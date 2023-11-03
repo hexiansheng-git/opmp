@@ -21,7 +21,6 @@ public class WarnServiceImpl implements WarnService {
 
     private static final String WARN_TEMPLATE = "您好，【项目名称】的【预警项名称】未能按要求完成，请及时进行查看。\n" + "预警规则：【预警规则】";
 
-
     @Override
     public void addWarn(WarnItem warnItem, WarnScopeType warnScopeType, String warnUrl, String warnScope, String tenantKey) {
         TWarn tWarn = new TWarn();
@@ -46,5 +45,18 @@ public class WarnServiceImpl implements WarnService {
 
     private String buildWarnContent(String projectName,String warnItem,String warnRule){
         return WARN_TEMPLATE.replace("【项目名称】",projectName).replace("【预警项名称】",warnItem).replace("【预警规则】",warnRule);
+    }
+
+    @Override
+    public void addWarn(WarnItem warnItem, String warnContent, WarnScopeType warnScopeType, String warnUrl, String warnScope, String tenantKey) {
+        TWarn tWarn = new TWarn();
+        tWarn.setWarnItem(warnItem.getWarnItem());
+        tWarn.setWarnItemId(warnItem.getWarnItemId());
+        tWarn.setWarnScopeType(warnScopeType.getWarnScopeType());
+        tWarn.setWarnScope(warnScope);
+        tWarn.setWarnUrl(warnUrl);
+        tWarn.setTenantKey(tenantKey);
+        tWarn.setWarnContent(warnContent);
+        systemServiceApi.addWarn(tWarn);
     }
 }
