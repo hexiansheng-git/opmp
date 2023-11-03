@@ -68,7 +68,7 @@ public class SbchTotalDemandPlanController extends BaseController {
     @PostMapping("/leaderList")
     @ResponseBody
     public AjaxResult leaderList(@RequestBody SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail) {
-        startPage(sbchTotalDemandPlanDetail.getPageNum(),sbchTotalDemandPlanDetail.getPageSize());
+//        startPage(sbchTotalDemandPlanDetail.getPageNum(),sbchTotalDemandPlanDetail.getPageSize());
         SbchTotalDemandPlan sbchTotalDemandPlan = sbchTotalDemandPlanService.getLeaderList(sbchTotalDemandPlanDetail);
         return AjaxResult.success(getDataTable(sbchTotalDemandPlan.getPlanDetailList()));
     }

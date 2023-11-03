@@ -239,9 +239,9 @@ public class SbchImportInquiryServiceImpl implements ISbchImportInquiryService {
             sbchImportInquiryCustoms.setInquiryId(returnVo.getId());
             List<SbchImportInquiryCustoms> customsList = sbchImportInquiryCustomsService.selectSbchImportInquiryCustomsList(sbchImportInquiryCustoms);
             if(!ObjectNullUtil.isEmpty(customsList)){
-                Map<String, List<SbchImportInquiryCustoms>> customsListMap = customsList.stream().collect(Collectors.groupingBy(t -> t.getCountryCode()));
+                Map<Long, List<SbchImportInquiryCustoms>> customsListMap = customsList.stream().collect(Collectors.groupingBy(t -> t.getCountryId()));
                 for (SbchImportInquiryCountry bean : countryList) {
-                    bean.setCustomsList(customsListMap.get(bean.getCountryCode()));
+                    bean.setCustomsList(customsListMap.get(bean.getId()));
                 }
             }
         }
