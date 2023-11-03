@@ -197,7 +197,7 @@ public class CommonServiceUtil {
             map.put("periodDate", FtDateUtils.formatDate(new Date()));
             AjaxResult ajaxResult = systemServiceApi.selectListRatePeriodByCodeAndCurrent(map);
             List<PeriodCurrency> periodCurrencies = JSONObject.parseArray(JSONObject.toJSONString(ajaxResult.get(AjaxResult.DATA_TAG)), PeriodCurrency.class);
-            return periodCurrencies.stream().collect(Collectors.toMap(PeriodCurrency::getCurrencyCode, PeriodCurrency::getRate));
+            return periodCurrencies == null ? new HashMap<>() : periodCurrencies.stream().collect(Collectors.toMap(PeriodCurrency::getCurrencyCode, PeriodCurrency::getRate));
         } catch (Exception e) {
             e.printStackTrace();
             return new HashMap<>();
