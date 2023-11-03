@@ -89,6 +89,7 @@ public class SbchTotalDemandPlanDetailServiceImpl implements ISbchTotalDemandPla
         list.forEach(p -> {
             p.setId(IdWorker.createId());
             p.setPlanId(planId);
+            p.setPtVar1(p.getMaterialType());
         });
         sbchTotalDemandPlanDetailMapper.deleteSbchTotalDemandPlanDetailByPlanId(planId, SecurityUtils.getUserId(), DateUtils.getNowDate());
         sbchTotalDemandPlanDetailMapper.batchInsert(list);

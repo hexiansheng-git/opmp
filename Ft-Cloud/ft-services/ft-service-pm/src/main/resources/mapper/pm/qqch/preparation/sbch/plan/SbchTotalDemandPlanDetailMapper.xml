@@ -55,7 +55,7 @@
 
     <select id="getAllDemandDevice" resultType="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail">
         select
-            equ_type as materialType, equ_code as materialCode, equ_name as materialName, brand as brandNames
+            SUBSTRING_INDEX(GROUP_CONCAT(equ_type), ',', 1)  as materialType, equ_code as materialCode, equ_name as materialName, brand as brandNames
                ,spec as materialSpec, rated_power as materialPower, unit as materialUnit, num as totalNum, equ_sourse
                , entry_date as planEntryTime, exit_date as planExitTime,
             IFNULL(sum(allocate_num), 0) as allocate_num,
@@ -84,7 +84,7 @@
              where version = #{version} and equ_code IS NOT NULL and equ_name IS NOT NULL and equ_type IS NOT NULL
             )columnToRow
         group by
-            equ_type, equ_code, equ_name
+            equ_code
     </select>
 
     <select id="selectSbchTotalDemandPlanDetailList"
