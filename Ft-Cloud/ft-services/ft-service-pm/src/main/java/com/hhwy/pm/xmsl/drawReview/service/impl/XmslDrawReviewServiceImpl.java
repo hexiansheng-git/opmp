@@ -445,6 +445,10 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             handlerWbsList(dto,version,isNew);
         else if(CollectionUtils.isNotEmpty(dto.getList()))
             handlerList(dto,version,isNew);
+        //提交校验
+        submitCheck(dto);
+        if(1==1)
+            throw new RuntimeException("ffff");
     }
 
     private void saveCheck(XmslDrawReviewDto dto){
@@ -463,6 +467,25 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         XmslDrawReview drawReview = getById(dto.getMainId());
         Assert.notNull(drawReview,"mainId有误，获取主数据失败");
         Assert.isTrue(drawReview.getValid()==Constant.NO_INT,"已生效的数据无法编辑");
+    }
+    private void submitCheck(XmslDrawReviewDto dto){
+        //如果为提交，校验必填数据
+        if(!StringUtils.equals(dto.getSubmitFlag(),"1"))
+            return ;
+        List<XmslDrawReviewList> errList = xmslDrawReviewMapper.selectNullList(new BigDecimal(dto.getVersion()));
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < errList.size(); i++) {
+            XmslDrawReviewList temp = errList.get(i);
+            sb.append(String.format("WBS[%s]下的清单[%s]未填报本部位复核数量;\n",temp.getWbsCode(),temp.getListCode()));
+        }
+        Assert.isTrue(sb.length()<1,sb.toString());
+        //校验物资的设计量
+        List<XmslDrawReviewMaterial> errMaterList = xmslDrawReviewMapper.selectNullMater(dto.getId());
+        for (int i = 0; i < errMaterList.size(); i++) {
+            XmslDrawReviewMaterial temp = errMaterList.get(i);
+            sb.append(String.format("WBS[%s]下的清单[%s],物资:[%s]未填报本部位复核数量;\n",temp.getWbsCode(),temp.getListCode(),temp.getCode()));
+        }
+        Assert.isTrue(sb.length()<1,sb.toString());
     }
 
     private void handlerWbsList(XmslDrawReviewDto dto,Integer version,boolean isNew){

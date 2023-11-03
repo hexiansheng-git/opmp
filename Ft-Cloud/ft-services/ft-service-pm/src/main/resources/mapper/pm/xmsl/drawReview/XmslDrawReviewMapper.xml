@@ -135,6 +135,13 @@
         select ancestors,id,pid pid,list_id listId from xmsl_draw_review_list where version &lt;= #{version}
     </select>
 
+    <select id="selectNullList" resultType="com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList" parameterType="java.math.BigDecimal">
+        select list_code listCode,wbs_code wbsCode from xmsl_draw_review_list where del_flag = 0  and version = #{version} and check_num is null
+    </select>
+    <select id="selectNullMater" resultType="com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewMaterial" parameterType="Long">
+        select list_code listCode,wbs_code wbsCode,code from xmsl_draw_review_material where  main_id = #{id}  and quanlity is null
+    </select>
+
     <insert id="insertXmslDrawReview">
         insert into xmsl_draw_review
         <trim prefix="(" suffix=")" suffixOverrides=",">
