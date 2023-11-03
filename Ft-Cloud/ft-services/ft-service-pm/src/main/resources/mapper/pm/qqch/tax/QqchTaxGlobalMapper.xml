@@ -40,6 +40,7 @@
         <result property="delFlag" column="del_flag"/>
         <result property="version" column="version"/>
         <result property="valid" column="valid"/>
+        <result property="leaf" column="leaf"/>
         <result property="treeId" column="tree_id"/>
         <result property="treePid" column="tree_pid"/>
         <result property="ptVar5" column="pt_var5"/>
@@ -81,6 +82,7 @@
              , `del_flag`
              , `version`
              , `valid`
+             , `leaf`
              , `tree_id`
              , `tree_pid`
              , `pt_var5`
@@ -126,6 +128,7 @@
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="treeId != null  and treeId != ''">and `tree_id` = #{treeId}</if>
             <if test="treePid != null  and treePid != ''">and `tree_pid` = #{treePid}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
@@ -173,6 +176,7 @@
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="treeId != null  and treeId != ''">and `tree_id` = #{treeId}</if>
             <if test="treePid != null  and treePid != ''">and `tree_pid` = #{treePid}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
@@ -249,6 +253,7 @@
             <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
             <if test="version != null ">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
+            <if test="leaf != null  and leaf != ''">`leaf`,</if>
             <if test="treeId != null  and treeId != ''">`tree_id`,</if>
             <if test="treePid != null  and treePid != ''">`tree_pid`,</if>
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
@@ -290,6 +295,7 @@
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
             <if test="version != null ">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
+            <if test="leaf != null  and leaf != ''">#{leaf},</if>
             <if test="treeId != null  and treeId != ''">#{treeId},</if>
             <if test="treePid != null  and treePid != ''">#{treePid},</if>
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
@@ -335,6 +341,7 @@
             `del_time`,
             `version`,
             `valid`,
+            `leaf`,
             `tree_id`,
             `tree_pid`,
             `pt_var5`,
@@ -377,6 +384,7 @@
                 #{item.delTime},
                 #{item.version},
                 #{item.valid},
+                #{item.leaf},
                 #{item.treeId},
                 #{item.treePid},
                 #{item.ptVar5},
@@ -423,6 +431,7 @@
             <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
             <if test="version != null ">`version` = #{version},</if>
             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
+            <if test="leaf != null  and  leaf != ''">`leaf` = #{leaf},</if>
             <if test="treeId != null  and  treeId != ''">`tree_id` = #{treeId},</if>
             <if test="treePid != null  and  treePid != ''">`tree_pid` = #{treePid},</if>
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
@@ -611,6 +620,11 @@
                     when `id`=#{item.id} then #{item.valid}
                 </foreach>
             </trim>
+            <trim prefix="leaf  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.leaf}
+                </foreach>
+            </trim>
             <trim prefix="tree_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.treeId}
@@ -676,6 +690,7 @@
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="treeId != null  and treeId != ''">and `tree_id` = #{treeId}</if>
             <if test="treePid != null  and treePid != ''">and `tree_pid` = #{treePid}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>

@@ -59,9 +59,9 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
         List<JdglMainPlanItem> returnList = new ArrayList<>();
 
-        System.out.println("--获取p6项目数据--租户:" + tenantKey + "--开始:" +  DateUtils.getDate());
+        System.out.println("--获取p6项目数据--租户:" + tenantKey + "--开始:" +  DateUtils.getTime());
         ProjectInfo projectInfo = getProjectInfo(tenantKey);
-        System.out.println("--获取p6项目数据--租户:" + tenantKey + "--结束:" +  DateUtils.getDate());
+        System.out.println("--获取p6项目数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime());
         if (projectInfo == null) return returnList;
 
         String urlwbs = p6IpPort + pre + "/wbsInfo";
@@ -77,14 +77,14 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         ParameterizedTypeReference<List<ActivityConstField>> responseType4Work = new ParameterizedTypeReference<List<ActivityConstField>>() {
         };
 
-        System.out.println("--获取p6 wbs数据--租户:" + tenantKey + "--开始:" +  DateUtils.getDate());
+        System.out.println("--获取p6 wbs数据--租户:" + tenantKey + "--开始:" +  DateUtils.getTime());
         // 获取p6 wbs数据
         ResponseEntity<List<WbsInfo>> wbsResult = restTemplate.exchange(urlwbs + "?projectId={projectId}", HttpMethod.GET, entity, responseType4Wbs, params);
-        System.out.println("--获取p6 wbs数据--租户:" + tenantKey + "--结束:" +  DateUtils.getDate() + "-- 数量:" + (wbsResult.getBody() == null ? 0 : wbsResult.getBody().size()));
-        System.out.println("--获取p6 作业数据--租户:" + tenantKey + "--开始:" +  DateUtils.getDate());
+        System.out.println("--获取p6 wbs数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime() + "-- 数量:" + (wbsResult.getBody() == null ? 0 : wbsResult.getBody().size()));
+        System.out.println("--获取p6 作业数据--租户:" + tenantKey + "--开始:" +  DateUtils.getTime());
         // 获取p6 作业数据
         ResponseEntity<List<ActivityConstField>> workResult = restTemplate.exchange(urlwork + "?projectId={projectId}", HttpMethod.GET, entity, responseType4Work, params);
-        System.out.println("--获取p6 作业数据--租户:" + tenantKey + "--结束:" +  DateUtils.getDate() + "-- 数量:" + (workResult.getBody() == null ? 0 : workResult.getBody().size()));
+        System.out.println("--获取p6 作业数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime() + "-- 数量:" + (workResult.getBody() == null ? 0 : workResult.getBody().size()));
 
         // 获取当前启用的总体计划主表数据
         JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
@@ -186,8 +186,8 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 jdglMainPlanItem.setExecuter(activityInfo.getExecuter());
                 jdglMainPlanItem.setStartDate(activityInfo.getStartDate());
                 jdglMainPlanItem.setFinishDate(activityInfo.getFinishDate());
-                jdglMainPlanItem.setIsCritical(activityInfo.getIsCritical() ? "1" : "0");
-                jdglMainPlanItem.setIsLongestPath(activityInfo.getIsLongestPath() ? "1" : "0");
+                jdglMainPlanItem.setIsCritical(activityInfo.getIsCritical() != null && activityInfo.getIsCritical() ? "1" : "0");
+                jdglMainPlanItem.setIsLongestPath(activityInfo.getIsLongestPath() != null && activityInfo.getIsLongestPath() ? "1" : "0");
                 jdglMainPlanItem.setWbsCode(activityInfo.getWbsCode());
 //                jdglMainPlanItem.setWbsObjectId();
                 jdglMainPlanItem.setWbsParentObjectId(activityInfo.getWbsObjectId());
@@ -308,10 +308,10 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
             String oldDataSource = DynamicDataSourceContextHolder.peek();
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
             try {
-                System.out.println("--获取p6 作业逻辑关系数据--租户:" + tenantKey + "--开始:" +  DateUtils.getDate());
+                System.out.println("--获取p6 作业逻辑关系数据--租户:" + tenantKey + "--开始:" +  DateUtils.getTime());
                 // 获取转换后的p6逻辑关系数据
                 List<JdglMainPlanItemPre> relInfos = getPre(projectId);
-                System.out.println("--获取p6 作业逻辑关系数据--租户:" + tenantKey + "--结束:" +  DateUtils.getDate() +"-- 数量:" + (relInfos == null ? 0 : relInfos.size()));
+                System.out.println("--获取p6 作业逻辑关系数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime() +"-- 数量:" + (relInfos == null ? 0 : relInfos.size()));
 
                 if (!CollectionUtils.isEmpty(relInfos) && !CollectionUtils.isEmpty(workInfos)) {
                     for (JdglMainPlanItem jdglMainPlanItem : workInfos) {
