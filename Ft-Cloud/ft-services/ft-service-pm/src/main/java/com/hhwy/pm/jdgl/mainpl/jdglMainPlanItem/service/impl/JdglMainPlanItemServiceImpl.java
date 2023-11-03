@@ -197,6 +197,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         }
         List<JdglMainPlanItem> jdglMainPlanItems = TreeUtil.treeToListWithoutId(jdglMainPlanItemList);
         for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItems) {
+            jdglMainPlanItem.setIsCritical(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) && "是".equals(jdglMainPlanItem.getIsCritical()) ? "1" : "0");
             jdglMainPlanItem.setUpdateUser(SecurityUtils.getSysUser().getNickName());
             jdglMainPlanItem.setUpdateTime(DateUtils.getNowDate());
         }
