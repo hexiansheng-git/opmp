@@ -1,4 +1,4 @@
-package com.hhwy.pm.qqch.tax.qqchTaxIn.vo;
+package com.hhwy.pm.qqch.tax.qqchTaxIn.domain.vo;
 
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxIn;
 import lombok.AllArgsConstructor;

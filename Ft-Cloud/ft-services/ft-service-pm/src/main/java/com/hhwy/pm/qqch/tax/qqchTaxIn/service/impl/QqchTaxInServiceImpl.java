@@ -21,7 +21,7 @@ import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxInDetail;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.mapper.QqchTaxInMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInDetailService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
-import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
+import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.vo.TaxInVO;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.IQqchTaxStageService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
@@ -184,7 +184,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
             Calendar tempCalendar = Calendar.getInstance();
             tempCalendar.setTime(temp.getPlanDate());
             Integer year = tempCalendar.get(Calendar.YEAR);
-            ObjectUtils.add2Map(yearAmtMap, year + "", temp.getMonthProdValue());
+            ObjectUtils.add2Map(yearAmtMap, String.valueOf(year), temp.getMonthProdValue());
         }
         //获取清单标价货币的汇率
         BigDecimal listRate = getListCurrencyRate();
@@ -239,7 +239,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
         xmslContractPayinfo.setMasterId(contractInfo.getId());
         List<XmslContractPayinfo> payinfoList = contractPayinfoService.getXmslContractPayinfoList(xmslContractPayinfo);
-        if(!org.apache.commons.collections4.CollectionUtils.isEmpty(payinfoList)) {
+        if(!CollectionUtils.isEmpty(payinfoList)) {
             XmslContractPayinfo payInfo = payinfoList.stream().filter(o -> listCurrencyCode.equals(o.getCurrencyCode())).findFirst().orElse(null);
             if(payInfo != null){
                 String rateType = payInfo.getRateType();

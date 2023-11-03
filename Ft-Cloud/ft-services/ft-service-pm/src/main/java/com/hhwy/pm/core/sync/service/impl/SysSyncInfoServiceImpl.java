@@ -179,6 +179,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(temp));
                 jsonObject.put("regionId", projectBasicInfo.getRegionId());
                 jsonObject.put("regionName", projectBasicInfo.getRegionName());
+                jsonObject.put("ptVar1", projectBasicInfo.getProjectCategory());
                 jsonObject.put("ptVar2", projectBasicInfo.getProjectCode());
                 jsonObjList.add(jsonObject);
             }

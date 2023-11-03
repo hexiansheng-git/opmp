@@ -2,7 +2,7 @@ package com.hhwy.pm.qqch.tax.qqchTaxCost.vo;
 
 import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCost;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCostDetail;
-import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
+import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.vo.TaxInVO;
 import com.hhwy.utils.JsonUtils;
 import lombok.Data;
 import lombok.ToString;

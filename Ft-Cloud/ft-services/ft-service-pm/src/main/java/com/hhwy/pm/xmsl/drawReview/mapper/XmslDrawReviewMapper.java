@@ -1,9 +1,11 @@
 package com.hhwy.pm.xmsl.drawReview.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
+import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewMaterial;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
 import org.apache.ibatis.annotations.Param;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
@@ -38,6 +40,10 @@ public interface XmslDrawReviewMapper {
     Integer getXmslDrawReviewCount(XmslDrawReview xmslDrawReview);
 
     XmslDrawReview getLast(@Param("valid") Integer valid);
+
+    List<XmslDrawReviewList> selectNullList(BigDecimal version);
+
+    List<XmslDrawReviewMaterial> selectNullMater(Long id);
 
     int insertXmslDrawReview(XmslDrawReview xmslDrawReview);
 

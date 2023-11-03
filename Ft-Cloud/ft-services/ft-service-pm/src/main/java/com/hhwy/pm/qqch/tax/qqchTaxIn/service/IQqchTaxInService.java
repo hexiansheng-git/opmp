@@ -3,7 +3,7 @@ package com.hhwy.pm.qqch.tax.qqchTaxIn.service;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxIn;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxInDetail;
-import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
+import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.vo.TaxInVO;
 
 import java.math.BigDecimal;
 import java.util.List;
