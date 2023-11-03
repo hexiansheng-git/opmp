@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.tax.qqchTaxIn.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
@@ -10,7 +9,7 @@ import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxInDetail;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.mapper.QqchTaxInDetailMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInDetailService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
-import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
+import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.vo.TaxInVO;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;

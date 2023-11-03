@@ -21,7 +21,7 @@ import com.hhwy.pm.qqch.tax.qqchTaxCost.service.IQqchTaxCostDetailService;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.service.IQqchTaxCostService;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.vo.TaxCostVO;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
-import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
+import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.vo.TaxInVO;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.IQqchTaxStageService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
