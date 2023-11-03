@@ -261,9 +261,8 @@ public class FtDateUtils extends DateUtils {
         try {
             return simpleDateFormat.parse(simpleDateFormat.format(new Date()));
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new RuntimeException("日期格式错误！");
         }
-        return null;
     }
 
     /**

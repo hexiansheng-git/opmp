@@ -54,14 +54,12 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
 
     @Override
     public SbchTotalDemandPlan getList(BigDecimal version) {
-        SbchTotalDemandPlan result = this.getSbchTotalDemandPlan(version, null);
-        return result;
+        return this.getSbchTotalDemandPlan(version, null);
     }
 
     @Override
     public SbchTotalDemandPlan getLeaderList(SbchTotalDemandPlanDetail param) {
-        SbchTotalDemandPlan result = this.getSbchTotalDemandPlan(null, param);
-        return result;
+        return this.getSbchTotalDemandPlan(null, param);
     }
 
     private SbchTotalDemandPlan getSbchTotalDemandPlan(BigDecimal version, SbchTotalDemandPlanDetail param) {
@@ -82,9 +80,6 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
                 param.setPlanId(sbchTotalDemandPlan1.getId());
                 sbchTotalDemandPlanDetails = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailLeaderList(param);
             }
-
-
-            ArrayList<SbchTotalDemandPlanDetail> returnList = new ArrayList<>();
             if (!ObjectNullUtil.isEmpty(sbchTotalDemandPlanDetails)) {
                 Map<String, String> busAndMaterialMap = new HashMap<>();
                 busAndMaterialMap.put("materialName", "materialName");
@@ -93,31 +88,8 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
                 Map<String, String> busAndCategoryMap = new HashMap<>();
                 busAndCategoryMap.put("ptVar1", "categoryName");
                 sbchTotalDemandPlanDetails = setMaterialNameUtils.setCategoryInfo(sbchTotalDemandPlanDetails, "materialType", busAndCategoryMap);
-
-                //根据设备编码分组  数量汇总展示
-                Map<String, List<SbchTotalDemandPlanDetail>> plamDetailMap = sbchTotalDemandPlanDetails.stream().collect(Collectors.groupingBy(t -> t.getMaterialCode()));
-                for (String materialCode : plamDetailMap.keySet()) {
-                    List<SbchTotalDemandPlanDetail> detailList = plamDetailMap.get(materialCode);
-                    //总数量
-                    int totalNum = detailList.stream().mapToInt(item -> ObjectUtils.isEmpty(item.getTotalNum()) ? 0 : item.getTotalNum().intValue()).sum();
-                    int allocateNum = detailList.stream().mapToInt(item -> ObjectUtils.isEmpty(item.getAllocateNum()) ? 0 : item.getAllocateNum().intValue()).sum();
-                    int localBuyNum = detailList.stream().mapToInt(item -> ObjectUtils.isEmpty(item.getLocalBuyNum()) ? 0 : item.getLocalBuyNum().intValue()).sum();
-                    int countryBuyNum = detailList.stream().mapToInt(item -> ObjectUtils.isEmpty(item.getCountryBuyNum()) ? 0 : item.getCountryBuyNum().intValue()).sum();
-                    int localLeaseNum = detailList.stream().mapToInt(item -> ObjectUtils.isEmpty(item.getLocalLeaseNum()) ? 0 : item.getLocalLeaseNum().intValue()).sum();
-                    int companySelfNum = detailList.stream().mapToInt(item -> ObjectUtils.isEmpty(item.getCompanySelfNum()) ? 0 : item.getCompanySelfNum().intValue()).sum();
-
-                    SbchTotalDemandPlanDetail detail = new SbchTotalDemandPlanDetail();
-                    BeanUtils.copyProperties(detailList.get(0), detail);
-                    detail.setTotalNum(Long.parseLong(totalNum + ""));
-                    detail.setAllocateNum(Long.parseLong(allocateNum + ""));
-                    detail.setLocalBuyNum(Long.parseLong(localBuyNum + ""));
-                    detail.setCountryBuyNum(Long.parseLong(countryBuyNum + ""));
-                    detail.setLocalLeaseNum(Long.parseLong(localLeaseNum + ""));
-                    detail.setCompanySelfNum(Long.parseLong(companySelfNum + ""));
-                    returnList.add(detail);
-                }
             }
-            result.setPlanDetailList(returnList);
+            result.setPlanDetailList(sbchTotalDemandPlanDetails);
         }
         result.setVersion(version);
         result.setStageIdentity(qqchReviewService.getStage());

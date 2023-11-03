@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -133,6 +134,11 @@ public class QqchPersonControlPlanServiceImpl implements IQqchPersonControlPlanS
         }
     }
 
+
+    //证件预警模板
+    private static final String CERTIFICATE_WARN_TEMPLATE = "您好，您的【《XXX》】证件将于【XX年XX月XX日】超过有效期限，请及时更新证件信息！";
+
+
     @Override
     public void personControlPlanWarn() {
         // 切换到master
@@ -158,6 +164,9 @@ public class QqchPersonControlPlanServiceImpl implements IQqchPersonControlPlanS
                     //用户名
                     String personId = plan.getPersonId();
                     List<QqchPersonControlPlan> children = plan.getChildren();
+                    if(CollectionUtils.isEmpty(children)){
+                        continue;
+                    }
                     for (QqchPersonControlPlan child : children) {
                         if (child.getIssueDate() == null || child.getLimitPeriod() == null || StringUtils
                                 .isBlank(child.getMessageWarn())) {
@@ -175,22 +184,29 @@ public class QqchPersonControlPlanServiceImpl implements IQqchPersonControlPlanS
                         // 日期相差天数
                         long diffDays = FtDateUtils.getDays(nowDate, dueDate);
 
+                        //证件名称
+                        String certificateName = child.getCertificateName();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+                        //证件到期日
+                        String dueDateFormat = sdf.format(dueDate);
+                        String warnContent = CERTIFICATE_WARN_TEMPLATE.replace("【《XXX》】", certificateName).replace("【XX年XX月XX日】", dueDateFormat);
+
                         // 到期前1个月提醒
                         if ("1".equals(plan.getMessageWarn()) && diffDays < 30) {
                             // 发送预警
-                            warnService.addWarn(WarnItem.PERSON_CONTROL_PLAN_ONE, WarnScopeType.USER, null, personId, tenantKey);
+                            warnService.addWarn(WarnItem.PERSON_CONTROL_PLAN_ONE, warnContent,WarnScopeType.USER, null, personId, tenantKey);
                         }
 
                         // 到期前2个月提醒
                         if ("2".equals(plan.getMessageWarn()) && diffDays < 60) {
                             // 发送预警
-                            warnService.addWarn(WarnItem.PERSON_CONTROL_PLAN_TWO, WarnScopeType.USER, null, personId, tenantKey);
+                            warnService.addWarn(WarnItem.PERSON_CONTROL_PLAN_ONE, warnContent,WarnScopeType.USER, null, personId, tenantKey);
                         }
 
                         // 到期前3个月提醒
                         if ("3".equals(plan.getMessageWarn()) && diffDays < 90) {
                             // 发送预警
-                            warnService.addWarn(WarnItem.PERSON_CONTROL_PLAN_THREE, WarnScopeType.USER, null, personId, tenantKey);
+                            warnService.addWarn(WarnItem.PERSON_CONTROL_PLAN_ONE, warnContent,WarnScopeType.USER, null, personId, tenantKey);
                         }
                     }
                 }

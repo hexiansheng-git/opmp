@@ -15,6 +15,7 @@ import com.hhwy.system.periodCurrency.service.IPeriodCurrencyService;
 import com.hhwy.utils.http.HttpRequestUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
  * 功能描述: 汇率批次
  */
 @RestController
+@Slf4j
 public class CurrencyPeriodData {
 
     @Autowired
@@ -48,120 +50,119 @@ public class CurrencyPeriodData {
 
     @GetMapping("pullPeriodCurrency")
     public AjaxResult pullPeriodCurrency() {
-        String year = String.valueOf(DateUtil.thisYear());
-        int pageNum = 1;
-        Map<String, String> headerMap = new HashMap<>();
-        headerMap.put("apikey", caiwuyun_apiKey);
 
+        log.info("---------------------------------------------------------------");
+        //请求参数
+        String year = String.valueOf(DateUtil.thisYear());
+        Map<String, String> header = new HashMap<>();
+        header.put("apikey", caiwuyun_apiKey);
+        //数据拼装结果
         Map<String, Map<String, Object>> qicihuilv = new HashMap<>();
+        //分页循环获取
+        int pageNum = 1;
         boolean flag = true;
         while (flag){
-            System.out.println("开始执行------------------------------");
-            String res = HttpRequestUtils.post(caiwuyun_url, headerMap, getReqParams(year, pageNum));
+            log.info("拉取期次、汇率开始， 页码：{}", pageNum);
+            //发送请求
+            String resp = HttpRequestUtils.post(caiwuyun_url, header, getReqParams(year, pageNum));
             // 结果解析
-            JSONObject jsonObject = JSONObject.parseObject(res, JSONObject.class);
-            if("success".equals(jsonObject.get("msg"))){
-                int TotalPage = (int) jsonObject.get("TotalPage");
-                int PageSize = (int) jsonObject.get("PageSize");
-                int TotalNumber = (int) jsonObject.get("TotalNumber");
-
-                List<JSONObject> data = (List<JSONObject>) jsonObject.get("data");
-                //"RATEVALUETYPE": "1"  区间汇率
-                if(CollectionUtils.isEmpty(data)){
-                    return null;
-                }
-                BigDecimal zero = new BigDecimal(0);
-                for(JSONObject temp : data){
-                    String RATEVALUETYPE = (String) temp.get("RATEVALUETYPE");//1期间汇率类型
-                    String DIRECTORINDIRECT = (String) temp.get("DIRECTORINDIRECT");//0:直接汇率 1：间接汇率
-                    String ZSBBH = (String) temp.get("ZSBBH");//折算币
-                    BigDecimal exchangeratefin = new BigDecimal(String.valueOf(temp.get("exchangeratefin")));//期末汇率
-                    BigDecimal EXCHANGERATEVALUE = new BigDecimal(String.valueOf(temp.get("EXCHANGERATEVALUE")));//区间汇率
-                    String BEGINDATE = year + temp.get("BEGINDATE");//开始日期
-                    String enddate = year + temp.get("enddate");//结束日期
-//                    String no = year + temp.get("PERIODNO");//期次编码
-
-                    String YBBH = (String) temp.get("YBBH");//原币
-
-                    String FIYEAR = (String) temp.get("FIYEAR");//年份
-                    String no = FIYEAR + temp.get("PERIODNO");//期次编码
-                    no = no.replace("df-", "");
-
-//                    if("1".equals(RATEVALUETYPE) && "USD".equals(ZSBBH) && zero.compareTo(EXCHANGERATEVALUE) == -1){
-                    if("1".equals(RATEVALUETYPE) && zero.compareTo(EXCHANGERATEVALUE) == -1){
-                        if("USD".equals(ZSBBH)){
-                            //折算币是美元的
-                            Map<String, Object> tt = qicihuilv.get(no);
-                            if(tt == null){
-                                tt = new HashMap<>();
-                            }
-                            tt.put("no", no);
-                            tt.put("startDate", BEGINDATE);
-                            tt.put("endDate", enddate);
-                            List list = (List) tt.get("data");
-                            if(CollectionUtils.isEmpty(list)){
-                                list = new ArrayList();
-                            }
-                            Map<String, Object> huilv = new HashMap<>();
-                            huilv.put("bizhong", YBBH);
-                            if("0".equals(DIRECTORINDIRECT)){
-                                //直接汇率 1个当地币换算美元的多少 所以系统内需要换算
-                                BigDecimal qjhl = new BigDecimal(1.00).divide(EXCHANGERATEVALUE, 6, BigDecimal.ROUND_HALF_UP);
-                                huilv.put("qujianhuilv", qjhl);
-                            }else{
-                                huilv.put("qujianhuilv", EXCHANGERATEVALUE);
-                                huilv.put("qimohuilv", exchangeratefin);
-                            }
-                            list.add(huilv);
-                            tt.put("data", list);
-                            qicihuilv.put(no, tt);
-                            //先临时插入redis缓存中
-//                            redisUtils.hPut("qicihuilv", no, JSONObject.toJSONString(tt));
-                            System.out.println("放一次！！！！！");
-                        }else if("USD".equals(YBBH)){
-                            //原币是美元的
-                            Map<String, Object> tt = qicihuilv.get(no);
-                            if(tt == null){
-                                tt = new HashMap<>();
-                            }
-                            tt.put("no", no);
-                            tt.put("startDate", BEGINDATE);
-                            tt.put("endDate", enddate);
-                            List list = (List) tt.get("data");
-                            if(CollectionUtils.isEmpty(list)){
-                                list = new ArrayList();
-                            }
-                            Map<String, Object> huilv = new HashMap<>();
-                            huilv.put("bizhong", ZSBBH);
-                            if("0".equals(DIRECTORINDIRECT)){
-                                //直接汇率 1个当地币换算美元的多少 所以系统内需要换算
-                                huilv.put("qujianhuilv", EXCHANGERATEVALUE);
-                                huilv.put("qimohuilv", exchangeratefin);
-                            }else{
-                                BigDecimal qjhl = new BigDecimal(1.00).divide(EXCHANGERATEVALUE, 6, BigDecimal.ROUND_HALF_UP);
-                                huilv.put("qujianhuilv", qjhl);
-                            }
-                            list.add(huilv);
-                            tt.put("data", list);
-                            qicihuilv.put(no, tt);
-                            //先临时插入redis缓存中
-//                            redisUtils.hPut("qicihuilv", no, JSONObject.toJSONString(tt));
-                            System.out.println("放一次！！！！！");
-
-                        }
-                    }
-                }
-                if(pageNum >= TotalPage){
-                    flag = false;
-                }
-                pageNum ++;
-                System.out.println("+1，+1"+pageNum);
+            JSONObject jsonObject = JSONObject.parseObject(resp, JSONObject.class);
+            if(!"success".equals(jsonObject.get("msg"))){
+                log.error("拉取期次、汇率请求失败， 响应msg：{}", jsonObject.get("msg"));
+                return  AjaxResult.error();
             }
+            int totalPage = (int) jsonObject.get("TotalPage");
+            List<JSONObject> data = (List<JSONObject>) jsonObject.get("data");
+            if(CollectionUtils.isEmpty(data)){
+                log.error("拉取期次、汇率数据为空， 响应msg：{}", jsonObject.get("msg"));
+                return  AjaxResult.error();
+            }
+            BigDecimal zero = new BigDecimal(0);
+            for(JSONObject temp : data){
+                //"RATEVALUETYPE": "1"  区间汇率
+                String RATEVALUETYPE = (String) temp.get("RATEVALUETYPE");//1期间汇率类型
+                String DIRECTORINDIRECT = (String) temp.get("DIRECTORINDIRECT");//0:直接汇率 1：间接汇率
+                String ZSBBH = (String) temp.get("ZSBBH");//折算币
+                BigDecimal exchangeratefin = new BigDecimal(String.valueOf(temp.get("exchangeratefin")));//期末汇率
+                BigDecimal EXCHANGERATEVALUE = new BigDecimal(String.valueOf(temp.get("EXCHANGERATEVALUE")));//区间汇率
+                String BEGINDATE = year + temp.get("BEGINDATE");//开始日期
+                String enddate = year + temp.get("enddate");//结束日期
+                String YBBH = (String) temp.get("YBBH");//原币
+                String FIYEAR = (String) temp.get("FIYEAR");//年份
+                String no = FIYEAR + temp.get("PERIODNO");//期次编码
+                no = no.replace("df-", "");
+
+                if(!"1".equals(RATEVALUETYPE) || zero.compareTo(EXCHANGERATEVALUE) > -1){
+//                    log.info("跳过，期间汇率类型不等于1或者区间汇率小于等于0；{}---{}", RATEVALUETYPE, EXCHANGERATEVALUE);
+                    continue;
+                }
+                if("USD".equals(ZSBBH)){
+                    //折算币是美元的
+                    Map<String, Object> tt = qicihuilv.get(no);
+                    if(tt == null){
+                        tt = new HashMap<>();
+                    }
+                    tt.put("no", no);
+                    tt.put("startDate", BEGINDATE);
+                    tt.put("endDate", enddate);
+                    Set list = (HashSet) tt.get("data");
+                    if(CollectionUtils.isEmpty(list)){
+                        list = new HashSet();
+                    }
+                    Map<String, Object> huilv = new HashMap<>();
+                    huilv.put("bizhong", YBBH);
+                    if("0".equals(DIRECTORINDIRECT)){
+                        //直接汇率 1个当地币换算美元的多少 所以系统内需要换算
+                        BigDecimal qjhl = new BigDecimal(1.00).divide(EXCHANGERATEVALUE, 6, BigDecimal.ROUND_HALF_UP);
+                        huilv.put("qujianhuilv", qjhl);
+                    }else{
+                        huilv.put("qujianhuilv", EXCHANGERATEVALUE);
+//                        huilv.put("qimohuilv", exchangeratefin);
+                    }
+                    list.add(huilv);
+                    tt.put("data", list);
+                    qicihuilv.put(no, tt);
+                    //先临时插入redis缓存中
+//                            redisUtils.hPut("qicihuilv", no, JSONObject.toJSONString(tt));
+                }else if("USD".equals(YBBH)){
+                    //原币是美元的
+                    Map<String, Object> tt = qicihuilv.get(no);
+                    if(tt == null){
+                        tt = new HashMap<>();
+                    }
+                    tt.put("no", no);
+                    tt.put("startDate", BEGINDATE);
+                    tt.put("endDate", enddate);
+                    Set list = (HashSet) tt.get("data");
+                    if(CollectionUtils.isEmpty(list)){
+                        list = new HashSet();
+                    }
+                    Map<String, Object> huilv = new HashMap<>();
+                    huilv.put("bizhong", ZSBBH);
+                    if("0".equals(DIRECTORINDIRECT)){
+                        //直接汇率 1个当地币换算美元的多少 所以系统内需要换算
+                        huilv.put("qujianhuilv", EXCHANGERATEVALUE);
+//                        huilv.put("qimohuilv", exchangeratefin);
+                    }else{
+                        BigDecimal qjhl = new BigDecimal(1.00).divide(EXCHANGERATEVALUE, 6, BigDecimal.ROUND_HALF_UP);
+                        huilv.put("qujianhuilv", qjhl);
+                    }
+                    list.add(huilv);
+                    tt.put("data", list);
+                    qicihuilv.put(no, tt);
+                    //先临时插入redis缓存中
+//                            redisUtils.hPut("qicihuilv", no, JSONObject.toJSONString(tt));
+                }
+            }
+            if(pageNum >= totalPage){
+                flag = false;
+            }
+            pageNum ++;
         }
-        System.out.println("执行结束------------------------------"+pageNum);
-        System.out.println("结果数据--->"+JSONObject.toJSONString(qicihuilv));
-        handleData(qicihuilv);
-        return AjaxResult.success();
+        log.info("拉取期次、汇率执行结束, 分页数：{}", pageNum);
+        log.info("结果数据--->"+JSONObject.toJSONString(qicihuilv));
+        //期次汇率入库
+        return handleData(qicihuilv);
     }
 
 
@@ -182,21 +183,21 @@ public class CurrencyPeriodData {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH)+1;
         //期次
-        List<PeriodInfo> periodInfoList=new ArrayList<>();
+        List<PeriodInfo> periodInfoList = new ArrayList<>();
         //汇率
-        List<PeriodCurrency> periodCurrencyList=new ArrayList<>();
+        List<PeriodCurrency> periodCurrencyList = new ArrayList<>();
         List<CurrencyInfo> currencyInfoList = currencyInfoService.selectCurrencyInfoList(new CurrencyInfo());
         for (int j = month; j <= 12; j++) {
-            String str=String.format("%02d",j);
-            String key=year+""+str;
+            String str = String.format("%02d",j);
+            String key = year +""+ str;
             Map<String, Object> map = qicihuilv.get(key);
-            if(null==map){
+            if(null == map){
                 continue;
             }
-            String no= map.get("no")+"";
-            String endDate= map.get("endDate")+"";
-            String startDate= map.get("startDate")+"";
-            PeriodInfo periodInfo=new PeriodInfo();
+            String no = map.get("no")+"";
+            String endDate = map.get("endDate")+"";
+            String startDate = map.get("startDate")+"";
+            PeriodInfo periodInfo = new PeriodInfo();
             Long periodId = IdWorker.createId();
             periodInfo.setId(periodId);
             try {
