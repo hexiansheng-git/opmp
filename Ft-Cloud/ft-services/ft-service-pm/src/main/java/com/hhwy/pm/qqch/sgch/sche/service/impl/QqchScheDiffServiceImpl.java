@@ -171,6 +171,8 @@ public class QqchScheDiffServiceImpl implements IQqchScheDiffService {
     }
 
     boolean checkScore(LinkedList<BigDecimal> scoreList, BigDecimal score) {
+        if(CollectionUtils.isEmpty(scoreList))
+            return true;
         BigDecimal last = scoreList.getLast();
         scoreList.add(score);
         // 如果最后一个数据大于当前值的话判断当前值和最后一个元素的值的大小
