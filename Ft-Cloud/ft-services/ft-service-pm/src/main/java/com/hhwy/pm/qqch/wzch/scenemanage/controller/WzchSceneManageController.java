@@ -46,7 +46,7 @@ public class WzchSceneManageController extends BaseController {
     /**
      * 查询资金策划列表
      */
-    @PreAuthorize(hasPermi = "wzch:sceneManage:list")
+//    @PreAuthorize(hasPermi = "wzch:sceneManage:list")
     @PostMapping("/list")
 //    @CustomLogger(title = "查询资金策划列表", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchSceneManage wzchSceneManage) {
@@ -74,7 +74,7 @@ public class WzchSceneManageController extends BaseController {
     /**
      * 新增保存资金策划
      */
-    @PreAuthorize(hasPermi = "wzch:sceneManage:add")
+//    @PreAuthorize(hasPermi = "wzch:sceneManage:add")
     @PostMapping("/add")
 //    @CustomLogger(title = "新增保存资金策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody WzchSceneManageDTO dto) {
@@ -85,7 +85,7 @@ public class WzchSceneManageController extends BaseController {
     /**
      * 修改保存资金策划
      */
-    @PreAuthorize(hasPermi = "wzch:sceneManage:edit")
+//    @PreAuthorize(hasPermi = "wzch:sceneManage:edit")
     @PostMapping("/edit")
 //    @CustomLogger(title = "修改保存资金策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchSceneManageDTO dto) {

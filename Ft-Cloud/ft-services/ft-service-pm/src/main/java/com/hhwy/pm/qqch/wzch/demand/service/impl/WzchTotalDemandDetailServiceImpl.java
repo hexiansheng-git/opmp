@@ -537,7 +537,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         List<List<String>> heads = head(years, request, rangeMap, leaderFlag);
         List<List<Object>> data = getData(request.getWzchTotalDemandDetailList(), years, request.getViewType(), rangeMap, leaderFlag);
         
-        EasyExeclUtil.export(response, heads, data, "物资总需想详情.xlsx", "物资总需想详情");
+        EasyExeclUtil.export(response, heads, data, "物资总需详情.xlsx", "物资总需详情");
 
     }
 
@@ -1317,6 +1317,9 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         List<SysDictData> tSysDictDataList = systemApiService.selectDictDataByType("total_demand_category_name");
         List<SysDictData> mSysDictDataList = systemApiService.selectDictDataByType("material_standard");
         List<SysDictData> wSysDictDataList = systemApiService.selectDictDataByType("warn_flag");
+        Map<String,String> mmap = mSysDictDataList.stream().collect(Collectors.toMap(r->r.getDictValue(),r->r.getDictLabel()));
+        Map<String,String> tmap = tSysDictDataList.stream().collect(Collectors.toMap(r->r.getDictValue(),r->r.getDictLabel()));
+
         for (WzchTotalDemandDetail detail : wzchTotalDemandDetails) {
             List<Object> list = new ArrayList<>();
             list.add(detail.getMaterialCode());
@@ -1327,8 +1330,9 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
                 list.add(detail.getMaterialTechParam());
 
                 if (CollectionUtils.isNotEmpty(mSysDictDataList) && StringUtils.isNotBlank(detail.getMaterialStandard())) {
-                    mSysDictDataList.stream().filter(i -> StringUtils.isNotEmpty(i.getDictValue()) && i.getDictValue().equals(detail.getMaterialStandard()))
-                            .findFirst().ifPresent(val -> list.add(val.getDictLabel()));
+                    list.add(com.hhwy.utils.ObjectUtils.nvlString(mmap.get(detail.getMaterialStandard())));
+//                    mSysDictDataList.stream().filter(i -> StringUtils.isNotEmpty(i.getDictValue()) && i.getDictValue().equals(detail.getMaterialStandard()))
+//                            .findFirst().ifPresent(val -> list.add(val.getDictLabel()));
                 } else {
                     list.add(detail.getMaterialStandard());
                 }
@@ -1337,13 +1341,16 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
             list.add(detail.getTotalDemandAmount());
             list.add(detail.getSelfDemandAmount());
             list.add(detail.getNonSelfAmount());
-//            if (CollectionUtils.isNotEmpty(tSysDictDataList) && StringUtils.isNotBlank(detail.getCategoryName())) {
+            if (CollectionUtils.isNotEmpty(tSysDictDataList) && StringUtils.isNotBlank(detail.getCategoryName())) {
+                list.add(com.hhwy.utils.ObjectUtils.nvlString(tmap.get(detail.getCategoryName())));
 //                tSysDictDataList.stream().filter(i -> StringUtils.isNotEmpty(i.getDictValue()) && i.getDictValue().equals(detail.getCategoryName()))
 //                        .findFirst().ifPresent(val -> list.add(val.getDictLabel()));
-//            } else {
+//                if(list.size() < 10)
+//                    list.add("");
+            } else {
                 //格式化类型
                 list.add(detail.getCategoryName());
-//            }
+            }
 
             if (!"1".equals(leaderFlag)) {
                 list.add(YesOrNoEnum.parseDesc(detail.getFirstEnterFlag()));

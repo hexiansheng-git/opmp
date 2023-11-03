@@ -14,4 +14,15 @@ public interface WarnService {
      * @param tenantKey 租户标识
      */
     void addWarn(WarnItem warnItem, WarnScopeType warnScopeType, String warnUrl, String warnScope, String tenantKey);
+
+    /**
+     *
+     * @param warnItem
+     * @param warnContent
+     * @param warnScopeType
+     * @param warnUrl
+     * @param warnScope
+     * @param tenantKey
+     */
+    void addWarn(WarnItem warnItem, String warnContent, WarnScopeType warnScopeType, String warnUrl, String warnScope, String tenantKey);
 }

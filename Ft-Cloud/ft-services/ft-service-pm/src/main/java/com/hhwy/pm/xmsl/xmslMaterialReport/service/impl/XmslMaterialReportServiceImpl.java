@@ -4,12 +4,14 @@ import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.domain.base.system.material.MaterialInfo;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewMaterial;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewMaterialService;
 import com.hhwy.pm.xmsl.xmslMaterialReport.domain.XmslMaterialReport;
 import com.hhwy.pm.xmsl.xmslMaterialReport.mapper.XmslMaterialReportMapper;
 import com.hhwy.pm.xmsl.xmslMaterialReport.service.IXmslMaterialReportService;
+import com.hhwy.utils.MaterialUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -121,6 +123,10 @@ public class XmslMaterialReportServiceImpl implements IXmslMaterialReportService
             XmslDrawReviewMaterial tempMater = materialIterator.next();
             XmslMaterialReport materialReport = new XmslMaterialReport();
             BeanUtils.copyProperties(tempMater, materialReport);
+            //重新获取物资类型
+            MaterialInfo materialInfo = MaterialUtils.getMaterialInfoByCode(materialReport.getCode());
+            if(materialInfo != null)
+                materialReport.setType(materialInfo.getMaterialType());
             addList.add(materialReport);
         }
         //4、清理主材报表，然后插入

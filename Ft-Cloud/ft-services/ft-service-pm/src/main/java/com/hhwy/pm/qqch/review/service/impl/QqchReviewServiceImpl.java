@@ -222,9 +222,13 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
             this.checkData(qqchReviewList, iData);
             this.updateQqchReviewList(qqchReviewList);
             this.updateFinishNum();
+            //推送到总部
+            sysSyncInfoService.pushQqchReview(qqchReviewList);
         }else {
             this.reviewMapper.insertQqchReviewList(iData);
+            sysSyncInfoService.pushQqchReview(iData);
         }
+
     }
 
     private void checkData(List<Review> qqchReviewList, List<Review> iData) {
