@@ -15,6 +15,7 @@ import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisCorrectService;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisPathService;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisSvService;
+import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeService;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheAnalyse;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheDiff;
 import com.hhwy.pm.qqch.sgch.sche.dto.QqchScheDTO;
@@ -70,6 +71,9 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
     @Autowired
     private SystemServiceApi systemServiceApi;
+
+    @Autowired
+    private IJdglCorrectionMeasuresMakeService jdglCorrectionMeasuresMakeService;
 
 
     public JdglDiffAnalysis getJdglDiffAnalysis(JdglDiffAnalysis jdglDiffAnalysis) {
@@ -167,9 +171,18 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             }
         }
 
-        sysSyncInfoService.pushJdglDiffAnalysis(jdglDiffAnalysis);
 
-        return jdglDiffAnalysisMapper.updateJdglDiffAnalysis(jdglDiffAnalysis);
+
+        int i = jdglDiffAnalysisMapper.updateJdglDiffAnalysis(jdglDiffAnalysis);
+
+        if(i > 0) {
+            sysSyncInfoService.pushJdglDiffAnalysis(jdglDiffAnalysis);
+            if(jdglDiffAnalysis.getRiskLevel() != null) {
+                jdglCorrectionMeasuresMakeService.syncData(period);
+            }
+        }
+
+        return i;
     }
 
     /**
@@ -444,6 +457,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
         if(i > 0) {
             sysSyncInfoService.pushJdglDiffAnalysis(jdglDiffAnalysis);
+//            jdglCorrectionMeasuresMakeService.syncData(nowDate);
         }
     }
 
@@ -472,11 +486,22 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         if(jdglDiffAnalysis  == null) {
             return;
         }
+        int count = 0;
         if("correctGrade".equals(field)) {
             jdglDiffAnalysis.setCorrectGrade(grade);
             countTotalGrade(jdglDiffAnalysis);
+            count ++;
         }
 
+        if(count > 0) {
+            int i = updateJdglDiffAnalysis(jdglDiffAnalysis);
+            if(i > 0) {
+                if(jdglDiffAnalysis.getRiskLevel() != null) {
+                    Date period = jdglDiffAnalysis.getPeriod();
+                    jdglCorrectionMeasuresMakeService.syncData(period);
+                }
+            }
+        }
     }
 
 }

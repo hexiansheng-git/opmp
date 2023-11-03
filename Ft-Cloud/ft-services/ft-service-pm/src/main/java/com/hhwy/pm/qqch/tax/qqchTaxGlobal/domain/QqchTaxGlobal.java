@@ -234,6 +234,11 @@ public class QqchTaxGlobal extends CompileEntity<QqchTaxGlobal> {
     @JsonProperty
     private String treePid;
     /**
+     * 字段描述：是否叶子节点(1:是;0:否;)
+     */
+    @JsonProperty
+    private String leaf;
+    /**
      * 字段描述：预留字段5
      */
     @JsonProperty

@@ -166,6 +166,7 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         if(cnyRate == null || cnyRate.compareTo(BigDecimal.ZERO) == 0) {
             cnyRate = getExchageRate("CNY", xmslContractPayinfoList);
             cnyProportion = getProportion("CNY", xmslContractPayinfoList);
+            if(cnyProportion == null) cnyProportion = BigDecimal.ZERO;
         }
 
         // 当地币种对美汇率
@@ -176,10 +177,11 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         if(localRate == null || localRate.compareTo(BigDecimal.ZERO) == 0) {
             localRate = getExchageRate(paymentCurrency, xmslContractPayinfoList);
             localProportion = getProportion(paymentCurrency, xmslContractPayinfoList);
+            if(localProportion == null) localProportion = BigDecimal.ZERO;
         }
 
-        // 美元比例
-        BigDecimal usdProportion = getProportion("USD", xmslContractPayinfoList);
+        // 美元及其他货币转换美元比例
+        BigDecimal usdProportion = new BigDecimal(100).subtract(cnyProportion).subtract(localProportion);//getProportion("USD", xmslContractPayinfoList);
 
         // 计量账单审核时长（天)
         BigDecimal meteringCircle = BigDecimal.ZERO;
@@ -199,11 +201,12 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         Map<String, Date> dateRange = getDateRange(year,meteringCircle);
         BigDecimal qqchProdPlanAmt = qqchProdPlanService.getQqchProdPlanAmt4DateRange(null, dateRange.get("start"), dateRange.get("end"));
 
-        if(rate != null && qqchProdPlanAmt != null && rate.compareTo(BigDecimal.ZERO) != 0) {
-            res.setQuantities(qqchProdPlanAmt.divide(rate, 2, BigDecimal.ROUND_HALF_UP)); // 工程量计量金额
-        } else {
-            res.setQuantities(BigDecimal.ZERO); // 工程量计量金额
-        }
+        res.setQuantities(qqchProdPlanAmt); // 工程量计量金额
+//        if(rate != null && qqchProdPlanAmt != null && rate.compareTo(BigDecimal.ZERO) != 0) {
+//            res.setQuantities(qqchProdPlanAmt.divide(rate, 2, BigDecimal.ROUND_HALF_UP)); // 工程量计量金额
+//        } else {
+//            res.setQuantities(BigDecimal.ZERO); // 工程量计量金额
+//        }
 
         // 节点回收比例
         BigDecimal nodeRecoveryRate = BigDecimal.ZERO;
@@ -228,11 +231,12 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
 
         res.setNodeRecoveryRate(res.getNodeRecoveryRate() == null ? nodeRecoveryRate : res.getNodeRecoveryRate()); // 节点回收比例
         res.setCurrency(currency);      //币种
-        if(rate != null && excContAmt != null && rate.compareTo(BigDecimal.ZERO) != 0) {
-            res.setExcContAmt(excContAmt.divide(rate, 2, BigDecimal.ROUND_HALF_UP));  //不含税合同金额
-        } else {
-            res.setExcContAmt(BigDecimal.ZERO);  //不含税合同金额
-        }
+        res.setExcContAmt(excContAmt); //不含税合同金额
+//        if(rate != null && excContAmt != null && rate.compareTo(BigDecimal.ZERO) != 0) {
+//            res.setExcContAmt(excContAmt.divide(rate, 2, BigDecimal.ROUND_HALF_UP));  //不含税合同金额
+//        } else {
+//            res.setExcContAmt(BigDecimal.ZERO);  //不含税合同金额
+//        }
         res.setRate(rate == null ? BigDecimal.ZERO : rate);              //汇率
         res.setCnyRate(cnyRate == null ? BigDecimal.ZERO : cnyRate);        //美元对人民币汇率
         res.setLocalRate(localRate == null ? BigDecimal.ZERO : localRate);    //项目当地币汇率
@@ -328,38 +332,165 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
 
     @Override
     public List<QqchTaxGlobal> getGlobalByFormula(QqchTaxGlobalFormula dealListDto) {
+
         IQqchTaxGlobalFormulaService bean = SpringUtils.getBean(IQqchTaxGlobalFormulaService.class);
+
+        // 获取填报明细数据
         CompileEntity<QqchTaxGlobalFormula> formula1 = bean.getFormula(dealListDto);
         QqchTaxGlobalFormula formula = formula1.getDto();
+
         ArrayList<QqchTaxGlobal> qqchTaxGlobals = new ArrayList<>();
 
+        if(formula == null) {
+            return qqchTaxGlobals;
+        }
+
+        // 节点回收比例
+        BigDecimal nodeRecoveryRate = formula.getNodeRecoveryRate() == null ? BigDecimal.ZERO : formula.getNodeRecoveryRate().divide(new BigDecimal(100));
+        // 合同币种对美汇率
+        BigDecimal rate = formula.getRate();
+        // 人民币占比
+        BigDecimal cnyProportion = formula.getCnyProportion()== null ? BigDecimal.ZERO : formula.getCnyProportion().divide(new BigDecimal(100));
+        // 人民币对美汇率
+        BigDecimal cnyRate = formula.getCnyRate();
+        // 本地币占比
+        BigDecimal localProportion = formula.getLocalProportion()== null ? BigDecimal.ZERO : formula.getLocalProportion().divide(new BigDecimal(100));
+        // 本地币对美汇率
+        BigDecimal localRate = formula.getLocalRate();
+        // 美元占比
+        BigDecimal usdProportion = formula.getUsdProportion() == null ? BigDecimal.ZERO : formula.getUsdProportion().divide(new BigDecimal(100));
+
+        // 工程量计算
+        BigDecimal a = formula.getQuantities();
+        // 调价收入
+        BigDecimal b = formula.getAdjustInAmt();
+        // 利息收入
+        BigDecimal c = formula.getPrePayAmt();
+        // 预付款
+        BigDecimal d = formula.getPrePayAmt();
+        BigDecimal d4Usd = d == null && rate == null && rate.compareTo(BigDecimal.ZERO) == 0
+                ? BigDecimal.ZERO : d.divide(rate, 2, BigDecimal.ROUND_HALF_UP);
+        // 质保金 - 合同币种
+        BigDecimal e = formula.getGuaAmt();
+        // 质保金 - 美元
+        BigDecimal e4Usd = e == null && rate == null && rate.compareTo(BigDecimal.ZERO) == 0
+                ? BigDecimal.ZERO : e.divide(rate, 2, BigDecimal.ROUND_HALF_UP);
+        // 单独计量的利息收入
+        BigDecimal f = formula.getAloneInterestInAmt();
+        // 索赔收入
+        BigDecimal g = formula.getClaimInAmt();
+
+        // 本次预计实收工程款 - 合同币种
+        //  H = A + B +C -D -E + F + G
+        BigDecimal totalAmt4cont = BigDecimal.ZERO.add(a == null ? BigDecimal.ZERO : a)
+                .add(b == null ? BigDecimal.ZERO : b)
+                .add(c == null ? BigDecimal.ZERO : c)
+                .subtract(d == null ? BigDecimal.ZERO : d)
+                .subtract(e == null ? BigDecimal.ZERO : e)
+                .add(f == null ? BigDecimal.ZERO : f)
+                .add(g == null ? BigDecimal.ZERO : g);
+
+        // ------------------------------------本期预计实收工程款---------------------------------//
+        // 本次预计实收工程款 - 美元
+        BigDecimal totalAmt4Usd = BigDecimal.ZERO;
+        if(rate != null) {
+            totalAmt4Usd = totalAmt4cont.divide(rate, 2, BigDecimal.ROUND_HALF_UP);
+        }
+
+        // 区域总部/国家办事处/总项目部代收支-当地币
+        BigDecimal regionLocalAmt = BigDecimal.ZERO;
+        // 区域总部/国家办事处/总项目部代收支-当地币折美元
+        BigDecimal regionUsdAmt = BigDecimal.ZERO;
+        if(localRate != null) {
+            regionUsdAmt = totalAmt4Usd.multiply(localProportion);
+            regionLocalAmt = regionUsdAmt.multiply(localRate);
+        }
+
+        // 海外事业部代收支-美元
+        BigDecimal overseasUsdAmt = totalAmt4Usd.multiply(usdProportion);
+
+        // 海外事业部代收支-人民币
+        BigDecimal overseasCnyAmt = BigDecimal.ZERO;
+        // 海外事业部代收支-人民币折美元
+        BigDecimal overseasCnyAmt2Usd = BigDecimal.ZERO;
+        if(cnyRate != null) {
+            overseasCnyAmt2Usd = totalAmt4Usd.multiply(cnyProportion);
+            overseasCnyAmt = overseasCnyAmt2Usd.multiply(cnyRate);
+        }
 
         QqchTaxGlobal rec = new QqchTaxGlobal();
         rec.setItemName("本期预计实收工程款");
-        rec.setRegionLocalAmt(formula.getLocalRecAmt());
-        rec.setRegionLocalRate(formula.getLocalRate());
-        rec.setOverseasCnyAmt(formula.getCnyRecAmt());
-        rec.setOverseasUsdAmt(formula.getUsdRecAmt());
-        rec.setOverseasCnyRate(formula.getCnyRate());
+        rec.setRegionLocalAmt(regionLocalAmt);
+        rec.setRegionLocalRate(regionUsdAmt);
+        rec.setOverseasCnyAmt(overseasCnyAmt);
+        rec.setOverseasUsdAmt(overseasUsdAmt);
+        rec.setOverseasCnyRate(overseasCnyAmt);
 
+        // ------------------------------------工程质保金返回---------------------------------//
+        // 本期工程质保金
+        BigDecimal e4This = BigDecimal.ZERO;
+        if(e4Usd != null) e4Usd.multiply(nodeRecoveryRate);
+        // 区域总部/国家办事处/总项目部代收支-当地币
+        BigDecimal regionLocalAmt1 = BigDecimal.ZERO;
+        // 区域总部/国家办事处/总项目部代收支-当地币折美元
+        BigDecimal regionUsdAmt1 = BigDecimal.ZERO;
+        if(localRate != null) {
+            regionUsdAmt1 = e4This.multiply(localProportion);
+            regionLocalAmt1 = regionUsdAmt1.multiply(localRate);
+        }
+
+        // 海外事业部代收支-美元
+        BigDecimal overseasUsdAmt1 = e4This.multiply(usdProportion);
+
+        // 海外事业部代收支-人民币
+        BigDecimal overseasCnyAmt1 = BigDecimal.ZERO;
+        // 海外事业部代收支-人民币折美元
+        BigDecimal overseasCnyAmt2Usd1 = BigDecimal.ZERO;
+        if(cnyRate != null) {
+            overseasCnyAmt2Usd1 = e4This.multiply(cnyProportion);
+            overseasCnyAmt1 = overseasCnyAmt2Usd1.multiply(cnyRate);
+        }
 
         QqchTaxGlobal back = new QqchTaxGlobal();
         back.setItemName("工程质保金返回");
-        back.setRegionLocalAmt(formula.getLocalBackAmt());
-        back.setOverseasCnyAmt(formula.getCnyBackAmt());
-        back.setOverseasUsdAmt(formula.getUsdBackAmt());
-        back.setOverseasCnyRate(formula.getCnyRate());
-        back.setRegionLocalRate(formula.getLocalRate());
+        back.setRegionLocalAmt(regionLocalAmt1);
+        back.setRegionLocalRate(regionUsdAmt1);
+        back.setOverseasCnyAmt(overseasCnyAmt1);
+        back.setOverseasUsdAmt(overseasUsdAmt1);
+        back.setOverseasCnyRate(overseasCnyAmt2Usd1);
 
+        // ------------------------------------本期预计实收预付款---------------------------------//
+        // 本期预计实收预付款金额
+        BigDecimal d4This = BigDecimal.ZERO;
+        if(d4Usd != null) d4Usd.multiply(nodeRecoveryRate);
+        // 区域总部/国家办事处/总项目部代收支-当地币
+        BigDecimal regionLocalAmt2 = BigDecimal.ZERO;
+        // 区域总部/国家办事处/总项目部代收支-当地币折美元
+        BigDecimal regionUsdAmt2 = BigDecimal.ZERO;
+        if(localRate != null) {
+            regionUsdAmt2 = d4This.multiply(localProportion);
+            regionLocalAmt2 = regionUsdAmt2.multiply(localRate);
+        }
+
+        // 海外事业部代收支-美元
+        BigDecimal overseasUsdAmt2 = d4This.multiply(usdProportion);
+
+        // 海外事业部代收支-人民币
+        BigDecimal overseasCnyAmt2 = BigDecimal.ZERO;
+        // 海外事业部代收支-人民币折美元
+        BigDecimal overseasCnyAmt2Usd2 = BigDecimal.ZERO;
+        if(cnyRate != null) {
+            overseasCnyAmt2Usd2 = d4This.multiply(cnyProportion);
+            overseasCnyAmt2 = overseasCnyAmt2Usd2.multiply(cnyRate);
+        }
 
         QqchTaxGlobal pay = new QqchTaxGlobal();
         pay.setItemName("本期预计实收预付款");
-        pay.setRegionLocalAmt(formula.getLocalPayAmt());
-        pay.setOverseasCnyAmt(formula.getCnyPayAmt());
-        pay.setOverseasUsdAmt(formula.getUsdPayAmt());
-        pay.setOverseasCnyRate(formula.getCnyRate());
-        pay.setRegionLocalRate(formula.getLocalRate());
-
+        pay.setRegionLocalAmt(regionLocalAmt2);
+        pay.setRegionLocalRate(regionUsdAmt2);
+        pay.setOverseasUsdAmt(overseasUsdAmt2);
+        pay.setOverseasCnyAmt(overseasCnyAmt2);
+        pay.setOverseasCnyRate(overseasCnyAmt2Usd2);
 
         qqchTaxGlobals.add(rec);
         qqchTaxGlobals.add(back);

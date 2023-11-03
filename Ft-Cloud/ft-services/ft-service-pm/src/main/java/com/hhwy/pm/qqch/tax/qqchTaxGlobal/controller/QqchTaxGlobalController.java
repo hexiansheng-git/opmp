@@ -192,7 +192,7 @@ public class QqchTaxGlobalController extends BaseController {
 
     @GetMapping("/getGlobalByFormula")
     public AjaxResult getGlobalByFormula(QqchTaxGlobalFormula param) {
-        List<QqchTaxGlobal> qqchTaxGlobalFormula = taxGlobalFormulaService.getGlobalByFormula(param.dealListDto());
+        List<QqchTaxGlobal> qqchTaxGlobalFormula = taxGlobalFormulaService.getGlobalByFormula(param);
         return AjaxResult.success(qqchTaxGlobalFormula);
     }
 
