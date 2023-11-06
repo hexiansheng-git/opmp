@@ -171,6 +171,8 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
 
         JdglMainPlanItem queryVO = new JdglMainPlanItem();
         queryVO.setPid(pid);
+        queryVO.setItemCode(jdglDayScheduleWbsParam.getWbsCode());
+        queryVO.setItemName(jdglDayScheduleWbsParam.getWbsName());
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getJdglMainPlanItemList4Lazy(queryVO);
 
         List<JdglDayScheduleWbs> returnList = new ArrayList<>();

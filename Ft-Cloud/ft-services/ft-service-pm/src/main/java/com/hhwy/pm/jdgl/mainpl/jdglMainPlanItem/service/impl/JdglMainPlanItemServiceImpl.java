@@ -63,12 +63,18 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         }
         Long mainPlanId = jdglMainPlanItem.getMainPlanId();
         if(mainPlanId == null) {
-            JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+            JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlanNoItem();
             if(usingJdglMainPlan != null) {
                 jdglMainPlanItem.setMainPlanId(usingJdglMainPlan.getId());
             }
         }
+
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemMapper.getJdglMainPlanItemList(jdglMainPlanItem);
+
+        if(StringUtils.isNotEmpty(jdglMainPlanItem.getItemCode()) || StringUtils.isNotEmpty(jdglMainPlanItem.getItemName())) {
+            return jdglMainPlanItemList;
+        }
+
         if(CollectionUtils.isEmpty(jdglMainPlanItemList)) {
             return jdglMainPlanItemList;
         }
@@ -127,7 +133,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                 jdglMainPlanItem1.setDuration(new BigDecimal(plannedDuration));
 //                jdglMainPlanItem1.setPlannedDuration(plannedDuration);
 
-                jdglMainPlanItem1.setOpen(true);
+                jdglMainPlanItem1.setOpen(false);
 //                jdglMainPlanItem1.setType("task");
 
                 // 实际开始
@@ -219,7 +225,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
     @Override
     public List<JdglMainPlanItem> getUsingJdglMainPlanItemList(JdglMainPlanItem jdglMainPlanItem) {
 
-        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlanNoItem();
 
         if(usingJdglMainPlan != null) {
             Long id = usingJdglMainPlan.getId();

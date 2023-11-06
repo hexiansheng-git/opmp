@@ -139,8 +139,8 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
             // 获取财务管理-风险管理-汇率登记
             List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
             if(!CollectionUtils.isEmpty(xmslContractPayinfoList) && jdglWeekPlanParam.getCustUnitCode() != null) {
-//                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> jdglWeekPlanParam.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
-                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> "USD".equals(vo.getCurrencyCode())).findFirst().orElse(null);
+                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> jdglWeekPlanParam.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
+//                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> "USD".equals(vo.getCurrencyCode())).findFirst().orElse(null);
                 if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
                     jdglWeekPlanParam.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
                 }

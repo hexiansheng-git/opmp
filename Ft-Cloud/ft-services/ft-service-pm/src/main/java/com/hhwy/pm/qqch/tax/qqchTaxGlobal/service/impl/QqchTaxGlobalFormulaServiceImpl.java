@@ -200,7 +200,7 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         Map<String, Date> dateRange = getDateRange(year,meteringCircle);
         BigDecimal qqchProdPlanAmt = qqchProdPlanService.getQqchProdPlanAmt4DateRange(null, dateRange.get("start"), dateRange.get("end"));
 
-        res.setQuantities(qqchProdPlanAmt); // 工程量计量金额
+        res.setQuantities(qqchProdPlanAmt == null ? BigDecimal.ZERO : qqchProdPlanAmt); // 工程量计量金额
 //        if(rate != null && qqchProdPlanAmt != null && rate.compareTo(BigDecimal.ZERO) != 0) {
 //            res.setQuantities(qqchProdPlanAmt.divide(rate, 2, BigDecimal.ROUND_HALF_UP)); // 工程量计量金额
 //        } else {
@@ -367,12 +367,12 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         BigDecimal c = formula.getPrePayAmt();
         // 预付款
         BigDecimal d = formula.getPrePayAmt();
-        BigDecimal d4Usd = d == null && rate == null && rate.compareTo(BigDecimal.ZERO) == 0
+        BigDecimal d4Usd = d == null || rate == null || rate.compareTo(BigDecimal.ZERO) == 0
                 ? BigDecimal.ZERO : d.divide(rate, 2, BigDecimal.ROUND_HALF_UP);
         // 质保金 - 合同币种
         BigDecimal e = formula.getGuaAmt();
         // 质保金 - 美元
-        BigDecimal e4Usd = e == null && rate == null && rate.compareTo(BigDecimal.ZERO) == 0
+        BigDecimal e4Usd = e == null || rate == null || rate.compareTo(BigDecimal.ZERO) == 0
                 ? BigDecimal.ZERO : e.divide(rate, 2, BigDecimal.ROUND_HALF_UP);
         // 单独计量的利息收入
         BigDecimal f = formula.getAloneInterestInAmt();
@@ -392,7 +392,7 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         // ------------------------------------本期预计实收工程款---------------------------------//
         // 本次预计实收工程款 - 美元
         BigDecimal totalAmt4Usd = BigDecimal.ZERO;
-        if(rate != null) {
+        if(rate != null && BigDecimal.ZERO.compareTo(rate) != 0) {
             totalAmt4Usd = totalAmt4cont.divide(rate, 2, BigDecimal.ROUND_HALF_UP);
         }
 

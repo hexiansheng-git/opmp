@@ -5,6 +5,7 @@ import com.hhwy.pm.core.sync.enums.SyncBusinessEnum;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.domain.JdglQuarterPlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
@@ -84,6 +85,9 @@ public interface ISysSyncInfoService {
      */
     void pushJdglProgressCorrectionTrack(List<JdglProgressCorrectionTrack> list);
     void pushJdglProgressCorrectionTrack(JdglProgressCorrectionTrack diffAnalysis);
+
+    void pushJdglMainPlan(List<JdglMainPlan> list);
+    void pushJdglMainPlan(JdglMainPlan jdglMainPlan);
 
     /**
      * 推送年度计划

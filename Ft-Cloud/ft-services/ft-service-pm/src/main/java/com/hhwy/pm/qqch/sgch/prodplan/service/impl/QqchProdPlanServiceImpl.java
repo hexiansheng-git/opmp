@@ -320,7 +320,9 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
             return BigDecimal.ZERO;
         }
         version = VersionUtil.getVersion(this.TN, version);
-        return qqchProdPlanMapper.getQqchProdPlanAmt4DateRange(version, start, end);
+        BigDecimal qqchProdPlanAmt4DateRange = qqchProdPlanMapper.getQqchProdPlanAmt4DateRange(version, start, end);
+        if(qqchProdPlanAmt4DateRange == null) return BigDecimal.ZERO;
+        return qqchProdPlanAmt4DateRange;
     }
 
     /**
