@@ -154,14 +154,19 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         XmslContractInfo contractInfo = xmslContractInfoMapper.getValidMaxVersionContractInfo();
         if(contractInfo != null){
             //有效合同金额对美元转换
-            this.setEffectiveAmoutDollar(contractInfo);
+            this.setEffectiveAmountDollar(contractInfo);
         }else {
             contractInfo = new XmslContractInfo();
         }
         return contractInfo;
     }
 
-    public void setEffectiveAmoutDollar(XmslContractInfo contractInfo){
+    /**
+     * 设置有效合同金额-美元
+     * @param contractInfo
+     */
+    @Override
+    public void setEffectiveAmountDollar(XmslContractInfo contractInfo){
         String listCurrencyCode = contractInfo.getListCurrencyCode();
         if("USD".equals(listCurrencyCode)){
             return;
@@ -208,7 +213,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         if(effectiveAmout != null && exchangeRate != null && exchangeRate.compareTo(BigDecimal.ZERO) != 0){
             effectiveAmoutDollar = effectiveAmout.divide(exchangeRate,4, RoundingMode.HALF_UP);
         }
-        contractInfo.setEffectiveAmoutDollar(effectiveAmoutDollar);
+        contractInfo.setEffectiveAmountDollar(effectiveAmoutDollar);
     }
 
     /**

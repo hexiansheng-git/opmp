@@ -21,6 +21,12 @@ public interface IXmslContractInfoService {
 
     XmslContractInfo getXmslContractInfo(XmslContractInfo xmslContractInfo);
 
+    /**
+     * 设置有效合同金额-美元
+     * @param contractInfo
+     */
+    void setEffectiveAmountDollar(XmslContractInfo contractInfo);
+
     List<XmslContractInfo> getXmslContractInfoList(XmslContractInfo xmslContractInfo);
 
     /**
