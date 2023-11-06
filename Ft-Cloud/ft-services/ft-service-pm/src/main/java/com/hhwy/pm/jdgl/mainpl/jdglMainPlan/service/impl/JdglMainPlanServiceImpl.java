@@ -62,6 +62,13 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         return getJdglMainPlan(jdglMainPlan);
     }
 
+    @Override
+    public JdglMainPlan getUsingJdglMainPlanNoItem() {
+        JdglMainPlan jdglMainPlan = new JdglMainPlan();
+        jdglMainPlan.setIsUse("1");
+        return jdglMainPlanMapper.getJdglMainPlan(jdglMainPlan);
+    }
+
     public List<JdglMainPlan> getJdglMainPlanList(JdglMainPlan jdglMainPlan) {
         List<JdglMainPlan> jdglMainPlanList = jdglMainPlanMapper.getJdglMainPlanList(jdglMainPlan);
 

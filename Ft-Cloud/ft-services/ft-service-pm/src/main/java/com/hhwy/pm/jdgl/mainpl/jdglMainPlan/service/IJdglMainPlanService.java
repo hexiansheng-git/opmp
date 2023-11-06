@@ -17,6 +17,8 @@ public interface IJdglMainPlanService {
 
     JdglMainPlan getUsingJdglMainPlan();
 
+    JdglMainPlan getUsingJdglMainPlanNoItem();
+
     List<JdglMainPlan> getJdglMainPlanList(JdglMainPlan jdglMainPlan);
 
     int insertJdglMainPlan(JdglMainPlan jdglMainPlan);
