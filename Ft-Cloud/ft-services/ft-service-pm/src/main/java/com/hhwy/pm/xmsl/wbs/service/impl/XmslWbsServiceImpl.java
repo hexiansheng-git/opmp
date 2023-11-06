@@ -527,6 +527,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                 temp.setListCode(null);
                 temp.setListIds(null);
             }
+            temp.setHaveChildren(ObjectUtils.nvl(temp.getHaveChildren(),0));
             if(temp.getId().length() < 21){
                 new AddBaseInfoUtil<>().updateBaseEntity(temp);
                 updateList.add(temp);
