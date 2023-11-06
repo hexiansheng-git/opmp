@@ -378,8 +378,8 @@ public class MaterialInfoServiceImpl implements IMaterialInfoService {
             return new AjaxResult(PmsConstant.WARN_CODE,"type不能为空");
         }
         String userId = SecurityUtils.getUserId().toString();
-        String redisKey=userId+PmsConstant.RECENTMATERIALKEY;
-        String key=userId+String.valueOf(type)+materialInfo.getMaterialCode();
+        String redisKey=userId+String.valueOf(type)+PmsConstant.RECENTMATERIALKEY;
+        String key=userId+materialInfo.getMaterialCode();
         redisUtils.hDelete(redisKey,key);
         return AjaxResult.success();
     }
