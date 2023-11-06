@@ -96,7 +96,7 @@ public class XmslDrawReviewController extends BaseController{
 
     /**
      * wbs列表
-     * @param map {version,valid,parentId}
+     * @param map {version,valid,parentId,ptVar1(编号|名称条件)}
      * @return
      */
     @PostMapping("/wbsList")
@@ -107,7 +107,7 @@ public class XmslDrawReviewController extends BaseController{
 
     /**
      * 工程量清单列表
-     * @param map {version,valid,parentId}
+     * @param map {version,valid,parentId,ptVar1(编号|名称条件)}
      * @return
      */
     @PostMapping("/engineeringList")

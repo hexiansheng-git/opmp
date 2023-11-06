@@ -142,6 +142,18 @@
         select list_code listCode,wbs_code wbsCode,code from xmsl_draw_review_material where  main_id = #{id}  and quanlity is null
     </select>
 
+
+    <select id="latestListId" resultType="com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList">
+        select `id`,ancestors from xmsl_contract_list
+        <where>
+            master_id = #{masterId} and del_flag = "0"
+            <if test="ptVar1 != null  and ptVar1 != ''">and (`code` like concat('%',#{ptVar1},'%')
+                        or `chinese_name` like concat('%',#{ptVar1},'%')
+                        or `foreign_name` like concat('%',#{ptVar1},'%')
+             ) </if>
+        </where>
+    </select>
+
     <insert id="insertXmslDrawReview">
         insert into xmsl_draw_review
         <trim prefix="(" suffix=")" suffixOverrides=",">

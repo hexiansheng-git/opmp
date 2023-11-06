@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewMaterial;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
@@ -44,6 +45,8 @@ public interface XmslDrawReviewMapper {
     List<XmslDrawReviewList> selectNullList(BigDecimal version);
 
     List<XmslDrawReviewMaterial> selectNullMater(Long id);
+
+    List<XmslContractList> latestListId(@Param("masterId") Long masterId,@Param("ptVar1") String ptVar1);
 
     int insertXmslDrawReview(XmslDrawReview xmslDrawReview);
 

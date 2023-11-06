@@ -1,12 +1,16 @@
 package com.hhwy.pm.xmsl.drawReview.service.impl;
 
+import cn.hutool.core.collection.ConcurrentHashSet;
+import cn.hutool.core.convert.Convert;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.domain.base.system.material.MaterialInfo;
 import com.hhwy.pm.core.system.SystemApiService;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.*;
 import com.hhwy.pm.xmsl.drawReview.dto.XmslDrawReviewDto;
@@ -24,6 +28,7 @@ import com.hhwy.utils.*;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.redisUtil.RedisUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -36,6 +41,7 @@ import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -54,6 +60,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     @Autowired
     private IXmslContractListService contractListService;
     @Autowired
+    private IXmslContractInfoService contractInfoService;
+    @Autowired
     private IXmslDrawReviewWbsService drawReviewWbsService;
     @Autowired
     private IXmslDrawReviewListService drawReviewListService;
@@ -69,6 +77,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     private IXmslMaterialReportService materialReportService;
     @Autowired
     private SystemApiService systemApiService;
+    @Autowired
+    private RedisUtils redisUtils;
 
     public XmslDrawReview getXmslDrawReview(XmslDrawReview xmslDrawReview) {
         return xmslDrawReviewMapper.getXmslDrawReview(xmslDrawReview);
@@ -108,16 +118,9 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
 
     @Override
     public List wbsList(Map map) {
-//        if(ObjectUtils.nvlString(map.get("valid")).equals("1")){
-//            XmslDrawReviewWbs query = new XmslDrawReviewWbs();
-//            query.setParentId(ObjectUtils.nvlLong(map.get("parentId"),-1L));
-//            query.setVersion(ObjectUtils.nvl(map.get("version")));
-//            query.setVersionFlag(Constant.YES_INT);
-//            List<XmslDrawReviewWbs> list = drawReviewWbsService.getXmslDrawReviewWbsList(query);
-//            return list;
-//        }
         XmslWbs query = new XmslWbs();
         query.setParentId(ObjectUtils.nvlString(map.get("parentId")));
+        query.setPtVar1(ObjectUtils.nvlString(map.get("ptVar1")));
         List<XmslWbs> list = wbsService.latestData(query);
         if(CollectionUtils.isEmpty(list))
             return list;
@@ -128,31 +131,11 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             temp.setId(null);
             wbsMap.put(temp.getCode(),temp);
         }
-//        if(ObjectUtils.isEmpty(map.get("version")))
-//            return list;
-        //查询对应的图纸复核wbs
-//        XmslDrawReviewWbs queryWbs = new XmslDrawReviewWbs();
-//        queryWbs.setVersion(ObjectUtils.nvl(map.get("version")));
-//        queryWbs.setVersionFlag(Constant.YES_INT);
-//        queryWbs.setParams(ObjectUtils.toMap("wbsCodes",wbsMap.keySet()));
-//        List<XmslDrawReviewWbs> wbsList = drawReviewWbsService.getXmslDrawReviewWbsList(queryWbs);
-//        for (int i = 0; i < wbsList.size(); i++) {
-//            XmslWbs tempWbs = wbsMap.get(wbsList.get(i).getCode());
-////            tempWbs.setId(wbsList.get(i).getId()+"");
-//        }
         return list;
     }
 
     @Override
     public List engineeringList(Map map) {
-//        if(ObjectUtils.nvlString(map.get("valid")).equals("1")){
-//            XmslDrawReviewList queryList = new XmslDrawReviewList();
-//            queryList.setVersion(ObjectUtils.nvl(map.get("version")));
-//            queryList.setVersionFlag(Constant.YES_INT);
-//            queryList.setPid(ObjectUtils.nvlLong(map.get("parentId"),-1L));
-//            List<XmslDrawReviewList> resuList = drawReviewListService.getXmslDrawReviewListList(queryList);
-//            return resuList;
-//        }
         XmslContractList queryList = new XmslContractList();
         if(ObjectUtils.nvlLong(map.get("parentId"),0L).equals(0L) ){ //合同清单的根级节点pid为null
             queryList.setPid(null);
@@ -160,29 +143,43 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         }else{
             queryList.setPid(ObjectUtils.nvlLong(map.get("parentId"),0L));
         }
-        List<XmslContractList> list = contractListService.getEffectList(queryList);
+        boolean hasCondition = ObjectUtils.isNotBlank(map.get("ptVar1"));
+        List<XmslContractList> list = null;
+        if(!hasCondition){
+            list = contractListService.getEffectList(queryList);
+        }else{  //搜索
+            String codeName = ObjectUtils.nvlString(map.get("ptVar1"));
+            String key = "list::lazySearch_"+ MySecurityUtils.getTenantKey()+"::"+StringUtils.join(",",codeName);
+            XmslContractInfo contractInfo = contractInfoService.getValidMaxVersionContractInfo();
+            if(contractInfo == null || contractInfo.getId() == null)
+                return new ArrayList();
+            //获取ids
+            Set<String> idSet = null;
+            if(!redisUtils.hasKey(key) ){
+                List<XmslContractList> listList = xmslDrawReviewMapper.latestListId(contractInfo.getId(),codeName);
+                final Set<String> resuIdSet = new ConcurrentHashSet<>();
+                listList.parallelStream().forEach(r->{
+                    resuIdSet.addAll(Arrays.asList(Convert.toStrArray(r.getAncestors())));
+                });
+                if(resuIdSet.size() < 1)
+                    resuIdSet.add("-1");
+                redisUtils.sAdd(key,resuIdSet.toArray(new String[]{}));
+                redisUtils.expire(key,10, TimeUnit.MINUTES);
+                idSet = resuIdSet;
+            }else{
+                idSet = redisUtils.sMembers(key);
+            }
+            queryList.setIds(idSet.stream().map(r->Long.valueOf(r)).toArray(Long[]::new));
+            list = contractListService.getXmslContractListList(queryList);
+        }
         if(CollectionUtils.isEmpty(list))
             return new ArrayList(2);
-        Map<String,XmslContractList> listMap = new HashMap<>(list.size());
         for (int i = 0; i < list.size(); i++) {
             XmslContractList temp = list.get(i);
             temp.setPtVar2(temp.getCode());
             temp.setPtVar1(String.valueOf(temp.getId()));
             temp.setListId(temp.getId());
             temp.setId(null);
-            listMap.put(temp.getCode(),temp);
-        }
-        if(ObjectUtils.isEmpty(map.get("version")))
-            return list;
-        //查询对应的图纸复核清单 (图纸复核清单id 填充到list)
-        XmslDrawReviewList queryDrawList = new XmslDrawReviewList();
-        queryDrawList.setVersion(ObjectUtils.nvl(map.get("version")));
-        queryDrawList.setVersionFlag(Constant.YES_INT);
-        queryDrawList.setParams(ObjectUtils.toMap("listCodes",listMap.keySet()));
-        List<XmslDrawReviewList> drawList = drawReviewListService.getXmslDrawReviewListList(queryDrawList);
-        for (int i = 0; i < drawList.size(); i++) {
-            XmslContractList tempList = listMap.get(drawList.get(i).getListCode());
-//            tempList.setId(drawList.get(i).getId());
         }
         return list;
     }
