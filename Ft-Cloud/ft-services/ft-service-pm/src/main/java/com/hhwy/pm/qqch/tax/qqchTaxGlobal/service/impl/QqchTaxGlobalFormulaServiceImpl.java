@@ -392,7 +392,7 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         // ------------------------------------本期预计实收工程款---------------------------------//
         // 本次预计实收工程款 - 美元
         BigDecimal totalAmt4Usd = BigDecimal.ZERO;
-        if(rate != null || BigDecimal.ZERO.compareTo(rate) != 0) {
+        if(rate != null && BigDecimal.ZERO.compareTo(rate) != 0) {
             totalAmt4Usd = totalAmt4cont.divide(rate, 2, BigDecimal.ROUND_HALF_UP);
         }
 
