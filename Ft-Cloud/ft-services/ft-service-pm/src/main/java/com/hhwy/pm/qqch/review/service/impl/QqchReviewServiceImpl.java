@@ -332,7 +332,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         }
         //获取合同有效合同金额
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
-        BigDecimal effectiveAmoutDollar = ObjectUtils.nvlBigDecimal(xmslContractInfo.getEffectiveAmoutDollar()).divide (new BigDecimal("10000"), 4,RoundingMode.HALF_UP);
+        BigDecimal effectiveAmoutDollar = ObjectUtils.nvlBigDecimal(xmslContractInfo.getEffectiveAmountDollar()).divide (new BigDecimal("10000"), 4,RoundingMode.HALF_UP);
         review.setEffectiveAmoutDollar(ObjectUtils.nvlBigDecimal(effectiveAmoutDollar));
         return review;
     }

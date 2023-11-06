@@ -59,7 +59,7 @@ public class XmslDrawReviewController extends BaseController{
     @PostMapping("/detail")
     public AjaxResult detali(@RequestBody XmslDrawReview drawReview) {
         if(drawReview.getId() == null){
-            drawReview =xmslDrawReviewService.getLast();
+            drawReview =xmslDrawReviewService.getEffectLast();
         }else{
             drawReview = xmslDrawReviewService.getById(drawReview.getId());
         }

@@ -76,7 +76,7 @@ public class QqchSurveyDesignTeams extends CommonBaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "关联计划wbs的id")
-    private Long wbsId;
+    private String wbsId;
     /**
      * 字段描述：关联计划wbs的name
      */

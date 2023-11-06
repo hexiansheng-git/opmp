@@ -66,43 +66,7 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
 
     @Override
     public SbchTotalDemandPlan getLeaderList(SbchTotalDemandPlanDetail param) {
-        SbchTotalDemandPlan result = new SbchTotalDemandPlan();
-        BigDecimal version = VersionUtil.getVersion("sbch_total_demand_plan", null);
-        SbchTotalDemandPlan sbchTotalDemandPlan = new SbchTotalDemandPlan();
-        sbchTotalDemandPlan.setVersion(version);
-        List<SbchTotalDemandPlan> sbchTotalDemandPlans = sbchTotalDemandPlanMapper.selectSbchTotalDemandPlanList(sbchTotalDemandPlan);
-        if (!ObjectNullUtil.isEmpty(sbchTotalDemandPlans)) {
-            SbchTotalDemandPlan sbchTotalDemandPlan1 = sbchTotalDemandPlans.get(0);
-            result = sbchTotalDemandPlan1;
-            List<SbchTotalDemandPlanDetail> sbchTotalDemandPlanDetails = null;
-            Integer pageNum = param.getPageNum();
-            Integer pageSize = param.getPageSize();
-            if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize)) {
-//                String orderBy = SqlUtils.escapeOrderBySql(pageDomain.getOrderBy());
-                PageHelper.startPage(pageNum, pageSize, null);
-            }
-            if (ObjectUtils.isEmpty(param)) {
-                param = new SbchTotalDemandPlanDetail();
-                param.setPlanId(sbchTotalDemandPlan1.getId());
-                sbchTotalDemandPlanDetails = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailList(param);
-            }else {
-                param.setPlanId(sbchTotalDemandPlan1.getId());
-                sbchTotalDemandPlanDetails = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailLeaderList(param);
-            }
-            if (!ObjectNullUtil.isEmpty(sbchTotalDemandPlanDetails)) {
-                Map<String, String> busAndMaterialMap = new HashMap<>();
-                busAndMaterialMap.put("materialName", "materialName");
-                busAndMaterialMap.put("materialSpec", "materialSpec");
-                sbchTotalDemandPlanDetails = setMaterialNameUtils.setMaterialInfo(sbchTotalDemandPlanDetails, "materialCode", busAndMaterialMap);
-                Map<String, String> busAndCategoryMap = new HashMap<>();
-                busAndCategoryMap.put("ptVar1", "categoryName");
-                sbchTotalDemandPlanDetails = setMaterialNameUtils.setCategoryInfo(sbchTotalDemandPlanDetails, "materialType", busAndCategoryMap);
-            }
-            result.setPlanDetailList(sbchTotalDemandPlanDetails);
-        }
-        result.setVersion(version);
-        result.setStageIdentity(qqchReviewService.getStage());
-        return result;
+        return this.getSbchTotalDemandPlan(null, param);
     }
 
     private SbchTotalDemandPlan getSbchTotalDemandPlan(BigDecimal version, SbchTotalDemandPlanDetail param) {
@@ -120,6 +84,12 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
                 param.setPlanId(sbchTotalDemandPlan1.getId());
                 sbchTotalDemandPlanDetails = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailList(param);
             }else {
+                Integer pageNum = param.getPageNum();
+                Integer pageSize = param.getPageSize();
+                if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize)) {
+//                String orderBy = SqlUtils.escapeOrderBySql(pageDomain.getOrderBy());
+                    PageHelper.startPage(pageNum, pageSize, null);
+                }
                 param.setPlanId(sbchTotalDemandPlan1.getId());
                 sbchTotalDemandPlanDetails = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailLeaderList(param);
             }

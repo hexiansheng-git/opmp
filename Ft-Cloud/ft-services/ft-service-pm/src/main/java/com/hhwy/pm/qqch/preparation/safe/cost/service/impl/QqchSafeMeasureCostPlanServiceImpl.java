@@ -62,7 +62,7 @@ public class QqchSafeMeasureCostPlanServiceImpl implements IQqchSafeMeasureCostP
         BigDecimal effectiveAmtDollar = BigDecimal.ZERO;
         if (xmslContractInfo != null) {
             // 有效合同金额
-            effectiveAmtDollar = xmslContractInfo.getEffectiveAmoutDollar() == null ? BigDecimal.ZERO : xmslContractInfo.getEffectiveAmoutDollar();
+            effectiveAmtDollar = xmslContractInfo.getEffectiveAmountDollar() == null ? BigDecimal.ZERO : xmslContractInfo.getEffectiveAmountDollar();
         }
         BigDecimal expectInvestCostTotal = BigDecimal.ZERO;
         // 占工程造价百分比（%）= 预计投入/合同总额

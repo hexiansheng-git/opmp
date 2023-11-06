@@ -395,5 +395,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update `sbch_equipment_special_plan_details` set del_flag = 1 where main_id=#{mainId}
     </update>
 
+    <select id="getListByDeviceCode" resultMap="SbchEquipmentSpecialPlanDetailsResult">
+        <include refid="selectSbchEquipmentSpecialPlanDetailsVo"/>
+        <where>
+            `del_flag` = 0
+            <if test="mainId != null "> and `main_id` = #{mainId}</if>
+            <if test="deviceCodes!=null">
+                and pt_var1 in
+                <foreach item="deviceCode" collection="deviceCodes" open="(" separator="," close=")">
+                    #{deviceCode}
+                </foreach>
+            </if>
+        </where>
+    </select>
 
 </mapper>

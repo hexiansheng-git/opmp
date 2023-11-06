@@ -255,6 +255,7 @@
             del_flag = "0"
             <if test="code != null  and code != ''">and `code` like concat('%',#{code},'%') </if>
             <if test="name != null  and name != ''">and `name` like concat('%',#{name},'%') </if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and (`code` like concat('%',#{ptVar1},'%')  or `name` like concat('%',#{ptVar1},'%') ) </if>
         </where>
     </select>
 

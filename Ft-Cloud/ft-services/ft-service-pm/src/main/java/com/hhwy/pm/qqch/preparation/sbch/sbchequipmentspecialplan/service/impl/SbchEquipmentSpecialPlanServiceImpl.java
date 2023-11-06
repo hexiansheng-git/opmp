@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -167,6 +168,25 @@ public class SbchEquipmentSpecialPlanServiceImpl implements ISbchEquipmentSpecia
         }
         returnVo.setVersion(version);
         returnVo.setStageIdentity(qqchReviewService.getStage());
+        return returnVo;
+    }
+
+    @Override
+    public List getListByDeviceCode(List<String> collect, BigDecimal version) {
+        List<SbchEquipmentSpecialPlanDetails> returnVo = new ArrayList();
+        version = VersionUtil.getVersion("sbch_equipment_special_plan", version);
+        SbchEquipmentSpecialPlan sbchEquipmentSpecialPlan = new SbchEquipmentSpecialPlan();
+        sbchEquipmentSpecialPlan.setVersionNo(version);
+        List<SbchEquipmentSpecialPlan> sbchEquipmentSpecialPlans = sbchEquipmentSpecialPlanMapper.selectSbchEquipmentSpecialPlanList(sbchEquipmentSpecialPlan);
+        SbchEquipmentSpecialPlanDetails sbchEquipmentSpecialPlanDetails = new SbchEquipmentSpecialPlanDetails();
+        if(!ObjectNullUtil.isEmpty(sbchEquipmentSpecialPlans)){
+            SbchEquipmentSpecialPlan sbchEquipmentSpecialPlan1 = sbchEquipmentSpecialPlans.get(0);
+            sbchEquipmentSpecialPlanDetails.setMainId(sbchEquipmentSpecialPlan1.getId());
+        }else{
+            sbchEquipmentSpecialPlanDetails.setMainId(0L);
+        }
+        sbchEquipmentSpecialPlanDetails.setDeviceCodes(collect);
+        returnVo = detailsService.getListByDeviceCode(sbchEquipmentSpecialPlanDetails);
         return returnVo;
     }
 

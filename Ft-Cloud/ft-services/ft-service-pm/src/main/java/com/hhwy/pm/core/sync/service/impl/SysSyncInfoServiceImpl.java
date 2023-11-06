@@ -386,7 +386,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
         }
     }
 
-    public void pushJdglProgressCorrectionTrack(JdglMainPlan jdglMainPlan){
+    public void pushJdglMainPlan(JdglMainPlan jdglMainPlan){
         this.pushJdglMainPlan(Arrays.asList(jdglMainPlan));
     }
 

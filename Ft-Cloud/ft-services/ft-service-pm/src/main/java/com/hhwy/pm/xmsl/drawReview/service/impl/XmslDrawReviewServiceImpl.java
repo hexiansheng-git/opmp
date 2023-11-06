@@ -128,14 +128,14 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             temp.setId(null);
             wbsMap.put(temp.getCode(),temp);
         }
-        if(ObjectUtils.isEmpty(map.get("version")))
-            return list;
+//        if(ObjectUtils.isEmpty(map.get("version")))
+//            return list;
         //查询对应的图纸复核wbs
-        XmslDrawReviewWbs queryWbs = new XmslDrawReviewWbs();
-        queryWbs.setVersion(ObjectUtils.nvl(map.get("version")));
-        queryWbs.setVersionFlag(Constant.YES_INT);
-        queryWbs.setParams(ObjectUtils.toMap("wbsCodes",wbsMap.keySet()));
-        List<XmslDrawReviewWbs> wbsList = drawReviewWbsService.getXmslDrawReviewWbsList(queryWbs);
+//        XmslDrawReviewWbs queryWbs = new XmslDrawReviewWbs();
+//        queryWbs.setVersion(ObjectUtils.nvl(map.get("version")));
+//        queryWbs.setVersionFlag(Constant.YES_INT);
+//        queryWbs.setParams(ObjectUtils.toMap("wbsCodes",wbsMap.keySet()));
+//        List<XmslDrawReviewWbs> wbsList = drawReviewWbsService.getXmslDrawReviewWbsList(queryWbs);
 //        for (int i = 0; i < wbsList.size(); i++) {
 //            XmslWbs tempWbs = wbsMap.get(wbsList.get(i).getCode());
 ////            tempWbs.setId(wbsList.get(i).getId()+"");

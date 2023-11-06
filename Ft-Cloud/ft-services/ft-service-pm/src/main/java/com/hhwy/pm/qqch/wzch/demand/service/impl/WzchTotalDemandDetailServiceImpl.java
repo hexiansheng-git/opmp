@@ -1343,10 +1343,6 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
             list.add(detail.getNonSelfAmount());
             if (CollectionUtils.isNotEmpty(tSysDictDataList) && StringUtils.isNotBlank(detail.getCategoryName())) {
                 list.add(com.hhwy.utils.ObjectUtils.nvlString(tmap.get(detail.getCategoryName())));
-//                tSysDictDataList.stream().filter(i -> StringUtils.isNotEmpty(i.getDictValue()) && i.getDictValue().equals(detail.getCategoryName()))
-//                        .findFirst().ifPresent(val -> list.add(val.getDictLabel()));
-//                if(list.size() < 10)
-//                    list.add("");
             } else {
                 //格式化类型
                 list.add(detail.getCategoryName());
