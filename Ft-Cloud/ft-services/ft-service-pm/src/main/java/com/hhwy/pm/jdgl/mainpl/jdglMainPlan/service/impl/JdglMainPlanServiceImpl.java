@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItemPre;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemPreService;
@@ -34,6 +35,9 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
 
     @Autowired
     private IJdglMainPlanItemPreService jdglMainPlanItemPreService;
+
+    @Autowired
+    private ISysSyncInfoService sysSyncInfoService;
 
 
     public JdglMainPlan getJdglMainPlan(JdglMainPlan jdglMainPlan) {
@@ -87,7 +91,11 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
 //        jdglMainPlan.setId(IdWorker.createId());
         jdglMainPlan.setCreateUser(SecurityUtils.getUserName());
         jdglMainPlan.setCreateTime(DateUtils.getNowDate());
-        return jdglMainPlanMapper.insertJdglMainPlan(jdglMainPlan);
+        int i = jdglMainPlanMapper.insertJdglMainPlan(jdglMainPlan);
+        if(i > 0) {
+            sysSyncInfoService.pushJdglMainPlan(jdglMainPlan);
+        }
+        return i;
     }
 
     @Transactional
@@ -106,7 +114,11 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         jdglMainPlan.setUpdateTime(DateUtils.getNowDate());
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlan.getJdglMainPlanItemList();
         iJdglMainPlanItemService.updateJdglMainPlanItemList(jdglMainPlanItemList);
-        return jdglMainPlanMapper.updateJdglMainPlan(jdglMainPlan);
+        int i = jdglMainPlanMapper.updateJdglMainPlan(jdglMainPlan);
+        if(i > 0) {
+            sysSyncInfoService.pushJdglMainPlan(jdglMainPlan);
+        }
+        return i;
     }
 
     @Transactional
