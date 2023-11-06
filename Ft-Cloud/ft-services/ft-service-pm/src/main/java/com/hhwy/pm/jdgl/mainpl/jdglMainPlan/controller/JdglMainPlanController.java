@@ -49,6 +49,13 @@ public class JdglMainPlanController extends BaseController {
     }
 
     // // @PreAuthorize(hasPermi = "jdglMainPlan:list")
+    @GetMapping("/getBaseMainPlan")
+    public AjaxResult getBaseMainPlan() {
+        JdglMainPlan jdglMainPlan = jdglMainPlanService.getBaseMainPlan();
+        return AjaxResult.success(jdglMainPlan);
+    }
+
+    // // @PreAuthorize(hasPermi = "jdglMainPlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglMainPlanList(@Validated(ValidationGroups.Select.class) JdglMainPlan jdglMainPlanParam) {
         startPage();

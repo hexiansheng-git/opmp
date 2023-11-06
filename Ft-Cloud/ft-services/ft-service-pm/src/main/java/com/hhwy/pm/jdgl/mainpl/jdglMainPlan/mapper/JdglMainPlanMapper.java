@@ -27,4 +27,6 @@ public interface JdglMainPlanMapper {
     int deleteJdglMainPlan(JdglMainPlan jdglMainPlan);
 
     int deleteJdglMainPlanByPks(@Param("jdglMainPlanPkList") List<Long> jdglMainPlanPkList);
+
+    JdglMainPlan getMinVersionMainPlan();
 }

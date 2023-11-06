@@ -141,4 +141,16 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
     public int deleteJdglMainPlanByPks(List<Long> jdglMainPlanPkList) {
         return jdglMainPlanMapper.deleteJdglMainPlanByPks(jdglMainPlanPkList);
     }
+
+    @Override
+    public JdglMainPlan getBaseMainPlan() {
+        JdglMainPlan jdglMainPlan = jdglMainPlanMapper.getMinVersionMainPlan();
+        if(jdglMainPlan == null) {
+            return new JdglMainPlan();
+        }
+        JdglMainPlan vo = new JdglMainPlan();
+        Long id = jdglMainPlan.getId();
+        vo.setId(id);
+        return getJdglMainPlan(vo);
+    }
 }
