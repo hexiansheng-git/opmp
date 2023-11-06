@@ -11,6 +11,8 @@ import com.hhwy.pm.ehr.domain.PersonCertifyCompetency;
 import com.hhwy.pm.ehr.service.IEhrService;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.redisUtil.RedisUtils;
+import org.apache.http.Header;
+import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -83,9 +85,16 @@ public class EhrServiceImpl implements IEhrService {
 
     @Override
     public Map<String,Object> getCertList(String userName4A) throws  ParserConfigurationException, IOException, SAXException {
-        String sessionId=this.getHrSessionId();
+
+        Map<String, String> res = this.getHrSessionId();
+        String sessionId = res.get("sessionId");
+        String cookie = res.get("cookie");
         String certParam = this.getCertParam(sessionId, userName4A);
-        String result = this.cretPost(certUrl, certParam);
+        CloseableHttpResponse response = this.cretPost(certUrl, certParam,cookie);
+        //获取结果实体
+        HttpEntity entity = response.getEntity();
+        int state = response.getStatusLine().getStatusCode();
+        String result = EntityUtils.toString(entity, "UTF-8");
         Map map = this.getCertInfo(result);
         return map;
     }
@@ -178,16 +187,31 @@ public class EhrServiceImpl implements IEhrService {
         return personCertifyCompetencyList;
     }
 
-    private String getHrSessionId() throws  ParserConfigurationException, IOException, SAXException {
+    private Map<String,String> getHrSessionId() throws  ParserConfigurationException, IOException, SAXException {
         String sessionParam = this.getSessionParam();
-        String result = this.cretPost(sessionUrl, sessionParam);
+        CloseableHttpResponse response = this.cretPost(sessionUrl, sessionParam,null);
+        //获取cookies
+        StringBuilder cookieSb = new StringBuilder();
+        Header[] allHeaders = response.getAllHeaders();
+        for (Header headr : allHeaders) {
+            if(headr.getName() != null && headr.getName().equalsIgnoreCase("Set-Cookie")) {
+                String cookie = headr.getValue();
+                    cookieSb.append(cookie).append(";");
+                }
+        }
+        //获取结果实体
+        HttpEntity entity = response.getEntity();
+        String result = EntityUtils.toString(entity, "UTF-8");
         String sessionId = this.getSessionInfo(result);
-        return sessionId;
+        Map<String, String> map = new HashMap<>();
+        map.put("sessionId",sessionId);
+        map.put("cookie",cookieSb.toString());
+        return map;
     }
 
 
 
-    public  String cretPost(String url,String param) {
+    public  CloseableHttpResponse  cretPost(String url,String param,String cookie) {
         CloseableHttpClient closeableHttpClient = null;
         HttpPost httpPost = null;
         CloseableHttpResponse response = null;
@@ -206,13 +230,18 @@ public class EhrServiceImpl implements IEhrService {
             httpPost.addHeader("charset","utf-8");
             httpPost.addHeader("apiKey", apiKey);
             httpPost.addHeader("SOAPAction", null);
+            httpPost.addHeader("SOAPAction", null);
+            // 设置登录接口的cookie到业务接口请求头
+            if(cookie!=null){
+                httpPost.addHeader("Cookie", cookie);
+            }
             //返回信息；
             response = closeableHttpClient.execute(httpPost);
             //获取结果实体
-            HttpEntity entity = response.getEntity();
-            int state = response.getStatusLine().getStatusCode();
-            String result = EntityUtils.toString(entity, "UTF-8");
-            return result;
+//            HttpEntity entity = response.getEntity();
+//            int state = response.getStatusLine().getStatusCode();
+//            String result = EntityUtils.toString(entity, "UTF-8");
+            return response;
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, exception.getMessage(), exception);
@@ -239,82 +268,87 @@ public class EhrServiceImpl implements IEhrService {
         }
     }
 
-//    public static void main(String[] args) throws ServiceException {
-//        String url = "http://api.cfhec.net/env-101/por-1901/hr/hrlogin/EASLogin";
-//        String apiKey="1R4xxlzZQj1wV643K9d6erJ7g4y89Zwj";
-//        String xminfo = "<soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" \n" +
-//                "xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:web=\"http://webservice.app.webservice.shr.kingdee.com\">\n" +
-//                "   <soapenv:Header/>\n" +
-//                "   <soapenv:Body>\n" +
-//                "      <web:login soapenv:encodingStyle=\"http://schemas.xmlsoao.org/soap/encoding/\">\n" +
-//                "         <userName xsi:type=\"xsd:string\">test01</userName>\n" +
-//                "         <password xsi:type=\"xsd:string\">Qwer@123</password>\n" +
-//                "         <slnName xsi:type=\"xsd:string\">eas</slnName>\n" +
-//                "         <dcName xsi:type=\"xsd:string\">ceshi230609</dcName>\n" +
-//                "         <language xsi:type=\"xsd:string\">L2</language>\n" +
-//                "         <dbType xsi:type=\"xsd:int\">0</dbType>\n" +
-//                "         <authPattern xsi:type=\"xsd:string\">0</authPattern>\n" +
-//                "      </web:login>\n" +
-//                "   </soapenv:Body>\n" +
-//                "</soapenv:Envelope>\n" +
-//                "\n";
-//
-//            CloseableHttpClient closeableHttpClient = null;
-//            HttpPost httpPost = null;
-//            CloseableHttpResponse response = null;
-//            // 创建Httpclient对象
-//            closeableHttpClient = HttpClients.createDefault();
-//            try{
-//                // 创建http GET请求
-//                httpPost = new HttpPost(url);
-//                //封装请求参数
-//                if(xminfo != null) {
-//                    StringEntity stringEntity = new StringEntity(xminfo, ContentType.TEXT_XML);
-//                    httpPost.setEntity(stringEntity);
-//                }
-//                //封装头部信息
-//                httpPost.addHeader("Content-Type","text/xml");
-//                httpPost.addHeader("charset","utf-8");
-//                httpPost.addHeader("apiKey", apiKey);
-//                httpPost.addHeader("SOAPAction", null);
-//                //返回信息；
-//                response = closeableHttpClient.execute(httpPost);
-//                //获取结果实体
-//                HttpEntity entity = response.getEntity();
-//                int state = response.getStatusLine().getStatusCode();
-//                String result = EntityUtils.toString(entity, "UTF-8");
-//                //请求成功
-//                String seessionId = getSessionInfo(result);
-//                //String userName=SecurityUtils.getSysUser().getUserName();
-//                String certParam = getCertParam(seessionId, "2022008083");
-//                //证件返回信息
-//                String certResponse = cretPost("http://api.cfhec.net/env-101/por-1901/hr/QueryPersonInfoService/WSOSFWebserviceFacade", certParam);
-//                Map map = getCertInfo(certResponse);
-//            } catch (Exception exception) {
-//                exception.printStackTrace();
-//                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, exception.getMessage(), exception);
-//            } finally {
-//                try{
-//                    httpPost.releaseConnection();
-//                }catch (Exception e){
-//
-//                }
-//                if(closeableHttpClient != null){
-//                    try{
-//                        closeableHttpClient.close();
-//                    } catch (Exception e){
-//
-//                    }
-//                }
-//                if(response != null){
-//                    try{
-//                        response.close();
-//                    } catch (Exception e){
-//
-//                    }
-//                }
-//            }
-//        }
+    public static void main(String[] args)  {
+        String url = "http://api.cfhec.net/env-101/por-1901/hr/hrlogin/EASLogin";
+        String apiKey="1R4xxlzZQj1wV643K9d6erJ7g4y89Zwj";
+        String xminfo = "<soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" \n" +
+                "xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:web=\"http://webservice.app.webservice.shr.kingdee.com\">\n" +
+                "   <soapenv:Header/>\n" +
+                "   <soapenv:Body>\n" +
+                "      <web:login soapenv:encodingStyle=\"http://schemas.xmlsoao.org/soap/encoding/\">\n" +
+                "         <userName xsi:type=\"xsd:string\">test01</userName>\n" +
+                "         <password xsi:type=\"xsd:string\">Qwer@123</password>\n" +
+                "         <slnName xsi:type=\"xsd:string\">eas</slnName>\n" +
+                "         <dcName xsi:type=\"xsd:string\">ceshi230609</dcName>\n" +
+                "         <language xsi:type=\"xsd:string\">L2</language>\n" +
+                "         <dbType xsi:type=\"xsd:int\">0</dbType>\n" +
+                "         <authPattern xsi:type=\"xsd:string\">0</authPattern>\n" +
+                "      </web:login>\n" +
+                "   </soapenv:Body>\n" +
+                "</soapenv:Envelope>\n" +
+                "\n";
+
+            CloseableHttpClient closeableHttpClient = null;
+            HttpPost httpPost = null;
+            CloseableHttpResponse response = null;
+            // 创建Httpclient对象
+            closeableHttpClient = HttpClients.createDefault();
+            try{
+                // 创建http GET请求
+                httpPost = new HttpPost(url);
+                //封装请求参数
+                if(xminfo != null) {
+                    StringEntity stringEntity = new StringEntity(xminfo, ContentType.TEXT_XML);
+                    httpPost.setEntity(stringEntity);
+                }
+                //封装头部信息
+                httpPost.addHeader("Content-Type","text/xml");
+                httpPost.addHeader("charset","utf-8");
+                httpPost.addHeader("apiKey", apiKey);
+                httpPost.addHeader("SOAPAction", null);
+                //返回信息；
+                response = closeableHttpClient.execute(httpPost);
+                //获取结果实体
+                HttpEntity entity = response.getEntity();
+                int state = response.getStatusLine().getStatusCode();
+                String result = EntityUtils.toString(entity, "UTF-8");
+
+                // 获取httpClient响应的请求头header
+                Header responseHeader = response.getFirstHeader("X-USER-AUTH");
+                HeaderElement[] responseHeaderElements = responseHeader.getElements();
+
+                //请求成功
+                //String seessionId = getSessionInfo(result);
+                //String userName=SecurityUtils.getSysUser().getUserName();
+                //String certParam = getCertParam(seessionId, "2022008083");
+                //证件返回信息
+                //String certResponse = cretPost("http://api.cfhec.net/env-101/por-1901/hr/QueryPersonInfoService/WSOSFWebserviceFacade", certParam);
+                //Map map = getCertInfo(certResponse);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, exception.getMessage(), exception);
+            } finally {
+                try{
+                    httpPost.releaseConnection();
+                }catch (Exception e){
+
+                }
+                if(closeableHttpClient != null){
+                    try{
+                        closeableHttpClient.close();
+                    } catch (Exception e){
+
+                    }
+                }
+                if(response != null){
+                    try{
+                        response.close();
+                    } catch (Exception e){
+
+                    }
+                }
+            }
+        }
 
 
     //解析session信息
