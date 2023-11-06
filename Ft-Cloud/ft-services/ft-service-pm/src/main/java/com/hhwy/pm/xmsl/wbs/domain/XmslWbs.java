@@ -239,7 +239,7 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     @JsonProperty
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：预留字段1  搜索时用作编号&名称搜索条件
      */
     @JsonProperty
     private String ptVar1;

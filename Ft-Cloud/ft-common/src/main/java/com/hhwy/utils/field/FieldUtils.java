@@ -81,7 +81,7 @@ public class FieldUtils {
             }
             method.invoke(t, v);
         } catch (Exception e) {
-          log.error("反射异常,设置指定字段{}的值失败,{}",fieldName,e.getMessage());  
+          log.debug("反射异常,设置指定字段{}的值失败,{}",fieldName,e.getMessage());
         }
 
     }
