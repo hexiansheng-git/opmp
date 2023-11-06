@@ -447,8 +447,6 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             handlerList(dto,version,isNew);
         //提交校验
         submitCheck(dto);
-        if(1==1)
-            throw new RuntimeException("ffff");
     }
 
     private void saveCheck(XmslDrawReviewDto dto){
