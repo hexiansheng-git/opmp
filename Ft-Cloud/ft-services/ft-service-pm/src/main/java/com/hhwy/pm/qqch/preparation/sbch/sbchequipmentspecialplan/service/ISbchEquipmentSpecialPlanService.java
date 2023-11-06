@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialplan.service;
 
 
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialplan.domain.SbchEquipmentSpecialPlan;
+import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialplan.domain.SbchEquipmentSpecialPlanDetails;
 import com.hhwy.utils.common.CommonBaseEntity;
 
 import java.math.BigDecimal;
@@ -66,4 +67,6 @@ public interface ISbchEquipmentSpecialPlanService {
     SbchEquipmentSpecialPlan getList(BigDecimal version);
 
     void batchSave(SbchEquipmentSpecialPlan sbchEquipmentSpecialPlan);
+
+    List<SbchEquipmentSpecialPlanDetails> getListByDeviceCode(List<String> collect, BigDecimal version);
 }

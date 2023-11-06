@@ -119,4 +119,9 @@ public class SbchEquipmentSpecialPlanDetailsServiceImpl implements ISbchEquipmen
         }
         return 1;
     }
+
+    @Override
+    public List<SbchEquipmentSpecialPlanDetails> getListByDeviceCode(SbchEquipmentSpecialPlanDetails sbchEquipmentSpecialPlanDetails) {
+        return sbchEquipmentSpecialPlanDetailsMapper.getListByDeviceCode(sbchEquipmentSpecialPlanDetails);
+    }
 }

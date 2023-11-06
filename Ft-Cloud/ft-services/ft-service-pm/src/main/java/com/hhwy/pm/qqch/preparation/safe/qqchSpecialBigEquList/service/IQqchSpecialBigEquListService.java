@@ -27,4 +27,6 @@ public interface IQqchSpecialBigEquListService {
     int deleteQqchSpecialBigEquListByPks(List<Long> qqchSpecialBigEquListPkList);
 
     void save(QqchSpecialBigEquListVo vo);
+
+    QqchSpecialBigEquListVo getSpecialBigEquList(QqchSpecialBigEquList qqchSpecialBigEquList);
 }

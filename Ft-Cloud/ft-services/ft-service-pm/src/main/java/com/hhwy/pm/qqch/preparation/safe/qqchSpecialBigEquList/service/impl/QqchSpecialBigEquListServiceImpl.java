@@ -13,6 +13,9 @@ import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.mapper.QqchSpecia
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service.IQqchInformationSheetService;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service.IQqchSpecialBigEquListService;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service.IQqchTransitionRecordService;
+import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.domain.SbchEquipmentSpecial;
+import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.domain.SbchEquipmentSpecialDetails;
+import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.service.ISbchEquipmentSpecialService;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchCompleteDesignHandover;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
@@ -50,6 +53,8 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
     private IQqchInformationSheetService qqchInformationSheetService;
     @Autowired
     private IQqchTransitionRecordService qqchTransitionRecordService;
+    @Autowired
+    private ISbchEquipmentSpecialService equipmentSpecialService;
 
 
     public QqchSpecialBigEquList getQqchSpecialBigEquList(QqchSpecialBigEquList qqchSpecialBigEquList) {
@@ -102,22 +107,46 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
     public QqchSpecialBigEquListVo getQqchSpecialBigEquListList(QqchSpecialBigEquList qqchSpecialBigEquList) {
         QqchSpecialBigEquListVo vo = new QqchSpecialBigEquListVo();
         BigDecimal version = VersionUtil.getVersion("qqch_special_big_equ_list",qqchSpecialBigEquList.getVersion());
-        QqchCompleteDesignHandover qqchCompleteDesignHandover = new QqchCompleteDesignHandover();
-        qqchCompleteDesignHandover.setVersion(version);
+        //实时查询8.4.1数据
+        SbchEquipmentSpecial list = equipmentSpecialService.getList(version);
+        List<SbchEquipmentSpecialDetails> detailsList = list.getDetailsList();
+        List<String> arrDeviceName = detailsList.stream().map(SbchEquipmentSpecialDetails::getMaterialName).collect(Collectors.toList());
+        qqchSpecialBigEquList.setArrDviceName(arrDeviceName);
+        //根据841设备查询
         List<QqchSpecialBigEquList> qqchSpecialBigEquListList = qqchSpecialBigEquListMapper.getQqchSpecialBigEquListList(qqchSpecialBigEquList);
         List<QqchInformationSheet> qqchInformationSheetList = qqchInformationSheetService.getQqchInformationSheetList(new QqchInformationSheet());
         Map<Long, List<QqchInformationSheet>> sheetMap = qqchInformationSheetList.stream().collect(Collectors.groupingBy(QqchInformationSheet::getOutId));
         List<QqchTransitionRecord> qqchTransitionRecordList = qqchTransitionRecordService.getQqchTransitionRecordList(new QqchTransitionRecord());
         Map<Long, List<QqchTransitionRecord>> recordMap = qqchTransitionRecordList.stream().collect(Collectors.groupingBy(QqchTransitionRecord::getOutId));
+        Map<String, List<SbchEquipmentSpecialDetails>> mapDevice = detailsList.stream().collect(Collectors.groupingBy(SbchEquipmentSpecialDetails::getMaterialName));
         for (QqchSpecialBigEquList specialBigEquList : qqchSpecialBigEquListList) {
             specialBigEquList.setQqchInformationSheetList(sheetMap.get(specialBigEquList.getId()));
             specialBigEquList.setQqchTransitionRecordList(recordMap.get(specialBigEquList.getId()));
+            specialBigEquList.setSpec(mapDevice.get(specialBigEquList.getEquName()).get(0).getMaterialSpec());
+            specialBigEquList.setProduceFactory(mapDevice.get(specialBigEquList.getEquName()).get(0).getSbProductFactory());
         }
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setQqchSpecialBigEquListList(qqchSpecialBigEquListList);
         return vo;
     }
+
+    /**
+     * 只获取主表list
+     * @param qqchSpecialBigEquList
+     * @return
+     */
+    public QqchSpecialBigEquListVo getSpecialBigEquList(QqchSpecialBigEquList qqchSpecialBigEquList) {
+        QqchSpecialBigEquListVo vo = new QqchSpecialBigEquListVo();
+        BigDecimal version = VersionUtil.getVersion("qqch_special_big_equ_list",qqchSpecialBigEquList.getVersion());
+        QqchCompleteDesignHandover qqchCompleteDesignHandover = new QqchCompleteDesignHandover();
+        qqchCompleteDesignHandover.setVersion(version);
+        List<QqchSpecialBigEquList> qqchSpecialBigEquListList = qqchSpecialBigEquListMapper.getQqchSpecialBigEquListList(qqchSpecialBigEquList);
+        vo.setQqchSpecialBigEquListList(qqchSpecialBigEquListList);
+        return vo;
+    }
+
+
 
 
     @Override

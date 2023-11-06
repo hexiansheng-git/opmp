@@ -62,4 +62,5 @@ public interface ISbchEquipmentSpecialPlanDetailsService {
     int deleteSbchEquipmentSpecialPlanDetailsById(Long id);
     int insertOrEditBatchByMainId(List<SbchEquipmentSpecialPlanDetails> list, Long mainId, Boolean isAdjus);
 
+    List<SbchEquipmentSpecialPlanDetails> getListByDeviceCode(SbchEquipmentSpecialPlanDetails sbchEquipmentSpecialPlanDetails);
 }
