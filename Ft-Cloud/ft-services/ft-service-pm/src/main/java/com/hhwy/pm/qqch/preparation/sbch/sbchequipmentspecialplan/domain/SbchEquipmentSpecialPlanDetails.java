@@ -7,6 +7,7 @@ import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 特种设备风险识别和措施策划详情对象 sbch_equipment_special_plan_details
@@ -103,4 +104,6 @@ public class SbchEquipmentSpecialPlanDetails extends CommonBaseEntity {
     /** 所属区域 */
     @Excel(name = "所属区域")
     private String region;
+
+    private List<String> deviceCodes;
 }

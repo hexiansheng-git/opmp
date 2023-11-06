@@ -71,4 +71,6 @@ public interface SbchEquipmentSpecialPlanDetailsMapper {
     int deleteSbchEquipmentSpecialPlanDetailsByMainId(Long mainId);
 
     int batchInsert(List<SbchEquipmentSpecialPlanDetails> dataList);
+
+    List<SbchEquipmentSpecialPlanDetails> getListByDeviceCode(SbchEquipmentSpecialPlanDetails sbchEquipmentSpecialPlanDetails);
 }

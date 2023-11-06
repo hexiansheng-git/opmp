@@ -28,6 +28,8 @@ import java.util.Map;
  * 
  * @author hwj
  * @date 2022-12-05
+ *
+ * 7.6.1
  */
 @Controller
 @RequestMapping("/equipmentspecial/special")

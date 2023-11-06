@@ -1,5 +1,7 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigProcessControl.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.google.j2objc.annotations.AutoreleasePool;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -9,6 +11,9 @@ import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigProcessControl.domain.Qqc
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigProcessControl.domain.vo.QqchSpecialBigProcessControlVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigProcessControl.mapper.QqchSpecialBigProcessControlMapper;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigProcessControl.service.IQqchSpecialBigProcessControlService;
+import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialcontrolplan.domain.SbchEquipmentSpecialControlPlan;
+import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialcontrolplan.domain.SbchEquipmentSpecialControlPlanDetails;
+import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialcontrolplan.service.ISbchEquipmentSpecialControlPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
@@ -21,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +43,9 @@ public class QqchSpecialBigProcessControlServiceImpl implements IQqchSpecialBigP
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+
+    @Autowired
+    private ISbchEquipmentSpecialControlPlanService equipmentSpecialControlPlanService;
 
 
     public QqchSpecialBigProcessControl getQqchSpecialBigProcessControl(QqchSpecialBigProcessControl qqchSpecialBigProcessControl) {
@@ -91,10 +100,26 @@ public class QqchSpecialBigProcessControlServiceImpl implements IQqchSpecialBigP
         QqchSpecialBigProcessControlVo vo = new QqchSpecialBigProcessControlVo();
         BigDecimal version = VersionUtil.getVersion("qqch_special_big_process_control", qqchSpecialBigProcessControl.getVersion());
         qqchSpecialBigProcessControl.setVersion(version);
-        List<QqchSpecialBigProcessControl> qqchSpecialBigProcessControlList = qqchSpecialBigProcessControlMapper.getQqchSpecialBigProcessControlList(qqchSpecialBigProcessControl);
+        //实时查询7.6.3数据
+        SbchEquipmentSpecialControlPlan list = equipmentSpecialControlPlanService.getList(version);
+        List<SbchEquipmentSpecialControlPlanDetails> detailsList = list.getDetailsList();
+
+        List<QqchSpecialBigProcessControl> result = new ArrayList<>();
+        detailsList.forEach(p -> {
+            QqchSpecialBigProcessControl control = new QqchSpecialBigProcessControl();
+            control.setMeasure(p.getControlItem());
+            control.setPersonName(p.getPerformName());
+            control.setMainDeptName(p.getResponsibleDepartment());
+            control.setCollaborateDeptName(p.getCooperationDepartment());
+            control.setNote(p.getPrecautions());
+            control.setFileGroupId(p.getTableTemplate());
+            control.setId(p.getId());
+            result.add(control);
+        });
+//        List<QqchSpecialBigProcessControl> qqchSpecialBigProcessControlList = qqchSpecialBigProcessControlMapper.getQqchSpecialBigProcessControlList(qqchSpecialBigProcessControl);
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
-        vo.setList(qqchSpecialBigProcessControlList);
+        vo.setList(result);
         return vo;
     }
 

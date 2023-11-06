@@ -1,14 +1,21 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquRiskMeasure.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.domain.QqchSpecialBigEquList;
+import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.domain.vo.QqchSpecialBigEquListVo;
+import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service.IQqchSpecialBigEquListService;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquRiskMeasure.domain.QqchSpecialBigEquRiskMeasure;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquRiskMeasure.domain.vo.QqchSpecialBigEquRiskMeasureVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquRiskMeasure.mapper.QqchSpecialBigEquRiskMeasureMapper;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquRiskMeasure.service.IQqchSpecialBigEquRiskMeasureService;
+import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialplan.domain.SbchEquipmentSpecialPlan;
+import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialplan.domain.SbchEquipmentSpecialPlanDetails;
+import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialplan.service.ISbchEquipmentSpecialPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
@@ -20,7 +27,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author ldd
@@ -36,6 +45,10 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchSpecialBigEquListService specialBigEquListService;
+    @Autowired
+    private ISbchEquipmentSpecialPlanService sbchEquipmentSpecialPlanService;
 
 
     public QqchSpecialBigEquRiskMeasure getQqchSpecialBigEquRiskMeasure(QqchSpecialBigEquRiskMeasure qqchSpecialBigEquRiskMeasure) {
@@ -87,12 +100,33 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
      */
     public QqchSpecialBigEquRiskMeasureVo getQqchSpecialBigEquRiskMeasureList(QqchSpecialBigEquRiskMeasure qqchSpecialBigEquRiskMeasure) {
         QqchSpecialBigEquRiskMeasureVo vo = new QqchSpecialBigEquRiskMeasureVo();
-        BigDecimal version = VersionUtil.getVersion("qqch_special_big_equ_risk_measure", qqchSpecialBigEquRiskMeasure.getVersion());
+        BigDecimal version = qqchSpecialBigEquRiskMeasure.getVersion();
+        version = VersionUtil.getVersion("qqch_special_big_equ_risk_measure", version);
         qqchSpecialBigEquRiskMeasure.setVersion(version);
-        List<QqchSpecialBigEquRiskMeasure> qqchSpecialBigEquRiskMeasureList = qqchSpecialBigEquRiskMeasureMapper.getQqchSpecialBigEquRiskMeasureList(qqchSpecialBigEquRiskMeasure);
+
+
+        QqchSpecialBigEquList param = new QqchSpecialBigEquList();
+        param.setVersion(version);
+        //获取8.4.1中有所有的设备
+        QqchSpecialBigEquListVo specialBigEquList = specialBigEquListService.getSpecialBigEquList(param);
+        List<QqchSpecialBigEquList> qqchSpecialBigEquListList = specialBigEquList.getQqchSpecialBigEquListList();
+        List<QqchSpecialBigEquRiskMeasure> result = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(qqchSpecialBigEquListList)) {
+            List<String> collect = qqchSpecialBigEquListList.stream().map(QqchSpecialBigEquList::getPtVar1).collect(Collectors.toList());
+            ////根据设备集合获取7.6.2中的数据
+            List<SbchEquipmentSpecialPlanDetails> list = sbchEquipmentSpecialPlanService.getListByDeviceCode(collect, version);
+            list.forEach(p -> {
+                QqchSpecialBigEquRiskMeasure bean = new QqchSpecialBigEquRiskMeasure();
+                bean.setEquName(p.getMaterialName());
+                bean.setRiskContent(p.getRiskContent());
+                bean.setControlMeasures(p.getControlMethods());
+                result.add(bean);
+            });
+        }
+//        List<QqchSpecialBigEquRiskMeasure> qqchSpecialBigEquRiskMeasureList = qqchSpecialBigEquRiskMeasureMapper.getQqchSpecialBigEquRiskMeasureList(qqchSpecialBigEquRiskMeasure);
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
-        vo.setList(qqchSpecialBigEquRiskMeasureList);
+        vo.setList(result);
         return vo;
     }
 
