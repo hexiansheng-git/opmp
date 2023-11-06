@@ -357,6 +357,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
      * 推送总体计划
      * @param list
      */
+    @Override
     public void pushJdglMainPlan(List<JdglMainPlan> list){
         long beginMills = System.currentTimeMillis();
         int status = 1;
@@ -386,6 +387,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
         }
     }
 
+    @Override
     public void pushJdglMainPlan(JdglMainPlan jdglMainPlan){
         this.pushJdglMainPlan(Arrays.asList(jdglMainPlan));
     }
