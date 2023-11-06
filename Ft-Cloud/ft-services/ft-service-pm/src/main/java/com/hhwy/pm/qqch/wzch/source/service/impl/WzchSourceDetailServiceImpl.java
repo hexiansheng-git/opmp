@@ -499,9 +499,9 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         }
         List<String> yesrs = yesrList.stream().distinct().sorted().collect(Collectors.toList());
         List<List<String>> head = head(yesrs);
-        System.out.println(JSONObject.toJSONString(head));
+//        System.out.println(JSONObject.toJSONString(head));
         List<List<Object>> data = getData(wzchSourceDetails, yesrs);
-        System.out.println(JSONObject.toJSONString(data));
+//        System.out.println(JSONObject.toJSONString(data));
         EasyExeclUtil.export(response,head,data,"来源策划详情.xlsx","来源策划详情");
 
     }
@@ -798,6 +798,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         List<List<Object>> data=new ArrayList<>();
         List<SysDictData> tSysDictDataList = systemApiService.selectDictDataByType("total_demand_category_name");
         List<SysDictData> mSysDictDataList = systemApiService.selectDictDataByType("material_standard");
+        Map<String,String> tmap = tSysDictDataList.stream().collect(Collectors.toMap(r->r.getDictValue(),r->r.getDictLabel()));
         for(WzchSourceDetail detail : wzchSourceDetails){
             List<Object> list=new ArrayList<>();
             list.add(detail.getMaterialCode());
@@ -816,12 +817,16 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             list.add(detail.getUnit());
             list.add(detail.getTotalDemandAmount());
             list.add(detail.getSelfDemandAmount());
-//            if(CollectionUtils.isNotEmpty(tSysDictDataList) && StringUtils.isNotBlank(detail.getCategoryName())){
+            if (CollectionUtils.isNotEmpty(tSysDictDataList) && StringUtils.isNotBlank(detail.getCategoryName())) {
+                list.add(com.hhwy.utils.ObjectUtils.nvlString(tmap.get(detail.getCategoryName())));
 //                tSysDictDataList.stream().filter(i -> StringUtils.isNotEmpty(i.getDictValue()) && i.getDictValue().equals(detail.getCategoryName()))
-//                        .findFirst().ifPresent(val ->  list.add(val.getDictLabel()));
-//            }else{
+//                        .findFirst().ifPresent(val -> list.add(val.getDictLabel()));
+//                if(list.size() < 10)
+//                    list.add("");
+            } else {
+                //格式化类型
                 list.add(detail.getCategoryName());
-//            }
+            }
 
             List<WzchSourceApproachYearCount> yearCountList = detail.getWzchSourceApproachYearCountList();
 
