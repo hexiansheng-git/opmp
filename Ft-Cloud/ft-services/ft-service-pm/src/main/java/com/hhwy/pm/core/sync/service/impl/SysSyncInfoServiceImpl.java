@@ -9,6 +9,7 @@ import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.domain.JdglQuarterPlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
@@ -350,6 +351,43 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
     @Override
     public void pushJdglProgressCorrectionTrack(JdglProgressCorrectionTrack progressCorrectionTrack) {
         pushJdglProgressCorrectionTrack(Arrays.asList(progressCorrectionTrack));
+    }
+
+    /**
+     * 推送总体计划
+     * @param list
+     */
+    public void pushJdglMainPlan(List<JdglMainPlan> list){
+        long beginMills = System.currentTimeMillis();
+        int status = 1;
+        String errMsg = "";
+        try{
+            ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+            List<JSONObject> jsonObjectList = new ArrayList<>();
+            for (JdglMainPlan temp : list) {
+                JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(temp));
+                jsonObject.put("regionId",projectBasicInfo.getRegionId());
+                jsonObject.put("regionName",projectBasicInfo.getRegionName());
+                jsonObject.put("projectId", projectBasicInfo.getProjectId());
+                jsonObject.put("projectName", projectBasicInfo.getProjectName());
+                jsonObject.put("projectCode", projectBasicInfo.getProjectCode());
+                jsonObjectList.add(jsonObject);
+            }
+            rocketMQTemplate.convertAndSend("jdgl_main_plan:tenantSuccess", JSONObject.toJSONString(jsonObjectList));
+        }catch(Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            String ids = list.stream().map(r->r.getId()+"").collect(Collectors.joining(","));
+            //3、更新syncInfo
+            sysSyncInfoLogService.insert(SyncBusinessEnum.QQCHWORKPLAN_ENUM,ids, (long) list.size(),System.currentTimeMillis()-beginMills,status,errMsg);
+        }
+    }
+
+    public void pushJdglProgressCorrectionTrack(JdglMainPlan jdglMainPlan){
+        this.pushJdglMainPlan(Arrays.asList(jdglMainPlan));
     }
 
 
