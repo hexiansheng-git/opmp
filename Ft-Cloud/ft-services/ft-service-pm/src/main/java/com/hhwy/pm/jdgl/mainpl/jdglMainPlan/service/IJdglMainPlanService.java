@@ -32,4 +32,6 @@ public interface IJdglMainPlanService {
     int deleteJdglMainPlan(JdglMainPlan jdglMainPlan);
 
     int deleteJdglMainPlanByPks(List<Long> jdglMainPlanPkList);
+
+    JdglMainPlan getBaseMainPlan();
 }
