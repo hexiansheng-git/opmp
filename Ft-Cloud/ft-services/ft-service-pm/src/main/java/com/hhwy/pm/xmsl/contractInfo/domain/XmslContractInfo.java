@@ -309,7 +309,7 @@ public class XmslContractInfo extends CommonBaseEntity {
      */
     @JsonProperty
     @Excel(name = "有效合同金额-美元")
-    private BigDecimal effectiveAmoutDollar;
+    private BigDecimal effectiveAmountDollar;
     /**
      * 字段描述：清单标价货币(编码)
      */

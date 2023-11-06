@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.system.api.domain.SysDictData;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
@@ -30,6 +32,9 @@ public class XmslContractInfoController extends BaseController {
 
     @Autowired
     private IXmslContractInfoService xmslContractInfoService;
+
+    @Autowired
+    private ISysSyncInfoService sysSyncInfoService;
 
 
 //    @PreAuthorize(hasPermi = "xmslContractInfo:list")
@@ -159,6 +164,10 @@ public class XmslContractInfoController extends BaseController {
         xmslContractInfo.setTaskStatus("5");//流程结束
         xmslContractInfo.setValid("1"); //版本生效
         xmslContractInfoService.updateXmslContractInfo1(xmslContractInfo);
+
+        //推送到总部版
+        xmslContractInfoService.setEffectiveAmountDollar(xmslContractInfo);
+        sysSyncInfoService.pushXmslContractInfo(xmslContractInfo);
         return AjaxResult.success();
     }
 
