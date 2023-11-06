@@ -49,6 +49,8 @@ public class XmslDrawReviewMaterialServiceImpl implements IXmslDrawReviewMateria
 
     @Override
     public List<XmslDrawReviewMaterial> getByWbsId(Long mainId, String listCode, Set<String> wbsIdSet) {
+        if(CollectionUtils.isEmpty(wbsIdSet))
+            return new ArrayList<>();
         XmslDrawReviewMaterial queryMater = new XmslDrawReviewMaterial();
         queryMater.setMainId(mainId);
         queryMater.setListCode(listCode);

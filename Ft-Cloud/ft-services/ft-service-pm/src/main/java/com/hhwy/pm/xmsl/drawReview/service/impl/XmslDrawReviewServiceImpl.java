@@ -159,6 +159,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                 List<XmslContractList> listList = xmslDrawReviewMapper.latestListId(contractInfo.getId(),codeName);
                 final Set<String> resuIdSet = new ConcurrentHashSet<>();
                 listList.parallelStream().forEach(r->{
+                    if(StringUtils.isBlank(r.getAncestors()))
+                        return;
                     resuIdSet.addAll(Arrays.asList(Convert.toStrArray(r.getAncestors())));
                 });
                 if(resuIdSet.size() < 1)
