@@ -178,7 +178,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         Date startY = dateRange4Year.get("start");
 
         BigDecimal countValue = jdglDayScheduleService.getCountValue(startY, startQ);
-        jdglQuarterPlanParam.setYearCompValueDl(countValue);
+        jdglQuarterPlanParam.setYearCompValueDl(countValue == null ? BigDecimal.ZERO : countValue.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
         if(jdglQuarterPlanParam.getYearCompValueDl() == null) jdglQuarterPlanParam.setYearCompValueDl(new BigDecimal(0));
         if(jdglQuarterPlanParam.getYearPlanValueDl()== null) jdglQuarterPlanParam.setYearPlanValueDl(new BigDecimal(0));
         jdglQuarterPlanParam.setRemainYearAmtDl(jdglQuarterPlanParam.getYearPlanValueDl().subtract(jdglQuarterPlanParam.getYearCompValueDl()));

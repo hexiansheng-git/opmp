@@ -106,7 +106,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
             XmslContractInfo contractInfo = contractInfoService.getValidMaxVersionContractInfo();
             //获取有效金额万美元
             contractInfoService.setEffectiveAmountDollar(contractInfo);
-            BigDecimal effectiveAmountDollar = ObjectUtils.nvlBigDecimal(contractInfo).divide(new BigDecimal("10000"),4, RoundingMode.HALF_UP);
+            BigDecimal effectiveAmountDollar = ObjectUtils.nvlBigDecimal(contractInfo.getEffectiveAmountDollar()).divide(new BigDecimal("10000"),4, RoundingMode.HALF_UP);
             List<JSONObject> finalList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 QqchWorkGroup temp = list.get(i);

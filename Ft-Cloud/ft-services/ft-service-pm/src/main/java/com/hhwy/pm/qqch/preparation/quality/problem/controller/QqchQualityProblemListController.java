@@ -34,7 +34,6 @@ public class QqchQualityProblemListController extends BaseController {
      * @param version
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchQualityProblemList:list")
     @GetMapping("/getList")
     public AjaxResult getList(BigDecimal version) {
         QqchQualityProblemListVo qqchQualityProblemListVo = qqchQualityProblemListService
@@ -48,7 +47,6 @@ public class QqchQualityProblemListController extends BaseController {
      * @param qqchQualityProblemListVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchQualityProblemList:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchQualityProblemListVo qqchQualityProblemListVo) {

@@ -657,7 +657,7 @@
         `country_buy_num`, `local_buy_num`, `local_lease_num`, `company_self_num`, `plan_entry_time`,
         `plan_exit_time`, `is_special`, detail.`create_user`,detail.`create_user_name`, detail.`create_time`,
         detail.`update_user`, detail.`update_user_name`, detail.`update_time`,
-        detail.`del_user`, detail.`del_time`, detail.`del_flag`, detail.`remark`, detail.`pt_var2`, detail.`pt_var3`,
+        detail.`del_user`, detail.`del_time`, detail.`del_flag`, detail.`remark`, detail.`pt_var1`,detail.`pt_var2`, detail.`pt_var3`,
         detail.`project_id`,detail.`project_name`, detail.`region_id`, detail.`region_name`, detail.`dept_id`
         from `sbch_total_demand_plan_detail` detail
         <where>
