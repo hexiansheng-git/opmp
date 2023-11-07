@@ -13,6 +13,7 @@ import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobal;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.mapper.QqchTaxGlobalMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.service.IQqchTaxGlobalService;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.TreeNode;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.io.IOUtils;
@@ -134,6 +135,9 @@ public class QqchTaxGlobalServiceImpl implements IQqchTaxGlobalService {
             if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(oChildren)) {
                 nChildren = CollectionUtils.isEmpty(nChildren) ? new ArrayList<>() : nChildren;
                 nChildren.addAll(oChildren);
+            }
+            if (ObjectNullUtil.isEmpty(nChildren)) {
+                treeVO.setLeaf("1");
             }
             treeVO.setChildren(nChildren);
         });
