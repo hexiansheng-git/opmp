@@ -305,8 +305,8 @@ public class EquAllotServiceImpl implements EquAllotService {
 
     @Override
     public AjaxResult xzxcsb(ActiveEquVo activeEquVo) {
-//        String url = "http://10.11.238.63:10003/basic-api/fms/xcsb/xcsbMonthSelfEquInfo/list";
-        String url = "https://wms.cfhec.net/basic-api/fms/xcsb/xcsbMonthSelfEquInfo/list";
+        String url = "http://10.11.238.63:10003/basic-api/fms/xcsb/xcsbMonthSelfEquInfo/list";
+//        String url = "https://wms.cfhec.net/basic-api/fms/xcsb/xcsbMonthSelfEquInfo/list";
         AjaxResult ajaxResult;
         String tenantKey = SecurityUtils.getTenantKey();
         activeEquVo.setPrjCode(tenantKey);
