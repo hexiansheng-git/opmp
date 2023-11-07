@@ -167,7 +167,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         Calendar cl = Calendar.getInstance();
         cl.setWeekDate(Integer.valueOf(year1), Integer.valueOf(week), 1);
 
-        String month = (cl.get(Calendar.MONTH) + 1) + "";
+        String month = (cl.get(Calendar.MONTH) + 1) >= 10 ? "" + (cl.get(Calendar.MONTH) + 1) : "0" + (cl.get(Calendar.MONTH) + 1);
 
         JdglMonthPlan usingMonthPlanByYearAndMonth = jdglMonthPlanService.getUsingMonthPlanByYearAndMonth(year1, month);
 
