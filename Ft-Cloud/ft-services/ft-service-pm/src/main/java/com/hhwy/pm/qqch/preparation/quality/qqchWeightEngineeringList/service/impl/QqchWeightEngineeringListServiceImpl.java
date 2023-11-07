@@ -112,13 +112,17 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
         List<QqchWeightEngineeringList> engineeringListList = this.getEngineeringListByVersion(null);
         Set<Long> wbsIds = new HashSet<>();
         for (QqchWeightEngineeringList weightEngineeringList : engineeringListList) {
-            Long wbsId = weightEngineeringList.getWbsId();
+            String wbsId = weightEngineeringList.getWbsId();
             if(wbsId != null){
-                wbsIds.add(wbsId);
-                Long[] childWbsIds = WbsRedisUtils.getChildWbsId(String.valueOf(wbsId));
-                if(childWbsIds != null) {
-                    wbsIds.addAll(Arrays.asList(childWbsIds));
+                String[] split = wbsId.split(",");
+                wbsIds.add(Long.valueOf(wbsId));
+                for (String arr : split){
+                    Long[] childWbsIds = WbsRedisUtils.getChildWbsId(arr);
+                    if(childWbsIds != null) {
+                        wbsIds.addAll(Arrays.asList(childWbsIds));
+                    }
                 }
+
             }
         }
         return wbsIds;
@@ -147,17 +151,20 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
         //获取wbsId集合
         Set<String> wbsIds = new HashSet<>();
         for (QqchWeightEngineeringList weightEngineeringList : engineeringListList) {
-            Long wbsId = weightEngineeringList.getWbsId();
+            String wbsId = weightEngineeringList.getWbsId();
             String wbsAncestors = weightEngineeringList.getWbsAncestors();
             if(StringUtils.isNotBlank(wbsAncestors)){
                 String[] wbsArrays = wbsAncestors.split(",");
                 wbsIds.addAll(Arrays.asList(wbsArrays));
             }
             if(wbsId != null){
-                Long[] childWbsIds = WbsRedisUtils.getChildWbsId(String.valueOf(wbsId));
-                if(childWbsIds != null) {
-                    for (Long childWbsId : childWbsIds) {
-                        wbsIds.add(String.valueOf(childWbsId));
+                String[] split = wbsId.split(",");
+                for (String arr : split){
+                    Long[] childWbsIds = WbsRedisUtils.getChildWbsId(arr);
+                    if(childWbsIds != null) {
+                        for (Long childWbsId : childWbsIds) {
+                            wbsIds.add(String.valueOf(childWbsId));
+                        }
                     }
                 }
             }
