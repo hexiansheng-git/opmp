@@ -141,6 +141,10 @@ public class Review extends CommonBaseEntity {
      */
     private String isCanApprove = "0";
     /**
+     * 字段描述：详情按钮  1: 存在  0： 不存在
+     */
+    private String particularsMark = "0";
+    /**
      * 字段描述：附件组id
      */
     @JsonProperty
