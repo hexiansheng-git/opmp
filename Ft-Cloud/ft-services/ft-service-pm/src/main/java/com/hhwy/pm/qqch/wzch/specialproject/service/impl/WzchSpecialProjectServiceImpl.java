@@ -156,6 +156,8 @@ public class WzchSpecialProjectServiceImpl implements IWzchSpecialProjectService
         List<WzchSpecialProject> list =this.wzchSpecialProjectMapper.selectWzchSpecialProjectList(new WzchSpecialProject(version));
         if(CollectionUtils.isEmpty(list)){
             vo.setDetailList(new ArrayList<>());
+            vo.setVersion(version);
+            vo.setStageIdentity(qqchReviewService.getStage());
             return vo;
         }
         BeanUtils.copyProperties(list.get(0), vo);
