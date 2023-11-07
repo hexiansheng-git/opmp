@@ -232,6 +232,11 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         return jdglDayScheduleMapper.getCountValue(startDate, endDate);
     }
 
+    @Override
+    public BigDecimal getCountValue4Cont(Date startDate, Date endDate) {
+        return jdglDayScheduleMapper.getCountValue4Cont(startDate, endDate);
+    }
+
     /**
      * 获取日期区间内的日填报数据，如不传值，则获取所有。
      * @param startDate

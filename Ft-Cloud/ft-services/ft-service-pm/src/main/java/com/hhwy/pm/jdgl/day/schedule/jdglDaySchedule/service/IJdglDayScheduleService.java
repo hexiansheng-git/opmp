@@ -36,6 +36,8 @@ public interface IJdglDayScheduleService {
 
     BigDecimal getCountValue(Date startDate, Date endDate);
 
+    BigDecimal getCountValue4Cont(Date startDate, Date endDate);
+
     List<JdglDaySchedule>  getListByDateRange(Date startDate, Date endDate);
 
     JdglDaySchedule getJdglDayScheduleByPerson(JdglDaySchedule jdglDayScheduleParam);
@@ -49,4 +51,6 @@ public interface IJdglDayScheduleService {
     List<JdglDaySchedule> getAllListByDateRange(Date startDate, Date endDate);
 
     JdglDaySchedule getJdglDayScheduleById(Long dayScheduleId);
+
+
 }
