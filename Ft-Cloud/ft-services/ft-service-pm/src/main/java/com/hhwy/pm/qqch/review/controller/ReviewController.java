@@ -8,7 +8,6 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
-import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.utils.JsonUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
@@ -40,8 +39,6 @@ public class ReviewController extends BaseController {
 
     @Autowired
     private IQqchReviewService qqchReviewService;
-    @Autowired
-    private IXmslContractInfoService contractInfoService;
 
 
     public static void main(String[] args) {
@@ -62,6 +59,7 @@ public class ReviewController extends BaseController {
         List<Review> reviewList = qqchReviewService.getQqchReviewList(reviewParam);
         handlerReviewList(reviewList);
         setIsCanApprove(reviewList);
+        setParticularsMark(reviewList);
         return getDataTableAjaxResult(reviewList);
     }
 
@@ -113,6 +111,30 @@ public class ReviewController extends BaseController {
         }
         return list;
     }
+
+    private void setParticularsMark(List<Review> qqchReviewList){
+        if(CollectionUtils.isEmpty(qqchReviewList)){
+            return;
+        }
+        Map<String, Review> reviewMap = qqchReviewList.stream().collect(Collectors.toMap(Review::getPlanStage, o -> o));
+
+        Review review1 = reviewMap.get("1");
+        if(review1 != null){
+            review1.setParticularsMark("1");
+        }
+
+        Review review2 = reviewMap.get("2");
+        if(review2 != null && !"0".equals(review2.getReviewStatus())){
+            review2.setParticularsMark("1");
+        }
+
+        Review review3 = reviewMap.get("3");
+        if(review3 != null && !"0".equals(review3.getReviewStatus())){
+            review3.setParticularsMark("1");
+        }
+    }
+
+
 
     /**
      * 设置评审阶段数据是否可以发起审批
