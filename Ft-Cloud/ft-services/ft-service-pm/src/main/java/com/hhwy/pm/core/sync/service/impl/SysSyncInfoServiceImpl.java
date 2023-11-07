@@ -1,6 +1,8 @@
 package com.hhwy.pm.core.sync.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.pm.core.sync.domain.SysSyncInfo;
 import com.hhwy.pm.core.sync.enums.SyncBusinessEnum;
 import com.hhwy.pm.core.sync.mapper.SysSyncInfoMapper;
@@ -21,9 +23,11 @@ import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.AddBaseInfoUtil;
+import com.hhwy.utils.ObjectUtils;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,8 +35,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +60,8 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
     private IQqchWorkGroupService qqchWorkGroupService;
     @Autowired
     private IXmslProjectBasicInfoService projectBasicInfoService;
+    @Autowired
+    private IXmslContractInfoService contractInfoService;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
     
@@ -94,15 +103,29 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
         String errMsg = "";
         try{
             ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+            XmslContractInfo contractInfo = contractInfoService.getValidMaxVersionContractInfo();
+            //获取有效金额万美元
+            contractInfoService.setEffectiveAmountDollar(contractInfo);
+            BigDecimal effectiveAmountDollar = ObjectUtils.nvlBigDecimal(contractInfo).divide(new BigDecimal("10000"),4, RoundingMode.HALF_UP);
+            List<JSONObject> finalList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
-                QqchWorkGroup temp =  list.get(i);
+                QqchWorkGroup temp = list.get(i);
                 temp.setProjectName(projectBasicInfo.getProjectName());
                 temp.setProjectId(projectBasicInfo.getProjectId());
                 temp.setRegionId(projectBasicInfo.getRegionId());
                 temp.setPtVar1(projectBasicInfo.getProjectCategory());
                 temp.setPtVar2(projectBasicInfo.getProjectCode());
+                JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(list.get(i)));
+                json.put("projectCode",projectBasicInfo.getProjectCode());
+                json.put("projectManager",ObjectUtils.nvlString(projectBasicInfo.getProjectManager()));
+                json.put("effectiveAmout",effectiveAmountDollar);
+                json.put("winDate", DateUtils.dateTime(contractInfo.getWinDate()) );
+                json.put("signDate", DateUtils.dateTime(contractInfo.getSignDate()) );
+                json.put("startTime", DateUtils.dateTime(contractInfo.getStartTime()) );
+                json.put("completedTime", DateUtils.dateTime(contractInfo.getCompletedTime()) );
+                finalList.add(json);
             }
-            rocketMQTemplate.convertAndSend("qqch_work_group1:tenantSuccess", JSONObject.toJSONString(list));
+            rocketMQTemplate.convertAndSend("qqch_work_group1:tenantSuccess", JSONObject.toJSONString(finalList));
         }catch(Exception e){
             e.printStackTrace();
             status = 0;
@@ -145,6 +168,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 temp.setPtVar1(projectBasicInfo.getProjectCategory());
                 temp.setPtVar2(projectBasicInfo.getProjectCode());
                 temp.setPtVar3(planLeader);
+                temp.setPtVar4(projectBasicInfo.getProjectManager());
             }
             rocketMQTemplate.convertAndSend("qqch_work_plan1:tenantSuccess", JSONObject.toJSONString(list));
         }catch(Exception e){
