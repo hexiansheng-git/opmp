@@ -5,14 +5,17 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.page.TableDataInfo;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.domain.base.system.material.MaterialInfo;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
 import com.hhwy.pm.qqch.wzch.priorpurchase.domain.WzchPriorPurchaseDetail;
 import com.hhwy.pm.qqch.wzch.priorpurchase.dto.WzchPriorPurchaseDetailDTO;
 import com.hhwy.pm.qqch.wzch.priorpurchase.service.IWzchPriorPurchaseDetailService;
+import com.hhwy.utils.MaterialUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -98,6 +101,12 @@ public class WzchPriorPurchaseDetailController extends BaseController {
         ExcelUtils<WzchPriorPurchaseDetailDTO> util = new ExcelUtils<>(WzchPriorPurchaseDetailDTO.class);
         try {
             List<WzchPriorPurchaseDetailDTO> importList = util.importExcel(file.getInputStream());
+            //判断物资编码是否正确
+            for (int i = 0; i < importList.size(); i++) {
+                WzchPriorPurchaseDetailDTO temp = importList.get(i);
+                MaterialInfo materialInfo = MaterialUtils.getMaterialInfoByCode(temp.getMaterialCode());
+                Assert.notNull(materialInfo,"物资编码"+temp.getMaterialCode()+"不存在于物资编码库!");
+            }
             HashMap<String, String> map = new HashMap<>();
             map.put("materialStandard", "material_standard");
             map.put("categoryName", "total_demand_category_name");

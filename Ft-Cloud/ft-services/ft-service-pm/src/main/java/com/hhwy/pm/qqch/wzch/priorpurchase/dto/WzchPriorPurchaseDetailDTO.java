@@ -102,7 +102,7 @@ public class WzchPriorPurchaseDetailDTO extends WzchPriorPurchaseDetail {
      */
     private String source;
 
-    @Excel(name = "来源")
+    @Excel(name = "来源",combo = {"当地采购","国内采购","第三国采购"})
     private String sourceName;
 
     /**
