@@ -8,7 +8,6 @@ import com.hhwy.domain.base.system.period.PeriodInfo;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.constant.PmConstant;
-import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglData4P6Service;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -18,22 +17,22 @@ import com.hhwy.pm.qqch.sgch.prodplan.domain.QqchProdPlan;
 import com.hhwy.pm.qqch.sgch.prodplan.service.IQqchProdPlanService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxIn;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxInDetail;
+import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.vo.TaxInVO;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.mapper.QqchTaxInMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInDetailService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
-import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.vo.TaxInVO;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.IQqchTaxStageService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
-import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.common.PmsUtils;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,11 +53,6 @@ import java.util.stream.Collectors;
 @Log
 @Service
 public class QqchTaxInServiceImpl implements IQqchTaxInService {
-
-    @Resource
-    private IXmslProjectBasicInfoService projectBasicInfoService;
-    @Resource
-    private IJdglData4P6Service jdglData4P6Service;
 
     private final static String TN = "qqch_tax_in";
 
@@ -285,28 +279,27 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         // 保存主要
         List<QqchTaxIn> inList = qqchTaxInParam.getDto().getInList();
         List<TaxInVO.CurrencyVO> currencyInfo = this.getCurrencyInfo();
-        List<QqchTaxIn> qqchTaxIns = CompileEntity.dealSaveDto(qqchTaxInParam, inList);
-        for (QqchTaxIn qqchTaxIn : qqchTaxIns) {
-            qqchTaxIn.setDataType("1");
-            qqchTaxIn.setRecordId(recordId);
-            String currency = qqchTaxIn.getCurrency();
-            CommonAssert.notBlank(currency, "币种编码不能为空");
-            currencyInfo.stream().filter(i -> currency.equals(i.getCurrency())).findFirst().ifPresent(item -> {
-                BigDecimal rate = item.getRate();
-                qqchTaxIn.setRate(rate);
-            });
+        if(!CollectionUtils.isEmpty(inList)){
+            List<QqchTaxIn> qqchTaxIns = CompileEntity.dealSaveDto(qqchTaxInParam, inList);
+            for (QqchTaxIn qqchTaxIn : qqchTaxIns) {
+                qqchTaxIn.setDataType("1");
+                qqchTaxIn.setRecordId(recordId);
+                String currency = qqchTaxIn.getCurrency();
+                CommonAssert.notBlank(currency, "币种编码不能为空");
+                currencyInfo.stream().filter(i -> currency.equals(i.getCurrency())).findFirst().ifPresent(item -> {
+                    BigDecimal rate = item.getRate();
+                    qqchTaxIn.setRate(rate);
+                });
 
-            List<QqchTaxInDetail> detailList = qqchTaxIn.getDetailList();
-            if (!CollectionUtils.isEmpty(detailList)) {
-                for (QqchTaxInDetail qqchTaxInDetail : detailList) {
-                    qqchTaxInDetail.setCurrency(currency);
+                List<QqchTaxInDetail> detailList = qqchTaxIn.getDetailList();
+                if (!CollectionUtils.isEmpty(detailList)) {
+                    for (QqchTaxInDetail qqchTaxInDetail : detailList) {
+                        qqchTaxInDetail.setCurrency(currency);
+                    }
                 }
+                allTaxInList.add(qqchTaxIn);
             }
-
-
-            allTaxInList.add(qqchTaxIn);
         }
-
 
         // 保存其他
         List<QqchTaxIn> otherList = qqchTaxInParam.getDto().getOtherList();
@@ -323,8 +316,9 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         // 所有的详情
         List<QqchTaxInDetail> allDetails = this.saveInList(allTaxInList);
         // 新增年份数据
-        this.detailService.save(CompileEntity.dealSaveDto(qqchTaxInParam, allDetails));
-
+        if(!CollectionUtils.isEmpty(allDetails)){
+            this.detailService.save(CompileEntity.dealSaveDto(qqchTaxInParam, allDetails));
+        }
     }
 
 
@@ -332,19 +326,15 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
     @Override
     public List<QqchTaxInDetail> saveInList(List<QqchTaxIn> list) {
         List<QqchTaxInDetail> allDetails = new ArrayList<>();
-
-//        List<TaxInVO.CurrencyVO> currencyInfo = this.getCurrencyInfo();
-
-//        Map<String, BigDecimal> currencyRateMap = currencyInfo.stream()
-//                .filter(ite -> StringUtils.isNotEmpty(ite.getCurrency()))
-//                .collect(Collectors.toMap(TaxInVO.CurrencyVO::getCurrency, TaxInVO.CurrencyVO::getRate, (v1, v2) -> v1));
+        if(CollectionUtils.isEmpty(list)){
+            return allDetails;
+        }
         for (QqchTaxIn item : list) {
             List<QqchTaxInDetail> detailList = item.getDetailList();
             // 不为空才循环
             if (!CollectionUtils.isEmpty(detailList)) {
                 String currency = item.getCurrency();
                 currency = StringUtils.isEmpty(currency) ? PmConstant.USD : currency;
-//                item.setRate(currencyRateMap.get(currency));
                 for (QqchTaxInDetail detail : detailList) {
                     detail.setId(IdWorker.createId());
                     // 设置币种
@@ -451,7 +441,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
      * @return
      */
     @Override
-    @CompileAspect(type = CompileOptEnum.TREE, tableName = TN)
+//    @CompileAspect(type = CompileOptEnum.TREE, tableName = TN)
     public List<QqchTaxIn> getInList(QqchTaxIn qqchTaxIn) {
         List<QqchTaxIn> qqchTaxInList = this.qqchTaxInMapper.getQqchTaxInList(qqchTaxIn);
         if (CollectionUtils.isEmpty(qqchTaxInList)){
@@ -475,6 +465,18 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
             }
             taxIn.setDetailList(qqchTaxInDetails);
         }
+
+        String dataType = qqchTaxIn.getDataType();
+        if("2".equals(dataType)){
+            //转树列表
+            qqchTaxInList = ListTreeUtil.formatTree(
+                    qqchTaxInList,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchTaxIn::getChildren,
+                    QqchTaxIn::setChildren);
+        }
+
         return qqchTaxInList;
     }
 }
