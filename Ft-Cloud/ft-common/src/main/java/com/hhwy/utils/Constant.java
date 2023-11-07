@@ -37,7 +37,7 @@ public class Constant {
     public static final String DEPT_PRJ_FLAG = "prjInfo";
     
     //0-未发起; 1审核中; 4-流程已结束,业务未结束; 5-流程和业务都已结束'
-//    public static final String task_status_INIt
+    public static final String TASK_STATUS_END = "4";
 
 
 

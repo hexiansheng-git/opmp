@@ -15,6 +15,14 @@ public class VersionUtil {
     }
 
     /**
+     * 获取最大版本号
+     * @param tableName
+     * @return
+     */
+    public static BigDecimal getMaxVersion(String tableName) {
+        return commonMapper.selectMaxVersion(tableName);
+    }
+    /**
      * 获取版本
      *
      * @param tableName 数据库表名
