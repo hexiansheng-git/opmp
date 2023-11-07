@@ -52,13 +52,13 @@ public class QqchTaxGlobal extends CompileEntity<QqchTaxGlobal> {
      * 字段描述：预算金额-当地币
      */
     @JsonProperty
-    @FtExcel(name = "预算金额-当地币")
+//    @FtExcel(name = "预算金额-当地币")
     private BigDecimal budgetLocalAmt;
     /**
      * 字段描述：预算金额-美元
      */
     @JsonProperty
-    @FtExcel(name = "预算金额-美元")
+//    @FtExcel(name = "预算金额-美元")
     private BigDecimal budgetUsdAmt;
     /**
      * 字段描述：项目直接收支-当地币

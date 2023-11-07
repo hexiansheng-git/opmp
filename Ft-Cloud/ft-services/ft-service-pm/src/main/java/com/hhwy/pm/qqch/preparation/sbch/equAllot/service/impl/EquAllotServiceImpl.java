@@ -34,6 +34,7 @@ import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -303,10 +304,12 @@ public class EquAllotServiceImpl implements EquAllotService {
         JyDetailsUtil.jyDetailsDetails(detailList,"getDetailsListCost", ValidationGroups.Save.class);
     }
 
+
+    @Value("${WSPlatform}")
+    private String WSPlatform;
     @Override
     public AjaxResult xzxcsb(ActiveEquVo activeEquVo) {
-//        String url = "http://10.11.238.63:10003/basic-api/fms/xcsb/xcsbMonthSelfEquInfo/list";
-        String url = "https://wms.cfhec.net/basic-api/fms/xcsb/xcsbMonthSelfEquInfo/list";
+        String url = WSPlatform + "/basic-api/fms/xcsb/xcsbMonthSelfEquInfo/list";
         AjaxResult ajaxResult;
         String tenantKey = SecurityUtils.getTenantKey();
         activeEquVo.setPrjCode(tenantKey);
@@ -317,11 +320,6 @@ public class EquAllotServiceImpl implements EquAllotService {
             e.printStackTrace();
             ajaxResult = AjaxResult.error("请求无法到达");
         }
-//        if (ObjectUtil.isEmpty(ajaxResult) || (int)ajaxResult.get("code") != 200)
-//            return null;
-//        String data1 = JSON.toJSONString(ajaxResult.get("data"));
-//        ActiveEquResult activeEquResult = JSON.parseObject(data1, ActiveEquResult.class);
-//        List<XcsbMonthSelfEquInfo> rows = activeEquResult.getRows();
         return ajaxResult;
     }
 }
