@@ -99,6 +99,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
      * @return
      */
     @Override
+    @Transactional
     public QqchWorkGroup adjustQqchWorkGroup(Long id) {
         QqchWorkGroup qqchWorkGroup;
 
@@ -124,8 +125,6 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         qqchWorkGroup.setId(id);
         //获取调整数据
         qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
-        //设置历史记录按钮
-        this.setHistoryMark(qqchWorkGroup);
         //设置工作小组成员数据
         this.setWorkGroupMember(qqchWorkGroup);
         //设置策划审批单位和策划主导单位
@@ -143,6 +142,11 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
 
         String newFileGroupId = copyFile(qqchWorkGroup.getFileGroupId());
         qqchWorkGroup.setFileGroupId(newFileGroupId);
+
+        this.insertQqchWorkGroup(qqchWorkGroup);
+
+        //设置历史记录按钮
+        this.setHistoryMark(qqchWorkGroup);
 
         return qqchWorkGroup;
     }
