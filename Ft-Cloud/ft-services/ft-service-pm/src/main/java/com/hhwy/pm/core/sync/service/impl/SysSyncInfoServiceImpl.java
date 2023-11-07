@@ -1,8 +1,6 @@
 package com.hhwy.pm.core.sync.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.pm.core.sync.domain.SysSyncInfo;
 import com.hhwy.pm.core.sync.enums.SyncBusinessEnum;
 import com.hhwy.pm.core.sync.mapper.SysSyncInfoMapper;
@@ -37,6 +35,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -119,10 +118,10 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 json.put("projectCode",projectBasicInfo.getProjectCode());
                 json.put("projectManager",ObjectUtils.nvlString(projectBasicInfo.getProjectManager()));
                 json.put("effectiveAmout",effectiveAmountDollar);
-                json.put("winDate", DateUtils.dateTime(contractInfo.getWinDate()) );
-                json.put("signDate", DateUtils.dateTime(contractInfo.getSignDate()) );
-                json.put("startTime", DateUtils.dateTime(contractInfo.getStartTime()) );
-                json.put("completedTime", DateUtils.dateTime(contractInfo.getCompletedTime()) );
+                json.put("winDate", dateTime(contractInfo.getWinDate()) );
+                json.put("signDate", dateTime(contractInfo.getSignDate()) );
+                json.put("startTime", dateTime(contractInfo.getStartTime()) );
+                json.put("completedTime", dateTime(contractInfo.getCompletedTime()) );
                 finalList.add(json);
             }
             rocketMQTemplate.convertAndSend("qqch_work_group1:tenantSuccess", JSONObject.toJSONString(finalList));
@@ -136,6 +135,15 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
             //3、更新syncInfo
             sysSyncInfoLogService.insert(SyncBusinessEnum.QQCHWORKGROUP_ENUM,ids,1L,System.currentTimeMillis()-beginMills,status,errMsg);
         }
+    }
+
+    private String dateTime(Date date){
+        if(date == null){
+            return "";
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
     }
 
     @Override

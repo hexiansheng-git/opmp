@@ -269,6 +269,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void save(CompileEntity<TaxInVO> qqchTaxInParam) {
+        BigDecimal version = qqchTaxInParam.getVersion();
 
         List<QqchTaxIn> allTaxInList = new ArrayList<>();
 
@@ -312,9 +313,8 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
             }
         }
 
-
         // 所有的详情
-        List<QqchTaxInDetail> allDetails = this.saveInList(allTaxInList);
+        List<QqchTaxInDetail> allDetails = this.saveInList(allTaxInList,version);
         // 新增年份数据
         if(!CollectionUtils.isEmpty(allDetails)){
             this.detailService.save(CompileEntity.dealSaveDto(qqchTaxInParam, allDetails));
@@ -323,8 +323,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
 
 
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
-    @Override
-    public List<QqchTaxInDetail> saveInList(List<QqchTaxIn> list) {
+    public List<QqchTaxInDetail> saveInList(List<QqchTaxIn> list,BigDecimal version) {
         List<QqchTaxInDetail> allDetails = new ArrayList<>();
         if(CollectionUtils.isEmpty(list)){
             return allDetails;
@@ -358,6 +357,10 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         EntityUtils.setCreateUpdateInfo(list);
         EntityUtils.setCreateUpdateInfo(allDetails);
         // 新增数据
+        QqchTaxIn delQuery = new QqchTaxIn();
+        delQuery.setVersion(version);
+        qqchTaxInMapper.deleteQqchTaxIn(delQuery);
+
         this.qqchTaxInMapper.insertQqchTaxInList(list);
 
         return allDetails;
