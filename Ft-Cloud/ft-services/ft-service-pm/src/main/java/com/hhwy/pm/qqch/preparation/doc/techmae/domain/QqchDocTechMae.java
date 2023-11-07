@@ -118,7 +118,7 @@ public class QqchDocTechMae extends TreeNode<QqchDocTechMae> {
     @JsonProperty
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：叶子节点标识  ： 1 是    0：否
      */
     @JsonProperty
     private String ptVar1;
