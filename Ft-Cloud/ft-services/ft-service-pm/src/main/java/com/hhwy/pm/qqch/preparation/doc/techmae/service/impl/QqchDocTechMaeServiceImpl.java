@@ -114,7 +114,16 @@ public class QqchDocTechMaeServiceImpl implements IQqchDocTechMaeService {
     @Override
     public int inserteQqchDocTechMaeVo(QqchDocTechMaeV0 qqchDocTechVo) {
         List<QqchDocTechMae> dataList = qqchDocTechVo.getDataList();
-        List<QqchDocTechMae> qqchDocTechMaes = TreeUtil.treeToList(dataList);
+
+        List<QqchDocTechMae> qqchDocTechMaes = ListTreeUtil.formatList(
+                dataList,
+                QqchDocTechMae::setId,
+                QqchDocTechMae::setPid,
+                QqchDocTechMae::setSort,
+                QqchDocTechMae::setLeaf,
+                QqchDocTechMae::getChildren,
+                QqchDocTechMae::setChildren);
+
         if (ObjectNullUtil.isEmpty(dataList)) {
             //先删除旧的 再添加新的
             QqchDocTechMae temp = new QqchDocTechMae();

@@ -51,7 +51,7 @@ public class QqchWeightEngineeringList extends CommonBaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "所属WBS的id")
-    private Long wbsId;
+    private String wbsId;
     /**
      * 字段描述：所属WBS的id
      */
