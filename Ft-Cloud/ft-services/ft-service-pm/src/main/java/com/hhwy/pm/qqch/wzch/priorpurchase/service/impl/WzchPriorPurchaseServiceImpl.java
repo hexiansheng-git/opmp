@@ -27,6 +27,7 @@ import com.hhwy.utils.validation.ValidationGroups;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -303,9 +304,9 @@ public class WzchPriorPurchaseServiceImpl implements IWzchPriorPurchaseService {
         BigDecimal version = VersionUtil.getVersion("wzch_prior_purchase", vo.getVersion());
         vo.setVersion(version);
         
-        WzchPriorPurchaseDTO busData = new WzchPriorPurchaseDTO();
-        busData.setVersion(version);
-        busData.setStageIdentity(qqchReviewService.getStage());
+//        WzchPriorPurchaseDTO busData = new WzchPriorPurchaseDTO();
+        vo.setVersion(version);
+        vo.setStageIdentity(qqchReviewService.getStage());
         List<WzchPriorPurchase> list = this.wzchPriorPurchaseMapper.selectWzchPriorPurchaseList(new WzchPriorPurchase(version));
         if(CollectionUtils.isEmpty(list)){
             vo.setDetailList(new ArrayList<>());
@@ -325,6 +326,8 @@ public class WzchPriorPurchaseServiceImpl implements IWzchPriorPurchaseService {
 
         try {
             for (WzchPriorPurchaseDetailDTO detailDTO : detailList) {
+                if(StringUtils.isBlank(detailDTO.getSource()))
+                    continue;
                 String[] sourceArr = detailDTO.getSource().split(",");
                 StringBuilder sourceStr = new StringBuilder("");
                 for (String source : sourceArr) {
@@ -346,8 +349,8 @@ public class WzchPriorPurchaseServiceImpl implements IWzchPriorPurchaseService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        busData.setDetailList(detailList);
-        return busData;
+        vo.setDetailList(detailList);
+        return vo;
     }
 
 
