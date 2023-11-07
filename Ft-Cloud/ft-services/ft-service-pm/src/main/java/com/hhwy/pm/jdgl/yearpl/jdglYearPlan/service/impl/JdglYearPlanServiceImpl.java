@@ -158,7 +158,7 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         Date start = dateRange4Year.get("start");
 
         // 计算合同、产值数据
-        BigDecimal countValue = jdglDayScheduleService.getCountValue(null, start);
+        BigDecimal countValue = jdglDayScheduleService.getCountValue4Cont(null, start);
 
         jdglYearPlanParam.setTotalCompValueCu(countValue);
         if(jdglYearPlanParam.getTotalCompValueCu() == null) jdglYearPlanParam.setTotalCompValueCu(new BigDecimal(0));
