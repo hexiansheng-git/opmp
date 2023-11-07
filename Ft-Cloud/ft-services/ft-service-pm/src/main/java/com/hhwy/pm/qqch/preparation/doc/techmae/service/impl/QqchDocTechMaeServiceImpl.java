@@ -120,7 +120,7 @@ public class QqchDocTechMaeServiceImpl implements IQqchDocTechMaeService {
                 QqchDocTechMae::setId,
                 QqchDocTechMae::setPid,
                 QqchDocTechMae::setSort,
-                QqchDocTechMae::setPtVar1,
+                QqchDocTechMae::setLeaf,
                 QqchDocTechMae::getChildren,
                 QqchDocTechMae::setChildren);
 

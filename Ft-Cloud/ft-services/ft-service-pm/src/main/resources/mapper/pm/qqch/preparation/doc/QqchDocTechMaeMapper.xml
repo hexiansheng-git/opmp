@@ -9,6 +9,7 @@
         <result property="id" column="id"/>
         <result property="pid" column="pid"/>
         <result property="code" column="code"/>
+        <result property="leaf" column="leaf"/>
         <result property="dataClassify" column="data_classify"/>
         <result property="desc" column="desc"/>
         <result property="version" column="version"/>
@@ -33,6 +34,7 @@
         select `id`
              , `pid`
              , `code`
+             , `leaf`
              , `data_classify`
              , `desc`
              , `version`
@@ -120,6 +122,7 @@
             <if test="id != null ">`id`,</if>
             <if test="pid != null ">`pid`,</if>
             <if test="code != null  and code != ''">`code`,</if>
+            <if test="leaf != null  and leaf != ''">`leaf`,</if>
             <if test="dataClassify != null  and dataClassify != ''">`data_classify`,</if>
             <if test="desc != null  and desc != ''">`desc`,</if>
             <if test="version != null ">`version`,</if>
@@ -145,6 +148,7 @@
             <if test="id != null ">#{id},</if>
             <if test="pid != null ">#{pid},</if>
             <if test="code != null  and code != ''">#{code},</if>
+            <if test="leaf != null  and leaf != ''">#{leaf},</if>
             <if test="dataClassify != null  and dataClassify != ''">#{dataClassify},</if>
             <if test="desc != null  and desc != ''">#{desc},</if>
             <if test="version != null ">#{version},</if>
@@ -175,6 +179,7 @@
             `id`,
             `pid`,
             `code`,
+            `leaf`,
             `data_classify`,
             `desc`,
             `version`,
@@ -200,6 +205,7 @@
                 #{item.id},
                 #{item.pid},
                 #{item.code},
+                #{item.leaf},
                 #{item.dataClassify},
                 #{item.desc},
                 #{item.version},
@@ -228,6 +234,7 @@
             <if test="id != null ">`id` = #{id},</if>
             <if test="pid != null ">`pid` = #{pid},</if>
             <if test="code != null  and  code != ''">`code` = #{code},</if>
+            <if test="leaf != null  and  leaf != ''">`leaf` = #{leaf},</if>
             <if test="dataClassify != null  and  dataClassify != ''">`data_classify` = #{dataClassify},</if>
             <if test="desc != null  and  desc != ''">`desc` = #{desc},</if>
             <if test="version != null ">`version` = #{version},</if>
@@ -269,6 +276,11 @@
             <trim prefix="code  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.code}
+                </foreach>
+            </trim>
+           <trim prefix="leaf  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.leaf}
                 </foreach>
             </trim>
             <trim prefix="data_classify  = case" suffix="end,">
