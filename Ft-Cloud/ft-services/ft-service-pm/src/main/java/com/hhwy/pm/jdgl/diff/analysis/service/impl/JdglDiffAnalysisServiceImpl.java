@@ -456,7 +456,13 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         int i = jdglDiffAnalysisMapper.insertJdglDiffAnalysis(jdglDiffAnalysis);
 
         if(i > 0) {
+            // 修正表单数据
+            JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect = new JdglDiffAnalysisCorrect();
+            jdglDiffAnalysisCorrect.setDiffAnalysisId(jdglDiffAnalysis.getId());
+            Map<String, List<JdglDiffAnalysisCorrect>> jdglDiffAnalysisCorrectMapList = iJdglDiffAnalysisCorrectService.getJdglDiffAnalysisCorrectMapList(jdglDiffAnalysisCorrect);
+            jdglDiffAnalysis.setJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrectMapList);
             sysSyncInfoService.pushJdglDiffAnalysis(jdglDiffAnalysis);
+
 //            jdglCorrectionMeasuresMakeService.syncData(nowDate);
         }
     }

@@ -98,8 +98,16 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
         if(CollectionUtils.isEmpty(jdglDiffAnalysisCorrectList)) {
             return 0;
         }
-        BigDecimal correctGrade = new BigDecimal(0);
+        List<JdglDiffAnalysisCorrect> needAddList = new ArrayList<>();
         for (JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect : jdglDiffAnalysisCorrectList) {
+            needAddList.add(jdglDiffAnalysisCorrect);
+            List<JdglDiffAnalysisCorrect> children = jdglDiffAnalysisCorrect.getChildren();
+            if(!CollectionUtils.isEmpty(children)) {
+                needAddList.addAll(children);
+            }
+        }
+        BigDecimal correctGrade = new BigDecimal(0);
+        for (JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect : needAddList) {
             if("1".equals(jdglDiffAnalysisCorrect.getIsSelect()) && jdglDiffAnalysisCorrect.getGrade() != null) {
                 correctGrade = correctGrade.add(jdglDiffAnalysisCorrect.getGrade());
             }
@@ -107,8 +115,8 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
             jdglDiffAnalysisCorrect.setCreateUser(SecurityUtils.getUserName());
             jdglDiffAnalysisCorrect.setCreateTime(DateUtils.getNowDate());
         }
-        iJdglDiffAnalysisService.updateGrage("correctGrade", jdglDiffAnalysisCorrectList.get(0).getDiffAnalysisId(), correctGrade);
-        return jdglDiffAnalysisCorrectMapper.insertJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrectList);
+        iJdglDiffAnalysisService.updateGrage("correctGrade", needAddList.get(0).getDiffAnalysisId(), correctGrade);
+        return jdglDiffAnalysisCorrectMapper.insertJdglDiffAnalysisCorrectList(needAddList);
     }
 
     @Transactional
@@ -123,16 +131,22 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
         if(CollectionUtils.isEmpty(jdglDiffAnalysisCorrectList)) {
             return 0;
         }
-        BigDecimal correctGrade = new BigDecimal(0);
+        List<JdglDiffAnalysisCorrect> needUpdateList = new ArrayList<>();
         for (JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect : jdglDiffAnalysisCorrectList) {
+            needUpdateList.add(jdglDiffAnalysisCorrect);
+            List<JdglDiffAnalysisCorrect> children = jdglDiffAnalysisCorrect.getChildren();
+            if(!CollectionUtils.isEmpty(children)) needUpdateList.addAll(children);
+        }
+        BigDecimal correctGrade = new BigDecimal(0);
+        for (JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect : needUpdateList) {
             if("1".equals(jdglDiffAnalysisCorrect.getIsSelect()) && jdglDiffAnalysisCorrect.getGrade() != null) {
                 correctGrade = correctGrade.add(jdglDiffAnalysisCorrect.getGrade());
             }
             jdglDiffAnalysisCorrect.setUpdateUser(SecurityUtils.getUserName());
             jdglDiffAnalysisCorrect.setUpdateTime(DateUtils.getNowDate());
         }
-        iJdglDiffAnalysisService.updateGrage("correctGrade", jdglDiffAnalysisCorrectList.get(0).getDiffAnalysisId(), correctGrade);
-        return jdglDiffAnalysisCorrectMapper.updateJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrectList);
+        iJdglDiffAnalysisService.updateGrage("correctGrade", needUpdateList.get(0).getDiffAnalysisId(), correctGrade);
+        return jdglDiffAnalysisCorrectMapper.updateJdglDiffAnalysisCorrectList(needUpdateList);
     }
 
     @Transactional
@@ -194,15 +208,18 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
                 if(!CollectionUtils.isEmpty(qqchScheFactors)) {
                     for (QqchScheFactors qqchScheFactors1 : qqchScheFactors) {
                         if(headerValue.equals(qqchScheFactors1.getFactorsType())) {
-                            JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect = new JdglDiffAnalysisCorrect();
-                            jdglDiffAnalysisCorrect.setSort(i);
-                            jdglDiffAnalysisCorrect.setFirstType(headerName);
-                            jdglDiffAnalysisCorrect.setSecondType(qqchScheFactors1.getFactorsDesc());
-                            jdglDiffAnalysisCorrect.setGrade(qqchScheFactors1.getScore());
-                            jdglDiffAnalysisCorrect.setIsSelect("0");
-                            jdglDiffAnalysisCorrect.setFirstTypeValue(headerValue);
-                            jdglDiffAnalysisCorrect.setDiffAnalysisId(jdglDiffAnalysisCorrectParam.getDiffAnalysisId());
-                            dataVos.add(jdglDiffAnalysisCorrect);
+                            String factorsDesc = qqchScheFactors1.getFactorsDesc();
+                            if(StringUtils.isNotEmpty(factorsDesc)) {
+                                JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect = new JdglDiffAnalysisCorrect();
+                                jdglDiffAnalysisCorrect.setSort(i);
+                                jdglDiffAnalysisCorrect.setFirstType(headerName);
+                                jdglDiffAnalysisCorrect.setSecondType(qqchScheFactors1.getFactorsDesc());
+                                jdglDiffAnalysisCorrect.setGrade(qqchScheFactors1.getScore());
+                                jdglDiffAnalysisCorrect.setIsSelect("0");
+                                jdglDiffAnalysisCorrect.setFirstTypeValue(headerValue);
+                                jdglDiffAnalysisCorrect.setDiffAnalysisId(jdglDiffAnalysisCorrectParam.getDiffAnalysisId());
+                                dataVos.add(jdglDiffAnalysisCorrect);
+                            }
                         }
                     }
                 }

@@ -173,7 +173,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
         cl.setTime(period);
 
         String year = cl.get(Calendar.YEAR) + "";
-        String month = (cl.get(Calendar.MONTH)  + 1)+"";
+        String month = (cl.get(Calendar.MONTH)  + 1) > 10 ? "" + (cl.get(Calendar.MONTH)  + 1) : "0" + (cl.get(Calendar.MONTH)  + 1);
 
         // 月计划数据
         JdglMonthPlan usingMonthPlanByYearAndMonth = jdglMonthPlanService.getUsingMonthPlanByYearAndMonth(year, month);
