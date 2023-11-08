@@ -84,6 +84,8 @@ public class CommonService {
     }
 
     private static final String POP_WINDOWS = "popWindows";
+    private static final String DETAIL = "detail";
+    private static final String EDIT = "edit";
 
     /**
      * 检验菜单是否有编辑权限
@@ -95,12 +97,12 @@ public class CommonService {
         CommonAssert.notBlank(menuId,"菜单id不能为空！");
         PermissionMark permissionMark = new PermissionMark();
 
-        if(POP_WINDOWS.equals(menuId)){
+        if(POP_WINDOWS.equals(menuId) || DETAIL.equals(menuId)){
             permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
             return permissionMark;
         }
 
-        if(SecurityUtils.getSysUser().isAdmin()){
+        if(EDIT.equals(menuId) || SecurityUtils.getSysUser().isAdmin()){
             return permissionMark;
         }
 
