@@ -178,7 +178,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         xmslContractPayinfo.setMasterId(contractInfo.getId());
         List<XmslContractPayinfo> payinfoList = xmslContractPayinfoService.getXmslContractPayinfoList(xmslContractPayinfo);
         if(!CollectionUtils.isEmpty(payinfoList)) {
-            XmslContractPayinfo USD = payinfoList.stream().filter(o -> "USD".equals(o.getCurrencyCode())).findFirst().orElse(null);
+            XmslContractPayinfo USD = payinfoList.stream().filter(o -> listCurrencyCode.equals(o.getCurrencyCode())).findFirst().orElse(null);
             if(USD != null){
                 String rateType = USD.getRateType();
                 if("1".equals(rateType)){

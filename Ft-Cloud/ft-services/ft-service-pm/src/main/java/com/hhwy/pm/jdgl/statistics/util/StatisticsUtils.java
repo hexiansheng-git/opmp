@@ -339,4 +339,34 @@ public class StatisticsUtils {
         instance.add(Calendar.DATE, i);
         return instance.getTime();
     }
+
+    /**
+     * 除以10000
+     * @return
+     */
+    public static BigDecimal getDivideTenThousand(BigDecimal num) {
+        return getDivideNum(num, 10000);
+    }
+
+    /**
+     * 除以100
+     * @return
+     */
+    public static BigDecimal getDivideHundred(BigDecimal num) {
+        return getDivideNum(num, 100);
+    }
+
+    /**
+     * 除以除数(num/divideNum)
+     * @param num 被除数
+     * @param divideNum 除数
+     * @return
+     */
+    public static BigDecimal getDivideNum(BigDecimal num, int divideNum) {
+        if(num == null || divideNum == 0) {
+            return BigDecimal.ZERO;
+        }
+        return num.divide(new BigDecimal(divideNum), 2, BigDecimal.ROUND_HALF_UP);
+    }
+
 }

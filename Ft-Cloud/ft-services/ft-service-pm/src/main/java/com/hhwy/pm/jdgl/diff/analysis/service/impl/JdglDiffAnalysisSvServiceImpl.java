@@ -244,7 +244,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
             jdglDiffAnalysisSvMapper.insertJdglDiffAnalysisSvList(insertList);
         }
 
-        jdglDiffAnalysis.setTotalCompValue(thisTotalActAmt);
+        jdglDiffAnalysis.setTotalCompValue(StatisticsUtils.getDivideTenThousand(thisTotalActAmt));
 
         if(new BigDecimal(0).compareTo(thisTotalPlanAmt) == 0) {
             return new BigDecimal(0);

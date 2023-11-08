@@ -16,6 +16,7 @@ import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisPathService;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisSvService;
 import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeService;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheAnalyse;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheDiff;
 import com.hhwy.pm.qqch.sgch.sche.dto.QqchScheDTO;
@@ -25,6 +26,7 @@ import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -324,6 +326,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
     }
 
+    @Transactional
     public void initDiffData() {
         JdglDiffAnalysis jdglDiffAnalysis = new JdglDiffAnalysis();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -333,7 +336,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
-        Date nowDate = new Date();
+        Date nowDate = FtDateUtils.getYearMonthDate(new Date());
         jdglDiffAnalysis.setId(IdWorker.createId());
         jdglDiffAnalysis.setPeriod(nowDate);
         jdglDiffAnalysis.setCreateTime(nowDate);
@@ -365,13 +368,15 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         XmslContractInfo validMaxVersionContractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
 
         String isOver = "";
+        BigDecimal effectiveAmountDollar = BigDecimal.ZERO;
         if(validMaxVersionContractInfo != null) {
             Date nowDate1 = DateUtils.getNowDate();
             Date handoverTime = validMaxVersionContractInfo.getHandoverTime();
             if(handoverTime != null && nowDate1.before(handoverTime)) {
                 isOver = "1";
             }
-            jdglDiffAnalysis.setContractAmtDl(validMaxVersionContractInfo.getEffectiveAmout());
+            effectiveAmountDollar = validMaxVersionContractInfo.getEffectiveAmountDollar();
+            if(effectiveAmountDollar != null)jdglDiffAnalysis.setContractAmtDl(StatisticsUtils.getDivideTenThousand(effectiveAmountDollar));
             jdglDiffAnalysis.setContractStartDate(validMaxVersionContractInfo.getStartTime());
             jdglDiffAnalysis.setContractEndDate(validMaxVersionContractInfo.getCompletedTime());
         }
@@ -389,11 +394,10 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         String weightedGrade = projectInfo.getWeightedGrade();
 
         if(validMaxVersionContractInfo != null) {
-            BigDecimal effectiveAmout = validMaxVersionContractInfo.getEffectiveAmout() == null ? BigDecimal.ZERO : validMaxVersionContractInfo.getEffectiveAmout();
             String duration = validMaxVersionContractInfo.getDuration();
             BigDecimal durationM = duration == null ? BigDecimal.ZERO : BigDecimal.valueOf(Double.valueOf(duration)/12);
-            if(durationM != null && BigDecimal.ZERO.compareTo(durationM) != 0) {
-                scaleGradeValue = effectiveAmout.divide(durationM, 2, BigDecimal.ROUND_HALF_UP);
+            if(effectiveAmountDollar != null && BigDecimal.ZERO.compareTo(durationM) != 0) {
+                scaleGradeValue = effectiveAmountDollar.divide(durationM, 2, BigDecimal.ROUND_HALF_UP).divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP);
             }
         }
 
@@ -453,6 +457,13 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             }
         }
 
+        if(jdglDiffAnalysis.getSDiffGrade() == null) jdglDiffAnalysis.setSDiffGrade(BigDecimal.ZERO);
+        if(jdglDiffAnalysis.getKeyGrade() == null) jdglDiffAnalysis.setKeyGrade(BigDecimal.ZERO);
+        if(jdglDiffAnalysis.getContractOverGrade() == null) jdglDiffAnalysis.setContractOverGrade(BigDecimal.ZERO);
+        if(jdglDiffAnalysis.getImportanceGrade() == null) jdglDiffAnalysis.setImportanceGrade(BigDecimal.ZERO);
+        if(jdglDiffAnalysis.getScaleGrade() == null) jdglDiffAnalysis.setScaleGrade(BigDecimal.ZERO);
+        if(jdglDiffAnalysis.getContractAmtDl() == null) jdglDiffAnalysis.setContractAmtDl(BigDecimal.ZERO);
+        jdglDiffAnalysis.setTotalGrade(BigDecimal.ZERO);
         int i = jdglDiffAnalysisMapper.insertJdglDiffAnalysis(jdglDiffAnalysis);
 
         if(i > 0) {
