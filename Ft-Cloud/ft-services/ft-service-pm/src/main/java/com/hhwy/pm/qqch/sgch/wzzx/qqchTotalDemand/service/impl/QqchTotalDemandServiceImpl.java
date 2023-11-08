@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemand.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -119,7 +120,7 @@ public class QqchTotalDemandServiceImpl implements IQqchTotalDemandService{
         for (QqchTotalDemand totalDemand : qqchTotalDemandList) {
             //是否优先进场:0-否;1-是
             String firstEnterFlag = totalDemand.getFirstEnterFlag();
-            if (StringUtils.isNotEmpty(firstEnterFlag) && firstEnterFlag.equals("0")) {
+            if (StrUtil.isNotEmpty(firstEnterFlag) && firstEnterFlag.equals("0")) {
                 totalDemand.setFirstEnterFlagBool(false);
             } else {
                 totalDemand.setFirstEnterFlagBool(true);
@@ -191,6 +192,7 @@ public class QqchTotalDemandServiceImpl implements IQqchTotalDemandService{
             totalDemand.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             totalDemand.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             totalDemand.setCreateTime(DateUtils.getNowDate());
+            totalDemand.setFirstEnterFlag(totalDemand.isFirstEnterFlagBool()==false?"0":"1");
             List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCountList = totalDemand.getQqchTotalDemandTimeCountList();
 
             if(CollectionUtils.isNotEmpty(qqchTotalDemandTimeCountList)){

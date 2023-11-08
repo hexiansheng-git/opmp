@@ -101,7 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deptId != null">`dept_id`,</if>
             <if test="version != null">`version`,</if>
             <if test="valid != null">`valid`,</if>
-            <if test="deptId != prjCode">`prj_code`,</if>
+            <if test="prjCode != null">`prj_code`,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>

@@ -231,6 +231,11 @@ public class WzchLocalPurchaseSupplyDetailServiceImpl implements IWzchLocalPurch
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int insertOrUpdateBatch(List<WzchLocalPurchaseSupplyDetailDTO> detailList, Long supplyId,boolean ignoreBatch) {
+        // 根据采购供应id删除物资详情
+        localPurchaseSupplyDetailMapper.deleteDetailBySupplyId(supplyId);
+
+        // 根据采购供应id删除物资批次详情
+        localPurchaseSupplyDetailMapper.deleteBatchDetailBySupplyId(supplyId);
         if (CollectionUtils.isEmpty(detailList)) {
             return 0;
             // TODO throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "物资详情不能为空");
@@ -270,12 +275,6 @@ public class WzchLocalPurchaseSupplyDetailServiceImpl implements IWzchLocalPurch
             Optional.of(batchDetails).ifPresent(saveBachDetails::addAll);
         }
 
-
-        // 根据采购供应id删除物资详情
-        localPurchaseSupplyDetailMapper.deleteDetailBySupplyId(supplyId);
-
-        // 根据采购供应id删除物资批次详情
-        localPurchaseSupplyDetailMapper.deleteBatchDetailBySupplyId(supplyId);
 
         // 批量插入物资详情
         int i = localPurchaseSupplyDetailMapper.insertOrUpdateBatch(detailList);

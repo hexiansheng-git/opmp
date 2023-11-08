@@ -107,23 +107,32 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
     public QqchSpecialBigEquListVo getQqchSpecialBigEquListList(QqchSpecialBigEquList qqchSpecialBigEquList) {
         QqchSpecialBigEquListVo vo = new QqchSpecialBigEquListVo();
         BigDecimal version = VersionUtil.getVersion("qqch_special_big_equ_list",qqchSpecialBigEquList.getVersion());
-        //实时查询8.4.1数据
+        //查询7.6.1数据
         SbchEquipmentSpecial list = equipmentSpecialService.getList(version);
         List<SbchEquipmentSpecialDetails> detailsList = list.getDetailsList();
-        List<String> arrDeviceName = detailsList.stream().map(SbchEquipmentSpecialDetails::getMaterialName).collect(Collectors.toList());
-        qqchSpecialBigEquList.setArrDviceName(arrDeviceName);
-        //根据841设备查询
+        //查询841设备
         List<QqchSpecialBigEquList> qqchSpecialBigEquListList = qqchSpecialBigEquListMapper.getQqchSpecialBigEquListList(qqchSpecialBigEquList);
         List<QqchInformationSheet> qqchInformationSheetList = qqchInformationSheetService.getQqchInformationSheetList(new QqchInformationSheet());
         Map<Long, List<QqchInformationSheet>> sheetMap = qqchInformationSheetList.stream().collect(Collectors.groupingBy(QqchInformationSheet::getOutId));
         List<QqchTransitionRecord> qqchTransitionRecordList = qqchTransitionRecordService.getQqchTransitionRecordList(new QqchTransitionRecord());
         Map<Long, List<QqchTransitionRecord>> recordMap = qqchTransitionRecordList.stream().collect(Collectors.groupingBy(QqchTransitionRecord::getOutId));
-        Map<String, List<SbchEquipmentSpecialDetails>> mapDevice = detailsList.stream().collect(Collectors.groupingBy(SbchEquipmentSpecialDetails::getMaterialName));
+        //填充附件信息
         for (QqchSpecialBigEquList specialBigEquList : qqchSpecialBigEquListList) {
             specialBigEquList.setQqchInformationSheetList(sheetMap.get(specialBigEquList.getId()));
             specialBigEquList.setQqchTransitionRecordList(recordMap.get(specialBigEquList.getId()));
-            specialBigEquList.setSpec(mapDevice.get(specialBigEquList.getEquName()).get(0).getMaterialSpec());
-            specialBigEquList.setProduceFactory(mapDevice.get(specialBigEquList.getEquName()).get(0).getSbProductFactory());
+        }
+        //将761新增的数据追加到841中
+        Map<String, List<QqchSpecialBigEquList>> collect = qqchSpecialBigEquListList.stream().collect(Collectors.groupingBy(QqchSpecialBigEquList::getEquName));
+        for (SbchEquipmentSpecialDetails bean : detailsList ) {
+            String materialName = bean.getMaterialName();
+            if (!collect.containsKey(materialName)) {
+                QqchSpecialBigEquList equList = new QqchSpecialBigEquList();
+                equList.setSpec(bean.getMaterialSpec());
+                equList.setEquSourse(bean.getSbPurchaseSource());
+                equList.setProduceFactory(bean.getSbProductFactory());
+                equList.setEquName(bean.getMaterialName());
+                qqchSpecialBigEquListList.add(equList);
+            }
         }
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());

@@ -46,6 +46,10 @@ public class QqchDocTechMae extends TreeNode<QqchDocTechMae> {
     @FtExcel(name = "编号",serialNumFlag = true)
     private String code;
     /**
+     * 字段描述：叶子结点标识
+     */
+    private String leaf;
+    /**
      * 字段描述：技术资料分类
      */
     @JsonProperty

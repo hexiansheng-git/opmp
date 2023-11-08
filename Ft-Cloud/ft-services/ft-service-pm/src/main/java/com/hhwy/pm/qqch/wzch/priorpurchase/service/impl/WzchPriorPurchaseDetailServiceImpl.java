@@ -113,12 +113,11 @@ public class WzchPriorPurchaseDetailServiceImpl implements IWzchPriorPurchaseDet
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int insertOrEditBatchByPurchaseId(List<WzchPriorPurchaseDetailDTO> detailList, Long purchaseId) {
-        if (CollectionUtils.isEmpty(detailList)) {
-            throw new CustomBusinessException("物资详情不能为空");
-        }
         // 先将之前数据都进行删除
         wzchPriorPurchaseDetailMapper.deleteByPurchaseId(purchaseId);
-
+        if (CollectionUtils.isEmpty(detailList)) {
+            return 0;
+        }
 
         // 集合类型转化 设置id 设置purchaseId
         List<WzchPriorPurchaseDetail> insertOrUpdateData = detailList.stream().map(item -> {

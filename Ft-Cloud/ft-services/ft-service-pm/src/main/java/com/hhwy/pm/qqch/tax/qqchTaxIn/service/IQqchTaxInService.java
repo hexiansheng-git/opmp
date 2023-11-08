@@ -2,7 +2,6 @@ package com.hhwy.pm.qqch.tax.qqchTaxIn.service;
 
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxIn;
-import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxInDetail;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.vo.TaxInVO;
 
 import java.math.BigDecimal;
@@ -38,8 +37,6 @@ public interface IQqchTaxInService {
     CompileEntity<TaxInVO> list(QqchTaxIn qqchTaxInParam);
 
     void save(CompileEntity<TaxInVO> qqchTaxInParam);
-
-    List<QqchTaxInDetail> saveInList(List<QqchTaxIn> list);
 
 
     public List<QqchTaxIn> getInList(QqchTaxIn taxIn);

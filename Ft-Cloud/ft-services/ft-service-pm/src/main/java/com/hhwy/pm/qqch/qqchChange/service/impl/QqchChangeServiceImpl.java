@@ -67,10 +67,6 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
     @Override
     public List<QqchChange> list(QqchChange qqchChange) {
         List<QqchChange> list = qqchChangeMapper.getQqchChangeList(qqchChange);
-        for (int i = 0; i < list.size(); i++) {
-            QqchChange temp = list.get(i);
-            temp.setVersionStr("V"+temp.getVersion());
-        }
         return list;
     }
 
@@ -80,6 +76,7 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
 
     @Override
     public QqchChangeVo adjustDetail() {
+        QqchChangeVo change = new QqchChangeVo();
         //判断是否已结束前期评审
         Integer unValidCount = qqchChangeMapper.countUnValidReview();
         Assert.isTrue(unValidCount==null||unValidCount < 1,"前期策划评审未结束,无法进行调整");
@@ -89,7 +86,6 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         Integer count = qqchChangeMapper.countQqchChange(query);
         Assert.isTrue(count ==null||count < 1,"已包含未生效的前期策划变更,无法进行调整");
         ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
-        QqchChangeVo change = new QqchChangeVo();
         change.setValid(Constant.NO_INT);
         change.setProjectCode(SecurityUtils.getTenantKey());
         change.setProjectName(projectBasicInfo.getProjectName());
@@ -100,12 +96,12 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         change.setChangeUserName(SecurityUtils.getSysUser().getNickName());
         //如果是版本一，加载工作计划的编制人
         List<QqchChangeDetail> detailList = loadDetail(maxVersion);
-
-        return null;
+        change.setDetailList(detailList);
+        return change;
     }
 
     private List<QqchChangeDetail> loadDetail(BigDecimal version){
-        List<SysMenu> list = getMenuList();
+        List<SysMenu> menuList = getMenuList();
         //工作计划的配置信息
         Map<String,QqchChangeDetail> planConfMap = new HashMap<>();
         //如果为空，加载工作计划
@@ -133,14 +129,49 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
             List<QqchChangeDetail> detailList = detailService.getQqchChangeDetailList(new QqchChangeDetail(change.getId()));
             for (int i = 0; i < detailList.size(); i++) {
                 QqchChangeDetail temp = detailList.get(i);
-                
+                planConfMap.put(temp.getItemName(),temp);
             }
         }
-
-
+        //加载menu
+        List<QqchChangeDetail> list = new ArrayList<>();
+        if (!ObjectNullUtil.isEmpty(menuList)) {
+            List<SysMenu> sysMenuList = ListTreeUtil.formatListPidNull(menuList,SysMenu::setMenuId,SysMenu::setParentId,SysMenu::setPtVar1,SysMenu::getChildren, SysMenu::setChildren);
+            if (!ObjectNullUtil.isEmpty(sysMenuList)) {
+                sysMenuList.stream().forEach(item -> {
+                    QqchChangeDetail qqchWorkPlanDetail = new QqchChangeDetail();
+                    qqchWorkPlanDetail.setId(item.getMenuId());
+                    qqchWorkPlanDetail.setItemId(item.getPath());
+                    qqchWorkPlanDetail.setPid(item.getParentId());
+                    qqchWorkPlanDetail.setItemName(item.getTitle());
+                    qqchWorkPlanDetail.setPtVar1(item.getPtVar1());//是否叶子节点
+                    qqchWorkPlanDetail.setSort(item.getSortCode() != null ? item.getSortCode().intValue() : null);
+                    list.add(qqchWorkPlanDetail);
+                });
+            }
+        }
+        if (!ObjectNullUtil.isEmpty(list)) {
+            list.stream().forEach(item -> {
+                String itemId = item.getItemId();
+                String itemName = item.getItemName();
+                String ptVar1 = item.getPtVar1();//是否叶子节点
+                Integer sort = item.getSort();
+                QqchChangeDetail detail = planConfMap.get(item.getItemName());
+                if (detail != null) {
+                    BeanUtils.copyProperties(detail, item);
+                    item.setId(item.getId());
+                    item.setPid(item.getPid());
+                    item.setItemId(itemId);
+                    item.setItemName(itemName);
+                    item.setSort(sort);
+                    item.setPtVar1(ptVar1);//是否叶子节点
+                }
+            });
+            List<QqchChangeDetail> tree = ListTreeUtil.formatTree(list, o -> o.getPid() == null, (r, n) -> r.getId().equals(n.getPid()),
+                    QqchChangeDetail::getChildren, QqchChangeDetail::setChildren);
+            return tree;
+        }
 //        Assert.notEmpty(detailList,"版本"+version+"前期策划变更的工作安排为空");
-
-        return null;
+        return new ArrayList<>();
     }
 
 

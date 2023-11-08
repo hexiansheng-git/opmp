@@ -98,7 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="wholeStatus != null  and wholeStatus != ''"> and `whole_status` = #{wholeStatus}</if>
             <if test="isSpecial != null  and isSpecial != ''"> and `is_special` = #{isSpecial}</if>
         </where>
-        order by `id` desc
+#         order by `id` desc
     </select>
     
     <select id="selectSbchEquipmentAllotTransnationalTechnologyById" parameterType="Long" resultMap="SbchEquipmentAllotTransnationalTechnologyResult">

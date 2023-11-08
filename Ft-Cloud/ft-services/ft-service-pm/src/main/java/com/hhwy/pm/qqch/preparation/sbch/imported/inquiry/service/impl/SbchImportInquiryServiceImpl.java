@@ -31,10 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -254,8 +251,6 @@ public class SbchImportInquiryServiceImpl implements ISbchImportInquiryService {
     public void batchSave(SbchImportInquiry vo) {
         //国家列表
         List<SbchImportInquiryCountry> countryList = vo.getCountryList();
-        //港口列表
-//        List<SbchImportInquiryCustoms> customsList = vo.getCustomsList();
 
         SbchImportInquiry temp = new SbchImportInquiry();
         temp.setVersion(vo.getVersion());
@@ -282,7 +277,7 @@ public class SbchImportInquiryServiceImpl implements ISbchImportInquiryService {
             if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
                 JyDetailsUtil.jyDetails(countryList, ValidationGroups.Save.class);
             }
-            List<SbchImportInquiryCustoms> saveList = null;
+            List<SbchImportInquiryCustoms> saveList = new ArrayList<>();
             for (SbchImportInquiryCountry sbchImportInquiryCountry : countryList) {
                 BeanUtils.copyProperties(vo,sbchImportInquiryCountry);
                 sbchImportInquiryCountry.setInquiryId(vo.getId());
@@ -302,7 +297,7 @@ public class SbchImportInquiryServiceImpl implements ISbchImportInquiryService {
                         BeanUtils.copyProperties(vo,sbchImportInquiryCustoms);
                         sbchImportInquiryCustoms.setId(IdWorker.createId());
                         sbchImportInquiryCustoms.setInquiryId(vo.getId());
-                        sbchImportInquiryCustoms.setCountryId(sbchImportInquiryCustoms.getId());
+                        sbchImportInquiryCustoms.setCountryId(sbchImportInquiryCountry.getId());
                         sbchImportInquiryCustoms.setFileGroupId(fileGroupId);
                     }
                     saveList.addAll(customsList);
