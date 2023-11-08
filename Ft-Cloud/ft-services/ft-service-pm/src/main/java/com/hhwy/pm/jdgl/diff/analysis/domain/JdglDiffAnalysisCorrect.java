@@ -204,5 +204,11 @@ public class JdglDiffAnalysisCorrect extends BaseEntity {
     @Excel(name = "项目名称")
     private String projectName;
 
+    /**
+     * 字段描述：租户标识
+     */
+    @JsonProperty
+    private String tenantKey;
+
     private List<JdglDiffAnalysisCorrect> children;
 }
