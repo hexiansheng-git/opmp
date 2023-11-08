@@ -92,9 +92,9 @@ public class QqchDiscloseThirdDetail extends TreeNode<QqchDiscloseThirdDetail> {
     /**
      * 字段描述：计划实施日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划实施日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计划实施日期", dateFormat = "yyyy-MM-dd")
     private Date planImplementTime;
     /**
      * 字段描述：排序

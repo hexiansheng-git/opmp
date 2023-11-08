@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.wzch.priorpurchase.controller;
 
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -105,7 +106,7 @@ public class WzchPriorPurchaseDetailController extends BaseController {
             for (int i = 0; i < importList.size(); i++) {
                 WzchPriorPurchaseDetailDTO temp = importList.get(i);
                 MaterialInfo materialInfo = MaterialUtils.getMaterialInfoByCode(temp.getMaterialCode());
-                Assert.notNull(materialInfo,"物资编码"+temp.getMaterialCode()+"不存在于物资编码库!");
+                Assert.isTrue(materialInfo!=null && StringUtils.isNotBlank(materialInfo.getMaterialCode()),"物资编码"+temp.getMaterialCode()+"不存在于物资编码库!");
             }
             HashMap<String, String> map = new HashMap<>();
             map.put("materialStandard", "material_standard");
@@ -123,6 +124,9 @@ public class WzchPriorPurchaseDetailController extends BaseController {
             // 为空 返回
             if (CollectionUtils.isEmpty(importList)) return AjaxResult.error("数据不能为空");
             return AjaxResult.success(importList);
+        }catch(IllegalArgumentException e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             return AjaxResult.error("导入异常");
