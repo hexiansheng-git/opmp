@@ -70,7 +70,7 @@ public class QqchTaxGlobal extends CompileEntity<QqchTaxGlobal> {
      * 字段描述：项目直接收支-当地币折美元汇率
      */
     @JsonProperty
-    @FtExcel(name = "项目直接收支-当地币折美元汇率")
+    @FtExcel(name = "项目直接收支-当地币折美元")
     private BigDecimal prjLocalRate;
     /**
      * 字段描述：区域总部/国家办事处/总项目部代收支-当地币
@@ -82,7 +82,7 @@ public class QqchTaxGlobal extends CompileEntity<QqchTaxGlobal> {
      * 字段描述：区域总部/国家办事处/总项目部代收支-当地币折美元汇率
      */
     @JsonProperty
-    @FtExcel(name = "区域总部/国家办事处/总项目部代收支-当地币折美元汇率")
+    @FtExcel(name = "区域总部/国家办事处/总项目部代收支-当地币折美元")
     private BigDecimal regionLocalRate;
     /**
      * 字段描述：海外事业部代收支-美元
@@ -100,7 +100,7 @@ public class QqchTaxGlobal extends CompileEntity<QqchTaxGlobal> {
      * 字段描述：海外事业部代收支-人民币折美元汇率
      */
     @JsonProperty
-    @FtExcel(name = "海外事业部代收支-人民币折美元汇率")
+    @FtExcel(name = "海外事业部代收支-人民币折美元")
     private BigDecimal overseasCnyRate;
     /**
      * 字段描述：合计-当地币种
@@ -112,7 +112,7 @@ public class QqchTaxGlobal extends CompileEntity<QqchTaxGlobal> {
      * 字段描述：合计-当地币折美元汇率
      */
     @JsonProperty
-    @FtExcel(name = "合计-当地币折美元汇率")
+    @FtExcel(name = "合计-当地币折美元")
     private BigDecimal sumLocalRate;
     /**
      * 字段描述：合计-美元
@@ -124,7 +124,7 @@ public class QqchTaxGlobal extends CompileEntity<QqchTaxGlobal> {
      * 字段描述：合计-人民币折美元汇率
      */
     @JsonProperty
-    @FtExcel(name = "合计-人民币折美元汇率")
+    @FtExcel(name = "合计-人民币折美元")
     private BigDecimal sumCnyRate;
     /**
      * 字段描述：附件
