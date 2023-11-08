@@ -7,6 +7,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
 import com.hhwy.pm.qqch.qqchChange.service.IQqchChangeService;
+import com.hhwy.pm.qqch.qqchChange.vo.QqchChangeVo;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -32,30 +33,29 @@ public class QqchChangeController extends BaseController {
     private IQqchChangeService qqchChangeService;
 
     @PreAuthorize(hasPermi = "qqchChange:list")
-    @GetMapping("/list")
-    public AjaxResult getQqchChangeList(@Validated(ValidationGroups.Select.class) QqchChange qqchChangeParam) {
+    @PostMapping("/list")
+    public AjaxResult getQqchChangeList(@RequestBody @Validated(ValidationGroups.Select.class) QqchChange qqchChangeParam) {
         startPage();
         List<QqchChange> qqchChangeList = qqchChangeService.list(qqchChangeParam);
         return getDataTableAjaxResult(qqchChangeList);
     }
 
+    /**
+     * 返回调整明细
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchChange:adjust")
+    @GetMapping("/adjust")
+    public AjaxResult adjust(){
+        QqchChangeVo vo = qqchChangeService.adjustDetail();
+        return AjaxResult.success(vo);
+    }
+
     @PreAuthorize(hasPermi = "qqchChange:add")
-    @PostMapping("/add")
-    public AjaxResult insertQqchChange(@Validated(ValidationGroups.Save.class) @RequestBody QqchChange qqchChangeParam) {
-        qqchChangeService.insertQqchChange(qqchChangeParam);
-        return AjaxResult.success(qqchChangeParam);
-    }
-
-    @PreAuthorize(hasPermi = "qqchChange:update")
-    @PostMapping("/update")
-    public AjaxResult updateQqchChange(@Validated(ValidationGroups.Update.class) @RequestBody QqchChange qqchChangeParam) {
-        return toAjax(qqchChangeService.updateQqchChange(qqchChangeParam));
-    }
-
-    @PreAuthorize(hasPermi = "qqchChange:update")
-    @PostMapping("/batchUpdate")
-    public AjaxResult updateQqchChangeList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchChange> qqchChangeListParam) {
-        return toAjax(qqchChangeService.updateQqchChangeList(qqchChangeListParam));
+    @PostMapping("/save")
+    public AjaxResult save(@RequestBody QqchChangeVo vo) {
+        qqchChangeService.save(vo);
+        return AjaxResult.success("",vo.getId());
     }
 
     @PreAuthorize(hasPermi = "qqchChange:remove")

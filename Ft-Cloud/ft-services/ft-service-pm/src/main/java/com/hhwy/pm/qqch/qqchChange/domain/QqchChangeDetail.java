@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
+import com.hhwy.utils.tree.TreeNode;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,7 +20,7 @@ import java.util.List;
  * @remark qqch_change_detail
  */
 @Data
-public class QqchChangeDetail extends BaseEntity {
+public class QqchChangeDetail extends TreeNode<QqchChangeDetail> {
     private static final long serialVersionUID = 1L;
 
     public QqchChangeDetail() {
@@ -101,16 +103,16 @@ public class QqchChangeDetail extends BaseEntity {
     /**
      * 字段描述：计划完成日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划完成日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计划完成日期", dateFormat = "yyyy-MM-dd")
     private Date finishTimeFirst;
     /**
      * 字段描述：实际完成日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "实际完成日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "实际完成日期", dateFormat = "yyyy-MM-dd")
     private Date actFinishTimeFirst;
     /**
      * 字段描述：评审人ID
@@ -128,9 +130,9 @@ public class QqchChangeDetail extends BaseEntity {
     /**
      * 字段描述：评审完成日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "评审完成日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "评审完成日期", dateFormat = "yyyy-MM-dd")
     private Date reviewFinishTime;
     /**
      * 字段描述：附件组id
@@ -192,9 +194,9 @@ public class QqchChangeDetail extends BaseEntity {
     /**
      * 字段描述：数据创建系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd")
     private Date createTime;
     /**
      * 字段描述：数据修改者id
@@ -205,9 +207,9 @@ public class QqchChangeDetail extends BaseEntity {
     /**
      * 字段描述：数据修改系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd")
     private Date updateTime;
     /**
      * 字段描述：数据删除者
@@ -218,9 +220,9 @@ public class QqchChangeDetail extends BaseEntity {
     /**
      * 字段描述：数据删除系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd")
     private Date delTime;
     /**
      * 字段描述：删除标识：0未删除；1已删除

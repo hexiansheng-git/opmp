@@ -26,6 +26,13 @@ public interface QqchChangeMapper {
 
     Integer countUnValidReview();
 
+    /**
+     * 统计编制内容为是的明细数量
+     * @param mainId
+     * @return
+     */
+    Integer countEditQqchChangeDetail(Long mainId);
+
     int insertQqchChange(QqchChange qqchChange);
 
     int insertQqchChangeList(@Param("qqchChangeList") List<QqchChange> qqchChangeList);
@@ -37,4 +44,7 @@ public interface QqchChangeMapper {
     int deleteQqchChange(QqchChange qqchChange);
 
     int deleteQqchChangeByPks(@Param("qqchChangePkList") List<Long> qqchChangePkList);
+
+    int deleteDetail(Long mainId);
+
 }

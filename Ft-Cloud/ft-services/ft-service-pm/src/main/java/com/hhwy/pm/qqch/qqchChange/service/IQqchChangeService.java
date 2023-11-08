@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.qqchChange.service;
 
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
+import com.hhwy.pm.qqch.qqchChange.vo.QqchChangeVo;
 
 import java.util.List;
 
@@ -22,7 +23,13 @@ public interface IQqchChangeService {
      * 获取调整明细，如果不可调整会抛出异常
      * @return
      */
-    QqchChange adjustDetail();
+    QqchChangeVo adjustDetail();
+
+    /**
+     * 保存
+     * @param vo
+     */
+    void save(QqchChangeVo vo);
 
     int insertQqchChange(QqchChange qqchChange);
 

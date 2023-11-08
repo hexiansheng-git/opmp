@@ -8,8 +8,10 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -82,12 +84,14 @@ public class QqchChange extends CommonBaseEntity {
      */
     @JsonProperty
     @Excel(name = "变更条件")
+    @NotBlank(message = "变更条件不能为空",groups = {ValidationGroups.Save.class})
     private String changeCondition;
     /**
      * 字段描述：变更原因
      */
     @JsonProperty
     @Excel(name = "变更原因")
+    @NotBlank(message = "变更原因不能为空",groups = {ValidationGroups.Save.class})
     private String changeReason;
     /**
      * 字段描述：附件

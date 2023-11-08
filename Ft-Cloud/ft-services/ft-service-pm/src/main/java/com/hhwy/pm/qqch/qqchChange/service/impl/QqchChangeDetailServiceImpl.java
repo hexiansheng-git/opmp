@@ -32,6 +32,13 @@ public class QqchChangeDetailServiceImpl implements IQqchChangeDetailService {
         return qqchChangeDetailMapper.getQqchChangeDetailList(qqchChangeDetail);
     }
 
+    @Override
+    public List<QqchChangeDetail> getQqchChangeDetailList(Long mainId) {
+        QqchChangeDetail qqchChangeDetail = new QqchChangeDetail();
+        qqchChangeDetail.setMainId(mainId);
+        return qqchChangeDetailMapper.getQqchChangeDetailList(qqchChangeDetail);
+    }
+
     @Transactional
     public int insertQqchChangeDetail(QqchChangeDetail qqchChangeDetail) {
         qqchChangeDetail.setId(IdWorker.createId());
@@ -42,11 +49,6 @@ public class QqchChangeDetailServiceImpl implements IQqchChangeDetailService {
 
     @Transactional
     public int insertQqchChangeDetailList(List<QqchChangeDetail> qqchChangeDetailList) {
-        for (QqchChangeDetail qqchChangeDetail : qqchChangeDetailList) {
-            qqchChangeDetail.setId(IdWorker.createId());
-            qqchChangeDetail.setCreateUser(SecurityUtils.getUserName());
-            qqchChangeDetail.setCreateTime(DateUtils.getNowDate());
-        }
         return qqchChangeDetailMapper.insertQqchChangeDetailList(qqchChangeDetailList);
     }
 

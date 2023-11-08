@@ -86,16 +86,14 @@
                ppd.`pt_var2`,
                ppd.`pt_var3`
         FROM `wzch_prior_purchase_detail` AS ppd
-
                  /*查询物资总需信息*/
-                 LEFT JOIN wzch_total_demand_detail AS tdd ON tdd.project_id = ppd.project_id
-            AND tdd.material_code = ppd.material_code
+                 LEFT JOIN wzch_total_demand_detail AS tdd
+            on tdd.material_code = ppd.material_code
             AND tdd.material_standard = ppd.material_standard
-            AND tdd.valid = 1
             AND tdd.del_flag = 0
             /*查询优先进场物资信息*/
-                 LEFT JOIN wzch_prior_approach_detail AS pad ON pad.project_id = ppd.project_id
-            AND pad.del_flag = '0'
+             LEFT JOIN wzch_prior_approach_detail AS pad
+            ON pad.del_flag = '0'
             AND pad.material_code = ppd.material_code
             AND pad.material_standard = ppd.material_standard
 

@@ -103,6 +103,7 @@ public class TreeUtil {
         Long id = IdWorker.createId();
         int sort = 1;
         List<T> children = node.getChildren();
+        node.setLeaf(CollectionUtils.isNotEmpty(children)?"0":"1");
         node.setId(id);
         node.setChildren(null);
         resultList.add(node);

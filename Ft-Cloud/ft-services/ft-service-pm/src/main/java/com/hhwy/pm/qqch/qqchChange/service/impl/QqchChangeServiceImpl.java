@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.TreeUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
@@ -21,11 +22,17 @@ import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysMenu;
+import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
+import com.hhwy.utils.tree.TreeUtil;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.utils.validation.ValidationUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -67,6 +71,14 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
     @Override
     public List<QqchChange> list(QqchChange qqchChange) {
         List<QqchChange> list = qqchChangeMapper.getQqchChangeList(qqchChange);
+        //计算完成百分比
+        for (int i = 0; i < list.size(); i++) {
+            QqchChange temp = list.get(i);
+            temp.setPlanNum(ObjectUtils.nvl(temp.getPlanNum()));
+            temp.setFinishNum(ObjectUtils.nvl(temp.getFinishNum()));
+            BigDecimal ratio = BigDecimalUtils.divideMay0(temp.getFinishNum(),temp.getPlanNum(),2);
+            temp.setFinishRatio(ObjectUtils.nvlBigDecimal(ratio).multiply(new BigDecimal("100")));;
+        }
         return list;
     }
 
@@ -91,7 +103,8 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         change.setProjectName(projectBasicInfo.getProjectName());
 
         BigDecimal maxVersion = VersionUtil.getMaxVersion(FlowEnum.QQCH_CHANGE.getTableName());
-        change.setVersion(ObjectUtils.nvlBigDecimal(maxVersion,BigDecimal.ONE));
+        maxVersion = maxVersion.compareTo(BigDecimal.ONE)==0?new BigDecimal("2.0"):maxVersion;
+        change.setVersion(maxVersion);
         change.setChangeUser(SecurityUtils.getUserId());
         change.setChangeUserName(SecurityUtils.getSysUser().getNickName());
         //如果是版本一，加载工作计划的编制人
@@ -125,11 +138,12 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
             }
         }else{ //加载上一版本数据
             QqchChange change = this.qqchChangeMapper.getQqchChange(new QqchChange(version));
-            Assert.notNull(change,"获取版本"+version+"的前期策划变更失败");
-            List<QqchChangeDetail> detailList = detailService.getQqchChangeDetailList(new QqchChangeDetail(change.getId()));
-            for (int i = 0; i < detailList.size(); i++) {
-                QqchChangeDetail temp = detailList.get(i);
-                planConfMap.put(temp.getItemName(),temp);
+            if(change != null){
+                List<QqchChangeDetail> detailList = detailService.getQqchChangeDetailList(new QqchChangeDetail(change.getId()));
+                for (int i = 0; i < detailList.size(); i++) {
+                    QqchChangeDetail temp = detailList.get(i);
+                    planConfMap.put(temp.getItemName(),temp);
+                }
             }
         }
         //加载menu
@@ -185,6 +199,68 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         }
         List<SysMenu> menuList = JSONArray.parseArray(JSON.toJSONString(ajaxResult.get("data")), SysMenu.class);
         return menuList;
+    }
+
+    @Override
+    @Transactional
+    public void save(QqchChangeVo vo) {
+        //校验
+        List<QqchChangeDetail> detailList = check(vo);
+        //处理明细
+        int planNum = 0;
+        for (int i = 0; i < detailList.size(); i++) {
+            QqchChangeDetail temp = detailList.get(i);
+            new AddBaseInfoUtil().addBaseEntity(temp);
+            temp.setMainId(vo.getId());
+            temp.setValid(Constant.NO_INT);
+            if(StringUtils.equals(temp.getLeaf(),"1") && temp.getIsFirst()==Constant.YES_INT)
+                planNum++;
+        }
+        vo.setPlanNum(planNum);
+        boolean isNew = vo.getId() == null;
+        if(isNew){
+            new AddBaseInfoUtil<>(vo);
+            vo.setValid(Constant.NO_INT);
+            this.qqchChangeMapper.insertQqchChange(vo);
+        }else{
+            new AddBaseInfoUtil<>().update(vo);
+            this.qqchChangeMapper.updateQqchChange(vo);
+            this.qqchChangeMapper.deleteDetail(vo.getId());
+        }
+        detailService.insertQqchChangeDetailList(detailList);
+    }
+
+    private List<QqchChangeDetail> check(QqchChangeVo vo){
+        Assert.notNull(vo,"数据缺失");
+        Assert.notNull(vo.getVersion(),"version不能为空");
+        Assert.notEmpty(vo.getDetailList(),"工作安排不能为空");
+        //判断是否已经有存在的版本
+        QqchChange query = new QqchChange();
+        query.setVersion(vo.getVersion());
+        query.setId(vo.getId());
+        Integer count = qqchChangeMapper.countQqchChange(query);
+        Assert.isTrue(count < 1,"已存在版本:"+vo.getVersionStr()+"的前期策划变更，请返回台账刷新。");
+
+        List<QqchChangeDetail> detailList = TreeUtil.treeToList(vo.getDetailList());
+        Assert.notEmpty(detailList,"工作安排格式不正确，解析结果为空");
+        if(StringUtils.isNotBlank(vo.getSubmitFlag())){
+            JyDetailsUtil.jyDetails(Arrays.asList(vo),ValidationGroups.Save.class);
+            int editingNum = 0;
+            //若为提交，工作安排至少得有一个编制内容、校验编制人、计划完成日期
+            for (int i = 0; i < detailList.size(); i++) {
+                QqchChangeDetail temp = detailList.get(i);
+                if(temp.getIsFirst()==Constant.NO_INT)
+                    continue;
+                editingNum++;
+                Assert.isTrue(StringUtils.isNotBlank(temp.getItemId()),"工作安排，"+temp.getItemName()+":itemId不能为空");
+                Assert.isTrue(StringUtils.isNotBlank(temp.getItemName()),"工作安排，"+temp.getItemName()+":itemName不能为空");
+                Assert.notNull(temp.getEditorFirst(),"工作安排，"+temp.getItemName()+":编制人ID不能为空");
+                Assert.notNull(temp.getEditorFirstName(),"工作安排，"+temp.getItemName()+":编制人不能为空");
+                Assert.notNull(temp.getFinishTimeFirst(),"工作安排，"+temp.getItemName()+":计划完成日期不能为空");
+            }
+            Assert.isTrue(editingNum>0,"工作安排至少得有一个编制内容项!");
+        }
+        return detailList;
     }
 
     @Transactional
