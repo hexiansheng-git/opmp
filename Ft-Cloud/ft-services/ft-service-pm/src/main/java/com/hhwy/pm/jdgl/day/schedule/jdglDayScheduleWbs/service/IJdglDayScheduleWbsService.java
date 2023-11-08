@@ -38,8 +38,6 @@ public interface IJdglDayScheduleWbsService {
 
     List<JdglDayScheduleWbs4Value> getTotalWbsListByDateRange(Date endDate);
 
-    List<JdglDayScheduleWbs4Value> getWbsListByDateRange4OnlyWbs(Date startDate, Date endDate);
-
     List<JdglDayScheduleWbs4Value> getTotalWbsListByDateRange4OnlyWbs(Date endDate);
 
     List<JdglDayScheduleWbs> getJdglDayScheduleWbsListByPerson(JdglDayScheduleWbs jdglDayScheduleWbs);

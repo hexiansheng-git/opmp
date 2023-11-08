@@ -86,8 +86,10 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         // 修正表单数据
         JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect = new JdglDiffAnalysisCorrect();
         jdglDiffAnalysisCorrect.setDiffAnalysisId(jdglDiffAnalysis1.getId());
-        Map<String, List<JdglDiffAnalysisCorrect>> jdglDiffAnalysisCorrectMapList = iJdglDiffAnalysisCorrectService.getJdglDiffAnalysisCorrectMapList(jdglDiffAnalysisCorrect);
-        jdglDiffAnalysis1.setJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrectMapList);
+        List<JdglDiffAnalysisCorrect> jdglDiffAnalysisCorrectList = iJdglDiffAnalysisCorrectService.getJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrect);
+//        Map<String, List<JdglDiffAnalysisCorrect>> jdglDiffAnalysisCorrectMapList = iJdglDiffAnalysisCorrectService.getJdglDiffAnalysisCorrectMapList(jdglDiffAnalysisCorrect);
+//        jdglDiffAnalysis1.setJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrectMapList);
+        jdglDiffAnalysis1.setJdglDiffAnalysisCorrectList4push(jdglDiffAnalysisCorrectList);
         return jdglDiffAnalysis1;
     }
 
@@ -406,30 +408,30 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
                 // 得分
                 BigDecimal score = qqchScheAnalyse.getScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getScore();
                 // s差异最大
-                BigDecimal diffMaxScore = qqchScheAnalyse.getDiffMaxScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getDiffMaxScore();
+                BigDecimal diffMaxScore = qqchScheAnalyse.getDiffMaxScore();//== null ? BigDecimal.ZERO : qqchScheAnalyse.getDiffMaxScore();
                 // s差异最小
-                BigDecimal diffMinScore = qqchScheAnalyse.getDiffMinScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getDiffMinScore();
+                BigDecimal diffMinScore = qqchScheAnalyse.getDiffMinScore();// == null ? BigDecimal.ZERO : qqchScheAnalyse.getDiffMinScore();
                 // 关键线路最大
-                BigDecimal lineMaxScore = qqchScheAnalyse.getLineMaxScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getLineMaxScore();
+                BigDecimal lineMaxScore = qqchScheAnalyse.getLineMaxScore();// == null ? BigDecimal.ZERO : qqchScheAnalyse.getLineMaxScore();
                 // 关键线路最小
-                BigDecimal lineMinScore = qqchScheAnalyse.getLineMinScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getLineMinScore();
+                BigDecimal lineMinScore = qqchScheAnalyse.getLineMinScore();// == null ? BigDecimal.ZERO : qqchScheAnalyse.getLineMinScore();
                 // 合同超期
                 String contFlag = qqchScheAnalyse.getContFlag();
                 // 重要性
                 String importance = qqchScheAnalyse.getImportance();
                 // 公路铁路最大
-                BigDecimal roadMaxScore = qqchScheAnalyse.getRoadMaxScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getRoadMaxScore();
+                BigDecimal roadMaxScore = qqchScheAnalyse.getRoadMaxScore();// == null ? BigDecimal.ZERO : qqchScheAnalyse.getRoadMaxScore();
                 // 公路铁路最小
-                BigDecimal roadMinScore = qqchScheAnalyse.getRoadMinScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getRoadMinScore();
+                BigDecimal roadMinScore = qqchScheAnalyse.getRoadMinScore();// == null ? BigDecimal.ZERO : qqchScheAnalyse.getRoadMinScore();
                 // 基建房建最大
-                BigDecimal buildMaxScore = qqchScheAnalyse.getBuildMaxScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getBuildMaxScore();
+                BigDecimal buildMaxScore = qqchScheAnalyse.getBuildMaxScore();// == null ? BigDecimal.ZERO : qqchScheAnalyse.getBuildMaxScore();
                 // 基建房建最小
-                BigDecimal buildMinScore = qqchScheAnalyse.getBuildMinScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getBuildMinScore();
+                BigDecimal buildMinScore = qqchScheAnalyse.getBuildMinScore();// == null ? BigDecimal.ZERO : qqchScheAnalyse.getBuildMinScore();
 
-                if(diffGradeValue.compareTo(diffMaxScore) < 0 && diffGradeValue.compareTo(diffMinScore) >= 0){
+                if((diffMaxScore == null || diffGradeValue.compareTo(diffMaxScore) < 0) && (diffMinScore == null || diffGradeValue.compareTo(diffMinScore) >= 0)){
                     jdglDiffAnalysis.setSDiffGrade(score);
                 }
-                if(keyGradeValue.compareTo(lineMaxScore) <0 && keyGradeValue.compareTo(lineMinScore) >= 0) {
+                if((lineMaxScore == null || keyGradeValue.compareTo(lineMaxScore) <0) && (lineMinScore == null || keyGradeValue.compareTo(lineMinScore) >= 0)) {
                     jdglDiffAnalysis.setKeyGrade(score);
                 }
                 if(isOver.equals(contFlag)) {
@@ -443,11 +445,11 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
                     String[] split = businessAreasAndProducts.split(",");
                     String s = Arrays.stream(split).filter(str -> str.equals(type11) || str.equals(type12) || str.equals(type29)).findFirst().orElse(null);
                     if(StringUtils.isEmpty(s)) {
-                        if(scaleGradeValue.compareTo(buildMaxScore) < 0 && scaleGradeValue.compareTo(buildMinScore) >= 0) {
+                        if((buildMaxScore == null || scaleGradeValue.compareTo(buildMaxScore) < 0) && (buildMinScore == null || scaleGradeValue.compareTo(buildMinScore) >= 0)) {
                             jdglDiffAnalysis.setScaleGrade(score);
                         }
                     } else {
-                        if(scaleGradeValue.compareTo(roadMaxScore) < 0 && scaleGradeValue.compareTo(roadMinScore) >= 0) {
+                        if((roadMaxScore == null || scaleGradeValue.compareTo(roadMaxScore) < 0) && (roadMinScore == null || scaleGradeValue.compareTo(roadMinScore) >= 0)) {
                             jdglDiffAnalysis.setScaleGrade(score);
                         }
                     }
@@ -470,8 +472,8 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             // 修正表单数据
             JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect = new JdglDiffAnalysisCorrect();
             jdglDiffAnalysisCorrect.setDiffAnalysisId(jdglDiffAnalysis.getId());
-            Map<String, List<JdglDiffAnalysisCorrect>> jdglDiffAnalysisCorrectMapList = iJdglDiffAnalysisCorrectService.getJdglDiffAnalysisCorrectMapList(jdglDiffAnalysisCorrect);
-            jdglDiffAnalysis.setJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrectMapList);
+            List<JdglDiffAnalysisCorrect> jdglDiffAnalysisCorrectList = iJdglDiffAnalysisCorrectService.getJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrect);
+            jdglDiffAnalysis.setJdglDiffAnalysisCorrectList4push(jdglDiffAnalysisCorrectList);
             sysSyncInfoService.pushJdglDiffAnalysis(jdglDiffAnalysis);
 
 //            jdglCorrectionMeasuresMakeService.syncData(nowDate);

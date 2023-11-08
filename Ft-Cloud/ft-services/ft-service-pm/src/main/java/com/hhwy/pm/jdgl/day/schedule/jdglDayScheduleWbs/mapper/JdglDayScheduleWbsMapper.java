@@ -38,8 +38,6 @@ public interface JdglDayScheduleWbsMapper {
 
     List<JdglDayScheduleWbs> getLeafWbsList(JdglDayScheduleWbs jdglDayScheduleWbsParam);
 
-    List<JdglDayScheduleWbs4Value> getWbsListByDateRange4OnlyWbs(@Param("startDate") Date startDate,@Param("endDate")  Date endDate);
-
     List<JdglDayScheduleWbs4Value> getTotalWbsListByDateRange4OnlyWbs(@Param("endDate") Date endDate);
 
     List<JdglDayScheduleWbs> getJdglDayScheduleWbsByDate(@Param("date") Date date);

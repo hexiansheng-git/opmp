@@ -402,7 +402,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
             }
         }
 
-        List<PlanStatisticsWbsValueVO> build = TreeUtil.build(returnList, -1l);
+        List<PlanStatisticsWbsValueVO> build = TreeUtil.build(returnList, null);
 
         return CollectionUtils.isEmpty(build)?new ArrayList<>():build;
     }
@@ -629,7 +629,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
 
         List<PlanStatisticsWbsImageVO> build = null;
         if(!CollectionUtils.isEmpty(returnList)) {
-            build = TreeUtil.build(returnList, -1l);
+            build = TreeUtil.build(returnList, null);
         }
 
 
@@ -732,7 +732,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                     }
 
                     planValueListQ.add(planStatisticsPeriodValueVO.getPlanValue() == null ? BigDecimal.ZERO : planStatisticsPeriodValueVO.getPlanValue());
-                    compValueListQ.add(planStatisticsPeriodValueVO.getCompValue() == null ? BigDecimal.ZERO : planStatisticsPeriodValueVO.getCompValue());
+                    compValueListQ.add(planStatisticsPeriodValueVO.getCompValue() == null ? BigDecimal.ZERO : StatisticsUtils.getDivideTenThousand(planStatisticsPeriodValueVO.getCompValue()));
 //                    quarterList.add(planStatisticsPeriodValueVO);
                 }
                 planStatisticsPeriodValueVOQuarter.setPeriodList(periodListQ);
@@ -788,7 +788,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                             }
                         }
                     }
-                    compValueListY.add(planStatisticsPeriodValueVO.getCompValue() == null ? BigDecimal.ZERO : planStatisticsPeriodValueVO.getCompValue());
+                    compValueListY.add(planStatisticsPeriodValueVO.getCompValue() == null ? BigDecimal.ZERO : StatisticsUtils.getDivideTenThousand(planStatisticsPeriodValueVO.getCompValue()));
                 }
 
                 planStatisticsPeriodValueVOYear.setPeriodList(periodListY);

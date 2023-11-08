@@ -428,7 +428,26 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
      */
     @Override
     public List<JdglDayScheduleWbs4Value> getWbsListByDateRange(Date startDate, Date endDate) {
-        return jdglDayScheduleWbsMapper.getWbsListByDateRange4Value(startDate, endDate);
+        List<JdglDayScheduleWbs4Value> wbsListByDateRange4Value = jdglDayScheduleWbsMapper.getWbsListByDateRange4Value(startDate, endDate);
+        if(wbsListByDateRange4Value != null) {
+            List<String> itemCodes = new ArrayList<>();
+            wbsListByDateRange4Value.stream().forEach(vo -> {
+                itemCodes.add(vo.getWbsCode());
+            });
+
+            List<JdglMainPlanItem> mainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemByItemCodes(itemCodes);
+            if(mainPlanItemList != null) {
+                for (JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value : wbsListByDateRange4Value) {
+                    String wbsCode = jdglDayScheduleWbs4Value.getWbsCode();
+                    JdglMainPlanItem jdglMainPlanItem = mainPlanItemList.stream().filter(vo -> wbsCode != null && wbsCode.equals(vo.getItemCode())).findFirst().orElse(null);
+                    if(jdglMainPlanItem != null) {
+                        jdglDayScheduleWbs4Value.setId(jdglMainPlanItem.getId());
+                        jdglDayScheduleWbs4Value.setPid(jdglMainPlanItem.getPid());
+                    }
+                }
+            }
+        }
+        return wbsListByDateRange4Value;
     }
 
     /**
@@ -439,11 +458,6 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
     @Override
     public List<JdglDayScheduleWbs4Value> getTotalWbsListByDateRange(Date endDate) {
         return jdglDayScheduleWbsMapper.getTotalWbsListByDateRange4Value(endDate);
-    }
-
-    @Override
-    public List<JdglDayScheduleWbs4Value> getWbsListByDateRange4OnlyWbs(Date startDate, Date endDate) {
-        return jdglDayScheduleWbsMapper.getWbsListByDateRange4OnlyWbs(startDate, endDate);
     }
 
     @Override

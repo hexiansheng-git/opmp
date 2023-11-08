@@ -169,6 +169,8 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
     @Override
     public List<JdglDiffAnalysisCorrect> getInitDiffAnalysisCorrect(JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
 
+        Long diffAnalysisId = jdglDiffAnalysisCorrectParam.getDiffAnalysisId();
+
 //        Map<String, List<JdglDiffAnalysisCorrect>> returnMapList = new HashMap<>();
 
         List<JdglDiffAnalysisCorrect> headerVos = new ArrayList<JdglDiffAnalysisCorrect>();
@@ -211,6 +213,7 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
                             String factorsDesc = qqchScheFactors1.getFactorsDesc();
                             if(StringUtils.isNotEmpty(factorsDesc)) {
                                 JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect = new JdglDiffAnalysisCorrect();
+                                jdglDiffAnalysisCorrect.setDiffAnalysisId(diffAnalysisId);
                                 jdglDiffAnalysisCorrect.setSort(i);
                                 jdglDiffAnalysisCorrect.setFirstType(headerName);
                                 jdglDiffAnalysisCorrect.setSecondType(qqchScheFactors1.getFactorsDesc());

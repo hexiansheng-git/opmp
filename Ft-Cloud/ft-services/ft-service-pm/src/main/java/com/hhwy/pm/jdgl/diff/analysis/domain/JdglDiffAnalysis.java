@@ -259,6 +259,9 @@ public class JdglDiffAnalysis extends BaseEntity {
 //    @Excel(name = "修正得分数据")
     private Map<String, List<JdglDiffAnalysisCorrect>> jdglDiffAnalysisCorrectList;
 
+
+    private List<JdglDiffAnalysisCorrect> jdglDiffAnalysisCorrectList4push;
+
     /**
      * 是否预警（用于给总部推送数据时判断是否根据风险等级进行预警）
      */
