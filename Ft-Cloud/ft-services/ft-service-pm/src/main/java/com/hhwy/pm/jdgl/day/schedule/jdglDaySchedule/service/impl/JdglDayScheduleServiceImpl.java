@@ -4,6 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.mapper.JdglDayScheduleMapper;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
@@ -50,6 +51,9 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
 
     @Autowired
     private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
+
+    @Autowired
+    private ISysSyncInfoService sysSyncInfoService;
 
     public JdglDaySchedule getJdglDaySchedule(JdglDaySchedule jdglDaySchedule) {
         JdglDaySchedule jdglDaySchedule1 = jdglDayScheduleMapper.getJdglDaySchedule(jdglDaySchedule);
@@ -150,6 +154,8 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         if (jdglDaySchedule1 != null) {
             String taskStatus = jdglDaySchedule1.getTaskStatus();
             jdglDaySchedule.setTaskStatus("0".equals(taskStatus)? "1" : "5");
+            jdglDaySchedule1.setTaskStatus("0".equals(taskStatus)? "1" : "5");
+            sysSyncInfoService.pushJdglDaySchedule(jdglDaySchedule1);
             jdglDayScheduleMapper.updateJdglDaySchedule(jdglDaySchedule);
         }
     }
