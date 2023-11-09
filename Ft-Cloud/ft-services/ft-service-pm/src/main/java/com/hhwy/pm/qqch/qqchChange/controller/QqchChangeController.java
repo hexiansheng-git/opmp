@@ -53,6 +53,12 @@ public class QqchChangeController extends BaseController {
         return AjaxResult.success(vo);
     }
 
+    @GetMapping("/detail")
+    public AjaxResult detail(Long mainId){
+        QqchChangeVo vo = qqchChangeService.detail(mainId);
+        return AjaxResult.success(vo);
+    }
+
     @PreAuthorize(hasPermi = "qqchChange:add")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchChangeVo vo) {

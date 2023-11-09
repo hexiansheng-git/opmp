@@ -118,6 +118,20 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         return change;
     }
 
+    @Override
+    public QqchChangeVo detail(Long id) {
+        QqchChangeVo vo = new QqchChangeVo();
+        QqchChange query = new QqchChange();
+        query.setId(id);
+        QqchChange change = qqchChangeMapper.getQqchChange(query);
+        Assert.notNull(change,"获取变更信息失败");
+        BeanUtils.copyProperties(change,vo);
+        //
+        List<QqchChangeDetail> detailList = loadDetail(change.getVersion());
+        vo.setDetailList(detailList);
+        return vo;
+    }
+
     private List<QqchChangeDetail> loadDetail(BigDecimal version){
         List<SysMenu> menuList = getMenuList();
         //工作计划的配置信息
@@ -309,15 +323,6 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         }
     }
 
-//    private void menuTree2List(List<SysMenu> list,List<SysMenu> resuList){
-//        if(CollectionUtils.isEmpty(list))
-//            return;
-//        for (int i = 0; i < list.size(); i++) {
-//            SysMenu temp = list.get(i);
-//            resuList.add(temp);
-//            menuTree2List(temp.getChildren(),resuList);
-//        }
-//    }
 
     @Transactional
     public int insertQqchChange(QqchChange qqchChange) {

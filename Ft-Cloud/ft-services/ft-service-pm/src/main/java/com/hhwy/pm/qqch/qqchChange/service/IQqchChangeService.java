@@ -26,6 +26,8 @@ public interface IQqchChangeService {
      */
     QqchChangeVo adjustDetail();
 
+    QqchChangeVo detail(Long id);
+
     /**
      * 保存
      * @param vo
