@@ -61,8 +61,7 @@ public class JdglProgressCorrectionTrackController extends BaseController {
     public AjaxResult getJdglProgressCorrectionTrackList(
         @Validated(ValidationGroups.Select.class) JdglProgressCorrectionTrack jdglProgressCorrectionTrackParam) {
         startPage();
-        List<JdglProgressCorrectionTrack> jdglProgressCorrectionTrackList = jdglProgressCorrectionTrackService
-            .getJdglProgressCorrectionTrackList(jdglProgressCorrectionTrackParam);
+        List<JdglProgressCorrectionTrack> jdglProgressCorrectionTrackList = jdglProgressCorrectionTrackService.getJdglProgressCorrectionTrackList(jdglProgressCorrectionTrackParam);
         return getDataTableAjaxResult(jdglProgressCorrectionTrackList);
     }
 

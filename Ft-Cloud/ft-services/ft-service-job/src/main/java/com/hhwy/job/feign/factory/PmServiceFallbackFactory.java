@@ -52,6 +52,11 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             }
 
             @Override
+            public AjaxResult weekTimerTrack() {
+                return null;
+            }
+
+            @Override
             public AjaxResult preparationFirstStageWarn() {
                 return null;
             }

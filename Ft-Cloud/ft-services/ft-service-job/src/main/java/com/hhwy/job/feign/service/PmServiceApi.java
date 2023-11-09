@@ -97,4 +97,7 @@ public interface PmServiceApi {
      */
     @PostMapping("/jdglData4P6/initJdglData4P6ByAll")
     AjaxResult initJdglData4P6ByAll();
+
+    @PostMapping("/jdglProgressCorrectionTrack/weekTimerTrack")
+    AjaxResult weekTimerTrack();
 }

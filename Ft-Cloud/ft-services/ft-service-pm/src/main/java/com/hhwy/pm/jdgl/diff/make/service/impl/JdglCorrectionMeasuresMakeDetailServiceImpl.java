@@ -28,10 +28,8 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
             .getJdglCorrectionMeasuresMakeDetail(jdglCorrectionMeasuresMakeDetail);
     }
 
-    public List<JdglCorrectionMeasuresMakeDetail> getJdglCorrectionMeasuresMakeDetailList(
-        JdglCorrectionMeasuresMakeDetail jdglCorrectionMeasuresMakeDetail) {
-        return jdglCorrectionMeasuresMakeDetailMapper
-            .getJdglCorrectionMeasuresMakeDetailList(jdglCorrectionMeasuresMakeDetail);
+    public List<JdglCorrectionMeasuresMakeDetail> getJdglCorrectionMeasuresMakeDetailList(JdglCorrectionMeasuresMakeDetail jdglCorrectionMeasuresMakeDetail) {
+        return jdglCorrectionMeasuresMakeDetailMapper.getJdglCorrectionMeasuresMakeDetailList(jdglCorrectionMeasuresMakeDetail);
     }
 
     @Transactional

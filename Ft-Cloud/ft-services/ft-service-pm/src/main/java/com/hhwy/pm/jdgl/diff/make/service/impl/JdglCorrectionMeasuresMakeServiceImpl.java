@@ -82,10 +82,8 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
      * @param jdglCorrectionMeasuresMake
      * @return
      */
-    public List<JdglCorrectionMeasuresMake> getJdglCorrectionMeasuresMakeList(
-        JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake) {
-        List<JdglCorrectionMeasuresMake> list =
-            jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMakeList(jdglCorrectionMeasuresMake);
+    public List<JdglCorrectionMeasuresMake> getJdglCorrectionMeasuresMakeList(JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake) {
+        List<JdglCorrectionMeasuresMake> list = jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMakeList(jdglCorrectionMeasuresMake);
         FlowInfoSearchUtil.getFlowInfo(list, FlowEnum.JDGL_CORRECTION_MEASURES_MAKE);
         return list;
     }

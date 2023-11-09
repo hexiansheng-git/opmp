@@ -100,8 +100,7 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
      * @param jdglProgressCorrectionTrack
      * @return
      */
-    public List<JdglProgressCorrectionTrack> getJdglProgressCorrectionTrackList(
-        JdglProgressCorrectionTrack jdglProgressCorrectionTrack) {
+    public List<JdglProgressCorrectionTrack> getJdglProgressCorrectionTrackList(JdglProgressCorrectionTrack jdglProgressCorrectionTrack) {
         return jdglProgressCorrectionTrackMapper.getJdglProgressCorrectionTrackList(jdglProgressCorrectionTrack);
     }
 
@@ -247,31 +246,24 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         // 当月最后一天
         Date lastDayMonth = calendar1.getTime();
 
-        // 查询最新制定数据
-        List<JdglCorrectionMeasuresMake> makeList = jdglCorrectionMeasuresMakeService
-            .getJdglCorrectionMeasuresMakeList(new JdglCorrectionMeasuresMake());
+        // 查询最新纠偏制定数据
+        List<JdglCorrectionMeasuresMake> makeList = jdglCorrectionMeasuresMakeService.getJdglCorrectionMeasuresMakeList(new JdglCorrectionMeasuresMake());
         if (CollectionUtils.isEmpty(makeList)) {
             return;
         }
         JdglCorrectionMeasuresMake make = makeList.get(0);
 
-        // 查询纠偏方案详情
+        // 查询纠偏制定，方案详情
         List<JdglCorrectionMeasuresMakeDetail> detailList = this.getDetailList(make.getId());
         if (CollectionUtils.isEmpty(detailList)) {
             return;
         }
-
         // 获取每周计划数据
-        JdglWeekPlan jdglWeekPlan = jdglWeekPlanService.getUsingWeekPlanByYearAndWeek(String.valueOf(year),
-            String.valueOf(week));
-
+        JdglWeekPlan jdglWeekPlan = jdglWeekPlanService.getUsingWeekPlanByYearAndWeek(String.valueOf(year), String.valueOf(week));
         // 获取月度计划数据
-        JdglMonthPlan jdglMonthPlan = jdglMonthPlanService.getUsingMonthPlanByYearAndMonth(String.valueOf(year),
-            String.valueOf(month));
-
+        JdglMonthPlan jdglMonthPlan = jdglMonthPlanService.getUsingMonthPlanByYearAndMonth(String.valueOf(year), String.valueOf(month));
         // 合同信息
         XmslContractInfo contractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
-
         // 获取总体计划,获取实际开工日期最早的数据
         JdglMainPlanItem maxActualStartDateMainPlanItem = jdglMainPlanItemService.getMaxActualStartDate();
         // 实际开工日
@@ -279,11 +271,8 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         if (maxActualStartDateMainPlanItem != null) {
             actualStartDate = maxActualStartDateMainPlanItem.getActualStartDate();
         }
-
         // 获取总体计划, 获取当月数据 todo 涉及版本
-        List<JdglMainPlanItem> mainPlanItemList = jdglMainPlanItemService
-            .getUsingJdglMainPlanItemListByDateRange(firstDayMonth, lastDayMonth);
-
+        List<JdglMainPlanItem> mainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(firstDayMonth, lastDayMonth);
         // 进度统计
         PlanStatisticsQueryVO planStatisticsQueryVO = new PlanStatisticsQueryVO();
         planStatisticsQueryVO.setQueryDateType("j");
@@ -478,17 +467,14 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         JdglCorrectionMeasuresMakeDetail qryDetail = new JdglCorrectionMeasuresMakeDetail();
         qryDetail.setMakeId(id);
         // 查询全部纠偏方案详情
-        List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMakeDetailService
-            .getJdglCorrectionMeasuresMakeDetailList(qryDetail);
-
-        // 查询偏差值为负的方案详情
-        List<JdglCorrectionMeasuresMakeDetail> diffDetailList = new ArrayList<>();
+        List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMakeDetailService.getJdglCorrectionMeasuresMakeDetailList(qryDetail);
         if (CollectionUtils.isEmpty(detailList)) {
             return newList;
         }
+        // 查询偏差值为负的方案详情
+        List<JdglCorrectionMeasuresMakeDetail> diffDetailList = new ArrayList<>();
         for (JdglCorrectionMeasuresMakeDetail detail : detailList) {
-            if (detail.getDeviationQuantity() != null
-                && detail.getDeviationQuantity().compareTo(BigDecimal.ZERO) < 0) {
+            if (detail.getDeviationQuantity() != null && detail.getDeviationQuantity().compareTo(BigDecimal.ZERO) < 0) {
                 diffDetailList.add(detail);
             }
         }
