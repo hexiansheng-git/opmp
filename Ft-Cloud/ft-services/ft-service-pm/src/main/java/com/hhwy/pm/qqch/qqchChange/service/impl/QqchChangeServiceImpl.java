@@ -272,7 +272,7 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
             //若为提交，工作安排至少得有一个编制内容、校验编制人、计划完成日期
             for (int i = 0; i < detailList.size(); i++) {
                 QqchChangeDetail temp = detailList.get(i);
-                if(temp.getIsFirst()==Constant.NO_INT)
+                if(temp.getIsFirst()==Constant.NO_INT || temp.getIsFirst() == null)
                     continue;
                 editingNum++;
                 Assert.isTrue(StringUtils.isNotBlank(temp.getItemId()),"工作安排，"+temp.getItemName()+":itemId不能为空");

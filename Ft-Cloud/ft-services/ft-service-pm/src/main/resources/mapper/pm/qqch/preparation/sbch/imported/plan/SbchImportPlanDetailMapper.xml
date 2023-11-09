@@ -427,10 +427,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </update>
 
-    <select id="getSbchImportPlanDetailList" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.plan.domain.SbchImportPlanDetail" resultType="map">
-        select detail.`id`,detail.`plan_id` planId, detail.`project_codes` projectCodes,detail.`import_way` importWay,  detail.`receive_staff` receiveStaff, detail.`material_codes` materialCodes,
-        detail.`send_customs` sendCustoms, detail.`goal_cuntoms` goalCuntoms,  detail.`cuntoms_value` cuntomsValue,  detail.`tax_way` taxWay,  detail.`tax_point` taxPoint,  detail.`create_user` createUser,detail.`pt_var1` ptVar1
-        from `sbch_import_plan_detail` detail
+    <select id="getSbchImportPlanDetailList" resultMap="SbchImportPlanDetailResult">
+        select * from `sbch_import_plan_detail` detail
         <where>
             detail.`del_flag` = 0
             <if test="planId != null "> and detail.`plan_id` = #{planId}</if>

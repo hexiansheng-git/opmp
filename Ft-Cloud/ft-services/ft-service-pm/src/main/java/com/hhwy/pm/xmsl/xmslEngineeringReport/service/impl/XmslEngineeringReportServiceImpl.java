@@ -182,6 +182,8 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
     private XmslEngineeringReport instanceList(XmslContractList list){
         XmslEngineeringReport report = new XmslEngineeringReport();
         report.setParentId(ObjectUtils.nvlLong(list.getPid()));
+        report.setAncestors(list.getAncestors());
+        report.setAncestorsName(list.getAncestorsName());
         report.setListCode(list.getCode());
         report.setListName(list.getChineseName());
         report.setListId(list.getId());

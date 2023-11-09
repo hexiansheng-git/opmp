@@ -147,7 +147,7 @@ public class SbchImportPlanController extends BaseController {
     public AjaxResult detailList(@PathVariable("id") Long id){
         SbchImportPlanDetail sbchImportPlanDetail = new SbchImportPlanDetail();
         sbchImportPlanDetail.setPlanId(id);
-        List<Map<String,Object>> sbchImportPlanDetails = sbchImportPlanDetailService.getSbchImportPlanDetailList(sbchImportPlanDetail);
+        List<SbchImportPlanDetail> sbchImportPlanDetails = sbchImportPlanDetailService.getSbchImportPlanDetailList(sbchImportPlanDetail);
         return AjaxResult.success(sbchImportPlanDetails);
     }
 

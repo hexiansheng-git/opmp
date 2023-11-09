@@ -130,35 +130,29 @@ public class SbchImportPlanDetailServiceImpl implements ISbchImportPlanDetailSer
     }
 
     @Override
-    public List<Map<String,Object>> getSbchImportPlanDetailList(SbchImportPlanDetail sbchImportPlanDetail) {
-        List<Map<String,Object>> list = sbchImportPlanDetailMapper.getSbchImportPlanDetailList(sbchImportPlanDetail);
-        List<String> materialCodes = list.stream().map(t -> t.get("materialCodes").toString()).collect(Collectors.toList());
-        ArrayList<String> materialCodeList = new ArrayList<>();
-        for (String materialCode : materialCodes) {
-            String[] split = materialCode.split(",");
-            for (String s : split) {
-                materialCodeList.add(s);
-            }
-        }
-//        List<MaterialInfo> materialList = materialInfoService.selectMaterialInfoListByCodes(materialCodeList);
-        List<MaterialInfo> materialList = new ArrayList<>();
-        Map<String, String> materialNameMap = new HashMap<>();
-        if(!ObjectNullUtil.isEmpty(materialList)){
-            materialNameMap = materialList.stream().collect(Collectors.groupingBy(t -> t.getMaterialCode(), Collectors.collectingAndThen(Collectors.toList(), t -> t.get(0).getMaterialName())));
-        }
-        for (Map<String, Object> stringStringMap : list) {
-            String[] materialCodeStr = stringStringMap.get("materialCodes").toString().split(",");
-            String materialNames = "";
-            for (String materialCode : materialCodeStr) {
-                String materialName = materialNameMap.get(materialCode);
-                if(!ObjectNullUtil.isEmpty(materialName)){
-                    materialNames+=","+materialName;
-                }
-            }
-            stringStringMap.put("id",String.valueOf(stringStringMap.get("id")));
-            stringStringMap.put("planId",String.valueOf(stringStringMap.get("planId")));
-            stringStringMap.put("materialNames",ObjectNullUtil.isEmpty(materialNames) ? materialNames :materialNames.substring(1));
-        }
+    public List<SbchImportPlanDetail> getSbchImportPlanDetailList(SbchImportPlanDetail sbchImportPlanDetail) {
+        List<SbchImportPlanDetail> list = sbchImportPlanDetailMapper.getSbchImportPlanDetailList(sbchImportPlanDetail);
+
+//        List<MaterialInfo> materialList = new ArrayList<>();
+//        Map<String, String> materialNameMap = new HashMap<>();
+//        if(!ObjectNullUtil.isEmpty(materialList)){
+//            materialNameMap = materialList.stream().collect(Collectors.groupingBy(t -> t.getMaterialCode(), Collectors.collectingAndThen(Collectors.toList(), t -> t.get(0).getMaterialName())));
+//        }
+//
+//        List<Map<String, Object>> materialCodes = list.stream().filter(p -> p.get("materialCodes") != null).collect(Collectors.toList());
+//        for (Map<String, Object> stringStringMap : materialCodes) {
+//            String[] materialCodeStr = stringStringMap.get("materialCodes").toString().split(",");
+//            String materialNames = "";
+//            for (String materialCode : materialCodeStr) {
+//                String materialName = materialNameMap.get(materialCode);
+//                if(!ObjectNullUtil.isEmpty(materialName)){
+//                    materialNames+=","+materialName;
+//                }
+//            }
+//            stringStringMap.put("id",String.valueOf(stringStringMap.get("id")));
+//            stringStringMap.put("planId",String.valueOf(stringStringMap.get("planId")));
+//            stringStringMap.put("materialNames",ObjectNullUtil.isEmpty(materialNames) ? materialNames :materialNames.substring(1));
+//        }
         return list;
     }
 
