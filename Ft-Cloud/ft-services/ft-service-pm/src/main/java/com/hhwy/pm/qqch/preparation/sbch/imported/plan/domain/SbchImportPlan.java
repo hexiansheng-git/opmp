@@ -101,5 +101,5 @@ public class SbchImportPlan extends MyPrepareBaseEntity {
 
     private String[] ids;
 
-    private List<Map<String,Object>> sbchImportPlanDetails;
+    private List<SbchImportPlanDetail> sbchImportPlanDetails;
 }

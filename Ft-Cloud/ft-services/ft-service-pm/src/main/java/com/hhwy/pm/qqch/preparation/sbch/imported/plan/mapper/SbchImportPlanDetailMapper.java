@@ -64,7 +64,7 @@ public interface SbchImportPlanDetailMapper {
 
     void batchInsert(@Param("dataList") List<SbchImportPlanDetail> detailList);
 
-    List<Map<String,Object>> getSbchImportPlanDetailList(SbchImportPlanDetail sbchImportPlanDetail);
+    List<SbchImportPlanDetail> getSbchImportPlanDetailList(SbchImportPlanDetail sbchImportPlanDetail);
 
     void deleteSbchImportPlanDetailByPlanId(@Param("planId") Long id, @Param("delUser") Long userId, @Param("delTime") Date date);
 }

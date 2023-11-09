@@ -63,7 +63,7 @@ public interface ISbchImportPlanDetailService {
 
     void batchInsert(List<SbchImportPlanDetail> detailList);
 
-    List<Map<String,Object>> getSbchImportPlanDetailList(SbchImportPlanDetail sbchImportPlanDetail);
+    List<SbchImportPlanDetail> getSbchImportPlanDetailList(SbchImportPlanDetail sbchImportPlanDetail);
 
     void deleteSbchImportPlanDetailByPlanId(Long id);
 }

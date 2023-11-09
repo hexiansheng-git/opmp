@@ -128,6 +128,7 @@ public class JdglCorrectionMeasuresMakeDetail extends TreeNode<JdglCorrectionMea
     /**
      * 字段描述：纠偏完成日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "纠偏完成日期")
     private Date correctionCompleteDate;

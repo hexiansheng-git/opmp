@@ -159,7 +159,7 @@ public class SbchImportPlanServiceImpl implements ISbchImportPlanService {
             //详情列表
             SbchImportPlanDetail sbchImportPlanDetail = new SbchImportPlanDetail();
             sbchImportPlanDetail.setPlanId(sbchImportPlan1.getId());
-            List<Map<String,Object>> sbchImportPlanDetails = sbchImportPlanDetailService.getSbchImportPlanDetailList(sbchImportPlanDetail);
+            List<SbchImportPlanDetail> sbchImportPlanDetails = sbchImportPlanDetailService.getSbchImportPlanDetailList(sbchImportPlanDetail);
             returnVo.setSbchImportPlanDetails(sbchImportPlanDetails);
         }
         returnVo.setVersion(version);
