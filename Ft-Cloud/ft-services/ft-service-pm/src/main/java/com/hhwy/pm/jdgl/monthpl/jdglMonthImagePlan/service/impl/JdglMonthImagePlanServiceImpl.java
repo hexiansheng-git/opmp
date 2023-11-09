@@ -318,6 +318,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
             imagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
             imagePlan.setWbsCode(jdglMainPlanItem.getWbsCode());
             imagePlan.setWbsName(jdglMainPlanItem.getWbsName());
+            imagePlan.setIsCriticalPath(jdglMainPlanItem.getIsCritical());
             //                jdglYearImagePlan.setWbsId();
             imagePlan.setResponsePerson(jdglMainPlanItem.getExecuter());
             imagePlan.setResponsePersonId(jdglMainPlanItem.getExecuterId());

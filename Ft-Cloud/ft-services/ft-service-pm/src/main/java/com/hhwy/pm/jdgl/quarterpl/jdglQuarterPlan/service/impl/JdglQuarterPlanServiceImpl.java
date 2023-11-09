@@ -9,6 +9,7 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.common.domain.FtActBusiness;
+import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.domain.JdglQuarterImagePlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.service.IJdglQuarterImagePlanService;
@@ -35,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +72,9 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
 
     @Autowired
     private IJdglDayScheduleService jdglDayScheduleService;
+
+    @Autowired
+    private ISysSyncInfoService sysSyncInfoService;
 
 //    @Autowired
 //    private IPeriodCurrencyService periodCurrencyService;
@@ -239,6 +244,11 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
             }
             jdglQuarterPlan.setTaskStatus("5");
             jdglQuarterPlan.setIsUse("1");
+            try {
+                sysSyncInfoService.pushJJdglQuarterPlan(jdglQuarterPlan);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             jdglQuarterPlanMapper.updateJdglQuarterPlan(jdglQuarterPlan);
         }
     }

@@ -145,7 +145,13 @@ public class QqchMilestoneServiceImpl implements IQqchMilestoneService {
     @Override
     public List<QqchMilestone> saveDataFromMainP6(QqchMilestone qqchMilestoneParam) {
 
-        BigDecimal version = VersionUtil.getVersion(QqchMilestone.TABLE_NAME, qqchMilestoneParam.getVersion());
+        BigDecimal version = qqchMilestoneParam.getVersion();
+
+        if(version == null) {
+            throw new RuntimeException("版本参数异常!");
+        }
+
+//        BigDecimal version = VersionUtil.getVersion(QqchMilestone.TABLE_NAME, qqchMilestoneParam.getVersion());
         QqchMilestone query = new QqchMilestone();
         query.setVersion(version);
         List<QqchMilestone> qqchMilestoneList = getQqchMilestoneList(query);
