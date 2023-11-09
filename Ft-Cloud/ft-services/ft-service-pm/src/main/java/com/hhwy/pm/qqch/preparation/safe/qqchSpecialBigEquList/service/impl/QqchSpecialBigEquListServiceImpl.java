@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -104,6 +105,7 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
      * @param qqchSpecialBigEquList
      * @return
      */
+    @Transactional
     public QqchSpecialBigEquListVo getQqchSpecialBigEquListList(QqchSpecialBigEquList qqchSpecialBigEquList) {
         QqchSpecialBigEquListVo vo = new QqchSpecialBigEquListVo();
         BigDecimal version = VersionUtil.getVersion("qqch_special_big_equ_list",qqchSpecialBigEquList.getVersion());
@@ -123,6 +125,7 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
         }
         //将761新增的数据追加到841中
         Map<String, List<QqchSpecialBigEquList>> collect = qqchSpecialBigEquListList.stream().collect(Collectors.groupingBy(QqchSpecialBigEquList::getEquName));
+        List<QqchSpecialBigEquList> addList = new ArrayList<>();
         for (SbchEquipmentSpecialDetails bean : detailsList ) {
             String materialName = bean.getMaterialName();
             if (!collect.containsKey(materialName)) {
@@ -131,8 +134,13 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
                 equList.setEquSourse(bean.getSbPurchaseSource());
                 equList.setProduceFactory(bean.getSbProductFactory());
                 equList.setEquName(bean.getMaterialName());
-                qqchSpecialBigEquListList.add(equList);
+                addList.add(equList);
             }
+        }
+        //保存新增的数据
+        if (CollectionUtil.isNotEmpty(addList)){
+            this.insertQqchSpecialBigEquListList(addList, version);
+            qqchSpecialBigEquListList.addAll(addList);
         }
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
@@ -212,6 +220,8 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
                     EntityUtils.setCreateUpdateInfo(qqchInformationSheetList);
                     informationSheets.add(qqchInformationSheet);
                 }
+                List<QqchInformationSheet> sheetList = informationSheets.stream().distinct().collect(Collectors.toList());
+                qqchInformationSheetService.insertQqchInformationSheetList(sheetList);
             }
             if(CollectionUtils.isNotEmpty(qqchTransitionRecordList)){
                 for (QqchTransitionRecord transitionRecord : qqchTransitionRecordList) {
@@ -220,12 +230,10 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
                     EntityUtils.setCreateUpdateInfo(transitionRecord);
                     transitionRecords.add(transitionRecord);
                 }
+                List<QqchTransitionRecord> recordList = transitionRecords.stream().distinct().collect(Collectors.toList());
+                qqchTransitionRecordService.insertQqchTransitionRecordList(recordList);
             }
         }
-        List<QqchInformationSheet> sheetList = informationSheets.stream().distinct().collect(Collectors.toList());
-        qqchInformationSheetService.insertQqchInformationSheetList(sheetList);
-        List<QqchTransitionRecord> recordList = transitionRecords.stream().distinct().collect(Collectors.toList());
-        qqchTransitionRecordService.insertQqchTransitionRecordList(recordList);
         qqchSpecialBigEquListMapper.insertQqchSpecialBigEquListList(qqchSpecialBigEquListList);
     }
 }

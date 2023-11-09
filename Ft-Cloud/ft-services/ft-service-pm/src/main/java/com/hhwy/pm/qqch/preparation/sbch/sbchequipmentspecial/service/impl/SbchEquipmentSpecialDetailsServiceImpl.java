@@ -106,6 +106,7 @@ public class SbchEquipmentSpecialDetailsServiceImpl implements ISbchEquipmentSpe
 //                Long id = item.getId() == null ? IdWorker.createId() : item.getId();
                 item.setId(IdWorker.createId());
                 item.setMainId(mainId);
+                item.setMaterialName(item.getMaterialName().trim());
                 EntityUtils.setCreateUpdateInfo(item);
                 return item;
 

@@ -112,7 +112,7 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
         List<QqchSpecialBigEquList> qqchSpecialBigEquListList = specialBigEquList.getQqchSpecialBigEquListList();
         List<QqchSpecialBigEquRiskMeasure> result = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(qqchSpecialBigEquListList)) {
-            List<String> collect = qqchSpecialBigEquListList.stream().map(QqchSpecialBigEquList::getPtVar1).collect(Collectors.toList());
+            List<String> collect = qqchSpecialBigEquListList.stream().map(QqchSpecialBigEquList::getEquName).collect(Collectors.toList());
             ////根据设备集合获取7.6.2中的数据
             List<SbchEquipmentSpecialPlanDetails> list = sbchEquipmentSpecialPlanService.getListByDeviceCode(collect, version);
             list.forEach(p -> {

@@ -185,7 +185,7 @@ public class SbchEquipmentSpecialPlanServiceImpl implements ISbchEquipmentSpecia
         }else{
             sbchEquipmentSpecialPlanDetails.setMainId(0L);
         }
-        sbchEquipmentSpecialPlanDetails.setDeviceCodes(collect);
+        sbchEquipmentSpecialPlanDetails.setDeviceNameList(collect);
         returnVo = detailsService.getListByDeviceCode(sbchEquipmentSpecialPlanDetails);
         return returnVo;
     }
