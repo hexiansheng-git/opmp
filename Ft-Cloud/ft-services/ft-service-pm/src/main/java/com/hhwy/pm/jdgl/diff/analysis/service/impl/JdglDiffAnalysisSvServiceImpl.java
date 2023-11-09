@@ -212,7 +212,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
                     if(jdglDayScheduleWbs4Value != null) {
                         jdglDiffAnalysisSv.setActStartDate(jdglDayScheduleWbs4Value.getEditerDate());
                         BigDecimal planCompValue = jdglMonthImagePlan.getPlanCompValue();
-                        BigDecimal thisValue = jdglDayScheduleWbs4Value.getThisValue();
+                        BigDecimal thisValue = StatisticsUtils.getDivideTenThousand(jdglDayScheduleWbs4Value.getThisValue());
                         if(thisValue != null && planCompValue!= null) {
                             jdglDiffAnalysisSv.setSvNum(thisValue.subtract(planCompValue));
                         }
@@ -294,7 +294,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
                     planStatisticsPeriodValueVO.setPeriod(jdglMonthPlan1.getMonth());
                     planStatisticsPeriodValueVO.setPlanValue(jdglMonthPlan1.getThisPlanValueDl());
                     if(monthScheduleByMonthRange != null) {
-                        planStatisticsPeriodValueVO.setCompValue(monthScheduleByMonthRange.get(jdglMonthPlan1.getYear() + "-" + jdglMonthPlan1.getMonth()));
+                        planStatisticsPeriodValueVO.setCompValue(StatisticsUtils.getDivideTenThousand(monthScheduleByMonthRange.get(jdglMonthPlan1.getYear() + "-" + jdglMonthPlan1.getMonth())));
                     }
                     if(planStatisticsPeriodValueVO.getPlanValue() != null && planStatisticsPeriodValueVO.getCompValue() != null) {
                         planStatisticsPeriodValueVO.setDiffValue(planStatisticsPeriodValueVO.getCompValue().subtract(planStatisticsPeriodValueVO.getPlanValue()));
