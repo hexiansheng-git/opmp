@@ -208,32 +208,30 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     public List<XmslDrawReviewList> relationWbsList(Integer version, Long mainId,String wbsCode,Long wbsId) {
         if(StringUtils.isBlank(wbsCode))
             return new ArrayList<>(2);
-        List<XmslDrawReviewRelation> relationList = null;
         if(version==null){ //未保存版本的话，取最新
             version = this.xmslDrawReviewMapper.selectMaxEffectVersion();
             //取最新wbs对应的清单
             XmslWbs wbs = wbsService.getByCode(wbsCode);
             if(wbs == null)
                 return new ArrayList<>();
-            relationList = relationService.relationList(version,wbsCode);
-        }else{
-            relationList = relationService.relationList(version,wbsCode);
         }
-        if(CollectionUtils.isEmpty(relationList)){
+        XmslDrawReviewList queryList = new XmslDrawReviewList();
+        queryList.setWbsCode(wbsCode);
+        queryList.setVersion(version);
+        List<XmslDrawReviewList> relationlist = xmslDrawReviewMapper.relationListCode(queryList);
+        if(CollectionUtils.isEmpty(relationlist)){
             if(ObjectUtils.nvl(version) == 1){  //加载默认wbs
                 return getByListCodes(wbsCode);
             }else{                              //加载上一版本
-                XmslDrawReview last = this.xmslDrawReviewMapper.getLast(1);
-                if(last == null){
-                    return getByListCodes(wbsCode);
-                }
-                mainId = last.getId();
-                version = last.getVersion();
-                relationList = relationService.relationList(version,wbsCode);
+//                if(last == null){
+//                    return getByListCodes(wbsCode);
+//                }
+//                mainId = last.getId();
+//                version = last.getVersion();
+//                relationList = relationService.relationList(version,wbsCode);
             }
         }
-
-        Set<String> listCodeSet = relationList.stream().map(r->r.getListCode()).collect(Collectors.toSet());
+        Set<String> listCodeSet = relationlist.stream().map(r->r.getListCode()).collect(Collectors.toSet());
         if(CollectionUtils.isEmpty(listCodeSet))
             return new ArrayList<>(2);
         //查询清单
@@ -322,24 +320,27 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             String[] wbsCodes = WbsRedisUtils.getWbsCodeByListCode(listCode);
             if(ArrayUtils.isEmpty(wbsCodes))
                 return new ArrayList<>();
-            relationList = getRelationList (version,listCode,wbsCodes);
-        }else{
-            relationList = getRelationList (version,listCode,null);
         }
+        XmslDrawReviewList queryList = new XmslDrawReviewList();
+        queryList.setListCode(listCode);
+        queryList.setVersion(version);
+        List<XmslDrawReviewList> relationlist = xmslDrawReviewMapper.relationListCode(queryList);
         if(CollectionUtils.isEmpty(relationList)){
             if(ObjectUtils.nvl(version) == 1){  //加载默认wbs
                 return getDefaultWbs(listCode);
             }else{                              //加载上一版本
-                XmslDrawReview last = this.xmslDrawReviewMapper.getLast(1);
-                if(last == null){
-                    return getDefaultWbs(listCode);
-                }
-                mainId = last.getId();
-                version = last.getVersion();
-                relationList = getRelationList (version,listCode,null);
+//                XmslDrawReview last = this.xmslDrawReviewMapper.getLast(1);
+//                if(last == null){
+//                    return getDefaultWbs(listCode);
+//                }
+//                mainId = last.getId();
+//                version = last.getVersion();
+//                relationList = getRelationList (version,listCode,null);
             }
         }
-        Set<String> listCodeSet = relationList.stream().map(r->r.getListCode()).collect(Collectors.toSet());
+        Set<String> listCodeSet = relationlist.stream().map(r->r.getListCode()).collect(Collectors.toSet());
+        if(CollectionUtils.isEmpty(listCodeSet))
+            return new ArrayList<>(2);
         //查询清单
         List<XmslDrawReviewList> drawList = drawReviewListService.getByCodes(mainId,listCodeSet);
         List<XmslDrawReviewWbs> list = trans2Wbs(drawList);

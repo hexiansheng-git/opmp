@@ -48,6 +48,8 @@ public interface XmslDrawReviewMapper {
 
     List<XmslContractList> latestListId(@Param("masterId") Long masterId,@Param("ptVar1") String ptVar1);
 
+    List<XmslDrawReviewList> relationListCode(XmslDrawReviewList list);
+
     int insertXmslDrawReview(XmslDrawReview xmslDrawReview);
 
     int insertXmslDrawReviewList(@Param("xmslDrawReviewList") List<XmslDrawReview> xmslDrawReviewList);

@@ -24,6 +24,14 @@ public class XmslDrawReviewList extends WarpBaseEntity {
 
     private Long id;
 
+    public XmslDrawReviewList() {
+    }
+
+    public XmslDrawReviewList(String wbsCode,String listCode) {
+        this.listCode = listCode;
+        this.wbsCode = wbsCode;
+    }
+
     /**
      * 字段描述：清单编码,xmsl_contract_list.code
      */
