@@ -2,6 +2,7 @@ package com.hhwy.pm.jdgl.yearpl.jdglYearPlan.service.impl;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.common.domain.FtActBusiness;
+import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
@@ -66,6 +68,9 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
 
     @Autowired
     private IJdglDayScheduleService jdglDayScheduleService;
+
+    @Autowired
+    private ISysSyncInfoService sysSyncInfoService;
 
     public JdglYearPlan getJdglYearPlan(JdglYearPlan jdglYearPlan) {
         JdglYearPlan jdglYearPlan1 = jdglYearPlanMapper.getJdglYearPlan(jdglYearPlan);
@@ -221,6 +226,11 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
             }
             jdglYearPlan.setTaskStatus("5");
             jdglYearPlan.setIsUse("1");
+            try {
+                sysSyncInfoService.pushJdglYearPlan(jdglYearPlan);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             jdglYearPlanMapper.updateJdglYearPlan(jdglYearPlan);
         }
 

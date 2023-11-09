@@ -12,6 +12,7 @@
         <result property="totalPlanImageId" column="total_plan_image_id"/>
         <result property="totalPlanImagePid" column="total_plan_image_pid"/>
         <result property="workId" column="work_id"/>
+        <result property="isCriticalPath" column="is_critical_path"/>
         <result property="workCode" column="work_code"/>
         <result property="workName" column="work_name"/>
         <result property="unit" column="unit"/>
@@ -53,6 +54,7 @@
              , `total_plan_image_id`
              , `total_plan_image_pid`
              , `work_id`
+             , `is_critical_path`
              , `work_code`
              , `work_name`
              , `unit`
@@ -101,6 +103,7 @@
             <if test="totalPlanImageId != null ">and `total_plan_image_id` = #{totalPlanImageId}</if>
             <if test="totalPlanImagePid != null ">and `total_plan_image_pid` = #{totalPlanImagePid}</if>
             <if test="workId != null ">and `work_id` = #{workId}</if>
+            <if test="isCriticalPath != null ">and `is_critical_path` = #{isCriticalPath}</if>
             <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
             <if test="workName != null  and workName != ''">and `work_name` = #{workName}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
@@ -148,6 +151,7 @@
             <if test="totalPlanImageId != null ">and `total_plan_image_id` = #{totalPlanImageId}</if>
             <if test="totalPlanImagePid != null ">and `total_plan_image_pid` = #{totalPlanImagePid}</if>
             <if test="workId != null ">and `work_id` = #{workId}</if>
+            <if test="isCriticalPath != null ">and `is_critical_path` = #{isCriticalPath}</if>
             <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
             <if test="workName != null  and workName != ''">and `work_name` = #{workName}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
@@ -205,6 +209,7 @@
             <if test="totalPlanImageId != null ">`total_plan_image_id`,</if>
             <if test="totalPlanImagePid != null ">`total_plan_image_pid`,</if>
             <if test="workId != null ">`work_id`,</if>
+            <if test="isCriticalPath != null ">`is_critical_path`,</if>
             <if test="workCode != null  and workCode != ''">`work_code`,</if>
             <if test="workName != null  and workName != ''">`work_name`,</if>
             <if test="unit != null  and unit != ''">`unit`,</if>
@@ -246,6 +251,7 @@
             <if test="totalPlanImageId != null ">#{totalPlanImageId},</if>
             <if test="totalPlanImagePid != null ">#{totalPlanImagePid},</if>
             <if test="workId != null ">#{workId},</if>
+            <if test="isCriticalPath != null ">#{isCriticalPath},</if>
             <if test="workCode != null  and workCode != ''">#{workCode},</if>
             <if test="workName != null  and workName != ''">#{workName},</if>
             <if test="unit != null  and unit != ''">#{unit},</if>
@@ -292,6 +298,7 @@
             `total_plan_image_id`,
             `total_plan_image_pid`,
             `work_id`,
+            `is_critical_path`,
             `work_code`,
             `work_name`,
             `unit`,
@@ -334,6 +341,7 @@
                 #{item.totalPlanImageId},
                 #{item.totalPlanImagePid},
                 #{item.workId},
+                #{item.isCriticalPath},
                 #{item.workCode},
                 #{item.workName},
                 #{item.unit},
@@ -379,6 +387,7 @@
             <if test="totalPlanImageId != null ">`total_plan_image_id` = #{totalPlanImageId},</if>
             <if test="totalPlanImagePid != null ">`total_plan_image_pid` = #{totalPlanImagePid},</if>
             <if test="workId != null ">`work_id` = #{workId},</if>
+            <if test="isCriticalPath != null ">`is_critical_path` = #{isCriticalPath},</if>
             <if test="workCode != null  and  workCode != ''">`work_code` = #{workCode},</if>
             <if test="workName != null  and  workName != ''">`work_name` = #{workName},</if>
             <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
@@ -449,6 +458,11 @@
             <trim prefix="work_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.workId}
+                </foreach>
+            </trim>
+            <trim prefix="is_critical_path  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.isCriticalPath}
                 </foreach>
             </trim>
             <trim prefix="work_code  = case" suffix="end,">
@@ -631,6 +645,7 @@
             <if test="totalPlanImageId != null ">and `total_plan_image_id` = #{totalPlanImageId}</if>
             <if test="totalPlanImagePid != null ">and `total_plan_image_pid` = #{totalPlanImagePid}</if>
             <if test="workId != null ">and `work_id` = #{workId}</if>
+            <if test="isCriticalPath != null ">and `is_critical_path` = #{isCriticalPath}</if>
             <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
             <if test="workName != null  and workName != ''">and `work_name` = #{workName}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>

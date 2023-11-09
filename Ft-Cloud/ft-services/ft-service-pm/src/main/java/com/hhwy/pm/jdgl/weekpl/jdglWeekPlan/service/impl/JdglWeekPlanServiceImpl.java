@@ -9,6 +9,7 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.common.domain.FtActBusiness;
+import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.service.IJdglMonthPlanService;
@@ -35,10 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author chenjinhao
@@ -71,6 +69,9 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
 
     @Autowired
     private IJdglDayScheduleService jdglDayScheduleService;
+
+    @Autowired
+    private ISysSyncInfoService sysSyncInfoService;
 
 //    @Autowired
 //    private IPeriodCurrencyService periodCurrencyService;
@@ -243,6 +244,11 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
             }
             jdglWeekPlan.setTaskStatus("5");
             jdglWeekPlan.setIsUse("1");
+            try {
+                sysSyncInfoService.pushJdglWeekPlan(jdglWeekPlan);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             jdglWeekPlanMapper.updateJdglWeekPlan(jdglWeekPlan);
         }
     }
