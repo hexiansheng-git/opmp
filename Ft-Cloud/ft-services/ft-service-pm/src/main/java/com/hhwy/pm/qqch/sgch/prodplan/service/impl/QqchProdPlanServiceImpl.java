@@ -300,7 +300,7 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
             qqchProdPlan.setSumProdValue(new BigDecimal(sumProdValue.floatValue()));
 
             if(contractInfo != null && contractInfo.getEffectiveAmout() != null && contractInfo.getEffectiveAmout().compareTo(BigDecimal.ZERO) != 0) {
-                qqchProdPlan.setFinishRatio(sumProdValue.divide(contractInfo.getEffectiveAmout(), 2, BigDecimal.ROUND_HALF_UP));
+                qqchProdPlan.setFinishRatio(sumProdValue.divide(contractInfo.getEffectiveAmout(), 4, BigDecimal.ROUND_HALF_UP));
             }
 
             qqchProdPlanList.add(qqchProdPlan);
