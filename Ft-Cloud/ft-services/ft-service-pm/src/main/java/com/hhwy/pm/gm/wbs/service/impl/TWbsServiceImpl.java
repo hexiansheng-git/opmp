@@ -42,7 +42,15 @@ public class TWbsServiceImpl implements ITWbsService {
 
 
     public TWbs getTWbs(TWbs tWbs) {
-        return tWbsMapper.getTWbs(tWbs);
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        try {
+            return tWbsMapper.getTWbs(tWbs);
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 
     @Override
