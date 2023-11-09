@@ -211,7 +211,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
                     JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = wbsListByDateRange.stream().filter(vo -> StringUtils.isNotEmpty(vo.getWbsCode()) && vo.getWbsCode().equals(jdglMonthImagePlan.getWorkCode())).findFirst().orElse(null);
                     if(jdglDayScheduleWbs4Value != null) {
                         jdglDiffAnalysisSv.setActStartDate(jdglDayScheduleWbs4Value.getEditerDate());
-                        BigDecimal planCompValue = jdglMonthImagePlan.getPlanCompValue();
+                        BigDecimal planCompValue = StatisticsUtils.getDivideTenThousand(jdglMonthImagePlan.getPlanCompValue());
                         BigDecimal thisValue = StatisticsUtils.getDivideTenThousand(jdglDayScheduleWbs4Value.getThisValue());
                         if(thisValue != null && planCompValue!= null) {
                             jdglDiffAnalysisSv.setSvNum(thisValue.subtract(planCompValue));
