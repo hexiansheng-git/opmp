@@ -96,7 +96,7 @@
             </if>
 
         </where>
-        order by `id` desc
+#         order by `id` desc
     </select>
 
     <select id="selectSbchMaterialTranPlanDetailById" parameterType="Long" resultMap="SbchMaterialTranPlanDetailResult">

@@ -10,4 +10,7 @@ import java.util.List;
 public class QqchChangeVo extends QqchChange {
 
     List<QqchChangeDetail> detailList;
+
+    //提交标志 1：提交，否则：保存
+    private String submitFlag;
 }

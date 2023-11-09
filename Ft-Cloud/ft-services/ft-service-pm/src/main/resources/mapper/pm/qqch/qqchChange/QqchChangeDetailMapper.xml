@@ -173,7 +173,7 @@
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="valid != null ">and `valid` = #{valid}</if>
         </where>
-        order by create_time desc
+        order by id desc
     </select>
 
     <insert id="insertQqchChangeDetail" useGeneratedKeys="true" keyProperty="id">

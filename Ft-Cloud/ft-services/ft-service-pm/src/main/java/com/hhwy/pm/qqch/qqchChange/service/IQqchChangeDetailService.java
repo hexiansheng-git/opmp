@@ -15,6 +15,8 @@ public interface IQqchChangeDetailService {
 
     List<QqchChangeDetail> getQqchChangeDetailList(QqchChangeDetail qqchChangeDetail);
 
+    List<QqchChangeDetail> getQqchChangeDetailList(Long mainId);
+
     int insertQqchChangeDetail(QqchChangeDetail qqchChangeDetail);
 
     int insertQqchChangeDetailList(List<QqchChangeDetail> qqchChangeDetailList);

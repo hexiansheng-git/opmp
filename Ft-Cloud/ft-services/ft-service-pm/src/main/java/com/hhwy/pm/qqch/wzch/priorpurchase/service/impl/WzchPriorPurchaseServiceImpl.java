@@ -303,9 +303,6 @@ public class WzchPriorPurchaseServiceImpl implements IWzchPriorPurchaseService {
     public WzchPriorPurchaseDTO baseInfo(WzchPriorPurchaseDTO vo) {
         BigDecimal version = VersionUtil.getVersion("wzch_prior_purchase", vo.getVersion());
         vo.setVersion(version);
-        
-//        WzchPriorPurchaseDTO busData = new WzchPriorPurchaseDTO();
-        vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         List<WzchPriorPurchase> list = this.wzchPriorPurchaseMapper.selectWzchPriorPurchaseList(new WzchPriorPurchase(version));
         if(CollectionUtils.isEmpty(list)){

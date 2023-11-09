@@ -105,5 +105,5 @@ public class SbchEquipmentSpecialPlanDetails extends CommonBaseEntity {
     @Excel(name = "所属区域")
     private String region;
 
-    private List<String> deviceCodes;
+    private List<String> deviceNameList;
 }
