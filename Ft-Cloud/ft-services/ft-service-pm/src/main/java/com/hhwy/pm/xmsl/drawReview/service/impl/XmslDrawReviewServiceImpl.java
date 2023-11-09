@@ -528,6 +528,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                 tempList.setPtVar1("1");
                 tempList.setPtVar3(temp.getName());
                 tempList.initAdd();
+                tempList.setImageProgress(ObjectUtils.nvlString(tempList.getImageProgress(),"0"));
                 addList.add(tempList);
                 addRelationList.add(new XmslDrawReviewRelation(dto.getId(),temp.getId(),temp.getCode(),
                         tempList.getListCode(),tempList.getId(),version));
@@ -618,6 +619,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             tempList.setVersion(version);
             tempList.setVersionFlag(Constant.YES_INT);
             tempList.setMainId(dto.getId());
+            tempList.setImageProgress(ObjectUtils.nvlString(tempList.getImageProgress(),"0"));
             //清单&挂接清单
             if(CollectionUtils.isEmpty(tempList.getWbsList()))
                 continue;
