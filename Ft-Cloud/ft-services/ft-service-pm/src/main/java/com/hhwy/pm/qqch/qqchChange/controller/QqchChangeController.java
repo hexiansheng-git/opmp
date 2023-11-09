@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
 import com.hhwy.pm.qqch.qqchChange.service.IQqchChangeService;
 import com.hhwy.pm.qqch.qqchChange.vo.QqchChangeVo;
+import com.hhwy.system.api.domain.SysMenu;
+import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -69,5 +71,17 @@ public class QqchChangeController extends BaseController {
         List<QqchChange> qqchChangeList = qqchChangeService.getQqchChangeList(qqchChangeParam);
         ExcelUtils<QqchChange> util = new ExcelUtils<>(QqchChange.class);
         util.exportExcel(response, qqchChangeList, DateUtils.getDate());
+    }
+
+    /**
+     * 权限菜单
+     * @param mainId
+     * @param authFlag
+     * @return
+     */
+    @GetMapping("/menu/qqch")
+    public AjaxResult authMenuList(@RequestParam Long mainId,@RequestParam String authFlag) {
+        List<SysMenu> list = qqchChangeService.authMenuList(mainId,authFlag);
+        return AjaxResult.success(list);
     }
 }

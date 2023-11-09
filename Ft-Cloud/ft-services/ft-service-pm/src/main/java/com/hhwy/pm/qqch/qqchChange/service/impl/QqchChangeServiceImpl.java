@@ -6,6 +6,7 @@ import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.TreeUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.SystemServiceApi;
@@ -25,6 +26,7 @@ import com.hhwy.system.api.domain.SysMenu;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.PlatMenuTreeUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
@@ -39,9 +41,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -227,6 +232,10 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
             this.qqchChangeMapper.updateQqchChange(vo);
             this.qqchChangeMapper.deleteDetail(vo.getId());
         }
+        for (int i = 0; i < detailList.size(); i++) {
+            QqchChangeDetail temp = detailList.get(i);
+            temp.setMainId(vo.getId());
+        }
         detailService.insertQqchChangeDetailList(detailList);
     }
 
@@ -262,6 +271,53 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         }
         return detailList;
     }
+
+    @Override
+    public List<SysMenu> authMenuList(Long mainId, String authFlag) {
+        List<SysMenu> menuTreeList = getMenuList();
+        if(!StringUtils.equals(authFlag,"1"))
+            return menuTreeList;
+        QqchChangeDetail query = new QqchChangeDetail();
+        query.setMainId(mainId);
+        query.setEditorFirst(SecurityUtils.getUserId());
+        List<QqchChangeDetail> list = detailService.getQqchChangeDetailList(query);
+        if(CollectionUtils.isEmpty(list))
+            return new ArrayList<>();
+        //过掉出编制人的菜单
+        Set<String> authNameSet = list.stream().map(r->r.getItemName()).collect(Collectors.toSet());
+        List<SysMenu> menuList = PlatMenuTreeUtils.menuTree2List(menuTreeList);
+        //全部前期策划编制菜单 map
+        Map<Long,SysMenu> menuMap = menuList.stream().collect(Collectors.toMap(r->r.getMenuId(),r->r));
+        //获取用户授权菜单
+        List<SysMenu> authMenuList = menuList.stream().filter(r->authNameSet.contains(r.getTitle())).collect(Collectors.toList());
+        List<SysMenu> authAllList = new ArrayList<>();
+        for (int i = 0; i < authMenuList.size(); i++) {
+            putParent(authMenuList.get(i),menuMap,authAllList);
+        }
+        //转树形
+        List<SysMenu> finalTreeList = (new PlatMenuTreeUtils()).menuList(authAllList);
+        return finalTreeList;
+    }
+
+    private void putParent(SysMenu menu,Map<Long,SysMenu> menuMap,List<SysMenu> list){
+        list.add(menu);
+        if(menu.getParentId() ==null)
+            return ;
+        SysMenu p = menuMap.get(menu.getParentId());
+        if(p != null){
+            putParent(p,menuMap,list);
+        }
+    }
+
+//    private void menuTree2List(List<SysMenu> list,List<SysMenu> resuList){
+//        if(CollectionUtils.isEmpty(list))
+//            return;
+//        for (int i = 0; i < list.size(); i++) {
+//            SysMenu temp = list.get(i);
+//            resuList.add(temp);
+//            menuTree2List(temp.getChildren(),resuList);
+//        }
+//    }
 
     @Transactional
     public int insertQqchChange(QqchChange qqchChange) {

@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.qqchChange.service;
 
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
 import com.hhwy.pm.qqch.qqchChange.vo.QqchChangeVo;
+import com.hhwy.system.api.domain.SysMenu;
 
 import java.util.List;
 
@@ -30,6 +31,14 @@ public interface IQqchChangeService {
      * @param vo
      */
     void save(QqchChangeVo vo);
+
+    /**
+     * 前期策划变更权限菜单
+     * @param mainId
+     * @param authFlag  传1获取权限菜单，否则获取全部
+     * @return
+     */
+    List<SysMenu> authMenuList(Long mainId,String authFlag);
 
     int insertQqchChange(QqchChange qqchChange);
 
