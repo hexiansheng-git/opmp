@@ -393,9 +393,10 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
             .multiply(new BigDecimal(100));
         jdglProgressCorrectionTrack.setQuarterValuePlanCompletePercentage(quarterValuePlanCompletePercentage);
         // 关键线路形象完成百分比 todo
-        jdglProgressCorrectionTrack.setKeyLineImageCompletePercentage(new BigDecimal("0"));
+        jdglProgressCorrectionTrack.setKeyLineImageCompletePercentage(BigDecimal.ZERO);
 
         // 近三个月差异化值 存3个值，逗号隔开 不包含本月
+        jdglProgressCorrectionTrack.setLastThreeMonthDiffValue("0");
         List<BigDecimal> valueList = jdglProgressCorrectionTrackMapper.getLastThreeMonthData(new JdglProgressCorrectionTrack());
         if (CollectionUtils.isNotEmpty(valueList)) {
             String valueStr = valueList.stream().map(String::valueOf).collect(Collectors.joining(","));
