@@ -240,7 +240,7 @@ public class QqchChangeDetail extends TreeNode<QqchChangeDetail> {
      * 字段描述：预留字段2
      */
     @JsonProperty
-    @Excel(name = "预留字段2")
+    @Excel(name = "编制人user_name")
     private String ptVar2;
     /**
      * 字段描述：预留字段3
