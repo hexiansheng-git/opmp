@@ -278,8 +278,7 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         planStatisticsQueryVO.setQueryDateType("j");
         planStatisticsQueryVO.setEndDate(endTime);
         planStatisticsQueryVO.setYear(String.valueOf(year));
-        Map<String, Map<String, BigDecimal>> statisticsMap =
-            planStatisticsService.getValueCompData(planStatisticsQueryVO);
+        Map<String, Map<String, BigDecimal>> statisticsMap = planStatisticsService.getValueCompData(planStatisticsQueryVO);
         Map<String, BigDecimal> quarterMap = statisticsMap.get("quarter");
         // 计划产值
         BigDecimal planAmt = quarterMap.get("planAmt");
@@ -287,7 +286,8 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         BigDecimal actAmt = quarterMap.get("actAmt");
 
         JdglProgressCorrectionTrack jdglProgressCorrectionTrack = new JdglProgressCorrectionTrack();
-        jdglProgressCorrectionTrack.setId(IdWorker.createId());
+        Long trackId = IdWorker.createId();
+        jdglProgressCorrectionTrack.setId(trackId);
         jdglProgressCorrectionTrack.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
         jdglProgressCorrectionTrack.setCreateUserName(SecurityUtils.getUserName());
         jdglProgressCorrectionTrack.setCreateTime(DateUtils.getNowDate());
@@ -327,14 +327,12 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         BigDecimal weekValueComplete = jdglDayScheduleService.getCountValueNotApprove(startTime, endTime);
         jdglProgressCorrectionTrack.setWeekValueComplete(weekValueComplete);
         // 周完成比例 本周产值完成/本周产值计划*100%
-        BigDecimal weekCompleteRatio = BigDecimalUtils.divide0(jdglProgressCorrectionTrack.getWeekValuePlan(),
-            jdglProgressCorrectionTrack.getWeekValueComplete(), 4).multiply(new BigDecimal(100));
+        BigDecimal weekCompleteRatio = BigDecimalUtils.divide0(jdglProgressCorrectionTrack.getWeekValuePlan(), jdglProgressCorrectionTrack.getWeekValueComplete(), 4).multiply(new BigDecimal(100));
         jdglProgressCorrectionTrack.setWeekCompleteRatio(weekCompleteRatio);
 
         if (jdglMonthPlan != null) {
             // 当月产值计划
-            jdglProgressCorrectionTrack.setMonthValuePlan(
-                jdglMonthPlan.getThisPlanValueDl() == null ? BigDecimal.ZERO : jdglMonthPlan.getThisPlanValueDl());
+            jdglProgressCorrectionTrack.setMonthValuePlan(jdglMonthPlan.getThisPlanValueDl() == null ? BigDecimal.ZERO : jdglMonthPlan.getThisPlanValueDl());
         }
         // 当月产值完成
         BigDecimal monthValueComplete = jdglDayScheduleService.getCountValueNotApprove(firstDayMonth, lastDayMonth);
@@ -395,23 +393,27 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
             .multiply(new BigDecimal(100));
         jdglProgressCorrectionTrack.setQuarterValuePlanCompletePercentage(quarterValuePlanCompletePercentage);
         // 关键线路形象完成百分比 todo
-        //jdglProgressCorrectionTrack.setKeyLineImageCompletePercentage();
+        jdglProgressCorrectionTrack.setKeyLineImageCompletePercentage(new BigDecimal("0"));
 
         // 近三个月差异化值 存3个值，逗号隔开 不包含本月
-        List<BigDecimal> valueList = jdglProgressCorrectionTrackMapper
-            .getLastThreeMonthData(new JdglProgressCorrectionTrack());
+        List<BigDecimal> valueList = jdglProgressCorrectionTrackMapper.getLastThreeMonthData(new JdglProgressCorrectionTrack());
         if (CollectionUtils.isNotEmpty(valueList)) {
             String valueStr = valueList.stream().map(String::valueOf).collect(Collectors.joining(","));
             jdglProgressCorrectionTrack.setLastThreeMonthDiffValue(valueStr);
         }
 
         // 周期信息入库
+        JdglProgressCorrectionTrack param = new JdglProgressCorrectionTrack();
+        param.setPeriod(jdglProgressCorrectionTrack.getPeriod());
+        param.setWeekReportPeriod(jdglProgressCorrectionTrack.getWeekReportPeriod());
+        jdglProgressCorrectionTrackMapper.deleteJdglProgressCorrectionTrack(param);
         jdglProgressCorrectionTrackMapper.insertJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
 
         List<JdglProgressCorrectionTrackDetail> trackDetailList = new ArrayList<>();
         for (JdglCorrectionMeasuresMakeDetail detail : detailList) {
             JdglProgressCorrectionTrackDetail trackDetail = new JdglProgressCorrectionTrackDetail();
             BeanUtils.copyProperties(detail, trackDetail);
+            trackDetail.setTrackId(trackId);
             trackDetailList.add(trackDetail);
         }
         // 纠偏方案详情入库

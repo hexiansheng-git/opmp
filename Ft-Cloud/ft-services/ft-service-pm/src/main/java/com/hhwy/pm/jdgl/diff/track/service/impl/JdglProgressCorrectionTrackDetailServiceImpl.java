@@ -52,8 +52,7 @@ public class JdglProgressCorrectionTrackDetailServiceImpl implements IJdglProgre
             jdglProgressCorrectionTrackDetail.setCreateUser(SecurityUtils.getUserName());
             jdglProgressCorrectionTrackDetail.setCreateTime(DateUtils.getNowDate());
         }
-        return jdglProgressCorrectionTrackDetailMapper
-            .insertJdglProgressCorrectionTrackDetailList(jdglProgressCorrectionTrackDetailList);
+        return jdglProgressCorrectionTrackDetailMapper.insertJdglProgressCorrectionTrackDetailList(jdglProgressCorrectionTrackDetailList);
     }
 
     @Transactional
