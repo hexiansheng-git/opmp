@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Service
 @RocketMQMessageListener(
-        consumerGroup = "pm-jdgl-updateCorrect",
+        consumerGroup = "diff_analysis_correct",
         topic = "diff_analysis_correct",
         selectorExpression = "update",
         consumeMode = ConsumeMode.ORDERLY)

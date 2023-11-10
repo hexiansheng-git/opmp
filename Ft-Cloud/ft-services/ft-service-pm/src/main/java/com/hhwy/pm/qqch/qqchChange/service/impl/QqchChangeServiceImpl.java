@@ -360,9 +360,10 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
 
     @Transactional
     public int deleteQqchChange(QqchChange qqchChange) {
-        qqchChange.setUpdateUser(SecurityUtils.getUserName());
-        qqchChange.setUpdateTime(DateUtils.getNowDate());
-        return qqchChangeMapper.deleteQqchChange(qqchChange);
+        int result = qqchChangeMapper.deleteQqchChange(qqchChange);
+        //删除子级
+        qqchChangeMapper.deleteDetail(qqchChange.getId());
+        return result;
     }
 
     @Transactional

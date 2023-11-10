@@ -5,6 +5,8 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
 import com.hhwy.pm.qqch.qqchChange.service.IQqchChangeService;
 import com.hhwy.pm.qqch.qqchChange.vo.QqchChangeVo;
@@ -39,6 +41,7 @@ public class QqchChangeController extends BaseController {
     public AjaxResult getQqchChangeList(@RequestBody @Validated(ValidationGroups.Select.class) QqchChange qqchChangeParam) {
         startPage();
         List<QqchChange> qqchChangeList = qqchChangeService.list(qqchChangeParam);
+        FlowInfoSearchUtil.getFlowInfo(qqchChangeList,FlowEnum.QQCH_CHANGE);
         return getDataTableAjaxResult(qqchChangeList);
     }
 
@@ -50,12 +53,14 @@ public class QqchChangeController extends BaseController {
     @GetMapping("/adjust")
     public AjaxResult adjust(){
         QqchChangeVo vo = qqchChangeService.adjustDetail();
+        FlowInfoSearchUtil.getFlowInfo(vo,FlowEnum.QQCH_CHANGE);
         return AjaxResult.success(vo);
     }
 
     @GetMapping("/detail")
     public AjaxResult detail(Long mainId){
         QqchChangeVo vo = qqchChangeService.detail(mainId);
+        FlowInfoSearchUtil.getFlowInfo(vo,FlowEnum.QQCH_CHANGE);
         return AjaxResult.success(vo);
     }
 
