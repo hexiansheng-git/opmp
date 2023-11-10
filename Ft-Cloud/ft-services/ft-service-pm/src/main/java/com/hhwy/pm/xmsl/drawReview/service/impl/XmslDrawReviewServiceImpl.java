@@ -234,6 +234,10 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         Set<String> listCodeSet = relationlist.stream().map(r->r.getListCode()).collect(Collectors.toSet());
         if(CollectionUtils.isEmpty(listCodeSet))
             return new ArrayList<>(2);
+        XmslDrawReview queryDraw = new XmslDrawReview();
+        queryDraw.setVersion(relationlist.get(0).getVersion());
+        XmslDrawReview oldDraw = this.xmslDrawReviewMapper.getXmslDrawReview(queryDraw);
+        mainId = oldDraw.getId();
         //查询清单
         XmslDrawReviewList query = new XmslDrawReviewList();
         query.setMainId(mainId);
@@ -341,6 +345,10 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         Set<String> listCodeSet = relationlist.stream().map(r->r.getListCode()).collect(Collectors.toSet());
         if(CollectionUtils.isEmpty(listCodeSet))
             return new ArrayList<>(2);
+        XmslDrawReview queryDraw = new XmslDrawReview();
+        queryDraw.setVersion(relationlist.get(0).getVersion());
+        XmslDrawReview oldDraw = this.xmslDrawReviewMapper.getXmslDrawReview(queryDraw);
+        mainId = oldDraw.getId();
         //查询清单
         List<XmslDrawReviewList> drawList = drawReviewListService.getByCodes(mainId,listCodeSet);
         List<XmslDrawReviewWbs> list = trans2Wbs(drawList);

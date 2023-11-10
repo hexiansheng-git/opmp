@@ -155,7 +155,7 @@
     </select>
 
     <select id="relationListCode" parameterType="com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList" resultType="com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList">
-        select wbs_code wbsCode,list_code listCode from xmsl_draw_review_list where
+        select version,wbs_code wbsCode,list_code listCode from xmsl_draw_review_list where
         del_flag = 0 and version_flag = 1
         and version &lt;= #{version}
         <if test="wbsCode != null and wbsCode != ''">
