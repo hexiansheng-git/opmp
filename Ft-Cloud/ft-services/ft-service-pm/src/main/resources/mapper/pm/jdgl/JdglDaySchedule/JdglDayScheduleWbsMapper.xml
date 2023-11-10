@@ -180,7 +180,7 @@
                 left join jdgl_day_schedule_bill jdsb
                           on jds.id = jdsb.day_schedule_id
                             and jdsw.wbs_code = jdsb.item_code
-                group by jds.date,jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity,jdsw.this_quantity
+                group by jds.date,jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity
                 order by sort asc
         ) wd group by wd.wbs_code,wd.wbs_name,wd.unit,wd.design_quantity
     </select>
@@ -196,7 +196,7 @@
                       left join jdgl_day_schedule_bill jdsb
                                  on jds.id = jdsb.day_schedule_id
                                     and jdsw.wbs_code = jdsb.item_code
-             group by jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity,jdsw.this_quantity
+             group by jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity
              order by sort asc
          ) wd group by wd.wbs_code,wd.wbs_name,wd.unit,wd.design_quantity
     </select>
@@ -212,7 +212,7 @@
                      left join jdgl_day_schedule_bill jdsb
                                on jds.id = jdsb.day_schedule_id
                                    and jdsw.wbs_code = jdsb.wbs_code
-            group by jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity,jdsw.this_quantity
+            group by jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity
             order by sort asc
         ) wd group by wd.wbs_code,wd.wbs_name,wd.unit,wd.design_quantity
     </select>

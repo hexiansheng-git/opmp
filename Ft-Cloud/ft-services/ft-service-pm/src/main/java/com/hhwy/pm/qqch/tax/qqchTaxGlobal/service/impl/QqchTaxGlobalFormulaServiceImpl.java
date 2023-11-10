@@ -180,7 +180,7 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         }
 
         // 美元及其他货币转换美元比例
-        BigDecimal usdProportion = new BigDecimal(100).subtract(cnyProportion).subtract(localProportion);//getProportion("USD", xmslContractPayinfoList);
+        BigDecimal usdProportion = BigDecimal.ONE.subtract(cnyProportion).subtract(localProportion);//getProportion("USD", xmslContractPayinfoList);
 
         // 计量账单审核时长（天)
         BigDecimal meteringCircle = BigDecimal.ZERO;
@@ -240,10 +240,10 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         res.setCnyRate(cnyRate == null ? BigDecimal.ZERO : cnyRate);        //美元对人民币汇率
         res.setLocalRate(localRate == null ? BigDecimal.ZERO : localRate);    //项目当地币汇率
         res.setPrePayRate(prePayRate == null ? BigDecimal.ZERO : prePayRate);  //预付款比例
-        res.setLocalProportion(localProportion == null ? BigDecimal.ZERO : localProportion); // 当地币种支付比例
-        res.setCnyProportion(cnyProportion == null ? BigDecimal.ZERO : cnyProportion); // 人民币支付比例
+        res.setLocalProportion(localProportion); // 当地币种支付比例
+        res.setCnyProportion(cnyProportion); // 人民币支付比例
         res.setContProportion(contProportion == null ? BigDecimal.ZERO : contProportion); // 合同币种支付比例
-        res.setUsdProportion(usdProportion == null ? BigDecimal.ZERO : usdProportion); // 美元支付比例
+        res.setUsdProportion(usdProportion); // 美元支付比例
         //质保金（保留金）扣除比例（%） 从项目中拿  qualityGuaranteeDepositRatio
         res.setGuaDeductRate(ObjectUtils.nvlBigDecimal(prj.getQualityGuaranteeDepositRatio()));
         qqchTaxGlobalFormulaCompileEntity.setDto(res);
@@ -255,7 +255,7 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         if(StringUtils.isNotEmpty(currency)) {
             XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> currency.equals(vo.getCurrencyCode())).findFirst().orElse(null);
             if(xmslContractPayinfo != null && xmslContractPayinfo.getProportion() != null)
-                proportion = new BigDecimal(xmslContractPayinfo.getProportion());
+                proportion = StatisticsUtils.getDivideHundred(BigDecimal.valueOf(xmslContractPayinfo.getProportion()));
         }
         return proportion;
     }
@@ -294,7 +294,7 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
             return returnMap;
         }
 
-        int meteringI = 0 - meteringCircle.intValue();
+        int meteringI = -meteringCircle.intValue();
 
         Calendar cl = Calendar.getInstance();
         cl.set(year, Calendar.JANUARY, 1);
@@ -419,11 +419,11 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
 
         QqchTaxGlobal rec = new QqchTaxGlobal();
         rec.setItemName("本期预计实收工程款");
-        rec.setRegionLocalAmt(regionLocalAmt);
-        rec.setRegionLocalRate(regionUsdAmt);
-        rec.setOverseasCnyAmt(overseasCnyAmt);
-        rec.setOverseasUsdAmt(overseasUsdAmt);
-        rec.setOverseasCnyRate(overseasCnyAmt);
+        rec.setRegionLocalAmt(regionLocalAmt.setScale(2, BigDecimal.ROUND_HALF_UP));
+        rec.setRegionLocalRate(regionUsdAmt.setScale(2, BigDecimal.ROUND_HALF_UP));
+        rec.setOverseasCnyAmt(overseasCnyAmt.setScale(2, BigDecimal.ROUND_HALF_UP));
+        rec.setOverseasUsdAmt(overseasUsdAmt.setScale(2, BigDecimal.ROUND_HALF_UP));
+        rec.setOverseasCnyRate(overseasCnyAmt.setScale(2, BigDecimal.ROUND_HALF_UP));
 
         // ------------------------------------工程质保金返回---------------------------------//
         // 本期工程质保金
@@ -452,11 +452,11 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
 
         QqchTaxGlobal back = new QqchTaxGlobal();
         back.setItemName("工程质保金返回");
-        back.setRegionLocalAmt(regionLocalAmt1);
-        back.setRegionLocalRate(regionUsdAmt1);
-        back.setOverseasCnyAmt(overseasCnyAmt1);
-        back.setOverseasUsdAmt(overseasUsdAmt1);
-        back.setOverseasCnyRate(overseasCnyAmt2Usd1);
+        back.setRegionLocalAmt(regionLocalAmt1.setScale(2, BigDecimal.ROUND_HALF_UP));
+        back.setRegionLocalRate(regionUsdAmt1.setScale(2, BigDecimal.ROUND_HALF_UP));
+        back.setOverseasCnyAmt(overseasCnyAmt1.setScale(2, BigDecimal.ROUND_HALF_UP));
+        back.setOverseasUsdAmt(overseasUsdAmt1.setScale(2, BigDecimal.ROUND_HALF_UP));
+        back.setOverseasCnyRate(overseasCnyAmt2Usd1.setScale(2, BigDecimal.ROUND_HALF_UP));
 
         // ------------------------------------本期预计实收预付款---------------------------------//
         // 本期预计实收预付款金额
@@ -485,11 +485,11 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
 
         QqchTaxGlobal pay = new QqchTaxGlobal();
         pay.setItemName("本期预计实收预付款");
-        pay.setRegionLocalAmt(regionLocalAmt2);
-        pay.setRegionLocalRate(regionUsdAmt2);
-        pay.setOverseasUsdAmt(overseasUsdAmt2);
-        pay.setOverseasCnyAmt(overseasCnyAmt2);
-        pay.setOverseasCnyRate(overseasCnyAmt2Usd2);
+        pay.setRegionLocalAmt(regionLocalAmt2.setScale(2, BigDecimal.ROUND_HALF_UP));
+        pay.setRegionLocalRate(regionUsdAmt2.setScale(2, BigDecimal.ROUND_HALF_UP));
+        pay.setOverseasUsdAmt(overseasUsdAmt2.setScale(2, BigDecimal.ROUND_HALF_UP));
+        pay.setOverseasCnyAmt(overseasCnyAmt2.setScale(2, BigDecimal.ROUND_HALF_UP));
+        pay.setOverseasCnyRate(overseasCnyAmt2Usd2.setScale(2, BigDecimal.ROUND_HALF_UP));
 
         qqchTaxGlobals.add(rec);
         qqchTaxGlobals.add(back);
