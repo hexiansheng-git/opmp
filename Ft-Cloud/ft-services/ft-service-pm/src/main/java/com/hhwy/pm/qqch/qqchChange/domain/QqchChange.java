@@ -12,6 +12,7 @@ import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -37,6 +38,7 @@ public class QqchChange extends CommonBaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "主键id")
+    @NotNull(message = "id不能为空",groups = {ValidationGroups.Delete.class})
     private Long id;
     /**
      * 字段描述：变更编制负责人

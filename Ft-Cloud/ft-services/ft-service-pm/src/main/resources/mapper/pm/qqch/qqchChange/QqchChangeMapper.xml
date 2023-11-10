@@ -551,39 +551,6 @@
         update `qqch_change` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="changeUser != null ">and `change_user` = #{changeUser}</if>
-            <if test="changeUserName != null  and changeUserName != ''">and `change_user_name` = #{changeUserName}</if>
-            <if test="editFinishDate != null ">and `edit_finish_date` = #{editFinishDate}</if>
-            <if test="reviewFinishDate != null ">and `review_finish_date` = #{reviewFinishDate}</if>
-            <if test="reqFinishDate != null ">and `req_finish_date` = #{reqFinishDate}</if>
-            <if test="changeSubmitDate != null ">and `change_submit_date` = #{changeSubmitDate}</if>
-            <if test="changeCondition != null  and changeCondition != ''">and `change_condition` = #{changeCondition}
-            </if>
-            <if test="changeReason != null  and changeReason != ''">and `change_reason` = #{changeReason}</if>
-            <if test="filegroupid != null  and filegroupid != ''">and `filegroupid` = #{filegroupid}</if>
-            <if test="planNum != null ">and `plan_num` = #{planNum}</if>
-            <if test="finishNum != null ">and `finish_num` = #{finishNum}</if>
-            <if test="finishRatio != null ">and `finish_ratio` = #{finishRatio}</if>
-            <if test="exigencyStatus != null  and exigencyStatus != ''">and `exigency_status` = #{exigencyStatus}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="version != null ">and `version` = #{version}</if>
-            <if test="valid != null ">and `valid` = #{valid}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateUserName != null  and updateUserName != ''">and `update_user_name` = #{updateUserName}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
     </update>
 
