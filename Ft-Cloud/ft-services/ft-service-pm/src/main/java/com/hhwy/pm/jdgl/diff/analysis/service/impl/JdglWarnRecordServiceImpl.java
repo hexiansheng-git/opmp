@@ -5,9 +5,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglWarnRecord;
 import com.hhwy.pm.jdgl.diff.analysis.mapper.JdglWarnRecordMapper;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglWarnRecordService;
-import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
-import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +23,6 @@ public class JdglWarnRecordServiceImpl implements IJdglWarnRecordService {
     @Autowired
     private JdglWarnRecordMapper jdglWarnRecordMapper;
 
-    @Autowired
-    private RocketMQTemplate rocketMQTemplate;
-
 
     public JdglWarnRecord getJdglWarnRecord(JdglWarnRecord jdglWarnRecord) {
         return jdglWarnRecordMapper.getJdglWarnRecord(jdglWarnRecord);
@@ -39,19 +34,11 @@ public class JdglWarnRecordServiceImpl implements IJdglWarnRecordService {
 
     @Transactional
     public int insertJdglWarnRecord(JdglWarnRecord jdglWarnRecord) {
-        jdglWarnRecord.setId(IdWorker.createId());
-        jdglWarnRecord.setCreateUser(SecurityUtils.getUserName());
-        jdglWarnRecord.setCreateTime(DateUtils.getNowDate());
         return jdglWarnRecordMapper.insertJdglWarnRecord(jdglWarnRecord);
     }
 
     @Transactional
     public int insertJdglWarnRecordList(List<JdglWarnRecord> jdglWarnRecordList) {
-        for (JdglWarnRecord jdglWarnRecord : jdglWarnRecordList) {
-            jdglWarnRecord.setId(IdWorker.createId());
-            jdglWarnRecord.setCreateUser(SecurityUtils.getUserName());
-            jdglWarnRecord.setCreateTime(DateUtils.getNowDate());
-        }
         return jdglWarnRecordMapper.insertJdglWarnRecordList(jdglWarnRecordList);
     }
 

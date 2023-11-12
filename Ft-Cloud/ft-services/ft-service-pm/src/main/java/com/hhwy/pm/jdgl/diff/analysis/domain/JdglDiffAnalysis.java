@@ -251,7 +251,12 @@ public class JdglDiffAnalysis extends BaseEntity {
     @JsonProperty
 //    @Excel(name = "项目名称")
     private String projectName;
-
+    /**
+     * 字段描述：项目编码
+     */
+    @JsonProperty
+    @Excel(name = "项目编码")
+    private String projectCode;
     /**
      * 字段描述：修正得分数据
      */
