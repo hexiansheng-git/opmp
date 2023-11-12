@@ -34,7 +34,6 @@ public class JdglWarnRecordServiceImpl implements IJdglWarnRecordService {
     }
 
     public List<JdglWarnRecord> getJdglWarnRecordList(JdglWarnRecord jdglWarnRecord) {
-        CommonAssert.notBlank(jdglWarnRecord.getProjectCode(),"项目编码不能为空！");
         return jdglWarnRecordMapper.getJdglWarnRecordList(jdglWarnRecord);
     }
 
