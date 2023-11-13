@@ -109,7 +109,6 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         change.setValid(Constant.NO_INT);
         change.setProjectCode(SecurityUtils.getTenantKey());
         change.setProjectName(projectBasicInfo.getProjectName());
-
         BigDecimal maxVersion = VersionUtil.getMaxVersion(FlowEnum.QQCH_CHANGE.getTableName());
         maxVersion = maxVersion.compareTo(BigDecimal.ONE)==0?new BigDecimal("2.0"):maxVersion;
         change.setVersion(maxVersion);
@@ -269,7 +268,7 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
 
         List<QqchChangeDetail> detailList = TreeUtil.treeToList(vo.getDetailList());
         Assert.notEmpty(detailList,"工作安排格式不正确，解析结果为空");
-        if(StringUtils.isNotBlank(vo.getSubmitFlag())){
+        if(StringUtils.equals(vo.getSubmitFlag(),"1")){
             JyDetailsUtil.jyDetails(Arrays.asList(vo),ValidationGroups.Save.class);
             int editingNum = 0;
             //若为提交，工作安排至少得有一个编制内容、校验编制人、计划完成日期
@@ -285,6 +284,8 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
                 Assert.notNull(temp.getFinishTimeFirst(),"工作安排，"+temp.getItemName()+":计划完成日期不能为空");
             }
             Assert.isTrue(editingNum>0,"工作安排至少得有一个编制内容项!");
+            //设置变更提交时间
+            vo.setChangeSubmitDate(new Date());
         }
         return detailList;
     }

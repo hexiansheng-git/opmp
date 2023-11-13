@@ -551,7 +551,7 @@
     </update>
 
     <update id="updateSubFinishNum">
-        update qqch_change set finish_num = ifnull(finish_num,0)+#{finishNum}
+        update qqch_change set finish_num = ifnull(finish_num,0)+#{finishNum},edit_finish_date=now()
         where `id` = #{id}
     </update>
 
