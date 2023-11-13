@@ -205,6 +205,7 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
             JdglDiffAnalysisCorrect vo = new JdglDiffAnalysisCorrect();
             vo.setFirstType(headerName);
             vo.setFirstTypeValue(headerValue);
+            vo.setDiffAnalysisId(diffAnalysisId);
             for (int i = 0; i < factorsVOList.size(); i++) {
                 List<QqchScheFactors> qqchScheFactors = factorsVOList.get(i);
                 if(!CollectionUtils.isEmpty(qqchScheFactors)) {
