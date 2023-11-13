@@ -146,12 +146,5 @@ public class QqchChangeController extends BaseController {
         return AjaxResult.success();
     }
 
-    @GetMapping("/flowInfo")
-    public AjaxResult flowInfo(Long mainId){
-        QqchChangeVo vo = qqchChangeService.detail(mainId);
-        FlowInfoSearchUtil.getFlowInfo(vo,FlowEnum.QQCH_CHANGE);
-        return AjaxResult.success(vo);
-    }
-
 
 }

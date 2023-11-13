@@ -84,7 +84,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
 
 
     public void syncInner(String tenantKey) {
-        XmslDrawReview drawReview = drawReviewService.getLast();
+        XmslDrawReview drawReview = drawReviewService.getEffectLast();
         if(drawReview == null || drawReview.getId()==null)
             return;
         xmslEngineeringReportMapper.deleteAll();
