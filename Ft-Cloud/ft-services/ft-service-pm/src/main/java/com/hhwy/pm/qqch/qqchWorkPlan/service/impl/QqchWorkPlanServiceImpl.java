@@ -544,8 +544,8 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                 //发布日期，即审批通过日期
                 Date issueDate = workGroup.getIssueDate();
                 Date nowDate = DateUtils.getNowDate();
-                Long diffDays = FtDateUtils.getDays(issueDate, nowDate);
-                if(diffDays > 3){
+                long diffDays = FtDateUtils.getDiffDays(issueDate, nowDate);
+                if(diffDays >= 3){
                     /*判断是否已提交前期策划工作计划报请审批*/
                     QqchWorkPlan firstVersionQqchWorkPlan = qqchWorkPlanMapper.getFirstVersionQqchWorkPlan();
                     if(firstVersionQqchWorkPlan == null || firstVersionQqchWorkPlan.getTaskStatus() == null || firstVersionQqchWorkPlan.getTaskStatus().equals("0")){
@@ -605,9 +605,16 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
 
                 //流程提交时间
                 Date taskCommitDate = workPlan.getTaskCommitDate();
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(taskCommitDate);
+                calendar.add(Calendar.DATE,3);
+                Date cutOffTime = calendar.getTime();
+
                 Date nowDate = DateUtils.getNowDate();
-                Long diffDays = FtDateUtils.getDays(taskCommitDate, nowDate);
-                if(diffDays >3 ){
+                long diffDays = FtDateUtils.getDiffDays(taskCommitDate, nowDate);
+//                if(diffDays >= 3 ){
+                if(FtDateUtils.dateFormatCompareTo(cutOffTime,nowDate)){
                     //获取工作小组组长
                     List<QqchWorkGroupMember> groupLeader = qqchWorkGroupMemberService.getGroupLeader();
                     StringBuilder warnScope = new StringBuilder();
