@@ -262,7 +262,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         return list;
     }
 
-    private List<XmslDrawReviewList> getByListCodes(String wbsCode){
+    @Override
+    public List<XmslDrawReviewList> getDefaultListRelation(String wbsCode){
         String[] listCodes = WbsRedisUtils.getListCodeByWbsCode(wbsCode);
         if(ArrayUtils.isEmpty(listCodes))
             return new ArrayList<>();
@@ -280,7 +281,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         return resuList;
     }
 
-    private List<XmslDrawReviewWbs> getDefaultWbs(String listCode){
+    @Override
+    public List<XmslDrawReviewWbs> getDefaultWbsRelation(String listCode){
         String[] wbsCodes = WbsRedisUtils.getWbsCodeByListCode(listCode);
         if(ArrayUtils.isEmpty(wbsCodes))
             return new ArrayList<>();
