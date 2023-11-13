@@ -221,7 +221,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         List<XmslDrawReviewList> relationlist = xmslDrawReviewMapper.relationListCode(queryList);
         if(CollectionUtils.isEmpty(relationlist)){
             if(ObjectUtils.nvl(version) == 1)  //加载默认wbs
-                return getByListCodes(wbsCode);
+                return getDefaultListRelation(wbsCode);
             return new ArrayList<>();
         }
         mainId = relationlist.get(0).getMainId(); //获取最大版本
@@ -318,7 +318,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         List<XmslDrawReviewList> relationlist = xmslDrawReviewMapper.relationListCode(queryList);
         if(CollectionUtils.isEmpty(relationList)){
             if(ObjectUtils.nvl(version) == 1)  //加载默认wbs
-                return getDefaultWbs(listCode);
+                return getDefaultWbsRelation(listCode);
             return new ArrayList<>();
         }
         mainId = relationlist.get(0).getMainId(); //获取最大版本
