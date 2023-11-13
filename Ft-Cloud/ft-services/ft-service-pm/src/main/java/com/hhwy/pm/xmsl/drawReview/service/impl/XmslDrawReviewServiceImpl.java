@@ -220,30 +220,15 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         queryList.setVersion(version);
         List<XmslDrawReviewList> relationlist = xmslDrawReviewMapper.relationListCode(queryList);
         if(CollectionUtils.isEmpty(relationlist)){
-            if(ObjectUtils.nvl(version) == 1){  //加载默认wbs
+            if(ObjectUtils.nvl(version) == 1)  //加载默认wbs
                 return getByListCodes(wbsCode);
-            }else{                              //加载上一版本
-//                if(last == null){
-//                    return getByListCodes(wbsCode);
-//                }
-//                mainId = last.getId();
-//                version = last.getVersion();
-//                relationList = relationService.relationList(version,wbsCode);
-            }
+            return new ArrayList<>();
         }
-        Set<String> listCodeSet = relationlist.stream().map(r->r.getListCode()).collect(Collectors.toSet());
-        if(CollectionUtils.isEmpty(listCodeSet))
-            return new ArrayList<>(2);
-        XmslDrawReview queryDraw = new XmslDrawReview();
-        queryDraw.setVersion(relationlist.get(0).getVersion());
-        XmslDrawReview oldDraw = this.xmslDrawReviewMapper.getXmslDrawReview(queryDraw);
-        mainId = oldDraw.getId();
+        mainId = relationlist.get(0).getMainId(); //获取最大版本
         //查询清单
-        XmslDrawReviewList query = new XmslDrawReviewList();
-        query.setMainId(mainId);
-        query.setWbsCode(wbsCode);
-        query.setParams(ObjectUtils.toMap("listCodes",listCodeSet));
-        List<XmslDrawReviewList> list = this.drawReviewListService.getXmslDrawReviewListList(query);
+        final Long finalMainId = mainId;
+        List<XmslDrawReviewList> list = relationlist.stream().filter(r->r.getMainId().equals(finalMainId)).collect(Collectors.toList());
+        Set<String> listCodeSet = list.stream().map(r->r.getListCode()).collect(Collectors.toSet());
         //获取清单对应的细目、配合比
         Map<String,XmslDrawReviewList> listMap = new HashMap<>(list.size());
         for (int i = 0; i < list.size(); i++) {
@@ -330,32 +315,19 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         queryList.setVersion(version);
         List<XmslDrawReviewList> relationlist = xmslDrawReviewMapper.relationListCode(queryList);
         if(CollectionUtils.isEmpty(relationList)){
-            if(ObjectUtils.nvl(version) == 1){  //加载默认wbs
+            if(ObjectUtils.nvl(version) == 1)  //加载默认wbs
                 return getDefaultWbs(listCode);
-            }else{                              //加载上一版本
-//                XmslDrawReview last = this.xmslDrawReviewMapper.getLast(1);
-//                if(last == null){
-//                    return getDefaultWbs(listCode);
-//                }
-//                mainId = last.getId();
-//                version = last.getVersion();
-//                relationList = getRelationList (version,listCode,null);
-            }
+            return new ArrayList<>();
         }
-        Set<String> listCodeSet = relationlist.stream().map(r->r.getListCode()).collect(Collectors.toSet());
-        if(CollectionUtils.isEmpty(listCodeSet))
-            return new ArrayList<>(2);
-        XmslDrawReview queryDraw = new XmslDrawReview();
-        queryDraw.setVersion(relationlist.get(0).getVersion());
-        XmslDrawReview oldDraw = this.xmslDrawReviewMapper.getXmslDrawReview(queryDraw);
-        mainId = oldDraw.getId();
+        mainId = relationlist.get(0).getMainId(); //获取最大版本
         //查询清单
-        List<XmslDrawReviewList> drawList = drawReviewListService.getByCodes(mainId,listCodeSet);
+        final Long finalMainId = mainId;
+        List<XmslDrawReviewList> drawList = relationlist.stream().filter(r->r.getMainId().equals(finalMainId)).collect(Collectors.toList());
         List<XmslDrawReviewWbs> list = trans2Wbs(drawList);
         //获取清单对应的细目、配合比
         Set<String> wbsCodeSet = drawList.stream().map(r->r.getWbsCode()).collect(Collectors.toSet());
         Map<String,XmslDrawReviewWbs> listMap = new HashMap<>(list.size());
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < drawList.size(); i++) {
             XmslDrawReviewWbs temp = list.get(i);
             listMap.put(temp.getCode(),temp);
         }
