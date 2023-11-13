@@ -98,6 +98,8 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
         if(CollectionUtils.isEmpty(jdglDiffAnalysisCorrectList)) {
             return 0;
         }
+        Long diffAnalysisId = jdglDiffAnalysisCorrectList.get(0).getDiffAnalysisId();
+        deleteJdglDiffAnalysisCorrectByDiffAnalysisId(diffAnalysisId);
         List<JdglDiffAnalysisCorrect> needAddList = new ArrayList<>();
         for (JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect : jdglDiffAnalysisCorrectList) {
             needAddList.add(jdglDiffAnalysisCorrect);
@@ -112,8 +114,8 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
                 correctGrade = correctGrade.add(jdglDiffAnalysisCorrect.getGrade());
             }
             jdglDiffAnalysisCorrect.setId(IdWorker.createId());
-            jdglDiffAnalysisCorrect.setCreateUser(SecurityUtils.getUserName());
-            jdglDiffAnalysisCorrect.setCreateTime(DateUtils.getNowDate());
+//            jdglDiffAnalysisCorrect.setCreateUser(SecurityUtils.getUserName());
+//            jdglDiffAnalysisCorrect.setCreateTime(DateUtils.getNowDate());
         }
         iJdglDiffAnalysisService.updateGrage("correctGrade", needAddList.get(0).getDiffAnalysisId(), correctGrade);
         return jdglDiffAnalysisCorrectMapper.insertJdglDiffAnalysisCorrectList(needAddList);
@@ -131,8 +133,6 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
         if(CollectionUtils.isEmpty(jdglDiffAnalysisCorrectList)) {
             return 0;
         }
-        Long diffAnalysisId = jdglDiffAnalysisCorrectList.get(0).getDiffAnalysisId();
-        deleteJdglDiffAnalysisCorrectByDiffAnalysisId(diffAnalysisId);
         List<JdglDiffAnalysisCorrect> needUpdateList = new ArrayList<>();
         for (JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect : jdglDiffAnalysisCorrectList) {
             needUpdateList.add(jdglDiffAnalysisCorrect);
@@ -144,8 +144,8 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
             if("1".equals(jdglDiffAnalysisCorrect.getIsSelect()) && jdglDiffAnalysisCorrect.getGrade() != null) {
                 correctGrade = correctGrade.add(jdglDiffAnalysisCorrect.getGrade());
             }
-            jdglDiffAnalysisCorrect.setUpdateUser(SecurityUtils.getUserName());
-            jdglDiffAnalysisCorrect.setUpdateTime(DateUtils.getNowDate());
+//            jdglDiffAnalysisCorrect.setUpdateUser(SecurityUtils.getUserName());
+//            jdglDiffAnalysisCorrect.setUpdateTime(DateUtils.getNowDate());
         }
         iJdglDiffAnalysisService.updateGrage("correctGrade", needUpdateList.get(0).getDiffAnalysisId(), correctGrade);
         return jdglDiffAnalysisCorrectMapper.updateJdglDiffAnalysisCorrectList(needUpdateList);
