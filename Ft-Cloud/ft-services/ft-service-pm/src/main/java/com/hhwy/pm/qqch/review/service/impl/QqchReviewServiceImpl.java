@@ -526,8 +526,8 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                     continue;
                 }
                 Date nowDate = DateUtils.getNowDate();
-                Long diffDays = FtDateUtils.getDays(winTheBiddingDate, nowDate);
-                if(diffDays > 30){
+                long diffDays = FtDateUtils.getDiffDays(winTheBiddingDate, nowDate);
+                if(diffDays >= 30){
                     /*发送预警*/
                     String warnScope = getStageWarnScope("1");
                     if(StringUtils.isNotBlank(warnScope)){
@@ -601,7 +601,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                 }
 
                 Date nowDate = DateUtils.getNowDate();
-                if(nowDate.compareTo(smallDate) > 0){
+                if(FtDateUtils.dateFormatCompareTo(smallDate,nowDate)){
                     String warnScope = getStageWarnScope("1");
                     if(StringUtils.isNotBlank(warnScope)){
                         warnService.addWarn(WarnItem.PREPARATION_SECOND_STAGE,WarnScopeType.USER,null,"admin",tenantKey);
@@ -658,7 +658,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                 Date cutOffTime = calendar.getTime();
                 Date nowDate = DateUtils.getNowDate();
 
-                if(nowDate.compareTo(cutOffTime) > 0){
+                if(FtDateUtils.dateFormatCompareTo(cutOffTime,nowDate)){
                     /*发送预警*/
                     String warnScope = getStageWarnScope("1");
                     if(StringUtils.isNotBlank(warnScope)) {
@@ -703,7 +703,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                 Date cutOffTime = calendar.getTime();
                 Date nowDate = DateUtils.getNowDate();
 
-                if(nowDate.compareTo(cutOffTime) > 0){
+                if(FtDateUtils.dateFormatCompareTo(cutOffTime,nowDate)){
                     /*发送预警*/
                     String instanceId = approvedDate.getInstanceId();
                     StringBuilder warnScope = new StringBuilder();

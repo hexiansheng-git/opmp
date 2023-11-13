@@ -182,7 +182,7 @@ public class QqchPersonControlPlanServiceImpl implements IQqchPersonControlPlanS
                         Date dueDate = FtDateUtils.getDateAddDays(issueDate, limitPeriod.intValue());
 
                         // 日期相差天数
-                        long diffDays = FtDateUtils.getDays(nowDate, dueDate);
+                        long diffDays = FtDateUtils.getDiffDays(nowDate, dueDate);
 
                         //证件名称
                         String certificateName = child.getCertificateName();

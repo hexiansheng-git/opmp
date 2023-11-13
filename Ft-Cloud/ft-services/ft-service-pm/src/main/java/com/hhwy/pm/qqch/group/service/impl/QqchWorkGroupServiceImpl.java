@@ -540,8 +540,8 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
                     continue;
                 }
                 Date nowDate = DateUtils.getNowDate();
-                Long diffDays = FtDateUtils.getDays(winTheBiddingDate, nowDate);
-                if(diffDays > 10){
+                long diffDays = FtDateUtils.getDiffDays(winTheBiddingDate, nowDate);
+                if(diffDays >= 10){
                     /*判断工作小组是否已成立并完成审批*/
                     QqchWorkGroup workGroup = qqchWorkGroupMapper.getValidMaxVersionQqchWorkGroup();
                     String projectCategory = projectInfo.getProjectCategory();

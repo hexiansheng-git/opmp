@@ -49,7 +49,7 @@ public class TWarnController extends BaseController {
 
     @PutMapping({"/changeHandleStatus"})
     public AjaxResult changeHandleStatus(@RequestBody TWarnRecord record) {
-        return this.toAjax(tWarnService.changeHandleStatus(record));
+        return toAjax(tWarnService.changeHandleStatus(record));
     }
 
     @PutMapping({"/batchChangeHandleStatus/{status}/{warnIds}"})
