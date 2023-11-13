@@ -131,6 +131,8 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
         if(CollectionUtils.isEmpty(jdglDiffAnalysisCorrectList)) {
             return 0;
         }
+        Long diffAnalysisId = jdglDiffAnalysisCorrectList.get(0).getDiffAnalysisId();
+        deleteJdglDiffAnalysisCorrectByDiffAnalysisId(diffAnalysisId);
         List<JdglDiffAnalysisCorrect> needUpdateList = new ArrayList<>();
         for (JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect : jdglDiffAnalysisCorrectList) {
             needUpdateList.add(jdglDiffAnalysisCorrect);
