@@ -117,8 +117,11 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
 //            jdglDiffAnalysisCorrect.setCreateUser(SecurityUtils.getUserName());
 //            jdglDiffAnalysisCorrect.setCreateTime(DateUtils.getNowDate());
         }
-        iJdglDiffAnalysisService.updateGrage("correctGrade", needAddList.get(0).getDiffAnalysisId(), correctGrade);
-        return jdglDiffAnalysisCorrectMapper.insertJdglDiffAnalysisCorrectList(needAddList);
+        int i = jdglDiffAnalysisCorrectMapper.insertJdglDiffAnalysisCorrectList(needAddList);
+        if(i > 0) {
+            iJdglDiffAnalysisService.updateGrage("correctGrade", needAddList.get(0).getDiffAnalysisId(), correctGrade);
+        }
+        return i;
     }
 
     @Transactional
