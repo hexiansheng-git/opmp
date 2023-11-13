@@ -287,6 +287,40 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
     }
 
     @Override
+    @Transactional
+    public void finishFlow(Long businessId) {
+        Assert.notNull(businessId,"业务ID不能为空");
+        QqchChange query = new QqchChange();
+        query.setId(businessId);
+        QqchChange qqchChange = this.getQqchChange(query);
+        Assert.notNull(qqchChange,"获取前期策划变更失败");
+        //1 修改valid
+        query.setValid(Constant.YES_INT);
+        new AddBaseInfoUtil<>().update(query);
+        this.qqchChangeMapper.updateQqchChange(query);
+    }
+
+    @Override
+    @Transactional
+    public void editingFinishFlow(Long businessId) {
+        Assert.notNull(businessId,"业务ID不能为空");
+        QqchChange query = new QqchChange();
+        query.setId(businessId);
+        QqchChange qqchChange = this.getQqchChange(query);
+        Assert.notNull(qqchChange,"获取前期策划变更失败");
+        //1 获取
+        QqchChangeDetail qqchChangeDetail = new QqchChangeDetail();
+        qqchChangeDetail.setMainId(businessId);
+        qqchChangeDetail.setEditorFirst(SecurityUtils.getUserId());
+        qqchChangeDetail.setPtVar1("1");
+        Integer count = this.qqchChangeMapper.countEditQqchChangeDetail(qqchChangeDetail);
+        if(count < 1)
+            return;
+        query.setFinishNum(count);
+        qqchChangeMapper.updateSubFinishNum(query);
+    }
+
+    @Override
     public List<SysMenu> authMenuList(Long mainId, String authFlag) {
         List<SysMenu> menuTreeList = getMenuList();
         if(!StringUtils.equals(authFlag,"1"))

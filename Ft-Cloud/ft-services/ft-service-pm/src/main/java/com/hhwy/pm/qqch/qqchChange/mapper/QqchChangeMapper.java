@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.qqchChange.mapper;
 
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
+import com.hhwy.pm.qqch.qqchChange.domain.QqchChangeDetail;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,10 +29,10 @@ public interface QqchChangeMapper {
 
     /**
      * 统计编制内容为是的明细数量
-     * @param mainId
+     * @param qqchChangeDetail
      * @return
      */
-    Integer countEditQqchChangeDetail(Long mainId);
+    Integer countEditQqchChangeDetail(QqchChangeDetail qqchChangeDetail);
 
     int insertQqchChange(QqchChange qqchChange);
 
@@ -40,6 +41,8 @@ public interface QqchChangeMapper {
     int updateQqchChange(QqchChange qqchChange);
 
     int updateQqchChangeList(@Param("qqchChangeList") List<QqchChange> qqchChangeList);
+
+    int updateSubFinishNum(QqchChange qqchChange);
 
     int deleteQqchChange(QqchChange qqchChange);
 

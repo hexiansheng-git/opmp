@@ -95,4 +95,27 @@ public class QqchChangeController extends BaseController {
         List<SysMenu> list = qqchChangeService.authMenuList(mainId,authFlag);
         return AjaxResult.success(list);
     }
+
+    /**
+     * 编制人编辑节点提交触发
+     * 修改编制完成数量
+     * @param businessId
+     * @return
+     */
+    @PostMapping("/editFinishListener")
+    public AjaxResult editFinishListener(@RequestParam("id") Long businessId){
+        qqchChangeService.editingFinishFlow(businessId);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 流程结束后触发
+     * @param businessId
+     * @return
+     */
+    @PostMapping("/listener")
+    public AjaxResult listener(@RequestParam("id") Long businessId){
+        qqchChangeService.finishFlow(businessId);
+        return AjaxResult.success();
+    }
 }
