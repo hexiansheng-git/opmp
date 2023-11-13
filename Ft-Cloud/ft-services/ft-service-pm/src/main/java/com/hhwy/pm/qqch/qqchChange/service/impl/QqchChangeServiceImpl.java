@@ -20,6 +20,7 @@ import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysMenu;
@@ -67,6 +68,8 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
     private SystemServiceApi systemServiceApi;
     @Autowired
     private IQqchWorkPlanDetailService workPlanDetailService;
+    @Autowired
+    private IXmslContractInfoService contractInfoService;
 
 
     public QqchChange getQqchChange(QqchChange qqchChange) {
