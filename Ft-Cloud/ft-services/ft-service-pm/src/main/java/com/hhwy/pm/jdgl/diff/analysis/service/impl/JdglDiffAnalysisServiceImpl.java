@@ -517,12 +517,12 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
         if(count > 0) {
             int i = updateJdglDiffAnalysis(jdglDiffAnalysis);
-            if(i > 0) {
-                if(jdglDiffAnalysis.getRiskLevel() != null) {
-                    Date period = jdglDiffAnalysis.getPeriod();
-                    jdglCorrectionMeasuresMakeService.syncData(period);
-                }
-            }
+//            if(i > 0) {
+//                if(jdglDiffAnalysis.getRiskLevel() != null) {
+//                    Date period = jdglDiffAnalysis.getPeriod();
+//                    jdglCorrectionMeasuresMakeService.syncData(period);
+//                }
+//            }
         }
     }
 
