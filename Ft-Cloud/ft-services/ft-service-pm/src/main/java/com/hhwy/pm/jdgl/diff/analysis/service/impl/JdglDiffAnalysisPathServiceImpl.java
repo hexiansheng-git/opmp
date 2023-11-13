@@ -94,6 +94,13 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
         return returnList;
     }
 
+    @Override
+    public int deleteJdglDiffAnalysisPathByDiffAnalysisId(Long diffAnalysisId) {
+        JdglDiffAnalysisPath jdglDiffAnalysisPath = new JdglDiffAnalysisPath();
+        jdglDiffAnalysisPath.setDiffAnalysisId(diffAnalysisId);
+        return deleteJdglDiffAnalysisPath(jdglDiffAnalysisPath);
+    }
+
     @Transactional
     public int insertJdglDiffAnalysisPath(JdglDiffAnalysisPath jdglDiffAnalysisPath) {
 //        jdglDiffAnalysisPath.setId(IdWorker.createId());
@@ -130,8 +137,8 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
 
     @Transactional
     public int deleteJdglDiffAnalysisPath(JdglDiffAnalysisPath jdglDiffAnalysisPath) {
-        jdglDiffAnalysisPath.setUpdateUser(SecurityUtils.getUserName());
-        jdglDiffAnalysisPath.setUpdateTime(DateUtils.getNowDate());
+//        jdglDiffAnalysisPath.setUpdateUser(SecurityUtils.getUserName());
+//        jdglDiffAnalysisPath.setUpdateTime(DateUtils.getNowDate());
         return jdglDiffAnalysisPathMapper.deleteJdglDiffAnalysisPath(jdglDiffAnalysisPath);
     }
 

@@ -111,6 +111,13 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
         return returnList;
     }
 
+    @Override
+    public void deleteJdglDiffAnalysisSvByDiffAnalysisId(Long diffAnalysisId) {
+        JdglDiffAnalysisSv jdglDiffAnalysisSv = new JdglDiffAnalysisSv();
+        jdglDiffAnalysisSv.setDiffAnalysisId(diffAnalysisId);
+        deleteJdglDiffAnalysisSv(jdglDiffAnalysisSv);
+    }
+
     @Transactional
     public int insertJdglDiffAnalysisSv(JdglDiffAnalysisSv jdglDiffAnalysisSv) {
         jdglDiffAnalysisSv.setId(IdWorker.createId());
@@ -147,8 +154,8 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
 
     @Transactional
     public int deleteJdglDiffAnalysisSv(JdglDiffAnalysisSv jdglDiffAnalysisSv) {
-        jdglDiffAnalysisSv.setUpdateUser(SecurityUtils.getUserName());
-        jdglDiffAnalysisSv.setUpdateTime(DateUtils.getNowDate());
+//        jdglDiffAnalysisSv.setUpdateUser(SecurityUtils.getUserName());
+//        jdglDiffAnalysisSv.setUpdateTime(DateUtils.getNowDate());
         return jdglDiffAnalysisSvMapper.deleteJdglDiffAnalysisSv(jdglDiffAnalysisSv);
     }
 
@@ -244,7 +251,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
             jdglDiffAnalysisSvMapper.insertJdglDiffAnalysisSvList(insertList);
         }
 
-        jdglDiffAnalysis.setTotalCompValue(StatisticsUtils.getDivideTenThousand(thisTotalActAmt));
+        jdglDiffAnalysis.setTotalCompValue(thisTotalActAmt);
 
         if(new BigDecimal(0).compareTo(thisTotalPlanAmt) == 0) {
             return new BigDecimal(0);

@@ -4,6 +4,7 @@ import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.domain.vo.DiffAnalysisQueryVo;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,4 +40,11 @@ public interface IJdglDiffAnalysisService {
     List<JdglDiffAnalysis> gmList(DiffAnalysisQueryVo queryVo);
 
     void updateGrage(String field, Long id, BigDecimal grade);
+
+    /**
+     * 根据期次删除差异化分析数据
+     * @param period
+     * @return
+     */
+    int deleteDiffAnalysisByPeriod(Date period);
 }

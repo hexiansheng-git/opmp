@@ -151,8 +151,8 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
 
     @Transactional
     public int deleteJdglDiffAnalysisCorrect(JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect) {
-        jdglDiffAnalysisCorrect.setUpdateUser(SecurityUtils.getUserName());
-        jdglDiffAnalysisCorrect.setUpdateTime(DateUtils.getNowDate());
+//        jdglDiffAnalysisCorrect.setUpdateUser(SecurityUtils.getUserName());
+//        jdglDiffAnalysisCorrect.setUpdateTime(DateUtils.getNowDate());
         return jdglDiffAnalysisCorrectMapper.deleteJdglDiffAnalysisCorrect(jdglDiffAnalysisCorrect);
     }
 
@@ -236,5 +236,12 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
 
         return headerVos;
 
+    }
+
+    @Override
+    public int deleteJdglDiffAnalysisCorrectByDiffAnalysisId(Long diffAnalysisId) {
+        JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect = new JdglDiffAnalysisCorrect();
+        jdglDiffAnalysisCorrect.setDiffAnalysisId(diffAnalysisId);
+        return deleteJdglDiffAnalysisCorrect(jdglDiffAnalysisCorrect);
     }
 }

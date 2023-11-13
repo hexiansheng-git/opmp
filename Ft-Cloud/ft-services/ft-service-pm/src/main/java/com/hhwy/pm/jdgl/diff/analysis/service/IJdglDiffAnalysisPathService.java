@@ -34,4 +34,6 @@ public interface IJdglDiffAnalysisPathService {
     BigDecimal initNotKeyJdglDiffAnalysisPath(JdglDiffAnalysis jdglDiffAnalysis);
 
     List<JdglDiffAnalysisPath> getJdglDiffAnalysisPathLazyList(JdglDiffAnalysisPath jdglDiffAnalysisPathParam);
+
+    int deleteJdglDiffAnalysisPathByDiffAnalysisId(Long diffAnalysisId);
 }

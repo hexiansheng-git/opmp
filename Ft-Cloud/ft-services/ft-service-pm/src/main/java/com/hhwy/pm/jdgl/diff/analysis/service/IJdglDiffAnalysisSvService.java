@@ -36,4 +36,6 @@ public interface IJdglDiffAnalysisSvService {
     Map<String, Object> getPlanAndComp(JdglDiffAnalysisSv jdglDiffAnalysisSvParam);
 
     List<JdglDiffAnalysisSv> getJdglDiffAnalysisSvLazyList(JdglDiffAnalysisSv jdglDiffAnalysisSvParam);
+
+    void deleteJdglDiffAnalysisSvByDiffAnalysisId(Long diffAnalysisId);
 }
