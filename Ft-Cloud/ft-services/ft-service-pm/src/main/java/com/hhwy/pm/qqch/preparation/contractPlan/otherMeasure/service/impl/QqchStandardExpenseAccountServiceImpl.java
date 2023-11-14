@@ -37,13 +37,11 @@ public class QqchStandardExpenseAccountServiceImpl implements IQqchStandardExpen
     @Override
     @Transactional
     public List<QqchStandardExpenseAccount> getQqchStandardExpenseAccountList(QqchStandardExpenseAccount qqchStandardExpenseAccount) {
-        List<QqchStandardExpenseAccount> list = qqchStandardExpenseAccountMapper.getQqchStandardExpenseAccountList(qqchStandardExpenseAccount);
-
-        if(CollectionUtils.isEmpty(list)){
-            //初始化数据
+        List<QqchStandardExpenseAccount> qqchStandardExpenseAccountList = qqchStandardExpenseAccountMapper.getQqchStandardExpenseAccountList(new QqchStandardExpenseAccount());
+        if(CollectionUtils.isEmpty(qqchStandardExpenseAccountList)){
             this.init();
-            list = qqchStandardExpenseAccountMapper.getQqchStandardExpenseAccountList(qqchStandardExpenseAccount);
         }
+        List<QqchStandardExpenseAccount> list = qqchStandardExpenseAccountMapper.getQqchStandardExpenseAccountList(qqchStandardExpenseAccount);
 
         //转树列表
         List<QqchStandardExpenseAccount> treeList = ListTreeUtil.formatTree(
