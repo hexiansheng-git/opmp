@@ -80,12 +80,12 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
 
     @Override
     public BigDecimal effectVersion() {
-        final String key = "qqchValidVersion";
+        final String key = "qqchValidVersion::"+SecurityUtils.getTenantKey();
         if(redisUtils.hasKey(key)){
             return ObjectUtils.nvlBigDecimal(redisUtils.get(key),BigDecimal.ONE);
         }
         BigDecimal version =qqchChangeMapper.effectVersion();
-        version = ObjectUtils.nvlBigDecimal(version,BigDecimal.ONE)
+        version = ObjectUtils.nvlBigDecimal(version,BigDecimal.ONE);
         redisUtils.setAndExpire(key,version+"",1, TimeUnit.HOURS);
         return version;
     }
