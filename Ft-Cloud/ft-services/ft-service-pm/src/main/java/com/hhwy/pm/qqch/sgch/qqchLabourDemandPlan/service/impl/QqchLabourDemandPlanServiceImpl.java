@@ -442,4 +442,9 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         }
         return arrayList;
     }
+
+    @Override
+    public List<Map> getWorkTeamList() {
+        return qqchLabourDemandPlanMapper.getWorkTeamList();
+    }
 }

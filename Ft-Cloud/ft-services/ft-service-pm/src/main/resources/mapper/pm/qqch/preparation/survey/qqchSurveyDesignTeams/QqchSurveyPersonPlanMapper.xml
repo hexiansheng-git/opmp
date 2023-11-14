@@ -147,7 +147,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="version != null "> and `version` = #{version}</if>
                             <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
                     </where>
-        order by create_time desc
+        order by job_number
     </select>
 
     <insert id="insertQqchSurveyPersonPlan"  useGeneratedKeys="true" keyProperty="id"  >

@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.diff.track.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -389,8 +390,7 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         BigDecimal planMathTotalTimeDiff = BigDecimal.valueOf(sumTotalFloat(mainPlanItemList));
         jdglProgressCorrectionTrack.setPlanMathTotalTimeDiff(planMathTotalTimeDiff);
         // 季度产值计划完成百分比
-        BigDecimal quarterValuePlanCompletePercentage = BigDecimalUtils.divide0(actAmt, planAmt, 4)
-            .multiply(new BigDecimal(100));
+        BigDecimal quarterValuePlanCompletePercentage = BigDecimalUtils.divide0(actAmt, planAmt, 4).multiply(new BigDecimal(100));
         jdglProgressCorrectionTrack.setQuarterValuePlanCompletePercentage(quarterValuePlanCompletePercentage);
         // 关键线路形象完成百分比 todo
         jdglProgressCorrectionTrack.setKeyLineImageCompletePercentage(BigDecimal.ZERO);
@@ -407,7 +407,14 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         JdglProgressCorrectionTrack param = new JdglProgressCorrectionTrack();
         param.setPeriod(jdglProgressCorrectionTrack.getPeriod());
         param.setWeekReportPeriod(jdglProgressCorrectionTrack.getWeekReportPeriod());
-        jdglProgressCorrectionTrackMapper.deleteJdglProgressCorrectionTrack(param);
+        List<JdglProgressCorrectionTrack> resultList = jdglProgressCorrectionTrackMapper.getJdglProgressCorrectionTrackList(param);
+        if (CollectionUtil.isNotEmpty(resultList)) {
+            jdglProgressCorrectionTrackMapper.deleteJdglProgressCorrectionTrack(param);
+            JdglProgressCorrectionTrackDetail param1 = new JdglProgressCorrectionTrackDetail();
+            param1.setTrackId(trackId);
+            jdglProgressCorrectionTrackDetailService.deleteJdglProgressCorrectionTrackDetail(param1);
+        }
+
         jdglProgressCorrectionTrackMapper.insertJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
 
         List<JdglProgressCorrectionTrackDetail> trackDetailList = new ArrayList<>();

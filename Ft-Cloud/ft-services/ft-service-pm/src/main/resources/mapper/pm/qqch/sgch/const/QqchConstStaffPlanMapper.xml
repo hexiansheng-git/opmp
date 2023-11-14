@@ -164,7 +164,7 @@
                 #{codeOrName},'%' ) )
             </if>
         </where>
-        order by create_time desc
+        order by occupation_code
     </select>
 
     <insert id="insertQqchConstStaffPlan" useGeneratedKeys="true" keyProperty="id">

@@ -37,4 +37,7 @@ public interface QqchLabourDemandPlanMapper {
     QqchLabourDemandPlan getQqchLabourDemandPlan2(QqchLabourDemandPlan qqchLabourDemandPlan);
 
     Map<String, Integer> personNumCalc(QqchLabourDemandPlan qqchLabourDemandPlanParam);
+
+    List<Map> getWorkTeamList();
+
 }
