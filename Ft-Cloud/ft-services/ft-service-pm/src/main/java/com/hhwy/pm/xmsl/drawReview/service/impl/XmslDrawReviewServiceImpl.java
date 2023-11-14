@@ -221,7 +221,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         List<XmslDrawReviewList> relationlist = xmslDrawReviewMapper.relationListCode(queryList);
         if(CollectionUtils.isEmpty(relationlist)){
             if(ObjectUtils.nvl(version) == 1)  //加载默认wbs
-                return getByListCodes(wbsCode);
+                return getDefaultListRelation(wbsCode);
             return new ArrayList<>();
         }
         mainId = relationlist.get(0).getMainId(); //获取最大版本
@@ -262,7 +262,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         return list;
     }
 
-    private List<XmslDrawReviewList> getByListCodes(String wbsCode){
+    @Override
+    public List<XmslDrawReviewList> getDefaultListRelation(String wbsCode){
         String[] listCodes = WbsRedisUtils.getListCodeByWbsCode(wbsCode);
         if(ArrayUtils.isEmpty(listCodes))
             return new ArrayList<>();
@@ -280,7 +281,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         return resuList;
     }
 
-    private List<XmslDrawReviewWbs> getDefaultWbs(String listCode){
+    @Override
+    public List<XmslDrawReviewWbs> getDefaultWbsRelation(String listCode){
         String[] wbsCodes = WbsRedisUtils.getWbsCodeByListCode(listCode);
         if(ArrayUtils.isEmpty(wbsCodes))
             return new ArrayList<>();
@@ -316,7 +318,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         List<XmslDrawReviewList> relationlist = xmslDrawReviewMapper.relationListCode(queryList);
         if(CollectionUtils.isEmpty(relationList)){
             if(ObjectUtils.nvl(version) == 1)  //加载默认wbs
-                return getDefaultWbs(listCode);
+                return getDefaultWbsRelation(listCode);
             return new ArrayList<>();
         }
         mainId = relationlist.get(0).getMainId(); //获取最大版本

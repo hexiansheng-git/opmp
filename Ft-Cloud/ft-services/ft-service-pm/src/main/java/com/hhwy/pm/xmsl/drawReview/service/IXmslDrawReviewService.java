@@ -1,13 +1,20 @@
 package com.hhwy.pm.xmsl.drawReview.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewSourceMaterial;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
 import com.hhwy.pm.xmsl.drawReview.dto.XmslDrawReviewDto;
+import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
+import com.hhwy.utils.AddBaseInfoUtil;
+import org.apache.commons.collections4.SetUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.beans.BeanUtils;
 
 /**
  * @author wk
@@ -69,6 +76,11 @@ public interface IXmslDrawReviewService {
      * @return
      */
     List<XmslDrawReviewWbs> relationList(Integer version, Long mainId, String listCode, Long listId);
+
+    
+    public List<XmslDrawReviewList> getDefaultListRelation(String wbsCode);
+
+    public List<XmslDrawReviewWbs> getDefaultWbsRelation(String listCode);
 
     /**
      * 保存
