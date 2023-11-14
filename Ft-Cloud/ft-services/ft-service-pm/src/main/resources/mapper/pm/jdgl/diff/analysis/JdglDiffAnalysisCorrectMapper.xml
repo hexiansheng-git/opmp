@@ -12,7 +12,7 @@
         <result property="firstTypeValue" column="first_type_value"/>
         <result property="secondType" column="second_type"/>
         <result property="grade" column="grade"/>
-        <result property="sort" column="sortsort"/>
+        <result property="sort" column="sort"/>
         <result property="isSelect" column="is_select"/>
         <result property="fileGroupId" column="file_group_id"/>
         <result property="remark" column="remark"/>
