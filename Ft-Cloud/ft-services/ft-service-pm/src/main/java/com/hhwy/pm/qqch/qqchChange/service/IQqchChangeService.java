@@ -4,6 +4,7 @@ import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
 import com.hhwy.pm.qqch.qqchChange.vo.QqchChangeVo;
 import com.hhwy.system.api.domain.SysMenu;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -13,6 +14,12 @@ import java.util.List;
  * @remark
  */
 public interface IQqchChangeService {
+
+    /**
+     * 获取最新版version
+     * @return
+     */
+    BigDecimal effectVersion();
 
     QqchChange getQqchChange(QqchChange qqchChange);
 
@@ -45,6 +52,19 @@ public interface IQqchChangeService {
      * @param businessId
      */
     void editingFinishFlow(Long businessId);
+
+    /**
+     * 评审人审批通过后触发
+     * 更新子表评审完成时间
+     * @param businessId
+     */
+    void reviewFinishFlow(Long businessId);
+    /**
+     * 全部评审人审批通过后触发
+     * 更新主表评审完成时间
+     * @param businessId
+     */
+    void reviewAllFinishFlow(Long businessId);
 
     /**
      * 前期策划变更权限菜单
