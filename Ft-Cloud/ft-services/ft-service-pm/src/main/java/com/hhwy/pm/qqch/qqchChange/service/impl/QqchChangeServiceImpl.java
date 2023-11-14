@@ -20,6 +20,7 @@ import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysMenu;
@@ -67,6 +68,8 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
     private SystemServiceApi systemServiceApi;
     @Autowired
     private IQqchWorkPlanDetailService workPlanDetailService;
+    @Autowired
+    private IXmslContractInfoService contractInfoService;
 
 
     public QqchChange getQqchChange(QqchChange qqchChange) {
@@ -106,7 +109,6 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         change.setValid(Constant.NO_INT);
         change.setProjectCode(SecurityUtils.getTenantKey());
         change.setProjectName(projectBasicInfo.getProjectName());
-
         BigDecimal maxVersion = VersionUtil.getMaxVersion(FlowEnum.QQCH_CHANGE.getTableName());
         maxVersion = maxVersion.compareTo(BigDecimal.ONE)==0?new BigDecimal("2.0"):maxVersion;
         change.setVersion(maxVersion);
@@ -266,7 +268,7 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
 
         List<QqchChangeDetail> detailList = TreeUtil.treeToList(vo.getDetailList());
         Assert.notEmpty(detailList,"工作安排格式不正确，解析结果为空");
-        if(StringUtils.isNotBlank(vo.getSubmitFlag())){
+        if(StringUtils.equals(vo.getSubmitFlag(),"1")){
             JyDetailsUtil.jyDetails(Arrays.asList(vo),ValidationGroups.Save.class);
             int editingNum = 0;
             //若为提交，工作安排至少得有一个编制内容、校验编制人、计划完成日期
@@ -282,8 +284,44 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
                 Assert.notNull(temp.getFinishTimeFirst(),"工作安排，"+temp.getItemName()+":计划完成日期不能为空");
             }
             Assert.isTrue(editingNum>0,"工作安排至少得有一个编制内容项!");
+            //设置变更提交时间
+            vo.setChangeSubmitDate(new Date());
         }
         return detailList;
+    }
+
+    @Override
+    @Transactional
+    public void finishFlow(Long businessId) {
+        Assert.notNull(businessId,"业务ID不能为空");
+        QqchChange query = new QqchChange();
+        query.setId(businessId);
+        QqchChange qqchChange = this.getQqchChange(query);
+        Assert.notNull(qqchChange,"获取前期策划变更失败");
+        //1 修改valid
+        query.setValid(Constant.YES_INT);
+        new AddBaseInfoUtil<>().update(query);
+        this.qqchChangeMapper.updateQqchChange(query);
+    }
+
+    @Override
+    @Transactional
+    public void editingFinishFlow(Long businessId) {
+        Assert.notNull(businessId,"业务ID不能为空");
+        QqchChange query = new QqchChange();
+        query.setId(businessId);
+        QqchChange qqchChange = this.getQqchChange(query);
+        Assert.notNull(qqchChange,"获取前期策划变更失败");
+        //1 获取
+        QqchChangeDetail qqchChangeDetail = new QqchChangeDetail();
+        qqchChangeDetail.setMainId(businessId);
+        qqchChangeDetail.setEditorFirst(SecurityUtils.getUserId());
+        qqchChangeDetail.setPtVar1("1");
+        Integer count = this.qqchChangeMapper.countEditQqchChangeDetail(qqchChangeDetail);
+        if(count < 1)
+            return;
+        query.setFinishNum(count);
+        qqchChangeMapper.updateSubFinishNum(query);
     }
 
     @Override

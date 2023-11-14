@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.bean.BeanUtils;
 import com.hhwy.domain.base.system.material.MaterialInfo;
 import com.hhwy.enums.FlowEnum;
@@ -151,6 +152,31 @@ public class XmslDrawReviewController extends BaseController{
             e.printStackTrace();
         }finally {
             logger.debug("获取清单的挂接数据耗时:{},mainId:{},wbsId:{}",System.currentTimeMillis()-beginMills,dto.getMainId(),dto.getWbsId());
+        }
+        return AjaxResult.success(new ArrayList<>(2));
+    }
+
+
+    /**
+     * 加载项目WbS的wbs|清单挂接关系
+     * @param dto
+     * @return
+     */
+    @PostMapping("/defaultRelationList")
+    public AjaxResult defaultRelationList(@RequestBody XmslDrawReviewDto dto){
+        try{
+            List list = null;
+            if(StringUtils.isNotBlank(dto.getWbsCode())){
+                list = xmslDrawReviewService.getDefaultListRelation(dto.getWbsCode());
+            }else if(StringUtils.isNotBlank(dto.getListCode())){
+                list = xmslDrawReviewService.getDefaultWbsRelation(dto.getListCode());
+            }else{
+                return AjaxResult.error("参数有误，必须传入wbsCode或listCode");
+            }
+            return AjaxResult.success(list);
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
         }
         return AjaxResult.success(new ArrayList<>(2));
     }

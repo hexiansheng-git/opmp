@@ -292,6 +292,24 @@ public class FtDateUtils extends DateUtils {
         return diff / nd;
     }
 
+    public static long getDiffDays(Date startDate, Date endDate){
+        Date startFormat = getFormatDate(startDate);
+        Date endFormat = getFormatDate(endDate);
+        if(startFormat == null || endFormat == null){
+            return 0;
+        }
+        return getDays(startFormat,endFormat);
+    }
+
+    public static boolean dateFormatCompareTo(Date date1,Date date2){
+        Date startFormat = getFormatDate(date1);
+        Date endFormat = getFormatDate(date2);
+        if(startFormat == null || endFormat == null){
+            return false;
+        }
+        return endFormat.compareTo(startFormat) >= 0;
+    }
+
     /**
      * 指定日期 加 *年
      *

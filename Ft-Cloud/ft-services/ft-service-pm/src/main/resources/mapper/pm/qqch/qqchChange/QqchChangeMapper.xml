@@ -171,10 +171,13 @@
         <if test="id != null"> and id != #{id} </if>
     </select>
     <!-- 编制内容为是的明细数量 -->
-    <select id="countEditQqchChangeDetail" resultType="Integer" parameterType="Long">
+    <select id="countEditQqchChangeDetail" resultType="Integer" parameterType="com.hhwy.pm.qqch.qqchChange.domain.QqchChangeDetail">
         select count(1) from qqch_change_detail where del_flag =0 and is_first = 1
         <if test="mainId != null"> and main_id = #{mainId} </if>
+        <if test="editorFirst != null"> and editor_first = #{editorFirst} </if>
+        <if test="ptVar1 != null"> and pt_var1 = #{ptVar1} </if>
     </select>
+
 
     <select id="countUnValidReview" resultType="Integer">
         select count(1) from qqch_review where del_flag =0 and task_status != 4
@@ -368,7 +371,7 @@
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
         </trim>
         <where>
-            <if test="id != null ">and `id` = #{id}</if>
+           `id` = #{id}
         </where>
     </update>
 
@@ -545,6 +548,11 @@
         <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
+    </update>
+
+    <update id="updateSubFinishNum">
+        update qqch_change set finish_num = ifnull(finish_num,0)+#{finishNum},edit_finish_date=now()
+        where `id` = #{id}
     </update>
 
     <update id="deleteQqchChange">

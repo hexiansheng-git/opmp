@@ -47,7 +47,7 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
         List<JdglCorrectionMeasuresMakeDetail> jdglCorrectionMeasuresMakeDetailList) {
         for (JdglCorrectionMeasuresMakeDetail jdglCorrectionMeasuresMakeDetail : jdglCorrectionMeasuresMakeDetailList) {
 //            jdglCorrectionMeasuresMakeDetail.setId(IdWorker.createId());
-            jdglCorrectionMeasuresMakeDetail.setCreateUser(SecurityUtils.getUserName());
+//            jdglCorrectionMeasuresMakeDetail.setCreateUser(SecurityUtils.getUserName());
             jdglCorrectionMeasuresMakeDetail.setCreateTime(DateUtils.getNowDate());
         }
         return jdglCorrectionMeasuresMakeDetailMapper

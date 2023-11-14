@@ -10,17 +10,27 @@ import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
 import com.hhwy.pm.qqch.qqchChange.service.IQqchChangeService;
 import com.hhwy.pm.qqch.qqchChange.vo.QqchChangeVo;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysMenu;
 import com.hhwy.system.api.domain.SysUser;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 前期策划变更
@@ -35,6 +45,10 @@ public class QqchChangeController extends BaseController {
 
     @Autowired
     private IQqchChangeService qqchChangeService;
+    @Autowired
+    private IXmslContractInfoService contractInfoService;
+    @Autowired
+    private IXmslProjectBasicInfoService projectBasicInfoService;
 
     @PreAuthorize(hasPermi = "qqchChange:list")
     @PostMapping("/list")
@@ -68,7 +82,20 @@ public class QqchChangeController extends BaseController {
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchChangeVo vo) {
         qqchChangeService.save(vo);
-        return AjaxResult.success("",vo.getId());
+        Map resuMap = new HashMap<>();
+        resuMap.put("id",vo.getId());
+        if(!StringUtils.equals(vo.getSubmitFlag(),"1"))
+            return AjaxResult.success("",resuMap);
+        //如果为提交，返回合同金额、项目分类
+        XmslContractInfo contractInfo = contractInfoService.getValidMaxVersionContractInfo();
+        //获取有效金额万美元
+        contractInfoService.setEffectiveAmountDollar(contractInfo);
+        ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+        resuMap.put("projectCategory",projectBasicInfo.getProjectCategory());
+        resuMap.put("amount", ObjectUtils.nvlBigDecimal(contractInfo.getEffectiveAmountDollar()).divide(new BigDecimal(10000),4, RoundingMode.HALF_UP));
+        return AjaxResult.success("",resuMap);
+
+
     }
 
     @PreAuthorize(hasPermi = "qqchChange:remove")
@@ -95,4 +122,29 @@ public class QqchChangeController extends BaseController {
         List<SysMenu> list = qqchChangeService.authMenuList(mainId,authFlag);
         return AjaxResult.success(list);
     }
+
+    /**
+     * 编制人编辑节点提交触发
+     * 修改编制完成数量
+     * @param businessId
+     * @return
+     */
+    @PostMapping("/editFinishListener")
+    public AjaxResult editFinishListener(@RequestParam("id") Long businessId){
+        qqchChangeService.editingFinishFlow(businessId);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 流程结束后触发
+     * @param businessId
+     * @return
+     */
+    @PostMapping("/listener")
+    public AjaxResult listener(@RequestParam("id") Long businessId){
+        qqchChangeService.finishFlow(businessId);
+        return AjaxResult.success();
+    }
+
+
 }

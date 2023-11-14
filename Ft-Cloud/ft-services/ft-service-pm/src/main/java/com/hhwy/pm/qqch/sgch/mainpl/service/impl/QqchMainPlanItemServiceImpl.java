@@ -140,7 +140,7 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
                 Integer plannedDuration = StatisticsUtils.getDaysByRangeDate(start_date, end_date);
                 qqchMainPlanItem1.setDuration(new BigDecimal(plannedDuration));
 
-                qqchMainPlanItem1.setOpen(true);
+                qqchMainPlanItem1.setOpen(false);
 //                qqchMainPlanItem1.setType("task");
 
                 // 实际开始

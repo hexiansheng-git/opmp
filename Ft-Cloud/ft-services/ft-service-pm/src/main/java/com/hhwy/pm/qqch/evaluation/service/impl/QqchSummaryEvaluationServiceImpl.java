@@ -142,10 +142,10 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
                     if (projectInitialInspectionDate == null) {
                         continue;
                     }
-                    diffDays = FtDateUtils.getDays(projectInitialInspectionDate, nowDate);
+                    diffDays = FtDateUtils.getDiffDays(projectInitialInspectionDate, nowDate);
 
                     // 项目初验时间超过10天，预警
-                    if (diffDays > 10) {
+                    if (diffDays >= 10) {
                         if (qqchSummaryEvaluation == null) {
                             // 发送预警
                             warnService.addWarn(WarnItem.SUMMARY, WarnScopeType.USER, null, "admin", tenantKey);

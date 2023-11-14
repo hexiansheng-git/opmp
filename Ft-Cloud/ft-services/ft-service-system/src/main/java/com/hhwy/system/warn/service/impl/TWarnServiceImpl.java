@@ -65,6 +65,7 @@ public class TWarnServiceImpl implements ITWarnService {
     @Override
     @Transactional
     public int addWarn(TWarn tWarn) {
+        tWarn.setWarnId(IdWorker.createId());
         tWarn.setCreateUser("admin");
         tWarn.setCreateTime(DateUtils.getNowDate());
         int result = tWarnMapper.insertTWarn(tWarn);
@@ -143,6 +144,7 @@ public class TWarnServiceImpl implements ITWarnService {
             if (record.getWarnUserName() == null) {
                 record.setWarnUserName(userName);
             }
+            record.setId(IdWorker.createId());
             record.setCreateTime(warn.getCreateTime());
             record.setCreateUser(warn.getCreateUser());
             return tWarnRecordMapper.insertTWarnRecord(record);

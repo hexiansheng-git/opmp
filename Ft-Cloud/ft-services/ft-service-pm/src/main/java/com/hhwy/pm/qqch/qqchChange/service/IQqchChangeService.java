@@ -35,6 +35,18 @@ public interface IQqchChangeService {
     void save(QqchChangeVo vo);
 
     /**
+     * 流程结束触发
+     * @param businessId
+     */
+    void finishFlow(Long businessId);
+
+    /**
+     * 编制人审批通过后触发（变更内容调整节点）
+     * @param businessId
+     */
+    void editingFinishFlow(Long businessId);
+
+    /**
      * 前期策划变更权限菜单
      * @param mainId
      * @param authFlag  传1获取权限菜单，否则获取全部

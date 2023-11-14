@@ -284,8 +284,8 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
     @Transactional
     public int deleteJdglDiffAnalysis(JdglDiffAnalysis jdglDiffAnalysis) {
-        jdglDiffAnalysis.setUpdateUser(SecurityUtils.getUserName());
-        jdglDiffAnalysis.setUpdateTime(DateUtils.getNowDate());
+//        jdglDiffAnalysis.setUpdateUser(SecurityUtils.getUserName());
+//        jdglDiffAnalysis.setUpdateTime(DateUtils.getNowDate());
         return jdglDiffAnalysisMapper.deleteJdglDiffAnalysis(jdglDiffAnalysis);
     }
 
@@ -331,7 +331,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
     @Transactional
     public void initDiffData() {
         JdglDiffAnalysis jdglDiffAnalysis = new JdglDiffAnalysis();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //        Date nowDate = null;
 //        try {
 //            nowDate = simpleDateFormat.parse("2023-10-20");
@@ -339,6 +339,9 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 //            e.printStackTrace();
 //        }
         Date nowDate = FtDateUtils.getYearMonthDate(new Date());
+
+        deleteDiffAnalysisByPeriod(nowDate);
+
         jdglDiffAnalysis.setId(IdWorker.createId());
         jdglDiffAnalysis.setPeriod(nowDate);
         jdglDiffAnalysis.setCreateTime(nowDate);
@@ -514,13 +517,32 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
         if(count > 0) {
             int i = updateJdglDiffAnalysis(jdglDiffAnalysis);
-            if(i > 0) {
-                if(jdglDiffAnalysis.getRiskLevel() != null) {
-                    Date period = jdglDiffAnalysis.getPeriod();
-                    jdglCorrectionMeasuresMakeService.syncData(period);
-                }
-            }
+//            if(i > 0) {
+//                if(jdglDiffAnalysis.getRiskLevel() != null) {
+//                    Date period = jdglDiffAnalysis.getPeriod();
+//                    jdglCorrectionMeasuresMakeService.syncData(period);
+//                }
+//            }
         }
+    }
+
+    @Override
+    public int deleteDiffAnalysisByPeriod(Date period) {
+        if(period == null) {
+            return 0;
+        }
+
+        JdglDiffAnalysis query = new JdglDiffAnalysis();
+        query.setPeriod(period);
+        JdglDiffAnalysis jdglDiffAnalysis = jdglDiffAnalysisMapper.getJdglDiffAnalysis(query);
+        if(jdglDiffAnalysis != null) {
+            Long id = jdglDiffAnalysis.getId();
+            iJdglDiffAnalysisSvService.deleteJdglDiffAnalysisSvByDiffAnalysisId(id);
+            iJdglDiffAnalysisCorrectService.deleteJdglDiffAnalysisCorrectByDiffAnalysisId(id);
+            jdglDiffAnalysisPathService.deleteJdglDiffAnalysisPathByDiffAnalysisId(id);
+        }
+
+        return deleteJdglDiffAnalysis(jdglDiffAnalysis);
     }
 
 }
