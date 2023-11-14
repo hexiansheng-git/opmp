@@ -174,6 +174,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
 
         BigDecimal thisTotalPlanAmt = new BigDecimal(0);
         BigDecimal thisTotalActAmt = new BigDecimal(0);
+        String users = "";
 
         Calendar cl = Calendar.getInstance();
 
@@ -214,6 +215,20 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
 //                jdglDiffAnalysisSv.setActStartDate(jdglMonthImagePlan.getCreateTime());
                 jdglDiffAnalysisSv.setActEndDate(jdglMonthImagePlan.getPlanEndDate());
 
+                // 处理作业责任人给总部推送预警用
+                String responsePersonId = jdglMonthImagePlan.getResponsePersonId();
+                jdglDiffAnalysisSv.setPtVar2(responsePersonId);
+                if(StringUtils.isNotEmpty(responsePersonId)) {
+                    String[] split = users.split(",");
+                    String userId = "";
+                    if(split.length > 0) {
+                        userId = Arrays.stream(split).filter(str -> str.equals(responsePersonId)).findFirst().orElse(null);
+                    }
+                    if(StringUtils.isEmpty(userId)) {
+                        users = "".equals(users) ? responsePersonId : "," + responsePersonId;
+                    }
+                }
+
                 if(!CollectionUtils.isEmpty(wbsListByDateRange)) {
                     JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = wbsListByDateRange.stream().filter(vo -> StringUtils.isNotEmpty(vo.getWbsCode()) && vo.getWbsCode().equals(jdglMonthImagePlan.getWorkCode())).findFirst().orElse(null);
                     if(jdglDayScheduleWbs4Value != null) {
@@ -252,6 +267,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
         }
 
         jdglDiffAnalysis.setTotalCompValue(thisTotalActAmt);
+        jdglDiffAnalysis.setPtVar2(users);
 
         if(new BigDecimal(0).compareTo(thisTotalPlanAmt) == 0) {
             return new BigDecimal(0);
