@@ -85,8 +85,9 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
             return ObjectUtils.nvlBigDecimal(redisUtils.get(key),BigDecimal.ONE);
         }
         BigDecimal version =qqchChangeMapper.effectVersion();
+        version = ObjectUtils.nvlBigDecimal(version,BigDecimal.ONE)
         redisUtils.setAndExpire(key,version+"",1, TimeUnit.HOURS);
-        return ObjectUtils.nvlBigDecimal(version,BigDecimal.ONE);
+        return version;
     }
     @Override
     public List<QqchChange> list(QqchChange qqchChange) {
