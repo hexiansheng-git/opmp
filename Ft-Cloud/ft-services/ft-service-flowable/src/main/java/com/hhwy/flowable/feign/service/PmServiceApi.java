@@ -115,4 +115,16 @@ public interface PmServiceApi {
      */
     @RequestMapping(value = "/qqchChange/listener", method = RequestMethod.POST)
     AjaxResult qqchChangeFinish(@RequestParam("id") Long id);
+
+    /**
+     * 前期策划单个评审人审批完成
+     */
+    @PostMapping(value = "/qqchChange/reviewFinishListener")
+    AjaxResult reviewFinishListener(@RequestParam("id") Long id);
+
+    /**
+     * 前期策划所有评审人审批完成
+     */
+    @PostMapping(value = "/qqchChange/reviewAllFinishListener")
+    AjaxResult reviewAllFinishListener(@RequestParam("id") Long id);
 }

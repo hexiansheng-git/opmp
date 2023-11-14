@@ -415,13 +415,16 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         for (XmslContractList contractList : list) {
             String code = contractList.getCode();
             StringBuilder wbsCodes = new StringBuilder();
+            StringBuilder wbsNames = new StringBuilder();
             BigDecimal listCheckNum = BigDecimal.ZERO;
 
             for (XmslDrawReviewList drawReviewList : drawReviewListList) {
                 if(code.equals(drawReviewList.getListCode())){
                     String wbsCode = drawReviewList.getWbsCode();
+                    String wbsName = drawReviewList.getWbsCode();
                     if(StringUtils.isNotBlank(wbsCode)){
                         wbsCodes.append(wbsCode).append(",");
+                        wbsNames.append(wbsName).append(",");
                     }
 
                     BigDecimal checkNum = drawReviewList.getCheckNum();
@@ -432,6 +435,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
             }
 
             contractList.setWbsCodes(wbsCodes.toString());
+            contractList.setWbsNames(wbsNames.toString());
             contractList.setListCheckNum(listCheckNum);
         }
     }

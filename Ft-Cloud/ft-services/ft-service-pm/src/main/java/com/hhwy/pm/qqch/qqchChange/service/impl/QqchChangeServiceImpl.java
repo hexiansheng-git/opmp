@@ -31,6 +31,7 @@ import com.hhwy.utils.PlatMenuTreeUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
@@ -46,6 +47,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -69,13 +71,23 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
     @Autowired
     private IQqchWorkPlanDetailService workPlanDetailService;
     @Autowired
-    private IXmslContractInfoService contractInfoService;
+    private RedisUtils redisUtils;
 
 
     public QqchChange getQqchChange(QqchChange qqchChange) {
         return qqchChangeMapper.getQqchChange(qqchChange);
     }
 
+    @Override
+    public BigDecimal effectVersion() {
+        final String key = "qqchValidVersion";
+        if(redisUtils.hasKey(key)){
+            return ObjectUtils.nvlBigDecimal(redisUtils.get(key),BigDecimal.ONE);
+        }
+        BigDecimal version =qqchChangeMapper.effectVersion();
+        redisUtils.setAndExpire(key,version+"",1, TimeUnit.HOURS);
+        return ObjectUtils.nvlBigDecimal(version,BigDecimal.ONE);
+    }
     @Override
     public List<QqchChange> list(QqchChange qqchChange) {
         List<QqchChange> list = qqchChangeMapper.getQqchChangeList(qqchChange);
@@ -110,7 +122,7 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         change.setProjectCode(SecurityUtils.getTenantKey());
         change.setProjectName(projectBasicInfo.getProjectName());
         BigDecimal maxVersion = VersionUtil.getMaxVersion(FlowEnum.QQCH_CHANGE.getTableName());
-        maxVersion = maxVersion.compareTo(BigDecimal.ONE)==0?new BigDecimal("2.0"):maxVersion;
+        maxVersion = maxVersion.compareTo(BigDecimal.ONE)==0?new BigDecimal("2.0"):maxVersion.add(BigDecimal.ONE);
         change.setVersion(maxVersion);
         change.setChangeUser(SecurityUtils.getUserId());
         change.setChangeUserName(SecurityUtils.getSysUser().getNickName());
@@ -131,6 +143,7 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         //
         List<QqchChangeDetail> detailList = loadDetail(change.getVersion());
         vo.setDetailList(detailList);
+        vo.setProjectCode(SecurityUtils.getTenantKey());
         return vo;
     }
 
@@ -302,6 +315,9 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         query.setValid(Constant.YES_INT);
         new AddBaseInfoUtil<>().update(query);
         this.qqchChangeMapper.updateQqchChange(query);
+        //version 扔redis
+        final String key = "qqchValidVersion";
+        redisUtils.setAndExpire(key,qqchChange.getVersion()+"",1, TimeUnit.HOURS);
     }
 
     @Override
@@ -322,6 +338,39 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
             return;
         query.setFinishNum(count);
         qqchChangeMapper.updateSubFinishNum(query);
+    }
+
+    @Override
+    @Transactional
+    public void reviewFinishFlow(Long businessId) {
+        QqchChange qqchChange= getWithValid(businessId);
+        //1 获取
+        QqchChangeDetail qqchChangeDetail = new QqchChangeDetail();
+        qqchChangeDetail.setMainId(businessId);
+        qqchChangeDetail.setReviewerId(SecurityUtils.getUserId());
+        List<QqchChangeDetail> list = detailService.getQqchChangeDetailList(qqchChangeDetail);
+        if(CollectionUtils.isEmpty(list))
+            return ;
+        List<Long> idList = list.stream().map(r->r.getId()).collect(Collectors.toList());
+        qqchChangeMapper.updateReviewFinishTime(idList);
+    }
+
+    @Override
+    @Transactional
+    public void reviewAllFinishFlow(Long businessId) {
+        QqchChange change= getWithValid(businessId);
+        change.setReviewFinishDate(new Date());
+        this.qqchChangeMapper.updateQqchChange(change);
+    }
+
+
+    private QqchChange getWithValid(Long businessId){
+        Assert.notNull(businessId,"业务ID不能为空");
+        QqchChange query = new QqchChange();
+        query.setId(businessId);
+        QqchChange qqchChange = this.getQqchChange(query);
+        Assert.notNull(qqchChange,"获取前期策划变更失败");
+        return qqchChange;
     }
 
     @Override
