@@ -273,7 +273,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
             return new BigDecimal(0);
         }
 
-        return thisTotalActAmt.subtract(thisTotalPlanAmt).divide(thisTotalPlanAmt, 4, BigDecimal.ROUND_HALF_UP);
+        return thisTotalActAmt.subtract(thisTotalPlanAmt).divide(thisTotalPlanAmt, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
     }
 
     @Override

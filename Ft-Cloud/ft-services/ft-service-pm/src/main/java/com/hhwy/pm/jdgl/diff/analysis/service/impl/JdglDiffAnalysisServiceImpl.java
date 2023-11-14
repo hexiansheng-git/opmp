@@ -153,7 +153,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         }
         BigDecimal sumMin = null;
         if(totalMeterValue != null && totalCompValue != null && BigDecimal.ZERO.compareTo(totalCompValue) != 0) {
-            sumMin = totalMeterValue.divide(totalCompValue, 2, BigDecimal.ROUND_HALF_UP);
+            sumMin = totalMeterValue.divide(totalCompValue, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
         }
 
         // 调取获取进度差异化管控策划列表接口
