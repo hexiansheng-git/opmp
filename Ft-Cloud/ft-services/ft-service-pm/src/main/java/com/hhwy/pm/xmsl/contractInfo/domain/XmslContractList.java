@@ -301,6 +301,10 @@ public class XmslContractList extends BaseEntity {
      */
     private String wbsCodes;
     /**
+     * 字段描述：所属wbs编码
+     */
+    private String wbsNames;
+    /**
      * 字段描述：清单复核数量
      */
     private BigDecimal  listCheckNum;
