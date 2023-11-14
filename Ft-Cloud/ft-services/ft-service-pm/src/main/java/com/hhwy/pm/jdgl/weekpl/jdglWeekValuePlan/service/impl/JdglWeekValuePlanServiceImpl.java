@@ -6,6 +6,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.domain.JdglDayScheduleBill;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.service.IJdglDayScheduleBillService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
+import com.hhwy.pm.jdgl.statistics.util.TreeCountUtils;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.domain.JdglWeekImagePlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.service.IJdglWeekImagePlanService;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
@@ -262,6 +263,8 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
                         if(valuePlan1 != null) valuePlan.setPid(valuePlan1.getId());
                     }
                     deleteJdglWeekValuePlanByPlanId(planId);
+                    TreeCountUtils<JdglWeekValuePlan> treeCountUtils = new TreeCountUtils<>();
+                    treeCountUtils.upCountValue(returnList, "WeekPlanValueCu");
                     insertJdglWeekValuePlanList(returnList);
                 }
             }

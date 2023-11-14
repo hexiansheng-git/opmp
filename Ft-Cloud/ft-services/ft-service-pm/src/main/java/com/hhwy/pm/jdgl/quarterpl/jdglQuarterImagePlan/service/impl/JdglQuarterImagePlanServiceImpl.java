@@ -15,6 +15,7 @@ import com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.service.IJdglQuarterImage
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.domain.JdglQuarterPlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.service.IJdglQuarterValuePlanService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
+import com.hhwy.pm.jdgl.statistics.util.TreeCountUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
@@ -140,6 +141,8 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
                 jdglQuarterImagePlan.setPlanCompValue(compValue);
             }
         }
+        TreeCountUtils<JdglQuarterImagePlan> treeCountUtils = new TreeCountUtils<>();
+        treeCountUtils.upCountValue(jdglQuarterImagePlanList, "planCompValue");
         jdglQuarterValuePlanService.updateValuePlanData(planId, jdglQuarterImagePlanList);
         return jdglQuarterImagePlanMapper.insertJdglQuarterImagePlanList(jdglQuarterImagePlanList);
     }
@@ -199,6 +202,8 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
                     jdglQuarterImagePlan.setPlanCompValue(compValue);
                 }
             }
+            TreeCountUtils<JdglQuarterImagePlan> treeCountUtils = new TreeCountUtils<>();
+            treeCountUtils.upCountValue(jdglQuarterImagePlanList, "planCompValue");
             deleteJdglQuarterImagePlanByPlanId(planId);
             jdglQuarterValuePlanService.updateValuePlanData(planId, jdglQuarterImagePlanList);
             return jdglQuarterImagePlanMapper.insertJdglQuarterImagePlanList(jdglQuarterImagePlanList);

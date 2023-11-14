@@ -13,6 +13,7 @@ import com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.domain.JdglMonthValuePlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.mapper.JdglMonthValuePlanMapper;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.service.IJdglMonthValuePlanService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
+import com.hhwy.pm.jdgl.statistics.util.TreeCountUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
@@ -260,6 +261,8 @@ public class JdglMonthValuePlanServiceImpl implements IJdglMonthValuePlanService
                         JdglMonthValuePlan valuePlan1 = returnList.stream().filter(vo -> vo.getInventoryId().equals(valuePlan.getInventoryPid())).findFirst().orElse(null);
                         if(valuePlan1 != null) valuePlan.setPid(valuePlan1.getId());
                     }
+                    TreeCountUtils<JdglMonthValuePlan> treeCountUtils = new TreeCountUtils<>();
+                    treeCountUtils.upCountValue(returnList, "monthPlanValueCu");
                     deleteJdglMonthValuePlanByPlanId(planId);
                     insertJdglMonthValuePlanList(returnList);
                 }
