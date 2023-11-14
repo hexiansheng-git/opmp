@@ -25,15 +25,16 @@ import com.hhwy.utils.core.DateUtil;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author zhenglili
@@ -232,8 +233,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         XmslContractInfo contractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
 
         // 获取总体计划, 获取当月数据
-        List<JdglMainPlanItem> mainPlanItemListTree = jdglMainPlanItemService
-            .getUsingJdglMainPlanItemListByDateRange(firstDay, lastDay);
+        List<JdglMainPlanItem> mainPlanItemListTree = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(firstDay, lastDay);
         // 树转列表
         List<JdglMainPlanItem> mainPlanItemList = TreeUtil.treeToList(mainPlanItemListTree);
 
@@ -245,8 +245,8 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         jdglCorrectionMeasuresMake.setWarnTime(FtDateUtils.getYearMonthDayDate());
         jdglCorrectionMeasuresMake.setRiskLevel(JdglDiffAnalysis.getRiskLevel());
         jdglCorrectionMeasuresMake.setPeriodTotalScore(JdglDiffAnalysis.getTotalGrade());
-        jdglCorrectionMeasuresMake.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-        jdglCorrectionMeasuresMake.setCreateUserName(SecurityUtils.getUserName());
+//        jdglCorrectionMeasuresMake.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+//        jdglCorrectionMeasuresMake.setCreateUserName(SecurityUtils.getUserName());
         jdglCorrectionMeasuresMake.setCreateTime(DateUtils.getNowDate());
         // 纠偏措施制定入库
         jdglCorrectionMeasuresMakeMapper.insertJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake);
@@ -280,9 +280,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             //JdglCorrectionMeasuresMakeDetail.setTotalFloat();
             JdglCorrectionMeasuresMakeDetail.setSvValue(jdglDiffAnalysisSv.getSvNum());
             // 实际工程量
-            BigDecimal actQuantity =
-                JdglCorrectionMeasuresMakeDetail.getQuantity()
-                    .add(JdglCorrectionMeasuresMakeDetail.getDeviationQuantity());
+            BigDecimal actQuantity = JdglCorrectionMeasuresMakeDetail.getQuantity().add(JdglCorrectionMeasuresMakeDetail.getDeviationQuantity());
             if (JdglCorrectionMeasuresMakeDetail.getQuantity().compareTo(BigDecimal.ZERO) != 0) {
                 actQuantity.divide(actQuantity, 2, RoundingMode.HALF_UP);
             }

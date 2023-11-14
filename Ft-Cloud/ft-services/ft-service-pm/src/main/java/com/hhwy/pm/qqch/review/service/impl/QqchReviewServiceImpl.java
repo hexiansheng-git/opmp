@@ -107,12 +107,17 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     public List<Review> getQqchReviewList(Review review) {
         List<Review> qqchReviewList = reviewMapper.getQqchReviewList(review);
         for (Review review1 : qqchReviewList) {
-            String stage = review1.getPlanStage();
-            if("1".equals(stage) || "2".equals(stage)){
-                FlowInfoSearchUtil.getFlowInfo(review1,FlowEnum.QQCH_REVIEW1);
-            }else if("3".equals(stage)){
-                FlowInfoSearchUtil.getFlowInfo(review1,FlowEnum.QQCH_REVIEW2);
+            try {
+                String stage = review1.getPlanStage();
+                if("1".equals(stage) || "2".equals(stage)){
+                    FlowInfoSearchUtil.getFlowInfo(review1,FlowEnum.QQCH_REVIEW1);
+                }else if("3".equals(stage)){
+                    FlowInfoSearchUtil.getFlowInfo(review1,FlowEnum.QQCH_REVIEW2);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
+
         }
         return qqchReviewList;
     }
@@ -439,7 +444,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     public String getStage() {
         Review where = new Review();
         where.setDelFlag("0");
-        List<Review> qqchReviewList = this.getQqchReviewList(where).stream().sorted(Comparator.comparing(Review::getPlanStage)).collect(toList());
+        List<Review> qqchReviewList = reviewMapper.getQqchReviewList(where).stream().sorted(Comparator.comparing(Review::getPlanStage)).collect(toList());
         for (Review review : qqchReviewList) {
             String taskStatus = review.getTaskStatus();
             if (!"4".equals(taskStatus)){

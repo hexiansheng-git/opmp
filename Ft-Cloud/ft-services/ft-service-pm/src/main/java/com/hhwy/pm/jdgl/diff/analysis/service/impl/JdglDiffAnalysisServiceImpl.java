@@ -35,8 +35,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -134,7 +132,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             return 0;
         }
 
-        jdglDiffAnalysis.setUpdateUser(SecurityUtils.getUserName());
+//        jdglDiffAnalysis.setUpdateUser(SecurityUtils.getUserName());
         jdglDiffAnalysis.setUpdateTime(DateUtils.getNowDate());
 
         BigDecimal totalCompValue = jdglDiffAnalysis.getTotalCompValue();

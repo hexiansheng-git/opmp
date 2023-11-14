@@ -63,8 +63,7 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
     public AjaxResult getJdglCorrectionMeasuresMakeList(
         @Validated(ValidationGroups.Select.class) JdglCorrectionMeasuresMake jdglCorrectionMeasuresMakeParam) {
         startPage();
-        List<JdglCorrectionMeasuresMake> jdglCorrectionMeasuresMakeList = jdglCorrectionMeasuresMakeService
-            .getJdglCorrectionMeasuresMakeList(jdglCorrectionMeasuresMakeParam);
+        List<JdglCorrectionMeasuresMake> jdglCorrectionMeasuresMakeList = jdglCorrectionMeasuresMakeService.getJdglCorrectionMeasuresMakeList(jdglCorrectionMeasuresMakeParam);
         return getDataTableAjaxResult(jdglCorrectionMeasuresMakeList);
     }
 

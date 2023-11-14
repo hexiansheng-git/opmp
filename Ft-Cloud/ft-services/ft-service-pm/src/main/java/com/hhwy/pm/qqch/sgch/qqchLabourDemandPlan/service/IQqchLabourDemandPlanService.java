@@ -47,4 +47,7 @@ public interface IQqchLabourDemandPlanService {
      * @return
      */
     QqchLabourDemandPlanVo getQqchLabourDemandPlanListWithSearch(QqchLabourDemandPlan qqchLabourDemandPlanParam);
+
+    List<Map> getWorkTeamList();
+
 }

@@ -793,4 +793,19 @@
         order by exit_date desc limit 1
     </select>
 
+    <select id="getWorkTeamList" resultType="map">
+        SELECT
+            work_team as constDesc,
+            MIN( entry_date ) as entryDate,
+            MAX( exit_date ) as exitDate,
+            pt_var1 as masterId13
+        FROM
+            qqch_labour_demand_plan
+        WHERE
+            del_flag = '0'
+                AND work_team IS NOT NULL
+        GROUP BY
+            work_team
+    </select>
+
 </mapper>

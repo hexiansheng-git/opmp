@@ -52,8 +52,7 @@ public class JdglProgressCorrectionTrackDetailServiceImpl implements IJdglProgre
             jdglProgressCorrectionTrackDetail.setCreateUser(SecurityUtils.getUserName());
             jdglProgressCorrectionTrackDetail.setCreateTime(DateUtils.getNowDate());
         }
-        return jdglProgressCorrectionTrackDetailMapper
-            .insertJdglProgressCorrectionTrackDetailList(jdglProgressCorrectionTrackDetailList);
+        return jdglProgressCorrectionTrackDetailMapper.insertJdglProgressCorrectionTrackDetailList(jdglProgressCorrectionTrackDetailList);
     }
 
     @Transactional
@@ -77,12 +76,10 @@ public class JdglProgressCorrectionTrackDetailServiceImpl implements IJdglProgre
     }
 
     @Transactional
-    public int deleteJdglProgressCorrectionTrackDetail(
-        JdglProgressCorrectionTrackDetail jdglProgressCorrectionTrackDetail) {
-        jdglProgressCorrectionTrackDetail.setUpdateUser(SecurityUtils.getUserName());
-        jdglProgressCorrectionTrackDetail.setUpdateTime(DateUtils.getNowDate());
-        return jdglProgressCorrectionTrackDetailMapper
-            .deleteJdglProgressCorrectionTrackDetail(jdglProgressCorrectionTrackDetail);
+    public int deleteJdglProgressCorrectionTrackDetail(JdglProgressCorrectionTrackDetail jdglProgressCorrectionTrackDetail) {
+//        jdglProgressCorrectionTrackDetail.setUpdateUser(SecurityUtils.getUserName());
+//        jdglProgressCorrectionTrackDetail.setUpdateTime(DateUtils.getNowDate());
+        return jdglProgressCorrectionTrackDetailMapper .deleteJdglProgressCorrectionTrackDetail(jdglProgressCorrectionTrackDetail);
     }
 
     @Transactional
