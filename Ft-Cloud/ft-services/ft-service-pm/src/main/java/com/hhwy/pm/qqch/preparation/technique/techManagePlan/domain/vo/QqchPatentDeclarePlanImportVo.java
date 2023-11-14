@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.utils.excel.FtExcel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +22,12 @@ import java.util.Date;
 public class QqchPatentDeclarePlanImportVo {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 字段描述：主键id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    private Long id;
     /**
      * 字段描述：增加时间
      */

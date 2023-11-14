@@ -33,8 +33,8 @@ public class XmslBidWinHandoverInfoController extends BaseController {
      * @return
      */
     @GetMapping("/getList")
-    public AjaxResult getXmslBidWinHandoverInfo() {
-        XmslBidWinHandoverInfo xmslBidWinHandoverInfo = xmslBidWinHandoverInfoService.getXmslBidWinHandoverInfo();
+    public AjaxResult getXmslBidWinHandoverInfo(String fileName) {
+        XmslBidWinHandoverInfo xmslBidWinHandoverInfo = xmslBidWinHandoverInfoService.getXmslBidWinHandoverInfo(fileName);
         return AjaxResult.success(xmslBidWinHandoverInfo);
     }
 

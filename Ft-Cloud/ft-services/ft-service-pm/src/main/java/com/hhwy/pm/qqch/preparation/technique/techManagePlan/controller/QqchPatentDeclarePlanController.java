@@ -11,6 +11,7 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPaten
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPatentDeclarePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchPatentDeclarePlanService;
 import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -95,6 +96,9 @@ public class QqchPatentDeclarePlanController extends BaseController {
         try {
             InputStream inputStream = file.getInputStream();
             List<QqchPatentDeclarePlanImportVo> qqchPatentDeclarePlanImportVoList = util.importExcel(inputStream);
+            qqchPatentDeclarePlanImportVoList.stream().forEach(o -> {
+                o.setId(IdWorker.createId());
+            });
             return AjaxResult.success(qqchPatentDeclarePlanImportVoList);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");
