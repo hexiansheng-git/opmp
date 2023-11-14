@@ -145,8 +145,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         if(!CollectionUtils.isEmpty(jdglDiffAnalysisList)) {
             for (JdglDiffAnalysis jdglDiffAnalysis1 : jdglDiffAnalysisList) {
                 if(period.after(jdglDiffAnalysis1.getPeriod())) {
-                    if(jdglDiffAnalysis1.getMeterValue() != null) {
-                        totalMeterValue = totalMeterValue == null ? BigDecimal.ZERO : totalMeterValue;
+                    if(totalMeterValue != null && jdglDiffAnalysis1.getMeterValue() != null) {
                         totalMeterValue = totalMeterValue.add(jdglDiffAnalysis1.getMeterValue());
                     }
                 }
@@ -154,7 +153,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         }
         BigDecimal sumMin = null;
         if(totalMeterValue != null && totalCompValue != null && BigDecimal.ZERO.compareTo(totalCompValue) != 0) {
-            sumMin = totalMeterValue.divide(totalCompValue, 2, BigDecimal.ROUND_HALF_UP);
+            sumMin = totalMeterValue.divide(totalCompValue, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
         }
 
         // 调取获取进度差异化管控策划列表接口
@@ -165,10 +164,10 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             if(!CollectionUtils.isEmpty(analyseList)) {
                 for (QqchScheAnalyse qqchScheAnalyse : analyseList) {
                     BigDecimal score = qqchScheAnalyse.getScore();
-                    BigDecimal sumMaxScore = qqchScheAnalyse.getSumMaxScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getSumMaxScore();
-                    BigDecimal sumMinScore = qqchScheAnalyse.getSumMinScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getSumMinScore();
+                    BigDecimal sumMaxScore = qqchScheAnalyse.getSumMaxScore();
+                    BigDecimal sumMinScore = qqchScheAnalyse.getSumMinScore();
 
-                    if(sumMin != null && sumMin.compareTo(sumMaxScore) < 0 && sumMin.compareTo(sumMinScore) >= 0) {
+                    if(sumMin != null && (sumMaxScore == null || sumMin.compareTo(sumMaxScore) < 0) && (sumMinScore == null || sumMin.compareTo(sumMinScore) >= 0)) {
                         jdglDiffAnalysis.setValueGrade(score);
                         countTotalGrade(jdglDiffAnalysis);
                     }

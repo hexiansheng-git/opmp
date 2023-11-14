@@ -10,6 +10,7 @@ import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
+import com.hhwy.pm.jdgl.statistics.util.TreeCountUtils;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.domain.JdglWeekImagePlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.mapper.JdglWeekImagePlanMapper;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.service.IJdglWeekImagePlanService;
@@ -141,7 +142,8 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
                 jdglWeekImagePlan.setPlanCompValue(compValue);
             }
         }
-
+        TreeCountUtils<JdglWeekImagePlan> treeCountUtils = new TreeCountUtils<>();
+        treeCountUtils.upCountValue(jdglWeekImagePlanList, "planCompValue");
         jdglWeekValuePlanService.updateValuePlanData(planId, jdglWeekImagePlanList);
         return jdglWeekImagePlanMapper.insertJdglWeekImagePlanList(jdglWeekImagePlanList);
     }
@@ -202,6 +204,8 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
                     jdglWeekImagePlan.setPlanCompValue(compValue);
                 }
             }
+            TreeCountUtils<JdglWeekImagePlan> treeCountUtils = new TreeCountUtils<>();
+            treeCountUtils.upCountValue(jdglWeekImagePlanList, "planCompValue");
             deleteJdglWeekImagePlanByPlanId(planId);
             jdglWeekValuePlanService.updateValuePlanData(planId, jdglWeekImagePlanList);
             return jdglWeekImagePlanMapper.insertJdglWeekImagePlanList(jdglWeekImagePlanList);

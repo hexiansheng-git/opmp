@@ -129,6 +129,7 @@ public class QqchMeasureExpPersonServiceImpl implements IQqchMeasureExpPersonSer
         QqchLabourDemandPlan where = new QqchLabourDemandPlan();
         where.setJobNames(teamNameSet);
         where.setValid("1");
+        where.setPid(0L);
         where.setVersion(VersionUtil.getVersion("qqch_labour_demand_plan", null));
         List<QqchLabourDemandPlan> qqchLabourDemandPlanList = labourDemandPlanMapper.getQqchLabourDemandPlanList(where);
         Map<String, List<QqchLabourDemandPlan>> map = qqchLabourDemandPlanList.stream().filter(i -> StringUtils.isNotEmpty(i.getJobName())).collect(Collectors.groupingBy(QqchLabourDemandPlan::getJobName));

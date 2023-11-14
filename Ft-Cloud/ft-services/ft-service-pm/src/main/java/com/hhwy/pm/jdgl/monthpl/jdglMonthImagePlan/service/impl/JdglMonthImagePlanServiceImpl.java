@@ -15,6 +15,7 @@ import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.service.IJdglMonthImagePlanSe
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.service.IJdglMonthValuePlanService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
+import com.hhwy.pm.jdgl.statistics.util.TreeCountUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
@@ -142,7 +143,8 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
                 jdglMonthImagePlan.setPlanCompValue(compValue);
             }
         }
-
+        TreeCountUtils<JdglMonthImagePlan> treeCountUtils = new TreeCountUtils<>();
+        treeCountUtils.upCountValue(jdglMonthImagePlanList, "planCompValue");
         jdglMonthValuePlanService.updateValuePlanData(planId, jdglMonthImagePlanList);
         return jdglMonthImagePlanMapper.insertJdglMonthImagePlanList(jdglMonthImagePlanList);
     }
@@ -204,6 +206,8 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
                     jdglMonthImagePlan.setPlanCompValue(compValue);
                 }
             }
+            TreeCountUtils<JdglMonthImagePlan> treeCountUtils = new TreeCountUtils<>();
+            treeCountUtils.upCountValue(jdglMonthImagePlanList, "planCompValue");
             deleteJdglMonthImagePlanByPlanId(planId);
             jdglMonthValuePlanService.updateValuePlanData(planId, jdglMonthImagePlanList);
             return jdglMonthImagePlanMapper.insertJdglMonthImagePlanList(jdglMonthImagePlanList);

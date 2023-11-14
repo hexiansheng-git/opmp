@@ -6,10 +6,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import lombok.Data;
 
 /**
  * @author zhenglili
@@ -79,23 +80,23 @@ public class QqchConstructionReviewPlan extends BaseEntity {
     /**
      * 字段描述：计划编制时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划编制时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计划编制时间", dateFormat = "yyyy-MM-dd")
     private Date planPreparationTime;
     /**
      * 字段描述：计划实施时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划实施时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计划实施时间", dateFormat = "yyyy-MM-dd")
     private Date planImplementTime;
     /**
      * 字段描述：清单通过时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "清单通过时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "清单通过时间", dateFormat = "yyyy-MM-dd")
     private Date listPassTime;
     /**
      * 字段描述：评审主体

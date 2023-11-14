@@ -13,6 +13,7 @@ import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.domain.JdglQuarterValuePl
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.mapper.JdglQuarterValuePlanMapper;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.service.IJdglQuarterValuePlanService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
+import com.hhwy.pm.jdgl.statistics.util.TreeCountUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
@@ -262,6 +263,8 @@ public class JdglQuarterValuePlanServiceImpl implements IJdglQuarterValuePlanSer
                         if(valuePlan1 != null) valuePlan.setPid(valuePlan1.getId());
                     }
                     deleteJdglQuarterValuePlanByPlanId(planId);
+                    TreeCountUtils<JdglQuarterValuePlan> treeCountUtils = new TreeCountUtils<>();
+                    treeCountUtils.upCountValue(returnList, "quarterPlanValueCu");
                     insertJdglQuarterValuePlanList(returnList);
                 }
             }

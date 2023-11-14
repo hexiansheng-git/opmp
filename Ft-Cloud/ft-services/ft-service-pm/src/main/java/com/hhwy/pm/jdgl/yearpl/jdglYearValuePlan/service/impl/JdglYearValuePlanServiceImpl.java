@@ -12,6 +12,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.domain.JdglDayScheduleBill;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.service.IJdglDayScheduleBillService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
+import com.hhwy.pm.jdgl.statistics.util.TreeCountUtils;
 import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
 import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.service.IJdglYearImagePlanService;
 import com.hhwy.pm.jdgl.yearpl.jdglYearPlan.domain.JdglYearPlan;
@@ -272,6 +273,8 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
                         if(jdglYearValuePlan1 != null) jdglYearValuePlan.setPid(jdglYearValuePlan1.getId());
                     }
                     deleteJdglYearValuePlanByYearPlanId(yearplanId);
+                    TreeCountUtils<JdglYearValuePlan> treeCountUtils = new TreeCountUtils<>();
+                    treeCountUtils.upCountValue(returnList, "yearPlanValueCu");
                     insertJdglYearValuePlanList(returnList);
                 }
             }

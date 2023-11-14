@@ -239,7 +239,7 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
         }
 
         returnBig = effectiveAmout == null || effectiveAmout.compareTo(new BigDecimal(0)) == 0 ? new BigDecimal(0)
-                : totalCompAmt.divide(effectiveAmout, 4, BigDecimal.ROUND_HALF_UP);
+                : totalCompAmt.divide(effectiveAmout, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
 
         return returnBig;
     }

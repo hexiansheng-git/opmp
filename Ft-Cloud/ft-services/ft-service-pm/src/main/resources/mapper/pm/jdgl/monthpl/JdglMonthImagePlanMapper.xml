@@ -197,7 +197,7 @@
         group by jyip.wbs_code,jyip.wbs_name,jyip.work_name,jyip.work_code
     </select>
     <select id="getThisPlanAmt" resultType="java.math.BigDecimal">
-        select sum(ifnull(plan_comp_value,0)) from jdgl_month_image_plan where plan_id = #{planId}
+        select sum(ifnull(plan_comp_value,0)) from jdgl_month_image_plan where plan_id = #{planId} and work_code != wbs_code
     </select>
 
     <insert id="insertJdglMonthImagePlan" useGeneratedKeys="true" keyProperty="id">

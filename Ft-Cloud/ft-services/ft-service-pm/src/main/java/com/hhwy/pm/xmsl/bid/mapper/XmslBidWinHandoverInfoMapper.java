@@ -19,7 +19,7 @@ public interface XmslBidWinHandoverInfoMapper {
     int insertXmslBidWinHandoverInfo(XmslBidWinHandoverInfo xmslBidWinHandoverInfo);
 
     int insertXmslBidWinHandoverInfoList(
-        @Param("xmslBidWinHandoverInfoList") List<XmslBidWinHandoverInfo> xmslBidWinHandoverInfoList);
+            @Param("xmslBidWinHandoverInfoList") List<XmslBidWinHandoverInfo> xmslBidWinHandoverInfoList);
 
     int updateXmslBidWinHandoverInfo(XmslBidWinHandoverInfo xmslBidWinHandoverInfo);
 
@@ -28,5 +28,5 @@ public interface XmslBidWinHandoverInfoMapper {
     int deleteXmslBidWinHandoverInfo(XmslBidWinHandoverInfo xmslBidWinHandoverInfo);
 
     int deleteXmslBidWinHandoverInfoByPks(
-        @Param("xmslBidWinHandoverInfoPkList") List<Long> xmslBidWinHandoverInfoPkList);
+            @Param("xmslBidWinHandoverInfoPkList") List<Long> xmslBidWinHandoverInfoPkList);
 }

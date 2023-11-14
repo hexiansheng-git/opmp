@@ -10,6 +10,7 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAppIn
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAppInnovatePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchAppInnovatePlanService;
 import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -94,6 +95,9 @@ public class QqchAppInnovatePlanController extends BaseController {
         try {
             InputStream inputStream = file.getInputStream();
             List<QqchAppInnovatePlanImportVo> qqchAppInnovatePlanImportVoList = util.importExcel(inputStream);
+            qqchAppInnovatePlanImportVoList.stream().forEach(o -> {
+                o.setId(IdWorker.createId());
+            });
             return AjaxResult.success(qqchAppInnovatePlanImportVoList);
         }catch (Exception e){
             throw new RuntimeException("导入失败！");

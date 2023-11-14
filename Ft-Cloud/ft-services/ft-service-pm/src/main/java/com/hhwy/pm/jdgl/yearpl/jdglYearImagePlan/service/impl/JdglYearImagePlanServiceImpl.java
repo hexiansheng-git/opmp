@@ -16,6 +16,7 @@ import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
+import com.hhwy.pm.jdgl.statistics.util.TreeCountUtils;
 import com.hhwy.pm.jdgl.yearpl.jdglYearPlan.domain.JdglYearPlan;
 import com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.service.IJdglYearValuePlanService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
@@ -164,7 +165,8 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
                 jdglYearImagePlan.setPlanCompValue(compValue);
             }
         }
-
+        TreeCountUtils<JdglYearImagePlan> treeCountUtils = new TreeCountUtils<>();
+        treeCountUtils.upCountValue(jdglYearImagePlanList, "planCompValue");
         int i = jdglYearImagePlanMapper.insertJdglYearImagePlanList(jdglYearImagePlanList);
         jdglYearValuePlanService.updateValuePlanData(yearPlanId, jdglYearImagePlanList);
         return i;
@@ -226,6 +228,8 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
                     jdglYearImagePlan.setPlanCompValue(compValue);
                 }
             }
+            TreeCountUtils<JdglYearImagePlan> treeCountUtils = new TreeCountUtils<>();
+            treeCountUtils.upCountValue(jdglYearImagePlanList, "planCompValue");
             deleteJdglYearImagePlanByYearPlanId(yearPlanId);
             int i = jdglYearImagePlanMapper.insertJdglYearImagePlanList(jdglYearImagePlanList);
             jdglYearValuePlanService.updateValuePlanData(yearPlanId, jdglYearImagePlanList);

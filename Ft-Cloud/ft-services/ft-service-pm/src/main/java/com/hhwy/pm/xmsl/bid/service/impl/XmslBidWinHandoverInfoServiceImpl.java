@@ -12,14 +12,17 @@ import com.hhwy.pm.xmsl.bid.mapper.XmslBidWinHandoverInfoMapper;
 import com.hhwy.pm.xmsl.bid.service.IXmslBidWinHandoverFileService;
 import com.hhwy.pm.xmsl.bid.service.IXmslBidWinHandoverInfoService;
 import com.hhwy.utils.idworker.IdWorker;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import io.seata.common.util.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zhenglili
@@ -38,25 +41,27 @@ public class XmslBidWinHandoverInfoServiceImpl implements IXmslBidWinHandoverInf
     @Autowired
     private SystemServiceApi systemServiceApi;
 
-    public XmslBidWinHandoverInfo getXmslBidWinHandoverInfo() {
+    public XmslBidWinHandoverInfo getXmslBidWinHandoverInfo(String fileName) {
         XmslBidWinHandoverInfo xmslBidWinHandoverInfo = new XmslBidWinHandoverInfo();
 
         XmslBidWinHandoverInfo result = new XmslBidWinHandoverInfo();
         XmslBidWinHandoverInfo info = xmslBidWinHandoverInfoMapper.getXmslBidWinHandoverInfo(xmslBidWinHandoverInfo);
 
         XmslBidWinHandoverFile xmslBidWinHandoverFile = new XmslBidWinHandoverFile();
+        xmslBidWinHandoverFile.setFileName(fileName);
 
         List<XmslBidWinHandoverFile> fileList;
 
         // 若中标项目移交信息无数据，则移交文件获取初始化数据
         if (info == null || info.getId() == null) {
             fileList = this.getInitializeData();
+            if(StringUtils.isNotBlank(fileName)){
+                fileList = fileList.stream().filter(o -> o.getFileName().contains(fileName)).collect(Collectors.toList());
+            }
         } else {
             BeanUtils.copyProperties(info, result);
-
             xmslBidWinHandoverFile.setHandoverInfoId(xmslBidWinHandoverInfo.getId());
-            fileList =
-                xmslBidWinHandoverFileService.getXmslBidWinHandoverFileList(xmslBidWinHandoverFile);
+            fileList = xmslBidWinHandoverFileService.getXmslBidWinHandoverFileList(xmslBidWinHandoverFile);
         }
         result.setXmslBidWinHandoverFileList(fileList);
         return result;
