@@ -118,7 +118,7 @@
       <if test="correctionTarget != null  and correctionTarget != ''">and `correction_target` = #{correctionTarget}</if>
       <if test="concreteMeasure != null  and concreteMeasure != ''">and `concrete_measure` = #{concreteMeasure}</if>
       <if test="correctionCompleteDate != null ">and `correction_complete_date` = #{correctionCompleteDate}</if>
-      <if test="workTeam != null ">and `work_team` = #{workTeam}</if>
+      <if test="workTeam != null and  workTeam != ''">and `work_team` = #{workTeam}</if>
       <if test="directorId != null  and directorId != ''">and `director_id` = #{directorId}</if>
       <if test="director != null  and director != ''">and `director` = #{director}</if>
       <if test="correctionExecuteSituation != null  and correctionExecuteSituation != ''">and
@@ -171,7 +171,7 @@
       <if test="correctionTarget != null  and correctionTarget != ''">and `correction_target` = #{correctionTarget}</if>
       <if test="concreteMeasure != null  and concreteMeasure != ''">and `concrete_measure` = #{concreteMeasure}</if>
       <if test="correctionCompleteDate != null ">and `correction_complete_date` = #{correctionCompleteDate}</if>
-      <if test="workTeam != null ">and `work_team` = #{workTeam}</if>
+      <if test="workTeam != null and workTeam != '' ">and `work_team` = #{workTeam}</if>
       <if test="directorId != null  and directorId != ''">and `director_id` = #{directorId}</if>
       <if test="director != null  and director != ''">and `director` = #{director}</if>
       <if test="correctionExecuteSituation != null  and correctionExecuteSituation != ''">and
@@ -221,7 +221,7 @@
       <if test="correctionTarget != null  and correctionTarget != ''">`correction_target`,</if>
       <if test="concreteMeasure != null  and concreteMeasure != ''">`concrete_measure`,</if>
       <if test="correctionCompleteDate != null ">`correction_complete_date`,</if>
-      <if test="workTeam != null ">`work_team`,</if>
+      <if test="workTeam != null  and workTeam != '' ">`work_team`,</if>
       <if test="directorId != null  and directorId != ''">`director_id`,</if>
       <if test="director != null  and director != ''">`director`,</if>
       <if test="correctionExecuteSituation != null  and correctionExecuteSituation != ''">
@@ -266,7 +266,7 @@
       <if test="correctionTarget != null  and correctionTarget != ''">#{correctionTarget},</if>
       <if test="concreteMeasure != null  and concreteMeasure != ''">#{concreteMeasure},</if>
       <if test="correctionCompleteDate != null ">#{correctionCompleteDate},</if>
-      <if test="workTeam != null ">#{workTeam},</if>
+      <if test="workTeam != null  and workTeam != '' ">#{workTeam},</if>
       <if test="directorId != null  and directorId != ''">#{directorId},</if>
       <if test="director != null  and director != ''">#{director},</if>
       <if test="correctionExecuteSituation != null  and correctionExecuteSituation != ''">
@@ -408,7 +408,7 @@
       <if test="correctionTarget != null  and  correctionTarget != ''">`correction_target` = #{correctionTarget},</if>
       <if test="concreteMeasure != null  and  concreteMeasure != ''">`concrete_measure` = #{concreteMeasure},</if>
       <if test="correctionCompleteDate != null ">`correction_complete_date` = #{correctionCompleteDate},</if>
-      <if test="workTeam != null ">`work_team` = #{workTeam},</if>
+      <if test="workTeam != null  and workTeam != '' ">`work_team` = #{workTeam},</if>
       <if test="directorId != null  and  directorId != ''">`director_id` = #{directorId},</if>
       <if test="director != null  and  director != ''">`director` = #{director},</if>
       <if test="correctionExecuteSituation != null  and  correctionExecuteSituation != ''">
@@ -677,7 +677,7 @@
       <if test="correctionTarget != null  and correctionTarget != ''">and `correction_target` = #{correctionTarget}</if>
       <if test="concreteMeasure != null  and concreteMeasure != ''">and `concrete_measure` = #{concreteMeasure}</if>
       <if test="correctionCompleteDate != null ">and `correction_complete_date` = #{correctionCompleteDate}</if>
-      <if test="workTeam != null ">and `work_team` = #{workTeam}</if>
+      <if test="workTeam != null  and workTeam != '' ">and `work_team` = #{workTeam}</if>
       <if test="directorId != null  and directorId != ''">and `director_id` = #{directorId}</if>
       <if test="director != null  and director != ''">and `director` = #{director}</if>
       <if test="correctionExecuteSituation != null  and correctionExecuteSituation != ''">and
