@@ -145,8 +145,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         if(!CollectionUtils.isEmpty(jdglDiffAnalysisList)) {
             for (JdglDiffAnalysis jdglDiffAnalysis1 : jdglDiffAnalysisList) {
                 if(period.after(jdglDiffAnalysis1.getPeriod())) {
-                    if(jdglDiffAnalysis1.getMeterValue() != null) {
-                        totalMeterValue = totalMeterValue == null ? BigDecimal.ZERO : totalMeterValue;
+                    if(totalMeterValue != null && jdglDiffAnalysis1.getMeterValue() != null) {
                         totalMeterValue = totalMeterValue.add(jdglDiffAnalysis1.getMeterValue());
                     }
                 }
