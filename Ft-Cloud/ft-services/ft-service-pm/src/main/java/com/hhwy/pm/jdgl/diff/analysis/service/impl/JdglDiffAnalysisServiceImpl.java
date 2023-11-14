@@ -138,7 +138,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         jdglDiffAnalysis.setUpdateTime(DateUtils.getNowDate());
 
         BigDecimal totalCompValue = jdglDiffAnalysis.getTotalCompValue();
-        BigDecimal totalMeterValue = jdglDiffAnalysis.getMeterValue() == null ? BigDecimal.ZERO : jdglDiffAnalysis.getMeterValue();
+        BigDecimal totalMeterValue = jdglDiffAnalysis.getMeterValue();
 
         QqchScheDTO dto = new QqchScheDTO();
 
@@ -147,12 +147,15 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         if(!CollectionUtils.isEmpty(jdglDiffAnalysisList)) {
             for (JdglDiffAnalysis jdglDiffAnalysis1 : jdglDiffAnalysisList) {
                 if(period.after(jdglDiffAnalysis1.getPeriod())) {
-                    totalMeterValue = totalMeterValue.add(jdglDiffAnalysis1.getMeterValue());
+                    if(jdglDiffAnalysis1.getMeterValue() != null) {
+                        totalMeterValue = totalMeterValue == null ? BigDecimal.ZERO : totalMeterValue;
+                        totalMeterValue = totalMeterValue.add(jdglDiffAnalysis1.getMeterValue());
+                    }
                 }
             }
         }
-        BigDecimal sumMin = BigDecimal.ZERO;
-        if(totalCompValue != null && BigDecimal.ZERO.compareTo(totalCompValue) != 0) {
+        BigDecimal sumMin = null;
+        if(totalMeterValue != null && totalCompValue != null && BigDecimal.ZERO.compareTo(totalCompValue) != 0) {
             sumMin = totalMeterValue.divide(totalCompValue, 2, BigDecimal.ROUND_HALF_UP);
         }
 
@@ -167,15 +170,13 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
                     BigDecimal sumMaxScore = qqchScheAnalyse.getSumMaxScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getSumMaxScore();
                     BigDecimal sumMinScore = qqchScheAnalyse.getSumMinScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getSumMinScore();
 
-                    if(sumMin.compareTo(sumMaxScore) < 0 && sumMin.compareTo(sumMinScore) >= 0) {
+                    if(sumMin != null && sumMin.compareTo(sumMaxScore) < 0 && sumMin.compareTo(sumMinScore) >= 0) {
                         jdglDiffAnalysis.setValueGrade(score);
                         countTotalGrade(jdglDiffAnalysis);
                     }
                 }
             }
         }
-
-
 
         int i = jdglDiffAnalysisMapper.updateJdglDiffAnalysis(jdglDiffAnalysis);
 
