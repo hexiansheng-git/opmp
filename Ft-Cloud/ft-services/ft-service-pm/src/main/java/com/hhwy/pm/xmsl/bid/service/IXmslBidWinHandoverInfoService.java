@@ -9,7 +9,7 @@ import com.hhwy.pm.xmsl.bid.domain.XmslBidWinHandoverInfo;
  */
 public interface IXmslBidWinHandoverInfoService {
 
-    XmslBidWinHandoverInfo getXmslBidWinHandoverInfo();
+    XmslBidWinHandoverInfo getXmslBidWinHandoverInfo(String fileName);
 
     void save(XmslBidWinHandoverInfo xmslBidWinHandoverInfo);
 }
