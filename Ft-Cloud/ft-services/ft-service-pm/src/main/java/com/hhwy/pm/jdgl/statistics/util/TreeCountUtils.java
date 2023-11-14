@@ -6,6 +6,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TreeCountUtils<T extends TreeNode> {
 
@@ -19,11 +20,76 @@ public class TreeCountUtils<T extends TreeNode> {
                 if(t1 == null) leafList.add(t);
             }
 
-            iteratorCountValue(treeList, leafList, columnName);
+            this.toAncestrals(treeList, null);
+
+//            iteratorCountValue(treeList, leafList, columnName);
+            iteratorCountValue4Level(treeList, columnName);
         }
 
         return treeList;
 
+    }
+
+    public void toAncestrals(List<T> treeList, Long pid) {
+        if(CollectionUtils.isEmpty(treeList)) {
+            return;
+        }
+        List<T> childList = new ArrayList<>();
+        if(pid == null) {
+            childList = treeList.stream().filter(vo -> vo.getPid() == null).collect(Collectors.toList());
+        } else {
+            childList = treeList.stream().filter(vo -> pid.equals(vo.getPid())).collect(Collectors.toList());
+        }
+        childList.stream().forEach(vo -> {
+            vo.setPtVar5(vo.getId() + "");
+        });
+        iteratorAncestrals(treeList, childList);
+    }
+
+    public void iteratorAncestrals(List<T> treeList, List<T> parentList) {
+        if(CollectionUtils.isEmpty(treeList) || CollectionUtils.isEmpty(parentList)) {
+            return;
+        }
+        List<T> childList = new ArrayList<>();
+        for (T t: parentList) {
+            List<T> collect = treeList.stream().filter(vo -> t.getId().equals(vo.getPid())).collect(Collectors.toList());
+            if(CollectionUtils.isNotEmpty(collect)) {
+                for (T t1: collect) {
+                    t1.setPtVar5(t.getPtVar5() + "," + t1.getId());
+                }
+                childList.addAll(collect);
+            } else {
+                t.setLeaf("1");
+            }
+        }
+        iteratorAncestrals(treeList, childList);
+    }
+
+    public void iteratorCountValue4Level(List<T> treeList, String columnName) {
+        if(CollectionUtils.isEmpty(treeList)) {
+            return;
+        }
+        for (T t: treeList) {
+            if(!"1".equals(t.getLeaf())) {
+                List<T> collect = treeList.stream().filter(vo -> "1".equals(vo.getLeaf()) && vo.getPtVar5().contains(t.getPtVar5())).collect(Collectors.toList());
+                if(CollectionUtils.isNotEmpty(collect)) {
+                    try {
+                        Field declaredField = t.getClass().getDeclaredField(columnName);
+                        declaredField.setAccessible(true);
+                        BigDecimal value = BigDecimal.ZERO;
+                        for (T t1: collect) {
+                            BigDecimal thisValue = (BigDecimal)declaredField.get(t1);
+                            if(thisValue != null) {
+                                value = value.add(thisValue);
+                            }
+                        }
+                        declaredField.set(t, value);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     public void iteratorCountValue(List<T> treeList, List<T> leafList, String columnName) {
