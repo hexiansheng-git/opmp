@@ -36,6 +36,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.hhwy.common.core.text.Convert;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 

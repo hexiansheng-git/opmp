@@ -626,8 +626,8 @@
         FROM
         `wzch_prior_approach_detail` as pad
         /*查询物资总需信息*/
-        LEFT JOIN wzch_total_demand_detail AS tdd ON tdd.project_id = pad.project_id
-        AND tdd.material_code = pad.material_code
+        LEFT JOIN wzch_total_demand_detail AS tdd ON
+        tdd.material_code = pad.material_code
         AND tdd.material_standard = pad.material_standard
         AND tdd.del_flag = 0
 

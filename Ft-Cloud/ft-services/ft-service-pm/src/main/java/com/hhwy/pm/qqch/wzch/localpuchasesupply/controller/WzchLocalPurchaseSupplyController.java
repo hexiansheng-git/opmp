@@ -273,7 +273,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
     }
 
     @PostMapping("/sync")
-    public AjaxResult sync(WzchLocalPurchaseSupply purchaseSupply) {
+    public AjaxResult sync(@RequestBody  WzchLocalPurchaseSupply purchaseSupply) {
         try{
             Assert.notNull(purchaseSupply.getVersion(), "version不能为空");
             wzchPurchaseSupplyService.sync(purchaseSupply);
