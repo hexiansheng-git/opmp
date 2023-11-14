@@ -10,6 +10,7 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraft
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraftDeclarePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchCraftDeclarePlanService;
 import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -94,6 +95,9 @@ public class QqchCraftDeclarePlanController extends BaseController {
         try {
             InputStream inputStream = file.getInputStream();
             List<QqchCraftDeclarePlanImportVo> qqchCraftDeclarePlanImportVoList = util.importExcel(inputStream);
+            qqchCraftDeclarePlanImportVoList.stream().forEach(o -> {
+                o.setId(IdWorker.createId());
+            });
             return AjaxResult.success(qqchCraftDeclarePlanImportVoList);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");

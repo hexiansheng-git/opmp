@@ -24,6 +24,12 @@ public class QqchTopicResearchPlanImportVo {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 字段描述：主键id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    private Long id;
+    /**
      * 字段描述：所属区域id
      */
     @JsonSerialize(using = ToStringSerializer.class)

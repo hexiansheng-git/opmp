@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchTopicR
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -105,6 +106,7 @@ public class QqchTopicResearchPlanController extends BaseController {
                 String regionName = projectInfo.getRegionName();
                 String projectName = projectInfo.getProjectName();
                 for (QqchTopicResearchPlanImportVo qqchTopicResearchPlanImportVo : qqchTopicResearchPlanImportVoList) {
+                    qqchTopicResearchPlanImportVo.setId(IdWorker.createId());
                     qqchTopicResearchPlanImportVo.setRegionId(regionId);
                     qqchTopicResearchPlanImportVo.setRegionName(regionName);
                     qqchTopicResearchPlanImportVo.setProjectName(projectName);
