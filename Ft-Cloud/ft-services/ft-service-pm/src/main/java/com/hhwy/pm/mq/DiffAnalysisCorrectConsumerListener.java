@@ -45,7 +45,7 @@ public class DiffAnalysisCorrectConsumerListener implements RocketMQListener<Str
             oldDataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey("master");
             if(StringUtils.isNotBlank(dataSource) && !dataSource.equals(oldDataSource)){
                 DynamicDataSourceContextHolder.push(dataSource);
-                jdglDiffAnalysisCorrectService.updateJdglDiffAnalysisCorrectList(correctList);
+                jdglDiffAnalysisCorrectService.insertJdglDiffAnalysisCorrectList(correctList);
             }
         }catch (Exception e){
             throw new CustomException(e.getMessage());
