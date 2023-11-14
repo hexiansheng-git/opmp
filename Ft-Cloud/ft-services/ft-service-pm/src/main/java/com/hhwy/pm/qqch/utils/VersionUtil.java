@@ -3,15 +3,18 @@ package com.hhwy.pm.qqch.utils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.qqchChange.service.IQqchChangeService;
 
 import java.math.BigDecimal;
 
 public class VersionUtil {
 
     private static CommonMapper commonMapper;
+    private static IQqchChangeService qqchChangeService;
 
     static {
         commonMapper = SpringUtils.getBean(CommonMapper.class);
+        qqchChangeService = SpringUtils.getBean(IQqchChangeService.class);
     }
 
     /**
@@ -31,12 +34,10 @@ public class VersionUtil {
      */
     public static BigDecimal getVersion(String tableName, BigDecimal version) {
         if (version == null) {
-            /*查询当前最大有效版本*/
-            version = commonMapper.selectMaxVersion(tableName);
-        } else {
-            /*查询当前最接近（小于等于）指定版本的版本号*/
-            version = commonMapper.selectLessOrEqualAssignVersion(tableName, version);
+            version  = qqchChangeService.effectVersion();
         }
+        /*查询当前最接近（小于等于）指定版本的版本号*/
+        version = commonMapper.selectLessOrEqualAssignVersion(tableName, version);
         if(version == null){
             version = BigDecimal.ONE;
         }

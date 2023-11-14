@@ -4,6 +4,7 @@ import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChangeDetail;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -12,6 +13,12 @@ import java.util.List;
  * @remark
  */
 public interface QqchChangeMapper {
+
+    /**
+     * 获取前期策划最大版本号
+     * @return
+     */
+    BigDecimal effectVersion();
 
     QqchChange getQqchChange(QqchChange qqchChange);
 
@@ -41,6 +48,13 @@ public interface QqchChangeMapper {
     int updateQqchChange(QqchChange qqchChange);
 
     int updateQqchChangeList(@Param("qqchChangeList") List<QqchChange> qqchChangeList);
+
+    /**
+     * 更改明细的评审完成日期
+     * @param list
+     * @return
+     */
+    int updateReviewFinishTime(@Param("idList") List<Long> list);
 
     int updateSubFinishNum(QqchChange qqchChange);
 

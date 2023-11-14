@@ -164,6 +164,10 @@
         select id from qqch_work_plan where del_flag = 0 and valid = 1 order by version desc limit 1
     </select>
 
+    <select id="effectVersion" resultType="BigDecimal">
+        select version from qqch_change where del_flag =0 and valid = 1 order by version desc limit 1
+    </select>
+
     <select id="countQqchChange" resultType="Integer">
         select count(1) from qqch_change where del_flag =0
         <if test="valid != null"> and valid = #{valid} </if>
@@ -550,10 +554,18 @@
         </foreach>
     </update>
 
+    <update id="updateReviewFinishTime" parameterType="Long">
+        update qqch_change set review_finish_time = now() where id in
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
     <update id="updateSubFinishNum">
         update qqch_change set finish_num = ifnull(finish_num,0)+#{finishNum},edit_finish_date=now()
         where `id` = #{id}
     </update>
+
 
     <update id="deleteQqchChange">
         update `qqch_change` set del_flag = 1

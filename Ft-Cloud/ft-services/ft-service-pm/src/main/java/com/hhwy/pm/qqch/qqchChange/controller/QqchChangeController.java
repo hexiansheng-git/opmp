@@ -72,8 +72,8 @@ public class QqchChangeController extends BaseController {
     }
 
     @GetMapping("/detail")
-    public AjaxResult detail(Long mainId){
-        QqchChangeVo vo = qqchChangeService.detail(mainId);
+    public AjaxResult detail(Long id){
+        QqchChangeVo vo = qqchChangeService.detail(id);
         FlowInfoSearchUtil.getFlowInfo(vo,FlowEnum.QQCH_CHANGE);
         return AjaxResult.success(vo);
     }
@@ -132,6 +132,30 @@ public class QqchChangeController extends BaseController {
     @PostMapping("/editFinishListener")
     public AjaxResult editFinishListener(@RequestParam("id") Long businessId){
         qqchChangeService.editingFinishFlow(businessId);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 单个评审人节点提交触发
+     * 修改编制完成数量
+     * @param businessId
+     * @return
+     */
+    @PostMapping("/reviewFinishListener")
+    public AjaxResult reviewFinishListener(@RequestParam("id") Long businessId){
+        qqchChangeService.reviewFinishFlow(businessId);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 单个评审人节点提交触发
+     * 修改编制完成数量
+     * @param businessId
+     * @return
+     */
+    @PostMapping("/reviewAllFinishListener")
+    public AjaxResult reviewAllFinishListener(@RequestParam("id") Long businessId){
+        qqchChangeService.reviewAllFinishFlow(businessId);
         return AjaxResult.success();
     }
 
