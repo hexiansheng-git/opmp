@@ -304,7 +304,6 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     public List<XmslDrawReviewWbs> relationList(Integer version, Long mainId, String listCode, Long listId) {
         if(StringUtils.isBlank(listCode))
             return new ArrayList<>(2);
-        List<XmslDrawReviewRelation> relationList = null;
         if(version==null){ //未保存版本的话，取最新
             version = this.xmslDrawReviewMapper.selectMaxEffectVersion();
             //取最新wbs对应的清单
@@ -316,7 +315,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         queryList.setListCode(listCode);
         queryList.setVersion(version);
         List<XmslDrawReviewList> relationlist = xmslDrawReviewMapper.relationListCode(queryList);
-        if(CollectionUtils.isEmpty(relationList)){
+        if(CollectionUtils.isEmpty(relationlist)){
             if(ObjectUtils.nvl(version) == 1)  //加载默认wbs
                 return getDefaultWbsRelation(listCode);
             return new ArrayList<>();
@@ -329,7 +328,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         //获取清单对应的细目、配合比
         Set<String> wbsCodeSet = drawList.stream().map(r->r.getWbsCode()).collect(Collectors.toSet());
         Map<String,XmslDrawReviewWbs> listMap = new HashMap<>(list.size());
-        for (int i = 0; i < drawList.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             XmslDrawReviewWbs temp = list.get(i);
             listMap.put(temp.getCode(),temp);
         }
