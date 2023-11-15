@@ -43,6 +43,19 @@ public class XmslMaterialReportController extends BaseController {
         return getDataTableAjaxResult(xmslMaterialReportList);
     }
 
+    /**
+     * 为1.6物资总需用提供，将type换成物资信息的materialType
+     * @param xmslMaterialReportParam
+     * @return
+     */
+    @GetMapping("/listForTotalDemand")
+    public AjaxResult listForTotalDemand(@Validated(ValidationGroups.Select.class) XmslMaterialReport xmslMaterialReportParam) {
+        startPage();
+        List<XmslMaterialReport> xmslMaterialReportList = xmslMaterialReportService.listForTotalDemand(xmslMaterialReportParam);
+        return getDataTableAjaxResult(xmslMaterialReportList);
+    }
+
+
     @GetMapping("/exportData")
     public void export(HttpServletResponse response) throws IOException {
         List<XmslMaterialReport> xmslMaterialReportList = xmslMaterialReportService.getXmslMaterialReportList(new XmslMaterialReport());

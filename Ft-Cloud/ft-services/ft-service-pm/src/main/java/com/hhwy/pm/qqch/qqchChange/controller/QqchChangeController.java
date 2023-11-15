@@ -86,13 +86,6 @@ public class QqchChangeController extends BaseController {
         resuMap.put("id",vo.getId());
         if(!StringUtils.equals(vo.getSubmitFlag(),"1"))
             return AjaxResult.success("",resuMap);
-        //如果为提交，返回合同金额、项目分类
-        XmslContractInfo contractInfo = contractInfoService.getValidMaxVersionContractInfo();
-        //获取有效金额万美元
-        contractInfoService.setEffectiveAmountDollar(contractInfo);
-        ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
-        resuMap.put("projectCategory",projectBasicInfo.getProjectCategory());
-        resuMap.put("amount", ObjectUtils.nvlBigDecimal(contractInfo.getEffectiveAmountDollar()).divide(new BigDecimal(10000),4, RoundingMode.HALF_UP));
         return AjaxResult.success("",resuMap);
 
 

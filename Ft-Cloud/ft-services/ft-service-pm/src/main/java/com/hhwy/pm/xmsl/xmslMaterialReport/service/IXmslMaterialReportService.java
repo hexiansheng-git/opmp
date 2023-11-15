@@ -17,6 +17,8 @@ public interface IXmslMaterialReportService {
 
     List<XmslMaterialReport> getXmslMaterialReportList(XmslMaterialReport xmslMaterialReport);
 
+    List<XmslMaterialReport> listForTotalDemand(XmslMaterialReport xmslMaterialReport);
+
     int insertXmslMaterialReport(XmslMaterialReport xmslMaterialReport);
 
     int insertXmslMaterialReportList(List<XmslMaterialReport> xmslMaterialReportList);
