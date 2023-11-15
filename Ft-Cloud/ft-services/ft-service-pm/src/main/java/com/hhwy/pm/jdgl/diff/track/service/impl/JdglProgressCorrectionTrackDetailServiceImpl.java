@@ -79,7 +79,7 @@ public class JdglProgressCorrectionTrackDetailServiceImpl implements IJdglProgre
     public int deleteJdglProgressCorrectionTrackDetail(JdglProgressCorrectionTrackDetail jdglProgressCorrectionTrackDetail) {
 //        jdglProgressCorrectionTrackDetail.setUpdateUser(SecurityUtils.getUserName());
 //        jdglProgressCorrectionTrackDetail.setUpdateTime(DateUtils.getNowDate());
-        return jdglProgressCorrectionTrackDetailMapper .deleteJdglProgressCorrectionTrackDetail(jdglProgressCorrectionTrackDetail);
+        return jdglProgressCorrectionTrackDetailMapper.deleteJdglProgressCorrectionTrackDetail(jdglProgressCorrectionTrackDetail);
     }
 
     @Transactional

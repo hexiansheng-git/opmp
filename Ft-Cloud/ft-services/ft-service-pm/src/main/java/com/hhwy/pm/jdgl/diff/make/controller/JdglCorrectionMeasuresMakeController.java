@@ -105,8 +105,7 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
         jdglCorrectionMeasuresMakeService.updateJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMakeParam);
         JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = new JdglCorrectionMeasuresMake();
         jdglCorrectionMeasuresMake.setId(jdglCorrectionMeasuresMakeParam.getId());
-        return AjaxResult.success(jdglCorrectionMeasuresMakeService
-            .getJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake));
+        return AjaxResult.success(jdglCorrectionMeasuresMakeService.getJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake));
     }
 
     @PreAuthorize(hasPermi = "jdglCorrectionMeasuresMake:update")

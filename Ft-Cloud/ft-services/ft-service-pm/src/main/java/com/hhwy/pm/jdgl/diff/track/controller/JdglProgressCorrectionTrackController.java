@@ -45,8 +45,7 @@ public class JdglProgressCorrectionTrackController extends BaseController {
     @GetMapping("/getOne")
     public AjaxResult getOne(
         @Validated(ValidationGroups.Get.class) JdglProgressCorrectionTrack jdglProgressCorrectionTrackParam) {
-        JdglProgressCorrectionTrack jdglProgressCorrectionTrack = jdglProgressCorrectionTrackService
-            .getJdglProgressCorrectionTrack(jdglProgressCorrectionTrackParam);
+        JdglProgressCorrectionTrack jdglProgressCorrectionTrack = jdglProgressCorrectionTrackService.getJdglProgressCorrectionTrack(jdglProgressCorrectionTrackParam);
         return AjaxResult.success(jdglProgressCorrectionTrack);
     }
 
