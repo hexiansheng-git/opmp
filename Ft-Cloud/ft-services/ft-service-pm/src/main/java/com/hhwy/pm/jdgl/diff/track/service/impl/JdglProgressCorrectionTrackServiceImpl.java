@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
@@ -35,18 +36,15 @@ import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author zhenglili
@@ -78,6 +76,8 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
     private IJdglMainPlanItemService jdglMainPlanItemService;
     @Autowired
     private IPlanStatisticsService planStatisticsService;
+    @Autowired
+    private ISysSyncInfoService sysSyncInfoService;
     @Autowired
     private IXmslProjectBasicInfoService projectBasicInfoService;
 
@@ -426,6 +426,8 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         }
 
         jdglProgressCorrectionTrackMapper.insertJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
+        //推送到总部版
+        sysSyncInfoService.pushJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
 
         List<JdglProgressCorrectionTrackDetail> trackDetailList = new ArrayList<>();
         for (JdglCorrectionMeasuresMakeDetail detail : detailList) {
