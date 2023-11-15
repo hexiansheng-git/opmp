@@ -40,7 +40,7 @@ public class EasyExeclUtil {
     }
 
     public static void export(HttpServletResponse response, List<List<String>> head, List<List<Object>> data, String fileName, String sheetName){
-        EasyExeclUtil.export(response,head,data,fileName,sheetName);
+        EasyExeclUtil.export(response,head,data,fileName,sheetName,new SheetWriteHandler[]{});
     }
 
     public static void export(HttpServletResponse response, List<List<String>> head, List<List<Object>> data, String fileName, String sheetName,

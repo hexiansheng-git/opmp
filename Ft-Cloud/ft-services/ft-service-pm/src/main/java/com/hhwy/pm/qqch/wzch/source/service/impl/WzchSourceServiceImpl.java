@@ -150,7 +150,7 @@ public class WzchSourceServiceImpl implements IWzchSourceService {
         wzchSource.setVersion(version);
         wzchSource.setStageIdentity(qqchReviewService.getStage());
         List<WzchSourceDetail> wzchSourceDetails = queryWzchSourceDetailList(version);
-        wzchSourceDetails = wzchSourceDetails.stream().sorted(Comparator.comparing(WzchSourceDetail::getMaterialCode)).collect(Collectors.toList());
+//        wzchSourceDetails = wzchSourceDetails.stream().sorted(Comparator.comparing(WzchSourceDetail::getMaterialCode)).collect(Collectors.toList());
         wzchSource.setWzchSourceDetailList(wzchSourceDetails);
         return wzchSource;
     }

@@ -316,7 +316,9 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
     }
 
     private void fillWzchTotalDemandDetail(WzchTotalDemand wzchTotalDemand) {
-        for (WzchTotalDemandDetail wzchTotalDemandDetail : wzchTotalDemand.getWzchTotalDemandDetailList()) {
+        List<WzchTotalDemandDetail> list = wzchTotalDemand.getWzchTotalDemandDetailList();
+        for (int i = list.size()-1; i >= 0; i--) {
+            WzchTotalDemandDetail wzchTotalDemandDetail = list.get(i);
             if (wzchTotalDemandDetail == null ||
                     CollectionUtils.isEmpty(wzchTotalDemandDetail.getWzchTotalDemandTimeCountList())) {
                 throw new BaseException("【保存数据失败】请完善表格数据");
@@ -1072,7 +1074,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         busAndMaterialMap.put("materialName", "materialName");
         busAndMaterialMap.put("materialSpec", "materialSpec");
         busAndMaterialMap.put("unit", "unit");
-        busAndMaterialMap.put("categoryName", "materialType");
+//        busAndMaterialMap.put("categoryName", "materialType");
         wzchCommonService.setMaterialInfo(list,"materialCode",busAndMaterialMap);
     }
 

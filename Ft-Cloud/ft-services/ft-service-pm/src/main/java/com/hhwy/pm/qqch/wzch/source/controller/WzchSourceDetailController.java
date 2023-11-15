@@ -79,6 +79,9 @@ public class WzchSourceDetailController extends BaseController {
         try{
             List<WzchSourceDetail> list =  wzchSourceDetailService.importData(file);
             return new AjaxResult(200,"导入成功",list);
+        }catch(IllegalArgumentException e){
+            e.printStackTrace();
+            throw new BaseException(e.getMessage());
         }catch (Exception e){
             e.printStackTrace();
             throw new BaseException("请检查导入的模板以及数据是否有误");
