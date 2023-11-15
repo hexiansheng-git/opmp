@@ -401,21 +401,25 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         //获取用户授权菜单
         List<SysMenu> authMenuList = menuList.stream().filter(r->authNameSet.contains(r.getTitle())).collect(Collectors.toList());
         List<SysMenu> authAllList = new ArrayList<>();
+        Set<Long> existsMenuId = new HashSet<>();
         for (int i = 0; i < authMenuList.size(); i++) {
-            putParent(authMenuList.get(i),menuMap,authAllList);
+            putParent(authMenuList.get(i),menuMap,authAllList,existsMenuId);
         }
         //转树形
         List<SysMenu> finalTreeList = (new PlatMenuTreeUtils()).menuList(authAllList);
         return finalTreeList;
     }
 
-    private void putParent(SysMenu menu,Map<Long,SysMenu> menuMap,List<SysMenu> list){
-        list.add(menu);
+    private void putParent(SysMenu menu,Map<Long,SysMenu> menuMap,List<SysMenu> list,Set<Long> existsMenuIdSet){
+        if(!existsMenuIdSet.contains(menu.getMenuId())){
+            list.add(menu);
+            existsMenuIdSet.add(menu.getMenuId());
+        }
         if(menu.getParentId() ==null)
             return ;
         SysMenu p = menuMap.get(menu.getParentId());
         if(p != null){
-            putParent(p,menuMap,list);
+            putParent(p,menuMap,list,existsMenuIdSet);
         }
     }
 
