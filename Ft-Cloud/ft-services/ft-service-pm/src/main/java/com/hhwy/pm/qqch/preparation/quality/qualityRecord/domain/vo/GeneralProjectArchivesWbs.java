@@ -62,6 +62,12 @@ public class GeneralProjectArchivesWbs {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     private Date completeTime;
+    /**
+     * 字段描述：资料完成时间 完工时间的后五天
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    private Date dataCompleteTime;
 
     /**
      * 字段描述：重难点工程清单标识（1：是，0：不是）
