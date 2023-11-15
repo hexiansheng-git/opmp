@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 主材报表
@@ -44,6 +45,22 @@ public class XmslMaterialReportServiceImpl implements IXmslMaterialReportService
 
     public List<XmslMaterialReport> getXmslMaterialReportList(XmslMaterialReport xmslMaterialReport) {
         return xmslMaterialReportMapper.getXmslMaterialReportList(xmslMaterialReport);
+    }
+
+    @Override
+    public List<XmslMaterialReport> listForTotalDemand(XmslMaterialReport xmslMaterialReport) {
+        List<XmslMaterialReport> list = xmslMaterialReportMapper.getXmslMaterialReportList(xmslMaterialReport);
+        if(CollectionUtils.isEmpty(list))
+            return list;
+        //为前期策划物资总需计划(1.6)准备，需要将type换成物资信息的materialType
+        Set<String> materCodeSet = list.stream().map(r->r.getCode()).collect(Collectors.toSet());
+        Map<String,MaterialInfo> materialInfoMap = MaterialUtils.getMaterialInfoMapByCodes(materCodeSet);
+        for (int i = 0; i < list.size(); i++) {
+            XmslMaterialReport temp = list.get(i);
+            MaterialInfo materialInfo = materialInfoMap.get(temp.getCode());
+            temp.setType(materialInfo==null?temp.getType():materialInfo.getMaterialType());
+        }
+        return list;
     }
 
     @Transactional

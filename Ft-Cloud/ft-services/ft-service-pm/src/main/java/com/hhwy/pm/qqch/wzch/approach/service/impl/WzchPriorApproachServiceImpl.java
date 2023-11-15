@@ -120,7 +120,7 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
         List<Long> detailIds = wzchTotalDemandDetails.stream().map(WzchTotalDemandDetail::getId).collect(Collectors.toList());
         List<WzchTotalDemandTimeCount> timeCounts = wzchTotalDemandTimeCountMapper.selectByTotalDemandDetailIds(detailIds);
         if(CollectionUtils.isEmpty(timeCounts))
-            throw new BaseException("获取数据异常");
+            throw new BaseException("未获取到日期数据，请检查来源策划数据");
         //2、转换为优先进场
         List<WzchPriorApproachDetail> addList = new ArrayList<>();
         List<WzchPriorApproachYearCount> addDetailList = new ArrayList<>();

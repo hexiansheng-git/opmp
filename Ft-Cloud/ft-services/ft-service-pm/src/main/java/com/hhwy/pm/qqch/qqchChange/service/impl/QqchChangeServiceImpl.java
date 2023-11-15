@@ -20,6 +20,7 @@ import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
@@ -46,6 +47,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
@@ -72,6 +74,8 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
     private IQqchWorkPlanDetailService workPlanDetailService;
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private IXmslContractInfoService contractInfoService;
 
 
     public QqchChange getQqchChange(QqchChange qqchChange) {
@@ -130,6 +134,8 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         //如果是版本一，加载工作计划的编制人
         List<QqchChangeDetail> detailList = loadDetail(maxVersion);
         change.setDetailList(detailList);
+        //
+        setAmtInfo(change);
         return change;
     }
 
@@ -145,6 +151,8 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         List<QqchChangeDetail> detailList = loadDetail(change.getVersion());
         vo.setDetailList(detailList);
         vo.setProjectCode(SecurityUtils.getTenantKey());
+        //
+        setAmtInfo(vo);
         return vo;
     }
 
@@ -457,5 +465,19 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
     @Transactional
     public int deleteQqchChangeByPks(List<Long> qqchChangePkList) {
         return qqchChangeMapper.deleteQqchChangeByPks(qqchChangePkList);
+    }
+
+    /**
+     * 设置项目分类、合同有效金额万美元
+     * @param qqchChange
+     */
+    private void setAmtInfo(QqchChangeVo qqchChange){
+        //如果为提交，返回合同金额、项目分类
+        XmslContractInfo contractInfo = contractInfoService.getValidMaxVersionContractInfo();
+        //获取有效金额万美元
+        contractInfoService.setEffectiveAmountDollar(contractInfo);
+        ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+        qqchChange.setProjectCategory(projectBasicInfo.getProjectCategory());
+        qqchChange.setAmount(ObjectUtils.nvlBigDecimal(contractInfo.getEffectiveAmountDollar()).divide(new BigDecimal(10000),4, RoundingMode.HALF_UP));
     }
 }
