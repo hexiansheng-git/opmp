@@ -188,7 +188,7 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
                 wzchPurchaseSupplyDetailDTO.setPurchaseSupplyDetailId(detailId++);
                 String materialCode = wzchPurchaseSupplyDetailDTO.getMaterialCode();
                 String materialStandard = wzchPurchaseSupplyDetailDTO.getMaterialStandard();
-
+                wzchPurchaseSupplyDetailDTO.setCategoryNameName(MaterialUtils.getCategoryNameByMaterCode(wzchPurchaseSupplyDetailDTO.getMaterialCode()));
                 // 来源
                 StringBuilder source = new StringBuilder("");
                 StringBuilder sourceName = new StringBuilder("");

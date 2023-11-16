@@ -119,15 +119,12 @@ public class WzchRevolveRentDetailServiceImpl implements IWzchRevolveRentDetailS
 
     @Override
     public int insertOrUpdateBatch(List<WzchRevolveRentDetailDTO> detailList, Long rentId) {
-
+        Assert.notNull(rentId, "周转租赁不能为空");
+        this.wzchRevolveRentDetailMapper.deleteByRentId(rentId);
         if (CollectionUtils.isEmpty(detailList)) {
             return 0;
             // TODO throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "物资详情不能为空");
         }
-
-        Assert.notNull(rentId, "周转租赁不能为空");
-        this.wzchRevolveRentDetailMapper.deleteByRentId(rentId);
-
         List<WzchRevolveRentDetail> insertOrUpdateData = detailList.stream().map(item -> {
             Long id = item.getId() == null ? IdWorker.createId() : item.getId();
             item.setId(id);

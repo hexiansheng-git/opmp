@@ -1010,9 +1010,12 @@ public class WzchCommonService {
             for (T t : tList) {
                 // 获取字段值
                 Object fieldValue = fieldUtils.getFieldVal(currencyNameFiledName, t);
+                if(ObjectUtils.isBlank(fieldValue))
+                    continue;
                 codes.append(fieldValue).append(",");
             }
-
+            if(ObjectUtils.isBlank(codes.toString()))
+                return;
             // 获取币种信息
             CurrencyInfo currencyInfo = new CurrencyInfo();
             currencyInfo.setParams(ParamUtils.init().add("currencyNames", codes.toString()).get());

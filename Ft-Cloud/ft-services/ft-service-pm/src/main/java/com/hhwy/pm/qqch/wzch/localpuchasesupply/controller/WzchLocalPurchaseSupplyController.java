@@ -16,6 +16,7 @@ import com.hhwy.pm.qqch.wzch.localpuchasesupply.service.IWzchLocalPurchaseSupply
 import com.hhwy.pm.qqch.wzch.puchasesupply.domain.WzchPurchaseSupply;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 import lombok.ToString;
@@ -234,6 +235,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
             dtoList = wzchCommonService.setDicValue(dtoList, dm);
             for (int i = 0; i < dtoList.size(); i++) {
                 dtoList.get(i).setPurchaseSupplyDetailId((long) i);
+                dtoList.get(i).setId(IdWorker.createId());
             }
 
             // 将数据进行分级

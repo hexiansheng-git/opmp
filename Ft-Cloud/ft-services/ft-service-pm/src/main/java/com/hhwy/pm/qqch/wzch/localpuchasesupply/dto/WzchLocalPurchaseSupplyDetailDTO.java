@@ -59,9 +59,10 @@ public class WzchLocalPurchaseSupplyDetailDTO extends WzchLocalPurchaseSupplyDet
     /**
      * 物资分类
      */
-    @NotBlank(message = "物资分类不能为空", groups = {ValidationGroups.Other.class})
-    @FtExcel(name = "物资分类",dictType = "total_demand_category_name")
+
     private String categoryName;
+    @NotBlank(message = "物资分类不能为空", groups = {ValidationGroups.Other.class})
+    @FtExcel(name = "物资分类")
     private String categoryNameName;
 
 
