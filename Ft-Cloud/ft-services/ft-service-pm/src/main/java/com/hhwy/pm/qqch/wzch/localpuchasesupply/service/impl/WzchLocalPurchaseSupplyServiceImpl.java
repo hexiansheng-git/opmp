@@ -23,6 +23,7 @@ import com.hhwy.pm.qqch.wzch.puchasesupply.domain.WzchPurchaseSupply;
 import com.hhwy.pm.qqch.wzch.puchasesupply.dto.WzchPurchaseSupplyDetailDTO;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.MaterialUtils;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -197,7 +198,7 @@ public class WzchLocalPurchaseSupplyServiceImpl implements IWzchLocalPurchaseSup
             wzchPurchaseSupplyDetailDTO.setPurchaseSupplyDetailId(detailId);
             String materialCode = wzchPurchaseSupplyDetailDTO.getMaterialCode();
             String materialStandard = wzchPurchaseSupplyDetailDTO.getMaterialStandard();
-
+            wzchPurchaseSupplyDetailDTO.setCategoryNameName(MaterialUtils.getCategoryNameByMaterCode(materialCode));
             // 来源
             StringBuilder source = new StringBuilder("");
             StringBuilder sourceName = new StringBuilder("");

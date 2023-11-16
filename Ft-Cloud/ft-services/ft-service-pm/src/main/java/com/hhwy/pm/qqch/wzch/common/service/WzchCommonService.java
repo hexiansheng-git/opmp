@@ -10,6 +10,7 @@ import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.qqch.wzch.common.mapper.WzchCommonMapper;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.AjaxResultUtil;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.ParamUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.common.PmsConstant;
@@ -504,8 +505,11 @@ public class WzchCommonService {
         CopyOnWriteArrayList<String> codes = new CopyOnWriteArrayList<>();
         tList.forEach(item -> {
             try {
+                Object o = materialCodeField.get(item);
+                if(ObjectUtils.isEmpty(o))
+                    return ;
                 // 获取物资编码值
-                String materialCode = (String) materialCodeField.get(item);
+                String materialCode = (String) o;
                 codes.add(materialCode);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1006,9 +1010,12 @@ public class WzchCommonService {
             for (T t : tList) {
                 // 获取字段值
                 Object fieldValue = fieldUtils.getFieldVal(currencyNameFiledName, t);
+                if(ObjectUtils.isBlank(fieldValue))
+                    continue;
                 codes.append(fieldValue).append(",");
             }
-
+            if(ObjectUtils.isBlank(codes.toString()))
+                return;
             // 获取币种信息
             CurrencyInfo currencyInfo = new CurrencyInfo();
             currencyInfo.setParams(ParamUtils.init().add("currencyNames", codes.toString()).get());

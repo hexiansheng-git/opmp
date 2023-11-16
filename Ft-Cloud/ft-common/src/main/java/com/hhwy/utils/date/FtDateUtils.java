@@ -85,6 +85,8 @@ public class FtDateUtils extends DateUtils {
 
 
     public static String formatDate(Date date) {
+        if(date==null)
+            return "";
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             return dateFormat.format(date);

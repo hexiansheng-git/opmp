@@ -24,6 +24,7 @@ import com.hhwy.pm.qqch.wzch.puchasesupply.service.IWzchPurchaseSupplyDetailServ
 import com.hhwy.pm.qqch.wzch.puchasesupply.service.IWzchPurchaseSupplyService;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 import lombok.ToString;
@@ -193,10 +194,10 @@ public class WzchPurchaseSupplyController extends BaseController {
             dm.put("categoryName_categoryNameName", "total_demand_category_name");
             dm.put("source_sourceName", "wzch_purchase_source");
             dtoList = wzchCommonService.setDicValue(dtoList, dm);
-            for (int i = 0; i < dtoList.size(); i++) {
+            for (int i = dtoList.size()-1; i >= 0; i--) {
                 dtoList.get(i).setPurchaseSupplyDetailId((long) i);
+                dtoList.get(i).setId(IdWorker.createId());
             }
-
             // 将数据进行分级
             dtoList = detailService.getLevelList(dtoList);
             return AjaxResult.success(dtoList);
