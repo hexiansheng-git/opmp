@@ -18,6 +18,16 @@ public class JdglData4P6Controller {
 
     /**
      * 根据租户编号拉取p6数据(不切租户)
+     * @param
+     * @return
+     */
+    @PostMapping("/initJdglData4P6ByThis")
+    public AjaxResult initJdglData4P6ByThis() {
+        return AjaxResult.success(jdglData4P6Service.initJdglData4P6ByThis());
+    }
+
+    /**
+     * 根据租户编号拉取p6数据(不切租户)
      * @param tenantKey
      * @return
      */

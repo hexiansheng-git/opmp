@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface IJdglData4P6Service {
 
+    List<JdglMainPlanItem> initJdglData4P6ByThis();
+
     List<JdglMainPlanItem> initJdglData4P6ByOne(String tenantKey);
 
     List<JdglMainPlanItem> initAllJdglData4P6();
@@ -16,4 +18,6 @@ public interface IJdglData4P6Service {
     ProjectInfo getProjectInfo(String projectCode);
 
     String initJdglWorkPreData4P6ByTenent(String projectId);
+
+
 }

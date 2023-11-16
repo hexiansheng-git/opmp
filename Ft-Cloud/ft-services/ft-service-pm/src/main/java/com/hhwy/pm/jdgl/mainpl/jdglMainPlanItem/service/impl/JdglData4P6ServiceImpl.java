@@ -3,6 +3,7 @@ package com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.impl;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
@@ -53,6 +54,15 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
     private String p6IpPort;
 
     private String pre = "";
+
+    @Override
+    public List<JdglMainPlanItem> initJdglData4P6ByThis() {
+        String tenantKey = SecurityUtils.getTenantKey();
+        if(StringUtils.isEmpty(tenantKey)) {
+            return new ArrayList<>();
+        }
+        return initJdglData4P6ByOne(tenantKey);
+    }
 
     @Override
     public List<JdglMainPlanItem> initJdglData4P6ByOne(String tenantKey) {
