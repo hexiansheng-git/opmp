@@ -13,6 +13,8 @@ import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.KeyDifficult
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.mapper.QqchKeyDifficultProjectArchivesMapper;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.service.IQqchKeyDifficultProjectArchivesService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
+import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -45,6 +48,9 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
 
     @Autowired
     private IQqchReviewService qqchReviewService;
+
+    @Autowired
+    private IQqchMainPlanItemService qqchMainPlanItemService;
 
 
     public QqchKeyDifficultProjectArchives getQqchKeyDifficultProjectArchives(QqchKeyDifficultProjectArchives qqchKeyDifficultProjectArchives) {
@@ -123,23 +129,34 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
         qqchKeyDifficultProjectArchives.setVersion(version);
         List<QqchKeyDifficultProjectArchives> qqchKeyDifficultProjectArchivesList = qqchKeyDifficultProjectArchivesMapper.getQqchKeyDifficultProjectArchivesList(qqchKeyDifficultProjectArchives);
 
-        Date nowDate = DateUtils.getNowDate();
+        String wbsCodes = keyDifficultProjectInventoryWbsList.stream().map(XmslWbs::getCode).collect(Collectors.joining(","));
+        List<QqchMainPlanItem> planItemList = qqchMainPlanItemService.getListByItemCodes(wbsCodes);
+        Map<String, QqchMainPlanItem> planItemMap = planItemList.stream().collect(Collectors.toMap(QqchMainPlanItem::getItemCode, o -> o));
+
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(nowDate);
-        calendar.add(Calendar.DATE,5);
-        Date after5Date = calendar.getTime();
         List<KeyDifficultWbs> keyDifficultWbsList = new ArrayList<>();
         for (XmslWbs xmslWbs : keyDifficultProjectInventoryWbsList) {
             KeyDifficultWbs keyDifficultWbs = new KeyDifficultWbs();
 
+            String wbsCode = xmslWbs.getCode();
             Long id = Long.valueOf(xmslWbs.getId());
             keyDifficultWbs.setId(Long.valueOf(xmslWbs.getId()));
             keyDifficultWbs.setPid(Long.valueOf(xmslWbs.getParentId()));
-            keyDifficultWbs.setWbsCode(xmslWbs.getCode());
+            keyDifficultWbs.setWbsCode(wbsCode);
             keyDifficultWbs.setWbsName(xmslWbs.getName());
 
-            keyDifficultWbs.setCompleteTime(nowDate);
-            keyDifficultWbs.setDataCompleteTime(after5Date);
+            //设置完工时间和资料完成时间
+            QqchMainPlanItem planItem = planItemMap.get(wbsCode);
+            if(planItem != null){
+                Date finishDate = planItem.getFinishDate();
+                if(finishDate != null){
+                    calendar.setTime(finishDate);
+                    calendar.add(Calendar.DATE,5);
+                    Date after5Date = calendar.getTime();
+                    keyDifficultWbs.setCompleteTime(finishDate);
+                    keyDifficultWbs.setDataCompleteTime(after5Date);
+                }
+            }
 
             List<QqchKeyDifficultProjectArchives> sublist = new ArrayList<>();
             for (QqchKeyDifficultProjectArchives keyDifficultProjectArchives : qqchKeyDifficultProjectArchivesList) {

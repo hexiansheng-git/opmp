@@ -9,7 +9,10 @@ import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleSer
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
+import com.hhwy.pm.jdgl.diff.track.mapper.JdglProgressCorrectionTrackMapper;
 import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackService;
+import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
+import com.hhwy.pm.jdgl.yearpl.jdglYearPlan.domain.JdglYearPlan;
 import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.evaluation.service.IQqchSummaryEvaluationService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
@@ -53,6 +56,8 @@ public class SyncController extends BaseController {
     private IQqchSummaryEvaluationService summaryEvaluationService;
     @Autowired
     private IJdglDayScheduleService jdglDayScheduleService;
+    @Autowired
+    private JdglProgressCorrectionTrackMapper jdglProgressCorrectionTrackMapper;
 
     /**
      * 前期策划测试用
@@ -179,12 +184,10 @@ public class SyncController extends BaseController {
      */
     @PostMapping("/progressCorrectionTrack")
     public AjaxResult progressCorrectionTrack(@RequestBody JdglProgressCorrectionTrack progressCorrectionTrack) {
-        if(!SecurityUtils.getSysUser().isAdmin())
-            return AjaxResult.error("ERROR");
         if(progressCorrectionTrack.getId() != null){
             JdglProgressCorrectionTrack query = new JdglProgressCorrectionTrack();
-            query.setId(IdWorker.createId());
-            progressCorrectionTrack = jdglProgressCorrectionTrackService.getJdglProgressCorrectionTrack(query);
+            query.setId(progressCorrectionTrack.getId());
+            progressCorrectionTrack = jdglProgressCorrectionTrackMapper.getJdglProgressCorrectionTrack(query);
             syncInfoService.pushJdglProgressCorrectionTrack(progressCorrectionTrack);
         }else{
             List<JdglProgressCorrectionTrack> list = jdglProgressCorrectionTrackService.getJdglProgressCorrectionTrackList(new JdglProgressCorrectionTrack());
@@ -203,6 +206,29 @@ public class SyncController extends BaseController {
         if(!SecurityUtils.getSysUser().isAdmin())
             return AjaxResult.error("ERROR");
         List<JdglDaySchedule> list = jdglDayScheduleService.getListBy(new JdglDaySchedule());
+        syncInfoService.pushJdglDaySchedule(list);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 推送年度计划数据
+     * @param yearPlan
+     * @return
+     */
+    @PostMapping("pushJdglYearPlan")
+    public AjaxResult pushJdglYearPlan(@RequestBody JdglYearPlan yearPlan){
+        syncInfoService.pushJdglYearPlan(yearPlan);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("pushJdglMonthPlan")
+    public AjaxResult pushJdglMonthPlan(@RequestBody JdglMonthPlan monthPlan){
+        syncInfoService.pushJdglMonthPlan(monthPlan);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("pushJdglDaySchedule")
+    public AjaxResult pushJdglDaySchedule(@RequestBody List<JdglDaySchedule> list){
         syncInfoService.pushJdglDaySchedule(list);
         return AjaxResult.success();
     }

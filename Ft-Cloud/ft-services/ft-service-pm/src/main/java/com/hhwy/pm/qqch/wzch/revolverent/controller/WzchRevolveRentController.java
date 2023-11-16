@@ -222,7 +222,7 @@ public class WzchRevolveRentController extends BaseController {
     }
 
     @PostMapping("/sync")
-    public AjaxResult sync(WzchRevolveRentDTO wzchRevolveRent) {
+    public AjaxResult sync(@RequestBody WzchRevolveRentDTO wzchRevolveRent) {
         try{
             Assert.notNull(wzchRevolveRent.getVersion(), "version不能为空");
             wzchRevolveRentService.sync(wzchRevolveRent);

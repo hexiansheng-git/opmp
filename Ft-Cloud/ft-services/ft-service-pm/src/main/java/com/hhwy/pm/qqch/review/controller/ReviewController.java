@@ -4,6 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.review.domain.Review;
@@ -20,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -239,6 +237,9 @@ public class ReviewController extends BaseController {
     public AjaxResult submit(@RequestBody Review review) {
         review.setTaskStatus("1");
         review.setReviewStatus("3");
+        review.setInitDate(new Date());
+        review.setInitUserId(SecurityUtils.getUserId());
+        review.setInitUserName(SecurityUtils.getSysUser().getNickName());
         qqchReviewService.updateQqchReview(review);
         return AjaxResult.success("", review.getId() + "");
     }

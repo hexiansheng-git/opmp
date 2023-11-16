@@ -134,7 +134,7 @@ public class WzchPriorPurchaseController extends BaseController {
      * @return
      */
     @PostMapping("/sync")
-    public AjaxResult sync(WzchPriorPurchaseDTO dto) {
+    public AjaxResult sync(@RequestBody WzchPriorPurchaseDTO dto) {
         try{
             Assert.notNull(dto.getVersion(), "version不能为空");
             wzchPriorPurchaseService.sync(dto);

@@ -247,6 +247,8 @@ public class QqchChange extends CommonBaseEntity {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
+
+
     public String getVersionStr() {
         return "V"+version;
     }

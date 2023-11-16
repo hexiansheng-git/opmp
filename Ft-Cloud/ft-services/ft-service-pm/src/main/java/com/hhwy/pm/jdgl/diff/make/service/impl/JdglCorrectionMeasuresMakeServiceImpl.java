@@ -215,7 +215,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         qryMake.setWarnPeriod(periodStr);
         JdglCorrectionMeasuresMake make = jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMake(qryMake);
         if (make != null) {
-            return;
+            jdglCorrectionMeasuresMakeMapper.deleteJdglCorrectionMeasuresMake(qryMake);
         }
 
         // 获取差异化分析数据

@@ -20,6 +20,7 @@ import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
@@ -46,6 +47,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
@@ -72,6 +74,8 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
     private IQqchWorkPlanDetailService workPlanDetailService;
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private IXmslContractInfoService contractInfoService;
 
 
     public QqchChange getQqchChange(QqchChange qqchChange) {
@@ -80,13 +84,14 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
 
     @Override
     public BigDecimal effectVersion() {
-        final String key = "qqchValidVersion";
+        final String key = "qqchValidVersion::"+SecurityUtils.getTenantKey();
         if(redisUtils.hasKey(key)){
             return ObjectUtils.nvlBigDecimal(redisUtils.get(key),BigDecimal.ONE);
         }
         BigDecimal version =qqchChangeMapper.effectVersion();
+        version = ObjectUtils.nvlBigDecimal(version,BigDecimal.ONE);
         redisUtils.setAndExpire(key,version+"",1, TimeUnit.HOURS);
-        return ObjectUtils.nvlBigDecimal(version,BigDecimal.ONE);
+        return version;
     }
     @Override
     public List<QqchChange> list(QqchChange qqchChange) {
@@ -129,6 +134,8 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         //如果是版本一，加载工作计划的编制人
         List<QqchChangeDetail> detailList = loadDetail(maxVersion);
         change.setDetailList(detailList);
+        //
+        setAmtInfo(change);
         return change;
     }
 
@@ -144,6 +151,8 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         List<QqchChangeDetail> detailList = loadDetail(change.getVersion());
         vo.setDetailList(detailList);
         vo.setProjectCode(SecurityUtils.getTenantKey());
+        //
+        setAmtInfo(vo);
         return vo;
     }
 
@@ -392,21 +401,25 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         //获取用户授权菜单
         List<SysMenu> authMenuList = menuList.stream().filter(r->authNameSet.contains(r.getTitle())).collect(Collectors.toList());
         List<SysMenu> authAllList = new ArrayList<>();
+        Set<Long> existsMenuId = new HashSet<>();
         for (int i = 0; i < authMenuList.size(); i++) {
-            putParent(authMenuList.get(i),menuMap,authAllList);
+            putParent(authMenuList.get(i),menuMap,authAllList,existsMenuId);
         }
         //转树形
         List<SysMenu> finalTreeList = (new PlatMenuTreeUtils()).menuList(authAllList);
         return finalTreeList;
     }
 
-    private void putParent(SysMenu menu,Map<Long,SysMenu> menuMap,List<SysMenu> list){
-        list.add(menu);
+    private void putParent(SysMenu menu,Map<Long,SysMenu> menuMap,List<SysMenu> list,Set<Long> existsMenuIdSet){
+        if(!existsMenuIdSet.contains(menu.getMenuId())){
+            list.add(menu);
+            existsMenuIdSet.add(menu.getMenuId());
+        }
         if(menu.getParentId() ==null)
             return ;
         SysMenu p = menuMap.get(menu.getParentId());
         if(p != null){
-            putParent(p,menuMap,list);
+            putParent(p,menuMap,list,existsMenuIdSet);
         }
     }
 
@@ -456,5 +469,19 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
     @Transactional
     public int deleteQqchChangeByPks(List<Long> qqchChangePkList) {
         return qqchChangeMapper.deleteQqchChangeByPks(qqchChangePkList);
+    }
+
+    /**
+     * 设置项目分类、合同有效金额万美元
+     * @param qqchChange
+     */
+    private void setAmtInfo(QqchChangeVo qqchChange){
+        //如果为提交，返回合同金额、项目分类
+        XmslContractInfo contractInfo = contractInfoService.getValidMaxVersionContractInfo();
+        //获取有效金额万美元
+        contractInfoService.setEffectiveAmountDollar(contractInfo);
+        ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+        qqchChange.setProjectCategory(projectBasicInfo.getProjectCategory());
+        qqchChange.setAmount(ObjectUtils.nvlBigDecimal(contractInfo.getEffectiveAmountDollar()).divide(new BigDecimal(10000),4, RoundingMode.HALF_UP));
     }
 }

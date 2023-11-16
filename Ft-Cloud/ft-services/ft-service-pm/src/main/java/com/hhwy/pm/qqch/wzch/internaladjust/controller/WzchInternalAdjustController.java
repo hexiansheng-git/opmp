@@ -212,7 +212,7 @@ public class WzchInternalAdjustController extends BaseController {
     }
 
     @PostMapping("/sync")
-    public AjaxResult sync(WzchInternalAdjustDTO dto) {
+    public AjaxResult sync(@RequestBody WzchInternalAdjustDTO dto) {
         try{
             Assert.notNull(dto.getVersion(), "version不能为空");
             wzchInternalAdjustService.sync(dto);

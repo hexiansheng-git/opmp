@@ -38,6 +38,7 @@ import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.MaterialUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
+import com.hhwy.utils.excelUtil.handler.DictHandler;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -59,6 +60,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
+import java.util.logging.Handler;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -314,7 +316,9 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
     }
 
     private void fillWzchTotalDemandDetail(WzchTotalDemand wzchTotalDemand) {
-        for (WzchTotalDemandDetail wzchTotalDemandDetail : wzchTotalDemand.getWzchTotalDemandDetailList()) {
+        List<WzchTotalDemandDetail> list = wzchTotalDemand.getWzchTotalDemandDetailList();
+        for (int i = list.size()-1; i >= 0; i--) {
+            WzchTotalDemandDetail wzchTotalDemandDetail = list.get(i);
             if (wzchTotalDemandDetail == null ||
                     CollectionUtils.isEmpty(wzchTotalDemandDetail.getWzchTotalDemandTimeCountList())) {
                 throw new BaseException("【保存数据失败】请完善表格数据");
@@ -535,9 +539,13 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         //对应的季度或者月份范围
         Map<String, List<String>> rangeMap = range(request, years);
         List<List<String>> heads = head(years, request, rangeMap, leaderFlag);
+
         List<List<Object>> data = getData(request.getWzchTotalDemandDetailList(), years, request.getViewType(), rangeMap, leaderFlag);
-        
-        EasyExeclUtil.export(response, heads, data, "物资总需详情.xlsx", "物资总需详情");
+
+        Map<Integer,String> dictNameMap = new HashMap<>();
+        dictNameMap.put(9,"total_demand_category_name");
+        EasyExeclUtil.export(response, heads, data, "物资总需详情.xlsx", "物资总需详情",
+                new DictHandler(dictNameMap));
 
     }
 
@@ -1066,7 +1074,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         busAndMaterialMap.put("materialName", "materialName");
         busAndMaterialMap.put("materialSpec", "materialSpec");
         busAndMaterialMap.put("unit", "unit");
-        busAndMaterialMap.put("categoryName", "materialType");
+//        busAndMaterialMap.put("categoryName", "materialType");
         wzchCommonService.setMaterialInfo(list,"materialCode",busAndMaterialMap);
     }
 
@@ -1316,7 +1324,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         List<List<Object>> data = new ArrayList<>();
         List<SysDictData> tSysDictDataList = systemApiService.selectDictDataByType("total_demand_category_name");
         List<SysDictData> mSysDictDataList = systemApiService.selectDictDataByType("material_standard");
-        List<SysDictData> wSysDictDataList = systemApiService.selectDictDataByType("warn_flag");
+//        List<SysDictData> wSysDictDataList = systemApiService.selectDictDataByType("warn_flag");
         Map<String,String> mmap = mSysDictDataList.stream().collect(Collectors.toMap(r->r.getDictValue(),r->r.getDictLabel()));
         Map<String,String> tmap = tSysDictDataList.stream().collect(Collectors.toMap(r->r.getDictValue(),r->r.getDictLabel()));
 
@@ -1353,6 +1361,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
             }
             List<WzchTotalDemandTimeCount> wzchTotalDemandTimeCountList = detail.getWzchTotalDemandTimeCountList();
             if (CollectionUtils.isEmpty(wzchTotalDemandTimeCountList)) {
+                data.add(list);
                 continue;
             }
             for (String year : yesrs) {

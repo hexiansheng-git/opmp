@@ -38,6 +38,8 @@ import java.util.Map;
  *
  * @author zq
  * @date 2022-11-23
+ *
+ * 7.1
  */
 @Controller
 @RequestMapping("/plan/detail")

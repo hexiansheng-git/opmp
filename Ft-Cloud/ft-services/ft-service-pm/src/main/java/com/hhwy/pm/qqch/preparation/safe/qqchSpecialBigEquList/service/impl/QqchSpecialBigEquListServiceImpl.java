@@ -110,8 +110,8 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
         QqchSpecialBigEquListVo vo = new QqchSpecialBigEquListVo();
         BigDecimal version = VersionUtil.getVersion("qqch_special_big_equ_list",qqchSpecialBigEquList.getVersion());
         //查询7.6.1数据
-        SbchEquipmentSpecial list = equipmentSpecialService.getList(version);
-        List<SbchEquipmentSpecialDetails> detailsList = list.getDetailsList();
+        SbchEquipmentSpecial equipmentSpecial = equipmentSpecialService.getList(version);
+        List<SbchEquipmentSpecialDetails> detailsList = equipmentSpecial.getDetailsList();
         //查询841设备
         List<QqchSpecialBigEquList> qqchSpecialBigEquListList = qqchSpecialBigEquListMapper.getQqchSpecialBigEquListList(qqchSpecialBigEquList);
         List<QqchInformationSheet> qqchInformationSheetList = qqchInformationSheetService.getQqchInformationSheetList(new QqchInformationSheet());

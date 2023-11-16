@@ -15,6 +15,8 @@ import com.hhwy.pm.qqch.preparation.quality.qualityRecord.mapper.QqchGeneralProj
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.service.IQqchGeneralProjectArchivesService;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.service.IQqchKeyDifficultProjectArchivesService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
+import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
@@ -26,9 +28,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -55,6 +56,9 @@ public class QqchGeneralProjectArchivesServiceImpl implements IQqchGeneralProjec
 
     @Autowired
     private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
+
+    @Autowired
+    private IQqchMainPlanItemService qqchMainPlanItemService;
 
     public QqchGeneralProjectArchives getQqchGeneralProjectArchives(QqchGeneralProjectArchives qqchGeneralProjectArchives) {
         return qqchGeneralProjectArchivesMapper.getQqchGeneralProjectArchives(qqchGeneralProjectArchives);
@@ -180,16 +184,35 @@ public class QqchGeneralProjectArchivesServiceImpl implements IQqchGeneralProjec
         //获取重难点工程清单对应的wbsId
         Set<Long> keyPointWbsIds = qqchWeightEngineeringListService.getCurrentAndLowerLevelWbsIds();
 
+        String wbsCodes = wbsList.stream().map(XmslWbs::getCode).collect(Collectors.joining(","));
+        List<QqchMainPlanItem> planItemList = qqchMainPlanItemService.getListByItemCodes(wbsCodes);
+        Map<String, QqchMainPlanItem> planItemMap = planItemList.stream().collect(Collectors.toMap(QqchMainPlanItem::getItemCode, o -> o));
+
+        Calendar calendar = Calendar.getInstance();
         List<GeneralProjectArchivesWbs> list = new ArrayList<>();
         for (XmslWbs wbs : wbsList) {
             GeneralProjectArchivesWbs generalProjectArchivesWbs = new GeneralProjectArchivesWbs();
 
+            String wbsCode = wbs.getCode();
             Long wbsId = Long.valueOf(wbs.getId());
             generalProjectArchivesWbs.setId(wbsId);
             generalProjectArchivesWbs.setHaveChildren(wbs.getHaveChildren());
             generalProjectArchivesWbs.setPid(Long.valueOf(wbs.getParentId()));
-            generalProjectArchivesWbs.setWbsCode(wbs.getCode());
+            generalProjectArchivesWbs.setWbsCode(wbsCode);
             generalProjectArchivesWbs.setWbsName(wbs.getName());
+
+            //设置完工时间和资料完成时间
+            QqchMainPlanItem planItem = planItemMap.get(wbsCode);
+            if(planItem != null){
+                Date finishDate = planItem.getFinishDate();
+                if(finishDate != null){
+                    calendar.setTime(finishDate);
+                    calendar.add(Calendar.DATE,5);
+                    Date after5Date = calendar.getTime();
+                    generalProjectArchivesWbs.setCompleteTime(finishDate);
+                    generalProjectArchivesWbs.setDataCompleteTime(after5Date);
+                }
+            }
 
             //判断当前wbs是否是重难点wbs
             if(keyPointWbsIds.contains(wbsId)) {

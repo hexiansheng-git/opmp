@@ -40,6 +40,8 @@ import com.hhwy.pm.qqch.wzch.source.vo.WzchSourceDetailResponse;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
+import com.hhwy.utils.MaterialUtils;
+import com.hhwy.utils.excelUtil.handler.DictHandler;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -486,9 +488,6 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
     public void export(List<WzchSourceDetail> wzchSourceDetails, HttpServletResponse response) {
         //List<WzchSourceDetail> wzchSourceDetails = exportData(request);
         List<String> yesrList = new ArrayList<>();
-        if (CollectionUtils.isEmpty(wzchSourceDetails)) {
-
-        }
         for (WzchSourceDetail wzchSourceDetail : wzchSourceDetails) {
             List<WzchSourceApproachYearCount> countList = wzchSourceDetail.getWzchSourceApproachYearCountList();
             if (CollectionUtils.isEmpty(countList)) {
@@ -502,8 +501,11 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
 //        System.out.println(JSONObject.toJSONString(head));
         List<List<Object>> data = getData(wzchSourceDetails, yesrs);
 //        System.out.println(JSONObject.toJSONString(data));
-        EasyExeclUtil.export(response,head,data,"来源策划详情.xlsx","来源策划详情");
-
+        Map<Integer,String> dictNameMap = new HashMap<>();
+        dictNameMap.put(4,"material_standard");
+        dictNameMap.put(8,"total_demand_category_name");
+        EasyExeclUtil.export(response,head,data,"来源策划详情.xlsx","来源策划详情"
+                ,new DictHandler(dictNameMap));
     }
 
     @Override
@@ -720,6 +722,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         List<SysDictData> tSysDictDataList = systemApiService.selectDictDataByType("total_demand_category_name");
         List<SysDictData> mSysDictDataList = systemApiService.selectDictDataByType("material_standard");
         int dataFlag = 0;
+        StringBuilder errMsg = new StringBuilder();
         for (Map<String,String> param : list) {
 
             if(dataFlag<=1 || dataFlag>list.size()-1 ){
@@ -727,6 +730,11 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
                 continue;
             }
             WzchSourceDetail detail = fillWzchSourceDetailBaseInfo(yearList, param,tSysDictDataList,mSysDictDataList);
+            //校验物资编码是否存在
+            if(!MaterialUtils.hasMaterialCode(detail.getMaterialCode())){
+                errMsg.append("物资编码["+detail.getMaterialCode()+"]不存在;");
+                continue;
+            }
             List<WzchSourceApproachYearCount> yearCountList = new ArrayList<>();
 
             Map<String, String> dataMap = list.get(dataFlag);
@@ -765,6 +773,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             sourceDetails.add(detail);
             dataFlag++;
         }
+        Assert.isTrue(StringUtils.isBlank(errMsg.toString()),errMsg.toString());
         return sourceDetails;
     }
 

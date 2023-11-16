@@ -326,9 +326,9 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         Long idl = Long.valueOf(id);
         // 根据id查询数据
         Review review = this.getQqchReview(new Review(idl));
-        review.setInitDate(new Date());
-        review.setInitUserId(SecurityUtils.getUserId());
-        review.setInitUserName(SecurityUtils.getSysUser().getNickName());
+//        review.setInitDate(new Date());
+//        review.setInitUserId(SecurityUtils.getUserId());
+//        review.setInitUserName(SecurityUtils.getSysUser().getNickName());
         String stage = review.getPlanStage();
         if("1".equals(stage) || "2".equals(stage)){
             FlowInfoSearchUtil.getFlowInfo(review,FlowEnum.QQCH_REVIEW1);

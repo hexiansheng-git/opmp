@@ -29,6 +29,12 @@ public class MaterialUtils {
             return new MaterialInfo();
         return list.get(0);
     }
+
+    public static boolean hasMaterialCode(String code){
+        if(StringUtils.isBlank(code))
+            return false;
+        return redisUtils.hExists(PmsConstant.MATERIALREDISKEY,code);
+    }
     
     public static List<MaterialInfo> getMaterialInfoByCodes(String codes){
         if(StringUtils.isBlank(codes))
