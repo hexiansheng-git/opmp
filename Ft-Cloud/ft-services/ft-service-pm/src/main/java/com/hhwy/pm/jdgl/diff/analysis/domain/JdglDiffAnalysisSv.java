@@ -113,7 +113,7 @@ public class JdglDiffAnalysisSv extends TreeNode<JdglDiffAnalysisSv> {
      */
     @JsonProperty
     @Excel(name = "原因分析")
-    private BigDecimal causeAnalysis;
+    private String causeAnalysis;
     /**
      * 字段描述：附件组id
      */

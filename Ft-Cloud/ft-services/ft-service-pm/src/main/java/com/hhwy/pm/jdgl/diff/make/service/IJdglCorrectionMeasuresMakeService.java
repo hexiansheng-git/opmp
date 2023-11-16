@@ -39,4 +39,6 @@ public interface IJdglCorrectionMeasuresMakeService {
      * @param period
      */
     void syncData(Date period);
+
+    JdglCorrectionMeasuresMake getJdglCorrectionMeasuresMakeByDate(Date period);
 }

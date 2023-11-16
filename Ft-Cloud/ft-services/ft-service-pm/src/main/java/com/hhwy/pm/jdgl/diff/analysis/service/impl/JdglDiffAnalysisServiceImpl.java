@@ -543,6 +543,13 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         return deleteJdglDiffAnalysis(jdglDiffAnalysis);
     }
 
+    @Override
+    public JdglDiffAnalysis getJdglDiffAnalysisById(Long id) {
+        JdglDiffAnalysis query = new JdglDiffAnalysis();
+        query.setId(id);
+        return jdglDiffAnalysisMapper.getJdglDiffAnalysis(query);
+    }
+
 }
 
 

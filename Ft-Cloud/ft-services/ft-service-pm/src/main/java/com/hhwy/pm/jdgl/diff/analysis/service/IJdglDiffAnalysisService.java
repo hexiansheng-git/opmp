@@ -47,4 +47,6 @@ public interface IJdglDiffAnalysisService {
      * @return
      */
     int deleteDiffAnalysisByPeriod(Date period);
+
+    JdglDiffAnalysis getJdglDiffAnalysisById(Long id);
 }
