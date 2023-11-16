@@ -19,6 +19,7 @@ import com.hhwy.system.warn.mapper.TWarnRecordMapper;
 import com.hhwy.system.warn.service.ITWarnService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +53,10 @@ public class TWarnServiceImpl implements ITWarnService {
     @Autowired
     private UserMapper myUserMapper;
 
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
+
 
     public TWarn getTWarn(TWarn tWarn) {
         return tWarnMapper.getTWarn(tWarn);
@@ -69,6 +74,9 @@ public class TWarnServiceImpl implements ITWarnService {
         tWarn.setCreateUser("admin");
         tWarn.setCreateTime(DateUtils.getNowDate());
         int result = tWarnMapper.insertTWarn(tWarn);
+
+        //推送到总部版
+        rocketMQTemplate.convertAndSend("pm_t_warn::tenantSuccess",tWarn);
         if (result > 0) {
             ThreadUtil.execAsync(() -> {
                 this.notify(tWarn);
@@ -162,7 +170,11 @@ public class TWarnServiceImpl implements ITWarnService {
             record.setStatus(status);
             this.changeHandleStatus(record);
         }
+    }
 
+    @Override
+    public void pushTWarn(TWarn tWarn) {
+        tWarnMapper.insertTWarn(tWarn);
     }
 
 
