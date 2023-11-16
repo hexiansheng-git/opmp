@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.domain.base.system.material.MaterialCategory;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.gencode.enums.CodeEnum;
@@ -25,6 +26,7 @@ import com.hhwy.pm.qqch.wzch.puchasesupply.service.IWzchPurchaseSupplyDetailServ
 import com.hhwy.pm.qqch.wzch.puchasesupply.service.IWzchPurchaseSupplyService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.MaterialUtils;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -186,6 +188,7 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
                 wzchPurchaseSupplyDetailDTO.setPurchaseSupplyDetailId(detailId++);
                 String materialCode = wzchPurchaseSupplyDetailDTO.getMaterialCode();
                 String materialStandard = wzchPurchaseSupplyDetailDTO.getMaterialStandard();
+
                 // 来源
                 StringBuilder source = new StringBuilder("");
                 StringBuilder sourceName = new StringBuilder("");

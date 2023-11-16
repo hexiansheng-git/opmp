@@ -10,6 +10,7 @@ import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.qqch.wzch.common.mapper.WzchCommonMapper;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.AjaxResultUtil;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.ParamUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.common.PmsConstant;
@@ -504,8 +505,11 @@ public class WzchCommonService {
         CopyOnWriteArrayList<String> codes = new CopyOnWriteArrayList<>();
         tList.forEach(item -> {
             try {
+                Object o = materialCodeField.get(item);
+                if(ObjectUtils.isEmpty(o))
+                    return ;
                 // 获取物资编码值
-                String materialCode = (String) materialCodeField.get(item);
+                String materialCode = (String) o;
                 codes.add(materialCode);
             } catch (Exception e) {
                 e.printStackTrace();

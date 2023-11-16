@@ -107,7 +107,20 @@ public class MaterialUtils {
     public static MaterialCategory getCategoryByCode(String code){
         Map<String,MaterialCategory> map = getCategoryByCodes(SetUtils.hashSet(code));
         return map==null?null:map.get(code);
-    } 
+    }
+
+    /**
+     * 获取物资分类名称
+     * @param materCode 物资编码
+     * @return
+     */
+    public static String getCategoryNameByMaterCode(String materCode){
+        MaterialInfo materialInfo = MaterialUtils.getMaterialInfoByCode(materCode);
+        if(materialInfo == null)
+            return "";
+        MaterialCategory category = MaterialUtils.getCategoryByCode(materialInfo.getCategoryCode());
+        return category == null?"":category.getCategoryName();
+    }
 
     
 }
