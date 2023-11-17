@@ -323,4 +323,19 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         // 纠偏方案入库
         jdglCorrectionMeasuresMakeDetailService.insertJdglCorrectionMeasuresMakeDetailList(newDetailList);
     }
+
+    @Override
+    public JdglCorrectionMeasuresMake getJdglCorrectionMeasuresMakeByDate(Date period) {
+        String periodStr = FtDateUtils.getYearMonthStr(period);
+
+        JdglCorrectionMeasuresMake qryMake = new JdglCorrectionMeasuresMake();
+        qryMake.setWarnPeriod(periodStr);
+        JdglCorrectionMeasuresMake make = jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMake(qryMake);
+        if (make != null) {
+            List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMakeDetailService
+                    .getDetailListByMakeId(make.getId());
+            make.setDetailList(detailList);
+        }
+        return make;
+    }
 }

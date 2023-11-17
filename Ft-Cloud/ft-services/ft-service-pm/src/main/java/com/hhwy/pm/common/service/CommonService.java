@@ -13,6 +13,7 @@ import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.exception.CustomBusinessException;
 import io.jsonwebtoken.lang.Assert;
@@ -102,7 +103,8 @@ public class CommonService {
             return permissionMark;
         }
 
-        if(EDIT.equals(menuId) || SecurityUtils.getSysUser().isAdmin()){
+        SysUser sysUser = SecurityUtils.getSysUser();
+        if(EDIT.equals(menuId) || sysUser.isAdmin() || "admin".equals(sysUser.getUserName())){
             return permissionMark;
         }
 

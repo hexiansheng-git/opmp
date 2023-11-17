@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.sgch.qqchconst.controller;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain.QqchSurveyParam;
+import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain.vo.QqchSurveyDesignTeamsVo;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstFacilityPlan;
@@ -45,14 +46,13 @@ public class QqchConstFacilityPlanController {
     }
 
     /**
-     * 获取设备策划和人员策划 2.1.3使用
+     * 获取设备策划和人员策划 2.1.3同步1.3的数据
      * @return
      */
-    @PostMapping("/queryDevicePlanListByConstDesc")
-    public AjaxResult queryDevicePlanListByConstDesc(@RequestBody List<QqchSurveyParam> param) {
-        BigDecimal version = VersionUtil.getVersion("qqch_const",null);
-        Map<String, Map<String, List>> list = constFacilityPlanService.queryDevicePlanListByConstDesc(param, version);
-        return AjaxResult.success(list);
+    @PostMapping("/dataSync")
+    public AjaxResult dataSync(@RequestBody QqchSurveyDesignTeamsVo qqchSurveyDesignTeamsVo ) {
+        QqchSurveyDesignTeamsVo vo = constFacilityPlanService.dataSync(qqchSurveyDesignTeamsVo);
+        return AjaxResult.success(vo);
     }
 
 }

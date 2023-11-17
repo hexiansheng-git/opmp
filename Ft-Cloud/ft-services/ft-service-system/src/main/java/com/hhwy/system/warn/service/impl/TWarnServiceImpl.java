@@ -19,14 +19,12 @@ import com.hhwy.system.warn.mapper.TWarnRecordMapper;
 import com.hhwy.system.warn.service.ITWarnService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -52,6 +50,10 @@ public class TWarnServiceImpl implements ITWarnService {
     @Autowired
     private UserMapper myUserMapper;
 
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
+
 
     public TWarn getTWarn(TWarn tWarn) {
         return tWarnMapper.getTWarn(tWarn);
@@ -69,12 +71,42 @@ public class TWarnServiceImpl implements ITWarnService {
         tWarn.setCreateUser("admin");
         tWarn.setCreateTime(DateUtils.getNowDate());
         int result = tWarnMapper.insertTWarn(tWarn);
+
+        //推送到总部版
+        this.push2Head(tWarn);
         if (result > 0) {
             ThreadUtil.execAsync(() -> {
                 this.notify(tWarn);
             });
         }
         return result;
+    }
+
+    private void push2Head(TWarn tWarn){
+        this.setTWarn(tWarn);
+        rocketMQTemplate.convertAndSend("pm_t_warn:tenantSuccess",tWarn);
+    }
+
+    private void setTWarn(TWarn tWarn){
+        String warnScopeType = tWarn.getWarnScopeType();
+        if(StringUtils.isBlank(warnScopeType)){
+            return;
+        }
+        if(WarnScopeType.ALL.getWarnScopeType().equals(warnScopeType) || WarnScopeType.USER.getWarnScopeType().equals(warnScopeType)){
+            return;
+        }
+        List<SysUser> userList = new ArrayList<>();
+        if (WarnScopeType.DEPT.getWarnScopeType().equals(warnScopeType)) {
+            userList = this.userMapper.selectUserListByDeptIds(tWarn.getWarnScope());
+        }
+        if(WarnScopeType.ROLE.getWarnScopeType().equals(warnScopeType)){
+            String warnScope = tWarn.getWarnScope();
+            String[] roleKeyList = warnScope.split(",");
+            userList = myUserMapper.selectByRoleKeyList(roleKeyList, tWarn.getTenantKey());
+        }
+        String userNames = userList.stream().map(SysUser::getUserName).distinct().collect(Collectors.joining(","));
+        tWarn.setWarnScopeType(WarnScopeType.USER.getWarnScopeType());
+        tWarn.setWarnScope(userNames);
     }
 
     @Override
@@ -162,7 +194,11 @@ public class TWarnServiceImpl implements ITWarnService {
             record.setStatus(status);
             this.changeHandleStatus(record);
         }
+    }
 
+    @Override
+    public void pushTWarn(TWarn tWarn) {
+        tWarnMapper.insertTWarn(tWarn);
     }
 
 

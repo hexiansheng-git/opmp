@@ -18,6 +18,9 @@ import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisSv;
 import com.hhwy.pm.jdgl.diff.analysis.mapper.JdglDiffAnalysisSvMapper;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisSvService;
+import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMake;
+import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMakeDetail;
+import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeService;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.domain.JdglMonthImagePlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.service.IJdglMonthImagePlanService;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
@@ -58,6 +61,9 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
 
     @Autowired
     private IJdglDiffAnalysisService jdglDiffAnalysisService;
+
+    @Autowired
+    private IJdglCorrectionMeasuresMakeService jdglCorrectionMeasuresMakeService;
 
     public JdglDiffAnalysisSv getJdglDiffAnalysisSv(JdglDiffAnalysisSv jdglDiffAnalysisSv) {
         return jdglDiffAnalysisSvMapper.getJdglDiffAnalysisSv(jdglDiffAnalysisSv);
@@ -102,8 +108,27 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
             return returnList;
         }
 
+        Long diffAnalysisId = jdglDiffAnalysisSvParam.getDiffAnalysisId();
+        List<JdglCorrectionMeasuresMakeDetail> makeDetailList = new ArrayList<>();
+        if(diffAnalysisId != null){
+            JdglDiffAnalysis jdglDiffAnalysisById = jdglDiffAnalysisService.getJdglDiffAnalysisById(diffAnalysisId);
+            if(jdglDiffAnalysisById != null) {
+                Date period = jdglDiffAnalysisById.getPeriod();
+                JdglCorrectionMeasuresMake jdglCorrectionMeasuresMakeByDate = jdglCorrectionMeasuresMakeService.getJdglCorrectionMeasuresMakeByDate(period);
+                if(jdglCorrectionMeasuresMakeByDate != null) {
+                    makeDetailList = jdglCorrectionMeasuresMakeByDate.getDetailList();
+                }
+            }
+        }
+
         for (JdglDiffAnalysisSv jdglDiffAnalysisSv : returnList) {
             Long id = jdglDiffAnalysisSv.getId();
+            if(CollectionUtils.isNotEmpty(makeDetailList)) {
+                String planItemCode = jdglDiffAnalysisSv.getPlanItemCode();
+                JdglCorrectionMeasuresMakeDetail jdglCorrectionMeasuresMakeDetail = makeDetailList.stream().filter(vo -> planItemCode.equals(vo.getWorkCode())).findFirst().orElse(null);
+                if(jdglCorrectionMeasuresMakeDetail != null)
+                    jdglDiffAnalysisSv.setCauseAnalysis(jdglCorrectionMeasuresMakeDetail.getDeviationCausesAnalysis());
+            }
             List<JdglDiffAnalysisSv> collect = jdglDiffAnalysisSvList.stream().filter(vo -> id.equals(vo.getPid())).collect(Collectors.toList());
             jdglDiffAnalysisSv.setHaveChildren(CollectionUtils.isEmpty(collect) ? 0 : 1);
         }

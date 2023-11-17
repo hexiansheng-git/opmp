@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain.vo;
 
 import com.hhwy.pm.qqch.constant.ConfirmStatus;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain.QqchSurveyDesignTeams;
+import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain.QqchSurveyParam;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,4 +39,9 @@ public class QqchSurveyDesignTeamsVo {
      * 字段描述：完整设计交接情况集合
      */
     private List<QqchSurveyDesignTeams> qqchSurveyDesignTeamsList;
+
+    /**
+     * 弹窗选择的数据
+     */
+    private List<QqchSurveyParam> params;
 }

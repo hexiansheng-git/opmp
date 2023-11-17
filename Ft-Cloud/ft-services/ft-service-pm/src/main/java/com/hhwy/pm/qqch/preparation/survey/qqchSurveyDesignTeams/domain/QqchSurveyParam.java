@@ -9,9 +9,12 @@ import lombok.Data;
  */
 @Data
 public class QqchSurveyParam {
+    //1.3主表id
     private Long masterId13;
 
+    //2.1.3主表id
     private Long masterId213;
 
+    //班组名称
     private String constDesc;
 }

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.sgch.qqchconst.service;
 
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain.QqchSurveyParam;
+import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain.vo.QqchSurveyDesignTeamsVo;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstFacilityPlan;
@@ -41,4 +42,6 @@ public interface IQqchConstFacilityPlanService {
     List<QqchConstFacilityPlan> list(QqchConstFacilityPlan dto);
 
     Map queryDevicePlanListByConstDesc(List<QqchSurveyParam> param, BigDecimal version);
+
+    QqchSurveyDesignTeamsVo dataSync(QqchSurveyDesignTeamsVo qqchSurveyDesignTeamsVo);
 }

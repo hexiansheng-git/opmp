@@ -37,4 +37,6 @@ public interface ITWarnService {
     int changeHandleStatus(TWarnRecord record);
 
     void batchChangeHandleStatus(Long[] warnIds, String status);
+
+    void pushTWarn(TWarn tWarn);
 }
