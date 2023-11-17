@@ -4,15 +4,18 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.domain.base.system.material.MaterialInfo;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
 import com.hhwy.pm.qqch.wzch.specialproject.domain.WzchSpecialProject;
 import com.hhwy.pm.qqch.wzch.specialproject.domain.WzchSpecialProjectDetail;
 import com.hhwy.pm.qqch.wzch.specialproject.dto.WzchSpecialProjectDTO;
 import com.hhwy.pm.qqch.wzch.specialproject.service.IWzchSpecialProjectDetailService;
 import com.hhwy.pm.qqch.wzch.specialproject.service.IWzchSpecialProjectService;
+import com.hhwy.utils.MaterialUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
+import io.jsonwebtoken.lang.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -182,10 +185,24 @@ public class WzchSpecialProjectController extends BaseController {
         try {
             ExcelUtils<WzchSpecialProjectDetail> util = new ExcelUtils<>(WzchSpecialProjectDetail.class);
             List<WzchSpecialProjectDetail> dtoList = util.importExcel(file.getInputStream());
+
             dtoList = wzchCommonService.importDealDict(dtoList, this.getDictMap());
+            StringBuilder sb = new StringBuilder();
             for (WzchSpecialProjectDetail wzchSpecialProjectDetail : dtoList) {
+                //从物资信息中拿物资名称
+                MaterialInfo materialInfo = MaterialUtils.getMaterialInfoByCode(wzchSpecialProjectDetail.getMaterialCode());
+                //校验物资信息物资编码有效
+                if(materialInfo == null || materialInfo.getMaterialCode() == null){
+                    if(sb.length() < 1)
+                        sb.append("物资编码:");
+                    sb.append(","+wzchSpecialProjectDetail.getMaterialCode());
+                    continue;
+                }
+                wzchSpecialProjectDetail.setMaterialName(materialInfo.getMaterialName());
                 wzchSpecialProjectDetail.setId(IdWorker.createId());
             }
+            if(sb.length() > 0)
+                return AjaxResult.error(sb+"不存在，请检查");
             return AjaxResult.success(dtoList);
         } catch (Exception e) {
             e.printStackTrace();

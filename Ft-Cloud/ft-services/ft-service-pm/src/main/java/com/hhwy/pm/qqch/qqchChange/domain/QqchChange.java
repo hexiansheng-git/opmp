@@ -250,6 +250,6 @@ public class QqchChange extends CommonBaseEntity {
 
 
     public String getVersionStr() {
-        return "V"+version;
+        return version==null?null:"V"+version.setScale(0);
     }
 }

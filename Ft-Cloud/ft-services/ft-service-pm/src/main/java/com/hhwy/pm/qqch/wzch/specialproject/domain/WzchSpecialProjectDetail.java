@@ -39,9 +39,10 @@ public class WzchSpecialProjectDetail extends CommonBaseEntity {
     /**
      * 物资编码
      */
+    @Excel(name = "物资编码")
     private String materialCode;
 
-    @Excel(name = "系统/成套设备名称")
+
     private String materialName;
 
     @Excel(name = "单位")

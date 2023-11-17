@@ -1099,14 +1099,13 @@
 
                  WHERE sd.del_flag = '0'
                    AND tdd.del_flag = 0
+                    <if test="version != null"> and sd.version = #{version} </if>
                    AND tdd.material_code = sd.material_code
                    AND tdd.material_standard = sd.material_standard
-
                  GROUP BY sayc.material_code,
                           sayc.detail_id
              ) AS temp
         WHERE temp.purchase_amount != 0
-
         order by temp.material_code asc
 
 

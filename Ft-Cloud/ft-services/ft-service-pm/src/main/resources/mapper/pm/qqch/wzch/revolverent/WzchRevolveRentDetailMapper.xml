@@ -117,15 +117,13 @@
         `wzch_revolve_rent_detail` AS rrd
 
         /* 关联物资总需*/
-        LEFT JOIN wzch_total_demand_detail AS tdd ON tdd.project_id = rrd.project_id
-        AND tdd.material_code = rrd.material_code
+        LEFT JOIN wzch_total_demand_detail AS tdd ON tdd.material_code = rrd.material_code
         AND tdd.material_standard = rrd.material_standard
-        AND tdd.valid = 1
         AND tdd.del_flag = 0
 
         /* 关联来源策划*/
-        LEFT JOIN wzch_source_detail AS sd ON sd.project_id = rrd.project_id
-        AND sd.material_code = rrd.material_code
+        LEFT JOIN wzch_source_detail AS sd ON
+        sd.material_code = rrd.material_code
         AND sd.material_standard = rrd.material_standard
         AND sd.del_flag = 0
         LEFT JOIN wzch_source_approach_year_count AS sayc ON sd.id = sayc.detail_id

@@ -108,8 +108,10 @@ public class WzchPriorPurchaseDetailDTO extends WzchPriorPurchaseDetail {
     /**
      * 币种
      */
-    @Excel(name = "币种")
     private String currency;
+
+    @Excel(name = "币种")
+    private String currencyName;
 
     /**
      * 单价

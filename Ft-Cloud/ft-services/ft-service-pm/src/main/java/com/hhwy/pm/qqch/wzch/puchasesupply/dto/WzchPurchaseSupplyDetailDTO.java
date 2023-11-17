@@ -30,6 +30,12 @@ public class WzchPurchaseSupplyDetailDTO extends WzchPurchaseSupplyDetail {
 
     private String planPurchaseDateGroup;
 
+    public WzchPurchaseSupplyDetailDTO() {
+    }
+    public WzchPurchaseSupplyDetailDTO(BigDecimal version) {
+        this.version = version;
+    }
+
     /**
      * 序号
      */
@@ -222,5 +228,8 @@ public class WzchPurchaseSupplyDetailDTO extends WzchPurchaseSupplyDetail {
      */
     @NotNull(message = "拟采购结束日期不能为空", groups = {ValidationGroups.Other.class})
     private Date planPurchaseDateEnd;
+
+
+    private BigDecimal version;
 
 }

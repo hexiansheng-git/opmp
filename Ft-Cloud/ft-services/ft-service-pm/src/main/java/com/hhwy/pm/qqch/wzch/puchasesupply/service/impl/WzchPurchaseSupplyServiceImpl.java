@@ -420,7 +420,7 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
             wzchPurchaseSupplyMapper.updateWzchPurchaseSupply(masterList.get(0));
         }                             
         //1、从来源策划中获取来源为国内采购、第三国采购、当地采购的数据
-        List<WzchPurchaseSupplyDetailDTO> list = detailService.getListByPrjId(new WzchPurchaseSupplyDetailDTO());
+        List<WzchPurchaseSupplyDetailDTO> list = detailService.getListByPrjId(new WzchPurchaseSupplyDetailDTO(purchaseSupply.getVersion()));
         //2、删除
         if(!isNew){
             this.wzchPurchaseSupplyMapper.deleteDirectByMasterId(purchaseSupply.getId());

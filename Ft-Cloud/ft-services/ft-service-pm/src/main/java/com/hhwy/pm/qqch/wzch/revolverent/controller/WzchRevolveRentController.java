@@ -8,12 +8,15 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
 import com.hhwy.pm.qqch.wzch.localpuchasesupply.domain.WzchLocalPurchaseSupply;
+import com.hhwy.pm.qqch.wzch.localpuchasesupply.dto.WzchLocalPurchaseSupplyDetailDTO;
 import com.hhwy.pm.qqch.wzch.revolverent.domain.WzchRevolveRent;
 import com.hhwy.pm.qqch.wzch.revolverent.domain.WzchRevolveRentDetail;
 import com.hhwy.pm.qqch.wzch.revolverent.dto.WzchRevolveRentDTO;
 import com.hhwy.pm.qqch.wzch.revolverent.dto.WzchRevolveRentDetailDTO;
 import com.hhwy.pm.qqch.wzch.revolverent.service.IWzchRevolveRentDetailService;
 import com.hhwy.pm.qqch.wzch.revolverent.service.IWzchRevolveRentService;
+import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.util.Assert;
@@ -24,9 +27,12 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 周转材租赁策划Controller
@@ -198,6 +204,7 @@ public class WzchRevolveRentController extends BaseController {
 //    @CustomLogger(title = "导入周转材料详情列表", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, @RequestParam Map map) {
         try {
+            Assert.isTrue(!ObjectUtils.isBlank(map.get("version")),"version不能为空");
             ExcelUtils<WzchRevolveRentDetailDTO> util = new ExcelUtils<>(WzchRevolveRentDetailDTO.class);
             List<WzchRevolveRentDetailDTO> dtoList = util.importExcel(file.getInputStream());
             HashMap<String, String> dicMap = new HashMap<>(3);
@@ -206,7 +213,14 @@ public class WzchRevolveRentController extends BaseController {
             dicMap.put("currency", "remittance_currency_type");
             dtoList = wzchCommonService.importDealDict(dtoList, dicMap);
 
-
+            //校验物资信息必须存在于来源策划
+            BigDecimal version = ObjectUtils.nvlBigDecimal(map.get("version"));
+            List<WzchRevolveRentDetailDTO> list = detailService.getMtlDetailList(new WzchRevolveRentDetailDTO(version));
+            Set<String> materCodeSet = list.stream().map(r->r.getMaterialCode()).collect(Collectors.toSet());
+            for (int i = 0; i < dtoList.size(); i++) {
+                String materCode = dtoList.get(i).getMaterialCode();
+                Assert.isTrue(materCodeSet.contains(materCode),"物资编码["+materCode+"]不存在于来源策划中，无法进行导入");
+            }
             HashMap<String, String> dm = new HashMap<>(3);
             dm.put("materialStandard_materialStandardName", "material_standard");
             dm.put("categoryName_categoryNameName", "total_demand_category_name");
@@ -214,10 +228,12 @@ public class WzchRevolveRentController extends BaseController {
             dtoList = wzchCommonService.setDicValue(dtoList, dm);
 
             return AjaxResult.success(dtoList);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "获取导入数据异常");
-
         }
     }
 

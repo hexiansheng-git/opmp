@@ -14,6 +14,7 @@ import com.hhwy.pm.qqch.wzch.localpuchasesupply.dto.WzchLocalPurchaseViewDetailD
 import com.hhwy.pm.qqch.wzch.localpuchasesupply.service.IWzchLocalPurchaseSupplyDetailService;
 import com.hhwy.pm.qqch.wzch.localpuchasesupply.service.IWzchLocalPurchaseSupplyService;
 import com.hhwy.pm.qqch.wzch.puchasesupply.domain.WzchPurchaseSupply;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -28,13 +29,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.text.Position;
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 属地化采购供应策划Controller
@@ -224,9 +225,18 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
 //    @CustomLogger(title = "导入采购供应策划物资详情", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, @RequestParam Map map) {
         try {
+            Assert.isTrue(!ObjectUtils.isBlank(map.get("version")),"version不能为空");
             FtExcelUtil<WzchLocalPurchaseSupplyDetailDTO> util = new FtExcelUtil<>(WzchLocalPurchaseSupplyDetailDTO.class);
             List<WzchLocalPurchaseSupplyDetailDTO> dtoList = util.importExcel(file.getInputStream());
 
+            BigDecimal version = ObjectUtils.nvlBigDecimal(map.get("version"));
+            //校验物资信息必须存在于来源策划
+            List<WzchLocalPurchaseSupplyDetailDTO> list =detailService.getListByPrjId(new WzchLocalPurchaseSupplyDetailDTO(version));
+            Set<String> materCodeSet = list.stream().map(r->r.getMaterialCode()).collect(Collectors.toSet());
+            for (int i = 0; i < dtoList.size(); i++) {
+                String materCode = dtoList.get(i).getMaterialCode();
+                Assert.isTrue(materCodeSet.contains(materCode),"物资编码["+materCode+"]不存在于来源策划中，无法进行导入");
+            }
             wzchCommonService.setCurrency(dtoList,"currency","currencyName");
             Map<String, String> dm = new HashMap<>(3);
             dm.put("materialStandard_materialStandardName", "material_standard");

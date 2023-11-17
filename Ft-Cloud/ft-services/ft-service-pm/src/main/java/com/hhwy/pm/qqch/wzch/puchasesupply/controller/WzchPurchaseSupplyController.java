@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.exception.BaseException;
@@ -30,6 +28,7 @@ import lombok.Data;
 import lombok.ToString;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.misc.Hash;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -183,11 +182,19 @@ public class WzchPurchaseSupplyController extends BaseController {
      */
     @PostMapping("detail/importData")
 //    @CustomLogger(title = "导入采购供应策划物资详情", businessType = CustomBusinessType.IMPORT)
-    public AjaxResult importData(MultipartFile file, @RequestParam Map map) {
+    public AjaxResult importData(MultipartFile file,BigDecimal version, @RequestParam Map map) {
         try {
             FtExcelUtil<WzchPurchaseSupplyDetailDTO> util = new FtExcelUtil<>(WzchPurchaseSupplyDetailDTO.class);
             List<WzchPurchaseSupplyDetailDTO> dtoList = util.importExcel(file.getInputStream());
-
+            //校验物资信息必须存在于来源策划 且物资编码有效
+            List<WzchPurchaseSupplyDetailDTO> list = detailService.getListByPrjId(new WzchPurchaseSupplyDetailDTO(version));
+            Set<String> materCodeSet = list.stream().map(r->r.getMaterialCode()).collect(Collectors.toSet());
+            for (int i = 0; i < dtoList.size(); i++) {
+                String materCode = dtoList.get(i).getMaterialCode();
+                if(StringUtils.isBlank(materCode))
+                    continue;
+                Assert.isTrue(materCodeSet.contains(materCode),"物资编码["+materCode+"]不存在于来源策划中，无法进行导入");
+            }
             wzchCommonService.setCurrency(dtoList,"currency","currencyName");
             Map<String, String> dm = new HashMap<>(3);
             dm.put("materialStandard_materialStandardName", "material_standard");

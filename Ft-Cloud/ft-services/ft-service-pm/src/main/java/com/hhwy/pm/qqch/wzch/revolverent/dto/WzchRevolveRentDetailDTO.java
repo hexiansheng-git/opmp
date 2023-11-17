@@ -21,6 +21,12 @@ import java.util.Date;
 public class WzchRevolveRentDetailDTO extends WzchRevolveRentDetail {
     private static final long serialVersionUID = 1L;
 
+    public WzchRevolveRentDetailDTO() {
+    }
+    public WzchRevolveRentDetailDTO(BigDecimal version) {
+        this.version = version;
+    }
+
     /**
      * 物资编码
      */
@@ -129,6 +135,8 @@ public class WzchRevolveRentDetailDTO extends WzchRevolveRentDetail {
      */
     @Excel(name = "总价")
     private BigDecimal totalPrice;
+
+    private BigDecimal version;
 
 
 }
