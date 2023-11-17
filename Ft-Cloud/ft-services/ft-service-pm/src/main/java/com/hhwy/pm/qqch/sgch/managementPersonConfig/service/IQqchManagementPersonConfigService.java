@@ -46,4 +46,10 @@ public interface IQqchManagementPersonConfigService {
     List<QqchManagementPersonConfig> getProjectLeadershipPersonList();
 
     String getPersonType(String userName) throws ParserConfigurationException, IOException, SAXException;
+
+    /**
+     * 获取 “项目领导层” 层级下的人员用户名
+     * @return
+     */
+    String getProjectLeadershipPersonUserNames();
 }
