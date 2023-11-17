@@ -375,7 +375,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         if(validMaxVersionContractInfo != null) {
             Date nowDate1 = DateUtils.getNowDate();
             Date handoverTime = validMaxVersionContractInfo.getHandoverTime();
-            if(handoverTime != null && nowDate1.before(handoverTime)) {
+            if(handoverTime != null && nowDate1.after(handoverTime)) {
                 isOver = "1";
             }
             effectiveAmountDollar = validMaxVersionContractInfo.getEffectiveAmountDollar();
