@@ -32,15 +32,6 @@ public class SgjsMeasurePositionController extends BaseController{
     @Autowired
     private ISgjsMeasurePositionService sgjsMeasurePositionService;
 
-
-
-    @PreAuthorize(hasPermi = "sgjsMeasurePosition:list")
-    @GetMapping
-    public AjaxResult getSgjsMeasurePosition(@Validated(ValidationGroups.Get.class)  SgjsMeasurePosition sgjsMeasurePositionParam){
-        SgjsMeasurePosition sgjsMeasurePosition =  sgjsMeasurePositionService.getSgjsMeasurePosition(sgjsMeasurePositionParam);
-        return AjaxResult.success(sgjsMeasurePosition);
-    }
-
     /**
      * 列表查询
      *
@@ -55,6 +46,28 @@ public class SgjsMeasurePositionController extends BaseController{
         return getDataTableAjaxResult(sgjsMeasurePositionList);
     }
 
+    /**
+     * 批量新增
+     *
+     * @param list
+     * @return
+     */
+    @PreAuthorize(hasPermi = "sgjsMeasurePosition:add")
+    @PostMapping("/batchAdd")
+    public AjaxResult insertSgjsMeasurePositionList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsMeasurePosition> list){
+        sgjsMeasurePositionService.insertSgjsMeasurePositionList(list);
+        return AjaxResult.success();
+    }
+
+    @PreAuthorize(hasPermi = "sgjsMeasurePosition:list")
+    @GetMapping
+    public AjaxResult getSgjsMeasurePosition(@Validated(ValidationGroups.Get.class)  SgjsMeasurePosition sgjsMeasurePositionParam){
+        SgjsMeasurePosition sgjsMeasurePosition =  sgjsMeasurePositionService.getSgjsMeasurePosition(sgjsMeasurePositionParam);
+        return AjaxResult.success(sgjsMeasurePosition);
+    }
+
+
+
     @PreAuthorize(hasPermi = "sgjsMeasurePosition:add")
     @PostMapping("/add")
     public AjaxResult insertSgjsMeasurePosition(@Validated(ValidationGroups.Save.class) @RequestBody SgjsMeasurePosition sgjsMeasurePositionParam){
@@ -62,12 +75,7 @@ public class SgjsMeasurePositionController extends BaseController{
         return AjaxResult.success(sgjsMeasurePositionParam);
     }
 
-    @PreAuthorize(hasPermi = "sgjsMeasurePosition:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertSgjsMeasurePositionList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsMeasurePosition> list){
-        sgjsMeasurePositionService.insertSgjsMeasurePositionList(list);
-        return AjaxResult.success();
-    }
+
 
     @PreAuthorize(hasPermi = "sgjsMeasurePosition:update")
     @PostMapping("/update")
