@@ -14,14 +14,15 @@ import com.hhwy.pm.qqch.preparation.safe.danger.service.IQqchDangerProcessContro
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -69,6 +70,7 @@ public class QqchDangerProcessControlPlanServiceImpl implements IQqchDangerProce
             }
             qqchDangerProcessControlPlan.setSchemeCode(qqchDangerList.getSchemeCode());
             qqchDangerProcessControlPlan.setSchemeName(qqchDangerList.getSchemeName());
+            qqchDangerProcessControlPlan.setWhetherFirst(qqchDangerList.getWhetherFirst());
             newList.add(qqchDangerProcessControlPlan);
         }
 
