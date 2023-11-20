@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.diff.make.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -35,6 +36,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zhenglili
@@ -233,6 +236,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         List<JdglMainPlanItem> mainPlanItemListTree = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(firstDay, lastDay);
         // 树转列表
         List<JdglMainPlanItem> mainPlanItemList = TreeUtil.treeToList(mainPlanItemListTree);
+        Map<String, List<JdglMainPlanItem>> mainPlanItemMap = mainPlanItemList.stream().collect(Collectors.groupingBy(JdglMainPlanItem::getItemCode));
 
         JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = new JdglCorrectionMeasuresMake();
         jdglCorrectionMeasuresMake.setId(IdWorker.createId());
@@ -257,7 +261,9 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             return;
         }
         // 树转列表
-        List<JdglDiffAnalysisSv> svList = TreeUtil.treeToList(svTreeList);
+        List<JdglDiffAnalysisSv> svListList = TreeUtil.treeToList(svTreeList);
+        //只需要偏差值小于0的
+        List<JdglDiffAnalysisSv> svList = svListList.stream().filter(p -> p.getThisDeviationNum().compareTo(BigDecimal.ZERO) < 0).collect(Collectors.toList());
 
         // 构建新的list
         List<JdglCorrectionMeasuresMakeDetail> newDetailList = new ArrayList<>();
@@ -274,8 +280,14 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
                 jdglDiffAnalysisSv.getDesignNum() == null ? BigDecimal.ZERO : jdglDiffAnalysisSv.getDesignNum());
             JdglCorrectionMeasuresMakeDetail.setDeviationQuantity(jdglDiffAnalysisSv.getThisDeviationNum() == null ?
                 BigDecimal.ZERO : jdglDiffAnalysisSv.getThisDeviationNum());
-            // todo 总时差 暂无来源
-            //JdglCorrectionMeasuresMakeDetail.setTotalFloat();
+            //总时差
+            BigDecimal totalFloat = new BigDecimal("0");
+            List<JdglMainPlanItem> jdglMainPlanItems = mainPlanItemMap.get(jdglDiffAnalysisSv.getPlanItemCode());
+            if (CollectionUtil.isNotEmpty(jdglMainPlanItems)){
+                totalFloat = BigDecimal.valueOf(jdglMainPlanItems.get(0).getTotalFloat());
+            }
+            JdglCorrectionMeasuresMakeDetail.setTotalFloat(totalFloat);
+            //SV值
             JdglCorrectionMeasuresMakeDetail.setSvValue(jdglDiffAnalysisSv.getSvNum());
             // 实际工程量
             BigDecimal actQuantity = JdglCorrectionMeasuresMakeDetail.getQuantity().add(JdglCorrectionMeasuresMakeDetail.getDeviationQuantity());
