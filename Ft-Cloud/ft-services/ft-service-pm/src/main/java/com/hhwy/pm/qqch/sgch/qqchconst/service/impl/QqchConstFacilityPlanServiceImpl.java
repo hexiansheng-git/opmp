@@ -130,31 +130,35 @@ public class QqchConstFacilityPlanServiceImpl implements IQqchConstFacilityPlanS
         List<QqchSurveyDesignTeams> pageData = qqchSurveyDesignTeamsVo.getQqchSurveyDesignTeamsList();
         //弹框勾选的数据
         List<QqchSurveyParam> selectData = qqchSurveyDesignTeamsVo.getParams();
-        Map<String, List<QqchSurveyParam>> selectDataMap = selectData.stream().filter(p -> p.getConstDesc() != null).collect(Collectors.groupingBy(QqchSurveyParam::getConstDesc));
+        Map<String, List<QqchSurveyParam>> selectDataMap = selectData.stream()
+                .filter(p -> p.getConstDesc() != null)
+                .collect(Collectors.groupingBy(QqchSurveyParam::getConstDesc));
 
         HashMap<String, String> jobDutyMap = new HashMap<>();
         HashMap<String, QqchSurveyDesignTeams> constDscMap = new HashMap<>();
         List<QqchSurveyDesignTeams> resultList = new ArrayList<>();
-        for (QqchSurveyDesignTeams teams : pageData) {
-            String teamName = teams.getTeamName();
-            if (selectDataMap.containsKey(teamName)) { //当前数据被再次勾选，暂存已编辑数据
-                //保存界面中可以编辑的字段 “岗位职责”
-                List<QqchSurveyPersonPlan> personPlanList = teams.getQqchSurveyPersonPlanList();
-                if (CollectionUtil.isEmpty(personPlanList))
-                    continue;
-                for (QqchSurveyPersonPlan plan : personPlanList) {
-                    String jobDuty = plan.getJobDuty();
-                    if (StringUtils.isEmpty(jobDuty)) {
+        if (CollectionUtil.isNotEmpty(selectData)){
+            for (QqchSurveyDesignTeams teams : pageData) {
+                String teamName = teams.getTeamName();
+                if (selectDataMap.containsKey(teamName)) { //当前数据被再次勾选，暂存已编辑数据
+                    //保存界面中可以编辑的字段 “岗位职责”
+                    List<QqchSurveyPersonPlan> personPlanList = teams.getQqchSurveyPersonPlanList();
+                    if (CollectionUtil.isEmpty(personPlanList))
                         continue;
+                    for (QqchSurveyPersonPlan plan : personPlanList) {
+                        String jobDuty = plan.getJobDuty();
+                        if (StringUtils.isEmpty(jobDuty)) {
+                            continue;
+                        }
+                        //暂存已填写的岗位职责
+                        jobDutyMap.put(plan.getJobNumber(), jobDuty);
                     }
-                    //暂存已填写的岗位职责
-                    jobDutyMap.put(plan.getJobNumber(), jobDuty);
+                    //暂存已填写的主表信息
+                    constDscMap.put(teams.getTeamName(), teams);
+                }else { //当前数据未被勾选
+                    //返回数据
+                    resultList.add(teams);
                 }
-                //暂存已填写的主表信息
-                constDscMap.put(teams.getTeamName(), teams);
-            }else { //当前数据未被勾选
-                //返回数据
-                resultList.add(teams);
             }
         }
 
@@ -164,13 +168,13 @@ public class QqchConstFacilityPlanServiceImpl implements IQqchConstFacilityPlanS
             Map.Entry<String, Map<String, List>> next = iterator.next();
             //班组
             String constDesc = next.getKey();
-            //字表数据
+            //子表数据
             Map<String, List> value = next.getValue();
-            //回填字表 - 岗位职责
+            //回填子表 - 岗位职责
             List<QqchSurveyPersonPlan> staffList = value.get("staffList");
             staffList.forEach(p -> {
                 String jobDuty = jobDutyMap.get(p.getJobNumber());
-                if (StringUtils.isNotEmpty(jobDuty)){
+                if (StringUtils.isNotBlank(jobDuty)){
                     p.setJobDuty(jobDuty);
                 }
             });
@@ -181,6 +185,12 @@ public class QqchConstFacilityPlanServiceImpl implements IQqchConstFacilityPlanS
                 qqchSurveyDesignTeams.setWbsName(designTeams.getWbsName());
                 qqchSurveyDesignTeams.setWbsId(designTeams.getWbsId());
                 qqchSurveyDesignTeams.setSubmitTime(designTeams.getSubmitTime());
+            }
+            List<QqchSurveyParam> qqchSurveyParams = selectDataMap.get(constDesc);
+            if (ObjectUtil.isNotEmpty(qqchSurveyParams)) {
+                qqchSurveyDesignTeams.setWorkContent(qqchSurveyParams.get(0).getWorkContent());
+                qqchSurveyDesignTeams.setEnterTime(qqchSurveyParams.get(0).getEntryDate());
+                qqchSurveyDesignTeams.setExitTime(qqchSurveyParams.get(0).getExitDate());
             }
             qqchSurveyDesignTeams.setTeamName(constDesc);
             qqchSurveyDesignTeams.setQqchSurveyEquPlanList(value.get("facilityPlanList"));

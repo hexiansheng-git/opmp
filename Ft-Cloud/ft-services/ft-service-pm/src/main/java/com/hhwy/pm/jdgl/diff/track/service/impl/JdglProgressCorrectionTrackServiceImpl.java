@@ -100,8 +100,7 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
      * @param jdglProgressCorrectionTrack
      * @return
      */
-    public JdglProgressCorrectionTrack getJdglProgressCorrectionTrack(
-        JdglProgressCorrectionTrack jdglProgressCorrectionTrack) {
+    public JdglProgressCorrectionTrack getJdglProgressCorrectionTrack(JdglProgressCorrectionTrack jdglProgressCorrectionTrack) {
         JdglProgressCorrectionTrack track = jdglProgressCorrectionTrackMapper.getJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
         if (track != null) {
             List<JdglProgressCorrectionTrackDetail> detailList = jdglProgressCorrectionTrackDetailService.getDetailListByTackId(track.getId());
