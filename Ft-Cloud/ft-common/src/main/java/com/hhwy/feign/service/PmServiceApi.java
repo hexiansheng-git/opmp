@@ -28,6 +28,6 @@ public interface PmServiceApi {
     /**
      *  3.6.1测量工作概述
      */
-    @GetMapping("/qqchMeasureExpRange/list")
-    AjaxResult qqchMeasureExpRangeList(CommonQqchMeasureExpRange dto);
+    @PostMapping("/qqchMeasureExpRange/feignList")
+    AjaxResult qqchMeasureExpRangeList(@RequestBody CommonQqchMeasureExpRange dto);
 }

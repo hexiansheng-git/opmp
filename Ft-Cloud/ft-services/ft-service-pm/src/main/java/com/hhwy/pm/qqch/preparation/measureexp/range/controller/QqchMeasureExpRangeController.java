@@ -84,6 +84,11 @@ public class QqchMeasureExpRangeController extends BaseController {
         return AjaxResult.success(compileEntity);
     }
 
+    @PostMapping("/feignList")
+    public AjaxResult feignList(@RequestBody QqchMeasureExpRange dto) {
+        return this.getQqchMeasureExpRangeList(dto);
+    }
+
 //    @PreAuthorize(hasPermi = "qqchMeasureExpRange:add")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpDTO expVO) {
