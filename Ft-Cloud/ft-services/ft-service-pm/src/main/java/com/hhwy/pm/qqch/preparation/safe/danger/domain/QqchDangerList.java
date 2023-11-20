@@ -71,6 +71,12 @@ public class QqchDangerList extends BaseEntity {
     @Excel(name = "判定条件")
     private String decisionCondition;
     /**
+     * 字段描述：是否首件
+     */
+    @JsonProperty
+    @Excel(name = "是否首件")
+    private String whetherFirst;
+    /**
      * 字段描述：版本
      */
     @JsonProperty
