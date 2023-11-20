@@ -3,6 +3,7 @@ package com.hhwy.pm.jdgl.statistics.controller;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.jdgl.statistics.domain.*;
 import com.hhwy.pm.jdgl.statistics.domain.export.PlanStatisticsBillValueVO4Export;
@@ -71,10 +72,28 @@ public class PlanStatisticsController  {
 
         List<SheetInfoBean> sheetInfoList = new LinkedList<>();
 
-        sheetInfoList.add(new SheetInfoBean("基本信息", PlanStatisticsValueCompVO.class, valueCompList));
-        sheetInfoList.add(new SheetInfoBean("WBS汇总", PlanStatisticsWbsValueVO4Export.class, wbsValueList));
-        sheetInfoList.add(new SheetInfoBean("清单汇总", PlanStatisticsBillValueVO4Export.class, billValueList));
-        sheetInfoList.add(new SheetInfoBean("形象汇总", PlanStatisticsWbsImageVO4Export.class, imageWbsList));
+        String dateStr = "-";
+        String queryDateType = iPlanStatisticsQueryVO.getQueryDateType();
+        String year = iPlanStatisticsQueryVO.getYear();
+        dateStr = year +"年";
+        if ("j".equals(queryDateType)) {
+            String quarter = iPlanStatisticsQueryVO.getQuarter();
+            dateStr += "第" + Integer.valueOf(quarter) + "季度";
+        }
+        if ("y".equals(queryDateType)) {
+            String month = iPlanStatisticsQueryVO.getMonth();
+            dateStr += "第" + Integer.valueOf(month) + "月";
+        }
+        if ("z".equals(queryDateType)) {
+            String week = iPlanStatisticsQueryVO.getWeek();
+            dateStr += "第" + Integer.valueOf(week) + "周";
+        }
+
+
+        sheetInfoList.add(new SheetInfoBean("基本信息" + dateStr, PlanStatisticsValueCompVO.class, valueCompList));
+        sheetInfoList.add(new SheetInfoBean("WBS汇总" + dateStr, PlanStatisticsWbsValueVO4Export.class, wbsValueList));
+        sheetInfoList.add(new SheetInfoBean("清单汇总" + dateStr, PlanStatisticsBillValueVO4Export.class, billValueList));
+        sheetInfoList.add(new SheetInfoBean("形象汇总" + dateStr, PlanStatisticsWbsImageVO4Export.class, imageWbsList));
 
         ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream()).build();
 
