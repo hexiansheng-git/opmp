@@ -2,6 +2,7 @@ package com.hhwy.pm.jdgl.mainpl.jdglMainPlan.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 
@@ -12,6 +13,7 @@ import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
  */
 public interface JdglMainPlanMapper {
 
+    @Options(flushCache = Options.FlushCachePolicy.TRUE)
     JdglMainPlan getJdglMainPlan(JdglMainPlan jdglMainPlan);
 
     List<JdglMainPlan> getJdglMainPlanList(JdglMainPlan jdglMainPlan);

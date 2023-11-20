@@ -65,13 +65,10 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
      * @param JdglCorrectionMeasuresMake
      * @return
      */
-    public JdglCorrectionMeasuresMake getJdglCorrectionMeasuresMake(
-        JdglCorrectionMeasuresMake JdglCorrectionMeasuresMake) {
-        JdglCorrectionMeasuresMake make = jdglCorrectionMeasuresMakeMapper
-            .getJdglCorrectionMeasuresMake(JdglCorrectionMeasuresMake);
+    public JdglCorrectionMeasuresMake getJdglCorrectionMeasuresMake(JdglCorrectionMeasuresMake JdglCorrectionMeasuresMake) {
+        JdglCorrectionMeasuresMake make = jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMake(JdglCorrectionMeasuresMake);
         if (make != null) {
-            List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMakeDetailService
-                .getDetailListByMakeId(make.getId());
+            List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMakeDetailService.getDetailListByMakeId(make);
             make.setDetailList(TreeUtil.build(detailList, null));
         }
         return make;
@@ -245,9 +242,10 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         jdglCorrectionMeasuresMake.setWarnTime(FtDateUtils.getYearMonthDayDate());
         jdglCorrectionMeasuresMake.setRiskLevel(JdglDiffAnalysis.getRiskLevel());
         jdglCorrectionMeasuresMake.setPeriodTotalScore(JdglDiffAnalysis.getTotalGrade());
-//        jdglCorrectionMeasuresMake.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-//        jdglCorrectionMeasuresMake.setCreateUserName(SecurityUtils.getUserName());
+        jdglCorrectionMeasuresMake.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+        jdglCorrectionMeasuresMake.setCreateUserName(SecurityUtils.getUserName());
         jdglCorrectionMeasuresMake.setCreateTime(DateUtils.getNowDate());
+        jdglCorrectionMeasuresMake.setTaskStatus("0");
         // 纠偏措施制定入库
         jdglCorrectionMeasuresMakeMapper.insertJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake);
 
@@ -332,8 +330,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         qryMake.setWarnPeriod(periodStr);
         JdglCorrectionMeasuresMake make = jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMake(qryMake);
         if (make != null) {
-            List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMakeDetailService
-                    .getDetailListByMakeId(make.getId());
+            List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMakeDetailService.getDetailListByMakeId(make);
             make.setDetailList(detailList);
         }
         return make;

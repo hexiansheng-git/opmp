@@ -2,12 +2,14 @@ package com.hhwy.feign.factory;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.feign.service.PmServiceApi;
-import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.feign.service.domain.CommonQqchMeasureExpRange;
+import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,6 +28,16 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             @Override
             public AjaxResult insertProjectTenant(Map map) {
                 return AjaxResult.error("请求失败:",throwable.getMessage());
+            }
+
+            @Override
+            public AjaxResult qqchMeasureExpRangeList(CommonQqchMeasureExpRange dto) {
+                return AjaxResult.error("请求失败:",throwable.getMessage());
+            }
+
+            @Override
+            public List<QqchPostSetting> getTechDeptList() {
+                return null;
             }
         };
     }
