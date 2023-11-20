@@ -2,8 +2,7 @@ package com.hhwy.feign.factory;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.feign.service.PmServiceApi;
-import com.hhwy.feign.service.SystemServiceApi;
-import com.hhwy.feign.service.domain.QqchMeasureExpRange;
+import com.hhwy.feign.service.domain.CommonQqchMeasureExpRange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -30,7 +29,7 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             }
 
             @Override
-            public AjaxResult qqchMeasureExpRangeList(QqchMeasureExpRange dto) {
+            public AjaxResult qqchMeasureExpRangeList(CommonQqchMeasureExpRange dto) {
                 return AjaxResult.error("请求失败:",throwable.getMessage());
             }
         };
