@@ -242,9 +242,10 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         jdglCorrectionMeasuresMake.setWarnTime(FtDateUtils.getYearMonthDayDate());
         jdglCorrectionMeasuresMake.setRiskLevel(JdglDiffAnalysis.getRiskLevel());
         jdglCorrectionMeasuresMake.setPeriodTotalScore(JdglDiffAnalysis.getTotalGrade());
-//        jdglCorrectionMeasuresMake.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-//        jdglCorrectionMeasuresMake.setCreateUserName(SecurityUtils.getUserName());
+        jdglCorrectionMeasuresMake.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+        jdglCorrectionMeasuresMake.setCreateUserName(SecurityUtils.getUserName());
         jdglCorrectionMeasuresMake.setCreateTime(DateUtils.getNowDate());
+        jdglCorrectionMeasuresMake.setTaskStatus("0");
         // 纠偏措施制定入库
         jdglCorrectionMeasuresMakeMapper.insertJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake);
 
