@@ -18,7 +18,7 @@ import java.util.Date;
  */
 @Data
 @ToString
-public class QqchMeasureExpRange extends CompileEntity<QqchMeasureExpRange> {
+public class CommonQqchMeasureExpRange extends CommonCompileEntity<CommonQqchMeasureExpRange> {
     private static final long serialVersionUID = 1L;
 
     /**

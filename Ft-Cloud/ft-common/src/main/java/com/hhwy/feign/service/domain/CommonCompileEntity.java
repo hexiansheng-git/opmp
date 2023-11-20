@@ -3,19 +3,16 @@ package com.hhwy.feign.service.domain;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.UUIDUtils;
-import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.tree.TreeNode;
-import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * 编制通用实体类
@@ -24,7 +21,7 @@ import java.util.List;
  */
 @Data
 @ToString
-public class CompileEntity<T> extends TreeNode<T> {
+public class CommonCompileEntity<T> extends TreeNode<T> {
 
     private static RedisUtils redisUtils;
 
@@ -81,7 +78,7 @@ public class CompileEntity<T> extends TreeNode<T> {
 
 
     public static <T> T dealListDto(BigDecimal version, T dto) {
-        CompileEntity<T> tCompileDTO = new CompileEntity<>();
+        CommonCompileEntity<T> tCompileDTO = new CommonCompileEntity<>();
         tCompileDTO.setVersion(version);
         tCompileDTO.setDto(dto);
         return tCompileDTO.dealListDto();
@@ -92,8 +89,8 @@ public class CompileEntity<T> extends TreeNode<T> {
 
 
     public T dealListDto() {
-        if (dto instanceof CompileEntity) {
-            CompileEntity compileEntity = (CompileEntity) dto;
+        if (dto instanceof CommonCompileEntity) {
+            CommonCompileEntity compileEntity = (CommonCompileEntity) dto;
             compileEntity.setVersion(version);
             return (T) compileEntity;
         }
@@ -103,7 +100,7 @@ public class CompileEntity<T> extends TreeNode<T> {
 
 
 
-    private void setBaseInfo(CompileEntity compileEntity) {
+    private void setBaseInfo(CommonCompileEntity compileEntity) {
 
         compileEntity.setSubmitFlag(submitFlag);
         compileEntity.setModuleIdentity(moduleIdentity);
@@ -116,7 +113,7 @@ public class CompileEntity<T> extends TreeNode<T> {
     }
 
 
-    public static void setValidStatus(CompileEntity entity) {
+    public static void setValidStatus(CommonCompileEntity entity) {
         String submitFlag = entity.getSubmitFlag();
         if (StringUtils.isEmpty(submitFlag)) throw new RuntimeException("提交状态不能为空");
 
