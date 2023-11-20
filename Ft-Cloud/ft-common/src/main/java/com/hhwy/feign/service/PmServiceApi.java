@@ -37,6 +37,6 @@ public interface PmServiceApi {
      * 获取项目技术管理部门及岗位设置表
      * @return
      */
-    @GetMapping("getTechDeptList")
+    @GetMapping("/qqchPostSetting/getTechDeptList")
     List<QqchPostSetting> getTechDeptList();
 }
