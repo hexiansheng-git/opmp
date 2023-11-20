@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.technique.manage.service;
 
+import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchPostSettingVo;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -13,4 +15,11 @@ public interface IQqchPostSettingService {
     QqchPostSettingVo getTreeList(BigDecimal version);
 
     void batchSave(QqchPostSettingVo qqchPostSettingVo);
+
+    /**
+     * 获取项目技术管理部门及岗位设置表
+     * @return
+     */
+    List<QqchPostSetting> getTechDeptList();
+
 }

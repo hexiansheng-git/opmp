@@ -2,18 +2,16 @@ package com.hhwy.pm.qqch.preparation.technique.manage.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchPostSettingVo;
 import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchPostSettingService;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -28,18 +26,25 @@ public class QqchPostSettingController extends BaseController {
     @Autowired
     private IQqchPostSettingService qqchPostSettingService;
 
-    @PreAuthorize(hasPermi = "qqchPostSetting:list")
     @GetMapping("/getTreeList")
     public AjaxResult getTreeList(BigDecimal version) {
         QqchPostSettingVo qqchPostSettingVo = qqchPostSettingService.getTreeList(version);
         return AjaxResult.success(qqchPostSettingVo);
     }
 
-    @PreAuthorize(hasPermi = "qqchPostSetting:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchPostSettingVo qqchPostSettingVo) {
         qqchPostSettingService.batchSave(qqchPostSettingVo);
         return AjaxResult.success();
+    }
+
+    /**
+     * 获取项目技术管理部门及岗位设置表
+     * @return
+     */
+    @GetMapping("getTechDeptList")
+    public List<QqchPostSetting> getTechDeptList() {
+        return qqchPostSettingService.getTechDeptList();
     }
 }
