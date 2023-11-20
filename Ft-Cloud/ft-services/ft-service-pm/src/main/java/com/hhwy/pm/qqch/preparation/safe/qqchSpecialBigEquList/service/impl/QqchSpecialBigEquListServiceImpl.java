@@ -134,6 +134,7 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
                 equList.setEquSourse(bean.getSbPurchaseSource());
                 equList.setProduceFactory(bean.getSbProductFactory());
                 equList.setEquName(bean.getMaterialName());
+                equList.setWhetherFirst("1");
                 addList.add(equList);
             }
         }
