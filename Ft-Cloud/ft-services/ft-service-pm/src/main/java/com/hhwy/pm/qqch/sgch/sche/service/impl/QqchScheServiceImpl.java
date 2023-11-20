@@ -1,14 +1,14 @@
 package com.hhwy.pm.qqch.sgch.sche.service.impl;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
-import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheAnalyse;
-import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheCorr;
-import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheDiff;
-import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheFactors;
+import com.hhwy.pm.qqch.sgch.sche.domain.*;
 import com.hhwy.pm.qqch.sgch.sche.dto.QqchScheDTO;
 import com.hhwy.pm.qqch.sgch.sche.service.*;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,5 +90,34 @@ public class QqchScheServiceImpl implements IQqchScheService {
         }
         // 保存纠偏措施
         corrService.saveList(CompileEntity.dealSaveDto(dto,dto.getCorrList()));
+    }
+
+    @Override
+    public QqchScheDTO getItems() {
+        QqchScheDTO qqchScheDTO = new QqchScheDTO();
+
+        BigDecimal version = VersionUtil.getMaxVersion("qqch_sche_diff_desc");
+
+        // 说明
+        QqchScheDiffDesc qqchScheDiffDesc = new QqchScheDiffDesc();
+        qqchScheDiffDesc.setVersion(version);
+        qqchScheDTO.setDiffDesc(diffDescService.getQqchScheDiffDesc(qqchScheDiffDesc));
+        // 差异化计算方法
+        QqchScheDiff qqchScheDiff = new QqchScheDiff();
+        qqchScheDiff.setVersion(version);
+        qqchScheDTO.setDiffList(diffService.getQqchScheDiffList(qqchScheDiff));
+        // 进度分析要素
+        QqchScheAnalyse qqchScheAnalyse = new QqchScheAnalyse();
+        qqchScheAnalyse.setVersion(version);
+        qqchScheDTO.setAnalyseList(analyseService.getQqchScheAnalyseList(qqchScheAnalyse));
+        // 进度影响要素
+        QqchScheFactors qqchScheFactors = new QqchScheFactors();
+        qqchScheFactors.setVersion(version);
+        qqchScheDTO.setScheFactorsVO(factorsService.getList4jd(qqchScheFactors));
+        // 纠偏措施
+//            qqchScheDTO.setCorrList(corrService.getList(CompileEntity.dealListDto(dto.getVersion(), new QqchScheCorr())));
+        qqchScheDTO.setVersion(new BigDecimal("1.0"));
+        qqchScheDTO.setStageIdentity("1");
+        return qqchScheDTO;
     }
 }
