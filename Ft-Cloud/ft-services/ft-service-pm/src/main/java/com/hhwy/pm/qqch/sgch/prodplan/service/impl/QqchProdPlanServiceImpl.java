@@ -84,6 +84,9 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
 
     @Transactional
     public int insertQqchProdPlanList(List<QqchProdPlan> qqchProdPlanList) {
+        if(CollectionUtils.isEmpty(qqchProdPlanList)) {
+            return 0;
+        }
         for (QqchProdPlan qqchProdPlan : qqchProdPlanList) {
             qqchProdPlan.setId(IdWorker.createId());
 //            qqchProdPlan.setCreateUser(SecurityUtils.getUserName());
@@ -131,6 +134,7 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void save(List<QqchProdPlan> dto) {
+        if(CollectionUtils.isEmpty(dto)) return;
         this.qqchProdPlanMapper.insertQqchProdPlanList(dto);
     }
 
