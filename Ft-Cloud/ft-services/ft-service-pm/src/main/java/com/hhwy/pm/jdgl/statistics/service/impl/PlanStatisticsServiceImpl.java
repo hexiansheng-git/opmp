@@ -156,8 +156,10 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 }
                 monthActAmt = monthActAmt.add(dayValueDl == null ? BigDecimal.ZERO : dayValueDl);
 
-                if((startDate.before(date) || startDate.equals(date)) && (endDate.after(date)||endDate.equals(date))) {
-                    weekActAmt = weekActAmt.add(dayValueDl == null ? BigDecimal.ZERO : dayValueDl);
+                if("z".equals(queryDateType)) {
+                    if((startDate.before(date) || startDate.equals(date)) && (endDate.after(date)||endDate.equals(date))) {
+                        weekActAmt = weekActAmt.add(dayValueDl == null ? BigDecimal.ZERO : dayValueDl);
+                    }
                 }
             }
         }
