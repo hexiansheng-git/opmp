@@ -3,6 +3,7 @@ package com.hhwy.feign.service;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.feign.factory.PmServiceFallbackFactory;
 import com.hhwy.feign.factory.SystemServiceFallbackFactory;
+import com.hhwy.feign.service.domain.QqchMeasureExpRange;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,4 +26,10 @@ public interface PmServiceApi {
      */
     @PostMapping("/projectBasicInfo/addTenant")
     AjaxResult insertProjectTenant(@RequestBody Map map);
+
+    /**
+     *  3.6.1测量工作概述
+     */
+    @GetMapping("/qqchMeasureExpRange/list")
+    AjaxResult qqchMeasureExpRangeList(QqchMeasureExpRange dto);
 }
