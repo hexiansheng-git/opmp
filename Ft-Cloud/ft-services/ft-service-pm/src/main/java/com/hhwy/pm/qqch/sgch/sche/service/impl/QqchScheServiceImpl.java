@@ -1,7 +1,5 @@
 package com.hhwy.pm.qqch.sgch.sche.service.impl;
 
-import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
-import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -9,7 +7,6 @@ import com.hhwy.pm.qqch.sgch.sche.domain.*;
 import com.hhwy.pm.qqch.sgch.sche.dto.QqchScheDTO;
 import com.hhwy.pm.qqch.sgch.sche.service.*;
 import com.hhwy.pm.qqch.utils.VersionUtil;
-import com.hhwy.utils.exception.CustomBusinessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;

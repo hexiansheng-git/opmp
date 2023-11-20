@@ -12,13 +12,14 @@ import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchPostSettingSer
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -121,5 +122,19 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
             String stageIdentity = voParam.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
+    }
+
+    /**
+     * 获取项目技术管理部门及岗位设置表
+     * @return
+     */
+    @Override
+    public List<QqchPostSetting> getTechDeptList() {
+        BigDecimal version = VersionUtil.getVersion("qqch_post_setting", null);
+        QqchPostSetting qqchPostSettingParam = new QqchPostSetting();
+        qqchPostSettingParam.setVersion(version);
+        qqchPostSettingParam.setPostType("1");
+        List<QqchPostSetting> list = qqchPostSettingMapper.getQqchPostSettingList(qqchPostSettingParam);
+        return TreeUtil.build(list, null);
     }
 }
