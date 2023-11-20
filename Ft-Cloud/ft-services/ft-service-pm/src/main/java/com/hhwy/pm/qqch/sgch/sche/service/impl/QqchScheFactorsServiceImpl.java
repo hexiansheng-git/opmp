@@ -128,6 +128,35 @@ public class QqchScheFactorsServiceImpl implements IQqchScheFactorsService {
         return res;
     }
 
+    @Override
+    public ScheFactorsVO getList4jd(QqchScheFactors dealSaveDto) {
+        List<QqchScheFactors> qqchScheFactorsList = this.getQqchScheFactorsList(dealSaveDto);
+
+        LinkedHashMap<String, String> factorsTypeMap = DictUtil.getDictDataName("factors_type");
+        List<ScheFactorsVO.ScheFactorsHeader> headers = new ArrayList<>();
+        factorsTypeMap.forEach((k, v) -> {
+            ScheFactorsVO.ScheFactorsHeader scheFactorsHeader = new ScheFactorsVO.ScheFactorsHeader();
+            scheFactorsHeader.setHeaderValue(k);
+            scheFactorsHeader.setHeaderName(v.split("-")[0]);
+            scheFactorsHeader.setTranslate(v.split("-")[1]);
+            headers.add(scheFactorsHeader);
+        });
+
+        ScheFactorsVO res = new ScheFactorsVO();
+        // 表头
+        res.setHeaderList(headers);
+        // 数据
+
+        List<List<QqchScheFactors>> resList = new ArrayList<>();
+        Map<BigDecimal, List<QqchScheFactors>> resMap = qqchScheFactorsList.stream().collect(Collectors.groupingBy(QqchScheFactors::getRowNum));
+        resMap.keySet().stream().sorted(Comparator.comparing(BigDecimal::intValue)).forEach(k -> {
+            resList.add(resMap.get(k));
+        });
+        res.setFactorsVOList(resList);
+
+        return res;
+    }
+
     private void checkData(List<QqchScheFactors> dealSaveDto) {
 
     }

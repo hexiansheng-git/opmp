@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ft-services</artifactId>
+        <groupId>com.hhwy</groupId>
+        <version>2.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>ft-service-sp</artifactId>
+    <dependencies>
+        <!-- SpringCloud Alibaba Nacos -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <!-- SpringCloud Alibaba Nacos Config -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <!-- SpringCloud Alibaba Sentinel -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
+
+        <!-- SpringBoot Actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Swagger UI -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+        </dependency>
+
+        <!-- Mysql Connector -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <!-- FT Common DataSource -->
+        <dependency>
+            <groupId>com.hhwy</groupId>
+            <artifactId>ft-common-datasource</artifactId>
+        </dependency>
+
+        <!-- FT Common DataScope -->
+        <dependency>
+            <groupId>com.hhwy</groupId>
+            <artifactId>ft-common-datascope</artifactId>
+        </dependency>
+
+        <!-- FT Common Log -->
+        <dependency>
+            <groupId>com.hhwy</groupId>
+            <artifactId>ft-common-log</artifactId>
+        </dependency>
+
+        <!-- FT Common Swagger -->
+        <dependency>
+            <groupId>com.hhwy</groupId>
+            <artifactId>ft-common-swagger</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.hhwy</groupId>
+            <artifactId>ft-common-socket</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hhwy</groupId>
+            <artifactId>ft-common-tenant</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hhwy</groupId>
+            <artifactId>ft-common</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.5.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

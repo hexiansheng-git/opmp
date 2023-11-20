@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.diff.make.service;
 
+import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMake;
 import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMakeDetail;
 import java.util.List;
 
@@ -30,5 +31,5 @@ public interface IJdglCorrectionMeasuresMakeDetailService {
 
     int deleteJdglCorrectionMeasuresMakeDetailByPks(List<Long> jdglCorrectionMeasuresMakeDetailPkList);
 
-    List<JdglCorrectionMeasuresMakeDetail> getDetailListByMakeId(Long makeId);
+    List<JdglCorrectionMeasuresMakeDetail> getDetailListByMakeId(JdglCorrectionMeasuresMake makeId);
 }

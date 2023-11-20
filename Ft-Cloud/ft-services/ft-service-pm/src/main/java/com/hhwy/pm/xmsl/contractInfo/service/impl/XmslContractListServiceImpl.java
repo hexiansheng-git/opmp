@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
@@ -171,7 +172,18 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         if (updateList.size() > 0) {
             xmslContractListMapper.updateXmslContractListList(updateList);
         }
+        //维护祖籍id
         this.handlerAncestors(null, null);
+        //回填有效合同金额
+        insertList.addAll(updateList);
+        List<XmslContractListVo> lastChild = insertList.stream()
+                .filter(p -> 0 == p.getHaveChildren() && "1".equals(p.getListType()))
+                .collect(Collectors.toList());
+        BigDecimal effectiveAmout = lastChild.stream().map(p -> p.getWinAmount()).reduce(BigDecimal.ZERO, BigDecimal::add);
+        XmslContractInfo xmslContractInfo = new XmslContractInfo();
+        xmslContractInfo.setId(xmslContractListList.get(0).getMasterId());
+        xmslContractInfo.setEffectiveAmout(NumberUtil.null2Zero(effectiveAmout));
+        xmslContractInfoMapper.updateXmslContractInfo(xmslContractInfo);
         return 1;
     }
 

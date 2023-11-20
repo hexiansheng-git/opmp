@@ -7,4 +7,5 @@ public interface IQqchScheService {
 
     void save(QqchScheDTO dto);
 
+    QqchScheDTO getItems();
 }

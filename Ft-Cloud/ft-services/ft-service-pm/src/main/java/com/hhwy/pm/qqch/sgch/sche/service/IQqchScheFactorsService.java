@@ -31,4 +31,6 @@ public interface IQqchScheFactorsService {
     void saveList(List<QqchScheFactors> dealSaveDto);
 
     ScheFactorsVO getList(QqchScheFactors dealSaveDto);
+
+    ScheFactorsVO getList4jd(QqchScheFactors dealSaveDto);
 }

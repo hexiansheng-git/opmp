@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xml.sax.SAXException;
 
-import javax.swing.plaf.IconUIResource;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -235,6 +234,16 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
         }else {
             return "中方";
         }
+    }
+
+    /**
+     * 获取 “项目领导层” 层级下的人员用户名
+     * @return
+     */
+    @Override
+    public String getProjectLeadershipPersonUserNames() {
+        List<QqchManagementPersonConfig> projectLeadershipPersonList = this.getProjectLeadershipPersonList();
+        return projectLeadershipPersonList.stream().map(QqchManagementPersonConfig::getPtVar1).distinct().collect(Collectors.joining(","));
     }
 
 

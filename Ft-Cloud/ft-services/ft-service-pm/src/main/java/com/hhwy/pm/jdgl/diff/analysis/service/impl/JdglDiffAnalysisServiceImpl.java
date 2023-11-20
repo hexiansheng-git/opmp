@@ -138,8 +138,6 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         BigDecimal totalCompValue = jdglDiffAnalysis.getTotalCompValue();
         BigDecimal totalMeterValue = jdglDiffAnalysis.getMeterValue();
 
-        QqchScheDTO dto = new QqchScheDTO();
-
         List<JdglDiffAnalysis> jdglDiffAnalysisList = getJdglDiffAnalysisList(new JdglDiffAnalysis());
 
         if(!CollectionUtils.isEmpty(jdglDiffAnalysisList)) {
@@ -157,7 +155,9 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         }
 
         // 调取获取进度差异化管控策划列表接口
-        QqchScheDTO list = qqchScheService.list(dto);
+//        QqchScheDTO dto = new QqchScheDTO();
+//        QqchScheDTO list = qqchScheService.list(dto);
+        QqchScheDTO list = qqchScheService.getItems();
 
         if(list != null) {
             List<QqchScheAnalyse> analyseList = list.getAnalyseList();
@@ -244,9 +244,12 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
             jdglDiffAnalysis.setIsWarn(true);
 
-            QqchScheDTO dto = new QqchScheDTO();
+
             // 调取获取进度差异化管控策划列表接口
-            QqchScheDTO list = qqchScheService.list(dto);
+//            QqchScheDTO dto = new QqchScheDTO();
+//            QqchScheDTO list = qqchScheService.list(dto);
+            QqchScheDTO list = qqchScheService.getItems();
+
 
             if(list == null || CollectionUtils.isEmpty(list.getDiffList())) {
                 return jdglDiffAnalysis;
@@ -345,10 +348,10 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         jdglDiffAnalysis.setCreateTime(nowDate);
 //        jdglDiffAnalysis.setCreateUser(SecurityUtils.getUserName());
 
-        QqchScheDTO dto = new QqchScheDTO();
-
         // 调取获取进度差异化管控策划列表接口
-        QqchScheDTO list = qqchScheService.list(dto);
+//        QqchScheDTO dto = new QqchScheDTO();
+//        QqchScheDTO list = qqchScheService.list(dto);
+        QqchScheDTO list = qqchScheService.getItems();
 
         List<QqchScheAnalyse> analyseList = null;
 

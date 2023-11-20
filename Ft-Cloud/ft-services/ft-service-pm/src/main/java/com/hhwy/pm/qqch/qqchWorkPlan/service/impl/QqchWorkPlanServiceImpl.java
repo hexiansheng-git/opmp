@@ -613,8 +613,8 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
 
                 Date nowDate = DateUtils.getNowDate();
                 long diffDays = FtDateUtils.getDiffDays(taskCommitDate, nowDate);
-//                if(diffDays >= 3 ){
-                if(FtDateUtils.dateFormatCompareTo(cutOffTime,nowDate)){
+                if(diffDays >= 3 ){
+//                if(FtDateUtils.dateFormatCompareTo(cutOffTime,nowDate)){
                     //获取工作小组组长
                     List<QqchWorkGroupMember> groupLeader = qqchWorkGroupMemberService.getGroupLeader();
                     StringBuilder warnScope = new StringBuilder();

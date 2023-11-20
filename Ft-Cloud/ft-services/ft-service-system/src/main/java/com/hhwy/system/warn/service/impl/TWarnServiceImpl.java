@@ -198,7 +198,12 @@ public class TWarnServiceImpl implements ITWarnService {
 
     @Override
     public void pushTWarn(TWarn tWarn) {
-        tWarnMapper.insertTWarn(tWarn);
+        int result = tWarnMapper.insertTWarn(tWarn);
+        if (result > 0) {
+            ThreadUtil.execAsync(() -> {
+                this.notify(tWarn);
+            });
+        }
     }
 
 

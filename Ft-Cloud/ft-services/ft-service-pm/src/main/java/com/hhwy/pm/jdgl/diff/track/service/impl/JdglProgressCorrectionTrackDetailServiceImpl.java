@@ -91,7 +91,6 @@ public class JdglProgressCorrectionTrackDetailServiceImpl implements IJdglProgre
     public List<JdglProgressCorrectionTrackDetail> getDetailListByTackId(Long trackId) {
         JdglProgressCorrectionTrackDetail jdglProgressCorrectionTrackDetail = new JdglProgressCorrectionTrackDetail();
         jdglProgressCorrectionTrackDetail.setTrackId(trackId);
-        return jdglProgressCorrectionTrackDetailMapper
-            .getJdglProgressCorrectionTrackDetailList(jdglProgressCorrectionTrackDetail);
+        return jdglProgressCorrectionTrackDetailMapper.getJdglProgressCorrectionTrackDetailList(jdglProgressCorrectionTrackDetail);
     }
 }

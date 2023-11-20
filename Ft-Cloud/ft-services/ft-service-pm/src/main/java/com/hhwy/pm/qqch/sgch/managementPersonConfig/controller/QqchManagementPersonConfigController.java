@@ -2,7 +2,6 @@ package com.hhwy.pm.qqch.sgch.managementPersonConfig.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.QqchManagementPersonConfig;
 import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.vo.QqchManagementPersonConfigVo;
 import com.hhwy.pm.qqch.sgch.managementPersonConfig.service.IQqchManagementPersonConfigService;
@@ -123,5 +122,14 @@ public class QqchManagementPersonConfigController extends BaseController {
         return AjaxResult.success("success",personType);
     }
 
+    /**
+     * 获取 “项目领导层” 层级下的人员用户名
+     * @return
+     */
+    @PostMapping("getProjectLeadershipPersonUserNames")
+    public AjaxResult getProjectLeadershipPersonUserNames(@RequestBody Map<String,String> map){
+        String userNames = qqchManagementPersonConfigService.getProjectLeadershipPersonUserNames();
+        return AjaxResult.success(userNames);
+    }
 
 }

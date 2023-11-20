@@ -1,9 +1,6 @@
 package com.hhwy.system.mq;
 
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
-import com.hhwy.common.core.utils.StringUtils;
-import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.system.warn.service.ITWarnService;
 import com.hhwy.utils.exception.CustomBusinessException;
@@ -17,8 +14,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RocketMQMessageListener(
-        consumerGroup = "pm_t_warn",
-        topic = "pm_t_warn",
+        consumerGroup = "gm_t_warn",
+        topic = "gm_t_warn",
         selectorExpression = "tenantSuccess",
         // 消费模式: 顺序消费
         consumeMode = ConsumeMode.ORDERLY)
@@ -29,7 +26,6 @@ public class TWarnConsumerListener implements RocketMQListener<String> , RocketM
 
     @Override
     public void onMessage(String s) {
-        String oldDataSource = null;
         try {
             TWarn tWarn = JSONObject.parseObject(s, TWarn.class);
             if(tWarn == null){
@@ -44,6 +40,6 @@ public class TWarnConsumerListener implements RocketMQListener<String> , RocketM
     @Override
     public void prepareStart(DefaultMQPushConsumer defaultMQPushConsumer) {
         defaultMQPushConsumer.setMaxReconsumeTimes(3);
-        defaultMQPushConsumer.setInstanceName("pm_t_warn");
+        defaultMQPushConsumer.setInstanceName("gm_t_warn");
     }
 }
