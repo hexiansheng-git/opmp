@@ -60,6 +60,9 @@ public class CompileEntity<T> extends TreeNode<T> {
     @NotBlank(message = "模块唯一标识不能为空！", groups = ValidationGroups.Save.class)
     private String moduleIdentity;
 
+    //真模块唯一标识（前端路由地址） 因为前端都是将路由地址传到menuId
+    private String menuId;
+
 
     private String dataType;
 
