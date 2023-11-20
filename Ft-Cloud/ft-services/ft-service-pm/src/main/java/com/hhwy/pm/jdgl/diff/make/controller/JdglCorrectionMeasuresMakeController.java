@@ -47,8 +47,7 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
     @GetMapping("/getOne")
     public AjaxResult getJdglCorrectionMeasuresMake(
         @Validated(ValidationGroups.Get.class) JdglCorrectionMeasuresMake jdglCorrectionMeasuresMakeParam) {
-        JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = jdglCorrectionMeasuresMakeService
-            .getJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMakeParam);
+        JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = jdglCorrectionMeasuresMakeService.getJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMakeParam);
         return AjaxResult.success(jdglCorrectionMeasuresMake);
     }
 

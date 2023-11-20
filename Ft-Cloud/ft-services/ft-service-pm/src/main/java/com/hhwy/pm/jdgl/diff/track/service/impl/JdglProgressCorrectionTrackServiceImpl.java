@@ -418,7 +418,7 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         jdglProgressCorrectionTrack.setProjectName(projectBasicInfo.getProjectName());
         jdglProgressCorrectionTrackMapper.insertJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
         //推送到总部版
-//        sysSyncInfoService.pushJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
+        sysSyncInfoService.pushJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
         List<JdglProgressCorrectionTrackDetail> trackDetailList = new ArrayList<>();
         for (JdglCorrectionMeasuresMakeDetail detail : detailList) {
             JdglProgressCorrectionTrackDetail trackDetail = new JdglProgressCorrectionTrackDetail();

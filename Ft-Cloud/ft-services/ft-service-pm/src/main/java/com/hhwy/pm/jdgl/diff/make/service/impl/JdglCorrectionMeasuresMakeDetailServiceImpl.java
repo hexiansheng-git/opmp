@@ -1,7 +1,9 @@
 package com.hhwy.pm.jdgl.diff.make.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMake;
 import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMakeDetail;
 import com.hhwy.pm.jdgl.diff.make.mapper.JdglCorrectionMeasuresMakeDetailMapper;
 import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeDetailService;
@@ -90,10 +92,14 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
     }
 
     @Override
-    public List<JdglCorrectionMeasuresMakeDetail> getDetailListByMakeId(Long makeId) {
+    public List<JdglCorrectionMeasuresMakeDetail> getDetailListByMakeId(JdglCorrectionMeasuresMake make) {
+        Long userId = SecurityUtils.getUserId();
         JdglCorrectionMeasuresMakeDetail jdglCorrectionMeasuresMakeDetail = new JdglCorrectionMeasuresMakeDetail();
-        jdglCorrectionMeasuresMakeDetail.setMakeId(makeId);
-        return jdglCorrectionMeasuresMakeDetailMapper
-            .getJdglCorrectionMeasuresMakeDetailList(jdglCorrectionMeasuresMakeDetail);
+        jdglCorrectionMeasuresMakeDetail.setMakeId(make.getId());
+        //只能查看、编辑自己负责的数据，除非当前记录流程已结束
+        if (StrUtil.isNotBlank(make.getTaskStatus()) &&  !make.getTaskStatus().equals("5")) {
+            jdglCorrectionMeasuresMakeDetail.setDirectorId(String.valueOf(userId));
+        }
+        return jdglCorrectionMeasuresMakeDetailMapper.getJdglCorrectionMeasuresMakeDetailList(jdglCorrectionMeasuresMakeDetail);
     }
 }
