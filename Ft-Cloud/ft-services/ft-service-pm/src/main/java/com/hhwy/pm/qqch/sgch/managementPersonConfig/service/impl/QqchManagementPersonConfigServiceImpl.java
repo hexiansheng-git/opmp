@@ -2,8 +2,12 @@ package com.hhwy.pm.qqch.sgch.managementPersonConfig.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.ehr.service.IEhrService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -18,6 +22,7 @@ import com.hhwy.pm.qqch.sgch.managementPersonConfig.mapper.QqchManagementPersonC
 import com.hhwy.pm.qqch.sgch.managementPersonConfig.service.IQqchManagementPersonConfigService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import io.seata.common.util.CollectionUtils;
@@ -30,6 +35,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -50,6 +56,8 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Autowired
     private IQqchOrganizationListService qqchOrganizationListService;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
     @Autowired
     IEhrService hrService;
@@ -238,12 +246,31 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
 
     /**
      * 获取 “项目领导层” 层级下的人员用户名
+     *
      * @return
      */
     @Override
-    public String getProjectLeadershipPersonUserNames() {
-        List<QqchManagementPersonConfig> projectLeadershipPersonList = this.getProjectLeadershipPersonList();
-        return projectLeadershipPersonList.stream().map(QqchManagementPersonConfig::getPtVar1).distinct().collect(Collectors.joining(","));
+    public Map<String, String> getProjectLeadershipPersonUserNameMap() {
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+        Map<String,String> userNameMap = new HashMap<>();
+        try {
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+                List<QqchManagementPersonConfig> projectLeadershipPersonList = this.getProjectLeadershipPersonList();
+                String userNames = projectLeadershipPersonList.stream().map(QqchManagementPersonConfig::getPtVar1).distinct().collect(Collectors.joining(","));
+                userNameMap.put(tenantKey,userNames);
+            }
+        }catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+        }
+
+        return userNameMap;
     }
 
 

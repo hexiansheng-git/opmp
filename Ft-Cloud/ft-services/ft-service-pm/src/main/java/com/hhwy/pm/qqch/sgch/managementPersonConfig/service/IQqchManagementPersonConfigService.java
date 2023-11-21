@@ -49,7 +49,8 @@ public interface IQqchManagementPersonConfigService {
 
     /**
      * 获取 “项目领导层” 层级下的人员用户名
+     *
      * @return
      */
-    String getProjectLeadershipPersonUserNames();
+    Map<String, String> getProjectLeadershipPersonUserNameMap();
 }

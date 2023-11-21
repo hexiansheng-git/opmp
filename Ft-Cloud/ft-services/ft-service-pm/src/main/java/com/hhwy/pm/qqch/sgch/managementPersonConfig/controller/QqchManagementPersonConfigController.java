@@ -126,10 +126,10 @@ public class QqchManagementPersonConfigController extends BaseController {
      * 获取 “项目领导层” 层级下的人员用户名
      * @return
      */
-    @PostMapping("getProjectLeadershipPersonUserNames")
-    public AjaxResult getProjectLeadershipPersonUserNames(@RequestBody Map<String,String> map){
-        String userNames = qqchManagementPersonConfigService.getProjectLeadershipPersonUserNames();
-        return AjaxResult.success(userNames);
+    @PostMapping("getProjectLeadershipPersonUserNameMap")
+    public AjaxResult getProjectLeadershipPersonUserNameMap(){
+        Map<String, String> userNameMap = qqchManagementPersonConfigService.getProjectLeadershipPersonUserNameMap();
+        return AjaxResult.success(userNameMap);
     }
 
 }

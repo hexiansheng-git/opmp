@@ -4,9 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.TreeUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.SystemServiceApi;
@@ -16,7 +14,6 @@ import com.hhwy.pm.qqch.qqchChange.mapper.QqchChangeMapper;
 import com.hhwy.pm.qqch.qqchChange.service.IQqchChangeDetailService;
 import com.hhwy.pm.qqch.qqchChange.service.IQqchChangeService;
 import com.hhwy.pm.qqch.qqchChange.vo.QqchChangeVo;
-import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
@@ -37,7 +34,6 @@ import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.utils.validation.ValidationUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +46,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -85,6 +79,16 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
     @Override
     public BigDecimal effectVersion() {
         final String key = "qqchValidVersion::"+SecurityUtils.getTenantKey();
+        return getBigDecimal(key);
+    }
+
+    @Override
+    public BigDecimal effectVersion(String tenantKey) {
+        final String key = "qqchValidVersion::"+tenantKey;
+        return getBigDecimal(key);
+    }
+
+    private BigDecimal getBigDecimal(String key) {
         if(redisUtils.hasKey(key)){
             return ObjectUtils.nvlBigDecimal(redisUtils.get(key),BigDecimal.ONE);
         }
@@ -93,6 +97,7 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         redisUtils.setAndExpire(key,version+"",1, TimeUnit.HOURS);
         return version;
     }
+
     @Override
     public List<QqchChange> list(QqchChange qqchChange) {
         List<QqchChange> list = qqchChangeMapper.getQqchChangeList(qqchChange);
