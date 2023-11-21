@@ -12,12 +12,13 @@ import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
 /**
+ * 技术管理机构管理
+ *
  * @author lcf
  * @date 2023-11-17 11:29:23
  * @remark
