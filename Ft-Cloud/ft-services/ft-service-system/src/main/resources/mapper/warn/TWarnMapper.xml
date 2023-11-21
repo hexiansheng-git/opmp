@@ -126,7 +126,7 @@
     </select>
 
     <insert id="insertTWarn" useGeneratedKeys="true" keyProperty="warnId">
-        insert into t_warn
+        replace into t_warn
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="warnId != null ">`warn_id`,</if>
             <if test="warnItem != null  and warnItem != ''">`warn_item`,</if>
@@ -165,7 +165,7 @@
 
     <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertTWarn -->
     <insert id="insertTWarnList">
-        insert into t_warn
+        replace into t_warn
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `warn_id`,
             `warn_item`,
