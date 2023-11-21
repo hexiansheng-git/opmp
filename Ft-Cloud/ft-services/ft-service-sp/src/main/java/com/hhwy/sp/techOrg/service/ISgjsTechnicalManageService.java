@@ -1,6 +1,8 @@
 package com.hhwy.sp.techOrg.service;
 
 import java.util.List;
+
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageVo;
 
@@ -42,4 +44,11 @@ public interface ISgjsTechnicalManageService {
      * @return
      */
     int batchAdd(SgjsTechnicalManageVo sgjsTechnicalManageVo);
+
+    /**
+     * 同步前期策划
+     *
+     * @return
+     */
+    AjaxResult sync();
 }

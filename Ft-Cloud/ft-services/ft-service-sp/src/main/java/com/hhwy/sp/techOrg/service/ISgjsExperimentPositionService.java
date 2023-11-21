@@ -1,8 +1,10 @@
 package com.hhwy.sp.techOrg.service;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.techOrg.domain.SgjsExperimentPosition;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lcf
@@ -26,4 +28,11 @@ public interface ISgjsExperimentPositionService {
     int deleteSgjsExperimentPosition(SgjsExperimentPosition sgjsExperimentPosition);
 
     int deleteSgjsExperimentPositionByPks(List<Long> sgjsExperimentPositionPkList);
+
+    /**
+     * 同步数据
+     *
+     * @param map
+     */
+    AjaxResult sync(Map<String, Object> map);
 }

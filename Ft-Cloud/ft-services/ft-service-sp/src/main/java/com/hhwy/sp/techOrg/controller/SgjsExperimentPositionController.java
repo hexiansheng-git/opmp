@@ -3,6 +3,7 @@ package com.hhwy.sp.techOrg.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import java.util.Map;
 
 import com.hhwy.sp.techOrg.domain.SgjsExperimentPosition;
 import com.hhwy.sp.techOrg.service.ISgjsExperimentPositionService;
@@ -106,5 +107,17 @@ public class SgjsExperimentPositionController extends BaseController{
         List<SgjsExperimentPosition> sgjsExperimentPositionList = sgjsExperimentPositionService.getSgjsExperimentPositionList(sgjsExperimentPositionParam);
         ExcelUtils<SgjsExperimentPosition> util = new ExcelUtils<>(SgjsExperimentPosition.class);
         util.exportExcel(response, sgjsExperimentPositionList, DateUtils.getDate());
+    }
+
+    /**
+     * 同步前期策划
+     * dataType 传2就是3.7.1  传1：3.6.1
+     *
+     * @param map
+     */
+    @PostMapping("/sync")
+    public AjaxResult sync(@RequestBody Map<String,Object> map){
+        AjaxResult result = sgjsExperimentPositionService.sync(map);
+        return result;
     }
 }

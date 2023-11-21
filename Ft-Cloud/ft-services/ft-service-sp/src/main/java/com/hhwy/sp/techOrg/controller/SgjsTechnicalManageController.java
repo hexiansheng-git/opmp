@@ -1,22 +1,21 @@
 package com.hhwy.sp.techOrg.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-
-import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageVo;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.sp.techOrg.service.ISgjsTechnicalManageService;
-import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
+import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageVo;
+import com.hhwy.sp.techOrg.service.ISgjsTechnicalManageService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * @author lcf
@@ -114,5 +113,10 @@ public class SgjsTechnicalManageController extends BaseController {
         List<SgjsTechnicalManage> sgjsTechnicalManageList = sgjsTechnicalManageService.getSgjsTechnicalManageList(sgjsTechnicalManageParam);
         ExcelUtils<SgjsTechnicalManage> util = new ExcelUtils<>(SgjsTechnicalManage.class);
         util.exportExcel(response, sgjsTechnicalManageList, DateUtils.getDate());
+    }
+
+    @GetMapping("/sync")
+    public AjaxResult sync(){
+        return sgjsTechnicalManageService.sync();
     }
 }

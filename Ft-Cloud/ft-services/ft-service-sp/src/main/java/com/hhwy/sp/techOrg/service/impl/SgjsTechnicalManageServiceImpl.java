@@ -3,7 +3,10 @@ package com.hhwy.sp.techOrg.service.impl;
 import cn.hutool.core.date.DateTime;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageVo;
 import com.hhwy.sp.techOrg.mapper.SgjsTechnicalManageMapper;
@@ -32,6 +35,8 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
 
     @Autowired
     private SgjsTechnicalManageMapper sgjsTechnicalManageMapper;
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
     private static final Logger logger= LoggerFactory.getLogger(SgjsTechnicalManageServiceImpl.class);
 
@@ -145,5 +150,14 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         }
         sgjsTechnicalManageMapper.insertSgjsTechnicalManageList(treeToList);
         return 0;
+    }
+
+    @Override
+    public AjaxResult sync() {
+        List<QqchPostSetting> list = pmServiceApi.getTechDeptList();
+        for (QqchPostSetting info:list) {
+            String str=info.getTechDept()+info.getPostName();
+        }
+        return AjaxResult.success(list);
     }
 }

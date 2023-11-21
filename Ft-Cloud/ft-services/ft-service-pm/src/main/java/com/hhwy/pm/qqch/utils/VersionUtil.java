@@ -44,6 +44,18 @@ public class VersionUtil {
         return version;
     }
 
+    public static BigDecimal getVersion(String tableName, BigDecimal version, String tenantKey) {
+        if (version == null) {
+            version  = qqchChangeService.effectVersion(tenantKey);
+        }
+        /*查询当前最接近（小于等于）指定版本的版本号*/
+        version = commonMapper.selectLessOrEqualAssignVersion(tableName, version);
+        if(version == null){
+            version = BigDecimal.ONE;
+        }
+        return version;
+    }
+
     /**
      * 获取版本，适用于多个功能公用一个表，通过类型区分
      *

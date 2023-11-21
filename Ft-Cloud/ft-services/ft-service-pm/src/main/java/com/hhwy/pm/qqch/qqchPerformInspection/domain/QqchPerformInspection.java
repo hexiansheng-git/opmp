@@ -150,5 +150,7 @@ public class QqchPerformInspection extends CommonBaseEntity {
     @JsonProperty
     private Long deptId;
 
+    private String ids;
+
     private List<QqchPerformInspectionDetail> detailList;
 }

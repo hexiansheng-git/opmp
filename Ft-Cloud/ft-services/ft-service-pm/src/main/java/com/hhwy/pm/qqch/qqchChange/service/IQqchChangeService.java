@@ -21,6 +21,8 @@ public interface IQqchChangeService {
      */
     BigDecimal effectVersion();
 
+    BigDecimal effectVersion(String tenantKey);
+
     QqchChange getQqchChange(QqchChange qqchChange);
 
     List<QqchChange> list(QqchChange qqchChange);
