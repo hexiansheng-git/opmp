@@ -806,6 +806,9 @@
             del_flag = '0'
             AND work_team IS NOT NULL
             AND pt_var1 IS NOT NULL
+            <if test="workTeam != null and workTeam != ''">
+                AND  work_team LIKE concat('%', #{workTeam}, '%')
+            </if>
         GROUP BY
             work_team
     </select>

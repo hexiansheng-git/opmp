@@ -38,6 +38,6 @@ public interface QqchLabourDemandPlanMapper {
 
     Map<String, Integer> personNumCalc(QqchLabourDemandPlan qqchLabourDemandPlanParam);
 
-    List<Map> getWorkTeamList();
+    List<Map> getWorkTeamList(String workTeam);
 
 }

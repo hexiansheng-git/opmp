@@ -48,6 +48,6 @@ public interface IQqchLabourDemandPlanService {
      */
     QqchLabourDemandPlanVo getQqchLabourDemandPlanListWithSearch(QqchLabourDemandPlan qqchLabourDemandPlanParam);
 
-    List<Map> getWorkTeamList();
+    List<Map> getWorkTeamList(String workTeam);
 
 }

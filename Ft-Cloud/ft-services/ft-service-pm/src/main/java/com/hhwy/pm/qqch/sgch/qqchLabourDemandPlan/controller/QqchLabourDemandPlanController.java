@@ -185,12 +185,13 @@ public class QqchLabourDemandPlanController extends BaseController {
 
     /***
      * 功能描述: 获取班组和进、出场时间  213弹窗
+     * @param workTeam 工作班组
      * 作者: fushudong
      * 时间: 2023/11/14
      */
     @GetMapping("/getWorkTeamList")
-    public AjaxResult getWorkTeamList(){
-        List<Map> result = qqchLabourDemandPlanService.getWorkTeamList();
+    public AjaxResult getWorkTeamList(@RequestParam(value = "workTeam", required = false) String workTeam){
+        List<Map> result = qqchLabourDemandPlanService.getWorkTeamList(workTeam);
         return AjaxResult.success(result);
     }
 

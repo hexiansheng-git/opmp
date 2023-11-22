@@ -444,7 +444,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
     }
 
     @Override
-    public List<Map> getWorkTeamList() {
-        return qqchLabourDemandPlanMapper.getWorkTeamList();
+    public List<Map> getWorkTeamList(String workTeam) {
+        return qqchLabourDemandPlanMapper.getWorkTeamList(workTeam);
     }
 }
