@@ -36,7 +36,7 @@ public class WbsRedisUtils {
     public static final String DIRE_CHILD_KEY = "WBS::dire_child_id::";
     //清单编号对应wbs编号   WBS::list_wbs::租户标志   L+清单编号 :: wbsId
     public static final String LIST_WBS_KEY = "WBS::list_wbs::";
-    //wbs编号对应清单编号   WBS::list_wbs::租户标志   L+清单编号 :: wbsId
+    //wbs编号对应清单编号   WBS::list_wbs::租户标志   wbs编号 :: 清单编号
     public static final String WBS_LIST_KEY = "WBS::wbs_list::";
 
 
@@ -196,6 +196,18 @@ public class WbsRedisUtils {
         return Convert.toStrArray(childIdObj);
     }
 
+
+    /**
+     * 获取当前租户下所有wbs挂接的清单编号
+     * @return
+     */
+    public static Map<Object, Object> getAllWbsRelation(){
+        String tenantKey = MySecurityUtils.getTenantKey();
+        String key = getWbsListKey(tenantKey);
+        Map<Object, Object> relationMap = redisUtils.hGetAll(key);
+        return relationMap;
+    }
+
     /**
      * 获取wbs redisKey
      * @param tenantKey
@@ -237,5 +249,6 @@ public class WbsRedisUtils {
     public static String getWbsListKey(String tenantKey){
         return WbsRedisUtils.WBS_LIST_KEY+ tenantKey;
     }
-    
+
+
 }

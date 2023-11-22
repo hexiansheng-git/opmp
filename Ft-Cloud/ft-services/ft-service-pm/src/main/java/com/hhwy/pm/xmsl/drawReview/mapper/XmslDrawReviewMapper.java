@@ -60,6 +60,10 @@ public interface XmslDrawReviewMapper {
     
     int deleteXmslDrawReview(XmslDrawReview xmslDrawReview);
 
+    int clearWbsListCode();
+
+    int batchUpdateListCode(@Param("list") List<Map> list);
+
     /**
      * 删除wbs到清单的挂接关系
      * @param map {mainId,wbsIds,listIds}

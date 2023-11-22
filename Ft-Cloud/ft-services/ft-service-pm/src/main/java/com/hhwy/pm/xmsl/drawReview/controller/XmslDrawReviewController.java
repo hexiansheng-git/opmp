@@ -175,11 +175,29 @@ public class XmslDrawReviewController extends BaseController{
             }
             return AjaxResult.success(list);
         }catch(Exception e){
+
             e.printStackTrace();
         }finally {
         }
         return AjaxResult.success(new ArrayList<>(2));
     }
+
+    /**
+     * 完整同步wbs的挂接关系
+     * @param dto
+     * @return
+     */
+    @PostMapping("/syncWbsRelation")
+    public AjaxResult syncWbsRelation(@RequestBody XmslDrawReviewDto dto){
+        try{
+            Long id = xmslDrawReviewService.syncWbsRelation(dto.getId());
+            return AjaxResult.success("success",id);
+        }catch(Exception e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
+    }
+
 
 
     @PreAuthorize(hasPermi = "xmslDrawReview:save")

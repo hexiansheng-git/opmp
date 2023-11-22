@@ -309,6 +309,26 @@
         </where>
     </update>
 
+    <!-- 清除wbs的清单编号 -->
+    <update id="clearWbsListCode">
+        update xmsl_wbs set list_code = ''
+    </update>
+    <!-- 更新wbs的清单编号 -->
+    <update id="batchUpdateListCode">
+        update xmsl_wbs
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="list_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `code`=#{item.code} then #{item.listCode}
+                </foreach>
+            </trim>
+        </trim>
+        where `code` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.code}
+        </foreach>
+    </update>
+
 
     <update id="deleteXmslDrawReview">
         update `xmsl_draw_review` set del_flag = 1

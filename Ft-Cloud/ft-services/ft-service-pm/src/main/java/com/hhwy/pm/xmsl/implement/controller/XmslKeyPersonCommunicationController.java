@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,6 +66,8 @@ public class XmslKeyPersonCommunicationController extends BaseController {
         try {
             InputStream inputStream = file.getInputStream();
             List<XmslKeyPersonCommunication> list = util.importExcel(inputStream);
+            if(CollectionUtils.isNotEmpty(list) && list.get(0) == null)
+                return AjaxResult.error("导入失败");
             return AjaxResult.success(list);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");

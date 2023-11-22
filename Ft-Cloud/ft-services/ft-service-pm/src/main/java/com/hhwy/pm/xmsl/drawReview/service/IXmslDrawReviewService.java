@@ -77,10 +77,20 @@ public interface IXmslDrawReviewService {
      */
     List<XmslDrawReviewWbs> relationList(Integer version, Long mainId, String listCode, Long listId);
 
-    
+    /**
+     * 记载默认挂接关系，暂时废弃
+     * @param wbsCode
+     * @return
+     */
     public List<XmslDrawReviewList> getDefaultListRelation(String wbsCode);
-
     public List<XmslDrawReviewWbs> getDefaultWbsRelation(String listCode);
+
+    /**
+     * 
+     * @param mainId
+     * @return
+     */
+    public Long syncWbsRelation(Long mainId);
 
     /**
      * 保存

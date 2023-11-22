@@ -23,6 +23,7 @@ public class AddBaseInfoUtil<T extends CommonBaseEntity> {
     public T add(T t){
         String currentUserId = String.valueOf(SecurityUtils.getUserId());
         t.setCreateUser(currentUserId);
+        t.setCreateUserName(SecurityUtils.getSysUser().getNickName());
         t.setUpdateUser(currentUserId);
         t.setUpdateTime(DateUtils.getNowDate());
         t.setCreateTime(DateUtils.getNowDate());

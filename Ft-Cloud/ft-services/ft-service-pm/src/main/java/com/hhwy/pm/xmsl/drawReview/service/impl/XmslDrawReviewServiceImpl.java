@@ -30,6 +30,7 @@ import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -220,8 +221,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         queryList.setVersion(version);
         List<XmslDrawReviewList> relationlist = xmslDrawReviewMapper.relationListCode(queryList);
         if(CollectionUtils.isEmpty(relationlist)){
-            if(ObjectUtils.nvl(version) == 1)  //加载默认wbs
-                return getDefaultListRelation(wbsCode);
+//            if(ObjectUtils.nvl(version) == 1)  //加载默认wbs
+//                return getDefaultListRelation(wbsCode);
             return new ArrayList<>();
         }
         mainId = relationlist.get(0).getMainId(); //获取最大版本
@@ -299,7 +300,93 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         }
         return resuList;
     }
-    
+
+    @Override
+    @Transactional
+    public Long syncWbsRelation(Long mainId) {
+        XmslDrawReviewDto dto = new XmslDrawReviewDto();
+        dto.setMainId(mainId);
+        saveCheck(dto);
+        //获取
+        Map<Object,Object> relationSourceMap = WbsRedisUtils.getAllWbsRelation();
+        //1、清除现有数据
+        if(mainId != null){ //清除所有挂接关系
+            Map delMap = ObjectUtils.toMap("mainId",mainId);
+            xmslDrawReviewMapper.deleteRelation(delMap);
+            xmslDrawReviewMapper.deleteWbsByCode(delMap);
+            xmslDrawReviewMapper.deleteList(delMap);
+            xmslDrawReviewMapper.deleteMaterial(delMap);
+            xmslDrawReviewMapper.deleteSourceMaterial(delMap);
+            XmslDrawReview dbReview = this.getById(mainId);
+            dto.setVersion(dbReview.getVersion());
+        }else{ //保存主表
+            dto.setId(IdWorker.createId());
+            Integer maxVersion = xmslDrawReviewMapper.selectMaxEffectVersion();
+            dto.setVersion(maxVersion==null?1:maxVersion+1);
+            dto.setValid(Constant.NO_INT);
+            new AddBaseInfoUtil<>(dto);
+            xmslDrawReviewMapper.insertXmslDrawReview(dto);
+            mainId = dto.getId();
+        }
+        if(MapUtils.isEmpty(relationSourceMap))
+            return mainId;
+        //2、转换为挂接关系
+        Set<String> listCodeSet = new HashSet<>();
+        Map<String,List<String>> relationMap = new HashMap<>(); //wbsCode: [listCode]
+        for(Map.Entry<Object,Object> entry: relationSourceMap.entrySet()){
+            if(ObjectUtils.isBlank(entry.getValue()) || StringUtils.equals("null",entry.getValue().toString()))
+                continue;
+            List<String> listCodes = Arrays.asList(Convert.toStrArray(entry.getValue()));
+            listCodeSet.addAll(listCodes);
+            relationMap.put(entry.getKey().toString(),listCodes);
+        }
+        List<XmslContractList> list = contractListService.getByCodes(listCodeSet);
+        Map<String,XmslContractList> listMap = new HashMap<>(list.size());
+        for (int i = 0; i < list.size(); i++) {
+            XmslContractList temp = list.get(i);
+            listMap.put(temp.getCode(),temp);
+        }
+        //4、生成wbs&&清单数据
+        List<XmslDrawReviewList> resuList = new ArrayList<>();
+        List<XmslDrawReviewWbs> resuWbsList = new ArrayList<>();
+        List<XmslDrawReviewRelation> resuRelateList = new ArrayList<>();
+        for(Map.Entry<String,List<String>> entry: relationMap.entrySet()){
+            List<String> listCodes = entry.getValue();
+            XmslWbs temp = WbsRedisUtils.getWbsByCode(entry.getKey());
+            XmslDrawReviewWbs wbs = new XmslDrawReviewWbs();
+            BeanUtils.copyProperties(temp, wbs);
+            wbs.setId(IdWorker.createId());
+            wbs.setWbsId(Long.valueOf(temp.getId()));
+            wbs.setCode(temp.getCode());
+            wbs.setMainId(mainId);
+            wbs.setVersion(dto.getVersion());
+            new AddBaseInfoUtil<>().addBaseEntity(wbs);
+            resuWbsList.add(wbs);
+            //构建list
+            for (int i = 0; i < listCodes.size(); i++) {
+                XmslContractList tempList = listMap.get(listCodes.get(i));
+                XmslDrawReviewList drawReviewList = new XmslDrawReviewList();
+                BeanUtils.copyProperties(tempList, drawReviewList);
+                drawReviewList.setId(IdWorker.createId());
+                drawReviewList.setListId(tempList.getId());
+                drawReviewList.setListCode(tempList.getCode());
+                new AddBaseInfoUtil<>().addBaseEntity(drawReviewList);
+                drawReviewList.setMainId(mainId);
+                resuList.add(drawReviewList);
+                drawReviewList.setVersion(dto.getVersion());
+                drawReviewList.setWbsCode(wbs.getCode());
+                //构建relation
+                resuRelateList.add(new XmslDrawReviewRelation(dto.getId(),wbs.getId(),wbs.getCode(),
+                        drawReviewList.getCode(),drawReviewList.getId(),dto.getVersion()));
+            }
+        }
+        drawReviewWbsService.insertXmslDrawReviewWbsList(resuWbsList);
+        relationService.insertXmslDrawReviewRelationList(resuRelateList);
+        drawReviewListService.insertXmslDrawReviewListList(resuList);
+        handlerVersionFlag(resuRelateList,1);
+        return dto.getId();
+    }
+
     @Override
     public List<XmslDrawReviewWbs> relationList(Integer version, Long mainId, String listCode, Long listId) {
         if(StringUtils.isBlank(listCode))
@@ -316,8 +403,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         queryList.setVersion(version);
         List<XmslDrawReviewList> relationlist = xmslDrawReviewMapper.relationListCode(queryList);
         if(CollectionUtils.isEmpty(relationlist)){
-            if(ObjectUtils.nvl(version) == 1)  //加载默认wbs
-                return getDefaultWbsRelation(listCode);
+//            if(ObjectUtils.nvl(version) == 1)  //加载默认wbs
+//                return getDefaultWbsRelation(listCode);
             return new ArrayList<>();
         }
         mainId = relationlist.get(0).getMainId(); //获取最大版本
@@ -745,6 +832,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                 DynamicDataSourceContextHolder.push(oldDataSource);
             }
         });
+        //4、同步挂接关系到最新wbs
+        syncRelate2Wbs(drawReview);
     }
 
     //加载图纸复核、
@@ -829,6 +918,30 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         drawReviewWbsService.updateParentId(wbsList);
         drawReviewListService.updateParentId(list);
     }
+
+    private void syncRelate2Wbs(XmslDrawReview drawReview){
+        List<XmslDrawReviewList> list = this.drawReviewListService.getFullEffectList();
+        if(CollectionUtils.isEmpty(list))
+            return ;
+        Set<String> listCodeSet = new HashSet<>();
+        Map<String,String> relationMap = new HashMap<>(); //wbsCode: [listCode]
+        for (int i = 0; i < list.size(); i++) {
+            XmslDrawReviewList temp = list.get(i);
+            ObjectUtils.addStr2MapList(relationMap,temp.getWbsCode(),temp.getListCode());
+        }
+        List<Map> updateWbsList = new ArrayList<>(relationMap.size());
+        for(Map.Entry<String,String> entry : relationMap.entrySet()){
+            if(StringUtils.isBlank(entry.getKey()))
+                continue;
+            updateWbsList.add(ObjectUtils.toMap("code",entry.getKey(),"listCode",entry.getValue()));
+        }
+        //更新项目wbs
+        xmslDrawReviewMapper.clearWbsListCode();
+        xmslDrawReviewMapper.batchUpdateListCode(updateWbsList);
+        wbsService.initWbs2Redis();
+    }
+
+
     private void ancestorToList(List<String> list,Set idSet,boolean isLong){
         for (int i = 0; i < list.size(); i++) {
             String temp = list.get(i);
