@@ -165,13 +165,16 @@ public class QqchConstServiceImpl implements IQqchConstService {
                 iFacList.addAll(facilityPlanList);
             }
         }
-
-        this.qqchConstMapper.insertQqchConstList(qqchConsts);
+        if(!CollectionUtils.isEmpty(qqchConsts))
+            this.qqchConstMapper.insertQqchConstList(qqchConsts);
 
         // 保存
-        jobService.saveList(CompileEntity.dealSaveDtoWithoutTree(dtoList, iJobList));
-        staffPlanService.saveList(CompileEntity.dealSaveDtoWithoutTree(dtoList, iStaffList));
-        facilityPlanService.saveList(CompileEntity.dealSaveDtoWithoutTree(dtoList, iFacList));
+        if(!CollectionUtils.isEmpty(iJobList))
+            jobService.saveList(CompileEntity.dealSaveDtoWithoutTree(dtoList, iJobList));
+        if(!CollectionUtils.isEmpty(iStaffList))
+            staffPlanService.saveList(CompileEntity.dealSaveDtoWithoutTree(dtoList, iStaffList));
+        if(!CollectionUtils.isEmpty(iFacList))
+            facilityPlanService.saveList(CompileEntity.dealSaveDtoWithoutTree(dtoList, iFacList));
 
 
     }
