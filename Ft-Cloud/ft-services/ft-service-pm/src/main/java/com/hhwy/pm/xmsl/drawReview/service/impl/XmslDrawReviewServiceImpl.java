@@ -376,7 +376,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                 drawReviewList.setVersion(dto.getVersion());
                 drawReviewList.setWbsCode(wbs.getCode());
                 //构建relation
-                resuRelateList.add(new XmslDrawReviewRelation(dto.getId(),wbs.getId(),wbs.getCode(),
+                resuRelateList.add(new XmslDrawReviewRelation(mainId,wbs.getId(),wbs.getCode(),
                         drawReviewList.getCode(),drawReviewList.getId(),dto.getVersion()));
             }
         }
@@ -384,7 +384,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         relationService.insertXmslDrawReviewRelationList(resuRelateList);
         drawReviewListService.insertXmslDrawReviewListList(resuList);
         handlerVersionFlag(resuRelateList,1);
-        return dto.getId();
+        return mainId;
     }
 
     @Override
@@ -409,6 +409,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         }
         mainId = relationlist.get(0).getMainId(); //获取最大版本
         //查询清单
+
         final Long finalMainId = mainId;
         List<XmslDrawReviewList> drawList = relationlist.stream().filter(r->r.getMainId().equals(finalMainId)).collect(Collectors.toList());
         List<XmslDrawReviewWbs> list = trans2Wbs(drawList);
