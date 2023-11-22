@@ -263,7 +263,9 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         // 树转列表
         List<JdglDiffAnalysisSv> svListList = TreeUtil.treeToList(svTreeList);
         //只需要偏差值小于0的
-        List<JdglDiffAnalysisSv> svList = svListList.stream().filter(p -> p.getThisDeviationNum().compareTo(BigDecimal.ZERO) < 0).collect(Collectors.toList());
+        List<JdglDiffAnalysisSv> svList = svListList.stream()
+                .filter(p -> null != p.getThisDeviationNum() && p.getThisDeviationNum().compareTo(BigDecimal.ZERO) < 0)
+                .collect(Collectors.toList());
 
         // 构建新的list
         List<JdglCorrectionMeasuresMakeDetail> newDetailList = new ArrayList<>();
