@@ -95,6 +95,11 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
             for (QqchMainPlanItem qqchMainPlanItem1 : returnList) {
                 if("1".equals(qqchMainPlanItem1.getLeaf())) qqchMainPlanItem1.setHaveChildren(0);
                 if(!"1".equals(qqchMainPlanItem1.getLeaf())) qqchMainPlanItem1.setHaveChildren(1);
+                // 总浮时 / 8
+                if(qqchMainPlanItem1.getTotalFloat() != null)
+                    qqchMainPlanItem1.setTotalFloat(new BigDecimal(qqchMainPlanItem1.getTotalFloat()).divide(new BigDecimal(8), 0, BigDecimal.ROUND_UP).intValue());
+                qqchMainPlanItem1.setPlannedDuration(StatisticsUtils.getDaysByRangeDate(qqchMainPlanItem1.getStartDate(), qqchMainPlanItem1.getFinishDate()));
+
             }
         }
 
