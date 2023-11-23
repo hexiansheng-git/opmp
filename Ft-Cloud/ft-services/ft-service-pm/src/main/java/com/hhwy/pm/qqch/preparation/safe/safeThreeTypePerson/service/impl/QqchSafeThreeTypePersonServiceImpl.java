@@ -14,7 +14,10 @@ import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -103,34 +106,44 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
 
     @Transactional
     public int insertQqchSafeThreeTypePersonList(QqchSafeThreeTypePersonVo qqchSafeThreeTypePersonVo) {
+        List<QqchSafeThreeTypePerson> personList = qqchSafeThreeTypePersonVo.getList();
+        String buttonMark = qqchSafeThreeTypePersonVo.getButtonMark();
+        personList = ListTreeUtil.formatList(
+                personList,
+                QqchSafeThreeTypePerson::setId,
+                QqchSafeThreeTypePerson::setPid,
+                QqchSafeThreeTypePerson::setSort,
+                QqchSafeThreeTypePerson::setLeaf,
+                QqchSafeThreeTypePerson::getChildren,
+                QqchSafeThreeTypePerson::setChildren);
+
+        //确认校验非空
+        if(ButtonMark.CONFIRM.equals(buttonMark) || ButtonMark.SUBMIT.equals(buttonMark)){
+            JyDetailsUtil.jyDetails(personList, QqchSafeThreeTypePerson::getLeaf, ValidationGroups.Save.class);
+        }
+
         //清空数据库表中数据
         QqchSafeThreeTypePerson temp = new QqchSafeThreeTypePerson();
         temp.setVersion(qqchSafeThreeTypePersonVo.getVersion());
         qqchSafeThreeTypePersonMapper.deleteQqchSafeThreeTypePerson(temp);
-        if (!CollectionUtils.isEmpty(qqchSafeThreeTypePersonVo.getList())) {
-            List<QqchSafeThreeTypePerson> lists = qqchSafeThreeTypePersonVo.getList();
-            List<QqchSafeThreeTypePerson> list = TreeUtil.treeToList(lists);
-//            LinkedHashMap<String, String> dutiesTypeMap = DictUtil.getDictData("duties_type");
-            for (QqchSafeThreeTypePerson person : list) {
-//                person.setId(IdWorker.createId());
+        if (!CollectionUtils.isEmpty(personList)) {
+            for (QqchSafeThreeTypePerson person : personList) {
                 person.setVersion(qqchSafeThreeTypePersonVo.getVersion());
                 if (qqchSafeThreeTypePersonVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
                     person.setValid(Valid.YES);
                 }else{
                     person.setValid(Valid.NO);
                 }
-//                person.setDuties(dutiesTypeMap.get(person.getDuties()));
                 person.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 person.setCreateUserName(SecurityUtils.getUserName());
                 person.setCreateTime(DateUtils.getNowDate());
             }
             //新增
-            qqchSafeThreeTypePersonMapper.insertQqchSafeThreeTypePersonList(list);
+            qqchSafeThreeTypePersonMapper.insertQqchSafeThreeTypePersonList(personList);
         }
-        String buttonMark = qqchSafeThreeTypePersonVo.getButtonMark();
+
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             // 插入确认状态
-            qqchReviewService.updateFinishNum(qqchSafeThreeTypePersonVo.getStageIdentity(), qqchSafeThreeTypePersonVo.getModuleIdentity());
             qqchModuleConfirmCaseService.addConfirmRecord(qqchSafeThreeTypePersonVo.getMenuId(), qqchSafeThreeTypePersonVo.getStageIdentity());
         }
         return 1;
