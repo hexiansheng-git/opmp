@@ -1,0 +1,135 @@
+package com.hhwy.sp.sgjsDiscloseRecord.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
+import com.hhwy.sp.sgjsDiscloseRecord.mapper.SgjsDiscloseRecordMapper;
+import com.hhwy.sp.sgjsDiscloseRecord.service.ISgjsDiscloseRecordService;
+import org.springframework.stereotype.Service;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.utils.idworker.IdWorker;
+
+/**
+ * @author cjh
+ * @date 2023-11-23 14:47:22
+ * @remark
+ */
+@Service
+public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService {
+
+    @Autowired
+    private SgjsDiscloseRecordMapper sgjsDiscloseRecordMapper;
+
+
+    public SgjsDiscloseRecord getSgjsDiscloseRecord(SgjsDiscloseRecord sgjsDiscloseRecord) {
+        return sgjsDiscloseRecordMapper.getSgjsDiscloseRecord(sgjsDiscloseRecord);
+    }
+
+    public List<SgjsDiscloseRecord> getSgjsDiscloseRecordList(SgjsDiscloseRecord sgjsDiscloseRecord) {
+        String dataType = sgjsDiscloseRecord.getDataType();
+        if(StringUtils.isEmpty(dataType)) {
+            throw new RuntimeException("参数异常！");
+        }
+        return sgjsDiscloseRecordMapper.getSgjsDiscloseRecordList(sgjsDiscloseRecord);
+    }
+
+    @Transactional
+    public int insertSgjsDiscloseRecord(SgjsDiscloseRecord sgjsDiscloseRecord) {
+        sgjsDiscloseRecord.setId(IdWorker.createId());
+        sgjsDiscloseRecord.setCreateUser(SecurityUtils.getSysUser().getNickName());
+        sgjsDiscloseRecord.setCreateTime(DateUtils.getNowDate());
+        return sgjsDiscloseRecordMapper.insertSgjsDiscloseRecord(sgjsDiscloseRecord);
+    }
+
+    @Transactional
+    public int insertSgjsDiscloseRecordList(List<SgjsDiscloseRecord> sgjsDiscloseRecordList) {
+        if(CollectionUtils.isEmpty(sgjsDiscloseRecordList)) {
+            return 0;
+        }
+        for (SgjsDiscloseRecord sgjsDiscloseRecord : sgjsDiscloseRecordList) {
+            sgjsDiscloseRecord.setId(IdWorker.createId());
+            sgjsDiscloseRecord.setCreateUser(SecurityUtils.getSysUser().getNickName());
+            sgjsDiscloseRecord.setCreateTime(DateUtils.getNowDate());
+        }
+        return sgjsDiscloseRecordMapper.insertSgjsDiscloseRecordList(sgjsDiscloseRecordList);
+    }
+
+    @Transactional
+    public int updateSgjsDiscloseRecord(SgjsDiscloseRecord sgjsDiscloseRecord) {
+        sgjsDiscloseRecord.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+        sgjsDiscloseRecord.setUpdateTime(DateUtils.getNowDate());
+        return sgjsDiscloseRecordMapper.updateSgjsDiscloseRecord(sgjsDiscloseRecord);
+    }
+
+    @Transactional
+    public int updateSgjsDiscloseRecordList(List<SgjsDiscloseRecord> sgjsDiscloseRecordList) {
+        if(CollectionUtils.isEmpty(sgjsDiscloseRecordList)) {
+            return 0;
+        }
+        List<SgjsDiscloseRecord> addList = new ArrayList<>();
+        List<SgjsDiscloseRecord> updateList = new ArrayList<>();
+
+        for (SgjsDiscloseRecord sgjsDiscloseRecord : sgjsDiscloseRecordList) {
+            if("1".equals(sgjsDiscloseRecord.getIsAdd())) {
+                addList.add(sgjsDiscloseRecord);
+            } else {
+                sgjsDiscloseRecord.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+                sgjsDiscloseRecord.setUpdateTime(DateUtils.getNowDate());
+                updateList.add(sgjsDiscloseRecord);
+            }
+        }
+        int i = 0;
+        if(CollectionUtils.isNotEmpty(addList)) {
+            i = i + insertSgjsDiscloseRecordList(addList);
+        }
+        if(CollectionUtils.isNotEmpty(updateList)) {
+            i = i + sgjsDiscloseRecordMapper.updateSgjsDiscloseRecordList(updateList);
+        }
+        return i;
+    }
+
+    @Transactional
+    public int deleteSgjsDiscloseRecord(SgjsDiscloseRecord sgjsDiscloseRecord) {
+        return sgjsDiscloseRecordMapper.deleteSgjsDiscloseRecord(sgjsDiscloseRecord);
+    }
+
+    @Transactional
+    public int deleteSgjsDiscloseRecordByPks(List<Long> sgjsDiscloseRecordPkList) {
+        return sgjsDiscloseRecordMapper.deleteSgjsDiscloseRecordByPks(sgjsDiscloseRecordPkList);
+    }
+
+    public List<SgjsDiscloseRecord> getSgjsDiscloseRecordListByNames(List<String> discloseNames) {
+        return sgjsDiscloseRecordMapper.getSgjsDiscloseRecordListByNames(discloseNames);
+    }
+
+    @Override
+    public int importData(List<SgjsDiscloseRecord> sgjsDiscloseRecordList) {
+        if(CollectionUtils.isEmpty(sgjsDiscloseRecordList)) {
+            return 0;
+        }
+        List<String> discloseNames = sgjsDiscloseRecordList.stream().map(SgjsDiscloseRecord::getDiscloseName).collect(Collectors.toList());
+        List<SgjsDiscloseRecord> exists = getSgjsDiscloseRecordListByNames(discloseNames);
+        for (SgjsDiscloseRecord sgjsDiscloseRecord : sgjsDiscloseRecordList) {
+            String discloseName = sgjsDiscloseRecord.getDiscloseName();
+            sgjsDiscloseRecord.setIsAdd("1");
+            if(CollectionUtils.isNotEmpty(exists)) {
+                SgjsDiscloseRecord sgjsDiscloseRecord1 = exists.stream().filter(vo -> discloseName.equals(vo.getDiscloseName())).findFirst().orElse(null);
+                if(sgjsDiscloseRecord1 != null) {
+                    sgjsDiscloseRecord.setId(sgjsDiscloseRecord1.getId());
+                    sgjsDiscloseRecord.setFileGroupId(sgjsDiscloseRecord1.getFileGroupId());
+                    sgjsDiscloseRecord.setIsAdd(null);
+                }
+            }
+        }
+
+        return updateSgjsDiscloseRecordList(sgjsDiscloseRecordList);
+    }
+}

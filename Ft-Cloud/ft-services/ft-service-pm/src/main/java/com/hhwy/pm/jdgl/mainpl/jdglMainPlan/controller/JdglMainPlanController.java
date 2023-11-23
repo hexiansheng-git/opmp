@@ -43,8 +43,8 @@ public class JdglMainPlanController extends BaseController {
 
     // // @PreAuthorize(hasPermi = "jdglMainPlan:list")
     @GetMapping("/getUsingMainPlan")
-    public AjaxResult getUsingMainPlan() {
-        JdglMainPlan jdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+    public AjaxResult getUsingMainPlan(String itemName, String tabNo) {
+        JdglMainPlan jdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan(itemName, tabNo);
         return AjaxResult.success(jdglMainPlan);
     }
 

@@ -6,92 +6,55 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.utils.tree.TreeNode;
+import com.hhwy.common.core.web.domain.BaseEntity;
 
 import java.util.Date;
 
 /**
  * @author lcf
- * @date 2023-11-23 14:01:14
- * @remark   sgjs_technical_manage
+ * @date 2023-11-23 10:21:37
+ * @remark   sgjs_technical_manage_info
  */
-public class SgjsTechnicalManage extends TreeNode<SgjsTechnicalManage> {
-
+public class SgjsTechnicalManageInfo extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 字段描述：
+     * 字段描述：主键
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
+    @Excel(name = "主键"    )
     private Long id;
     /**
-     * 字段描述：父级id
+     * 字段描述：技术管理主表id
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "父级id"    )
-    private Long pid;
+    @Excel(name = "技术管理主表id"    )
+    private Long techId;
     /**
-     * 字段描述：岗位
+     * 字段描述：进场时间
      */
     @JsonProperty
-    @Excel(name = "岗位"    )
-    private String postName;
+    @Excel(name = "进场时间"    )
+    private String entryDate;
     /**
-     * 字段描述：岗位职责
+     * 字段描述：离场时间
      */
     @JsonProperty
-    @Excel(name = "岗位职责"    )
-    private String postJob;
+    @Excel(name = "离场时间"    )
+    private String leaveDate;
     /**
-     * 字段描述：编制人数
+     * 字段描述：在场天数
      */
     @JsonProperty
-    @Excel(name = "编制人数"    )
-    private Integer headCount;
+    @Excel(name = "在场天数"    )
+    private Integer entryDay;
     /**
-     * 字段描述：
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonProperty
-    private Long userId;
-    /**
-     * 字段描述：人员姓名
+     * 字段描述：离场原因
      */
     @JsonProperty
-    @Excel(name = "人员姓名"    )
-    private String userName;
-    /**
-     * 字段描述：联系方式
-     */
-    @JsonProperty
-    @Excel(name = "联系方式"    )
-    private String phone;
-    /**
-     * 字段描述：实际进场日期
-     */
-    @JsonProperty
-    @Excel(name = "实际进场日期")
-    private Date actualDate;
-    /**
-     * 字段描述：是否在场
-     */
-    @JsonProperty
-    @Excel(name = "是否在场"    )
-    private String workOrNot;
-    /**
-     * 字段描述：实际退场日期
-     */
-    @JsonProperty
-    @Excel(name = "实际退场日期"    )
-    private String actualExitDate;
-    /**
-     * 字段描述：备注
-     */
-    @JsonProperty
-    @Excel(name = "备注"    )
-    private String remark;
+    @Excel(name = "离场原因"    )
+    private String leaveRemark;
     /**
      * 字段描述：数据来源
      */
@@ -213,36 +176,6 @@ public class SgjsTechnicalManage extends TreeNode<SgjsTechnicalManage> {
     @Excel(name = "预留字段5"    )
     private String ptVar5;
 
-    private String actualDateStr;
-
-    private Date actualDateBegin;
-
-    private Date actualDateEnd;
-
-    public String getActualDateStr() {
-        return actualDateStr;
-    }
-
-    public void setActualDateStr(String actualDateStr) {
-        this.actualDateStr = actualDateStr;
-    }
-
-    public Date getActualDateBegin() {
-        return actualDateBegin;
-    }
-
-    public void setActualDateBegin(Date actualDateBegin) {
-        this.actualDateBegin = actualDateBegin;
-    }
-
-    public Date getActualDateEnd() {
-        return actualDateEnd;
-    }
-
-    public void setActualDateEnd(Date actualDateEnd) {
-        this.actualDateEnd = actualDateEnd;
-    }
-
     @JsonIgnore
     public Long getId() {
         return id;
@@ -252,92 +185,44 @@ public class SgjsTechnicalManage extends TreeNode<SgjsTechnicalManage> {
         this.id = id;
     }
     @JsonIgnore
-    public Long getPid() {
-        return pid;
+    public Long getTechId() {
+        return techId;
     }
     @JsonIgnore
-    public void setPid(Long pid) {
-        this.pid = pid;
+    public void setTechId(Long techId) {
+        this.techId = techId;
     }
     @JsonIgnore
-    public String getPostName() {
-        return postName;
+    public String getEntryDate() {
+        return entryDate;
     }
     @JsonIgnore
-    public void setPostName(String postName) {
-        this.postName = postName;
+    public void setEntryDate(String entryDate) {
+        this.entryDate = entryDate;
     }
     @JsonIgnore
-    public String getPostJob() {
-        return postJob;
+    public String getLeaveDate() {
+        return leaveDate;
     }
     @JsonIgnore
-    public void setPostJob(String postJob) {
-        this.postJob = postJob;
+    public void setLeaveDate(String leaveDate) {
+        this.leaveDate = leaveDate;
     }
     @JsonIgnore
-    public Integer getHeadCount() {
-        return headCount;
+    public Integer getEntryDay() {
+        return entryDay;
     }
     @JsonIgnore
-    public void setHeadCount(Integer headCount) {
-        this.headCount = headCount;
+    public void setEntryDay(Integer entryDay) {
+        this.entryDay = entryDay;
     }
     @JsonIgnore
-    public Long getUserId() {
-        return userId;
+    public String getLeaveRemark() {
+        return leaveRemark;
     }
     @JsonIgnore
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-    @JsonIgnore
-    public String getUserName() {
-        return userName;
-    }
-    @JsonIgnore
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-    @JsonIgnore
-    public String getPhone() {
-        return phone;
-    }
-    @JsonIgnore
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-    @JsonIgnore
-    public Date getActualDate() {
-        return actualDate;
-    }
-    @JsonIgnore
-    public void setActualDate(Date actualDate) {
-        this.actualDate = actualDate;
-    }
-    @JsonIgnore
-    public String getWorkOrNot() {
-        return workOrNot;
-    }
-    @JsonIgnore
-    public void setWorkOrNot(String workOrNot) {
-        this.workOrNot = workOrNot;
-    }
-    @JsonIgnore
-    public String getActualExitDate() {
-        return actualExitDate;
-    }
-    @JsonIgnore
-    public void setActualExitDate(String actualExitDate) {
-        this.actualExitDate = actualExitDate;
-    }
-    @JsonIgnore
-    public String getRemark() {
-        return remark;
-    }
-    @JsonIgnore
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setLeaveRemark(String leaveRemark) {
+        this.leaveRemark = leaveRemark;
     }
     @JsonIgnore
     public String getDataSource() {

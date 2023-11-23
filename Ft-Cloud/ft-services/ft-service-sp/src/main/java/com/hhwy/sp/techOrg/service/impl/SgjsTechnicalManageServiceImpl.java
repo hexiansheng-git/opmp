@@ -5,12 +5,15 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.DictType;
 import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageVo;
 import com.hhwy.sp.techOrg.mapper.SgjsTechnicalManageMapper;
 import com.hhwy.sp.techOrg.service.ISgjsTechnicalManageService;
+import com.hhwy.utils.Constant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
@@ -23,6 +26,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +41,9 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
     private SgjsTechnicalManageMapper sgjsTechnicalManageMapper;
     @Autowired
     private PmServiceApi pmServiceApi;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
+
 
     private static final Logger logger= LoggerFactory.getLogger(SgjsTechnicalManageServiceImpl.class);
 
@@ -61,8 +68,30 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             sgjsTechnicalManage.setActualDateEnd(FtDateUtils.parseDate(end));
         }
         List<SgjsTechnicalManage> list = sgjsTechnicalManageMapper.getSgjsTechnicalManageList(sgjsTechnicalManage);
+        //字典项处理
+        AjaxResult result = systemServiceApi.dictType(DictType.WORK_OR_NOT);
+        List<Map<String,Object>> dictDataList=null;
+        if(result.get("code").toString().equals(Constant.SUCCESS_CODE)){
+            dictDataList= (List<Map<String, Object>>) result.get("data");
+        }
+        List<Map<String, Object>> oneList = dictDataList.stream().filter(e -> e.get("dictValue").equals("0")).collect(Collectors.toList());
+        List<Map<String, Object>> zeroList = dictDataList.stream().filter(e -> e.get("dictValue").equals("1")).collect(Collectors.toList());
         for (SgjsTechnicalManage info:list) {
             info.setActualDateStr(FtDateUtils.formatDate(info.getActualDate()));
+            String one = (String)oneList.get(0).get("dictValue");
+            String zero = (String)zeroList.get(0).get("dictValue");
+            String workOrNot = info.getWorkOrNot();
+            if(StringUtils.isEmpty(workOrNot)){
+                continue;
+            }
+            if(workOrNot.equals(one)){
+                String oneDictLabel = (String)oneList.get(0).get("dictLabel");
+                info.setWorkOrNot(oneDictLabel);
+            }
+            if(workOrNot.equals(zero)){
+                String zeroDictLabel = (String)zeroList.get(0).get("dictLabel");
+                info.setWorkOrNot(zeroDictLabel);
+            }
         }
         vo.setTreeList(TreeUtil.build(list, 0L));
         return vo;
@@ -129,13 +158,21 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
 
     @Override
     @Transactional
-    public int batchAdd(SgjsTechnicalManageVo sgjsTechnicalManageVo) {
+    public AjaxResult batchAdd(SgjsTechnicalManageVo sgjsTechnicalManageVo) {
+        List<SgjsTechnicalManage> treeToList=null;
+        //数据校验
+        AjaxResult result=validData(sgjsTechnicalManageVo.getTreeList());
+
+        if(result.get("code").toString().equals("200")){
+            treeToList=(List<SgjsTechnicalManage>)result.get("data");
+        }else {
+            return result;
+        }
         //删除库中所有数据
         SgjsTechnicalManage info=new SgjsTechnicalManage();
         info.setUpdateTime(DateTime.now());
         info.setUpdateUser(SecurityUtils.getUserId()+"");
         sgjsTechnicalManageMapper.delectAll(info);
-        List<SgjsTechnicalManage> treeToList=null;
         if(!CollectionUtils.isEmpty(sgjsTechnicalManageVo.getTreeList())){
             treeToList= TreeUtil.treeToList(sgjsTechnicalManageVo.getTreeList());
             for (int i = 0; i < treeToList.size(); i++) {
@@ -149,15 +186,73 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             }
         }
         sgjsTechnicalManageMapper.insertSgjsTechnicalManageList(treeToList);
-        return 0;
+        return AjaxResult.success();
+    }
+
+    /**
+     * 数据保存校验
+     *
+     * @param list
+     * @return
+     */
+    private AjaxResult validData(List<SgjsTechnicalManage>list) {
+        String msg="";
+        String s = validDataDigui(list, msg);
+        if(StringUtils.isNotEmpty(s)){
+            return AjaxResult.success(list);
+        }
+        return AjaxResult.error(msg);
+    }
+
+   private String validDataDigui(List<SgjsTechnicalManage>list,String msg){
+        for (int i = 0; i < list.size(); i++) {
+            Integer headCount = list.get(i).getHeadCount();
+            if(headCount>0){
+                String userName = list.get(i).getUserName();
+                if(StringUtils.isEmpty(userName)){
+                    msg=msg+list.get(i).getPostName()+"的姓名不能为空";
+                }
+                Date actualDate = list.get(i).getActualDate();
+                if(null==actualDate){
+                    msg=msg+list.get(i).getPostName()+"的姓名不能为空";
+                }
+            }
+            if(!CollectionUtils.isEmpty(list.get(i).getChildren())){
+                validDataDigui(list,msg);
+            }
+        }
+        return msg;
     }
 
     @Override
     public AjaxResult sync() {
         List<QqchPostSetting> list = pmServiceApi.getTechDeptList();
-        for (QqchPostSetting info:list) {
-            String str=info.getTechDept()+info.getPostName();
-        }
+        //递归处理
+        digui(list);
         return AjaxResult.success(list);
+    }
+
+    private void digui(List<QqchPostSetting> list){
+        for (QqchPostSetting info:list) {
+            //技术部门+技术岗位=岗位
+            String str="";
+            if(!StringUtils.isEmpty(info.getTechDept()) && !StringUtils.isEmpty(info.getPostName())){
+                str=info.getTechDept()+info.getPostName();
+            }
+            if(StringUtils.isEmpty(info.getTechDept())){
+                str=info.getPostName();
+            }
+            if(StringUtils.isEmpty(info.getPostName())){
+                str=info.getTechDept();
+            }
+            //编制人数
+            String headcount = info.getHeadcount();
+            if(!StringUtils.isEmpty(str)){
+                info.setPostName(str);
+            }
+            if(!CollectionUtils.isEmpty(info.getChildren())){
+                digui(list);
+            }
+        }
     }
 }
