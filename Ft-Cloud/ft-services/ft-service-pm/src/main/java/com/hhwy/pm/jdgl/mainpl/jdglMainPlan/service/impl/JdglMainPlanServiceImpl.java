@@ -59,11 +59,44 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         return jdglMainPlan1;
     }
 
+
+    public JdglMainPlan getJdglMainPlan(JdglMainPlan jdglMainPlan, String itemName, String tabNo) {
+        JdglMainPlan jdglMainPlan1 = jdglMainPlanMapper.getJdglMainPlan(jdglMainPlan);
+        if(jdglMainPlan1 == null) {
+            return new JdglMainPlan();
+        }
+        JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
+        jdglMainPlanItem.setMainPlanId(jdglMainPlan1.getId());
+        if("1".equals(tabNo)) {
+            jdglMainPlanItem.setItemName(itemName);
+        }
+        List<JdglMainPlanItem> jdglMainPlanItemList = iJdglMainPlanItemService.getJdglMainPlanItemListNoTree(jdglMainPlanItem);
+        jdglMainPlan1.setJdglMainPlanItemList(jdglMainPlanItemList == null ? new ArrayList<>() : jdglMainPlanItemList);
+        JdglMainPlanItemPre jdglMainPlanItemPre = new JdglMainPlanItemPre();
+        jdglMainPlanItemPre.setMainPlanId(jdglMainPlan1.getId());
+        List<JdglMainPlanItemPre> jdglMainPlanItemPreList = jdglMainPlanItemPreService.getJdglMainPlanItemPreList(jdglMainPlanItemPre);
+        jdglMainPlan1.setJdglMainPlanItemPreList(jdglMainPlanItemPreList == null ? new ArrayList<>() : jdglMainPlanItemPreList);
+        if("2".equals(tabNo)) {
+            jdglMainPlanItem.setItemName(itemName);
+        }
+        List<JdglMainPlanItem> keyRoad = iJdglMainPlanItemService.getKeyRoad(jdglMainPlanItem);
+        jdglMainPlan1.setKeyLoadList(keyRoad == null ? new ArrayList<>() : keyRoad);
+
+        return jdglMainPlan1;
+    }
+
     @Override
     public JdglMainPlan getUsingJdglMainPlan() {
         JdglMainPlan jdglMainPlan = new JdglMainPlan();
         jdglMainPlan.setIsUse("1");
         return getJdglMainPlan(jdglMainPlan);
+    }
+
+    @Override
+    public JdglMainPlan getUsingJdglMainPlan(String itemName, String tabNo) {
+        JdglMainPlan jdglMainPlan = new JdglMainPlan();
+        jdglMainPlan.setIsUse("1");
+        return getJdglMainPlan(jdglMainPlan, itemName, tabNo);
     }
 
     @Override
