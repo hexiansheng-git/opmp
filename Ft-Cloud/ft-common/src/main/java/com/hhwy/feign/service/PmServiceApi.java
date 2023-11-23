@@ -41,4 +41,7 @@ public interface PmServiceApi {
      */
     @GetMapping("/qqchPostSetting/getTechDeptList")
     List<QqchPostSetting> getTechDeptList();
+
+    @GetMapping("/projectBasicInfo/getPrjInfo")
+    Map<String,Object> getPrjInfo();
 }

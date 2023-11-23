@@ -39,6 +39,11 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             public List<QqchPostSetting> getTechDeptList() {
                 return null;
             }
+
+            @Override
+            public Map<String, Object> getPrjInfo() {
+                return null;
+            }
         };
     }
 }
