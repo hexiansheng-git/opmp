@@ -2,21 +2,15 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.sp.techOrg.mapper.SgjsTechnicalManageMapper">
+<mapper namespace="com.hhwy.sp.techOrg.mapper.SgjsTechnicalManageInfoMapper">
 
-    <resultMap type="com.hhwy.sp.techOrg.domain.SgjsTechnicalManage" id="SgjsTechnicalManageResultMap">
+    <resultMap type="com.hhwy.sp.techOrg.domain.SgjsTechnicalManageInfo" id="SgjsTechnicalManageInfoResultMap">
         <result property="id" column="id" />
-        <result property="pid" column="pid" />
-        <result property="postName" column="post_name" />
-        <result property="postJob" column="post_job" />
-        <result property="headCount" column="head_count" />
-        <result property="userId" column="user_id" />
-        <result property="userName" column="user_name" />
-        <result property="phone" column="phone" />
-        <result property="actualDate" column="actual_date" />
-        <result property="workOrNot" column="work_or_not" />
-        <result property="actualExitDate" column="actual_exit_date" />
-        <result property="remark" column="remark" />
+        <result property="techId" column="tech_id" />
+        <result property="entryDate" column="entry_date" />
+        <result property="leaveDate" column="leave_date" />
+        <result property="entryDay" column="entry_day" />
+        <result property="leaveRemark" column="leave_remark" />
         <result property="dataSource" column="data_source" />
         <result property="regionId" column="region_id" />
         <result property="regionName" column="region_name" />
@@ -37,20 +31,14 @@
         <result property="ptVar4" column="pt_var4" />
         <result property="ptVar5" column="pt_var5" />
     </resultMap>
-    <sql id="selectSgjsTechnicalManageVo">
+    <sql id="selectSgjsTechnicalManageInfoVo">
         select
                                                             `id`
-                                                         ,`pid`
-                                                         ,`post_name`
-                                                         ,`post_job`
-                                                         ,`head_count`
-                                                         ,`user_id`
-                                                         ,`user_name`
-                                                         ,`phone`
-                                                         ,`actual_date`
-                                                         ,`work_or_not`
-                                                         ,`actual_exit_date`
-                                                         ,`remark`
+                                                         ,`tech_id`
+                                                         ,`entry_date`
+                                                         ,`leave_date`
+                                                         ,`entry_day`
+                                                         ,`leave_remark`
                                                          ,`data_source`
                                                          ,`region_id`
                                                          ,`region_name`
@@ -70,24 +58,18 @@
                                                          ,`pt_var3`
                                                          ,`pt_var4`
                                                          ,`pt_var5`
-                                    from sgjs_technical_manage
+                                    from sgjs_technical_manage_info
     </sql>
-    <select id="getSgjsTechnicalManage" resultMap="SgjsTechnicalManageResultMap">
-        <include refid="selectSgjsTechnicalManageVo" />
+    <select id="getSgjsTechnicalManageInfo" resultMap="SgjsTechnicalManageInfoResultMap">
+        <include refid="selectSgjsTechnicalManageInfoVo" />
         <where>
             del_flag = "0"
             <if test="id != null "> and `id` = #{id}</if>
-            <if test="pid != null "> and `pid` = #{pid}</if>
-            <if test="postName != null  and postName != ''"> and `post_name` = #{postName}</if>
-            <if test="postJob != null  and postJob != ''"> and `post_job` = #{postJob}</if>
-            <if test="headCount != null "> and `head_count` = #{headCount}</if>
-            <if test="userId != null "> and `user_id` = #{userId}</if>
-            <if test="userName != null  and userName != ''"> and `user_name` = #{userName}</if>
-            <if test="phone != null  and phone != ''"> and `phone` = #{phone}</if>
-            <if test="actualDate != null  and actualDate != ''"> and `actual_date` = #{actualDate}</if>
-            <if test="workOrNot != null  and workOrNot != ''"> and `work_or_not` = #{workOrNot}</if>
-            <if test="actualExitDate != null"> and `actual_exit_date` = #{actualExitDate}</if>
-            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="techId != null "> and `tech_id` = #{techId}</if>
+            <if test="entryDate != null  and entryDate != ''"> and `entry_date` = #{entryDate}</if>
+            <if test="leaveDate != null  and leaveDate != ''"> and `leave_date` = #{leaveDate}</if>
+            <if test="entryDay != null "> and `entry_day` = #{entryDay}</if>
+            <if test="leaveRemark != null  and leaveRemark != ''"> and `leave_remark` = #{leaveRemark}</if>
             <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
@@ -111,22 +93,16 @@
         order by create_time desc
     </select>
 
-    <select id="getSgjsTechnicalManageList" resultMap="SgjsTechnicalManageResultMap">
-        <include refid="selectSgjsTechnicalManageVo" />
+    <select id="getSgjsTechnicalManageInfoList" resultMap="SgjsTechnicalManageInfoResultMap">
+        <include refid="selectSgjsTechnicalManageInfoVo" />
         <where>
             del_flag = "0"
             <if test="id != null "> and `id` = #{id}</if>
-            <if test="pid != null "> and `pid` = #{pid}</if>
-            <if test="postName != null  and postName != ''"> and `post_name` = #{postName}</if>
-            <if test="postJob != null  and postJob != ''"> and `post_job` = #{postJob}</if>
-            <if test="headCount != null "> and `head_count` = #{headCount}</if>
-            <if test="userId != null "> and `user_id` = #{userId}</if>
-            <if test="userName != null  and userName != ''"> and `user_name` = #{userName}</if>
-            <if test="phone != null  and phone != ''"> and `phone` = #{phone}</if>
-            <if test="actualDate != null  and actualDate != ''"> and `actual_date` = #{actualDate}</if>
-            <if test="workOrNot != null  and workOrNot != ''"> and `work_or_not` = #{workOrNot}</if>
-            <if test="actualExitDate != null"> and `actual_exit_date` = #{actualExitDate}</if>
-            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="techId != null "> and `tech_id` = #{techId}</if>
+            <if test="entryDate != null  and entryDate != ''"> and `entry_date` = #{entryDate}</if>
+            <if test="leaveDate != null  and leaveDate != ''"> and `leave_date` = #{leaveDate}</if>
+            <if test="entryDay != null "> and `entry_day` = #{entryDay}</if>
+            <if test="leaveRemark != null  and leaveRemark != ''"> and `leave_remark` = #{leaveRemark}</if>
             <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
@@ -150,21 +126,15 @@
         order by create_time desc
     </select>
 
-    <insert id="insertSgjsTechnicalManage"  useGeneratedKeys="true" keyProperty="id"  >
-        insert into sgjs_technical_manage
+    <insert id="insertSgjsTechnicalManageInfo"  useGeneratedKeys="true" keyProperty="id"  >
+        insert into sgjs_technical_manage_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="pid != null ">`pid`,</if>
-            <if test="postName != null  and postName != ''">`post_name`,</if>
-            <if test="postJob != null  and postJob != ''">`post_job`,</if>
-            <if test="headCount != null ">`head_count`,</if>
-            <if test="userId != null ">`user_id`,</if>
-            <if test="userName != null  and userName != ''">`user_name`,</if>
-            <if test="phone != null  and phone != ''">`phone`,</if>
-            <if test="actualDate != null  and actualDate != ''">`actual_date`,</if>
-            <if test="workOrNot != null  and workOrNot != ''">`work_or_not`,</if>
-            <if test="actualExitDate != null">`actual_exit_date`,</if>
-            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="techId != null ">`tech_id`,</if>
+            <if test="entryDate != null  and entryDate != ''">`entry_date`,</if>
+            <if test="leaveDate != null  and leaveDate != ''">`leave_date`,</if>
+            <if test="entryDay != null ">`entry_day`,</if>
+            <if test="leaveRemark != null  and leaveRemark != ''">`leave_remark`,</if>
             <if test="dataSource != null  and dataSource != ''">`data_source`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -187,17 +157,11 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="pid != null ">#{pid},</if>
-            <if test="postName != null  and postName != ''">#{postName},</if>
-            <if test="postJob != null  and postJob != ''">#{postJob},</if>
-            <if test="headCount != null ">#{headCount},</if>
-            <if test="userId != null ">#{userId},</if>
-            <if test="userName != null  and userName != ''">#{userName},</if>
-            <if test="phone != null  and phone != ''">#{phone},</if>
-            <if test="actualDate != null  and actualDate != ''">#{actualDate},</if>
-            <if test="workOrNot != null  and workOrNot != ''">#{workOrNot},</if>
-            <if test="actualExitDate != null">#{actualExitDate},</if>
-            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="techId != null ">#{techId},</if>
+            <if test="entryDate != null  and entryDate != ''">#{entryDate},</if>
+            <if test="leaveDate != null  and leaveDate != ''">#{leaveDate},</if>
+            <if test="entryDay != null ">#{entryDay},</if>
+            <if test="leaveRemark != null  and leaveRemark != ''">#{leaveRemark},</if>
             <if test="dataSource != null  and dataSource != ''">#{dataSource},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -220,22 +184,16 @@
         </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsTechnicalManage -->
-    <insert id="insertSgjsTechnicalManageList">
-        insert into sgjs_technical_manage
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsTechnicalManageInfo -->
+    <insert id="insertSgjsTechnicalManageInfoList">
+        insert into sgjs_technical_manage_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
-            `pid`,
-            `post_name`,
-            `post_job`,
-            `head_count`,
-            `user_id`,
-            `user_name`,
-            `phone`,
-            `actual_date`,
-            `work_or_not`,
-            `actual_exit_date`,
-            `remark`,
+            `tech_id`,
+            `entry_date`,
+            `leave_date`,
+            `entry_day`,
+            `leave_remark`,
             `data_source`,
             `region_id`,
             `region_name`,
@@ -256,20 +214,14 @@
             `pt_var5`,
         </trim>
         values
-        <foreach collection="sgjsTechnicalManageList" item="item" separator=",">
+        <foreach collection="sgjsTechnicalManageInfoList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
-                #{item.pid},
-                #{item.postName},
-                #{item.postJob},
-                #{item.headCount},
-                #{item.userId},
-                #{item.userName},
-                #{item.phone},
-                #{item.actualDate},
-                #{item.workOrNot},
-                #{item.actualExitDate},
-                #{item.remark},
+                #{item.techId},
+                #{item.entryDate},
+                #{item.leaveDate},
+                #{item.entryDay},
+                #{item.leaveRemark},
                 #{item.dataSource},
                 #{item.regionId},
                 #{item.regionName},
@@ -292,21 +244,15 @@
         </foreach>
     </insert>
 
-    <update id="updateSgjsTechnicalManage">
-        update sgjs_technical_manage
+    <update id="updateSgjsTechnicalManageInfo">
+        update sgjs_technical_manage_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
-            <if test="pid != null ">`pid` = #{pid},</if>
-            <if test="postName != null  and  postName != ''">`post_name` = #{postName},</if>
-            <if test="postJob != null  and  postJob != ''">`post_job` = #{postJob},</if>
-            <if test="headCount != null ">`head_count` = #{headCount},</if>
-            <if test="userId != null ">`user_id` = #{userId},</if>
-            <if test="userName != null  and  userName != ''">`user_name` = #{userName},</if>
-            <if test="phone != null  and  phone != ''">`phone` = #{phone},</if>
-            <if test="actualDate != null  and  actualDate != ''">`actual_date` = #{actualDate},</if>
-            <if test="workOrNot != null  and  workOrNot != ''">`work_or_not` = #{workOrNot},</if>
-            <if test="actualExitDate != null  and  actualExitDate != ''">`actual_exit_date` = #{actualExitDate},</if>
-            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="techId != null ">`tech_id` = #{techId},</if>
+            <if test="entryDate != null  and  entryDate != ''">`entry_date` = #{entryDate},</if>
+            <if test="leaveDate != null  and  leaveDate != ''">`leave_date` = #{leaveDate},</if>
+            <if test="entryDay != null ">`entry_day` = #{entryDay},</if>
+            <if test="leaveRemark != null  and  leaveRemark != ''">`leave_remark` = #{leaveRemark},</if>
             <if test="dataSource != null  and  dataSource != ''">`data_source` = #{dataSource},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -332,67 +278,37 @@
         </where>
     </update>
 
-    <update id="updateSgjsTechnicalManageList">
-        update sgjs_technical_manage
+    <update id="updateSgjsTechnicalManageInfoList">
+        update sgjs_technical_manage_info
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.id}
                 </foreach>
             </trim>
-            <trim prefix="pid  = case" suffix="end,">
+            <trim prefix="tech_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.pid}
+                    when `id`=#{item.id} then #{item.techId}
                 </foreach>
             </trim>
-            <trim prefix="post_name  = case" suffix="end,">
+            <trim prefix="entry_date  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.postName}
+                    when `id`=#{item.id} then #{item.entryDate}
                 </foreach>
             </trim>
-            <trim prefix="post_job  = case" suffix="end,">
+            <trim prefix="leave_date  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.postJob}
+                    when `id`=#{item.id} then #{item.leaveDate}
                 </foreach>
             </trim>
-            <trim prefix="head_count  = case" suffix="end,">
+            <trim prefix="entry_day  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.headCount}
+                    when `id`=#{item.id} then #{item.entryDay}
                 </foreach>
             </trim>
-            <trim prefix="user_id  = case" suffix="end,">
+            <trim prefix="leave_remark  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.userId}
-                </foreach>
-            </trim>
-            <trim prefix="user_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.userName}
-                </foreach>
-            </trim>
-            <trim prefix="phone  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.phone}
-                </foreach>
-            </trim>
-            <trim prefix="actual_date  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.actualDate}
-                </foreach>
-            </trim>
-            <trim prefix="work_or_not  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.workOrNot}
-                </foreach>
-            </trim>
-            <trim prefix="actual_exit_date  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.actualExitDate}
-                </foreach>
-            </trim>
-            <trim prefix="remark  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.remark}
+                    when `id`=#{item.id} then #{item.leaveRemark}
                 </foreach>
             </trim>
             <trim prefix="data_source  = case" suffix="end,">
@@ -497,21 +413,15 @@
         </foreach>
     </update>
 
-    <update id="deleteSgjsTechnicalManage">
-        update `sgjs_technical_manage` set del_flag = 1
+    <update id="deleteSgjsTechnicalManageInfo">
+        update `sgjs_technical_manage_info` set del_flag = 1
         <where>
             <if test="id != null "> and `id` = #{id}</if>
-            <if test="pid != null "> and `pid` = #{pid}</if>
-            <if test="postName != null  and postName != ''"> and `post_name` = #{postName}</if>
-            <if test="postJob != null  and postJob != ''"> and `post_job` = #{postJob}</if>
-            <if test="headCount != null "> and `head_count` = #{headCount}</if>
-            <if test="userId != null "> and `user_id` = #{userId}</if>
-            <if test="userName != null  and userName != ''"> and `user_name` = #{userName}</if>
-            <if test="phone != null  and phone != ''"> and `phone` = #{phone}</if>
-            <if test="actualDate != null  and actualDate != ''"> and `actual_date` = #{actualDate}</if>
-            <if test="workOrNot != null  and workOrNot != ''"> and `work_or_not` = #{workOrNot}</if>
-            <if test="actualExitDate != null"> and `actual_exit_date` = #{actualExitDate}</if>
-            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="techId != null "> and `tech_id` = #{techId}</if>
+            <if test="entryDate != null  and entryDate != ''"> and `entry_date` = #{entryDate}</if>
+            <if test="leaveDate != null  and leaveDate != ''"> and `leave_date` = #{leaveDate}</if>
+            <if test="entryDay != null "> and `entry_day` = #{entryDay}</if>
+            <if test="leaveRemark != null  and leaveRemark != ''"> and `leave_remark` = #{leaveRemark}</if>
             <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
@@ -534,11 +444,11 @@
         </where>
     </update>
 
-    <update id="deleteSgjsTechnicalManageByPks">
-        update `sgjs_technical_manage` set del_flag = 1
+    <update id="deleteSgjsTechnicalManageInfoByPks">
+        update `sgjs_technical_manage_info` set del_flag = 1
         <where>
             `id` in
-            <foreach item="id" collection="sgjsTechnicalManagePkList" open="(" separator="," close=")">
+            <foreach item="id" collection="sgjsTechnicalManageInfoPkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>

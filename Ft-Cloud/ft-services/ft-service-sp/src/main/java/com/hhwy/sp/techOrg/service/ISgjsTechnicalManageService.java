@@ -43,7 +43,7 @@ public interface ISgjsTechnicalManageService {
      * @param sgjsTechnicalManageVo
      * @return
      */
-    int batchAdd(SgjsTechnicalManageVo sgjsTechnicalManageVo);
+    AjaxResult batchAdd(SgjsTechnicalManageVo sgjsTechnicalManageVo);
 
     /**
      * 同步前期策划
