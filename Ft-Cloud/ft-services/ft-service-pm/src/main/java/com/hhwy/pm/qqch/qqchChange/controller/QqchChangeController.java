@@ -10,6 +10,7 @@ import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
 import com.hhwy.pm.qqch.qqchChange.service.IQqchChangeService;
 import com.hhwy.pm.qqch.qqchChange.vo.QqchChangeVo;
+import com.hhwy.pm.qqch.sgch.dataShare.DataShareDevicePlanService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
@@ -31,6 +32,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * 前期策划变更
@@ -49,6 +52,8 @@ public class QqchChangeController extends BaseController {
     private IXmslContractInfoService contractInfoService;
     @Autowired
     private IXmslProjectBasicInfoService projectBasicInfoService;
+    @Autowired
+    private DataShareDevicePlanService dataShareDevicePlanService;
 
     @PreAuthorize(hasPermi = "qqchChange:list")
     @PostMapping("/list")
@@ -160,6 +165,11 @@ public class QqchChangeController extends BaseController {
     @PostMapping("/listener")
     public AjaxResult listener(@RequestParam("id") Long businessId){
         qqchChangeService.finishFlow(businessId);
+        //推送设备策划数据到物设中间库
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(() -> {
+            dataShareDevicePlanService.eachChangePush();
+        });
         return AjaxResult.success();
     }
 

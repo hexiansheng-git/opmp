@@ -9,6 +9,7 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.sgch.dataShare.DataShareDevicePlanService;
 import com.hhwy.utils.JsonUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
@@ -22,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +40,8 @@ public class ReviewController extends BaseController {
 
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private DataShareDevicePlanService dataShareDevicePlanService;
 
 
     public static void main(String[] args) {
@@ -257,6 +262,11 @@ public class ReviewController extends BaseController {
     @PostMapping("/listener")
     public AjaxResult reviewListener(Long id) {
         qqchReviewService.listener(id);
+        //推送设备策划数据到物设中间库
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(() -> {
+            dataShareDevicePlanService.eachStagePush();
+        });
         return AjaxResult.success("成功");
     }
 
