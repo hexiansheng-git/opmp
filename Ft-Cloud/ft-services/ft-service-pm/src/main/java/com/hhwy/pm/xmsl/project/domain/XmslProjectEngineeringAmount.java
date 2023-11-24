@@ -31,6 +31,11 @@ public class XmslProjectEngineeringAmount extends BaseEntity {
      * 字段描述：主键id
      */
     @JsonProperty
+    private String serialNumber;
+    /**
+     * 字段描述：主键id
+     */
+    @JsonProperty
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**

@@ -27,6 +27,14 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
     private XmslProjectEngineeringAmountMapper xmslProjectEngineeringAmountMapper;
 
 
+    @Override
+    public List<XmslProjectEngineeringAmount> getListByProjectInfoId(Long projectInfoId) {
+        XmslProjectEngineeringAmount xmslProjectEngineeringAmount = new XmslProjectEngineeringAmount();
+        xmslProjectEngineeringAmount.setProjectBasicInfoId(projectInfoId);
+        List<XmslProjectEngineeringAmount> list = this.getProjectEngineeringAmountList(xmslProjectEngineeringAmount);
+        return list;
+    }
+
     public List<XmslProjectEngineeringAmount> getProjectEngineeringAmountList(XmslProjectEngineeringAmount xmslProjectEngineeringAmount) {
         return xmslProjectEngineeringAmountMapper.getProjectEngineeringAmountList(xmslProjectEngineeringAmount);
     }

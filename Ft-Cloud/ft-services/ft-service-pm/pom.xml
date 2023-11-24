@@ -111,6 +111,31 @@
             <version>2.2.1</version>
         </dependency>
 
+        <!--    POI 依赖 使用xlsx xml的格式(即XSSFWorkbook)   -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>5.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-scratchpad</artifactId>
+            <version>3.17</version>
+        </dependency>
+
+        <!--     poi模板导入，主力包      -->
+        <dependency>
+            <groupId>com.deepoove</groupId>
+            <artifactId>poi-tl</artifactId>
+            <version>1.12.1</version>
+        </dependency>
+
+
         <dependency>
             <groupId>com.hhwy</groupId>
             <artifactId>ft-api-flowable</artifactId>

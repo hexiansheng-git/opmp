@@ -25,6 +25,12 @@ public class XmslProjectMaterialsAmount extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 字段描述：序号
+     */
+    @JsonProperty
+    @JsonSerialize(using = ToStringSerializer.class)
+    private String serialNumber;
+    /**
      * 字段描述：主键id
      */
     @JsonProperty

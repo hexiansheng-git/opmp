@@ -113,6 +113,10 @@ public class ProjectBasicInfo {
     @JsonProperty
     private Date completionDate;
     /**
+     * 字段描述：项目开竣工日期
+     */
+    private String startCompletionDate;
+    /**
      * 字段描述：缺陷责任期
      */
     @JsonProperty
@@ -177,7 +181,6 @@ public class ProjectBasicInfo {
      * 字段描述：业务领域及产品描述
      */
     @JsonProperty
-    @Excel(name = "业务领域及产品")
     private String businessAreasAndProductsLabel;
     /**
      * 字段描述：承包方式
@@ -255,6 +258,16 @@ public class ProjectBasicInfo {
      */
     @JsonProperty
     private String projectContext;
+    /**
+     * 字段描述：工程地理位置附件组id
+     */
+    @JsonProperty
+    private String locationImageGroupId;
+    /**
+     * 字段描述：主要结构形式附加组id
+     */
+    @JsonProperty
+    private String structureImageGroupId;
     /**
      * 字段描述：当地币种
      */

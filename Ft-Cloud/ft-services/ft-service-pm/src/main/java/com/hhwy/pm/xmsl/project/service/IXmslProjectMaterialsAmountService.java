@@ -10,6 +10,13 @@ import java.util.List;
  */
 public interface IXmslProjectMaterialsAmountService {
 
+    /**
+     * 根据主项目id获取数据
+     * @param projectInfoId
+     * @return
+     */
+    List<XmslProjectMaterialsAmount> getListByProjectInfoId(Long projectInfoId);
+
     List<XmslProjectMaterialsAmount> getProjectMaterialsAmountList(XmslProjectMaterialsAmount projectMaterialsAmount);
 
     int deleteProjectMaterialsAmount(XmslProjectMaterialsAmount xmslProjectMaterialsAmount);

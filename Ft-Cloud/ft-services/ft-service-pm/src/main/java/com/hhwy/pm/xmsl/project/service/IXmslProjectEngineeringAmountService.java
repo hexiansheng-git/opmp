@@ -12,6 +12,8 @@ import java.util.List;
  */
 public interface IXmslProjectEngineeringAmountService {
 
+    List<XmslProjectEngineeringAmount> getListByProjectInfoId(Long projectInfoId);
+
     List<XmslProjectEngineeringAmount> getProjectEngineeringAmountList(XmslProjectEngineeringAmount projectEngineeringAmount);
 
     int deleteProjectEngineeringAmount(XmslProjectEngineeringAmount xmslProjectEngineeringAmount);

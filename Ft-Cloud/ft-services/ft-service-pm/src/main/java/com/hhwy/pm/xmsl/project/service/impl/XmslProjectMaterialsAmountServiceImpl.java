@@ -25,6 +25,13 @@ public class XmslProjectMaterialsAmountServiceImpl implements IXmslProjectMateri
     @Autowired
     private XmslProjectMaterialsAmountMapper xmslProjectMaterialsAmountMapper;
 
+    @Override
+    public List<XmslProjectMaterialsAmount> getListByProjectInfoId(Long projectInfoId) {
+        XmslProjectMaterialsAmount xmslProjectMaterialsAmount = new XmslProjectMaterialsAmount();
+        xmslProjectMaterialsAmount.setProjectBasicInfoId(projectInfoId);
+        return this.getProjectMaterialsAmountList(xmslProjectMaterialsAmount);
+    }
+
     public List<XmslProjectMaterialsAmount> getProjectMaterialsAmountList(XmslProjectMaterialsAmount xmslProjectMaterialsAmount) {
         return xmslProjectMaterialsAmountMapper.getProjectMaterialsAmountList(xmslProjectMaterialsAmount);
     }
