@@ -140,19 +140,19 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             return;
         }
         List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMake.getDetailList();
+        List<JdglCorrectionMeasuresMakeDetail> treeList = TreeUtil.treeToListWithoutId(detailList);
 
         jdglCorrectionMeasuresMake.setUpdateUser(SecurityUtils.getUserName());
         jdglCorrectionMeasuresMake.setUpdateTime(DateUtils.getNowDate());
-        Date maxDate = detailList.stream().filter(p -> p.getCorrectionCompleteDate() != null)
+        Date maxDate = treeList.stream().filter(p -> p.getCorrectionCompleteDate() != null)
                 .map(JdglCorrectionMeasuresMakeDetail::getCorrectionCompleteDate)
-                .max(Date::compareTo).get();
+                .max(Date::compareTo).orElse(null);
         jdglCorrectionMeasuresMake.setCorrectionDate(maxDate);
         jdglCorrectionMeasuresMakeMapper.updateJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake);
 
 
         if (!CollectionUtils.isEmpty(detailList)) {
             // 树转列表
-            List<JdglCorrectionMeasuresMakeDetail> treeList = TreeUtil.treeToListWithoutId(detailList);
             for (JdglCorrectionMeasuresMakeDetail detail : treeList) {
                 detail.setMakeId(jdglCorrectionMeasuresMake.getId());
                 detail.setUpdateUser(SecurityUtils.getUserName());
