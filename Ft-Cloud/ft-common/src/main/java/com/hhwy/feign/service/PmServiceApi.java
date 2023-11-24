@@ -50,4 +50,7 @@ public interface PmServiceApi {
      */
     @PostMapping("/syncInfo/insert")
     AjaxResult insertSyncLog(@RequestBody SysSyncInfoLog log);
+
+    @GetMapping("/projectBasicInfo/getPrjInfo")
+    Map<String,Object> getPrjInfo();
 }

@@ -17,6 +17,8 @@ public interface IJdglMainPlanService {
 
     JdglMainPlan getUsingJdglMainPlan();
 
+    JdglMainPlan getUsingJdglMainPlan(String itemName, String tabNo);
+
     JdglMainPlan getUsingJdglMainPlanNoItem();
 
     List<JdglMainPlan> getJdglMainPlanList(JdglMainPlan jdglMainPlan);

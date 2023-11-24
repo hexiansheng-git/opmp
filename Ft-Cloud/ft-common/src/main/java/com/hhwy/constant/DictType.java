@@ -17,4 +17,6 @@ public class DictType {
     public static final String HANDOVER_FILE_INIT_DATA = "handover_file_init_data";
     /*管理模式初始化数据*/
     public static final String MANAGE_MODE_INIT_DATA = "manage_mode_init_data";
+    /*lcf:技术职责清单---是否在场*/
+    public static final String WORK_OR_NOT="workOrNot";
 }

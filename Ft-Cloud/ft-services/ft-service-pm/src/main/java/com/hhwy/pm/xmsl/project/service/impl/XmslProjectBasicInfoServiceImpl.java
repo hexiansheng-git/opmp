@@ -21,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author han
@@ -316,6 +318,16 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         }
 
         return projectInfoWithOther;
+    }
+
+    @Override
+    public Map<String, Object> getPrjInfo() {
+        Map<String,Object> map = new HashMap<>();
+        XmslProjectBasicInfo xmslProjectBasicInfo = xmslProjectBasicInfoMapper.getProjectBasicInfo(new XmslProjectBasicInfo());
+        map.put("projectId",xmslProjectBasicInfo.getProjectId());
+        map.put("projectName",xmslProjectBasicInfo.getProjectName());
+        map.put("projectCode",xmslProjectBasicInfo.getProjectCode());
+        return map;
     }
 
 }

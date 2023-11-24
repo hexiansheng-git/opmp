@@ -2,17 +2,15 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.sp.techOrg.mapper.SgjsMeasurePositionMapper">
+<mapper namespace="com.hhwy.sp.techOrg.mapper.SgjsTechnicalManageInfoMapper">
 
-    <resultMap type="com.hhwy.sp.techOrg.domain.SgjsMeasurePosition" id="SgjsMeasurePositionResultMap">
+    <resultMap type="com.hhwy.sp.techOrg.domain.SgjsTechnicalManageInfo" id="SgjsTechnicalManageInfoResultMap">
         <result property="id" column="id" />
-        <result property="postName" column="post_name" />
-        <result property="divideWork" column="divide_work" />
-        <result property="configWork" column="config_work" />
-        <result property="configLocal" column="config_local" />
-        <result property="source" column="source" />
-        <result property="planDate" column="plan_date" />
-        <result property="actualDate" column="actual_date" />
+        <result property="techId" column="tech_id" />
+        <result property="entryDate" column="entry_date" />
+        <result property="leaveDate" column="leave_date" />
+        <result property="entryDay" column="entry_day" />
+        <result property="leaveRemark" column="leave_remark" />
         <result property="dataSource" column="data_source" />
         <result property="regionId" column="region_id" />
         <result property="regionName" column="region_name" />
@@ -33,16 +31,14 @@
         <result property="ptVar4" column="pt_var4" />
         <result property="ptVar5" column="pt_var5" />
     </resultMap>
-    <sql id="selectSgjsMeasurePositionVo">
+    <sql id="selectSgjsTechnicalManageInfoVo">
         select
                                                             `id`
-                                                         ,`post_name`
-                                                         ,`divide_work`
-                                                         ,`config_work`
-                                                         ,`config_local`
-                                                         ,`source`
-                                                         ,`plan_date`
-                                                         ,`actual_date`
+                                                         ,`tech_id`
+                                                         ,`entry_date`
+                                                         ,`leave_date`
+                                                         ,`entry_day`
+                                                         ,`leave_remark`
                                                          ,`data_source`
                                                          ,`region_id`
                                                          ,`region_name`
@@ -62,20 +58,18 @@
                                                          ,`pt_var3`
                                                          ,`pt_var4`
                                                          ,`pt_var5`
-                                    from sgjs_measure_position
+                                    from sgjs_technical_manage_info
     </sql>
-    <select id="getSgjsMeasurePosition" resultMap="SgjsMeasurePositionResultMap">
-        <include refid="selectSgjsMeasurePositionVo" />
+    <select id="getSgjsTechnicalManageInfo" resultMap="SgjsTechnicalManageInfoResultMap">
+        <include refid="selectSgjsTechnicalManageInfoVo" />
         <where>
             del_flag = "0"
             <if test="id != null "> and `id` = #{id}</if>
-            <if test="postName != null  and postName != ''"> and `post_name` = #{postName}</if>
-            <if test="divideWork != null  and divideWork != ''"> and `divide_work` = #{divideWork}</if>
-            <if test="configWork != null  and configWork != ''"> and `config_work` = #{configWork}</if>
-            <if test="configLocal != null  and configLocal != ''"> and `config_local` = #{configLocal}</if>
-            <if test="source != null  and source != ''"> and `source` = #{source}</if>
-            <if test="planDate != null "> and `plan_date` = #{planDate}</if>
-            <if test="actualDate != null "> and `actual_date` = #{actualDate}</if>
+            <if test="techId != null "> and `tech_id` = #{techId}</if>
+            <if test="entryDate != null  and entryDate != ''"> and `entry_date` = #{entryDate}</if>
+            <if test="leaveDate != null  and leaveDate != ''"> and `leave_date` = #{leaveDate}</if>
+            <if test="entryDay != null "> and `entry_day` = #{entryDay}</if>
+            <if test="leaveRemark != null  and leaveRemark != ''"> and `leave_remark` = #{leaveRemark}</if>
             <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
@@ -99,18 +93,16 @@
         order by create_time desc
     </select>
 
-    <select id="getSgjsMeasurePositionList" resultMap="SgjsMeasurePositionResultMap">
-        <include refid="selectSgjsMeasurePositionVo" />
+    <select id="getSgjsTechnicalManageInfoList" resultMap="SgjsTechnicalManageInfoResultMap">
+        <include refid="selectSgjsTechnicalManageInfoVo" />
         <where>
             del_flag = "0"
             <if test="id != null "> and `id` = #{id}</if>
-            <if test="postName != null  and postName != ''"> and `post_name` = #{postName}</if>
-            <if test="divideWork != null  and divideWork != ''"> and `divide_work` = #{divideWork}</if>
-            <if test="configWork != null  and configWork != ''"> and `config_work` = #{configWork}</if>
-            <if test="configLocal != null  and configLocal != ''"> and `config_local` = #{configLocal}</if>
-            <if test="source != null  and source != ''"> and `source` = #{source}</if>
-            <if test="planDate != null "> and `plan_date` = #{planDate}</if>
-            <if test="actualDate != null "> and `actual_date` = #{actualDate}</if>
+            <if test="techId != null "> and `tech_id` = #{techId}</if>
+            <if test="entryDate != null  and entryDate != ''"> and `entry_date` = #{entryDate}</if>
+            <if test="leaveDate != null  and leaveDate != ''"> and `leave_date` = #{leaveDate}</if>
+            <if test="entryDay != null "> and `entry_day` = #{entryDay}</if>
+            <if test="leaveRemark != null  and leaveRemark != ''"> and `leave_remark` = #{leaveRemark}</if>
             <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
@@ -130,21 +122,25 @@
             <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+            <if test="null!=techIdList">
+                and tech_id in
+                <foreach collection="techIdList" item="techId" separator="," open="(" close=")">
+                    #{techId}
+                </foreach>
+            </if>
         </where>
         order by create_time desc
     </select>
 
-    <insert id="insertSgjsMeasurePosition"  useGeneratedKeys="true" keyProperty="id"  >
-        insert into sgjs_measure_position
+    <insert id="insertSgjsTechnicalManageInfo"  useGeneratedKeys="true" keyProperty="id"  >
+        insert into sgjs_technical_manage_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="postName != null  and postName != ''">`post_name`,</if>
-            <if test="divideWork != null  and divideWork != ''">`divide_work`,</if>
-            <if test="configWork != null  and configWork != ''">`config_work`,</if>
-            <if test="configLocal != null  and configLocal != ''">`config_local`,</if>
-            <if test="source != null  and source != ''">`source`,</if>
-            <if test="planDate != null ">`plan_date`,</if>
-            <if test="actualDate != null ">`actual_date`,</if>
+            <if test="techId != null ">`tech_id`,</if>
+            <if test="entryDate != null  and entryDate != ''">`entry_date`,</if>
+            <if test="leaveDate != null  and leaveDate != ''">`leave_date`,</if>
+            <if test="entryDay != null ">`entry_day`,</if>
+            <if test="leaveRemark != null  and leaveRemark != ''">`leave_remark`,</if>
             <if test="dataSource != null  and dataSource != ''">`data_source`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -167,13 +163,11 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="postName != null  and postName != ''">#{postName},</if>
-            <if test="divideWork != null  and divideWork != ''">#{divideWork},</if>
-            <if test="configWork != null  and configWork != ''">#{configWork},</if>
-            <if test="configLocal != null  and configLocal != ''">#{configLocal},</if>
-            <if test="source != null  and source != ''">#{source},</if>
-            <if test="planDate != null ">#{planDate},</if>
-            <if test="actualDate != null ">#{actualDate},</if>
+            <if test="techId != null ">#{techId},</if>
+            <if test="entryDate != null  and entryDate != ''">#{entryDate},</if>
+            <if test="leaveDate != null  and leaveDate != ''">#{leaveDate},</if>
+            <if test="entryDay != null ">#{entryDay},</if>
+            <if test="leaveRemark != null  and leaveRemark != ''">#{leaveRemark},</if>
             <if test="dataSource != null  and dataSource != ''">#{dataSource},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -196,18 +190,16 @@
         </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsMeasurePosition -->
-    <insert id="insertSgjsMeasurePositionList">
-        insert into sgjs_measure_position
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsTechnicalManageInfo -->
+    <insert id="insertSgjsTechnicalManageInfoList">
+        insert into sgjs_technical_manage_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
-            `post_name`,
-            `divide_work`,
-            `config_work`,
-            `config_local`,
-            `source`,
-            `plan_date`,
-            `actual_date`,
+            `tech_id`,
+            `entry_date`,
+            `leave_date`,
+            `entry_day`,
+            `leave_remark`,
             `data_source`,
             `region_id`,
             `region_name`,
@@ -228,16 +220,14 @@
             `pt_var5`,
         </trim>
         values
-        <foreach collection="sgjsMeasurePositionList" item="item" separator=",">
+        <foreach collection="sgjsTechnicalManageInfoList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
-                #{item.postName},
-                #{item.divideWork},
-                #{item.configWork},
-                #{item.configLocal},
-                #{item.source},
-                #{item.planDate},
-                #{item.actualDate},
+                #{item.techId},
+                #{item.entryDate},
+                #{item.leaveDate},
+                #{item.entryDay},
+                #{item.leaveRemark},
                 #{item.dataSource},
                 #{item.regionId},
                 #{item.regionName},
@@ -260,17 +250,15 @@
         </foreach>
     </insert>
 
-    <update id="updateSgjsMeasurePosition">
-        update sgjs_measure_position
+    <update id="updateSgjsTechnicalManageInfo">
+        update sgjs_technical_manage_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
-            <if test="postName != null  and  postName != ''">`post_name` = #{postName},</if>
-            <if test="divideWork != null  and  divideWork != ''">`divide_work` = #{divideWork},</if>
-            <if test="configWork != null  and  configWork != ''">`config_work` = #{configWork},</if>
-            <if test="configLocal != null  and  configLocal != ''">`config_local` = #{configLocal},</if>
-            <if test="source != null  and  source != ''">`source` = #{source},</if>
-            <if test="planDate != null ">`plan_date` = #{planDate},</if>
-            <if test="actualDate != null ">`actual_date` = #{actualDate},</if>
+            <if test="techId != null ">`tech_id` = #{techId},</if>
+            <if test="entryDate != null  and  entryDate != ''">`entry_date` = #{entryDate},</if>
+            <if test="leaveDate != null  and  leaveDate != ''">`leave_date` = #{leaveDate},</if>
+            <if test="entryDay != null ">`entry_day` = #{entryDay},</if>
+            <if test="leaveRemark != null  and  leaveRemark != ''">`leave_remark` = #{leaveRemark},</if>
             <if test="dataSource != null  and  dataSource != ''">`data_source` = #{dataSource},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -296,47 +284,37 @@
         </where>
     </update>
 
-    <update id="updateSgjsMeasurePositionList">
-        update sgjs_measure_position
+    <update id="updateSgjsTechnicalManageInfoList">
+        update sgjs_technical_manage_info
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.id}
                 </foreach>
             </trim>
-            <trim prefix="post_name  = case" suffix="end,">
+            <trim prefix="tech_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.postName}
+                    when `id`=#{item.id} then #{item.techId}
                 </foreach>
             </trim>
-            <trim prefix="divide_work  = case" suffix="end,">
+            <trim prefix="entry_date  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.divideWork}
+                    when `id`=#{item.id} then #{item.entryDate}
                 </foreach>
             </trim>
-            <trim prefix="config_work  = case" suffix="end,">
+            <trim prefix="leave_date  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.configWork}
+                    when `id`=#{item.id} then #{item.leaveDate}
                 </foreach>
             </trim>
-            <trim prefix="config_local  = case" suffix="end,">
+            <trim prefix="entry_day  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.configLocal}
+                    when `id`=#{item.id} then #{item.entryDay}
                 </foreach>
             </trim>
-            <trim prefix="source  = case" suffix="end,">
+            <trim prefix="leave_remark  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.source}
-                </foreach>
-            </trim>
-            <trim prefix="plan_date  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.planDate}
-                </foreach>
-            </trim>
-            <trim prefix="actual_date  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.actualDate}
+                    when `id`=#{item.id} then #{item.leaveRemark}
                 </foreach>
             </trim>
             <trim prefix="data_source  = case" suffix="end,">
@@ -441,17 +419,15 @@
         </foreach>
     </update>
 
-    <update id="deleteSgjsMeasurePosition">
-        update `sgjs_measure_position` set del_flag = 1
+    <update id="deleteSgjsTechnicalManageInfo">
+        update `sgjs_technical_manage_info` set del_flag = 1
         <where>
             <if test="id != null "> and `id` = #{id}</if>
-            <if test="postName != null  and postName != ''"> and `post_name` = #{postName}</if>
-            <if test="divideWork != null  and divideWork != ''"> and `divide_work` = #{divideWork}</if>
-            <if test="configWork != null  and configWork != ''"> and `config_work` = #{configWork}</if>
-            <if test="configLocal != null  and configLocal != ''"> and `config_local` = #{configLocal}</if>
-            <if test="source != null  and source != ''"> and `source` = #{source}</if>
-            <if test="planDate != null "> and `plan_date` = #{planDate}</if>
-            <if test="actualDate != null "> and `actual_date` = #{actualDate}</if>
+            <if test="techId != null "> and `tech_id` = #{techId}</if>
+            <if test="entryDate != null  and entryDate != ''"> and `entry_date` = #{entryDate}</if>
+            <if test="leaveDate != null  and leaveDate != ''"> and `leave_date` = #{leaveDate}</if>
+            <if test="entryDay != null "> and `entry_day` = #{entryDay}</if>
+            <if test="leaveRemark != null  and leaveRemark != ''"> and `leave_remark` = #{leaveRemark}</if>
             <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
@@ -474,11 +450,21 @@
         </where>
     </update>
 
-    <update id="deleteSgjsMeasurePositionByPks">
-        update `sgjs_measure_position` set del_flag = 1
+    <update id="deleteSgjsTechnicalManageInfoByPks">
+        update `sgjs_technical_manage_info` set del_flag = 1
         <where>
             `id` in
-            <foreach item="id" collection="sgjsMeasurePositionPkList" open="(" separator="," close=")">
+            <foreach item="id" collection="sgjsTechnicalManageInfoPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="deleteInfoByPIds">
+        update `sgjs_technical_manage_info` set del_flag = 1
+        <where>
+            `tech_id` in
+            <foreach item="id" collection="techIdList" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>

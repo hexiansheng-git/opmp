@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.sgch.dataShare.mapper.DataShareDevicePlanMapper">
+
+    <select id="dataPush">
+        INSERT INTO `data_share_ws`.sbch_equipment_allot SELECT * FROM sbch_equipment_allot WHERE del_flag = '0' ORDER BY version  LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_equipment_allot_details
+        (SELECT * FROM sbch_equipment_allot_details WHERE del_flag = '0' AND main_id = (select id from sbch_equipment_allot WHERE del_flag = '0' order by version desc LIMIT 1));
+
+        INSERT INTO `data_share_ws`.sbch_equipment_allot_transnational SELECT * FROM sbch_equipment_allot_transnational WHERE del_flag = '0' ORDER BY version  LIMIT 1;
+
+        INSERT INTO `data_share_ws`.sbch_equipment_allot_transnational_bulk
+        SELECT * FROM sbch_equipment_allot_transnational_bulk WHERE del_flag = '0' AND main_id IN
+                                                                                       (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' order by version desc LIMIT 1));
+
+        INSERT INTO `data_share_ws`.sbch_equipment_allot_transnational_clearance
+        SELECT * FROM sbch_equipment_allot_transnational_clearance WHERE del_flag = '0' AND main_id IN
+                                                                                            (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' order by version desc LIMIT 1));
+
+        INSERT INTO `data_share_ws`.sbch_equipment_allot_transnational_clearance_details
+        SELECT * FROM sbch_equipment_allot_transnational_clearance_details WHERE del_flag = '0' and main_id IN
+                                                                                                    (SELECT id FROM sbch_equipment_allot_transnational_clearance WHERE del_flag = '0' AND main_id IN
+                                                                                                                                                                                          (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' order by version desc LIMIT 1)));
+
+        INSERT INTO `data_share_ws`.sbch_equipment_allot_transnational_container
+        SELECT * FROM sbch_equipment_allot_transnational_container WHERE del_flag = '0' and main_id IN
+                                                                                            (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' order by version desc LIMIT 1));
+
+        INSERT INTO `data_share_ws`.sbch_equipment_allot_transnational_cost
+        SELECT * FROM sbch_equipment_allot_transnational_cost WHERE del_flag = '0' and main_id IN
+                                                                                       (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' order by version desc LIMIT 1));
+
+        INSERT INTO `data_share_ws`.sbch_equipment_allot_transnational_details
+        SELECT * FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' order by version desc LIMIT 1);
+
+        INSERT INTO `data_share_ws`.sbch_equipment_allot_transnational_disassembly
+        SELECT * FROM sbch_equipment_allot_transnational_disassembly WHERE del_flag = '0' and main_id IN
+                                                                                              (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' order by version desc LIMIT 1));
+
+        INSERT INTO `data_share_ws`.sbch_equipment_allot_transnational_exit
+        SELECT * FROM sbch_equipment_allot_transnational_exit WHERE del_flag = '0' and main_id IN
+                                                                                       (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' order by version desc LIMIT 1));
+
+        INSERT INTO `data_share_ws`.sbch_equipment_allot_transnational_import
+        SELECT * FROM sbch_equipment_allot_transnational_import WHERE del_flag = '0' and main_id IN
+                                                                                         (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' order by version desc LIMIT 1));
+
+        INSERT INTO `data_share_ws`.sbch_equipment_allot_transnational_port
+        SELECT * FROM sbch_equipment_allot_transnational_port WHERE del_flag = '0' and main_id IN
+                                                                                       (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' order by version desc LIMIT 1));
+
+        INSERT INTO `data_share_ws`.sbch_equipment_allot_transnational_technology
+        SELECT * FROM sbch_equipment_allot_transnational_technology WHERE del_flag = '0' and main_id IN
+                                                                                             (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' order by version desc LIMIT 1));
+
+        INSERT INTO `data_share_ws`.sbch_equipment_lease SELECT * FROM sbch_equipment_lease WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_equipment_lease_details
+        SELECT * FROM sbch_equipment_lease_details WHERE del_flag = '0' AND main_id = (SELECT id FROM sbch_equipment_lease WHERE del_flag = '0' order by version desc LIMIT 1);
+
+        INSERT INTO `data_share_ws`.sbch_equipment_local_purchase SELECT * FROM sbch_equipment_local_purchase WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_equipment_local_purchase_details
+        SELECT * FROM sbch_equipment_local_purchase_details WHERE del_flag = '0' and main_id = (SELECT id FROM sbch_equipment_local_purchase WHERE del_flag = '0' order by version desc LIMIT 1);
+
+
+        INSERT INTO `data_share_ws`.sbch_equipment_purchase SELECT * FROM sbch_equipment_purchase WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_equipment_purchase_details
+        SELECT * FROM sbch_equipment_purchase_details WHERE del_flag = '0' and main_id = (SELECT id FROM sbch_equipment_purchase WHERE del_flag = '0' order by version desc LIMIT 1);
+
+        INSERT INTO `data_share_ws`.sbch_equipment_special SELECT * FROM sbch_equipment_special WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_equipment_special_control_plan SELECT * FROM sbch_equipment_special_control_plan WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_equipment_special_control_plan_details
+        SELECT * FROM sbch_equipment_special_control_plan_details WHERE del_flag = '0' AND main_id = (SELECT id FROM sbch_equipment_special_control_plan WHERE del_flag = '0' order by version desc LIMIT 1);
+        INSERT INTO `data_share_ws`.sbch_equipment_special_details
+        SELECT * FROM sbch_equipment_special_details WHERE del_flag = '0' and main_id = (SELECT id FROM sbch_equipment_special WHERE del_flag = '0' order by version desc LIMIT 1);
+
+        INSERT INTO `data_share_ws`.sbch_equipment_special_plan SELECT * FROM sbch_equipment_special_plan WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_equipment_special_plan_details
+        SELECT * FROM sbch_equipment_special_plan_details WHERE del_flag = '0' and main_id = (SELECT id FROM sbch_equipment_special_plan WHERE del_flag = '0' order by version desc LIMIT 1);
+
+        INSERT INTO `data_share_ws`.sbch_equipment_supplier SELECT * FROM sbch_equipment_supplier WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_equipment_supplier_details
+        SELECT * FROM sbch_equipment_supplier_details WHERE del_flag = '0' and main_id = (SELECT id FROM sbch_equipment_supplier WHERE del_flag = '0' order by version desc LIMIT 1);
+
+        INSERT INTO `data_share_ws`.sbch_equipment_team SELECT * FROM sbch_equipment_team WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_equipment_team_details
+        SELECT * FROM sbch_equipment_team_details WHERE del_flag = '0' and main_id = (SELECT id FROM sbch_equipment_team WHERE del_flag = '0' order by version desc LIMIT 1);
+        INSERT INTO `data_share_ws`.sbch_equipment_team_details_details
+        SELECT * FROM sbch_equipment_team_details_details WHERE del_flag = '0' and main_id IN
+                                                                                   (SELECT id FROM sbch_equipment_team_details WHERE del_flag = '0' and main_id = (SELECT id FROM sbch_equipment_team WHERE del_flag = '0' order by version desc LIMIT 1));
+
+        INSERT INTO `data_share_ws`.sbch_import_customs_clear SELECT * FROM sbch_import_customs_clear WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_import_customs_clear_detail
+        SELECT * FROM sbch_import_customs_clear_detail WHERE del_flag = '0' and info_id = (SELECT id FROM sbch_import_customs_clear WHERE del_flag = '0' order by version desc LIMIT 1);
+
+        INSERT INTO `data_share_ws`.sbch_import_inquiry SELECT * FROM sbch_import_inquiry WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_import_inquiry_country
+        SELECT * FROM sbch_import_inquiry_country WHERE del_flag = '0' and inquiry_id = (SELECT id FROM sbch_import_inquiry WHERE del_flag = '0' order by version desc LIMIT 1);
+        INSERT INTO `data_share_ws`.sbch_import_inquiry_customs
+        SELECT * FROM sbch_import_inquiry_customs WHERE del_flag = '0' and inquiry_id = (SELECT id FROM sbch_import_inquiry WHERE del_flag = '0' order by version desc LIMIT 1);
+
+        INSERT INTO `data_share_ws`.sbch_import_plan SELECT * FROM sbch_import_plan WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_import_plan_detail
+        SELECT * FROM sbch_import_plan_detail WHERE del_flag = '0' and plan_id = (SELECT id FROM sbch_import_plan WHERE del_flag = '0' order by version desc LIMIT 1);
+
+        INSERT INTO `data_share_ws`.sbch_material_manager SELECT * FROM sbch_material_manager WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_material_manager_detail
+        SELECT * FROM sbch_material_manager_detail WHERE del_flag = '0' and info_id = (SELECT id FROM sbch_material_manager WHERE del_flag = '0' order by version desc LIMIT 1);
+
+        INSERT INTO `data_share_ws`.sbch_material_tran_plan SELECT * FROM sbch_material_tran_plan WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_material_tran_plan_detail
+        SELECT * FROM sbch_material_tran_plan_detail WHERE del_flag = '0' and plan_id = (SELECT id FROM sbch_material_tran_plan WHERE del_flag = '0' order by version desc LIMIT 1);
+
+        INSERT INTO `data_share_ws`.sbch_single_check SELECT * FROM sbch_single_check WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_single_check_detail
+        SELECT * FROM sbch_single_check_detail WHERE del_flag = '0' and info_id = (SELECT id FROM sbch_single_check WHERE del_flag = '0' order by version desc LIMIT 1);
+
+        INSERT INTO `data_share_ws`.sbch_staffing_detail
+        SELECT * FROM sbch_staffing_detail WHERE del_flag = '0' and staffing_id = (SELECT id FROM sbch_staffing_info WHERE del_flag = '0' order by version desc LIMIT 1);
+        INSERT INTO `data_share_ws`.sbch_staffing_info SELECT * FROM sbch_staffing_info WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_staffing_special_detail
+        SELECT * FROM sbch_staffing_special_detail WHERE del_flag = '0' and info_id = (SELECT id FROM sbch_staffing_special_info WHERE del_flag = '0' order by version desc LIMIT 1);
+        INSERT INTO `data_share_ws`.sbch_staffing_special_info SELECT * FROM sbch_staffing_special_info WHERE del_flag = '0' order by version desc LIMIT 1;
+
+        INSERT INTO `data_share_ws`.sbch_total_demand_plan SELECT * FROM sbch_total_demand_plan WHERE del_flag = '0' order by version desc LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_total_demand_plan_detail
+        SELECT * FROM sbch_total_demand_plan_detail WHERE del_flag = '0' and plan_id = (SELECT id FROM sbch_total_demand_plan WHERE del_flag = '0' order by version desc LIMIT 1);
+
+    </select>
+
+    <update id="deleteByOneVersion">
+        UPDATE `data_share_ws`.sbch_equipment_allot_details SET del_flag = '1' WHERE main_id = (select id from sbch_equipment_allot WHERE del_flag = '0' AND version = 1.0);
+        UPDATE `data_share_ws`.sbch_equipment_allot SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_equipment_allot_transnational SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+
+        UPDATE `data_share_ws`.sbch_equipment_allot_transnational_bulk SET del_flag = '1' WHERE del_flag = '0' AND main_id IN
+        (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' AND version = 1.0));
+
+        UPDATE `data_share_ws`.sbch_equipment_allot_transnational_clearance SET del_flag = '1' WHERE del_flag = '0' AND main_id IN
+        (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' AND version = 1.0));
+
+        UPDATE `data_share_ws`.sbch_equipment_allot_transnational_clearance_details SET del_flag = '1' WHERE del_flag = '0' and main_id IN
+        (SELECT id FROM sbch_equipment_allot_transnational_clearance WHERE del_flag = '0' AND main_id IN
+                                                                                                                                                                                                                      (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' AND version = 1.0)));
+        UPDATE `data_share_ws`.sbch_equipment_allot_transnational_container SET del_flag = '1' WHERE del_flag = '0' and main_id IN
+        (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' AND version = 1.0));
+
+        UPDATE `data_share_ws`.sbch_equipment_allot_transnational_cost SET del_flag = '1' WHERE del_flag = '0' and main_id IN
+        (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' AND version = 1.0));
+
+        UPDATE `data_share_ws`.sbch_equipment_allot_transnational_details SET del_flag = '1' WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' AND version = 1.0);
+
+        UPDATE `data_share_ws`.sbch_equipment_allot_transnational_disassembly SET del_flag = '1' WHERE del_flag = '0' and main_id IN
+        (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' AND version = 1.0));
+
+        UPDATE `data_share_ws`.sbch_equipment_allot_transnational_exit SET del_flag = '1' WHERE del_flag = '0' and main_id IN
+                                                                                                                   (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' AND version = 1.0));
+
+        UPDATE `data_share_ws`.sbch_equipment_allot_transnational_import SET del_flag = '1' WHERE del_flag = '0' and main_id IN
+        (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' AND version = 1.0));
+
+        UPDATE `data_share_ws`.sbch_equipment_allot_transnational_port SET del_flag = '1' WHERE del_flag = '0' and main_id IN
+         (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' AND version = 1.0));
+
+        UPDATE `data_share_ws`.sbch_equipment_allot_transnational_technology SET del_flag = '1' WHERE del_flag = '0' and main_id IN
+        (SELECT id FROM sbch_equipment_allot_transnational_details WHERE del_flag = '0' and main_id = (select id from sbch_equipment_allot_transnational WHERE del_flag = '0' AND version = 1.0));
+
+        UPDATE `data_share_ws`.sbch_equipment_lease SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_equipment_lease_details SET del_flag = '1' WHERE del_flag = '0' AND main_id = (SELECT id FROM sbch_equipment_lease WHERE del_flag = '0' AND version = 1.0);
+
+        UPDATE `data_share_ws`.sbch_equipment_local_purchase SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_equipment_local_purchase_details SET del_flag = '1' WHERE del_flag = '0' and main_id = (SELECT id FROM sbch_equipment_local_purchase WHERE del_flag = '0' AND version = 1.0);
+
+
+        UPDATE `data_share_ws`.sbch_equipment_purchase SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_equipment_purchase_details SET del_flag = '1' WHERE del_flag = '0' and main_id = (SELECT id FROM sbch_equipment_purchase WHERE del_flag = '0' AND version = 1.0);
+
+        UPDATE `data_share_ws`.sbch_equipment_special SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_equipment_special_control_plan SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_equipment_special_control_plan_details SET del_flag = '1' WHERE del_flag = '0' AND main_id = (SELECT id FROM sbch_equipment_special_control_plan WHERE del_flag = '0' AND version = 1.0);
+        UPDATE `data_share_ws`.sbch_equipment_special_details SET del_flag = '1' WHERE del_flag = '0' and main_id = (SELECT id FROM sbch_equipment_special WHERE del_flag = '0' AND version = 1.0);
+
+        UPDATE `data_share_ws`.sbch_equipment_special_plan SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_equipment_special_plan_details SET del_flag = '1' WHERE del_flag = '0' and main_id = (SELECT id FROM sbch_equipment_special_plan WHERE del_flag = '0' AND version = 1.0);
+
+        UPDATE `data_share_ws`.sbch_equipment_supplier SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_equipment_supplier_details SET del_flag = '1'  WHERE del_flag = '0' and main_id = (SELECT id FROM sbch_equipment_supplier WHERE del_flag = '0' AND version = 1.0);
+
+        UPDATE `data_share_ws`.sbch_equipment_team SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_equipment_team_details SET del_flag = '1' WHERE del_flag = '0' and main_id = (SELECT id FROM sbch_equipment_team WHERE del_flag = '0' AND version = 1.0);
+        UPDATE `data_share_ws`.sbch_equipment_team_details_details SET del_flag = '1' WHERE del_flag = '0' and main_id IN
+        (SELECT id FROM sbch_equipment_team_details WHERE del_flag = '0' and main_id = (SELECT id FROM sbch_equipment_team WHERE del_flag = '0' AND version = 1.0));
+
+        UPDATE `data_share_ws`.sbch_import_customs_clear SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_import_customs_clear_detail SET del_flag = '1' WHERE del_flag = '0' and info_id = (SELECT id FROM sbch_import_customs_clear WHERE del_flag = '0' AND version = 1.0);
+
+        UPDATE `data_share_ws`.sbch_import_inquiry SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_import_inquiry_country SET del_flag = '1' WHERE del_flag = '0' and inquiry_id = (SELECT id FROM sbch_import_inquiry WHERE del_flag = '0' AND version = 1.0);
+        UPDATE `data_share_ws`.sbch_import_inquiry_customs SET del_flag = '1' WHERE del_flag = '0' and inquiry_id = (SELECT id FROM sbch_import_inquiry WHERE del_flag = '0' AND version = 1.0);
+
+        UPDATE `data_share_ws`.sbch_import_plan SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_import_plan_detail SET del_flag = '1' WHERE del_flag = '0' and plan_id = (SELECT id FROM sbch_import_plan WHERE del_flag = '0' AND version = 1.0);
+
+        UPDATE `data_share_ws`.sbch_material_manager SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_material_manager_detail SET del_flag = '1' WHERE del_flag = '0' and info_id = (SELECT id FROM sbch_material_manager WHERE del_flag = '0' AND version = 1.0);
+
+        UPDATE `data_share_ws`.sbch_material_tran_plan SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_material_tran_plan_detail SET del_flag = '1' WHERE del_flag = '0' and plan_id = (SELECT id FROM sbch_material_tran_plan WHERE del_flag = '0' AND version = 1.0);
+
+        UPDATE `data_share_ws`.sbch_single_check SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_single_check_detail SET del_flag = '1' WHERE del_flag = '0' and info_id = (SELECT id FROM sbch_single_check WHERE del_flag = '0' AND version = 1.0);
+
+        UPDATE `data_share_ws`.sbch_staffing_detail SET del_flag = '1'WHERE del_flag = '0' and staffing_id = (SELECT id FROM sbch_staffing_info WHERE del_flag = '0' AND version = 1.0);
+        UPDATE `data_share_ws`.sbch_staffing_info SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_staffing_special_detail SET del_flag = '1' WHERE del_flag = '0' and info_id = (SELECT id FROM sbch_staffing_special_info WHERE del_flag = '0' AND version = 1.0);
+        UPDATE `data_share_ws`.sbch_staffing_special_info SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+
+        UPDATE `data_share_ws`.sbch_total_demand_plan SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.sbch_total_demand_plan_detail SET del_flag = '1' WHERE del_flag = '0' and plan_id = (SELECT id FROM sbch_total_demand_plan WHERE del_flag = '0' AND version = 1.0);
+
+</update>
+
+
+    <update id="updateValidFlag">
+        UPDATE `data_share_ws`.sbch_equipment_allot SET valid = '0' WHERE del_flag = '0';
+
+        UPDATE `data_share_ws`.sbch_equipment_allot_transnational SET valid = '0' WHERE del_flag = '0' ;
+
+        UPDATE `data_share_ws`.sbch_equipment_lease SET valid = '0' WHERE del_flag = '0' ;
+
+        UPDATE `data_share_ws`.sbch_equipment_local_purchase SET valid = '0' WHERE del_flag = '0' ;
+
+        UPDATE `data_share_ws`.sbch_equipment_purchase SET valid = '0' WHERE del_flag = '0' ;
+
+        UPDATE `data_share_ws`.sbch_equipment_special SET valid = '0' WHERE del_flag = '0' ;
+        UPDATE `data_share_ws`.sbch_equipment_special_control_plan SET valid = '0' WHERE del_flag = '0' ;
+
+        UPDATE `data_share_ws`.sbch_equipment_special_plan SET valid = '0' WHERE del_flag = '0' ;
+
+        UPDATE `data_share_ws`.sbch_equipment_supplier SET valid = '0' WHERE del_flag = '0' ;
+
+        UPDATE `data_share_ws`.sbch_equipment_team SET valid = '0' WHERE del_flag = '0' ;
+
+        UPDATE `data_share_ws`.sbch_import_customs_clear SET valid = '0' WHERE del_flag = '0' ;
+
+        UPDATE `data_share_ws`.sbch_import_inquiry SET valid = '0' WHERE del_flag = '0' ;
+
+        UPDATE `data_share_ws`.sbch_import_plan SET valid = '0' WHERE del_flag = '0' ;
+
+        UPDATE `data_share_ws`.sbch_material_manager SET valid = '0' WHERE del_flag = '0' ;
+
+        UPDATE `data_share_ws`.sbch_material_tran_plan SET valid = '0' WHERE del_flag = '0' ;
+
+        UPDATE `data_share_ws`.sbch_single_check SET valid = '0' WHERE del_flag = '0' ;
+
+        UPDATE `data_share_ws`.sbch_staffing_info SET valid = '0' WHERE del_flag = '0' ;
+        UPDATE `data_share_ws`.sbch_staffing_special_info SET valid = '0' WHERE del_flag = '0' ;
+        UPDATE `data_share_ws`.sbch_total_demand_plan SET valid = '0' WHERE del_flag = '0' ;
+    </update>
+</mapper>

@@ -43,7 +43,11 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
 
             @Override
             public AjaxResult insertSyncLog(SysSyncInfoLog log) {
-                return AjaxResult.error("请求失败:",throwable.getMessage());
+                return AjaxResult.error("请求失败:", throwable.getMessage());
+            }
+            @Override
+            public Map<String, Object> getPrjInfo() {
+                return null;
             }
         };
     }

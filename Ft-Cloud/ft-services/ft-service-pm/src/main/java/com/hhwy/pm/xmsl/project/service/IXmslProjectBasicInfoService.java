@@ -5,6 +5,7 @@ import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectInfoWithOther;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author han
@@ -63,4 +64,7 @@ public interface IXmslProjectBasicInfoService {
      * @return
      */
     ProjectInfoWithOther getProjectInfoWithOther();
+
+    Map<String, Object> getPrjInfo();
+
 }

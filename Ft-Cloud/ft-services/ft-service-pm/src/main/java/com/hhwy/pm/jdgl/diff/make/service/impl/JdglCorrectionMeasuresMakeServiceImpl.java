@@ -17,6 +17,7 @@ import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeDetailServi
 import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
+import com.hhwy.pm.jdgl.statistics.util.TreeCountUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
@@ -73,7 +74,9 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         if (make != null) {
             List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMakeDetailService.getDetailListByMakeId(make);
             make.setDetailList(TreeUtil.build(detailList, null));
+//            make.setDetailList(detailList);
         }
+        FlowInfoSearchUtil.getFlowInfo(make, FlowEnum.JDGL_CORRECTION_MEASURES_MAKE);
         return make;
     }
 
@@ -136,11 +139,17 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         if (jdglCorrectionMeasuresMake == null || jdglCorrectionMeasuresMake.getId() == null) {
             return;
         }
+        List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMake.getDetailList();
+
         jdglCorrectionMeasuresMake.setUpdateUser(SecurityUtils.getUserName());
         jdglCorrectionMeasuresMake.setUpdateTime(DateUtils.getNowDate());
+        Date maxDate = detailList.stream().filter(p -> p.getCorrectionCompleteDate() != null)
+                .map(JdglCorrectionMeasuresMakeDetail::getCorrectionCompleteDate)
+                .max(Date::compareTo).get();
+        jdglCorrectionMeasuresMake.setCorrectionDate(maxDate);
         jdglCorrectionMeasuresMakeMapper.updateJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake);
 
-        List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMake.getDetailList();
+
         if (!CollectionUtils.isEmpty(detailList)) {
             // 树转列表
             List<JdglCorrectionMeasuresMakeDetail> treeList = TreeUtil.treeToListWithoutId(detailList);
@@ -215,7 +224,11 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         qryMake.setWarnPeriod(periodStr);
         JdglCorrectionMeasuresMake make = jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMake(qryMake);
         if (make != null) {
+            //删除该期次历史版本
             jdglCorrectionMeasuresMakeMapper.deleteJdglCorrectionMeasuresMake(qryMake);
+            JdglCorrectionMeasuresMakeDetail makeDetail = new JdglCorrectionMeasuresMakeDetail();
+            makeDetail.setMakeId(qryMake.getId());
+            jdglCorrectionMeasuresMakeDetailService.deleteJdglCorrectionMeasuresMakeDetail(makeDetail);
         }
 
         // 获取差异化分析数据
@@ -262,12 +275,23 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         }
         // 树转列表
         List<JdglDiffAnalysisSv> svListList = TreeUtil.treeToList(svTreeList);
+        TreeCountUtils treeCountUtils = new TreeCountUtils();
+        treeCountUtils.toAncestrals(svListList, null);
         //只需要偏差值小于0的
-        List<JdglDiffAnalysisSv> svList = svListList.stream().filter(p -> p.getThisDeviationNum().compareTo(BigDecimal.ZERO) < 0).collect(Collectors.toList());
+        List<JdglDiffAnalysisSv> svList = svListList.stream()
+                .filter(p -> null != p.getThisDeviationNum() && p.getThisDeviationNum().compareTo(BigDecimal.ZERO) < 0)
+                .collect(Collectors.toList());
+
+        ArrayList<JdglDiffAnalysisSv> objects = new ArrayList<>();
+        svList.forEach(p ->{
+            List<JdglDiffAnalysisSv> collect = svListList.stream().filter(p1 -> p.getPtVar5().contains(p1.getPtVar5())).collect(Collectors.toList());
+            objects.addAll(collect);
+        });
+        List<JdglDiffAnalysisSv> collect = objects.stream().distinct().collect(Collectors.toList());
 
         // 构建新的list
         List<JdglCorrectionMeasuresMakeDetail> newDetailList = new ArrayList<>();
-        for (JdglDiffAnalysisSv jdglDiffAnalysisSv : svList) {
+        for (JdglDiffAnalysisSv jdglDiffAnalysisSv : collect) {
             JdglCorrectionMeasuresMakeDetail JdglCorrectionMeasuresMakeDetail = new JdglCorrectionMeasuresMakeDetail();
             JdglCorrectionMeasuresMakeDetail.setId(jdglDiffAnalysisSv.getId());
             JdglCorrectionMeasuresMakeDetail.setPid(jdglDiffAnalysisSv.getPid());

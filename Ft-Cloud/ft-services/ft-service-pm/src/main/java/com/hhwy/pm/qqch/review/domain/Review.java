@@ -137,13 +137,17 @@ public class Review extends CommonBaseEntity {
     @FtExcel(name = "流程状态")
     private String taskStatus;
     /**
-     * 字段描述：是否可以发起审批   1: 可发起   0： 不可发起
+     * 字段描述：发起审批按钮标识   1: 存在   0： 不存在
      */
     private String isCanApprove = "0";
     /**
-     * 字段描述：详情按钮  1: 存在  0： 不存在
+     * 字段描述：详情按钮标识  1: 存在  0： 不存在
      */
     private String particularsMark = "0";
+    /**
+     * 字段描述：处理按钮标识  1: 存在  0： 不存在
+     */
+    private String disposeMark = "0";
     /**
      * 字段描述：附件组id
      */

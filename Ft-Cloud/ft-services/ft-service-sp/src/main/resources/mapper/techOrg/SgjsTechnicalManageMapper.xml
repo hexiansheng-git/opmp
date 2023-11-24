@@ -9,11 +9,14 @@
         <result property="pid" column="pid" />
         <result property="postName" column="post_name" />
         <result property="postJob" column="post_job" />
-        <result property="userCount" column="user_count" />
+        <result property="headCount" column="head_count" />
+        <result property="userId" column="user_id" />
         <result property="userName" column="user_name" />
         <result property="phone" column="phone" />
-        <result property="remark" column="remark" />
         <result property="actualDate" column="actual_date" />
+        <result property="workOrNot" column="work_or_not" />
+        <result property="actualExitDate" column="actual_exit_date" />
+        <result property="remark" column="remark" />
         <result property="dataSource" column="data_source" />
         <result property="regionId" column="region_id" />
         <result property="regionName" column="region_name" />
@@ -36,35 +39,38 @@
     </resultMap>
     <sql id="selectSgjsTechnicalManageVo">
         select
-            `id`
-         ,`pid`
-         ,`post_name`
-         ,`post_job`
-         ,`user_count`
-         ,`user_name`
-         ,`phone`
-         ,`remark`
-         ,`actual_date`
-         ,`data_source`
-         ,`region_id`
-         ,`region_name`
-         ,`project_id`
-         ,`project_name`
-         ,`dept_id`
-         ,`create_user`
-         ,`create_user_name`
-         ,`create_time`
-         ,`update_user`
-         ,`update_time`
-         ,`del_user`
-         ,`del_time`
-         ,`del_flag`
-         ,`pt_var1`
-         ,`pt_var2`
-         ,`pt_var3`
-         ,`pt_var4`
-         ,`pt_var5`
-        from sgjs_technical_manage
+                                                            `id`
+                                                         ,`pid`
+                                                         ,`post_name`
+                                                         ,`post_job`
+                                                         ,`head_count`
+                                                         ,`user_id`
+                                                         ,`user_name`
+                                                         ,`phone`
+                                                         ,`actual_date`
+                                                         ,`work_or_not`
+                                                         ,`actual_exit_date`
+                                                         ,`remark`
+                                                         ,`data_source`
+                                                         ,`region_id`
+                                                         ,`region_name`
+                                                         ,`project_id`
+                                                         ,`project_name`
+                                                         ,`dept_id`
+                                                         ,`create_user`
+                                                         ,`create_user_name`
+                                                         ,`create_time`
+                                                         ,`update_user`
+                                                         ,`update_time`
+                                                         ,`del_user`
+                                                         ,`del_time`
+                                                         ,`del_flag`
+                                                         ,`pt_var1`
+                                                         ,`pt_var2`
+                                                         ,`pt_var3`
+                                                         ,`pt_var4`
+                                                         ,`pt_var5`
+                                    from sgjs_technical_manage
     </sql>
     <select id="getSgjsTechnicalManage" resultMap="SgjsTechnicalManageResultMap">
         <include refid="selectSgjsTechnicalManageVo" />
@@ -74,11 +80,14 @@
             <if test="pid != null "> and `pid` = #{pid}</if>
             <if test="postName != null  and postName != ''"> and `post_name` = #{postName}</if>
             <if test="postJob != null  and postJob != ''"> and `post_job` = #{postJob}</if>
-            <if test="userCount != null "> and `user_count` = #{userCount}</if>
+            <if test="headCount != null "> and `head_count` = #{headCount}</if>
+            <if test="userId != null "> and `user_id` = #{userId}</if>
             <if test="userName != null  and userName != ''"> and `user_name` = #{userName}</if>
             <if test="phone != null  and phone != ''"> and `phone` = #{phone}</if>
+            <if test="actualDate != null  and actualDate != ''"> and `actual_date` = #{actualDate}</if>
+            <if test="workOrNot != null  and workOrNot != ''"> and `work_or_not` = #{workOrNot}</if>
+            <if test="actualExitDate != null"> and `actual_exit_date` = #{actualExitDate}</if>
             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-            <if test="actualDate != null "> and `actual_date` = #{actualDate}</if>
             <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
@@ -110,13 +119,14 @@
             <if test="pid != null "> and `pid` = #{pid}</if>
             <if test="postName != null  and postName != ''"> and `post_name` = #{postName}</if>
             <if test="postJob != null  and postJob != ''"> and `post_job` = #{postJob}</if>
-            <if test="userCount != null "> and `user_count` = #{userCount}</if>
+            <if test="headCount != null "> and `head_count` = #{headCount}</if>
+            <if test="userId != null "> and `user_id` = #{userId}</if>
             <if test="userName != null  and userName != ''"> and `user_name` = #{userName}</if>
             <if test="phone != null  and phone != ''"> and `phone` = #{phone}</if>
+            <if test="actualDate != null  and actualDate != ''"> and `actual_date` = #{actualDate}</if>
+            <if test="workOrNot != null  and workOrNot != ''"> and `work_or_not` = #{workOrNot}</if>
+            <if test="actualExitDate != null"> and `actual_exit_date` = #{actualExitDate}</if>
             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-            <if test="actualDate != null "> and `actual_date` = #{actualDate}</if>
-            <if test="actualDateBegin != null "> and `actual_date` &gt;= #{actualDateBegin}</if>
-            <if test="actualDateEnd != null "> and `actual_date`  &lt;=#{actualDateEnd}</if>
             <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
@@ -147,11 +157,14 @@
             <if test="pid != null ">`pid`,</if>
             <if test="postName != null  and postName != ''">`post_name`,</if>
             <if test="postJob != null  and postJob != ''">`post_job`,</if>
-            <if test="userCount != null ">`user_count`,</if>
+            <if test="headCount != null ">`head_count`,</if>
+            <if test="userId != null ">`user_id`,</if>
             <if test="userName != null  and userName != ''">`user_name`,</if>
             <if test="phone != null  and phone != ''">`phone`,</if>
+            <if test="actualDate != null  and actualDate != ''">`actual_date`,</if>
+            <if test="workOrNot != null  and workOrNot != ''">`work_or_not`,</if>
+            <if test="actualExitDate != null">`actual_exit_date`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
-            <if test="actualDate != null ">`actual_date`,</if>
             <if test="dataSource != null  and dataSource != ''">`data_source`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -177,11 +190,14 @@
             <if test="pid != null ">#{pid},</if>
             <if test="postName != null  and postName != ''">#{postName},</if>
             <if test="postJob != null  and postJob != ''">#{postJob},</if>
-            <if test="userCount != null ">#{userCount},</if>
+            <if test="headCount != null ">#{headCount},</if>
+            <if test="userId != null ">#{userId},</if>
             <if test="userName != null  and userName != ''">#{userName},</if>
             <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="actualDate != null  and actualDate != ''">#{actualDate},</if>
+            <if test="workOrNot != null  and workOrNot != ''">#{workOrNot},</if>
+            <if test="actualExitDate != null">#{actualExitDate},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
-            <if test="actualDate != null ">#{actualDate},</if>
             <if test="dataSource != null  and dataSource != ''">#{dataSource},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -212,11 +228,14 @@
             `pid`,
             `post_name`,
             `post_job`,
-            `user_count`,
+            `head_count`,
+            `user_id`,
             `user_name`,
             `phone`,
-            `remark`,
             `actual_date`,
+            `work_or_not`,
+            `actual_exit_date`,
+            `remark`,
             `data_source`,
             `region_id`,
             `region_name`,
@@ -243,11 +262,14 @@
                 #{item.pid},
                 #{item.postName},
                 #{item.postJob},
-                #{item.userCount},
+                #{item.headCount},
+                #{item.userId},
                 #{item.userName},
                 #{item.phone},
-                #{item.remark},
                 #{item.actualDate},
+                #{item.workOrNot},
+                #{item.actualExitDate},
+                #{item.remark},
                 #{item.dataSource},
                 #{item.regionId},
                 #{item.regionName},
@@ -277,11 +299,14 @@
             <if test="pid != null ">`pid` = #{pid},</if>
             <if test="postName != null  and  postName != ''">`post_name` = #{postName},</if>
             <if test="postJob != null  and  postJob != ''">`post_job` = #{postJob},</if>
-            <if test="userCount != null ">`user_count` = #{userCount},</if>
+            <if test="headCount != null ">`head_count` = #{headCount},</if>
+            <if test="userId != null ">`user_id` = #{userId},</if>
             <if test="userName != null  and  userName != ''">`user_name` = #{userName},</if>
             <if test="phone != null  and  phone != ''">`phone` = #{phone},</if>
+            <if test="actualDate != null  and  actualDate != ''">`actual_date` = #{actualDate},</if>
+            <if test="workOrNot != null  and  workOrNot != ''">`work_or_not` = #{workOrNot},</if>
+            <if test="actualExitDate != null  and  actualExitDate != ''">`actual_exit_date` = #{actualExitDate},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
-            <if test="actualDate != null ">`actual_date` = #{actualDate},</if>
             <if test="dataSource != null  and  dataSource != ''">`data_source` = #{dataSource},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -330,9 +355,14 @@
                     when `id`=#{item.id} then #{item.postJob}
                 </foreach>
             </trim>
-            <trim prefix="user_count  = case" suffix="end,">
+            <trim prefix="head_count  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.userCount}
+                    when `id`=#{item.id} then #{item.headCount}
+                </foreach>
+            </trim>
+            <trim prefix="user_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.userId}
                 </foreach>
             </trim>
             <trim prefix="user_name  = case" suffix="end,">
@@ -345,14 +375,24 @@
                     when `id`=#{item.id} then #{item.phone}
                 </foreach>
             </trim>
-            <trim prefix="remark  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.remark}
-                </foreach>
-            </trim>
             <trim prefix="actual_date  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.actualDate}
+                </foreach>
+            </trim>
+            <trim prefix="work_or_not  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.workOrNot}
+                </foreach>
+            </trim>
+            <trim prefix="actual_exit_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.actualExitDate}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
                 </foreach>
             </trim>
             <trim prefix="data_source  = case" suffix="end,">
@@ -464,11 +504,14 @@
             <if test="pid != null "> and `pid` = #{pid}</if>
             <if test="postName != null  and postName != ''"> and `post_name` = #{postName}</if>
             <if test="postJob != null  and postJob != ''"> and `post_job` = #{postJob}</if>
-            <if test="userCount != null "> and `user_count` = #{userCount}</if>
+            <if test="headCount != null "> and `head_count` = #{headCount}</if>
+            <if test="userId != null "> and `user_id` = #{userId}</if>
             <if test="userName != null  and userName != ''"> and `user_name` = #{userName}</if>
             <if test="phone != null  and phone != ''"> and `phone` = #{phone}</if>
+            <if test="actualDate != null  and actualDate != ''"> and `actual_date` = #{actualDate}</if>
+            <if test="workOrNot != null  and workOrNot != ''"> and `work_or_not` = #{workOrNot}</if>
+            <if test="actualExitDate != null"> and `actual_exit_date` = #{actualExitDate}</if>
             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-            <if test="actualDate != null "> and `actual_date` = #{actualDate}</if>
             <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
@@ -500,19 +543,4 @@
             </foreach>
         </where>
     </update>
-
-    <update id="delectAll" parameterType="com.hhwy.sp.techOrg.domain.SgjsTechnicalManage">
-        update `sgjs_technical_manage` set del_flag = 1  and update_time=#{updateTime} and update_user=#{updateUser}
-    </update>
-
-    <select id="batchSelect" parameterType="list" resultMap="SgjsTechnicalManageResultMap">
-        select * from `sgjs_technical_manage` where del_flag = 0 and id in
-        <foreach collection="list" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-        or pid in
-        <foreach collection="list" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </select>
 </mapper>

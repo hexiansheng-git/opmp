@@ -62,11 +62,11 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
     @Override
     public List<QqchMainPlanItem> initQqchData4P6(String tenantKey, BigDecimal version) {
 
-        if(version == null) {
-            throw new RuntimeException("版本参数异常!");
-        }
+//        if(version == null) {
+//            throw new RuntimeException("版本参数异常!");
+//        }
 
-//        version = VersionUtil.getVersion(QqchMainPlanItem.TABLE_NAME, version);
+        version = VersionUtil.getVersion(QqchMainPlanItem.TABLE_NAME, version);
 
         List<QqchMainPlanItem> returnList = new ArrayList<>();
 

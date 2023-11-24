@@ -9,6 +9,7 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.sgch.dataShare.DataShareDevicePlanService;
 import com.hhwy.utils.JsonUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
@@ -22,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +40,8 @@ public class ReviewController extends BaseController {
 
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private DataShareDevicePlanService dataShareDevicePlanService;
 
 
     public static void main(String[] args) {
@@ -58,6 +63,7 @@ public class ReviewController extends BaseController {
         handlerReviewList(reviewList);
         setIsCanApprove(reviewList);
         setParticularsMark(reviewList);
+        setDisposeMark(reviewList);
         return getDataTableAjaxResult(reviewList);
     }
 
@@ -114,28 +120,18 @@ public class ReviewController extends BaseController {
         if(CollectionUtils.isEmpty(qqchReviewList)){
             return;
         }
-        Map<String, Review> reviewMap = qqchReviewList.stream().collect(Collectors.toMap(Review::getPlanStage, o -> o));
 
-        Review review1 = reviewMap.get("1");
-        if(review1 != null){
-            review1.setParticularsMark("1");
-        }
-
-        Review review2 = reviewMap.get("2");
-        if(review2 != null && !"0".equals(review2.getReviewStatus())){
-            review2.setParticularsMark("1");
-        }
-
-        Review review3 = reviewMap.get("3");
-        if(review3 != null && !"0".equals(review3.getReviewStatus())){
-            review3.setParticularsMark("1");
-        }
+        qqchReviewList.stream().forEach(review -> {
+            String reviewStatus = review.getReviewStatus();
+            String taskStatus = review.getTaskStatus();
+            if(!"0".equals(taskStatus) && ("2".equals(reviewStatus) || "3".equals(reviewStatus) || "4".equals(reviewStatus))){
+                review.setParticularsMark("1");
+            }
+        });
     }
 
-
-
     /**
-     * 设置评审阶段数据是否可以发起审批
+     * 设置评审阶段数据是否存在发起审批按钮
      * @param qqchReviewList
      */
     private void setIsCanApprove(List<Review> qqchReviewList){
@@ -159,11 +155,27 @@ public class ReviewController extends BaseController {
             return true;
         }
         String reviewStatus = review.getReviewStatus();
-        if("2".equals(reviewStatus)){
+        String taskStatus = review.getTaskStatus();
+        //编制完成并且未发起流程
+        if("2".equals(reviewStatus) && "0".equals(taskStatus)){
             review.setIsCanApprove("1");
             return true;
         }
         return !"4".equals(reviewStatus);
+    }
+
+    private void setDisposeMark(List<Review> qqchReviewList){
+        if(CollectionUtils.isEmpty(qqchReviewList)){
+            return;
+        }
+        Long userId = SecurityUtils.getSysUser().getUserId();
+        qqchReviewList.stream().forEach(review -> {
+            String taskStatus = review.getTaskStatus();
+            String processTaskManId = review.getProcessTaskManId();
+            if("1".equals(taskStatus) && userId.toString().equals(processTaskManId)){
+                review.setDisposeMark("1");
+            }
+        });
     }
 
     //    @PreAuthorize(hasPermi = "qqchReview:add")
@@ -250,6 +262,11 @@ public class ReviewController extends BaseController {
     @PostMapping("/listener")
     public AjaxResult reviewListener(Long id) {
         qqchReviewService.listener(id);
+        //推送设备策划数据到物设中间库
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(() -> {
+            dataShareDevicePlanService.eachStagePush();
+        });
         return AjaxResult.success("成功");
     }
 

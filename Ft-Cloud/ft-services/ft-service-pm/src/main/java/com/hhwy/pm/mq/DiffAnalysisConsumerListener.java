@@ -5,12 +5,8 @@ import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
-import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
-import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisCorrect;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglWarnRecord;
-import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisCorrectService;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglWarnRecordService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.spring.annotation.ConsumeMode;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
@@ -18,8 +14,6 @@ import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.apache.rocketmq.spring.core.RocketMQPushConsumerLifecycleListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * 
@@ -61,6 +55,6 @@ public class DiffAnalysisConsumerListener implements RocketMQListener<String> , 
     @Override
     public void prepareStart(DefaultMQPushConsumer defaultMQPushConsumer) {
         defaultMQPushConsumer.setMaxReconsumeTimes(3);
-        defaultMQPushConsumer.setInstanceName("gm");
+        defaultMQPushConsumer.setInstanceName("jdgl_warn_record");
     }
 }

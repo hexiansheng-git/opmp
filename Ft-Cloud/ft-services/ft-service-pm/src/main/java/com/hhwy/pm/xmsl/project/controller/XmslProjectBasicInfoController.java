@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author han
@@ -67,6 +68,10 @@ public class XmslProjectBasicInfoController extends BaseController{
         return AjaxResult.success(projectInfo);
     }
 
+    @GetMapping("getPrjInfo")
+    public Map<String,Object> getPrjInfo(){
+        return projectBasicInfoService.getPrjInfo();
+    }
     /**
      * 获取项目基本信息（附带其他信息）
      * @return

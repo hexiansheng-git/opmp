@@ -52,6 +52,6 @@ public class ProjectBasicInfoConsumerListener implements RocketMQListener<String
     @Override
     public void prepareStart(DefaultMQPushConsumer defaultMQPushConsumer) {
         defaultMQPushConsumer.setMaxReconsumeTimes(3);
-        defaultMQPushConsumer.setInstanceName("gm");
+        defaultMQPushConsumer.setInstanceName("editInvoke");
     }
 }

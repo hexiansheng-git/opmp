@@ -45,8 +45,7 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
      */
     @PreAuthorize(hasPermi = "jdglCorrectionMeasuresMake:list")
     @GetMapping("/getOne")
-    public AjaxResult getJdglCorrectionMeasuresMake(
-        @Validated(ValidationGroups.Get.class) JdglCorrectionMeasuresMake jdglCorrectionMeasuresMakeParam) {
+    public AjaxResult getJdglCorrectionMeasuresMake(@Validated(ValidationGroups.Get.class) JdglCorrectionMeasuresMake jdglCorrectionMeasuresMakeParam) {
         JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = jdglCorrectionMeasuresMakeService.getJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMakeParam);
         return AjaxResult.success(jdglCorrectionMeasuresMake);
     }
