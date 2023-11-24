@@ -67,6 +67,10 @@ public class TWarnServiceImpl implements ITWarnService {
     @Override
     @Transactional
     public int addWarn(TWarn tWarn) {
+        String warnScope = tWarn.getWarnScope();
+        if(StringUtils.isBlank(warnScope)){
+            return 1;
+        }
         tWarn.setWarnId(IdWorker.createId());
         tWarn.setCreateUser("admin");
         tWarn.setCreateTime(DateUtils.getNowDate());
