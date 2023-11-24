@@ -1,10 +1,11 @@
-package com.hhwy.pm.core.sync.domain;
+package com.hhwy.domain;
 
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.Date;
 
 /**

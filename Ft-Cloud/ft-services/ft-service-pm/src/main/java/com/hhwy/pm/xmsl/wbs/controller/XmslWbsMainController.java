@@ -7,8 +7,10 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.FlowServiceApi;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
@@ -39,6 +41,8 @@ public class XmslWbsMainController extends BaseController {
     private IXmslWbsMainService xmslWbsMainService;
     @Autowired
     private FlowServiceApi flowServiceApi;
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
     @PreAuthorize(hasPermi = "xmslWbsMain:list")
     @GetMapping
@@ -59,7 +63,6 @@ public class XmslWbsMainController extends BaseController {
     @PreAuthorize(hasPermi = "xmslWbsMain:detail")
     @PostMapping("/detail")
     public AjaxResult detail(@RequestBody XmslWbsMain xmslWbsMainParam) {
-        flowServiceApi.isNowfirstNode("f1a873f8-5466-11ee-9954-ba7f02a27bc2");
         XmslWbsMain wbsMain = null;
         if(xmslWbsMainParam.getId() == null){
             wbsMain = xmslWbsMainService.getLast();

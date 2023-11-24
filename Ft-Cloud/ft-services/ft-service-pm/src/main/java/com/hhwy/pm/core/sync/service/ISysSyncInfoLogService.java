@@ -1,7 +1,7 @@
 package com.hhwy.pm.core.sync.service;
 
 
-import com.hhwy.pm.core.sync.domain.SysSyncInfoLog;
+import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.pm.core.sync.enums.SyncBusinessEnum;
 
 import java.util.List;
@@ -41,6 +41,8 @@ public interface ISysSyncInfoLogService {
      * @return
      */
     public int insert(SyncBusinessEnum businessEnum,String id,Long count,Long useMills,Integer status,String msg);
+
+    public int insert(String busType,String id,Long count,Long useMills,Integer status,String msg);
 
     /**
      * 修改数据同步日志

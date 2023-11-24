@@ -3,6 +3,8 @@ package com.hhwy.pm.core.sync.controller;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.SysSyncInfoLog;
+import com.hhwy.pm.core.sync.service.ISysSyncInfoLogService;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
@@ -46,6 +48,8 @@ public class SyncController extends BaseController {
     private IQqchReviewService reviewService;
     @Autowired
     private ISysSyncInfoService syncInfoService;
+    @Autowired
+    private ISysSyncInfoLogService sysSyncInfoLogService;
     @Autowired
     private IJdglDiffAnalysisService jdglDiffAnalysisService;
     @Autowired
@@ -230,6 +234,18 @@ public class SyncController extends BaseController {
     @PostMapping("pushJdglDaySchedule")
     public AjaxResult pushJdglDaySchedule(@RequestBody List<JdglDaySchedule> list){
         syncInfoService.pushJdglDaySchedule(list);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 插入日志
+     * @param log
+     * @return
+     */
+    @PostMapping("/insert")
+    public AjaxResult insert(@RequestBody SysSyncInfoLog log){
+        sysSyncInfoLogService.insert(log.getBusinessName(),log.getPtVar1(),
+                Long.valueOf(log.getPushCount()),log.getUseTime(),log.getStatus(),log.getFailMsg());
         return AjaxResult.success();
     }
 }

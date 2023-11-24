@@ -1,6 +1,7 @@
 package com.hhwy.feign.factory;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.domain.CommonQqchMeasureExpRange;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
@@ -38,6 +39,11 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             @Override
             public List<QqchPostSetting> getTechDeptList() {
                 return null;
+            }
+
+            @Override
+            public AjaxResult insertSyncLog(SysSyncInfoLog log) {
+                return AjaxResult.error("请求失败:",throwable.getMessage());
             }
         };
     }

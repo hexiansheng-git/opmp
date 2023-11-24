@@ -1,6 +1,6 @@
 package com.hhwy.pm.core.sync.mapper;
 
-import com.hhwy.pm.core.sync.domain.SysSyncInfoLog;
+import com.hhwy.domain.SysSyncInfoLog;
 
 import java.util.List;
 

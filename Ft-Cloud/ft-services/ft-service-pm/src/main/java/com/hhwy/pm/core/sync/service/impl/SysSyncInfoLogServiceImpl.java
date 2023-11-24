@@ -2,7 +2,7 @@ package com.hhwy.pm.core.sync.service.impl;
 
 import com.graphbuilder.math.func.LgFunction;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.pm.core.sync.domain.SysSyncInfoLog;
+import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.pm.core.sync.enums.SyncBusinessEnum;
 import com.hhwy.pm.core.sync.mapper.SysSyncInfoLogMapper;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoLogService;
@@ -57,9 +57,14 @@ public class SysSyncInfoLogServiceImpl implements ISysSyncInfoLogService {
     @Override
     @Transactional
     public int insert(SyncBusinessEnum businessEnum, String ids, Long count, Long useMills, Integer status,String msg) {
+        return insert(businessEnum.busType(),ids,count,useMills,status,msg);
+    }
+
+    @Override
+    public int insert(String busType, String ids, Long count, Long useMills, Integer status,String msg) {
         SysSyncInfoLog log = new SysSyncInfoLog();
         log.setId(IdWorker.createId());
-        log.setBusinessName(businessEnum.busType());
+        log.setBusinessName(busType);
         log.setPushCount(count.intValue());
         log.setUseTime(useMills);
         log.setStatus(status==null?1:status);

@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhwy.pm.core.sync.mapper.SysSyncInfoLogMapper">
-    <resultMap type="com.hhwy.pm.core.sync.domain.SysSyncInfoLog" id="SysSyncInfoLogResult">
+    <resultMap type="com.hhwy.domain.SysSyncInfoLog" id="SysSyncInfoLogResult">
         <result property="id"    column="id"    />
         <result property="businessName"    column="business_name"    />
         <result property="lastPushId"    column="last_push_id"    />
@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select `id`, `business_name`, `last_push_id`, `push_count`, `use_time`, `status`, `fail_count`, `fail_msg`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `pt_var5` from `sys_sync_info_log`
     </sql>
 
-    <select id="selectSysSyncInfoLogList" parameterType="com.hhwy.pm.core.sync.domain.SysSyncInfoLog" resultMap="SysSyncInfoLogResult">
+    <select id="selectSysSyncInfoLogList" parameterType="com.hhwy.domain.SysSyncInfoLog" resultMap="SysSyncInfoLogResult">
         <include refid="selectSysSyncInfoLogVo"/>
         <where>
             `del_flag` = 0
@@ -60,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSysSyncInfoLogVo"/>
         where `id` = #{id}
     </select>
-    <insert id="insertSysSyncInfoLog" parameterType="com.hhwy.pm.core.sync.domain.SysSyncInfoLog">
+    <insert id="insertSysSyncInfoLog" parameterType="com.hhwy.domain.SysSyncInfoLog">
         insert into `sys_sync_info_log`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -314,7 +314,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
-    <update id="updateSysSyncInfoLog" parameterType="com.hhwy.pm.core.sync.domain.SysSyncInfoLog">
+    <update id="updateSysSyncInfoLog" parameterType="com.hhwy.domain.SysSyncInfoLog">
         update `sys_sync_info_log`
         <trim prefix="SET" suffixOverrides=",">
             <if test="businessName != null">`business_name` = #{businessName},</if>

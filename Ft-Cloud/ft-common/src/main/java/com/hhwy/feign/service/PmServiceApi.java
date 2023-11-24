@@ -1,6 +1,7 @@
 package com.hhwy.feign.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.feign.factory.PmServiceFallbackFactory;
 import com.hhwy.feign.service.domain.CommonQqchMeasureExpRange;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
@@ -41,4 +42,12 @@ public interface PmServiceApi {
      */
     @GetMapping("/qqchPostSetting/getTechDeptList")
     List<QqchPostSetting> getTechDeptList();
+
+    /**
+     * 插入同步日志
+     * @param log
+     * @return
+     */
+    @PostMapping("/syncInfo/insert")
+    AjaxResult insertSyncLog(@RequestBody SysSyncInfoLog log);
 }
