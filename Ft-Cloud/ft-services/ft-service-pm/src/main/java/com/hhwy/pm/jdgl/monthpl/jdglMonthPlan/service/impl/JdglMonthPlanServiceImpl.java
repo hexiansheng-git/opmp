@@ -339,7 +339,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
     }
 
     @Transactional
-    public int updateJdglMonthPlan(JdglMonthPlan jdglMonthPlan) {
+    public JdglMonthPlan updateJdglMonthPlan(JdglMonthPlan jdglMonthPlan) {
 
         Long id = jdglMonthPlan.getId();
         String year = jdglMonthPlan.getYear();
@@ -374,7 +374,8 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         } else {
             jdglMonthPlan.setThisPlanValueDl(BigDecimal.ZERO);
         }
-        return jdglMonthPlanMapper.updateJdglMonthPlan(jdglMonthPlan);
+        jdglMonthPlanMapper.updateJdglMonthPlan(jdglMonthPlan);
+        return jdglMonthPlan;
     }
 
     @Transactional

@@ -81,7 +81,7 @@ public class JdglMonthPlanController extends BaseController {
     // @PreAuthorize(hasPermi = "jdglMonthPlan:update")
     @PostMapping("/update")
     public AjaxResult updateJdglMonthPlan(@Validated(ValidationGroups.Update.class) @RequestBody JdglMonthPlan jdglMonthPlanParam) {
-        return toAjax(jdglMonthPlanService.updateJdglMonthPlan(jdglMonthPlanParam));
+        return AjaxResult.success(jdglMonthPlanService.updateJdglMonthPlan(jdglMonthPlanParam));
     }
 
     // @PreAuthorize(hasPermi = "jdglMonthPlan:update")

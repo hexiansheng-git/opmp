@@ -21,7 +21,7 @@ public interface IJdglMonthPlanService {
 
     int insertJdglMonthPlanList(List<JdglMonthPlan> jdglMonthPlanList);
 
-    int updateJdglMonthPlan(JdglMonthPlan jdglMonthPlan);
+    JdglMonthPlan updateJdglMonthPlan(JdglMonthPlan jdglMonthPlan);
 
     int updateJdglMonthPlanList(List<JdglMonthPlan> jdglMonthPlanList);
 
