@@ -58,6 +58,6 @@ public class DiffAnalysisCorrectConsumerListener implements RocketMQListener<Str
     @Override
     public void prepareStart(DefaultMQPushConsumer defaultMQPushConsumer) {
         defaultMQPushConsumer.setMaxReconsumeTimes(3);
-        defaultMQPushConsumer.setInstanceName("gm");
+        defaultMQPushConsumer.setInstanceName("diff_analysis_correct");
     }
 }
