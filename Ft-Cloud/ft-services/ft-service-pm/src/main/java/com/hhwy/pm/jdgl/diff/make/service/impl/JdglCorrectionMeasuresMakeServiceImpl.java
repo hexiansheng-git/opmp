@@ -144,12 +144,12 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
 
         jdglCorrectionMeasuresMake.setUpdateUser(SecurityUtils.getUserName());
         jdglCorrectionMeasuresMake.setUpdateTime(DateUtils.getNowDate());
-        Date maxDate = treeList.stream().filter(p -> p.getCorrectionCompleteDate() != null)
+        Date maxDate = treeList.stream()
+                .filter(p -> p.getCorrectionCompleteDate() != null)
                 .map(JdglCorrectionMeasuresMakeDetail::getCorrectionCompleteDate)
                 .max(Date::compareTo).orElse(null);
         jdglCorrectionMeasuresMake.setCorrectionDate(maxDate);
         jdglCorrectionMeasuresMakeMapper.updateJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake);
-
 
         if (!CollectionUtils.isEmpty(detailList)) {
             // 树转列表
@@ -162,7 +162,6 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             // 执行更改下操作
             jdglCorrectionMeasuresMakeDetailService.updateJdglCorrectionMeasuresMakeDetailList(treeList);
         }
-
     }
 
     @Transactional
@@ -284,7 +283,9 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
 
         ArrayList<JdglDiffAnalysisSv> objects = new ArrayList<>();
         svList.forEach(p ->{
-            List<JdglDiffAnalysisSv> collect = svListList.stream().filter(p1 -> p.getPtVar5().contains(p1.getPtVar5())).collect(Collectors.toList());
+            List<JdglDiffAnalysisSv> collect = svListList.stream()
+                    .filter(p1 -> p.getPtVar5().contains(p1.getPtVar5())).collect(Collectors.toList());
+            collect.forEach(p2 -> p2.setPlanItemCode(p.getPlanItemCode()));
             objects.addAll(collect);
         });
         List<JdglDiffAnalysisSv> collect = objects.stream().distinct().collect(Collectors.toList());

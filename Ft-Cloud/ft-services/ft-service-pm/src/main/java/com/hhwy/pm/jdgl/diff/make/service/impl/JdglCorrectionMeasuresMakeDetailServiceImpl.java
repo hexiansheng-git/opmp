@@ -96,8 +96,8 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
         JdglCorrectionMeasuresMakeDetail jdglCorrectionMeasuresMakeDetail = new JdglCorrectionMeasuresMakeDetail();
         jdglCorrectionMeasuresMakeDetail.setMakeId(make.getId());
         //只能查看、编辑自己负责的数据，除非当前记录流程已结束
-        if (StrUtil.isNotBlank(make.getTaskStatus()) &&  !make.getTaskStatus().equals("5")) {
-            jdglCorrectionMeasuresMakeDetail.setDirectorId(String.valueOf(userName));
+        if (StrUtil.isNotBlank(make.getTaskStatus()) &&  !make.getTaskStatus().equals("5") && !userName.equals("admin")) {
+            jdglCorrectionMeasuresMakeDetail.setDirectorId(userName);
         }
         return jdglCorrectionMeasuresMakeDetailMapper.getJdglCorrectionMeasuresMakeDetailList(jdglCorrectionMeasuresMakeDetail);
     }
