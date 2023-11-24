@@ -38,7 +38,7 @@ public interface ISgjsTechnicalManageService {
     int deleteSgjsTechnicalManageByPks(List<Long> sgjsTechnicalManagePkList);
 
     /**
-     * 批量保持
+     * 批量保存
      *
      * @param sgjsTechnicalManageVo
      * @return
@@ -51,4 +51,12 @@ public interface ISgjsTechnicalManageService {
      * @return
      */
     AjaxResult sync();
+
+    /**
+     * 项目版数据点击保存后进行总部版同步
+     *
+     * @param list
+     * @return
+     */
+    void syncDataToGm(List<SgjsTechnicalManage> list);
 }

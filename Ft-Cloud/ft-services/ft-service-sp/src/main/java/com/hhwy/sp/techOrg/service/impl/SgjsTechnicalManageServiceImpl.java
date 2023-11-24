@@ -1,6 +1,7 @@
 package com.hhwy.sp.techOrg.service.impl;
 
 import cn.hutool.core.date.DateTime;
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -10,13 +11,16 @@ import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
+import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageInfo;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageVo;
+import com.hhwy.sp.techOrg.mapper.SgjsTechnicalManageInfoMapper;
 import com.hhwy.sp.techOrg.mapper.SgjsTechnicalManageMapper;
 import com.hhwy.sp.techOrg.service.ISgjsTechnicalManageService;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -43,6 +45,10 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
     private PmServiceApi pmServiceApi;
     @Autowired
     private SystemServiceApi systemServiceApi;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private SgjsTechnicalManageInfoMapper sgjsTechnicalManageInfoMapper;
 
 
     private static final Logger logger= LoggerFactory.getLogger(SgjsTechnicalManageServiceImpl.class);
@@ -92,6 +98,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
                 String zeroDictLabel = (String)zeroList.get(0).get("dictLabel");
                 info.setWorkOrNot(zeroDictLabel);
             }
+            info.setLeaf(info.getPtVar2());
         }
         vo.setTreeList(TreeUtil.build(list, 0L));
         return vo;
@@ -162,30 +169,53 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         List<SgjsTechnicalManage> treeToList=null;
         //数据校验
         AjaxResult result=validData(sgjsTechnicalManageVo.getTreeList());
-
         if(result.get("code").toString().equals("200")){
             treeToList=(List<SgjsTechnicalManage>)result.get("data");
         }else {
             return result;
+        }
+        //获取项目信息
+        Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+        if(CollectionUtils.isEmpty(prjInfo)){
+            return AjaxResult.error("获取项目信息异常");
         }
         //删除库中所有数据
         SgjsTechnicalManage info=new SgjsTechnicalManage();
         info.setUpdateTime(DateTime.now());
         info.setUpdateUser(SecurityUtils.getUserId()+"");
         sgjsTechnicalManageMapper.delectAll(info);
-        if(!CollectionUtils.isEmpty(sgjsTechnicalManageVo.getTreeList())){
-            treeToList= TreeUtil.treeToList(sgjsTechnicalManageVo.getTreeList());
-            for (int i = 0; i < treeToList.size(); i++) {
-                SgjsTechnicalManage manage = treeToList.get(i);
-                String actualDateStr = manage.getActualDateStr();
-                if(StringUtils.isNotEmpty(actualDateStr)){
-                    String str = actualDateStr.replaceAll("(?:年|月|日)", "-");
-                    Date date = FtDateUtils.parseDate(str);
-                    manage.setActualDate(date);
-                }
-            }
+        if(CollectionUtils.isEmpty(sgjsTechnicalManageVo.getTreeList())){
+            return AjaxResult.error("数据异常");
         }
+        //数据处理
+        treeToList= TreeUtil.treeToList(sgjsTechnicalManageVo.getTreeList());
+        for (int i = 0; i < treeToList.size(); i++) {
+            SgjsTechnicalManage manage = treeToList.get(i);
+            String actualDateStr = manage.getActualDateStr();
+            if(StringUtils.isNotEmpty(actualDateStr)){
+                String str = actualDateStr.replaceAll("(?:年|月|日)", "-");
+                Date date = FtDateUtils.parseDate(str);
+                manage.setActualDate(date);
+            }
+            Long projectId = (Long)prjInfo.get("projectId");
+            manage.setProjectId(projectId);
+            manage.setProjectName((String) prjInfo.get("projectName"));
+            manage.setPtVar1((String)prjInfo.get("projectCode"));
+        }
+        //入库
         sgjsTechnicalManageMapper.insertSgjsTechnicalManageList(treeToList);
+        //处理离场/进场记录
+        List<String> delIdList = sgjsTechnicalManageVo.getDelIdList();
+        if(!CollectionUtils.isEmpty(delIdList)){
+            //传过来的可能是根节点id   查询根节点下左右子节点id
+            List<Long> idLtr=delIdList.stream().map(Long::valueOf).collect(Collectors.toList());
+            List<SgjsTechnicalManage> list = sgjsTechnicalManageMapper.batchSelect(idLtr);
+            List<String> idList = list.stream().map(e -> e.getId()+"").collect(Collectors.toList());
+            int i = sgjsTechnicalManageInfoMapper.deleteInfoByPIds(idList);
+            logger.info("子表数据删除记录--->【{}】",i);
+        }
+        //同步总部数据
+        syncDataToGm(treeToList);
         return AjaxResult.success();
     }
 
@@ -232,6 +262,64 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         return AjaxResult.success(list);
     }
 
+    /**
+     * 总部版数据同步
+     *
+     * @param treeToList
+     * @return
+     */
+    @Override
+    public void syncDataToGm(List<SgjsTechnicalManage> treeToList) {
+        List<Long> techIdList=new ArrayList<>();
+        diguiTechTree(techIdList,treeToList);
+        //根据techId 批量查询进/离场记录
+        SgjsTechnicalManageInfo info=new SgjsTechnicalManageInfo();
+        info.setTechIdList(techIdList);
+        List<SgjsTechnicalManageInfo> infoList = sgjsTechnicalManageInfoMapper.getSgjsTechnicalManageInfoList(info);
+        // 主表、子表数据一起同步
+        Map<String,Object> map=new HashMap<>();
+        map.put("techList",treeToList);
+        map.put("infoList",infoList);
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try {
+            rocketMQTemplate.convertAndSend("sgjs_technical_group1:tenantSuccess", JSONObject.toJSONString(map));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            String ids = treeToList.stream().map(r->r.getId()+"").collect(Collectors.joining(","));
+            //sysSyncInfoLogService.insert("sgjs_technical_insert",ids,1L,System.currentTimeMillis()-beginMills,status,errMsg);
+        }
+    }
+
+    /**
+     * 递归取id 查进/离场数据
+     *
+     * @param idList
+     * @param treeToList
+     */
+    void diguiTechTree(List<Long> idList,List<SgjsTechnicalManage> treeToList){
+        for (SgjsTechnicalManage info :treeToList) {
+            Long id = info.getId();
+            idList.add(id);
+            if(!CollectionUtils.isEmpty(info.getChildren())){
+                diguiTechTree(idList,treeToList);
+            }
+        }
+
+    }
+
+
+    /**
+     * 递归前期策划
+     *
+     * @param list
+     */
     private void digui(List<QqchPostSetting> list){
         for (QqchPostSetting info:list) {
             //技术部门+技术岗位=岗位
@@ -245,8 +333,6 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             if(StringUtils.isEmpty(info.getPostName())){
                 str=info.getTechDept();
             }
-            //编制人数
-            String headcount = info.getHeadcount();
             if(!StringUtils.isEmpty(str)){
                 info.setPostName(str);
             }
