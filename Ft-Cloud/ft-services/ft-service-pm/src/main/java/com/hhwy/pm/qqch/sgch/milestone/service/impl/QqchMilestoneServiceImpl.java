@@ -147,11 +147,11 @@ public class QqchMilestoneServiceImpl implements IQqchMilestoneService {
 
         BigDecimal version = qqchMilestoneParam.getVersion();
 
-        if(version == null) {
-            throw new RuntimeException("版本参数异常!");
-        }
+//        if(version == null) {
+//            throw new RuntimeException("版本参数异常!");
+//        }
 
-//        BigDecimal version = VersionUtil.getVersion(QqchMilestone.TABLE_NAME, qqchMilestoneParam.getVersion());
+        version = VersionUtil.getVersion(QqchMilestone.TABLE_NAME, version);
         QqchMilestone query = new QqchMilestone();
         query.setVersion(version);
         List<QqchMilestone> qqchMilestoneList = getQqchMilestoneList(query);
