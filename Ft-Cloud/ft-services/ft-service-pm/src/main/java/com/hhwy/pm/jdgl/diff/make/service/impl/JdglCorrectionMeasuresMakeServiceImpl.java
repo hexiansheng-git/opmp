@@ -72,8 +72,10 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         JdglCorrectionMeasuresMake make = jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMake(JdglCorrectionMeasuresMake);
         if (make != null) {
             List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMakeDetailService.getDetailListByMakeId(make);
-            make.setDetailList(TreeUtil.build(detailList, null));
+//            make.setDetailList(TreeUtil.build(detailList, null));
+            make.setDetailList(detailList);
         }
+        FlowInfoSearchUtil.getFlowInfo(make, FlowEnum.JDGL_CORRECTION_MEASURES_MAKE);
         return make;
     }
 
