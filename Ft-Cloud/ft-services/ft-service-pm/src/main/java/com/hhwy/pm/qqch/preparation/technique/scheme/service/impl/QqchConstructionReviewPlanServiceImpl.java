@@ -141,11 +141,13 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         List<QqchConstructionReviewPlan> list = qqchConstructionReviewPlanVo.getList();
         list.stream().forEach(plan -> {
             List<QqchConstructionReviewPlan> children = plan.getChildren();
-            children.stream().forEach(child -> {
-                child.setUpdateUser(SecurityUtils.getUserName());
-                child.setUpdateTime(DateUtils.getNowDate());
-                updateList.add(child);
-            });
+            if(!CollectionUtils.isEmpty(children)){
+                children.stream().forEach(child -> {
+                    child.setUpdateUser(SecurityUtils.getUserName());
+                    child.setUpdateTime(DateUtils.getNowDate());
+                    updateList.add(child);
+                });
+            }
         });
         if (!CollectionUtils.isEmpty(updateList)) {
             // 数据更新
