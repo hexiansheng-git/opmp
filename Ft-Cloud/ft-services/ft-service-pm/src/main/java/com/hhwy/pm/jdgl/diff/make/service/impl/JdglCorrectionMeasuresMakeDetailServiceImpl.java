@@ -77,12 +77,10 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
     }
 
     @Transactional
-    public int deleteJdglCorrectionMeasuresMakeDetail(
-        JdglCorrectionMeasuresMakeDetail jdglCorrectionMeasuresMakeDetail) {
-        jdglCorrectionMeasuresMakeDetail.setUpdateUser(SecurityUtils.getUserName());
-        jdglCorrectionMeasuresMakeDetail.setUpdateTime(DateUtils.getNowDate());
-        return jdglCorrectionMeasuresMakeDetailMapper
-            .deleteJdglCorrectionMeasuresMakeDetail(jdglCorrectionMeasuresMakeDetail);
+    public int deleteJdglCorrectionMeasuresMakeDetail(JdglCorrectionMeasuresMakeDetail jdglCorrectionMeasuresMakeDetail) {
+//        jdglCorrectionMeasuresMakeDetail.setUpdateUser(SecurityUtils.getUserName());
+//        jdglCorrectionMeasuresMakeDetail.setUpdateTime(DateUtils.getNowDate());
+        return jdglCorrectionMeasuresMakeDetailMapper.deleteJdglCorrectionMeasuresMakeDetail(jdglCorrectionMeasuresMakeDetail);
     }
 
     @Transactional

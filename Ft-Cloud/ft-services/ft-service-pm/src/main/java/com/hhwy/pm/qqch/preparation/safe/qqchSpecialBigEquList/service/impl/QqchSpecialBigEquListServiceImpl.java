@@ -130,10 +130,14 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
             String materialName = bean.getMaterialName();
             if (!collect.containsKey(materialName)) {
                 QqchSpecialBigEquList equList = new QqchSpecialBigEquList();
-                equList.setSpec(bean.getMaterialSpec());
-                equList.setEquSourse(bean.getSbPurchaseSource());
-                equList.setProduceFactory(bean.getSbProductFactory());
                 equList.setEquName(bean.getMaterialName());
+                equList.setSpec(bean.getMaterialSpec());
+                equList.setProduceFactory(bean.getSbProductFactory());
+                equList.setPlanEntryDate(bean.getPlanEntryTime());
+                equList.setPlanExitDate(bean.getPlanExitTime());
+                equList.setPersonName(bean.getOperatorName());
+                equList.setFileGroupId(bean.getOperatorCertificate());
+                equList.setEquSourse(bean.getSbPurchaseSource());
                 equList.setWhetherFirst("1");
                 addList.add(equList);
             }

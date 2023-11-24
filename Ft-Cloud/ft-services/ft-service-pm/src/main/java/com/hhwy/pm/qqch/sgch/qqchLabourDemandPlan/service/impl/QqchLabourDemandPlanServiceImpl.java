@@ -246,13 +246,13 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         }
 
         for (QqchLabourDemandPlanDto qqchLabourDemandPlanDto : list2) {
-            Date startTime = qqchLabourDemandPlanDto.getStartTime();
-            Date endTime = qqchLabourDemandPlanDto.getEndTime();
+            Date beginOfMonth = qqchLabourDemandPlanDto.getStartTime();
+            Date endOfMonth = qqchLabourDemandPlanDto.getEndTime();
             for (QqchLabourDemandPlanDto labourDemandPlanDto : list) {
-                Date startTime1 = labourDemandPlanDto.getStartTime();
-                Date endTime1 = labourDemandPlanDto.getEndTime();
-                boolean in = DateUtil.isIn(startTime, startTime1, endTime1);
-                boolean in1 = DateUtil.isIn(endTime, startTime1, endTime1);
+                Date startTime = labourDemandPlanDto.getStartTime();
+                Date endTime = labourDemandPlanDto.getEndTime();
+                boolean in = DateUtil.isIn(startTime, beginOfMonth, endOfMonth);
+                boolean in1 = DateUtil.isIn(endTime, beginOfMonth, endOfMonth);
                 if (in || in1) {
                     qqchLabourDemandPlanDto.setNum(qqchLabourDemandPlanDto.getNum().add(labourDemandPlanDto.getNum()));
                 }
@@ -435,9 +435,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             qqchLabourDemandPlan.setChinaNum(list.stream().map(p -> p.getChinaNum()).reduce(BigDecimal.ZERO, BigDecimal::add));
             qqchLabourDemandPlan.setOutNum(list.stream().map(p -> p.getOutNum()).reduce(BigDecimal.ZERO, BigDecimal::add));
             qqchLabourDemandPlan.setTotal(list.stream().map(p -> p.getTotal()).reduce(BigDecimal.ZERO, BigDecimal::add));
-            if (qqchLabourDemandPlan.getTotal().compareTo(BigDecimal.ZERO) > 0) {
-                qqchLabourDemandPlan.setOutProportion(qqchLabourDemandPlan.getOutNum().multiply(new BigDecimal("100")).divide(qqchLabourDemandPlan.getTotal(), 2, RoundingMode.UP));
-            }
+            qqchLabourDemandPlan.setOutProportion(list.stream().map(p -> p.getOutProportion()).reduce(BigDecimal.ZERO, BigDecimal::add));
             arrayList.add(qqchLabourDemandPlan);
         }
         return arrayList;

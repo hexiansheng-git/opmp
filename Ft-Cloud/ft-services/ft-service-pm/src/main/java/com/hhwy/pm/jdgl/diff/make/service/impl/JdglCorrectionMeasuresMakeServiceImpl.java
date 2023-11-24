@@ -215,7 +215,11 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         qryMake.setWarnPeriod(periodStr);
         JdglCorrectionMeasuresMake make = jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMake(qryMake);
         if (make != null) {
+            //删除该期次历史版本
             jdglCorrectionMeasuresMakeMapper.deleteJdglCorrectionMeasuresMake(qryMake);
+            JdglCorrectionMeasuresMakeDetail makeDetail = new JdglCorrectionMeasuresMakeDetail();
+            makeDetail.setMakeId(qryMake.getId());
+            jdglCorrectionMeasuresMakeDetailService.deleteJdglCorrectionMeasuresMakeDetail(makeDetail);
         }
 
         // 获取差异化分析数据

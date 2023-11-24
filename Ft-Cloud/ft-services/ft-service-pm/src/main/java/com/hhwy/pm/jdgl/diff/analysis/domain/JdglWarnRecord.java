@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.diff.analysis.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -35,6 +36,8 @@ public class JdglWarnRecord extends BaseEntity {
      * 字段描述：当前期次
      */
     @JsonProperty
+    @JsonFormat(pattern = "yyyy-MM")
+    @JSONField(format = "yyyy-MM")
     @Excel(name = "当前期次")
     private Date period;
     /**

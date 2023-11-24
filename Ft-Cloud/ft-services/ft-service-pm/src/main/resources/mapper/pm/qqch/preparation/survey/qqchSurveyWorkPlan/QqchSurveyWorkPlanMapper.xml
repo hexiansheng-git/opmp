@@ -128,8 +128,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="pid != null "> and `pid` = #{pid}</if>
                             <if test="planWbsId != null "> and `plan_wbs_id` = #{planWbsId}</if>
                             <if test="planWbsPid != null "> and `plan_wbs_pid` = #{planWbsPid}</if>
-                            <if test="planWbsCode != null  and planWbsCode != ''"> and `plan_wbs_code` = #{planWbsCode}</if>
-                            <if test="planWbsName != null  and planWbsName != ''"> and `plan_wbs_name` = #{planWbsName}</if>
+                            <if test="planWbsCode != null  and planWbsCode != ''"> and `plan_wbs_code` like concat('%', #{planWbsCode}, '%')</if>
+                            <if test="planWbsName != null  and planWbsName != ''"> and `plan_wbs_name` like concat('%', #{planWbsName}, '%')</if>
                             <if test="workContent != null  and workContent != ''"> and `work_content` = #{workContent}</if>
                             <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
                             <if test="workNum != null  and workNum != ''"> and `work_num` = #{workNum}</if>
