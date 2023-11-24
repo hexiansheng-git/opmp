@@ -27,5 +27,5 @@ public interface ISgjsDiscloseRecordService {
 
     int deleteSgjsDiscloseRecordByPks(List<Long> sgjsDiscloseRecordPkList);
 
-    int importData(List<SgjsDiscloseRecord> sgjsDiscloseRecordList);
+    int importData(List<SgjsDiscloseRecord> sgjsDiscloseRecordList, String dataType);
 }

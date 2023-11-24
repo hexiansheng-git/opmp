@@ -29,4 +29,6 @@ public interface SgjsDiscloseRecordMapper {
     int deleteSgjsDiscloseRecordByPks(@Param("sgjsDiscloseRecordPkList") List<Long> sgjsDiscloseRecordPkList);
 
     List<SgjsDiscloseRecord> getSgjsDiscloseRecordListByNames(@Param("list") List<String> discloseNames);
+
+    List<SgjsDiscloseRecord> getSgjsDiscloseRecordListByIds(@Param("list") List<Long> sgjsDiscloseRecordPkList);
 }

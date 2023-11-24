@@ -11,6 +11,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
 import com.hhwy.sp.sgjsDiscloseRecord.mapper.SgjsDiscloseRecordMapper;
 import com.hhwy.sp.sgjsDiscloseRecord.service.ISgjsDiscloseRecordService;
+import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
 
     @Autowired
     private SgjsDiscloseRecordMapper sgjsDiscloseRecordMapper;
+    @Autowired
+    private ISysSyncInfoService4Sp syncInfoService;
 
 
     public SgjsDiscloseRecord getSgjsDiscloseRecord(SgjsDiscloseRecord sgjsDiscloseRecord) {
@@ -74,6 +77,7 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
         if(CollectionUtils.isEmpty(sgjsDiscloseRecordList)) {
             return 0;
         }
+        String dataType = sgjsDiscloseRecordList.get(0).getDataType();
         List<SgjsDiscloseRecord> addList = new ArrayList<>();
         List<SgjsDiscloseRecord> updateList = new ArrayList<>();
 
@@ -93,8 +97,27 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
         if(CollectionUtils.isNotEmpty(updateList)) {
             i = i + sgjsDiscloseRecordMapper.updateSgjsDiscloseRecordList(updateList);
         }
+        if(i > 0) {
+            pushDataToHeadquarters(dataType);
+        }
         return i;
     }
+
+    /**
+     * 推送数据到总部
+     * @param
+     */
+    public void pushDataToHeadquarters(String dataType) {
+        if(StringUtils.isEmpty(dataType)) {
+            return;
+        }
+        SgjsDiscloseRecord sgjsDiscloseRecord = new SgjsDiscloseRecord();
+        sgjsDiscloseRecord.setDataType(dataType);
+        List<SgjsDiscloseRecord> sgjsDiscloseRecordList = getSgjsDiscloseRecordList(sgjsDiscloseRecord);
+        if(CollectionUtils.isNotEmpty(sgjsDiscloseRecordList)) {
+            syncInfoService.pushSgjsDiscloseRecord(sgjsDiscloseRecordList);
+        }
+    };
 
     @Transactional
     public int deleteSgjsDiscloseRecord(SgjsDiscloseRecord sgjsDiscloseRecord) {
@@ -103,7 +126,16 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
 
     @Transactional
     public int deleteSgjsDiscloseRecordByPks(List<Long> sgjsDiscloseRecordPkList) {
-        return sgjsDiscloseRecordMapper.deleteSgjsDiscloseRecordByPks(sgjsDiscloseRecordPkList);
+        int i = sgjsDiscloseRecordMapper.deleteSgjsDiscloseRecordByPks(sgjsDiscloseRecordPkList);
+        if(i > 0) {
+            List<SgjsDiscloseRecord> sgjsDiscloseRecordList = sgjsDiscloseRecordMapper.getSgjsDiscloseRecordListByIds(sgjsDiscloseRecordPkList);
+            if(CollectionUtils.isNotEmpty(sgjsDiscloseRecordList)){
+                String dataType = sgjsDiscloseRecordList.get(0).getDataType();
+                pushDataToHeadquarters(dataType);
+            }
+        }
+
+        return i;
     }
 
     public List<SgjsDiscloseRecord> getSgjsDiscloseRecordListByNames(List<String> discloseNames) {
@@ -111,13 +143,14 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
     }
 
     @Override
-    public int importData(List<SgjsDiscloseRecord> sgjsDiscloseRecordList) {
+    public int importData(List<SgjsDiscloseRecord> sgjsDiscloseRecordList, String dataType) {
         if(CollectionUtils.isEmpty(sgjsDiscloseRecordList)) {
             return 0;
         }
         List<String> discloseNames = sgjsDiscloseRecordList.stream().map(SgjsDiscloseRecord::getDiscloseName).collect(Collectors.toList());
         List<SgjsDiscloseRecord> exists = getSgjsDiscloseRecordListByNames(discloseNames);
         for (SgjsDiscloseRecord sgjsDiscloseRecord : sgjsDiscloseRecordList) {
+            sgjsDiscloseRecord.setDataType(dataType);
             String discloseName = sgjsDiscloseRecord.getDiscloseName();
             sgjsDiscloseRecord.setIsAdd("1");
             if(CollectionUtils.isNotEmpty(exists)) {

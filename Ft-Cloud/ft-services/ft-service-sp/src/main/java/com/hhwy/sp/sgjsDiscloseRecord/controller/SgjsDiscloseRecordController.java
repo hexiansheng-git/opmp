@@ -125,11 +125,11 @@ public class SgjsDiscloseRecordController extends BaseController {
     }
 
     @PostMapping("/importData")
-    public AjaxResult importData(@RequestParam("file") MultipartFile file) {
+    public AjaxResult importData(@RequestParam("file") MultipartFile file,@RequestParam("dataType") String dataType) {
         try {
             ExcelUtils<SgjsDiscloseRecord> excelUtils = new ExcelUtils<>(SgjsDiscloseRecord.class);
             List<SgjsDiscloseRecord> sgjsDiscloseRecordList = excelUtils.importExcel("sheet1", file.getInputStream());
-            sgjsDiscloseRecordService.importData(sgjsDiscloseRecordList);
+            sgjsDiscloseRecordService.importData(sgjsDiscloseRecordList, dataType);
             return AjaxResult.success(sgjsDiscloseRecordList);
         } catch (Exception e) {
             throw new RuntimeException(e);

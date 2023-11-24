@@ -175,6 +175,19 @@
             </where>
         </where>
     </select>
+    <select id="getSgjsDiscloseRecordListByIds"
+            resultType="com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord">
+        <include refid="selectSgjsDiscloseRecordVo"/>
+        <where>
+            del_flag = "0"
+            <where>
+                and `id` in
+                <foreach item="id" collection="list" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </where>
+        </where>
+    </select>
 
     <insert id="insertSgjsDiscloseRecord" useGeneratedKeys="true" keyProperty="id">
         insert into sgjs_disclose_record
