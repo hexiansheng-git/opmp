@@ -9,6 +9,7 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.tree.TreeNode;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author lcf
@@ -218,6 +219,16 @@ public class SgjsTechnicalManage extends TreeNode<SgjsTechnicalManage> {
     private Date actualDateBegin;
 
     private Date actualDateEnd;
+    //在场/离场日期记录数据
+    private List<SgjsTechnicalManageInfo> infoList;
+
+    public List<SgjsTechnicalManageInfo> getInfoList() {
+        return infoList;
+    }
+
+    public void setInfoList(List<SgjsTechnicalManageInfo> infoList) {
+        this.infoList = infoList;
+    }
 
     public String getActualDateStr() {
         return actualDateStr;

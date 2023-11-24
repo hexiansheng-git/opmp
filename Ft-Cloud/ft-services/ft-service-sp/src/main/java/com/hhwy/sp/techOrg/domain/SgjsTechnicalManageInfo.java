@@ -9,6 +9,7 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author lcf
@@ -175,6 +176,16 @@ public class SgjsTechnicalManageInfo extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5"    )
     private String ptVar5;
+
+    private List<Long> techIdList;
+
+    public List<Long> getTechIdList() {
+        return techIdList;
+    }
+
+    public void setTechIdList(List<Long> techIdList) {
+        this.techIdList = techIdList;
+    }
 
     @JsonIgnore
     public Long getId() {

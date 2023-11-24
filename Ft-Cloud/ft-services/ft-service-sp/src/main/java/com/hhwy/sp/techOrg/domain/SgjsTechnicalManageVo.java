@@ -12,6 +12,9 @@ import java.util.List;
  */
 @Data
 public class SgjsTechnicalManageVo{
-
+    //新增数据
     private List<SgjsTechnicalManage> treeList;
+    //删除id
+    private List<String> delIdList;
+
 }

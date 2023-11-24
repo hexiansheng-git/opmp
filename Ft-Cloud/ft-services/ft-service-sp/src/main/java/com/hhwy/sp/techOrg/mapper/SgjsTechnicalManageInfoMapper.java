@@ -27,4 +27,12 @@ public interface SgjsTechnicalManageInfoMapper {
     int deleteSgjsTechnicalManageInfo(SgjsTechnicalManageInfo sgjsTechnicalManageInfo);
 
     int deleteSgjsTechnicalManageInfoByPks(@Param("sgjsTechnicalManageInfoPkList") List<Long> sgjsTechnicalManageInfoPkList);
+
+    /**
+     * 根据主表id进行子表数据删除
+     *
+     * @param techIdList
+     * @return
+     */
+    int deleteInfoByPIds(@Param("techIdList") List<String> techIdList);
 }

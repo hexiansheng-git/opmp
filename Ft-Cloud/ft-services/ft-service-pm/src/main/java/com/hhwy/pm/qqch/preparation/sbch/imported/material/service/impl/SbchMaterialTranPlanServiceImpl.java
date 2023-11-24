@@ -195,7 +195,7 @@ public class SbchMaterialTranPlanServiceImpl implements ISbchMaterialTranPlanSer
                 JyDetailsUtil.jyDetails(detailList, ValidationGroups.Save.class);
             }
             for (SbchMaterialTranPlanDetail sbchMaterialTranPlanDetail : detailList) {
-                BeanUtils.copyProperties(sbchMaterialTranPlan,sbchMaterialTranPlanDetail);
+                BeanUtils.copyProperties(sbchMaterialTranPlan,sbchMaterialTranPlanDetail, "fileGroupId");
                 sbchMaterialTranPlanDetail.setPlanId(sbchMaterialTranPlan.getId());
                 EntityUtils.setCreateInfo(sbchMaterialTranPlanDetail);
                 sbchMaterialTranPlanDetail.setId(IdWorker.createId());
