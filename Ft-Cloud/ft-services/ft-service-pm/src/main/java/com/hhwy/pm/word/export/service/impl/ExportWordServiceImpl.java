@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.deepoove.poi.XWPFTemplate;
 import com.deepoove.poi.config.Configure;
 import com.deepoove.poi.data.PictureRenderData;
+import com.deepoove.poi.data.PictureType;
 import com.deepoove.poi.data.Pictures;
 import com.deepoove.poi.plugin.table.LoopRowTableRenderPolicy;
 import com.deepoove.poi.util.PoitlIOUtils;
@@ -26,7 +27,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -126,14 +129,28 @@ public class ExportWordServiceImpl implements ExportWordService {
         /*设置工程地理位置附件*/
         String locationImageGroupId = projectInfo.getLocationImageGroupId();
         List<PictureRenderData> locationPictureList = this.getPictureRenderDataList(locationImageGroupId);
-        List<Map<String,PictureRenderData>> listMap = new ArrayList<>();
+        List<Map<String,PictureRenderData>> locationList = new ArrayList<>();
         for (PictureRenderData pictureRenderData : locationPictureList) {
             Map<String,PictureRenderData> map = new HashMap<>();
             map.put("locationPicture",pictureRenderData);
-            listMap.add(map);
+            locationList.add(map);
         }
-        projectWordData.setLocationPictureList(listMap);
+        projectWordData.setLocationPictureList(locationList);
+
+        /*设置工程结构形式附件*/
+        String structureImageGroupId = projectInfo.getStructureImageGroupId();
+        List<PictureRenderData> structurePictureList = this.getPictureRenderDataList(structureImageGroupId);
+        List<Map<String,PictureRenderData>> structureList = new ArrayList<>();
+        for (PictureRenderData pictureRenderData : structurePictureList) {
+            Map<String,PictureRenderData> map = new HashMap<>();
+            map.put("structurePicture",pictureRenderData);
+            structureList.add(map);
+        }
+        projectWordData.setStructurePictureList(structureList);
     }
+
+    /*图片基础宽度*/
+    private static final int BASE_WIDTH = 500;
 
     /**
      * 获取附件组id关联的所有图片流
@@ -160,8 +177,20 @@ public class ExportWordServiceImpl implements ExportWordService {
                 continue;
             }
             InputStream is = new ByteArrayInputStream(body);
-            PictureRenderData pictureRenderData = Pictures.ofStream(is).size(180, 180).create();
-            pictureRenderDataList.add(pictureRenderData);
+            try {
+                BufferedImage image = ImageIO.read(is);
+                int width = image.getWidth();
+                int height = image.getHeight();
+                if(width > BASE_WIDTH){
+                    double times = (double) width / BASE_WIDTH;
+                    width = (int) Math.round(width / times);
+                    height = (int) Math.round(height / times);
+                }
+                PictureRenderData pictureRenderData = Pictures.ofBufferedImage(image, PictureType.suggestFileType(fileDto.getExtension())).size(width, height).create();
+                pictureRenderDataList.add(pictureRenderData);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         return pictureRenderDataList;
     }

@@ -123,4 +123,8 @@ public class ProjectWordData {
      * 字段描述：工程地理位置附件集合
      */
     private List<Map<String,PictureRenderData>> locationPictureList;
+    /**
+     * 字段描述：工程结构形式附件集合
+     */
+    private List<Map<String,PictureRenderData>> structurePictureList;
 }

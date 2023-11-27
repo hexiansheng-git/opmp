@@ -21,4 +21,6 @@ public class FileDto {
     private String contextType;
     @JsonProperty
     private String filePath;
+    @JsonProperty
+    private String extension;
 }
