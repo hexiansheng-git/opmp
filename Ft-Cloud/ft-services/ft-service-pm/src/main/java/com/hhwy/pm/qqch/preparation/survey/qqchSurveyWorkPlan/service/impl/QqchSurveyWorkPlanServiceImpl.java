@@ -21,10 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -120,8 +117,8 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
         allLinkList.forEach(p -> {
             QqchSurveyWorkPlan qqchSurveyWorkPlan = new QqchSurveyWorkPlan();
             qqchSurveyWorkPlan.setId(p.getId());
-            qqchSurveyWorkPlan.setPlanWbsCode(p.getWbsCode());
-            qqchSurveyWorkPlan.setPlanWbsName(p.getWbsName());
+            qqchSurveyWorkPlan.setPlanWbsCode(p.getItemCode());
+            qqchSurveyWorkPlan.setPlanWbsName(p.getItemName());
             qqchSurveyWorkPlan.setUnit(p.getUnit());
             qqchSurveyWorkPlan.setWorkNum(String.valueOf(p.getQuantity()));
             qqchSurveyWorkPlan.setStartTime(p.getStartDate());
@@ -135,7 +132,16 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
         Map<String, List<QqchSurveyWorkPlan>> collect = originList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getWorkContent()) && StrUtil.isNotBlank(p.getRemark()))
                 .collect(Collectors.groupingBy(QqchSurveyWorkPlan::getPlanWbsCode));
-        Set<QqchSurveyWorkPlan> qqchSurveyWorkPlans = CollectionUtil.unionDistinct(originList, transBeanList);
+        HashMap<String, QqchSurveyWorkPlan> objects = new HashMap<>();
+        for (int i = 0; i < originList.size(); i++) {
+            QqchSurveyWorkPlan qqchSurveyWorkPlan = originList.get(i);
+            objects.put(qqchSurveyWorkPlan.getPlanWbsCode(), qqchSurveyWorkPlan);
+        }
+        for (int i = 0; i < transBeanList.size(); i++) {
+            QqchSurveyWorkPlan qqchSurveyWorkPlan = transBeanList.get(i);
+            objects.put(qqchSurveyWorkPlan.getPlanWbsCode(), qqchSurveyWorkPlan);
+        }
+        List<QqchSurveyWorkPlan> qqchSurveyWorkPlans = objects.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
         qqchSurveyWorkPlans.forEach(p -> {
             if (collect.containsKey(p.getPlanWbsCode())) {
                 QqchSurveyWorkPlan qqchSurveyWorkPlan = collect.get(p.getPlanWbsCode()).get(0);
@@ -143,8 +149,7 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
                 p.setRemark(qqchSurveyWorkPlan.getRemark());
             }
         });
-        ArrayList<QqchSurveyWorkPlan> qqchSurveyWorkPlans1 = new ArrayList<>(qqchSurveyWorkPlans);
-        List<QqchSurveyWorkPlan> build = TreeUtil.build(qqchSurveyWorkPlans1, null);
+        List<QqchSurveyWorkPlan> build = TreeUtil.build(qqchSurveyWorkPlans, null);
         return build;
     }
 }
