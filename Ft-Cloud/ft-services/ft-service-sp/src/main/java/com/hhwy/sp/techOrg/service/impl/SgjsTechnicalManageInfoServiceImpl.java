@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author lcf
@@ -42,6 +43,10 @@ public class SgjsTechnicalManageInfoServiceImpl implements ISgjsTechnicalManageI
 
     @Transactional
     public int insertSgjsTechnicalManageInfoList(List<SgjsTechnicalManageInfo> sgjsTechnicalManageInfoList) {
+        //删掉之前的再次新增
+        List<String> techIds = sgjsTechnicalManageInfoList.stream().map(e -> e.getTechId()+"").distinct().collect(Collectors.toList());
+        sgjsTechnicalManageInfoMapper.deleteInfoByTechIds(techIds);
+        //删完再新增
         for (SgjsTechnicalManageInfo sgjsTechnicalManageInfo : sgjsTechnicalManageInfoList) {
             sgjsTechnicalManageInfo.setId(IdWorker.createId());
             sgjsTechnicalManageInfo.setCreateUser(SecurityUtils.getUserName());

@@ -51,6 +51,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
     private SgjsTechnicalManageInfoMapper sgjsTechnicalManageInfoMapper;
 
 
+
     private static final Logger logger= LoggerFactory.getLogger(SgjsTechnicalManageServiceImpl.class);
 
     public SgjsTechnicalManage getSgjsTechnicalManage(SgjsTechnicalManage sgjsTechnicalManage) {
@@ -211,7 +212,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             List<Long> idLtr=delIdList.stream().map(Long::valueOf).collect(Collectors.toList());
             List<SgjsTechnicalManage> list = sgjsTechnicalManageMapper.batchSelect(idLtr);
             List<String> idList = list.stream().map(e -> e.getId()+"").collect(Collectors.toList());
-            int i = sgjsTechnicalManageInfoMapper.deleteInfoByPIds(idList);
+            int i = sgjsTechnicalManageInfoMapper.deleteInfoByTechIds(idList);
             logger.info("子表数据删除记录--->【{}】",i);
         }
         //同步总部数据
@@ -226,32 +227,42 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
      * @return
      */
     private AjaxResult validData(List<SgjsTechnicalManage>list) {
-        String msg="";
-        String s = validDataDigui(list, msg);
-        if(StringUtils.isNotEmpty(s)){
+        List<String> msgList=new ArrayList<>();
+        validDataDigui(list, msgList);
+        if(CollectionUtils.isEmpty(msgList)){
             return AjaxResult.success(list);
         }
+        String msg = StringUtils.join(msgList, ",");
         return AjaxResult.error(msg);
     }
 
-   private String validDataDigui(List<SgjsTechnicalManage>list,String msg){
-        for (int i = 0; i < list.size(); i++) {
-            Integer headCount = list.get(i).getHeadCount();
-            if(headCount>0){
-                String userName = list.get(i).getUserName();
-                if(StringUtils.isEmpty(userName)){
-                    msg=msg+list.get(i).getPostName()+"的姓名不能为空";
-                }
-                Date actualDate = list.get(i).getActualDate();
-                if(null==actualDate){
-                    msg=msg+list.get(i).getPostName()+"的姓名不能为空";
-                }
-            }
-            if(!CollectionUtils.isEmpty(list.get(i).getChildren())){
-                validDataDigui(list,msg);
-            }
-        }
-        return msg;
+   private void validDataDigui(List<SgjsTechnicalManage>list,List<String> msgList){
+       for (SgjsTechnicalManage info:list ) {
+           Integer headCount = info.getHeadCount();
+           List<SgjsTechnicalManage> children = info.getChildren();
+           //headCount的量  校验实际进场和人员姓名
+           if(headCount==children.size()){
+               for (int i = 0; i < children.size(); i++) {
+                   if(null!=children.get(i).getHeadCount() && children.get(i).getHeadCount()>0){
+                       //实际日期
+                       String actualDateStr = children.get(i).getActualDateStr();
+                       if(StringUtils.isEmpty(actualDateStr)){
+                           msgList.add(info.getPostName()+"实际进场不能为空");
+                       }
+                       String userName = children.get(i).getUserName();
+                       if(StringUtils.isEmpty(userName)){
+                           msgList.add(info.getPostName()+"人员姓名不能为空");
+                       }
+                   }
+               }
+           }else{
+
+           }
+
+           if(!CollectionUtils.isEmpty(info.getChildren())){
+               validDataDigui(info.getChildren(),msgList);
+           }
+       }
     }
 
     @Override
@@ -337,7 +348,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
                 info.setPostName(str);
             }
             if(!CollectionUtils.isEmpty(info.getChildren())){
-                digui(list);
+                digui(info.getChildren());
             }
         }
     }

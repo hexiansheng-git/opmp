@@ -460,7 +460,7 @@
         </where>
     </update>
 
-    <update id="deleteInfoByPIds">
+    <update id="deleteInfoByTechIds">
         update `sgjs_technical_manage_info` set del_flag = 1
         <where>
             `tech_id` in

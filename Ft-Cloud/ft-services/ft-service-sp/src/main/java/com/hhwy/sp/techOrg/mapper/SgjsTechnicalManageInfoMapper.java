@@ -34,5 +34,5 @@ public interface SgjsTechnicalManageInfoMapper {
      * @param techIdList
      * @return
      */
-    int deleteInfoByPIds(@Param("techIdList") List<String> techIdList);
+    int deleteInfoByTechIds(@Param("techIdList") List<String> techIdList);
 }
