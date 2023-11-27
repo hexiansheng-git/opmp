@@ -2,6 +2,7 @@ package com.hhwy.pm.jdgl.diff.track.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.hhwy.common.core.utils.DateUtils;
@@ -222,11 +223,13 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
     @Transactional
     public void weekTimerTrack() {
         //时间参数处理
-        Date date = new Date();
+        Date dateTime = new Date();
+        //默认生成上一周的数据
+        DateTime date = DateUtil.offsetWeek(dateTime, -1);
         int thisYear = DateUtil.thisYear();
         int thisMonth = DateUtil.thisMonth();
         Date beginOfMonth = DateUtil.beginOfMonth(date);
-        Date endOfMonth = DateUtil.beginOfMonth(date);
+        Date endOfMonth = DateUtil.endOfMonth(date);
         Date beginOfWeek = DateUtil.beginOfWeek(date);
         Date endOfWeek = DateUtil.endOfWeek(date);
         //处理年初和年尾日期

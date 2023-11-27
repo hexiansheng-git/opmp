@@ -6,10 +6,16 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.domain.QqchSurveyWorkPlan;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.domain.QqchSurveyWorkPlanVo;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.service.IQqchSurveyWorkPlanService;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
+import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
+import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author ldd
@@ -23,6 +29,9 @@ public class QqchSurveyWorkPlanController extends BaseController {
 
     @Autowired
     private IQqchSurveyWorkPlanService qqchSurveyWorkPlanService;
+
+    @Autowired
+    IQqchMainPlanItemService qqchMainPlanItemService;
 
 
 
@@ -65,6 +74,18 @@ public class QqchSurveyWorkPlanController extends BaseController {
         qqchSurveyWorkPlanService.confirm(qqchSurveyWorkPlanVo);
         return AjaxResult.success(qqchSurveyWorkPlanVo);
     }
+
+
+    /**
+     *  弹窗功能，获取选中的作业的所有上下级作业
+     */
+    @PostMapping("/getActivityByids")
+    public AjaxResult getActivityByids(Long[] ids) {
+        List<QqchMainPlanItem> allLinkList = qqchMainPlanItemService.getAllLinkList(Arrays.asList(ids));
+        List<QqchMainPlanItem> build = TreeUtil.build(allLinkList, null);
+        return AjaxResult.success(build);
+    }
+
 
 
 }
