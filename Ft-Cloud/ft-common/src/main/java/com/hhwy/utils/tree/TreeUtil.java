@@ -4,14 +4,10 @@ import cn.hutool.core.comparator.CompareUtil;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TreeUtil {
 
@@ -162,6 +158,7 @@ public class TreeUtil {
         int sort = 1;
         for (T node : source) {
             node.setSort(sort++);
+            node.setPid(null);
             node.setLevel(splitWithLevel(node, result, 0));
         }
         return result;
