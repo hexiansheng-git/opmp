@@ -2,6 +2,9 @@ package com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.service;
 
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.domain.QqchSurveyWorkPlan;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.domain.QqchSurveyWorkPlanVo;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
+
+import java.util.List;
 
 /**
  * @author ldd
@@ -18,4 +21,6 @@ public interface IQqchSurveyWorkPlanService {
     void save(QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo);
 
     void confirm(QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo);
+
+    List<QqchSurveyWorkPlan> handleActivityData(QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo);
 }

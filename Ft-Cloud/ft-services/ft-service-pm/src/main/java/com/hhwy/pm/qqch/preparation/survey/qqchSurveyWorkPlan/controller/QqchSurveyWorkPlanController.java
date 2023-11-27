@@ -30,9 +30,6 @@ public class QqchSurveyWorkPlanController extends BaseController {
     @Autowired
     private IQqchSurveyWorkPlanService qqchSurveyWorkPlanService;
 
-    @Autowired
-    IQqchMainPlanItemService qqchMainPlanItemService;
-
 
 
     /**
@@ -77,12 +74,11 @@ public class QqchSurveyWorkPlanController extends BaseController {
 
 
     /**
-     *  弹窗功能，获取选中的作业的所有上下级作业
+     *  弹窗功能，整合弹框选中和列表中的数据
      */
     @PostMapping("/getActivityByids")
-    public AjaxResult getActivityByids(Long[] ids) {
-        List<QqchMainPlanItem> allLinkList = qqchMainPlanItemService.getAllLinkList(Arrays.asList(ids));
-        List<QqchMainPlanItem> build = TreeUtil.build(allLinkList, null);
+    public AjaxResult handleActivityData(@RequestBody QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo) {
+        List<QqchSurveyWorkPlan> build = qqchSurveyWorkPlanService.handleActivityData(qqchSurveyWorkPlanVo);
         return AjaxResult.success(build);
     }
 

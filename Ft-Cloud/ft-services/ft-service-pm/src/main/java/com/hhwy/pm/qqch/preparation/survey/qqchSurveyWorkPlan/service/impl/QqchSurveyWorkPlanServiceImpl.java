@@ -1,5 +1,7 @@
 package com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -10,6 +12,8 @@ import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.domain.QqchSurveyW
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.mapper.QqchSurveyWorkPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.service.IQqchSurveyWorkPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
+import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -17,7 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author ldd
@@ -33,6 +42,9 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private IQqchMainPlanItemService qqchMainPlanItemService;
+
 
 
 
@@ -92,4 +104,47 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
         qqchSurveyWorkPlanMapper.insertQqchSurveyWorkPlanList(insertList);
     }
 
+    @Override
+    public List<QqchSurveyWorkPlan> handleActivityData(QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo) {
+        List<QqchSurveyWorkPlan> originList = qqchSurveyWorkPlanVo.getQqchSurveyWorkPlanList();
+        List<QqchMainPlanItem> newList = qqchSurveyWorkPlanVo.getQqchMainPlanItemList();
+        if (CollectionUtil.isEmpty(newList)) {
+            return originList;
+        }
+//        List<QqchMainPlanItem> qqchMainPlanItems = TreeUtil.treeToList(newList);
+        List<Long> ids = newList.stream().map(QqchMainPlanItem::getId).collect(Collectors.toList());
+        //获取选中数据的所有上下级
+        List<QqchMainPlanItem> allLinkList = qqchMainPlanItemService.getAllLinkList(ids);
+
+        List<QqchSurveyWorkPlan> transBeanList = new ArrayList<>();
+        allLinkList.forEach(p -> {
+            QqchSurveyWorkPlan qqchSurveyWorkPlan = new QqchSurveyWorkPlan();
+            qqchSurveyWorkPlan.setId(p.getId());
+            qqchSurveyWorkPlan.setPlanWbsCode(p.getWbsCode());
+            qqchSurveyWorkPlan.setPlanWbsName(p.getWbsName());
+            qqchSurveyWorkPlan.setUnit(p.getUnit());
+            qqchSurveyWorkPlan.setWorkNum(String.valueOf(p.getQuantity()));
+            qqchSurveyWorkPlan.setStartTime(p.getStartDate());
+            qqchSurveyWorkPlan.setEndTime(p.getFinishDate());
+            qqchSurveyWorkPlan.setPid(p.getPid());
+            transBeanList.add(qqchSurveyWorkPlan);
+        });
+        if (CollectionUtil.isEmpty(originList)) {
+            return transBeanList;
+        }
+        Map<String, List<QqchSurveyWorkPlan>> collect = originList.stream()
+                .filter(p -> StrUtil.isNotBlank(p.getWorkContent()) && StrUtil.isNotBlank(p.getRemark()))
+                .collect(Collectors.groupingBy(QqchSurveyWorkPlan::getPlanWbsCode));
+        Set<QqchSurveyWorkPlan> qqchSurveyWorkPlans = CollectionUtil.unionDistinct(originList, transBeanList);
+        qqchSurveyWorkPlans.forEach(p -> {
+            if (collect.containsKey(p.getPlanWbsCode())) {
+                QqchSurveyWorkPlan qqchSurveyWorkPlan = collect.get(p.getPlanWbsCode()).get(0);
+                p.setWorkContent(qqchSurveyWorkPlan.getWorkContent());
+                p.setRemark(qqchSurveyWorkPlan.getRemark());
+            }
+        });
+        ArrayList<QqchSurveyWorkPlan> qqchSurveyWorkPlans1 = new ArrayList<>(qqchSurveyWorkPlans);
+        List<QqchSurveyWorkPlan> build = TreeUtil.build(qqchSurveyWorkPlans1, null);
+        return build;
+    }
 }

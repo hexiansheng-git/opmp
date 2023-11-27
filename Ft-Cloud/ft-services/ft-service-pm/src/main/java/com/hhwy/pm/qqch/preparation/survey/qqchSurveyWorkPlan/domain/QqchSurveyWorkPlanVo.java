@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.domain;
 
 import com.hhwy.pm.qqch.constant.ConfirmStatus;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -30,7 +31,12 @@ public class QqchSurveyWorkPlanVo {
     private String buttonMark;
 
     /**
-     * 字段描述：完整设计交接情况集合
+     * 字段描述：列表集合
      */
     private List<QqchSurveyWorkPlan> qqchSurveyWorkPlanList;
+
+    /**
+     * 字段描述：弹框选中的集合
+     */
+    private List<QqchMainPlanItem> qqchMainPlanItemList;
 }
