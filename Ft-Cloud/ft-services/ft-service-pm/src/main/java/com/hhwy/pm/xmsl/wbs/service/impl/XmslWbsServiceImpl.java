@@ -176,7 +176,14 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         return xmslWbsMapper.getXmslWbsList(xmslWbs);
     }
 
-    
+    @Override
+    public List<XmslWbs> getXmslWbsHistoryList(Long mainId) {
+        XmslWbs query = new XmslWbs();
+        query.setMainId(mainId);
+        query.setParams(ObjectUtils.toMap("tableName","xmsl_wbs_history"));
+        return getXmslWbsListByTname(query);
+    }
+
     @Override
     public List<XmslWbs> getXmslWbsList(XmslWbs xmslWbs) {
         xmslWbs.setParams(ObjectUtils.toMap("tableName","xmsl_wbs"));
@@ -422,7 +429,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                 try{
                     if(RedissonLockUtil.lock(key)){
                         Long count = xmslWbsMapper.countByWbs(new XmslWbs());
-                        int limitSize = 3;
+                        int limitSize = 1000;
                         Long pages = count/limitSize+(count%limitSize>0?1:0);
                         Map<String,String> codeIdMap = new ConcurrentHashMap<>(limitSize); //wbsCode : wbsId
                         Map<String,String> redisMap = new ConcurrentHashMap<>(limitSize);
@@ -521,6 +528,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         for (int i = 0; i < list.size(); i++) {
             XmslWbsHistory temp = list.get(i);
             temp.setPtVar2(StringUtils.isBlank(temp.getPtVar2())?"-1":temp.getPtVar2()); //ptVar2 变更状态添加默认值
+            temp.setName(ObjectUtils.nvlString(temp.getPartCode())+""+ObjectUtils.nvlString(temp.getPtVar3()));
             temp.setMainId(dto.getMainId());
             //若wbs有子级，清除清单编号。20230804 玉涛需求
             if(temp.getHaveChildren() == Constant.YES_INT){

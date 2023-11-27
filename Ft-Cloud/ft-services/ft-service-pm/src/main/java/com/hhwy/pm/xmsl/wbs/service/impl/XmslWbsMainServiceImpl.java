@@ -20,6 +20,7 @@ import com.hhwy.utils.*;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -233,7 +234,10 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                 Map<String,XmslWbs> lastWbsMap = new HashMap<>(10000);
                 //加载上一版本的wbs
                 if(effect != null){
-                    List<XmslWbs> lastList = wbsService.getByMainId(effect.getId());
+                    List<XmslWbs> lastList = wbsService.getXmslWbsHistoryList(effect.getId());
+                    if(CollectionUtils.isEmpty(lastList))
+                        lastList = wbsService.getByMainId(effect.getId());
+//                    List<XmslWbs> lastList = wbsService.getByMainId(effect.getId());
                     for (int i = 0; i < lastList.size(); i++) {
                         XmslWbs temp = lastList.get(i);
                         lastWbsMap.put(temp.getCode(), temp);
@@ -267,6 +271,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
             }catch(Exception e){
                 e.printStackTrace();
                 log.error("wbs加载祖级名称&塞redis失败，mainid:{},消息：{}",main.getId(),e.getMessage());
+                throw e;
             }finally {
                 DynamicDataSourceContextHolder.poll();
                 DynamicDataSourceContextHolder.push(oldDataSource);
@@ -285,12 +290,14 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
     private void compareVersionFlag(XmslWbs wbs,Map<String,XmslWbs> lastWbsMap,List<XmslWbs> updateList){
         if(MapUtils.isEmpty(lastWbsMap))
             return ;
+//        if(wbs.getCode().equals("0") || wbs.getCode().equals("777") || wbs.getCode().equals("0-1") )
+//            System.out.println(1);
         XmslWbs oldWbs = lastWbsMap.get(wbs.getCode());
         //版本修改状态，1:原数据修改,2:新增数据，3：禁用（仅生效数据）
         String flag = null;
         if(oldWbs == null ){  //新增数据
             flag = "2";
-        }else if(oldWbs.getStatus() == Constant.NO_INT && wbs.getStatus() == Constant.YES_INT){
+        }else if(oldWbs.getStatus() == Constant.YES_INT && wbs.getStatus() == Constant.NO_INT){
             flag = "3";
         }else if(!StringUtils.equals(oldWbs.toString(), wbs.toString())){
             flag = "1";
