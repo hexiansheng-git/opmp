@@ -6,7 +6,9 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpPerson;
+import com.hhwy.pm.qqch.preparation.measureexp.range.dto.QqchMeasureExpDTO;
 import com.hhwy.pm.qqch.preparation.measureexp.range.mapper.QqchMeasureExpPersonMapper;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpPersonService;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
@@ -152,13 +154,20 @@ public class QqchMeasureExpPersonServiceImpl implements IQqchMeasureExpPersonSer
     }
 
     @Override
-    @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
-    public void saveList(List<QqchMeasureExpPerson> personList) {
-        if (CollectionUtils.isEmpty(personList)) return;
-        for (QqchMeasureExpPerson qqchMeasureExpPerson : personList) {
+    public void saveList(QqchMeasureExpDTO expVO) {
+        //删除旧数据
+        QqchMeasureExpPerson delParam = new QqchMeasureExpPerson();
+        delParam.setVersion(expVO.getVersion());
+        delParam.setDataType(expVO.getDataType());
+        qqchMeasureExpPersonMapper.deleteQqchMeasureExpPerson(delParam);
+
+        List<QqchMeasureExpPerson> qqchMeasureExpPeople = CompileEntity.dealSaveDto(expVO, expVO.getPersonList());
+        if (CollectionUtils.isEmpty(qqchMeasureExpPeople)) return;
+        for (QqchMeasureExpPerson qqchMeasureExpPerson : qqchMeasureExpPeople) {
             qqchMeasureExpPerson.setId(IdWorker.createId());
+            qqchMeasureExpPerson.setDataType(expVO.getDataType());
         }
-        EntityUtils.setCreateUpdateInfo(personList);
-        this.qqchMeasureExpPersonMapper.insertQqchMeasureExpPersonList(personList);
+        EntityUtils.setCreateUpdateInfo(qqchMeasureExpPeople);
+        this.qqchMeasureExpPersonMapper.insertQqchMeasureExpPersonList(qqchMeasureExpPeople);
     }
 }

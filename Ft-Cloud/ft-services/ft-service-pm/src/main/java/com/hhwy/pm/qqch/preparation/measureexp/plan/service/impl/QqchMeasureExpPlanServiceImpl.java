@@ -1,24 +1,21 @@
 package com.hhwy.pm.qqch.preparation.measureexp.plan.service.impl;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.CompileInterface;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
-import com.hhwy.pm.qqch.preparation.measureexp.plan.service.IQqchMeasureExpPlanService;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.pm.qqch.preparation.measureexp.plan.mapper.QqchMeasureExpPlanMapper;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.domain.QqchMeasureExpPlan;
+import com.hhwy.pm.qqch.preparation.measureexp.plan.mapper.QqchMeasureExpPlanMapper;
+import com.hhwy.pm.qqch.preparation.measureexp.plan.service.IQqchMeasureExpPlanService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author mls
@@ -89,11 +86,18 @@ public class QqchMeasureExpPlanServiceImpl implements IQqchMeasureExpPlanService
     }
 
     @Override
-    @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
-    public void saveTree(List<QqchMeasureExpPlan> dtos) {
-        this.checkData(dtos);
-        if (CollectionUtils.isEmpty(dtos)) return;
-        this.qqchMeasureExpPlanMapper.insertQqchMeasureExpPlanList(dtos);
+    public void saveTree(CompileEntity<List<QqchMeasureExpPlan>> map) {
+        //删除旧数据
+        QqchMeasureExpPlan delParam = new QqchMeasureExpPlan();
+        delParam.setVersion(map.getVersion());
+        delParam.setDataType(map.getDataType());
+        qqchMeasureExpPlanMapper.deleteQqchMeasureExpPlan(delParam);
+
+        //插入新数据
+        List<QqchMeasureExpPlan> dto = map.dealSaveDto();
+        this.checkData(dto);
+        if (CollectionUtils.isEmpty(dto)) return;
+        this.qqchMeasureExpPlanMapper.insertQqchMeasureExpPlanList(dto);
     }
 
     private void checkData(List<QqchMeasureExpPlan> dtos) {

@@ -1,20 +1,17 @@
 package com.hhwy.pm.qqch.preparation.measureexp.range.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpRange;
-import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureOrg;
 import com.hhwy.pm.qqch.preparation.measureexp.range.dto.QqchMeasureExpDTO;
 import com.hhwy.pm.qqch.preparation.measureexp.range.mapper.QqchMeasureExpRangeMapper;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpPersonService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpRangeService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureOrgService;
 import com.hhwy.utils.idworker.IdWorker;
-import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -104,13 +101,19 @@ public class QqchMeasureExpRangeServiceImpl implements IQqchMeasureExpRangeServi
 
 
     @Override
-    @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
-    public void saveTreeList(List<QqchMeasureExpRange> expRangeList) {
-        if (CollectionUtils.isEmpty(expRangeList)) return;
-        for (QqchMeasureExpRange qqchMeasureExpRange : expRangeList) {
-            qqchMeasureExpRange.setDataType(expRangeList.get(0).getDataType());
+    public void saveTreeList(QqchMeasureExpDTO expVO) {
+        //删除旧数据
+        QqchMeasureExpRange delParam = new QqchMeasureExpRange();
+        delParam.setVersion(expVO.getVersion());
+        delParam.setDataType(expVO.getDataType());
+        qqchMeasureExpRangeMapper.deleteQqchMeasureExpRange(delParam);
+
+        List<QqchMeasureExpRange> qqchMeasureExpRanges = CompileEntity.dealSaveDto(expVO, expVO.getExpRangeList());
+        if (CollectionUtils.isEmpty(qqchMeasureExpRanges)) return;
+        for (QqchMeasureExpRange qqchMeasureExpRange : qqchMeasureExpRanges) {
+            qqchMeasureExpRange.setDataType(expVO.getDataType());
         }
-        this.qqchMeasureExpRangeMapper.insertQqchMeasureExpRangeList(expRangeList);
+        this.qqchMeasureExpRangeMapper.insertQqchMeasureExpRangeList(qqchMeasureExpRanges);
     }
 
     @Override

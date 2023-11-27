@@ -1,8 +1,9 @@
 package com.hhwy.pm.qqch.preparation.measureexp.plan.service;
 
-import java.util.List;
-
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.domain.QqchMeasureExpPlan;
+
+import java.util.List;
 
 /**
  * @author mls
@@ -27,7 +28,7 @@ public interface IQqchMeasureExpPlanService {
 
     int deleteQqchMeasureExpPlanByPks(List<Long> qqchMeasureExpPlanPkList);
 
-    void saveTree(List<QqchMeasureExpPlan> dtos);
+    void saveTree(CompileEntity<List<QqchMeasureExpPlan>> map);
 
     List<QqchMeasureExpPlan> getQqchMeasureExpPlanListByVersion(QqchMeasureExpPlan qqchMeasureExpPlanParam);
 }

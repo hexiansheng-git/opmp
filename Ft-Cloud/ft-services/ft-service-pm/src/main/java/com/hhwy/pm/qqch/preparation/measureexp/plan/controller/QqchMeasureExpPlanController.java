@@ -1,26 +1,22 @@
 package com.hhwy.pm.qqch.preparation.measureexp.plan.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.domain.QqchMeasureExpPlan;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.service.IQqchMeasureExpPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 工作计划
@@ -62,9 +58,7 @@ public class QqchMeasureExpPlanController extends BaseController {
 //    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:add")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchMeasureExpPlan>> map) {
-
-        List<QqchMeasureExpPlan> dto = map.dealSaveDto();
-        qqchMeasureExpPlanService.saveTree(dto);
+        qqchMeasureExpPlanService.saveTree(map);
         return AjaxResult.success("操作成功");
     }
 

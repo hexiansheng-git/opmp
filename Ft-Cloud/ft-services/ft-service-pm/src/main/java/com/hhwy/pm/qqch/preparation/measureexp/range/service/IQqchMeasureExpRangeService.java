@@ -1,9 +1,9 @@
 package com.hhwy.pm.qqch.preparation.measureexp.range.service;
 
-import java.util.List;
-
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpRange;
 import com.hhwy.pm.qqch.preparation.measureexp.range.dto.QqchMeasureExpDTO;
+
+import java.util.List;
 
 /**
  * @author mls
@@ -31,7 +31,7 @@ public interface IQqchMeasureExpRangeService {
     List<QqchMeasureExpRange> getQqchMeasureExpRangeListByVersion(QqchMeasureExpRange qqchMeasureExpRangeParam);
     
 
-    void saveTreeList(List<QqchMeasureExpRange> expRangeList);
+    void saveTreeList(QqchMeasureExpDTO expVO);
 
     void saveAll(QqchMeasureExpDTO expVO);
     

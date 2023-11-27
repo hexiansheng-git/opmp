@@ -1,16 +1,17 @@
 package com.hhwy.pm.qqch.preparation.measureexp.range.mapper;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpRange;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author mls
  * @date 2023-07-25 18:01:34
- * @remark 
+ * @remark
  */
 public interface QqchMeasureExpRangeMapper {
-                                                                                                                                                                                                                                                                                        
+
     QqchMeasureExpRange getQqchMeasureExpRange(QqchMeasureExpRange qqchMeasureExpRange);
 
     List<QqchMeasureExpRange> getQqchMeasureExpRangeList(QqchMeasureExpRange qqchMeasureExpRange);
@@ -21,9 +22,9 @@ public interface QqchMeasureExpRangeMapper {
 
     int updateQqchMeasureExpRange(QqchMeasureExpRange qqchMeasureExpRange);
 
-            int updateQqchMeasureExpRangeList(@Param("qqchMeasureExpRangeList") List<QqchMeasureExpRange> qqchMeasureExpRangeList);
-    
+    int updateQqchMeasureExpRangeList(@Param("qqchMeasureExpRangeList") List<QqchMeasureExpRange> qqchMeasureExpRangeList);
+
     int deleteQqchMeasureExpRange(QqchMeasureExpRange qqchMeasureExpRange);
 
-            int deleteQqchMeasureExpRangeByPks(@Param("qqchMeasureExpRangePkList") List<Long> qqchMeasureExpRangePkList);
-    }
+    int deleteQqchMeasureExpRangeByPks(@Param("qqchMeasureExpRangePkList") List<Long> qqchMeasureExpRangePkList);
+}

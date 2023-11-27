@@ -4,11 +4,9 @@ import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpPerson;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpRange;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureOrg;
-import com.hhwy.utils.JsonUtils;
 import lombok.Data;
 import lombok.ToString;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -20,10 +18,4 @@ public class QqchMeasureExpDTO extends CompileEntity<QqchMeasureExpDTO> {
     private QqchMeasureOrg org;
     private List<QqchMeasureExpRange> expRangeList;
     private List<QqchMeasureExpPerson> personList;
-    
-    
-    
-    
-    
-    
 }

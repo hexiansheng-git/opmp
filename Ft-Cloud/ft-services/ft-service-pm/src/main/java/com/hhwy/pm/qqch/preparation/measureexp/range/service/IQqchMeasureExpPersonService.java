@@ -1,8 +1,9 @@
 package com.hhwy.pm.qqch.preparation.measureexp.range.service;
 
-import java.util.List;
-
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpPerson;
+import com.hhwy.pm.qqch.preparation.measureexp.range.dto.QqchMeasureExpDTO;
+
+import java.util.List;
 
 /**
  * @author mls
@@ -38,7 +39,7 @@ public interface IQqchMeasureExpPersonService {
     /**
      * 保存列表
      *
-     * @param personList
+     * @param expVO
      */
-    void saveList(List<QqchMeasureExpPerson> personList);
+    void saveList(QqchMeasureExpDTO expVO);
 }
