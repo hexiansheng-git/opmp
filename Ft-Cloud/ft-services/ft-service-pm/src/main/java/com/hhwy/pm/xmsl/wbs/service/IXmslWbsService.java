@@ -62,6 +62,8 @@ public interface IXmslWbsService {
      */
     List<XmslWbs> getXmslWbsList(XmslWbs xmslWbs);
 
+    List<XmslWbs> getXmslWbsHistoryList(Long mainId);
+
     /**
      * 获取wbs的所有子级
      * @param ids wbsId数组
