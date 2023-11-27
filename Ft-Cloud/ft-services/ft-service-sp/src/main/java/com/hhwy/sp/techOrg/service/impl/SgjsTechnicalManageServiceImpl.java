@@ -198,7 +198,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
                 Date date = FtDateUtils.parseDate(str);
                 manage.setActualDate(date);
             }
-            Long projectId = (Long)prjInfo.get("projectId");
+            Long projectId = Long.parseLong(prjInfo.get("projectId")+"");
             manage.setProjectId(projectId);
             manage.setProjectName((String) prjInfo.get("projectName"));
             manage.setPtVar1((String)prjInfo.get("projectCode"));
