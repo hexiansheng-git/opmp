@@ -39,6 +39,8 @@ public class Constant {
     //0-未发起; 1审核中; 4-流程已结束,业务未结束; 5-流程和业务都已结束'
     public static final String TASK_STATUS_END = "4";
 
-
-
+    /** 总部版token字段名 **/
+    public static final String AUTHORIZATION="Authorization";
+    /*租户标识*/
+    public static final String TENANT_KEY = "tenantKey";
 }
