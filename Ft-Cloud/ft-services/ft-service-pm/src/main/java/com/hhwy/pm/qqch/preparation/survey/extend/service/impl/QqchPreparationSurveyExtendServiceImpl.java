@@ -59,21 +59,19 @@ public class QqchPreparationSurveyExtendServiceImpl implements IQqchPreparationS
      */
     @Transactional
     public void preserveFile(String moduleIdentity, BigDecimal version, String fileGroupId){
-        if(StringUtils.isBlank(fileGroupId)){
-            return;
-        }
-        //查询当前是否已插入附件数据
-        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = new QqchPreparationSurveyExtend();
-        qqchPreparationSurveyExtend.setModuleIdentity(moduleIdentity);
-        qqchPreparationSurveyExtend.setVersion(version);
-        qqchPreparationSurveyExtend.setFileGroupId(fileGroupId);
-        QqchPreparationSurveyExtend extend = qqchPreparationSurveyExtendMapper.getQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
+        //删除附件数据
+        QqchPreparationSurveyExtend delParam = new QqchPreparationSurveyExtend();
+        delParam.setModuleIdentity(moduleIdentity);
+        delParam.setVersion(version);
+        qqchPreparationSurveyExtendMapper.deleteQqchPreparationSurveyExtend(delParam);
 
-        if(extend == null){
-            qqchPreparationSurveyExtend.setValid(Valid.YES);
-            qqchPreparationSurveyExtend.setValid(Valid.YES);
-            this.insertQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
-        }
+        //插入新数据
+        QqchPreparationSurveyExtend addData = new QqchPreparationSurveyExtend();
+        addData.setFileGroupId(fileGroupId);
+        addData.setModuleIdentity(moduleIdentity);
+        addData.setVersion(version);
+        addData.setValid(Valid.YES);
+        this.insertQqchPreparationSurveyExtend(addData);
     }
 
     /**
