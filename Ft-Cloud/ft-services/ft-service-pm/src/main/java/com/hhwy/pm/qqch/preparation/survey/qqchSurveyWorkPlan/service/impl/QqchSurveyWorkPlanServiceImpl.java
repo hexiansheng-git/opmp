@@ -21,9 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author ldd
@@ -49,7 +51,7 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
         BigDecimal version = VersionUtil.getVersion("qqch_survey_work_plan",qqchSurveyWorkPlan.getVersion());
         qqchSurveyWorkPlan.setVersion(version);
         List<QqchSurveyWorkPlan> qqchSurveyWorkPlanList = qqchSurveyWorkPlanMapper.getQqchSurveyWorkPlanList(qqchSurveyWorkPlan);
-        List<QqchSurveyWorkPlan> qqchSurveyWorkPlans = TreeUtil.build(qqchSurveyWorkPlanList, 0l);
+        List<QqchSurveyWorkPlan> qqchSurveyWorkPlans = TreeUtil.build(qqchSurveyWorkPlanList, null);
         QqchSurveyWorkPlanVo vo = new QqchSurveyWorkPlanVo();
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
@@ -94,21 +96,18 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
             qqchSurveyWorkPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchSurveyWorkPlan.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             qqchSurveyWorkPlan.setCreateTime(DateUtils.getNowDate());
-            if(qqchSurveyWorkPlan.getPid()==null){
-                qqchSurveyWorkPlan.setPid(0l);
-            }
+
         }
         qqchSurveyWorkPlanMapper.insertQqchSurveyWorkPlanList(insertList);
     }
 
     @Override
     public List<QqchSurveyWorkPlan> handleActivityData(QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo) {
-        List<QqchSurveyWorkPlan> originList = qqchSurveyWorkPlanVo.getQqchSurveyWorkPlanList();
+        List<QqchSurveyWorkPlan> originTreeList = qqchSurveyWorkPlanVo.getQqchSurveyWorkPlanList();
         List<QqchMainPlanItem> newList = qqchSurveyWorkPlanVo.getQqchMainPlanItemList();
         if (CollectionUtil.isEmpty(newList)) {
-            return originList;
+            return originTreeList;
         }
-//        List<QqchMainPlanItem> qqchMainPlanItems = TreeUtil.treeToList(newList);
         List<Long> ids = newList.stream().map(QqchMainPlanItem::getId).collect(Collectors.toList());
         //获取选中数据的所有上下级
         List<QqchMainPlanItem> allLinkList = qqchMainPlanItemService.getAllLinkList(ids);
@@ -117,18 +116,23 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
         allLinkList.forEach(p -> {
             QqchSurveyWorkPlan qqchSurveyWorkPlan = new QqchSurveyWorkPlan();
             qqchSurveyWorkPlan.setId(p.getId());
+            qqchSurveyWorkPlan.setPlanWbsId(StrUtil.isBlank(p.getWbsObjectId())?1L:Long.valueOf(p.getWbsObjectId()));
+            qqchSurveyWorkPlan.setPlanWbsPid(StrUtil.isBlank(p.getWbsParentObjectId())?null:Long.valueOf(p.getWbsParentObjectId()));
             qqchSurveyWorkPlan.setPlanWbsCode(p.getItemCode());
             qqchSurveyWorkPlan.setPlanWbsName(p.getItemName());
             qqchSurveyWorkPlan.setUnit(p.getUnit());
-            qqchSurveyWorkPlan.setWorkNum(String.valueOf(p.getQuantity()));
+            qqchSurveyWorkPlan.setWorkNum(p.getQuantity() == null ? "0" : String.valueOf(p.getQuantity()));
             qqchSurveyWorkPlan.setStartTime(p.getStartDate());
             qqchSurveyWorkPlan.setEndTime(p.getFinishDate());
-            qqchSurveyWorkPlan.setPid(p.getPid());
+            Long pid = p.getPid();
+            qqchSurveyWorkPlan.setPid(pid);
+            if ( null == pid ) qqchSurveyWorkPlan.setPlanWbsPid(null);
             transBeanList.add(qqchSurveyWorkPlan);
         });
-        if (CollectionUtil.isEmpty(originList)) {
-            return transBeanList;
+        if (CollectionUtil.isEmpty(originTreeList)) {
+            return build(transBeanList, null);
         }
+        List<QqchSurveyWorkPlan> originList = TreeUtil.treeToListWithoutId(originTreeList);
         Map<String, List<QqchSurveyWorkPlan>> collect = originList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getWorkContent()) && StrUtil.isNotBlank(p.getRemark()))
                 .collect(Collectors.groupingBy(QqchSurveyWorkPlan::getPlanWbsCode));
@@ -149,7 +153,37 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
                 p.setRemark(qqchSurveyWorkPlan.getRemark());
             }
         });
-        List<QqchSurveyWorkPlan> build = TreeUtil.build(qqchSurveyWorkPlans, null);
+        List<QqchSurveyWorkPlan> build = build(qqchSurveyWorkPlans, null);
         return build;
+    }
+
+    /**
+     * 根据pid，构建树节点
+     */
+    public static List<QqchSurveyWorkPlan> build(List<QqchSurveyWorkPlan> treeNodes, Long pid) {
+        if (CollectionUtils.isEmpty(treeNodes)) {
+            return new ArrayList<>();
+        }
+        treeNodes.forEach(treeVO -> {
+
+            List<QqchSurveyWorkPlan> nChildren = treeNodes.stream().filter((item) -> treeVO.getPlanWbsId().equals(item.getPlanWbsPid()))
+                    .collect(Collectors.toList());
+
+            List<QqchSurveyWorkPlan> oChildren = treeVO.getChildren();
+            if (CollectionUtils.isNotEmpty(oChildren)) {
+                nChildren = CollectionUtils.isEmpty(nChildren) ? new ArrayList<>() : nChildren;
+                nChildren.addAll(oChildren);
+            }
+            treeVO.setChildren(nChildren);
+        });
+        List<QqchSurveyWorkPlan> collect;
+        if (pid == null) {
+            collect = treeNodes.stream().filter((item) -> item.getPlanWbsPid() == null)
+                    .collect(Collectors.toList());
+        } else {
+            collect = treeNodes.stream().filter((item) -> pid.equals(item.getPlanWbsPid()))
+                    .collect(Collectors.toList());
+        }
+        return collect;
     }
 }
