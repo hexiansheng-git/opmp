@@ -108,6 +108,56 @@ public class TWbsServiceImpl implements ITWbsService {
     }
 
     @Override
+    public List<TWbs> wbsTreeList(Map map) {
+        if(ObjectUtils.isBlank(map.get("engineeringType")))
+            return new ArrayList<>(2);
+        Long mainId = tWbsMapper.getEffectMainIdByType(map.get("engineeringType").toString());
+        if(mainId == null)
+            return new ArrayList<>(2);
+        TWbs query = new TWbs();
+        query.setMainId(mainId);
+        query.setCode(map.get("code")!=null?map.get("code").toString():null);
+        query.setName(map.get("name")!=null?map.get("name").toString():null);
+        List<TWbs> list = this.getTWbsList(query);
+        //查询出祖级对象
+        Set<Long> pidSet = new HashSet<>();
+        for (int i = 0; i < list.size(); i++) {
+            TWbs temp = list.get(i);
+            List<Long> pidList = StringUtils.isBlank(temp.getAncestors())?new ArrayList<>(2):Arrays.asList(com.hhwy.common.core.text.Convert.toLongArray(temp.getAncestors()));
+            pidList.remove(temp.getId());
+            pidSet.addAll(pidList);
+        }
+        if(CollectionUtils.isNotEmpty(pidSet)){
+            query = new TWbs();
+            query.setParams(ObjectUtils.toMap("ids",pidSet));
+            List<TWbs> tempList = this.getTWbsList(query);
+            list.addAll(0,tempList);
+        }
+        //转树形
+        Map<String,TWbs> wbsMap = new HashMap<>();
+        for (int i = 0; i < list.size(); i++) {
+            TWbs temp = list.get(i);
+            wbsMap.put(temp.getId(),temp);
+        }
+        List<TWbs> resuList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            TWbs temp = list.get(i);
+            if(temp.getLevel()==1){
+                resuList.add(temp);
+                continue;
+            }
+            TWbs parent = wbsMap.get(temp.getParentId());
+            if(parent==null)
+                continue;
+            if(parent.getChildren() == null){
+                parent.setChildren(new ArrayList<>(10));
+            }
+            parent.getChildren().add(temp);
+        }
+        return resuList;
+    }
+
+    @Override
     public Map<String, List<TWbs>> copyChildList(Long[] ids) {
         List<TWbs> historyList = tWbsMapper.getTWbsParentList(ids);
         //子级id : 最上级id

@@ -46,6 +46,17 @@ public class TWbsController extends BaseController{
         return AjaxResult.success(list);
     }
 
+    /**
+     * 获取生效版本的wbs（全量）
+     * @param map
+     * @return
+     */
+    @PostMapping("/effectTreeList")
+    public AjaxResult effectTreeList(@RequestBody Map map) {
+        List<TWbs> list = tWbsService.wbsTreeList(map);
+        return AjaxResult.success(list);
+    }
+
     @PostMapping("/detail")
     public AjaxResult detail(@RequestBody TWbs wbs) {
         TWbs query = new TWbs();

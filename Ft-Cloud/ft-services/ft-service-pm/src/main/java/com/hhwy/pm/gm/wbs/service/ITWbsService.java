@@ -36,6 +36,13 @@ public interface ITWbsService {
     List<TWbs> lazySearchList(TWbs tWbs);
 
     /**
+     * wbs全量树形
+     * @param map
+     * @return
+     */
+    public List<TWbs> wbsTreeList(Map map);
+
+    /**
      * 拷贝数据
      * @param ids
      * @return
