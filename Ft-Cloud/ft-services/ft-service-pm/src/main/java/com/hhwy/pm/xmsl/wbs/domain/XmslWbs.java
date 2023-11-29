@@ -252,7 +252,7 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     @JsonProperty
     private String ptVar3;
     /**
-     * 字段描述：预留字段4
+     * 字段描述：p6对应的wbsID,推送到p6时需要用到
      */
     @JsonProperty
     private String ptVar4;

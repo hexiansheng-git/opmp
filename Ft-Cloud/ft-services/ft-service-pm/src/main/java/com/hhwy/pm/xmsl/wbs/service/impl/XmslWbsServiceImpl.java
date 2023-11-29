@@ -518,8 +518,11 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         saveMain(dto);
         //2、明细数据
         List<XmslWbsHistory> list = dto.getList();
-        if(CollectionUtils.isEmpty(list) && StringUtils.isBlank(dto.getDelIds()))
+        if(CollectionUtils.isEmpty(list) && StringUtils.isBlank(dto.getDelIds())){
+            submitCheck(dto);
             return ;
+        }
+
         List<XmslWbsHistory> addList = new ArrayList<>();
         List<XmslWbsHistory> updateList = new ArrayList<>();
         //前端新增数据的ID都为uid,需要替换为后端生成的id
@@ -561,11 +564,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         if(StringUtils.isNotBlank(dto.getDelIds())){
             wbsHistoryService.deleteXmslWbsHistoryByPks(Arrays.asList(Convert.toLongArray(dto.getDelIds())));
         }
-        //如果为提交，校验所有wbs必填项
-        if(Constant.YES_INT.equals(dto.getSubmitFlag())){
-            String wrongCodes = this.xmslWbsMapper.countWbsOnlyOne(dto.getMainId());
-            Assert.isTrue(StringUtils.isBlank(wrongCodes),"wbs编号为:["+wrongCodes+"]的数据未填写项目部位（桩号）或标准WBS名称");
-        }
+        //提交校验
+        submitCheck(dto);
     }
     
     private void saveMain(XmslWbsDto dto){
@@ -615,6 +615,14 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         XmslWbsMain wbsMain = this.wbsMainService.getById(dto.getMainId());
         Assert.notNull(wbsMain,"mainId有误，获取主数据失败");
         Assert.isTrue(wbsMain.getValid()==Constant.NO_INT,"已生效的数据无法编辑");
+    }
+
+    private void submitCheck(XmslWbsDto dto){
+        //如果为提交，校验所有wbs必填项
+        if(Constant.YES_INT.equals(dto.getSubmitFlag())){
+            String wrongCodes = this.xmslWbsMapper.countWbsOnlyOne(dto.getMainId());
+            Assert.isTrue(StringUtils.isBlank(wrongCodes),"wbs编号为:["+wrongCodes+"]的数据未填写项目部位（桩号）或标准WBS名称");
+        }
     }
 
     public String getSnowId(String id,Map<String,String> idRepalceMap){
