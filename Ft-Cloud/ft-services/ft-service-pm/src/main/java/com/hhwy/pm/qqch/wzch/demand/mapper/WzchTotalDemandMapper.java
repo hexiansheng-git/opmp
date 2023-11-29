@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.wzch.demand.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand;
@@ -67,6 +68,8 @@ public interface WzchTotalDemandMapper {
      * @return 结果
      */
     int deleteWzchTotalDemandByIds(String[] ids);
+
+    int deleteWzchTotalDemandByVersion(BigDecimal version);
 
     /**
      * 通过id列表查询

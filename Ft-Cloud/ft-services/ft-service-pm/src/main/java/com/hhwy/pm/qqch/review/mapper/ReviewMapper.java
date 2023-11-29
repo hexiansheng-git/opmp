@@ -47,4 +47,5 @@ public interface ReviewMapper {
      * @return
      */
     Review getApprovedData();
+
 }

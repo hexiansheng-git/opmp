@@ -14,6 +14,8 @@ import java.util.List;
 @Data
 public class WzchTotalDemandDetailVO extends PreparationEntity {
 
+    private Long id;
+
     private String viewType; //视角类型 Y-年 M-月 Q-季
     
     private List<WzchTotalDemandDetail> wzchTotalDemandDetailList;

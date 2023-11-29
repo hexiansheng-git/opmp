@@ -34,6 +34,8 @@ import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandValidVO;
 import com.hhwy.pm.qqch.wzch.enums.YesOrNoEnum;
 import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
 import com.hhwy.pm.qqch.wzch.source.service.IWzchSourceService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.MaterialUtils;
@@ -94,6 +96,8 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
     private IQqchTotalDemandTimeCountService qqchTotalDemandTimeCountService;
     @Autowired
     private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
+    @Autowired
+    private IXmslProjectBasicInfoService projectBasicInfoService;
 
     /**
      * 查询物资总需用详情
@@ -181,11 +185,12 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         fillWzchTotalDemand(wzchTotalDemand);
         fillWzchTotalDemandDetail(wzchTotalDemand);
 
+
         WzchTotalDemand demand = wzchTotalDemandService.selectWzchTotalDemandById(wzchTotalDemand.getId());
         if (demand != null) {
             wzchTotalDemandService.updateWzchTotalDemand(wzchTotalDemand);
         } else {
-            wzchTotalDemand.setId(IdWorker.createId());
+            buildDefaultTotalDemand(wzchTotalDemand);
             wzchTotalDemandService.insertWzchTotalDemand(wzchTotalDemand);
         }
         wzchTotalDemandDetailMapper.deleteByVersion(wzchTotalDemand.getVersion());
@@ -202,6 +207,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
                     time.setVersion(wzchTotalDemand.getVersion());
                 }
                 wzchTotalDemandDetail.setVersion(wzchTotalDemand.getVersion());
+                wzchTotalDemandDetail.setTotalDemandId(wzchTotalDemand.getId());
             }
             wzchTotalDemandDetailMapper.batchInsert(wzchTotalDemandDetailList);
             List<Long> detailIds = wzchTotalDemandDetailList.stream().map(WzchTotalDemandDetail::getId).collect(Collectors.toList());
@@ -233,6 +239,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
     @Transactional
     public void syncQqchTotal(BigDecimal version) {
         //1、删除物资总需、日期明细
+        wzchTotalDemandMapper.deleteWzchTotalDemandByVersion(version);
         this.wzchTotalDemandDetailMapper.deleteByVersion(version);
         wzchTotalDemandTimeCountService.deleteByVersion(version);
         //2、获取施工策划  
@@ -245,6 +252,9 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         query.setVersion(version);
         List<QqchTotalDemandTimeCount> timeCountList = qqchTotalDemandTimeCountService.getQqchTotalDemandTimeCountList(query);
         //3、转换为物资总需
+        WzchTotalDemand totalDemand = new WzchTotalDemand();
+        totalDemand.setVersion(version);
+        buildDefaultTotalDemand(totalDemand);
         List<WzchTotalDemandDetail> addList = new ArrayList<>(totalDemandList.size());
         List<WzchTotalDemandTimeCount> addTimeList = new ArrayList<>(timeCountList.size());
         for (int i = 0; i < totalDemandList.size(); i++) {
@@ -253,6 +263,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
             BeanUtils.copyProperties(temp, tempTotal);
             tempTotal.setCategoryName(temp.getMaterialType());
             new AddBaseInfoUtil().addBaseEntity(tempTotal);
+            tempTotal.setTotalDemandId(totalDemand.getId());
             addList.add(tempTotal);
         }
         for (int i = 0; i < timeCountList.size(); i++) {
@@ -274,9 +285,11 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
             tempTotal.setThirdQuarterNum(quarter3);
             tempTotal.setFourthQuarterNum(quarter4);
             tempTotal.setYearNum(yearSum);
+
             new AddBaseInfoUtil().addBaseEntity(tempTotal);
             addTimeList.add(tempTotal);
         }
+        this.wzchTotalDemandService.insertWzchTotalDemand(totalDemand);
         this.wzchTotalDemandDetailMapper.batchInsert(addList);
         this.wzchTotalDemandTimeCountService.batchInsert(addTimeList);
         
@@ -494,6 +507,23 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         if (wzchTotalDemand.getDeptId() == null) {
             wzchTotalDemand.setDeptId(SecurityUtils.getSysUser().getDeptId());
         }
+    }
+
+    /**
+     * 构建默认的主表对象
+     * @param version
+     */
+    private WzchTotalDemand buildDefaultTotalDemand(WzchTotalDemand totalDemand){
+        totalDemand.setId(IdWorker.createId());
+        totalDemand.setDemandCode("");   //单据编号
+        totalDemand.setTitle("物资总需用"+totalDemand.getVersion());
+        totalDemand.setPrjCode(SecurityUtils.getTenantKey());
+        new AddBaseInfoUtil<>(totalDemand);
+        totalDemand.setDeptId(SecurityUtils.getSysUser().getDeptId());
+        ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+        totalDemand.setProjectId(projectBasicInfo.getProjectId());
+        totalDemand.setProjectName(projectBasicInfo.getProjectName());
+        return totalDemand;
     }
 
     @Override

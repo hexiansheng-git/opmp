@@ -104,6 +104,14 @@ public class WzchTotalDemandServiceImpl implements IWzchTotalDemandService
         return wzchTotalDemandMapper.selectWzchTotalDemandById(id);
     }
 
+    @Override
+    public WzchTotalDemand selectByVersion(BigDecimal version){
+        WzchTotalDemand query = new WzchTotalDemand();
+        query.setVersion(version);
+        List<WzchTotalDemand> list = wzchTotalDemandMapper.selectWzchTotalDemandList(query);
+        return CollectionUtils.isEmpty(list)?null:list.get(0);
+    }
+
     /**
      * 查询物资总需列表
      *
@@ -507,8 +515,14 @@ public class WzchTotalDemandServiceImpl implements IWzchTotalDemandService
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
 
+        WzchTotalDemand totalDemand = this.selectByVersion(version);
+        if(totalDemand == null){
+            vo.setWzchTotalDemandDetailList(new ArrayList<>(2));
+            return vo;
+        }
+        vo.setId(totalDemand.getId());
         WzchTotalDemandDetail query = new WzchTotalDemandDetail();
-        query.setVersion(version);
+        query.setTotalDemandId(totalDemand.getId());
         List<WzchTotalDemandDetail> wzchTotalDemandDetailList = wzchTotalDemandDetailService.selectWzchTotalDemandDetailList(query);
         if (CollectionUtils.isEmpty(wzchTotalDemandDetailList)){
             vo.setWzchTotalDemandDetailList(new ArrayList<>(2));

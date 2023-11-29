@@ -168,6 +168,8 @@ public class WzchTotalDemand extends CommonBaseEntity {
     @Excel(name = "模块标识（页面唯一标识）1： 2： ...")
     private String moduleIdentity;
 
+    private String prjCode;
+
     private List<WzchTotalDemandDetail> wzchTotalDemandDetailList;
 
     public WzchTotalDemand(Long id) {
@@ -193,4 +195,14 @@ public class WzchTotalDemand extends CommonBaseEntity {
         this.versionCode = versionCode;
         this.projectId = projectId;
     }
+
+    public BigDecimal getVersion() {
+        return version;
+    }
+
+    public void setVersion(BigDecimal version) {
+        this.version = version;
+        this.versionCode = version==null?"":version.toString();
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.wzch.demand.service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -33,6 +34,8 @@ public interface IWzchTotalDemandService {
      * @return 物资总需集合
      */
     List<WzchTotalDemand> selectWzchTotalDemandList(WzchTotalDemand wzchTotalDemand);
+
+    public WzchTotalDemand selectByVersion(BigDecimal version);
 
     /**
      * 新增物资总需

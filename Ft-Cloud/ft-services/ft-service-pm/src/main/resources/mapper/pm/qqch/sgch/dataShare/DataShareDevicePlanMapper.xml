@@ -219,6 +219,12 @@
         UPDATE `data_share_ws`.sbch_total_demand_plan SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
         UPDATE `data_share_ws`.sbch_total_demand_plan_detail SET del_flag = '1' WHERE del_flag = '0' and plan_id = (SELECT id FROM sbch_total_demand_plan WHERE del_flag = '0' AND version = 1.0);
 
+        UPDATE `data_share_ws`.wzch_total_demand SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.wzch_total_demand_detail SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`.wzch_total_demand_time_count SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+
+        UPDATE `data_share_ws`. SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
+        UPDATE `data_share_ws`. SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
 </update>
 
 
