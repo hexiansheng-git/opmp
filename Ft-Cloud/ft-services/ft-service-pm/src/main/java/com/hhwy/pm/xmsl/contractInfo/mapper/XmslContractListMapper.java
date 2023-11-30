@@ -41,4 +41,6 @@ public interface XmslContractListMapper {
     XmslContractList getContractPriceByListtype(XmslContractList xmslContractList);
 
     List<XmslContractList> getByAncestors(@Param("masterId") Long masterId, @Param("ancestors") String ancestors);
+
+    void updateToRemoveDisable(Long id);
 }

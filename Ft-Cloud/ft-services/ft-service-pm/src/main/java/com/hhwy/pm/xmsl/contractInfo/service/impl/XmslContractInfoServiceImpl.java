@@ -548,8 +548,11 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
     }
 
     @Override
-    public void updateAllToInvalid() {
+    @Transactional
+    public void updateAllToInvalid(Long id) {
         xmslContractInfoMapper.updateAllToInvalid();
+        //给合同清单打标记（已生效的合同清单不能删除）
+        xmslContractListService.updateToRemoveDisable(id);
     }
 
     /***

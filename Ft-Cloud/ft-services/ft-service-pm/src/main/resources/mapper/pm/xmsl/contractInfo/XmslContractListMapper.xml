@@ -1128,4 +1128,8 @@
         <include refid="selectXmslContractListVo"/>
         where del_flag = '0' and master_id = #{masterId} and find_in_set(id,#{ancestors})
     </select>
+
+    <update id="updateToRemoveDisable">
+        UPDATE xmsl_contract_list SET pt_var3 = 1 WHERE del_flag = '0' AND master_id = #{id}
+    </update>
 </mapper>
