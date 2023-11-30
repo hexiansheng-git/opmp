@@ -7,6 +7,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.DictType;
+import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
@@ -50,9 +51,9 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
     @Autowired
     private SgjsTechnicalManageInfoMapper sgjsTechnicalManageInfoMapper;
 
-
-
     private static final Logger logger= LoggerFactory.getLogger(SgjsTechnicalManageServiceImpl.class);
+
+
 
     public SgjsTechnicalManage getSgjsTechnicalManage(SgjsTechnicalManage sgjsTechnicalManage) {
         return sgjsTechnicalManageMapper.getSgjsTechnicalManage(sgjsTechnicalManage);
@@ -304,7 +305,13 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         }finally {
             //3、更新syncInfo
             String ids = treeToList.stream().map(r->r.getId()+"").collect(Collectors.joining(","));
-            //sysSyncInfoLogService.insert("sgjs_technical_insert",ids,1L,System.currentTimeMillis()-beginMills,status,errMsg);
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("sgjs_technical_insert");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(ids);
+            logger.error("sgjs_technical_insert同步失败【{}】,时间：【{}】",ids,System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
         }
     }
 
