@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.finance.policy.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -11,15 +12,22 @@ import com.hhwy.pm.qqch.preparation.finance.policy.mapper.QqchLocalBankSituation
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalBankSituationService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.qyzs.finance.qyzsFinanceBankStatus.domain.QyzsFinanceBankStatus;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
-import java.util.List;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhenglili
@@ -35,6 +43,11 @@ public class QqchLocalBankSituationServiceImpl implements IQqchLocalBankSituatio
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
 
     /**
      * 列表
@@ -69,7 +82,8 @@ public class QqchLocalBankSituationServiceImpl implements IQqchLocalBankSituatio
         qqchLocalBankSituationMapper.deleteQqchLocalBankSituation(deleteParam);
 
         String buttonMark = voParam.getButtonMark();
-        if (!CollectionUtils.isEmpty(voParam.getList())) {
+        List<QqchLocalBankSituation> list = voParam.getList();
+        if (!CollectionUtils.isEmpty(list)) {
             // 校验非空
             if (!ButtonMark.SAVE.equals(buttonMark)) {
                 JyDetailsUtil.jyDetails(voParam.getList(), ValidationGroups.Save.class);
@@ -93,6 +107,51 @@ public class QqchLocalBankSituationServiceImpl implements IQqchLocalBankSituatio
             String menuId = voParam.getMenuId();
             String stageIdentity = voParam.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+            this.pushQyzsFinanceBankStatus(list);
         }
+    }
+
+    /**
+     * 推送当地银行状况到总部版
+     * @param list
+     */
+    public void pushQyzsFinanceBankStatus(List<QqchLocalBankSituation> list){
+        Map<String,Object> map = new HashMap<>();
+
+        String projectLocation = xmslProjectBasicInfoService.projectInfo().getProjectLocation();
+        if(StringUtils.isBlank(projectLocation) || CollectionUtils.isEmpty(list)){
+            return;
+        }
+
+        List<QyzsFinanceBankStatus> bankStatusList = new ArrayList<>();
+        for (QqchLocalBankSituation qqchLocalBankSituation : list) {
+            String isSelect = qqchLocalBankSituation.getIsSelect();
+            if(!"1".equals(isSelect)){
+                QyzsFinanceBankStatus bankStatus = new QyzsFinanceBankStatus();
+                bankStatus.setId(IdWorker.createId());
+                bankStatus.setCountryCode(projectLocation);
+                bankStatus.setBankName(qqchLocalBankSituation.getBankName());
+                bankStatus.setNature(qqchLocalBankSituation.getBankNature());
+                bankStatus.setReputationAndService(qqchLocalBankSituation.getReputationService());
+                bankStatus.setServiceEfficiency(qqchLocalBankSituation.getServiceEfficiency());
+                bankStatus.setCashSituation(qqchLocalBankSituation.getAccessCash());
+                bankStatus.setBusinessDealing(qqchLocalBankSituation.getBusinessDealing());
+                bankStatus.setDepositInterestRate(qqchLocalBankSituation.getDepositRate());
+                bankStatus.setLendingRate(qqchLocalBankSituation.getLendRate());
+                bankStatus.setOffering(qqchLocalBankSituation.getProvideService());
+                bankStatus.setCreateTime(DateUtils.getNowDate());
+                bankStatus.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                bankStatus.setCreateUserName(SecurityUtils.getUserName());
+                bankStatusList.add(bankStatus);
+            }
+        }
+
+        if(CollectionUtils.isEmpty(bankStatusList)){
+            return;
+        }
+
+        map.put("countryCode",projectLocation);
+        map.put("bankStatusList",bankStatusList);
+        rocketMQTemplate.convertAndSend("qyzs_finance_bank_status:tenantSuccess", map);
     }
 }
