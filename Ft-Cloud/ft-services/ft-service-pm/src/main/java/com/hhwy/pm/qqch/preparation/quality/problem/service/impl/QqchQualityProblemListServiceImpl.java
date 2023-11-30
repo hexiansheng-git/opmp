@@ -191,7 +191,7 @@ public class QqchQualityProblemListServiceImpl implements IQqchQualityProblemLis
 
         map.put("projectType",defaultEngineeringType);
 //        map.put("wbsCode","");
-        map.put("problemList",commonProblemList);
+        map.put("commonProblemList",commonProblemList);
         rocketMQTemplate.convertAndSend("qyzs_quality_common_problem:tenantSuccess", map);
     }
 }
