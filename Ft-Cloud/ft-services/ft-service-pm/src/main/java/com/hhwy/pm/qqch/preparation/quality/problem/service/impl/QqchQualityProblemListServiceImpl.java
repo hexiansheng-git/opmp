@@ -163,6 +163,7 @@ public class QqchQualityProblemListServiceImpl implements IQqchQualityProblemLis
         List<QqchQualityProblemControl> problemControlList = qqchQualityProblemControlMapper.getQqchQualityProblemControlList(query);
         Map<String, QqchQualityProblemControl> controlMap = problemControlList.stream().collect(Collectors.toMap(QqchQualityProblemControl::getProblemCode, o -> o));
 
+        //TODO 根据项目wbsCode获取关联的标准wbsCode
         List<QyzsQualityCommonProblem> commonProblemList = new ArrayList<>();
         for (QqchQualityProblemList problem : list) {
             QyzsQualityCommonProblem commonProblem = new QyzsQualityCommonProblem();
@@ -189,7 +190,7 @@ public class QqchQualityProblemListServiceImpl implements IQqchQualityProblemLis
         }
 
         map.put("projectType",defaultEngineeringType);
-        map.put("wbsCode","");
+//        map.put("wbsCode","");
         map.put("problemList",commonProblemList);
         rocketMQTemplate.convertAndSend("qyzs_quality_common_problem:tenantSuccess", map);
     }
