@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.finance.policy.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -11,15 +12,22 @@ import com.hhwy.pm.qqch.preparation.finance.policy.mapper.QqchMainTaxItemRateMap
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchMainTaxItemRateService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.qyzs.finance.qyzsFinanceTaxItemRate.domain.QyzsFinanceTaxItemRate;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
-import java.util.List;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhenglili
@@ -35,6 +43,10 @@ public class QqchMainTaxItemRateServiceImpl implements IQqchMainTaxItemRateServi
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     public QqchMainTaxItemRateVo getQqchMainTaxItemRateList(BigDecimal version) {
         QqchMainTaxItemRateVo vo = new QqchMainTaxItemRateVo();
@@ -58,7 +70,8 @@ public class QqchMainTaxItemRateServiceImpl implements IQqchMainTaxItemRateServi
         qqchMainTaxItemRateMapper.deleteQqchMainTaxItemRate(deleteParam);
 
         String buttonMark = voParam.getButtonMark();
-        if (!CollectionUtils.isEmpty(voParam.getList())) {
+        List<QqchMainTaxItemRate> list = voParam.getList();
+        if (!CollectionUtils.isEmpty(list)) {
             // 校验非空
             if (!ButtonMark.SAVE.equals(buttonMark)) {
                 JyDetailsUtil.jyDetails(voParam.getList(), ValidationGroups.Save.class);
@@ -82,6 +95,50 @@ public class QqchMainTaxItemRateServiceImpl implements IQqchMainTaxItemRateServi
             String menuId = voParam.getMenuId();
             String stageIdentity = voParam.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+            this.pushQyzsFinanceTaxItemRate(list);
         }
+    }
+
+    /**
+     * 推送税种到总部版
+     * @param list
+     */
+    public void pushQyzsFinanceTaxItemRate(List<QqchMainTaxItemRate> list){
+        Map<String,Object> map = new HashMap<>();
+
+        String projectLocation = xmslProjectBasicInfoService.projectInfo().getProjectLocation();
+        if(StringUtils.isBlank(projectLocation) || CollectionUtils.isEmpty(list)){
+            return;
+        }
+
+        List<QyzsFinanceTaxItemRate> taxItemRateList = new ArrayList<>();
+        for (QqchMainTaxItemRate qqchMainTaxItemRate : list) {
+            String isSelect = qqchMainTaxItemRate.getIsSelect();
+            if(!"1".equals(isSelect)){
+                QyzsFinanceTaxItemRate rate = new QyzsFinanceTaxItemRate();
+                rate.setId(IdWorker.createId());
+                rate.setCountryCode(projectLocation);
+                rate.setTaxesCategories(qqchMainTaxItemRate.getTaxType());
+                rate.setTaxRate(String.valueOf(qqchMainTaxItemRate.getTaxRate()));
+                rate.setTaxBase(qqchMainTaxItemRate.getTaxBase());
+                rate.setTaxCalculationMethod(qqchMainTaxItemRate.getTaxCalculationMethod());
+                rate.setTaxPaymentDeadline(qqchMainTaxItemRate.getTaxPayDeadline());
+                rate.setDeclarationProcedure(qqchMainTaxItemRate.getDeclarationProcedure());
+                rate.setPreferentialTaxPolicy(qqchMainTaxItemRate.getTaxPreferentialPolicy());
+                rate.setOperationProcessDescription(qqchMainTaxItemRate.getOperationProcessDescription());
+                rate.setCreateTime(DateUtils.getNowDate());
+                rate.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                rate.setCreateUserName(SecurityUtils.getUserName());
+                taxItemRateList.add(rate);
+            }
+        }
+
+        if(CollectionUtils.isEmpty(taxItemRateList)){
+            return;
+        }
+
+        map.put("countryCode",projectLocation);
+        map.put("taxItemRateList",taxItemRateList);
+        rocketMQTemplate.convertAndSend("qyzs_finance_tax_item_rate:tenantSuccess", map);
     }
 }

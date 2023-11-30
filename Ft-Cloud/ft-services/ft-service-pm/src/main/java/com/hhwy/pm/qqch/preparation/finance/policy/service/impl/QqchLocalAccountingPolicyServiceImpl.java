@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.finance.policy.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -11,15 +12,22 @@ import com.hhwy.pm.qqch.preparation.finance.policy.mapper.QqchLocalAccountingPol
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalAccountingPolicyService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.qyzs.finance.qyzsFinanceAccountPolicy.domain.QyzsFinanceAccountPolicy;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
-import java.util.List;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhenglili
@@ -35,6 +43,10 @@ public class QqchLocalAccountingPolicyServiceImpl implements IQqchLocalAccountin
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     /**
      * 列表
@@ -70,7 +82,8 @@ public class QqchLocalAccountingPolicyServiceImpl implements IQqchLocalAccountin
         qqchLocalAccountingPolicyMapper.deleteQqchLocalAccountingPolicy(deleteParam);
 
         String buttonMark = voParam.getButtonMark();
-        if (!CollectionUtils.isEmpty(voParam.getList())) {
+        List<QqchLocalAccountingPolicy> list = voParam.getList();
+        if (!CollectionUtils.isEmpty(list)) {
             // 校验非空
             if (!ButtonMark.SAVE.equals(buttonMark)) {
                 JyDetailsUtil.jyDetails(voParam.getList(), ValidationGroups.Save.class);
@@ -94,6 +107,44 @@ public class QqchLocalAccountingPolicyServiceImpl implements IQqchLocalAccountin
             String menuId = voParam.getMenuId();
             String stageIdentity = voParam.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+            this.pushQyzsFinanceAccountPolicy(list);
         }
+    }
+
+    /**
+     * 推送当地会计政策到总部版
+     * @param list
+     */
+    public void pushQyzsFinanceAccountPolicy(List<QqchLocalAccountingPolicy> list){
+        Map<String,Object> map = new HashMap<>();
+
+        String projectLocation = xmslProjectBasicInfoService.projectInfo().getProjectLocation();
+        if(StringUtils.isBlank(projectLocation) || CollectionUtils.isEmpty(list)){
+            return;
+        }
+
+        List<QyzsFinanceAccountPolicy> accountPolicyList = new ArrayList<>();
+        for (QqchLocalAccountingPolicy qqchLocalAccountingPolicy : list) {
+            String isSelect = qqchLocalAccountingPolicy.getIsSelect();
+            if(!"1".equals(isSelect)){
+                QyzsFinanceAccountPolicy policy = new QyzsFinanceAccountPolicy();
+                policy.setId(IdWorker.createId());
+                policy.setCountryCode(projectLocation);
+                policy.setAccountingPolicy(qqchLocalAccountingPolicy.getAccountingPolicy());
+                policy.setContent(qqchLocalAccountingPolicy.getContent());
+                policy.setCreateTime(DateUtils.getNowDate());
+                policy.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                policy.setCreateUserName(SecurityUtils.getUserName());
+                accountPolicyList.add(policy);
+            }
+        }
+
+        if(CollectionUtils.isEmpty(accountPolicyList)){
+            return;
+        }
+
+        map.put("countryCode",projectLocation);
+        map.put("accountPolicyList",accountPolicyList);
+        rocketMQTemplate.convertAndSend("qyzs_finance_account_policy:tenantSuccess", map);
     }
 }

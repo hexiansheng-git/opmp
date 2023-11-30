@@ -16,17 +16,23 @@ import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchTaxLawService;
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchTaxRegulatoryOverviewService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.qyzs.finance.qyzsFinanceTaxLaw.domain.QyzsFinanceTaxLaw;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
-import java.util.List;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhenglili
@@ -46,6 +52,8 @@ public class QqchTaxRegulatoryOverviewServiceImpl implements IQqchTaxRegulatoryO
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Autowired
     private IXmslContractInfoService xmslContractInfoService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     public QqchTaxRegulatoryOverviewVo getQqchTaxRegulatoryOverview(BigDecimal version) {
         QqchTaxRegulatoryOverviewVo vo = new QqchTaxRegulatoryOverviewVo();
@@ -127,6 +135,51 @@ public class QqchTaxRegulatoryOverviewServiceImpl implements IQqchTaxRegulatoryO
             String menuId = voParam.getMenuId();
             String stageIdentity = voParam.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+
+            //推送数据到总部版
+            this.pushQyzsFinanceTaxLaw(voParam);
         }
+    }
+
+    /**
+     * 推送税法数据到总部版
+     * @param voParam
+     */
+    public void pushQyzsFinanceTaxLaw(QqchTaxRegulatoryOverviewVo voParam) {
+        Map<String,Object> map = new HashMap<>();
+
+        QqchTaxRegulatoryOverview overview = voParam.getOverview();
+        String countryCode = overview.getCountryCode();
+        String countryName = overview.getCountryName();
+        List<QqchTaxLaw> qqchTaxLawList = voParam.getList();
+        if(StringUtils.isBlank(countryCode) || CollectionUtils.isEmpty(qqchTaxLawList)){
+            return;
+        }
+
+        List<QyzsFinanceTaxLaw> lawList = new ArrayList<>();
+        for (QqchTaxLaw qqchTaxLaw : qqchTaxLawList) {
+            String isSelect = qqchTaxLaw.getIsSelect();
+            if(!"1".equals(isSelect)){
+                QyzsFinanceTaxLaw law = new QyzsFinanceTaxLaw();
+                law.setId(IdWorker.createId());
+                law.setCountryCode(countryCode);
+                law.setCountryName(countryName);
+                law.setTaxLawEngName(qqchTaxLaw.getTaxLawEnglish());
+                law.setTaxLawChnName(qqchTaxLaw.getTaxLawChinese());
+                law.setReleaseYear(qqchTaxLaw.getPublishYear());
+                law.setPublishingAgency(qqchTaxLaw.getPublishOrgan());
+                law.setRemark(qqchTaxLaw.getRemark());
+                law.setCreateTime(DateUtils.getNowDate());
+                law.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                law.setCreateUserName(SecurityUtils.getUserName());
+                lawList.add(law);
+            }
+        }
+        if(CollectionUtils.isEmpty(lawList)){
+            return;
+        }
+        map.put("countryCode",countryCode);
+        map.put("lawList",lawList);
+        rocketMQTemplate.convertAndSend("qyzs_finance_tax_law:tenantSuccess", map);
     }
 }
