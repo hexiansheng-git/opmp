@@ -13,4 +13,10 @@ public interface IQqchQualityProblemListService {
     QqchQualityProblemListVo getQqchQualityProblemListList(BigDecimal version);
 
     void batchSave(QqchQualityProblemListVo qqchQualityProblemListVo);
+
+    /**
+     * 推送质量通病到总部版
+     * @param version
+     */
+    void pushQyzsQualityCommonProblem(BigDecimal version);
 }

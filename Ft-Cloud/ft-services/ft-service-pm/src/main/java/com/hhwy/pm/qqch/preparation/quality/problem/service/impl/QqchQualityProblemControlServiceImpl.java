@@ -14,14 +14,15 @@ import com.hhwy.pm.qqch.preparation.quality.problem.service.IQqchQualityProblemL
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -39,6 +40,7 @@ public class QqchQualityProblemControlServiceImpl implements IQqchQualityProblem
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Autowired
     private IQqchQualityProblemListService qqchQualityProblemListService;
+
 
     /**
      * 列表
@@ -96,8 +98,9 @@ public class QqchQualityProblemControlServiceImpl implements IQqchQualityProblem
         deleteParam.setVersion(voParam.getVersion());
         qqchQualityProblemControlMapper.deleteQqchQualityProblemControl(deleteParam);
 
-        if (!CollectionUtils.isEmpty(voParam.getList())) {
-            for (QqchQualityProblemControl qqchQualityProblemControl : voParam.getList()) {
+        List<QqchQualityProblemControl> list = voParam.getList();
+        if (!CollectionUtils.isEmpty(list)) {
+            for (QqchQualityProblemControl qqchQualityProblemControl : list) {
                 qqchQualityProblemControl.setId(IdWorker.createId());
                 qqchQualityProblemControl.setVersion(voParam.getVersion());
                 if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
@@ -107,7 +110,7 @@ public class QqchQualityProblemControlServiceImpl implements IQqchQualityProblem
                 qqchQualityProblemControl.setCreateUserName(SecurityUtils.getUserName());
                 qqchQualityProblemControl.setCreateTime(DateUtils.getNowDate());
             }
-            qqchQualityProblemControlMapper.insertQqchQualityProblemControlList(voParam.getList());
+            qqchQualityProblemControlMapper.insertQqchQualityProblemControlList(list);
         }
 
         String buttonMark = voParam.getButtonMark();
@@ -116,6 +119,7 @@ public class QqchQualityProblemControlServiceImpl implements IQqchQualityProblem
             String menuId = voParam.getMenuId();
             String stageIdentity = voParam.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+            qqchQualityProblemListService.pushQyzsQualityCommonProblem(voParam.getVersion());
         }
     }
 

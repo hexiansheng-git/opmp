@@ -1,14 +1,17 @@
 package com.hhwy.pm.qqch.preparation.quality.problem.mapper;
 
 import com.hhwy.pm.qqch.preparation.quality.problem.domain.QqchQualityProblemControl;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author zhenglili
  * @date 2023-08-03 14:30:43
  * @remark 9.2.2 质量通病控制措施
  */
+@Repository
 public interface QqchQualityProblemControlMapper {
 
     QqchQualityProblemControl getQqchQualityProblemControl(QqchQualityProblemControl qqchQualityProblemControl);
