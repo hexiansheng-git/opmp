@@ -269,10 +269,10 @@ public class XmslContractList extends BaseEntity {
     @Excel(name = "预留字段2")
     private String ptVar2;
     /**
-     * 字段描述：预留字段3
+     * 字段描述：合同清单有效标识  1表示不可以删除
      */
     @JsonProperty
-    @Excel(name = "预留字段3")
+    @Excel(name = "合同清单有效标识")
     private String ptVar3;
     /**
      * 字段描述：预留字段4

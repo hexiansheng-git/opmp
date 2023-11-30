@@ -493,4 +493,9 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         }
         return new ArrayList<>(collect.values());
     }
+
+    @Override
+    public void updateToRemoveDisable(Long id) {
+        xmslContractListMapper.updateToRemoveDisable(id);
+    }
 }

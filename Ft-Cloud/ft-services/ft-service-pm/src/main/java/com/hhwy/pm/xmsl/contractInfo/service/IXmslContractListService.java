@@ -63,4 +63,6 @@ public interface IXmslContractListService {
     List<XmslContractList> popUpWindows(ContractListQueryVo queryVo);
 
     List<ImportXmslContractListVo> parseLevelStruct(List<ImportXmslContractListVo> importXmslContractListVos);
+
+    void updateToRemoveDisable(Long id);
 }

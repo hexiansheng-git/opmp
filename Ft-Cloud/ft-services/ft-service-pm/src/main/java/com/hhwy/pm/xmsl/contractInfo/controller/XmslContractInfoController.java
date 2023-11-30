@@ -155,9 +155,9 @@ public class XmslContractInfoController extends BaseController {
     @RequestMapping(value ="/listener",method = RequestMethod.POST)
     @Transactional
     public AjaxResult updateContract(@RequestParam ("id") Long id) {
-        //修改其它合同信息为无效
-        xmslContractInfoService.updateAllToInvalid();
-
+        //修改其它合同信息为无效，同时给合同清单打标记（已生效的合同清单不能删除）
+        xmslContractInfoService.updateAllToInvalid(id);
+        //修改生效状态
         XmslContractInfo xmslContractInfo1 = new XmslContractInfo();
         xmslContractInfo1.setId(id);
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(xmslContractInfo1);
