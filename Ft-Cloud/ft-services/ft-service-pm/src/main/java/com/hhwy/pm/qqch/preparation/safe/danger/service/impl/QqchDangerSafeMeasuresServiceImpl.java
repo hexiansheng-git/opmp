@@ -1,6 +1,8 @@
 package com.hhwy.pm.qqch.preparation.safe.danger.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -15,7 +17,12 @@ import com.hhwy.pm.qqch.preparation.safe.danger.service.IQqchDangerListService;
 import com.hhwy.pm.qqch.preparation.safe.danger.service.IQqchDangerSafeMeasuresService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain.QyzsSafeRiskBigProj;
+import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain.QyzsSafeRiskBigProjItem;
+import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain.SafeRiskBigProjQueryVo;
+import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.service.IQyzsSafeRiskBigProjService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +32,7 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -45,6 +53,10 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
     private QqchDangerSafeMeasuresDetailMapper qqchDangerSafeMeasuresDetailMapper;
     @Autowired
     private IQqchDangerListService qqchDangerListService;
+    @Autowired
+    private IQyzsSafeRiskBigProjService qyzsSafeRiskBigProjService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     /**
      * 列表
@@ -60,6 +72,13 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
         qryParam.setVersion(version);
         List<QqchDangerSafeMeasures> list = qqchDangerSafeMeasuresMapper.getQqchDangerSafeMeasuresList(qryParam);
 
+
+        //获取企业知识库危大工程清单数据
+        AjaxResult ajaxResult = qyzsSafeRiskBigProjService.getQyzsSafeRiskBigProjList(new SafeRiskBigProjQueryVo());
+        Map<String,Object> dataMap = (Map<String, Object>) ajaxResult.get("data");
+        List<QyzsSafeRiskBigProj> riskBigProjList = (List<QyzsSafeRiskBigProj>) dataMap.get("items");
+        Map<String, QyzsSafeRiskBigProj> riskBigProjMap = riskBigProjList.stream().collect(Collectors.toMap(QyzsSafeRiskBigProj::getRiskProjType, o -> o));
+
         // 组装新列表
         List<QqchDangerSafeMeasures> newList = new ArrayList<>();
 
@@ -72,32 +91,55 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
                     BeanUtils.copyProperties(measures, qqchDangerSafeMeasures);
                 }
             }
+            if(qqchDangerSafeMeasures.getId() == null){
+                qqchDangerSafeMeasures.setId(IdWorker.createId());
+            }
             qqchDangerSafeMeasures.setSchemeCode(qqchDangerList.getSchemeCode());
             qqchDangerSafeMeasures.setSchemeName(qqchDangerList.getSchemeName());
             qqchDangerSafeMeasures.setDangerLevel(qqchDangerList.getDangerLevel());
             qqchDangerSafeMeasures.setDangerLevelLabel(qqchDangerList.getDangerLevelLabel());
             qqchDangerSafeMeasures.setWbsCode(qqchDangerList.getWbsCode());
             qqchDangerSafeMeasures.setWbsName(qqchDangerList.getWbsName());
+            qqchDangerSafeMeasures.setPtVar1(qqchDangerList.getPtVar1());
             newList.add(qqchDangerSafeMeasures);
         }
 
         // 全部详情
         QqchDangerSafeMeasuresDetail qryParamDetail = new QqchDangerSafeMeasuresDetail();
         qryParamDetail.setVersion(version);
-        List<QqchDangerSafeMeasuresDetail> deTailList = qqchDangerSafeMeasuresDetailMapper
-            .getQqchDangerSafeMeasuresDetailList(qryParamDetail);
+        List<QqchDangerSafeMeasuresDetail> deTailList = qqchDangerSafeMeasuresDetailMapper.getQqchDangerSafeMeasuresDetailList(qryParamDetail);
+        Map<Long, List<QqchDangerSafeMeasuresDetail>> detailMap = deTailList.stream().collect(Collectors.groupingBy(QqchDangerSafeMeasuresDetail::getMasterId));
 
-        if (!CollectionUtils.isEmpty(newList) && !CollectionUtils.isEmpty(deTailList)) {
-            for (QqchDangerSafeMeasures qqchDangerSafeMeasures : newList) {
-                List<QqchDangerSafeMeasuresDetail> detailListChild = new ArrayList<>();
-                for (QqchDangerSafeMeasuresDetail deTail : deTailList) {
-                    if (qqchDangerSafeMeasures.getId() != null && qqchDangerSafeMeasures.getId()
-                        .equals(deTail.getMasterId())) {
-                        detailListChild.add(deTail);
+        for (QqchDangerSafeMeasures measures : newList) {
+            List<QqchDangerSafeMeasuresDetail> detailList = new ArrayList<>();
+            List<QqchDangerSafeMeasuresDetail> oldDetailList = detailMap.get(measures.getId());
+            if(!CollectionUtils.isEmpty(oldDetailList)){
+                detailList.addAll(oldDetailList);
+            }
+            /*危大工程类型*/
+            String dangerType = measures.getPtVar1();
+            /*是否已同步过主数据*/
+            String whetherSync = measures.getPtVar2();
+            if(StringUtils.isNotBlank(dangerType) && !"1".equals(whetherSync)){
+                QyzsSafeRiskBigProj riskBigProj = riskBigProjMap.get(dangerType);
+                if(riskBigProj == null){
+                    continue;
+                }
+                List<QyzsSafeRiskBigProjItem> riskBigProjItemList = riskBigProj.getQyzsSafeRiskBigProjItemList();
+                if(!CollectionUtils.isEmpty(riskBigProjItemList)){
+                    measures.setPtVar2("1");
+                    for (QyzsSafeRiskBigProjItem item : riskBigProjItemList) {
+                        QqchDangerSafeMeasuresDetail detail = new QqchDangerSafeMeasuresDetail();
+                        detail.setId(IdWorker.createId());
+                        detail.setMasterId(measures.getId());
+                        detail.setMeasures(item.getSafeTechnicalMeasure());
+                        detail.setIsWarehouse("0");
+                        detail.setIsSelect("1");
+                        detailList.add(detail);
                     }
                 }
-                qqchDangerSafeMeasures.setDetailList(detailListChild);
             }
+            measures.setDetailList(detailList);
         }
 
         vo.setVersion(version);
@@ -119,12 +161,13 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
         deleteParam.setVersion(voParam.getVersion());
         qqchDangerSafeMeasuresMapper.deleteQqchDangerSafeMeasures(deleteParam);
 
-        if (!CollectionUtils.isEmpty(voParam.getList())) {
-            List<Long> ids = voParam.getList().stream().map(QqchDangerSafeMeasures::getId).collect(Collectors.toList());
+        List<QqchDangerSafeMeasures> list = voParam.getList();
+        if (!CollectionUtils.isEmpty(list)) {
+            List<Long> ids = list.stream().map(QqchDangerSafeMeasures::getId).collect(Collectors.toList());
             // 批量删除子表数据
             qqchDangerSafeMeasuresDetailMapper.deleteQqchDangerSafeMeasuresDetailByPks(ids);
 
-            List<QqchDangerSafeMeasures> newMainList = voParam.getList();
+            List<QqchDangerSafeMeasures> newMainList = list;
             // 新子列表集合
             List<QqchDangerSafeMeasuresDetail> newDetailList = new ArrayList<>();
             for (QqchDangerSafeMeasures newMain : newMainList) {
@@ -169,6 +212,39 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
             String menuId = voParam.getMenuId();
             String stageIdentity = voParam.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+            this.pushQyzsSafeRiskBigProj(list);
         }
+    }
+
+    /**
+     * 推送危大工程安全技术措施到总部版
+     * @param list
+     */
+    public void pushQyzsSafeRiskBigProj(List<QqchDangerSafeMeasures> list){
+        List<QyzsSafeRiskBigProj> riskBigProjList = new ArrayList<>();
+        if(CollectionUtils.isEmpty(list)){
+            return;
+        }
+        for (QqchDangerSafeMeasures measures : list) {
+            List<QqchDangerSafeMeasuresDetail> detailList = measures.getDetailList();
+            if(CollectionUtils.isEmpty(detailList)){
+                continue;
+            }
+            List<QqchDangerSafeMeasuresDetail> warehouseList = detailList.stream().filter(o -> !"1".equals(o.getIsSelect()) && "1".equals(o.getIsWarehouse())).collect(Collectors.toList());
+            if(CollectionUtils.isEmpty(warehouseList)){
+                continue;
+            }
+            QyzsSafeRiskBigProj riskBigProj = new QyzsSafeRiskBigProj();
+            riskBigProj.setRiskProjType(measures.getPtVar1());
+            List<QyzsSafeRiskBigProjItem> itemList = new ArrayList<>();
+            for (QqchDangerSafeMeasuresDetail detail : warehouseList) {
+                QyzsSafeRiskBigProjItem item = new QyzsSafeRiskBigProjItem();
+                item.setSafeTechnicalMeasure(detail.getMeasures());
+                itemList.add(item);
+            }
+            riskBigProj.setQyzsSafeRiskBigProjItemList(itemList);
+            riskBigProjList.add(riskBigProj);
+        }
+        rocketMQTemplate.convertAndSend("qyzs_safe_risk_big_proj:tenantSuccess", riskBigProjList);
     }
 }

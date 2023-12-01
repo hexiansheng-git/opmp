@@ -1,4 +1,4 @@
-package com.hhwy.pm.qqch.preparation.safe.danger.domain;
+package com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,17 +8,15 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author zhenglili
- * @date 2023-08-07 14:22:57
- * @remark qqch_danger_list
+ * @author cjh
+ * @date 2023-11-20 15:21:27
+ * @remark qyzs_safe_risk_big_proj_item
  */
 @Data
-public class QqchDangerList extends BaseEntity {
-
+public class QyzsSafeRiskBigProjItem extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -29,65 +27,17 @@ public class QqchDangerList extends BaseEntity {
     @Excel(name = "主键id")
     private Long id;
     /**
-     * 字段描述：危大工程编号
+     * 字段描述：附件组id
      */
     @JsonProperty
-    @Excel(name = "危大工程编号")
-    private String schemeCode;
+    @Excel(name = "附件组id")
+    private String fileGroupId;
     /**
-     * 字段描述：危大工程名称
+     * 字段描述：备注/描述
      */
     @JsonProperty
-    @Excel(name = "危大工程名称")
-    private String schemeName;
-    /**
-     * 字段描述：危大/超危大（字典类型danger_level）
-     */
-    @JsonProperty
-    @Excel(name = "危大/超危大（字典类型danger_level）")
-    private String dangerLevel;
-    /**
-     * 字段描述：危大/超危大
-     */
-    @JsonProperty
-    @Excel(name = "危大/超危大")
-    private String dangerLevelLabel;
-    /**
-     * 字段描述：项目WBS编码
-     */
-    @JsonProperty
-    @Excel(name = "项目WBS编码")
-    private String wbsCode;
-    /**
-     * 字段描述：项目WBS
-     */
-    @JsonProperty
-    @Excel(name = "项目WBS")
-    private String wbsName;
-    /**
-     * 字段描述：判定条件
-     */
-    @JsonProperty
-    @Excel(name = "判定条件")
-    private String decisionCondition;
-    /**
-     * 字段描述：是否首件
-     */
-    @JsonProperty
-    @Excel(name = "是否首件")
-    private String whetherFirst;
-    /**
-     * 字段描述：版本
-     */
-    @JsonProperty
-    @Excel(name = "版本")
-    private BigDecimal version;
-    /**
-     * 字段描述：是否有效 1-有效 0-失效
-     */
-    @JsonProperty
-    @Excel(name = "是否有效 1-有效 0-失效")
-    private String valid;
+    @Excel(name = "备注/描述")
+    private String remark;
     /**
      * 字段描述：所属区域id
      */
@@ -173,10 +123,10 @@ public class QqchDangerList extends BaseEntity {
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：危大工程类型
+     * 字段描述：预留字段1
      */
     @JsonProperty
-    @Excel(name = "危大工程类型")
+    @Excel(name = "预留字段1")
     private String ptVar1;
     /**
      * 字段描述：预留字段2
@@ -202,4 +152,23 @@ public class QqchDangerList extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+    /**
+     * 字段描述：流程状态（5已完成）
+     */
+    @JsonProperty
+    @Excel(name = "流程状态（5已完成）")
+    private String taskStatus;
+    /**
+     * 字段描述：关联id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "关联id")
+    private Long linkId;
+    /**
+     * 字段描述：安全技术措施
+     */
+    @JsonProperty
+    @Excel(name = "安全技术措施")
+    private String safeTechnicalMeasure;
 }

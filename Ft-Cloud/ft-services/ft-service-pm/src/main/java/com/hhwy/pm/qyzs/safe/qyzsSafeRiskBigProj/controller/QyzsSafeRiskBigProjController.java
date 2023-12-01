@@ -29,4 +29,13 @@ public class QyzsSafeRiskBigProjController extends BaseController {
     public AjaxResult getList(SafeRiskBigProjQueryVo queryVo) {
         return qyzsSafeRiskBigProjService.getQyzsSafeRiskBigProjList(queryVo);
     }
+
+    /**
+     * 获取危大工程清单危大工程类型列表
+     * @return
+     */
+    @GetMapping("getRiskProjTypeList")
+    public AjaxResult getRiskProjTypeList() {
+        return AjaxResult.success(qyzsSafeRiskBigProjService.getRiskProjTypeList());
+    }
 }

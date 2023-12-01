@@ -30,4 +30,12 @@ public class QyzsSafeRiskBigProjServiceImpl implements IQyzsSafeRiskBigProjServi
         HttpEntity<MultiValueMap<String,Object>> httpEntity = new HttpEntity<>(headers);
         return RestTemplateUtils.get(url, httpEntity, AjaxResult.class, queryVo.getRiskProjType());
     }
+
+    @Override
+    public AjaxResult getRiskProjTypeList() {
+        String url = gmUrl + "/gm/qyzsSafeRiskBigProj/getRiskProjTypeList";
+        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
+        HttpEntity<MultiValueMap<String,Object>> httpEntity = new HttpEntity<>(headers);
+        return RestTemplateUtils.get(url, httpEntity, AjaxResult.class);
+    }
 }
