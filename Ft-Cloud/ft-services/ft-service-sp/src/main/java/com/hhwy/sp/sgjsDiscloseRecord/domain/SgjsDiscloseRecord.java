@@ -39,10 +39,10 @@ public class SgjsDiscloseRecord extends BaseEntity {
     @Excel(name = "附件组id")
     private String fileGroupId;
     /**
-     * 字段描述：备注/描述
+     * 字段描述：备注
      */
     @JsonProperty
-    @Excel(name = "备注/描述")
+    @Excel(name = "备注")
     private String remark;
     /**
      * 字段描述：所属区域id
