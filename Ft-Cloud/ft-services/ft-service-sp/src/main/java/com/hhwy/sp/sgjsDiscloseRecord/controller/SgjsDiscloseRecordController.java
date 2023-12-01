@@ -30,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * @author cjh
  * @date 2023-11-23 14:47:22
- * @remark
+ * @remark 交底记录管理
  */
 @Validated
 @RestController
@@ -48,6 +48,11 @@ public class SgjsDiscloseRecordController extends BaseController {
         return AjaxResult.success(sgjsDiscloseRecord);
     }
 
+    /**
+     * 查询接口
+     * @param sgjsDiscloseRecordParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsDiscloseRecord:list")
     @GetMapping("/list")
     public AjaxResult getSgjsDiscloseRecordList(@Validated(ValidationGroups.Select.class) SgjsDiscloseRecord sgjsDiscloseRecordParam) {
@@ -76,6 +81,11 @@ public class SgjsDiscloseRecordController extends BaseController {
         return toAjax(sgjsDiscloseRecordService.updateSgjsDiscloseRecord(sgjsDiscloseRecordParam));
     }
 
+    /**
+     * 保存接口
+     * @param sgjsDiscloseRecordListParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsDiscloseRecord:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateSgjsDiscloseRecordList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsDiscloseRecord> sgjsDiscloseRecordListParam) {
@@ -102,6 +112,12 @@ public class SgjsDiscloseRecordController extends BaseController {
 //        util.exportExcel(response, sgjsDiscloseRecordList, DateUtils.getDate());
 //    }
 
+    /**
+     * 导出接口
+     * @param response
+     * @param sgjsDiscloseRecordParam
+     * @throws IOException
+     */
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody SgjsDiscloseRecord sgjsDiscloseRecordParam) throws IOException {
         String dataType = sgjsDiscloseRecordParam.getDataType();
@@ -113,9 +129,11 @@ public class SgjsDiscloseRecordController extends BaseController {
 
         FtExcelUtil<SgjsDiscloseRecord> util = new FtExcelUtil<>(SgjsDiscloseRecord.class);
         String templateName = "";
+        // 一、二级交底模板
         if("oneOrTwo".equals(dataType)) {
             templateName = "exportDiscloseRecord12.xlsx";
         }
+        // 三级交底模板
         if("three".equals(dataType)) {
             templateName = "exportDiscloseRecord3.xlsx";
         }
@@ -124,6 +142,12 @@ public class SgjsDiscloseRecordController extends BaseController {
 
     }
 
+    /**
+     * 导入接口
+     * @param file
+     * @param dataType 页签:oneOrTwo（一、二级交底）、three（三级交底）
+     * @return
+     */
     @PostMapping("/importData")
     public AjaxResult importData(@RequestParam("file") MultipartFile file,@RequestParam("dataType") String dataType) {
         try {
