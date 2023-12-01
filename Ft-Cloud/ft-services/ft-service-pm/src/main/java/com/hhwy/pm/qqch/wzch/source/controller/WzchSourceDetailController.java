@@ -56,7 +56,7 @@ public class WzchSourceDetailController extends BaseController {
 //    @PreAuthorize(hasPermi = "wzch:sourceDetail:export")
 //    @CustomLogger(title = "来源策划详情-导出",businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
-    public void export( @RequestBody List<WzchSourceDetail> request, HttpServletResponse response) throws IOException {
+    public void export(@RequestBody List<WzchSourceDetail> request, HttpServletResponse response) throws IOException {
        try{
            wzchSourceDetailService.export(request,response);
        }catch (BaseException b){
