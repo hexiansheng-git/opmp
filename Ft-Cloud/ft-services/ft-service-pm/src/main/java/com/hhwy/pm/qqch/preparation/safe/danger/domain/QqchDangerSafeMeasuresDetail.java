@@ -6,9 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * @author zhenglili
@@ -44,7 +45,7 @@ public class QqchDangerSafeMeasuresDetail extends BaseEntity {
      * 字段描述：是否入库 0-否 1-是（字典类型common_yes）
      */
     @JsonProperty
-    @Excel(name = "是否入库 0-否 1-是（字典类型common_yes）")
+    @Excel(name = "是否入库 0-否 6（字典类型common_yes）")
     private String isWarehouse;
     /**
      * 字段描述：是否选择来的数据 1-是 0-否

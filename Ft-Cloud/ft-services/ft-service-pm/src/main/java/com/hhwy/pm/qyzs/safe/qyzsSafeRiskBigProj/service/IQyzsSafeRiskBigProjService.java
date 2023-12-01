@@ -12,4 +12,6 @@ import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain.SafeRiskBigProjQueryVo;
 public interface IQyzsSafeRiskBigProjService {
 
     AjaxResult getQyzsSafeRiskBigProjList(SafeRiskBigProjQueryVo queryVo);
+
+    AjaxResult getRiskProjTypeList();
 }
