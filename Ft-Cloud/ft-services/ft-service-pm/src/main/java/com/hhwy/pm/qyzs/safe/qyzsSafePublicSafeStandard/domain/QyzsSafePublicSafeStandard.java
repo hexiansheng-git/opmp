@@ -1,27 +1,22 @@
-package com.hhwy.pm.qqch.preparation.survey.extend.domain;
+package com.hhwy.pm.qyzs.safe.qyzsSafePublicSafeStandard.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
-import lombok.AllArgsConstructor;
+import com.hhwy.utils.tree.TreeNode;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author han
- * @date 2023-07-07 18:36:03
- * @remark 前期策划-前期策划编制-勘察设计策划-扩展
+ * @author cjh
+ * @date 2023-11-21 10:47:10
+ * @remark qyzs_safe_public_safe_standard
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class QqchPreparationSurveyExtend extends BaseEntity {
+public class QyzsSafePublicSafeStandard extends TreeNode<QyzsSafePublicSafeStandard> {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -32,28 +27,17 @@ public class QqchPreparationSurveyExtend extends BaseEntity {
     @Excel(name = "主键id")
     private Long id;
     /**
-     * 字段描述：模块标识（页面唯一标识）1： 2： ...
-     */
-    @JsonProperty
-    @Excel(name = "模块标识（页面唯一标识）1： 2： ...")
-    private String moduleIdentity;
-    /**
      * 字段描述：附件组id
      */
     @JsonProperty
+    @Excel(name = "附件组id")
     private String fileGroupId;
     /**
-     * 字段描述：版本
+     * 字段描述：备注/描述
      */
     @JsonProperty
-    @Excel(name = "版本")
-    private BigDecimal version;
-    /**
-     * 字段描述：是否有效 1-有效 0-失效
-     */
-    @JsonProperty
-    @Excel(name = "是否有效 1-有效 0-失效")
-    private String valid;
+    @Excel(name = "备注/描述")
+    private String remark;
     /**
      * 字段描述：所属区域id
      */
@@ -102,9 +86,9 @@ public class QqchPreparationSurveyExtend extends BaseEntity {
     /**
      * 字段描述：数据创建系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     /**
      * 字段描述：数据修改者id
@@ -115,9 +99,9 @@ public class QqchPreparationSurveyExtend extends BaseEntity {
     /**
      * 字段描述：数据修改系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     /**
      * 字段描述：数据删除者
@@ -128,9 +112,9 @@ public class QqchPreparationSurveyExtend extends BaseEntity {
     /**
      * 字段描述：数据删除系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH")
+    @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date delTime;
     /**
      * 字段描述：删除标识：0未删除；1已删除
@@ -168,4 +152,69 @@ public class QqchPreparationSurveyExtend extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+    /**
+     * 字段描述：流程状态（5已完成）
+     */
+    @JsonProperty
+    @Excel(name = "流程状态（5已完成）")
+    private String taskStatus;
+    /**
+     * 字段描述：父ID
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "父ID")
+    private Long pid;
+    /**
+     * 字段描述：是否叶子节点
+     */
+    @JsonProperty
+    @Excel(name = "是否叶子节点")
+    private String leaf;
+    /**
+     * 字段描述：排序号
+     */
+    @JsonProperty
+    @Excel(name = "排序号")
+    private Integer sort;
+    /**
+     * 字段描述：类别
+     */
+    @JsonProperty
+    @Excel(name = "类别")
+    private String type;
+    /**
+     * 字段描述：设置项目
+     */
+    @JsonProperty
+    @Excel(name = "设置项目")
+    private String setProject;
+    /**
+     * 字段描述：风险等级-低风险
+     */
+    @JsonProperty
+    @Excel(name = "风险等级-低风险")
+    private String lowRisk;
+    /**
+     * 字段描述：风险等级-一般风险
+     */
+    @JsonProperty
+    @Excel(name = "风险等级-一般风险")
+    private String normalRisk;
+    /**
+     * 字段描述：风险等级-高风险
+     */
+    @JsonProperty
+    @Excel(name = "风险等级-高风险")
+    private String hignRisk;
+    /**
+     * 字段描述：风险等级-极高风险
+     */
+    @JsonProperty
+    @Excel(name = "风险等级-极高风险")
+    private String polarHignRisk;
+
+    @JsonProperty
+    private String isAdd;
+
 }

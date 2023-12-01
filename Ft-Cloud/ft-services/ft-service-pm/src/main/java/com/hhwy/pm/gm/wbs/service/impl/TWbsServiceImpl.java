@@ -67,136 +67,160 @@ public class TWbsServiceImpl implements ITWbsService {
 
     @Override
     public List<TWbs> lazySearchList(TWbs wbs) {
-        boolean hasCondition = StringUtils.isNotBlank(wbs.getNodeType()) || StringUtils.isNotBlank(wbs.getName());
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        try {
+            boolean hasCondition = StringUtils.isNotBlank(wbs.getNodeType()) || StringUtils.isNotBlank(wbs.getName());
 //        if(hasCondition && (StringUtils.trim(wbs.getNodeType())+StringUtils.trim(wbs.getName())).length() < 3)
 //            throw new RuntimeException("搜索参数过小");
-        if(!hasCondition){
-            List<TWbs> list = tWbsMapper.getTWbsList(wbs);
+            if(!hasCondition){
+                List<TWbs> list = tWbsMapper.getTWbsList(wbs);
+                return list;
+            }
+            //如果是懒加载,找出满足条件的id，扔redis
+            String key = "twbs::lazySearch_"+SecurityUtils.getTenantKey()+
+                    StringUtils.join(new String[]{wbs.getName(),wbs.getNodeType()},",");
+            //获取ids
+            Set<String> idSet = null;
+            if(!redisUtils.hasKey(key) ){
+                String parentId = wbs.getParentId();
+                wbs.setParentId(null);
+                List<TWbs> list = tWbsMapper.getTWbsId(wbs);
+                final Set<String> resuIdSet = new ConcurrentHashSet<>();
+                list.parallelStream().forEach(r->{
+                    if(r == null || StringUtils.isBlank(r.getAncestors()))
+                        return ;
+                    resuIdSet.addAll(Arrays.asList(Convert.toStrArray(r.getAncestors())));
+                });
+                wbs.setParentId(parentId);
+                if(resuIdSet.size() < 1)
+                    resuIdSet.add("-1");
+                idSet = resuIdSet.stream().map(r->r+"").collect(Collectors.toSet());
+                redisUtils.sAdd(key,idSet.toArray(new String[]{}));
+                redisUtils.expire(key,10, TimeUnit.MINUTES);
+            }else{
+                idSet = redisUtils.sMembers(key);
+            }
+            TWbs queryWbs = new TWbs();
+            queryWbs.setParams(ObjectUtils.toMap("ids", idSet));
+            queryWbs.setMainId(wbs.getMainId());
+            queryWbs.setParentId(wbs.getParentId());
+            List<TWbs> list = tWbsMapper.getTWbsList(queryWbs);
             return list;
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
         }
-        //如果是懒加载,找出满足条件的id，扔redis
-        String key = "twbs::lazySearch_"+SecurityUtils.getTenantKey()+
-                StringUtils.join(new String[]{wbs.getName(),wbs.getNodeType()},",");
-        //获取ids
-        Set<String> idSet = null;
-        if(!redisUtils.hasKey(key) ){
-            String parentId = wbs.getParentId();
-            wbs.setParentId(null);
-            List<TWbs> list = tWbsMapper.getTWbsId(wbs);
-            final Set<String> resuIdSet = new ConcurrentHashSet<>();
-            list.parallelStream().forEach(r->{
-                if(r == null || StringUtils.isBlank(r.getAncestors()))
-                    return ;
-                resuIdSet.addAll(Arrays.asList(Convert.toStrArray(r.getAncestors())));
-            });
-            wbs.setParentId(parentId);
-            if(resuIdSet.size() < 1)
-                resuIdSet.add("-1");
-            idSet = resuIdSet.stream().map(r->r+"").collect(Collectors.toSet());
-            redisUtils.sAdd(key,idSet.toArray(new String[]{}));
-            redisUtils.expire(key,10, TimeUnit.MINUTES);
-        }else{
-            idSet = redisUtils.sMembers(key);
-        }
-        TWbs queryWbs = new TWbs();
-        queryWbs.setParams(ObjectUtils.toMap("ids", idSet));
-        queryWbs.setMainId(wbs.getMainId());
-        queryWbs.setParentId(wbs.getParentId());
-        List<TWbs> list = tWbsMapper.getTWbsList(queryWbs);
-        return list;
+        
+        
     }
 
     @Override
     public List<TWbs> wbsTreeList(Map map) {
-        String engineeringType = null;
-        Object typeObj = map.get("engineeringType");
-        if(typeObj != null){
-            engineeringType = (String) typeObj;
-        }
-        if(StringUtils.isBlank(engineeringType)){
-            engineeringType = this.getDefaultEngineeringType();
-        }
-        if(StringUtils.isBlank(engineeringType)){
-            return new ArrayList<>(2);
-        }
-
-        Long mainId = tWbsMapper.getEffectMainIdByType(engineeringType);
-        if(mainId == null)
-            return new ArrayList<>(2);
-        TWbs query = new TWbs();
-        query.setMainId(mainId);
-        query.setId(map.get("standardId") != null?map.get("standardId").toString():null);
-        query.setCode(map.get("code")!=null?map.get("code").toString():null);
-        query.setName(map.get("name")!=null?map.get("name").toString():null);
-        List<TWbs> list = this.getTWbsList(query);
-        //查询出祖级对象
-        Set<Long> pidSet = new HashSet<>();
-        for (int i = 0; i < list.size(); i++) {
-            TWbs temp = list.get(i);
-            List<Long> pidList = StringUtils.isBlank(temp.getAncestors())?new ArrayList<>(2):Arrays.asList(com.hhwy.common.core.text.Convert.toLongArray(temp.getAncestors()));
-            pidList.remove(temp.getId());
-            pidSet.addAll(pidList);
-        }
-        if(CollectionUtils.isNotEmpty(pidSet)){
-            query = new TWbs();
-            query.setParams(ObjectUtils.toMap("ids",pidSet));
-            List<TWbs> tempList = this.getTWbsList(query);
-            list.addAll(0,tempList);
-        }
-        //转树形
-        Map<String,TWbs> wbsMap = new HashMap<>();
-        for (int i = 0; i < list.size(); i++) {
-            TWbs temp = list.get(i);
-            wbsMap.put(temp.getId(),temp);
-        }
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
         List<TWbs> resuList = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            TWbs temp = list.get(i);
-            if(temp.getLevel()==1){
-                resuList.add(temp);
-                continue;
+        try {
+            String engineeringType = null;
+            Object typeObj = map.get("engineeringType");
+            if(typeObj != null){
+                engineeringType = (String) typeObj;
             }
-            TWbs parent = wbsMap.get(temp.getParentId());
-            if(parent==null)
-                continue;
-            if(parent.getChildren() == null){
-                parent.setChildren(new ArrayList<>(10));
+            if(StringUtils.isBlank(engineeringType)){
+                engineeringType = this.getDefaultEngineeringType();
             }
-            parent.getChildren().add(temp);
+            if(StringUtils.isBlank(engineeringType)){
+                return new ArrayList<>(2);
+            }
+
+            Long mainId = tWbsMapper.getEffectMainIdByType(engineeringType);
+            if(mainId == null)
+                return new ArrayList<>(2);
+            TWbs query = new TWbs();
+            query.setMainId(mainId);
+            query.setId(map.get("standardId") != null?map.get("standardId").toString():null);
+            query.setCode(map.get("code")!=null?map.get("code").toString():null);
+            query.setName(map.get("name")!=null?map.get("name").toString():null);
+            List<TWbs> list = this.getTWbsList(query);
+            //查询出祖级对象
+            Set<Long> pidSet = new HashSet<>();
+            for (int i = 0; i < list.size(); i++) {
+                TWbs temp = list.get(i);
+                List<Long> pidList = StringUtils.isBlank(temp.getAncestors())?new ArrayList<>(2):Arrays.asList(com.hhwy.common.core.text.Convert.toLongArray(temp.getAncestors()));
+                pidList.remove(temp.getId());
+                pidSet.addAll(pidList);
+            }
+            if(CollectionUtils.isNotEmpty(pidSet)){
+                query = new TWbs();
+                query.setParams(ObjectUtils.toMap("ids",pidSet));
+                List<TWbs> tempList = this.getTWbsList(query);
+                list.addAll(0,tempList);
+            }
+            //转树形
+            Map<String,TWbs> wbsMap = new HashMap<>();
+            for (int i = 0; i < list.size(); i++) {
+                TWbs temp = list.get(i);
+                wbsMap.put(temp.getId(),temp);
+            }
+            for (int i = 0; i < list.size(); i++) {
+                TWbs temp = list.get(i);
+                if(temp.getLevel()==1){
+                    resuList.add(temp);
+                    continue;
+                }
+                TWbs parent = wbsMap.get(temp.getParentId());
+                if(parent==null)
+                    continue;
+                if(parent.getChildren() == null){
+                    parent.setChildren(new ArrayList<>(10));
+                }
+                parent.getChildren().add(temp);
+            }
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
         }
         return resuList;
     }
 
     @Override
     public Map<String, List<TWbs>> copyChildList(Long[] ids) {
-        List<TWbs> historyList = tWbsMapper.getTWbsParentList(ids);
-        //子级id : 最上级id
-        Map<String,String> realIdMap = new HashMap<>();
-        Map<String,List<TWbs>> resuMap = new HashMap<>();
-        List<Long> idList = new ArrayList<>();
-        idList.addAll(Arrays.asList(ids));
-        //旧Id : 新的UUID
-        Map<String,String> newIdMap = new HashMap<>();
-        //遍历5级查找
-        for (int i = 0; i < 5; i++) {
-            List<TWbs> tempList = tWbsMapper.getTWbsParentList(idList.toArray(new Long[]{}));
-            if(CollectionUtils.isEmpty(tempList))
-                break;
-            idList.clear();
-            for (int j = 0; j < tempList.size(); j++) {
-                TWbs temp = tempList.get(j);
-                String topId = i==0?temp.getParentId():realIdMap.get(temp.getParentId());
-                idList.add(Long.valueOf(temp.getId()));
-                realIdMap.put(temp.getId(), topId);
-                //替换掉Id和父级Id，否则前端id会重
-                ObjectUtils.add2MapList(resuMap,topId,temp);
-                String newId = UUIDUtils.getShortUuid();
-                newIdMap.put(temp.getId(), newId);
-                temp.setId(newId);
-                temp.setParentId(i==0?temp.getParentId(): ObjectUtils.nvlString(newIdMap.get(temp.getParentId())));
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        try {
+            //子级id : 最上级id
+            Map<String,String> realIdMap = new HashMap<>();
+            Map<String,List<TWbs>> resuMap = new HashMap<>();
+            List<Long> idList = new ArrayList<>();
+            idList.addAll(Arrays.asList(ids));
+            //旧Id : 新的UUID
+            Map<String,String> newIdMap = new HashMap<>();
+            //遍历5级查找
+            for (int i = 0; i < 5; i++) {
+                List<TWbs> tempList = tWbsMapper.getTWbsParentList(idList.toArray(new Long[]{}));
+                if(CollectionUtils.isEmpty(tempList))
+                    break;
+                idList.clear();
+                for (int j = 0; j < tempList.size(); j++) {
+                    TWbs temp = tempList.get(j);
+                    String topId = i==0?temp.getParentId():realIdMap.get(temp.getParentId());
+                    idList.add(Long.valueOf(temp.getId()));
+                    realIdMap.put(temp.getId(), topId);
+                    //替换掉Id和父级Id，否则前端id会重
+                    ObjectUtils.add2MapList(resuMap,topId,temp);
+                    String newId = UUIDUtils.getShortUuid();
+                    newIdMap.put(temp.getId(), newId);
+                    temp.setId(newId);
+                    temp.setParentId(i==0?temp.getParentId(): ObjectUtils.nvlString(newIdMap.get(temp.getParentId())));
+                }
             }
+            return resuMap;
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
         }
-        return resuMap;
     }
 
     public void selectDbColumnList(String dataSource) {

@@ -1,21 +1,23 @@
 package com.hhwy.pm.qqch.preparation.survey.extend.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-
-import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
-import com.hhwy.pm.qqch.preparation.survey.extend.service.IQqchPreparationSurveyExtendService;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.preparation.survey.extend.domain.EnvReport;
+import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
+import com.hhwy.pm.qqch.preparation.survey.extend.service.IQqchPreparationSurveyExtendService;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author han
@@ -59,6 +61,28 @@ public class QqchPreparationSurveyExtendController extends BaseController {
     public AjaxResult insertQqchPreparationSurveyExtend(@Validated(ValidationGroups.Save.class) @RequestBody QqchPreparationSurveyExtend qqchPreparationSurveyExtendParam) {
         qqchPreparationSurveyExtendService.insertQqchPreparationSurveyExtend(qqchPreparationSurveyExtendParam);
         return AjaxResult.success(qqchPreparationSurveyExtendParam);
+    }
+
+    /**
+     * 获取环评报告
+     * @param version
+     * @return
+     */
+    @GetMapping("getEnvReport")
+    public AjaxResult getEnvReport(BigDecimal version){
+        EnvReport envReport = qqchPreparationSurveyExtendService.getEnvReport(version);
+        return AjaxResult.success(envReport);
+    }
+
+    /**
+     * 保存环评报告
+     * @param envReport
+     * @return
+     */
+    @PostMapping("saveEnvReport")
+    public AjaxResult saveEnvReport(@RequestBody EnvReport envReport){
+        qqchPreparationSurveyExtendService.saveEnvReport(envReport);
+        return AjaxResult.success();
     }
 
     @PreAuthorize(hasPermi = "qqchPreparationSurveyExtend:add")
