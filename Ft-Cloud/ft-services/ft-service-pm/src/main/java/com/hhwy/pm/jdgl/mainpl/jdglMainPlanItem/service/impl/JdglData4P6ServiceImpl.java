@@ -9,6 +9,7 @@ import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.*;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.vo.ActivityInfoVoBean;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglData4P6Service;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemPreService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
@@ -25,6 +26,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -103,7 +105,9 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         Calendar cl = Calendar.getInstance();
         cl.setTime(nowDate);
         String datePro = "Y" + cl.get(Calendar.YEAR) + "M" + (cl.get(Calendar.MONTH) + 1) + "W" + (cl.get(Calendar.WEEK_OF_MONTH));
+        List<JdglMainPlanItem> jdglMainPlanItemList = null;
         if (usingJdglMainPlan != null) {
+            jdglMainPlanItemList = usingJdglMainPlan.getJdglMainPlanItemList();
             usingJdglMainPlan.setIsUse("0");
             jdglMainPlanService.updateJdglMainPlan(usingJdglMainPlan);
             usingJdglMainPlan.setId(mainPlanId);
@@ -194,6 +198,13 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 jdglMainPlanItem.setTotalFloat(activityInfo.getTotalFloat());
 //                jdglMainPlanItem.setExecuterId();
                 jdglMainPlanItem.setExecuter(activityInfo.getExecuter());
+                if(CollectionUtils.isNotEmpty(jdglMainPlanItemList)) {
+                    JdglMainPlanItem jdglMainPlanItem1 = jdglMainPlanItemList.stream().filter(vo -> p6Id.equals(vo.getItemCode())).findFirst().orElse(null);
+                    if(jdglMainPlanItem1 != null) {
+                        jdglMainPlanItem.setExecuterId(jdglMainPlanItem1.getExecuterId());
+                        jdglMainPlanItem.setExecuter(jdglMainPlanItem1.getExecuter());
+                    }
+                }
                 jdglMainPlanItem.setStartDate(activityInfo.getStartDate());
                 jdglMainPlanItem.setFinishDate(activityInfo.getFinishDate());
                 jdglMainPlanItem.setIsCritical(activityInfo.getIsCritical() != null && activityInfo.getIsCritical() ? "1" : "0");
@@ -613,6 +624,48 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
         return "初始化成功!";
     }
+
+    @Override
+    public void pushUserToP6(List<ActivityInfoVoBean> activityInfoVoBeanList) {
+        try {
+            System.out.println("----------------------推送作业用户数据开始---------------------");
+            String url = p6IpPort + pre + "/updateActivityConstomField";
+
+            Map<String, Object> params = new HashMap<>();
+            params.put("projectId", SecurityUtils.getTenantKey());
+//            params.put("projectId", "test-01");
+            params.put("activityList", activityInfoVoBeanList);
+//            params.put("jobPerson", jobPerson);
+            HttpEntity<?> entity = new HttpEntity(params, new HttpHeaders());
+            restTemplate.exchange(url, HttpMethod.POST, entity, Object.class, params);
+            System.out.println("----------------------推送作业用户数据结束---------------------");
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+//    @Override
+//    public void pushUserToP6(String activityCode, String jobPerson) {
+//
+//        try {
+//            System.out.println("----------------------" + "修改" + activityCode + "作业开始---------------------");
+//            String url = p6IpPort + pre + "/updateActivityConstomField";
+//            HttpEntity<?> entity = new HttpEntity(new HttpHeaders());
+//            ParameterizedTypeReference responseType = new ParameterizedTypeReference() {
+//            };
+//            Map<String, Object> params = new HashMap<>();
+//            params.put("projectId", SecurityUtils.getTenantKey());
+//            params.put("activityCode", activityCode);
+//            params.put("jobPerson", jobPerson);
+//            restTemplate.exchange(url + "?projectId={projectId}&activityCode=${activityCode}&jobPerson=${jobPerson}", HttpMethod.GET, entity, responseType, params);
+//            System.out.println("----------------------" + "修改" + activityCode + "作业结束---------------------");
+//
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//
+//    }
 
 
     /**

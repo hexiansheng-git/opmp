@@ -26,9 +26,9 @@ public class RestTemplateConfig {
      */
     private ClientHttpRequestFactory getClientHttpRequestFactory(){
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(5, TimeUnit.SECONDS)
-                .writeTimeout(5, TimeUnit.SECONDS)
-                .readTimeout(5, TimeUnit.SECONDS)
+//                .connectTimeout(5, TimeUnit.SECONDS)
+//                .writeTimeout(5, TimeUnit.SECONDS)
+//                .readTimeout(5, TimeUnit.SECONDS)
                 .build();
         return new OkHttp3ClientHttpRequestFactory(okHttpClient);
     }

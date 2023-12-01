@@ -6,7 +6,9 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.vo.ActivityInfoVoBean;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.mapper.JdglMainPlanItemMapper;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglData4P6Service;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.utils.idworker.IdWorker;
@@ -36,6 +38,9 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
 
     @Autowired
     private IJdglMainPlanService jdglMainPlanService;
+
+    @Autowired
+    private IJdglData4P6Service jdglData4P6Service;
 
 
     public JdglMainPlanItem getJdglMainPlanItem(JdglMainPlanItem jdglMainPlanItem) {
@@ -216,6 +221,9 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
     public int updateJdglMainPlanItem(JdglMainPlanItem jdglMainPlanItem) {
         jdglMainPlanItem.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglMainPlanItem.setUpdateTime(DateUtils.getNowDate());
+        if(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType())) {
+//            jdglData4P6Service.pushUserToP6(jdglMainPlanItem.getItemCode(), jdglMainPlanItem.getExecuter());
+        }
         return jdglMainPlanItemMapper.updateJdglMainPlanItem(jdglMainPlanItem);
     }
 
@@ -225,10 +233,20 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
             return 0;
         }
         List<JdglMainPlanItem> jdglMainPlanItems = TreeUtil.treeToListWithoutId(jdglMainPlanItemList);
+        List<ActivityInfoVoBean> activityInfoVoBeanList = new ArrayList<>();
         for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItems) {
             jdglMainPlanItem.setIsCritical(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) && "是".equals(jdglMainPlanItem.getIsCritical()) ? "1" : "0");
             jdglMainPlanItem.setUpdateUser(SecurityUtils.getSysUser().getNickName());
             jdglMainPlanItem.setUpdateTime(DateUtils.getNowDate());
+            if(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType())) {
+                ActivityInfoVoBean activityInfoVoBean = new ActivityInfoVoBean();
+                activityInfoVoBean.setId(jdglMainPlanItem.getItemCode());
+                activityInfoVoBean.setJobPerson(jdglMainPlanItem.getExecuter());
+                activityInfoVoBeanList.add(activityInfoVoBean);
+            }
+        }
+        if(CollectionUtils.isNotEmpty(activityInfoVoBeanList)) {
+            jdglData4P6Service.pushUserToP6(activityInfoVoBeanList);
         }
         return jdglMainPlanItemMapper.updateJdglMainPlanItemList(jdglMainPlanItems);
     }
