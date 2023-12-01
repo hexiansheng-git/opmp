@@ -5,7 +5,6 @@ import cn.hutool.core.convert.Convert;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.UUIDUtils;
-import com.hhwy.common.datasource.utils.DataSourceUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.gm.wbs.domain.TWbs;
 import com.hhwy.pm.gm.wbs.mapper.TWbsMapper;
@@ -109,13 +108,24 @@ public class TWbsServiceImpl implements ITWbsService {
 
     @Override
     public List<TWbs> wbsTreeList(Map map) {
-        if(ObjectUtils.isBlank(map.get("engineeringType")))
+        String engineeringType = null;
+        Object typeObj = map.get("engineeringType");
+        if(typeObj != null){
+            engineeringType = (String) typeObj;
+        }
+        if(StringUtils.isBlank(engineeringType)){
+            engineeringType = this.getDefaultEngineeringType();
+        }
+        if(StringUtils.isBlank(engineeringType)){
             return new ArrayList<>(2);
-        Long mainId = tWbsMapper.getEffectMainIdByType(map.get("engineeringType").toString());
+        }
+
+        Long mainId = tWbsMapper.getEffectMainIdByType(engineeringType);
         if(mainId == null)
             return new ArrayList<>(2);
         TWbs query = new TWbs();
         query.setMainId(mainId);
+        query.setId(map.get("standardId") != null?map.get("standardId").toString():null);
         query.setCode(map.get("code")!=null?map.get("code").toString():null);
         query.setName(map.get("name")!=null?map.get("name").toString():null);
         List<TWbs> list = this.getTWbsList(query);
