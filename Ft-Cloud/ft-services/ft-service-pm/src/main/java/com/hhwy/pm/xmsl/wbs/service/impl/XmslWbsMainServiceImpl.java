@@ -12,6 +12,9 @@ import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsListRelation;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsMainMapper;
+import com.hhwy.pm.xmsl.wbs.push.WbsPushP6;
+import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVo;
+import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVoBean;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsListRelationService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
@@ -20,6 +23,7 @@ import com.hhwy.utils.*;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
+import com.hhwy.utils.tree.ListTreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.SetUtils;
@@ -49,6 +53,8 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
     private IXmslWbsListRelationService wbsListRelationService;
     @Resource
     private IXmslEngineeringReportService engineeringReportService;
+    @Resource
+    private WbsPushP6 wbsPushP6;
 
 
     public XmslWbsMain getXmslWbsMain(XmslWbsMain xmslWbsMain) {
@@ -207,11 +213,11 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         XmslWbsMain effect = this.getEffect();
         if(effect != null){
             this.xmslWbsMainMapper.insertWbsToHistory(ObjectUtils.toMap("mainId",effect.getId()));
-            this.xmslWbsMainMapper.deleteWbs();    
-        }        
+            this.xmslWbsMainMapper.deleteWbs();
+        }
         xmslWbsMainMapper.insertHistoryToWbs(id);
         this.xmslWbsMainMapper.deleteWbsHitoryByMainId(id);
-        //2、修改main表状态
+//        //2、修改main表状态
         this.xmslWbsMainMapper.updateValid(id);
         //异步处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容
         asyncHandler(main,effect);
@@ -246,7 +252,9 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                 List<XmslWbsListRelation> relationList = new ArrayList<>();
                 //需要修改版本标识(ptVar2)
                 List<XmslWbs> updateFlagList = new ArrayList<>();
+                List<XmslWbs> allList = new ArrayList<>();
                 Function<XmslWbs,XmslWbs> iteratFunc = (r)->{
+                    allList.add(r);
                     //对比状态,如果需要修改标识，放入updateFlagList
                     compareVersionFlag(r,lastWbsMap,updateFlagList);
                     if(StringUtils.isBlank(r.getListCode()))
@@ -262,12 +270,15 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                     }
                     return r;
                 };
+
                 wbsService.handlerAncestors(iteratFunc);
                 wbsListRelationService.insertXmslWbsListRelationList(relationList);
                 //4、修改版本变更标志
                 wbsService.updatePtVar2List(updateFlagList);
                 //5、wbs塞入redis
                 wbsService.initWbs2Redis(tenantKey);
+                //6、推送到p6
+                wbsPushP6.push2P6(main.getId(),tenantKey,allList);
             }catch(Exception e){
                 e.printStackTrace();
                 log.error("wbs加载祖级名称&塞redis失败，mainid:{},消息：{}",main.getId(),e.getMessage());
@@ -290,8 +301,8 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
     private void compareVersionFlag(XmslWbs wbs,Map<String,XmslWbs> lastWbsMap,List<XmslWbs> updateList){
         if(MapUtils.isEmpty(lastWbsMap))
             return ;
-//        if(wbs.getCode().equals("0") || wbs.getCode().equals("777") || wbs.getCode().equals("0-1") )
-//            System.out.println(1);
+        if( wbs.getCode().equals("0-1")  )
+            System.out.println(1);
         XmslWbs oldWbs = lastWbsMap.get(wbs.getCode());
         //版本修改状态，1:原数据修改,2:新增数据，3：禁用（仅生效数据）
         String flag = null;
@@ -302,9 +313,41 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         }else if(!StringUtils.equals(oldWbs.toString(), wbs.toString())){
             flag = "1";
         }
+        if(StringUtils.isNotBlank(wbs.getPtVar4()) && !StringUtils.equals(oldWbs.getName(), wbs.getName())){ //给推送p6准备的，若改了名称需要推送p6修改接口
+            wbs.setPtVar5("1");
+        }
         if(flag != null){
             wbs.setPtVar2(flag);
             updateList.add(wbs);
         }
     }
+
+    @Override
+    @Transactional
+    public int updateP6Code(WbsInfoVo wbsInfoVo) {
+        org.springframework.util.Assert.isTrue(StringUtils.isNotBlank(wbsInfoVo.getProjectId()),"项目ID不能为空");
+        //树形转集合
+        List<WbsInfoVoBean> treeList = wbsInfoVo.getWbsList();
+        if(CollectionUtils.isEmpty(treeList)){
+            log.debug("项目WBS更新p6编号接口，Wbs集合为空");
+            return 0;
+        }
+        List<WbsInfoVoBean> list = ListTreeUtil.formatList(treeList, WbsInfoVoBean::getChildren,WbsInfoVoBean::setChildren);
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(wbsInfoVo.getProjectId()));
+        int result = 0;
+        try {
+            result = xmslWbsMainMapper.updateWbsP6Code(list);
+            xmslWbsMainMapper.updateWbsHisP6Code(list);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new CustomBusinessException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+        return result;
+    }
+
+
 }

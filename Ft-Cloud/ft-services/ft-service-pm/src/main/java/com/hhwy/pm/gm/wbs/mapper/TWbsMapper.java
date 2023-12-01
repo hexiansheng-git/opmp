@@ -32,7 +32,7 @@ public interface TWbsMapper {
      * @param type
      * @return
      */
-    String getEffectEngineeringTypeByProType(String type);
+    String getEffectEngineeringTypeByProType(String[] type);
 
     int insertTWbs(TWbs tWbs);
 

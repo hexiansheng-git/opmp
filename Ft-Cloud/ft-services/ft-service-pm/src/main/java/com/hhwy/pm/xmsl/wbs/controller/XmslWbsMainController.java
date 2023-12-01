@@ -1,6 +1,8 @@
 package com.hhwy.pm.xmsl.wbs.controller;
 
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
@@ -12,20 +14,26 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.FlowServiceApi;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
+import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVo;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author wk
@@ -138,5 +146,23 @@ public class XmslWbsMainController extends BaseController {
         XmslWbsMain effect = xmslWbsMainService.getEffect();
         xmslWbsMainService.asyncHandler(main,effect);
         return AjaxResult.success();
+    }
+
+    /**
+     * 更新p6编码接口
+     * 无需登录
+     * @param vo
+     * @return
+     */
+    @PostMapping("/updateP6Code")
+    public AjaxResult updateP6Code(@RequestBody WbsInfoVo vo) {
+        long begin = System.currentTimeMillis();
+        try{
+            xmslWbsMainService.updateP6Code(vo);
+        }finally{
+            long usemills = System.currentTimeMillis()-begin;
+            logger.debug("更新WBS对应P6编号，耗时:{}毫秒",usemills);
+        }
+        return AjaxResult.success("");
     }
 }

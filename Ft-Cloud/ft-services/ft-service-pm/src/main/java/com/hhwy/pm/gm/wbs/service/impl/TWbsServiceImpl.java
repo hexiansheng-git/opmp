@@ -243,7 +243,8 @@ public class TWbsServiceImpl implements ITWbsService {
         String type = projectBasicInfo.getBusinessAreasAndProducts();
         if(StringUtils.isBlank(type))
             return "";
-        String enType = tWbsMapper.getEffectEngineeringTypeByProType(type);
+        String[] types = Convert.toStrArray(type);
+        String enType = tWbsMapper.getEffectEngineeringTypeByProType(types);
         return ObjectUtils.nvlString(enType);
     }
 

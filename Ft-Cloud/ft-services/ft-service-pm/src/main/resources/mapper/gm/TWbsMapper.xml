@@ -229,8 +229,13 @@
     </select>
 
     <select id="getEffectEngineeringTypeByProType" parameterType="String" resultType="String">
-        select engineering_type from t_wbs_main where product_type like concat('%', #{type},'%')
-        and valid = 1 order by version desc limit 1
+        select engineering_type from `opmp-pm`.t_wbs_main where
+        <where>
+            <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+                or product_type like concat('%', #{item},'%')
+            </foreach>
+            and valid = 1 order by version desc limit 1
+        </where>
     </select>
 
     <insert id="insertTWbs" useGeneratedKeys="true" keyProperty="id">

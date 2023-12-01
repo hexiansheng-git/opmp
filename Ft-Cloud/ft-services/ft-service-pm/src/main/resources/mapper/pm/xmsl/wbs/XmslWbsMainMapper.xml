@@ -294,6 +294,35 @@
         where del_flag = 0 and main_id = #{mainId}
     </update>
 
+    <update id="updateWbsP6Code">
+        update xmsl_wbs
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="pt_var4 = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `code`=#{item.wbsCode} then #{item.objectId}
+                </foreach>
+            </trim>
+        </trim>
+        where `code` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.wbsCode}
+        </foreach>
+    </update>
+    <update id="updateWbsHisP6Code">
+        update xmsl_wbs_history
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="pt_var4 = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `code`=#{item.wbsCode} then #{item.objectId}
+                </foreach>
+            </trim>
+        </trim>
+        where `code` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.wbsCode}
+        </foreach>
+    </update>
+
     <delete id="deleteXmslWbsMain">
         delete from `xmsl_wbs_main`
         <where>

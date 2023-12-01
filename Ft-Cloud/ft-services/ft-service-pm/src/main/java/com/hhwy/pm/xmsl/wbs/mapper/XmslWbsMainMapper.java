@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.wbs.mapper;
 
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
+import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVoBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -51,6 +52,15 @@ public interface XmslWbsMainMapper {
      * @return
      */
     int updateValid(Long id);
+
+    /**
+     * 更新xmsl_wbs的p6编号（ptVar4）
+     * @param list
+     * @return
+     */
+    int updateWbsP6Code(List<WbsInfoVoBean> list);
+    //更新xmsl_wbs_history的p6编号（ptVar4）
+    int updateWbsHisP6Code(List<WbsInfoVoBean> list);
 
     int deleteXmslWbsMain(XmslWbsMain xmslWbsMain);
 

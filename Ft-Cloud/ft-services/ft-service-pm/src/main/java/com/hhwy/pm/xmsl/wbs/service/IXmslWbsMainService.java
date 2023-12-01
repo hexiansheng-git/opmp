@@ -2,6 +2,7 @@ package com.hhwy.pm.xmsl.wbs.service;
 
 import java.util.List;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
+import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVo;
 
 /**
  * @author wk
@@ -61,5 +62,12 @@ public interface IXmslWbsMainService {
      * @param effect
      */
     public void asyncHandler(XmslWbsMain main,XmslWbsMain effect);
+
+    /**
+     * 更新p6编号
+     * @param wbsInfoVo
+     * @return
+     */
+    public int updateP6Code(WbsInfoVo wbsInfoVo);
 
 }

@@ -242,7 +242,7 @@
     </select>
 
     <select id="latestWbsSimpleAllList" resultMap="XmslWbsResultMap">
-        select `id`,`parent_id`,`code`,part_code,`name`,`level`,node_type,list_code,status from xmsl_wbs
+        select `id`,`parent_id`,`code`,part_code,`name`,`level`,node_type,list_code,status,pt_var4 from xmsl_wbs
         <where>
             del_flag = "0"
         </where>
