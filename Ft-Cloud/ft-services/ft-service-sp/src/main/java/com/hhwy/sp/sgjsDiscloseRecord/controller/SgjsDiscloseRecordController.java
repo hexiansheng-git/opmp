@@ -120,7 +120,7 @@ public class SgjsDiscloseRecordController extends BaseController {
             templateName = "exportDiscloseRecord3.xlsx";
         }
 
-        util.exportWithTemplate(response, sgjsDiscloseRecordList, 2, templateName, "sheet1");
+        util.exportWithTemplate4FileName(response, sgjsDiscloseRecordList, 2, templateName, "sheet1", "交底记录");
 
     }
 
