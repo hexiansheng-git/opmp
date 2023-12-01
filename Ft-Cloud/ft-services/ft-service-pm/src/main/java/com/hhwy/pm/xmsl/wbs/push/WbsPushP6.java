@@ -87,7 +87,7 @@ public class WbsPushP6 {
     private void push(Long mainId,String projectCode,List<WbsInfoVoBean> treeList,List<WbsInfoVoBean> updateList){
         long begin = System.currentTimeMillis();
         try{
-//            projectCode = "test-01";
+            projectCode = "test-01";
             //1、新增接口
             if(CollectionUtils.isNotEmpty(treeList)){
                 log.debug("wbs推送新增p6,mainId:{},新增树形第一级条目数:{}",mainId,treeList.size());

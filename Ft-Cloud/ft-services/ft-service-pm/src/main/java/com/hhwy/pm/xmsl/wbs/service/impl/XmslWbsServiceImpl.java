@@ -116,16 +116,18 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                 return ObjectUtils.toMap("list",new ArrayList<>(2),"mainId",xmslWbs.getMainId());
             }
         }
+        XmslWbsMain effect = wbsMainService.getEffect();
+        String tableName = "xmsl_wbs_history";
         if(xmslWbs.getMainId() == null){
-            XmslWbsMain wbsMain = wbsMainService.getEffect();
-            if(wbsMain == null)
+            if(effect == null)
                 return ObjectUtils.toMap("list",new ArrayList<>(2),"mainId","");
-            xmslWbs.setMainId(wbsMain.getId());
+            xmslWbs.setMainId(effect.getId());
         }
+        tableName = effect.getId().equals(xmslWbs.getId())?"xmsl_wbs":"xmsl_wbs_history";
         //判断查询历史还是查询当前
         XmslWbsMain main = wbsMainService.getById(xmslWbs.getMainId());
         xmslWbs.setParams(xmslWbs.getParams()==null?new HashMap<>(1):xmslWbs.getParams());
-        xmslWbs.getParams().put("tableName",main.getValid()==Constant.NO_INT?"xmsl_wbs_history":"xmsl_wbs");
+        xmslWbs.getParams().put("tableName",tableName);
         List<XmslWbs> list = xmslWbsMapper.getXmslWbsList(xmslWbs);
         //清单信息获取
         return ObjectUtils.toMap("list",list,"mainId",main.getId(),"version",main.getVersion());
