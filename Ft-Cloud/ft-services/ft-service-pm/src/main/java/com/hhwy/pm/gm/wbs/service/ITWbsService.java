@@ -53,7 +53,7 @@ public interface ITWbsService {
      * 获取默认的工程类型
      * @return
      */
-    public String getDefaultEngineeringType();
+    String getDefaultEngineeringType();
 
     int insertTWbs(TWbs tWbs);
 

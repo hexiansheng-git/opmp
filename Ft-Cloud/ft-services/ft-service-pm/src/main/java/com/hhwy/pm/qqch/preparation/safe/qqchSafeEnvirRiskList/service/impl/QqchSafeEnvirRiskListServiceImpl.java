@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.gm.wbs.service.ITWbsService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -17,6 +19,7 @@ import com.hhwy.pm.qqch.preparation.survey.extend.domain.EnvReport;
 import com.hhwy.pm.qqch.preparation.survey.extend.service.IQqchPreparationSurveyExtendService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.qyzs.safe.qyzsSafeEnvRiskProc.domain.QyzsSafeEnvRiskProc;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
@@ -26,11 +29,14 @@ import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zq
@@ -56,6 +62,8 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
     private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private ITWbsService tWbsService;
 
 
     public QqchSafeEnvirRiskList getQqchSafeEnvirRiskList(QqchSafeEnvirRiskList qqchSafeEnvirRiskList) {
@@ -130,6 +138,7 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
             qqchModuleConfirmCaseService.addConfirmRecord(safeEnvirRiskListVo.getMenuId(), safeEnvirRiskListVo.getStageIdentity());
             //推送环评报告
             this.pushSafeEiaReport(safeEnvirRiskListVo.getVersion());
+            this.pushQyzsSafeEnvRiskProc(safeEnvirRiskListVo.getVersion());
         }
         return 1;
     }
@@ -152,6 +161,63 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
         map.put("uploadUser",envReport.getUploadUser());
         map.put("uploadTime",envReport.getUploadTime());
         rocketMQTemplate.convertAndSend("qyzs_safe_eia_report:tenantSuccess", map);
+    }
+
+    /**
+     * 推送风险管控数据到总部版
+     * @param version
+     */
+    public void pushQyzsSafeEnvRiskProc(BigDecimal version){
+        QqchSafeEnvirRiskList safeRiskList = new QqchSafeEnvirRiskList();
+        safeRiskList.setVersion(version);
+        List<QqchSafeEnvirRiskList> qqchSafeEnvirRiskListList = qqchSafeEnvirRiskListMapper.getQqchSafeEnvirRiskListList(safeRiskList);
+        if(CollectionUtils.isEmpty(qqchSafeEnvirRiskListList)){
+            return;
+        }
+        String projectType = tWbsService.getDefaultEngineeringType();
+        if(StringUtils.isBlank(projectType)){
+            return;
+        }
+        List<Long> idList = qqchSafeEnvirRiskListList.stream().map(QqchSafeEnvirRiskList::getId).collect(Collectors.toList());
+        List<QqchSafeEnvirRiskListDetail> detailList = detailService.getDetailListByInfoIdList(idList);
+        if(CollectionUtils.isEmpty(detailList)){
+            return;
+        }
+        Map<Long, QqchSafeEnvirRiskListDetail> detailMap = detailList.stream().collect(Collectors.toMap(QqchSafeEnvirRiskListDetail::getId, o -> o));
+        List<QqchSafeEnvirRiskListDetail> pushList = detailList.stream().filter(o -> !"0".equals(o.getPtVar2())).collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(pushList)){
+            return;
+        }
+
+        //TODO 根据项目wbs获取关联的标准wbs编码
+
+        List<QyzsSafeEnvRiskProc> procList = new ArrayList<>();
+        for (QqchSafeEnvirRiskListDetail detail : pushList) {
+            QyzsSafeEnvRiskProc proc = new QyzsSafeEnvRiskProc();
+            proc.setId(detail.getId());
+            proc.setPid(detail.getPid());
+            proc.setProcName(detail.getProProcess());
+            proc.setEnvEffect(detail.getEnvriReason());
+            proc.setOccurrence(detail.getFrequency());
+            proc.setIsMajor(detail.getIsMostReason());
+            //TODO 措施项
+            Long pid = detail.getPid();
+            if(pid != null){
+                QqchSafeEnvirRiskListDetail parent = detailMap.get(pid);
+                if(parent != null && StringUtils.isNotBlank(parent.getPtVar1())){
+                    proc.setPid(Long.valueOf(parent.getPtVar1()));
+                }
+            }
+            detail.setPtVar1(String.valueOf(detail.getId()));
+            detail.setPtVar2("0");
+            procList.add(proc);
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectType",projectType);
+        map.put("procList",procList);
+        rocketMQTemplate.convertAndSend("qyzs_safe_env_risk_proc:tenantSuccess", map);
+
+
     }
 
     @Transactional
