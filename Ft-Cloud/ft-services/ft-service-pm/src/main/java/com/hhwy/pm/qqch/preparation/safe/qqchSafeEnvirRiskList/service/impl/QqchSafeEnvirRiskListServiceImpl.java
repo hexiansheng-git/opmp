@@ -17,6 +17,7 @@ import com.hhwy.pm.qqch.preparation.survey.extend.domain.EnvReport;
 import com.hhwy.pm.qqch.preparation.survey.extend.service.IQqchPreparationSurveyExtendService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
@@ -143,9 +144,10 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
         if(envReport == null){
             return;
         }
-        String projectName = xmslProjectBasicInfoService.projectInfo().getProjectName();
+        ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
         Map<String,Object> map = new HashMap<>();
-        map.put("projectName",projectName);
+        map.put("projectName",projectInfo.getProjectName());
+        map.put("projectId",projectInfo.getProjectId());
         map.put("fileGroupId",envReport.getFileGroupId());
         map.put("uploadUser",envReport.getUploadUser());
         map.put("uploadTime",envReport.getUploadTime());
