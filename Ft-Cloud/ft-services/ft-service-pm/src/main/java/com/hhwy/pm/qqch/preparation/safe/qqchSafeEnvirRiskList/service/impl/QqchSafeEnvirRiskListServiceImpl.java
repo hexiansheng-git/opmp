@@ -13,17 +13,23 @@ import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.mapper.QqchSafeEn
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.mapper.QqchSafeEnvirRiskListMapper;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.service.IQqchSafeEnvirRiskListDetailService;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.service.IQqchSafeEnvirRiskListService;
+import com.hhwy.pm.qqch.preparation.survey.extend.domain.EnvReport;
+import com.hhwy.pm.qqch.preparation.survey.extend.service.IQqchPreparationSurveyExtendService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zq
@@ -43,6 +49,12 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchPreparationSurveyExtendService qqchPreparationSurveyExtendService;
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
 
     public QqchSafeEnvirRiskList getQqchSafeEnvirRiskList(QqchSafeEnvirRiskList qqchSafeEnvirRiskList) {
@@ -115,8 +127,29 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             // 插入确认状态
             qqchModuleConfirmCaseService.addConfirmRecord(safeEnvirRiskListVo.getMenuId(), safeEnvirRiskListVo.getStageIdentity());
+            //推送环评报告
+            this.pushSafeEiaReport(safeEnvirRiskListVo.getVersion());
         }
         return 1;
+    }
+
+    /**
+     * 推送环评报告
+     * @param version
+     */
+    public void pushSafeEiaReport(BigDecimal version){
+        //获取环评报告
+        EnvReport envReport = qqchPreparationSurveyExtendService.getEnvReport(version);
+        if(envReport == null){
+            return;
+        }
+        String projectName = xmslProjectBasicInfoService.projectInfo().getProjectName();
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectName",projectName);
+        map.put("fileGroupId",envReport.getFileGroupId());
+        map.put("uploadUser",envReport.getUploadUser());
+        map.put("uploadTime",envReport.getUploadTime());
+        rocketMQTemplate.convertAndSend("qyzs_safe_eia_report:tenantSuccess", map);
     }
 
     @Transactional
