@@ -43,4 +43,7 @@ public class ModuleIdentity {
      */
     public static final String QQCH_VIDEO_MONITOR_INFO = "qqch_video_monitor_info";
 
+    //8.8.1 环境风险管控
+    public static final String QQCH_SAFE_ENVIR_RISK_LIST = "qqch_safe_envir_risk_list";
+
 }

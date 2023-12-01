@@ -1,17 +1,17 @@
 package com.hhwy.pm.qqch.preparation.survey.extend.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author han
@@ -102,9 +102,9 @@ public class QqchPreparationSurveyExtend extends BaseEntity {
     /**
      * 字段描述：数据创建系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd")
     private Date createTime;
     /**
      * 字段描述：数据修改者id
@@ -115,9 +115,9 @@ public class QqchPreparationSurveyExtend extends BaseEntity {
     /**
      * 字段描述：数据修改系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd")
     private Date updateTime;
     /**
      * 字段描述：数据删除者
@@ -128,9 +128,9 @@ public class QqchPreparationSurveyExtend extends BaseEntity {
     /**
      * 字段描述：数据删除系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH")
     @JsonProperty
-    @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH")
     private Date delTime;
     /**
      * 字段描述：删除标识：0未删除；1已删除
