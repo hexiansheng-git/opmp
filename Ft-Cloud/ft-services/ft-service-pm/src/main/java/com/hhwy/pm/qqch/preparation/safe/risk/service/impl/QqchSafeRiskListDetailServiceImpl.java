@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author zq
  * @date 2023-08-11 13:41:38
- * @remark 
+ * @remark
  */
 @Service
 public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetailService {
@@ -24,7 +24,7 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
     @Autowired
     private QqchSafeRiskListDetailMapper qqchSafeRiskListDetailMapper;
 
-                                                                                                                                                                                                                                                                            
+
     public QqchSafeRiskListDetail getQqchSafeRiskListDetail(QqchSafeRiskListDetail qqchSafeRiskListDetail) {
         return qqchSafeRiskListDetailMapper.getQqchSafeRiskListDetail(qqchSafeRiskListDetail);
     }
@@ -57,15 +57,15 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
         return qqchSafeRiskListDetailMapper.updateQqchSafeRiskListDetail(qqchSafeRiskListDetail);
     }
 
-            @Transactional
-        public int updateQqchSafeRiskListDetailList(List<QqchSafeRiskListDetail> qqchSafeRiskListDetailList) {
-            for (QqchSafeRiskListDetail qqchSafeRiskListDetail : qqchSafeRiskListDetailList) {
-                qqchSafeRiskListDetail.setUpdateUser(SecurityUtils.getUserName());
-                qqchSafeRiskListDetail.setUpdateTime(DateUtils.getNowDate());
-            }
-            return qqchSafeRiskListDetailMapper.updateQqchSafeRiskListDetailList(qqchSafeRiskListDetailList);
+    @Transactional
+    public int updateQqchSafeRiskListDetailList(List<QqchSafeRiskListDetail> qqchSafeRiskListDetailList) {
+        for (QqchSafeRiskListDetail qqchSafeRiskListDetail : qqchSafeRiskListDetailList) {
+            qqchSafeRiskListDetail.setUpdateUser(SecurityUtils.getUserName());
+            qqchSafeRiskListDetail.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return qqchSafeRiskListDetailMapper.updateQqchSafeRiskListDetailList(qqchSafeRiskListDetailList);
+    }
+
     @Transactional
     public int deleteQqchSafeRiskListDetail(QqchSafeRiskListDetail qqchSafeRiskListDetail) {
         qqchSafeRiskListDetail.setUpdateUser(SecurityUtils.getUserName());
@@ -73,14 +73,14 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
         return qqchSafeRiskListDetailMapper.deleteQqchSafeRiskListDetail(qqchSafeRiskListDetail);
     }
 
-            @Transactional
-        public int deleteQqchSafeRiskListDetailByPks(List<Long> qqchSafeRiskListDetailPkList) {
-            return qqchSafeRiskListDetailMapper.deleteQqchSafeRiskListDetailByPks(qqchSafeRiskListDetailPkList);
-        }
+    @Transactional
+    public int deleteQqchSafeRiskListDetailByPks(List<Long> qqchSafeRiskListDetailPkList) {
+        return qqchSafeRiskListDetailMapper.deleteQqchSafeRiskListDetailByPks(qqchSafeRiskListDetailPkList);
+    }
 
     @Override
     @Transactional
     public void deleteByInfoId(Long infoId, String userId, String userName, Date nowDate) {
-        qqchSafeRiskListDetailMapper.deleteByInfoId(infoId,userName,nowDate);
+        qqchSafeRiskListDetailMapper.deleteByInfoId(infoId, userName, nowDate);
     }
 }

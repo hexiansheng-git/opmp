@@ -222,6 +222,8 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
 
         //插入主表数据
         gatherPlanTaskMain.setId(IdWorker.createId());
+        gatherPlanTaskMain.setVersion(version);
+        gatherPlanTaskMain.setValid("0");
         gatherPlanTaskMain.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
         gatherPlanTaskMain.setCreateUserName(SecurityUtils.getUserName());
         gatherPlanTaskMain.setCreateTime(DateUtils.getNowDate());
@@ -235,6 +237,8 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
         }
         for (QqchGatherPlanTask gatherPlanTask : qqchGatherPlanTaskList) {
             gatherPlanTask.setGatherId(IdWorker.createId());
+            gatherPlanTask.setVersion(version);
+            gatherPlanTask.setValid("0");
             qqchGatherPlanTask.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchGatherPlanTask.setCreateUserName(SecurityUtils.getUserName());
             qqchGatherPlanTask.setCreateTime(DateUtils.getNowDate());

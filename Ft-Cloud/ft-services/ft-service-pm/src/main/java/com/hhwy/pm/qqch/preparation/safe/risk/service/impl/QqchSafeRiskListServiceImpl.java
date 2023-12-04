@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.safe.risk.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -26,7 +27,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zq
@@ -49,6 +53,8 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
 
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+
+    private static final String TN = "qqch_safe_risk_list";
 
 
     public QqchSafeRiskList getQqchSafeRiskList(QqchSafeRiskList qqchSafeRiskList) {
@@ -159,7 +165,8 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
     public QqchSafeRiskListVo getList(SafeRiskListQueryVo queryVo) {
         QqchSafeRiskListVo qqchSafeRiskListVo = new QqchSafeRiskListVo();
         BigDecimal version = queryVo.getVersion();
-        version = VersionUtil.getVersion("qqch_safe_risk_list",version);
+        this.checkExistsData(version,queryVo.getType());
+        version = VersionUtil.getVersion(TN,version);
 
         QqchSafeRiskList qqchSafeRiskList = new QqchSafeRiskList();
         qqchSafeRiskList.setVersion(version);
@@ -202,5 +209,79 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         qqchSafeRiskListVo.setVersion(version);
         qqchSafeRiskListVo.setStageIdentity(qqchReviewService.getStage());
         return qqchSafeRiskListVo;
+    }
+
+    public void checkExistsData(BigDecimal version, String type){
+        if(version == null){
+            return;
+        }
+        boolean exists = CommonServiceUtil.checkExistsByVersion(TN, version);
+        if(exists){
+            return;
+        }
+        BigDecimal oldVersion = VersionUtil.getVersion(TN,version);
+        if(oldVersion.equals(version)){
+            return;
+        }
+        //查询主子表数据
+        QqchSafeRiskList qqchSafeRiskList = new QqchSafeRiskList();
+        qqchSafeRiskList.setVersion(version);
+        qqchSafeRiskList.setType(type);
+        List<QqchSafeRiskList> qqchSafeRiskListList = qqchSafeRiskListMapper.getQqchSafeRiskListList(qqchSafeRiskList);
+        if(CollectionUtils.isEmpty(qqchSafeRiskListList)){
+            return;
+        }
+        String infoIds = qqchSafeRiskListList.stream().map(o -> o.getId().toString()).collect(Collectors.joining(","));
+        List<QqchSafeRiskListDetail> detailList = qqchSafeRiskListDetailMapper.getListByInfoIds(infoIds);
+        Map<Long, List<QqchSafeRiskListDetail>> detailMap = null;
+        if(CollectionUtils.isNotEmpty(detailList)){
+            //转树列表
+            detailList = ListTreeUtil.formatTree(
+                    detailList,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchSafeRiskListDetail::getChildren,
+                    QqchSafeRiskListDetail::setChildren);
+
+            //转线性列表
+            detailList = ListTreeUtil.formatList(
+                    detailList,
+                    QqchSafeRiskListDetail::setId,
+                    QqchSafeRiskListDetail::setPid,
+                    QqchSafeRiskListDetail::setSort,
+                    QqchSafeRiskListDetail::getChildren,
+                    QqchSafeRiskListDetail::setChildren);
+            detailMap = detailList.stream().collect(Collectors.groupingBy(QqchSafeRiskListDetail::getInfoId));
+        }
+
+        List<QqchSafeRiskListDetail> insertList = new ArrayList<>();
+        for (QqchSafeRiskList safeRiskList : qqchSafeRiskListList) {
+            Long oldId = safeRiskList.getId();
+            Long id = IdWorker.createId();
+            safeRiskList.setId(id);
+            safeRiskList.setVersion(version);
+            safeRiskList.setValid(Valid.NO);
+            safeRiskList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            safeRiskList.setCreateUserName(SecurityUtils.getUserName());
+            safeRiskList.setCreateTime(DateUtils.getNowDate());
+
+            if(detailMap != null){
+                List<QqchSafeRiskListDetail> details = detailMap.get(oldId);
+                if(CollectionUtils.isNotEmpty(details)){
+                    for (QqchSafeRiskListDetail detail : details) {
+                        detail.setInfoId(id);
+                        detail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                        detail.setCreateUserName(SecurityUtils.getUserName());
+                        detail.setCreateTime(DateUtils.getNowDate());
+                    }
+                    insertList.addAll(details);
+                }
+            }
+        }
+
+        //插入主表数据
+        qqchSafeRiskListMapper.insertQqchSafeRiskListList(qqchSafeRiskListList);
+        //插入子表数据
+        qqchSafeRiskListDetailMapper.insertQqchSafeRiskListDetailList(insertList);
     }
 }

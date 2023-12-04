@@ -111,6 +111,10 @@
         </where>
         order by sort
     </select>
+    <select id="getListByInfoIds" resultMap="QqchSafeRiskListDetailResultMap">
+        <include refid="selectQqchSafeRiskListDetailVo"/>
+        where del_flag = '0' and find_in_set(info_id,#{infoIds})
+    </select>
 
     <insert id="insertQqchSafeRiskListDetail" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_safe_risk_list_detail
