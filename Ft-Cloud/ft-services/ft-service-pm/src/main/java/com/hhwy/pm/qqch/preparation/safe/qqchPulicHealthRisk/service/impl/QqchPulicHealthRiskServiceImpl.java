@@ -12,15 +12,19 @@ import com.hhwy.pm.qqch.preparation.safe.qqchPulicHealthRisk.service.IQqchPulicH
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.qyzs.safe.qyzsSafeDiseaseBank.domain.QyzsSafeDiseaseBank;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +41,8 @@ public class QqchPulicHealthRiskServiceImpl implements IQqchPulicHealthRiskServi
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
 
     public QqchPulicHealthRisk getQqchPulicHealthRisk(QqchPulicHealthRisk qqchPulicHealthRisk) {
@@ -120,6 +126,17 @@ public class QqchPulicHealthRiskServiceImpl implements IQqchPulicHealthRiskServi
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+            //向总部版推送数据
+
+            List<QqchPulicHealthRisk> qqchPulicHealthRiskList1 = qqchPulicHealthRiskList;
+            List<QyzsSafeDiseaseBank> pushData = new ArrayList<>();
+            qqchPulicHealthRiskList1.forEach(p ->{
+                QyzsSafeDiseaseBank qyzsSafeDiseaseBank = new QyzsSafeDiseaseBank();
+                qyzsSafeDiseaseBank.setRiskFactor(p.getRiskFactor());
+                qyzsSafeDiseaseBank.setControlMeasure(p.getControlMeasure());
+                pushData.add(qyzsSafeDiseaseBank);
+            });
+            rocketMQTemplate.convertAndSend("qyzs_safe_disease_bank:tenantSuccess", pushData);
         }
     }
 
