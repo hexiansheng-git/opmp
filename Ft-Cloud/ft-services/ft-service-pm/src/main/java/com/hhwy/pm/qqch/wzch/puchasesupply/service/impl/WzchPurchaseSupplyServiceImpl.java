@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.system.material.MaterialCategory;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
@@ -341,6 +342,7 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
         dto.setVersionCode(new BigDecimal("1.0"));
         // 是否生效 新增不能生效
         dto.setValid("0");
+        dto.setPrjCode(SecurityUtils.getTenantKey());
         // 设置新增信息
         EntityUtils.setCreateUpdateInfo(dto);
         if(dto.getId()==null){
@@ -413,10 +415,12 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
         if(isNew){
             purchaseSupply.setId(IdWorker.createId());
             new AddBaseInfoUtil().addBaseEntity(purchaseSupply);
+            purchaseSupply.setPrjCode(SecurityUtils.getTenantKey());
             this.wzchPurchaseSupplyMapper.insertWzchPurchaseSupply(purchaseSupply);
         }else{
             masterList.get(0).setLimitPriceDesc(purchaseSupply.getLimitPriceDesc());
             purchaseSupply.setId(masterList.get(0).getId());
+            masterList.get(0).setPrjCode(SecurityUtils.getTenantKey());
             wzchPurchaseSupplyMapper.updateWzchPurchaseSupply(masterList.get(0));
         }                             
         //1、从来源策划中获取来源为国内采购、第三国采购、当地采购的数据

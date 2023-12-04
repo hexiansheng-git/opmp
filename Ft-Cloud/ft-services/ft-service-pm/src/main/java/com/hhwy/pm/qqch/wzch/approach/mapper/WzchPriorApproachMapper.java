@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.wzch.approach.mapper;
 import com.hhwy.pm.qqch.wzch.approach.domain.WzchPriorApproach;
 import com.hhwy.pm.qqch.wzch.approach.vo.WzchPriorApproachExportRequest;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -59,6 +60,8 @@ public interface WzchPriorApproachMapper {
      * @return 结果
      */
     int deleteWzchPriorApproachByIds(String[] ids);
+
+    int deleteDirectByVersion(BigDecimal version);
 
     List<WzchPriorApproach> selectByIdsAndTitleAndProjectNameAndRegionName(WzchPriorApproachExportRequest request);
 }

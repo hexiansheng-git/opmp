@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.wzch.approach.service.impl;
 import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.qqch.wzch.approach.domain.WzchPriorApproach;
@@ -89,7 +90,7 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
     @Override
     public int insertWzchPriorApproach(WzchPriorApproach wzchPriorApproach) {
 
-        wzchPriorApproach.setCreateTime(DateUtils.getNowDate());
+//        wzchPriorApproach.setCreateTime(DateUtils.getNowDate());
 
         return wzchPriorApproachMapper.insertWzchPriorApproach(wzchPriorApproach);
     }
@@ -109,6 +110,7 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
     @Override
     @Transactional
     public void sync(BigDecimal version) {
+        this.wzchPriorApproachMapper.deleteDirectByVersion(version);
         this.wzchPriorApproachDetailService.deleteDirectByVersion(version);
         this.wzchPriorApproachDetailService.deleteYearDirectByVersion(version);
         //1、根据版本号从总需用、来源策划获取优先进场物资
@@ -121,6 +123,7 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
         List<WzchTotalDemandTimeCount> timeCounts = wzchTotalDemandTimeCountMapper.selectByTotalDemandDetailIds(detailIds);
         if(CollectionUtils.isEmpty(timeCounts))
             throw new BaseException("未获取到日期数据，请检查来源策划数据");
+        WzchPriorApproach main = buildDefaultApproach(version);
         //2、转换为优先进场
         List<WzchPriorApproachDetail> addList = new ArrayList<>();
         List<WzchPriorApproachYearCount> addDetailList = new ArrayList<>();
@@ -129,6 +132,7 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
             WzchPriorApproachDetail tempApp = new WzchPriorApproachDetail();
             BeanUtils.copyProperties(temp,tempApp);
             new AddBaseInfoUtil<>().addBaseEntity(tempApp);
+            tempApp.setPriorApproachId(main.getId());
             addList.add(tempApp);
         }
         for (int i = 0; i < timeCounts.size(); i++) {
@@ -142,8 +146,22 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
             addDetailList.add(tempYear);
         }
         //3、删除当前版本数据，插入
+        this.wzchPriorApproachMapper.insertWzchPriorApproach(main);
         wzchPriorApproachDetailService.batchInsert(addList);
         wzchPriorApproachYearCountService.batchInsert(addDetailList);
+    }
+    
+    private WzchPriorApproach buildDefaultApproach(BigDecimal version){
+        WzchPriorApproach main = new WzchPriorApproach();
+        main.setId(IdWorker.createId());
+        main.setApproachCode("");
+        main.setTitle("");
+        main.setVersion(version);
+//        main.setProjectId();
+//        main.setProjectName(SecurityUtils.getTenantKey());
+        main.setPrjCode(SecurityUtils.getTenantKey());
+        new AddBaseInfoUtil().addBaseEntity(main);
+        return main;
     }
 
     /**
@@ -243,6 +261,11 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
     @Override
     public WzchPriorApproach detail(WzchPriorApproach approach) {
         BigDecimal version = VersionUtil.getVersion("wzch_prior_approach_detail", approach.getVersion());
+        WzchPriorApproach query = new WzchPriorApproach();
+        query.setVersion(version);
+        List<WzchPriorApproach> list = this.wzchPriorApproachMapper.selectWzchPriorApproachList(query);
+        if(CollectionUtils.isNotEmpty(list))
+            approach = list.get(0);
         approach.setVersion(version);
         approach.setStageIdentity(qqchReviewService.getStage());
 

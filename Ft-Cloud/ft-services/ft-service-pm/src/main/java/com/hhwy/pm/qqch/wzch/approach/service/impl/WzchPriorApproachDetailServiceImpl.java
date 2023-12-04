@@ -29,6 +29,7 @@ import com.hhwy.pm.qqch.wzch.demand.mapper.WzchTotalDemandTimeCountMapper;
 import com.hhwy.pm.qqch.wzch.demand.service.IWzchTotalDemandDetailService;
 import com.hhwy.pm.qqch.wzch.demand.service.IWzchTotalDemandService;
 import com.hhwy.system.api.domain.SysDictData;
+import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.compress.utils.Lists;
@@ -163,7 +164,7 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
     @Override
     @Transactional
     public void save(WzchPriorApproach wzchPriorApproach) {
-        if(wzchPriorApproach==null ){
+        if(wzchPriorApproach==null || wzchPriorApproach.getVersion() == null){
             throw new BaseException("入参缺失");
         }
         fillWzchPriorApproach(wzchPriorApproach);
@@ -171,9 +172,23 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
         if (wzchPriorApproach.getDeptId() == null) {
             wzchPriorApproach.setDeptId(SecurityUtils.getSysUser().getDeptId());
         }
+        //处理主表
+        if(wzchPriorApproach.getId() == null){
+            wzchPriorApproach.setId(IdWorker.createId());
+            wzchPriorApproach.setApproachCode("");
+            wzchPriorApproach.setTitle("");
+            wzchPriorApproach.setPrjCode(SecurityUtils.getTenantKey());
+            wzchPriorApproach.setDeptId(SecurityUtils.getSysUser().getDeptId());
+            new AddBaseInfoUtil().addBaseEntity(wzchPriorApproach);
+            this.wzchPriorApproachService.insertWzchPriorApproach(wzchPriorApproach);
+        }else{
+            new AddBaseInfoUtil().updateBaseEntity(wzchPriorApproach);
+            this.wzchPriorApproachService.updateWzchPriorApproach(wzchPriorApproach);
+        }
 //        WzchPriorApproach approach = wzchPriorApproachService.selectWzchPriorApproachById(wzchPriorApproach.getId());
         List<WzchPriorApproachYearCount> wzchPriorApproachYearCounts = new ArrayList<>();
         for (WzchPriorApproachDetail wzchPriorApproachDetail : wzchPriorApproach.getWzchPriorApproachDetailList()) {
+            wzchPriorApproachDetail.setPriorApproachId(wzchPriorApproach.getId());
             wzchPriorApproachDetail.setVersion(wzchPriorApproach.getVersion());
             //设置version
             List<WzchPriorApproachYearCount> list = wzchPriorApproachDetail.getWzchPriorApproachYearCountList();
@@ -195,6 +210,20 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
             String stageIdentity = wzchPriorApproach.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
+    }
+    
+    @Override
+    public WzchPriorApproach buildDefaultApproach(BigDecimal version){
+        WzchPriorApproach main = new WzchPriorApproach();
+        main.setId(IdWorker.createId());
+        main.setApproachCode("");
+        main.setTitle("");
+        main.setVersion(version);
+//        main.setProjectId();
+//        main.setProjectName(SecurityUtils.getTenantKey());
+        main.setPrjCode(SecurityUtils.getTenantKey());
+        new AddBaseInfoUtil().addBaseEntity(main);
+        return main;
     }
 
     @Override
