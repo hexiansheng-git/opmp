@@ -71,6 +71,7 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
 
     private SbchTotalDemandPlan getSbchTotalDemandPlan(BigDecimal version, SbchTotalDemandPlanDetail param) {
         SbchTotalDemandPlan result = new SbchTotalDemandPlan();
+        List<SbchTotalDemandPlanDetail> resultList = new ArrayList<>();
         version = VersionUtil.getVersion("sbch_total_demand_plan", version);
         SbchTotalDemandPlan sbchTotalDemandPlan = new SbchTotalDemandPlan();
         sbchTotalDemandPlan.setVersion(version);
@@ -78,11 +79,11 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
         if (!ObjectNullUtil.isEmpty(sbchTotalDemandPlans)) {
             SbchTotalDemandPlan sbchTotalDemandPlan1 = sbchTotalDemandPlans.get(0);
             result = sbchTotalDemandPlan1;
-            List<SbchTotalDemandPlanDetail> sbchTotalDemandPlanDetails = null;
+
             if (ObjectUtils.isEmpty(param)) {
                 param = new SbchTotalDemandPlanDetail();
                 param.setPlanId(sbchTotalDemandPlan1.getId());
-                sbchTotalDemandPlanDetails = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailList(param);
+                resultList = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailList(param);
             }else {
                 Integer pageNum = param.getPageNum();
                 Integer pageSize = param.getPageSize();
@@ -91,19 +92,19 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
                     PageHelper.startPage(pageNum, pageSize, null);
                 }
                 param.setPlanId(sbchTotalDemandPlan1.getId());
-                sbchTotalDemandPlanDetails = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailLeaderList(param);
+                resultList = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailLeaderList(param);
             }
-            if (!ObjectNullUtil.isEmpty(sbchTotalDemandPlanDetails)) {
+            if (!ObjectNullUtil.isEmpty(resultList)) {
                 Map<String, String> busAndMaterialMap = new HashMap<>();
                 busAndMaterialMap.put("materialName", "materialName");
                 busAndMaterialMap.put("materialSpec", "materialSpec");
-                sbchTotalDemandPlanDetails = setMaterialNameUtils.setMaterialInfo(sbchTotalDemandPlanDetails, "materialCode", busAndMaterialMap);
+                resultList = setMaterialNameUtils.setMaterialInfo(resultList, "materialCode", busAndMaterialMap);
                 Map<String, String> busAndCategoryMap = new HashMap<>();
                 busAndCategoryMap.put("ptVar1", "categoryName");
-                sbchTotalDemandPlanDetails = setMaterialNameUtils.setCategoryInfo(sbchTotalDemandPlanDetails, "materialType", busAndCategoryMap);
+                resultList = setMaterialNameUtils.setCategoryInfo(resultList, "materialType", busAndCategoryMap);
             }
-            result.setPlanDetailList(sbchTotalDemandPlanDetails);
         }
+        result.setPlanDetailList(resultList);
         result.setVersion(version);
         result.setStageIdentity(qqchReviewService.getStage());
         return result;

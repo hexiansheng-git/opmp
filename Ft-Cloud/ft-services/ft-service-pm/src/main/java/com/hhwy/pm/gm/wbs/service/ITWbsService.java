@@ -4,6 +4,7 @@ import com.hhwy.pm.gm.wbs.domain.TWbs;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * wbs
@@ -53,7 +54,14 @@ public interface ITWbsService {
      * 获取默认的工程类型
      * @return
      */
-    public String getDefaultEngineeringType();
+    String getDefaultEngineeringType();
+
+    /**
+     * 获取项目wbs关联的标准wbs
+     * @param set
+     * @return
+     */
+    Map<String,TWbs> getTWbsByPrjWbsCode(Set<String> set);
 
     int insertTWbs(TWbs tWbs);
 

@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
 
 /**
@@ -43,6 +44,7 @@ public class SgjsDiscloseRecord extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "备注")
+    @FtExcel(name = "备注")
     private String remark;
     /**
      * 字段描述：所属区域id
@@ -169,30 +171,35 @@ public class SgjsDiscloseRecord extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "交底等级")
+    @FtExcel(name = "交底等级")
     private String discloseLevel;
     /**
      * 字段描述：交底名称
      */
     @JsonProperty
     @Excel(name = "交底名称")
+    @FtExcel(name = "交底名称")
     private String discloseName;
     /**
      * 字段描述：交底人
      */
     @JsonProperty
     @Excel(name = "交底人")
+    @FtExcel(name = "交底人")
     private String discloseUser;
     /**
      * 字段描述：交底人职务
      */
     @JsonProperty
     @Excel(name = "交底人职务")
+    @FtExcel(name = "交底人职务")
     private String discloseUserPost;
     /**
      * 字段描述：被交底人
      */
     @JsonProperty
     @Excel(name = "被交底人")
+    @FtExcel(name = "被交底人")
     private String wasDiscloseUser;
     /**
      * 字段描述：实际交底日期
@@ -200,30 +207,35 @@ public class SgjsDiscloseRecord extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "实际交底日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "实际交底日期", dateFormat = "yyyy-MM-dd")
     private Date actDiscloseDate;
     /**
      * 字段描述：wbs名称
      */
     @JsonProperty
     @Excel(name = "wbs名称")
+    @FtExcel(name = "wbs名称")
     private String wbsName;
     /**
      * 字段描述：wbs编码
      */
     @JsonProperty
     @Excel(name = "wbs编码")
+    @FtExcel(name = "wbs编码")
     private String wbsCode;
     /**
      * 字段描述：审核人
      */
     @JsonProperty
     @Excel(name = "审核人")
+    @FtExcel(name = "审核人")
     private String reviewUser;
     /**
      * 字段描述：作业班组
      */
     @JsonProperty
     @Excel(name = "作业班组")
+    @FtExcel(name = "作业班组")
     private String workTeam;
 
     /**

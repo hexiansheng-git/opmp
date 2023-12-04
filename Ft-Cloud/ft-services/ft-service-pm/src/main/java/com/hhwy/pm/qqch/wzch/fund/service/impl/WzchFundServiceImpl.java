@@ -280,6 +280,7 @@ public class WzchFundServiceImpl implements IWzchFundService {
     }
 
     @Override
+    @Transactional
     public long save(WzchFundDTO dto) {
         Assert.notNull(dto.getVersion(),"版本号不能为空");
         List<WzchFundDetail> detailList = dto.getDetailList();

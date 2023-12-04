@@ -1,8 +1,9 @@
 package com.hhwy.pm.common.mapper;
 
-import java.math.BigDecimal;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.math.BigDecimal;
 
 /**
  * 通用持久层
@@ -86,4 +87,6 @@ public interface CommonMapper {
      */
     BigDecimal selectLessOrEqualAssignVersionByType(@Param("tableName") String tableName,
         @Param("version") BigDecimal version, @Param("type") String type);
+
+    int getCountByVersion(@Param("tableName") String tableName, @Param("version") BigDecimal version);
 }

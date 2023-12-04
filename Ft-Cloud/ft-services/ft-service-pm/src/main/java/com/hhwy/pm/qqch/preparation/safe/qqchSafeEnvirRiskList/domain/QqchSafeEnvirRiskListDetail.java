@@ -129,13 +129,13 @@ public class QqchSafeEnvirRiskListDetail extends BaseEntity {
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：企业知识库数据id
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
+    @Excel(name = "企业知识库数据id")
     private String ptVar1;
     /**
-     * 字段描述：预留字段2
+     * 字段描述：数据来源  0：选择来的  1：手动新增
      */
     @JsonProperty
     @Excel(name = "预留字段2")

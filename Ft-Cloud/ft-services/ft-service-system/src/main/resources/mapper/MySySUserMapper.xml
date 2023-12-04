@@ -202,8 +202,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </select>
     <select id="selectByRoleKeyList" resultMap="com.hhwy.system.core.mapper.SysUserMapper.SysUserResult">
-        select u.user_id userId, u.dept_id deptId, u.user_name userName, u.nick_name nickName, u.user_type userType, u.tenant_key tenantKey, u.email, u.phone_number, u.password, u.sex, u.id_card idCard,
-        u.status, u.del_flag delFlag, u.super_flag superFlag, u.login_ip loginIp, u.login_date loginDate, u.create_user createUser, u.create_time createTime, u.remark, u.pt_var_1, u.pt_var_2, u.pt_var_3, u.pt_var_4, u.pt_var_5
+        select u.user_id, u.dept_id, u.user_name, u.nick_name, u.user_type, u.tenant_key, u.email, u.phone_number, u.password, u.sex, u.id_card,
+        u.status, u.del_flag, u.super_flag, u.login_ip, u.login_date, u.create_user, u.create_time, u.remark, u.pt_var_1, u.pt_var_2, u.pt_var_3, u.pt_var_4, u.pt_var_5
         FROM
         sys_user u,
         (select user_id from sys_user_role sur,sys_role sr where sur.tenant_key = #{tenantKey} and sur.role_id = sr.role_id and sr.role_key in
@@ -211,5 +211,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{roleKey}
         </foreach>) uid
         where u.user_id = uid.user_id
+    </select>
+
+    <select id="selectUserIdByTenant" resultMap="com.hhwy.system.core.mapper.SysUserMapper.SysUserResult">
+        select user_id ,
+               tenant_key
+        FROM
+        sys_user
+        where tenant_key=#{tenantKey}
     </select>
 </mapper>

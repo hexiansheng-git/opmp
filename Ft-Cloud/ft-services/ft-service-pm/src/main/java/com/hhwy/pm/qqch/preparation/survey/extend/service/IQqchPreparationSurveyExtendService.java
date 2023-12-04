@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.extend.service;
 
+import com.hhwy.pm.qqch.preparation.survey.extend.domain.EnvReport;
 import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
 
 import java.math.BigDecimal;
@@ -39,4 +40,8 @@ public interface IQqchPreparationSurveyExtendService {
     int deleteQqchPreparationSurveyExtend(QqchPreparationSurveyExtend qqchPreparationSurveyExtend);
 
     int deleteQqchPreparationSurveyExtendByPks(List<Long> qqchPreparationSurveyExtendPkList);
+
+    EnvReport getEnvReport(BigDecimal version);
+
+    void saveEnvReport(EnvReport envReport);
 }

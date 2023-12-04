@@ -67,4 +67,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		order by r.role_sort
 	</select>
 
+    <select id="selectRoleMenuList" resultType="com.hhwy.system.core.domain.SysRoleMenu">
+		select  role_id as roleId,
+				menu_id as menuId,
+				misty_flag mistyFlag,
+				tenant_key tenantKey
+		from  sys_role_menu
+		where  role_id=#{roleId} and  tenant_key=#{tenantKey}
+	</select>
+
+
+
 </mapper> 

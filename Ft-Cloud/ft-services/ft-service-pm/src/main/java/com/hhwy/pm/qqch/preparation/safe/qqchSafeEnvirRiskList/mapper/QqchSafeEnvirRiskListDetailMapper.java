@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.mapper;
 
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskListDetail;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  * @date 2023-08-14 14:00:39
  * @remark
  */
+@Repository
 public interface QqchSafeEnvirRiskListDetailMapper {
 
     QqchSafeEnvirRiskListDetail getQqchSafeEnvirRiskListDetail(QqchSafeEnvirRiskListDetail qqchSafeEnvirRiskListDetail);
