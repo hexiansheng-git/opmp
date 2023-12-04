@@ -264,8 +264,9 @@ public class ReviewController extends BaseController {
         qqchReviewService.listener(id);
         //推送设备策划数据到物设中间库
         ExecutorService executorService = Executors.newSingleThreadExecutor();
+        String tenantKey = SecurityUtils.getTenantKey();
         executorService.submit(() -> {
-            dataShareDevicePlanService.eachStagePush();
+            dataShareDevicePlanService.eachStagePush(tenantKey);
         });
         return AjaxResult.success("成功");
     }

@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
@@ -167,8 +168,9 @@ public class QqchChangeController extends BaseController {
         qqchChangeService.finishFlow(businessId);
         //推送设备策划数据到物设中间库
         ExecutorService executorService = Executors.newSingleThreadExecutor();
+        String tenantKey = SecurityUtils.getTenantKey();
         executorService.submit(() -> {
-            dataShareDevicePlanService.eachChangePush();
+            dataShareDevicePlanService.eachChangePush(tenantKey);
         });
         return AjaxResult.success();
     }

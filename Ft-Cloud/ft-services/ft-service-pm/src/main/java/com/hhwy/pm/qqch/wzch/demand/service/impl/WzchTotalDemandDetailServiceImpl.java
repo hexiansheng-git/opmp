@@ -517,7 +517,6 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         totalDemand.setId(IdWorker.createId());
         totalDemand.setDemandCode("");   //单据编号
         totalDemand.setTitle("物资总需用"+totalDemand.getVersion());
-        totalDemand.setPrjCode(SecurityUtils.getTenantKey());
         new AddBaseInfoUtil<>(totalDemand);
         totalDemand.setDeptId(SecurityUtils.getSysUser().getDeptId());
         ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();

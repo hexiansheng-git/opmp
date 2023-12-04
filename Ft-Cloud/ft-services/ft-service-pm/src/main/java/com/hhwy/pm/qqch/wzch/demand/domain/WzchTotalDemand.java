@@ -168,7 +168,6 @@ public class WzchTotalDemand extends CommonBaseEntity {
     @Excel(name = "模块标识（页面唯一标识）1： 2： ...")
     private String moduleIdentity;
 
-    private String prjCode;
 
     private List<WzchTotalDemandDetail> wzchTotalDemandDetailList;
 
