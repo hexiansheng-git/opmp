@@ -11,6 +11,8 @@ import com.hhwy.pm.gm.wbs.mapper.TWbsMapper;
 import com.hhwy.pm.gm.wbs.service.ITWbsService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
@@ -223,18 +225,6 @@ public class TWbsServiceImpl implements ITWbsService {
         }
     }
 
-    public void selectDbColumnList(String dataSource) {
-        //切换到master
-        String oldDataSource = DynamicDataSourceContextHolder.peek();
-        DynamicDataSourceContextHolder.push(dataSource);
-        try {
-            
-        }finally {
-            DynamicDataSourceContextHolder.poll();
-            DynamicDataSourceContextHolder.push(oldDataSource);
-        }
-    }
-    
     @Override
     public List<TWbs> wbsListByType(String type,String name, String nodeType, Long parentId) {
         //获取项目的产品类型
@@ -270,6 +260,41 @@ public class TWbsServiceImpl implements ITWbsService {
         String[] types = Convert.toStrArray(type);
         String enType = tWbsMapper.getEffectEngineeringTypeByProType(types);
         return ObjectUtils.nvlString(enType);
+    }
+
+    @Override
+    public Map<String, TWbs> getTWbsByPrjWbsCode(Set<String> set) {
+        List<XmslWbs> wbsList = WbsRedisUtils.getWbsByCodes(set);
+        if(CollectionUtils.isEmpty(wbsList))
+            return new HashMap<>(2);
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        try {
+            Set<Long> wbsIdList = wbsList.stream().map(XmslWbs::getStandardId).filter(r->r!=null).collect(Collectors.toSet());
+            List<TWbs> tWbsList = getTWbsByIds(wbsIdList);
+            if(CollectionUtils.isEmpty(tWbsList))
+                return new HashMap<>(2);
+            Map<String,TWbs> tWbsMap = tWbsList.stream().collect(Collectors.toMap(TWbs::getId,r->r));
+            Map<String, TWbs> resuMap = new HashMap<>();
+            wbsList.stream().forEach(r->{
+                resuMap.put(r.getCode(),r.getStandardId()!=null?tWbsMap.get(r.getStandardId()+""):null);
+            });
+            return resuMap;
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+
+
+    }
+
+    public List<TWbs> getTWbsByIds(Collection<Long> ids){
+        if(CollectionUtils.isEmpty(ids))
+            return new ArrayList<>(2);
+        TWbs query = new TWbs();
+        query.setParams(ObjectUtils.toMap("ids",ids));
+        return this.tWbsMapper.getTWbsList(query);
     }
 
     @Transactional

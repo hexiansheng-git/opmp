@@ -87,6 +87,8 @@ public class WbsRedisUtils {
      * @return
      */
     public static List<XmslWbs> getWbsByCodes(Collection wbsCodes){
+        if(CollectionUtils.isEmpty(wbsCodes))
+            return new ArrayList<>(2);
         String tenantKey = MySecurityUtils.getTenantKey();
         List<Object> wbsIdList = redisUtils.hMultiGet(WbsRedisUtils.getCodeKey(tenantKey),wbsCodes);
         wbsIdList = wbsIdList.stream().filter(r->r!=null).collect(Collectors.toList());

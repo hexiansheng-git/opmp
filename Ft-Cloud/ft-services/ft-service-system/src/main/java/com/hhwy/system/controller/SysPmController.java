@@ -8,6 +8,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.system.api.domain.*;
+import com.hhwy.system.core.processor.ITenantProcessor;
 import com.hhwy.system.core.service.*;
 import com.hhwy.system.service.IDeptService;
 import com.hhwy.system.service.ISysPmService;
@@ -204,6 +205,11 @@ public class SysPmController {
         System.out.println(sb.toString());
 
     }
-
+    @Autowired
+    ITenantProcessor  tenantProcessor;
+    @PostMapping("/createRoleTest")
+    public void createRoleTest(@RequestBody SysTenant sysTenant) {
+        tenantProcessor.doPostForInsert(sysTenant);
+    }
 
 }

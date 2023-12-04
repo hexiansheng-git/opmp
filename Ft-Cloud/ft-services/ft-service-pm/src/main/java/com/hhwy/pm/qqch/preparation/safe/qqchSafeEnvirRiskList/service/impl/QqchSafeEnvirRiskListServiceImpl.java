@@ -216,8 +216,6 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
         map.put("projectType",projectType);
         map.put("procList",procList);
         rocketMQTemplate.convertAndSend("qyzs_safe_env_risk_proc:tenantSuccess", map);
-
-
     }
 
     @Transactional

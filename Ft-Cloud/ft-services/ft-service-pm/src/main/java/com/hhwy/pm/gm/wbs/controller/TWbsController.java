@@ -1,6 +1,7 @@
 package com.hhwy.pm.gm.wbs.controller;
 
 import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -10,6 +11,7 @@ import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
+import org.apache.commons.collections4.SetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -82,6 +84,13 @@ public class TWbsController extends BaseController{
         return AjaxResult.success("",enType);
     }
 
+    @PostMapping("/getTWbsByPrjWbsCode")
+    public AjaxResult getTWbsByPrjWbsCode(String wbsCodes) {
+        if(StringUtils.isBlank(wbsCodes))
+            return AjaxResult.success();
+        Map<String,TWbs> map = tWbsService.getTWbsByPrjWbsCode(SetUtils.hashSet(wbsCodes.split(",")));
+        return AjaxResult.success("",map);
+    }
 
 
 }

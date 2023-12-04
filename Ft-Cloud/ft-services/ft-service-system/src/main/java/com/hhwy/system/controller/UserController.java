@@ -120,5 +120,10 @@ public class UserController extends BaseController {
         return AjaxResult.success(userList);
     }
 
+    @PostMapping("/testUser")
+    public AjaxResult testUser(@RequestBody Map<String,String> map){
+       iUserService.testUser(map.get("s").toString());
+        return AjaxResult.success();
+    }
 
 }

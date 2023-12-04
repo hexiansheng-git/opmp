@@ -43,4 +43,8 @@ public interface IUserService {
     List<SysUser> selectAllUser(List<SysDept> deptList);
 
     int insertSysUserList(List<SysUser> sysUserList);
+
+    List<SysUser> testUser(String s);
+    List<SysUser> selectUserIdByTenant(String tenantKey);
+
 }
