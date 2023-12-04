@@ -31,6 +31,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -870,6 +871,59 @@ public class FtExcelUtil<T> {
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
+        }
+    }
+
+    public void exportWithTemplate4FileName(HttpServletResponse response, List<T> list, int startRow, String templateName, String sheetName, String fileName) {
+        this.initWithTemp(list, sheetName, templateName, FtExcel.Type.EXPORT);
+        this.exportWithTemplate4FileName(response, startRow, fileName);
+    }
+
+    private void exportWithTemplate4FileName(HttpServletResponse response, int startRow, String fileName) {
+        // 减掉一行
+        startRow--;
+        // excel表格 和 导入的数据 其实都可以看成二维数组
+        FieldUtils fieldUtils = FieldUtils.init();
+        try {
+            for (int i = 0; i < this.list.size(); i++) {
+                T t = list.get(i);
+                // 每条数据都创建一行excel
+                Row row = this.sheet.createRow(i + startRow);
+                for (int fieldIndex = 0; fieldIndex < this.fields.size(); fieldIndex++) {
+                    Object[] objects = this.fields.get(fieldIndex);
+                    Field field = (Field) objects[0];
+                    FtExcel anno = (FtExcel) objects[1];
+                    int decimalScale = anno.decimalScale();
+                    Object fieldVal = fieldUtils.getFieldVal(field.getName(), t);
+                    if (fieldVal instanceof BigDecimal) {
+                        BigDecimal fieldValBig = (BigDecimal) fieldVal;
+                        fieldVal = fieldValBig.setScale(decimalScale, RoundingMode.DOWN);
+                    }
+
+                    if(fieldVal instanceof Date) {
+                        String dateFormat = StringUtils.isEmpty(anno.dateFormat()) ? "yyyy-MM-dd" : anno.dateFormat();
+                        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+                        Date fieldValDate = (Date) fieldVal;
+                        fieldVal = sdf.format(fieldValDate);
+                    }
+                    Cell cell = row.createCell(fieldIndex);
+                    cell.setCellValue(fieldVal == null ? "" : fieldVal + "");
+                }
+            }
+            response.setHeader("Content-Disposition", "attachment;fileName=" +  URLEncoder.encode(StringUtils.isEmpty(fileName)?this.templateName:fileName, "UTF-8"));
+            response.setContentType("multipart/form-data");
+//            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setCharacterEncoding("utf-8");
+            this.wb.write(response.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if(this.wb != null) this.wb.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
