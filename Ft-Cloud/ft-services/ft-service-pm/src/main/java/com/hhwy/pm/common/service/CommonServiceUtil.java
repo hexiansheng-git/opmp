@@ -209,4 +209,8 @@ public class CommonServiceUtil {
         Map<String, BigDecimal> map= CommonServiceUtil.getUsdRate(Arrays.asList(usdCode));
         return map==null?BigDecimal.ONE:map.get(usdCode);
     }
+
+    public static boolean checkExistsByVersion(String tableName,BigDecimal version){
+        return commonMapper.getCountByVersion(tableName,version) > 0;
+    }
 }
