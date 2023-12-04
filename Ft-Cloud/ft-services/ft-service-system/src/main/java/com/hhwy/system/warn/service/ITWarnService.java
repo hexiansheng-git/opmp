@@ -4,6 +4,7 @@ import com.hhwy.constant.WarnItem;
 import com.hhwy.constant.WarnScopeType;
 import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.domain.base.system.warn.TWarnRecord;
+import com.hhwy.system.api.domain.SysUser;
 
 import java.util.List;
 
@@ -39,4 +40,6 @@ public interface ITWarnService {
     void batchChangeHandleStatus(Long[] warnIds, String status);
 
     void pushTWarn(TWarn tWarn);
+
+    List<SysUser> selectByRoleKeyList(String[] roleKeyList);
 }
