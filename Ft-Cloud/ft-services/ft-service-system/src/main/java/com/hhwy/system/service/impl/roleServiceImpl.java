@@ -4,6 +4,7 @@ import com.hhwy.common.security.service.TokenService;
 import com.hhwy.domain.base.system.SysTreeUtil;
 import com.hhwy.system.api.domain.SysDept;
 import com.hhwy.system.api.domain.SysRole;
+import com.hhwy.system.core.domain.SysRoleMenu;
 import com.hhwy.system.mapper.DeptMapper;
 import com.hhwy.system.mapper.RoleMapper;
 import com.hhwy.system.service.IDeptService;
@@ -29,6 +30,12 @@ public class roleServiceImpl implements IRoleService {
     @Override
     public List<SysRole> list(SysRole role) {
         return roleMapper.selectRoleList(role);
+    }
+
+    @Override
+    public List<SysRoleMenu> selectRoleMenuList(String tenantKey,Long roleId) {
+
+        return roleMapper.selectRoleMenuList(tenantKey,roleId);
     }
 
 
