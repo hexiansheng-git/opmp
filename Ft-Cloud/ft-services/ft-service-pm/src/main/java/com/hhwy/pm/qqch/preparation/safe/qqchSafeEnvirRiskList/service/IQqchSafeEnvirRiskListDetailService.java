@@ -28,7 +28,7 @@ public interface IQqchSafeEnvirRiskListDetailService {
 
     int deleteQqchSafeEnvirRiskListDetailByPks(List<Long> qqchSafeEnvirRiskListDetailPkList);
 
-    List<QqchSafeEnvirRiskListDetail> getQqchSafeEnvirRiskListDetailListByInfoId(List<Long> infoIdList);
+    List<QqchSafeEnvirRiskListDetail> getDetailListByInfoIdList(List<Long> infoIdList);
 
     void deleteByInfoId(Long infoId, String delUser, Date nowDate);
 }

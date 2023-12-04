@@ -80,7 +80,7 @@ public class QqchSafeEnvirRiskListDetailServiceImpl implements IQqchSafeEnvirRis
     }
 
     @Override
-    public List<QqchSafeEnvirRiskListDetail> getQqchSafeEnvirRiskListDetailListByInfoId(List<Long> infoIdList) {
+    public List<QqchSafeEnvirRiskListDetail> getDetailListByInfoIdList(List<Long> infoIdList) {
         return qqchSafeEnvirRiskListDetailMapper.getQqchSafeEnvirRiskListDetailListByInfoId(infoIdList);
     }
 
