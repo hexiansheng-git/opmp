@@ -1,5 +1,7 @@
 package com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskList.service.impl;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -15,19 +17,21 @@ import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskList.service.IQqchQua
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.qyzs.quality.qyzsQualityRisk.domain.QyzsQualityRisk;
 import com.hhwy.utils.idworker.IdWorker;
 import io.seata.common.util.CollectionUtils;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author ldd
@@ -45,6 +49,9 @@ public class QqchQualityRiskListServiceImpl implements IQqchQualityRiskListServi
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchQualityRiskControlMeasuresService qualityRiskService;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
 
     public QqchQualityRiskList getQqchQualityRiskList(QqchQualityRiskList qqchQualityRiskList) {
@@ -133,9 +140,28 @@ public class QqchQualityRiskListServiceImpl implements IQqchQualityRiskListServi
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+
+            //推送总部版知识库
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            executorService.submit(() -> {
+                //过滤掉 “质量风险内容”为空的数据
+                List<QqchQualityRiskList> nonNullList = qqchQualityRiskListList.stream()
+                        .filter(p -> StrUtil.isNotBlank(p.getContent()))
+                        .collect(Collectors.toList());
+                List<QyzsQualityRisk> pushData = new ArrayList<>();
+                nonNullList.forEach(p -> {
+                    QyzsQualityRisk qyzsQualityRisk = new QyzsQualityRisk();
+                    qyzsQualityRisk.setRiskContent(p.getContent());
+                    qyzsQualityRisk.setRiskReason(p.getReason());
+                    qyzsQualityRisk.setConsequence(p.getResult());
+                    qyzsQualityRisk.setRemark(p.getRemark());
+                    qyzsQualityRisk.setEditer(SecurityUtils.getUserName());
+                    qyzsQualityRisk.setEditDate(DateUtil.date());
+                    pushData.add(qyzsQualityRisk);
+                });
+                rocketMQTemplate.convertAndSend("qqch_quality_risk_list:tenantSuccess", pushData);
+            });
         }
-
-
     }
 
     /***

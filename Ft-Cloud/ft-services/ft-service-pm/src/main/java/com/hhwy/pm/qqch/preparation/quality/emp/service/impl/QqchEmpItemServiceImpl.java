@@ -1,5 +1,8 @@
 package com.hhwy.pm.qqch.preparation.quality.emp.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -9,10 +12,13 @@ import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.quality.emp.domain.QqchEmpItem;
 import com.hhwy.pm.qqch.preparation.quality.emp.mapper.QqchEmpItemMapper;
 import com.hhwy.pm.qqch.preparation.quality.emp.service.IQqchEmpItemService;
+import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.domain.QqchQualityRiskControlMeasures;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.QqchWeightEngineeringList;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.service.IQqchWeightEngineeringListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qyzs.quality.qyzsQualityRisk.domain.QyzsQualityRisk;
+import com.hhwy.pm.qyzs.quality.qyzsQualitySpecialInspection.domain.QyzsQualitySpecialInspection;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.utils.EntityUtils;
@@ -20,6 +26,7 @@ import com.hhwy.utils.JsonUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +34,8 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -49,6 +58,8 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
     @Autowired
     private QqchEmpItemMapper qqchEmpItemMapper;
 
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     public QqchEmpItem getQqchEmpItem(QqchEmpItem qqchEmpItem) {
         return qqchEmpItemMapper.getQqchEmpItem(qqchEmpItem);
@@ -158,12 +169,55 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
             String stage = reviewService.getStage();
             moduleConfirmCaseService.addConfirmRecord(dto.getModuleIdentity(), stage);
             reviewService.updateFinishNum();
+            //数据推送总部版
+            pushCenter(empItemListList);
         }
         // 将当前版本的做出变更的wbs进行删除
         if (!CollectionUtils.isEmpty(wbsCodeList))
             this.qqchEmpItemMapper.deleteByWbsCodeAndVersion(wbsCodeList, version);
         if (!CollectionUtils.isEmpty(iDatas)) this.qqchEmpItemMapper.insertQqchEmpItemList(iDatas);
 
+    }
+
+    /***
+     * 功能描述: 数据推送总版
+     * 作者: fushudong
+     * 时间: 2023/12/4
+     */
+    private void pushCenter(List<List<QqchEmpItem>> param) {
+        if (CollectionUtil.isEmpty(param)) {
+            return;
+        }
+        List<QqchEmpItem> list = new ArrayList<>();
+        param.forEach(p -> {
+            if (CollectionUtil.isNotEmpty(param)) {
+                List<QqchEmpItem> qqchEmpItems = TreeUtil.treeToList(p);
+                list.addAll(qqchEmpItems);
+            }
+        });
+        //过滤掉 “质量风险内容”为空的数据
+        List<QqchEmpItem> nonNullList = list.stream()
+                .filter(p -> StrUtil.isNotBlank(p.getCheckCode()))
+                .collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(nonNullList)) return;
+        //推送总部版知识库
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(() -> {
+            List<QyzsQualitySpecialInspection> pushData = new ArrayList<>();
+            nonNullList.forEach(p -> {
+                QyzsQualitySpecialInspection bean = new QyzsQualitySpecialInspection();
+                bean.setInspectionNo(p.getCheckCode());
+                bean.setInspectionName(p.getCheckName());
+                bean.setInspectionProject(p.getCheckItem());
+                bean.setSpecifiedValue(p.getStipulate());
+                bean.setInspectionMethodFrequency(p.getCheckMethod());
+                bean.setEditer(SecurityUtils.getUserName());
+                bean.setEditDate(DateUtil.date());
+//                bean.setDataFrom(SecurityUtils.);
+                pushData.add(bean);
+            });
+            rocketMQTemplate.convertAndSend("qqch_emp_item:tenantSuccess", pushData);
+        });
     }
 
     @Override
