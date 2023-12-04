@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -50,10 +51,15 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
     @Autowired
     private IQqchReviewService qqchReviewService;
 
+    private static final String TN = "qqch_construction_list";
+
+    @Override
     public QqchConstructionListVo getQqchConstructionListList(QqchConstructionListVo paramVo) {
         QqchConstructionListVo vo = new QqchConstructionListVo();
 
-        BigDecimal version = VersionUtil.getVersion("qqch_construction_list", paramVo.getVersion());
+        BigDecimal version = paramVo.getVersion();
+        this.checkExistsByVersion(version);
+        version = VersionUtil.getVersion(TN, version);
         vo.setVersion(version);
         if(StringUtils.isNotBlank(paramVo.getWbsCode())){
             QqchConstructionList qryParam = new QqchConstructionList();
@@ -74,6 +80,36 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
         return vo;
     }
 
+    public void checkExistsByVersion(BigDecimal version){
+        if(version == null){
+            return;
+        }
+        boolean exists = CommonServiceUtil.checkExistsByVersion(TN, version);
+        if(exists){
+            return;
+        }
+        BigDecimal oldVersion = VersionUtil.getVersion(TN, version);
+        if(oldVersion.equals(version)){
+            return;
+        }
+        //获取该版本全量数据
+        QqchConstructionList qryParam = new QqchConstructionList();
+        qryParam.setVersion(oldVersion);
+        List<QqchConstructionList> list = qqchConstructionListMapper.getQqchConstructionListList(qryParam);
+        if(CollectionUtils.isEmpty(list)){
+            return;
+        }
+        for (QqchConstructionList qqchConstructionList : list) {
+            qqchConstructionList.setId(IdWorker.createId());
+            qqchConstructionList.setVersion(version);
+            qqchConstructionList.setValid("0");
+            qqchConstructionList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchConstructionList.setCreateUserName(SecurityUtils.getUserName());
+            qqchConstructionList.setCreateTime(DateUtils.getNowDate());
+        }
+        qqchConstructionListMapper.insertQqchConstructionListList(list);
+    }
+
     @Override
     public List<QqchConstructionList> list(QqchConstructionList list) {
         return qqchConstructionListMapper.getQqchConstructionListList(list);
@@ -86,7 +122,7 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
     @Override
     public List<QqchConstructionList> getLatest(){
         // 获取方案清单最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_list");
+        BigDecimal maxVersion = commonMapper.selectMaxVersion(TN);
         QqchConstructionList qryParam = new QqchConstructionList();
         qryParam.setVersion(maxVersion);
         // 获取方案清单数据
@@ -236,7 +272,7 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
     @Override
     public List<QqchConstructionList> getBigDangerLevelConstructionList() {
         // 获取方案清单最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_list");
+        BigDecimal maxVersion = commonMapper.selectMaxVersion(TN);
         return qqchConstructionListMapper.getBigDangerLevelConstructionList(maxVersion);
     }
 }

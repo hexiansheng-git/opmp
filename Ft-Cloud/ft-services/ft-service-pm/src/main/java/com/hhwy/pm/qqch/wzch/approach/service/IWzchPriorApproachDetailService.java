@@ -73,6 +73,8 @@ public interface IWzchPriorApproachDetailService {
      */
     void save(WzchPriorApproach wzchPriorApproach);
 
+    public WzchPriorApproach buildDefaultApproach(BigDecimal version);
+
     /**
      * 导出
      * @param wzchPriorApproachDetails

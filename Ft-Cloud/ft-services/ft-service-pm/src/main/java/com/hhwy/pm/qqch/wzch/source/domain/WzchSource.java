@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.common.MyPrepareBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
-public class WzchSource extends CommonBaseEntity {
+public class WzchSource extends MyPrepareBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /** id */

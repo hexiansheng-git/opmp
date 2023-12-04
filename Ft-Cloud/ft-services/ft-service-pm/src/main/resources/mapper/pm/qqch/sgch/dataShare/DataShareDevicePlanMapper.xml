@@ -5,7 +5,7 @@
 <mapper namespace="com.hhwy.pm.qqch.sgch.dataShare.mapper.DataShareDevicePlanMapper">
 
     <select id="dataPush">
-        INSERT INTO `data_share_ws`.sbch_equipment_allot SELECT * FROM sbch_equipment_allot WHERE del_flag = '0' ORDER BY version  LIMIT 1;
+        INSERT INTO `data_share_ws`.sbch_equipment_allot SELECT *,() FROM sbch_equipment_allot WHERE del_flag = '0' ORDER BY version  LIMIT 1;
         INSERT INTO `data_share_ws`.sbch_equipment_allot_details
         (SELECT * FROM sbch_equipment_allot_details WHERE del_flag = '0' AND main_id = (select id from sbch_equipment_allot WHERE del_flag = '0' order by version desc LIMIT 1));
 

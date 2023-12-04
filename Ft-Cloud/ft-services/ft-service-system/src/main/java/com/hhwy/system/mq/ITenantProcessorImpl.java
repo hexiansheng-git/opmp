@@ -7,7 +7,9 @@ import com.hhwy.flowable.api.RemoteBpmnSyncService;
 import com.hhwy.system.api.domain.SysRole;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
+import com.hhwy.system.core.domain.SysRoleMenu;
 import com.hhwy.system.core.domain.SysUserRole;
+import com.hhwy.system.core.mapper.SysRoleMenuMapper;
 import com.hhwy.system.core.mapper.SysUserMapper;
 import com.hhwy.system.core.mapper.SysUserRoleMapper;
 import com.hhwy.system.core.processor.ITenantProcessor;
@@ -18,6 +20,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +44,13 @@ public class ITenantProcessorImpl implements ITenantProcessor {
     private SysUserRoleMapper sysUserRoleMapper;
 
     @Autowired
+    private SysRoleMenuMapper sysRoleMenuMapper;
+
+    @Autowired
     private IUserService userService;
 
     @Override
+    @Transactional
     public void doPostForInsert(SysTenant sysTenant) {
 //        System.out.println("租户创建成功回调方法开始********************************************************************************");
 //        Map<String, Object> projectInfo = sysTenant.getParams();
@@ -57,6 +64,7 @@ public class ITenantProcessorImpl implements ITenantProcessor {
 
         masterToTenant(sysTenant);
         addRoleToTenant(sysTenant);
+        addMenuToRole(sysTenant);
     }
 
     //给租户下发流程信息
@@ -91,6 +99,28 @@ public class ITenantProcessorImpl implements ITenantProcessor {
         }
 
     }
+
+    //给租户的默认角色添加菜单权限
+    public void addMenuToRole(SysTenant sysTenant) {
+        //默认普通角色信息
+        SysRole sysRole = new SysRole();
+        sysRole.setRoleKey("common");
+        List<SysRole> sysRoles = roleService.list(sysRole);
+        SysRole sysRoleCommon = sysRoles.get(0);
+        String tenantKey = sysTenant.getTenantKey();
+        //master菜单信息
+        List<SysRoleMenu> roleMenuList = roleService.selectRoleMenuList("master", sysRoleCommon.getRoleId());
+
+        // 租户菜单关系维护
+        for(SysRoleMenu item:roleMenuList){
+            item.setTenantKey(tenantKey);
+        }
+        if(CollectionUtils.isNotEmpty(roleMenuList)) {
+            sysRoleMenuMapper.batchRoleMenu(roleMenuList);
+        }
+
+    }
+
 
     @Override
     public void doPostForUpdate(SysTenant sysTenant) {

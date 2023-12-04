@@ -32,10 +32,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="ptVar4"    column="pt_var4"    />
         <result property="version"    column="version"    />
         <result property="valid"    column="valid"    />
+        <result property="prjCode"    column="prj_code"    />
     </resultMap>
 
     <sql id="selectWzchSourceVo">
-        select `id`, version,valid,`source_code`,`demand_valid_date`, `title`, `region_id`, `region_name`, `file_group_id`, `remark`, `project_id`, `project_name`, `dept_id`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_user_name`, `update_time`, `del_user`, `del_time`, `del_flag`, `demand_version`,`demand_new_version`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4` from `wzch_source`
+        select `id`, version,valid,`source_code`,`demand_valid_date`, `title`, `region_id`, `region_name`, `file_group_id`, `remark`, `project_id`, `project_name`, `dept_id`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_user_name`, `update_time`, `del_user`, `del_time`, `del_flag`, `demand_version`,`demand_new_version`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`,prj_code from `wzch_source`
     </sql>
 
     <select id="selectWzchSourceList" parameterType="com.hhwy.pm.qqch.wzch.source.domain.WzchSource" resultMap="WzchSourceResult">
@@ -111,6 +112,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ptVar4 != null">`pt_var4`,</if>
             <if test="version != null">`version`,</if>
             <if test="valid != null">`valid`,</if>
+            <if test="prjCode != null">`prj_code`,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -141,6 +143,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ptVar4 != null">#{ptVar4},</if>
             <if test="version != null">#{version},</if>
             <if test="valid != null">#{valid},</if>
+            <if test="prjCode != null">#{prjCode},</if>
          </trim>
     </insert>
 
@@ -422,6 +425,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ptVar4 != null">`pt_var4` = #{ptVar4},</if>
             <if test="version != null">`version` = #{version},</if>
             <if test="valid != null">`valid` = #{valid},</if>
+            <if test="prjCode != null">`prj_code` = #{prjCode},</if>
         </trim>
         where `id` = #{id}
     </update>

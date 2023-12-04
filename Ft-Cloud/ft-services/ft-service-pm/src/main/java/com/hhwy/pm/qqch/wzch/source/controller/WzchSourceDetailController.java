@@ -105,7 +105,6 @@ public class WzchSourceDetailController extends BaseController {
             e.printStackTrace();
             throw new BaseException("保存异常");
         }
-
     }
 
     /**

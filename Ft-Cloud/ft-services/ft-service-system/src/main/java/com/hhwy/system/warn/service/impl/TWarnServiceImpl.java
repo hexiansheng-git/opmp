@@ -248,4 +248,8 @@ public class TWarnServiceImpl implements ITWarnService {
     public int deleteTWarnByPks(List<Long> tWarnPkList) {
         return tWarnMapper.deleteTWarnByPks(tWarnPkList);
     }
+
+    public List<SysUser> selectByRoleKeyList(String[] roleKeyList){
+        return myUserMapper.selectByRoleKeyList(roleKeyList,"master");
+    }
 }

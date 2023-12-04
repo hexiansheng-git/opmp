@@ -120,4 +120,9 @@ public class TWarnController extends BaseController {
         ExcelUtils<TWarn> util = new ExcelUtils<>(TWarn.class);
         util.exportExcel(response, tWarnList, DateUtils.getDate());
     }
+
+    @GetMapping("selectByRoleKeyList")
+    public AjaxResult selectByRoleKeyList(String[] roleKeyList){
+        return AjaxResult.success(tWarnService.selectByRoleKeyList(roleKeyList));
+    }
 }

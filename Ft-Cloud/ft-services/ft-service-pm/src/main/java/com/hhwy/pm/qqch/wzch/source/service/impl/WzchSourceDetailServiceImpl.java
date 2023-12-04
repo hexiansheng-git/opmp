@@ -167,12 +167,12 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         WzchSource source = wzchSourceService.selectWzchSourceById(wzchSource.getId());
         if(source==null) {
             wzchSource.setId(IdWorker.createId());
+            wzchSource.setPrjCode(SecurityUtils.getTenantKey());
             //插入前校验不能有其他数据
             List list = wzchSourceService.selectWzchSourceList(new WzchSource());
             if(CollectionUtils.isNotEmpty(list))
                 throw new RuntimeException("已存在物资来源数据，无法新增。请勿点击过快");
             wzchSourceService.insertWzchSource(wzchSource);
-
         }else{
             wzchSourceService.updateWzchSource(wzchSource);
         }
@@ -380,6 +380,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         new AddBaseInfoUtil<>().addBaseEntity(wzchSource);
         wzchSource.setValid("0");
         wzchSource.setVersion(version);
+        wzchSource.setPrjCode(SecurityUtils.getTenantKey());
         //
         WzchTotalDemandTimeCount queryTime = new WzchTotalDemandTimeCount();
         queryTime.setVersion(version);
