@@ -26,6 +26,8 @@ import java.math.BigDecimal;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author ldd
@@ -127,18 +129,21 @@ public class QqchPulicHealthRiskServiceImpl implements IQqchPulicHealthRiskServi
             String stageIdentity = vo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
             //向总部版推送数据
-
-            List<QqchPulicHealthRisk> qqchPulicHealthRiskList1 = qqchPulicHealthRiskList;
-            List<QyzsSafeDiseaseBank> pushData = new ArrayList<>();
-            qqchPulicHealthRiskList1.forEach(p ->{
-                QyzsSafeDiseaseBank qyzsSafeDiseaseBank = new QyzsSafeDiseaseBank();
-                qyzsSafeDiseaseBank.setRiskFactor(p.getRiskFactor());
-                qyzsSafeDiseaseBank.setControlMeasure(p.getControlMeasure());
-                pushData.add(qyzsSafeDiseaseBank);
+            ExecutorService executorService = Executors.newFixedThreadPool(1);
+            executorService.submit(() -> {
+                List<QqchPulicHealthRisk> qqchPulicHealthRiskList1 = qqchPulicHealthRiskList;
+                List<QyzsSafeDiseaseBank> pushData = new ArrayList<>();
+                qqchPulicHealthRiskList1.forEach(p ->{
+                    QyzsSafeDiseaseBank qyzsSafeDiseaseBank = new QyzsSafeDiseaseBank();
+                    qyzsSafeDiseaseBank.setRiskFactor(p.getRiskFactor());
+                    qyzsSafeDiseaseBank.setControlMeasure(p.getControlMeasure());
+                    pushData.add(qyzsSafeDiseaseBank);
+                });
+                rocketMQTemplate.convertAndSend("qyzs_safe_disease_bank:tenantSuccess", pushData);
             });
-            rocketMQTemplate.convertAndSend("qyzs_safe_disease_bank:tenantSuccess", pushData);
         }
     }
+
 
     @Transactional
     public int insertQqchPulicHealthRiskList(List<QqchPulicHealthRisk> qqchPulicHealthRiskList,BigDecimal version) {
