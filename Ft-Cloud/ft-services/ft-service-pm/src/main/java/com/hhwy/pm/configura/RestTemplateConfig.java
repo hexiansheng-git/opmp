@@ -17,20 +17,7 @@ public class RestTemplateConfig {
     @ConditionalOnMissingBean(RestTemplate.class)
     @Bean
     public RestTemplate restTemplate(){
-        return new RestTemplate(getClientHttpRequestFactory());
-    }
-
-    /**
-     * 使用OkHttpClient作为底层客户端
-     * @return
-     */
-    private ClientHttpRequestFactory getClientHttpRequestFactory(){
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-//                .connectTimeout(5, TimeUnit.SECONDS)
-//                .writeTimeout(5, TimeUnit.SECONDS)
-//                .readTimeout(5, TimeUnit.SECONDS)
-                .build();
-        return new OkHttp3ClientHttpRequestFactory(okHttpClient);
+        return new RestTemplate();
     }
 
 }
