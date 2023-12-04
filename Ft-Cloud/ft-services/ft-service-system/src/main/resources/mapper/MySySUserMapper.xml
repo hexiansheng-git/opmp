@@ -212,4 +212,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>) uid
         where u.user_id = uid.user_id
     </select>
+
+    <select id="selectUserIdByTenant" resultMap="com.hhwy.system.core.mapper.SysUserMapper.SysUserResult">
+        select user_id ,
+               tenant_key
+        FROM
+        sys_user
+        where tenant_key=#{tenantKey}
+    </select>
 </mapper>

@@ -1,16 +1,24 @@
 package com.hhwy.system.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.system.SelfUserInfo;
 import com.hhwy.domain.base.system.UserPostInfo;
 import com.hhwy.system.api.domain.SysDept;
+import com.hhwy.system.api.domain.SysRole;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.system.api.model.LoginUser;
+import com.hhwy.system.core.domain.SysUserRole;
+import com.hhwy.system.core.mapper.SysUserRoleMapper;
 import com.hhwy.system.mapper.UserMapper;
+import com.hhwy.system.service.IDeptService;
+import com.hhwy.system.service.IRoleService;
 import com.hhwy.system.service.IUserService;
 import com.hhwy.system.utils.redis.SysRedisUtils;
+import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -143,5 +151,104 @@ public class UserServiceImpl implements IUserService {
     @Override
     public int insertSysUserList(List<SysUser> sysUserList) {
         return userMapper.insertSysUserList(sysUserList);
+    }
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private IDeptService deptService;
+
+    @Autowired
+    private IRoleService roleService;
+
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
+
+    public List<SysUser> testUser(String s) {
+        Map projectBasicInfo = JSON.parseObject(s, Map.class);
+        // 需要同步的领导账号
+
+        SysUser sysUser = JSONObject.parseObject(projectBasicInfo.get("sysUser").toString(),SysUser.class);
+        // 需要同步领导账号的租户的集合
+        List<String> tenantKeys = JSONObject.parseObject(projectBasicInfo.get("tenantKeys").toString(), ArrayList.class);
+        if(sysUser != null && !org.apache.commons.collections4.CollectionUtils.isEmpty(tenantKeys)) {
+
+            // 需要新增的用户
+            List<SysUser> sysUserList4Add = new ArrayList<>();
+            // 需要新增的用户与角色关系
+            List<SysUserRole> sysUserRoleList4Add = new ArrayList<>();
+            // 查询已存在该用户的租户用户数据
+            SysUser sysUser1 = new SysUser();
+            sysUser1.setUserName(sysUser.getUserName());
+            List<SysUser> sysUsers = userService.selectSysUserInfo(sysUser1);
+
+            // 查询每个租户默认的领导角色
+            SysRole sysRole = new SysRole();
+            sysRole.setRoleKey("common");
+            List<SysRole> sysRoles = roleService.list(sysRole);
+
+            // 获取每个租户的项目机构数据
+            List<SysDept> projectOrgInfo = deptService.getProjectOrgInfo();
+
+            for(String tenantKey : tenantKeys) {
+                // 过滤已存在的租户用户
+                if(!org.apache.commons.collections4.CollectionUtils.isEmpty(sysUsers)) {
+                    SysUser sysUserExist = sysUsers.stream().filter(vo -> tenantKey.equals(vo.getTenantKey())).findFirst().orElse(null);
+                    if(sysUserExist != null) {
+                        continue;
+                    }
+                }
+                // 复制领导用户数据
+                SysUser sysUser4Add = JSONObject.parseObject(JSONObject.toJSONString(sysUser), SysUser.class);
+                if(sysUser4Add != null) {
+
+                    // ID
+                    Long id = IdWorker.createId();
+                    sysUser4Add.setUserId(id);
+
+                    if(!org.apache.commons.collections4.CollectionUtils.isEmpty(sysRoles)) {
+                        //逻辑有问题暂时修改2023年9月13日17:27:37 todo
+                        //SysRole sysRole1 = sysRoles.stream().filter(vo -> tenantKey.equals(vo.getTenantKey())).findFirst().orElse(null);
+                        SysRole sysRole1 = sysRoles.get(0);
+                        // 默认角色
+                        if(sysRole1 != null) {
+
+                            // 权限id 维护
+                            Long[] roleIds = new Long[1];
+                            roleIds[0] = sysRole1.getRoleId();
+                            sysUser4Add.setRoleIds(roleIds);
+                            sysUser4Add.setTenantKey(tenantKey);
+                            sysUser4Add.setStatus("0");
+
+                            // 角色用户关系维护
+                            SysUserRole sysUserRole = new SysUserRole();
+                            sysUserRole.setUserId(id);
+                            sysUserRole.setRoleId(sysRole1.getRoleId());
+                            sysUserRole.setTenantKey(tenantKey);
+                            sysUserRoleList4Add.add(sysUserRole);
+
+                        }
+                    }
+                    if(!org.apache.commons.collections4.CollectionUtils.isEmpty(projectOrgInfo)) {
+                        SysDept sysDept = projectOrgInfo.stream().filter(vo -> tenantKey.equals(vo.getTenantKey())).findFirst().orElse(null);
+                        // 默认部门维护
+                        if(sysDept != null) sysUser4Add.setDeptId(null);
+                    }
+
+                    sysUserList4Add.add(sysUser4Add);
+                }
+            }
+            // 插入用户数据
+            if(!org.apache.commons.collections4.CollectionUtils.isEmpty(sysUserList4Add)) userService.insertSysUserList(sysUserList4Add);
+            // 插入权限关系数据
+            if(!org.apache.commons.collections4.CollectionUtils.isEmpty(sysUserRoleList4Add)) sysUserRoleMapper.batchUserRole(sysUserRoleList4Add);
+        }
+
+        return  null;
+    }
+
+    @Override
+    public List<SysUser> selectUserIdByTenant(String tenantKey) {
+        return userMapper.selectUserIdByTenant(tenantKey);
     }
 }
