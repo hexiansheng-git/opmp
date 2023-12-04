@@ -2,6 +2,7 @@ package com.hhwy.pm.ehr.controller;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.ehr.domain.PersonCertifyCompetency;
 import com.hhwy.pm.ehr.service.IEhrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,8 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 调用人资系统获取人员的证书信息
@@ -47,7 +50,10 @@ public class EhrController {
     @PostMapping("test3")
     public AjaxResult test3(String userNames){
         try {
-            ehrService.getCertListByUserName4As(userNames);
+            for(int i=1; i<=10; i++){
+                Map<String, Object> res = ehrService.getCertList("2022008083");
+                System.out.print("第"+i+"次请求返回结果:"+res.toString());
+            }
         } catch (ParserConfigurationException | IOException | SAXException e) {
             throw new RuntimeException(e);
         }
