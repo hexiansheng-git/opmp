@@ -203,6 +203,9 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
     }
 
     public void checkExistsData(BigDecimal version){
+        if(version == null){
+            return;
+        }
         boolean exists = CommonServiceUtil.checkExistsByVersion(TN, version);
         if(exists){
             return;
