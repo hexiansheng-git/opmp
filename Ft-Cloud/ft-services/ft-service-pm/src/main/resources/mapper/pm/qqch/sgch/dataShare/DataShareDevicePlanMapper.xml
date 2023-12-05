@@ -132,7 +132,7 @@
         (SELECT * FROM wzch_total_demand_detail WHERE del_flag = '0' AND total_demand_id = (select id from wzch_total_demand WHERE del_flag = '0' order by version desc LIMIT 1));
         replace INTO `data_share_ws`.wzch_total_demand_time_count
 		(select * from wzch_total_demand_time_count where total_demand_detail_id in (
-            SELECT id FROM wzch_total_demand_detail WHERE del_flag = '0' AND total_demand_id = (select id from wzch_total_demand WHERE del_flag = '0' order by version desc LIMIT 1)))
+            SELECT id FROM wzch_total_demand_detail WHERE del_flag = '0' AND total_demand_id = (select id from wzch_total_demand WHERE del_flag = '0' order by version desc LIMIT 1)));
 
         replace INTO `data_share_ws`.wzch_source SELECT *,#{prjCode} FROM wzch_source WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_source_detail
@@ -269,8 +269,8 @@
         UPDATE `data_share_ws`.sbch_import_customs_clear_detail SET del_flag = '1' WHERE del_flag = '0' and info_id = (SELECT id FROM sbch_import_customs_clear WHERE del_flag = '0' AND version = 1.0);
 
         UPDATE `data_share_ws`.sbch_import_inquiry SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
-        UPDATE `data_share_ws`.sbch_import_inquiry_country SET del_flag = '1' WHERE del_flag = '0' and inquiry_id = (SELECT id FROM sbch_import_inquiry WHERE del_flag = '0' AND version = 1.0);
-        UPDATE `data_share_ws`.sbch_import_inquiry_customs SET del_flag = '1' WHERE del_flag = '0' and inquiry_id = (SELECT id FROM sbch_import_inquiry WHERE del_flag = '0' AND version = 1.0);
+        UPDATE `data_share_ws`.sbch_import_inquiry_country SET del_flag = '1' WHERE del_flag = '0' and inquiry_id in (SELECT id FROM sbch_import_inquiry WHERE del_flag = '0' AND version = 1.0);
+        UPDATE `data_share_ws`.sbch_import_inquiry_customs SET del_flag = '1' WHERE del_flag = '0' and inquiry_id in (SELECT id FROM sbch_import_inquiry WHERE del_flag = '0' AND version = 1.0);
 
         UPDATE `data_share_ws`.sbch_import_plan SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
         UPDATE `data_share_ws`.sbch_import_plan_detail SET del_flag = '1' WHERE del_flag = '0' and plan_id = (SELECT id FROM sbch_import_plan WHERE del_flag = '0' AND version = 1.0);
@@ -338,32 +338,16 @@
         UPDATE `data_share_ws`.wzch_source_approach_year_count SET valid = '0' WHERE del_flag = '0' ;
         UPDATE `data_share_ws`.wzch_prior_approach SET valid = '0' WHERE del_flag = '0' ;
         UPDATE `data_share_ws`.wzch_prior_approach_detail SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_prior_approach_year_count SET valid = '0' WHERE del_flag = '0' ;
         UPDATE `data_share_ws`.wzch_purchase_supply SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_purchase_supply_detail SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_purchase_supply_batch_detail SET valid = '0' WHERE del_flag = '0' ;
         UPDATE `data_share_ws`.wzch_local_purchase_supply SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_local_purchase_supply_detail SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_local_purchase_supply_batch_detail SET valid = '0' WHERE del_flag = '0' ;
         UPDATE `data_share_ws`.wzch_revolve_rent SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_revolve_rent_detail SET valid = '0' WHERE del_flag = '0' ;
         UPDATE `data_share_ws`.wzch_prior_purchase SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_prior_purchase_detail SET valid = '0' WHERE del_flag = '0' ;
         UPDATE `data_share_ws`.wzch_special_project SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_special_project_detail SET valid = '0' WHERE del_flag = '0' ;
         UPDATE `data_share_ws`.wzch_fund SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_fund_detail SET valid = '0' WHERE del_flag = '0' ;
         UPDATE `data_share_ws`.wzch_import_export_survey SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_import_export_survey_country SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_import_export_survey_customs SET valid = '0' WHERE del_flag = '0' ;
         UPDATE `data_share_ws`.wzch_import_export_plan SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_import_export_plan_detail SET valid = '0' WHERE del_flag = '0' ;
         UPDATE `data_share_ws`.wzch_special_material_plan SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_special_material_plan_detail SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_special_material_request_detail SET valid = '0' WHERE del_flag = '0' ;
         UPDATE `data_share_ws`.wzch_local_transport_plan SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_local_transport_plan_detail SET valid = '0' WHERE del_flag = '0' ;
         UPDATE `data_share_ws`.wzch_scene_manage SET valid = '0' WHERE del_flag = '0' ;
-        UPDATE `data_share_ws`.wzch_scene_manage_detail SET valid = '0' WHERE del_flag = '0' ;
     </update>
 </mapper>
