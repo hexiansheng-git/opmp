@@ -392,6 +392,10 @@
             </if>
         </where>
     </select>
+    <select id="getDetailListByInfoIds" resultMap="QqchSafeEnvirRiskListDetailResultMap">
+        <include refid="selectQqchSafeEnvirRiskListDetailVo"></include>
+        where del_flag = '0' and find_in_set(info_id,#{infoIds})
+    </select>
 
     <update id="deleteByInfoId">
         update `qqch_safe_envir_risk_list_detail` set del_flag = 1,del_user = #{delUser},del_time = #{delTime}

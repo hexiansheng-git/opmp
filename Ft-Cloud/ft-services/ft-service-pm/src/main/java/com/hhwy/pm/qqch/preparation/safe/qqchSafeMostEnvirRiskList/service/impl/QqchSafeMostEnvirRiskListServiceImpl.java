@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.service.impl
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -19,6 +20,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zq
@@ -47,6 +52,8 @@ public class QqchSafeMostEnvirRiskListServiceImpl implements IQqchSafeMostEnvirR
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+
+    private static final String TN = "qqch_safe_most_envir_risk_list";
 
     public QqchSafeMostEnvirRiskList getQqchSafeMostEnvirRiskList(QqchSafeMostEnvirRiskList qqchSafeMostEnvirRiskList) {
         return qqchSafeMostEnvirRiskListMapper.getQqchSafeMostEnvirRiskList(qqchSafeMostEnvirRiskList);
@@ -152,8 +159,8 @@ public class QqchSafeMostEnvirRiskListServiceImpl implements IQqchSafeMostEnvirR
     public QqchSafeMostEnvirRiskListVo getList(SafeMostEnvirRiskListQueryVo queryVo) {
         QqchSafeMostEnvirRiskListVo safeMostEnvirRiskListVo = new QqchSafeMostEnvirRiskListVo();
         BigDecimal version = queryVo.getVersion();
-        version = VersionUtil.getVersion("qqch_safe_most_envir_risk_list",version);
-
+        this.checkExistsData(version);
+        version = VersionUtil.getVersion(TN,version);
         QqchSafeMostEnvirRiskList safeMostEnvirRiskList = new QqchSafeMostEnvirRiskList();
         safeMostEnvirRiskList.setVersion(version);
         safeMostEnvirRiskList.setWbsId(queryVo.getWbsId());
@@ -174,5 +181,64 @@ public class QqchSafeMostEnvirRiskListServiceImpl implements IQqchSafeMostEnvirR
         safeMostEnvirRiskListVo.setVersion(version);
         safeMostEnvirRiskListVo.setStageIdentity(qqchReviewService.getStage());
         return safeMostEnvirRiskListVo;
+    }
+
+    public void checkExistsData(BigDecimal version){
+        if(version == null){
+            return;
+        }
+        boolean exists = CommonServiceUtil.checkExistsByVersion(TN, version);
+        if(exists){
+            return;
+        }
+        BigDecimal oldVersion = VersionUtil.getVersion(TN,version);
+        if(oldVersion.equals(version)){
+            return;
+        }
+
+        //查询主子表数据
+        QqchSafeMostEnvirRiskList query = new QqchSafeMostEnvirRiskList();
+        query.setVersion(version);
+        List<QqchSafeMostEnvirRiskList> riskListList = qqchSafeMostEnvirRiskListMapper.getQqchSafeMostEnvirRiskListList(query);
+        if(CollectionUtils.isEmpty(riskListList)){
+            return;
+        }
+        List<Long> idList = riskListList.stream().map(QqchSafeMostEnvirRiskList::getId).collect(Collectors.toList());
+        List<QqchSafeMostEnvirRiskListDetail> detailList = detailMapper.getListByInfoIds(idList);
+        Map<Long, List<QqchSafeMostEnvirRiskListDetail>> detailMap = null;
+        if(!CollectionUtils.isEmpty(detailList)){
+            detailMap = detailList.stream().collect(Collectors.groupingBy(QqchSafeMostEnvirRiskListDetail::getInfoId));
+        }
+
+        List<QqchSafeMostEnvirRiskListDetail> insertList = new ArrayList<>();
+        for (QqchSafeMostEnvirRiskList riskList : riskListList) {
+            Long oldId = riskList.getId();
+            Long id = IdWorker.createId();
+            riskList.setId(id);
+            riskList.setVersion(version);
+            riskList.setValid(Valid.NO);
+            riskList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            riskList.setCreateUserName(SecurityUtils.getUserName());
+            riskList.setCreateTime(DateUtils.getNowDate());
+
+            if(detailMap != null){
+                List<QqchSafeMostEnvirRiskListDetail> details = detailMap.get(oldId);
+                if(!CollectionUtils.isEmpty(details)){
+                    for (QqchSafeMostEnvirRiskListDetail detail : details) {
+                        detail.setId(IdWorker.createId());
+                        detail.setInfoId(id);
+                        detail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                        detail.setCreateUserName(SecurityUtils.getUserName());
+                        detail.setCreateTime(DateUtils.getNowDate());
+                    }
+                    insertList.addAll(details);
+                }
+            }
+        }
+
+        qqchSafeMostEnvirRiskListMapper.insertQqchSafeMostEnvirRiskListList(riskListList);
+        if(CollectionUtils.isNotEmpty(insertList)){
+            detailMapper.insertQqchSafeMostEnvirRiskListDetailList(insertList);
+        }
     }
 }

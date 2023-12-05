@@ -2,18 +2,14 @@ package com.hhwy.pm.qqch.preparation.safe.danger.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.danger.domain.vo.QqchDangerSafeMeasuresVo;
 import com.hhwy.pm.qqch.preparation.safe.danger.service.IQqchDangerSafeMeasuresService;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 /**
  * @author zhenglili
@@ -34,7 +30,6 @@ public class QqchDangerSafeMeasuresController extends BaseController {
      * @param version
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDangerSafeMeasures:list")
     @GetMapping("/getList")
     public AjaxResult getList(BigDecimal version) {
         QqchDangerSafeMeasuresVo qqchDangerSafeMeasuresVo = qqchDangerSafeMeasuresService
@@ -48,7 +43,6 @@ public class QqchDangerSafeMeasuresController extends BaseController {
      * @param qqchDangerSafeMeasuresVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDangerSafeMeasures:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchDangerSafeMeasuresVo qqchDangerSafeMeasuresVo) {
