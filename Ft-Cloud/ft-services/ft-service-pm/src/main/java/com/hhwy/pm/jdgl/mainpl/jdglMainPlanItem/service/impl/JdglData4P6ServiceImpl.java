@@ -375,7 +375,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         if (!CollectionUtils.isEmpty(tenantKeyList)) {
 
             // 创建固定数量的线程池
-            int threadPoolSize = 10;
+            int threadPoolSize = 5;
             ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
 
 
