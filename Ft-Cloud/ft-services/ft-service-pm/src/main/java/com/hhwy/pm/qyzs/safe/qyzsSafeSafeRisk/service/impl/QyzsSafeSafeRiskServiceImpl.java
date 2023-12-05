@@ -2,10 +2,12 @@ package com.hhwy.pm.qyzs.safe.qyzsSafeSafeRisk.service.impl;
 
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.pm.gm.wbs.service.ITWbsService;
 import com.hhwy.pm.qyzs.safe.qyzsSafeSafeRisk.domain.SafeSafeRiskQueryVo;
 import com.hhwy.pm.qyzs.safe.qyzsSafeSafeRisk.service.IQyzsSafeSafeRiskService;
 import com.hhwy.pm.utils.HttpHeadersUtils;
 import com.hhwy.pm.utils.RestTemplateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +22,8 @@ import org.springframework.util.MultiValueMap;
 @Service
 public class QyzsSafeSafeRiskServiceImpl implements IQyzsSafeSafeRiskService {
 
+    @Autowired
+    private ITWbsService tWbsService;
 
     @Value("${gm.back-url}")
     private String gmUrl;
@@ -28,6 +32,7 @@ public class QyzsSafeSafeRiskServiceImpl implements IQyzsSafeSafeRiskService {
         String url = gmUrl + "/gm/qyzsSafeSafeRisk/list?projectType={projectType}&wbsCode={wbsCode}&workUnit={workUnit}&riskLevel={riskLevel}";
         HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
         HttpEntity<MultiValueMap<String,Object>> httpEntity = new HttpEntity<>(headers);
-        return RestTemplateUtils.get(url, httpEntity, AjaxResult.class, queryVo.getProjectType(),queryVo.getWbsCode(),queryVo.getWorkUnit(),queryVo.getRiskLevel());
+        String projectType = tWbsService.getDefaultEngineeringType();
+        return RestTemplateUtils.get(url, httpEntity, AjaxResult.class, projectType,queryVo.getWbsCode(),queryVo.getWorkUnit(),queryVo.getRiskLevel());
     }
 }

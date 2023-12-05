@@ -1,10 +1,13 @@
 package com.hhwy.pm.qqch.review.controller;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.review.domain.Review;
@@ -264,8 +267,20 @@ public class ReviewController extends BaseController {
         qqchReviewService.listener(id);
         //推送设备策划数据到物设中间库
         ExecutorService executorService = Executors.newSingleThreadExecutor();
+        String tenantKey = SecurityUtils.getTenantKey();
         executorService.submit(() -> {
-            dataShareDevicePlanService.eachStagePush();
+            //切换
+            String oldDataSource = DynamicDataSourceContextHolder.peek();
+            DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+            try {
+                dataShareDevicePlanService.eachStagePush(tenantKey);
+            }catch (Exception e){
+                e.printStackTrace();
+                throw new CustomException(e.getMessage());
+            }finally {
+                DynamicDataSourceContextHolder.poll();
+                DynamicDataSourceContextHolder.push(oldDataSource);
+            }
         });
         return AjaxResult.success("成功");
     }

@@ -9,7 +9,7 @@ import java.util.List;
 public interface DataShareDevicePlanMapper {
 
 
-    void dataPush();
+    void dataPush(@Param("prjCode") String prjCode);
 
     void deleteByOneVersion();
 

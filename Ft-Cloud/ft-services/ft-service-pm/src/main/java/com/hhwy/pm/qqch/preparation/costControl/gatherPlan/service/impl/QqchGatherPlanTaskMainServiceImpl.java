@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.costControl.gatherPlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
@@ -20,7 +21,9 @@ import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +59,8 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
 
     @Autowired
     private IQqchMainPlanItemService qqchMainPlanItemService;
+
+    private static final String TN = "qqch_gather_plan_task_main";
 
 
     public QqchGatherPlanTaskMain getQqchGatherPlanTaskMain(QqchGatherPlanTaskMain qqchGatherPlanTaskMain) {
@@ -122,6 +127,7 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
         QqchGatherPlanTaskMainVo qqchGatherPlanTaskMainVo = new QqchGatherPlanTaskMainVo();
 
         BigDecimal version = queryVo.getVersion();
+        this.checkExistsData(version);
         Long wbsMainId = queryVo.getWbsMainId();
         String parentId = queryVo.getParentId();
 
@@ -137,11 +143,17 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
         xmslWbs.setParentId(parentId);
         Map map = xmslWbsService.listData(xmslWbs);
         List<XmslWbs> wbsList = (List<XmslWbs>) map.get("list");
-        wbsMainId = (Long) map.get("mainId");
-        Integer wbsVersion = (Integer) map.get("version");
+        Object mainIdObj = map.get("mainId");
+        if(ObjectUtils.isNotBlank(mainIdObj)){
+            wbsMainId = (Long) mainIdObj;
+        }
+        Object versionObj = map.get("version");
+        Integer wbsVersion = null;
+        if(ObjectUtils.isNotEmpty(versionObj)){
+            wbsVersion= (Integer) versionObj;
+        }
 
-
-        version = VersionUtil.getVersion("qqch_gather_plan_task_main", version);
+        version = VersionUtil.getVersion(TN, version);
         QqchGatherPlanTask qqchGatherPlanTask = new QqchGatherPlanTask();
         qqchGatherPlanTask.setVersion(version);
         List<QqchGatherPlanTask> qqchGatherPlanTaskList = qqchGatherPlanTaskMapper.getQqchGatherPlanTaskList(qqchGatherPlanTask);
@@ -188,6 +200,50 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
         qqchGatherPlanTaskMainVo.setStageIdentity(qqchReviewService.getStage());
         qqchGatherPlanTaskMainVo.setQqchGatherPlanTaskVoList(qqchGatherPlanTaskVoList);
         return qqchGatherPlanTaskMainVo;
+    }
+
+    public void checkExistsData(BigDecimal version){
+        if(version == null){
+            return;
+        }
+        boolean exists = CommonServiceUtil.checkExistsByVersion(TN, version);
+        if(exists){
+            return;
+        }
+        BigDecimal oldVersion = VersionUtil.getVersion(TN, version);
+        if(oldVersion.equals(version)){
+            return;
+        }
+        //查询主子表数据
+        QqchGatherPlanTaskMain gatherPlanTaskMain = this.getQqchGatherPlanTaskMainByVersion(oldVersion);
+        if(gatherPlanTaskMain == null){
+            return;
+        }
+
+        //插入主表数据
+        gatherPlanTaskMain.setId(IdWorker.createId());
+        gatherPlanTaskMain.setVersion(version);
+        gatherPlanTaskMain.setValid("0");
+        gatherPlanTaskMain.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+        gatherPlanTaskMain.setCreateUserName(SecurityUtils.getUserName());
+        gatherPlanTaskMain.setCreateTime(DateUtils.getNowDate());
+        qqchGatherPlanTaskMainMapper.insertQqchGatherPlanTaskMain(gatherPlanTaskMain);
+
+        QqchGatherPlanTask qqchGatherPlanTask = new QqchGatherPlanTask();
+        qqchGatherPlanTask.setVersion(version);
+        List<QqchGatherPlanTask> qqchGatherPlanTaskList = qqchGatherPlanTaskMapper.getQqchGatherPlanTaskList(qqchGatherPlanTask);
+        if(CollectionUtils.isEmpty(qqchGatherPlanTaskList)){
+            return;
+        }
+        for (QqchGatherPlanTask gatherPlanTask : qqchGatherPlanTaskList) {
+            gatherPlanTask.setGatherId(IdWorker.createId());
+            gatherPlanTask.setVersion(version);
+            gatherPlanTask.setValid("0");
+            qqchGatherPlanTask.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchGatherPlanTask.setCreateUserName(SecurityUtils.getUserName());
+            qqchGatherPlanTask.setCreateTime(DateUtils.getNowDate());
+        }
+        qqchGatherPlanTaskMapper.insertQqchGatherPlanTaskList(qqchGatherPlanTaskList);
     }
 
     /**

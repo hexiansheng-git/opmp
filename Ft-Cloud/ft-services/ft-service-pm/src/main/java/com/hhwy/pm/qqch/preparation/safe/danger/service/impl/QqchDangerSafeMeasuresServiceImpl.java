@@ -31,6 +31,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -76,8 +77,8 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
         //获取企业知识库危大工程清单数据
         AjaxResult ajaxResult = qyzsSafeRiskBigProjService.getQyzsSafeRiskBigProjList(new SafeRiskBigProjQueryVo());
         Map<String,Object> dataMap = (Map<String, Object>) ajaxResult.get("data");
-        List<QyzsSafeRiskBigProj> riskBigProjList = (List<QyzsSafeRiskBigProj>) dataMap.get("items");
-        Map<String, QyzsSafeRiskBigProj> riskBigProjMap = riskBigProjList.stream().collect(Collectors.toMap(QyzsSafeRiskBigProj::getRiskProjType, o -> o));
+        List<LinkedHashMap<String,Object>> riskBigProjList = (List<LinkedHashMap<String,Object>>) dataMap.get("items");
+//        Map<String, QyzsSafeRiskBigProj> riskBigProjMap = riskBigProjList.stream().filter(DistinctUtil.distinctByKey(QyzsSafeRiskBigProj::getRiskProjType)).collect(Collectors.toMap(QyzsSafeRiskBigProj::getRiskProjType, o -> o));
 
         // 组装新列表
         List<QqchDangerSafeMeasures> newList = new ArrayList<>();
@@ -121,18 +122,24 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
             /*是否已同步过主数据*/
             String whetherSync = measures.getPtVar2();
             if(StringUtils.isNotBlank(dangerType) && !"1".equals(whetherSync)){
-                QyzsSafeRiskBigProj riskBigProj = riskBigProjMap.get(dangerType);
-                if(riskBigProj == null){
+                LinkedHashMap<String, Object> proj = null;
+                for (LinkedHashMap<String, Object> linkedHashMap : riskBigProjList) {
+                    if(dangerType.equals(linkedHashMap.get("riskProjType"))){
+                        proj = linkedHashMap;
+                        break;
+                    }
+                }
+                if(proj == null){
                     continue;
                 }
-                List<QyzsSafeRiskBigProjItem> riskBigProjItemList = riskBigProj.getQyzsSafeRiskBigProjItemList();
+                List<LinkedHashMap<String,Object>> riskBigProjItemList = (List<LinkedHashMap<String, Object>>) proj.get("qyzsSafeRiskBigProjItemList");
                 if(!CollectionUtils.isEmpty(riskBigProjItemList)){
                     measures.setPtVar2("1");
-                    for (QyzsSafeRiskBigProjItem item : riskBigProjItemList) {
+                    for (LinkedHashMap<String,Object> item : riskBigProjItemList) {
                         QqchDangerSafeMeasuresDetail detail = new QqchDangerSafeMeasuresDetail();
                         detail.setId(IdWorker.createId());
                         detail.setMasterId(measures.getId());
-                        detail.setMeasures(item.getSafeTechnicalMeasure());
+                        detail.setMeasures(item.get("safeTechnicalMeasure") == null?null:item.get("safeTechnicalMeasure").toString());
                         detail.setIsWarehouse("0");
                         detail.setIsSelect("1");
                         detailList.add(detail);

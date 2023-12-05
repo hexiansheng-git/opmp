@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.quality.qualityRecord.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.CommonYesNo;
+import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
@@ -26,6 +27,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -59,6 +61,8 @@ public class QqchGeneralProjectArchivesServiceImpl implements IQqchGeneralProjec
 
     @Autowired
     private IQqchMainPlanItemService qqchMainPlanItemService;
+
+    private static final String TN = "qqch_general_project_archives";
 
     public QqchGeneralProjectArchives getQqchGeneralProjectArchives(QqchGeneralProjectArchives qqchGeneralProjectArchives) {
         return qqchGeneralProjectArchivesMapper.getQqchGeneralProjectArchives(qqchGeneralProjectArchives);
@@ -125,12 +129,47 @@ public class QqchGeneralProjectArchivesServiceImpl implements IQqchGeneralProjec
 
         //获取一般工程档案清单
         BigDecimal version = qqchGeneralProjectArchives.getVersion();
-        version = VersionUtil.getVersion("qqch_general_project_archives",version);
+        this.checkExistsData(version);
+        version = VersionUtil.getVersion(TN,version);
         this.setList(generalProjectArchivesWbsVo,version);
 
         generalProjectArchivesWbsVo.setVersion(version);
         generalProjectArchivesWbsVo.setStageIdentity(qqchReviewService.getStage());
         return generalProjectArchivesWbsVo;
+    }
+
+    public void checkExistsData(BigDecimal version){
+        if(version == null){
+            return;
+        }
+        boolean exists = CommonServiceUtil.checkExistsByVersion(TN, version);
+        if(exists){
+            return;
+        }
+        BigDecimal oldVersion = VersionUtil.getVersion(TN,version);
+        if(oldVersion.equals(version)){
+            return;
+        }
+
+        //获取一般工程档案清单
+        QqchGeneralProjectArchives query = new QqchGeneralProjectArchives();
+        query.setVersion(version);
+        List<QqchGeneralProjectArchives> archivesList = qqchGeneralProjectArchivesMapper.getQqchGeneralProjectArchivesList(query);
+
+        if(CollectionUtils.isEmpty(archivesList)){
+            return;
+        }
+
+        for (QqchGeneralProjectArchives archives : archivesList) {
+            archives.setId(IdWorker.createId());
+            archives.setVersion(version);
+            archives.setValid("0");
+            archives.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            archives.setCreateUserName(SecurityUtils.getUserName());
+            archives.setCreateTime(DateUtils.getNowDate());
+        }
+
+        qqchGeneralProjectArchivesMapper.insertQqchGeneralProjectArchivesList(archivesList);
     }
 
     /**

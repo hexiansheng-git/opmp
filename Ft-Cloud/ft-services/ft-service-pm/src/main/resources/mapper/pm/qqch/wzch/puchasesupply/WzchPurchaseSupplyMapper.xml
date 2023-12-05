@@ -35,7 +35,6 @@
         <result property="processTaskName" column="process_task_name"/>
         <result property="processTaskMan" column="process_task_man"/>
         <result property="version" column="version"/>
-        <result property="prjCode" column="prj_code"/>
     </resultMap>
 
     <sql id="selectWzchPurchaseSupplyVo">
@@ -67,7 +66,7 @@
                wps.`pt_var2`,
                wps.`pt_var3`,
                wps.`pt_var4`,
-               wps.version,wps.prj_code
+               wps.version
         from `wzch_purchase_supply` as wps
     </sql>
 
@@ -154,7 +153,6 @@
             <if test="ptVar4 != null">`pt_var4`,</if>
             <if test="params.dataType != null">`data_type`,</if>
             <if test="version != null">`version`,</if>
-            <if test="prjCode != null">`prj_code`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -185,7 +183,6 @@
             <if test="ptVar4 != null">#{ptVar4},</if>
             <if test="params.dataType != null">#{params.dataType},</if>
             <if test="version != null">#{version},</if>
-            <if test="prjCode != null">#{prjCode},</if>
         </trim>
     </insert>
 
@@ -462,7 +459,6 @@
             <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
             <if test="ptVar4 != null">`pt_var4` = #{ptVar4},</if>
             <if test="version != null">`version` = #{version},</if>
-            <if test="prjCode != null">`prj_code` = #{prjCode},</if>
         </trim>
         where `id` = #{id}
     </update>

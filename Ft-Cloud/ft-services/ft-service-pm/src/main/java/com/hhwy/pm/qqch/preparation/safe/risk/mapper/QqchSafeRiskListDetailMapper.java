@@ -17,6 +17,8 @@ public interface QqchSafeRiskListDetailMapper {
 
     List<QqchSafeRiskListDetail> getQqchSafeRiskListDetailList(QqchSafeRiskListDetail qqchSafeRiskListDetail);
 
+    List<QqchSafeRiskListDetail> getListByInfoIds(@Param("infoIds") String infoIds);
+
     int insertQqchSafeRiskListDetail(QqchSafeRiskListDetail qqchSafeRiskListDetail);
 
     int insertQqchSafeRiskListDetailList(@Param("qqchSafeRiskListDetailList") List<QqchSafeRiskListDetail> qqchSafeRiskListDetailList);

@@ -213,11 +213,14 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             List<Long> idLtr=delIdList.stream().map(Long::valueOf).collect(Collectors.toList());
             List<SgjsTechnicalManage> list = sgjsTechnicalManageMapper.batchSelect(idLtr);
             List<String> idList = list.stream().map(e -> e.getId()+"").collect(Collectors.toList());
-            int i = sgjsTechnicalManageInfoMapper.deleteInfoByTechIds(idList);
-            logger.info("子表数据删除记录--->【{}】",i);
+            if (!CollectionUtils.isEmpty(idList)) {
+                int i = sgjsTechnicalManageInfoMapper.deleteInfoByTechIds(idList);
+                logger.info("子表数据删除记录--->【{}】",i);
+            }
+            logger.info("子表未删除。。。。。。。。。。");
         }
         //同步总部数据
-        syncDataToGm(treeToList);
+        //syncDataToGm(treeToList);
         return AjaxResult.success();
     }
 
