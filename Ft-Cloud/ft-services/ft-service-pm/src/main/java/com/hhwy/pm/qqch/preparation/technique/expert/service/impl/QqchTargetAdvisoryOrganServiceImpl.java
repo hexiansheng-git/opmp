@@ -12,14 +12,20 @@ import com.hhwy.pm.qqch.preparation.technique.expert.service.IQqchTargetAdvisory
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.qyzs.speciallistOrg.qyzsEnquiryOrgLibrary.domain.QyzsEnquiryOrgLibrary;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import io.seata.common.util.CollectionUtils;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -37,6 +43,12 @@ public class QqchTargetAdvisoryOrganServiceImpl implements IQqchTargetAdvisoryOr
 
     @Autowired
     private IQqchReviewService qqchReviewService;
+
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
 
     public QqchTargetAdvisoryOrgan getQqchTargetAdvisoryOrgan(QqchTargetAdvisoryOrgan qqchTargetAdvisoryOrgan) {
@@ -153,5 +165,35 @@ public class QqchTargetAdvisoryOrganServiceImpl implements IQqchTargetAdvisoryOr
             String stageIdentity = qqchTargetAdvisoryOrganVo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
+    }
+
+    @Override
+    public void addToQyzsEnquiryOrgLibrary(List<QqchTargetAdvisoryOrgan> list) {
+        List<QqchTargetAdvisoryOrgan> needPushList = list.stream().filter(o -> !"0".equals(o.getPtVar1())).collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(needPushList)){
+            return;
+        }
+        ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+        List<QyzsEnquiryOrgLibrary> orgLibraryList = new ArrayList<>();
+        for (QqchTargetAdvisoryOrgan organ : needPushList) {
+            QyzsEnquiryOrgLibrary orgLibrary = new QyzsEnquiryOrgLibrary();
+            orgLibrary.setId(IdWorker.createId());
+            orgLibrary.setOrgName(organ.getOrganName());
+            orgLibrary.setOrgType(organ.getOrganType());
+            orgLibrary.setEnterpriseCertification(organ.getEnterpriseQualification());
+            orgLibrary.setMainBusiness(organ.getPrimaryBusiness());
+            orgLibrary.setSpecialtyDirection(organ.getMajorField());
+            orgLibrary.setDataSource(projectInfo.getProjectName());
+            orgLibrary.setPersonId(Math.toIntExact(SecurityUtils.getUserId()));
+            orgLibrary.setPersonName(SecurityUtils.getUserName());
+            orgLibrary.setEditTime(DateUtils.getNowDate());
+            orgLibrary.setRemark(organ.getRemark());
+            orgLibrary.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            orgLibrary.setCreateUserName(SecurityUtils.getUserName());
+            orgLibrary.setCreateTime(DateUtils.getNowDate());
+            orgLibraryList.add(orgLibrary);
+        }
+
+        rocketMQTemplate.convertAndSend("qqch_target_advisory_organ:tenantSuccess",orgLibraryList);
     }
 }

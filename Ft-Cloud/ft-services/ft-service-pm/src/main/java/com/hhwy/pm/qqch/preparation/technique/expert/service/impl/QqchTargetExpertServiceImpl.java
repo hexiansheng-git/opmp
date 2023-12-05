@@ -12,14 +12,20 @@ import com.hhwy.pm.qqch.preparation.technique.expert.service.IQqchTargetExpertSe
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.qyzs.speciallistOrg.qyzsSpeciallistLibrary.domain.QyzsSpeciallistLibrary;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import io.seata.common.util.CollectionUtils;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -37,6 +43,12 @@ public class QqchTargetExpertServiceImpl implements IQqchTargetExpertService {
 
     @Autowired
     private IQqchReviewService qqchReviewService;
+
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
 
     public QqchTargetExpert getQqchTargetExpert(QqchTargetExpert qqchTargetExpert) {
@@ -152,5 +164,36 @@ public class QqchTargetExpertServiceImpl implements IQqchTargetExpertService {
             String stageIdentity = qqchTargetExpertVo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
+    }
+
+    @Override
+    public void addToQyzsSpeciallistLibrary(List<QqchTargetExpert> list) {
+        List<QqchTargetExpert> needPushList = list.stream().filter(o -> !"0".equals(o.getPtVar1())).collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(needPushList)){
+            return;
+        }
+        ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+        List<QyzsSpeciallistLibrary> speciallistLibraryList = new ArrayList<>();
+        for (QqchTargetExpert expert : needPushList) {
+            QyzsSpeciallistLibrary library = new QyzsSpeciallistLibrary();
+            library.setId(IdWorker.createId());
+            library.setSpeciallistCode(expert.getExpertCode());
+            library.setSpeciallistName(expert.getName());
+            library.setDepartment(expert.getUnit());
+            library.setBusinessAreas(expert.getField());
+            library.setProducts(expert.getProduct());
+            library.setSpecialty(expert.getSpecialty());
+            library.setDataSource(projectInfo.getProjectName());
+            library.setPersonId(Math.toIntExact(SecurityUtils.getUserId()));
+            library.setPersonName(SecurityUtils.getUserName());
+            library.setEditTime(DateUtils.getNowDate());
+            library.setRemark(expert.getRemark());
+            library.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            library.setCreateUserName(SecurityUtils.getUserName());
+            library.setCreateTime(DateUtils.getNowDate());
+            speciallistLibraryList.add(library);
+        }
+
+        rocketMQTemplate.convertAndSend("qqch_target_expert:tenantSuccess",speciallistLibraryList);
     }
 }

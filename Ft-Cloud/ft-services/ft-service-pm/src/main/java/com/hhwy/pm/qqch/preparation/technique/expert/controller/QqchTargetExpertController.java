@@ -98,6 +98,17 @@ public class QqchTargetExpertController extends BaseController {
     }
 
     /**
+     * 添加到专家库
+     * @param list
+     * @return
+     */
+    @PostMapping("addToQyzsSpeciallistLibrary")
+    public AjaxResult addToQyzsSpeciallistLibrary(@RequestBody List<QqchTargetExpert> list){
+        qqchTargetExpertService.addToQyzsSpeciallistLibrary(list);
+        return AjaxResult.success();
+    }
+
+    /**
      * 保存/确认/提交
      * @param qqchTargetExpertVo
      * @return
