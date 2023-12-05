@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.gm.wbs.service.ITWbsService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -64,6 +65,8 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
     private RocketMQTemplate rocketMQTemplate;
     @Autowired
     private ITWbsService tWbsService;
+
+    private static final String TN = "qqch_safe_envir_risk_list";
 
 
     public QqchSafeEnvirRiskList getQqchSafeEnvirRiskList(QqchSafeEnvirRiskList qqchSafeEnvirRiskList) {
@@ -250,7 +253,8 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
     public QqchSafeEnvirRiskListVo getList(SafeEnvirRiskListQueryVo queryVo) {
         QqchSafeEnvirRiskListVo safeEnvirRiskListVo = new QqchSafeEnvirRiskListVo();
         BigDecimal version = queryVo.getVersion();
-        version = VersionUtil.getVersion("qqch_safe_envir_risk_list",version);
+        this.checkExistsData(version);
+        version = VersionUtil.getVersion(TN,version);
 
         QqchSafeEnvirRiskList safeRiskList = new QqchSafeEnvirRiskList();
         safeRiskList.setVersion(version);
@@ -280,5 +284,81 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
         safeEnvirRiskListVo.setVersion(version);
         safeEnvirRiskListVo.setStageIdentity(qqchReviewService.getStage());
         return safeEnvirRiskListVo;
+    }
+
+    public void checkExistsData(BigDecimal version){
+        if(version == null){
+            return;
+        }
+        boolean exists = CommonServiceUtil.checkExistsByVersion(TN, version);
+        if(exists){
+            return;
+        }
+        BigDecimal oldVersion = VersionUtil.getVersion(TN,version);
+        if(oldVersion.equals(version)){
+            return;
+        }
+
+        //查询主子表数据
+        QqchSafeEnvirRiskList listQuery = new QqchSafeEnvirRiskList();
+        listQuery.setVersion(version);
+        List<QqchSafeEnvirRiskList> listList = qqchSafeEnvirRiskListMapper.getQqchSafeEnvirRiskListList(listQuery);
+        if(CollectionUtils.isEmpty(listList)){
+            return;
+        }
+        String infoIds = listList.stream().map(o -> o.getId().toString()).collect(Collectors.joining(","));
+        List<QqchSafeEnvirRiskListDetail> detailList = detailMapper.getDetailListByInfoIds(infoIds);
+
+        Map<Long, List<QqchSafeEnvirRiskListDetail>> detailMap = null;
+        if(!CollectionUtils.isEmpty(detailList)){
+            //转树列表
+            detailList = ListTreeUtil.formatTree(
+                    detailList,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchSafeEnvirRiskListDetail::getChildren,
+                    QqchSafeEnvirRiskListDetail::setChildren);
+
+            //转线性列表
+            detailList = ListTreeUtil.formatList(
+                    detailList,
+                    QqchSafeEnvirRiskListDetail::setId,
+                    QqchSafeEnvirRiskListDetail::setPid,
+                    QqchSafeEnvirRiskListDetail::getChildren,
+                    QqchSafeEnvirRiskListDetail::setChildren);
+            detailMap = detailList.stream().collect(Collectors.groupingBy(QqchSafeEnvirRiskListDetail::getInfoId));
+        }
+
+        List<QqchSafeEnvirRiskListDetail> insertList = new ArrayList<>();
+        for (QqchSafeEnvirRiskList riskList : listList) {
+            Long oldId = riskList.getId();
+            Long id = IdWorker.createId();
+            riskList.setId(id);
+            riskList.setVersion(version);
+            riskList.setValid(Valid.NO);
+            riskList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            riskList.setCreateUserName(SecurityUtils.getUserName());
+            riskList.setCreateTime(DateUtils.getNowDate());
+
+            if(detailMap != null){
+                List<QqchSafeEnvirRiskListDetail> details = detailMap.get(oldId);
+                if(!CollectionUtils.isEmpty(details)){
+                    for (QqchSafeEnvirRiskListDetail detail : details) {
+                        detail.setInfoId(id);
+                        detail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                        detail.setCreateUserName(SecurityUtils.getUserName());
+                        detail.setCreateTime(DateUtils.getNowDate());
+                    }
+                    insertList.addAll(details);
+                }
+            }
+        }
+
+        //插入主表数据
+        qqchSafeEnvirRiskListMapper.insertQqchSafeEnvirRiskListList(listList);
+        //插入子表数据
+        if(!CollectionUtils.isEmpty(insertList)){
+            detailMapper.insertQqchSafeEnvirRiskListDetailList(insertList);
+        }
     }
 }

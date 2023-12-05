@@ -35,4 +35,5 @@ public interface QqchSafeEnvirRiskListDetailMapper {
 
     void deleteByInfoId(@Param("infoId") Long infoId, @Param("delUser") String delUser, @Param("delTime") Date delTime);
 
+    List<QqchSafeEnvirRiskListDetail> getDetailListByInfoIds(@Param("infoIds") String infoIds);
 }
