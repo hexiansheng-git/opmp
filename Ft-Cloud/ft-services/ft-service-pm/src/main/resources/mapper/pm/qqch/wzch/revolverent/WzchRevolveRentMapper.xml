@@ -35,7 +35,6 @@
         <result property="processTaskName" column="process_task_name"/>
         <result property="processTaskMan" column="process_task_man"/>
         <result property="version" column="version"/>
-        <result property="prjCode" column="prj_code"/>
     </resultMap>
 
     <sql id="selectWzchRevolveRentVo">
@@ -67,7 +66,7 @@
                rr.`pt_var2`,
                rr.`pt_var3`,
                rr.`pt_var4`,
-               rr.`version`,rr.prj_code
+               rr.`version`
         from `wzch_revolve_rent` as rr
     </sql>
 
