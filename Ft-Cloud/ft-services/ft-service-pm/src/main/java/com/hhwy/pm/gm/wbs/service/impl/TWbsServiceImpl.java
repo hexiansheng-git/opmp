@@ -6,6 +6,7 @@ import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.gm.wbs.domain.TWbs;
 import com.hhwy.pm.gm.wbs.mapper.TWbsMapper;
 import com.hhwy.pm.gm.wbs.service.ITWbsService;
@@ -122,7 +123,8 @@ public class TWbsServiceImpl implements ITWbsService {
     public List<TWbs> wbsTreeList(Map map) {
         //切换到master
         String oldDataSource = DynamicDataSourceContextHolder.peek();
-        DynamicDataSourceContextHolder.push("master");
+        String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey("master");
+        DynamicDataSourceContextHolder.push(dataSource);
         List<TWbs> resuList = new ArrayList<>();
         try {
             String engineeringType = null;
