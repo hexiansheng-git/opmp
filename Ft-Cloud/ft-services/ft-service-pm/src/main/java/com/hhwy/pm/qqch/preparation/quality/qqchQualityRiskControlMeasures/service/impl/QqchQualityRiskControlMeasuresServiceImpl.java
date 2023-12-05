@@ -137,28 +137,32 @@ public class QqchQualityRiskControlMeasuresServiceImpl implements IQqchQualityRi
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
-
             //推送总部版知识库
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
-            executorService.submit(() -> {
-                //过滤掉 “质量风险内容”为空的数据
-                List<QqchQualityRiskControlMeasures> nonNullList = qqchQualityRiskControlMeasuresList.stream()
-                        .filter(p -> StrUtil.isNotBlank(p.getContent()))
-                        .collect(Collectors.toList());
-                List<QyzsQualityRisk> pushData = new ArrayList<>();
-                nonNullList.forEach(p -> {
-                    QyzsQualityRisk qyzsQualityRisk = new QyzsQualityRisk();
-                    qyzsQualityRisk.setRiskContent(p.getContent());
-                    qyzsQualityRisk.setRiskReason(p.getReason());
-                    qyzsQualityRisk.setCountermeasure(p.getCureKeyPoint());
-                    qyzsQualityRisk.setRemark(p.getRemark());
-                    qyzsQualityRisk.setEditer(SecurityUtils.getUserName());
-                    qyzsQualityRisk.setEditDate(DateUtil.date());
-                    pushData.add(qyzsQualityRisk);
-                });
-                rocketMQTemplate.convertAndSend("qqch_quality_risk_control_measures:tenantSuccess", pushData);
-            });
+            pushData(qqchQualityRiskControlMeasuresList);
         }
+    }
+
+    //推送总部版知识库
+    private void pushData(List<QqchQualityRiskControlMeasures> qqchQualityRiskControlMeasuresList) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(() -> {
+            //过滤掉 “质量风险内容”为空的数据
+            List<QqchQualityRiskControlMeasures> nonNullList = qqchQualityRiskControlMeasuresList.stream()
+                    .filter(p -> StrUtil.isNotBlank(p.getContent()))
+                    .collect(Collectors.toList());
+            List<QyzsQualityRisk> pushData = new ArrayList<>();
+            nonNullList.forEach(p -> {
+                QyzsQualityRisk qyzsQualityRisk = new QyzsQualityRisk();
+                qyzsQualityRisk.setRiskContent(p.getContent());
+                qyzsQualityRisk.setRiskReason(p.getReason());
+                qyzsQualityRisk.setCountermeasure(p.getCureKeyPoint());
+                qyzsQualityRisk.setRemark(p.getRemark());
+//                qyzsQualityRisk.setEditer(SecurityUtils.getUserName());
+                qyzsQualityRisk.setEditDate(DateUtil.date());
+                pushData.add(qyzsQualityRisk);
+            });
+            rocketMQTemplate.convertAndSend("qqch_quality_risk_control_measures:tenantSuccess", pushData);
+        });
     }
 
 

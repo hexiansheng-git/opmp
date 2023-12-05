@@ -170,7 +170,7 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
             moduleConfirmCaseService.addConfirmRecord(dto.getModuleIdentity(), stage);
             reviewService.updateFinishNum();
             //数据推送总部版
-            pushCenter(empItemListList);
+            pushData(empItemListList);
         }
         // 将当前版本的做出变更的wbs进行删除
         if (!CollectionUtils.isEmpty(wbsCodeList))
@@ -184,7 +184,7 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
      * 作者: fushudong
      * 时间: 2023/12/4
      */
-    private void pushCenter(List<List<QqchEmpItem>> param) {
+    private void pushData(List<List<QqchEmpItem>> param) {
         if (CollectionUtil.isEmpty(param)) {
             return;
         }
@@ -211,7 +211,7 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
                 bean.setInspectionProject(p.getCheckItem());
                 bean.setSpecifiedValue(p.getStipulate());
                 bean.setInspectionMethodFrequency(p.getCheckMethod());
-                bean.setEditer(SecurityUtils.getUserName());
+//                bean.setEditer(SecurityUtils.getUserName());
                 bean.setEditDate(DateUtil.date());
 //                bean.setDataFrom(SecurityUtils.);
                 pushData.add(bean);
