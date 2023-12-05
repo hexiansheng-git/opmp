@@ -209,7 +209,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
     public int insertJdglMainPlanItemList(List<JdglMainPlanItem> jdglMainPlanItemList) {
         for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItemList) {
 //            jdglMainPlanItem.setId(IdWorker.createId());
-            jdglMainPlanItem.setCreateUser(SecurityUtils.getSysUser().getNickName());
+//            jdglMainPlanItem.setCreateUser(SecurityUtils.getSysUser().getNickName());
             jdglMainPlanItem.setCreateTime(DateUtils.getNowDate());
 //            jdglMainPlanItem.setUpdateUser(SecurityUtils.getSysUser().getNickName());
 //            jdglMainPlanItem.setUpdateTime(DateUtils.getNowDate());

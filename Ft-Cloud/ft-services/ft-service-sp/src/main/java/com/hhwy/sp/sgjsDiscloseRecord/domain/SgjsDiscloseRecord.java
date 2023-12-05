@@ -247,4 +247,16 @@ public class SgjsDiscloseRecord extends BaseEntity {
      * 是否是新增数据
      */
     private String isAdd;
+    /**
+     * 字段描述：实际交底日期-查询-开始
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    private Date queryStartDate;
+    /**
+     * 字段描述：实际交底日期-查询-结束
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    private Date queryEndDate;
 }

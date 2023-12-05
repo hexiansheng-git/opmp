@@ -108,8 +108,8 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         List<JdglMainPlanItem> jdglMainPlanItemList = null;
         if (usingJdglMainPlan != null) {
             jdglMainPlanItemList = usingJdglMainPlan.getJdglMainPlanItemList();
-            usingJdglMainPlan.setIsUse("0");
-            jdglMainPlanService.updateJdglMainPlan(usingJdglMainPlan);
+//            usingJdglMainPlan.setIsUse("0");
+            jdglMainPlanService.deleteJdglMainPlan(usingJdglMainPlan);
             usingJdglMainPlan.setId(mainPlanId);
             String versionPro = usingJdglMainPlan.getVersionPro();
             if (datePro.equals(versionPro)) {

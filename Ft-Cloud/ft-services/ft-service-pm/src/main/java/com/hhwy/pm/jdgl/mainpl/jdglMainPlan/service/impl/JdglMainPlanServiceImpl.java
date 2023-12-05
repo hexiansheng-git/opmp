@@ -126,7 +126,7 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
     @Transactional
     public int insertJdglMainPlan(JdglMainPlan jdglMainPlan) {
 //        jdglMainPlan.setId(IdWorker.createId());
-        jdglMainPlan.setCreateUser(SecurityUtils.getUserName());
+//        jdglMainPlan.setCreateUser(SecurityUtils.getUserName());
         jdglMainPlan.setCreateTime(DateUtils.getNowDate());
         int i = jdglMainPlanMapper.insertJdglMainPlan(jdglMainPlan);
         if(i > 0) {
@@ -147,7 +147,7 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
 
     @Transactional
     public int updateJdglMainPlan(JdglMainPlan jdglMainPlan) {
-        jdglMainPlan.setUpdateUser(SecurityUtils.getUserName());
+//        jdglMainPlan.setUpdateUser(SecurityUtils.getUserName());
         jdglMainPlan.setUpdateTime(DateUtils.getNowDate());
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlan.getJdglMainPlanItemList();
         iJdglMainPlanItemService.updateJdglMainPlanItemList(jdglMainPlanItemList);
@@ -169,8 +169,8 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
 
     @Transactional
     public int deleteJdglMainPlan(JdglMainPlan jdglMainPlan) {
-        jdglMainPlan.setUpdateUser(SecurityUtils.getUserName());
-        jdglMainPlan.setUpdateTime(DateUtils.getNowDate());
+//        jdglMainPlan.setUpdateUser(SecurityUtils.getUserName());
+//        jdglMainPlan.setUpdateTime(DateUtils.getNowDate());
         return jdglMainPlanMapper.deleteJdglMainPlan(jdglMainPlan);
     }
 

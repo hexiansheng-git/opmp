@@ -2,6 +2,7 @@ package com.hhwy.job.feign.factory;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.job.feign.service.PmServiceApi;
+import feign.Request;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
@@ -47,7 +48,7 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             }
 
             @Override
-            public AjaxResult initJdglData4P6ByAll() {
+            public AjaxResult initJdglData4P6ByAll(Request.Options options) {
                 return null;
             }
 

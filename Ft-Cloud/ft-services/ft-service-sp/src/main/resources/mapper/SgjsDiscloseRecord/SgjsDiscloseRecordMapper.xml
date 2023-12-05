@@ -154,7 +154,8 @@
             </if>
             <if test="wasDiscloseUser != null  and wasDiscloseUser != ''">and `was_disclose_user` = #{wasDiscloseUser}
             </if>
-            <if test="actDiscloseDate != null ">and `act_disclose_date` = #{actDiscloseDate}</if>
+            <if test="queryStartDate != null ">and `act_disclose_date` &gt;= #{queryStartDate}</if>
+            <if test="queryEndDate != null ">and `act_disclose_date` &lt;= #{queryEndDate}</if>
             <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
             <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
             <if test="reviewUser != null  and reviewUser != ''">and `review_user` = #{reviewUser}</if>

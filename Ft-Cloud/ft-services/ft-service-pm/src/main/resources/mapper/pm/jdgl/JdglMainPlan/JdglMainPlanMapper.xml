@@ -361,7 +361,7 @@
     </update>
 
     <update id="deleteJdglMainPlan">
-        update `jdgl_main_plan` set del_flag = 1
+        update `jdgl_main_plan` set del_flag = 1,is_use = '0'
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="version != null  and version != ''">and `version` = #{version}</if>
