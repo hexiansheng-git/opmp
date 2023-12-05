@@ -39,4 +39,6 @@ public interface IQqchTargetAdvisoryOrganService {
      * @return
      */
     void save(QqchTargetAdvisoryOrganVo qqchTargetAdvisoryOrganVo);
+
+    void addToQyzsEnquiryOrgLibrary(List<QqchTargetAdvisoryOrgan> list);
 }

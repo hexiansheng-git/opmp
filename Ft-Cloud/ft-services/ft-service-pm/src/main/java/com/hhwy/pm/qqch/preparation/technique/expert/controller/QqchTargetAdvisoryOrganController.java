@@ -4,7 +4,6 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.expert.domain.QqchTargetAdvisoryOrgan;
 import com.hhwy.pm.qqch.preparation.technique.expert.domain.vo.QqchTargetAdvisoryOrganVo;
 import com.hhwy.pm.qqch.preparation.technique.expert.service.IQqchTargetAdvisoryOrganService;
@@ -96,6 +95,18 @@ public class QqchTargetAdvisoryOrganController extends BaseController {
         QqchTargetAdvisoryOrganVo qqchTargetAdvisoryOrganVo = qqchTargetAdvisoryOrganService.getQqchTargetAdvisoryOrganVo(qqchTargetAdvisoryOrgan);
         return AjaxResult.success(qqchTargetAdvisoryOrganVo);
     }
+
+    /**
+     * 添加到咨询机构库
+     * @param list
+     * @return
+     */
+    @PostMapping("addToQyzsEnquiryOrgLibrary")
+    public AjaxResult addToQyzsEnquiryOrgLibrary(@RequestBody List<QqchTargetAdvisoryOrgan> list){
+        qqchTargetAdvisoryOrganService.addToQyzsEnquiryOrgLibrary(list);
+        return AjaxResult.success();
+    }
+
 
     /**
      * 保存/确认/提交

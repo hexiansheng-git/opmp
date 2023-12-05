@@ -39,4 +39,6 @@ public interface IQqchTargetExpertService {
      * @return
      */
     void save(QqchTargetExpertVo qqchTargetExpertVo);
+
+    void addToQyzsSpeciallistLibrary(List<QqchTargetExpert> list);
 }
