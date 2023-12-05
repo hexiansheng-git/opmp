@@ -415,7 +415,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
         }finally {
             String ids = list.stream().map(r->r.getId()+"").collect(Collectors.joining(","));
             //3、更新syncInfo
-            sysSyncInfoLogService.insert(SyncBusinessEnum.QQCHWORKPLAN_ENUM,ids, (long) list.size(),System.currentTimeMillis()-beginMills,status,errMsg);
+//            sysSyncInfoLogService.insert(SyncBusinessEnum.QQCHWORKPLAN_ENUM,ids, (long) list.size(),System.currentTimeMillis()-beginMills,status,errMsg);
         }
     }
 
