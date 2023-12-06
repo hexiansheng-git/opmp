@@ -1,6 +1,8 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.service;
 
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskList;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskListDetail;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.AssembleDataVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.QqchSafeEnvirRiskListVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.SafeEnvirRiskListQueryVo;
 
@@ -30,4 +32,6 @@ public interface IQqchSafeEnvirRiskListService {
     int deleteQqchSafeEnvirRiskListByPks(List<Long> qqchSafeEnvirRiskListPkList);
 
     QqchSafeEnvirRiskListVo getList(SafeEnvirRiskListQueryVo queryVo);
+
+    List<QqchSafeEnvirRiskListDetail> assembleData(AssembleDataVo assembleDataVo);
 }

@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.quality.problem.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.gm.wbs.domain.TWbs;
 import com.hhwy.pm.gm.wbs.service.ITWbsService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -140,6 +141,9 @@ public class QqchQualityProblemListServiceImpl implements IQqchQualityProblemLis
      * @param version
      */
     public void pushQyzsQualityCommonProblem(BigDecimal version){
+        if(version == null){
+            return;
+        }
         Map<String,Object> map = new HashMap<>();
 
         //获取项目工程类型
@@ -153,7 +157,7 @@ public class QqchQualityProblemListServiceImpl implements IQqchQualityProblemLis
         problemQuery.setVersion(version);
         List<QqchQualityProblemList> list = qqchQualityProblemListMapper.getQqchQualityProblemListList(problemQuery);
 
-        if(StringUtils.isBlank(defaultEngineeringType) || CollectionUtils.isEmpty(list) || version == null){
+        if(StringUtils.isBlank(defaultEngineeringType) || CollectionUtils.isEmpty(list)){
             return;
         }
 
@@ -163,13 +167,22 @@ public class QqchQualityProblemListServiceImpl implements IQqchQualityProblemLis
         List<QqchQualityProblemControl> problemControlList = qqchQualityProblemControlMapper.getQqchQualityProblemControlList(query);
         Map<String, QqchQualityProblemControl> controlMap = problemControlList.stream().collect(Collectors.toMap(QqchQualityProblemControl::getProblemCode, o -> o));
 
-        //TODO 根据项目wbsCode获取关联的标准wbsCode
+        //根据项目wbsCode获取关联的标准wbsCode
+        //根据项目wbs获取关联的标准wbs编码
+        Set<String> wbsCodeSet = list.stream().map(QqchQualityProblemList::getWbsCode).collect(Collectors.toSet());
+        Map<String, TWbs> tWbsMap = tWbsService.getTWbsByPrjWbsCode(wbsCodeSet);
+
         List<QyzsQualityCommonProblem> commonProblemList = new ArrayList<>();
         for (QqchQualityProblemList problem : list) {
+            String wbsCode = problem.getWbsCode();
+            if(!tWbsMap.containsKey(wbsCode)){
+                continue;
+            }
+            TWbs tWbs = tWbsMap.get(wbsCode);
             QyzsQualityCommonProblem commonProblem = new QyzsQualityCommonProblem();
             commonProblem.setId(IdWorker.createId());
             commonProblem.setProjectType(defaultEngineeringType);
-            commonProblem.setWbsCode("");
+            commonProblem.setWbsCode(tWbs.getCode());
             commonProblem.setProblemName(problem.getProblemName());
             commonProblem.setConsequence(problem.getPossibleResult());
             QqchQualityProblemControl control = controlMap.get(problem.getProblemCode());
@@ -190,7 +203,6 @@ public class QqchQualityProblemListServiceImpl implements IQqchQualityProblemLis
         }
 
         map.put("projectType",defaultEngineeringType);
-//        map.put("wbsCode","");
         map.put("commonProblemList",commonProblemList);
         rocketMQTemplate.convertAndSend("qyzs_quality_common_problem:tenantSuccess", map);
     }

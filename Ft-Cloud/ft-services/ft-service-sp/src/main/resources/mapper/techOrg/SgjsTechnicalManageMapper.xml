@@ -547,7 +547,7 @@
     </update>
 
     <update id="delectAll" parameterType="com.hhwy.sp.techOrg.domain.SgjsTechnicalManage">
-        update `sgjs_technical_manage` set del_flag = 1  and update_time=#{updateTime} and update_user=#{updateUser}
+        update `sgjs_technical_manage` set del_flag = "1"  , update_time=#{updateTime} , update_user=#{updateUser}
     </update>
 
     <select id="batchSelect" parameterType="list" resultMap="SgjsTechnicalManageResultMap">

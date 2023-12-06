@@ -5,6 +5,8 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskList;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskListDetail;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.AssembleDataVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.QqchSafeEnvirRiskListVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.SafeEnvirRiskListQueryVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.service.IQqchSafeEnvirRiskListService;
@@ -98,5 +100,16 @@ public class QqchSafeEnvirRiskListController extends BaseController {
     public AjaxResult getList(SafeEnvirRiskListQueryVo queryVo){
         QqchSafeEnvirRiskListVo qqchSafeEnvirRiskListVo = qqchSafeEnvirRiskListService.getList(queryVo);
         return AjaxResult.success(qqchSafeEnvirRiskListVo);
+    }
+
+    /**
+     * 组装数据
+     * @param assembleDataVo
+     * @return
+     */
+    @PostMapping("assembleDataVo")
+    public AjaxResult assembleData(@RequestBody AssembleDataVo assembleDataVo) {
+        List<QqchSafeEnvirRiskListDetail> detailList = qqchSafeEnvirRiskListService.assembleData(assembleDataVo);
+        return AjaxResult.success(detailList);
     }
 }

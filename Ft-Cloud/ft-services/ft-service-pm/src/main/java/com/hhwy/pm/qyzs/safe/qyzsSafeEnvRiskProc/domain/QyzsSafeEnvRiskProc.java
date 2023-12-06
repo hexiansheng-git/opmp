@@ -10,6 +10,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author cjh
@@ -278,4 +279,12 @@ public class QyzsSafeEnvRiskProc extends BaseEntity {
     @JsonProperty
     private String isAdd;
 
+    /**
+     * 字段描述：措施项
+     */
+    @JsonProperty
+    @Excel(name = "措施项")
+    private String measureName;
+
+    private List<QyzsSafeEnvRiskProc> children;
 }

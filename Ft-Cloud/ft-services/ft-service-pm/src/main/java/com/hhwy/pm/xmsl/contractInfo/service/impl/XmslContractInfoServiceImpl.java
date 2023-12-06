@@ -168,7 +168,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
     @Override
     public void setEffectiveAmountDollar(XmslContractInfo contractInfo){
         String listCurrencyCode = contractInfo.getListCurrencyCode();
-        if("USD".equals(listCurrencyCode)){
+        if("USD".equals(listCurrencyCode) || StringUtils.isBlank(listCurrencyCode)){
             return;
         }
         /*汇率*/
