@@ -4,12 +4,14 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
+import com.hhwy.pm.gm.wbs.domain.TWbs;
 import com.hhwy.pm.gm.wbs.service.ITWbsService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskList;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskListDetail;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.AssembleDataVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.QqchSafeEnvirRiskListVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.SafeEnvirRiskListQueryVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.mapper.QqchSafeEnvirRiskListDetailMapper;
@@ -33,10 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -192,18 +191,29 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
             return;
         }
 
-        //TODO 根据项目wbs获取关联的标准wbs编码
+        //根据项目wbs获取关联的标准wbs编码
+        Set<String> wbsCodeSet = qqchSafeEnvirRiskListList.stream().map(QqchSafeEnvirRiskList::getWbsCode).collect(Collectors.toSet());
+        Map<Long, QqchSafeEnvirRiskList> riskListMap = qqchSafeEnvirRiskListList.stream().collect(Collectors.toMap(QqchSafeEnvirRiskList::getId, o -> o));
+        Map<String, TWbs> tWbsMap = tWbsService.getTWbsByPrjWbsCode(wbsCodeSet);
 
         List<QyzsSafeEnvRiskProc> procList = new ArrayList<>();
         for (QqchSafeEnvirRiskListDetail detail : pushList) {
+            Long infoId = detail.getInfoId();
+            String wbsCode = riskListMap.get(infoId).getWbsCode();
+            if(!tWbsMap.containsKey(wbsCode)){
+                continue;
+            }
+            TWbs tWbs = tWbsMap.get(wbsCode);
             QyzsSafeEnvRiskProc proc = new QyzsSafeEnvRiskProc();
             proc.setId(detail.getId());
             proc.setPid(detail.getPid());
+            proc.setWbsCode(tWbs.getCode());
+            proc.setWorkName(tWbs.getName());
             proc.setProcName(detail.getProProcess());
             proc.setEnvEffect(detail.getEnvriReason());
             proc.setOccurrence(detail.getFrequency());
             proc.setIsMajor(detail.getIsMostReason());
-            //TODO 措施项
+            proc.setMeasureName(detail.getMeasure());
             Long pid = detail.getPid();
             if(pid != null){
                 QqchSafeEnvirRiskListDetail parent = detailMap.get(pid);
@@ -360,5 +370,75 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
         if(!CollectionUtils.isEmpty(insertList)){
             detailMapper.insertQqchSafeEnvirRiskListDetailList(insertList);
         }
+    }
+
+    @Override
+    public List<QqchSafeEnvirRiskListDetail> assembleData(AssembleDataVo assembleDataVo) {
+        List<QqchSafeEnvirRiskListDetail> detailList = assembleDataVo.getDetailList();
+        List<QyzsSafeEnvRiskProc> envRiskProcList = assembleDataVo.getEnvRiskProcList();
+        if(CollectionUtils.isEmpty(envRiskProcList)){
+            return detailList;
+        }
+
+        envRiskProcList = ListTreeUtil.formatList(envRiskProcList, QyzsSafeEnvRiskProc::getChildren,QyzsSafeEnvRiskProc::setChildren);
+
+        List<QqchSafeEnvirRiskListDetail> tempList = new ArrayList<>();
+        for (QyzsSafeEnvRiskProc proc : envRiskProcList) {
+            QqchSafeEnvirRiskListDetail detail = new QqchSafeEnvirRiskListDetail();
+            detail.setId(proc.getId());
+            detail.setPid(proc.getPid());
+            detail.setProProcess(proc.getProcName());
+            detail.setWorkContent(proc.getWorkName());
+            detail.setEnvriReason(proc.getEnvFactor());
+            detail.setFrequency(proc.getFrequency());
+            detail.setEnvriImpact(proc.getEnvEffect());
+            detail.setIsMostReason(proc.getIsMajor());
+            detail.setMeasure(proc.getMeasureName());
+            detail.setPtVar1(proc.getId().toString());
+            detail.setPtVar2("0");
+            tempList.add(detail);
+        }
+
+        if(CollectionUtils.isEmpty(detailList)){
+            //转树列表
+            return ListTreeUtil.formatTree(
+                    tempList,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchSafeEnvirRiskListDetail::getChildren,
+                    QqchSafeEnvirRiskListDetail::setChildren);
+        }
+
+
+        //合并
+        detailList = ListTreeUtil.formatList(
+                detailList,
+                QqchSafeEnvirRiskListDetail::setId,
+                QqchSafeEnvirRiskListDetail::setPid,
+                QqchSafeEnvirRiskListDetail::getChildren,
+                QqchSafeEnvirRiskListDetail::setChildren);
+
+        Map<String, QqchSafeEnvirRiskListDetail> repositoryMap = detailList.stream().filter(o -> StringUtils.isNotBlank(o.getPtVar1())).collect(Collectors.toMap(QqchSafeEnvirRiskListDetail::getPtVar1, o -> o));
+
+        for (QqchSafeEnvirRiskListDetail detail : tempList) {
+            Long id = detail.getId();
+            if(repositoryMap.containsKey(id.toString())){
+                continue;
+            }
+            Long pid = detail.getPid();
+            if (repositoryMap.containsKey(pid.toString())) {
+                QqchSafeEnvirRiskListDetail safeEnvirRiskListDetail = repositoryMap.get(pid.toString());
+                detail.setPid(safeEnvirRiskListDetail.getId());
+            }
+            detailList.add(detail);
+        }
+
+        ListTreeUtil.formatTree(
+                detailList,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchSafeEnvirRiskListDetail::getChildren,
+                QqchSafeEnvirRiskListDetail::setChildren);
+        return detailList;
     }
 }
