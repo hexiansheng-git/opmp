@@ -402,6 +402,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
             // 等待线程池执行结束
             while (!executorService.isTerminated()) {
                 Thread.yield();
+                System.out.println("获取p6数据结束--------------------------");
             }
 
         }
