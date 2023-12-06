@@ -388,7 +388,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                         initJdglData4P6ByOne(tenantKey);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        System.out.println(e.getMessage());
+                        System.out.println("获取p6异常:-----------------" + e.getMessage());
 //                        throw new CustomBusinessException(e.getMessage());
                     } finally {
                         DynamicDataSourceContextHolder.poll();
