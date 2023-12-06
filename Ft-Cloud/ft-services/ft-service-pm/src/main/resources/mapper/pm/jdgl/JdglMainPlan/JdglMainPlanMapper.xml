@@ -83,7 +83,7 @@
     <select id="getJdglMainPlanList" resultMap="JdglMainPlanResultMap">
         <include refid="selectJdglMainPlanVo"/>
         <where>
-            del_flag = "0"
+            1 = 1
             <if test="id != null ">and `id` = #{id}</if>
             <if test="version != null  and version != ''">and `version` = #{version}</if>
             <if test="versionPro != null  and versionPro != ''">and `version_pro` = #{versionPro}</if>
