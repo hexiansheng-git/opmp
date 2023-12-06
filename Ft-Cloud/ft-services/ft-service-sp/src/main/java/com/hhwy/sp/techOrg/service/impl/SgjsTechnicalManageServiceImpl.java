@@ -243,11 +243,17 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
    private void validDataDigui(List<SgjsTechnicalManage>list,List<String> msgList){
        for (SgjsTechnicalManage info:list ) {
            Integer headCount = info.getHeadCount();
+           if(headCount==0){
+               String name = info.getUserName();
+               if(StringUtils.isEmpty(name)){
+                   msgList.add(info.getPostName()+"人员姓名不能为空");
+               }
+           }
            List<SgjsTechnicalManage> children = info.getChildren();
            //headCount的量  校验实际进场和人员姓名
            if(headCount==children.size()){
                for (int i = 0; i < children.size(); i++) {
-                   if(null!=children.get(i).getHeadCount() && children.get(i).getHeadCount()>0){
+                   if(null!=children.get(i).getHeadCount()){
                        //实际日期
                        String actualDateStr = children.get(i).getActualDateStr();
                        if(StringUtils.isEmpty(actualDateStr)){
@@ -260,7 +266,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
                    }
                }
            }else{
-
+                msgList.add("编制人数和子集不匹配");
            }
 
            if(!CollectionUtils.isEmpty(info.getChildren())){
