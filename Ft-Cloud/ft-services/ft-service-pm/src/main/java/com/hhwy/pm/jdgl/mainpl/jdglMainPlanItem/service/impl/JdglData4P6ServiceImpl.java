@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -95,7 +96,11 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         System.out.println("--获取p6 wbs数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime() + "-- 数量:" + (wbsResult.getBody() == null ? 0 : wbsResult.getBody().size()));
         System.out.println("--获取p6 作业数据--租户:" + tenantKey + "--开始:" +  DateUtils.getTime());
         // 获取p6 作业数据
-        ResponseEntity<List<ActivityConstField>> workResult = restTemplate.exchange(urlwork + "?projectId={projectId}", HttpMethod.GET, entity, responseType4Work, params);
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(1000);
+        requestFactory.setReadTimeout(3600000);
+        RestTemplate restTemplateTimeout = new RestTemplate(requestFactory);
+        ResponseEntity<List<ActivityConstField>> workResult = restTemplateTimeout.exchange(urlwork + "?projectId={projectId}", HttpMethod.GET, entity, responseType4Work, params);
         System.out.println("--获取p6 作业数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime() + "-- 数量:" + (workResult.getBody() == null ? 0 : workResult.getBody().size()));
 
         // 获取当前启用的总体计划主表数据
@@ -402,7 +407,6 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
             // 等待线程池执行结束
             while (!executorService.isTerminated()) {
                 Thread.yield();
-                System.out.println("获取p6数据结束--------------------------");
             }
 
         }
