@@ -94,7 +94,7 @@ public class WbsPushP6 {
             //推送新增修改数据到p6
             push(mainId,projectCode,treeList,updateList);
             //禁用wbs推送到p6,需要判断这些wbs是否已经推送给p6
-//            pushDelete(mainId,projectCode,invalidIdSet);
+            pushDelete(mainId,projectCode,invalidIdSet);
         }finally {
             long usemills = System.currentTimeMillis()-beginMills;
             log.debug("wbs推送p6，mainID:{},耗时:{}毫秒",mainId,usemills);
@@ -142,9 +142,17 @@ public class WbsPushP6 {
     }
 
     //推送删除数据，需要保证要删除的数据推送给p6过
-    private void pushDelete(Long mainId,String projectCode,Set<Long> invalidIdSet){
+    private void pushDelete(Long mainId,String projectCode,Set<String> invalidIdSourceSet){
         long begin = System.currentTimeMillis();
         try{
+            if(CollectionUtils.isEmpty(invalidIdSourceSet))
+                return;
+            Set<Long> invalidIdSet = new HashSet<>();
+            for(String r : invalidIdSourceSet){
+                if(StringUtils.isBlank(r))
+                    continue;
+                invalidIdSet.add(Long.valueOf(r));
+            }
             final String busName = SyncBusinessEnum.WBSPUSHP6_DELETE_ENUM.name();
             Map<String,String> p6IdMap = new HashMap<>();
             List<Map> wbsList = new ArrayList<>();

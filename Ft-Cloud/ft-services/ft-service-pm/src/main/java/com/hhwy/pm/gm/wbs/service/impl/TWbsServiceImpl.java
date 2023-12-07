@@ -148,12 +148,13 @@ public class TWbsServiceImpl implements ITWbsService {
             query.setCode(map.get("code")!=null?map.get("code").toString():null);
             query.setName(map.get("name")!=null?map.get("name").toString():null);
             List<TWbs> list = this.getTWbsList(query);
+            Set<Long> idSet = list.stream().map(r->Long.valueOf(r.getId())).collect(Collectors.toSet());
             //查询出祖级对象
             Set<Long> pidSet = new HashSet<>();
             for (int i = 0; i < list.size(); i++) {
                 TWbs temp = list.get(i);
-                List<Long> pidList = StringUtils.isBlank(temp.getAncestors())?new ArrayList<>(2):Arrays.asList(com.hhwy.common.core.text.Convert.toLongArray(temp.getAncestors()));
-                pidList.remove(temp.getId());
+                List<Long> pidList = StringUtils.isBlank(temp.getAncestors())?new ArrayList<>(2):Arrays.asList(Convert.toLongArray(temp.getAncestors()));
+                pidList = pidList.stream().filter(r->!idSet.contains(r)).collect(Collectors.toList());
                 pidSet.addAll(pidList);
             }
             if(CollectionUtils.isNotEmpty(pidSet)){
