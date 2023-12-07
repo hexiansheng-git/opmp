@@ -121,6 +121,8 @@ public class TWbsServiceImpl implements ITWbsService {
 
     @Override
     public List<TWbs> wbsTreeList(Map map) {
+        //当前项目的工程类型
+        String currentProjEngType = this.getDefaultEngineeringType();
         //切换到master
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey("master");
@@ -133,7 +135,7 @@ public class TWbsServiceImpl implements ITWbsService {
                 engineeringType = (String) typeObj;
             }
             if(StringUtils.isBlank(engineeringType)){
-                engineeringType = this.getDefaultEngineeringType();
+                engineeringType = currentProjEngType;
             }
             if(StringUtils.isBlank(engineeringType)){
                 return new ArrayList<>(2);
