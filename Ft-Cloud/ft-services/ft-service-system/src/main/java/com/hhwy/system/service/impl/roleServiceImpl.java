@@ -5,6 +5,7 @@ import com.hhwy.domain.base.system.SysTreeUtil;
 import com.hhwy.system.api.domain.SysDept;
 import com.hhwy.system.api.domain.SysRole;
 import com.hhwy.system.core.domain.SysRoleMenu;
+import com.hhwy.system.core.domain.SysUserRole;
 import com.hhwy.system.mapper.DeptMapper;
 import com.hhwy.system.mapper.RoleMapper;
 import com.hhwy.system.service.IDeptService;
@@ -36,6 +37,11 @@ public class roleServiceImpl implements IRoleService {
     public List<SysRoleMenu> selectRoleMenuList(String tenantKey,Long roleId) {
 
         return roleMapper.selectRoleMenuList(tenantKey,roleId);
+    }
+
+    @Override
+    public List<SysUserRole> selectRoleUserExit(Long userId, long l, String tenantKey) {
+        return roleMapper.selectRoleUserExit(userId,l,tenantKey);
     }
 
 

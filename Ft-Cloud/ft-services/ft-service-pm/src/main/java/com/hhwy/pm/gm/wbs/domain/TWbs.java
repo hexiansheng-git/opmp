@@ -1,5 +1,7 @@
 package com.hhwy.pm.gm.wbs.domain;
 
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -20,6 +22,7 @@ import java.util.List;
  * @remark t_wbs
  */
 @Data
+@ExcelIgnoreUnannotated
 public class TWbs extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -41,6 +44,7 @@ public class TWbs extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "编号")
+    @ExcelProperty("编号")
     private String code;
     /**
      * 字段描述：父级ID,最顶级为0
@@ -68,6 +72,7 @@ public class TWbs extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "名称")
+    @ExcelProperty("名称")
     private String name;
 
     /**

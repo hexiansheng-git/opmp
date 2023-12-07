@@ -62,13 +62,14 @@ public class UserConsumerListener implements RocketMQListener<String> , RocketMQ
 
     @Override
     public void onMessage(String s) {
+        boolean addUser = false;
+        Map userInfo = JSON.parseObject(s, Map.class);
+        // 需要同步的账号
+        SysUser sysUser = JSONObject.parseObject(userInfo.get("sysUser").toString(),SysUser.class);
 
-        Map projectBasicInfo = JSON.parseObject(s, Map.class);
-        // 需要同步的领导账号
+        // 需要同步账号的租户的集合
+        List<String> tenantKeys = JSONObject.parseObject(userInfo.get("tenantKeys").toString(), ArrayList.class);
 
-        SysUser sysUser = JSONObject.parseObject(projectBasicInfo.get("sysUser").toString(),SysUser.class);
-        // 需要同步领导账号的租户的集合
-        List<String> tenantKeys = JSONObject.parseObject(projectBasicInfo.get("tenantKeys").toString(), ArrayList.class);
         if(sysUser != null && !CollectionUtils.isEmpty(tenantKeys)) {
 
             // 需要新增的用户
@@ -92,14 +93,27 @@ public class UserConsumerListener implements RocketMQListener<String> , RocketMQ
                 // 过滤已存在的租户用户
                 if(!CollectionUtils.isEmpty(sysUsers)) {
                     SysUser sysUserExist = sysUsers.stream().filter(vo -> tenantKey.equals(vo.getTenantKey())).findFirst().orElse(null);
+
                     if(sysUserExist != null) {
-                        continue;
+                        //检测租户内是否对用户授权过管理员角色信息
+                        List<SysUserRole> roleUserList = roleService.selectRoleUserExit(sysUserExist.getUserId(), 1L, tenantKey);
+                        if(CollectionUtils.isEmpty(roleUserList)){
+                            //带有区域中心管理员标识 赋予超管权限
+                            if(sysUser.getRemark().equals("region")){
+                                SysUserRole sysUserRoleRegion = new SysUserRole();
+                                sysUserRoleRegion.setUserId(sysUserExist.getUserId());
+                                sysUserRoleRegion.setRoleId(1L);
+                                sysUserRoleRegion.setTenantKey(tenantKey);
+                                sysUserRoleList4Add.add(sysUserRoleRegion);
+                            }
+                        }
+                    }else{
+                        addUser=true;
                     }
                 }
                 // 复制领导用户数据
                 SysUser sysUser4Add = JSONObject.parseObject(JSONObject.toJSONString(sysUser), SysUser.class);
-                if(sysUser4Add != null) {
-
+                if(sysUser4Add != null && addUser) {
                     // ID
                     Long id = IdWorker.createId();
                     sysUser4Add.setUserId(id);
@@ -110,7 +124,6 @@ public class UserConsumerListener implements RocketMQListener<String> , RocketMQ
                         SysRole sysRole1 = sysRoles.get(0);
                         // 默认角色
                         if(sysRole1 != null) {
-
                             // 权限id 维护
                             Long[] roleIds = new Long[1];
                             roleIds[0] = sysRole1.getRoleId();
@@ -125,6 +138,14 @@ public class UserConsumerListener implements RocketMQListener<String> , RocketMQ
                             sysUserRole.setTenantKey(tenantKey);
                             sysUserRoleList4Add.add(sysUserRole);
 
+                            //带有区域中心管理员标识 赋予超管权限
+                            if(sysUser.getRemark().equals("region")){
+                                SysUserRole sysUserRoleRegion = new SysUserRole();
+                                sysUserRoleRegion.setUserId(id);
+                                sysUserRoleRegion.setRoleId(1L);
+                                sysUserRoleRegion.setTenantKey(tenantKey);
+                                sysUserRoleList4Add.add(sysUserRoleRegion);
+                            }
                         }
                     }
                     if(!CollectionUtils.isEmpty(projectOrgInfo)) {
@@ -134,6 +155,7 @@ public class UserConsumerListener implements RocketMQListener<String> , RocketMQ
                     }
 
                     sysUserList4Add.add(sysUser4Add);
+                    addUser=false;
                 }
             }
             // 插入用户数据

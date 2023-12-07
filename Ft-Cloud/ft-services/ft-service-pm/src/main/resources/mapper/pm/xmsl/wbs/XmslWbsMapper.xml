@@ -878,6 +878,13 @@
             #{item.id}
         </foreach>
     </update>
+    <update id="clearPtVar4">
+        update xmsl_wbs set pt_var4 = null
+        where `id` in
+        <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
 
     <update id="deleteXmslWbs">
         update `xmsl_wbs` set del_flag = 1

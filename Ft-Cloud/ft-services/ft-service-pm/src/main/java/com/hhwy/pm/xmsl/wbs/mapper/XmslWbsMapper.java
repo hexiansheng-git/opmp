@@ -6,6 +6,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * wbs-最新
@@ -64,6 +65,13 @@ public interface XmslWbsMapper {
      * @return
      */
     int updatePtVar2List(List<XmslWbs> list);
+
+    /**
+     * 清空ptVar4(p6ID)
+     * @param ids
+     * @return
+     */
+    int clearPtVar4(Set<Long> ids);
 
     int deleteXmslWbs(XmslWbs xmslWbs);
 

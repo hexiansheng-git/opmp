@@ -52,6 +52,7 @@ public interface XmslWbsMainMapper {
      * @return
      */
     int updateValid(Long id);
+    int updateWbsStatus(@Param("ids") List<Long> ids);
 
     /**
      * 更新xmsl_wbs的p6编号（ptVar4）

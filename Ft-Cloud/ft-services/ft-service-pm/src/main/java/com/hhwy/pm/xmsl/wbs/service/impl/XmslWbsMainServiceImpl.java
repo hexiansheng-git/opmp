@@ -8,6 +8,8 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.qqch.review.domain.Review;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsListRelation;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
@@ -36,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author wk
@@ -51,8 +54,6 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
     private IXmslWbsService wbsService;
     @Resource
     private IXmslWbsListRelationService wbsListRelationService;
-    @Resource
-    private IXmslEngineeringReportService engineeringReportService;
     @Resource
     private WbsPushP6 wbsPushP6;
 
@@ -243,7 +244,6 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                     List<XmslWbs> lastList = wbsService.getXmslWbsHistoryList(effect.getId());
                     if(CollectionUtils.isEmpty(lastList))
                         lastList = wbsService.getByMainId(effect.getId());
-//                    List<XmslWbs> lastList = wbsService.getByMainId(effect.getId());
                     for (int i = 0; i < lastList.size(); i++) {
                         XmslWbs temp = lastList.get(i);
                         lastWbsMap.put(temp.getCode(), temp);
@@ -253,8 +253,18 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                 //需要修改版本标识(ptVar2)
                 List<XmslWbs> updateFlagList = new ArrayList<>();
                 List<XmslWbs> allList = new ArrayList<>();
+                Set<String> invalidIdSet = new HashSet<>(); //失效的wbsId (父级失效，需要将其所有子级状态改为失效)
                 Function<XmslWbs,XmslWbs> iteratFunc = (r)->{
                     allList.add(r);
+                    if(r.getStatus() == Constant.NO_INT)
+                        invalidIdSet.add(r.getId());
+                    String[] pids = r.getAncestors().split(",");
+                    for (int i = 0; i < pids.length; i++) {
+                        if(invalidIdSet.contains(pids[i])){
+                            invalidIdSet.add(r.getId());
+                            break;
+                        }
+                    }
                     //对比状态,如果需要修改标识，放入updateFlagList
                     compareVersionFlag(r,lastWbsMap,updateFlagList);
                     if(StringUtils.isBlank(r.getListCode()))
@@ -277,8 +287,10 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                 wbsService.updatePtVar2List(updateFlagList);
                 //5、wbs塞入redis
                 wbsService.initWbs2Redis(tenantKey);
-                //6、推送到p6
-                wbsPushP6.push2P6(main.getId(),tenantKey,allList);
+                //6、更新子级状态
+                updateChildStatus(invalidIdSet);
+                //7、推送到p6
+                wbsPushP6.push2P6(main.getId(),tenantKey,allList,invalidIdSet);
             }catch(Exception e){
                 e.printStackTrace();
                 log.error("wbs加载祖级名称&塞redis失败，mainid:{},消息：{}",main.getId(),e.getMessage());
@@ -322,6 +334,22 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         }
     }
 
+    /**
+     * 修改子级状态为禁用
+     * @param invalidIdSet
+     */
+    private void updateChildStatus(Set<String> invalidIdSet){
+        if(CollectionUtils.isEmpty(invalidIdSet))
+            return;
+        List<String> invalidIdList = new ArrayList<>(invalidIdSet);
+        PageFuncUtils.exec(invalidIdList.size(),500,(start,end)->{
+            List<String> tempList = invalidIdList.subList(start, end);
+            List<Long> idList = tempList.stream().map(r->Long.valueOf(r)).collect(Collectors.toList());
+            this.xmslWbsMainMapper.updateWbsStatus(idList);
+            return true;
+        });
+    }
+
     @Override
     @Transactional
     public int updateP6Code(WbsInfoVo wbsInfoVo) {
@@ -348,6 +376,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         }
         return result;
     }
+
 
 
 }

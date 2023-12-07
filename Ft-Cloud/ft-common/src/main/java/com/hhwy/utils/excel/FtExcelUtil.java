@@ -681,7 +681,7 @@ public class FtExcelUtil<T> {
                 }
             } else {
                 val = cell.getNumericCellValue();
-                if (HSSFDateUtil.isCellDateFormatted(cell)) {
+                if (DateUtil.isCellDateFormatted(cell)) {
                     val = DateUtil.getJavaDate((Double) val);
                 } else if ((Double) val % 1.0D > 0.0D) {
                     val = (new DecimalFormat("0.00")).format(val);

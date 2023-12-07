@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -135,6 +136,8 @@ public interface IXmslWbsService {
     int updateXmslWbsList(List<XmslWbs> xmslWbsList);
 
     int updatePtVar2List(List<XmslWbs> list);
+
+    int clearPtVar4(Set<Long> set);
 
     int deleteXmslWbs(XmslWbs xmslWbs);
 

@@ -104,8 +104,8 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
             ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
             XmslContractInfo contractInfo = contractInfoService.getValidMaxVersionContractInfo();
             //获取有效金额万美元
-            contractInfoService.setEffectiveAmountDollar(contractInfo);
-            BigDecimal effectiveAmountDollar = ObjectUtils.nvlBigDecimal(contractInfo.getEffectiveAmountDollar()).divide(new BigDecimal("10000"),4, RoundingMode.HALF_UP);
+//            contractInfoService.setEffectiveAmountDollar(contractInfo);
+//            BigDecimal effectiveAmountDollar = ObjectUtils.nvlBigDecimal(contractInfo.getEffectiveAmountDollar()).divide(new BigDecimal("10000"),4, RoundingMode.HALF_UP);
             List<JSONObject> finalList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 QqchWorkGroup temp = list.get(i);
@@ -117,7 +117,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(list.get(i)));
                 json.put("projectCode",projectBasicInfo.getProjectCode());
                 json.put("projectManager",ObjectUtils.nvlString(projectBasicInfo.getProjectManager()));
-                json.put("effectiveAmout",effectiveAmountDollar);
+                json.put("effectiveAmout",BigDecimal.ZERO);
                 json.put("winDate", dateTime(contractInfo.getWinDate()) );
                 json.put("signDate", dateTime(contractInfo.getSignDate()) );
                 json.put("startTime", dateTime(contractInfo.getStartTime()) );

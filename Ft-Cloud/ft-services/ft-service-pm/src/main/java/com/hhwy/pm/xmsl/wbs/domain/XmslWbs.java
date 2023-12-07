@@ -1,5 +1,7 @@
 package com.hhwy.pm.xmsl.wbs.domain;
 
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,6 +30,7 @@ import java.util.Date;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@ExcelIgnoreUnannotated
 public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     private static final long serialVersionUID = 1L;
 
@@ -56,6 +59,7 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     @JsonProperty
     @FtExcel(name = "编号")
     @NotBlank(message = "编号不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
+    @ExcelProperty("编号")
     private String code;
     /**
      * 字段描述：父级ID,最顶级为0
@@ -86,6 +90,7 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     @JsonProperty
     @FtExcel(name = "项目部位（桩号）")
     @NotBlank(message = "项目部位不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
+    @ExcelProperty("项目部位（桩号）")
     private String partCode;
     /**
      * 字段描述：名称 实际是 桩号-wbs名称
@@ -93,6 +98,7 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     @JsonProperty
     @FtExcel(name = "标准WBS名称")
     @NotBlank(message = "标准WBS名称不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
+    @ExcelProperty("标准WBS名称")
     private String name;
     /**
      * 字段描述：节点类型,字典:xmsl_wbs_type
