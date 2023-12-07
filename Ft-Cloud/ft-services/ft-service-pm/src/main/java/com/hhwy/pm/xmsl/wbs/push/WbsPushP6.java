@@ -1,15 +1,20 @@
 package com.hhwy.pm.xmsl.wbs.push;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.feign.factory.FlowServiceFallbackFactory;
+import com.hhwy.pm.core.sync.enums.SyncBusinessEnum;
+import com.hhwy.pm.core.sync.service.ISyncLogMasterService;
+import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVo;
 import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVoBean;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
+import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.HttpClientUtil;
 import com.hhwy.utils.ObjectUtils;
@@ -25,69 +30,81 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class WbsPushP6 {
     private static final Logger log = LoggerFactory.getLogger(FlowServiceFallbackFactory.class);
     @Autowired
     private IXmslWbsMainService wbsMainService;
+    @Autowired
+    private IXmslWbsService wbsService;
+    @Autowired
+    private ISyncLogMasterService syncLogMasterService;
     @Value("${p6.wbsPushUrl}")
     private String wbsPushUrl;
     @Value("${p6.wbsPushUpdateUrl}")
     private String wbsPushUpdateUrl;
+    @Value("${p6.wbsPushDeleteUrl}")
+    private String wbsPushDeleteUrl;
 
     /**
      * 推送到p6
      * @param mainId      wbsMainId
      * @param projectCode  项目编号
      * @param list [{ptVar5:标记是否为修改的wbs}]
+     * @param invalidIdSet 禁用的id
      */
-    public void push2P6(Long mainId,String projectCode,List<XmslWbs> list){
-        List<WbsInfoVoBean> voList = new ArrayList<>();
-        //转换 > WbsInfoVoBean
-        Map<String,WbsInfoVoBean> map = new HashMap<>();
-        List<WbsInfoVoBean> treeList = new ArrayList<>();
-        List<WbsInfoVoBean> updateList = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            XmslWbs temp = list.get(i);
-            if(StringUtils.isBlank(temp.getCode())){
-                log.error("WBS编号为空,ID:"+temp.getId()+",mainId:"+temp.getMainId());
-                continue;
+    public void push2P6(Long mainId, String projectCode, List<XmslWbs> list, Set<String> invalidIdSet){
+        long beginMills = System.currentTimeMillis();
+        try{
+            List<WbsInfoVoBean> voList = new ArrayList<>();
+            //转换 > WbsInfoVoBean
+            Map<String,WbsInfoVoBean> map = new HashMap<>();
+            List<WbsInfoVoBean> treeList = new ArrayList<>();
+            List<WbsInfoVoBean> updateList = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {
+                XmslWbs temp = list.get(i);
+                if(StringUtils.isBlank(temp.getCode())){
+                    log.error("WBS编号为空,ID:"+temp.getId()+",mainId:"+temp.getMainId());
+                    continue;
+                }
+                if(StringUtils.isBlank(temp.getName())){
+                    log.error("WBS名称为空,ID:"+temp.getId()+",mainId:"+temp.getMainId());
+                    continue;
+                }
+                WbsInfoVoBean bean = WbsInfoVoBean.parseWbs(temp);
+                if(temp.getLevel() == 1 )
+                    treeList.add(bean);
+                voList.add(bean);
+                map.put(temp.getId(),bean);
+                if(StringUtils.isNotBlank(temp.getPtVar5())) //不为空：需要推送到修改接口
+                    updateList.add(bean);
             }
-            if(StringUtils.isBlank(temp.getName())){
-                log.error("WBS名称为空,ID:"+temp.getId()+",mainId:"+temp.getMainId());
-                continue;
+            //递归成树形
+            for (int i = 0; i < voList.size(); i++) {
+                WbsInfoVoBean temp = voList.get(i);
+                WbsInfoVoBean parent = map.get(temp.getPid());
+                if(parent == null)
+                    continue;
+                temp.setParentObjectId(parent.getObjectId());
+                parent.getChildren().add(temp);
             }
-            WbsInfoVoBean bean = WbsInfoVoBean.parseWbs(temp);
-            if(temp.getLevel() == 1 )
-                treeList.add(bean);
-            voList.add(bean);
-            map.put(temp.getId(),bean);
-            if(StringUtils.isNotBlank(temp.getPtVar5())) //不为空：需要推送到修改接口
-                updateList.add(bean);
+            projectCode = "test-01";
+            //推送新增修改数据到p6
+            push(mainId,projectCode,treeList,updateList);
+            //禁用wbs推送到p6,需要判断这些wbs是否已经推送给p6
+            pushDelete(mainId,projectCode,invalidIdSet);
+        }finally {
+            long usemills = System.currentTimeMillis()-beginMills;
+            log.debug("wbs推送p6，mainID:{},耗时:{}毫秒",mainId,usemills);
         }
-        //递归成树形
-        for (int i = 0; i < voList.size(); i++) {
-            WbsInfoVoBean temp = voList.get(i);
-            WbsInfoVoBean parent = map.get(temp.getPid());
-            if(parent == null)
-                continue;
-            temp.setParentObjectId(parent.getObjectId());
-            parent.getChildren().add(temp);
-        }
-        //推送到
-//        System.out.println(JSONObject.toJSONString(treeList, SerializerFeature.DisableCircularReferenceDetect));
-        push(mainId,projectCode,treeList,updateList);
+
     }
 
     private void push(Long mainId,String projectCode,List<WbsInfoVoBean> treeList,List<WbsInfoVoBean> updateList){
         long begin = System.currentTimeMillis();
         try{
-            projectCode = "test-01";
             //1、新增接口
             if(CollectionUtils.isNotEmpty(treeList)){
                 log.debug("wbs推送新增p6,mainId:{},新增树形第一级条目数:{}",mainId,treeList.size());
@@ -116,12 +133,72 @@ public class WbsPushP6 {
             }
         }catch(Exception e){
             e.printStackTrace();
-            log.error("wbs推送p6失败，mainID:{},消息:{}",mainId,e.getMessage());
+            log.error("wbs推送新增p6失败，mainID:{},消息:{}",mainId,e.getMessage());
             throw e;
         }finally {
             long usemills = System.currentTimeMillis()-begin;
-            log.debug("wbs推送p6，mainID:{},耗时:{}毫秒",mainId,usemills);
+            log.debug("wbs推送新增p6，mainID:{},耗时:{}毫秒",mainId,usemills);
         }
     }
+
+    //推送删除数据，需要保证要删除的数据推送给p6过
+    private void pushDelete(Long mainId,String projectCode,Set<Long> invalidIdSet){
+        long begin = System.currentTimeMillis();
+        try{
+            final String busName = SyncBusinessEnum.WBSPUSHP6_DELETE_ENUM.name();
+            Map<String,String> p6IdMap = new HashMap<>();
+            List<Map> wbsList = new ArrayList<>();
+            Iterator<Long> iterator = invalidIdSet.iterator();
+            while(iterator.hasNext()){
+                Long id = iterator.next();
+                XmslWbs tempWbs = WbsRedisUtils.getWbs(id);
+                if(StringUtils.isNotBlank(tempWbs.getPtVar4())){
+                    //delIdSet.add(tempWbs.getPtVar4());
+                    p6IdMap.put(tempWbs.getPtVar4(),tempWbs.getId());
+                    wbsList.add(ObjectUtils.toMap("objectId",tempWbs.getPtVar4().trim()));
+                }
+            }
+            if(CollectionUtils.isEmpty(wbsList)){
+                log.debug("wbs删除推送p6,没有任何要处理的数据,prjCode:{},禁用ID数量:{}",projectCode,invalidIdSet.size());
+                return ;
+            }
+            //构建请求参数
+            StringEntity stringEntity = new StringEntity(JSONObject.toJSONString(ObjectUtils.toMap(
+                    "projectId",projectCode,
+                    "wbsList",wbsList)), ContentType.APPLICATION_JSON);
+            String resultStr =  HttpClientUtil.send(wbsPushDeleteUrl, HttpClientUtil.METHOD_POST,
+                    null,null,stringEntity,null);
+            //处理结果
+            AjaxResult result = JSONObject.parseObject(resultStr, AjaxResult.class);
+            if(!AjaxResult.isSuccess(result)){
+                syncLogMasterService.fail(busName,stringEntity.toString(),resultStr,"");
+                //将处理失败的id从p6Map中剔除掉
+                JSONArray failArray = JSONObject.parseArray(JSONObject.toJSONString(result.get(AjaxResult.DATA_TAG)));
+                for (int i = 0; i < failArray.size(); i++) {
+                    JSONObject jsonObject = failArray.getJSONObject(i);
+                    String objId = jsonObject.getString("objectId");
+                    p6IdMap.remove(objId);
+                }
+            }else{
+                syncLogMasterService.success(busName,stringEntity.toString(),resultStr);
+            }
+            //若成功，修改推送成功数据的ptVar4为空
+            Set<Long> updateIdSet = new HashSet<>();
+            for(Map.Entry<String,String> entry : p6IdMap.entrySet()){
+                if(StringUtils.isBlank(entry.getValue()))
+                    continue;
+                updateIdSet.add(Long.valueOf(entry.getValue()));
+            }
+            wbsService.clearPtVar4(updateIdSet);
+        }catch(Exception e){
+            e.printStackTrace();
+            log.error("wbs推送删除p6失败，mainID:{},消息:{}",mainId,e.getMessage());
+            throw e;
+        }finally {
+            long usemills = System.currentTimeMillis()-begin;
+            log.debug("wbs推送删除p6，mainID:{},耗时:{}毫秒",mainId,usemills);
+        }
+    }
+
 
 }

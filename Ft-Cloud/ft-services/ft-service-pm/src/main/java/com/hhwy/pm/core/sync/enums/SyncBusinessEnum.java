@@ -6,7 +6,16 @@ public enum SyncBusinessEnum {
     /** 前期策划工作小组 */
     QQCHWORKGROUP_ENUM("qqch_work_group"),
     /** 前期策划工作计划 */
-    QQCHWORKPLAN_ENUM("qqch_work_plan");
+    QQCHWORKPLAN_ENUM("qqch_work_plan"),
+    /** wbs推送新增 */
+    WBSPUSHP6_ADD_ENUM("wbsPushP6_add"),
+    /** wbs推送p6修改 */
+    WBSPUSHP6_UPDATE_ENUM("wbsPushP6_update"),
+    /** wbs推送p6删除 */
+    WBSPUSHP6_DELETE_ENUM("wbsPushP6_delete")
+    ;
+
+
     
     /**
      * 前缀
