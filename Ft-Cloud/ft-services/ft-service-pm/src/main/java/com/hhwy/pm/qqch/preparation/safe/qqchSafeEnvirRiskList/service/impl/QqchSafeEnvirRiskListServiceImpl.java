@@ -23,6 +23,7 @@ import com.hhwy.pm.qqch.preparation.survey.extend.service.IQqchPreparationSurvey
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.qyzs.safe.qyzsSafeEnvRiskProc.domain.QyzsSafeEnvRiskProc;
+import com.hhwy.pm.qyzs.safe.qyzsSafeEnvRiskProc.service.IQyzsSafeEnvRiskProcService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
@@ -64,6 +65,8 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
     private RocketMQTemplate rocketMQTemplate;
     @Autowired
     private ITWbsService tWbsService;
+    @Autowired
+    private IQyzsSafeEnvRiskProcService qyzsSafeEnvRiskProcService;
 
     private static final String TN = "qqch_safe_envir_risk_list";
 
@@ -381,6 +384,11 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
         }
 
         envRiskProcList = ListTreeUtil.formatList(envRiskProcList, QyzsSafeEnvRiskProc::getChildren,QyzsSafeEnvRiskProc::setChildren);
+        QyzsSafeEnvRiskProc query = new QyzsSafeEnvRiskProc();
+        query.setWbsCode(assembleDataVo.getWbsCode());
+        List<QyzsSafeEnvRiskProc> allList = qyzsSafeEnvRiskProcService.getCommonListBy(query);
+        //获取选中数据的父子级集合
+        envRiskProcList = ListTreeUtil.getRelevancyListBySublist(envRiskProcList, allList, QyzsSafeEnvRiskProc::getId,QyzsSafeEnvRiskProc::getPid);
 
         List<QqchSafeEnvirRiskListDetail> tempList = new ArrayList<>();
         for (QyzsSafeEnvRiskProc proc : envRiskProcList) {

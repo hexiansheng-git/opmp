@@ -2,7 +2,10 @@ package com.hhwy.pm.qyzs.safe.qyzsSafeEnvRiskProc.service;
 
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.pm.qyzs.safe.qyzsSafeEnvRiskProc.domain.QyzsSafeEnvRiskProc;
 import com.hhwy.pm.qyzs.safe.qyzsSafeEnvRiskProc.domain.SafeEnvRiskProcQueryVo;
+
+import java.util.List;
 
 /**
  * @author cjh
@@ -12,4 +15,6 @@ import com.hhwy.pm.qyzs.safe.qyzsSafeEnvRiskProc.domain.SafeEnvRiskProcQueryVo;
 public interface IQyzsSafeEnvRiskProcService {
 
     AjaxResult getQyzsSafeEnvRiskProcList(SafeEnvRiskProcQueryVo queryVo);
+
+    List<QyzsSafeEnvRiskProc> getCommonListBy(QyzsSafeEnvRiskProc qyzsSafeEnvRiskProc);
 }
