@@ -17,6 +17,12 @@ public interface XmslContractInfoMapper {
      */
     XmslContractInfo getValidMaxVersionContractInfo();
 
+    /**
+     * 获取最新版本的合同信息
+     * @return
+     */
+    XmslContractInfo getMaxVersionContractInfo();
+
     XmslContractInfo getXmslContractInfo(XmslContractInfo xmslContractInfo);
 
     List<XmslContractInfo> getXmslContractInfoList(XmslContractInfo xmslContractInfo);

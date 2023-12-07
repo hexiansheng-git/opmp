@@ -164,6 +164,13 @@
         limit 1
     </select>
 
+    <select id="getMaxVersionContractInfo" resultMap="XmslContractInfoResultMap">
+        <include refid="selectXmslContractInfoVo"/>
+        where del_flag = '0'
+        order by version desc
+        limit 1
+    </select>
+
     <select id="getMaxVersionRecordByVersion" resultMap="XmslContractInfoResultMap">
         <include refid="selectXmslContractInfoVo" />
         where del_flag = "0" and  version > #{version}

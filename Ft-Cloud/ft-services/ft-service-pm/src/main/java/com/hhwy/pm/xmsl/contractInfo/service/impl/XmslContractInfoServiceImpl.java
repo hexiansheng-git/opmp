@@ -417,7 +417,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
      */
     public void updateProjectInfo(ProjectBasicInfo projectInfo) {
         //获取最新有效版本的合同信息
-        XmslContractInfo latestContractInfo = xmslContractInfoMapper.getValidMaxVersionContractInfo();
+        XmslContractInfo latestContractInfo = xmslContractInfoMapper.getMaxVersionContractInfo();
         if (latestContractInfo == null) return;
         BigDecimal version = latestContractInfo.getVersion();
         //查询当前版本是否是数据库中最大版本
