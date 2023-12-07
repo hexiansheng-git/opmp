@@ -38,5 +38,61 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 
+
+	<select id="selectDbCount" resultType="int">
+		select count(1)  from  ${db}.${table}
+	</select>
+	<select id="selectCountLogin" resultType="map">
+		select   t.tenant_key as  tenantKey ,count(l.user_name) count  from   sys_tenant    t  left  JOIN   sys_logininfor l   on  t.tenant_key=l.tenant_key  and  l.user_name!='admin'  and  l.access_time >'2023-12-01 00:00:00'
+		GROUP BY t.tenant_key;
+	</select>
+	<insert id="batchInsert">
+
+		INSERT INTO `data_info`
+		(
+			`projectName`,
+			`projectCode`,
+			`loginCount`,
+			`hetong`,
+			`xiaozu`,
+			`jihua`,
+<!--			`bianzhi`,-->
+<!--			`jieduan`,-->
+<!--			`pingshen`,-->
+			`nian`,
+			`ji`,
+			`yue`,
+			`zhou`,
+			`jindu`
+		)
+		VALUES
+		<foreach collection="list" item="info" separator=",">
+			(
+			#{info.projectName},
+			#{info.projectCode},
+			#{info.loginCount},
+			#{info.xmsl_contract_info},
+			#{info.qqch_work_group},
+			#{info.qqch_work_plan},
+<!--			#{info.bianzhi},-->
+<!--			#{info.jieduan},-->
+<!--			#{info.pingshen},-->
+			#{info.jdgl_year_plan},
+			#{info.jdgl_quarter_plan},
+			#{info.jdgl_month_plan},
+			#{info.jdgl_week_plan},
+			#{info.jdgl_day_schedule}
+			)
+		</foreach>
+
+
+	</insert>
+	<delete id="delete">
+
+		delete from  `data_info`
+
+	</delete>
+
+
 	
 </mapper> 

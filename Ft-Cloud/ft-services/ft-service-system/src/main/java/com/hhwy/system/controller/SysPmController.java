@@ -10,6 +10,7 @@ import com.hhwy.common.security.service.TokenService;
 import com.hhwy.system.api.domain.*;
 import com.hhwy.system.core.processor.ITenantProcessor;
 import com.hhwy.system.core.service.*;
+import com.hhwy.system.mapper.SysPmMapper;
 import com.hhwy.system.service.IDeptService;
 import com.hhwy.system.service.ISysPmService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -49,6 +50,10 @@ public class SysPmController {
 
     @Autowired
     private IDeptService deptService;
+
+
+    @Autowired
+    SysPmMapper sysPmMapper;
     /**
      * 查询字典项，导出使用  , 根据value查询 label
      * @param dictType
@@ -210,6 +215,59 @@ public class SysPmController {
     @PostMapping("/createRoleTest")
     public void createRoleTest(@RequestBody SysTenant sysTenant) {
         tenantProcessor.doPostForInsert(sysTenant);
+    }
+
+    //查询部分数据使用情况
+    @PostMapping("/createData")
+    public void createData() {
+        ArrayList<Map> list = new ArrayList<>();
+        Map<String, String> map = new HashMap<>();
+        map.put("项目设立合同信息","xmsl_contract_info");
+        map.put("前期策划小组","qqch_work_group");
+        map.put("前期策划工作计划","qqch_work_plan");
+//        map.put("前期策划编制","");
+//        map.put("前期策划评","");
+        map.put("进度管理-年度产值计划","jdgl_year_plan");
+        map.put("进度管理-季度产值计划","jdgl_quarter_plan");
+        map.put("进度管理-月度产值计划","jdgl_month_plan");
+        map.put("进度管理-每周产值计划","jdgl_week_plan");
+        map.put("进度管理-进度填报","jdgl_day_schedule");
+        List<SysTenant> tenantList = tenantService.selectSysTenantList(new SysTenant());
+
+        //登录情况
+        Map<Object, Object> countMap = new HashMap<>();
+        List<Map> loginCountList = sysPmMapper.selectCountLogin();
+        for(Map item:loginCountList){
+            countMap.put(item.get("tenantKey"),item.get("count"));
+        }
+
+        //数据库信息
+        List<SysTenantDb> dbList = dbService.selectSysTenantDbList(new SysTenantDb());
+        Map<String, String> dbMap = new HashMap<>();
+        for(SysTenantDb item:dbList){
+            dbMap.put(item.getTenantKey(),item.getDbName());
+        }
+        Map<String, Object> resMap = new HashMap<>();
+        //查询
+        for(SysTenant item:tenantList){
+            //结果数据集合
+            Map<Object, Object> dataMap = new HashMap<>();
+            dataMap.put("projectName",item.getTenantName());
+            dataMap.put("projectCode",item.getTenantKey());
+            dataMap.put("loginCount",countMap.get(item.getTenantKey()));
+
+            String dbStr = dbMap.get(item.getTenantKey());
+            for(String key:map.keySet()){
+                String value = map.get(key).toString();
+                int count = sysPmMapper.selectDbCount(dbStr,value);
+                dataMap.put(value,count);
+            }
+            list.add(dataMap);
+        }
+        sysPmMapper.delete();
+        sysPmMapper.batchInsert(list);
+
+
     }
 
 }
