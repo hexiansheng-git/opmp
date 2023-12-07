@@ -94,7 +94,7 @@ public class WbsPushP6 {
             //推送新增修改数据到p6
             push(mainId,projectCode,treeList,updateList);
             //禁用wbs推送到p6,需要判断这些wbs是否已经推送给p6
-            pushDelete(mainId,projectCode,invalidIdSet);
+//            pushDelete(mainId,projectCode,invalidIdSet);
         }finally {
             long usemills = System.currentTimeMillis()-beginMills;
             log.debug("wbs推送p6，mainID:{},耗时:{}毫秒",mainId,usemills);

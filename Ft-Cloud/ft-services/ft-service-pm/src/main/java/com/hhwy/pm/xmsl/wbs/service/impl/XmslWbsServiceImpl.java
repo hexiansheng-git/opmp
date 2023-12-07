@@ -123,7 +123,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                 return ObjectUtils.toMap("list",new ArrayList<>(2),"mainId","");
             xmslWbs.setMainId(effect.getId());
         }
-        tableName = effect.getId().equals(Long.valueOf(xmslWbs.getId()))?"xmsl_wbs":"xmsl_wbs_history";
+        tableName = effect.getId().equals(Long.valueOf(xmslWbs.getMainId()))?"xmsl_wbs":"xmsl_wbs_history";
         //判断查询历史还是查询当前
         XmslWbsMain main = wbsMainService.getById(xmslWbs.getMainId());
         xmslWbs.setParams(xmslWbs.getParams()==null?new HashMap<>(1):xmslWbs.getParams());
