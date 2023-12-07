@@ -40,13 +40,6 @@ public class SgjsDiscloseRecord extends BaseEntity {
     @Excel(name = "附件组id")
     private String fileGroupId;
     /**
-     * 字段描述：备注
-     */
-    @JsonProperty
-    @Excel(name = "备注")
-    @FtExcel(name = "备注")
-    private String remark;
-    /**
      * 字段描述：所属区域id
      */
     @JsonSerialize(using = ToStringSerializer.class)
@@ -173,6 +166,15 @@ public class SgjsDiscloseRecord extends BaseEntity {
     @Excel(name = "交底等级")
     @FtExcel(name = "交底等级")
     private String discloseLevel;
+
+    /**
+     * 字段描述：wbs名称
+     */
+    @JsonProperty
+    @Excel(name = "wbs名称")
+    @FtExcel(name = "wbs名称")
+    private String wbsName;
+
     /**
      * 字段描述：交底名称
      */
@@ -180,6 +182,13 @@ public class SgjsDiscloseRecord extends BaseEntity {
     @Excel(name = "交底名称")
     @FtExcel(name = "交底名称")
     private String discloseName;
+    /**
+     * 字段描述：审核人
+     */
+    @JsonProperty
+    @Excel(name = "审核人")
+    @FtExcel(name = "审核人")
+    private String reviewUser;
     /**
      * 字段描述：交底人
      */
@@ -202,6 +211,13 @@ public class SgjsDiscloseRecord extends BaseEntity {
     @FtExcel(name = "被交底人")
     private String wasDiscloseUser;
     /**
+     * 字段描述：作业班组
+     */
+    @JsonProperty
+    @Excel(name = "作业班组")
+    @FtExcel(name = "作业班组")
+    private String workTeam;
+    /**
      * 字段描述：实际交底日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -209,34 +225,21 @@ public class SgjsDiscloseRecord extends BaseEntity {
     @Excel(name = "实际交底日期", dateFormat = "yyyy-MM-dd")
     @FtExcel(name = "实际交底日期", dateFormat = "yyyy-MM-dd")
     private Date actDiscloseDate;
+
     /**
-     * 字段描述：wbs名称
+     * 字段描述：备注
      */
     @JsonProperty
-    @Excel(name = "wbs名称")
-    @FtExcel(name = "wbs名称")
-    private String wbsName;
+    @Excel(name = "备注")
+    @FtExcel(name = "备注")
+    private String remark;
+
+
     /**
      * 字段描述：wbs编码
      */
     @JsonProperty
-    @Excel(name = "wbs编码")
-    @FtExcel(name = "wbs编码")
     private String wbsCode;
-    /**
-     * 字段描述：审核人
-     */
-    @JsonProperty
-    @Excel(name = "审核人")
-    @FtExcel(name = "审核人")
-    private String reviewUser;
-    /**
-     * 字段描述：作业班组
-     */
-    @JsonProperty
-    @Excel(name = "作业班组")
-    @FtExcel(name = "作业班组")
-    private String workTeam;
 
     /**
      * 数据分类:oneOrTwo、three

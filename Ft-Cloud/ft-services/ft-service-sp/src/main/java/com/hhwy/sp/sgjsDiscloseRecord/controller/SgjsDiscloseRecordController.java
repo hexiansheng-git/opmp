@@ -12,6 +12,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
 import com.hhwy.sp.sgjsDiscloseRecord.service.ISgjsDiscloseRecordService;
 import com.hhwy.utils.excel.FtExcelUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -126,6 +127,22 @@ public class SgjsDiscloseRecordController extends BaseController {
         }
 
         List<SgjsDiscloseRecord> sgjsDiscloseRecordList = sgjsDiscloseRecordService.getSgjsDiscloseRecordList(sgjsDiscloseRecordParam);
+
+        if(CollectionUtils.isNotEmpty(sgjsDiscloseRecordList)) {
+            sgjsDiscloseRecordList.stream().forEach(vo -> {
+                switch (vo.getDiscloseLevel()) {
+                    case "1":
+                        vo.setDiscloseLevel("一级交底");
+                        break;
+                    case "2":
+                        vo.setDiscloseLevel("二级交底");
+                        break;
+                    case "3":
+                        vo.setDiscloseLevel("三级交底");
+                        break;
+                }
+            });
+        }
 
         FtExcelUtil<SgjsDiscloseRecord> util = new FtExcelUtil<>(SgjsDiscloseRecord.class);
         String templateName = "";
