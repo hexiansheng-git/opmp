@@ -382,4 +382,61 @@ public class ListTreeUtil {
             }
         }
     }
+
+
+
+    /**
+     * 根据子集递归查询父子级数据
+     * @param sublist
+     * @param allList
+     * @param getId
+     * @param getPid
+     * @return
+     * @param <T>
+     */
+    public static <T> List<T> getRelevancyListBySublist(List<T> sublist,List<T> allList,Function<T,Long> getId,Function<T,Long> getPid) {
+        List<T> resultList = new ArrayList<>();
+        Map<Long,T> resultMap = new HashMap<>();
+
+        for (T t : sublist) {
+            recursion1(t,allList,resultMap,getId,getPid);
+            resultMap.putIfAbsent(getId.apply(t), t);
+        }
+
+        for (Map.Entry<Long, T> t : resultMap.entrySet()) {
+            resultList.add(t.getValue());
+        }
+        return resultList;
+    }
+
+    /**
+     * 递归查询父级数据
+     * @param down
+     * @param allList
+     * @param resultMap
+     */
+    public static <T> void recursion1(T down,List<T> allList,Map<Long,T> resultMap,Function<T,Long> getId,Function<T,Long> getPid){
+        Long id = getId.apply(down);
+        Long pid = getPid.apply(down);
+        //找父级
+        if(pid != null){
+            for (T t : allList) {
+                Long tempId = getId.apply(t);
+                if(pid.equals(tempId)){
+                    recursion(t,allList,resultMap,getId,getPid);
+                    resultMap.putIfAbsent(tempId, t);
+                }
+            }
+        }
+
+        //找子级
+        for (T t : allList) {
+            Long tempId = getId.apply(t);
+            Long tempPid = getPid.apply(t);
+            if(id.equals(tempPid)){
+                recursion1(t,allList,resultMap,getId,getPid);
+                resultMap.putIfAbsent(tempId, t);
+            }
+        }
+    }
 }
