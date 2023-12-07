@@ -243,7 +243,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
    private void validDataDigui(List<SgjsTechnicalManage>list,List<String> msgList){
        for (SgjsTechnicalManage info:list ) {
            Integer headCount = info.getHeadCount();
-           if(headCount==0){
+           if(headCount==1){
                String name = info.getUserName();
                if(StringUtils.isEmpty(name)){
                    msgList.add(info.getPostName()+"人员姓名不能为空");
