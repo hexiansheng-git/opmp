@@ -75,6 +75,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from  sys_role_menu
 		where  role_id=#{roleId} and  tenant_key=#{tenantKey}
 	</select>
+    <select id="selectRoleUserExit" resultType="com.hhwy.system.core.domain.SysUserRole">
+		select  user_id as userId,
+				role_id as roleId,
+				tenant_key tenantKey
+		from  sys_user_role
+		where  user_id=#{userId} and role_id =#{roleId} and  tenant_key=#{tenantKey}
+	</select>
 
 
 

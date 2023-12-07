@@ -58,7 +58,6 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
     private IDeptService deptService;
     @Override
     public void onMessage(String s) {
-//            try {
         System.out.println("mq创建租户方法开始*************************************"+s);
                 Map projectBasicInfo = JSON.parseObject(s, Map.class);
                 String projectName = (String) projectBasicInfo.get("projectName");
@@ -100,17 +99,9 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
                 List<SysUser> idList = this.handUserInfo(userList, roleUserList, partUserList);
 
                 sysTenant.setUserList(idList);
-//                sysTenant.setUserList(userList);
 
                 this.tenantService.insertSysTenant(sysTenant);
         System.out.println("mq创建租户方法结束*************************************"+s);
-
-//            }catch (MyBatisSystemException e){
-//                e.printStackTrace();
-//            }
-//            catch (Exception e){
-//                e.printStackTrace();
-//            }
     }
 
     @Override
