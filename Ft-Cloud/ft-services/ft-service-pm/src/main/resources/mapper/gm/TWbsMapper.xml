@@ -231,10 +231,7 @@
     <select id="getEffectEngineeringTypeByProType" parameterType="String" resultType="String">
         select engineering_type from `opmp-pm`.t_wbs_main
         <where>
-            <foreach collection="list" index="index" item="item" separator="or" open="(" close=")">
-                product_type like concat('%', #{item},'%')
-            </foreach>
-            and valid = 1
+            product_type like concat('%', #{item},'%') and valid = 1
         </where>
         order by version desc limit 1
     </select>
