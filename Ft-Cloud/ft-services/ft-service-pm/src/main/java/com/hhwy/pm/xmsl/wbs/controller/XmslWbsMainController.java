@@ -144,7 +144,7 @@ public class XmslWbsMainController extends BaseController {
         if(main.getValid() == Constant.YES_INT)
             return AjaxResult.error("数据已生效");
         XmslWbsMain effect = xmslWbsMainService.getEffect();
-        xmslWbsMainService.asyncHandler(main,effect);
+        xmslWbsMainService.asyncHandler(SecurityUtils.getTenantKey(),main,effect);
         return AjaxResult.success();
     }
 

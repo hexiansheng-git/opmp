@@ -51,6 +51,12 @@ public class QqchMeasureExpEquController extends BaseController {
         return AjaxResult.success(qqchMeasureExpEquVo);
     }
 
+//    @PreAuthorize(hasPermi = "qqchMeasureExpEqu:list")
+    @PostMapping("/feignList")
+    public AjaxResult feignList() {
+        return this.getMeasureList(null);
+    }
+
     /**
      * 试验仪器设备配置计划列表
      *

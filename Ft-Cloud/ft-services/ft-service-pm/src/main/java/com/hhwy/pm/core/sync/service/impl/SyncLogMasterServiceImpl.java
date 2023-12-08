@@ -1,6 +1,8 @@
 package com.hhwy.pm.core.sync.service.impl;
 
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.pm.core.sync.mapper.SysSyncInfoLogMapper;
 import com.hhwy.pm.core.sync.service.ISyncLogMasterService;
@@ -20,17 +22,25 @@ public class SyncLogMasterServiceImpl implements ISyncLogMasterService {
     @Override
     @Transactional
     public void success(String busName, String param, String result) {
-        save(busName,param,result, Constant.YES_INT,null);
+        save(busName,param,result, Constant.YES_INT,null,null);
     }
 
     @Override
     @Transactional
     public void fail(String busName, String param, String result, String failMsg) {
-        save(busName,param,result, Constant.NO_INT,failMsg);
+        save(busName,param,result, Constant.NO_INT,failMsg,null);
     }
 
+    @Override
+    @Transactional
+    public void save(String busName, String param, String result, Integer status, String failMsg) {
+        save(busName,param,result, status,failMsg,null);
+    }
 
-    public void save(String busName, String param, String result,Integer status,String failMsg){
+    @Override
+    @Transactional
+    public void save(String busName, String param, String result,Integer status,String failMsg,Long useMills){
+        String userId = SecurityUtils.getUserId()+"";
         ThreadPoolUtil.execute(()->{
             //切换到master
             String oldDataSource = DynamicDataSourceContextHolder.peek();
@@ -45,7 +55,12 @@ public class SyncLogMasterServiceImpl implements ISyncLogMasterService {
                 log.setFailMsg(failMsg);
                 log.setPtVar1(param);
                 log.setPtVar2(result);
-                new AddBaseInfoUtil<>().addBaseEntity(log);
+                log.setCreateUser(userId);
+                log.setUpdateUser(userId);
+                log.setUpdateTime(DateUtils.getNowDate());
+                log.setCreateTime(DateUtils.getNowDate());
+                log.setDelFlag("0");
+                log.setUseTime(useMills);
                 this.sysSyncInfoLogMapper.insertSysSyncInfoLog(log);
             }finally {
                 DynamicDataSourceContextHolder.poll();
