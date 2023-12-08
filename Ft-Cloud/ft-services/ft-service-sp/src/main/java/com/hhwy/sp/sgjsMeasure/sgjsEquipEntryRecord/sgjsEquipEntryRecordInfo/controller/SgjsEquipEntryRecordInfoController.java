@@ -31,7 +31,6 @@ public class SgjsEquipEntryRecordInfoController extends BaseController{
     private ISgjsEquipEntryRecordInfoService sgjsEquipEntryRecordInfoService;
 
 
-
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfo:list")
     @GetMapping
     public AjaxResult getSgjsEquipEntryRecordInfo(@Validated(ValidationGroups.Get.class)  SgjsEquipEntryRecordInfo sgjsEquipEntryRecordInfoParam){

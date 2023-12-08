@@ -1,7 +1,7 @@
-package com.hhwy.sgjsEquipEntryRecordInfoDetail.sgjsEquipEntryRecordInfoDetail.service;
+package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.service;
 
 import java.util.List;
-import com.hhwy.sgjsEquipEntryRecordInfoDetail.sgjsEquipEntryRecordInfoDetail.domain.SgjsEquipEntryRecordInfoDetail;
+import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.domain.SgjsEquipEntryRecordInfoDetail;
 
 /**
  * @author lcf   测量管理--测试设备进场记录

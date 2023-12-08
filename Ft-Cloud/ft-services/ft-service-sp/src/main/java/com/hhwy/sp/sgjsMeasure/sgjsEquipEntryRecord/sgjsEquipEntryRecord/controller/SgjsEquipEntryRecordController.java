@@ -41,6 +41,12 @@ public class SgjsEquipEntryRecordController extends BaseController{
         return AjaxResult.success(sgjsEquipEntryRecord);
     }
 
+    /**
+     * 列表查询
+     *
+     * @param sgjsEquipEntryRecordParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:list")
     @GetMapping("/list")
     public AjaxResult getSgjsEquipEntryRecordList(@Validated(ValidationGroups.Select.class) SgjsEquipEntryRecord sgjsEquipEntryRecordParam){

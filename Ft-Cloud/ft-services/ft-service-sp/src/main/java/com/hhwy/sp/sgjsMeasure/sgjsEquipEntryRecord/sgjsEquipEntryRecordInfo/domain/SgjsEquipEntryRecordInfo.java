@@ -27,6 +27,10 @@ public class SgjsEquipEntryRecordInfo extends BaseEntity {
     @JsonProperty
     private Long id;
     /**
+     * 主表id
+     */
+    private Long recordId;
+    /**
      * 字段描述：管理编码
      */
     @JsonProperty
@@ -244,6 +248,14 @@ public class SgjsEquipEntryRecordInfo extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5"    )
     private String ptVar5;
+
+    public Long getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(Long recordId) {
+        this.recordId = recordId;
+    }
 
     @JsonIgnore
     public Long getId() {
