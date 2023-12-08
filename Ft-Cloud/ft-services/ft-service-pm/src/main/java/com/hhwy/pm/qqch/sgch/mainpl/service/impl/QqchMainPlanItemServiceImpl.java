@@ -383,15 +383,17 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
 
         QqchMainPlanItem qqchMainPlanItem = getQqchMainPlanItem(qqchMainPlanItemVoParam);
 
-        Long id = qqchMainPlanItem.getId();
+        if(qqchMainPlanItem != null) {
+            Long id = qqchMainPlanItem.getId();
 
-        List<QqchMainPlanItem> allLinkList = getAllLinkList(Arrays.asList(id));
+            List<QqchMainPlanItem> allLinkList = getAllLinkList(Arrays.asList(id));
 
-        if(!CollectionUtils.isEmpty(allLinkList)) {
-            QqchMainPlanItem qqchMainPlanItem1 = allLinkList.stream().filter(vo -> QqchMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType()) && "1".equals(vo.getIsCritical())).findFirst().orElse(null);
-            if(qqchMainPlanItem1 != null) qqchMainPlanItem.setIsCritical("1");
+            if(!CollectionUtils.isEmpty(allLinkList)) {
+                QqchMainPlanItem qqchMainPlanItem1 = allLinkList.stream().filter(vo -> QqchMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType()) && "1".equals(vo.getIsCritical())).findFirst().orElse(null);
+                if(qqchMainPlanItem1 != null) qqchMainPlanItem.setIsCritical("1");
+            }
+            if(qqchMainPlanItem.getIsCritical() == null) qqchMainPlanItem.setIsCritical("0");
         }
-        if(qqchMainPlanItem.getIsCritical() == null) qqchMainPlanItem.setIsCritical("0");
 
         return qqchMainPlanItem;
     }

@@ -26,10 +26,15 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -96,12 +101,38 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         System.out.println("--获取p6 wbs数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime() + "-- 数量:" + (wbsResult.getBody() == null ? 0 : wbsResult.getBody().size()));
         System.out.println("--获取p6 作业数据--租户:" + tenantKey + "--开始:" +  DateUtils.getTime());
         // 获取p6 作业数据
-        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setConnectTimeout(1000);
-        requestFactory.setReadTimeout(3600000);
-        RestTemplate restTemplateTimeout = new RestTemplate(requestFactory);
-        ResponseEntity<List<ActivityConstField>> workResult = restTemplateTimeout.exchange(urlwork + "?projectId={projectId}", HttpMethod.GET, entity, responseType4Work, params);
-        System.out.println("--获取p6 作业数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime() + "-- 数量:" + (workResult.getBody() == null ? 0 : workResult.getBody().size()));
+//        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+//        requestFactory.setConnectTimeout(1000);
+//        requestFactory.setReadTimeout(3600000);
+//        RestTemplate restTemplateTimeout = new RestTemplate(requestFactory);
+//        ResponseEntity<List<ActivityConstField>> workResult = restTemplateTimeout.exchange(urlwork + "?projectId={projectId}", HttpMethod.GET, entity, responseType4Work, params);
+//        System.out.println("--获取p6 作业数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime() + "-- 数量:" + (workResult.getBody() == null ? 0 : workResult.getBody().size()));
+
+//        if("PJ2016004237".equalsIgnoreCase(tenantKey)) {
+//            try {
+//                boolean isEnd = true;
+//                // 每隔5秒钟发送一次心跳消息
+//                while (isEnd) {
+//                    Thread thread = Thread.currentThread();
+//                    String name = thread.getName();
+//                    Thread.State state = thread.getState();
+//                    System.out.println("获取p6数据线程租户：" +tenantKey+"，当前线程名：" + name+"，当前线程状态：" + state);
+//                    if(Thread.State.TERMINATED == state) isEnd = false;
+//                    // 暂停5秒钟
+//                    Thread.sleep(5000);
+//                }
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+
+        HttpClient client = HttpClient.create()
+                .responseTimeout(Duration.ofSeconds(3600));
+        WebClient webClient = WebClient.builder()
+                .clientConnector(new ReactorClientHttpConnector(client))
+                .build();
+        List<ActivityConstField> workInfos = webClient.get().uri(urlwork + "?projectId={projectId}", projectId).retrieve().bodyToFlux(ActivityConstField.class).collectList().block();
+        System.out.println("--获取p6 作业数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime() + "-- 数量:" + (workInfos == null ? 0 : workInfos.size()));
 
         // 获取当前启用的总体计划主表数据
         JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
@@ -138,7 +169,9 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         jdglMainPlanService.insertJdglMainPlan(usingJdglMainPlan);
 
         List<WbsInfo> wbsInfos = wbsResult.getBody();
-        List<ActivityConstField> workInfos = workResult.getBody();
+
+//        List<ActivityConstField> workInfos = workResult.getBody();
+
         if (!CollectionUtils.isEmpty(wbsInfos) && !CollectionUtils.isEmpty(workInfos)) {
             for (WbsInfo wbsInfo : wbsInfos) {
                 JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
@@ -421,21 +454,57 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
             throw new RuntimeException("projectId参数异常");
         }
 
-        String oldDataSource = DynamicDataSourceContextHolder.peek();
-        DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(projectId));
-        try {
-            initJdglData4P6ByOne(projectId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("租户"+ projectId + "获取p6异常:-----------------" + e.getMessage());
+        // 创建固定数量的线程池
+        int threadPoolSize = 1;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
+
+        executorService.execute(() -> {
+            String oldDataSource = DynamicDataSourceContextHolder.peek();
+            DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(projectId));
+            try {
+                initJdglData4P6ByOne(projectId);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("租户" + projectId + "获取p6异常:-----------------" + e.getMessage());
 //            throw new CustomBusinessException(e.getMessage());
-        } finally {
-            DynamicDataSourceContextHolder.poll();
-            DynamicDataSourceContextHolder.push(oldDataSource);
+            } finally {
+                DynamicDataSourceContextHolder.poll();
+                DynamicDataSourceContextHolder.push(oldDataSource);
+            }
+        });
+
+        executorService.shutdown();
+
+        // 等待线程池执行结束
+        while (!executorService.isTerminated()) {
+            Thread.yield();
         }
 
         return null;
     }
+
+//    @Override
+//    public List<JdglMainPlanItem> initOneJdglData4P6ByTenent(String projectId) {
+//
+//        if (StringUtils.isEmpty(projectId)) {
+//            throw new RuntimeException("projectId参数异常");
+//        }
+//
+//        String oldDataSource = DynamicDataSourceContextHolder.peek();
+//        DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(projectId));
+//        try {
+//            initJdglData4P6ByOne(projectId);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println("租户"+ projectId + "获取p6异常:-----------------" + e.getMessage());
+////            throw new CustomBusinessException(e.getMessage());
+//        } finally {
+//            DynamicDataSourceContextHolder.poll();
+//            DynamicDataSourceContextHolder.push(oldDataSource);
+//        }
+//
+//        return null;
+//    }
 
     /**
      * 给wbs赋值开始结束时间
