@@ -3,6 +3,7 @@ package com.hhwy.pm.xmsl.wbs.service.impl;
 import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.NumberUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.github.pagehelper.PageHelper;
@@ -12,6 +13,7 @@ import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
@@ -22,6 +24,7 @@ import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsMapper;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsHistoryService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
+import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.*;
 import com.hhwy.utils.excel.FtExcelUtil;
@@ -67,6 +70,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     private IXmslWbsHistoryService wbsHistoryService;
     @Resource
     private IXmslContractInfoService xmslContractInfoService;
+    @Autowired
+    private SystemApiService systemApiService;
 
     @Override
     public XmslWbs getByCode(String code) {
@@ -123,7 +128,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                 return ObjectUtils.toMap("list",new ArrayList<>(2),"mainId","");
             xmslWbs.setMainId(effect.getId());
         }
-        tableName = effect.getId().equals(Long.valueOf(xmslWbs.getMainId()))?"xmsl_wbs":"xmsl_wbs_history";
+        tableName = Long.valueOf(xmslWbs.getMainId()).equals(effect==null?-1L:effect.getId())?"xmsl_wbs":"xmsl_wbs_history";
         //判断查询历史还是查询当前
         XmslWbsMain main = wbsMainService.getById(xmslWbs.getMainId());
         xmslWbs.setParams(xmslWbs.getParams()==null?new HashMap<>(1):xmslWbs.getParams());
@@ -312,6 +317,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         List<XmslWbs> list = excelUtil.importExcel(file.getInputStream());
         Map<String,XmslWbs> codeMap = new HashMap<>(list.size());
         List<XmslWbs> resuList = new ArrayList<>();
+        List<SysDictData> nodeTypeDictList = systemApiService.selectDictDataByType("xmsl_wbs_type");
         //序号map
         Map<String,Integer> sortMap = new HashMap<>(list.size());
         for (int i = 0; i < list.size(); i++) {
@@ -341,6 +347,11 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             temp.setSort(sort);
             temp.setId(UUIDUtils.getShortUuid());
             codeMap.put(temp.getCode(), temp);
+            temp.setPtVar3(temp.getName());
+            temp.setName(ObjectUtils.nvlString(temp.getPartCode())+"-"+ObjectUtils.nvlString(temp.getName()));
+            temp.setStatus(ObjectUtils.nvl(temp.getStatus(),1));
+            SysDictData tempDict = nodeTypeDictList.get(NumberUtil.min(temp.getLevel(),nodeTypeDictList.size())-1);
+            temp.setNodeType(tempDict==null?"":tempDict.getDictValue());
         }
         return resuList;
     }
@@ -370,9 +381,6 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             //遍历，获取祖级id、名称
             for (int i = 0; i < list.size(); i++) {
                 XmslWbs temp = list.get(i);
-                if(func != null){
-                    func.apply(temp);
-                }
                 idNameMap.put(temp.getId(),temp.getName().trim());
                 //若有父级，则放入parentIdMap、parentNameMap
                 if(isParentFunc.apply(temp.getParentId())){
@@ -395,10 +403,13 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                 if(isParentFunc.apply(temp.getParentId())){
                     temp.setAncestors(temp.getId());
                     temp.setAncestorsName(temp.getName());
-                    continue;
+                }else{
+                    temp.setAncestors(StringUtils.join(parentIdMap.get(temp.getId()),","));
+                    temp.setAncestorsName(StringUtils.join(parentNameMap.get(temp.getId()),","));
                 }
-                temp.setAncestors(StringUtils.join(parentIdMap.get(temp.getId()),","));
-                temp.setAncestorsName(StringUtils.join(parentNameMap.get(temp.getId()),","));
+                if(func != null){  //调用自定义遍历方法
+                    func.apply(temp);
+                }
             }
             xmslWbsMapper.updateXmslWbsAncestorList(list);
         }finally{
