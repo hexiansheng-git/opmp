@@ -1,4 +1,4 @@
-package com.hhwy.sp.sgjsPlanMeasure.sgjsPlanMeasureManage.service.impl;
+package com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.service.impl;
 
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.sp.sgjsPlanMeasure.sgjsPlanMeasureManage.mapper.SgjsPlanMeasureManageMapper;
-import com.hhwy.sp.sgjsPlanMeasure.sgjsPlanMeasureManage.service.ISgjsPlanMeasureManageService;
-import com.hhwy.sp.sgjsPlanMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.mapper.SgjsPlanMeasureManageMapper;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.service.ISgjsPlanMeasureManageService;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
 import com.hhwy.utils.idworker.IdWorker;
 
 /**

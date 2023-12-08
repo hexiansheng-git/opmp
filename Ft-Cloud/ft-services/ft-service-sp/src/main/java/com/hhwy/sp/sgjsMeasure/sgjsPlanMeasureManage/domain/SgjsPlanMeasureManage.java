@@ -1,4 +1,4 @@
-package com.hhwy.sp.sgjsPlanMeasure.sgjsPlanMeasureManage.domain;
+package com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;

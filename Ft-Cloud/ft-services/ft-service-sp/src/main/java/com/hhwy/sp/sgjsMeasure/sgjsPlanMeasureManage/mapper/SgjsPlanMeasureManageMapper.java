@@ -1,8 +1,8 @@
-package com.hhwy.sp.sgjsPlanMeasure.sgjsPlanMeasureManage.mapper;
+package com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import com.hhwy.sp.sgjsPlanMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
 
 /**
  * @author zmh

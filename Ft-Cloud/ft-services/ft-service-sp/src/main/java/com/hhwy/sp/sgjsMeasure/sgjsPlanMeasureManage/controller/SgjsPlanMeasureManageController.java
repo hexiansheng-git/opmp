@@ -1,4 +1,4 @@
-package com.hhwy.sp.sgjsPlanMeasure.sgjsPlanMeasureManage.controller;
+package com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,8 +10,8 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.sp.sgjsPlanMeasure.sgjsPlanMeasureManage.service.ISgjsPlanMeasureManageService;
-import com.hhwy.sp.sgjsPlanMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.service.ISgjsPlanMeasureManageService;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
 
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;

@@ -1,7 +1,7 @@
-package com.hhwy.sp.sgjsPlanMeasure.sgjsPlanMeasureManage.service;
+package com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.service;
 
 import java.util.List;
-import com.hhwy.sp.sgjsPlanMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
 
 /**
  * @author zmh
