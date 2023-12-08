@@ -26,6 +26,11 @@ public class SgjsEquipEntryRecordInfoDetail extends BaseEntity {
     @JsonProperty
     private Long id;
     /**
+     * 设备进场表id
+     *
+     */
+    private Long infoId;
+    /**
      * 字段描述：自检校验时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -158,6 +163,14 @@ public class SgjsEquipEntryRecordInfoDetail extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5"    )
     private String ptVar5;
+
+    public Long getInfoId() {
+        return infoId;
+    }
+
+    public void setInfoId(Long infoId) {
+        this.infoId = infoId;
+    }
 
     @JsonIgnore
     public Long getId() {

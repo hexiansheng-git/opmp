@@ -6,6 +6,7 @@
 
     <resultMap type="com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo" id="SgjsEquipEntryRecordInfoResultMap">
         <result property="id" column="id" />
+        <result property="recordId" column="record_id" />
         <result property="manageCode" column="manage_code" />
         <result property="categoryCode" column="category_code" />
         <result property="materialName" column="material_name" />
@@ -44,49 +45,51 @@
     </resultMap>
     <sql id="selectSgjsEquipEntryRecordInfoVo">
         select
-                                                            `id`
-                                                         ,`manage_code`
-                                                         ,`category_code`
-                                                         ,`material_name`
-                                                         ,`material_spec`
-                                                         ,`category_name`
-                                                         ,`category_id`
-                                                         ,`manufacturer`
-                                                         ,`serial_num`
-                                                         ,`power`
-                                                         ,`bottom_no`
-                                                         ,`entry_date`
-                                                         ,`exit_date`
-                                                         ,`check_date`
-                                                         ,`source`
-                                                         ,`current_state`
-                                                         ,`remark`
-                                                         ,`data_source`
-                                                         ,`region_id`
-                                                         ,`region_name`
-                                                         ,`project_id`
-                                                         ,`project_name`
-                                                         ,`dept_id`
-                                                         ,`create_user`
-                                                         ,`create_user_name`
-                                                         ,`create_time`
-                                                         ,`update_user`
-                                                         ,`update_time`
-                                                         ,`del_user`
-                                                         ,`del_time`
-                                                         ,`del_flag`
-                                                         ,`pt_var1`
-                                                         ,`pt_var2`
-                                                         ,`pt_var3`
-                                                         ,`pt_var4`
-                                                         ,`pt_var5`
-                                    from sgjs_equip_entry_record_info
+            `id`
+         , `record_id`
+         ,`manage_code`
+         ,`category_code`
+         ,`material_name`
+         ,`material_spec`
+         ,`category_name`
+         ,`category_id`
+         ,`manufacturer`
+         ,`serial_num`
+         ,`power`
+         ,`bottom_no`
+         ,`entry_date`
+         ,`exit_date`
+         ,`check_date`
+         ,`source`
+         ,`current_state`
+         ,`remark`
+         ,`data_source`
+         ,`region_id`
+         ,`region_name`
+         ,`project_id`
+         ,`project_name`
+         ,`dept_id`
+         ,`create_user`
+         ,`create_user_name`
+         ,`create_time`
+         ,`update_user`
+         ,`update_time`
+         ,`del_user`
+         ,`del_time`
+         ,`del_flag`
+         ,`pt_var1`
+         ,`pt_var2`
+         ,`pt_var3`
+         ,`pt_var4`
+         ,`pt_var5`
+        from sgjs_equip_entry_record_info
     </sql>
     <select id="getSgjsEquipEntryRecordInfo" resultMap="SgjsEquipEntryRecordInfoResultMap">
         <include refid="selectSgjsEquipEntryRecordInfoVo" />
         <where>
             del_flag = "0"
             <if test="id != null "> and `id` = #{id}</if>
+            <if test="recordId != null "> and `record_id` = #{recordId}</if>
             <if test="manageCode != null  and manageCode != ''"> and `manage_code` = #{manageCode}</if>
             <if test="categoryCode != null  and categoryCode != ''"> and `category_code` = #{categoryCode}</if>
             <if test="materialName != null  and materialName != ''"> and `material_name` = #{materialName}</if>
@@ -131,6 +134,7 @@
         <where>
             del_flag = "0"
             <if test="id != null "> and `id` = #{id}</if>
+            <if test="recordId != null "> and `record_id` = #{recordId}</if>
             <if test="manageCode != null  and manageCode != ''"> and `manage_code` = #{manageCode}</if>
             <if test="categoryCode != null  and categoryCode != ''"> and `category_code` = #{categoryCode}</if>
             <if test="materialName != null  and materialName != ''"> and `material_name` = #{materialName}</if>
@@ -174,6 +178,7 @@
         insert into sgjs_equip_entry_record_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
+            <if test="recordId != null ">`record_id`,</if>
             <if test="manageCode != null  and manageCode != ''">`manage_code`,</if>
             <if test="categoryCode != null  and categoryCode != ''">`category_code`,</if>
             <if test="materialName != null  and materialName != ''">`material_name`,</if>
@@ -212,6 +217,7 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
+            <if test="recordId != null ">#{recordId},</if>
             <if test="manageCode != null  and manageCode != ''">#{manageCode},</if>
             <if test="categoryCode != null  and categoryCode != ''">#{categoryCode},</if>
             <if test="materialName != null  and materialName != ''">#{materialName},</if>
@@ -255,6 +261,7 @@
         insert into sgjs_equip_entry_record_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
+            `record_id`,
             `manage_code`,
             `category_code`,
             `material_name`,
@@ -294,6 +301,7 @@
         <foreach collection="sgjsEquipEntryRecordInfoList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
+                #{item.recordId},
                 #{item.manageCode},
                 #{item.categoryCode},
                 #{item.materialName},
@@ -336,6 +344,7 @@
         update sgjs_equip_entry_record_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
+            <if test="recordId != null ">`record_id` = #{recordId},</if>
             <if test="manageCode != null  and  manageCode != ''">`manage_code` = #{manageCode},</if>
             <if test="categoryCode != null  and  categoryCode != ''">`category_code` = #{categoryCode},</if>
             <if test="materialName != null  and  materialName != ''">`material_name` = #{materialName},</if>
