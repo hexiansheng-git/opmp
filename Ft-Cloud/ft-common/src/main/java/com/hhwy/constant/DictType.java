@@ -19,4 +19,8 @@ public class DictType {
     public static final String MANAGE_MODE_INIT_DATA = "manage_mode_init_data";
     /*lcf:技术职责清单---是否在场*/
     public static final String WORK_OR_NOT="workOrNot";
+    /*wll:技术培训管理---培训类型*/
+    public static final String Technical_Training_Type="technicalTrainingType";
+
+
 }
