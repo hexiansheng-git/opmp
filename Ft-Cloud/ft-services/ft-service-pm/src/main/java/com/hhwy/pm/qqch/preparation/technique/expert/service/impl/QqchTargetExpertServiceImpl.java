@@ -184,7 +184,7 @@ public class QqchTargetExpertServiceImpl implements IQqchTargetExpertService {
             library.setProducts(expert.getProduct());
             library.setSpecialty(expert.getSpecialty());
             library.setDataSource(projectInfo.getProjectName());
-            library.setPersonId(Math.toIntExact(SecurityUtils.getUserId()));
+            library.setPersonId(SecurityUtils.getUserId());
             library.setPersonName(SecurityUtils.getUserName());
             library.setEditTime(DateUtils.getNowDate());
             library.setRemark(expert.getRemark());

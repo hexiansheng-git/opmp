@@ -63,7 +63,7 @@ public class QyzsSpeciallistLibrary extends BaseEntity {
      * 字段描述：编辑人
      */
     @JsonProperty
-    private Integer personId;
+    private Long personId;
     /**
      * 字段描述：编辑人姓名
      */

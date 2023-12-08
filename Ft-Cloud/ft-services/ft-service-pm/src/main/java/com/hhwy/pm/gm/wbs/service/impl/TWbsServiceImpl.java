@@ -121,6 +121,8 @@ public class TWbsServiceImpl implements ITWbsService {
 
     @Override
     public List<TWbs> wbsTreeList(Map map) {
+        //当前项目的工程类型
+        String currentProjEngType = this.getDefaultEngineeringType();
         //切换到master
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey("master");
@@ -133,7 +135,7 @@ public class TWbsServiceImpl implements ITWbsService {
                 engineeringType = (String) typeObj;
             }
             if(StringUtils.isBlank(engineeringType)){
-                engineeringType = this.getDefaultEngineeringType();
+                engineeringType = currentProjEngType;
             }
             if(StringUtils.isBlank(engineeringType)){
                 return new ArrayList<>(2);
@@ -148,12 +150,13 @@ public class TWbsServiceImpl implements ITWbsService {
             query.setCode(map.get("code")!=null?map.get("code").toString():null);
             query.setName(map.get("name")!=null?map.get("name").toString():null);
             List<TWbs> list = this.getTWbsList(query);
+            Set<Long> idSet = list.stream().map(r->Long.valueOf(r.getId())).collect(Collectors.toSet());
             //查询出祖级对象
             Set<Long> pidSet = new HashSet<>();
             for (int i = 0; i < list.size(); i++) {
                 TWbs temp = list.get(i);
-                List<Long> pidList = StringUtils.isBlank(temp.getAncestors())?new ArrayList<>(2):Arrays.asList(com.hhwy.common.core.text.Convert.toLongArray(temp.getAncestors()));
-                pidList.remove(temp.getId());
+                List<Long> pidList = StringUtils.isBlank(temp.getAncestors())?new ArrayList<>(2):Arrays.asList(Convert.toLongArray(temp.getAncestors()));
+                pidList = pidList.stream().filter(r->!idSet.contains(r)).collect(Collectors.toList());
                 pidSet.addAll(pidList);
             }
             if(CollectionUtils.isNotEmpty(pidSet)){
