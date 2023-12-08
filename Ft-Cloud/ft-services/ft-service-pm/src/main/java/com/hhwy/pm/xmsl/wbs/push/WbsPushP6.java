@@ -75,6 +75,8 @@ public class WbsPushP6 {
                     log.error("WBS名称为空,ID:"+temp.getId()+",mainId:"+temp.getMainId());
                     continue;
                 }
+                if(temp.getStatus()==Constant.NO_INT)
+                    continue;
                 WbsInfoVoBean bean = WbsInfoVoBean.parseWbs(temp);
                 if(temp.getLevel() == 1 )
                     treeList.add(bean);

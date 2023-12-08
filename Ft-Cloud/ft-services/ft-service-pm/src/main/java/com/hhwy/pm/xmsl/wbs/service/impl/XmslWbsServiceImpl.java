@@ -628,6 +628,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         XmslWbsMain wbsMain = this.wbsMainService.getById(dto.getMainId());
         Assert.notNull(wbsMain,"mainId有误，获取主数据失败");
         Assert.isTrue(wbsMain.getValid()==Constant.NO_INT,"已生效的数据无法编辑");
+
     }
 
     private void submitCheck(XmslWbsDto dto){
@@ -635,6 +636,9 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         if(Constant.YES_INT.equals(dto.getSubmitFlag())){
             String wrongCodes = this.xmslWbsMapper.countWbsOnlyOne(dto.getMainId());
             Assert.isTrue(StringUtils.isBlank(wrongCodes),"wbs编号为:["+wrongCodes+"]的数据未填写项目部位（桩号）或标准WBS名称");
+            //校验重复编码
+            List<String> repeatCodeList = xmslWbsMapper.repeatWbsCode(dto.getMainId());
+            Assert.isTrue(CollectionUtils.isEmpty(repeatCodeList),"["+StringUtils.join(repeatCodeList,",")+"]WBS编号重复");
         }
     }
 
