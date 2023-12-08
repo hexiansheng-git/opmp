@@ -49,6 +49,16 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             public Map<String, Object> getPrjInfo() {
                 return null;
             }
+
+            @Override
+            public AjaxResult qqchMeasureExpPlanList() {
+                return AjaxResult.error("请求失败:", throwable.getMessage());
+            }
+
+            @Override
+            public AjaxResult qqchMeasureExpEquList() {
+                return AjaxResult.error("请求失败:", throwable.getMessage());
+            }
         };
     }
 }
