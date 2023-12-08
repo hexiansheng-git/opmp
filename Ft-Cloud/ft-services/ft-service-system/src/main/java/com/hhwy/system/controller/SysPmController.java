@@ -13,6 +13,7 @@ import com.hhwy.system.core.service.*;
 import com.hhwy.system.mapper.SysPmMapper;
 import com.hhwy.system.service.IDeptService;
 import com.hhwy.system.service.ISysPmService;
+import com.hhwy.utils.ObjectUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -219,7 +220,9 @@ public class SysPmController {
 
     //查询部分数据使用情况
     @PostMapping("/createData")
-    public void createData() {
+    public String createData() {
+        String loginStr = "登录人数";
+        
         ArrayList<Map> list = new ArrayList<>();
         Map<String, String> map = new HashMap<>();
         map.put("项目设立合同信息","xmsl_contract_info");
@@ -264,10 +267,72 @@ public class SysPmController {
             }
             list.add(dataMap);
         }
+        Map<Object, Integer> menucountMap = new HashMap<>();
+        Map<Object, Integer> projectcountMap = new HashMap<>();
+        for(Map item:list){
+//            map.put("项目设立合同信息","xmsl_contract_info");
+//            map.put("前期策划小组","qqch_work_group");
+//            map.put("前期策划工作计划","qqch_work_plan");
+//            map.put("进度管理-年度产值计划","jdgl_year_plan");
+//            map.put("进度管理-季度产值计划","jdgl_quarter_plan");
+//            map.put("进度管理-月度产值计划","jdgl_month_plan");
+//            map.put("进度管理-每周产值计划","jdgl_week_plan");
+//            map.put("进度管理-进度填报","jdgl_day_schedule");
+            Integer loginCount= ObjectUtils.toInteger(item.get("loginCount"));
+            if(loginCount!=0){
+                if(menucountMap.containsKey(loginStr)){
+                    menucountMap.put(loginStr,menucountMap.get(loginStr)+loginCount);
+                }else{
+                    menucountMap.put(loginStr,loginCount);
+                }
+                if(projectcountMap.containsKey(loginStr)){
+                    projectcountMap.put(loginStr,projectcountMap.get(loginStr)+1);
+                }else{
+                    projectcountMap.put(loginStr,1);
+                }
+            };
+            for(String key:map.keySet()){
+                String value = map.get(key).toString();
+                Integer count= ObjectUtils.toInteger(item.get(value));
+                if(count!=0){
+                    if(menucountMap.containsKey(key)){
+                        menucountMap.put(key,menucountMap.get(key)+count);
+                    }else{
+                        menucountMap.put(key,count);
+                    }
+                    if(projectcountMap.containsKey(key)){
+                        projectcountMap.put(key,projectcountMap.get(key)+1);
+                    }else{
+                        projectcountMap.put(key,1);
+                    }
+                };
+            }
+        }
+
+
+
         sysPmMapper.delete();
         sysPmMapper.batchInsert(list);
 
+        StringBuffer resStr = new StringBuffer();
+        resStr.append(loginStr)
+                .append(":")
+                .append(projectcountMap.get(loginStr))
+                .append("个项目")
+                .append(menucountMap.get(loginStr))
+                .append("人次;")
+                .append("\n");
+        for(String key:map.keySet()){
+            resStr.append(key)
+                    .append(":")
+                    .append(projectcountMap.get(key))
+                    .append("个项目")
+                    .append(menucountMap.get(key))
+                    .append("条数据;")
+                    .append("\n");
+        }
 
+        return  resStr.toString();
     }
 
 }
