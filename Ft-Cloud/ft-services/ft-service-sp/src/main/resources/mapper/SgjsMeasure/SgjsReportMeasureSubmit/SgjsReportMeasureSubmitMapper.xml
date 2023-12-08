@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.sg.sgjsMeasure.sgjsReportMeasureSubmit.sgjsReportMeasureSubmit.mapper.SgjsReportMeasureSubmitMapper">
+<mapper namespace="com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.mapper.SgjsReportMeasureSubmitMapper">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-    <resultMap type="com.hhwy.sg.sgjsMeasure.sgjsReportMeasureSubmit.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit" id="SgjsReportMeasureSubmitResultMap">
+    <resultMap type="com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit" id="SgjsReportMeasureSubmitResultMap">
                     <result property="id" column="id" />
                     <result property="pid" column="pid" />
                     <result property="reportName" column="report_name" />
