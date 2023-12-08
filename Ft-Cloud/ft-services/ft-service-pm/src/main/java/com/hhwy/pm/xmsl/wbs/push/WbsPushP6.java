@@ -169,13 +169,14 @@ public class WbsPushP6 {
 
     //推送删除数据，需要保证要删除的数据推送给p6过
     private void pushDelete(Long mainId,String projectCode,Set<String> invalidIdSourceSet){
+        if(CollectionUtils.isEmpty(invalidIdSourceSet))
+            return;
         long begin = System.currentTimeMillis();
         StringEntity stringEntity =null;
         String resultStr = null;
         boolean isSuccess = false;
         try{
-            if(CollectionUtils.isEmpty(invalidIdSourceSet))
-                return;
+
             Set<Long> invalidIdSet = new HashSet<>();
             for(String r : invalidIdSourceSet){
                 if(StringUtils.isBlank(r))

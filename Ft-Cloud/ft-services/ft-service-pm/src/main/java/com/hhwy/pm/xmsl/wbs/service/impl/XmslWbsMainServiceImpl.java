@@ -221,8 +221,9 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
 //        //2、修改main表状态
         this.xmslWbsMainMapper.updateValid(id);
         //3、异步处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容& 推送p6
-        String tenantKey = MySecurityUtils.getTenantKey();
+        String tenantKey = SecurityUtils.getTenantKey();
         ThreadPoolUtil.getThreadPool().execute(()-> {
+            MySecurityUtils.set(tenantKey);
             try {
                 Thread.sleep(700L);
             } catch (InterruptedException e) {
