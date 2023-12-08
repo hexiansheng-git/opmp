@@ -176,6 +176,9 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         if(CollectionUtils.isEmpty(wbsInfos)) {
             System.out.println("--未获取到p6wbs数据--租户:" + tenantKey);
         }
+        if(CollectionUtils.isEmpty(workInfos)) {
+            System.out.println("--未获取到p6作业数据--租户:" + tenantKey);
+        }
 
 //        List<ActivityConstField> workInfos = workResult.getBody();
 
@@ -230,9 +233,6 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 returnList.add(jdglMainPlanItem);
             }
             List<JdglMainPlanItem> workMainPlanItemList = new ArrayList<>();
-            if(CollectionUtils.isEmpty(workInfos)) {
-                System.out.println("--未获取到p6作业数据--租户:" + tenantKey);
-            }
             for (ActivityConstField activityInfo : workInfos) {
                 JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
                 String p6Id = activityInfo.getId();
