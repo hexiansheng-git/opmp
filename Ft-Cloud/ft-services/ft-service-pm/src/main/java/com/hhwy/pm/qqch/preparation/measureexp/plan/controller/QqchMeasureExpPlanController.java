@@ -54,6 +54,13 @@ public class QqchMeasureExpPlanController extends BaseController {
         res.setStageIdentity(reviewService.getStage());
         return AjaxResult.success(res);
     }
+    @GetMapping("/feignList")
+    public AjaxResult feignList() {
+        QqchMeasureExpPlan qqchMeasureExpPlanParam = new QqchMeasureExpPlan();
+        qqchMeasureExpPlanParam.setDataType("1"); //1-测量管理计划 2-实验管理计划
+        return this.getQqchMeasureExpPlanList(qqchMeasureExpPlanParam);
+    }
+
 
 //    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:add")
     @PostMapping("/save")

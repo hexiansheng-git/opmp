@@ -53,4 +53,20 @@ public interface PmServiceApi {
 
     @GetMapping("/projectBasicInfo/getPrjInfo")
     Map<String,Object> getPrjInfo();
+
+
+    /**
+     * 3.6.2 feign接口
+     * @return
+     */
+    @GetMapping("/qqchMeasureExpPlan/feignList")
+    AjaxResult qqchMeasureExpPlanList();
+
+    /**
+     * 3.6.4
+     * @return
+     */
+    @PostMapping("/qqchMeasureExpEqu/feignList")
+    AjaxResult qqchMeasureExpEquList();
+
 }

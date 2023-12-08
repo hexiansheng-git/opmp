@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,7 @@ public class QqchScheServiceImpl implements IQqchScheService {
         qqchScheDTO.setCorrList(corrService.getList(CompileEntity.dealListDto(dto.getVersion(), new QqchScheCorr())));
         qqchScheDTO.setVersion(new BigDecimal("1.0"));
         qqchScheDTO.setStageIdentity("1");
-
+        qqchScheDTO.setFactorsVOList(new ArrayList<>(2));
         return qqchScheDTO;
 
     }

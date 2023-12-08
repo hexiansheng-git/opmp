@@ -220,87 +220,91 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         this.xmslWbsMainMapper.deleteWbsHitoryByMainId(id);
 //        //2、修改main表状态
         this.xmslWbsMainMapper.updateValid(id);
-        //异步处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容
-        asyncHandler(main,effect);
-//        //4、工程量报表生成
-//        ThreadPoolUtil.getThreadPool().execute(()->{
-//            engineeringReportService.sync();
-//        });
-    }
-    //异步处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容
-    @Override
-    public void asyncHandler(XmslWbsMain main,XmslWbsMain effect){
+        //3、异步处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容& 推送p6
         String tenantKey = MySecurityUtils.getTenantKey();
-        //3、处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容
-        ThreadPoolUtil.getThreadPool().execute(()->{
-            long beginMills = System.currentTimeMillis();
-            //切换租户
+        ThreadPoolUtil.getThreadPool().execute(()-> {
+            try {
+                Thread.sleep(700L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             String oldDataSource = DynamicDataSourceContextHolder.peek();
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
             try{
-                Map<String,XmslWbs> lastWbsMap = new HashMap<>(10000);
-                //加载上一版本的wbs
-                if(effect != null){
-                    List<XmslWbs> lastList = wbsService.getXmslWbsHistoryList(effect.getId());
-                    if(CollectionUtils.isEmpty(lastList))
-                        lastList = wbsService.getByMainId(effect.getId());
-                    for (int i = 0; i < lastList.size(); i++) {
-                        XmslWbs temp = lastList.get(i);
-                        lastWbsMap.put(temp.getCode(), temp);
-                    }
-                }
-                List<XmslWbsListRelation> relationList = new ArrayList<>();
-                //需要修改版本标识(ptVar2)
-                List<XmslWbs> updateFlagList = new ArrayList<>();
-                List<XmslWbs> allList = new ArrayList<>();
-                Set<String> invalidIdSet = new HashSet<>(); //失效的wbsId (父级失效，需要将其所有子级状态改为失效)
-                Function<XmslWbs,XmslWbs> iteratFunc = (r)->{
-                    allList.add(r);
-                    if(r.getStatus() == Constant.NO_INT)
-                        invalidIdSet.add(r.getId());
-                    String[] pids = r.getAncestors().split(",");
-                    for (int i = 0; i < pids.length; i++) {
-                        if(invalidIdSet.contains(pids[i])){
-                            invalidIdSet.add(r.getId());
-                            break;
-                        }
-                    }
-                    //对比状态,如果需要修改标识，放入updateFlagList
-                    compareVersionFlag(r,lastWbsMap,updateFlagList);
-                    if(StringUtils.isBlank(r.getListCode()))
-                        return r;
-                    Long[] listIds = Convert.toLongArray(r.getListIds());
-                    String[] listCodes = Convert.toStrArray(r.getListCode());
-                    Set<String> listCodeSet = SetUtils.hashSet(listCodes);
-                    int i=0;
-                    for (String code : listCodeSet) {
-                        XmslWbsListRelation temp = new XmslWbsListRelation(main.getId(),Long.valueOf(r.getId()),code,ArrayUtils.get(listIds,i));
-                        relationList.add(temp);
-                        i++;
-                    }
-                    return r;
-                };
-
-                wbsService.handlerAncestors(iteratFunc);
-                wbsListRelationService.insertXmslWbsListRelationList(relationList);
-                //4、修改版本变更标志
-                wbsService.updatePtVar2List(updateFlagList);
-                //5、wbs塞入redis
-                wbsService.initWbs2Redis(tenantKey);
-                //6、更新子级状态
-                updateChildStatus(invalidIdSet);
-                //7、推送到p6
-                wbsPushP6.push2P6(main.getId(),tenantKey,allList,invalidIdSet);
-            }catch(Exception e){
-                e.printStackTrace();
-                log.error("wbs加载祖级名称&塞redis失败，mainid:{},消息：{}",main.getId(),e.getMessage());
-                throw e;
+                asyncHandler(tenantKey,main, effect);
             }finally {
                 DynamicDataSourceContextHolder.poll();
                 DynamicDataSourceContextHolder.push(oldDataSource);
-                log.debug("wbs加载祖级名称&塞redis完成,耗时：{}",System.currentTimeMillis()-beginMills);
             }
         });
+    }
+    //异步处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容
+    @Override
+    @Transactional
+    public void asyncHandler(String tenantKey,XmslWbsMain main,XmslWbsMain effect){
+        //3、处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容
+        long beginMills = System.currentTimeMillis();
+        try{
+            Map<String,XmslWbs> lastWbsMap = new HashMap<>(10000);
+            //加载上一版本的wbs
+            if(effect != null){
+                List<XmslWbs> lastList = wbsService.getXmslWbsHistoryList(effect.getId());
+                if(CollectionUtils.isEmpty(lastList))
+                    lastList = wbsService.getByMainId(effect.getId());
+                for (int i = 0; i < lastList.size(); i++) {
+                    XmslWbs temp = lastList.get(i);
+                    lastWbsMap.put(temp.getCode(), temp);
+                }
+            }
+            List<XmslWbsListRelation> relationList = new ArrayList<>();
+            //需要修改版本标识(ptVar2)
+            List<XmslWbs> updateFlagList = new ArrayList<>();
+            List<XmslWbs> allList = new ArrayList<>();
+            Set<String> invalidIdSet = new HashSet<>(); //失效的wbsId (父级失效，需要将其所有子级状态改为失效)
+            Function<XmslWbs,XmslWbs> iteratFunc = (r)->{
+                allList.add(r);
+                if(r.getStatus() == Constant.NO_INT)
+                    invalidIdSet.add(r.getId());
+                String[] pids = r.getAncestors().split(",");
+                for (int i = 0; i < pids.length; i++) {
+                    if(invalidIdSet.contains(pids[i])){
+                        invalidIdSet.add(r.getId());
+                        break;
+                    }
+                }
+                //对比状态,如果需要修改标识，放入updateFlagList
+                compareVersionFlag(r,lastWbsMap,updateFlagList);
+                if(StringUtils.isBlank(r.getListCode()))
+                    return r;
+                Long[] listIds = Convert.toLongArray(r.getListIds());
+                String[] listCodes = Convert.toStrArray(r.getListCode());
+                Set<String> listCodeSet = SetUtils.hashSet(listCodes);
+                int i=0;
+                for (String code : listCodeSet) {
+                    XmslWbsListRelation temp = new XmslWbsListRelation(main.getId(),Long.valueOf(r.getId()),code,ArrayUtils.get(listIds,i));
+                    relationList.add(temp);
+                    i++;
+                }
+                return r;
+            };
+
+            wbsService.handlerAncestors(iteratFunc);
+            wbsListRelationService.insertXmslWbsListRelationList(relationList);
+            //4、修改版本变更标志
+            wbsService.updatePtVar2List(updateFlagList);
+            //5、wbs塞入redis
+            wbsService.initWbs2Redis(tenantKey);
+            //6、更新子级状态
+            updateChildStatus(invalidIdSet);
+            //7、推送到p6
+            wbsPushP6.push2P6(main.getId(),tenantKey,allList,invalidIdSet);
+        }catch(Exception e){
+            e.printStackTrace();
+            log.error("wbs加载祖级名称&塞redis失败，mainid:{},消息：{}",main.getId(),e.getMessage());
+            throw e;
+        }finally {
+            log.debug("wbs加载祖级名称&塞redis完成,耗时：{}",System.currentTimeMillis()-beginMills);
+        }
     }
 
     /**

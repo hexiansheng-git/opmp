@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.hhwy.common.core.exception.CustomException;
+import com.hhwy.common.core.utils.file.FileUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.feign.factory.FlowServiceFallbackFactory;
 import com.hhwy.pm.core.sync.enums.SyncBusinessEnum;
@@ -30,6 +31,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import java.io.IOException;
 import java.util.*;
 
 @Component
@@ -55,7 +57,7 @@ public class WbsPushP6 {
      * @param list [{ptVar5:标记是否为修改的wbs}]
      * @param invalidIdSet 禁用的id
      */
-    public void push2P6(Long mainId, String projectCode, List<XmslWbs> list, Set<String> invalidIdSet){
+    public void push2P6(Long mainId, String projectCode, List<XmslWbs> list, Set<String> invalidIdSet)  {
         long beginMills = System.currentTimeMillis();
         try{
             List<WbsInfoVoBean> voList = new ArrayList<>();
@@ -102,6 +104,7 @@ public class WbsPushP6 {
 
     }
 
+    //推送新增&修改数据
     private void push(Long mainId,String projectCode,List<WbsInfoVoBean> treeList,List<WbsInfoVoBean> updateList){
         long begin = System.currentTimeMillis();
         try{
@@ -111,24 +114,47 @@ public class WbsPushP6 {
                 StringEntity stringEntity = new StringEntity(JSONObject.toJSONString(ObjectUtils.toMap(
                         "projectId",projectCode,
                         "wbsList",treeList)), ContentType.APPLICATION_JSON);
-                String resultStr =  HttpClientUtil.send(wbsPushUrl, HttpClientUtil.METHOD_POST,
-                        null,null,stringEntity,null);
-                AjaxResult result = JSONObject.parseObject(resultStr, AjaxResult.class);
-                Assert.isTrue(AjaxResult.isSuccess(result), "新增p6返回失败:"+result.get(AjaxResult.MSG_TAG));
-                WbsInfoVo vo = JSONObject.parseObject(JSONObject.toJSONString(result.get(AjaxResult.DATA_TAG)),WbsInfoVo.class);
-                wbsMainService.updateP6Code(vo);
+                String resultStr = "";
+                boolean isSuccess = false;
+                try{
+                    resultStr =  HttpClientUtil.send(wbsPushUrl, HttpClientUtil.METHOD_POST,
+                            null,null,stringEntity,null);
+                    AjaxResult result = JSONObject.parseObject(resultStr, AjaxResult.class);
+                    isSuccess = AjaxResult.isSuccess(result);
+                    Assert.isTrue(AjaxResult.isSuccess(result), "新增p6返回失败:"+result.get(AjaxResult.MSG_TAG));
+                    WbsInfoVo vo = JSONObject.parseObject(JSONObject.toJSONString(result.get(AjaxResult.DATA_TAG)),WbsInfoVo.class);
+                    wbsMainService.updateP6Code(vo);
+                }finally {
+                    Integer status = isSuccess?Constant.YES_INT:Constant.NO_INT;
+                    syncLogMasterService.save(SyncBusinessEnum.WBSPUSHP6_ADD_ENUM.name(), getContent(stringEntity),resultStr,status,"",System.currentTimeMillis()-begin);
+                }
             }
             //2、更新接口
             if(CollectionUtils.isNotEmpty(updateList)){
+                long beginMills= System.currentTimeMillis();
                 log.debug("wbs推送修改p6,mainId:{},修改条目数:{}",mainId,updateList.size());
-                StringEntity stringEntity = new StringEntity(JSONObject.toJSONString(ObjectUtils.toMap(
-                        "projectId",projectCode,
-                        "wbsList",updateList)), ContentType.APPLICATION_JSON);
-                String resultStr =  HttpClientUtil.send(wbsPushUpdateUrl, HttpClientUtil.METHOD_POST,
-                        null,null,stringEntity,null);
-                if(StringUtils.isNotBlank(resultStr)){
-                    AjaxResult result = JSONObject.parseObject(resultStr, AjaxResult.class);
-                    Assert.isTrue(AjaxResult.isSuccess(result), "修改p6返回失败:"+result.get(AjaxResult.MSG_TAG));
+                StringEntity stringEntity = null;
+                String resultStr = "";
+                boolean isSuccess = false;
+                try{
+                    //修改时删除children
+                    for (int i = 0; i < updateList.size(); i++) {
+                        WbsInfoVoBean temp = updateList.get(i);
+                        temp.setChildren(null);
+                    }
+                    stringEntity = new StringEntity(JSONObject.toJSONString(ObjectUtils.toMap(
+                            "projectId",projectCode,
+                            "wbsList",updateList)), ContentType.APPLICATION_JSON);
+                    resultStr =  HttpClientUtil.send(wbsPushUpdateUrl, HttpClientUtil.METHOD_POST,
+                            null,null,stringEntity,null);
+                    if(StringUtils.isNotBlank(resultStr)){
+                        AjaxResult result = JSONObject.parseObject(resultStr, AjaxResult.class);
+                        isSuccess = AjaxResult.isSuccess(result);
+                        Assert.isTrue(AjaxResult.isSuccess(result), "修改p6返回失败:"+result.get(AjaxResult.MSG_TAG));
+                    }
+                }finally {
+                    Integer status = isSuccess?Constant.YES_INT:Constant.NO_INT;
+                    syncLogMasterService.save(SyncBusinessEnum.WBSPUSHP6_UPDATE_ENUM.name(),getContent(stringEntity),resultStr,status,"",System.currentTimeMillis()-beginMills);
                 }
             }
         }catch(Exception e){
@@ -144,6 +170,9 @@ public class WbsPushP6 {
     //推送删除数据，需要保证要删除的数据推送给p6过
     private void pushDelete(Long mainId,String projectCode,Set<String> invalidIdSourceSet){
         long begin = System.currentTimeMillis();
+        StringEntity stringEntity =null;
+        String resultStr = null;
+        boolean isSuccess = false;
         try{
             if(CollectionUtils.isEmpty(invalidIdSourceSet))
                 return;
@@ -153,7 +182,6 @@ public class WbsPushP6 {
                     continue;
                 invalidIdSet.add(Long.valueOf(r));
             }
-            final String busName = SyncBusinessEnum.WBSPUSHP6_DELETE_ENUM.name();
             Map<String,String> p6IdMap = new HashMap<>();
             List<Map> wbsList = new ArrayList<>();
             Iterator<Long> iterator = invalidIdSet.iterator();
@@ -171,24 +199,22 @@ public class WbsPushP6 {
                 return ;
             }
             //构建请求参数
-            StringEntity stringEntity = new StringEntity(JSONObject.toJSONString(ObjectUtils.toMap(
+            stringEntity = new StringEntity(JSONObject.toJSONString(ObjectUtils.toMap(
                     "projectId",projectCode,
                     "wbsList",wbsList)), ContentType.APPLICATION_JSON);
-            String resultStr =  HttpClientUtil.send(wbsPushDeleteUrl, HttpClientUtil.METHOD_POST,
+            resultStr =  HttpClientUtil.send(wbsPushDeleteUrl, HttpClientUtil.METHOD_POST,
                     null,null,stringEntity,null);
             //处理结果
             AjaxResult result = JSONObject.parseObject(resultStr, AjaxResult.class);
-            if(!AjaxResult.isSuccess(result)){
-                syncLogMasterService.fail(busName,stringEntity.toString(),resultStr,"");
-                //将处理失败的id从p6Map中剔除掉
+            isSuccess = AjaxResult.isSuccess(result);
+            //将处理失败的id从p6Map中剔除掉
+            if(result.get(AjaxResult.DATA_TAG) != null){
                 JSONArray failArray = JSONObject.parseArray(JSONObject.toJSONString(result.get(AjaxResult.DATA_TAG)));
                 for (int i = 0; i < failArray.size(); i++) {
                     JSONObject jsonObject = failArray.getJSONObject(i);
                     String objId = jsonObject.getString("objectId");
                     p6IdMap.remove(objId);
                 }
-            }else{
-                syncLogMasterService.success(busName,stringEntity.toString(),resultStr);
             }
             //若成功，修改推送成功数据的ptVar4为空
             Set<Long> updateIdSet = new HashSet<>();
@@ -205,8 +231,19 @@ public class WbsPushP6 {
         }finally {
             long usemills = System.currentTimeMillis()-begin;
             log.debug("wbs推送删除p6，mainID:{},耗时:{}毫秒",mainId,usemills);
+            Integer status = isSuccess?Constant.YES_INT:Constant.NO_INT;
+            syncLogMasterService.save(SyncBusinessEnum.WBSPUSHP6_DELETE_ENUM.name(),getContent(stringEntity),resultStr,status,"",System.currentTimeMillis()-begin);
         }
     }
 
-
+    private String getContent(StringEntity stringEntity){
+        try{
+            if(stringEntity ==null)
+                return "";
+            return FileUtils.readFile(stringEntity.getContent());
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        return stringEntity.toString();
+    }
 }

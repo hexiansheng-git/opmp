@@ -71,7 +71,7 @@ public interface XmslWbsMapper {
      * @param ids
      * @return
      */
-    int clearPtVar4(Set<Long> ids);
+    int clearPtVar4(@Param("ids") Set<Long> ids);
 
     int deleteXmslWbs(XmslWbs xmslWbs);
 

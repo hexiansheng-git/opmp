@@ -60,8 +60,9 @@ public interface IXmslWbsMainService {
      * 流程结束后部分逻辑异步处理
      * @param main
      * @param effect
+     * @param tenantKey
      */
-    public void asyncHandler(XmslWbsMain main,XmslWbsMain effect);
+    public void asyncHandler(String tenantKey,XmslWbsMain main,XmslWbsMain effect);
 
     /**
      * 更新p6编号
