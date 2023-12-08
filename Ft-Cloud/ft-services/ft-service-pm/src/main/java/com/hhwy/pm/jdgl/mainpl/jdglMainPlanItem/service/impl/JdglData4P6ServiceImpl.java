@@ -80,7 +80,10 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         System.out.println("--获取p6项目数据--租户:" + tenantKey + "--开始:" +  DateUtils.getTime());
         ProjectInfo projectInfo = getProjectInfo(tenantKey);
         System.out.println("--获取p6项目数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime());
-        if (projectInfo == null) return returnList;
+        if (projectInfo == null) {
+            System.out.println("--未获取到p6项目数据--租户:" + tenantKey);
+            return returnList;
+        }
 
         String urlwbs = p6IpPort + pre + "/wbsInfo";
         String urlwork = p6IpPort + pre + "/activityInfo";
@@ -170,6 +173,10 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
         List<WbsInfo> wbsInfos = wbsResult.getBody();
 
+        if(CollectionUtils.isEmpty(wbsInfos)) {
+            System.out.println("--未获取到p6wbs数据--租户:" + tenantKey);
+        }
+
 //        List<ActivityConstField> workInfos = workResult.getBody();
 
         if (!CollectionUtils.isEmpty(wbsInfos) && !CollectionUtils.isEmpty(workInfos)) {
@@ -223,6 +230,9 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 returnList.add(jdglMainPlanItem);
             }
             List<JdglMainPlanItem> workMainPlanItemList = new ArrayList<>();
+            if(CollectionUtils.isEmpty(workInfos)) {
+                System.out.println("--未获取到p6作业数据--租户:" + tenantKey);
+            }
             for (ActivityConstField activityInfo : workInfos) {
                 JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
                 String p6Id = activityInfo.getId();
@@ -371,6 +381,10 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 // 获取转换后的p6逻辑关系数据
                 List<JdglMainPlanItemPre> relInfos = getPre(projectId);
                 System.out.println("--获取p6 作业逻辑关系数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime() +"-- 数量:" + (relInfos == null ? 0 : relInfos.size()));
+
+                if(CollectionUtils.isEmpty(relInfos)) {
+                    System.out.println("--未获取到p6作业逻辑数据--租户:" + tenantKey);
+                }
 
                 if (!CollectionUtils.isEmpty(relInfos) && !CollectionUtils.isEmpty(workInfos)) {
                     for (JdglMainPlanItem jdglMainPlanItem : workInfos) {
