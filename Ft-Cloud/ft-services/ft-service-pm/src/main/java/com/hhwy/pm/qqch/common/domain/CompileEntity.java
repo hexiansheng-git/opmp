@@ -96,6 +96,7 @@ public class CompileEntity<T> extends TreeNode<T> {
         CompileEntity<T> tCompileDTO = new CompileEntity<>();
         tCompileDTO.setVersion(param.getVersion());
         tCompileDTO.setSubmitFlag(param.getSubmitFlag());
+        tCompileDTO.setMenuId(param.getMenuId());
         tCompileDTO.setModuleIdentity(param.getModuleIdentity());
         tCompileDTO.setReqId(param.getReqId());
         tCompileDTO.setStageIdentity(param.getStageIdentity());
@@ -108,6 +109,7 @@ public class CompileEntity<T> extends TreeNode<T> {
         CompileEntity<T> tCompileDTO = new CompileEntity<>();
         tCompileDTO.setVersion(param.getVersion());
         tCompileDTO.setSubmitFlag(param.getSubmitFlag());
+        tCompileDTO.setMenuId(param.getMenuId());
         tCompileDTO.setModuleIdentity(param.getModuleIdentity());
         tCompileDTO.setReqId(param.getReqId());
         tCompileDTO.setStageIdentity(param.getStageIdentity());
@@ -120,6 +122,7 @@ public class CompileEntity<T> extends TreeNode<T> {
         CompileEntity<T> tCompileDTO = new CompileEntity<>();
         tCompileDTO.setVersion(param.getVersion());
         tCompileDTO.setSubmitFlag(param.getSubmitFlag());
+        tCompileDTO.setMenuId(param.getMenuId());
         tCompileDTO.setModuleIdentity(param.getModuleIdentity());
         tCompileDTO.setReqId(param.getReqId());
         tCompileDTO.setStageIdentity(param.getStageIdentity());
@@ -182,6 +185,7 @@ public class CompileEntity<T> extends TreeNode<T> {
     private void setBaseInfo(CompileEntity compileEntity) {
 
         compileEntity.setSubmitFlag(submitFlag);
+        compileEntity.setMenuId(menuId);
         compileEntity.setModuleIdentity(moduleIdentity);
         compileEntity.setVersion(version == null ? new BigDecimal(InitVersionConstant.INIT_VERSION) : version);
         String dataType1 = compileEntity.getDataType();
