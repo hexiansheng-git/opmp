@@ -1,5 +1,7 @@
 package com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.service;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
 import java.util.List;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
 
@@ -16,7 +18,7 @@ public interface ISgjsPlanMeasureManageService {
 
     int insertSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
-    int insertSgjsPlanMeasureManageList(List<SgjsPlanMeasureManage> sgjsPlanMeasureManageList);
+    AjaxResult batchAdd(SgjsPlanMeasureManageVo sgjsPlanMeasureManageVo);
 
     int updateSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
@@ -25,4 +27,8 @@ public interface ISgjsPlanMeasureManageService {
     int deleteSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
             int deleteSgjsPlanMeasureManageByPks(List<Long> sgjsPlanMeasureManagePkList);
-    }
+
+    SgjsPlanMeasureManageVo list(SgjsPlanMeasureManage sgjsPlanMeasureManageParam);
+
+    SgjsPlanMeasureManageVo qqchMeasureExpPlanSelect();
+}

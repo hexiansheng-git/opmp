@@ -97,6 +97,10 @@
             <if test="materialType != null  and materialType != ''">and detail.`material_type` like concat('%',
                 #{materialType}, '%')
             </if>
+            <if test="ptVar1 != null  and ptVar1 != ''">
+                and detail.`pt_var1` like concat('%',
+                #{ptVar1}, '%')
+            </if>
             <if test="materialCode != null  and materialCode != ''">and detail.`material_code` like '${materialCode}%'
             </if>
             <if test="materialName != null  and materialName != ''">and detail.`material_name` like '${materialName}%'
@@ -667,6 +671,9 @@
 #             select id from sbch_total_demand_plan where is_valid = '1' and del_flag = '0'
 #             )
             <if test="planId != null ">and `plan_id` = #{planId}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and detail.`pt_var1` like concat('%',
+                #{ptVar1}, '%')
+            </if>
             <if test="materialType != null  and materialType != ''">and detail.`material_type` like concat('%',
                 #{materialType}, '%')
             </if>

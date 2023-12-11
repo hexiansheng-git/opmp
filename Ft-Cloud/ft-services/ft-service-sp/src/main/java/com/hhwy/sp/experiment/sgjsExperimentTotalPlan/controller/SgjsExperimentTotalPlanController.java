@@ -3,6 +3,10 @@ package com.hhwy.sp.experiment.sgjsExperimentTotalPlan.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import java.util.Map;
+
+import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.utils.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
@@ -20,7 +24,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 /**
  * @author lcf--试验总体计划
  * @date 2023-12-11 10:00:11
- * @remark 
+ * @remark
  */
 @Validated
 @RestController
@@ -29,8 +33,10 @@ public class SgjsExperimentTotalPlanController extends BaseController{
 
     @Autowired
     private ISgjsExperimentTotalPlanService sgjsExperimentTotalPlanService;
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
-                                                                                                                                                                                                                                                                                                                                        
+
 
     @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:list")
     @GetMapping
@@ -67,29 +73,44 @@ public class SgjsExperimentTotalPlanController extends BaseController{
         return toAjax(sgjsExperimentTotalPlanService.updateSgjsExperimentTotalPlan(sgjsExperimentTotalPlanParam));
     }
 
-            @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:update")
-        @PostMapping("/batchUpdate")
-        public AjaxResult updateSgjsExperimentTotalPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsExperimentTotalPlan> sgjsExperimentTotalPlanListParam){
-            return toAjax(sgjsExperimentTotalPlanService.updateSgjsExperimentTotalPlanList(sgjsExperimentTotalPlanListParam));
-        }
-    
+    @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:update")
+    @PostMapping("/batchUpdate")
+    public AjaxResult updateSgjsExperimentTotalPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsExperimentTotalPlan> sgjsExperimentTotalPlanListParam){
+        return toAjax(sgjsExperimentTotalPlanService.updateSgjsExperimentTotalPlanList(sgjsExperimentTotalPlanListParam));
+    }
+
     @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteSgjsExperimentTotalPlan(@Validated(ValidationGroups.Delete.class) @RequestBody SgjsExperimentTotalPlan sgjsExperimentTotalPlanParam){
         return toAjax(sgjsExperimentTotalPlanService.deleteSgjsExperimentTotalPlan(sgjsExperimentTotalPlanParam));
     }
 
-            @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:remove")
-        @PostMapping("/{ids}")
-        public AjaxResult deleteSgjsExperimentTotalPlanByPks(@PathVariable Long[] ids){
-            List<Long> sgjsExperimentTotalPlanPkList = Arrays.asList(ids);
-            return toAjax(sgjsExperimentTotalPlanService.deleteSgjsExperimentTotalPlanByPks(sgjsExperimentTotalPlanPkList));
-        }
-    
+    @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:remove")
+    @PostMapping("/{ids}")
+    public AjaxResult deleteSgjsExperimentTotalPlanByPks(@PathVariable Long[] ids){
+        List<Long> sgjsExperimentTotalPlanPkList = Arrays.asList(ids);
+        return toAjax(sgjsExperimentTotalPlanService.deleteSgjsExperimentTotalPlanByPks(sgjsExperimentTotalPlanPkList));
+    }
+
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsExperimentTotalPlan sgjsExperimentTotalPlanParam) throws IOException {
         List<SgjsExperimentTotalPlan> sgjsExperimentTotalPlanList = sgjsExperimentTotalPlanService.getSgjsExperimentTotalPlanList(sgjsExperimentTotalPlanParam);
         ExcelUtils<SgjsExperimentTotalPlan> util = new ExcelUtils<>(SgjsExperimentTotalPlan.class);
         util.exportExcel(response, sgjsExperimentTotalPlanList, DateUtils.getDate());
+    }
+
+    /**
+     * 根据项目id查询项目信息
+     *
+     * @param
+     * @return
+     */
+    @GetMapping("/selectPrjById")
+    public AjaxResult selectPrjById(){
+        Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+        if(ObjectUtils.isEmpty(prjInfo)){
+            return AjaxResult.error("数据异常");
+        }
+        return AjaxResult.success(prjInfo);
     }
 }

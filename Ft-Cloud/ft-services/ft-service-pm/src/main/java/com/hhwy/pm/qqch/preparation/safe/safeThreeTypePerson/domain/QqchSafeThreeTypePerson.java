@@ -84,7 +84,7 @@ public class QqchSafeThreeTypePerson  extends TreeNode<QqchSafeThreeTypePerson> 
      */
     @JsonProperty
     @Excel(name = "证件地址")
-    private String cardUrl;
+    private String fileGroupId;
     /**
      * 字段描述：管控措施
      */

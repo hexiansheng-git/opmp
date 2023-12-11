@@ -7,23 +7,31 @@ import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManag
 /**
  * @author zmh
  * @date 2023-12-07 18:13:51
- * @remark 
+ * @remark
  */
 public interface SgjsPlanMeasureManageMapper {
-                                                                                                                                                                                                                                                                                                                
+
     SgjsPlanMeasureManage getSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
-    List<SgjsPlanMeasureManage> getSgjsPlanMeasureManageList(SgjsPlanMeasureManage sgjsPlanMeasureManage);
+    List<SgjsPlanMeasureManage> getSgjsPlanMeasureManageList(
+        SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
     int insertSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
-    int insertSgjsPlanMeasureManageList(@Param("sgjsPlanMeasureManageList") List<SgjsPlanMeasureManage> sgjsPlanMeasureManageList);
+    int insertSgjsPlanMeasureManageList(
+        @Param("sgjsPlanMeasureManageList") List<SgjsPlanMeasureManage> sgjsPlanMeasureManageList);
 
     int updateSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
-            int updateSgjsPlanMeasureManageList(@Param("sgjsPlanMeasureManageList") List<SgjsPlanMeasureManage> sgjsPlanMeasureManageList);
-    
+    int updateSgjsPlanMeasureManageList(
+        @Param("sgjsPlanMeasureManageList") List<SgjsPlanMeasureManage> sgjsPlanMeasureManageList);
+
     int deleteSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
-            int deleteSgjsPlanMeasureManageByPks(@Param("sgjsPlanMeasureManagePkList") List<Long> sgjsPlanMeasureManagePkList);
-    }
+    int deleteSgjsPlanMeasureManageByPks(
+        @Param("sgjsPlanMeasureManagePkList") List<Long> sgjsPlanMeasureManagePkList);
+
+    void delectAll(SgjsPlanMeasureManage info);
+
+
+}
