@@ -1,21 +1,22 @@
-package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.domain;
+package com.hhwy.sp.experiment.sgjsExperimentRecord.domain;
 
+import com.hhwy.common.core.web.domain.BaseEntity;
+import java.util.Date;
+import java.math.BigDecimal;
+import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * @author lcf   测量管理--测试设备进场记录
- * @date 2023-12-08 10:49:49
- * @remark   sgjs_equip_entry_record_info_detail
+ * @author lcf--试验设备进场记录
+ * @date 2023-12-11 15:03:30
+ * @remark   sgjs_experiment_record
  */
-public class SgjsEquipEntryRecordInfoDetail extends BaseEntity {
+public class SgjsExperimentRecord extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -25,23 +26,71 @@ public class SgjsEquipEntryRecordInfoDetail extends BaseEntity {
     @JsonProperty
     private Long id;
     /**
-     * 设备进场表id
-     *
+     * 字段描述：编码
      */
-    private Long infoId;
+    @JsonProperty
+    @Excel(name = "编码"    )
+    private String materialCode;
     /**
-     * 字段描述：自检校验时间
+     * 字段描述：设备名称
+     */
+    @JsonProperty
+    @Excel(name = "设备名称"    )
+    private String materialName;
+    /**
+     * 字段描述：型号
+     */
+    @JsonProperty
+    @Excel(name = "型号"    )
+    private String materialSpec;
+    /**
+     * 字段描述：类别名称
+     */
+    @JsonProperty
+    @Excel(name = "类别名称"    )
+    private String categoryName;
+    /**
+     * 字段描述：类别id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "类别id"    )
+    private Long categoryId;
+    /**
+     * 字段描述：要求进场日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "自检校验时间"    ,dateFormat = "yyyy-MM-dd"  )
-    private Date checkDate;
+    @Excel(name = "要求进场日期"    ,dateFormat = "yyyy-MM-dd"  )
+    private Date entryDate;
+
+    private Date entryDateBegin;
+
+    private Date entryDateEnd;
+
     /**
-     * 字段描述：备注
+     * 字段描述：所需数量
      */
     @JsonProperty
-    @Excel(name = "备注"    )
+    @Excel(name = "所需数量"    )
+    private Integer num;
+    /**
+     * 字段描述：来源
+     */
+    @JsonProperty
+    @Excel(name = "来源"    )
+    private String source;
+    /**
+     * 字段描述：
+     */
+    @JsonProperty
     private String remark;
+    /**
+     * 字段描述：实际进场数量
+     */
+    @JsonProperty
+    @Excel(name = "实际进场数量"    )
+    private Integer actualNum;
     /**
      * 字段描述：数据来源 0新增1同步
      */
@@ -163,26 +212,20 @@ public class SgjsEquipEntryRecordInfoDetail extends BaseEntity {
     @Excel(name = "预留字段5"    )
     private String ptVar5;
 
-    /**
-     * 字段描述：附件组id
-     */
-    @JsonProperty
-    private String fileGroupId;
-
-    public String getFileGroupId() {
-        return fileGroupId;
+    public Date getEntryDateBegin() {
+        return entryDateBegin;
     }
 
-    public void setFileGroupId(String fileGroupId) {
-        this.fileGroupId = fileGroupId;
+    public void setEntryDateBegin(Date entryDateBegin) {
+        this.entryDateBegin = entryDateBegin;
     }
 
-    public Long getInfoId() {
-        return infoId;
+    public Date getEntryDateEnd() {
+        return entryDateEnd;
     }
 
-    public void setInfoId(Long infoId) {
-        this.infoId = infoId;
+    public void setEntryDateEnd(Date entryDateEnd) {
+        this.entryDateEnd = entryDateEnd;
     }
 
     @JsonIgnore
@@ -194,12 +237,68 @@ public class SgjsEquipEntryRecordInfoDetail extends BaseEntity {
         this.id = id;
     }
     @JsonIgnore
-    public Date getCheckDate() {
-        return checkDate;
+    public String getMaterialCode() {
+        return materialCode;
     }
     @JsonIgnore
-    public void setCheckDate(Date checkDate) {
-        this.checkDate = checkDate;
+    public void setMaterialCode(String materialCode) {
+        this.materialCode = materialCode;
+    }
+    @JsonIgnore
+    public String getMaterialName() {
+        return materialName;
+    }
+    @JsonIgnore
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName;
+    }
+    @JsonIgnore
+    public String getMaterialSpec() {
+        return materialSpec;
+    }
+    @JsonIgnore
+    public void setMaterialSpec(String materialSpec) {
+        this.materialSpec = materialSpec;
+    }
+    @JsonIgnore
+    public String getCategoryName() {
+        return categoryName;
+    }
+    @JsonIgnore
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+    @JsonIgnore
+    public Long getCategoryId() {
+        return categoryId;
+    }
+    @JsonIgnore
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+    @JsonIgnore
+    public Date getEntryDate() {
+        return entryDate;
+    }
+    @JsonIgnore
+    public void setEntryDate(Date entryDate) {
+        this.entryDate = entryDate;
+    }
+    @JsonIgnore
+    public Integer getNum() {
+        return num;
+    }
+    @JsonIgnore
+    public void setNum(Integer num) {
+        this.num = num;
+    }
+    @JsonIgnore
+    public String getSource() {
+        return source;
+    }
+    @JsonIgnore
+    public void setSource(String source) {
+        this.source = source;
     }
     @JsonIgnore
     public String getRemark() {
@@ -208,6 +307,14 @@ public class SgjsEquipEntryRecordInfoDetail extends BaseEntity {
     @JsonIgnore
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+    @JsonIgnore
+    public Integer getActualNum() {
+        return actualNum;
+    }
+    @JsonIgnore
+    public void setActualNum(Integer actualNum) {
+        this.actualNum = actualNum;
     }
     @JsonIgnore
     public String getDataSource() {

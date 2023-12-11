@@ -134,7 +134,7 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
         }
         List<QqchSurveyWorkPlan> originList = TreeUtil.treeToListWithoutId(originTreeList);
         Map<String, List<QqchSurveyWorkPlan>> collect = originList.stream()
-                .filter(p -> StrUtil.isNotBlank(p.getWorkContent()) && StrUtil.isNotBlank(p.getRemark()))
+                .filter(p -> StrUtil.isNotBlank(p.getWorkContent()) || StrUtil.isNotBlank(p.getRemark()))
                 .collect(Collectors.groupingBy(QqchSurveyWorkPlan::getPlanWbsCode));
         HashMap<String, QqchSurveyWorkPlan> objects = new HashMap<>();
         for (int i = 0; i < originList.size(); i++) {

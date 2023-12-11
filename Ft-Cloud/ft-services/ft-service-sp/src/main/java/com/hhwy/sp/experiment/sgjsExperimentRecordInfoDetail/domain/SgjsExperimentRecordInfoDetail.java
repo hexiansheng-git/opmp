@@ -1,21 +1,22 @@
-package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.domain;
+package com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.domain;
 
+import com.hhwy.common.core.web.domain.BaseEntity;
+import java.util.Date;
+import java.math.BigDecimal;
+import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * @author lcf   测量管理--测试设备进场记录
- * @date 2023-12-08 10:49:49
- * @remark   sgjs_equip_entry_record_info_detail
+ * @author lcf--自检自校表记录
+ * @date 2023-12-11 15:04:20
+ * @remark   sgjs_experiment_record_info_detail
  */
-public class SgjsEquipEntryRecordInfoDetail extends BaseEntity {
+public class SgjsExperimentRecordInfoDetail extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -25,9 +26,11 @@ public class SgjsEquipEntryRecordInfoDetail extends BaseEntity {
     @JsonProperty
     private Long id;
     /**
-     * 设备进场表id
-     *
+     * 字段描述：实际设备进场设备id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "实际设备进场设备id"    )
     private Long infoId;
     /**
      * 字段描述：自检校验时间
@@ -163,10 +166,7 @@ public class SgjsEquipEntryRecordInfoDetail extends BaseEntity {
     @Excel(name = "预留字段5"    )
     private String ptVar5;
 
-    /**
-     * 字段描述：附件组id
-     */
-    @JsonProperty
+    /** 附件 */
     private String fileGroupId;
 
     public String getFileGroupId() {
@@ -177,14 +177,6 @@ public class SgjsEquipEntryRecordInfoDetail extends BaseEntity {
         this.fileGroupId = fileGroupId;
     }
 
-    public Long getInfoId() {
-        return infoId;
-    }
-
-    public void setInfoId(Long infoId) {
-        this.infoId = infoId;
-    }
-
     @JsonIgnore
     public Long getId() {
         return id;
@@ -192,6 +184,14 @@ public class SgjsEquipEntryRecordInfoDetail extends BaseEntity {
     @JsonIgnore
     public void setId(Long id) {
         this.id = id;
+    }
+    @JsonIgnore
+    public Long getInfoId() {
+        return infoId;
+    }
+    @JsonIgnore
+    public void setInfoId(Long infoId) {
+        this.infoId = infoId;
     }
     @JsonIgnore
     public Date getCheckDate() {
