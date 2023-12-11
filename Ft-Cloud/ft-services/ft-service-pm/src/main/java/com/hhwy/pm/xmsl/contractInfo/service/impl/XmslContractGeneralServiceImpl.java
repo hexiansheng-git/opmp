@@ -1,24 +1,35 @@
 package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.stream.StreamUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.domain.QqchSurveyWorkPlan;
+import com.hhwy.pm.qyzs.manage.qyzsManageContCondition.controller.QyzsManageContConditionController;
+import com.hhwy.pm.qyzs.manage.qyzsManageContCondition.domain.QyzsManageContCondition;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractGeneral;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractGeneralVo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractGeneralMapper;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractGeneralService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
+import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.ResultSet;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author ldd
@@ -189,4 +200,85 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
         }
         return resultList;
     }
+
+    @Override
+    public List<XmslContractGeneral> dataHandler(XmslContractGeneralVo xmslContractGeneralVo) {
+        //列表结构
+        List<QyzsManageContCondition> knowledgeList = xmslContractGeneralVo.getKnowledgeList();
+        //树形结构
+        List<XmslContractGeneral> alreadyTreeList = xmslContractGeneralVo.getAlreadyList();
+        //弹窗未选择数据直接返回
+        if (CollectionUtil.isEmpty(knowledgeList)){
+            return alreadyTreeList;
+        }
+        //todo 获取弹窗选中数据的所有父级和子集
+        getParentAndChilderNode()
+
+        //列表已有数据为空，返回弹窗选中的数据
+        List<XmslContractGeneral> resultList = new ArrayList<>();
+        if (CollectionUtil.isEmpty(alreadyTreeList)){
+            //copy 对象
+            knowledgeList.forEach(p -> {
+                transferBean(resultList, p);
+            });
+            return ListTreeUtil.formatTree(resultList, o -> o.getPid() == null, (r, n) -> r.getId().equals(n.getPid()), XmslContractGeneral::getChildren, XmslContractGeneral::setChildren);
+        }
+        //树转list
+        List<XmslContractGeneral> alreadyList = new ArrayList<>();
+        treeToList(alreadyTreeList, alreadyList);
+        Set<String> alreadyCode = alreadyList.stream().map(XmslContractGeneral::getCode).collect(Collectors.toSet());
+        for (QyzsManageContCondition condition : knowledgeList){
+            String contConditionNo = condition.getContConditionNo();
+            if (alreadyCode.contains(contConditionNo)) {
+                //列表中已存在的无需处理
+                continue;
+            }
+            transferBean(resultList, condition);
+        }
+        //转树列表
+        return ListTreeUtil.formatTree(resultList, o -> o.getPid() == null, (r, n) -> r.getId().equals(n.getPid()), XmslContractGeneral::getChildren, XmslContractGeneral::setChildren);
+
+    }
+
+    //对象拷贝
+    private void transferBean(List<XmslContractGeneral> resultList, QyzsManageContCondition p) {
+        XmslContractGeneral xmslContractGeneral = new XmslContractGeneral();
+        xmslContractGeneral.setCode(p.getContConditionNo());
+        xmslContractGeneral.setName(p.getChineseConditonName());
+        xmslContractGeneral.setContent(p.getChineseConditionContent());
+        xmslContractGeneral.setId(IdWorker.createId());
+        xmslContractGeneral.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+        xmslContractGeneral.setCreateUserName(SecurityUtils.getUserName());
+        xmslContractGeneral.setCreateTime(DateUtils.getNowDate());
+        resultList.add(xmslContractGeneral);
+    }
+
+    //树转list
+    private void treeToList(List<XmslContractGeneral> alreadyTreeList, List<XmslContractGeneral> alreadyList){
+        for (XmslContractGeneral general : alreadyTreeList) {
+            alreadyList.add(general);
+            if (CollectionUtil.isEmpty(general.getChildren())) {
+                continue;
+            }
+            treeToList(general.getChildren(), alreadyList);
+        }
+    }
+
+    /***
+     * 功能描述:
+     * @param ids 节点
+     * 作者: fushudong
+     * 时间: 2023/12/11
+     */
+    public void getParentAndChilderNode(List<Long> ids){
+        //获取知识库合同通用条件列表
+        AjaxResult qyzsManageContConditionList = condition.getQyzsManageContConditionList(new QyzsManageContCondition());
+
+        for (Long id : ids){
+
+        }
+    }
+
+    @Autowired
+    private QyzsManageContConditionController condition;
 }
