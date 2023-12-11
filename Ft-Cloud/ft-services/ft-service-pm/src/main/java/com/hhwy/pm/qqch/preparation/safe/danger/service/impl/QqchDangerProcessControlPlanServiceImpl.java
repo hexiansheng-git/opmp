@@ -156,7 +156,7 @@ public class QqchDangerProcessControlPlanServiceImpl implements IQqchDangerProce
                             qqchDangerProcessControlPlan.setLeaderExamineFrequency(db.getLeaderExamineFrequency());
                             qqchDangerProcessControlPlan.setLeaderFileGroupId(db.getLeaderFileGroupId());
                             qqchDangerProcessControlPlan.setSpecialExamineFrequency(db.getSpecialExamineFrequency());
-                            qqchDangerProcessControlPlan.setSpecialFileGroupId(db.getSpecialFileGroupId());
+                            qqchDangerProcessControlPlan.setFileGroupId(db.getFileGroupId());
                             qqchDangerProcessControlPlan.setWhetherFirst(db.getWhetherFirst());
                         }
                     }

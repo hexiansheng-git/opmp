@@ -16,7 +16,7 @@
         <result property="signDate" column="sign_date"/>
         <result property="validPeriod" column="valid_period"/>
         <result property="noticeMsg" column="notice_msg"/>
-        <result property="cardUrl" column="card_url"/>
+        <result property="fileGroupId" column="file_group_id"/>
         <result property="controMeasures" column="contro_measures"/>
         <result property="attenPoint" column="atten_point"/>
         <result property="mainResDeptId" column="main_res_dept_id"/>
@@ -48,7 +48,7 @@
              , `sign_date`
              , `valid_period`
              , `notice_msg`
-             , `card_url`
+             , `file_group_id`
              , `contro_measures`
              , `atten_point`
              , `main_res_dept_id`
@@ -84,7 +84,7 @@
             <if test="signDate != null ">and `sign_date` = #{signDate}</if>
             <if test="validPeriod != null ">and `valid_period` = #{validPeriod}</if>
             <if test="noticeMsg != null  and noticeMsg != ''">and `notice_msg` = #{noticeMsg}</if>
-            <if test="cardUrl != null  and cardUrl != ''">and `card_url` = #{cardUrl}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="controMeasures != null  and controMeasures != ''">and `contro_measures` = #{controMeasures}</if>
             <if test="attenPoint != null  and attenPoint != ''">and `atten_point` = #{attenPoint}</if>
             <if test="mainResDeptId != null ">and `main_res_dept_id` = #{mainResDeptId}</if>
@@ -124,7 +124,7 @@
             <if test="signDate != null ">and `sign_date` = #{signDate}</if>
             <if test="validPeriod != null ">and `valid_period` = #{validPeriod}</if>
             <if test="noticeMsg != null  and noticeMsg != ''">and `notice_msg` = #{noticeMsg}</if>
-            <if test="cardUrl != null  and cardUrl != ''">and `card_url` = #{cardUrl}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="controMeasures != null  and controMeasures != ''">and `contro_measures` = #{controMeasures}</if>
             <if test="attenPoint != null  and attenPoint != ''">and `atten_point` = #{attenPoint}</if>
             <if test="mainResDeptId != null ">and `main_res_dept_id` = #{mainResDeptId}</if>
@@ -163,7 +163,7 @@
             <if test="signDate != null ">`sign_date`,</if>
             <if test="validPeriod != null ">`valid_period`,</if>
             <if test="noticeMsg != null  and noticeMsg != ''">`notice_msg`,</if>
-            <if test="cardUrl != null  and cardUrl != ''">`card_url`,</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
             <if test="controMeasures != null  and controMeasures != ''">`contro_measures`,</if>
             <if test="attenPoint != null  and attenPoint != ''">`atten_point`,</if>
             <if test="mainResDeptId != null ">`main_res_dept_id`,</if>
@@ -195,7 +195,7 @@
             <if test="signDate != null ">#{signDate},</if>
             <if test="validPeriod != null ">#{validPeriod},</if>
             <if test="noticeMsg != null  and noticeMsg != ''">#{noticeMsg},</if>
-            <if test="cardUrl != null  and cardUrl != ''">#{cardUrl},</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="controMeasures != null  and controMeasures != ''">#{controMeasures},</if>
             <if test="attenPoint != null  and attenPoint != ''">#{attenPoint},</if>
             <if test="mainResDeptId != null ">#{mainResDeptId},</if>
@@ -232,7 +232,7 @@
             `sign_date`,
             `valid_period`,
             `notice_msg`,
-            `card_url`,
+            `file_group_id`,
             `contro_measures`,
             `atten_point`,
             `main_res_dept_id`,
@@ -265,7 +265,7 @@
                 #{item.signDate},
                 #{item.validPeriod},
                 #{item.noticeMsg},
-                #{item.cardUrl},
+                #{item.fileGroupId},
                 #{item.controMeasures},
                 #{item.attenPoint},
                 #{item.mainResDeptId},
@@ -301,7 +301,7 @@
             <if test="signDate != null ">`sign_date` = #{signDate},</if>
             <if test="validPeriod != null ">`valid_period` = #{validPeriod},</if>
             <if test="noticeMsg != null  and  noticeMsg != ''">`notice_msg` = #{noticeMsg},</if>
-            <if test="cardUrl != null  and  cardUrl != ''">`card_url` = #{cardUrl},</if>
+            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
             <if test="controMeasures != null  and  controMeasures != ''">`contro_measures` = #{controMeasures},</if>
             <if test="attenPoint != null  and  attenPoint != ''">`atten_point` = #{attenPoint},</if>
             <if test="mainResDeptId != null ">`main_res_dept_id` = #{mainResDeptId},</if>
@@ -381,9 +381,9 @@
                     when `id`=#{item.id} then #{item.noticeMsg}
                 </foreach>
             </trim>
-            <trim prefix="card_url  = case" suffix="end,">
+            <trim prefix="file_group_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.cardUrl}
+                    when `id`=#{item.id} then #{item.fileGroupId}
                 </foreach>
             </trim>
             <trim prefix="contro_measures  = case" suffix="end,">
@@ -501,7 +501,7 @@
             <if test="signDate != null ">and `sign_date` = #{signDate}</if>
             <if test="validPeriod != null ">and `valid_period` = #{validPeriod}</if>
             <if test="noticeMsg != null  and noticeMsg != ''">and `notice_msg` = #{noticeMsg}</if>
-            <if test="cardUrl != null  and cardUrl != ''">and `card_url` = #{cardUrl}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="controMeasures != null  and controMeasures != ''">and `contro_measures` = #{controMeasures}</if>
             <if test="attenPoint != null  and attenPoint != ''">and `atten_point` = #{attenPoint}</if>
             <if test="mainResDeptId != null ">and `main_res_dept_id` = #{mainResDeptId}</if>
@@ -564,9 +564,9 @@
                     when `id`=#{item.id} then #{item.noticeMsg}
                 </foreach>
             </trim>
-            <trim prefix="card_url  = case" suffix="end,">
+            <trim prefix="file_group_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.cardUrl}
+                    when `id`=#{item.id} then #{item.fileGroupId}
                 </foreach>
             </trim>
             <trim prefix="contro_measures  = case" suffix="end,">
