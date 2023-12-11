@@ -93,7 +93,7 @@
         <where>
             del_flag = '0'
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="moduleIdentity != null  and moduleIdentity != ''">and `module_identity` = #{moduleIdentity}</if>
+            <if test="moduleIdentity != null  and moduleIdentity != ''">and `module_identity` like concat('%' , #{moduleIdentity} ,'%')</if>
             <if test="moduleName != null  and moduleName != ''">and `module_name` = #{moduleName}</if>
             <if test="stageIdentity != null  and stageIdentity != ''">and `stage_identity` = #{stageIdentity}</if>
             <if test="stageName != null  and stageName != ''">and `stage_name` = #{stageName}</if>
