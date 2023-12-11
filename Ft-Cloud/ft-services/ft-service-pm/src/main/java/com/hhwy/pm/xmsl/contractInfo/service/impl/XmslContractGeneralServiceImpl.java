@@ -212,7 +212,7 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
             return alreadyTreeList;
         }
         //todo 获取弹窗选中数据的所有父级和子集
-        getParentAndChilderNode()
+//        getParentAndChilderNode()
 
         //列表已有数据为空，返回弹窗选中的数据
         List<XmslContractGeneral> resultList = new ArrayList<>();
@@ -272,11 +272,11 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
      */
     public void getParentAndChilderNode(List<Long> ids){
         //获取知识库合同通用条件列表
-        AjaxResult qyzsManageContConditionList = condition.getQyzsManageContConditionList(new QyzsManageContCondition());
-
-        for (Long id : ids){
-
-        }
+//        AjaxResult qyzsManageContConditionList = condition.getQyzsManageContConditionList(new QyzsManageContCondition());
+//
+//        for (Long id : ids){
+//
+//        }
     }
 
     @Autowired
