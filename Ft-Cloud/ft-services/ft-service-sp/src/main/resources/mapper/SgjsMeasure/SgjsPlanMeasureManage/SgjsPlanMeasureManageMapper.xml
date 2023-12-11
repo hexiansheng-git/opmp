@@ -1,441 +1,460 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.mapper.SgjsPlanMeasureManageMapper">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-    <resultMap type="com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage" id="SgjsPlanMeasureManageResultMap">
-                    <result property="id" column="id" />
-                    <result property="pid" column="pid" />
-                    <result property="measureName" column="measure_name" />
-                    <result property="measureUnit" column="measure_unit" />
-                    <result property="workload" column="workload" />
-                    <result property="planStartDate" column="plan_start_date" />
-                    <result property="planEndDate" column="plan_end_date" />
-                    <result property="realStartDate" column="real_start_date" />
-                    <result property="realEndDate" column="real_end_date" />
-                    <result property="remark" column="remark" />
-                    <result property="dataSource" column="data_source" />
-                    <result property="createUser" column="create_user" />
-                    <result property="createUserName" column="create_user_name" />
-                    <result property="createTime" column="create_time" />
-                    <result property="updateUser" column="update_user" />
-                    <result property="updateTime" column="update_time" />
-                    <result property="delUser" column="del_user" />
-                    <result property="delTime" column="del_time" />
-                    <result property="delFlag" column="del_flag" />
-                    <result property="ptVar1" column="pt_var1" />
-                    <result property="ptVar2" column="pt_var2" />
-                    <result property="ptVar3" column="pt_var3" />
-                    <result property="ptVar4" column="pt_var4" />
-                    <result property="ptVar5" column="pt_var5" />
-            </resultMap>
-    <sql id="selectSgjsPlanMeasureManageVo">
-        select
-                                                            `id`
-                                                         ,`pid`
-                                                         ,`measure_name`
-                                                         ,`measure_unit`
-                                                         ,`workload`
-                                                         ,`plan_start_date`
-                                                         ,`plan_end_date`
-                                                         ,`real_start_date`
-                                                         ,`real_end_date`
-                                                         ,`remark`
-                                                         ,`data_source`
-                                                         ,`create_user`
-                                                         ,`create_user_name`
-                                                         ,`create_time`
-                                                         ,`update_user`
-                                                         ,`update_time`
-                                                         ,`del_user`
-                                                         ,`del_time`
-                                                         ,`del_flag`
-                                                         ,`pt_var1`
-                                                         ,`pt_var2`
-                                                         ,`pt_var3`
-                                                         ,`pt_var4`
-                                                         ,`pt_var5`
-                                    from sgjs_plan_measure_manage
-    </sql>
-    <select id="getSgjsPlanMeasureManage" resultMap="SgjsPlanMeasureManageResultMap">
-        <include refid="selectSgjsPlanMeasureManageVo" />
-        <where>
-            del_flag = "0"
-                            <if test="id != null "> and `id` = #{id}</if>
-                            <if test="pid != null "> and `pid` = #{pid}</if>
-                            <if test="measureName != null  and measureName != ''"> and `measure_name` = #{measureName}</if>
-                            <if test="measureUnit != null  and measureUnit != ''"> and `measure_unit` = #{measureUnit}</if>
-                            <if test="workload != null "> and `workload` = #{workload}</if>
-                            <if test="planStartDate != null "> and `plan_start_date` = #{planStartDate}</if>
-                            <if test="planEndDate != null "> and `plan_end_date` = #{planEndDate}</if>
-                            <if test="realStartDate != null "> and `real_start_date` = #{realStartDate}</if>
-                            <if test="realEndDate != null "> and `real_end_date` = #{realEndDate}</if>
-                            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-                            <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
-                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
-                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
-                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
-                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
-                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
-                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
-                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
-                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
-                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
-                            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
-                            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
-                            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
-                    </where>
-        order by create_time desc
-    </select>
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+  namespace="com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.mapper.SgjsPlanMeasureManageMapper">
 
-    <select id="getSgjsPlanMeasureManageList" resultMap="SgjsPlanMeasureManageResultMap">
-        <include refid="selectSgjsPlanMeasureManageVo" />
-        <where>
-            del_flag = "0"
-                            <if test="id != null "> and `id` = #{id}</if>
-                            <if test="pid != null "> and `pid` = #{pid}</if>
-                            <if test="measureName != null  and measureName != ''"> and `measure_name` = #{measureName}</if>
-                            <if test="measureUnit != null  and measureUnit != ''"> and `measure_unit` = #{measureUnit}</if>
-                            <if test="workload != null "> and `workload` = #{workload}</if>
-                            <if test="planStartDate != null "> and `plan_start_date` = #{planStartDate}</if>
-                            <if test="planEndDate != null "> and `plan_end_date` = #{planEndDate}</if>
-                            <if test="realStartDate != null "> and `real_start_date` = #{realStartDate}</if>
-                            <if test="realEndDate != null "> and `real_end_date` = #{realEndDate}</if>
-                            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-                            <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
-                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
-                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
-                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
-                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
-                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
-                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
-                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
-                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
-                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
-                            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
-                            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
-                            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
-                    </where>
-        order by create_time desc
-    </select>
+  <resultMap type="com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage"
+    id="SgjsPlanMeasureManageResultMap">
+    <result property="id" column="id"/>
+    <result property="pid" column="pid"/>
+    <result property="measureName" column="measure_name"/>
+    <result property="measureUnit" column="measure_unit"/>
+    <result property="workload" column="workload"/>
+    <result property="planStartDate" column="plan_start_date"/>
+    <result property="planEndDate" column="plan_end_date"/>
+    <result property="realStartDate" column="real_start_date"/>
+    <result property="realEndDate" column="real_end_date"/>
+    <result property="remark" column="remark"/>
+    <result property="dataSource" column="data_source"/>
+    <result property="createUser" column="create_user"/>
+    <result property="createUserName" column="create_user_name"/>
+    <result property="createTime" column="create_time"/>
+    <result property="updateUser" column="update_user"/>
+    <result property="updateTime" column="update_time"/>
+    <result property="delUser" column="del_user"/>
+    <result property="delTime" column="del_time"/>
+    <result property="delFlag" column="del_flag"/>
+    <result property="serialNumber" column="serial_number"/>
+    <result property="ptVar1" column="pt_var1"/>
+    <result property="ptVar2" column="pt_var2"/>
+    <result property="ptVar3" column="pt_var3"/>
+    <result property="ptVar4" column="pt_var4"/>
+    <result property="ptVar5" column="pt_var5"/>
+  </resultMap>
+  <sql id="selectSgjsPlanMeasureManageVo">
+    select `id`
+         , `pid`
+         , `measure_name`
+         , `measure_unit`
+         , `workload`
+         , `plan_start_date`
+         , `plan_end_date`
+         , `real_start_date`
+         , `real_end_date`
+         , `remark`
+         , `data_source`
+         , `create_user`
+         , `create_user_name`
+         , `create_time`
+         , `update_user`
+         , `update_time`
+         , `del_user`
+         , `del_time`
+         , `del_flag`
+         , `serial_number`
+         , `pt_var1`
+         , `pt_var2`
+         , `pt_var3`
+         , `pt_var4`
+         , `pt_var5`
+    from sgjs_plan_measure_manage
+  </sql>
+  <select id="getSgjsPlanMeasureManage" resultMap="SgjsPlanMeasureManageResultMap">
+    <include refid="selectSgjsPlanMeasureManageVo"/>
+    <where>
+      del_flag = "0"
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="pid != null ">and `pid` = #{pid}</if>
+      <if test="measureName != null  and measureName != ''">and `measure_name` = #{measureName}</if>
+      <if test="measureUnit != null  and measureUnit != ''">and `measure_unit` = #{measureUnit}</if>
+      <if test="workload != null ">and `workload` = #{workload}</if>
+      <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
+      <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
+      <if test="realStartDate != null ">and `real_start_date` = #{realStartDate}</if>
+      <if test="realEndDate != null ">and `real_end_date` = #{realEndDate}</if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+      <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` =
+        #{createUserName}
+      </if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+    </where>
+    order by create_time desc
+  </select>
 
-    <insert id="insertSgjsPlanMeasureManage"  useGeneratedKeys="true" keyProperty="id"  >
-        insert into sgjs_plan_measure_manage
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-                            <if test="id != null ">`id`,</if>
-                            <if test="pid != null ">`pid`,</if>
-                            <if test="measureName != null  and measureName != ''">`measure_name`,</if>
-                            <if test="measureUnit != null  and measureUnit != ''">`measure_unit`,</if>
-                            <if test="workload != null ">`workload`,</if>
-                            <if test="planStartDate != null ">`plan_start_date`,</if>
-                            <if test="planEndDate != null ">`plan_end_date`,</if>
-                            <if test="realStartDate != null ">`real_start_date`,</if>
-                            <if test="realEndDate != null ">`real_end_date`,</if>
-                            <if test="remark != null  and remark != ''">`remark`,</if>
-                            <if test="dataSource != null  and dataSource != ''">`data_source`,</if>
-                            <if test="createUser != null  and createUser != ''">`create_user`,</if>
-                            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
-                            <if test="createTime != null ">`create_time`,</if>
-                            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
-                            <if test="updateTime != null ">`update_time`,</if>
-                            <if test="delUser != null  and delUser != ''">`del_user`,</if>
-                            <if test="delTime != null ">`del_time`,</if>
-                            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
-                            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
-                            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
-                            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
-                            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
-                            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
-                    </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-                            <if test="id != null ">#{id},</if>
-                            <if test="pid != null ">#{pid},</if>
-                            <if test="measureName != null  and measureName != ''">#{measureName},</if>
-                            <if test="measureUnit != null  and measureUnit != ''">#{measureUnit},</if>
-                            <if test="workload != null ">#{workload},</if>
-                            <if test="planStartDate != null ">#{planStartDate},</if>
-                            <if test="planEndDate != null ">#{planEndDate},</if>
-                            <if test="realStartDate != null ">#{realStartDate},</if>
-                            <if test="realEndDate != null ">#{realEndDate},</if>
-                            <if test="remark != null  and remark != ''">#{remark},</if>
-                            <if test="dataSource != null  and dataSource != ''">#{dataSource},</if>
-                            <if test="createUser != null  and createUser != ''">#{createUser},</if>
-                            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
-                            <if test="createTime != null ">#{createTime},</if>
-                            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
-                            <if test="updateTime != null ">#{updateTime},</if>
-                            <if test="delUser != null  and delUser != ''">#{delUser},</if>
-                            <if test="delTime != null ">#{delTime},</if>
-                            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
-                            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
-                            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
-                            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
-                            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
-                            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
-                    </trim>
-    </insert>
+  <select id="getSgjsPlanMeasureManageList" resultMap="SgjsPlanMeasureManageResultMap">
+    <include refid="selectSgjsPlanMeasureManageVo"/>
+    <where>
+      del_flag = "0"
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="pid != null ">and `pid` = #{pid}</if>
+      <if test="measureName != null  and measureName != ''">and `measure_name` like concat('%',#{measureName},'%')</if>
+      <if test="measureUnit != null  and measureUnit != ''">and `measure_unit` = #{measureUnit}</if>
+      <if test="workload != null ">and `workload` = #{workload}</if>
+      <if test="planStartDate != null ">and `plan_start_date` &gt;= #{planStartDate}</if>
+      <if test="planEndDate != null "> and `plan_end_date` &lt;= #{planEndDate}</if>
+      <if test="realStartDate != null ">and `real_start_date` &gt;= #{realStartDate}</if>
+      <if test="realEndDate != null ">and `real_end_date` &lt;= #{realEndDate}</if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+      <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` =
+        #{createUserName}
+      </if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+    </where>
+    order by create_time desc
+  </select>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsPlanMeasureManage -->
-    <insert id="insertSgjsPlanMeasureManageList">
-        insert into sgjs_plan_measure_manage
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-                                                `id`,
-                                                                `pid`,
-                                                                `measure_name`,
-                                                                `measure_unit`,
-                                                                `workload`,
-                                                                `plan_start_date`,
-                                                                `plan_end_date`,
-                                                                `real_start_date`,
-                                                                `real_end_date`,
-                                                                `remark`,
-                                                                `data_source`,
-                                                                `create_user`,
-                                                                `create_user_name`,
-                                                                `create_time`,
-                                                                `update_user`,
-                                                                `update_time`,
-                                                                `del_user`,
-                                                                `del_time`,
-                                                                                            `pt_var1`,
-                                                                `pt_var2`,
-                                                                `pt_var3`,
-                                                                `pt_var4`,
-                                                                `pt_var5`,
-                                    </trim>
-        values
-        <foreach collection="sgjsPlanMeasureManageList" item="item" separator=",">
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                                                            #{item.id},
-                                                                                #{item.pid},
-                                                                                #{item.measureName},
-                                                                                #{item.measureUnit},
-                                                                                #{item.workload},
-                                                                                #{item.planStartDate},
-                                                                                #{item.planEndDate},
-                                                                                #{item.realStartDate},
-                                                                                #{item.realEndDate},
-                                                                                #{item.remark},
-                                                                                #{item.dataSource},
-                                                                                #{item.createUser},
-                                                                                #{item.createUserName},
-                                                                                #{item.createTime},
-                                                                                #{item.updateUser},
-                                                                                #{item.updateTime},
-                                                                                #{item.delUser},
-                                                                                #{item.delTime},
-                                                                                                                    #{item.ptVar1},
-                                                                                #{item.ptVar2},
-                                                                                #{item.ptVar3},
-                                                                                #{item.ptVar4},
-                                                                                #{item.ptVar5},
-                                                </trim>
+
+  <insert id="insertSgjsPlanMeasureManage" useGeneratedKeys="true" keyProperty="id">
+    insert into sgjs_plan_measure_manage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null ">`id`,</if>
+      <if test="pid != null ">`pid`,</if>
+      <if test="measureName != null  and measureName != ''">`measure_name`,</if>
+      <if test="measureUnit != null  and measureUnit != ''">`measure_unit`,</if>
+      <if test="workload != null ">`workload`,</if>
+      <if test="planStartDate != null ">`plan_start_date`,</if>
+      <if test="planEndDate != null ">`plan_end_date`,</if>
+      <if test="realStartDate != null ">`real_start_date`,</if>
+      <if test="realEndDate != null ">`real_end_date`,</if>
+      <if test="remark != null  and remark != ''">`remark`,</if>
+      <if test="dataSource != null  and dataSource != ''">`data_source`,</if>
+      <if test="createUser != null  and createUser != ''">`create_user`,</if>
+      <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+      <if test="createTime != null ">`create_time`,</if>
+      <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+      <if test="updateTime != null ">`update_time`,</if>
+      <if test="delUser != null  and delUser != ''">`del_user`,</if>
+      <if test="delTime != null ">`del_time`,</if>
+      <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null ">#{id},</if>
+      <if test="pid != null ">#{pid},</if>
+      <if test="measureName != null  and measureName != ''">#{measureName},</if>
+      <if test="measureUnit != null  and measureUnit != ''">#{measureUnit},</if>
+      <if test="workload != null ">#{workload},</if>
+      <if test="planStartDate != null ">#{planStartDate},</if>
+      <if test="planEndDate != null ">#{planEndDate},</if>
+      <if test="realStartDate != null ">#{realStartDate},</if>
+      <if test="realEndDate != null ">#{realEndDate},</if>
+      <if test="remark != null  and remark != ''">#{remark},</if>
+      <if test="dataSource != null  and dataSource != ''">#{dataSource},</if>
+      <if test="createUser != null  and createUser != ''">#{createUser},</if>
+      <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+      <if test="createTime != null ">#{createTime},</if>
+      <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+      <if test="updateTime != null ">#{updateTime},</if>
+      <if test="delUser != null  and delUser != ''">#{delUser},</if>
+      <if test="delTime != null ">#{delTime},</if>
+      <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+    </trim>
+  </insert>
+
+  <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsPlanMeasureManage -->
+  <insert id="insertSgjsPlanMeasureManageList">
+    insert into sgjs_plan_measure_manage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      `id`,
+      `pid`,
+      `measure_name`,
+      `measure_unit`,
+      `workload`,
+      `plan_start_date`,
+      `plan_end_date`,
+      `real_start_date`,
+      `real_end_date`,
+      `remark`,
+      `data_source`,
+      `create_user`,
+      `create_user_name`,
+      `create_time`,
+      `update_user`,
+      `update_time`,
+      `del_user`,
+      `del_time`,
+      `serial_number`,
+      `pt_var1`,
+      `pt_var2`,
+      `pt_var3`,
+      `pt_var4`,
+      `pt_var5`,
+    </trim>
+    values
+    <foreach collection="sgjsPlanMeasureManageList" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{item.id},
+        #{item.pid},
+        #{item.measureName},
+        #{item.measureUnit},
+        #{item.workload},
+        #{item.planStartDate},
+        #{item.planEndDate},
+        #{item.realStartDate},
+        #{item.realEndDate},
+        #{item.remark},
+        #{item.dataSource},
+        #{item.createUser},
+        #{item.createUserName},
+        #{item.createTime},
+        #{item.updateUser},
+        #{item.updateTime},
+        #{item.delUser},
+        #{item.delTime},
+        #{item.serialNumber},
+        #{item.ptVar1},
+        #{item.ptVar2},
+        #{item.ptVar3},
+        #{item.ptVar4},
+        #{item.ptVar5},
+      </trim>
+    </foreach>
+  </insert>
+
+  <update id="updateSgjsPlanMeasureManage">
+    update sgjs_plan_measure_manage
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="id != null ">`id` = #{id},</if>
+      <if test="pid != null ">`pid` = #{pid},</if>
+      <if test="measureName != null  and  measureName != ''">`measure_name` = #{measureName},</if>
+      <if test="measureUnit != null  and  measureUnit != ''">`measure_unit` = #{measureUnit},</if>
+      <if test="workload != null ">`workload` = #{workload},</if>
+      <if test="planStartDate != null ">`plan_start_date` = #{planStartDate},</if>
+      <if test="planEndDate != null ">`plan_end_date` = #{planEndDate},</if>
+      <if test="realStartDate != null ">`real_start_date` = #{realStartDate},</if>
+      <if test="realEndDate != null ">`real_end_date` = #{realEndDate},</if>
+      <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+      <if test="dataSource != null  and  dataSource != ''">`data_source` = #{dataSource},</if>
+      <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+      <if test="createUserName != null  and  createUserName != ''">`create_user_name` =
+        #{createUserName},
+      </if>
+      <if test="createTime != null ">`create_time` = #{createTime},</if>
+      <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+      <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+      <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+      <if test="delTime != null ">`del_time` = #{delTime},</if>
+      <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+      <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+      <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+      <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+      <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+      <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+    </trim>
+    <where>
+      <if test="id != null ">and `id` = #{id}</if>
+    </where>
+  </update>
+
+  <update id="updateSgjsPlanMeasureManageList">
+    update sgjs_plan_measure_manage
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.id}
         </foreach>
-    </insert>
+      </trim>
+      <trim prefix="pid  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.pid}
+        </foreach>
+      </trim>
+      <trim prefix="measure_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.measureName}
+        </foreach>
+      </trim>
+      <trim prefix="measure_unit  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.measureUnit}
+        </foreach>
+      </trim>
+      <trim prefix="workload  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.workload}
+        </foreach>
+      </trim>
+      <trim prefix="plan_start_date  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.planStartDate}
+        </foreach>
+      </trim>
+      <trim prefix="plan_end_date  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.planEndDate}
+        </foreach>
+      </trim>
+      <trim prefix="real_start_date  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.realStartDate}
+        </foreach>
+      </trim>
+      <trim prefix="real_end_date  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.realEndDate}
+        </foreach>
+      </trim>
+      <trim prefix="remark  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.remark}
+        </foreach>
+      </trim>
+      <trim prefix="data_source  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.dataSource}
+        </foreach>
+      </trim>
+      <trim prefix="create_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createUser}
+        </foreach>
+      </trim>
+      <trim prefix="create_user_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createUserName}
+        </foreach>
+      </trim>
+      <trim prefix="create_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="update_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.updateUser}
+        </foreach>
+      </trim>
+      <trim prefix="update_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.updateTime}
+        </foreach>
+      </trim>
+      <trim prefix="del_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delUser}
+        </foreach>
+      </trim>
+      <trim prefix="del_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delTime}
+        </foreach>
+      </trim>
+      <trim prefix="del_flag  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delFlag}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var1  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar1}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var2  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar2}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var3  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar3}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var4  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar4}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var5  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar5}
+        </foreach>
+      </trim>
+    </trim>
+    where `id` in
+    <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+      #{item.id}
+    </foreach>
+  </update>
 
-    <update id="updateSgjsPlanMeasureManage">
-        update sgjs_plan_measure_manage
-        <trim prefix="SET" suffixOverrides=",">
-                            <if test="id != null ">`id` = #{id},</if>
-                            <if test="pid != null ">`pid` = #{pid},</if>
-                            <if test="measureName != null  and  measureName != ''">`measure_name` = #{measureName},</if>
-                            <if test="measureUnit != null  and  measureUnit != ''">`measure_unit` = #{measureUnit},</if>
-                            <if test="workload != null ">`workload` = #{workload},</if>
-                            <if test="planStartDate != null ">`plan_start_date` = #{planStartDate},</if>
-                            <if test="planEndDate != null ">`plan_end_date` = #{planEndDate},</if>
-                            <if test="realStartDate != null ">`real_start_date` = #{realStartDate},</if>
-                            <if test="realEndDate != null ">`real_end_date` = #{realEndDate},</if>
-                            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
-                            <if test="dataSource != null  and  dataSource != ''">`data_source` = #{dataSource},</if>
-                            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
-                            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
-                            <if test="createTime != null ">`create_time` = #{createTime},</if>
-                            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
-                            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
-                            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
-                            <if test="delTime != null ">`del_time` = #{delTime},</if>
-                            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
-                            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
-                            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
-                            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
-                            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
-                            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
-                    </trim>
-        <where>
-                                                                        <if test="id != null "> and `id` = #{id}</if>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
-    </update>
+  <update id="deleteSgjsPlanMeasureManage">
+    update `sgjs_plan_measure_manage` set del_flag = 1
+    <where>
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="pid != null ">and `pid` = #{pid}</if>
+      <if test="measureName != null  and measureName != ''">and `measure_name` = #{measureName}</if>
+      <if test="measureUnit != null  and measureUnit != ''">and `measure_unit` = #{measureUnit}</if>
+      <if test="workload != null ">and `workload` = #{workload}</if>
+      <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
+      <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
+      <if test="realStartDate != null ">and `real_start_date` = #{realStartDate}</if>
+      <if test="realEndDate != null ">and `real_end_date` = #{realEndDate}</if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+      <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` =
+        #{createUserName}
+      </if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+    </where>
+  </update>
 
-            <update id="updateSgjsPlanMeasureManageList">
-            update sgjs_plan_measure_manage
-            <trim prefix="set" suffixOverrides=",">
-                                    <trim prefix="id  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.id}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="pid  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.pid}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="measure_name  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.measureName}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="measure_unit  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.measureUnit}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="workload  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.workload}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="plan_start_date  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.planStartDate}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="plan_end_date  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.planEndDate}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="real_start_date  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.realStartDate}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="real_end_date  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.realEndDate}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="remark  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.remark}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="data_source  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.dataSource}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="create_user  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.createUser}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="create_user_name  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.createUserName}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="create_time  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.createTime}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="update_user  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.updateUser}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="update_time  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.updateTime}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="del_user  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.delUser}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="del_time  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.delTime}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="del_flag  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.delFlag}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="pt_var1  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.ptVar1}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="pt_var2  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.ptVar2}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="pt_var3  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.ptVar3}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="pt_var4  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.ptVar4}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="pt_var5  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.ptVar5}
-                        </foreach>
-                    </trim>
-                            </trim>
-            where `id` in
-            <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
-                #{item.id}
-            </foreach>
-        </update>
-    
-            <update id="deleteSgjsPlanMeasureManage">
-            update `sgjs_plan_measure_manage` set del_flag = 1
-            <where>
-                                    <if test="id != null "> and `id` = #{id}</if>
-                                    <if test="pid != null "> and `pid` = #{pid}</if>
-                                    <if test="measureName != null  and measureName != ''"> and `measure_name` = #{measureName}</if>
-                                    <if test="measureUnit != null  and measureUnit != ''"> and `measure_unit` = #{measureUnit}</if>
-                                    <if test="workload != null "> and `workload` = #{workload}</if>
-                                    <if test="planStartDate != null "> and `plan_start_date` = #{planStartDate}</if>
-                                    <if test="planEndDate != null "> and `plan_end_date` = #{planEndDate}</if>
-                                    <if test="realStartDate != null "> and `real_start_date` = #{realStartDate}</if>
-                                    <if test="realEndDate != null "> and `real_end_date` = #{realEndDate}</if>
-                                    <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-                                    <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
-                                    <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
-                                    <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
-                                    <if test="createTime != null "> and `create_time` = #{createTime}</if>
-                                    <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-                                    <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
-                                    <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
-                                    <if test="delTime != null "> and `del_time` = #{delTime}</if>
-                                    <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
-                                    <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
-                                    <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
-                                    <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
-                                    <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
-                                    <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
-                            </where>
-        </update>
+  <update id="deleteSgjsPlanMeasureManageByPks">
+    update `sgjs_plan_measure_manage` set del_flag = 1
+    <where>
+      `id` in
+      <foreach item="id" collection="sgjsPlanMeasureManagePkList" open="(" separator="," close=")">
+        #{id}
+      </foreach>
+    </where>
+  </update>
 
-                    <update id="deleteSgjsPlanMeasureManageByPks">
-                update `sgjs_plan_measure_manage` set del_flag = 1
-                <where>
-                    `id` in
-                    <foreach item="id" collection="sgjsPlanMeasureManagePkList" open="(" separator="," close=")">
-                        #{id}
-                    </foreach>
-                </where>
-            </update>
-            </mapper>
+  <update id="delectAll" parameterType="com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage">
+    update `sgjs_plan_measure_manage` set del_flag = "1"  , update_time=#{updateTime} , update_user=#{updateUser}
+  </update>
+
+</mapper>
