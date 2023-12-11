@@ -155,9 +155,6 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
     public void pushSafeEiaReport(BigDecimal version){
         //获取环评报告
         EnvReport envReport = qqchPreparationSurveyExtendService.getEnvReport(version);
-        if(envReport == null){
-            return;
-        }
         ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
         Map<String,Object> map = new HashMap<>();
         map.put("projectName",projectInfo.getProjectName());

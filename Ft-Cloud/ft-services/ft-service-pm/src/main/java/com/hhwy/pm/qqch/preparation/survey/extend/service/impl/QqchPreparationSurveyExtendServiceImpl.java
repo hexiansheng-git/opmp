@@ -153,10 +153,10 @@ public class QqchPreparationSurveyExtendServiceImpl implements IQqchPreparationS
             version = BigDecimal.ONE;
         }
         QqchPreparationSurveyExtend extend = this.getQqchPreparationSurveyExtend(ModuleIdentity.QQCH_SAFE_ENVIR_RISK_LIST, version);
-        if(extend == null){
-            return null;
-        }
         EnvReport envReport = new EnvReport();
+        if(extend == null){
+            return envReport;
+        }
         envReport.setVersion(version);
         envReport.setFileGroupId(extend.getFileGroupId());
         envReport.setUploadUser(extend.getCreateUserName());
