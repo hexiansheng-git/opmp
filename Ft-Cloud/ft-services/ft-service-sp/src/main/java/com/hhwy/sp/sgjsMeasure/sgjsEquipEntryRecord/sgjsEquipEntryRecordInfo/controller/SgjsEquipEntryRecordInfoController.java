@@ -3,6 +3,8 @@ package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.co
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
@@ -38,6 +40,12 @@ public class SgjsEquipEntryRecordInfoController extends BaseController{
         return AjaxResult.success(sgjsEquipEntryRecordInfo);
     }
 
+    /**
+     * 查询
+     *
+     * @param sgjsEquipEntryRecordInfoParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfo:list")
     @GetMapping("/list")
     public AjaxResult getSgjsEquipEntryRecordInfoList(@Validated(ValidationGroups.Select.class) SgjsEquipEntryRecordInfo sgjsEquipEntryRecordInfoParam){
@@ -53,12 +61,33 @@ public class SgjsEquipEntryRecordInfoController extends BaseController{
         return AjaxResult.success(sgjsEquipEntryRecordInfoParam);
     }
 
+    /**
+     * 批量新增
+     *
+     * @param sgjsEquipEntryRecordInfoListParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfo:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertSgjsEquipEntryRecordInfoList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsEquipEntryRecordInfo> sgjsEquipEntryRecordInfoListParam){
         sgjsEquipEntryRecordInfoService.insertSgjsEquipEntryRecordInfoList(sgjsEquipEntryRecordInfoListParam);
-        return AjaxResult.success(sgjsEquipEntryRecordInfoListParam);
+        return AjaxResult.success();
     }
+
+
+    /**
+     * 批量新增
+     *
+     * @param map
+     * @return
+     */
+    @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfo:addMap")
+    @PostMapping("/batchAddMap")
+    public AjaxResult batchAddMap(@Validated(ValidationGroups.Save.class) @RequestBody Map<String,Object> map){
+        sgjsEquipEntryRecordInfoService.batchAddMap(map);
+        return AjaxResult.success();
+    }
+
 
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfo:update")
     @PostMapping("/update")
@@ -91,4 +120,9 @@ public class SgjsEquipEntryRecordInfoController extends BaseController{
         ExcelUtils<SgjsEquipEntryRecordInfo> util = new ExcelUtils<>(SgjsEquipEntryRecordInfo.class);
         util.exportExcel(response, sgjsEquipEntryRecordInfoList, DateUtils.getDate());
     }
+
+
+
+
+
 }

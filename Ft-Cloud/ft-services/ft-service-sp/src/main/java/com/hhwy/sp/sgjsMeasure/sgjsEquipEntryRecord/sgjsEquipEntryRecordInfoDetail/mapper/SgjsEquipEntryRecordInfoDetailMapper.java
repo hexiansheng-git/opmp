@@ -26,4 +26,11 @@ public interface SgjsEquipEntryRecordInfoDetailMapper {
     int deleteSgjsEquipEntryRecordInfoDetail(SgjsEquipEntryRecordInfoDetail sgjsEquipEntryRecordInfoDetail);
 
     int deleteSgjsEquipEntryRecordInfoDetailByPks(@Param("sgjsEquipEntryRecordInfoDetailPkList") List<Long> sgjsEquipEntryRecordInfoDetailPkList);
+
+    /**
+     * 批量删除
+     *
+     * @return
+     */
+    int deleteAll(SgjsEquipEntryRecordInfoDetail detail);
 }

@@ -63,6 +63,7 @@ public class SgjsEquipEntryRecord extends BaseEntity {
     @JsonProperty
     @Excel(name = "要求进场日期"    ,dateFormat = "yyyy-MM-dd"  )
     private Date entryDate;
+
     /**
      * 字段描述：所需数量
      */
@@ -206,6 +207,36 @@ public class SgjsEquipEntryRecord extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5"    )
     private String ptVar5;
+
+    private String entryDateStr;
+
+    private Date entryDateBegin;
+
+    private Date entryDateEnd;
+
+    public Date getEntryDateBegin() {
+        return entryDateBegin;
+    }
+
+    public void setEntryDateBegin(Date entryDateBegin) {
+        this.entryDateBegin = entryDateBegin;
+    }
+
+    public Date getEntryDateEnd() {
+        return entryDateEnd;
+    }
+
+    public void setEntryDateEnd(Date entryDateEnd) {
+        this.entryDateEnd = entryDateEnd;
+    }
+
+    public String getEntryDateStr() {
+        return entryDateStr;
+    }
+
+    public void setEntryDateStr(String entryDateStr) {
+        this.entryDateStr = entryDateStr;
+    }
 
     @JsonIgnore
     public Long getId() {

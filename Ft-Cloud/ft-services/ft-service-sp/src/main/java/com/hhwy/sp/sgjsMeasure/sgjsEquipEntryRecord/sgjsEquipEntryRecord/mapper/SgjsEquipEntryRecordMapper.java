@@ -26,4 +26,12 @@ public interface SgjsEquipEntryRecordMapper {
     int deleteSgjsEquipEntryRecord(SgjsEquipEntryRecord sgjsEquipEntryRecord);
 
     int deleteSgjsEquipEntryRecordByPks(@Param("sgjsEquipEntryRecordPkList") List<Long> sgjsEquipEntryRecordPkList);
+
+    /**
+     * 批量修改
+     *
+     * @param equipList
+     * @return
+     */
+    int bathUpdateByList(List<SgjsEquipEntryRecord> equipList);
 }
