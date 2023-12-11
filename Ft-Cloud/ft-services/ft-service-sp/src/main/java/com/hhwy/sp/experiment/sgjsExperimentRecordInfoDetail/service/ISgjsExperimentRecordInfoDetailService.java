@@ -1,15 +1,15 @@
-package com.hhwy.experiment.sgjsExperimentRecordInfoDetail.service;
+package com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.service;
 
 import java.util.List;
-import com.hhwy.experiment.sgjsExperimentRecordInfoDetail.domain.SgjsExperimentRecordInfoDetail;
+import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.domain.SgjsExperimentRecordInfoDetail;
 
 /**
  * @author lcf--自检自校表记录
  * @date 2023-12-11 15:04:20
- * @remark 
+ * @remark
  */
 public interface ISgjsExperimentRecordInfoDetailService {
-                                                                                                                                                                                                                                                                                                    
+
     SgjsExperimentRecordInfoDetail getSgjsExperimentRecordInfoDetail(SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetail);
 
     List<SgjsExperimentRecordInfoDetail> getSgjsExperimentRecordInfoDetailList(SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetail);
@@ -20,9 +20,9 @@ public interface ISgjsExperimentRecordInfoDetailService {
 
     int updateSgjsExperimentRecordInfoDetail(SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetail);
 
-            int updateSgjsExperimentRecordInfoDetailList(List<SgjsExperimentRecordInfoDetail> sgjsExperimentRecordInfoDetailList);
-    
+    int updateSgjsExperimentRecordInfoDetailList(List<SgjsExperimentRecordInfoDetail> sgjsExperimentRecordInfoDetailList);
+
     int deleteSgjsExperimentRecordInfoDetail(SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetail);
 
-            int deleteSgjsExperimentRecordInfoDetailByPks(List<Long> sgjsExperimentRecordInfoDetailPkList);
-    }
+    int deleteSgjsExperimentRecordInfoDetailByPks(List<Long> sgjsExperimentRecordInfoDetailPkList);
+}

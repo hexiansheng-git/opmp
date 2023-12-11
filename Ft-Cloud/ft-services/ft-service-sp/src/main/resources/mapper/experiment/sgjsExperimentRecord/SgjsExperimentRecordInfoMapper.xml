@@ -233,6 +233,8 @@
             <if test="residualValue != null  and residualValue != ''">`residual_value`,</if>
             <if test="acceptDate != null ">`accept_date`,</if>
             <if test="entryDate != null ">`entry_date`,</if>
+            <if test="entryDateBegin != null"> and `entry_date` &gt;= #{entryDateBegin}</if>
+            <if test="entryDateEnd != null"> and `entry_date` &lt;= #{entryDateEnd}</if>
             <if test="exitDate != null ">`exit_date`,</if>
             <if test="checkDate != null ">`check_date`,</if>
             <if test="checkDay != null ">`check_day`,</if>

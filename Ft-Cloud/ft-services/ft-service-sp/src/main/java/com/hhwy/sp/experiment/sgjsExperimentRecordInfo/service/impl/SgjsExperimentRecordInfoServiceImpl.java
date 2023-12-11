@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author lcf--设备实际进场记录
  * @date 2023-12-11 15:03:58
- * @remark 
+ * @remark
  */
 @Service
 public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecordInfoService{
@@ -23,7 +23,7 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
     @Autowired
     private SgjsExperimentRecordInfoMapper sgjsExperimentRecordInfoMapper;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
     public SgjsExperimentRecordInfo getSgjsExperimentRecordInfo(SgjsExperimentRecordInfo sgjsExperimentRecordInfo) {
         return sgjsExperimentRecordInfoMapper.getSgjsExperimentRecordInfo(sgjsExperimentRecordInfo);
     }
@@ -57,15 +57,15 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
         return sgjsExperimentRecordInfoMapper.updateSgjsExperimentRecordInfo(sgjsExperimentRecordInfo);
     }
 
-            @Transactional
-        public int updateSgjsExperimentRecordInfoList(List<SgjsExperimentRecordInfo> sgjsExperimentRecordInfoList) {
-            for (SgjsExperimentRecordInfo sgjsExperimentRecordInfo : sgjsExperimentRecordInfoList) {
-                sgjsExperimentRecordInfo.setUpdateUser(SecurityUtils.getUserName());
-                sgjsExperimentRecordInfo.setUpdateTime(DateUtils.getNowDate());
-            }
-            return sgjsExperimentRecordInfoMapper.updateSgjsExperimentRecordInfoList(sgjsExperimentRecordInfoList);
+    @Transactional
+    public int updateSgjsExperimentRecordInfoList(List<SgjsExperimentRecordInfo> sgjsExperimentRecordInfoList) {
+        for (SgjsExperimentRecordInfo sgjsExperimentRecordInfo : sgjsExperimentRecordInfoList) {
+            sgjsExperimentRecordInfo.setUpdateUser(SecurityUtils.getUserName());
+            sgjsExperimentRecordInfo.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return sgjsExperimentRecordInfoMapper.updateSgjsExperimentRecordInfoList(sgjsExperimentRecordInfoList);
+    }
+
     @Transactional
     public int deleteSgjsExperimentRecordInfo(SgjsExperimentRecordInfo sgjsExperimentRecordInfo) {
         sgjsExperimentRecordInfo.setUpdateUser(SecurityUtils.getUserName());
@@ -73,8 +73,8 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
         return sgjsExperimentRecordInfoMapper.deleteSgjsExperimentRecordInfo(sgjsExperimentRecordInfo);
     }
 
-            @Transactional
-        public int deleteSgjsExperimentRecordInfoByPks(List<Long> sgjsExperimentRecordInfoPkList) {
-            return sgjsExperimentRecordInfoMapper.deleteSgjsExperimentRecordInfoByPks(sgjsExperimentRecordInfoPkList);
-        }
+    @Transactional
+    public int deleteSgjsExperimentRecordInfoByPks(List<Long> sgjsExperimentRecordInfoPkList) {
+        return sgjsExperimentRecordInfoMapper.deleteSgjsExperimentRecordInfoByPks(sgjsExperimentRecordInfoPkList);
     }
+}

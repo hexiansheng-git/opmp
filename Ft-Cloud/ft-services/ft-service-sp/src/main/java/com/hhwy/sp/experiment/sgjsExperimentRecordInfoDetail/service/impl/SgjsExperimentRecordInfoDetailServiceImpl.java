@@ -1,4 +1,4 @@
-package com.hhwy.experiment.sgjsExperimentRecordInfoDetail.service.impl;
+package com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.service.impl;
 
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.experiment.sgjsExperimentRecordInfoDetail.mapper.SgjsExperimentRecordInfoDetailMapper;
-import com.hhwy.experiment.sgjsExperimentRecordInfoDetail.service.ISgjsExperimentRecordInfoDetailService;
-import com.hhwy.experiment.sgjsExperimentRecordInfoDetail.domain.SgjsExperimentRecordInfoDetail;
+import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.mapper.SgjsExperimentRecordInfoDetailMapper;
+import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.service.ISgjsExperimentRecordInfoDetailService;
+import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.domain.SgjsExperimentRecordInfoDetail;
 import com.hhwy.utils.idworker.IdWorker;
 
 /**

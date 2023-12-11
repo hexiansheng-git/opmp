@@ -1,16 +1,16 @@
-package com.hhwy.experiment.sgjsExperimentRecordInfoDetail.mapper;
+package com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import com.hhwy.experiment.sgjsExperimentRecordInfoDetail.domain.SgjsExperimentRecordInfoDetail;
+import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.domain.SgjsExperimentRecordInfoDetail;
 
 /**
  * @author lcf--自检自校表记录
  * @date 2023-12-11 15:04:20
- * @remark 
+ * @remark
  */
 public interface SgjsExperimentRecordInfoDetailMapper {
-                                                                                                                                                                                                                                                                                                    
+
     SgjsExperimentRecordInfoDetail getSgjsExperimentRecordInfoDetail(SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetail);
 
     List<SgjsExperimentRecordInfoDetail> getSgjsExperimentRecordInfoDetailList(SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetail);
@@ -21,9 +21,9 @@ public interface SgjsExperimentRecordInfoDetailMapper {
 
     int updateSgjsExperimentRecordInfoDetail(SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetail);
 
-            int updateSgjsExperimentRecordInfoDetailList(@Param("sgjsExperimentRecordInfoDetailList") List<SgjsExperimentRecordInfoDetail> sgjsExperimentRecordInfoDetailList);
-    
+    int updateSgjsExperimentRecordInfoDetailList(@Param("sgjsExperimentRecordInfoDetailList") List<SgjsExperimentRecordInfoDetail> sgjsExperimentRecordInfoDetailList);
+
     int deleteSgjsExperimentRecordInfoDetail(SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetail);
 
-            int deleteSgjsExperimentRecordInfoDetailByPks(@Param("sgjsExperimentRecordInfoDetailPkList") List<Long> sgjsExperimentRecordInfoDetailPkList);
-    }
+    int deleteSgjsExperimentRecordInfoDetailByPks(@Param("sgjsExperimentRecordInfoDetailPkList") List<Long> sgjsExperimentRecordInfoDetailPkList);
+}
