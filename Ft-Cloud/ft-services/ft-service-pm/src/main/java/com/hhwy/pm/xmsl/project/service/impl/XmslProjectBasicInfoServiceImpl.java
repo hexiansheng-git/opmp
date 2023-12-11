@@ -324,9 +324,22 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     public Map<String, Object> getPrjInfo() {
         Map<String,Object> map = new HashMap<>();
         XmslProjectBasicInfo xmslProjectBasicInfo = xmslProjectBasicInfoMapper.getProjectBasicInfo(new XmslProjectBasicInfo());
+        /*项目id*/
         map.put("projectId",xmslProjectBasicInfo.getProjectId());
+        /*项目名称*/
         map.put("projectName",xmslProjectBasicInfo.getProjectName());
+        /*项目编码*/
         map.put("projectCode",xmslProjectBasicInfo.getProjectCode());
+        /*机构id*/
+        map.put("regionId",xmslProjectBasicInfo.getRegionId());
+        /*机构名称*/
+        map.put("regionName",xmslProjectBasicInfo.getRegionName());
+        /*项目所在地（国）*/
+        map.put("projectLocation",xmslProjectBasicInfo.getProjectLocation());
+        /*中标单位*/
+        map.put("winTheBiddingUnit",xmslProjectBasicInfo.getWinTheBiddingUnit());
+        /*业务领域及产品*/
+        map.put("businessAreasAndProductsLabel",xmslProjectBasicInfo.getBusinessAreasAndProductsLabel());
         return map;
     }
 
