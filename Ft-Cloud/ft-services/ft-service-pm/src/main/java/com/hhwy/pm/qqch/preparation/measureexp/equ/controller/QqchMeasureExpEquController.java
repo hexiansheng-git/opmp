@@ -71,6 +71,15 @@ public class QqchMeasureExpEquController extends BaseController {
     }
 
     /**
+     * 3.7.4 实验仪器设备配置计划
+     * @return
+     */
+    @PostMapping("/feignExperimentList")
+    public AjaxResult feignExperimentList() {
+        return this.getExperimentList(null);
+    }
+
+    /**
      * 测量仪器设备配置计划保存/确认/提交
      *
      * @param qqchMeasureExpEquVo

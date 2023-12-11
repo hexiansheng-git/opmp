@@ -11,6 +11,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.gencode.enums.CodeEnum;
+import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
@@ -52,6 +53,8 @@ public class WzchLocalTransportPlanDetailServiceImpl implements IWzchLocalTransp
     private WzchCommonService wzchCommonService;
     @Resource
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Resource
+    private GenCodeService genCodeService;
 
     /**
      * 查询当地运输方案策划详情
@@ -206,10 +209,11 @@ public class WzchLocalTransportPlanDetailServiceImpl implements IWzchLocalTransp
         if (wzchLocalTransportPlan==null) {
             throw new BaseException("入参缺失");
         }
+        wzchLocalTransportPlan.setTitle(com.hhwy.utils.ObjectUtils.nvlString(wzchLocalTransportPlan.getTitle()));
         if(StringUtils.isBlank(wzchLocalTransportPlan.getPlanCode())){
-//            String code = genCodeService.getCode(CodeEnum.EQU_LOCAL_TRANSPORT_PLAN);
-//            code += genCodeService.fillString(1, 2);
-//            wzchLocalTransportPlan.setPlanCode(code);
+            String code = genCodeService.getCode(CodeEnum.EQU_LOCAL_TRANSPORT_PLAN);
+            code += genCodeService.fillString(1, 2);
+            wzchLocalTransportPlan.setPlanCode(code);
         }
         if(StringUtils.isBlank(wzchLocalTransportPlan.getCreateUser())){
             wzchLocalTransportPlan.setCreateUser(SecurityUtils.getUserId().toString());

@@ -1,8 +1,10 @@
 package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.mapper.SgjsEquipEntryRecordMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
@@ -12,6 +14,7 @@ import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDeta
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.service.ISgjsEquipEntryRecordInfoDetailService;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.map.LinkedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -108,39 +112,52 @@ public class SgjsEquipEntryRecordInfoServiceImpl implements ISgjsEquipEntryRecor
     @Override
     @Transactional
     public int batchAddMap(Map<String, Object> map) {
-        List<SgjsEquipEntryRecord> equipList= (List<SgjsEquipEntryRecord>)map.get("equipList");
+        List<LinkedHashMap<String,Object>> equipList= (List<LinkedHashMap<String,Object>>)map.get("equipList");
         if(CollectionUtils.isEmpty(equipList)){
             logger.error("传参equipList空了");
             return -1;
         }
-        List<SgjsEquipEntryRecordInfo> infoList= (List<SgjsEquipEntryRecordInfo>)map.get("infoList");
+        List<LinkedHashMap<String,Object>> infoList= (List<LinkedHashMap<String,Object>>)map.get("infoList");
         if(CollectionUtils.isEmpty(infoList)){
             logger.error("传参infoList空了");
             return -2;
         }
         //1、批量修改主表实际进场数量
-        for (SgjsEquipEntryRecord info:equipList) {
+        List<SgjsEquipEntryRecord> eList=new ArrayList<>();
+        for (LinkedHashMap<String,Object> mInfo:equipList) {
+            SgjsEquipEntryRecord info=new SgjsEquipEntryRecord();
             info.setUpdateTime(DateUtils.getNowDate());
             info.setUpdateUser(SecurityUtils.getUserName());
+            info.setId(Long.parseLong(mInfo.get("recordId")+""));
+            info.setActualNum(Integer.parseInt(mInfo.get("actualNum")+""));
+            eList.add(info);
         }
-        sgjsEquipEntryRecordMapper.bathUpdateByList(equipList);
+        sgjsEquipEntryRecordMapper.bathUpdateByList(eList);
         //2、删除子表所有数据
         SgjsEquipEntryRecordInfo record=new SgjsEquipEntryRecordInfo();
         record.setUpdateTime(DateUtils.getNowDate());
         record.setUpdateUser(SecurityUtils.getUserId()+"");
         sgjsEquipEntryRecordInfoMapper.deleteAll(record);
         List<SgjsEquipEntryRecordInfoDetail> list=new ArrayList<>();
-        for (SgjsEquipEntryRecordInfo info:infoList) {
+        List<SgjsEquipEntryRecordInfo> iList=new ArrayList<>();
+        for (LinkedHashMap<String,Object> mInfo:infoList) {
+            String s = JSONObject.toJSONString(mInfo);
+            SgjsEquipEntryRecordInfo info = JSONObject.parseObject(s, SgjsEquipEntryRecordInfo.class);
             info.setCreateTime(DateUtils.getNowDate());
             info.setCreateUser(SecurityUtils.getUserId()+"");
             info.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             List<SgjsEquipEntryRecordInfoDetail> detailList = info.getDetailList();
-            list.addAll(detailList);
+            if(!CollectionUtils.isEmpty(detailList)){
+                list.addAll(detailList);
+            }
+            iList.add(info);
         }
         //3、重新添加数据
-        sgjsEquipEntryRecordInfoMapper.insertSgjsEquipEntryRecordInfoList(infoList);
+        sgjsEquipEntryRecordInfoMapper.insertSgjsEquipEntryRecordInfoList(iList);
         //4、自检自校数据新增
-        sgjsEquipEntryRecordInfoDetailService.insertSgjsEquipEntryRecordInfoDetailList(list);
+        if(!CollectionUtils.isEmpty(list)){
+            sgjsEquipEntryRecordInfoDetailService.insertSgjsEquipEntryRecordInfoDetailList(list);
+        }
         return 1;
     }
 }

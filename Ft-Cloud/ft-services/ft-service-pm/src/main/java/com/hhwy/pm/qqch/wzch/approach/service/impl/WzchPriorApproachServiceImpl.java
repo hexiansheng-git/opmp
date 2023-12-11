@@ -4,6 +4,8 @@ import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.gencode.enums.CodeEnum;
+import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.qqch.wzch.approach.domain.WzchPriorApproach;
@@ -57,6 +59,8 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
     private WzchTotalDemandTimeCountMapper wzchTotalDemandTimeCountMapper;
     @Resource
     private IQqchReviewService qqchReviewService;
+    @Resource
+    private GenCodeService genCodeService;
 
     /**
      * 查询优先进场物资
@@ -146,6 +150,9 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
             addDetailList.add(tempYear);
         }
         //3、删除当前版本数据，插入
+        String code = genCodeService.getCode(CodeEnum.EQU_TOTAL_DEMAND);
+        code += genCodeService.fillString(1, 2);
+        main.setApproachCode(code);
         this.wzchPriorApproachMapper.insertWzchPriorApproach(main);
         wzchPriorApproachDetailService.batchInsert(addList);
         wzchPriorApproachYearCountService.batchInsert(addDetailList);

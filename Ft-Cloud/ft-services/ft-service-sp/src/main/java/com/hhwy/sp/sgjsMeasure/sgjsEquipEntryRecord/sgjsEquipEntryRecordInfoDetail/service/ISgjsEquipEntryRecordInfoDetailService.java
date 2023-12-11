@@ -6,10 +6,10 @@ import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDeta
 /**
  * @author lcf   测量管理--测试设备进场记录
  * @date 2023-12-08 10:49:49
- * @remark 
+ * @remark
  */
 public interface ISgjsEquipEntryRecordInfoDetailService {
-                                                                                                                                                                                                                                                                                        
+
     SgjsEquipEntryRecordInfoDetail getSgjsEquipEntryRecordInfoDetail(SgjsEquipEntryRecordInfoDetail sgjsEquipEntryRecordInfoDetail);
 
     List<SgjsEquipEntryRecordInfoDetail> getSgjsEquipEntryRecordInfoDetailList(SgjsEquipEntryRecordInfoDetail sgjsEquipEntryRecordInfoDetail);
@@ -20,9 +20,9 @@ public interface ISgjsEquipEntryRecordInfoDetailService {
 
     int updateSgjsEquipEntryRecordInfoDetail(SgjsEquipEntryRecordInfoDetail sgjsEquipEntryRecordInfoDetail);
 
-            int updateSgjsEquipEntryRecordInfoDetailList(List<SgjsEquipEntryRecordInfoDetail> sgjsEquipEntryRecordInfoDetailList);
-    
+    int updateSgjsEquipEntryRecordInfoDetailList(List<SgjsEquipEntryRecordInfoDetail> sgjsEquipEntryRecordInfoDetailList);
+
     int deleteSgjsEquipEntryRecordInfoDetail(SgjsEquipEntryRecordInfoDetail sgjsEquipEntryRecordInfoDetail);
 
-            int deleteSgjsEquipEntryRecordInfoDetailByPks(List<Long> sgjsEquipEntryRecordInfoDetailPkList);
-    }
+    int deleteSgjsEquipEntryRecordInfoDetailByPks(List<Long> sgjsEquipEntryRecordInfoDetailPkList);
+}

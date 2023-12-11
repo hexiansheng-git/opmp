@@ -39,6 +39,12 @@ public class SgjsExperimentRecordInfoController extends BaseController{
         return AjaxResult.success(sgjsExperimentRecordInfo);
     }
 
+    /**
+     * 列表查询
+     *
+     * @param sgjsExperimentRecordInfoParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsExperimentRecordInfo:list")
     @GetMapping("/list")
     public AjaxResult getSgjsExperimentRecordInfoList(@Validated(ValidationGroups.Select.class) SgjsExperimentRecordInfo sgjsExperimentRecordInfoParam){

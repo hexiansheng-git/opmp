@@ -1,4 +1,4 @@
-package com.hhwy.experiment.sgjsExperimentRecordInfoDetail.controller;
+package com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,8 +10,8 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.experiment.sgjsExperimentRecordInfoDetail.service.ISgjsExperimentRecordInfoDetailService;
-import com.hhwy.experiment.sgjsExperimentRecordInfoDetail.domain.SgjsExperimentRecordInfoDetail;
+import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.service.ISgjsExperimentRecordInfoDetailService;
+import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.domain.SgjsExperimentRecordInfoDetail;
 
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;

@@ -140,7 +140,7 @@
     </select>
 
     <select id="countWbsOnlyOne" resultType="String">
-        select group_concat(code) from xmsl_wbs_history where main_id = #{mainId} and ( name = '' or name is null) limit 100
+        select group_concat(code) from xmsl_wbs_history where main_id = #{mainId} and del_flag = 0 and ( name = '' or name is null) limit 100
     </select>
 
     <select id="latestWbsList" resultMap="XmslWbsResultMap">

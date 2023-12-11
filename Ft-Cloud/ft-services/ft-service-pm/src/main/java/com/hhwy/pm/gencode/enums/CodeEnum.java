@@ -69,9 +69,31 @@ public enum CodeEnum {
     EQU_TOTAL_DEMAND("WZZX","yyyyMMdd",3),
     /**来源策划*/
     EQU_SOURCE("LUCH","yyyyMMdd",3),
+    /**进出口调查*/
+    EQU_SURVEY("JCKDC","yyyyMMdd",3),
+    /**进出口策划*/
+    EQU_IMPORT_EXPORT_PLAN("JCKCH","yyyyMMdd",3),
+    /**当地运输方案策划*/
+    EQU_LOCAL_TRANSPORT_PLAN("DDYSFACH","yyyyMMdd",3),
+    /**专项物资发运策划*/
+    EQU_SPECICAL_MATERIAL_PLAN("ZXWZFYCH","yyyyMMdd",3),
+
+    /**
+     * 优先进场物资设备采购策划编码规则 YXJCWSBZCG20221123001
+     */
+    WPP("YXJCWSBZCG", "yyyyMMdd", 3),
     /*采购供应策划表*/
-    WPS("CGGYCH", "yyyyMMdd", 3);
-        
+    WPS("CGGYCH", "yyyyMMdd", 3),
+    /*周转材租赁策划*/
+    WRR("ZZCZL", "yyyyMMdd", 3),
+    /*内部调剂材料策划*/
+    WIA("NBTJ", "yyyyMMdd", 3),
+    /*属地采购供应策划表*/
+    WLPS("SDCGGYCH", "yyyyMMdd", 3),
+    /*资金策划*/
+    WF("ZJCH", "yyyyMMdd", 3),
+    /*专项物资策划*/
+    WSP("ZXWZCH", "yyyyMMdd", 3);
     /**
      * 前缀
      */

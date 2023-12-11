@@ -163,6 +163,20 @@ public class SgjsEquipEntryRecordInfoDetail extends BaseEntity {
     @Excel(name = "预留字段5"    )
     private String ptVar5;
 
+    /**
+     * 字段描述：附件组id
+     */
+    @JsonProperty
+    private String fileGroupId;
+
+    public String getFileGroupId() {
+        return fileGroupId;
+    }
+
+    public void setFileGroupId(String fileGroupId) {
+        this.fileGroupId = fileGroupId;
+    }
+
     public Long getInfoId() {
         return infoId;
     }

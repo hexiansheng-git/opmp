@@ -54,11 +54,27 @@ public class QqchMeasureExpPlanController extends BaseController {
         res.setStageIdentity(reviewService.getStage());
         return AjaxResult.success(res);
     }
+
+    /**
+     * 3.7.1 测量管理计划
+     * @return
+     */
     @GetMapping("/feignList")
     public AjaxResult feignList() {
         QqchMeasureExpPlan qqchMeasureExpPlanParam = new QqchMeasureExpPlan();
         qqchMeasureExpPlanParam.setDataType("1"); //1-测量管理计划 2-实验管理计划
         return this.getQqchMeasureExpPlanList(qqchMeasureExpPlanParam);
+    }
+
+    /**
+     * 3.7.2 实验工作计划 最新生效数据
+     * @return
+     */
+    @GetMapping("/feignPlanList")
+    public AjaxResult feignPlanList() {
+        QqchMeasureExpPlan plan = new QqchMeasureExpPlan();
+        plan.setDataType("2");
+        return this.getQqchMeasureExpPlanList(plan);
     }
 
 
@@ -115,4 +131,5 @@ public class QqchMeasureExpPlanController extends BaseController {
         ExcelUtils<QqchMeasureExpPlan> util = new ExcelUtils<>(QqchMeasureExpPlan.class);
         util.exportExcel(response, qqchMeasureExpPlanList, DateUtils.getDate());
     }
+
 }

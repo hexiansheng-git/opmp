@@ -33,8 +33,7 @@ public class SgjsExperimentTotalPlanController extends BaseController{
 
     @Autowired
     private ISgjsExperimentTotalPlanService sgjsExperimentTotalPlanService;
-    @Autowired
-    private PmServiceApi pmServiceApi;
+
 
 
 
@@ -107,10 +106,7 @@ public class SgjsExperimentTotalPlanController extends BaseController{
      */
     @GetMapping("/selectPrjById")
     public AjaxResult selectPrjById(){
-        Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
-        if(ObjectUtils.isEmpty(prjInfo)){
-            return AjaxResult.error("数据异常");
-        }
-        return AjaxResult.success(prjInfo);
+        SgjsExperimentTotalPlan info =sgjsExperimentTotalPlanService.selectDetailInfo();
+        return AjaxResult.success(info);
     }
 }

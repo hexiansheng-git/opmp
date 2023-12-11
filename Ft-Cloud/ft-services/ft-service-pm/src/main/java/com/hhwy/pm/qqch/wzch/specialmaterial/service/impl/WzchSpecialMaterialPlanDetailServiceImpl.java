@@ -61,6 +61,9 @@ public class WzchSpecialMaterialPlanDetailServiceImpl implements IWzchSpecialMat
     private SystemApiService dictTypeService;
     @Resource
     private WzchCommonService wzchCommonService;
+    @Resource
+    private GenCodeService genCodeService;
+
     /**
      * 查询专项物资发运策划-发运策划
      * 
@@ -240,10 +243,11 @@ public class WzchSpecialMaterialPlanDetailServiceImpl implements IWzchSpecialMat
         if (wzchSpecialMaterialPlan == null || wzchSpecialMaterialPlan.getVersion() == null) {
             throw new BaseException("入参缺失");
         }
+        wzchSpecialMaterialPlan.setTitle(com.hhwy.utils.ObjectUtils.nvlString(wzchSpecialMaterialPlan.getTitle()));
         if (StringUtils.isBlank(wzchSpecialMaterialPlan.getPlanCode())) {
-//            String code = genCodeService.getCode(CodeEnum.EQU_SPECICAL_MATERIAL_PLAN);
-//            code += genCodeService.fillString(1, 2);
-//            wzchSpecialMaterialPlan.setPlanCode(code);
+            String code = genCodeService.getCode(CodeEnum.EQU_SPECICAL_MATERIAL_PLAN);
+            code += genCodeService.fillString(1, 2);
+            wzchSpecialMaterialPlan.setPlanCode(code);
         }
         if (StringUtils.isBlank(wzchSpecialMaterialPlan.getCreateUser())) {
             wzchSpecialMaterialPlan.setCreateUser(SecurityUtils.getUserId().toString());
