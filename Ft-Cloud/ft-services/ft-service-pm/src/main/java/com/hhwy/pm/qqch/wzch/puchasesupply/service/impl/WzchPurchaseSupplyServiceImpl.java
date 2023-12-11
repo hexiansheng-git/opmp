@@ -25,6 +25,8 @@ import com.hhwy.pm.qqch.wzch.puchasesupply.mapper.WzchPurchaseSupplyDetailMapper
 import com.hhwy.pm.qqch.wzch.puchasesupply.mapper.WzchPurchaseSupplyMapper;
 import com.hhwy.pm.qqch.wzch.puchasesupply.service.IWzchPurchaseSupplyDetailService;
 import com.hhwy.pm.qqch.wzch.puchasesupply.service.IWzchPurchaseSupplyService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.MaterialUtils;
@@ -70,6 +72,8 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
     private IQqchReviewService qqchReviewService;
     @Resource
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Resource
+    private IXmslProjectBasicInfoService projectBasicInfoService;
 
 
 
@@ -328,9 +332,9 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
         String code = "";
         if (dto.getParams() != null && TWO.equals(dto.getParams().get("dataType"))) {
             title = dto.getProjectName() + "-" + "属地化采购供应策划";
-//            code = genCodeService.getSetCode(CodeEnum.WLPS);
+            code = genCodeService.getSetCode(CodeEnum.WLPS);
         } else {
-//            code = genCodeService.getSetCode(CodeEnum.WPS);
+            code = genCodeService.getSetCode(CodeEnum.WPS);
             title = dto.getProjectName() + "-" + "采购供应策划";
         }
         dto.setTitle(title);
@@ -347,6 +351,7 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
         EntityUtils.setCreateUpdateInfo(dto);
         if(dto.getId()==null){
             dto.setId(IdWorker.createId());
+            dto.setValid("0");
             int i = this.wzchPurchaseSupplyMapper.insertWzchPurchaseSupply(dto);
             // 新增条数不为 1, 失败
             if (i != 1) throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "新增失败");
@@ -416,6 +421,12 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
             purchaseSupply.setId(IdWorker.createId());
             new AddBaseInfoUtil().addBaseEntity(purchaseSupply);
             purchaseSupply.setPrjCode(SecurityUtils.getTenantKey());
+            ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+            String code = genCodeService.getSetCode(CodeEnum.WPS);
+            String title = projectBasicInfo.getProjectName() + "-" + "采购供应策划";
+            purchaseSupply.setValid("0");
+            purchaseSupply.setSupplyCode(code);
+            purchaseSupply.setTitle(title);
             this.wzchPurchaseSupplyMapper.insertWzchPurchaseSupply(purchaseSupply);
         }else{
             masterList.get(0).setLimitPriceDesc(purchaseSupply.getLimitPriceDesc());

@@ -6,6 +6,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.gencode.enums.CodeEnum;
+import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
@@ -52,6 +53,8 @@ public class WzchImportExportSurveyServiceImpl implements IWzchImportExportSurve
     private IQqchReviewService qqchReviewService;
     @Resource
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Resource
+    private GenCodeService genCodeService;
     /**
      * 查询进出口调查
      * 
@@ -153,7 +156,7 @@ public class WzchImportExportSurveyServiceImpl implements IWzchImportExportSurve
     @Transactional
     public Long save(WzchImportExportSurvey wzchImportExportSurvey) {
         checkWzchImportExportSurvey(wzchImportExportSurvey);
-        
+
         if(wzchImportExportSurvey.getId()==null){
             wzchImportExportSurvey.setId(IdWorker.createId());
             fillWzchImportExportSurvey(wzchImportExportSurvey);
@@ -181,10 +184,12 @@ public class WzchImportExportSurveyServiceImpl implements IWzchImportExportSurve
     }
 
     private void fillWzchImportExportSurvey(WzchImportExportSurvey wzchImportExportSurvey) {
+        if(wzchImportExportSurvey.getTitle() == null)
+            wzchImportExportSurvey.setTitle("");
         if(StringUtils.isBlank(wzchImportExportSurvey.getSurveyCode())){
-//            String code = genCodeService.getSetCode(CodeEnum.EQU_SURVEY);
-//            code += genCodeService.fillString(1, 2);
-//            wzchImportExportSurvey.setSurveyCode(code);
+            String code = genCodeService.getSetCode(CodeEnum.EQU_SURVEY);
+            code += genCodeService.fillString(1, 2);
+            wzchImportExportSurvey.setSurveyCode(code);
         }
         if(StringUtils.isBlank(wzchImportExportSurvey.getCreateUser())){
             wzchImportExportSurvey.setCreateUser(SecurityUtils.getUserId().toString());

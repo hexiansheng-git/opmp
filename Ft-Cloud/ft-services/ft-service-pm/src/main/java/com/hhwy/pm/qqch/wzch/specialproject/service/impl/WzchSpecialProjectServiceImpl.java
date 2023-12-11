@@ -291,7 +291,6 @@ public class WzchSpecialProjectServiceImpl implements IWzchSpecialProjectService
         // 获取前端传入的物资明细
         List<WzchSpecialProjectDetail> detailList = dto.getDetailList();
         JyDetailsUtil.jyDetails(detailList, ValidationGroups.Save.class);
-
         // 设置版本号码
         dto.setVersionCode(new BigDecimal("1.0"));
         // 是否生效 新增不能生效
@@ -302,6 +301,8 @@ public class WzchSpecialProjectServiceImpl implements IWzchSpecialProjectService
         if(dto.getId() == null){
             dto.setId(IdWorker.createId());
             new AddBaseInfoUtil<>().addBaseEntity(dto);
+            dto.setSpecialProjectCode(genCodeService.getSetCode(CodeEnum.WSP));
+            dto.setTitle("");
             int i = this.wzchSpecialProjectMapper.insertWzchSpecialProject(dto);
             // 新增条数不为 1, 失败
             if (i != 1) throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "保存失败");
