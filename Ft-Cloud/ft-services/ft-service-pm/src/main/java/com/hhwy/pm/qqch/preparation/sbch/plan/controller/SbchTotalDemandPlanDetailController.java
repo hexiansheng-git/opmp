@@ -98,9 +98,9 @@ public class SbchTotalDemandPlanDetailController extends BaseController {
                     detail.setMaterialType(ObjectUtils.toString(materialMap.get("categoryCode")));
 
                     //从categoryInfoRedis取出来分类名称
-                    Object categoryInfo = redisUtils.hGet("categoryInfoRedis", ObjectUtils.toString(materialMap.get("categoryCode")));
-                    Map<String, Object> categoryMap = JSON.parseObject(categoryInfo.toString(), Map.class);
-                    detail.setPtVar1(ObjectUtils.toString(categoryMap.get("categoryName")));
+//                    Object categoryInfo = redisUtils.hGet("categoryInfoRedis", ObjectUtils.toString(materialMap.get("categoryCode")));
+//                    Map<String, Object> categoryMap = JSON.parseObject(categoryInfo.toString(), Map.class);
+//                    detail.setPtVar1(ObjectUtils.toString(categoryMap.get("categoryName")));
                 }
             }
             return AjaxResult.success(list);
