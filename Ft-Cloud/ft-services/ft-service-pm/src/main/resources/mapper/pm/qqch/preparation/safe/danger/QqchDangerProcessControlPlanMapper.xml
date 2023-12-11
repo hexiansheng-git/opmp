@@ -18,7 +18,7 @@
     <result property="leaderExamineFrequency" column="leader_examine_frequency"/>
     <result property="leaderFileGroupId" column="leader_file_group_id"/>
     <result property="specialExamineFrequency" column="special_examine_frequency"/>
-    <result property="specialFileGroupId" column="special_file_group_id"/>
+    <result property="fileGroupId" column="file_group_id"/>
     <result property="whetherFirst" column="whether_first"/>
     <result property="version" column="version"/>
     <result property="valid" column="valid"/>
@@ -55,7 +55,7 @@
       ,`leader_examine_frequency`
       ,`leader_file_group_id`
       ,`special_examine_frequency`
-      ,`special_file_group_id`
+      ,`file_group_id`
       ,`whether_first`
       ,`version`
       ,`valid`
@@ -101,8 +101,8 @@
       <if test="specialExamineFrequency != null  and specialExamineFrequency != ''">and `special_examine_frequency` =
         #{specialExamineFrequency}
       </if>
-      <if test="specialFileGroupId != null  and specialFileGroupId != ''">and `special_file_group_id` =
-        #{specialFileGroupId}
+      <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` =
+        #{fileGroupId}
       </if>
       <if test="whetherFirst != null and whetherFirst != ''">and `whether_first` = #{whetherFirst}</if>
       <if test="version != null ">and `version` = #{version}</if>
@@ -151,8 +151,8 @@
       <if test="specialExamineFrequency != null  and specialExamineFrequency != ''">and `special_examine_frequency` =
         #{specialExamineFrequency}
       </if>
-      <if test="specialFileGroupId != null  and specialFileGroupId != ''">and `special_file_group_id` =
-        #{specialFileGroupId}
+      <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` =
+        #{fileGroupId}
       </if>
       <if test="whetherFirst != null and whetherFirst != ''">and `whether_first` = #{whetherFirst}</if>
       <if test="version != null ">and `version` = #{version}</if>
@@ -194,7 +194,7 @@
       <if test="leaderExamineFrequency != null  and leaderExamineFrequency != ''">`leader_examine_frequency`,</if>
       <if test="leaderFileGroupId != null  and leaderFileGroupId != ''">`leader_file_group_id`,</if>
       <if test="specialExamineFrequency != null  and specialExamineFrequency != ''">`special_examine_frequency`,</if>
-      <if test="specialFileGroupId != null  and specialFileGroupId != ''">`special_file_group_id`,</if>
+      <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
       <if test="whetherFirst != null and whetherFirst != ''">`whether_first`,</if>
       <if test="version != null ">`version`,</if>
       <if test="valid != null  and valid != ''">`valid`,</if>
@@ -230,7 +230,7 @@
       <if test="leaderExamineFrequency != null  and leaderExamineFrequency != ''">#{leaderExamineFrequency},</if>
       <if test="leaderFileGroupId != null  and leaderFileGroupId != ''">#{leaderFileGroupId},</if>
       <if test="specialExamineFrequency != null  and specialExamineFrequency != ''">#{specialExamineFrequency},</if>
-      <if test="specialFileGroupId != null  and specialFileGroupId != ''">#{specialFileGroupId},</if>
+      <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
       <if test="whetherFirst != null and whetherFirst != ''">#{whetherFirst},</if>
       <if test="version != null ">#{version},</if>
       <if test="valid != null  and valid != ''">#{valid},</if>
@@ -271,7 +271,7 @@
       `leader_examine_frequency`,
       `leader_file_group_id`,
       `special_examine_frequency`,
-      `special_file_group_id`,
+      `file_group_id`,
       `whether_first`,
       `version`,
       `valid`,
@@ -308,7 +308,7 @@
         #{item.leaderExamineFrequency},
         #{item.leaderFileGroupId},
         #{item.specialExamineFrequency},
-        #{item.specialFileGroupId},
+        #{item.fileGroupId},
         #{item.whetherFirst},
         #{item.version},
         #{item.valid},
@@ -354,8 +354,8 @@
       <if test="specialExamineFrequency != null  and  specialExamineFrequency != ''">`special_examine_frequency` =
         #{specialExamineFrequency},
       </if>
-      <if test="specialFileGroupId != null  and  specialFileGroupId != ''">`special_file_group_id` =
-        #{specialFileGroupId},
+      <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` =
+        #{fileGroupId},
       </if>
       <if test="whetherFirst != null and whetherFirst != ''">`whether_first` = #{whetherFirst},</if>
       <if test="version != null ">`version` = #{version},</if>
@@ -447,9 +447,9 @@
           when `id`=#{item.id} then #{item.specialExamineFrequency}
         </foreach>
       </trim>
-      <trim prefix="special_file_group_id  = case" suffix="end,">
+      <trim prefix="file_group_id  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.specialFileGroupId}
+          when `id`=#{item.id} then #{item.fileGroupId}
         </foreach>
       </trim>
       <trim prefix="whether_first  = case" suffix="end,">
@@ -585,8 +585,8 @@
       <if test="specialExamineFrequency != null  and specialExamineFrequency != ''">and `special_examine_frequency` =
         #{specialExamineFrequency}
       </if>
-      <if test="specialFileGroupId != null  and specialFileGroupId != ''">and `special_file_group_id` =
-        #{specialFileGroupId}
+      <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` =
+        #{fileGroupId}
       </if>
       <if test="whetherFirst != null and whetherFirst != ''">and `whether_first` = #{whetherFirst}</if>
       <if test="version != null ">and `version` = #{version}</if>
