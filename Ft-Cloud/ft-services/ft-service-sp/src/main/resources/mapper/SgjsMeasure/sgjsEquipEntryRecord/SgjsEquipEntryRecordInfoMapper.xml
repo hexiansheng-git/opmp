@@ -286,16 +286,7 @@
             `dept_id`,
             `create_user`,
             `create_user_name`,
-            `create_time`,
-            `update_user`,
-            `update_time`,
-            `del_user`,
-            `del_time`,
-            `pt_var1`,
-            `pt_var2`,
-            `pt_var3`,
-            `pt_var4`,
-            `pt_var5`,
+            `create_time`
         </trim>
         values
         <foreach collection="sgjsEquipEntryRecordInfoList" item="item" separator=",">
@@ -326,16 +317,7 @@
                 #{item.deptId},
                 #{item.createUser},
                 #{item.createUserName},
-                #{item.createTime},
-                #{item.updateUser},
-                #{item.updateTime},
-                #{item.delUser},
-                #{item.delTime},
-                #{item.ptVar1},
-                #{item.ptVar2},
-                #{item.ptVar3},
-                #{item.ptVar4},
-                #{item.ptVar5},
+                #{item.createTime}
             </trim>
         </foreach>
     </insert>
@@ -627,4 +609,8 @@
             </foreach>
         </where>
     </update>
+
+    <delete id="deleteAll" parameterType="com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo">
+        update `sgjs_equip_entry_record_info` set del_flag = 1
+    </delete>
 </mapper>

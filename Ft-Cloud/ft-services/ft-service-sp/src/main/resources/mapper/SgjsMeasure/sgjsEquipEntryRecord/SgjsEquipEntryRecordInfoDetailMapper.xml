@@ -31,35 +31,37 @@
     </resultMap>
     <sql id="selectSgjsEquipEntryRecordInfoDetailVo">
         select
-                                                            `id`
-                                                         ,`check_date`
-                                                         ,`remark`
-                                                         ,`data_source`
-                                                         ,`region_id`
-                                                         ,`region_name`
-                                                         ,`project_id`
-                                                         ,`project_name`
-                                                         ,`dept_id`
-                                                         ,`create_user`
-                                                         ,`create_user_name`
-                                                         ,`create_time`
-                                                         ,`update_user`
-                                                         ,`update_time`
-                                                         ,`del_user`
-                                                         ,`del_time`
-                                                         ,`del_flag`
-                                                         ,`pt_var1`
-                                                         ,`pt_var2`
-                                                         ,`pt_var3`
-                                                         ,`pt_var4`
-                                                         ,`pt_var5`
-                                    from sgjs_equip_entry_record_info_detail
+            `id`
+         ,`info_id`
+         ,`check_date`
+         ,`remark`
+         ,`data_source`
+         ,`region_id`
+         ,`region_name`
+         ,`project_id`
+         ,`project_name`
+         ,`dept_id`
+         ,`create_user`
+         ,`create_user_name`
+         ,`create_time`
+         ,`update_user`
+         ,`update_time`
+         ,`del_user`
+         ,`del_time`
+         ,`del_flag`
+         ,`pt_var1`
+         ,`pt_var2`
+         ,`pt_var3`
+         ,`pt_var4`
+         ,`pt_var5`
+        from sgjs_equip_entry_record_info_detail
     </sql>
     <select id="getSgjsEquipEntryRecordInfoDetail" resultMap="SgjsEquipEntryRecordInfoDetailResultMap">
         <include refid="selectSgjsEquipEntryRecordInfoDetailVo" />
         <where>
             del_flag = "0"
             <if test="id != null "> and `id` = #{id}</if>
+            <if test="infoId != null "> and `info_id` = #{infoId}</if>
             <if test="checkDate != null "> and `check_date` = #{checkDate}</if>
             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
             <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
@@ -90,6 +92,7 @@
         <where>
             del_flag = "0"
             <if test="id != null "> and `id` = #{id}</if>
+            <if test="infoId != null "> and `info_id` = #{infoId}</if>
             <if test="checkDate != null "> and `check_date` = #{checkDate}</if>
             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
             <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
@@ -119,6 +122,7 @@
         insert into sgjs_equip_entry_record_info_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
+            <if test="infoId != null ">`info_id`,</if>
             <if test="checkDate != null ">`check_date`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="dataSource != null  and dataSource != ''">`data_source`,</if>
@@ -143,6 +147,7 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
+            <if test="infoId != null ">#{infoId},</if>
             <if test="checkDate != null ">#{checkDate},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="dataSource != null  and dataSource != ''">#{dataSource},</if>
@@ -172,6 +177,7 @@
         insert into sgjs_equip_entry_record_info_detail
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
+            `info_id`,
             `check_date`,
             `remark`,
             `data_source`,
@@ -197,6 +203,7 @@
         <foreach collection="sgjsEquipEntryRecordInfoDetailList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
+                #{item.infoId},
                 #{item.checkDate},
                 #{item.remark},
                 #{item.dataSource},
@@ -225,6 +232,7 @@
         update sgjs_equip_entry_record_info_detail
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
+            <if test="infoId != null ">`info_id` = #{infoId},</if>
             <if test="checkDate != null ">`check_date` = #{checkDate},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="dataSource != null  and  dataSource != ''">`data_source` = #{dataSource},</if>
@@ -408,5 +416,9 @@
                 #{id}
             </foreach>
         </where>
+    </update>
+
+    <update id="deleteAll" parameterType="com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.domain.SgjsEquipEntryRecordInfoDetail">
+        update `sgjs_equip_entry_record_info_detail` set del_flag = 1,update_time=#{updateTime},update_user=#{updateUser}
     </update>
 </mapper>

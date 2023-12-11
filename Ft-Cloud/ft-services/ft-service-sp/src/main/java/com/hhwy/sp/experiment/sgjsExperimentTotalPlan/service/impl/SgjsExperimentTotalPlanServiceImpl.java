@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author lcf--试验总体计划
  * @date 2023-12-11 10:00:11
- * @remark 
+ * @remark
  */
 @Service
 public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalPlanService{
@@ -23,7 +23,7 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
     @Autowired
     private SgjsExperimentTotalPlanMapper sgjsExperimentTotalPlanMapper;
 
-                                                                                                                                                                                                                                                                                                                                        
+
     public SgjsExperimentTotalPlan getSgjsExperimentTotalPlan(SgjsExperimentTotalPlan sgjsExperimentTotalPlan) {
         return sgjsExperimentTotalPlanMapper.getSgjsExperimentTotalPlan(sgjsExperimentTotalPlan);
     }
@@ -57,15 +57,15 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
         return sgjsExperimentTotalPlanMapper.updateSgjsExperimentTotalPlan(sgjsExperimentTotalPlan);
     }
 
-            @Transactional
-        public int updateSgjsExperimentTotalPlanList(List<SgjsExperimentTotalPlan> sgjsExperimentTotalPlanList) {
-            for (SgjsExperimentTotalPlan sgjsExperimentTotalPlan : sgjsExperimentTotalPlanList) {
-                sgjsExperimentTotalPlan.setUpdateUser(SecurityUtils.getUserName());
-                sgjsExperimentTotalPlan.setUpdateTime(DateUtils.getNowDate());
-            }
-            return sgjsExperimentTotalPlanMapper.updateSgjsExperimentTotalPlanList(sgjsExperimentTotalPlanList);
+    @Transactional
+    public int updateSgjsExperimentTotalPlanList(List<SgjsExperimentTotalPlan> sgjsExperimentTotalPlanList) {
+        for (SgjsExperimentTotalPlan sgjsExperimentTotalPlan : sgjsExperimentTotalPlanList) {
+            sgjsExperimentTotalPlan.setUpdateUser(SecurityUtils.getUserName());
+            sgjsExperimentTotalPlan.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return sgjsExperimentTotalPlanMapper.updateSgjsExperimentTotalPlanList(sgjsExperimentTotalPlanList);
+    }
+
     @Transactional
     public int deleteSgjsExperimentTotalPlan(SgjsExperimentTotalPlan sgjsExperimentTotalPlan) {
         sgjsExperimentTotalPlan.setUpdateUser(SecurityUtils.getUserName());
@@ -73,8 +73,8 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
         return sgjsExperimentTotalPlanMapper.deleteSgjsExperimentTotalPlan(sgjsExperimentTotalPlan);
     }
 
-            @Transactional
-        public int deleteSgjsExperimentTotalPlanByPks(List<Long> sgjsExperimentTotalPlanPkList) {
-            return sgjsExperimentTotalPlanMapper.deleteSgjsExperimentTotalPlanByPks(sgjsExperimentTotalPlanPkList);
-        }
+    @Transactional
+    public int deleteSgjsExperimentTotalPlanByPks(List<Long> sgjsExperimentTotalPlanPkList) {
+        return sgjsExperimentTotalPlanMapper.deleteSgjsExperimentTotalPlanByPks(sgjsExperimentTotalPlanPkList);
     }
+}
