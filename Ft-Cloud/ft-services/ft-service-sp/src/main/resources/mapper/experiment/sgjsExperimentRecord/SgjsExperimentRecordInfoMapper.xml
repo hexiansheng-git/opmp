@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.sp.experiment.sgjsExperimentRecordInfo.mapper.SgjsExperimentRecordInfoMapper">
+
+    <resultMap type="com.hhwy.sp.experiment.sgjsExperimentRecordInfo.domain.SgjsExperimentRecordInfo" id="SgjsExperimentRecordInfoResultMap">
+        <result property="id" column="id" />
+        <result property="recordId" column="record_id" />
+        <result property="manageCode" column="manage_code" />
+        <result property="experimentCode" column="experiment_code" />
+        <result property="categoryCode" column="category_code" />
+        <result property="materialName" column="material_name" />
+        <result property="materialSpec" column="material_spec" />
+        <result property="categoryName" column="category_name" />
+        <result property="categoryId" column="category_id" />
+        <result property="manufacturer" column="manufacturer" />
+        <result property="serialNum" column="serial_num" />
+        <result property="power" column="power" />
+        <result property="bottomNo" column="bottom_no" />
+        <result property="productDate" column="product_date" />
+        <result property="sizeMsg" column="size_msg" />
+        <result property="weight" column="weight" />
+        <result property="originalValue" column="original_value" />
+        <result property="residualValue" column="residual_value" />
+        <result property="acceptDate" column="accept_date" />
+        <result property="entryDate" column="entry_date" />
+        <result property="exitDate" column="exit_date" />
+        <result property="checkDate" column="check_date" />
+        <result property="checkDay" column="check_day" />
+        <result property="nextCheckDate" column="next_check_date" />
+        <result property="source" column="source" />
+        <result property="currentState" column="current_state" />
+        <result property="remark" column="remark" />
+        <result property="dataSource" column="data_source" />
+        <result property="regionId" column="region_id" />
+        <result property="regionName" column="region_name" />
+        <result property="projectId" column="project_id" />
+        <result property="projectName" column="project_name" />
+        <result property="deptId" column="dept_id" />
+        <result property="createUser" column="create_user" />
+        <result property="createUserName" column="create_user_name" />
+        <result property="createTime" column="create_time" />
+        <result property="updateUser" column="update_user" />
+        <result property="updateTime" column="update_time" />
+        <result property="delUser" column="del_user" />
+        <result property="delTime" column="del_time" />
+        <result property="delFlag" column="del_flag" />
+        <result property="ptVar1" column="pt_var1" />
+        <result property="ptVar2" column="pt_var2" />
+        <result property="ptVar3" column="pt_var3" />
+        <result property="ptVar4" column="pt_var4" />
+        <result property="ptVar5" column="pt_var5" />
+    </resultMap>
+    <sql id="selectSgjsExperimentRecordInfoVo">
+        select
+                                                            `id`
+                                                         ,`record_id`
+                                                         ,`manage_code`
+                                                         ,`experiment_code`
+                                                         ,`category_code`
+                                                         ,`material_name`
+                                                         ,`material_spec`
+                                                         ,`category_name`
+                                                         ,`category_id`
+                                                         ,`manufacturer`
+                                                         ,`serial_num`
+                                                         ,`power`
+                                                         ,`bottom_no`
+                                                         ,`product_date`
+                                                         ,`size_msg`
+                                                         ,`weight`
+                                                         ,`original_value`
+                                                         ,`residual_value`
+                                                         ,`accept_date`
+                                                         ,`entry_date`
+                                                         ,`exit_date`
+                                                         ,`check_date`
+                                                         ,`check_day`
+                                                         ,`next_check_date`
+                                                         ,`source`
+                                                         ,`current_state`
+                                                         ,`remark`
+                                                         ,`data_source`
+                                                         ,`region_id`
+                                                         ,`region_name`
+                                                         ,`project_id`
+                                                         ,`project_name`
+                                                         ,`dept_id`
+                                                         ,`create_user`
+                                                         ,`create_user_name`
+                                                         ,`create_time`
+                                                         ,`update_user`
+                                                         ,`update_time`
+                                                         ,`del_user`
+                                                         ,`del_time`
+                                                         ,`del_flag`
+                                                         ,`pt_var1`
+                                                         ,`pt_var2`
+                                                         ,`pt_var3`
+                                                         ,`pt_var4`
+                                                         ,`pt_var5`
+                                    from sgjs_experiment_record_info
+    </sql>
+    <select id="getSgjsExperimentRecordInfo" resultMap="SgjsExperimentRecordInfoResultMap">
+        <include refid="selectSgjsExperimentRecordInfoVo" />
+        <where>
+            del_flag = "0"
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="recordId != null "> and `record_id` = #{recordId}</if>
+            <if test="manageCode != null  and manageCode != ''"> and `manage_code` = #{manageCode}</if>
+            <if test="experimentCode != null  and experimentCode != ''"> and `experiment_code` = #{experimentCode}</if>
+            <if test="categoryCode != null  and categoryCode != ''"> and `category_code` = #{categoryCode}</if>
+            <if test="materialName != null  and materialName != ''"> and `material_name` = #{materialName}</if>
+            <if test="materialSpec != null  and materialSpec != ''"> and `material_spec` = #{materialSpec}</if>
+            <if test="categoryName != null  and categoryName != ''"> and `category_name` = #{categoryName}</if>
+            <if test="categoryId != null "> and `category_id` = #{categoryId}</if>
+            <if test="manufacturer != null  and manufacturer != ''"> and `manufacturer` = #{manufacturer}</if>
+            <if test="serialNum != null  and serialNum != ''"> and `serial_num` = #{serialNum}</if>
+            <if test="power != null  and power != ''"> and `power` = #{power}</if>
+            <if test="bottomNo != null  and bottomNo != ''"> and `bottom_no` = #{bottomNo}</if>
+            <if test="productDate != null "> and `product_date` = #{productDate}</if>
+            <if test="sizeMsg != null  and sizeMsg != ''"> and `size_msg` = #{sizeMsg}</if>
+            <if test="weight != null  and weight != ''"> and `weight` = #{weight}</if>
+            <if test="originalValue != null "> and `original_value` = #{originalValue}</if>
+            <if test="residualValue != null  and residualValue != ''"> and `residual_value` = #{residualValue}</if>
+            <if test="acceptDate != null "> and `accept_date` = #{acceptDate}</if>
+            <if test="entryDate != null "> and `entry_date` = #{entryDate}</if>
+            <if test="exitDate != null "> and `exit_date` = #{exitDate}</if>
+            <if test="checkDate != null "> and `check_date` = #{checkDate}</if>
+            <if test="checkDay != null "> and `check_day` = #{checkDay}</if>
+            <if test="nextCheckDate != null "> and `next_check_date` = #{nextCheckDate}</if>
+            <if test="source != null  and source != ''"> and `source` = #{source}</if>
+            <if test="currentState != null  and currentState != ''"> and `current_state` = #{currentState}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getSgjsExperimentRecordInfoList" resultMap="SgjsExperimentRecordInfoResultMap">
+        <include refid="selectSgjsExperimentRecordInfoVo" />
+        <where>
+            del_flag = "0"
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="recordId != null "> and `record_id` = #{recordId}</if>
+            <if test="manageCode != null  and manageCode != ''"> and `manage_code` = #{manageCode}</if>
+            <if test="experimentCode != null  and experimentCode != ''"> and `experiment_code` = #{experimentCode}</if>
+            <if test="categoryCode != null  and categoryCode != ''"> and `category_code` = #{categoryCode}</if>
+            <if test="materialName != null  and materialName != ''"> and `material_name` = #{materialName}</if>
+            <if test="materialSpec != null  and materialSpec != ''"> and `material_spec` = #{materialSpec}</if>
+            <if test="categoryName != null  and categoryName != ''"> and `category_name` = #{categoryName}</if>
+            <if test="categoryId != null "> and `category_id` = #{categoryId}</if>
+            <if test="manufacturer != null  and manufacturer != ''"> and `manufacturer` = #{manufacturer}</if>
+            <if test="serialNum != null  and serialNum != ''"> and `serial_num` = #{serialNum}</if>
+            <if test="power != null  and power != ''"> and `power` = #{power}</if>
+            <if test="bottomNo != null  and bottomNo != ''"> and `bottom_no` = #{bottomNo}</if>
+            <if test="productDate != null "> and `product_date` = #{productDate}</if>
+            <if test="sizeMsg != null  and sizeMsg != ''"> and `size_msg` = #{sizeMsg}</if>
+            <if test="weight != null  and weight != ''"> and `weight` = #{weight}</if>
+            <if test="originalValue != null "> and `original_value` = #{originalValue}</if>
+            <if test="residualValue != null  and residualValue != ''"> and `residual_value` = #{residualValue}</if>
+            <if test="acceptDate != null "> and `accept_date` = #{acceptDate}</if>
+            <if test="entryDate != null "> and `entry_date` = #{entryDate}</if>
+            <if test="exitDate != null "> and `exit_date` = #{exitDate}</if>
+            <if test="checkDate != null "> and `check_date` = #{checkDate}</if>
+            <if test="checkDay != null "> and `check_day` = #{checkDay}</if>
+            <if test="nextCheckDate != null "> and `next_check_date` = #{nextCheckDate}</if>
+            <if test="source != null  and source != ''"> and `source` = #{source}</if>
+            <if test="currentState != null  and currentState != ''"> and `current_state` = #{currentState}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertSgjsExperimentRecordInfo"  useGeneratedKeys="true" keyProperty="id"  >
+        insert into sgjs_experiment_record_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="recordId != null ">`record_id`,</if>
+            <if test="manageCode != null  and manageCode != ''">`manage_code`,</if>
+            <if test="experimentCode != null  and experimentCode != ''">`experiment_code`,</if>
+            <if test="categoryCode != null  and categoryCode != ''">`category_code`,</if>
+            <if test="materialName != null  and materialName != ''">`material_name`,</if>
+            <if test="materialSpec != null  and materialSpec != ''">`material_spec`,</if>
+            <if test="categoryName != null  and categoryName != ''">`category_name`,</if>
+            <if test="categoryId != null ">`category_id`,</if>
+            <if test="manufacturer != null  and manufacturer != ''">`manufacturer`,</if>
+            <if test="serialNum != null  and serialNum != ''">`serial_num`,</if>
+            <if test="power != null  and power != ''">`power`,</if>
+            <if test="bottomNo != null  and bottomNo != ''">`bottom_no`,</if>
+            <if test="productDate != null ">`product_date`,</if>
+            <if test="sizeMsg != null  and sizeMsg != ''">`size_msg`,</if>
+            <if test="weight != null  and weight != ''">`weight`,</if>
+            <if test="originalValue != null ">`original_value`,</if>
+            <if test="residualValue != null  and residualValue != ''">`residual_value`,</if>
+            <if test="acceptDate != null ">`accept_date`,</if>
+            <if test="entryDate != null ">`entry_date`,</if>
+            <if test="exitDate != null ">`exit_date`,</if>
+            <if test="checkDate != null ">`check_date`,</if>
+            <if test="checkDay != null ">`check_day`,</if>
+            <if test="nextCheckDate != null ">`next_check_date`,</if>
+            <if test="source != null  and source != ''">`source`,</if>
+            <if test="currentState != null  and currentState != ''">`current_state`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="dataSource != null  and dataSource != ''">`data_source`,</if>
+            <if test="regionId != null ">`region_id`,</if>
+            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+            <if test="projectId != null ">`project_id`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="deptId != null ">`dept_id`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="recordId != null ">#{recordId},</if>
+            <if test="manageCode != null  and manageCode != ''">#{manageCode},</if>
+            <if test="experimentCode != null  and experimentCode != ''">#{experimentCode},</if>
+            <if test="categoryCode != null  and categoryCode != ''">#{categoryCode},</if>
+            <if test="materialName != null  and materialName != ''">#{materialName},</if>
+            <if test="materialSpec != null  and materialSpec != ''">#{materialSpec},</if>
+            <if test="categoryName != null  and categoryName != ''">#{categoryName},</if>
+            <if test="categoryId != null ">#{categoryId},</if>
+            <if test="manufacturer != null  and manufacturer != ''">#{manufacturer},</if>
+            <if test="serialNum != null  and serialNum != ''">#{serialNum},</if>
+            <if test="power != null  and power != ''">#{power},</if>
+            <if test="bottomNo != null  and bottomNo != ''">#{bottomNo},</if>
+            <if test="productDate != null ">#{productDate},</if>
+            <if test="sizeMsg != null  and sizeMsg != ''">#{sizeMsg},</if>
+            <if test="weight != null  and weight != ''">#{weight},</if>
+            <if test="originalValue != null ">#{originalValue},</if>
+            <if test="residualValue != null  and residualValue != ''">#{residualValue},</if>
+            <if test="acceptDate != null ">#{acceptDate},</if>
+            <if test="entryDate != null ">#{entryDate},</if>
+            <if test="exitDate != null ">#{exitDate},</if>
+            <if test="checkDate != null ">#{checkDate},</if>
+            <if test="checkDay != null ">#{checkDay},</if>
+            <if test="nextCheckDate != null ">#{nextCheckDate},</if>
+            <if test="source != null  and source != ''">#{source},</if>
+            <if test="currentState != null  and currentState != ''">#{currentState},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="dataSource != null  and dataSource != ''">#{dataSource},</if>
+            <if test="regionId != null ">#{regionId},</if>
+            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsExperimentRecordInfo -->
+    <insert id="insertSgjsExperimentRecordInfoList">
+        insert into sgjs_experiment_record_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `record_id`,
+            `manage_code`,
+            `experiment_code`,
+            `category_code`,
+            `material_name`,
+            `material_spec`,
+            `category_name`,
+            `category_id`,
+            `manufacturer`,
+            `serial_num`,
+            `power`,
+            `bottom_no`,
+            `product_date`,
+            `size_msg`,
+            `weight`,
+            `original_value`,
+            `residual_value`,
+            `accept_date`,
+            `entry_date`,
+            `exit_date`,
+            `check_date`,
+            `check_day`,
+            `next_check_date`,
+            `source`,
+            `current_state`,
+            `remark`,
+            `data_source`,
+            `region_id`,
+            `region_name`,
+            `project_id`,
+            `project_name`,
+            `dept_id`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+        </trim>
+        values
+        <foreach collection="sgjsExperimentRecordInfoList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.recordId},
+                #{item.manageCode},
+                #{item.experimentCode},
+                #{item.categoryCode},
+                #{item.materialName},
+                #{item.materialSpec},
+                #{item.categoryName},
+                #{item.categoryId},
+                #{item.manufacturer},
+                #{item.serialNum},
+                #{item.power},
+                #{item.bottomNo},
+                #{item.productDate},
+                #{item.sizeMsg},
+                #{item.weight},
+                #{item.originalValue},
+                #{item.residualValue},
+                #{item.acceptDate},
+                #{item.entryDate},
+                #{item.exitDate},
+                #{item.checkDate},
+                #{item.checkDay},
+                #{item.nextCheckDate},
+                #{item.source},
+                #{item.currentState},
+                #{item.remark},
+                #{item.dataSource},
+                #{item.regionId},
+                #{item.regionName},
+                #{item.projectId},
+                #{item.projectName},
+                #{item.deptId},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateSgjsExperimentRecordInfo">
+        update sgjs_experiment_record_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="recordId != null ">`record_id` = #{recordId},</if>
+            <if test="manageCode != null  and  manageCode != ''">`manage_code` = #{manageCode},</if>
+            <if test="experimentCode != null  and  experimentCode != ''">`experiment_code` = #{experimentCode},</if>
+            <if test="categoryCode != null  and  categoryCode != ''">`category_code` = #{categoryCode},</if>
+            <if test="materialName != null  and  materialName != ''">`material_name` = #{materialName},</if>
+            <if test="materialSpec != null  and  materialSpec != ''">`material_spec` = #{materialSpec},</if>
+            <if test="categoryName != null  and  categoryName != ''">`category_name` = #{categoryName},</if>
+            <if test="categoryId != null ">`category_id` = #{categoryId},</if>
+            <if test="manufacturer != null  and  manufacturer != ''">`manufacturer` = #{manufacturer},</if>
+            <if test="serialNum != null  and  serialNum != ''">`serial_num` = #{serialNum},</if>
+            <if test="power != null  and  power != ''">`power` = #{power},</if>
+            <if test="bottomNo != null  and  bottomNo != ''">`bottom_no` = #{bottomNo},</if>
+            <if test="productDate != null ">`product_date` = #{productDate},</if>
+            <if test="sizeMsg != null  and  sizeMsg != ''">`size_msg` = #{sizeMsg},</if>
+            <if test="weight != null  and  weight != ''">`weight` = #{weight},</if>
+            <if test="originalValue != null ">`original_value` = #{originalValue},</if>
+            <if test="residualValue != null  and  residualValue != ''">`residual_value` = #{residualValue},</if>
+            <if test="acceptDate != null ">`accept_date` = #{acceptDate},</if>
+            <if test="entryDate != null ">`entry_date` = #{entryDate},</if>
+            <if test="exitDate != null ">`exit_date` = #{exitDate},</if>
+            <if test="checkDate != null ">`check_date` = #{checkDate},</if>
+            <if test="checkDay != null ">`check_day` = #{checkDay},</if>
+            <if test="nextCheckDate != null ">`next_check_date` = #{nextCheckDate},</if>
+            <if test="source != null  and  source != ''">`source` = #{source},</if>
+            <if test="currentState != null  and  currentState != ''">`current_state` = #{currentState},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="dataSource != null  and  dataSource != ''">`data_source` = #{dataSource},</if>
+            <if test="regionId != null ">`region_id` = #{regionId},</if>
+            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+        </trim>
+        <where>
+            <if test="id != null "> and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateSgjsExperimentRecordInfoList">
+        update sgjs_experiment_record_info
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="record_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.recordId}
+                </foreach>
+            </trim>
+            <trim prefix="manage_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.manageCode}
+                </foreach>
+            </trim>
+            <trim prefix="experiment_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.experimentCode}
+                </foreach>
+            </trim>
+            <trim prefix="category_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.categoryCode}
+                </foreach>
+            </trim>
+            <trim prefix="material_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.materialName}
+                </foreach>
+            </trim>
+            <trim prefix="material_spec  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.materialSpec}
+                </foreach>
+            </trim>
+            <trim prefix="category_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.categoryName}
+                </foreach>
+            </trim>
+            <trim prefix="category_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.categoryId}
+                </foreach>
+            </trim>
+            <trim prefix="manufacturer  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.manufacturer}
+                </foreach>
+            </trim>
+            <trim prefix="serial_num  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.serialNum}
+                </foreach>
+            </trim>
+            <trim prefix="power  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.power}
+                </foreach>
+            </trim>
+            <trim prefix="bottom_no  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.bottomNo}
+                </foreach>
+            </trim>
+            <trim prefix="product_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.productDate}
+                </foreach>
+            </trim>
+            <trim prefix="size_msg  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.sizeMsg}
+                </foreach>
+            </trim>
+            <trim prefix="weight  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.weight}
+                </foreach>
+            </trim>
+            <trim prefix="original_value  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.originalValue}
+                </foreach>
+            </trim>
+            <trim prefix="residual_value  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.residualValue}
+                </foreach>
+            </trim>
+            <trim prefix="accept_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.acceptDate}
+                </foreach>
+            </trim>
+            <trim prefix="entry_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.entryDate}
+                </foreach>
+            </trim>
+            <trim prefix="exit_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.exitDate}
+                </foreach>
+            </trim>
+            <trim prefix="check_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.checkDate}
+                </foreach>
+            </trim>
+            <trim prefix="check_day  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.checkDay}
+                </foreach>
+            </trim>
+            <trim prefix="next_check_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.nextCheckDate}
+                </foreach>
+            </trim>
+            <trim prefix="source  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.source}
+                </foreach>
+            </trim>
+            <trim prefix="current_state  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.currentState}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="data_source  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.dataSource}
+                </foreach>
+            </trim>
+            <trim prefix="region_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionId}
+                </foreach>
+            </trim>
+            <trim prefix="region_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionName}
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.deptId}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar3}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar4}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar5}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="deleteSgjsExperimentRecordInfo">
+        update `sgjs_experiment_record_info` set del_flag = 1
+        <where>
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="recordId != null "> and `record_id` = #{recordId}</if>
+            <if test="manageCode != null  and manageCode != ''"> and `manage_code` = #{manageCode}</if>
+            <if test="experimentCode != null  and experimentCode != ''"> and `experiment_code` = #{experimentCode}</if>
+            <if test="categoryCode != null  and categoryCode != ''"> and `category_code` = #{categoryCode}</if>
+            <if test="materialName != null  and materialName != ''"> and `material_name` = #{materialName}</if>
+            <if test="materialSpec != null  and materialSpec != ''"> and `material_spec` = #{materialSpec}</if>
+            <if test="categoryName != null  and categoryName != ''"> and `category_name` = #{categoryName}</if>
+            <if test="categoryId != null "> and `category_id` = #{categoryId}</if>
+            <if test="manufacturer != null  and manufacturer != ''"> and `manufacturer` = #{manufacturer}</if>
+            <if test="serialNum != null  and serialNum != ''"> and `serial_num` = #{serialNum}</if>
+            <if test="power != null  and power != ''"> and `power` = #{power}</if>
+            <if test="bottomNo != null  and bottomNo != ''"> and `bottom_no` = #{bottomNo}</if>
+            <if test="productDate != null "> and `product_date` = #{productDate}</if>
+            <if test="sizeMsg != null  and sizeMsg != ''"> and `size_msg` = #{sizeMsg}</if>
+            <if test="weight != null  and weight != ''"> and `weight` = #{weight}</if>
+            <if test="originalValue != null "> and `original_value` = #{originalValue}</if>
+            <if test="residualValue != null  and residualValue != ''"> and `residual_value` = #{residualValue}</if>
+            <if test="acceptDate != null "> and `accept_date` = #{acceptDate}</if>
+            <if test="entryDate != null "> and `entry_date` = #{entryDate}</if>
+            <if test="exitDate != null "> and `exit_date` = #{exitDate}</if>
+            <if test="checkDate != null "> and `check_date` = #{checkDate}</if>
+            <if test="checkDay != null "> and `check_day` = #{checkDay}</if>
+            <if test="nextCheckDate != null "> and `next_check_date` = #{nextCheckDate}</if>
+            <if test="source != null  and source != ''"> and `source` = #{source}</if>
+            <if test="currentState != null  and currentState != ''"> and `current_state` = #{currentState}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+        </where>
+    </update>
+
+    <update id="deleteSgjsExperimentRecordInfoByPks">
+        update `sgjs_experiment_record_info` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="sgjsExperimentRecordInfoPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+</mapper>
