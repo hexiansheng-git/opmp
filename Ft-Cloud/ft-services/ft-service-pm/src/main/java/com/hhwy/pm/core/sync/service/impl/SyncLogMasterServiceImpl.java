@@ -40,7 +40,11 @@ public class SyncLogMasterServiceImpl implements ISyncLogMasterService {
     @Override
     @Transactional
     public void save(String busName, String param, String result,Integer status,String failMsg,Long useMills){
-        String userId = SecurityUtils.getUserId()+"";
+        String userId = "";
+        try{
+            userId = SecurityUtils.getUserId()+"";
+        }catch(Exception e){}
+        final String userIdStr = userId;
         ThreadPoolUtil.execute(()->{
             //切换到master
             String oldDataSource = DynamicDataSourceContextHolder.peek();
@@ -55,8 +59,8 @@ public class SyncLogMasterServiceImpl implements ISyncLogMasterService {
                 log.setFailMsg(failMsg);
                 log.setPtVar1(param);
                 log.setPtVar2(result);
-                log.setCreateUser(userId);
-                log.setUpdateUser(userId);
+                log.setCreateUser(userIdStr);
+                log.setUpdateUser(userIdStr);
                 log.setUpdateTime(DateUtils.getNowDate());
                 log.setCreateTime(DateUtils.getNowDate());
                 log.setDelFlag("0");

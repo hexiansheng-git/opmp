@@ -2,14 +2,17 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.mapper.SgjsEquipEntryRecordInfoDetailMapper">
+<mapper namespace="com.hhwy.sp.experiment.sgjsExperimentTotalPlan.mapper.SgjsExperimentTotalPlanMapper">
 
-    <resultMap type="com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.domain.SgjsEquipEntryRecordInfoDetail" id="SgjsEquipEntryRecordInfoDetailResultMap">
+    <resultMap type="com.hhwy.sp.experiment.sgjsExperimentTotalPlan.domain.SgjsExperimentTotalPlan" id="SgjsExperimentTotalPlanResultMap">
         <result property="id" column="id" />
-        <result property="infoId" column="info_id" />
-        <result property="checkDate" column="check_date" />
+        <result property="projectCode" column="project_code" />
+        <result property="winTheBiddingUnit" column="win_the_bidding_unit" />
+        <result property="businessAreasAndProducts" column="business_areas_and_products" />
+        <result property="projectLocation" column="project_location" />
+        <result property="subsidiaryOrgan" column="subsidiary_organ" />
+        <result property="fileGroupId" column="file_group_id" />
         <result property="remark" column="remark" />
-        <result property="dataSource" column="data_source" />
         <result property="regionId" column="region_id" />
         <result property="regionName" column="region_name" />
         <result property="projectId" column="project_id" />
@@ -29,42 +32,48 @@
         <result property="ptVar4" column="pt_var4" />
         <result property="ptVar5" column="pt_var5" />
     </resultMap>
-    <sql id="selectSgjsEquipEntryRecordInfoDetailVo">
+    <sql id="selectSgjsExperimentTotalPlanVo">
         select
-            `id`
-         ,`info_id`
-         ,`check_date`
-         ,`remark`
-         ,`data_source`
-         ,`region_id`
-         ,`region_name`
-         ,`project_id`
-         ,`project_name`
-         ,`dept_id`
-         ,`create_user`
-         ,`create_user_name`
-         ,`create_time`
-         ,`update_user`
-         ,`update_time`
-         ,`del_user`
-         ,`del_time`
-         ,`del_flag`
-         ,`pt_var1`
-         ,`pt_var2`
-         ,`pt_var3`
-         ,`pt_var4`
-         ,`pt_var5`
-        from sgjs_equip_entry_record_info_detail
+                                                            `id`
+                                                         ,`project_code`
+                                                         ,`win_the_bidding_unit`
+                                                         ,`business_areas_and_products`
+                                                         ,`project_location`
+                                                         ,`subsidiary_organ`
+                                                         ,`file_group_id`
+                                                         ,`remark`
+                                                         ,`region_id`
+                                                         ,`region_name`
+                                                         ,`project_id`
+                                                         ,`project_name`
+                                                         ,`dept_id`
+                                                         ,`create_user`
+                                                         ,`create_user_name`
+                                                         ,`create_time`
+                                                         ,`update_user`
+                                                         ,`update_time`
+                                                         ,`del_user`
+                                                         ,`del_time`
+                                                         ,`del_flag`
+                                                         ,`pt_var1`
+                                                         ,`pt_var2`
+                                                         ,`pt_var3`
+                                                         ,`pt_var4`
+                                                         ,`pt_var5`
+                                    from sgjs_experiment_total_plan
     </sql>
-    <select id="getSgjsEquipEntryRecordInfoDetail" resultMap="SgjsEquipEntryRecordInfoDetailResultMap">
-        <include refid="selectSgjsEquipEntryRecordInfoDetailVo" />
+    <select id="getSgjsExperimentTotalPlan" resultMap="SgjsExperimentTotalPlanResultMap">
+        <include refid="selectSgjsExperimentTotalPlanVo" />
         <where>
             del_flag = "0"
             <if test="id != null "> and `id` = #{id}</if>
-            <if test="infoId != null "> and `info_id` = #{infoId}</if>
-            <if test="checkDate != null "> and `check_date` = #{checkDate}</if>
+            <if test="projectCode != null  and projectCode != ''"> and `project_code` = #{projectCode}</if>
+            <if test="winTheBiddingUnit != null  and winTheBiddingUnit != ''"> and `win_the_bidding_unit` = #{winTheBiddingUnit}</if>
+            <if test="businessAreasAndProducts != null  and businessAreasAndProducts != ''"> and `business_areas_and_products` = #{businessAreasAndProducts}</if>
+            <if test="projectLocation != null  and projectLocation != ''"> and `project_location` = #{projectLocation}</if>
+            <if test="subsidiaryOrgan != null  and subsidiaryOrgan != ''"> and `subsidiary_organ` = #{subsidiaryOrgan}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-            <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
             <if test="projectId != null "> and `project_id` = #{projectId}</if>
@@ -87,15 +96,18 @@
         order by create_time desc
     </select>
 
-    <select id="getSgjsEquipEntryRecordInfoDetailList" resultMap="SgjsEquipEntryRecordInfoDetailResultMap">
-        <include refid="selectSgjsEquipEntryRecordInfoDetailVo" />
+    <select id="getSgjsExperimentTotalPlanList" resultMap="SgjsExperimentTotalPlanResultMap">
+        <include refid="selectSgjsExperimentTotalPlanVo" />
         <where>
             del_flag = "0"
             <if test="id != null "> and `id` = #{id}</if>
-            <if test="infoId != null "> and `info_id` = #{infoId}</if>
-            <if test="checkDate != null "> and `check_date` = #{checkDate}</if>
+            <if test="projectCode != null  and projectCode != ''"> and `project_code` = #{projectCode}</if>
+            <if test="winTheBiddingUnit != null  and winTheBiddingUnit != ''"> and `win_the_bidding_unit` = #{winTheBiddingUnit}</if>
+            <if test="businessAreasAndProducts != null  and businessAreasAndProducts != ''"> and `business_areas_and_products` = #{businessAreasAndProducts}</if>
+            <if test="projectLocation != null  and projectLocation != ''"> and `project_location` = #{projectLocation}</if>
+            <if test="subsidiaryOrgan != null  and subsidiaryOrgan != ''"> and `subsidiary_organ` = #{subsidiaryOrgan}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-            <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
             <if test="projectId != null "> and `project_id` = #{projectId}</if>
@@ -118,14 +130,17 @@
         order by create_time desc
     </select>
 
-    <insert id="insertSgjsEquipEntryRecordInfoDetail"  useGeneratedKeys="true" keyProperty="id"  >
-        insert into sgjs_equip_entry_record_info_detail
+    <insert id="insertSgjsExperimentTotalPlan"  useGeneratedKeys="true" keyProperty="id"  >
+        insert into sgjs_experiment_total_plan
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="infoId != null ">`info_id`,</if>
-            <if test="checkDate != null ">`check_date`,</if>
+            <if test="projectCode != null  and projectCode != ''">`project_code`,</if>
+            <if test="winTheBiddingUnit != null  and winTheBiddingUnit != ''">`win_the_bidding_unit`,</if>
+            <if test="businessAreasAndProducts != null  and businessAreasAndProducts != ''">`business_areas_and_products`,</if>
+            <if test="projectLocation != null  and projectLocation != ''">`project_location`,</if>
+            <if test="subsidiaryOrgan != null  and subsidiaryOrgan != ''">`subsidiary_organ`,</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
-            <if test="dataSource != null  and dataSource != ''">`data_source`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -147,10 +162,13 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="infoId != null ">#{infoId},</if>
-            <if test="checkDate != null ">#{checkDate},</if>
+            <if test="projectCode != null  and projectCode != ''">#{projectCode},</if>
+            <if test="winTheBiddingUnit != null  and winTheBiddingUnit != ''">#{winTheBiddingUnit},</if>
+            <if test="businessAreasAndProducts != null  and businessAreasAndProducts != ''">#{businessAreasAndProducts},</if>
+            <if test="projectLocation != null  and projectLocation != ''">#{projectLocation},</if>
+            <if test="subsidiaryOrgan != null  and subsidiaryOrgan != ''">#{subsidiaryOrgan},</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
-            <if test="dataSource != null  and dataSource != ''">#{dataSource},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>
@@ -172,15 +190,18 @@
         </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsEquipEntryRecordInfoDetail -->
-    <insert id="insertSgjsEquipEntryRecordInfoDetailList">
-        insert into sgjs_equip_entry_record_info_detail
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsExperimentTotalPlan -->
+    <insert id="insertSgjsExperimentTotalPlanList">
+        insert into sgjs_experiment_total_plan
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
-            `info_id`,
-            `check_date`,
+            `project_code`,
+            `win_the_bidding_unit`,
+            `business_areas_and_products`,
+            `project_location`,
+            `subsidiary_organ`,
+            `file_group_id`,
             `remark`,
-            `data_source`,
             `region_id`,
             `region_name`,
             `project_id`,
@@ -200,13 +221,16 @@
             `pt_var5`,
         </trim>
         values
-        <foreach collection="sgjsEquipEntryRecordInfoDetailList" item="item" separator=",">
+        <foreach collection="sgjsExperimentTotalPlanList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
-                #{item.infoId},
-                #{item.checkDate},
+                #{item.projectCode},
+                #{item.winTheBiddingUnit},
+                #{item.businessAreasAndProducts},
+                #{item.projectLocation},
+                #{item.subsidiaryOrgan},
+                #{item.fileGroupId},
                 #{item.remark},
-                #{item.dataSource},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.projectId},
@@ -228,14 +252,17 @@
         </foreach>
     </insert>
 
-    <update id="updateSgjsEquipEntryRecordInfoDetail">
-        update sgjs_equip_entry_record_info_detail
+    <update id="updateSgjsExperimentTotalPlan">
+        update sgjs_experiment_total_plan
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
-            <if test="infoId != null ">`info_id` = #{infoId},</if>
-            <if test="checkDate != null ">`check_date` = #{checkDate},</if>
+            <if test="projectCode != null  and  projectCode != ''">`project_code` = #{projectCode},</if>
+            <if test="winTheBiddingUnit != null  and  winTheBiddingUnit != ''">`win_the_bidding_unit` = #{winTheBiddingUnit},</if>
+            <if test="businessAreasAndProducts != null  and  businessAreasAndProducts != ''">`business_areas_and_products` = #{businessAreasAndProducts},</if>
+            <if test="projectLocation != null  and  projectLocation != ''">`project_location` = #{projectLocation},</if>
+            <if test="subsidiaryOrgan != null  and  subsidiaryOrgan != ''">`subsidiary_organ` = #{subsidiaryOrgan},</if>
+            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
-            <if test="dataSource != null  and  dataSource != ''">`data_source` = #{dataSource},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
@@ -260,27 +287,47 @@
         </where>
     </update>
 
-    <update id="updateSgjsEquipEntryRecordInfoDetailList">
-        update sgjs_equip_entry_record_info_detail
+    <update id="updateSgjsExperimentTotalPlanList">
+        update sgjs_experiment_total_plan
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.id}
                 </foreach>
             </trim>
-            <trim prefix="check_date  = case" suffix="end,">
+            <trim prefix="project_code  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.checkDate}
+                    when `id`=#{item.id} then #{item.projectCode}
+                </foreach>
+            </trim>
+            <trim prefix="win_the_bidding_unit  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.winTheBiddingUnit}
+                </foreach>
+            </trim>
+            <trim prefix="business_areas_and_products  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.businessAreasAndProducts}
+                </foreach>
+            </trim>
+            <trim prefix="project_location  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectLocation}
+                </foreach>
+            </trim>
+            <trim prefix="subsidiary_organ  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.subsidiaryOrgan}
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.fileGroupId}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.remark}
-                </foreach>
-            </trim>
-            <trim prefix="data_source  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.dataSource}
                 </foreach>
             </trim>
             <trim prefix="region_id  = case" suffix="end,">
@@ -380,13 +427,17 @@
         </foreach>
     </update>
 
-    <update id="deleteSgjsEquipEntryRecordInfoDetail">
-        update `sgjs_equip_entry_record_info_detail` set del_flag = 1
+    <update id="deleteSgjsExperimentTotalPlan">
+        update `sgjs_experiment_total_plan` set del_flag = 1
         <where>
             <if test="id != null "> and `id` = #{id}</if>
-            <if test="checkDate != null "> and `check_date` = #{checkDate}</if>
+            <if test="projectCode != null  and projectCode != ''"> and `project_code` = #{projectCode}</if>
+            <if test="winTheBiddingUnit != null  and winTheBiddingUnit != ''"> and `win_the_bidding_unit` = #{winTheBiddingUnit}</if>
+            <if test="businessAreasAndProducts != null  and businessAreasAndProducts != ''"> and `business_areas_and_products` = #{businessAreasAndProducts}</if>
+            <if test="projectLocation != null  and projectLocation != ''"> and `project_location` = #{projectLocation}</if>
+            <if test="subsidiaryOrgan != null  and subsidiaryOrgan != ''"> and `subsidiary_organ` = #{subsidiaryOrgan}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-            <if test="dataSource != null  and dataSource != ''"> and `data_source` = #{dataSource}</if>
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
             <if test="projectId != null "> and `project_id` = #{projectId}</if>
@@ -408,17 +459,13 @@
         </where>
     </update>
 
-    <update id="deleteSgjsEquipEntryRecordInfoDetailByPks">
-        update `sgjs_equip_entry_record_info_detail` set del_flag = 1
+    <update id="deleteSgjsExperimentTotalPlanByPks">
+        update `sgjs_experiment_total_plan` set del_flag = 1
         <where>
             `id` in
-            <foreach item="id" collection="sgjsEquipEntryRecordInfoDetailPkList" open="(" separator="," close=")">
+            <foreach item="id" collection="sgjsExperimentTotalPlanPkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>
-    </update>
-
-    <update id="deleteAll" parameterType="com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.domain.SgjsEquipEntryRecordInfoDetail">
-        update `sgjs_equip_entry_record_info_detail` set del_flag = 1,update_time=#{updateTime},update_user=#{updateUser}
     </update>
 </mapper>

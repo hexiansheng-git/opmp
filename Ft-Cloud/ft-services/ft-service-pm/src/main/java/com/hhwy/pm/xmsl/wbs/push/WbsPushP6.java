@@ -75,6 +75,8 @@ public class WbsPushP6 {
                     log.error("WBS名称为空,ID:"+temp.getId()+",mainId:"+temp.getMainId());
                     continue;
                 }
+                if(temp.getStatus()==Constant.NO_INT)
+                    continue;
                 WbsInfoVoBean bean = WbsInfoVoBean.parseWbs(temp);
                 if(temp.getLevel() == 1 )
                     treeList.add(bean);
@@ -92,7 +94,7 @@ public class WbsPushP6 {
                 temp.setParentObjectId(parent.getObjectId());
                 parent.getChildren().add(temp);
             }
-            projectCode = "test-01";
+            //projectCode = "test-01";
             //推送新增修改数据到p6
             push(mainId,projectCode,treeList,updateList);
             //禁用wbs推送到p6,需要判断这些wbs是否已经推送给p6
@@ -169,13 +171,14 @@ public class WbsPushP6 {
 
     //推送删除数据，需要保证要删除的数据推送给p6过
     private void pushDelete(Long mainId,String projectCode,Set<String> invalidIdSourceSet){
+        if(CollectionUtils.isEmpty(invalidIdSourceSet))
+            return;
         long begin = System.currentTimeMillis();
         StringEntity stringEntity =null;
         String resultStr = null;
         boolean isSuccess = false;
         try{
-            if(CollectionUtils.isEmpty(invalidIdSourceSet))
-                return;
+
             Set<Long> invalidIdSet = new HashSet<>();
             for(String r : invalidIdSourceSet){
                 if(StringUtils.isBlank(r))

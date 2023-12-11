@@ -48,6 +48,13 @@ public interface XmslWbsMapper {
      */
     int hasEffectWbs();
 
+    /**
+     * 校验重复编码
+     * @param mainId
+     * @return
+     */
+    List<String> repeatWbsCode(@Param("mainId")Long mainId);
+
     int insertXmslWbs(XmslWbs xmslWbs);
 
     int insertXmslWbsList(@Param("xmslWbsList") List<XmslWbs> xmslWbsList);

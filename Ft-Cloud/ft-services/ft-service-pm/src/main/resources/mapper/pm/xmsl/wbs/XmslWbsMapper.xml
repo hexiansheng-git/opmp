@@ -410,6 +410,10 @@
         select count(1) from xmsl_wbs_main where valid = 1 limit 1
     </select>
 
+    <select id="repeatWbsCode" resultType="String">
+        select code from  xmsl_wbs_history where main_id = #{mainId} and del_flag =0 group by code having count(1) > 1
+    </select>
+
     <insert id="insertXmslWbs" useGeneratedKeys="true" keyProperty="id">
         insert into xmsl_wbs
         <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -1,25 +1,22 @@
-package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain;
+package com.hhwy.sp.experiment.sgjsExperimentTotalPlan.domain;
 
+import com.hhwy.common.core.web.domain.BaseEntity;
+import java.util.Date;
+import java.math.BigDecimal;
+import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
-import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.domain.SgjsEquipEntryRecordInfoDetail;
-
-import java.util.Date;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * 测量管理--测试设备进场记录
- *
- * @author lcf
- * @date 2023-12-08 10:49:36
- * @remark   sgjs_equip_entry_record_info
+ * @author lcf--试验总体计划
+ * @date 2023-12-11 10:00:11
+ * @remark   sgjs_experiment_total_plan
  */
-public class SgjsEquipEntryRecordInfo extends BaseEntity {
+public class SgjsExperimentTotalPlan extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -29,119 +26,47 @@ public class SgjsEquipEntryRecordInfo extends BaseEntity {
     @JsonProperty
     private Long id;
     /**
-     * 主表id
-     */
-    private Long recordId;
-    /**
-     * 字段描述：管理编码
+     * 字段描述：项目编码
      */
     @JsonProperty
-    @Excel(name = "管理编码"    )
-    private String manageCode;
+    @Excel(name = "项目编码"    )
+    private String projectCode;
     /**
      * 字段描述：
+     * 中标单位
      */
     @JsonProperty
-    private String categoryCode;
+    private String winTheBiddingUnit;
     /**
-     * 字段描述：设备名称
+     * 字段描述：业务领域及产品
      */
     @JsonProperty
-    @Excel(name = "设备名称"    )
-    private String materialName;
+    @Excel(name = "业务领域及产品"    )
+    private String businessAreasAndProducts;
     /**
-     * 字段描述：型号
+     * 字段描述：项目所在地（国）
      */
     @JsonProperty
-    @Excel(name = "型号"    )
-    private String materialSpec;
+    @Excel(name = "项目所在地（国）"    )
+    private String projectLocation;
     /**
-     * 字段描述：类别名称
+     * 字段描述：所属机构
      */
     @JsonProperty
-    @Excel(name = "类别名称"    )
-    private String categoryName;
+    @Excel(name = "所属机构"    )
+    private String subsidiaryOrgan;
     /**
-     * 字段描述：类别
+     * 字段描述：附件组id
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "类别"    )
-    private Long categoryId;
+    @Excel(name = "附件组id"    )
+    private String fileGroupId;
     /**
-     * 字段描述：厂商
+     * 字段描述：备注/描述
      */
     @JsonProperty
-    @Excel(name = "厂商"    )
-    private String manufacturer;
-    /**
-     * 字段描述：主机系列号
-     */
-    @JsonProperty
-    @Excel(name = "主机系列号"    )
-    private String serialNum;
-    /**
-     * 字段描述：主机功率（KW）
-     */
-    @JsonProperty
-    @Excel(name = "主机功率（KW）"    )
-    private String power;
-    /**
-     * 字段描述：底盘系列号
-     */
-    @JsonProperty
-    @Excel(name = "底盘系列号"    )
-    private String bottomNo;
-    /**
-     * 字段描述：实际进场日期
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @Excel(name = "实际进场日期"    ,dateFormat = "yyyy-MM-dd"  )
-    private Date entryDate;
-
-    private String entryDateStr;
-
-    private Date entryDateBegin;
-
-    private Date entryDateEnd;
-    /**
-     * 字段描述：实际退场时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @Excel(name = "实际退场时间"    ,dateFormat = "yyyy-MM-dd"  )
-    private Date exitDate;
-    /**
-     * 字段描述：最近自检校验日期
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @Excel(name = "最近自检校验日期"    ,dateFormat = "yyyy-MM-dd"  )
-    private Date checkDate;
-    /**
-     * 字段描述：
-     */
-    @JsonProperty
-    private String source;
-    /**
-     * 字段描述：当前状态
-     */
-    @JsonProperty
-    @Excel(name = "当前状态"    )
-    private String currentState;
-    /**
-     * 字段描述：备注
-     */
-    @JsonProperty
-    @Excel(name = "备注"    )
+    @Excel(name = "备注/描述"    )
     private String remark;
-    /**
-     * 字段描述：数据来源 0新增1同步
-     */
-    @JsonProperty
-    @Excel(name = "数据来源 0新增1同步"    )
-    private String dataSource;
     /**
      * 字段描述：所属区域id
      */
@@ -227,16 +152,16 @@ public class SgjsEquipEntryRecordInfo extends BaseEntity {
     @Excel(name = "删除标识：0未删除；1已删除"    )
     private String delFlag;
     /**
-     * 字段描述：预留字段1   项目编码
+     * 字段描述：预留字段1
      */
     @JsonProperty
-    @Excel(name = "预留字段1   项目编码"    )
+    @Excel(name = "预留字段1"    )
     private String ptVar1;
     /**
-     * 字段描述：预留字段2  leaf 是否是叶子节点 0否1是
+     * 字段描述：预留字段2
      */
     @JsonProperty
-    @Excel(name = "预留字段2  leaf 是否是叶子节点 0否1是"    )
+    @Excel(name = "预留字段2"    )
     private String ptVar2;
     /**
      * 字段描述：预留字段3
@@ -257,49 +182,6 @@ public class SgjsEquipEntryRecordInfo extends BaseEntity {
     @Excel(name = "预留字段5"    )
     private String ptVar5;
 
-    public String getEntryDateStr() {
-        return entryDateStr;
-    }
-
-    public void setEntryDateStr(String entryDateStr) {
-        this.entryDateStr = entryDateStr;
-    }
-
-    public Date getEntryDateBegin() {
-        return entryDateBegin;
-    }
-
-    public void setEntryDateBegin(Date entryDateBegin) {
-        this.entryDateBegin = entryDateBegin;
-    }
-
-    public Date getEntryDateEnd() {
-        return entryDateEnd;
-    }
-
-    public void setEntryDateEnd(Date entryDateEnd) {
-        this.entryDateEnd = entryDateEnd;
-    }
-
-    //子表数据
-    private List<SgjsEquipEntryRecordInfoDetail> detailList;
-
-    public List<SgjsEquipEntryRecordInfoDetail> getDetailList() {
-        return detailList;
-    }
-
-    public void setDetailList(List<SgjsEquipEntryRecordInfoDetail> detailList) {
-        this.detailList = detailList;
-    }
-
-    public Long getRecordId() {
-        return recordId;
-    }
-
-    public void setRecordId(Long recordId) {
-        this.recordId = recordId;
-    }
-
     @JsonIgnore
     public Long getId() {
         return id;
@@ -309,124 +191,52 @@ public class SgjsEquipEntryRecordInfo extends BaseEntity {
         this.id = id;
     }
     @JsonIgnore
-    public String getManageCode() {
-        return manageCode;
+    public String getProjectCode() {
+        return projectCode;
     }
     @JsonIgnore
-    public void setManageCode(String manageCode) {
-        this.manageCode = manageCode;
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode;
     }
     @JsonIgnore
-    public String getCategoryCode() {
-        return categoryCode;
+    public String getWinTheBiddingUnit() {
+        return winTheBiddingUnit;
     }
     @JsonIgnore
-    public void setCategoryCode(String categoryCode) {
-        this.categoryCode = categoryCode;
+    public void setWinTheBiddingUnit(String winTheBiddingUnit) {
+        this.winTheBiddingUnit = winTheBiddingUnit;
     }
     @JsonIgnore
-    public String getMaterialName() {
-        return materialName;
+    public String getBusinessAreasAndProducts() {
+        return businessAreasAndProducts;
     }
     @JsonIgnore
-    public void setMaterialName(String materialName) {
-        this.materialName = materialName;
+    public void setBusinessAreasAndProducts(String businessAreasAndProducts) {
+        this.businessAreasAndProducts = businessAreasAndProducts;
     }
     @JsonIgnore
-    public String getMaterialSpec() {
-        return materialSpec;
+    public String getProjectLocation() {
+        return projectLocation;
     }
     @JsonIgnore
-    public void setMaterialSpec(String materialSpec) {
-        this.materialSpec = materialSpec;
+    public void setProjectLocation(String projectLocation) {
+        this.projectLocation = projectLocation;
     }
     @JsonIgnore
-    public String getCategoryName() {
-        return categoryName;
+    public String getSubsidiaryOrgan() {
+        return subsidiaryOrgan;
     }
     @JsonIgnore
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setSubsidiaryOrgan(String subsidiaryOrgan) {
+        this.subsidiaryOrgan = subsidiaryOrgan;
     }
     @JsonIgnore
-    public Long getCategoryId() {
-        return categoryId;
+    public String getFileGroupId() {
+        return fileGroupId;
     }
     @JsonIgnore
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-    @JsonIgnore
-    public String getManufacturer() {
-        return manufacturer;
-    }
-    @JsonIgnore
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
-    }
-    @JsonIgnore
-    public String getSerialNum() {
-        return serialNum;
-    }
-    @JsonIgnore
-    public void setSerialNum(String serialNum) {
-        this.serialNum = serialNum;
-    }
-    @JsonIgnore
-    public String getPower() {
-        return power;
-    }
-    @JsonIgnore
-    public void setPower(String power) {
-        this.power = power;
-    }
-    @JsonIgnore
-    public String getBottomNo() {
-        return bottomNo;
-    }
-    @JsonIgnore
-    public void setBottomNo(String bottomNo) {
-        this.bottomNo = bottomNo;
-    }
-    @JsonIgnore
-    public Date getEntryDate() {
-        return entryDate;
-    }
-    @JsonIgnore
-    public void setEntryDate(Date entryDate) {
-        this.entryDate = entryDate;
-    }
-    @JsonIgnore
-    public Date getExitDate() {
-        return exitDate;
-    }
-    @JsonIgnore
-    public void setExitDate(Date exitDate) {
-        this.exitDate = exitDate;
-    }
-    @JsonIgnore
-    public Date getCheckDate() {
-        return checkDate;
-    }
-    @JsonIgnore
-    public void setCheckDate(Date checkDate) {
-        this.checkDate = checkDate;
-    }
-    @JsonIgnore
-    public String getSource() {
-        return source;
-    }
-    @JsonIgnore
-    public void setSource(String source) {
-        this.source = source;
-    }
-    @JsonIgnore
-    public String getCurrentState() {
-        return currentState;
-    }
-    @JsonIgnore
-    public void setCurrentState(String currentState) {
-        this.currentState = currentState;
+    public void setFileGroupId(String fileGroupId) {
+        this.fileGroupId = fileGroupId;
     }
     @JsonIgnore
     public String getRemark() {
@@ -435,14 +245,6 @@ public class SgjsEquipEntryRecordInfo extends BaseEntity {
     @JsonIgnore
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-    @JsonIgnore
-    public String getDataSource() {
-        return dataSource;
-    }
-    @JsonIgnore
-    public void setDataSource(String dataSource) {
-        this.dataSource = dataSource;
     }
     @JsonIgnore
     public Long getRegionId() {

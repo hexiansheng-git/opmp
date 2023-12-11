@@ -1,4 +1,4 @@
-package com.hhwy.sgjsEquipEntryRecordInfoDetail.sgjsEquipEntryRecordInfoDetail.controller;
+package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +20,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 /**
  * @author lcf   测量管理--测试设备进场记录
  * @date 2023-12-08 10:49:49
- * @remark 
+ * @remark
  */
 @Validated
 @RestController
@@ -30,7 +30,6 @@ public class SgjsEquipEntryRecordInfoDetailController extends BaseController{
     @Autowired
     private ISgjsEquipEntryRecordInfoDetailService sgjsEquipEntryRecordInfoDetailService;
 
-                                                                                                                                                                                                                                                                                        
 
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfoDetail:list")
     @GetMapping
@@ -54,11 +53,17 @@ public class SgjsEquipEntryRecordInfoDetailController extends BaseController{
         return AjaxResult.success(sgjsEquipEntryRecordInfoDetailParam);
     }
 
+    /**
+     * 批量新增
+     *
+     * @param sgjsEquipEntryRecordInfoDetailListParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfoDetail:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertSgjsEquipEntryRecordInfoDetailList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsEquipEntryRecordInfoDetail> sgjsEquipEntryRecordInfoDetailListParam){
         sgjsEquipEntryRecordInfoDetailService.insertSgjsEquipEntryRecordInfoDetailList(sgjsEquipEntryRecordInfoDetailListParam);
-        return AjaxResult.success(sgjsEquipEntryRecordInfoDetailListParam);
+        return AjaxResult.success();
     }
 
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfoDetail:update")
@@ -67,25 +72,25 @@ public class SgjsEquipEntryRecordInfoDetailController extends BaseController{
         return toAjax(sgjsEquipEntryRecordInfoDetailService.updateSgjsEquipEntryRecordInfoDetail(sgjsEquipEntryRecordInfoDetailParam));
     }
 
-            @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfoDetail:update")
-        @PostMapping("/batchUpdate")
-        public AjaxResult updateSgjsEquipEntryRecordInfoDetailList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsEquipEntryRecordInfoDetail> sgjsEquipEntryRecordInfoDetailListParam){
-            return toAjax(sgjsEquipEntryRecordInfoDetailService.updateSgjsEquipEntryRecordInfoDetailList(sgjsEquipEntryRecordInfoDetailListParam));
-        }
-    
+    @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfoDetail:update")
+    @PostMapping("/batchUpdate")
+    public AjaxResult updateSgjsEquipEntryRecordInfoDetailList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsEquipEntryRecordInfoDetail> sgjsEquipEntryRecordInfoDetailListParam){
+        return toAjax(sgjsEquipEntryRecordInfoDetailService.updateSgjsEquipEntryRecordInfoDetailList(sgjsEquipEntryRecordInfoDetailListParam));
+    }
+
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfoDetail:remove")
     @PostMapping("/delete")
     public AjaxResult deleteSgjsEquipEntryRecordInfoDetail(@Validated(ValidationGroups.Delete.class) @RequestBody SgjsEquipEntryRecordInfoDetail sgjsEquipEntryRecordInfoDetailParam){
         return toAjax(sgjsEquipEntryRecordInfoDetailService.deleteSgjsEquipEntryRecordInfoDetail(sgjsEquipEntryRecordInfoDetailParam));
     }
 
-            @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfoDetail:remove")
-        @PostMapping("/{ids}")
-        public AjaxResult deleteSgjsEquipEntryRecordInfoDetailByPks(@PathVariable Long[] ids){
-            List<Long> sgjsEquipEntryRecordInfoDetailPkList = Arrays.asList(ids);
-            return toAjax(sgjsEquipEntryRecordInfoDetailService.deleteSgjsEquipEntryRecordInfoDetailByPks(sgjsEquipEntryRecordInfoDetailPkList));
-        }
-    
+    @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfoDetail:remove")
+    @PostMapping("/{ids}")
+    public AjaxResult deleteSgjsEquipEntryRecordInfoDetailByPks(@PathVariable Long[] ids){
+        List<Long> sgjsEquipEntryRecordInfoDetailPkList = Arrays.asList(ids);
+        return toAjax(sgjsEquipEntryRecordInfoDetailService.deleteSgjsEquipEntryRecordInfoDetailByPks(sgjsEquipEntryRecordInfoDetailPkList));
+    }
+
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsEquipEntryRecordInfoDetail sgjsEquipEntryRecordInfoDetailParam) throws IOException {
         List<SgjsEquipEntryRecordInfoDetail> sgjsEquipEntryRecordInfoDetailList = sgjsEquipEntryRecordInfoDetailService.getSgjsEquipEntryRecordInfoDetailList(sgjsEquipEntryRecordInfoDetailParam);
