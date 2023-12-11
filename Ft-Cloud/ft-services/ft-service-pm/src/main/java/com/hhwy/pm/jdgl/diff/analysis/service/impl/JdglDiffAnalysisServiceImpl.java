@@ -391,9 +391,9 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
         ProjectBasicInfo projectInfo = projectBasicInfoService.projectInfo();
         // 项目规模
-        String type11 = "1-1";
-        String type12 = "1-2";
-        String type29 = "2-9";
+        String type11 = "D01P01"; // 公路
+        String type12 = "D01P03"; // 铁路
+        String type29 = "D02P09"; // 市政
         BigDecimal scaleGradeValue = BigDecimal.ZERO;
 
         // 项目重要性
