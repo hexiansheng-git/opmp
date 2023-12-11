@@ -1,6 +1,8 @@
 package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.service;
 
 import java.util.List;
+
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecord;
 
 /**
@@ -25,4 +27,11 @@ public interface ISgjsEquipEntryRecordService {
     int deleteSgjsEquipEntryRecord(SgjsEquipEntryRecord sgjsEquipEntryRecord);
 
     int deleteSgjsEquipEntryRecordByPks(List<Long> sgjsEquipEntryRecordPkList);
+
+    /**
+     * 同步3.6.4
+     *
+     * @return
+     */
+    AjaxResult sync();
 }

@@ -26,4 +26,9 @@ public interface SgjsEquipEntryRecordInfoMapper {
     int deleteSgjsEquipEntryRecordInfo(SgjsEquipEntryRecordInfo sgjsEquipEntryRecordInfo);
 
     int deleteSgjsEquipEntryRecordInfoByPks(@Param("sgjsEquipEntryRecordInfoPkList") List<Long> sgjsEquipEntryRecordInfoPkList);
+
+    /**
+     * 删除所有数据
+     */
+    int deleteAll(SgjsEquipEntryRecordInfo record);
 }

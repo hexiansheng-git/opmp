@@ -3,6 +3,8 @@ package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.contro
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+
+import com.hhwy.feign.service.PmServiceApi;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
@@ -31,8 +33,10 @@ public class SgjsEquipEntryRecordController extends BaseController{
 
     @Autowired
     private ISgjsEquipEntryRecordService sgjsEquipEntryRecordService;
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
-                                                                                                                                                                                                                                                                                                                                                                                        
+
 
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:list")
     @GetMapping
@@ -75,29 +79,41 @@ public class SgjsEquipEntryRecordController extends BaseController{
         return toAjax(sgjsEquipEntryRecordService.updateSgjsEquipEntryRecord(sgjsEquipEntryRecordParam));
     }
 
-            @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:update")
-        @PostMapping("/batchUpdate")
-        public AjaxResult updateSgjsEquipEntryRecordList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsEquipEntryRecord> sgjsEquipEntryRecordListParam){
-            return toAjax(sgjsEquipEntryRecordService.updateSgjsEquipEntryRecordList(sgjsEquipEntryRecordListParam));
-        }
-    
+    @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:update")
+    @PostMapping("/batchUpdate")
+    public AjaxResult updateSgjsEquipEntryRecordList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsEquipEntryRecord> sgjsEquipEntryRecordListParam){
+        return toAjax(sgjsEquipEntryRecordService.updateSgjsEquipEntryRecordList(sgjsEquipEntryRecordListParam));
+    }
+
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:remove")
     @PostMapping("/delete")
     public AjaxResult deleteSgjsEquipEntryRecord(@Validated(ValidationGroups.Delete.class) @RequestBody SgjsEquipEntryRecord sgjsEquipEntryRecordParam){
         return toAjax(sgjsEquipEntryRecordService.deleteSgjsEquipEntryRecord(sgjsEquipEntryRecordParam));
     }
 
-            @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:remove")
-        @PostMapping("/{ids}")
-        public AjaxResult deleteSgjsEquipEntryRecordByPks(@PathVariable Long[] ids){
-            List<Long> sgjsEquipEntryRecordPkList = Arrays.asList(ids);
-            return toAjax(sgjsEquipEntryRecordService.deleteSgjsEquipEntryRecordByPks(sgjsEquipEntryRecordPkList));
-        }
-    
+    @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:remove")
+    @PostMapping("/{ids}")
+    public AjaxResult deleteSgjsEquipEntryRecordByPks(@PathVariable Long[] ids){
+        List<Long> sgjsEquipEntryRecordPkList = Arrays.asList(ids);
+        return toAjax(sgjsEquipEntryRecordService.deleteSgjsEquipEntryRecordByPks(sgjsEquipEntryRecordPkList));
+    }
+
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsEquipEntryRecord sgjsEquipEntryRecordParam) throws IOException {
         List<SgjsEquipEntryRecord> sgjsEquipEntryRecordList = sgjsEquipEntryRecordService.getSgjsEquipEntryRecordList(sgjsEquipEntryRecordParam);
         ExcelUtils<SgjsEquipEntryRecord> util = new ExcelUtils<>(SgjsEquipEntryRecord.class);
         util.exportExcel(response, sgjsEquipEntryRecordList, DateUtils.getDate());
     }
+
+    /**
+     * 同步3.6.4
+     *
+     * @return
+     */
+    @PostMapping("/sysnc")
+    public AjaxResult sysnc(){
+        AjaxResult result = sgjsEquipEntryRecordService.sync();
+        return result;
+    }
+
 }

@@ -42,6 +42,11 @@ public class SgjsEquipEntryRecordInfoDetailServiceImpl implements ISgjsEquipEntr
 
     @Transactional
     public int insertSgjsEquipEntryRecordInfoDetailList(List<SgjsEquipEntryRecordInfoDetail> sgjsEquipEntryRecordInfoDetailList) {
+        //添加之前先删掉库中原有数据
+        SgjsEquipEntryRecordInfoDetail detail=new SgjsEquipEntryRecordInfoDetail();
+        detail.setUpdateTime(DateUtils.getNowDate());
+        detail.setUpdateUser(SecurityUtils.getUserId()+"");
+        sgjsEquipEntryRecordInfoDetailMapper.deleteAll(detail);
         for (SgjsEquipEntryRecordInfoDetail sgjsEquipEntryRecordInfoDetail : sgjsEquipEntryRecordInfoDetailList) {
             sgjsEquipEntryRecordInfoDetail.setId(IdWorker.createId());
             sgjsEquipEntryRecordInfoDetail.setCreateUser(SecurityUtils.getUserName());
