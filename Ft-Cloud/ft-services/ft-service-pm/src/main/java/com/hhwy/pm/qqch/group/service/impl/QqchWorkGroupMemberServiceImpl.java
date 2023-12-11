@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -109,6 +110,8 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
         List<QqchWorkGroupMember> resultMember = new ArrayList<>();
 
         List<QqchWorkGroupMember> pageMemberList = queryVo.getMemberList();
+
+        pageMemberList = pageMemberList.stream().filter(o -> o.getDirectorId() != null && o.getDirector() != null).collect(Collectors.toList());
 
         if(CollectionUtils.isEmpty(pageMemberList)){
             return resultMember;
