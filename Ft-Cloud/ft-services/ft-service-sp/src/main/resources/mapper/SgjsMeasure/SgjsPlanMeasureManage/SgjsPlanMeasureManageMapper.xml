@@ -453,7 +453,7 @@
     </where>
   </update>
 
-  <update id="delectAll" parameterType="com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage">
+  <update id="deleteAll" parameterType="com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage">
     update `sgjs_plan_measure_manage` set del_flag = "1"  , update_time=#{updateTime} , update_user=#{updateUser}
   </update>
 
