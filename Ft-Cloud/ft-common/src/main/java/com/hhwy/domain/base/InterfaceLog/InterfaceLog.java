@@ -86,6 +86,34 @@ public class InterfaceLog extends BaseEntity {
 
     private String method;
 
+    private String type;
+    private String name;
+    private String tenantkey;
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    public String getTenantkey() {
+        return this.tenantkey;
+    }
+
+    public void setTenantkey(final String tenantkey) {
+        this.tenantkey = tenantkey;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(final String type) {
+        this.type = type;
+    }
+
     public String getMethod() {
         return method;
     }

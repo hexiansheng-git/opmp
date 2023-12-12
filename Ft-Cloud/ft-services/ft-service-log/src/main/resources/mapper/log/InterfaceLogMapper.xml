@@ -33,6 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="method" column="method"/>
         <result property="userId" column="user_id"/>
         <result property="userName" column="user_name"/>
+        <result property="type" column="type"/>
     </resultMap>
     <sql id="selectInterfaceLogVo">
         select
@@ -121,6 +122,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="method != null">`method`,</if>
             <if test="userId != null">`user_id`,</if>
             <if test="userName != null">`user_name`,</if>
+            <if test="type != null">`type`,</if>
+            <if test="tenantkey != null">`tenantkey`,</if>
+            <if test="name != null">`name`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -147,6 +151,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="method != null">#{method},</if>
             <if test="userId != null">#{userId},</if>
             <if test="userName != null">#{userName},</if>
+            <if test="type != null">#{type},</if>
+            <if test="tenantkey != null">#{tenantkey},</if>
+            <if test="name != null">#{name},</if>
         </trim>
     </insert>
 
