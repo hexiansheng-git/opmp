@@ -10,6 +10,9 @@ import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.mapper.SgjsEquipEntryRecordMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.service.ISgjsEquipEntryRecordService;
+import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
+import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.mapper.SgjsEquipEntryRecordInfoMapper;
+import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.domain.SgjsEquipEntryRecordInfoDetail;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
@@ -23,6 +26,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author lcf   测量管理--测试设备进场记录
@@ -34,6 +38,8 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
 
     @Autowired
     private SgjsEquipEntryRecordMapper sgjsEquipEntryRecordMapper;
+    @Autowired
+    private SgjsEquipEntryRecordInfoMapper infoMapper;
     @Autowired
     private PmServiceApi pmServiceApi;
 
@@ -53,7 +59,19 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             sgjsEquipEntryRecord.setEntryDateBegin(FtDateUtils.parseDate(begin));
             sgjsEquipEntryRecord.setEntryDateEnd(FtDateUtils.parseDate(end));
         }
-        return sgjsEquipEntryRecordMapper.getSgjsEquipEntryRecordList(sgjsEquipEntryRecord);
+        List<SgjsEquipEntryRecord> list = sgjsEquipEntryRecordMapper.getSgjsEquipEntryRecordList(sgjsEquipEntryRecord);
+        if(CollectionUtils.isEmpty(list)){
+            return null;
+        }
+        List<String> idList = list.stream().map(e -> e.getId() + "").collect(Collectors.toList());
+        //根据id批量查询子表信息
+        List<SgjsEquipEntryRecordInfo> infoList=infoMapper.selectByIdList(idList);
+        for (int i = 0; i < list.size(); i++) {
+            String id = list.get(i).getId()+"";
+            List<SgjsEquipEntryRecordInfo> infos = infoList.stream().filter(e -> String.valueOf(e.getRecordId()).equals(id)).collect(Collectors.toList());
+            list.get(i).setInfoList(infos);
+        }
+        return list;
     }
 
     @Transactional
