@@ -25,4 +25,11 @@ public interface ISgjsExperimentTotalPlanService {
     int deleteSgjsExperimentTotalPlan(SgjsExperimentTotalPlan sgjsExperimentTotalPlan);
 
     int deleteSgjsExperimentTotalPlanByPks(List<Long> sgjsExperimentTotalPlanPkList);
+
+    /**
+     * 查询详情
+     *
+     * @return
+     */
+    SgjsExperimentTotalPlan selectDetailInfo();
 }

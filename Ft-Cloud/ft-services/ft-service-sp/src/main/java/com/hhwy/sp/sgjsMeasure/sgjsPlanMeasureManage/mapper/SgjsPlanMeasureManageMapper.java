@@ -31,7 +31,7 @@ public interface SgjsPlanMeasureManageMapper {
     int deleteSgjsPlanMeasureManageByPks(
         @Param("sgjsPlanMeasureManagePkList") List<Long> sgjsPlanMeasureManagePkList);
 
-    void delectAll(SgjsPlanMeasureManage info);
+    void deleteAll(SgjsPlanMeasureManage info);
 
 
 }

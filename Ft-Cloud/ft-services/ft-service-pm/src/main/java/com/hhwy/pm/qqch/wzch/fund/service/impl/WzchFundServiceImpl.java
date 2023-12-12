@@ -294,6 +294,8 @@ public class WzchFundServiceImpl implements IWzchFundService {
         if(dto.getId()==null) {
             dto.setId(IdWorker.createId());
             new AddBaseInfoUtil<>().addBaseEntity(dto);
+            dto.setTitle("");
+            dto.setFundCode(genCodeService.getSetCode(CodeEnum.WF));
             int i = this.wzchFundMapper.insertWzchFund(dto);
             // 新增条数不为 1, 失败
             if (i != 1) throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "新增失败");

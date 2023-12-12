@@ -24,6 +24,9 @@ public class ImportSbchTotalDemandPlanDetail {
     @NotBlank(message = "设备分类编码不可为空")
     private String materialType;
 
+    @Excel(name = "设备分类名称")
+    private String ptVar1;
+
     @Excel(name = "设备名称")
     @NotBlank(message = "设备名称不可为空")
     private String materialName;
@@ -87,8 +90,6 @@ public class ImportSbchTotalDemandPlanDetail {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date planExitTime;
-
-    private String ptVar1;
 
     @Excel(name = "是否特种设备")
     private String isSpecial;

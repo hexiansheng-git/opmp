@@ -33,5 +33,5 @@ public interface SgjsEquipEntryRecordMapper {
      * @param equipList
      * @return
      */
-    int bathUpdateByList(List<SgjsEquipEntryRecord> equipList);
+    int bathUpdateByList(@Param(value = "list") List<SgjsEquipEntryRecord> equipList);
 }

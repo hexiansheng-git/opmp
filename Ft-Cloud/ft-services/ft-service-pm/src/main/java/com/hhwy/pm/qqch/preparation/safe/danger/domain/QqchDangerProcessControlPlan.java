@@ -6,9 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * @author zhenglili
@@ -104,7 +105,7 @@ public class QqchDangerProcessControlPlan extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "专项检查表附件组id")
-    private String specialFileGroupId;
+    private String fileGroupId;
     /**
      * 字段描述：是否首件
      */

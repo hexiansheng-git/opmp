@@ -2,15 +2,19 @@ package com.hhwy.sp.experiment.sgjsExperimentTotalPlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.domain.SgjsExperimentTotalPlan;
 import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.mapper.SgjsExperimentTotalPlanMapper;
 import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.service.ISgjsExperimentTotalPlanService;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lcf--试验总体计划
@@ -22,6 +26,8 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
 
     @Autowired
     private SgjsExperimentTotalPlanMapper sgjsExperimentTotalPlanMapper;
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
 
     public SgjsExperimentTotalPlan getSgjsExperimentTotalPlan(SgjsExperimentTotalPlan sgjsExperimentTotalPlan) {
@@ -37,6 +43,7 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
         sgjsExperimentTotalPlan.setId(IdWorker.createId());
         sgjsExperimentTotalPlan.setCreateUser(SecurityUtils.getUserName());
         sgjsExperimentTotalPlan.setCreateTime(DateUtils.getNowDate());
+        sgjsExperimentTotalPlan.setUpdateTime(DateUtils.getNowDate());
         return sgjsExperimentTotalPlanMapper.insertSgjsExperimentTotalPlan(sgjsExperimentTotalPlan);
     }
 
@@ -77,4 +84,38 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
     public int deleteSgjsExperimentTotalPlanByPks(List<Long> sgjsExperimentTotalPlanPkList) {
         return sgjsExperimentTotalPlanMapper.deleteSgjsExperimentTotalPlanByPks(sgjsExperimentTotalPlanPkList);
     }
+
+    @Override
+    public SgjsExperimentTotalPlan selectDetailInfo() {
+        Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+        if(ObjectUtils.isEmpty(prjInfo)){
+            return null;
+        }
+        SgjsExperimentTotalPlan info=new SgjsExperimentTotalPlan();
+        info.setProjectLocation(prjInfo.get("projectLocation")+"");
+        info.setBusinessAreasAndProducts(prjInfo.get("businessAreasAndProductsLabel")+"");
+        info.setProjectCode(prjInfo.get("projectCode")+"");
+        if(null!=prjInfo.get("regionId")){
+            info.setRegionId(Long.parseLong(prjInfo.get("regionId")+""));
+        }
+        info.setRegionName(ObjectUtils.toString(prjInfo.get("regionName")));
+        info.setProjectName(prjInfo.get("projectName")+"");
+        info.setWinTheBiddingUnit(ObjectUtils.toString(prjInfo.get("winTheBiddingUnit")));
+        if(null!=prjInfo.get("projectId")){
+            info.setProjectId(Long.parseLong(prjInfo.get("projectId")+""));
+        }
+        List<SgjsExperimentTotalPlan> list = sgjsExperimentTotalPlanMapper.getSgjsExperimentTotalPlanList(new SgjsExperimentTotalPlan());
+        info.setCreateUser(SecurityUtils.getUserId()+"");
+        info.setCreateUserName(SecurityUtils.getSysUser().getNickName());
+        info.setPtVar1(SecurityUtils.getSysUser().getPhoneNumber());
+        if(!CollectionUtils.isEmpty(list)){
+            info.setFileGroupId(list.get(0).getFileGroupId());
+            if(null!=list.get(0).getId()){
+                info.setId(list.get(0).getId());
+            }
+        }
+        return info;
+    }
+
+
 }

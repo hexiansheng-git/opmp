@@ -168,12 +168,15 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         if(source==null) {
             wzchSource.setId(IdWorker.createId());
             wzchSource.setPrjCode(SecurityUtils.getTenantKey());
+            wzchSource.setTitle(wzchSource.getVersion()+"");
+            wzchSource.setValid("0");
             //插入前校验不能有其他数据
             List list = wzchSourceService.selectWzchSourceList(new WzchSource());
             if(CollectionUtils.isNotEmpty(list))
                 throw new RuntimeException("已存在物资来源数据，无法新增。请勿点击过快");
             wzchSourceService.insertWzchSource(wzchSource);
         }else{
+            wzchSource.setTitle(wzchSource.getVersion()+"");
             wzchSourceService.updateWzchSource(wzchSource);
         }
         wzchSourceDetailMapper.deleteWzchSourceDetailBySourdeId(wzchSource.getId());
@@ -184,8 +187,10 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             r.setSourceId(wzchSource.getId());
             detailIds.add(r.getId());
         });
-        wzchSourceDetailMapper.batchInsert(detailList);
-        wzchSourceApproachYearCountMapper.deleteWzchSourceApproachYearCountByDetailIds(detailIds);
+        if(CollectionUtils.isNotEmpty(detailList))
+            wzchSourceDetailMapper.batchInsert(detailList);
+        if(CollectionUtils.isNotEmpty(detailIds))
+            wzchSourceApproachYearCountMapper.deleteWzchSourceApproachYearCountByDetailIds(detailIds);
         List<WzchSourceApproachYearCount> yearCounts = new ArrayList<>();
         for (WzchSourceDetail wzchSourceDetail : detailList) {
             List<WzchSourceApproachYearCount> yearCountList = wzchSourceDetail.getWzchSourceApproachYearCountList();
@@ -195,7 +200,8 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             }
             yearCounts.addAll(wzchSourceDetail.getWzchSourceApproachYearCountList());
         }
-        wzchSourceApproachYearCountMapper.batchInsert(yearCounts);
+        if(CollectionUtils.isNotEmpty(yearCounts))
+            wzchSourceApproachYearCountMapper.batchInsert(yearCounts);
         if (ButtonMark.CONFIRM.equals(wzchSource.getButtonMark())) {
             // 插入确认状态
             String menuId = wzchSource.getMenuId();
@@ -357,9 +363,9 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         if(wzchSource == null){
             throw new BaseException("500","入参缺失");
         }
-        if (CollectionUtils.isEmpty(wzchSource.getWzchSourceDetailList())) {
-            throw new BaseException("数据缺失");
-        }
+//        if (CollectionUtils.isEmpty(wzchSource.getWzchSourceDetailList())) {
+//            throw new BaseException("数据缺失");
+//        }
     }
 
     @Override
@@ -408,8 +414,9 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             detailTimeList.add(tempSource);
         }
 
-
-
+        String code = genCodeService.getSetCode(CodeEnum.EQU_SOURCE);
+        code += genCodeService.fillString(1, 2);
+        wzchSource.setSourceCode(code);
         wzchSourceService.insertWzchSource(wzchSource);
         //3、插入来源策划、明细、年份明细
         if(CollectionUtils.isNotEmpty(detailList))

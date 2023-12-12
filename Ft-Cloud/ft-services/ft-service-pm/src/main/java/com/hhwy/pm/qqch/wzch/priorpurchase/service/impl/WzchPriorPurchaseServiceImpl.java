@@ -225,9 +225,9 @@ public class WzchPriorPurchaseServiceImpl implements IWzchPriorPurchaseService {
         // 设置id
 //        wzchPriorPurchaseDTO.setId(id);
         // 设置单据编码
-//        wzchPriorPurchaseDTO.setPriorPurchaseCode(genCodeService.getSetCode(CodeEnum.WPP));
+        wzchPriorPurchaseDTO.setPriorPurchaseCode(genCodeService.getSetCode(CodeEnum.WPP));
         // 设置版本号码
-//        wzchPriorPurchaseDTO.setVersionCode(new BigDecimal("1.0"));
+        wzchPriorPurchaseDTO.setVersionCode(wzchPriorPurchaseDTO.getVersion());
         // 是否生效
         wzchPriorPurchaseDTO.setValid("0");
         // 设置创建信息
@@ -377,6 +377,8 @@ public class WzchPriorPurchaseServiceImpl implements IWzchPriorPurchaseService {
         if(isNew){
             dto.setId(IdWorker.createId());
             new AddBaseInfoUtil<>().addBaseEntity(dto);
+            dto.setPriorPurchaseCode(genCodeService.getSetCode(CodeEnum.WPP));
+            dto.setTitle("");
             wzchPriorPurchaseMapper.insertWzchPriorPurchase(dto);    
         }else{
             BeanUtils.copyProperties(mainList.get(0), dto);

@@ -81,7 +81,7 @@ public class SbchTotalDemandPlanDetailServiceImpl implements ISbchTotalDemandPla
         }else {
             planId = sbchTotalDemandPlans.get(0).getId();
         }
-        //获取设备总需所有设备
+        //获取1.7 设备总需所有设备
         List<SbchTotalDemandPlanDetail> list = sbchTotalDemandPlanDetailMapper.getAllDemandDevice(version);
         if (CollectionUtils.isEmpty(list)){
             return result;
@@ -90,6 +90,7 @@ public class SbchTotalDemandPlanDetailServiceImpl implements ISbchTotalDemandPla
             p.setId(IdWorker.createId());
             p.setPlanId(planId);
             p.setPtVar1(p.getMaterialType());
+            p.setIsSpecial("0");
         });
         sbchTotalDemandPlanDetailMapper.deleteSbchTotalDemandPlanDetailByPlanId(planId, SecurityUtils.getUserId(), DateUtils.getNowDate());
         sbchTotalDemandPlanDetailMapper.batchInsert(list);

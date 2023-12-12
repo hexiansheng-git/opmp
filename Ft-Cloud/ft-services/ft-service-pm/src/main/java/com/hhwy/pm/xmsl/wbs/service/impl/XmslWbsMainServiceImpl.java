@@ -297,8 +297,8 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
             wbsService.initWbs2Redis(tenantKey);
             //6、更新子级状态
             updateChildStatus(invalidIdSet);
-            //7、推送到p6
-            wbsPushP6.push2P6(main.getId(),tenantKey,allList,invalidIdSet);
+            //7、推送到p6  暂时注释
+//            wbsPushP6.push2P6(main.getId(),tenantKey,allList,invalidIdSet);
         }catch(Exception e){
             e.printStackTrace();
             log.error("wbs加载祖级名称&塞redis失败，mainid:{},消息：{}",main.getId(),e.getMessage());

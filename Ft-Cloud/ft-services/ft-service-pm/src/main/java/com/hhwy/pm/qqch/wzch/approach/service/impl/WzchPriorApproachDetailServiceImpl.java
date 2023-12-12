@@ -175,10 +175,10 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
         //处理主表
         if(wzchPriorApproach.getId() == null){
             wzchPriorApproach.setId(IdWorker.createId());
-            wzchPriorApproach.setApproachCode("");
-            wzchPriorApproach.setTitle("");
+            wzchPriorApproach.setTitle(wzchPriorApproach.getVersion()+"");
             wzchPriorApproach.setPrjCode(SecurityUtils.getTenantKey());
             wzchPriorApproach.setDeptId(SecurityUtils.getSysUser().getDeptId());
+            wzchPriorApproach.setValid("0");
             new AddBaseInfoUtil().addBaseEntity(wzchPriorApproach);
             this.wzchPriorApproachService.insertWzchPriorApproach(wzchPriorApproach);
         }else{

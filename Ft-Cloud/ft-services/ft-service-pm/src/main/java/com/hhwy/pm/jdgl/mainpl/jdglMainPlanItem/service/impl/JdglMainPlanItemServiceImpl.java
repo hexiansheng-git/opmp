@@ -245,9 +245,9 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                 activityInfoVoBeanList.add(activityInfoVoBean);
             }
         }
-        if(CollectionUtils.isNotEmpty(activityInfoVoBeanList)) {
-            jdglData4P6Service.pushUserToP6(activityInfoVoBeanList);
-        }
+//        if(CollectionUtils.isNotEmpty(activityInfoVoBeanList)) {
+//            jdglData4P6Service.pushUserToP6(activityInfoVoBeanList);
+//        }
         return jdglMainPlanItemMapper.updateJdglMainPlanItemList(jdglMainPlanItems);
     }
 

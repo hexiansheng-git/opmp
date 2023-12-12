@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.contractInfo.service;
 
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractGeneral;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractGeneralVo;
 
 import java.util.List;
 
@@ -28,4 +29,7 @@ public interface IXmslContractGeneralService {
     int deleteXmslContractGeneralByPks(List<Long> xmslContractGeneralPkList, Long masterId);
 
     List<XmslContractGeneral> provideList(XmslContractGeneral xmslContractGeneralParam);
+
+    List<XmslContractGeneral> dataHandler(XmslContractGeneralVo xmslContractGeneralVo);
+
 }
