@@ -5,10 +5,12 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.CriticalExpReportQueryVo;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.SgjsCriticalExpReport;
+import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportQueryVo;
+import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportVo;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.service.ISgjsCriticalExpReportService;
 import com.hhwy.utils.validation.ValidationGroups;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -54,11 +56,11 @@ public class SgjsCriticalExpReportController extends BaseController {
         return AjaxResult.success(sgjsCriticalExpReportParam);
     }
 
-    @PreAuthorize(hasPermi = "sgjsCriticalExpReport:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertSgjsCriticalExpReportList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsCriticalExpReport> sgjsCriticalExpReportListParam) {
-        sgjsCriticalExpReportService.insertSgjsCriticalExpReportList(sgjsCriticalExpReportListParam);
-        return AjaxResult.success(sgjsCriticalExpReportListParam);
+    @PreAuthorize(hasPermi = "sgjsCriticalExpReport:save")
+    @PostMapping("/save")
+    public AjaxResult insertSgjsCriticalExpReportList(@Validated(ValidationGroups.Save.class) @RequestBody CriticalExpReportVo criticalExpReportVo) {
+        sgjsCriticalExpReportService.save(criticalExpReportVo);
+        return AjaxResult.success();
     }
 
     @PreAuthorize(hasPermi = "sgjsCriticalExpReport:update")
@@ -82,13 +84,19 @@ public class SgjsCriticalExpReportController extends BaseController {
     @PreAuthorize(hasPermi = "sgjsCriticalExpReport:remove")
     @PostMapping("/delete/{ids}")
     public AjaxResult deleteSgjsCriticalExpReportByPks(@PathVariable Long[] ids) {
-        List<Long> sgjsCriticalExpReportPkList = Arrays.asList(ids);
-        return toAjax(sgjsCriticalExpReportService.deleteSgjsCriticalExpReportByPks(sgjsCriticalExpReportPkList));
+        List<Long> idList = Arrays.asList(ids);
+        return toAjax(sgjsCriticalExpReportService.deleteSgjsCriticalExpReportByPks(idList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response,List<Long> ids) throws IOException {
-        List<SgjsCriticalExpReport> sgjsCriticalExpReportList = sgjsCriticalExpReportService.getListByIds(ids);
+    @PostMapping("/export")
+    public void export(HttpServletResponse response,@RequestBody CriticalExpReportQueryVo queryVo) throws IOException {
+        List<Long> ids = queryVo.getIds();
+        List<SgjsCriticalExpReport> sgjsCriticalExpReportList;
+        if(CollectionUtils.isEmpty(ids)){
+            sgjsCriticalExpReportList = sgjsCriticalExpReportService.getSgjsCriticalExpReportList(queryVo);
+        }else {
+            sgjsCriticalExpReportList = sgjsCriticalExpReportService.getListByIds(ids);
+        }
         ExcelUtils<SgjsCriticalExpReport> util = new ExcelUtils<>(SgjsCriticalExpReport.class);
         util.exportExcel(response, sgjsCriticalExpReportList, DateUtils.getDate());
     }
