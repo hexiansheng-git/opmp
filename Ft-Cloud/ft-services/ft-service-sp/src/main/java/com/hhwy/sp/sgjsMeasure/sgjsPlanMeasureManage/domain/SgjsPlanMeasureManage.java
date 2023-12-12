@@ -59,7 +59,7 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
      */
     @JsonProperty
     @Excel(name = "工作量")
-    private Integer workload;
+    private String workload;
     /**
      * 字段描述：计划开始日期
      */

@@ -112,20 +112,19 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         for (LinkedHashMap<String, Object> l : list) {
             SgjsPlanMeasureManage sgjsPlanMeasureManage = new SgjsPlanMeasureManage();
             sgjsPlanMeasureManage.setMeasureName(
-                l.get("workItem") == null ? null : (String) l.get("workItem"));
+                l.get("workItem") == null ? null : l.get("workItem").toString());
             sgjsPlanMeasureManage.setMeasureUnit(
-                l.get("unit") == null ? null : (String) l.get("unit"));
+                l.get("unit") == null ? null : l.get("unit").toString());
             sgjsPlanMeasureManage.setWorkload(
-                l.get("workload") == null ? null : (Integer) l.get("workload"));
+                l.get("workload") == null ? null : l.get("workload").toString());
             sgjsPlanMeasureManage.setPlanStartDate(l.get("planBeginDate") == null ? null
                 : FtDateUtils.parseDate(l.get("planBeginDate")));
             sgjsPlanMeasureManage.setPlanEndDate(
                 l.get("planEndDate") == null ? null : FtDateUtils.parseDate(l.get("planEndDate")));
             sgjsPlanMeasureManage.setPid(
-                l.get("pid") == null ? 0L : Long.parseLong((String) l.get("pid")));
+                l.get("pid") == null ? 0L : Long.parseLong(l.get("pid").toString()));
             treeToList.add(sgjsPlanMeasureManage);
-            List<LinkedHashMap<String, Object>> children = (List<LinkedHashMap<String, Object>>) l.get(
-                "children");
+            List<LinkedHashMap<String, Object>> children = (List<LinkedHashMap<String, Object>>) l.get("children");
             if (children.size() > 0) {
                 digui(children, treeToList);
             }
