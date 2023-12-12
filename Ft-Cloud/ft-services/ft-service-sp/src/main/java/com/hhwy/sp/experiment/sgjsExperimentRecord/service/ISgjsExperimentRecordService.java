@@ -1,6 +1,8 @@
 package com.hhwy.sp.experiment.sgjsExperimentRecord.service;
 
 import java.util.List;
+
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
 
 /**
@@ -25,4 +27,11 @@ public interface ISgjsExperimentRecordService {
     int deleteSgjsExperimentRecord(SgjsExperimentRecord sgjsExperimentRecord);
 
     int deleteSgjsExperimentRecordByPks(List<Long> sgjsExperimentRecordPkList);
+
+    /**
+     * 同步前期策划3.7.2
+     *
+     * @return
+     */
+    AjaxResult sync();
 }
