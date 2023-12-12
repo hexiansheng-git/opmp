@@ -1,7 +1,6 @@
 package com.hhwy.sp.experiment.sgjsExperProgressManage.service.impl;
 
 
-import cn.hutool.core.date.DateTime;
 import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -19,7 +18,6 @@ import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -195,7 +193,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
     @Transactional
     public AjaxResult batchAdd(SgjsExperProgressManageVo sgjsExperProgressManageVo) {
 
-        List<SgjsExperProgressManage> treeToList = null;
+        /*List<SgjsExperProgressManage> treeToList = null;
         if (CollectionUtils.isEmpty(sgjsExperProgressManageVo.getTreeList())) {
             return AjaxResult.error("数据异常");
         }
@@ -214,7 +212,42 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             sgjsExperProgressManage.setDelFlag("0");
         }
         sgjsExperProgressManageMapper.insertSgjsExperProgressManageList(treeToList);
+        return AjaxResult.success();*/
+
+        //获取删除的id集合
+        List<String> delIdList = sgjsExperProgressManageVo.getDelIdList();
+        if (delIdList.size()>0){
+            List<Long> idsList=new ArrayList<>();
+            for (String idStr : delIdList) {
+                idsList.add(Long.valueOf(idStr));
+            }
+            sgjsExperProgressManageMapper.deleteSgjsExperProgressManageByPks(idsList);
+        }
+        //根据标志位判断是新增操作还是修改操作
+        List<SgjsExperProgressManage> treeList = sgjsExperProgressManageVo.getTreeList();
+        List<SgjsExperProgressManage>  updateList=new ArrayList<>();
+        List<SgjsExperProgressManage>  insertList=new ArrayList<>();
+        for (SgjsExperProgressManage sgjsExperProgressManage : treeList) {
+
+            if ("1".equals(sgjsExperProgressManage.getType())){
+                updateList.add(sgjsExperProgressManage);
+            }
+            if ("0".equals(sgjsExperProgressManage.getType())){
+                insertList.add(sgjsExperProgressManage);
+            }
+        }
+        //批量进行修改和新增
+
+        if (insertList.size()>0){
+            sgjsExperProgressManageMapper.insertSgjsExperProgressManageList(insertList);
+        }
+        if (updateList.size()>0){
+            sgjsExperProgressManageMapper.updateSgjsExperProgressManageList(updateList);
+        }
+
         return AjaxResult.success();
 
     }
+
+
 }

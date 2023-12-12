@@ -253,6 +253,11 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
 
 
 
+    //标识新增才是修改  0新增；1修改
+    private String type;
+
+    //当前节点所在层级目录
+    private String path;
 
 
     //计划开始日期范围字符串
@@ -262,6 +267,22 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     //实际开始日期范围字符串
     private String realStartDateStr;
 
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public Date getPlanStartDate1() {
         return planStartDate1;
