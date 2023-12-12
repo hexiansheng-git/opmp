@@ -1,7 +1,9 @@
 package com.hhwy.sp.experiment.sgjsExperimentRecord.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.mapper.SgjsExperimentRecordMapper;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.service.ISgjsExperimentRecordService;
@@ -15,15 +17,17 @@ import java.util.List;
 /**
  * @author lcf--试验设备进场记录
  * @date 2023-12-11 15:03:30
- * @remark 
+ * @remark
  */
 @Service
 public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordService{
 
     @Autowired
     private SgjsExperimentRecordMapper sgjsExperimentRecordMapper;
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
-                                                                                                                                                                                                                                                                                                                                                                                        
+
     public SgjsExperimentRecord getSgjsExperimentRecord(SgjsExperimentRecord sgjsExperimentRecord) {
         return sgjsExperimentRecordMapper.getSgjsExperimentRecord(sgjsExperimentRecord);
     }
@@ -57,15 +61,15 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
         return sgjsExperimentRecordMapper.updateSgjsExperimentRecord(sgjsExperimentRecord);
     }
 
-            @Transactional
-        public int updateSgjsExperimentRecordList(List<SgjsExperimentRecord> sgjsExperimentRecordList) {
-            for (SgjsExperimentRecord sgjsExperimentRecord : sgjsExperimentRecordList) {
-                sgjsExperimentRecord.setUpdateUser(SecurityUtils.getUserName());
-                sgjsExperimentRecord.setUpdateTime(DateUtils.getNowDate());
-            }
-            return sgjsExperimentRecordMapper.updateSgjsExperimentRecordList(sgjsExperimentRecordList);
+    @Transactional
+    public int updateSgjsExperimentRecordList(List<SgjsExperimentRecord> sgjsExperimentRecordList) {
+        for (SgjsExperimentRecord sgjsExperimentRecord : sgjsExperimentRecordList) {
+            sgjsExperimentRecord.setUpdateUser(SecurityUtils.getUserName());
+            sgjsExperimentRecord.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return sgjsExperimentRecordMapper.updateSgjsExperimentRecordList(sgjsExperimentRecordList);
+    }
+
     @Transactional
     public int deleteSgjsExperimentRecord(SgjsExperimentRecord sgjsExperimentRecord) {
         sgjsExperimentRecord.setUpdateUser(SecurityUtils.getUserName());
@@ -73,8 +77,17 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
         return sgjsExperimentRecordMapper.deleteSgjsExperimentRecord(sgjsExperimentRecord);
     }
 
-            @Transactional
-        public int deleteSgjsExperimentRecordByPks(List<Long> sgjsExperimentRecordPkList) {
-            return sgjsExperimentRecordMapper.deleteSgjsExperimentRecordByPks(sgjsExperimentRecordPkList);
-        }
+    @Transactional
+    public int deleteSgjsExperimentRecordByPks(List<Long> sgjsExperimentRecordPkList) {
+        return sgjsExperimentRecordMapper.deleteSgjsExperimentRecordByPks(sgjsExperimentRecordPkList);
     }
+
+    @Override
+    public AjaxResult sync() {
+        AjaxResult result = pmServiceApi.feignExperimentList();
+        if(!result.get("code").toString().equals("200")){
+            AjaxResult.error("同步异常");
+        }
+        return result;
+    }
+}

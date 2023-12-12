@@ -1,13 +1,11 @@
 package com.hhwy.sp.experiment.sgjsExperimentTotalPlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.domain.SgjsExperimentTotalPlan;
 import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.mapper.SgjsExperimentTotalPlanMapper;
 import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.service.ISgjsExperimentTotalPlanService;
-import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecord;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,9 +98,9 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
         if(null!=prjInfo.get("regionId")){
             info.setRegionId(Long.parseLong(prjInfo.get("regionId")+""));
         }
-        info.setRegionName(prjInfo.get("regionName")+"");
+        info.setRegionName(ObjectUtils.toString(prjInfo.get("regionName")));
         info.setProjectName(prjInfo.get("projectName")+"");
-        info.setWinTheBiddingUnit(prjInfo.get("winTheBiddingUnit")+"");
+        info.setWinTheBiddingUnit(ObjectUtils.toString(prjInfo.get("winTheBiddingUnit")));
         if(null!=prjInfo.get("projectId")){
             info.setProjectId(Long.parseLong(prjInfo.get("projectId")+""));
         }

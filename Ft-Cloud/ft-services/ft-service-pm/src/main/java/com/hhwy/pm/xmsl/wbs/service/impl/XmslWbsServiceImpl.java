@@ -544,7 +544,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         for (int i = 0; i < list.size(); i++) {
             XmslWbsHistory temp = list.get(i);
             temp.setPtVar2(StringUtils.isBlank(temp.getPtVar2())?"-1":temp.getPtVar2()); //ptVar2 变更状态添加默认值
-            temp.setName(ObjectUtils.nvlString(temp.getPartCode())+""+ObjectUtils.nvlString(temp.getPtVar3()));
+            temp.setName(ObjectUtils.nvlString(temp.getPartCode())+"-"+ObjectUtils.nvlString(temp.getPtVar3()));
             temp.setMainId(dto.getMainId());
             //若wbs有子级，清除清单编号。20230804 玉涛需求
             if(temp.getHaveChildren() == Constant.YES_INT){

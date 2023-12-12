@@ -83,7 +83,7 @@ public class SgjsEquipEntryRecordInfoController extends BaseController{
      */
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfo:addMap")
     @PostMapping("/batchAddMap")
-    public AjaxResult batchAddMap(@Validated(ValidationGroups.Save.class) @RequestBody Map<String,Object> map){
+    public AjaxResult batchAddMap(@RequestBody Map<String,Object> map){
         sgjsEquipEntryRecordInfoService.batchAddMap(map);
         return AjaxResult.success();
     }

@@ -16,6 +16,7 @@ import com.hhwy.pm.qqch.wzch.scenemanage.service.WzchSceneManageDetailService;
 import com.hhwy.pm.qqch.wzch.scenemanage.service.WzchSceneManageService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -55,6 +56,8 @@ public class WzchSceneManageServiceImpl implements WzchSceneManageService {
     private IQqchReviewService qqchReviewService;
     @Resource
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Resource
+    private GenCodeService genCodeService;
 
 
     private final static String ONE = "1";
@@ -145,10 +148,13 @@ public class WzchSceneManageServiceImpl implements WzchSceneManageService {
         // 获取前端传入的物资明细
         List<WzchSceneManageDetail> detailList = dto.getDetailList();
         JyDetailsUtil.jyDetails(detailList, ValidationGroups.Save.class);
-
+        dto.setTitle(ObjectUtils.nvlString(dto.getTitle()));
         if(dto.getId()==null){
             dto.setId(IdWorker.createId());
             new AddBaseInfoUtil<>().addBaseEntity(dto);
+            // 设置单据编码
+            dto.setValid("0");
+            dto.setSceneCode(genCodeService.getSetCode(CodeEnum.WF));
             int i = this.wzchSceneManageMapper.insert(dto);
             // 新增条数不为 1, 失败
             if (i != 1) throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "新增失败");

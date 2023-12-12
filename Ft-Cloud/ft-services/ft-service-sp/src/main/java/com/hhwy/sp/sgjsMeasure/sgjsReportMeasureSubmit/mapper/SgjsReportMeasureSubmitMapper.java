@@ -17,7 +17,7 @@ public interface SgjsReportMeasureSubmitMapper {
 
     int insertSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
 
-    int insertSgjsReportMeasureSubmitList(@Param("sgjsReportMeasureSubmitList") List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList);
+    int batchAdd(@Param("sgjsReportMeasureSubmitList") List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList);
 
     int updateSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
 
@@ -26,4 +26,8 @@ public interface SgjsReportMeasureSubmitMapper {
     int deleteSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
 
             int deleteSgjsReportMeasureSubmitByPks(@Param("sgjsReportMeasureSubmitPkList") List<Long> sgjsReportMeasureSubmitPkList);
-    }
+
+    void deleteAll(SgjsReportMeasureSubmit info);
+
+    void deleteWbsAll(SgjsReportMeasureSubmit info);
+}

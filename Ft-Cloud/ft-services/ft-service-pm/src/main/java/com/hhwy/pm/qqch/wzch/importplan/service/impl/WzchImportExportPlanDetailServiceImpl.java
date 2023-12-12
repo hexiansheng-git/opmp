@@ -228,11 +228,11 @@ public class WzchImportExportPlanDetailServiceImpl implements IWzchImportExportP
 //        if(wzchImportExportPlan.getId()==null){
 //            throw new BaseException("ID缺失");
 //        }
-
+        wzchImportExportPlan.setTitle(com.hhwy.utils.ObjectUtils.nvlString(wzchImportExportPlan.getTitle()));
         if(StringUtils.isBlank(wzchImportExportPlan.getPlanCode())){
-//            String code = genCodeService.getSetCode(CodeEnum.EQU_IMPORT_EXPORT_PLAN);
-//            code += genCodeService.fillString(1, 2);
-//            wzchImportExportPlan.setPlanCode(code);
+            String code = genCodeService.getSetCode(CodeEnum.EQU_IMPORT_EXPORT_PLAN);
+            code += genCodeService.fillString(1, 2);
+            wzchImportExportPlan.setPlanCode(code);
         }
         if(StringUtils.isBlank(wzchImportExportPlan.getCreateUser())){
             wzchImportExportPlan.setCreateUser(SecurityUtils.getUserId().toString());

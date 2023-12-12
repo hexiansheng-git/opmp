@@ -245,6 +245,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         //2、获取施工策划  
         QqchTotalDemand queryDemand = new QqchTotalDemand();
         queryDemand.setVersion(version);
+
         List<QqchTotalDemand> totalDemandList = qqchTotalDemandService.getQqchTotalDemandListSource(queryDemand);
         if(CollectionUtils.isEmpty(totalDemandList))
             return ;
@@ -289,6 +290,9 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
             new AddBaseInfoUtil().addBaseEntity(tempTotal);
             addTimeList.add(tempTotal);
         }
+        String code = genCodeService.getSetCode(CodeEnum.EQU_TOTAL_DEMAND);
+        code += genCodeService.fillString(1, 2);
+        totalDemand.setDemandCode(code);
         this.wzchTotalDemandService.insertWzchTotalDemand(totalDemand);
         this.wzchTotalDemandDetailMapper.batchInsert(addList);
         this.wzchTotalDemandTimeCountService.batchInsert(addTimeList);

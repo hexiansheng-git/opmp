@@ -58,8 +58,8 @@ public class WzchRevolveRentServiceImpl implements IWzchRevolveRentService {
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Resource
     private IQqchReviewService qqchReviewService;
-//    @Resource
-//    private FlowService flowService;
+    @Resource
+    private GenCodeService genCodeService;
 
 
     private final static String ONE = "1";
@@ -204,7 +204,7 @@ public class WzchRevolveRentServiceImpl implements IWzchRevolveRentService {
         // 设置主键
         dto.setId(rentId);
         // 设置单据编码
-//        dto.setRentCode(genCodeService.getSetCode(CodeEnum.WRR));
+        dto.setRentCode(genCodeService.getSetCode(CodeEnum.WRR));
         // 设置版本号码
         dto.setVersionCode(new BigDecimal("1.0"));
         // 是否生效 新增不能生效
@@ -303,11 +303,13 @@ public class WzchRevolveRentServiceImpl implements IWzchRevolveRentService {
         dto.setVersionCode(new BigDecimal("1.0"));
         // 是否生效 新增不能生效
         dto.setValid("0");
-        
+        dto.setRentCode(genCodeService.getSetCode(CodeEnum.WRR));
+        dto.setTitle("");
         // 设置新增信息
         if(dto.getId()==null){
             new AddBaseInfoUtil<>().addBaseEntity(dto);
             dto.setId(IdWorker.createId());
+
             int i = this.wzchRevolveRentMapper.insertWzchRevolveRent(dto);
             // 新增条数不为 1, 失败
             if (i != 1) throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "新增失败");
@@ -332,8 +334,11 @@ public class WzchRevolveRentServiceImpl implements IWzchRevolveRentService {
         wzchRevolveRent.setLimitPriceDesc(StringUtils.equals("null",wzchRevolveRent.getLimitPriceDesc())?"":wzchRevolveRent.getLimitPriceDesc());
         List<WzchRevolveRent> masterList = this.wzchRevolveRentMapper.selectWzchRevolveRentList(wzchRevolveRent);
         boolean isNew = CollectionUtils.isEmpty(masterList);
+
         if(isNew){
             wzchRevolveRent.setId(IdWorker.createId());
+            wzchRevolveRent.setRentCode(genCodeService.getSetCode(CodeEnum.WRR));
+            wzchRevolveRent.setTitle("");
             new AddBaseInfoUtil().addBaseEntity(wzchRevolveRent);
             this.wzchRevolveRentMapper.insertWzchRevolveRent(wzchRevolveRent);
         }else{

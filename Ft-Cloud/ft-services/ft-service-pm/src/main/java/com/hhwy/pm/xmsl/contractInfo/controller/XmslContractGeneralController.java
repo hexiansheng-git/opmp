@@ -7,6 +7,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractGeneral;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractGeneral;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractGeneralVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractGeneralService;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -33,7 +34,6 @@ public class XmslContractGeneralController extends BaseController {
 
     @Autowired
     private IXmslContractGeneralService xmslContractGeneralService;
-
 
     @PreAuthorize(hasPermi = "xmslContractGeneral:list")
     @GetMapping
@@ -134,5 +134,16 @@ public class XmslContractGeneralController extends BaseController {
     public AjaxResult provideList(@Validated(ValidationGroups.Get.class) XmslContractGeneral xmslContractGeneralParam) {
         List<XmslContractGeneral> treeVOS = xmslContractGeneralService.provideList(xmslContractGeneralParam);
         return AjaxResult.success(treeVOS);
+    }
+
+
+    /**
+     * 功能描述: 弹窗功能，整合弹框选中和列表中的数据
+     * 作者: fushudong
+     * 时间: 2023/12/11
+     */
+    public AjaxResult dataHandler(@RequestBody XmslContractGeneralVo xmslContractGeneralVo){
+        List<XmslContractGeneral> result = xmslContractGeneralService.dataHandler(xmslContractGeneralVo);
+        return AjaxResult.success(result);
     }
 }

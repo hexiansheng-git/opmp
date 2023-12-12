@@ -1,9 +1,16 @@
 package com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.controller;
 
+import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
+import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
+import com.hhwy.utils.tree.TreeUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
@@ -37,14 +44,17 @@ public class SgjsReportMeasureSubmitController extends BaseController {
         return AjaxResult.success(sgjsReportMeasureSubmit);
     }
 
+    /**
+     * 台账列表数据
+     * @param sgjsReportMeasureSubmitParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:list")
     @GetMapping("/list")
     public AjaxResult getSgjsReportMeasureSubmitList(
         SgjsReportMeasureSubmit sgjsReportMeasureSubmitParam) {
-        startPage();
-        List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList = sgjsReportMeasureSubmitService.getSgjsReportMeasureSubmitList(
-            sgjsReportMeasureSubmitParam);
-        return getDataTableAjaxResult(sgjsReportMeasureSubmitList);
+        SgjsReportMeasureSubmitVo sgjsReportMeasureSubmitVo = sgjsReportMeasureSubmitService.list(sgjsReportMeasureSubmitParam);
+        return AjaxResult.success(sgjsReportMeasureSubmitVo);
     }
 
     @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:add")
@@ -55,13 +65,17 @@ public class SgjsReportMeasureSubmitController extends BaseController {
         return AjaxResult.success(sgjsReportMeasureSubmitParam);
     }
 
+    /**
+     * 批量新增
+     * @param sgjsReportMeasureSubmitVo
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertSgjsReportMeasureSubmitList(
-        @RequestBody List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitListParam) {
-        sgjsReportMeasureSubmitService.insertSgjsReportMeasureSubmitList(
-            sgjsReportMeasureSubmitListParam);
-        return AjaxResult.success(sgjsReportMeasureSubmitListParam);
+        @Validated(ValidationGroups.Save.class) @RequestBody SgjsReportMeasureSubmitVo sgjsReportMeasureSubmitVo) {
+        AjaxResult ajaxResult =  sgjsReportMeasureSubmitService.batchAdd(sgjsReportMeasureSubmitVo);
+        return ajaxResult;
     }
 
     @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:update")
@@ -99,9 +113,12 @@ public class SgjsReportMeasureSubmitController extends BaseController {
     @GetMapping("/export")
     public void export(HttpServletResponse response,
         SgjsReportMeasureSubmit sgjsReportMeasureSubmitParam) throws IOException {
-        List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList = sgjsReportMeasureSubmitService.getSgjsReportMeasureSubmitList(
-            sgjsReportMeasureSubmitParam);
-        ExcelUtils<SgjsReportMeasureSubmit> util = new ExcelUtils<>(SgjsReportMeasureSubmit.class);
-        util.exportExcel(response, sgjsReportMeasureSubmitList, DateUtils.getDate());
+        SgjsReportMeasureSubmitVo sgjsReportMeasureSubmitVo = sgjsReportMeasureSubmitService.list(sgjsReportMeasureSubmitParam);
+        List<SgjsReportMeasureSubmit> treeList = sgjsReportMeasureSubmitVo.getTreeList();
+        if(CollectionUtils.isNotEmpty(treeList)){
+            treeList = TreeUtil.treeToList(treeList);
+        }
+        ExcelUtils<SgjsReportMeasureSubmit> utils = new ExcelUtils<>(SgjsReportMeasureSubmit.class);
+        utils.exportExcel(response,treeList,DateUtils.getDate());
     }
 }

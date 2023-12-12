@@ -370,11 +370,12 @@ public class WzchLocalPurchaseSupplyServiceImpl implements IWzchLocalPurchaseSup
         dto.setTitle("");
         // 设置版本号码
         dto.setVersionCode(new BigDecimal("1.0"));
-        dto.setValid("0");
         // 设置新增信息
         EntityUtils.setCreateUpdateInfo(dto);
         if(dto.getId()==null){
             dto.setId(IdWorker.createId());
+            dto.setSupplyCode(genCodeService.getSetCode(CodeEnum.WLPS));
+            dto.setValid("0");
             int i = this.localPurchaseSupplyMapper.insertWzchPurchaseSupply(dto);
             // 新增条数不为 1, 失败
             if (i != 1) throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "新增失败");
@@ -402,6 +403,9 @@ public class WzchLocalPurchaseSupplyServiceImpl implements IWzchLocalPurchaseSup
         if(isNew){
             purchaseSupply.setId(IdWorker.createId());
             new AddBaseInfoUtil().addBaseEntity(purchaseSupply);
+            purchaseSupply.setSupplyCode(genCodeService.getSetCode(CodeEnum.WLPS));
+            purchaseSupply.setValid("0");
+            purchaseSupply.setTitle("");
             this.localPurchaseSupplyMapper.insertWzchPurchaseSupply(purchaseSupply);
         }else{
             masterList.get(0).setLimitPriceDesc(purchaseSupply.getLimitPriceDesc());

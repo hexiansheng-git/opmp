@@ -31,10 +31,8 @@ public interface PmServiceApi {
     /**
      *  3.6.1测量工作概述
      */
-
     @PostMapping("/qqchMeasureExpRange/feignList")
     AjaxResult qqchMeasureExpRangeList(@RequestBody CommonQqchMeasureExpRange dto);
-
 
     /**
      * 获取项目技术管理部门及岗位设置表
@@ -56,11 +54,18 @@ public interface PmServiceApi {
 
 
     /**
-     * 3.6.2 feign接口
+     * 3.7.1 测量管理计划
      * @return
      */
     @GetMapping("/qqchMeasureExpPlan/feignList")
     AjaxResult qqchMeasureExpPlanList();
+
+    /**
+     * 3.7.2 实验工作计划
+     * @return
+     */
+    @GetMapping("/qqchMeasureExpPlan/feignPlanList")
+    AjaxResult feignPlanList();
 
     /**
      * 3.6.4
@@ -68,5 +73,12 @@ public interface PmServiceApi {
      */
     @PostMapping("/qqchMeasureExpEqu/feignList")
     AjaxResult qqchMeasureExpEquList();
+
+    /**
+     * 3.7.4 实验仪器设备配置计划
+     * @return
+     */
+    @PostMapping("/qqchMeasureExpEqu/feignExperimentList")
+    AjaxResult feignExperimentList();
 
 }

@@ -84,7 +84,7 @@
         order by create_time desc
     </select>
 
-    <select id="getQqchOrganizationListList" resultMap="QqchOrganizationListResultMap">
+     <select id="getQqchOrganizationListList" resultMap="QqchOrganizationListResultMap">
         <include refid="selectQqchOrganizationListVo"/>
         <where>
             del_flag = "0"
