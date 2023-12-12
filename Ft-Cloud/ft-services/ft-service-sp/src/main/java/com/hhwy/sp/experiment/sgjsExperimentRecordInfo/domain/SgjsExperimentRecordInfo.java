@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.domain.SgjsExperimentRecordInfoDetail;
 
 /**
  * @author lcf--设备实际进场记录
@@ -30,7 +31,6 @@ public class SgjsExperimentRecordInfo extends BaseEntity {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主表id"    )
     private Long recordId;
     /**
      * 字段描述：管理编码
@@ -42,26 +42,8 @@ public class SgjsExperimentRecordInfo extends BaseEntity {
      * 字段描述：实验室编码
      */
     @JsonProperty
-    @Excel(name = "实验室编码"    )
+    @Excel(name = "试验室编码"    )
     private String experimentCode;
-    /**
-     * 字段描述：类别编码
-     */
-    @JsonProperty
-    @Excel(name = "类别编码"    )
-    private String categoryCode;
-    /**
-     * 字段描述：设备名称
-     */
-    @JsonProperty
-    @Excel(name = "设备名称"    )
-    private String materialName;
-    /**
-     * 字段描述：型号
-     */
-    @JsonProperty
-    @Excel(name = "型号"    )
-    private String materialSpec;
     /**
      * 字段描述：类别名称
      */
@@ -69,12 +51,11 @@ public class SgjsExperimentRecordInfo extends BaseEntity {
     @Excel(name = "类别名称"    )
     private String categoryName;
     /**
-     * 字段描述：类别
+     * 字段描述：设备名称
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "类别"    )
-    private Long categoryId;
+    @Excel(name = "设备名称"    )
+    private String materialName;
     /**
      * 字段描述：厂商
      */
@@ -82,17 +63,34 @@ public class SgjsExperimentRecordInfo extends BaseEntity {
     @Excel(name = "厂商"    )
     private String manufacturer;
     /**
-     * 字段描述：主机系列号
+     * 字段描述：型号
      */
     @JsonProperty
-    @Excel(name = "主机系列号"    )
-    private String serialNum;
+    @Excel(name = "型号"    )
+    private String materialSpec;
+    /**
+     * 字段描述：类别编码
+     */
+    @JsonProperty
+    private String categoryCode;
+    /**
+     * 字段描述：类别
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    private Long categoryId;
     /**
      * 字段描述：主机功率（KW）
      */
     @JsonProperty
     @Excel(name = "主机功率（KW）"    )
     private String power;
+    /**
+     * 字段描述：主机系列号
+     */
+    @JsonProperty
+    @Excel(name = "主机系列号"    )
+    private String serialNum;
     /**
      * 字段描述：底盘系列号
      */
@@ -116,6 +114,7 @@ public class SgjsExperimentRecordInfo extends BaseEntity {
      * 字段描述：
      */
     @JsonProperty
+    @Excel(name = "自重（t）"    )
     private String weight;
     /**
      * 字段描述：原值
@@ -127,6 +126,7 @@ public class SgjsExperimentRecordInfo extends BaseEntity {
      * 字段描述：
      */
     @JsonProperty
+    @Excel(name = "余值"    )
     private String residualValue;
     /**
      * 字段描述：验收日期
@@ -150,11 +150,17 @@ public class SgjsExperimentRecordInfo extends BaseEntity {
     @Excel(name = "实际退场时间"    ,dateFormat = "yyyy-MM-dd"  )
     private Date exitDate;
     /**
+     * 字段描述：
+     */
+    @JsonProperty
+    @Excel(name = "来源"    ,dateFormat = "yyyy-MM-dd"  )
+    private String source;
+    /**
      * 字段描述：最近自检校验日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "最近自检校验日期"    ,dateFormat = "yyyy-MM-dd"  )
+    @Excel(name = "检验标定日期"    ,dateFormat = "yyyy-MM-dd"  )
     private Date checkDate;
     /**
      * 字段描述：标定周期
@@ -169,11 +175,6 @@ public class SgjsExperimentRecordInfo extends BaseEntity {
     @JsonProperty
     @Excel(name = "下次检验标定日期"    ,dateFormat = "yyyy-MM-dd"  )
     private Date nextCheckDate;
-    /**
-     * 字段描述：
-     */
-    @JsonProperty
-    private String source;
     /**
      * 字段描述：当前状态
      */
@@ -190,122 +191,113 @@ public class SgjsExperimentRecordInfo extends BaseEntity {
      * 字段描述：数据来源 0新增1同步
      */
     @JsonProperty
-    @Excel(name = "数据来源 0新增1同步"    )
     private String dataSource;
     /**
      * 字段描述：所属区域id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "所属区域id"    )
     private Long regionId;
     /**
      * 字段描述：所属区域名称
      */
     @JsonProperty
-    @Excel(name = "所属区域名称"    )
     private String regionName;
     /**
      * 字段描述：项目id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "项目id"    )
     private Long projectId;
     /**
      * 字段描述：项目名称
      */
     @JsonProperty
-    @Excel(name = "项目名称"    )
     private String projectName;
     /**
      * 字段描述：部门id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "部门id"    )
     private Long deptId;
     /**
      * 字段描述：数据创建者id
      */
     @JsonProperty
-    @Excel(name = "数据创建者id"    )
     private String createUser;
     /**
      * 字段描述：数据创建者名称
      */
     @JsonProperty
-    @Excel(name = "数据创建者名称"    )
     private String createUserName;
     /**
      * 字段描述：数据创建系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据创建系统时间"  ,dateFormat = "yyyy-MM-dd HH:mm:ss"    )
     private Date createTime;
     /**
      * 字段描述：数据修改者id
      */
     @JsonProperty
-    @Excel(name = "数据修改者id"    )
     private String updateUser;
     /**
      * 字段描述：数据修改系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据修改系统时间"  ,dateFormat = "yyyy-MM-dd HH:mm:ss"    )
     private Date updateTime;
     /**
      * 字段描述：数据删除者
      */
     @JsonProperty
-    @Excel(name = "数据删除者"    )
     private String delUser;
     /**
      * 字段描述：数据删除系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据删除系统时间"  ,dateFormat = "yyyy-MM-dd HH:mm:ss"    )
     private Date delTime;
     /**
      * 字段描述：删除标识：0未删除；1已删除
      */
     @JsonProperty
-    @Excel(name = "删除标识：0未删除；1已删除"    )
     private String delFlag;
     /**
      * 字段描述：预留字段1   项目编码
      */
     @JsonProperty
-    @Excel(name = "预留字段1   项目编码"    )
     private String ptVar1;
     /**
      * 字段描述：预留字段2  leaf 是否是叶子节点 0否1是
      */
     @JsonProperty
-    @Excel(name = "预留字段2  leaf 是否是叶子节点 0否1是"    )
     private String ptVar2;
     /**
      * 字段描述：预留字段3
      */
     @JsonProperty
-    @Excel(name = "预留字段3"    )
     private String ptVar3;
     /**
      * 字段描述：预留字段4
      */
     @JsonProperty
-    @Excel(name = "预留字段4"    )
     private String ptVar4;
     /**
      * 字段描述：预留字段5
      */
     @JsonProperty
-    @Excel(name = "预留字段5"    )
     private String ptVar5;
+
+    private List<SgjsExperimentRecordInfoDetail> detailList;
+
+    public List<SgjsExperimentRecordInfoDetail> getDetailList() {
+        return detailList;
+    }
+
+    public void setDetailList(List<SgjsExperimentRecordInfoDetail> detailList) {
+        this.detailList = detailList;
+    }
 
     @JsonIgnore
     public Long getId() {

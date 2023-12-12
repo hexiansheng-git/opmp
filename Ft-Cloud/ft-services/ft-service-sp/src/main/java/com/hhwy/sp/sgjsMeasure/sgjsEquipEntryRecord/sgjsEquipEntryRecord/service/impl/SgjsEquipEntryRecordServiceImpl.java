@@ -6,9 +6,11 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.mapper.SgjsEquipEntryRecordMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.service.ISgjsEquipEntryRecordService;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.slf4j.Logger;
@@ -110,7 +112,26 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             if(CollectionUtils.isEmpty(map)){
                 return AjaxResult.error("同步转换异常");
             }
-
+            List<SgjsEquipEntryRecord> dataList=new ArrayList<>();
+            for (int i = 0; i < map.size(); i++) {
+                SgjsEquipEntryRecord info=new SgjsEquipEntryRecord();
+                JSONObject object = JSONObject.parseObject(JSONObject.toJSONString(map.get(i)));
+                info.setMaterialCode(ObjectUtils.toString(object.get("equCode")));
+                info.setMaterialName(ObjectUtils.toString(object.get("equName")));
+                info.setCategoryName(ObjectUtils.toString(object.get("equTypeName")));
+                info.setMaterialSpec(ObjectUtils.toString(object.get("spec")));
+                info.setSource(ObjectUtils.toString(object.get("source")));
+                info.setNum(ObjectUtils.toInteger(object.get("reqNum")));
+                info.setEntryDate(ObjectUtils.toDate(object.get("reqInDate")));
+                info.setCreateTime(DateUtils.getNowDate());
+                info.setCreateUser(SecurityUtils.getUserId()+"");
+                info.setId(IdWorker.createId());
+                info.setProjectId(ObjectUtils.toLong(object.get("")));
+                dataList.add(info);
+            }
+            if(!CollectionUtils.isEmpty(dataList)){
+                sgjsEquipEntryRecordMapper.insertSgjsEquipEntryRecordList(dataList);
+            }
             return AjaxResult.success(list);
         }
         logger.error("同步3.6.4异常");

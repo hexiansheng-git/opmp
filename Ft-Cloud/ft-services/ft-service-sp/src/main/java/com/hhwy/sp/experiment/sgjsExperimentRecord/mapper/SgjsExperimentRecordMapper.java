@@ -1,8 +1,9 @@
 package com.hhwy.sp.experiment.sgjsExperimentRecord.mapper;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author lcf--试验设备进场记录
@@ -26,4 +27,12 @@ public interface SgjsExperimentRecordMapper {
     int deleteSgjsExperimentRecord(SgjsExperimentRecord sgjsExperimentRecord);
 
     int deleteSgjsExperimentRecordByPks(@Param("sgjsExperimentRecordPkList") List<Long> sgjsExperimentRecordPkList);
+
+    /**
+     * 批量修改
+     *
+     * @param eList
+     * @return
+     */
+    int bathUpdateByList(List<SgjsExperimentRecord> eList);
 }
