@@ -131,6 +131,9 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
                 safeEnvirRiskListDetail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 safeEnvirRiskListDetail.setCreateUserName(SecurityUtils.getUserName());
                 safeEnvirRiskListDetail.setCreateTime(DateUtils.getNowDate());
+                if(safeEnvirRiskListDetail.getPtVar2()==null){
+                    safeEnvirRiskListDetail.setPtVar2("0");
+                }
             }
         }
         if(!ObjectNullUtil.isEmpty(detailList)){
