@@ -1,37 +1,30 @@
 package com.hhwy.pm.qqch.preparation.workPlanning.controller;
 
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-import java.util.Map;
-
-import cn.hutool.poi.excel.ExcelUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.common.service.CommonService;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlanVo;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningBuildPlanService;
-import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
-import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author zq
@@ -73,6 +66,7 @@ public class QqchWorkPlanningBuildPlanController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchWorkPlanningBuildPlan:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-1.4大临设施布设", name = "1.4.2营地场站规划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchWorkPlanningBuildPlanList(@Validated(ValidationGroups.Save.class) @RequestBody QqchWorkPlanningBuildPlanVo qqchWorkPlanningBuildPlanVo) {
         try{
             qqchWorkPlanningBuildPlanService.insertQqchWorkPlanningBuildPlanList(qqchWorkPlanningBuildPlanVo);
@@ -126,6 +120,7 @@ public class QqchWorkPlanningBuildPlanController extends BaseController {
     @PreAuthorize(hasPermi = "qqchWorkPlanningBuildPlan:importData")
     @PostMapping("/importData")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-1.4大临设施布设", name = "1.4.2营地场站规划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(@RequestPart("file") MultipartFile file){
         ExcelUtils<QqchWorkPlanningBuildPlan> util = new ExcelUtils<>(QqchWorkPlanningBuildPlan.class);
         try{

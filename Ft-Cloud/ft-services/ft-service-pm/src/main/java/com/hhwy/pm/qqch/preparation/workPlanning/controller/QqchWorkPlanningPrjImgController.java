@@ -6,6 +6,8 @@ import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningPrjImgService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
@@ -40,6 +42,7 @@ public class QqchWorkPlanningPrjImgController extends BaseController{
     }
 
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-1.4大临设施布设", name = "1.4.1项目总平面图规划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchWorkPlanningPrjImg(@Validated(ValidationGroups.Save.class) @RequestBody QqchWorkPlanningPrjImg qqchWorkPlanningPrjImgParam){
         try{
             qqchWorkPlanningPrjImgService.insertQqchWorkPlanningPrjImg(qqchWorkPlanningPrjImgParam);

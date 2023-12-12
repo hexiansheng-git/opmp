@@ -10,18 +10,16 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.listener.TerrainLan
 import com.hhwy.pm.xmsl.implement.domain.XmslTerrainLandforms;
 import com.hhwy.pm.xmsl.implement.domain.vo.ImplementVo;
 import com.hhwy.pm.xmsl.implement.service.IXmslTerrainLandformsService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author zhenglili
@@ -55,6 +53,7 @@ public class XmslTerrainLandformsController extends BaseController {
      */
     @PreAuthorize(hasPermi = "xmslTerrainLandforms:add")
     @PostMapping("/batchSave")
+    @CustomLogger(title = "项目设立", name = "实施条件" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSave(@RequestBody ImplementVo implementVo) {
         xmslTerrainLandformsService.batchSave(implementVo);
         return AjaxResult.success("保存成功！");

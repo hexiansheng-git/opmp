@@ -147,6 +147,7 @@
                 </foreach>
             </if>
         </where>
+        order by create_time desc
     </select>
 
     <insert id="insertSgjsCriticalExpReport" useGeneratedKeys="true" keyProperty="id">
@@ -583,7 +584,7 @@
         update `sgjs_critical_exp_report` set del_flag = 1
         <where>
             `id` in
-            <foreach item="id" collection="sgjsCriticalExpReportPkList" open="(" separator="," close=")">
+            <foreach item="id" collection="idList" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>
