@@ -58,13 +58,19 @@ public class XmslDrawReviewController extends BaseController{
 
     @PreAuthorize(hasPermi = "xmslDrawReview:list")
     @PostMapping("/detail")
-    public AjaxResult detali(@RequestBody XmslDrawReview drawReview) {
+    public AjaxResult detail(@RequestBody XmslDrawReview drawReview) {
         if(drawReview.getId() == null){
-            drawReview =xmslDrawReviewService.getEffectLast();
+            drawReview = xmslDrawReviewService.getEffectLast();
+            if(drawReview == null){ //若未获取到生效数据，尝试获取最新未生效数据
+                drawReview = xmslDrawReviewService.getLast();
+            }
         }else{
             drawReview = xmslDrawReviewService.getById(drawReview.getId());
         }
-        drawReview = drawReview==null?new XmslDrawReview():drawReview;
+        if(drawReview == null){ //若是第一次新增，默认不可编辑
+            drawReview = new XmslDrawReview();
+            drawReview.setValid(1);
+        }
         //是否有调整记录
         Integer hasChange = xmslDrawReviewService.hasChange();
         if(drawReview != null)
