@@ -67,10 +67,8 @@ public class XmslDrawReviewController extends BaseController{
         }else{
             drawReview = xmslDrawReviewService.getById(drawReview.getId());
         }
-        if(drawReview == null){ //若是第一次新增，默认不可编辑
+        if(drawReview == null)//若是第一次新增，默认不可编辑
             drawReview = new XmslDrawReview();
-            drawReview.setValid(1);
-        }
         //是否有调整记录
         Integer hasChange = xmslDrawReviewService.hasChange();
         if(drawReview != null)
