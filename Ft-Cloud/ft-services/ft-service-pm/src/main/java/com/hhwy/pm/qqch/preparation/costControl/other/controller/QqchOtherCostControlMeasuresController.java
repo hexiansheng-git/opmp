@@ -4,6 +4,8 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.costControl.other.domain.vo.QqchOtherCostControlMeasuresVo;
 import com.hhwy.pm.qqch.preparation.costControl.other.service.IQqchOtherCostControlMeasuresService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -32,6 +34,7 @@ public class QqchOtherCostControlMeasuresController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchOtherCostControlMeasures:list")
     @GetMapping("/getTreeList")
+    @CustomLogger(title = "前期策划-前期策划编制-成本管控策划-其他成本管控工作安排及措施", name = "5.5其他成本管控工作安排及措施" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getTreeList(BigDecimal version) {
         QqchOtherCostControlMeasuresVo qqchOtherCostControlMeasuresVo = qqchOtherCostControlMeasuresService
             .getQqchOtherCostControlMeasuresList(version);
@@ -46,6 +49,7 @@ public class QqchOtherCostControlMeasuresController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchOtherCostControlMeasures:add")
     @PostMapping("/batchSave")
+    @CustomLogger(title = "前期策划-前期策划编制-成本管控策划-其他成本管控工作安排及措施", name = "5.5其他成本管控工作安排及措施" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchOtherCostControlMeasuresVo qqchOtherCostControlMeasuresVo) {
         qqchOtherCostControlMeasuresService.batchSave(qqchOtherCostControlMeasuresVo);

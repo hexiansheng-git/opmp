@@ -5,6 +5,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.evaluation.service.IQqchSummaryEvaluationService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +26,7 @@ public class QqchSummaryEvaluationController extends BaseController {
     private IQqchSummaryEvaluationService qqchSummaryEvaluationService;
 
 //    @PreAuthorize(hasPermi = "qqchSummaryEvaluation:list")
+    @CustomLogger(title = "前期策划-前期策划总结评价", name = "前期策划总结评价" ,businessType = CustomBusinessType.SELECT)
     @GetMapping("/getQqchSummaryEvaluation")
     public AjaxResult getQqchSummaryEvaluation(
         @Validated(ValidationGroups.Get.class) QqchSummaryEvaluation qqchSummaryEvaluationParam) {
@@ -34,6 +37,7 @@ public class QqchSummaryEvaluationController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSummaryEvaluation:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划总结评价", name = "前期策划总结评价" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchSummaryEvaluation qqchSummaryEvaluationParam) {
         qqchSummaryEvaluationService.save(qqchSummaryEvaluationParam);
@@ -47,6 +51,7 @@ public class QqchSummaryEvaluationController extends BaseController {
      * @return
      */
     @PostMapping("/submit")
+    @CustomLogger(title = "前期策划-前期策划总结评价", name = "前期策划总结评价" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult submit(@Validated({ValidationGroups.Update.class,
         ValidationGroups.Save.class}) @RequestBody QqchSummaryEvaluation qqchSummaryEvaluationParam) {
         qqchSummaryEvaluationService.submit(qqchSummaryEvaluationParam);
