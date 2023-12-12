@@ -71,6 +71,7 @@ public class CustomLoggerAspect {
         }
 
         String title = customLogger.title();
+        String name = customLogger.name();
         Object result = null;
         //方法请求参数
         Object[] args = joinPoint.getArgs();
@@ -85,7 +86,7 @@ public class CustomLoggerAspect {
                 @Override
                 public void run() {
                     //数据解析
-                    handleLogOperate(st, finalResult,title,request,args,joinPoint, "500");
+                    handleLogOperate(st, finalResult,title,name,request,args,joinPoint, "500");
                 }
             });
             thread.start();
@@ -99,7 +100,7 @@ public class CustomLoggerAspect {
             @Override
             public void run() {
                 //数据解析
-                handleLogOperate(st, finalResult1,title,request,args,joinPoint);
+                handleLogOperate(st, finalResult1,title,name,request,args,joinPoint);
             }
         });
         thread.start();
@@ -117,7 +118,7 @@ public class CustomLoggerAspect {
      * @param args 请求参数
      * @param joinPoint
      */
-    private void handleLogOperate(long st,Object result,String title,HttpServletRequest request,Object[] args,
+    private void handleLogOperate(long st,Object result,String title,String name,HttpServletRequest request,Object[] args,
                                   ProceedingJoinPoint joinPoint){
         long et = System.currentTimeMillis();
         long sec=et-st;
@@ -166,7 +167,8 @@ public class CustomLoggerAspect {
         }
         //租户标识
         interfaceLog.setPtVar2(request.getHeader("tenantKey"));
-
+        //功能名
+        interfaceLog.setPtVar3(name);
         try{
             if(code.equals("200")){
                     logServiceApi.insertSuccessLog(interfaceLog);
@@ -180,7 +182,7 @@ public class CustomLoggerAspect {
     }
 
 
-    private void handleLogOperate(long st,Object result,String title,HttpServletRequest request,Object[] args,
+    private void handleLogOperate(long st,Object result,String title,String name,HttpServletRequest request,Object[] args,
                                   ProceedingJoinPoint joinPoint, String code){
         long et = System.currentTimeMillis();
         long sec=et-st;
@@ -215,7 +217,8 @@ public class CustomLoggerAspect {
         }
         //租户标识
         interfaceLog.setPtVar2(request.getHeader("tenantKey"));
-
+        //功能名
+        interfaceLog.setPtVar3(name);
         try{
             if(code.equals("200")){
                 logServiceApi.insertSuccessLog(interfaceLog);

@@ -9,6 +9,8 @@ import java.lang.annotation.*;
 public @interface CustomLogger {
     //功能模块名称
     String title();
+    //
+    String name();
     //操作类型
     CustomBusinessType businessType();
 
