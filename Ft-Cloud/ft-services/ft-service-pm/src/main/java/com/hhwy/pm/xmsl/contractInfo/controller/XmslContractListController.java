@@ -178,9 +178,9 @@ public class XmslContractListController extends BaseController {
      * @throws IOException
      */
     @PostMapping("/import")
-    public AjaxResult importDate(@RequestPart("file") MultipartFile file) {
+    public AjaxResult importDate(@RequestPart("file") MultipartFile file) throws Exception {
         ExcelUtils<ImportXmslContractListVo> util = new ExcelUtils<>(ImportXmslContractListVo.class);
-        try {
+//        try {
             InputStream inputStream = file.getInputStream();
             List<ImportXmslContractListVo> importXmslContractListVos = util.importExcel(inputStream);
             //找到层级关系
@@ -191,9 +191,9 @@ public class XmslContractListController extends BaseController {
                     , ImportXmslContractListVo::getChildren
                     , ImportXmslContractListVo::setChildren);
             return AjaxResult.success(dateList);
-        } catch (Exception e) {
-            throw new RuntimeException("导入失败！");
-        }
+//        } catch (Exception e) {
+//            throw new RuntimeException("导入失败！");
+//        }
     }
 
     /**
