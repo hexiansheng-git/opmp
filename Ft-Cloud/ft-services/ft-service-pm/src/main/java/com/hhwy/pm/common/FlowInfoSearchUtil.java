@@ -51,7 +51,10 @@ public class FlowInfoSearchUtil {
     public static <T extends CommonBaseEntity> List<T> getFlowInfo(List<T> list, FlowEnum flowEnum){
         if(CollectionUtils.isEmpty(list) || flowEnum == null || StringUtil.isBlank(flowEnum.getTableName()))
             return list;
-        String[] businessIds =list.stream().map(r->r.getId()+"").toArray(String[]::new);
+        String[] businessIds =list.stream().filter(o -> o.getId() != null).map(r->r.getId()+"").toArray(String[]::new);
+        if(businessIds.length == 0){
+            return list;
+        }
         //查询流程数据：1、ft_act_business查不到数据（根据 业务主键business_id、表名business_table_name、租户标识tenant_key），表明流程未发起
         //           2、ft_act_business有数据，根据process_instance_id联查act_ru_task（PROC_INST_ID_），查到的记录即为当前流程待审核节点，
         //          如若没有数据，表明流程已结束，NAME_：当前审批节点名称，ASSIGNEE_：审批人
