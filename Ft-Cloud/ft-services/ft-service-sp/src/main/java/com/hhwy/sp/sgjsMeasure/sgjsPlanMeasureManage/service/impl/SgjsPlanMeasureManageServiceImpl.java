@@ -72,10 +72,8 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         if (StringUtils.isNotEmpty(sgjsPlanMeasureManage.getRealStartDateStr())) {
             String realStartDateStr = sgjsPlanMeasureManage.getRealStartDateStr();
             String[] split = realStartDateStr.split("~");
-            sgjsPlanMeasureManage.setRealStartDate(
-                FtDateUtils.parseDate(split[0].replaceAll("(?:年|月|日)", "-")));
-            sgjsPlanMeasureManage.setRealEndDate(
-                FtDateUtils.parseDate(split[1].replaceAll("(?:年|月|日)", "-")));
+            sgjsPlanMeasureManage.setRealStartDate(FtDateUtils.parseDate(split[0].replaceAll("(?:年|月|日)", "-")));
+            sgjsPlanMeasureManage.setRealEndDate(FtDateUtils.parseDate(split[1].replaceAll("(?:年|月|日)", "-")));
         }
         List<SgjsPlanMeasureManage> sgjsPlanMeasureManageList = sgjsPlanMeasureManageMapper.getSgjsPlanMeasureManageList(
             sgjsPlanMeasureManage);
@@ -96,31 +94,40 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         SgjsPlanMeasureManageVo sgjsPlanMeasureManageVo = new SgjsPlanMeasureManageVo();
         List<SgjsPlanMeasureManage> treeToList = new ArrayList<>();
         AjaxResult ajaxResult = pmServiceApi.qqchMeasureExpPlanList();
-        if(!ajaxResult.get("code").toString().equals(Constant.SUCCESS_CODE)){
+        if (!ajaxResult.get("code").toString().equals(Constant.SUCCESS_CODE)) {
             throw new BaseException("同步前期策划数据失败");
         }
-        Map<String,Object> dataMap = (Map<String, Object>) ajaxResult.get("data");
-        List<LinkedHashMap<String,Object>> riskBigProjList = (List<LinkedHashMap<String,Object>>) dataMap.get("dto");
+        Map<String, Object> dataMap = (Map<String, Object>) ajaxResult.get("data");
+        List<LinkedHashMap<String, Object>> riskBigProjList = (List<LinkedHashMap<String, Object>>) dataMap.get(
+            "dto");
         //递归处理3.6.2数据结果
-        digui(riskBigProjList,treeToList);
+        digui(riskBigProjList, treeToList);
         sgjsPlanMeasureManageVo.setTreeList(treeToList);
         return sgjsPlanMeasureManageVo;
     }
 
 
-    private void digui( List<LinkedHashMap<String,Object>> list,List<SgjsPlanMeasureManage> treeToList){
-        for (LinkedHashMap<String,Object> l:list) {
-            SgjsPlanMeasureManage sgjsPlanMeasureManage=new SgjsPlanMeasureManage();
-            sgjsPlanMeasureManage.setMeasureName(l.get("workItem") == null ? null : (String) l.get("workItem"));
-            sgjsPlanMeasureManage.setMeasureUnit(l.get("unit") == null ? null : (String) l.get("unit"));
-            sgjsPlanMeasureManage.setWorkload(l.get("workload") == null ? null : (Integer) l.get("workload"));
-            sgjsPlanMeasureManage.setPlanStartDate(l.get("planBeginDate") == null ? null : FtDateUtils.parseDate(l.get("planBeginDate")));
-            sgjsPlanMeasureManage.setPlanEndDate(l.get("planEndDate") == null ? null : FtDateUtils.parseDate(l.get("planEndDate")));
-            sgjsPlanMeasureManage.setPid(l.get("pid") == null ? 0L : Long.parseLong((String) l.get("pid")));
+    private void digui(List<LinkedHashMap<String, Object>> list,
+        List<SgjsPlanMeasureManage> treeToList) {
+        for (LinkedHashMap<String, Object> l : list) {
+            SgjsPlanMeasureManage sgjsPlanMeasureManage = new SgjsPlanMeasureManage();
+            sgjsPlanMeasureManage.setMeasureName(
+                l.get("workItem") == null ? null : (String) l.get("workItem"));
+            sgjsPlanMeasureManage.setMeasureUnit(
+                l.get("unit") == null ? null : (String) l.get("unit"));
+            sgjsPlanMeasureManage.setWorkload(
+                l.get("workload") == null ? null : (Integer) l.get("workload"));
+            sgjsPlanMeasureManage.setPlanStartDate(l.get("planBeginDate") == null ? null
+                : FtDateUtils.parseDate(l.get("planBeginDate")));
+            sgjsPlanMeasureManage.setPlanEndDate(
+                l.get("planEndDate") == null ? null : FtDateUtils.parseDate(l.get("planEndDate")));
+            sgjsPlanMeasureManage.setPid(
+                l.get("pid") == null ? 0L : Long.parseLong((String) l.get("pid")));
             treeToList.add(sgjsPlanMeasureManage);
-            List<LinkedHashMap<String,Object>> children=(List<LinkedHashMap<String,Object>>)l.get("children");
-            if(children.size()>0){
-                digui(children,treeToList);
+            List<LinkedHashMap<String, Object>> children = (List<LinkedHashMap<String, Object>>) l.get(
+                "children");
+            if (children.size() > 0) {
+                digui(children, treeToList);
             }
         }
     }

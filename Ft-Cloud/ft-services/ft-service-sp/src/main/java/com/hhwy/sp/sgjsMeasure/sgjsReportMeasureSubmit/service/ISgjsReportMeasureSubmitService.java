@@ -1,5 +1,7 @@
 package com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
 import java.util.List;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
 
@@ -12,11 +14,11 @@ public interface ISgjsReportMeasureSubmitService {
                                                                                                                                                                                                                                                                                                                                                     
     SgjsReportMeasureSubmit getSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
 
-    List<SgjsReportMeasureSubmit> getSgjsReportMeasureSubmitList(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
+    SgjsReportMeasureSubmitVo list(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
 
     int insertSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
 
-    int insertSgjsReportMeasureSubmitList(List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList);
+    AjaxResult batchAdd(SgjsReportMeasureSubmitVo sgjsReportMeasureSubmitVo);
 
     int updateSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
 
