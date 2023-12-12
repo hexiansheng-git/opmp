@@ -1,6 +1,8 @@
 package com.hhwy.sp.experiment.sgjsExperimentRecordInfo.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfo.domain.SgjsExperimentRecordInfo;
 
 /**
@@ -25,4 +27,12 @@ public interface ISgjsExperimentRecordInfoService {
     int deleteSgjsExperimentRecordInfo(SgjsExperimentRecordInfo sgjsExperimentRecordInfo);
 
     int deleteSgjsExperimentRecordInfoByPks(List<Long> sgjsExperimentRecordInfoPkList);
+
+    /**
+     * 数据新增
+     *
+     * @param map
+     * @return
+     */
+    int batchAddMap(Map<String, Object> map);
 }

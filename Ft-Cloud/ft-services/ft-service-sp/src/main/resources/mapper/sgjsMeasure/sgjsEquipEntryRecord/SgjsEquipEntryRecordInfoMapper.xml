@@ -611,6 +611,6 @@
     </update>
 
     <delete id="deleteAll" parameterType="com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo">
-        update `sgjs_equip_entry_record_info` set del_flag = 1
+        update `sgjs_equip_entry_record_info` set del_flag = 1 ,update_time=#{updateTime},update_user=#{updateUser}
     </delete>
 </mapper>

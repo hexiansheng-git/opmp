@@ -318,9 +318,7 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
         String buttonMark = qqchMainPlanItemVoParam.getButtonMark();
         if(ButtonMark.CONFIRM.equals(buttonMark)){
             String menuId = qqchMainPlanItemVoParam.getMenuId();
-            String stageIdentity = qqchMainPlanItemVoParam.getStageIdentity();
-            if(stageIdentity == null) stageIdentity = qqchReviewService.getStage();
-            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,qqchReviewService.getStage());
         }
     }
 

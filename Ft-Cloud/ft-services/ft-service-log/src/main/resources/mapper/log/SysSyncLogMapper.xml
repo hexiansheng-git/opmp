@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.log.mapper.SysSyncLogMapper">
+
+    <resultMap id="SysSyncLogResult" type="com.hhwy.domain.log.SysSyncLog">
+        <result property="id"    column="id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="interfaceName"    column="interface_name"    />
+        <result property="remark" column="remark"   />
+    </resultMap>
+    <sql id="selectSysSyncLogVo">
+        select
+            `id`,`interface_name`,`method`,`create_user`, `create_time`, `update_user`, `update_time`, `del_user`,
+            `del_time`, `del_flag`,`interface_url`,`fun_name`,`req`,`res`,,`status`,`remark`,`businessUnique`,
+        from sys_sync_log
+    </sql>
+
+    <select id="selectSysSyncLogList" parameterType="com.hhwy.domain.log.SysSyncLog" resultMap="SysSyncLogResult">
+        select * from sys_sync_log
+        <include refid="selectSysSyncLogVo"/>
+        where `id` = #{id}
+    </select>
+
+    <insert id="insertSysSyncLog" parameterType="com.hhwy.domain.log.SysSyncLog">
+        insert into `sys_sync_log`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="interfaceName != null">`interface_name`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="businessUnique != null">`business_unique`,</if>
+            <if test="status != null">`status`,</if>
+            <if test="req != null">`req`,</if>
+            <if test="res != null">`res`,</if>
+            <if test="funName != null">`fun_name`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+            <if test="ptVar4 != null">`pt_var4`,</if>
+            <if test="ptVar5 != null">`pt_var5`,</if>
+            <if test="interfaceUrl != null">`interface_url`,</if>
+            <if test="funName != null">`fun_name`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="interfaceName != null">#{interfaceName},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="businessUnique != null">#{businessUnique},</if>
+            <if test="status != null">#{status},</if>
+            <if test="req != null">#{req},</if>
+            <if test="res != null">#{res},</if>
+            <if test="funName != null">#{funName},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="ptVar4 != null">#{ptVar4},</if>
+            <if test="ptVar5 != null">#{ptVar5},</if>
+            <if test="interfaceUrl != null">#{interfaceUrl},</if>
+            <if test="funName != null">#{funName},</if>
+        </trim>
+    </insert>
+
+
+</mapper>

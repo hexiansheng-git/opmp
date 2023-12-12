@@ -99,7 +99,7 @@ public class UserConsumerListener implements RocketMQListener<String> , RocketMQ
                         List<SysUserRole> roleUserList = roleService.selectRoleUserExit(sysUserExist.getUserId(), 1L, tenantKey);
                         if(CollectionUtils.isEmpty(roleUserList)){
                             //带有区域中心管理员标识 赋予超管权限
-                            if(sysUser.getRemark().equals("region")){
+                            if(sysUser.getRemark()!=null && sysUser.getRemark().equals("region")){
                                 SysUserRole sysUserRoleRegion = new SysUserRole();
                                 sysUserRoleRegion.setUserId(sysUserExist.getUserId());
                                 sysUserRoleRegion.setRoleId(1L);

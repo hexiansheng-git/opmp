@@ -215,7 +215,7 @@
     </insert>
 
     <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsExperimentRecord -->
-    <insert id="insertSgjsExperimentRecordList">
+    <insert id="insertSgjsExperimentRecordList" parameterType="list">
         insert into sgjs_experiment_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
@@ -527,5 +527,30 @@
                 #{id}
             </foreach>
         </where>
+    </update>
+
+    <update id="bathUpdateByList" parameterType="list">
+        update sgjs_experiment_record
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
     </update>
 </mapper>
