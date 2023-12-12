@@ -1,12 +1,16 @@
-package com.hhwy.sp.sgjsExperiment.sgjsExperProgressManage.controller;
+package com.hhwy.sp.experiment.sgjsExperProgressManage.controller;
 
+
+import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.sp.sgjsExperiment.sgjsExperProgressManage.domain.SgjsExperProgressManage;
-import com.hhwy.sp.sgjsExperiment.sgjsExperProgressManage.service.ISgjsExperProgressManageService;
+import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManage;
+import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManageVo;
+import com.hhwy.sp.experiment.sgjsExperProgressManage.service.ISgjsExperProgressManageService;
+import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -38,13 +42,19 @@ public class SgjsExperProgressManageController extends BaseController {
         return AjaxResult.success(sgjsExperProgressManage);
     }
 
+    /**
+     * 列表数据
+     * @param sgjsExperProgressManageParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsExperProgressManage:list")
     @GetMapping("/list")
     public AjaxResult getSgjsExperProgressManageList(@Validated(ValidationGroups.Select.class) SgjsExperProgressManage sgjsExperProgressManageParam) {
-        startPage();
-        List<SgjsExperProgressManage> sgjsExperProgressManageList = sgjsExperProgressManageService.getSgjsExperProgressManageList(sgjsExperProgressManageParam);
-        return getDataTableAjaxResult(sgjsExperProgressManageList);
+
+        SgjsExperProgressManageVo vo=sgjsExperProgressManageService.list(sgjsExperProgressManageParam);
+        return AjaxResult.success(vo);
     }
+
 
     @PreAuthorize(hasPermi = "sgjsExperProgressManage:add")
     @PostMapping("/add")
@@ -53,12 +63,20 @@ public class SgjsExperProgressManageController extends BaseController {
         return AjaxResult.success(sgjsExperProgressManageParam);
     }
 
+    /**
+     * 批量新增
+     * @param sgjsExperProgressManageVo
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsExperProgressManage:add")
     @PostMapping("/batchAdd")
-    public AjaxResult insertSgjsExperProgressManageList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsExperProgressManage> sgjsExperProgressManageListParam) {
-        sgjsExperProgressManageService.insertSgjsExperProgressManageList(sgjsExperProgressManageListParam);
-        return AjaxResult.success(sgjsExperProgressManageListParam);
+    public AjaxResult insertSgjsExperProgressManageList(
+            @Validated(ValidationGroups.Save.class) @RequestBody SgjsExperProgressManageVo sgjsExperProgressManageVo) {
+        AjaxResult ajaxResult =  sgjsExperProgressManageService.batchAdd(sgjsExperProgressManageVo);
+        return ajaxResult;
     }
+
+
 
     @PreAuthorize(hasPermi = "sgjsExperProgressManage:update")
     @PostMapping("/update")
@@ -74,8 +92,8 @@ public class SgjsExperProgressManageController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsExperProgressManage:remove")
     @PostMapping("/delete")
-    public AjaxResult deleteSgjsExperProgressManage(@Validated(ValidationGroups.Delete.class) @RequestBody SgjsExperProgressManage sgjsExperProgressManageParam) {
-        return toAjax(sgjsExperProgressManageService.deleteSgjsExperProgressManage(sgjsExperProgressManageParam));
+    public AjaxResult deleteSgjsExperProgressManage(@Validated(ValidationGroups.Delete.class) @RequestBody List<Long> ids) {
+        return toAjax(sgjsExperProgressManageService.deleteSgjsExperProgressManageByPks(ids));
     }
 
     @PreAuthorize(hasPermi = "sgjsExperProgressManage:remove")
@@ -85,10 +103,30 @@ public class SgjsExperProgressManageController extends BaseController {
         return toAjax(sgjsExperProgressManageService.deleteSgjsExperProgressManageByPks(sgjsExperProgressManagePkList));
     }
 
+
+    /**
+     * 导出数据
+     * @param response
+     * @param sgjsExperProgressManageParam
+     * @throws IOException
+     */
     @GetMapping("/export")
-    public void export(HttpServletResponse response, SgjsExperProgressManage sgjsExperProgressManageParam) throws IOException {
-        List<SgjsExperProgressManage> sgjsExperProgressManageList = sgjsExperProgressManageService.getSgjsExperProgressManageList(sgjsExperProgressManageParam);
-        ExcelUtils<SgjsExperProgressManage> util = new ExcelUtils<>(SgjsExperProgressManage.class);
-        util.exportExcel(response, sgjsExperProgressManageList, DateUtils.getDate());
+    public void export(HttpServletResponse response,
+                       SgjsExperProgressManage sgjsExperProgressManageParam) throws IOException {
+        SgjsExperProgressManageVo sgjsExperProgressManageVo = sgjsExperProgressManageService.list(sgjsExperProgressManageParam);
+        List<SgjsExperProgressManage> treeList = sgjsExperProgressManageVo.getTreeList();
+        if(CollectionUtils.isNotEmpty(treeList)){
+            treeList = TreeUtil.treeToList(treeList);
+        }
+        ExcelUtils<SgjsExperProgressManage> utils = new ExcelUtils<>(SgjsExperProgressManage.class);
+        utils.exportExcel(response,treeList,DateUtils.getDate());
+    }
+    /**
+     * 同步前期策划的数据
+     * @return
+     */
+    @GetMapping("/sync")
+    public SgjsExperProgressManageVo sync(){
+        return sgjsExperProgressManageService.sync();
     }
 }
