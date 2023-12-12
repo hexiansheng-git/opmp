@@ -108,7 +108,11 @@ public class QqchMeasureExpRangeServiceImpl implements IQqchMeasureExpRangeServi
         delParam.setDataType(expVO.getDataType());
         qqchMeasureExpRangeMapper.deleteQqchMeasureExpRange(delParam);
 
-        List<QqchMeasureExpRange> qqchMeasureExpRanges = CompileEntity.dealSaveDto(expVO, expVO.getExpRangeList());
+        List<QqchMeasureExpRange> expRangeList = expVO.getExpRangeList();
+        if(CollectionUtils.isEmpty(expRangeList)){
+            return;
+        }
+        List<QqchMeasureExpRange> qqchMeasureExpRanges = CompileEntity.dealSaveDto(expVO, expRangeList);
         if (CollectionUtils.isEmpty(qqchMeasureExpRanges)) return;
         for (QqchMeasureExpRange qqchMeasureExpRange : qqchMeasureExpRanges) {
             qqchMeasureExpRange.setDataType(expVO.getDataType());
