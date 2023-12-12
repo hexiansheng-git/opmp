@@ -112,17 +112,13 @@ public class XmslContractListController extends BaseController {
     @PreAuthorize(hasPermi = "xmslContractList:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertXmslContractListList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslContractListVo> xmslContractListListParam) {
-        if (CollectionUtil.isNotEmpty(xmslContractListListParam)) {
-            List<XmslContractListVo> collect = xmslContractListListParam.stream()
-                    .filter(p -> StrUtil.isBlank(p.getCode()) || p.getWinNum() == null || p.getWinUnitPrice() == null)
-                    .collect(Collectors.toList());
-            if (CollectionUtil.isNotEmpty(collect))
-               return AjaxResult.error("必填项为空,(清单编号、中标合同清单数量、中标合同清单单价)");
-        }
         int i = xmslContractListService.insertXmslContractListList(xmslContractListListParam);
         if (i == 500) return AjaxResult.error("保存异常，主合同清单编号重复");
+        if (i == 400) return AjaxResult.error("必填项为空,(清单编号、中标合同清单数量、中标合同清单单价)");
         return AjaxResult.success(xmslContractListListParam);
     }
+
+
 
     @PreAuthorize(hasPermi = "xmslContractList:update")
     @PostMapping("/update")

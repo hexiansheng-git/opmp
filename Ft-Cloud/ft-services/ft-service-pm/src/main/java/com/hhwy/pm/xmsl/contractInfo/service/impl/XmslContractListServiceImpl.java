@@ -160,7 +160,16 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         for (XmslContractListVo xmslContract : xmslContractListList) {
             this.recursionSubset(xmslContract, insertList, updateList);
         }
-
+        //数据校验
+        List<XmslContractListVo> adllList = new ArrayList<>();
+        adllList.addAll(insertList);
+        adllList.addAll(updateList);
+        List<XmslContractListVo> collect1 = adllList.stream().filter(p -> p.getPid() != null).collect(Collectors.toList());
+        List<XmslContractListVo> collect2 = collect1.stream()
+                .filter(p -> StrUtil.isBlank(p.getCode()) || p.getWinNum() == null || p.getWinUnitPrice() == null)
+                .collect(Collectors.toList());
+        if (CollectionUtil.isNotEmpty(collect2))
+           return 400;
         if (insertList.size() > 0) {
             insertList.forEach(q->{
                 if (q.getPid() != null) {
