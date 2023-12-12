@@ -16,8 +16,6 @@ import com.hhwy.utils.Constant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,8 +39,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
 
     @Autowired
     private PmServiceApi pmServiceApi;
-
-    private static final Logger logger = LoggerFactory.getLogger(SgjsExperProgressManageServiceImpl.class);
 
 
     public SgjsExperProgressManage getSgjsExperProgressManage(SgjsExperProgressManage sgjsExperProgressManage) {
@@ -85,8 +81,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
 
         //查询符合条件的数据
         List<SgjsExperProgressManage> list = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(sgjsTechnicalManage);
-
-
 
         vo.setTreeList(TreeUtil.newBuild(list));
         return vo;
@@ -217,6 +211,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             sgjsExperProgressManage.setCreateTime(DateTime.now());
             sgjsExperProgressManage.setCreateUser(SecurityUtils.getUserId() + "");
             sgjsExperProgressManage.setCreateUserName(SecurityUtils.getUserName() + "");
+            sgjsExperProgressManage.setDelFlag("0");
         }
         sgjsExperProgressManageMapper.insertSgjsExperProgressManageList(treeToList);
         return AjaxResult.success();
