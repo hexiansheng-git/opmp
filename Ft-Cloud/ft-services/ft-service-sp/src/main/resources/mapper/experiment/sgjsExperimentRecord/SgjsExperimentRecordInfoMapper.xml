@@ -770,4 +770,15 @@
             </foreach>
         </where>
     </update>
+
+    <update id="deleteAll" parameterType="com.hhwy.sp.experiment.sgjsExperimentRecordInfo.domain.SgjsExperimentRecordInfo">
+        update `sgjs_experiment_record_info` set del_flag = 1,update_time=#{updateTime},update_user=#{updateUser}
+    </update>
+
+    <select id="selectByExperimentNos" parameterType="list" resultMap="SgjsExperimentRecordInfoResultMap">
+        select  * from  where  experiment_code in
+        <foreach collection="codeList" separator="," open="(" close=")" item="code">
+            #{code}
+        </foreach>
+    </select>
 </mapper>

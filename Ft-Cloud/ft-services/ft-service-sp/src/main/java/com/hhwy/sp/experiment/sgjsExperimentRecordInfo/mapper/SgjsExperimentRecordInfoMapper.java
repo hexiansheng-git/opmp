@@ -1,6 +1,8 @@
 package com.hhwy.sp.experiment.sgjsExperimentRecordInfo.mapper;
 
 import java.util.List;
+
+import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
 import org.apache.ibatis.annotations.Param;
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfo.domain.SgjsExperimentRecordInfo;
 
@@ -26,4 +28,20 @@ public interface SgjsExperimentRecordInfoMapper {
     int deleteSgjsExperimentRecordInfo(SgjsExperimentRecordInfo sgjsExperimentRecordInfo);
 
     int deleteSgjsExperimentRecordInfoByPks(@Param("sgjsExperimentRecordInfoPkList") List<Long> sgjsExperimentRecordInfoPkList);
+
+    /**
+     * 删除子表数据
+     *
+     * @param record
+     * @return
+     */
+    int deleteAll(SgjsEquipEntryRecordInfo record);
+
+    /**
+     * 根据试验编号查询是否重复
+     *
+     * @param codeList
+     * @return
+     */
+    List<SgjsExperimentRecordInfo> selectByExperimentNos(List<String> codeList);
 }

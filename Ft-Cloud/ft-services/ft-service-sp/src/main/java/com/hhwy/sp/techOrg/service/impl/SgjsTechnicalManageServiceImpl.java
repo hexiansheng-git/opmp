@@ -102,7 +102,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             }
             info.setLeaf(info.getPtVar2());
         }
-        vo.setTreeList(TreeUtil.build(list, 0L));
+        vo.setTreeList(TreeUtil.newBuild(list));
         return vo;
     }
 

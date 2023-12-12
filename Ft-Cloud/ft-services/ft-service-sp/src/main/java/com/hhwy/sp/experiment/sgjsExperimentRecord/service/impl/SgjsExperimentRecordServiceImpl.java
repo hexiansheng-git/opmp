@@ -1,5 +1,7 @@
 package com.hhwy.sp.experiment.sgjsExperimentRecord.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -7,11 +9,14 @@ import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.mapper.SgjsExperimentRecordMapper;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.service.ISgjsExperimentRecordService;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -83,11 +88,35 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
     }
 
     @Override
+    @Transactional
     public AjaxResult sync() {
         AjaxResult result = pmServiceApi.feignExperimentList();
         if(!result.get("code").toString().equals("200")){
             AjaxResult.error("同步异常");
         }
-        return result;
+        JSONObject data = JSONObject.parseObject(JSONObject.toJSONString(result.get("data")));
+        JSONArray array = JSONObject.parseArray(JSONObject.toJSONString(data.get("experimentList")));
+        List<SgjsExperimentRecord> list=new ArrayList<>();
+        for (int i = 0; i < array.size(); i++) {
+            JSONObject object = JSONObject.parseObject(JSONObject.toJSONString(array.get(i)));
+            SgjsExperimentRecord info=new SgjsExperimentRecord();
+            info.setMaterialCode(ObjectUtils.toString(object.get("equCode")));
+            info.setMaterialName(ObjectUtils.toString(object.get("equName")));
+            info.setCategoryName(ObjectUtils.toString(object.get("equTypeName")));
+            info.setMaterialSpec(ObjectUtils.toString(object.get("spec")));
+            info.setSource(ObjectUtils.toString(object.get("source")));
+            info.setNum(Integer.parseInt(object.get("reqNum").toString()));
+            info.setEntryDate(ObjectUtils.toDate(object.get("reqInDate")));
+            info.setCreateTime(DateUtils.getNowDate());
+            info.setCreateUser(SecurityUtils.getUserId()+"");
+            info.setId(IdWorker.createId());
+            info.setProjectId(ObjectUtils.toLong(object.get("")));
+            list.add(info);
+        }
+        //同步完入库
+        if(!CollectionUtils.isEmpty(list)){
+            sgjsExperimentRecordMapper.insertSgjsExperimentRecordList(list);
+        }
+        return AjaxResult.success(list);
     }
 }
