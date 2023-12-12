@@ -1,0 +1,26 @@
+[
+  {
+    "manage_model": "整体分包",
+    "create_user": "1",
+    "create_user_name": "admin",
+    "del_flag": "0",
+    "version": 1.0,
+    "valid": "1"
+  },
+  {
+    "manage_model": "部分分包",
+    "create_user": "1",
+    "create_user_name": "admin",
+    "del_flag": "0",
+    "version": 1.0,
+    "valid": "1"
+  },
+  {
+    "manage_model": "自营",
+    "create_user": "1",
+    "create_user_name": "admin",
+    "del_flag": "0",
+    "version": 1.0,
+    "valid": "1"
+  }
+]

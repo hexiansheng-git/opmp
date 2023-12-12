@@ -142,6 +142,7 @@ public class XmslContractGeneralController extends BaseController {
      * 作者: fushudong
      * 时间: 2023/12/11
      */
+    @PostMapping("/dataHandler")
     public AjaxResult dataHandler(@RequestBody XmslContractGeneralVo xmslContractGeneralVo){
         List<XmslContractGeneral> result = xmslContractGeneralService.dataHandler(xmslContractGeneralVo);
         return AjaxResult.success(result);
