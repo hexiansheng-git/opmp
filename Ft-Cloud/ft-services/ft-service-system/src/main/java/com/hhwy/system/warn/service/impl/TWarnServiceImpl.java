@@ -158,8 +158,8 @@ public class TWarnServiceImpl implements ITWarnService {
         params.put("userName", SecurityUtils.getUserName());
         Long userId = SecurityUtils.getUserId();
         String tenantKey = SecurityUtils.getTenantKey();
-        List<SysRole> sysRoles = roleMapper.selectRoleListByUserId(userId, tenantKey, Collections.singletonList(tenantKey));
-        String roleKeys = sysRoles.stream().map(SysRole::getRoleKey).collect(Collectors.joining());
+        List<SysRole> sysRoles = roleMapper.selectRoleListByUserId(userId, tenantKey, Collections.singletonList("master"));
+        String roleKeys = sysRoles.stream().map(SysRole::getRoleKey).collect(Collectors.joining(","));
         params.put("roleKeys",roleKeys);
         warn.setParams(params);
         warn.setTenantKey(tenantKey);
