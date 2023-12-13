@@ -1,6 +1,8 @@
 package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.mapper;
 
 import java.util.List;
+
+import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.domain.SgjsEquipEntryRecordInfoDetail;
 import org.apache.ibatis.annotations.Param;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
 
@@ -31,4 +33,12 @@ public interface SgjsEquipEntryRecordInfoMapper {
      * 删除所有数据
      */
     int deleteAll(SgjsEquipEntryRecordInfo record);
+
+    /**
+     * 根据主表id进行查询
+     *
+     * @param idList
+     * @return
+     */
+    List<SgjsEquipEntryRecordInfo> selectByIdList(@Param(value = "idList") List<String> idList);
 }

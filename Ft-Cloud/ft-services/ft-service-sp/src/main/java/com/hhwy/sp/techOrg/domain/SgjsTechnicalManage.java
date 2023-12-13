@@ -33,6 +33,8 @@ public class SgjsTechnicalManage extends TreeNode<SgjsTechnicalManage> {
     @JsonProperty
     @Excel(name = "父级id"    )
     private Long pid;
+
+    private String type;
     /**
      * 字段描述：岗位
      */
@@ -221,6 +223,24 @@ public class SgjsTechnicalManage extends TreeNode<SgjsTechnicalManage> {
     private Date actualDateEnd;
     //在场/离场日期记录数据
     private List<SgjsTechnicalManageInfo> infoList;
+
+    private String path;
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public List<SgjsTechnicalManageInfo> getInfoList() {
         return infoList;

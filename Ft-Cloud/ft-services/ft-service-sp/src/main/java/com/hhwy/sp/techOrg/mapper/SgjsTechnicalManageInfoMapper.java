@@ -2,6 +2,7 @@ package com.hhwy.sp.techOrg.mapper;
 
 import java.util.List;
 
+import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageInfo;
 import org.apache.ibatis.annotations.Param;
 

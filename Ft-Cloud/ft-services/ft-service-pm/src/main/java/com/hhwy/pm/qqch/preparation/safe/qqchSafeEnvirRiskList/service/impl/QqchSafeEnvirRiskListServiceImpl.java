@@ -131,6 +131,9 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
                 safeEnvirRiskListDetail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 safeEnvirRiskListDetail.setCreateUserName(SecurityUtils.getUserName());
                 safeEnvirRiskListDetail.setCreateTime(DateUtils.getNowDate());
+                if(safeEnvirRiskListDetail.getPtVar2()==null){
+                    safeEnvirRiskListDetail.setPtVar2("1");
+                }
             }
         }
         if(!ObjectNullUtil.isEmpty(detailList)){
@@ -380,7 +383,9 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
             return detailList;
         }
 
-        envRiskProcList = ListTreeUtil.formatList(envRiskProcList, QyzsSafeEnvRiskProc::getChildren,QyzsSafeEnvRiskProc::setChildren);
+        for (QyzsSafeEnvRiskProc proc : envRiskProcList) {
+            proc.setChildren(null);
+        }
         QyzsSafeEnvRiskProc query = new QyzsSafeEnvRiskProc();
         query.setWbsCode(assembleDataVo.getWbsCode());
         List<QyzsSafeEnvRiskProc> allList = qyzsSafeEnvRiskProcService.getCommonListBy(query);
@@ -431,14 +436,14 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
                 continue;
             }
             Long pid = detail.getPid();
-            if (repositoryMap.containsKey(pid.toString())) {
+            if (pid != null && repositoryMap.containsKey(pid.toString())) {
                 QqchSafeEnvirRiskListDetail safeEnvirRiskListDetail = repositoryMap.get(pid.toString());
                 detail.setPid(safeEnvirRiskListDetail.getId());
             }
             detailList.add(detail);
         }
 
-        ListTreeUtil.formatTree(
+        detailList = ListTreeUtil.formatTree(
                 detailList,
                 o -> o.getPid() == null,
                 (r, n) -> r.getId().equals(n.getPid()),

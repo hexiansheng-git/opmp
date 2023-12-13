@@ -53,4 +53,6 @@ public interface IQqchManagementPersonConfigService {
      * @return
      */
     Map<String, String> getProjectLeadershipPersonUserNameMap();
+
+    List<QqchManagementPersonConfig> getPopWindows(QqchManagementPersonConfig qqchManagementPersonConfig);
 }

@@ -142,4 +142,9 @@ public class DateUtil {
             }
         }
     }
+
+    public static String getCurrentDate(){
+        SimpleDateFormat DATE_SDF = new SimpleDateFormat("yyyy-MM-dd");
+        return DATE_SDF.format(new Date());
+    }
 }

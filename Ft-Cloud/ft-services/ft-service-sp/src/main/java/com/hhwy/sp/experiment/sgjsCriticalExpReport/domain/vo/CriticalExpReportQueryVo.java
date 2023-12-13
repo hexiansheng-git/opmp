@@ -1,9 +1,10 @@
-package com.hhwy.sp.experiment.sgjsCriticalExpReport.domain;
+package com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -31,4 +32,6 @@ public class CriticalExpReportQueryVo {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date actualCommitDateEnd;
+
+    private List<Long> ids;
 }

@@ -160,7 +160,16 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         for (XmslContractListVo xmslContract : xmslContractListList) {
             this.recursionSubset(xmslContract, insertList, updateList);
         }
-
+        //数据校验
+        List<XmslContractListVo> adllList = new ArrayList<>();
+        adllList.addAll(insertList);
+        adllList.addAll(updateList);
+        List<XmslContractListVo> collect1 = adllList.stream().filter(p -> p.getPid() != null).collect(Collectors.toList());
+        List<XmslContractListVo> collect2 = collect1.stream()
+                .filter(p -> StrUtil.isBlank(p.getCode()) || p.getWinNum() == null || p.getWinUnitPrice() == null)
+                .collect(Collectors.toList());
+        if (CollectionUtil.isNotEmpty(collect2))
+           return 400;
         if (insertList.size() > 0) {
             insertList.forEach(q->{
                 if (q.getPid() != null) {
@@ -482,7 +491,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
             String curentCode = innerCode.substring(innerCode.lastIndexOf("-") +1);
             //获取当前数据的父层级
             ImportXmslContractListVo parent = collect.get(parentCode);
-            Assert.notNull(parent, "第{}数据未找到父层级，请确认编号按层级顺序排列", i);
+            Assert.notNull(parent, "层级码：{} 未找到父层级：{}，请确认是否存在", innerCode, parentCode);
             //获取父层级的children，将当前记录add进去
             List<ImportXmslContractListVo> children = parent.getChildren();
             if (CollectionUtil.isEmpty(children)) {

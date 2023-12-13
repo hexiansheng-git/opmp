@@ -611,6 +611,13 @@
     </update>
 
     <delete id="deleteAll" parameterType="com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo">
-        update `sgjs_equip_entry_record_info` set del_flag = 1
+        update `sgjs_equip_entry_record_info` set del_flag = 1 ,update_time=#{updateTime},update_user=#{updateUser}
     </delete>
+
+    <select id="selectByIdList" resultMap="SgjsEquipEntryRecordInfoResultMap">
+        select  * from sgjs_equip_entry_record_info where record_id in
+        <foreach collection="idList" separator="," open="(" close=")" item="id">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

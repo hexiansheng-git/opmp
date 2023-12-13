@@ -1,6 +1,6 @@
 package com.hhwy.sp.experiment.sgjsCriticalExpReport.mapper;
 
-import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.CriticalExpReportQueryVo;
+import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportQueryVo;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.SgjsCriticalExpReport;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -31,5 +31,5 @@ public interface SgjsCriticalExpReportMapper {
 
     int deleteSgjsCriticalExpReport(SgjsCriticalExpReport sgjsCriticalExpReport);
 
-    int deleteSgjsCriticalExpReportByPks(@Param("sgjsCriticalExpReportPkList") List<Long> sgjsCriticalExpReportPkList);
+    int deleteSgjsCriticalExpReportByPks(@Param("idList") List<Long> idList);
 }

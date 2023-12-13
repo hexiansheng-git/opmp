@@ -132,4 +132,15 @@ public class QqchManagementPersonConfigController extends BaseController {
         return AjaxResult.success(userNameMap);
     }
 
+    /**
+     * 8.1.1弹窗
+     * @param qqchManagementPersonConfig
+     * @return
+     */
+    @GetMapping("/getPopWindows")
+    public AjaxResult getPopWindows(QqchManagementPersonConfig qqchManagementPersonConfig){
+        List<QqchManagementPersonConfig> list = qqchManagementPersonConfigService.getPopWindows(qqchManagementPersonConfig);
+        return AjaxResult.success(list);
+    }
+
 }

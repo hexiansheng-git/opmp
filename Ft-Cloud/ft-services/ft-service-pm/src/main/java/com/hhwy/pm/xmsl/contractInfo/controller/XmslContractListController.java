@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
@@ -25,12 +26,16 @@ import com.hhwy.utils.excelUtil.ExcelUtilByTemplate;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.utils.validation.ValidationUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -109,8 +114,11 @@ public class XmslContractListController extends BaseController {
     public AjaxResult insertXmslContractListList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslContractListVo> xmslContractListListParam) {
         int i = xmslContractListService.insertXmslContractListList(xmslContractListListParam);
         if (i == 500) return AjaxResult.error("保存异常，主合同清单编号重复");
+        if (i == 400) return AjaxResult.error("必填项为空,(清单编号、中标合同清单数量、中标合同清单单价)");
         return AjaxResult.success(xmslContractListListParam);
     }
+
+
 
     @PreAuthorize(hasPermi = "xmslContractList:update")
     @PostMapping("/update")
@@ -166,9 +174,9 @@ public class XmslContractListController extends BaseController {
      * @throws IOException
      */
     @PostMapping("/import")
-    public AjaxResult importDate(@RequestPart("file") MultipartFile file) {
+    public AjaxResult importDate(@RequestPart("file") MultipartFile file) throws Exception {
         ExcelUtils<ImportXmslContractListVo> util = new ExcelUtils<>(ImportXmslContractListVo.class);
-        try {
+//        try {
             InputStream inputStream = file.getInputStream();
             List<ImportXmslContractListVo> importXmslContractListVos = util.importExcel(inputStream);
             //找到层级关系
@@ -179,9 +187,9 @@ public class XmslContractListController extends BaseController {
                     , ImportXmslContractListVo::getChildren
                     , ImportXmslContractListVo::setChildren);
             return AjaxResult.success(dateList);
-        } catch (Exception e) {
-            throw new RuntimeException("导入失败！");
-        }
+//        } catch (Exception e) {
+//            throw new RuntimeException("导入失败！");
+//        }
     }
 
     /**

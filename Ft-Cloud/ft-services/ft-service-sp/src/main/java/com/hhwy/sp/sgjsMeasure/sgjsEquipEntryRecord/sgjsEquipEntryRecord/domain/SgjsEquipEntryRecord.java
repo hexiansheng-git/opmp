@@ -1,15 +1,16 @@
 package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-import java.util.Date;
-import java.math.BigDecimal;
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.util.List;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author lcf   测量管理--测试设备进场记录
@@ -213,6 +214,16 @@ public class SgjsEquipEntryRecord extends BaseEntity {
     private Date entryDateBegin;
 
     private Date entryDateEnd;
+
+    private List<SgjsEquipEntryRecordInfo> infoList;
+
+    public List<SgjsEquipEntryRecordInfo> getInfoList() {
+        return infoList;
+    }
+
+    public void setInfoList(List<SgjsEquipEntryRecordInfo> infoList) {
+        this.infoList = infoList;
+    }
 
     public Date getEntryDateBegin() {
         return entryDateBegin;

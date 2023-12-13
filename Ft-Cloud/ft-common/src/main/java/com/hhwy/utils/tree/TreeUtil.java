@@ -41,6 +41,40 @@ public class TreeUtil {
         return collect;
     }
 
+    
+    /**
+     * 树形结构处理，且支持搜索
+     *
+     * @param treeNodes
+     * @param <T>
+     * @return
+     */
+    public static <T extends TreeNode<T>> List<T> newBuild(List<T> treeNodes) {
+        if (CollectionUtils.isEmpty(treeNodes)) {
+            return new ArrayList<>();
+        }
+        treeNodes.forEach(treeVO -> {
+
+            List<T> nChildren = treeNodes.stream().filter((item) -> treeVO.getId().equals(item.getPid()))
+                    .collect(Collectors.toList());
+
+            List<T> oChildren = treeVO.getChildren();
+            if (CollectionUtils.isNotEmpty(oChildren)) {
+                nChildren = CollectionUtils.isEmpty(nChildren) ? new ArrayList<>() : nChildren;
+                nChildren.addAll(oChildren);
+            }
+            treeVO.setChildren(nChildren);
+        });
+        List<T> collect = treeNodes.stream().filter((item) -> "0".equals(item.getPid()+""))
+                    .collect(Collectors.toList());
+
+        if(!CollectionUtils.isEmpty(treeNodes) && CollectionUtils.isEmpty(collect)){
+            return treeNodes;
+        }
+
+        return collect;
+    }
+
     /**
      * 根据pid，构建树节点加是否叶子节点
      */

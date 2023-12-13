@@ -1,6 +1,5 @@
 package com.hhwy.sp.techOrg.service.impl;
 
-import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -102,7 +101,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             }
             info.setLeaf(info.getPtVar2());
         }
-        vo.setTreeList(TreeUtil.build(list, 0L));
+        vo.setTreeList(TreeUtil.newBuild(list));
         return vo;
     }
 
@@ -176,19 +175,6 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         }else {
             return result;
         }
-        //获取项目信息
-        Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
-        if(CollectionUtils.isEmpty(prjInfo)){
-            return AjaxResult.error("获取项目信息异常");
-        }
-        //删除库中所有数据
-        SgjsTechnicalManage info=new SgjsTechnicalManage();
-        info.setUpdateTime(DateTime.now());
-        info.setUpdateUser(SecurityUtils.getUserId()+"");
-        sgjsTechnicalManageMapper.delectAll(info);
-        if(CollectionUtils.isEmpty(sgjsTechnicalManageVo.getTreeList())){
-            return AjaxResult.error("数据异常");
-        }
         //数据处理
         treeToList= TreeUtil.treeToList(sgjsTechnicalManageVo.getTreeList());
         for (int i = 0; i < treeToList.size(); i++) {
@@ -199,13 +185,24 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
                 Date date = FtDateUtils.parseDate(str);
                 manage.setActualDate(date);
             }
-            Long projectId = Long.parseLong(prjInfo.get("projectId")+"");
-            manage.setProjectId(projectId);
-            manage.setProjectName((String) prjInfo.get("projectName"));
-            manage.setPtVar1((String)prjInfo.get("projectCode"));
+            manage.setUpdateTime(DateUtils.getNowDate());
+            manage.setUpdateUser(SecurityUtils.getUserId()+"");
+            manage.setCreateTime(DateUtils.getNowDate());
+            manage.setCreateUser(SecurityUtils.getUserId()+"");
         }
-        //入库
-        sgjsTechnicalManageMapper.insertSgjsTechnicalManageList(treeToList);
+        List<SgjsTechnicalManage> insertList = treeToList.stream().filter(e -> StringUtils.isNotEmpty(e.getType()) && e.getType().equals("1")).collect(Collectors.toList());
+        //批量入库
+        if(!CollectionUtils.isEmpty(insertList)){
+            sgjsTechnicalManageMapper.insertSgjsTechnicalManageList(insertList);
+        }
+        //批量编辑
+        List<SgjsTechnicalManage> updateList = treeToList.stream().filter(e -> StringUtils.isEmpty(e.getType())).collect(Collectors.toList());
+        if(!CollectionUtils.isEmpty(updateList)){
+            sgjsTechnicalManageMapper.updateSgjsTechnicalManageList(updateList);
+        }
+        //批量删除
+        deleteByIds(sgjsTechnicalManageVo.getDelIdList());
+
         //处理离场/进场记录
         List<String> delIdList = sgjsTechnicalManageVo.getDelIdList();
         if(!CollectionUtils.isEmpty(delIdList)){
@@ -222,6 +219,27 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         //同步总部数据
         syncDataToGm(treeToList);
         return AjaxResult.success();
+    }
+
+
+    /**
+     * 批量删除
+     *
+     * @param delIdList
+     */
+    private void deleteByIds(List<String> delIdList){
+        List<SgjsTechnicalManage> list =new ArrayList<>();
+        for (int i = 0; i < delIdList.size(); i++) {
+            SgjsTechnicalManage info=new SgjsTechnicalManage();
+            info.setId(Long.parseLong(delIdList.get(i)));
+            info.setUpdateUser(SecurityUtils.getUserId()+"");
+            info.setUpdateTime(DateUtils.getNowDate());
+            list.add(info);
+        }
+        //删除
+        if(!CollectionUtils.isEmpty(list)){
+            sgjsTechnicalManageMapper.deleteInfoData(list);
+        }
     }
 
     /**

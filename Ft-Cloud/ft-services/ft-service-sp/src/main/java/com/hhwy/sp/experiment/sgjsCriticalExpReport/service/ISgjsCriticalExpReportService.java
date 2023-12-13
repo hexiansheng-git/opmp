@@ -1,7 +1,8 @@
 package com.hhwy.sp.experiment.sgjsCriticalExpReport.service;
 
-import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.CriticalExpReportQueryVo;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.SgjsCriticalExpReport;
+import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportQueryVo;
+import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportVo;
 
 import java.util.List;
 
@@ -26,7 +27,9 @@ public interface ISgjsCriticalExpReportService {
 
     int deleteSgjsCriticalExpReport(SgjsCriticalExpReport sgjsCriticalExpReport);
 
-    int deleteSgjsCriticalExpReportByPks(List<Long> sgjsCriticalExpReportPkList);
+    int deleteSgjsCriticalExpReportByPks(List<Long> idList);
 
     List<SgjsCriticalExpReport> getListByIds(List<Long> ids);
+
+    void save(CriticalExpReportVo criticalExpReportVo);
 }

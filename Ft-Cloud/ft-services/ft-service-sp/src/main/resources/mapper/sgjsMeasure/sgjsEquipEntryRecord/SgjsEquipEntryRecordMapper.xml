@@ -217,7 +217,7 @@
     </insert>
 
     <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsEquipEntryRecord -->
-    <insert id="insertSgjsEquipEntryRecordList">
+    <insert id="insertSgjsEquipEntryRecordList" parameterType="list">
         insert into sgjs_equip_entry_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,

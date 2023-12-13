@@ -6,6 +6,8 @@ import java.util.List;
 import java.io.IOException;
 
 import com.hhwy.pm.qqch.preparation.doc.tech.domain.QqchDocTechVo;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,7 @@ import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
 
 /**
+ * 3.8.2 技术资料管理台账
  * @author mls
  * @date 2023-07-25 18:25:45
  * @remark
@@ -38,6 +41,7 @@ public class QqchDocTechController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchDocTech:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-技术资料管理台账", name = "3.8.2 技术资料管理台账" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchDocTechList(BigDecimal version) {
         QqchDocTechVo qqchDocTechVo = qqchDocTechService.getQqchDocTechListVo(version);
         return AjaxResult.success(qqchDocTechVo);
@@ -49,6 +53,7 @@ public class QqchDocTechController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchDocTech:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-技术资料管理台账", name = "3.8.2 技术资料管理台账" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchDocTech(@Validated(ValidationGroups.Update.class) @RequestBody QqchDocTechVo qqchDocTechParam) {
         try{
             return AjaxResult.success( qqchDocTechService.insertQqchDocTechListVo(qqchDocTechParam));

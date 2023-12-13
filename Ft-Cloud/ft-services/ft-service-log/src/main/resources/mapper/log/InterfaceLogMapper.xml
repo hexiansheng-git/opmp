@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.log.mapper.InterfaceLogMapper">
+
+    <resultMap id="InterfaceLogResult" type="com.hhwy.domain.base.InterfaceLog.InterfaceLog">
+        <result property="id"    column="id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="operateIp"    column="operate_ip"    />
+        <result property="interfaceStatus"    column="interface_status"    />
+        <result property="interfaceName"    column="interface_name"    />
+        <result property="interfaceDesc" column="interface_desc"/>
+        <result property="offset"    column="offset"    />
+        <result property="requestType"    column="request_type"    />
+        <result property="requestUrl"    column="request_url"    />
+        <result property="var1"    column="var1"    />
+        <result property="var2"    column="var2"    />
+        <result property="var3"    column="var3"    />
+        <result property="remark" column="remark"   />
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="osName" column="os_name"/>
+        <result property="osVersion" column="os_version"/>
+        <result property="browser" column="browser"/>
+        <result property="timeConsume" column="time_consume"/>
+        <result property="method" column="method"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="type" column="type"/>
+    </resultMap>
+    <sql id="selectInterfaceLogVo">
+        select
+            `id`,`time_consume`,`method`,`create_user`, `create_time`, `update_user`, `update_time`, `del_user`,
+            `del_time`, `del_flag`,`operate_ip`,`interface_status`,`interface_name`,`interface_desc`,`offset`,`request_type`,
+            `request_url`,`user_id`,`user_name`,`remark`, `var1`,`var2`,`var3`,`browser`
+        from sys_interface_log
+    </sql>
+
+    <select id="selectInterfaceLogById" parameterType="long" resultMap="InterfaceLogResult">
+        <include refid="selectInterfaceLogVo"/>
+        where `id` = #{id}
+    </select>
+
+    <select id="selectInterfaceLogList" parameterType="com.hhwy.domain.base.InterfaceLog.InterfaceLog" resultMap="InterfaceLogResult">
+        <include refid="selectInterfaceLogVo"/>
+        <where>
+            del_flag='0'
+            <if test="params.createTime != null and params.createTime != ''"> and `create_time` like concat(#{params.createTime}, "%")</if>
+            <if test="params.query != null and params.query != ''">
+             and (
+                    `interface_name` like concat( "%", #{params.query}, "%")
+                    or `interface_desc` like concat( "%", #{params.query}, "%")
+                )
+            </if>
+            <if test="params.interfaceStatus != null and params.interfaceStatus != ''"> and `interface_status` = #{params.interfaceStatus}</if>
+            <if test="params.var1 != null and params.var1 != ''"> and `var1` = #{params.var1}</if>
+
+
+            <if test="operateIp != null  and operateIp != ''"> and `operate_ip` = #{operateIp}</if>
+            <if test="interfaceStatus != null  and interfaceStatus != ''"> and `interface_status` like concat('%', #{interfaceStatus}, '%')</if>
+            <if test="interfaceName != null  and interfaceName != ''"> and `interface_name` = #{interfaceName}</if>
+            <if test="interfaceDesc != null  and interfaceDesc != ''"> and `interface_desc` = #{interfaceDesc}</if>
+            <if test="offset != null  and offset != ''"> and `offset` = #{offset}</if>
+            <if test="requestType != null  and requestType != ''"> and `request_type` = #{requestType}</if>
+            <if test="requestUrl != null  and requestUrl != ''"> and `request_url` = #{requestUrl}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="var1 != null  and var1 != ''"> and `var1` = #{var1}</if>
+            <if test="var2 != null  and var2 != ''"> and `var2` = #{var2}</if>
+            <if test="var3 != null  and var3 != ''"> and `var3` = #{var3}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="userId != null  and userId != ''"> and `user_id` = #{userId}</if>
+            <if test="userName != null  and userName != ''"> and `user_name` = #{userName}</if>
+            <if test="osName != null  and osName != ''"> and `os_name` = #{osName}</if>
+            <if test="osVersion != null  and osVersion != ''"> and `os_version` = #{osVersion}</if>
+            <if test="browser != null  and browser != ''"> and `browser` = #{browser}</if>
+            <if test="timeConsume != null  and timeConsume != ''"> and `time_consume` = #{timeConsume}</if>
+            <if test="method != null  and method != ''"> and `method` = #{method}</if>
+            <if test="userId != null "> and `user_id` = #{userId}</if>
+            <if test="userName != null  and userName != ''"> and `user_name` = #{userName}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="insertInterfaceLog" parameterType="com.hhwy.domain.base.InterfaceLog.InterfaceLog">
+        insert into `sys_interface_log`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="operateIp != null">`operate_ip`,</if>
+            <if test="interfaceStatus != null">`interface_status`,</if>
+            <if test="interfaceName != null">`interface_name`,</if>
+            <if test="interfaceDesc != null">`interface_desc`,</if>
+            <if test="offset != null">`offset`,</if>
+            <if test="requestType != null">`request_type`,</if>
+            <if test="requestUrl != null">`request_url`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="var1 != null">`var1`,</if>
+            <if test="var2 != null">`var2`,</if>
+            <if test="var3 != null">`var3`,</if>
+            <if test="browser !=null">`browser`,</if>
+            <if test="timeConsume != null">`time_consume`,</if>
+            <if test="method != null">`method`,</if>
+            <if test="userId != null">`user_id`,</if>
+            <if test="userName != null">`user_name`,</if>
+            <if test="type != null">`type`,</if>
+            <if test="tenantkey != null">`tenantkey`,</if>
+            <if test="name != null">`name`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="operateIp != null">#{operateIp},</if>
+            <if test="interfaceStatus != null">#{interfaceStatus},</if>
+            <if test="interfaceName != null">#{interfaceName},</if>
+            <if test="interfaceDesc != null">#{interfaceDesc},</if>
+            <if test="offset != null">#{offset},</if>
+            <if test="requestType != null">#{requestType},</if>
+            <if test="requestUrl != null">#{requestUrl},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="var1 != null">#{var1},</if>
+            <if test="var2 != null">#{var2},</if>
+            <if test="var3 != null">#{var3},</if>
+            <if test="browser != null">#{browser},</if>
+            <if test="timeConsume != null">#{timeConsume},</if>
+            <if test="method != null">#{method},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="type != null">#{type},</if>
+            <if test="tenantkey != null">#{tenantkey},</if>
+            <if test="name != null">#{name},</if>
+        </trim>
+    </insert>
+
+</mapper>
