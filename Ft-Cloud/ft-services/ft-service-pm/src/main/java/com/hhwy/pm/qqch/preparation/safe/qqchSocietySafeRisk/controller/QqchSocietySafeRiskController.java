@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.qqchSocietySafeRisk.domain.QqchSocietySafeRisk;
 import com.hhwy.pm.qqch.preparation.safe.qqchSocietySafeRisk.domain.vo.QqchSocietySafeRiskVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSocietySafeRisk.service.IQqchSocietySafeRiskService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +31,7 @@ public class QqchSocietySafeRiskController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-公共安全风险管控策划", name = "8.6.1社会安全风险策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSocietySafeRiskList(@Validated(ValidationGroups.Select.class) QqchSocietySafeRisk qqchSocietySafeRiskParam) {
         QqchSocietySafeRiskVo vo = qqchSocietySafeRiskService.getQqchSocietySafeRiskList(qqchSocietySafeRiskParam);
         return AjaxResult.success(vo);
@@ -36,6 +39,7 @@ public class QqchSocietySafeRiskController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-公共安全风险管控策划", name = "8.6.1社会安全风险策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSocietySafeRiskList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSocietySafeRiskVo vo) {
         qqchSocietySafeRiskService.save(vo);
         return AjaxResult.success();
@@ -44,6 +48,7 @@ public class QqchSocietySafeRiskController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-公共安全风险管控策划", name = "8.6.1社会安全风险策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSocietySafeRisk(@Validated(ValidationGroups.Get.class) QqchSocietySafeRisk qqchSocietySafeRiskParam) {
         QqchSocietySafeRisk qqchSocietySafeRisk = qqchSocietySafeRiskService.getQqchSocietySafeRisk(qqchSocietySafeRiskParam);
         return AjaxResult.success(qqchSocietySafeRisk);
@@ -51,6 +56,7 @@ public class QqchSocietySafeRiskController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-公共安全风险管控策划", name = "8.6.1社会安全风险策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSocietySafeRisk(@Validated(ValidationGroups.Save.class) @RequestBody QqchSocietySafeRisk qqchSocietySafeRiskParam) {
         qqchSocietySafeRiskService.insertQqchSocietySafeRisk(qqchSocietySafeRiskParam);
         return AjaxResult.success(qqchSocietySafeRiskParam);

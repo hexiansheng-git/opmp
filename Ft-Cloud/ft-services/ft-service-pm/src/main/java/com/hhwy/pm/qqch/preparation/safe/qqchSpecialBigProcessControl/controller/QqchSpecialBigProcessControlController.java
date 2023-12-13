@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigProcessControl.domain.QqchSpecialBigProcessControl;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigProcessControl.domain.vo.QqchSpecialBigProcessControlVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigProcessControl.service.IQqchSpecialBigProcessControlService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -34,6 +36,7 @@ public class QqchSpecialBigProcessControlController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划", name = "8.4.3 特种设备及大型设备过程管控策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSpecialBigProcessControlList(@Validated(ValidationGroups.Select.class) QqchSpecialBigProcessControl qqchSpecialBigProcessControlParam) {
         QqchSpecialBigProcessControlVo vo = qqchSpecialBigProcessControlService.getQqchSpecialBigProcessControlList(qqchSpecialBigProcessControlParam);
         return AjaxResult.success(vo);
@@ -42,6 +45,7 @@ public class QqchSpecialBigProcessControlController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划", name = "8.4.3 特种设备及大型设备过程管控策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSpecialBigProcessControlList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSpecialBigProcessControlVo vo) {
         qqchSpecialBigProcessControlService.save(vo);
         return AjaxResult.success();
@@ -50,6 +54,7 @@ public class QqchSpecialBigProcessControlController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划", name = "8.4.3 特种设备及大型设备过程管控策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSpecialBigProcessControl(@Validated(ValidationGroups.Get.class) QqchSpecialBigProcessControl qqchSpecialBigProcessControlParam) {
         QqchSpecialBigProcessControl qqchSpecialBigProcessControl = qqchSpecialBigProcessControlService.getQqchSpecialBigProcessControl(qqchSpecialBigProcessControlParam);
         return AjaxResult.success(qqchSpecialBigProcessControl);
@@ -58,6 +63,7 @@ public class QqchSpecialBigProcessControlController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划", name = "8.4.3 特种设备及大型设备过程管控策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSpecialBigProcessControl(@Validated(ValidationGroups.Save.class) @RequestBody QqchSpecialBigProcessControl qqchSpecialBigProcessControlParam) {
         qqchSpecialBigProcessControlService.insertQqchSpecialBigProcessControl(qqchSpecialBigProcessControlParam);
         return AjaxResult.success(qqchSpecialBigProcessControlParam);

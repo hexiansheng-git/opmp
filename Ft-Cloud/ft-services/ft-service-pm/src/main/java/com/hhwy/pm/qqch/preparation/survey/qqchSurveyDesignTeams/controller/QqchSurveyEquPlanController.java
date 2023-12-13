@@ -7,6 +7,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain.QqchSurveyEquPlan;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.service.IQqchSurveyEquPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +35,7 @@ public class QqchSurveyEquPlanController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchSurveyEquPlan:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计经营模式策划", name = "2.1.3勘察设计队伍配置" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSurveyEquPlan(@Validated(ValidationGroups.Get.class) QqchSurveyEquPlan qqchSurveyEquPlanParam) {
         QqchSurveyEquPlan qqchSurveyEquPlan = qqchSurveyEquPlanService.getQqchSurveyEquPlan(qqchSurveyEquPlanParam);
         return AjaxResult.success(qqchSurveyEquPlan);
@@ -40,6 +43,7 @@ public class QqchSurveyEquPlanController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchSurveyEquPlan:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计经营模式策划", name = "2.1.3勘察设计队伍配置" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSurveyEquPlanList(@Validated(ValidationGroups.Select.class) QqchSurveyEquPlan qqchSurveyEquPlanParam) {
         startPage();
         List<QqchSurveyEquPlan> qqchSurveyEquPlanList = qqchSurveyEquPlanService.getQqchSurveyEquPlanList(qqchSurveyEquPlanParam);
@@ -48,6 +52,7 @@ public class QqchSurveyEquPlanController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchSurveyEquPlan:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计经营模式策划", name = "2.1.3勘察设计队伍配置" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSurveyEquPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyEquPlan qqchSurveyEquPlanParam) {
         qqchSurveyEquPlanService.insertQqchSurveyEquPlan(qqchSurveyEquPlanParam);
         return AjaxResult.success(qqchSurveyEquPlanParam);
@@ -55,6 +60,7 @@ public class QqchSurveyEquPlanController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchSurveyEquPlan:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计经营模式策划", name = "2.1.3勘察设计队伍配置" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSurveyEquPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchSurveyEquPlan> qqchSurveyEquPlanListParam) {
         qqchSurveyEquPlanService.insertQqchSurveyEquPlanList(qqchSurveyEquPlanListParam);
         return AjaxResult.success(qqchSurveyEquPlanListParam);
@@ -86,6 +92,7 @@ public class QqchSurveyEquPlanController extends BaseController {
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计经营模式策划", name = "2.1.3勘察设计队伍配置" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, QqchSurveyEquPlan qqchSurveyEquPlanParam) throws IOException {
         List<QqchSurveyEquPlan> qqchSurveyEquPlanList = qqchSurveyEquPlanService.getQqchSurveyEquPlanList(qqchSurveyEquPlanParam);
         ExcelUtils<QqchSurveyEquPlan> util = new ExcelUtils<>(QqchSurveyEquPlan.class);

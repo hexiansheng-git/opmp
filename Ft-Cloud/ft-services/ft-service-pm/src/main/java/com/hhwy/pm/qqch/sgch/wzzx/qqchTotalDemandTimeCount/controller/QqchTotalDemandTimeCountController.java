@@ -7,6 +7,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.domain.QqchTotalDemandTimeCount;
 import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.service.IQqchTotalDemandTimeCountService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -20,73 +22,77 @@ import java.util.List;
 /**
  * @author ldd
  * @date 2023-08-02 10:55:17
- * @remark  1.6 物资总需计划
+ * @remark 1.6 物资总需计划
  */
 @Validated
 @RestController
 @RequestMapping("/qqchTotalDemandTimeCount")
-public class QqchTotalDemandTimeCountController extends BaseController{
+public class QqchTotalDemandTimeCountController extends BaseController {
 
     @Autowired
     private IQqchTotalDemandTimeCountService qqchTotalDemandTimeCountService;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 
-//    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:list")
+    //    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:list")
     @GetMapping
-    public AjaxResult getQqchTotalDemandTimeCount(@Validated(ValidationGroups.Get.class)  QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam){
-        QqchTotalDemandTimeCount qqchTotalDemandTimeCount =  qqchTotalDemandTimeCountService.getQqchTotalDemandTimeCount(qqchTotalDemandTimeCountParam);
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-物资总需计划", name = "1.6物资总需计划", businessType = CustomBusinessType.SELECT)
+    public AjaxResult getQqchTotalDemandTimeCount(@Validated(ValidationGroups.Get.class) QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam) {
+        QqchTotalDemandTimeCount qqchTotalDemandTimeCount = qqchTotalDemandTimeCountService.getQqchTotalDemandTimeCount(qqchTotalDemandTimeCountParam);
         return AjaxResult.success(qqchTotalDemandTimeCount);
     }
 
-//    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:list")
+    //    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:list")
     @GetMapping("/list")
-    public AjaxResult getQqchTotalDemandTimeCountList(@Validated(ValidationGroups.Select.class) QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam){
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-物资总需计划", name = "1.6物资总需计划", businessType = CustomBusinessType.SELECT)
+    public AjaxResult getQqchTotalDemandTimeCountList(@Validated(ValidationGroups.Select.class) QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam) {
         startPage();
         List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCountList = qqchTotalDemandTimeCountService.getQqchTotalDemandTimeCountList(qqchTotalDemandTimeCountParam);
         return getDataTableAjaxResult(qqchTotalDemandTimeCountList);
     }
 
-//    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:add")
+    //    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:add")
     @PostMapping("/add")
-    public AjaxResult insertQqchTotalDemandTimeCount(@Validated(ValidationGroups.Save.class) @RequestBody QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam){
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-物资总需计划", name = "1.6物资总需计划", businessType = CustomBusinessType.SAVE)
+    public AjaxResult insertQqchTotalDemandTimeCount(@Validated(ValidationGroups.Save.class) @RequestBody QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam) {
         qqchTotalDemandTimeCountService.insertQqchTotalDemandTimeCount(qqchTotalDemandTimeCountParam);
         return AjaxResult.success(qqchTotalDemandTimeCountParam);
     }
 
-//    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:add")
+    //    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:add")
     @PostMapping("/batchAdd")
-    public AjaxResult insertQqchTotalDemandTimeCountList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCountListParam){
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-物资总需计划", name = "1.6物资总需计划", businessType = CustomBusinessType.SAVE)
+    public AjaxResult insertQqchTotalDemandTimeCountList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCountListParam) {
         qqchTotalDemandTimeCountService.insertQqchTotalDemandTimeCountList(qqchTotalDemandTimeCountListParam);
         return AjaxResult.success(qqchTotalDemandTimeCountListParam);
     }
 
-//    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:update")
+    //    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:update")
     @PostMapping("/update")
-    public AjaxResult updateQqchTotalDemandTimeCount(@Validated(ValidationGroups.Update.class) @RequestBody QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam){
+    public AjaxResult updateQqchTotalDemandTimeCount(@Validated(ValidationGroups.Update.class) @RequestBody QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam) {
         return toAjax(qqchTotalDemandTimeCountService.updateQqchTotalDemandTimeCount(qqchTotalDemandTimeCountParam));
     }
 
-//            @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:update")
-        @PostMapping("/batchUpdate")
-        public AjaxResult updateQqchTotalDemandTimeCountList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCountListParam){
-            return toAjax(qqchTotalDemandTimeCountService.updateQqchTotalDemandTimeCountList(qqchTotalDemandTimeCountListParam));
-        }
-    
-//    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:remove")
+    //            @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:update")
+    @PostMapping("/batchUpdate")
+    public AjaxResult updateQqchTotalDemandTimeCountList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCountListParam) {
+        return toAjax(qqchTotalDemandTimeCountService.updateQqchTotalDemandTimeCountList(qqchTotalDemandTimeCountListParam));
+    }
+
+    //    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:remove")
     @PostMapping("/delete")
-    public AjaxResult deleteQqchTotalDemandTimeCount(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam){
+    public AjaxResult deleteQqchTotalDemandTimeCount(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam) {
         return toAjax(qqchTotalDemandTimeCountService.deleteQqchTotalDemandTimeCount(qqchTotalDemandTimeCountParam));
     }
 
-//            @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:remove")
-        @PostMapping("/{ids}")
-        public AjaxResult deleteQqchTotalDemandTimeCountByPks(@PathVariable Long[] ids){
-            List<Long> qqchTotalDemandTimeCountPkList = Arrays.asList(ids);
-            return toAjax(qqchTotalDemandTimeCountService.deleteQqchTotalDemandTimeCountByPks(qqchTotalDemandTimeCountPkList));
-        }
-    
+    //            @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:remove")
+    @PostMapping("/{ids}")
+    public AjaxResult deleteQqchTotalDemandTimeCountByPks(@PathVariable Long[] ids) {
+        List<Long> qqchTotalDemandTimeCountPkList = Arrays.asList(ids);
+        return toAjax(qqchTotalDemandTimeCountService.deleteQqchTotalDemandTimeCountByPks(qqchTotalDemandTimeCountPkList));
+    }
+
     @GetMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-物资总需计划", name = "1.6物资总需计划" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam) throws IOException {
         List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCountList = qqchTotalDemandTimeCountService.getQqchTotalDemandTimeCountList(qqchTotalDemandTimeCountParam);
         ExcelUtils<QqchTotalDemandTimeCount> util = new ExcelUtils<>(QqchTotalDemandTimeCount.class);

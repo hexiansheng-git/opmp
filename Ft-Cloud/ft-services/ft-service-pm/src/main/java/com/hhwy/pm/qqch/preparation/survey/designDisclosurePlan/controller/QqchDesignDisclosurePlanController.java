@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.domain.QqchDesignDisclosurePlan;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.domain.vo.QqchDesignDisclosurePlanVo;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.service.IQqchDesignDisclosurePlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -34,6 +36,7 @@ public class QqchDesignDisclosurePlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchDesignDisclosurePlan:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-设计交底策划", name = "2.4设计交底策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchDesignDisclosurePlanList(@Validated(ValidationGroups.Select.class) QqchDesignDisclosurePlan qqchDesignDisclosurePlanParam) {
         QqchDesignDisclosurePlanVo qqchDesignDisclosurePlanVo = qqchDesignDisclosurePlanService.getQqchDesignDisclosurePlanList(qqchDesignDisclosurePlanParam);
         return AjaxResult.success(qqchDesignDisclosurePlanVo);
@@ -47,6 +50,7 @@ public class QqchDesignDisclosurePlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchDesignDisclosurePlan:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-设计交底策划", name = "2.4设计交底策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchAdd(@Validated(ValidationGroups.Save.class) @RequestBody QqchDesignDisclosurePlanVo qqchDesignDisclosurePlanVo) {
         qqchDesignDisclosurePlanService.save(qqchDesignDisclosurePlanVo);
         return AjaxResult.success(qqchDesignDisclosurePlanVo);
@@ -60,6 +64,7 @@ public class QqchDesignDisclosurePlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchDesignDisclosurePlan:confirm")
     @PostMapping("/confirm")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-设计交底策划", name = "2.4设计交底策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchDesignDisclosurePlanVo qqchDesignDisclosurePlanVo) {
         qqchDesignDisclosurePlanService.confirm(qqchDesignDisclosurePlanVo);
         return AjaxResult.success(qqchDesignDisclosurePlanVo);

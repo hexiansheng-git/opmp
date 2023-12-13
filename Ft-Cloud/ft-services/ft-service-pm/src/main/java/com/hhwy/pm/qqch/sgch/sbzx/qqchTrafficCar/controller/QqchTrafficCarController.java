@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchTrafficCar.domain.QqchTrafficCar;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchTrafficCar.domain.vo.QqchTrafficCarVo;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchTrafficCar.service.IQqchTrafficCarService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +32,7 @@ public class QqchTrafficCarController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchTrafficCar:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-设备总需计划", name = "1.7.2交通车辆" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchTrafficCar(@Validated(ValidationGroups.Get.class) QqchTrafficCar qqchTrafficCarParam) {
         QqchTrafficCar qqchTrafficCar = qqchTrafficCarService.getQqchTrafficCar(qqchTrafficCarParam);
         return AjaxResult.success(qqchTrafficCar);
@@ -43,6 +46,7 @@ public class QqchTrafficCarController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchTrafficCar:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-设备总需计划", name = "1.7.2交通车辆" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchTrafficCarList(@Validated(ValidationGroups.Select.class) QqchTrafficCar qqchTrafficCarParam) {
         QqchTrafficCarVo vo = qqchTrafficCarService.getQqchTrafficCarList(qqchTrafficCarParam);
         return AjaxResult.success(vo);
@@ -56,6 +60,7 @@ public class QqchTrafficCarController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchTrafficCar:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-设备总需计划", name = "1.7.2交通车辆" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchTrafficCar(@Validated(ValidationGroups.Save.class) @RequestBody QqchTrafficCarVo qqchTrafficCarParam) {
         qqchTrafficCarService.save(qqchTrafficCarParam);
         return AjaxResult.success();

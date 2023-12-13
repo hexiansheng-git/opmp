@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.qqchCareerHealthRiskList.domain.QqchCareerHealthRiskList;
 import com.hhwy.pm.qqch.preparation.safe.qqchCareerHealthRiskList.domain.vo.QqchCareerHealthRiskListVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchCareerHealthRiskList.service.IQqchCareerHealthRiskListService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -34,6 +36,7 @@ public class QqchCareerHealthRiskListController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-职业健康策划", name = "8.7.1职业健康风险清单" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchCareerHealthRiskListList(@Validated(ValidationGroups.Select.class) QqchCareerHealthRiskList qqchCareerHealthRiskListParam) {
         QqchCareerHealthRiskListVo vo = qqchCareerHealthRiskListService.getQqchCareerHealthRiskListList(qqchCareerHealthRiskListParam);
         return AjaxResult.success(vo);
@@ -41,6 +44,7 @@ public class QqchCareerHealthRiskListController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-职业健康策划", name = "8.7.1职业健康风险清单" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchCareerHealthRiskListList(@Validated(ValidationGroups.Save.class) @RequestBody QqchCareerHealthRiskListVo vo) {
         qqchCareerHealthRiskListService.save(vo);
         return AjaxResult.success();
@@ -49,6 +53,7 @@ public class QqchCareerHealthRiskListController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-职业健康策划", name = "8.7.1职业健康风险清单" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchCareerHealthRiskList(@Validated(ValidationGroups.Get.class) QqchCareerHealthRiskList qqchCareerHealthRiskListParam) {
         QqchCareerHealthRiskList qqchCareerHealthRiskList = qqchCareerHealthRiskListService.getQqchCareerHealthRiskList(qqchCareerHealthRiskListParam);
         return AjaxResult.success(qqchCareerHealthRiskList);
@@ -57,6 +62,7 @@ public class QqchCareerHealthRiskListController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-职业健康策划", name = "8.7.1职业健康风险清单" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchCareerHealthRiskList(@Validated(ValidationGroups.Save.class) @RequestBody QqchCareerHealthRiskList qqchCareerHealthRiskListParam) {
         qqchCareerHealthRiskListService.insertQqchCareerHealthRiskList(qqchCareerHealthRiskListParam);
         return AjaxResult.success(qqchCareerHealthRiskListParam);

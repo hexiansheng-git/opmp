@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.qqchDangerJobIdentification.domain.QqchDangerJobIdentification;
 import com.hhwy.pm.qqch.preparation.safe.qqchDangerJobIdentification.domain.vo.QqchDangerJobIdentificationVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchDangerJobIdentification.service.IQqchDangerJobIdentificationService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +37,7 @@ public class QqchDangerJobIdentificationController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-危险作业管控策划", name = "8.5危险作业管控策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchDangerJobIdentificationList(@Validated(ValidationGroups.Select.class) QqchDangerJobIdentification qqchDangerJobIdentificationParam) {
         QqchDangerJobIdentificationVo vo = qqchDangerJobIdentificationService.getQqchDangerJobIdentificationList(qqchDangerJobIdentificationParam);
         return AjaxResult.success(vo);
@@ -47,6 +50,7 @@ public class QqchDangerJobIdentificationController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-危险作业管控策划", name = "8.5危险作业管控策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchDangerJobIdentificationList(@Validated(ValidationGroups.Save.class) @RequestBody QqchDangerJobIdentificationVo vo) {
         qqchDangerJobIdentificationService.save(vo);
         return AjaxResult.success();
@@ -55,6 +59,7 @@ public class QqchDangerJobIdentificationController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-危险作业管控策划", name = "8.5危险作业管控策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchDangerJobIdentification(@Validated(ValidationGroups.Get.class) QqchDangerJobIdentification qqchDangerJobIdentificationParam) {
         QqchDangerJobIdentification qqchDangerJobIdentification = qqchDangerJobIdentificationService.getQqchDangerJobIdentification(qqchDangerJobIdentificationParam);
         return AjaxResult.success(qqchDangerJobIdentification);
@@ -63,6 +68,7 @@ public class QqchDangerJobIdentificationController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-危险作业管控策划", name = "8.5危险作业管控策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchDangerJobIdentification(@Validated(ValidationGroups.Save.class) @RequestBody QqchDangerJobIdentification qqchDangerJobIdentificationParam) {
         qqchDangerJobIdentificationService.insertQqchDangerJobIdentification(qqchDangerJobIdentificationParam);
         return AjaxResult.success(qqchDangerJobIdentificationParam);
