@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 
 import com.hhwy.pm.qqch.preparation.sbch.staffing.domain.SbchStaffingInfo;
 import com.hhwy.pm.qqch.preparation.sbch.staffing.service.ISbchStaffingInfoService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -40,10 +42,9 @@ public class SbchStaffingInfoController extends BaseController {
     /**
      * 查询设备人员配置策划列表
      */
-//    @PreAuthorize(hasPermi="staffing:info:list")
-    //@CustomLogger(title = "人员配置策划列表-查询", businessType = CustomBusinessType.SELECT)
     @GetMapping("/getList")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备人员配置策划", name = "7.3.1设备人员配置", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(BigDecimal version) {
         SbchStaffingInfo info  = sbchStaffingInfoService.getList(version);
         return AjaxResult.success(info);
@@ -54,10 +55,9 @@ public class SbchStaffingInfoController extends BaseController {
     /**
      * 新增保存设备人员配置策划
      */
-//    @PreAuthorize(hasPermi="staffing:info:add")
-    //@CustomLogger(title = "设备人员配置策划-添加保存", businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备人员配置策划", name = "7.3.1设备人员配置", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody SbchStaffingInfo sbchStaffingInfo) {
         try{
             Long aLong = sbchStaffingInfoService.insertSbchStaffingInfo(sbchStaffingInfo);

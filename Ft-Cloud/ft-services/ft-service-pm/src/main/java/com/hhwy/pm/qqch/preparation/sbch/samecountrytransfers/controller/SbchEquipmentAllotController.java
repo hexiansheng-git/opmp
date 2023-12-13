@@ -12,6 +12,8 @@ import com.hhwy.pm.qqch.preparation.sbch.samecountrytransfers.domain.SbchEquipme
 import com.hhwy.pm.qqch.preparation.sbch.samecountrytransfers.dto.SbchEquipmentAllotDTO;
 import com.hhwy.pm.qqch.preparation.sbch.samecountrytransfers.service.ISbchEquipmentAllotService;
 import com.hhwy.utils.common.PmsConstant;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +42,8 @@ public class SbchEquipmentAllotController extends BaseController {
     /**
      * 查询同国别设备列表
      */
-//    @PreAuthorize(hasPermi ="samecountry:transfers:list")
     @GetMapping("/list")
-    //@CustomLogger(title = "同国别-列表查询",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.2设备调拨策划-同国别设备列表", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody SbchEquipmentAllot sbchEquipmentAllot) {
         List<SbchEquipmentAllot> list = sbchEquipmentAllotService.selectSbchEquipmentAllotList(sbchEquipmentAllot);
         TableDataInfo dataTable = getDataTable(list);
@@ -56,9 +57,8 @@ public class SbchEquipmentAllotController extends BaseController {
     /**
      * 新增保存同国别设备
      */
-//    @PreAuthorize(hasPermi ="samecountry:transfers:add")
-    //@CustomLogger(title = "同国别-保存",businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.2设备调拨策划-同国别设备列表", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody SbchEquipmentAllotDTO sbchEquipmentAllot) {
         try {
             return new AjaxResult(200,"成功",sbchEquipmentAllotService.insertSbchEquipmentAllotAndDetails(sbchEquipmentAllot));

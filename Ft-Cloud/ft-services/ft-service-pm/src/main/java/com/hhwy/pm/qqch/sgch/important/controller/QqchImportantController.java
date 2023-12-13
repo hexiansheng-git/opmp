@@ -89,8 +89,8 @@ public class QqchImportantController extends BaseController {
 
 
     private void checkData(List<QqchImportant> list) {
-        if(CollectionUtils.isEmpty(list)) {
-            return ;
+        if (CollectionUtils.isEmpty(list)) {
+            return;
         }
         List<String> users = list.stream().map(QqchImportant::getDutyUserName).distinct().filter(StringUtils::isNotEmpty).collect(Collectors.toList());
         SysUser where = new SysUser();

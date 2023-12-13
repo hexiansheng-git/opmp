@@ -17,6 +17,8 @@ import com.hhwy.pm.qqch.preparation.sbch.plan.service.ISbchTotalDemandPlanDetail
 import com.hhwy.pm.qqch.preparation.sbch.plan.vo.ImportSbchTotalDemandPlanDetail;
 import com.hhwy.pm.qqch.wzch.enums.YesOrNoEnum;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.excel.ExportUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
@@ -60,6 +62,7 @@ public class SbchTotalDemandPlanDetailController extends BaseController {
      */
     @GetMapping("/syncData")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备总需计划", name = "7.1设备总需计划", businessType = CustomBusinessType.SAVE)
     public AjaxResult syncData(BigDecimal version) {
         SbchTotalDemandPlan sbchTotalDemandPlan = totalDemandPlanDetailService.syncData(version);
         return AjaxResult.success(sbchTotalDemandPlan);
@@ -75,6 +78,7 @@ public class SbchTotalDemandPlanDetailController extends BaseController {
      */
     @PostMapping("/importData")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备总需计划", name = "7.1设备总需计划", businessType = CustomBusinessType.OTHER)
     public AjaxResult importData(MultipartFile file) {
         try {
             ExcelUtils<ImportSbchTotalDemandPlanDetail> util = new ExcelUtils(ImportSbchTotalDemandPlanDetail.class);
@@ -114,6 +118,7 @@ public class SbchTotalDemandPlanDetailController extends BaseController {
      * 导出
      */
     @PostMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备总需计划", name = "7.1设备总需计划", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response) throws IOException {
         SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail = new SbchTotalDemandPlanDetail();
         List<SbchTotalDemandPlanDetail> list = totalDemandPlanDetailService.selectSbchTotalDemandPlanDetailLeaderList(sbchTotalDemandPlanDetail);

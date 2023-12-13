@@ -10,6 +10,8 @@ import com.hhwy.pm.qqch.preparation.sbch.imported.material.domain.SbchMaterialTr
 import com.hhwy.pm.qqch.preparation.sbch.imported.material.service.ISbchMaterialTranPlanDetailService;
 import com.hhwy.pm.qqch.preparation.sbch.imported.material.service.ISbchMaterialTranPlanService;
 import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -45,10 +47,9 @@ public class SbchMaterialTranPlanController extends BaseController {
     /**
      * 查询大型成套设备运输方案列表
      */
-//    @PreAuthorize(hasPermi="train:info:list")
-    //@CustomLogger(title = "大型成套设备运输方案列表-查看", businessType = CustomBusinessType.SELECT)
     @PostMapping("/list")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.3大型成套设备运输方案", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@RequestBody SbchMaterialTranPlan sbchMaterialTranPlan) {
 //        startPage(sbchMaterialTranPlan.getPageNum(),sbchMaterialTranPlan.getPageSize());
         List<SbchMaterialTranPlan> list = sbchMaterialTranPlanService.selectSbchMaterialTranPlanList(sbchMaterialTranPlan);
@@ -58,10 +59,9 @@ public class SbchMaterialTranPlanController extends BaseController {
     /**
      * 导出大型成套设备运输方案列表
      */
-//    @PreAuthorize(hasPermi="train:info:export")
-    //@CustomLogger(title = "大型成套设备运输方案列表-导出", businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.3大型成套设备运输方案", businessType = CustomBusinessType.EXPORT)
     public void export(@RequestBody SbchMaterialTranPlan sbchMaterialTranPlan, HttpServletResponse response) {
         try{
             List<SbchMaterialTranPlan> list = sbchMaterialTranPlanService.selectSbchMaterialTranPlanList(sbchMaterialTranPlan);
@@ -75,10 +75,9 @@ public class SbchMaterialTranPlanController extends BaseController {
     /**
      * 新增保存大型成套设备运输方案
      */
-//    @PreAuthorize(hasPermi="train:info:add")
-    //@CustomLogger(title = "大型成套设备运输方案-新增保存", businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.3大型成套设备运输方案", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody SbchMaterialTranPlan sbchMaterialTranPlan) {
         try{
             return toAjax(sbchMaterialTranPlanService.insertSbchMaterialTranPlan(sbchMaterialTranPlan));
@@ -95,10 +94,9 @@ public class SbchMaterialTranPlanController extends BaseController {
     /**
      * 修改保存大型成套设备运输方案
      */
-//    @PreAuthorize(hasPermi="train:info:edit")
-    //@CustomLogger(title = "大型成套设备运输方案-编辑保存", businessType = CustomBusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.3大型成套设备运输方案", businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody SbchMaterialTranPlan sbchMaterialTranPlan) {
         try{
             return toAjax(sbchMaterialTranPlanService.updateSbchMaterialTranPlan(sbchMaterialTranPlan));
@@ -114,10 +112,9 @@ public class SbchMaterialTranPlanController extends BaseController {
     /**
      * 删除大型成套设备运输方案
      */
-//    @PreAuthorize(hasPermi="train:info:remove")
-    //@CustomLogger(title = "大型成套设备运输方案-编辑保存", businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.3大型成套设备运输方案", businessType = CustomBusinessType.DELETE)
     public AjaxResult remove(@RequestBody Map map) {
         if(ObjectNullUtil.isEmpty(map.get("ids"))){
             return AjaxResult.error("id不可为空");
@@ -141,6 +138,7 @@ public class SbchMaterialTranPlanController extends BaseController {
      */
     @GetMapping("/detail/{id}")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.3大型成套设备运输方案", businessType = CustomBusinessType.SELECT)
     public AjaxResult detail (@PathVariable("id") Long id){
         SbchMaterialTranPlan sbchMaterialTranPlan = sbchMaterialTranPlanService.selectSbchMaterialTranPlanById(id);
         return AjaxResult.success(sbchMaterialTranPlan);
@@ -155,6 +153,7 @@ public class SbchMaterialTranPlanController extends BaseController {
      */
     @GetMapping("/detailList/{id}")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.3大型成套设备运输方案", businessType = CustomBusinessType.SELECT)
     public AjaxResult detailList(@PathVariable("id") Long id){
         SbchMaterialTranPlanDetail sbchMaterialTranPlanDetail = new SbchMaterialTranPlanDetail();
         sbchMaterialTranPlanDetail.setPlanId(id);
@@ -181,6 +180,7 @@ public class SbchMaterialTranPlanController extends BaseController {
 
     @GetMapping("/getList")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.3大型成套设备运输方案", businessType = CustomBusinessType.SELECT)
     public AjaxResult getList(BigDecimal version){
         SbchMaterialTranPlan sbchMaterialTranPlan = sbchMaterialTranPlanService.getList(version);
         return AjaxResult.success(sbchMaterialTranPlan);
@@ -188,6 +188,7 @@ public class SbchMaterialTranPlanController extends BaseController {
 
     @PostMapping("/batchAdd")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.3大型成套设备运输方案", businessType = CustomBusinessType.SAVE)
     public AjaxResult batchAdd(@Validated(ValidationGroups.Save.class) @RequestBody  SbchMaterialTranPlan sbchMaterialTranPlan){
         try{
             sbchMaterialTranPlanService.batchSave(sbchMaterialTranPlan);

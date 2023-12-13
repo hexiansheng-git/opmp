@@ -7,6 +7,8 @@ import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlan;
 import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail;
 import com.hhwy.pm.qqch.preparation.sbch.plan.service.SbchTotalDemandPlanService;
 import com.hhwy.pm.qqch.preparation.sbch.plan.vo.SbchTotalDemandPlanDetailVo;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,7 @@ public class SbchTotalDemandPlanController extends BaseController {
 //    @PreAuthorize(hasPermi = "sbchTotalDemandPlan:list")
     @GetMapping("/getList")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备总需计划", name = "7.1设备总需计划", businessType = CustomBusinessType.SELECT)
     public AjaxResult getList(BigDecimal version) {
         SbchTotalDemandPlan sbchTotalDemandPlan = sbchTotalDemandPlanService.getList(version);
         return AjaxResult.success(sbchTotalDemandPlan);
@@ -49,6 +52,7 @@ public class SbchTotalDemandPlanController extends BaseController {
 //    @PreAuthorize(hasPermi = "sbchTotalDemandPlan:add")
     @PostMapping("/batchAdd")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备总需计划", name = "7.1设备总需计划", businessType = CustomBusinessType.SAVE)
     public AjaxResult add(@Validated(ValidationGroups.Save.class) @RequestBody SbchTotalDemandPlan vo){
         try{
             sbchTotalDemandPlanService.batchSave(vo);
@@ -67,6 +71,7 @@ public class SbchTotalDemandPlanController extends BaseController {
      */
     @PostMapping("/leaderList")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备总需计划", name = "7.1设备总需计划", businessType = CustomBusinessType.SELECT)
     public AjaxResult leaderList(@RequestBody SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail) {
 //        startPage(sbchTotalDemandPlanDetail.getPageNum(),sbchTotalDemandPlanDetail.getPageSize());
         SbchTotalDemandPlan sbchTotalDemandPlan = sbchTotalDemandPlanService.getLeaderList(sbchTotalDemandPlanDetail);

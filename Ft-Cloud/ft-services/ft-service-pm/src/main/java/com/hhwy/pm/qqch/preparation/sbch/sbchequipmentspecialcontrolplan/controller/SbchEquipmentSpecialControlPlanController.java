@@ -10,6 +10,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialcontrolplan.domain.SbchEquipmentSpecialControlPlan;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialcontrolplan.service.ISbchEquipmentSpecialControlPlanService;
 import com.hhwy.utils.common.PmsConstant;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,10 +53,9 @@ public class SbchEquipmentSpecialControlPlanController extends BaseController {
     /**
      * 查询特种设备过程管控策划列表
      */
-//    @PreAuthorize(hasPermi ="equipmentspecial:control:list")
     @PostMapping("/list")
-    //@CustomLogger(title = "特种设备过程管控策划-列表查询",businessType = CustomBusinessType.SELECT)
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-特种设备策划", name = "7.6.3特种设备过程管控策划", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody SbchEquipmentSpecialControlPlan sbchEquipmentSpecialControlPlan) {
 //        startPage(sbchEquipmentSpecialControlPlan.getPageNum(),sbchEquipmentSpecialControlPlan.getPageSize());
         List<SbchEquipmentSpecialControlPlan> list = sbchEquipmentSpecialControlPlanService.selectSbchEquipmentSpecialControlPlanList(sbchEquipmentSpecialControlPlan);
@@ -67,10 +68,9 @@ public class SbchEquipmentSpecialControlPlanController extends BaseController {
     /**
      * 导出特种设备过程管控策划列表
      */
-//    @PreAuthorize(hasPermi ="equipmentspecial:control:export")
-    //@CustomLogger(title = "特种设备过程管控策划-导出",businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-特种设备策划", name = "7.6.3特种设备过程管控策划", businessType = CustomBusinessType.EXPORT)
     public void export(@RequestBody SbchEquipmentSpecialControlPlan sbchEquipmentSpecialControlPlan, HttpServletResponse response) {
         List<SbchEquipmentSpecialControlPlan> list = sbchEquipmentSpecialControlPlanService.selectSbchEquipmentSpecialControlPlanList(sbchEquipmentSpecialControlPlan);
         ExcelUtils<SbchEquipmentSpecialControlPlan> util = new ExcelUtils<SbchEquipmentSpecialControlPlan>(SbchEquipmentSpecialControlPlan.class);
@@ -83,10 +83,9 @@ public class SbchEquipmentSpecialControlPlanController extends BaseController {
     /**
      * 新增保存特种设备过程管控策划
      */
-//    @PreAuthorize(hasPermi ="equipmentspecial:control:add")
-    //@CustomLogger(title = "特种设备过程管控策划-保存",businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-特种设备策划", name = "7.6.3特种设备过程管控策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody SbchEquipmentSpecialControlPlan sbchEquipmentSpecialControlPlan) {
         try {
             return toAjax(sbchEquipmentSpecialControlPlanService.insertSbchEquipmentSpecialControlPlan(sbchEquipmentSpecialControlPlan));
@@ -102,10 +101,9 @@ public class SbchEquipmentSpecialControlPlanController extends BaseController {
     /**
      * 修改保存特种设备过程管控策划
      */
-//    @PreAuthorize(hasPermi ="equipmentspecial:control:edit")
-    //@CustomLogger(title = "特种设备过程管控策划-编辑",businessType = CustomBusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-特种设备策划", name = "7.6.3特种设备过程管控策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody SbchEquipmentSpecialControlPlan sbchEquipmentSpecialControlPlan) {
         try {
             return toAjax(sbchEquipmentSpecialControlPlanService.updateSbchEquipmentSpecialControlPlan(sbchEquipmentSpecialControlPlan));
@@ -121,10 +119,9 @@ public class SbchEquipmentSpecialControlPlanController extends BaseController {
     /**
      * 删除特种设备过程管控策划
      */
-//    @PreAuthorize(hasPermi ="equipmentspecial:control:remove")
-    //@CustomLogger(title = "特种设备过程管控策划-删除",businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-特种设备策划", name = "7.6.3特种设备过程管控策划", businessType = CustomBusinessType.DELETE)
     public AjaxResult remove(@Validated(ValidationGroups.Update.class) @RequestBody String ids) {
         Map<String,String> maps = (Map) JSON.parse(ids);
         if (StringUtils.isBlank(maps.get("ids")))
@@ -134,6 +131,7 @@ public class SbchEquipmentSpecialControlPlanController extends BaseController {
 
     @GetMapping("/getList")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-特种设备策划", name = "7.6.3特种设备过程管控策划", businessType = CustomBusinessType.SELECT)
     public AjaxResult getList(BigDecimal version){
         SbchEquipmentSpecialControlPlan sbchEquipmentSpecialControlPlan = sbchEquipmentSpecialControlPlanService.getList(version);
         return AjaxResult.success(sbchEquipmentSpecialControlPlan);
@@ -141,6 +139,7 @@ public class SbchEquipmentSpecialControlPlanController extends BaseController {
 
     @PostMapping("/batchAdd")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-特种设备策划", name = "7.6.3特种设备过程管控策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult batchAdd(@Validated(ValidationGroups.Save.class)@RequestBody SbchEquipmentSpecialControlPlan sbchEquipmentSpecialControlPlan ){
         try{
             sbchEquipmentSpecialControlPlanService.batchSave(sbchEquipmentSpecialControlPlan);
