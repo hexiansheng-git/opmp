@@ -12,6 +12,8 @@ import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractPayinfoVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,7 @@ public class XmslContractPayinfoController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractPayinfo:list")
     @GetMapping
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "项目支付信息", businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslContractPayinfo(@Validated(ValidationGroups.Get.class)  XmslContractPayinfo xmslContractPayinfoParam) {
         XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoService.getXmslContractPayinfo(xmslContractPayinfoParam);
         return AjaxResult.success(xmslContractPayinfo);
@@ -57,6 +60,7 @@ public class XmslContractPayinfoController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractPayinfo:list")
     @GetMapping("/list")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "项目支付信息", businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslContractPayinfoList(@Validated(ValidationGroups.Select.class)  XmslContractPayinfo xmslContractPayinfoParam) {
         startPage();
         List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractPayinfoService.getXmslContractPayinfoList(xmslContractPayinfoParam);
@@ -65,6 +69,7 @@ public class XmslContractPayinfoController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractPayinfo:add")
     @PostMapping("/add")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "项目支付信息", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertXmslContractPayinfo(@Validated(ValidationGroups.Save.class) @RequestBody XmslContractPayinfo xmslContractPayinfoParam) {
         xmslContractPayinfoService.insertXmslContractPayinfo(xmslContractPayinfoParam);
         return AjaxResult.success(xmslContractPayinfoParam);
@@ -85,6 +90,7 @@ public class XmslContractPayinfoController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractPayinfo:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "项目支付信息", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteXmslContractPayinfo(@Validated(ValidationGroups.Delete.class) @RequestBody XmslContractPayinfo xmslContractPayinfoParam) {
         return toAjax(xmslContractPayinfoService.deleteXmslContractPayinfo(xmslContractPayinfoParam));
     }
@@ -97,6 +103,7 @@ public class XmslContractPayinfoController extends BaseController {
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "项目支付信息", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, XmslContractPayinfo xmslContractPayinfoParam) throws IOException {
         List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractPayinfoService.getXmslContractPayinfoList(xmslContractPayinfoParam);
         ExcelUtils<XmslContractPayinfo> util = new ExcelUtils<>(XmslContractPayinfo.class);
@@ -108,6 +115,7 @@ public class XmslContractPayinfoController extends BaseController {
      *
      */
     @PostMapping("import")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "项目支付信息", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importFile(@RequestParam("file") MultipartFile file ) {
         try {
             ExcelUtils<XmslContractPayinfoVo> util = new ExcelUtils<>(XmslContractPayinfoVo.class);

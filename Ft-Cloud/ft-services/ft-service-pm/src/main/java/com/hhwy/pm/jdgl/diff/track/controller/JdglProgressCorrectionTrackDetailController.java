@@ -7,6 +7,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrackDetail;
 import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackDetailService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.util.Arrays;
@@ -36,6 +38,7 @@ public class JdglProgressCorrectionTrackDetailController extends BaseController 
 
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrackDetail:list")
     @GetMapping
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪详情", businessType = CustomBusinessType.SELECT)
     public AjaxResult getJdglProgressCorrectionTrackDetail(
         @Validated(ValidationGroups.Get.class) JdglProgressCorrectionTrackDetail jdglProgressCorrectionTrackDetailParam) {
         JdglProgressCorrectionTrackDetail jdglProgressCorrectionTrackDetail = jdglProgressCorrectionTrackDetailService
@@ -45,6 +48,7 @@ public class JdglProgressCorrectionTrackDetailController extends BaseController 
 
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrackDetail:list")
     @GetMapping("/list")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪详情", businessType = CustomBusinessType.SELECT)
     public AjaxResult getJdglProgressCorrectionTrackDetailList(
         @Validated(ValidationGroups.Select.class) JdglProgressCorrectionTrackDetail jdglProgressCorrectionTrackDetailParam) {
         startPage();
@@ -55,6 +59,7 @@ public class JdglProgressCorrectionTrackDetailController extends BaseController 
 
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrackDetail:add")
     @PostMapping("/add")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪详情", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertJdglProgressCorrectionTrackDetail(
         @Validated(ValidationGroups.Save.class) @RequestBody JdglProgressCorrectionTrackDetail jdglProgressCorrectionTrackDetailParam) {
         jdglProgressCorrectionTrackDetailService
@@ -64,6 +69,7 @@ public class JdglProgressCorrectionTrackDetailController extends BaseController 
 
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrackDetail:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪详情", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertJdglProgressCorrectionTrackDetailList(
         @Validated(ValidationGroups.Save.class) @RequestBody List<JdglProgressCorrectionTrackDetail> jdglProgressCorrectionTrackDetailListParam) {
         jdglProgressCorrectionTrackDetailService
@@ -89,6 +95,7 @@ public class JdglProgressCorrectionTrackDetailController extends BaseController 
 
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrackDetail:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪详情", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteJdglProgressCorrectionTrackDetail(
         @Validated(ValidationGroups.Delete.class) @RequestBody JdglProgressCorrectionTrackDetail jdglProgressCorrectionTrackDetailParam) {
         return toAjax(jdglProgressCorrectionTrackDetailService
@@ -97,6 +104,7 @@ public class JdglProgressCorrectionTrackDetailController extends BaseController 
 
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrackDetail:remove")
     @PostMapping("/{ids}")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪详情", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteJdglProgressCorrectionTrackDetailByPks(@PathVariable Long[] ids) {
         List<Long> jdglProgressCorrectionTrackDetailPkList = Arrays.asList(ids);
         return toAjax(jdglProgressCorrectionTrackDetailService
@@ -104,6 +112,7 @@ public class JdglProgressCorrectionTrackDetailController extends BaseController 
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪详情", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response,
         JdglProgressCorrectionTrackDetail jdglProgressCorrectionTrackDetailParam) throws IOException {
         List<JdglProgressCorrectionTrackDetail> jdglProgressCorrectionTrackDetailList = jdglProgressCorrectionTrackDetailService

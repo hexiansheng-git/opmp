@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSpecial;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractSpecial;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractSpecialService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,7 @@ public class XmslContractSpecialController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractSpecial:list")
     @GetMapping
+    @CustomLogger(title = "项目设立-合同信息-专用条件", name = "专用条件", businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslContractSpecial(@Validated(ValidationGroups.Get.class)  XmslContractSpecial xmslContractSpecialParam) {
         List<XmslContractSpecial> treeVOS  = xmslContractSpecialService.getXmslContractSpecial(xmslContractSpecialParam);
         return AjaxResult.success(treeVOS);
@@ -44,6 +47,7 @@ public class XmslContractSpecialController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractSpecial:list")
     @GetMapping("/list")
+    @CustomLogger(title = "项目设立-合同信息-专用条件", name = "专用条件", businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslContractSpecialList(@Validated(ValidationGroups.Select.class)  XmslContractSpecial xmslContractSpecialParam) {
         startPage();
         List<XmslContractSpecial> xmslContractSpecialList = xmslContractSpecialService.getXmslContractSpecialList(xmslContractSpecialParam);
@@ -52,6 +56,7 @@ public class XmslContractSpecialController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractSpecial:add")
     @PostMapping("/add")
+    @CustomLogger(title = "项目设立-合同信息-专用条件", name = "专用条件", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertXmslContractSpecial(@Validated(ValidationGroups.Save.class) @RequestBody XmslContractSpecial xmslContractSpecialParam) {
         xmslContractSpecialService.insertXmslContractSpecial(xmslContractSpecialParam);
         return AjaxResult.success(xmslContractSpecialParam);
@@ -59,6 +64,7 @@ public class XmslContractSpecialController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractSpecial:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "项目设立-合同信息-专用条件", name = "专用条件", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertXmslContractSpecialList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslContractSpecial> xmslContractSpecialListParam) {
         xmslContractSpecialService.insertXmslContractSpecialList(xmslContractSpecialListParam);
         return AjaxResult.success(xmslContractSpecialListParam);
@@ -78,12 +84,14 @@ public class XmslContractSpecialController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractSpecial:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "项目设立-合同信息-专用条件", name = "专用条件", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteXmslContractSpecial(@Validated(ValidationGroups.Delete.class) @RequestBody XmslContractSpecial xmslContractSpecialParam) {
         return toAjax(xmslContractSpecialService.deleteXmslContractSpecial(xmslContractSpecialParam));
     }
 
     @PreAuthorize(hasPermi = "xmslContractSpecial:remove")
     @PostMapping("/remove")
+    @CustomLogger(title = "项目设立-合同信息-专用条件", name = "专用条件", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteXmslContractSpecialByPks(@RequestBody XmslContractSpecial xmslContractSpecialParam) {
         List<Long> xmslContractSpecialPkList = Arrays.asList(xmslContractSpecialParam.getIds());
         Long masterId = xmslContractSpecialParam.getMasterId();
@@ -98,6 +106,7 @@ public class XmslContractSpecialController extends BaseController {
      * @throws IOException
      */
     @GetMapping("/export")
+    @CustomLogger(title = "项目设立-合同信息-专用条件", name = "专用条件", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response,@RequestBody XmslContractSpecial xmslContractSpecialParam) throws IOException {
         List<XmslContractSpecial> xmslContractSpecialList = xmslContractSpecialService.getXmslContractSpecialList(xmslContractSpecialParam);
         ExcelUtils<XmslContractSpecial> util = new ExcelUtils<>(XmslContractSpecial.class);
@@ -110,6 +119,7 @@ public class XmslContractSpecialController extends BaseController {
      * @return
      */
     @GetMapping("/import")
+    @CustomLogger(title = "项目设立-合同信息-专用条件", name = "专用条件", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importDate(@RequestPart("file") MultipartFile file) {
         ExcelUtils<ImportXmslContractSpecial> util = new ExcelUtils<>(ImportXmslContractSpecial.class);
         try {
@@ -128,6 +138,7 @@ public class XmslContractSpecialController extends BaseController {
      * @return
      */
     @PostMapping("/provideList")
+    @CustomLogger(title = "项目设立-合同信息-专用条件", name = "专用条件", businessType = CustomBusinessType.SELECT)
     public AjaxResult provideList(@Validated(ValidationGroups.Get.class) XmslContractSpecial xmslContractSpecialParam) {
         List<XmslContractSpecial> treeVOS = xmslContractSpecialService.provideList(xmslContractSpecialParam);
         return AjaxResult.success(treeVOS);

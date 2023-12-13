@@ -9,6 +9,8 @@ import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.system.api.domain.SysDictData;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +41,7 @@ public class XmslContractInfoController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "xmslContractInfo:list")
     @GetMapping
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "主合同信息", businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslContractInfo(@Validated(ValidationGroups.Get.class)  XmslContractInfo xmslContractInfoParam) {
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(xmslContractInfoParam);
         return AjaxResult.success(xmslContractInfo);
@@ -68,6 +71,7 @@ public class XmslContractInfoController extends BaseController {
      */
     @PreAuthorize(hasPermi = "xmslContractInfo:adjust")
     @GetMapping("/adjust")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "主合同信息", businessType = CustomBusinessType.OTHER)
     public AjaxResult adjustXmslContractInfo(@Validated(ValidationGroups.Select.class) XmslContractInfo xmslContractInfoParam) {
         XmslContractInfo xmslContractInfo = xmslContractInfoService.adjustXmslContractInfo(xmslContractInfoParam);
         return AjaxResult.success(xmslContractInfo);
@@ -81,6 +85,7 @@ public class XmslContractInfoController extends BaseController {
      */
     @PreAuthorize(hasPermi = "xmslContractInfo:add")
     @PostMapping("/add")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "主合同信息", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertXmslContractInfo(@Validated(ValidationGroups.Save.class) @RequestBody XmslContractInfo xmslContractInfoParam) {
         return AjaxResult.success(xmslContractInfoService.insertXmslContractInfo(xmslContractInfoParam));
     }
@@ -88,6 +93,7 @@ public class XmslContractInfoController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractInfo:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "主合同信息", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertXmslContractInfoList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslContractInfo> xmslContractInfoListParam) {
         xmslContractInfoService.insertXmslContractInfoList(xmslContractInfoListParam);
         return AjaxResult.success(xmslContractInfoListParam);
@@ -102,6 +108,7 @@ public class XmslContractInfoController extends BaseController {
      */
     @PreAuthorize(hasPermi = "xmslContractInfo:update")
     @PostMapping("/update")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "主合同信息", businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateXmslContractInfo(@Validated(ValidationGroups.Update.class) @RequestBody XmslContractInfo xmslContractInfoParam) {
         xmslContractInfoService.updateXmslContractInfo(xmslContractInfoParam);
         return AjaxResult.success(xmslContractInfoParam.getId());
@@ -126,6 +133,7 @@ public class XmslContractInfoController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractInfo:remove")
     @GetMapping("/delete")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "主合同信息", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteXmslContractInfo(@RequestParam ("id") Long id) {
         XmslContractInfo xmslContractInfoParam = new XmslContractInfo();
         xmslContractInfoParam.setId(id);
@@ -140,6 +148,7 @@ public class XmslContractInfoController extends BaseController {
     }
 
     @PostMapping("/export")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "主合同信息", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, XmslContractInfo xmslContractInfoParam) throws IOException {
         List<XmslContractInfo> xmslContractInfoList = xmslContractInfoService.getXmslContractInfoList(xmslContractInfoParam);
         ExcelUtils<XmslContractInfo> util = new ExcelUtils<>(XmslContractInfo.class);
@@ -154,6 +163,7 @@ public class XmslContractInfoController extends BaseController {
      */
     @RequestMapping(value ="/listener",method = RequestMethod.POST)
     @Transactional
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "主合同信息", businessType = CustomBusinessType.OTHER)
     public AjaxResult updateContract(@RequestParam ("id") Long id) {
         //修改其它合同信息为无效，同时给合同清单打标记（已生效的合同清单不能删除）
         xmslContractInfoService.updateAllToInvalid(id);
