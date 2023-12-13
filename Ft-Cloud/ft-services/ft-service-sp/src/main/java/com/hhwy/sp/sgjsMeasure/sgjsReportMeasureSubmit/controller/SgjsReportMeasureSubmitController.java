@@ -111,12 +111,20 @@ public class SgjsReportMeasureSubmitController extends BaseController {
     }
 
     @GetMapping("/export")
-    public void export(HttpServletResponse response,
-        SgjsReportMeasureSubmit sgjsReportMeasureSubmitParam) throws IOException {
-        SgjsReportMeasureSubmitVo sgjsReportMeasureSubmitVo = sgjsReportMeasureSubmitService.list(sgjsReportMeasureSubmitParam);
-        List<SgjsReportMeasureSubmit> treeList = sgjsReportMeasureSubmitVo.getTreeList();
-        if(CollectionUtils.isNotEmpty(treeList)){
-            treeList = TreeUtil.treeToList(treeList);
+    public void export(HttpServletResponse response, SgjsReportMeasureSubmit sgjsReportMeasureSubmitParam) throws IOException {
+        List<Long> ids = sgjsReportMeasureSubmitParam.getIds();
+        List<SgjsReportMeasureSubmit> treeList = null;
+        if(CollectionUtils.isEmpty(ids)){
+            SgjsReportMeasureSubmitVo sgjsReportMeasureSubmitVo = sgjsReportMeasureSubmitService.list(sgjsReportMeasureSubmitParam);
+            treeList = sgjsReportMeasureSubmitVo.getTreeList();
+            if(CollectionUtils.isNotEmpty(treeList)){
+                treeList = TreeUtil.treeToList(treeList);
+            }
+        }else{
+            List<SgjsReportMeasureSubmit> list = sgjsReportMeasureSubmitService.getIds(ids);
+            if(!CollectionUtils.isEmpty(list)){
+                treeList = list;
+            }
         }
         ExcelUtils<SgjsReportMeasureSubmit> utils = new ExcelUtils<>(SgjsReportMeasureSubmit.class);
         utils.exportExcel(response,treeList,DateUtils.getDate());

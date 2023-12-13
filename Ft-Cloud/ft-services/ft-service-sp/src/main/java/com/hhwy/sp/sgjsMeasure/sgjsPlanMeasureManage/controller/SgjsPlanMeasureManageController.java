@@ -128,12 +128,20 @@ public class SgjsPlanMeasureManageController extends BaseController {
     }
 
     @GetMapping("/export")
-    public void export(HttpServletResponse response,
-        SgjsPlanMeasureManage sgjsPlanMeasureManageParam) throws IOException {
-        SgjsPlanMeasureManageVo sgjsPlanMeasureManageVo = sgjsPlanMeasureManageService.list(sgjsPlanMeasureManageParam);
-        List<SgjsPlanMeasureManage> treeList = sgjsPlanMeasureManageVo.getTreeList();
-        if(CollectionUtils.isNotEmpty(treeList)){
-            treeList = TreeUtil.treeToList(treeList);
+    public void export(HttpServletResponse response, SgjsPlanMeasureManage sgjsPlanMeasureManageParam) throws IOException {
+        List<Long> ids = sgjsPlanMeasureManageParam.getIds();
+        List<SgjsPlanMeasureManage> treeList = null;
+        if(CollectionUtils.isEmpty(ids)){
+            SgjsPlanMeasureManageVo sgjsPlanMeasureManageVo = sgjsPlanMeasureManageService.list(sgjsPlanMeasureManageParam);
+            treeList = sgjsPlanMeasureManageVo.getTreeList();
+            if(CollectionUtils.isNotEmpty(treeList)){
+                treeList = TreeUtil.treeToList(treeList);
+            }
+        }else{
+            List<SgjsPlanMeasureManage> list = sgjsPlanMeasureManageService.getIds(ids);
+            if(CollectionUtils.isEmpty(list)){
+                treeList = list;
+            }
         }
         ExcelUtils<SgjsPlanMeasureManage> utils = new ExcelUtils<>(SgjsPlanMeasureManage.class);
         utils.exportExcel(response,treeList,DateUtils.getDate());

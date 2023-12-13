@@ -21,13 +21,15 @@ public interface SgjsReportMeasureSubmitMapper {
 
     int updateSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
 
-            int updateSgjsReportMeasureSubmitList(@Param("sgjsReportMeasureSubmitList") List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList);
+    int updateSgjsReportMeasureSubmitList(@Param("list") List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList);
     
     int deleteSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
 
-            int deleteSgjsReportMeasureSubmitByPks(@Param("sgjsReportMeasureSubmitPkList") List<Long> sgjsReportMeasureSubmitPkList);
+    int deleteSgjsReportMeasureSubmitByPks(@Param("sgjsReportMeasureSubmitPkList") List<Long> sgjsReportMeasureSubmitPkList);
 
-    void deleteAll(SgjsReportMeasureSubmit info);
+    void deleteAll(@Param("delIdList") List<String> delIdList);
 
-    void deleteWbsAll(SgjsReportMeasureSubmit info);
+    List<SgjsReportMeasureSubmit> getIds(@Param("ids") List<Long> ids);
+
+    int deleteInfoData(List<SgjsReportMeasureSubmit> list);
 }

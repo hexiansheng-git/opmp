@@ -31,4 +31,6 @@ public interface ISgjsPlanMeasureManageService {
     SgjsPlanMeasureManageVo list(SgjsPlanMeasureManage sgjsPlanMeasureManageParam);
 
     SgjsPlanMeasureManageVo qqchMeasureExpPlanSelect();
+
+    List<SgjsPlanMeasureManage> getIds(List<Long> ids);
 }

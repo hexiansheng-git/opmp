@@ -23,15 +23,17 @@ public interface SgjsPlanMeasureManageMapper {
 
     int updateSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
-    int updateSgjsPlanMeasureManageList(
-        @Param("sgjsPlanMeasureManageList") List<SgjsPlanMeasureManage> sgjsPlanMeasureManageList);
+    int updateSgjsPlanMeasureManageList(@Param("list") List<SgjsPlanMeasureManage> sgjsPlanMeasureManageList);
 
     int deleteSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
     int deleteSgjsPlanMeasureManageByPks(
         @Param("sgjsPlanMeasureManagePkList") List<Long> sgjsPlanMeasureManagePkList);
 
-    void deleteAll(SgjsPlanMeasureManage info);
 
+    void deleteAll(@Param("delIdList") List<String> delIdList);
 
+    List<SgjsPlanMeasureManage> getIds(@Param("ids") List<Long> ids);
+
+    int deleteInfoData(List<SgjsPlanMeasureManage> list);
 }

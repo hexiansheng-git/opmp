@@ -85,7 +85,7 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
                 plan.setRealEndDateStr(FtDateUtils.formatDate(plan.getRealEndDate()));
             });
         }
-        sgjsPlanMeasureManageVo.setTreeList(TreeUtil.build(sgjsPlanMeasureManageList, 0L));
+        sgjsPlanMeasureManageVo.setTreeList(TreeUtil.newBuild(sgjsPlanMeasureManageList));
         return sgjsPlanMeasureManageVo;
     }
 
@@ -106,6 +106,11 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         return sgjsPlanMeasureManageVo;
     }
 
+    @Override
+    public List<SgjsPlanMeasureManage> getIds(List<Long> ids) {
+        return sgjsPlanMeasureManageMapper.getIds(ids);
+    }
+
 
     private void digui(List<LinkedHashMap<String, Object>> list,
         List<SgjsPlanMeasureManage> treeToList) {
@@ -124,6 +129,8 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
             sgjsPlanMeasureManage.setPid(
                 l.get("pid") == null ? 0L : Long.parseLong(l.get("pid").toString()));
             treeToList.add(sgjsPlanMeasureManage);
+            //同步标识
+            sgjsPlanMeasureManage.setDataSource("1");
             List<LinkedHashMap<String, Object>> children = (List<LinkedHashMap<String, Object>>) l.get("children");
             if (children.size() > 0) {
                 digui(children, treeToList);
@@ -145,25 +152,46 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         if (CollectionUtils.isEmpty(sgjsPlanMeasureManageVo.getTreeList())) {
             return AjaxResult.error("数据异常");
         }
-        //删除库中所有数据
-        SgjsPlanMeasureManage info = new SgjsPlanMeasureManage();
-        info.setUpdateTime(DateTime.now());
-        info.setUpdateUser(SecurityUtils.getUserId() + "");
-        sgjsPlanMeasureManageMapper.deleteAll(info);
-        //数据处理
         treeToList = TreeUtil.treeToList(sgjsPlanMeasureManageVo.getTreeList());
         for (int i = 0; i < treeToList.size(); i++) {
             SgjsPlanMeasureManage sgjsPlanMeasureManage = treeToList.get(i);
-//            sgjsPlanMeasureManage.setPlanStartDate(FtDateUtils.parseDate(sgjsPlanMeasureManage.getPlanStartDateStr().replaceAll("(?:年|月|日)", "-")));
-//            sgjsPlanMeasureManage.setPlanEndDate(FtDateUtils.parseDate(sgjsPlanMeasureManage.getPlanEndDateStr().replaceAll("(?:年|月|日)", "-")));
-//            sgjsPlanMeasureManage.setRealStartDate(FtDateUtils.parseDate(sgjsPlanMeasureManage.getRealStartDateStr().replaceAll("(?:年|月|日)", "-")));
-//            sgjsPlanMeasureManage.setRealEndDate(FtDateUtils.parseDate(sgjsPlanMeasureManage.getRealEndDateStr().replaceAll("(?:年|月|日)", "-")));
             sgjsPlanMeasureManage.setCreateTime(DateTime.now());
             sgjsPlanMeasureManage.setCreateUser(SecurityUtils.getUserId() + "");
             sgjsPlanMeasureManage.setCreateUserName(SecurityUtils.getUserName() + "");
         }
-        sgjsPlanMeasureManageMapper.insertSgjsPlanMeasureManageList(treeToList);
+        List<SgjsPlanMeasureManage> insertList = treeToList.stream().filter(p -> StringUtils.isNotEmpty(p.getIsAdd()) && p.getIsAdd().equals("1")).collect(Collectors.toList());
+        //批量入库
+        if(!CollectionUtils.isEmpty(insertList)){
+            sgjsPlanMeasureManageMapper.insertSgjsPlanMeasureManageList(insertList);
+        }
+        //批量编辑
+        List<SgjsPlanMeasureManage> updateList = treeToList.stream().filter(p -> StringUtils.isEmpty(p.getIsAdd())).collect(Collectors.toList());
+        if(!CollectionUtils.isEmpty(updateList)){
+            sgjsPlanMeasureManageMapper.updateSgjsPlanMeasureManageList(updateList);
+        }
+        //批量删除
+        deleteByIds(sgjsPlanMeasureManageVo.getDelIdList());
         return AjaxResult.success();
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param delIdList
+     */
+    private void deleteByIds(List<String> delIdList){
+        List<SgjsPlanMeasureManage> list =new ArrayList<>();
+        for (int i = 0; i < delIdList.size(); i++) {
+            SgjsPlanMeasureManage info=new SgjsPlanMeasureManage();
+            info.setId(Long.parseLong(delIdList.get(i)));
+            info.setUpdateUser(SecurityUtils.getUserId()+"");
+            info.setUpdateTime(DateUtils.getNowDate());
+            list.add(info);
+        }
+        //删除
+        if(!CollectionUtils.isEmpty(list)){
+            sgjsPlanMeasureManageMapper.deleteInfoData(list);
+        }
     }
 
     @Transactional
