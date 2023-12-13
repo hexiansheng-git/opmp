@@ -10,4 +10,6 @@ public interface IQqchData4P6Service {
 
     List<QqchMainPlanItem> initQqchData4P6(String tenantKey, BigDecimal version);
 
+    void initQqchData4P64Thread(String tenantKey, BigDecimal version);
+
 }
