@@ -9,6 +9,8 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 
 import com.hhwy.pm.qqch.preparation.sbch.imported.inquiry.domain.SbchImportInquiryCustoms;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +36,7 @@ public class SbchImprtInquiryCustomsController extends BaseController {
     //@CustomLogger(title = "港口详情-导入", businessType = CustomBusinessType.IMPORT)
     @PostMapping("/importData")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "港口详情-导入", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file){
         try{
             ExcelUtils<SbchImportInquiryCustoms> util = new ExcelUtils(SbchImportInquiryCustoms.class);

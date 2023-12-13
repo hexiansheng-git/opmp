@@ -9,6 +9,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.sbch.imported.material.domain.SbchMaterialTranPlanDetail;
 import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail;
 import com.hhwy.pm.qqch.preparation.sbch.plan.service.ISbchTotalDemandPlanDetailService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,7 @@ public class SbchMaterialTranPlanDetailController {
      */
     @PostMapping("/importData")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.3大型成套设备运输方案", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file){
         try{
             ExcelUtils<SbchMaterialTranPlanDetail> util = new ExcelUtils(SbchMaterialTranPlanDetail.class);

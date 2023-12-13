@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInsure;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractInsureVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInsureService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +37,7 @@ public class XmslContractInsureController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractInsure:list")
     @GetMapping
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "投保险种", businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslContractInsure(@Validated(ValidationGroups.Get.class)  XmslContractInsure xmslContractInsureParam) {
         XmslContractInsure xmslContractInsure = xmslContractInsureService.getXmslContractInsure(xmslContractInsureParam);
         return AjaxResult.success(xmslContractInsure);
@@ -42,6 +45,7 @@ public class XmslContractInsureController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractInsure:list")
     @GetMapping("/list")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "投保险种", businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslContractInsureList(@Validated(ValidationGroups.Select.class)  XmslContractInsure xmslContractInsureParam) {
         startPage();
         List<XmslContractInsure> xmslContractInsureList = xmslContractInsureService.getXmslContractInsureList(xmslContractInsureParam);
@@ -50,6 +54,7 @@ public class XmslContractInsureController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractInsure:add")
     @PostMapping("/add")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "投保险种", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertXmslContractInsure(@Validated(ValidationGroups.Save.class) @RequestBody XmslContractInsure xmslContractInsureParam) {
         xmslContractInsureService.insertXmslContractInsure(xmslContractInsureParam);
         return AjaxResult.success(xmslContractInsureParam);
@@ -70,6 +75,7 @@ public class XmslContractInsureController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractInsure:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "投保险种", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteXmslContractInsure(@Validated(ValidationGroups.Delete.class) @RequestBody XmslContractInsure xmslContractInsureParam) {
         return toAjax(xmslContractInsureService.deleteXmslContractInsure(xmslContractInsureParam));
     }
@@ -82,6 +88,7 @@ public class XmslContractInsureController extends BaseController {
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "投保险种", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, XmslContractInsure xmslContractInsureParam) throws IOException {
         List<XmslContractInsure> xmslContractInsureList = xmslContractInsureService.getXmslContractInsureList(xmslContractInsureParam);
         ExcelUtils<XmslContractInsure> util = new ExcelUtils<>(XmslContractInsure.class);
@@ -93,6 +100,7 @@ public class XmslContractInsureController extends BaseController {
      *
      */
     @PostMapping("import")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "投保险种", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importFile(@RequestParam("file") MultipartFile file ) {
         try {
             ExcelUtils<XmslContractInsureVo> util = new ExcelUtils<>(XmslContractInsureVo.class);

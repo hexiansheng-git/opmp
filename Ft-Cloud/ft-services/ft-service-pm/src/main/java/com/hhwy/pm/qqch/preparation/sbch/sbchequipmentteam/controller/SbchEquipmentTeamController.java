@@ -15,6 +15,8 @@ import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.dto.SbchEquipmentTeam
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.service.ISbchEquipmentTeamService;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.vo.ImportSbchEquipmentTeamDetailsDetails;
 import com.hhwy.utils.common.PmsConstant;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +50,7 @@ public class SbchEquipmentTeamController extends BaseController {
      */
 //    @PreAuthorize(hasPermi ="equipmentteam:team:list")
     @GetMapping("/getList")
-    //@CustomLogger(title = "协作单位设备管理-列表查询",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.4协作单位设备管理", businessType = CustomBusinessType.SELECT)
     @ResponseBody
     public AjaxResult list(BigDecimal version) {
 
@@ -59,10 +61,9 @@ public class SbchEquipmentTeamController extends BaseController {
     /**
      * 新增保存协作单位设备管理
      */
-//    @PreAuthorize(hasPermi ="equipmentteam:team:add")
-    //@CustomLogger(title = "协作单位设备管理-保存",businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.4协作单位设备管理", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody SbchEquipmentTeam sbchEquipmentTeam) {
         try {
             return new AjaxResult(200,"成功",sbchEquipmentTeamService.insertSbchEquipmentTeamAndDetails(sbchEquipmentTeam));
@@ -82,6 +83,7 @@ public class SbchEquipmentTeamController extends BaseController {
      */
     @PostMapping("/importUnitSb")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.4协作单位设备管理", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importUnitSb(MultipartFile file){
         try{
             ExcelUtils<ImportSbchEquipmentTeamDetailsDetails> util = new ExcelUtils(ImportSbchEquipmentTeamDetailsDetails.class);
@@ -95,6 +97,7 @@ public class SbchEquipmentTeamController extends BaseController {
 
     @PostMapping("/importUnit")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.4协作单位设备管理", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importUnit(MultipartFile file){
         try{
             ExcelUtils<SbchEquipmentTeamDetails> util = new ExcelUtils(SbchEquipmentTeamDetails.class);

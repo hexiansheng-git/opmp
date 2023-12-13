@@ -19,6 +19,8 @@ import com.hhwy.pm.qqch.preparation.sbch.sblease.service.ISbchEquipmentService;
 import com.hhwy.pm.qqch.preparation.sbch.sblease.vo.ImportSbchEquipmentSupplierDetails;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
@@ -51,12 +53,14 @@ public class SbchEquipmentSupplierController extends BaseController {
     @Autowired
     private SystemServiceApi systemServiceApi;
     @GetMapping("/getList")
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.3设备租赁管理", businessType = CustomBusinessType.SELECT)
     public AjaxResult getList(BigDecimal version){
         LeaseVo leaseVo = sbchEquipmentService.getList(version, null);
         return AjaxResult.success(leaseVo);
     }
 
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.3设备租赁管理", businessType = CustomBusinessType.SAVE)
     public AjaxResult batchAdd(@RequestBody LeaseVo leaseVo){
         try {
             sbchEquipmentService.batchAdd(leaseVo);
@@ -79,6 +83,7 @@ public class SbchEquipmentSupplierController extends BaseController {
 //   // @CustomLogger(title = "设备租赁供应商-导入", businessType = CustomBusinessType.IMPORT)
     @PostMapping("/importData")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.3设备租赁管理", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file){
         try{
             ExcelUtils<ImportSbchEquipmentSupplierDetails> util = new ExcelUtils(ImportSbchEquipmentSupplierDetails.class);
@@ -118,6 +123,7 @@ public class SbchEquipmentSupplierController extends BaseController {
      * 时间: 2023/10/21
      */
     @PostMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.3设备租赁管理", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, Long[] ids, int listType) throws IOException {
         LeaseVo map = sbchEquipmentService.getList(null, ids);
         if (ObjectUtils.isEmpty(map)){

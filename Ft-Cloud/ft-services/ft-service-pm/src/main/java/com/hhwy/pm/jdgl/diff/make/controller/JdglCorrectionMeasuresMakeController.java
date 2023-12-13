@@ -7,6 +7,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMake;
 import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.util.Arrays;
@@ -45,6 +47,7 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
      */
     @PreAuthorize(hasPermi = "jdglCorrectionMeasuresMake:list")
     @GetMapping("/getOne")
+    @CustomLogger(title = "进度管理-差异化管控", name = "纠偏措施制定", businessType = CustomBusinessType.SELECT)
     public AjaxResult getJdglCorrectionMeasuresMake(@Validated(ValidationGroups.Get.class) JdglCorrectionMeasuresMake jdglCorrectionMeasuresMakeParam) {
         JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = jdglCorrectionMeasuresMakeService.getJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMakeParam);
         return AjaxResult.success(jdglCorrectionMeasuresMake);
@@ -58,6 +61,7 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
      */
     @PreAuthorize(hasPermi = "jdglCorrectionMeasuresMake:list")
     @GetMapping("/getList")
+    @CustomLogger(title = "进度管理-差异化管控", name = "纠偏措施制定", businessType = CustomBusinessType.SELECT)
     public AjaxResult getJdglCorrectionMeasuresMakeList(
         @Validated(ValidationGroups.Select.class) JdglCorrectionMeasuresMake jdglCorrectionMeasuresMakeParam) {
         startPage();
@@ -73,6 +77,7 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
      */
     @PreAuthorize(hasPermi = "jdglCorrectionMeasuresMake:add")
     @PostMapping("/add")
+    @CustomLogger(title = "进度管理-差异化管控", name = "纠偏措施制定", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertJdglCorrectionMeasuresMake(
         @Validated(ValidationGroups.Save.class) @RequestBody JdglCorrectionMeasuresMake jdglCorrectionMeasuresMakeParam) {
         jdglCorrectionMeasuresMakeService.insertJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMakeParam);
@@ -84,6 +89,7 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
 
     @PreAuthorize(hasPermi = "jdglCorrectionMeasuresMake:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "进度管理-差异化管控", name = "纠偏措施制定", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertJdglCorrectionMeasuresMakeList(
         @Validated(ValidationGroups.Save.class) @RequestBody List<JdglCorrectionMeasuresMake> jdglCorrectionMeasuresMakeListParam) {
         jdglCorrectionMeasuresMakeService.insertJdglCorrectionMeasuresMakeList(jdglCorrectionMeasuresMakeListParam);
@@ -116,6 +122,7 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
 
     @PreAuthorize(hasPermi = "jdglCorrectionMeasuresMake:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "进度管理-差异化管控", name = "纠偏措施制定", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteJdglCorrectionMeasuresMake(
         @Validated(ValidationGroups.Delete.class) @RequestBody JdglCorrectionMeasuresMake jdglCorrectionMeasuresMakeParam) {
         return toAjax(
@@ -130,6 +137,7 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
      */
     @PreAuthorize(hasPermi = "jdglCorrectionMeasuresMake:remove")
     @PostMapping("/{ids}")
+    @CustomLogger(title = "进度管理-差异化管控", name = "纠偏措施制定", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteJdglCorrectionMeasuresMakeByPks(@PathVariable Long[] ids) {
         List<Long> jdglCorrectionMeasuresMakePkList = Arrays.asList(ids);
         return toAjax(
@@ -137,6 +145,7 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "进度管理-差异化管控", name = "纠偏措施制定", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, JdglCorrectionMeasuresMake jdglCorrectionMeasuresMakeParam)
         throws IOException {
         List<JdglCorrectionMeasuresMake> jdglCorrectionMeasuresMakeList = jdglCorrectionMeasuresMakeService
@@ -164,6 +173,7 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
      * @return
      */
     @PostMapping("/syncData")
+    @CustomLogger(title = "进度管理-差异化管控", name = "纠偏措施制定", businessType = CustomBusinessType.SAVE)
     public AjaxResult syncData(@RequestParam Date period) {
         jdglCorrectionMeasuresMakeService.syncData(period);
         return AjaxResult.success();
