@@ -12,6 +12,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.InterfaceLog.InterfaceLog;
 import com.hhwy.feign.service.ILogServiceApi;
 import com.hhwy.system.api.domain.SysOperLog;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -157,7 +158,7 @@ public class CustomLoggerAspect {
         MethodSignature signature =(MethodSignature)joinPoint.getSignature();
         interfaceLog.setMethod(signature.getDeclaringTypeName()+ "." + signature.getName());
         interfaceLog.setRequestType(request.getMethod());
-        interfaceLog.setRequestUrl(request.getRequestURL().toString());
+        interfaceLog.setRequestUrl(ObjectUtils.toString(request.getRequestURL()));
         interfaceLog.setOperateIp(request.getHeader("requestRemoteIp"));
         interfaceLog.setOsName(System.getProperty("os.name"));
         interfaceLog.setOsVersion(System.getProperty("os.version"));
@@ -208,7 +209,7 @@ public class CustomLoggerAspect {
         MethodSignature signature =(MethodSignature)joinPoint.getSignature();
         interfaceLog.setMethod(signature.getDeclaringTypeName()+ "." + signature.getName());
         interfaceLog.setRequestType(request.getMethod());
-        interfaceLog.setRequestUrl(request.getRequestURL().toString());
+        interfaceLog.setRequestUrl(ObjectUtils.toString(request.getRequestURL()));
         interfaceLog.setOperateIp(request.getHeader("requestRemoteIp"));
         interfaceLog.setOsName(System.getProperty("os.name"));
         interfaceLog.setOsVersion(System.getProperty("os.version"));
