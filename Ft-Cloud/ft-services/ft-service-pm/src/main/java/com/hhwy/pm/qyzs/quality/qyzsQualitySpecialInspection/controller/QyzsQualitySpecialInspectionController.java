@@ -39,10 +39,10 @@ public class QyzsQualitySpecialInspectionController extends BaseController {
     @GetMapping("/list")
     public AjaxResult getQyzsQualitySpecialInspectionList(@Validated(ValidationGroups.Select.class) QyzsQualitySpecialInspection param) {
         String projectType = wbsService.getDefaultEngineeringType();
-        String url = gmUrl + "/gm/qyzsQualitySpecialInspection/list?inspectionName={inspectionName}&inspectionProject={inspectionProject}&projectType={projectType}";
+        String url = gmUrl + "/gm/qyzsQualitySpecialInspection/list?inspectionName={inspectionName}&inspectionProject={inspectionProject}&projectType={projectType}&wbsCode={wbsCode}";
         HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
         HttpEntity<MultiValueMap<String,Object>> httpEntity = new HttpEntity<>(headers);
-        return RestTemplateUtils.get(url, httpEntity, AjaxResult.class, param.getInspectionName(), param.getInspectionProject(), projectType);
+        return RestTemplateUtils.get(url, httpEntity, AjaxResult.class, param.getInspectionName(), param.getInspectionProject(), projectType, param.getWbsCode());
     }
 
 }
