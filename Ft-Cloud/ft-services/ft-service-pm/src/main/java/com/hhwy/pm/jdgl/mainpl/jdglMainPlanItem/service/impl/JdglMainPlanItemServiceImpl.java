@@ -104,21 +104,19 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
     public List<JdglMainPlanItem> getJdglMainPlanItemListNoTree(JdglMainPlanItem jdglMainPlanItem) {
         Long mainPlanId = jdglMainPlanItem.getMainPlanId();
         String itemName = jdglMainPlanItem.getItemName();
-        String itemCode = jdglMainPlanItem.getItemCode();
-        String executer = jdglMainPlanItem.getExecuter();
+        Date startDate = jdglMainPlanItem.getStartDate();
         jdglMainPlanItem = new JdglMainPlanItem();
         jdglMainPlanItem.setMainPlanId(mainPlanId);
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemMapper.getJdglMainPlanItemList(jdglMainPlanItem);
         if(!CollectionUtils.isEmpty(jdglMainPlanItemList)) {
             List<JdglMainPlanItem> list4Query = new ArrayList<>(jdglMainPlanItemList);
             if(StringUtils.isNotEmpty(itemName)) {
-                list4Query = list4Query.stream().filter(vo -> vo.getItemName().contains(itemName)).collect(Collectors.toList());
+                list4Query = list4Query.stream().filter(vo -> (StringUtils.isNotEmpty(vo.getItemName()) && vo.getItemName().contains(itemName))
+                    || (StringUtils.isNotEmpty(vo.getItemCode()) && vo.getItemCode().contains(itemName))
+                        || (StringUtils.isNotEmpty(vo.getExecuter()) && vo.getExecuter().contains(itemName))).collect(Collectors.toList());
             }
-            if(StringUtils.isNotEmpty(itemCode)) {
-                list4Query = list4Query.stream().filter(vo -> itemCode.equals(vo.getItemCode())).collect(Collectors.toList());
-            }
-            if(StringUtils.isNotEmpty(executer)) {
-                list4Query = list4Query.stream().filter(vo -> executer.equals(vo.getExecuter())).collect(Collectors.toList());
+            if(startDate != null) {
+                list4Query = list4Query.stream().filter(vo -> vo.getStartDate() != null && startDate.compareTo(vo.getStartDate()) == 0).collect(Collectors.toList());
             }
             if(CollectionUtils.isNotEmpty(list4Query)) {
                 // 根据作业名称过滤数据
@@ -139,6 +137,8 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                     }
                 }
                 jdglMainPlanItemList = list4Filter.stream().distinct().collect(Collectors.toList());
+            } else {
+                return new ArrayList<>();
             }
             for (JdglMainPlanItem jdglMainPlanItem1 : jdglMainPlanItemList) {
                 // 计划完成百分比 * 100
@@ -330,8 +330,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
     public List<JdglMainPlanItem> getKeyRoad(JdglMainPlanItem jdglMainPlanItemParam) {
         Long mainPlanId = jdglMainPlanItemParam.getMainPlanId();
         String itemName = jdglMainPlanItemParam.getItemName();
-        String itemCode = jdglMainPlanItemParam.getItemCode();
-        String executer = jdglMainPlanItemParam.getExecuter();
+        Date startDate = jdglMainPlanItemParam.getStartDate();
         jdglMainPlanItemParam = new JdglMainPlanItem();
         jdglMainPlanItemParam.setMainPlanId(mainPlanId);
         List<JdglMainPlanItem> returnList = new ArrayList<>();
@@ -363,13 +362,13 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         if(CollectionUtils.isNotEmpty(returnList)) {
             List<JdglMainPlanItem> list4Query = new ArrayList<>(returnList);
             if(StringUtils.isNotEmpty(itemName)) {
-                list4Query = list4Query.stream().filter(vo -> vo.getItemName().contains(itemName)).collect(Collectors.toList());
+                list4Query = list4Query.stream().filter(vo -> (StringUtils.isNotEmpty(vo.getItemName()) && vo.getItemName().contains(itemName))
+                        || (StringUtils.isNotEmpty(vo.getItemCode()) && vo.getItemCode().contains(itemName))
+                        || (StringUtils.isNotEmpty(vo.getExecuter()) && vo.getExecuter().contains(itemName))).collect(Collectors.toList());
             }
-            if(StringUtils.isNotEmpty(itemCode)) {
-                list4Query = list4Query.stream().filter(vo -> itemCode.equals(vo.getItemCode())).collect(Collectors.toList());
-            }
-            if(StringUtils.isNotEmpty(executer)) {
-                list4Query = list4Query.stream().filter(vo -> executer.equals(vo.getExecuter())).collect(Collectors.toList());
+
+            if(startDate != null) {
+                list4Query = list4Query.stream().filter(vo -> vo.getStartDate() != null && startDate.compareTo(vo.getStartDate()) == 0).collect(Collectors.toList());
             }
             // 根据作业名称过滤数据
             List<JdglMainPlanItem> list4Filter = new ArrayList<>();
@@ -387,6 +386,8 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                         }
                     }
                 }
+            } else {
+                return new ArrayList<>();
             }
             returnList = list4Filter.stream().distinct().collect(Collectors.toList());
 

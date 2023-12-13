@@ -8,12 +8,6 @@ import java.util.Date;
 
 @Data
 public class JdglMainPlanQueryVO {
-
-    /**
-     * 作业编码
-     */
-    @JsonProperty
-    private String itemCode;
     /**
      * 作业名称
      */
@@ -24,11 +18,6 @@ public class JdglMainPlanQueryVO {
      */
     @JsonProperty
     private String tabNo;
-    /**
-     * 责任人
-     */
-    @JsonProperty
-    private String executer;
 
     /**
      * 开始时间

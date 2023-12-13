@@ -77,17 +77,14 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         }
         String tabNo = queryVO.getTabNo();
         String itemName = queryVO.getItemName();
-        String itemCode = queryVO.getItemCode();
         Date startDate = queryVO.getStartDate();
         Date endDate = queryVO.getEndDate();
-        String executer = queryVO.getExecuter();
 
         JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
         jdglMainPlanItem.setMainPlanId(jdglMainPlan1.getId());
         if("1".equals(tabNo)) {
             jdglMainPlanItem.setItemName(itemName);
-            jdglMainPlanItem.setItemCode(itemCode);
-            jdglMainPlanItem.setExecuter(executer);
+            jdglMainPlanItem.setStartDate(startDate);
         }
         List<JdglMainPlanItem> jdglMainPlanItemList = iJdglMainPlanItemService.getJdglMainPlanItemListNoTree(jdglMainPlanItem);
         jdglMainPlan1.setJdglMainPlanItemList(jdglMainPlanItemList == null ? new ArrayList<>() : jdglMainPlanItemList);
@@ -97,8 +94,7 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         jdglMainPlan1.setJdglMainPlanItemPreList(jdglMainPlanItemPreList == null ? new ArrayList<>() : jdglMainPlanItemPreList);
         if("2".equals(tabNo)) {
             jdglMainPlanItem.setItemName(itemName);
-            jdglMainPlanItem.setItemCode(itemCode);
-            jdglMainPlanItem.setExecuter(executer);
+            jdglMainPlanItem.setStartDate(startDate);
         }
         List<JdglMainPlanItem> keyRoad = iJdglMainPlanItemService.getKeyRoad(jdglMainPlanItem);
         jdglMainPlan1.setKeyLoadList(keyRoad == null ? new ArrayList<>() : keyRoad);
