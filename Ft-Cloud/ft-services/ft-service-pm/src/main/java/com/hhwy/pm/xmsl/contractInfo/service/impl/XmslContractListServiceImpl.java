@@ -164,7 +164,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         List<XmslContractListVo> adllList = new ArrayList<>();
         adllList.addAll(insertList);
         adllList.addAll(updateList);
-        List<XmslContractListVo> collect1 = adllList.stream().filter(p -> p.getPid() != null).collect(Collectors.toList());
+        List<XmslContractListVo> collect1 = adllList.stream().filter(p -> p.getHaveChildren() == 0 ).collect(Collectors.toList());
         List<XmslContractListVo> collect2 = collect1.stream()
                 .filter(p -> StrUtil.isBlank(p.getCode()) || p.getWinNum() == null || p.getWinUnitPrice() == null)
                 .collect(Collectors.toList());
