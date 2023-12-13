@@ -11,6 +11,8 @@ import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.sgch.prodplan.domain.QqchProdPlan;
 import com.hhwy.pm.qqch.sgch.prodplan.service.IQqchProdPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,7 @@ public class QqchProdPlanController extends BaseController {
 
     //  // @PreAuthorize(hasPermi = "qqchProdPlan:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-产值计划S曲线", name = "1.2.5 产值计划S曲线" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchProdPlanList(@Validated(ValidationGroups.Select.class) QqchProdPlan qqchProdPlanParam) {
         CompileEntity<HashMap<String, Object>> qqchProdPlanList = qqchProdPlanService.selectList(qqchProdPlanParam);
         return AjaxResult.success(qqchProdPlanList);

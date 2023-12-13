@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.service.IJdglWeekPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +65,7 @@ public class JdglWeekPlanController extends BaseController {
 
     //  // @PreAuthorize(hasPermi = "jdglWeekPlan:list")
     @GetMapping("/list")
+    @CustomLogger(title = "进度管理-计划管理-每周计划", name = "每周计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getJdglWeekPlanList(@Validated(ValidationGroups.Select.class) JdglWeekPlan jdglWeekPlanParam) {
         startPage();
         List<JdglWeekPlan> jdglWeekPlanList = jdglWeekPlanService.getJdglWeekPlanList(jdglWeekPlanParam);
@@ -71,6 +74,7 @@ public class JdglWeekPlanController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglWeekPlan:add")
     @PostMapping("/add")
+    @CustomLogger(title = "进度管理-计划管理-每周计划", name = "每周计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertJdglWeekPlan(@Validated(ValidationGroups.Save.class) @RequestBody JdglWeekPlan jdglWeekPlanParam) {
         jdglWeekPlanService.insertJdglWeekPlan(jdglWeekPlanParam);
         return AjaxResult.success(jdglWeekPlanParam);
@@ -91,6 +95,7 @@ public class JdglWeekPlanController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglWeekPlan:update")
     @PostMapping("/update")
+    @CustomLogger(title = "进度管理-计划管理-每周计划", name = "每周计划" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateJdglWeekPlan(@Validated(ValidationGroups.Update.class) @RequestBody JdglWeekPlan jdglWeekPlanParam) {
         return toAjax(jdglWeekPlanService.updateJdglWeekPlan(jdglWeekPlanParam));
     }
@@ -103,6 +108,7 @@ public class JdglWeekPlanController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglWeekPlan:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "进度管理-计划管理-每周计划", name = "每周计划" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteJdglWeekPlan(@Validated(ValidationGroups.Delete.class) @RequestBody JdglWeekPlan jdglWeekPlanParam) {
         return toAjax(jdglWeekPlanService.deleteJdglWeekPlan(jdglWeekPlanParam));
     }

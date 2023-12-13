@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlanQueryVO;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 
 /**
@@ -17,7 +18,7 @@ public interface IJdglMainPlanService {
 
     JdglMainPlan getUsingJdglMainPlan();
 
-    JdglMainPlan getUsingJdglMainPlan(String itemName, String tabNo);
+    JdglMainPlan getUsingJdglMainPlan(JdglMainPlanQueryVO queryVO);
 
     JdglMainPlan getUsingJdglMainPlanNoItem();
 

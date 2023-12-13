@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.domain.vo.DiffAnalysisQueryVo;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -41,6 +43,7 @@ public class JdglDiffAnalysisController extends BaseController {
 
     //  // @PreAuthorize(hasPermi = "jdglDiffAnalysis:list")
     @GetMapping("/list")
+    @CustomLogger(title = "进度管理-差异化管控-差异化分析", name = "差异化分析" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getJdglDiffAnalysisList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysis jdglDiffAnalysisParam) {
         startPage();
         List<JdglDiffAnalysis> jdglDiffAnalysisList = jdglDiffAnalysisService.getJdglDiffAnalysisList(jdglDiffAnalysisParam);
@@ -74,6 +77,7 @@ public class JdglDiffAnalysisController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglDiffAnalysis:update")
     @PostMapping("/update")
+    @CustomLogger(title = "进度管理-差异化管控-差异化分析", name = "差异化分析" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateJdglDiffAnalysis(@RequestBody JdglDiffAnalysis jdglDiffAnalysisParam) {
         return AjaxResult.success(jdglDiffAnalysisService.updateJdglDiffAnalysis(jdglDiffAnalysisParam));
     }

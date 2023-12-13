@@ -20,15 +20,15 @@ public class QqchData4P6Controller {
     @Autowired
     private IQqchData4P6Service qqchData4P6Service;
 
+//    @PostMapping("/initQqchData4P6")
+//    public AjaxResult initQqchData4P6(BigDecimal version) {
+//        String tenantKey = SecurityUtils.getTenantKey();
+//        return AjaxResult.success(qqchData4P6Service.initQqchData4P6(tenantKey, version));
+//    }
+
+
+
     @PostMapping("/initQqchData4P6")
-    public AjaxResult initQqchData4P6(BigDecimal version) {
-        String tenantKey = SecurityUtils.getTenantKey();
-        return AjaxResult.success(qqchData4P6Service.initQqchData4P6(tenantKey, version));
-    }
-
-
-
-    @PostMapping("/initQqchData4P6Thread")
     public AjaxResult initQqchData4P6Thread(BigDecimal version) {
         String tenantKey = SecurityUtils.getTenantKey();
         version = VersionUtil.getVersion(QqchMainPlanItem.TABLE_NAME, version);

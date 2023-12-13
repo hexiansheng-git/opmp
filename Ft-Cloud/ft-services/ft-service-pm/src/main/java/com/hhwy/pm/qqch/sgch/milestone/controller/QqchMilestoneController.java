@@ -9,6 +9,8 @@ import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.milestone.domain.QqchMilestone;
 import com.hhwy.pm.qqch.sgch.milestone.service.IQqchMilestoneService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import jdk.nashorn.internal.runtime.Version;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,7 @@ public class QqchMilestoneController extends BaseController {
 
     //  // @PreAuthorize(hasPermi = "qqchMilestone:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-里程碑节点策划", name = "1.2.2 里程碑节点策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchMilestone qqchMilestoneParam) {
         BigDecimal version = VersionUtil.getVersion(QqchMilestone.TABLE_NAME, qqchMilestoneParam.getVersion());
         qqchMilestoneParam.setVersion(version);
@@ -57,6 +60,7 @@ public class QqchMilestoneController extends BaseController {
 
     // @PreAuthorize(hasPermi = "qqchMilestone:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-里程碑节点策划", name = "1.2.2 里程碑节点策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchMilestone>> dtoList) {
         List<QqchMilestone> dto = dtoList.dealSaveDto();
         qqchMilestoneService.save(dto);
@@ -65,6 +69,7 @@ public class QqchMilestoneController extends BaseController {
 
     // @PreAuthorize(hasPermi = "qqchMilestone:add")
     @PostMapping("/saveDataFromMainP6")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-里程碑节点策划", name = "1.2.2 里程碑节点策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult saveDataFromMainP6(@Validated(ValidationGroups.Select.class) QqchMilestone qqchMilestoneParam) {
         List<QqchMilestone> dto = qqchMilestoneService.saveDataFromMainP6(qqchMilestoneParam);
         return AjaxResult.success(dto);

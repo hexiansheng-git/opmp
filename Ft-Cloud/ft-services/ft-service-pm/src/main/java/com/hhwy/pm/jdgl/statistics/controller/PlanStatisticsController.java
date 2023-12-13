@@ -10,6 +10,8 @@ import com.hhwy.pm.jdgl.statistics.domain.export.PlanStatisticsBillValueVO4Expor
 import com.hhwy.pm.jdgl.statistics.domain.export.PlanStatisticsWbsImageVO4Export;
 import com.hhwy.pm.jdgl.statistics.domain.export.PlanStatisticsWbsValueVO4Export;
 import com.hhwy.pm.jdgl.statistics.service.IPlanStatisticsService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +31,7 @@ public class PlanStatisticsController  {
     private IPlanStatisticsService iPlanStatisticsService;
 
     @PostMapping("/getValueCompData")
+    @CustomLogger(title = "进度管理-进度统计", name = "进度统计" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getValueCompData(@RequestBody PlanStatisticsQueryVO iPlanStatisticsQueryVO) {
         return AjaxResult.success(iPlanStatisticsService.getValueCompData(iPlanStatisticsQueryVO));
     };

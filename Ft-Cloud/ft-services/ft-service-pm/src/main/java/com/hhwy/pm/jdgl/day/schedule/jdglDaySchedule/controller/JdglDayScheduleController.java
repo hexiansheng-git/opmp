@@ -6,6 +6,8 @@ import java.util.List;
 import java.io.IOException;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,6 +62,7 @@ public class JdglDayScheduleController extends BaseController {
 
 //    // @PreAuthorize(hasPermi = "jdglDaySchedule:list")
     @GetMapping("/list")
+    @CustomLogger(title = "进度管理-进度填报", name = "进度填报" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getJdglDayScheduleList(@Validated(ValidationGroups.Select.class) JdglDaySchedule jdglDayScheduleParam) {
         startPage();
         List<JdglDaySchedule> jdglDayScheduleList = jdglDayScheduleService.getJdglDayScheduleList(jdglDayScheduleParam);
@@ -81,6 +84,7 @@ public class JdglDayScheduleController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglDaySchedule:add")
     @PostMapping("/add")
+    @CustomLogger(title = "进度管理-进度填报", name = "进度填报" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertJdglDaySchedule(@Validated(ValidationGroups.Save.class) @RequestBody JdglDaySchedule jdglDayScheduleParam) {
         jdglDayScheduleService.insertJdglDaySchedule(jdglDayScheduleParam);
         Long id = jdglDayScheduleParam.getId();
@@ -98,6 +102,7 @@ public class JdglDayScheduleController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglDaySchedule:update")
     @PostMapping("/update")
+    @CustomLogger(title = "进度管理-进度填报", name = "进度填报" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateJdglDaySchedule(@Validated(ValidationGroups.Update.class) @RequestBody JdglDaySchedule jdglDayScheduleParam) {
         jdglDayScheduleService.updateJdglDaySchedule(jdglDayScheduleParam);
         Long id = jdglDayScheduleParam.getId();
@@ -114,6 +119,7 @@ public class JdglDayScheduleController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglDaySchedule:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "进度管理-进度填报", name = "进度填报" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteJdglDaySchedule(@Validated(ValidationGroups.Delete.class) @RequestBody JdglDaySchedule jdglDayScheduleParam) {
         return toAjax(jdglDayScheduleService.deleteJdglDaySchedule(jdglDayScheduleParam));
     }

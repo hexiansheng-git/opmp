@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlanQueryVO;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -43,8 +46,9 @@ public class JdglMainPlanController extends BaseController {
 
     // // @PreAuthorize(hasPermi = "jdglMainPlan:list")
     @GetMapping("/getUsingMainPlan")
-    public AjaxResult getUsingMainPlan(String itemName, String tabNo) {
-        JdglMainPlan jdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan(itemName, tabNo);
+    @CustomLogger(title = "进度管理-计划管理-总体计划", name = "总体计划" ,businessType = CustomBusinessType.SELECT)
+    public AjaxResult getUsingMainPlan(JdglMainPlanQueryVO queryVO) {
+        JdglMainPlan jdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan(queryVO);
         return AjaxResult.success(jdglMainPlan);
     }
 

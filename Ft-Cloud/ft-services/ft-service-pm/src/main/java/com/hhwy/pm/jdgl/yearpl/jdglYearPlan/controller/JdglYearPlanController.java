@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,6 +57,7 @@ public class JdglYearPlanController extends BaseController {
 
     //  // @PreAuthorize(hasPermi = "jdglYearPlan:list")
     @GetMapping("/list")
+    @CustomLogger(title = "进度管理-计划管理-年度计划", name = "年度计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getJdglYearPlanList(@Validated(ValidationGroups.Select.class) JdglYearPlan jdglYearPlanParam) {
         startPage();
         List<JdglYearPlan> jdglYearPlanList = jdglYearPlanService.getJdglYearPlanList(jdglYearPlanParam);
@@ -63,6 +66,7 @@ public class JdglYearPlanController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglYearPlan:add")
     @PostMapping("/add")
+    @CustomLogger(title = "进度管理-计划管理-年度计划", name = "年度计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertJdglYearPlan(@Validated(ValidationGroups.Save.class) @RequestBody JdglYearPlan jdglYearPlanParam) {
         jdglYearPlanService.insertJdglYearPlan(jdglYearPlanParam);
         return AjaxResult.success(jdglYearPlanParam);
@@ -83,6 +87,7 @@ public class JdglYearPlanController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglYearPlan:update")
     @PostMapping("/update")
+    @CustomLogger(title = "进度管理-计划管理-年度计划", name = "年度计划" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateJdglYearPlan(@Validated(ValidationGroups.Update.class) @RequestBody JdglYearPlan jdglYearPlanParam) {
         return toAjax(jdglYearPlanService.updateJdglYearPlan(jdglYearPlanParam));
     }
@@ -95,6 +100,7 @@ public class JdglYearPlanController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglYearPlan:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "进度管理-计划管理-年度计划", name = "年度计划" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteJdglYearPlan(@Validated(ValidationGroups.Delete.class) @RequestBody JdglYearPlan jdglYearPlanParam) {
         return toAjax(jdglYearPlanService.deleteJdglYearPlan(jdglYearPlanParam));
     }

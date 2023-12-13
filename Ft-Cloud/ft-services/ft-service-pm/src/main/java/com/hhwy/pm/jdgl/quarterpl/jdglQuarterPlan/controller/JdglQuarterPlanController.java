@@ -7,6 +7,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.domain.JdglQuarterPlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.service.IJdglQuarterPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +54,7 @@ public class JdglQuarterPlanController extends BaseController {
 
     //  // @PreAuthorize(hasPermi = "jdglQuarterPlan:list")
     @GetMapping("/list")
+    @CustomLogger(title = "进度管理-计划管理-季度计划", name = "季度计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getJdglQuarterPlanList(@Validated(ValidationGroups.Select.class) JdglQuarterPlan jdglQuarterPlanParam) {
         startPage();
         List<JdglQuarterPlan> jdglQuarterPlanList = jdglQuarterPlanService.getJdglQuarterPlanList(jdglQuarterPlanParam);
@@ -60,6 +63,7 @@ public class JdglQuarterPlanController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglQuarterPlan:add")
     @PostMapping("/add")
+    @CustomLogger(title = "进度管理-计划管理-季度计划", name = "季度计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertJdglQuarterPlan(@Validated(ValidationGroups.Save.class) @RequestBody JdglQuarterPlan jdglQuarterPlanParam) {
         jdglQuarterPlanService.insertJdglQuarterPlan(jdglQuarterPlanParam);
         return AjaxResult.success(jdglQuarterPlanParam);
@@ -86,12 +90,14 @@ public class JdglQuarterPlanController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglQuarterPlan:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "进度管理-计划管理-季度计划", name = "季度计划" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateJdglQuarterPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglQuarterPlan> jdglQuarterPlanListParam) {
         return toAjax(jdglQuarterPlanService.updateJdglQuarterPlanList(jdglQuarterPlanListParam));
     }
 
     // @PreAuthorize(hasPermi = "jdglQuarterPlan:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "进度管理-计划管理-季度计划", name = "季度计划" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteJdglQuarterPlan(@Validated(ValidationGroups.Delete.class) @RequestBody JdglQuarterPlan jdglQuarterPlanParam) {
         return toAjax(jdglQuarterPlanService.deleteJdglQuarterPlan(jdglQuarterPlanParam));
     }

@@ -7,6 +7,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.service.IJdglMonthPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +54,7 @@ public class JdglMonthPlanController extends BaseController {
 
     //  // @PreAuthorize(hasPermi = "jdglMonthPlan:list")
     @GetMapping("/list")
+    @CustomLogger(title = "进度管理-计划管理-月度计划", name = "月度计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getJdglMonthPlanList(@Validated(ValidationGroups.Select.class) JdglMonthPlan jdglMonthPlanParam) {
         startPage();
         List<JdglMonthPlan> jdglMonthPlanList = jdglMonthPlanService.getJdglMonthPlanList(jdglMonthPlanParam);
@@ -60,6 +63,7 @@ public class JdglMonthPlanController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglMonthPlan:add")
     @PostMapping("/add")
+    @CustomLogger(title = "进度管理-计划管理-月度计划", name = "月度计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertJdglMonthPlan(@Validated(ValidationGroups.Save.class) @RequestBody JdglMonthPlan jdglMonthPlanParam) {
         jdglMonthPlanService.insertJdglMonthPlan(jdglMonthPlanParam);
         return AjaxResult.success(jdglMonthPlanParam);
@@ -80,6 +84,7 @@ public class JdglMonthPlanController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglMonthPlan:update")
     @PostMapping("/update")
+    @CustomLogger(title = "进度管理-计划管理-月度计划", name = "月度计划" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateJdglMonthPlan(@Validated(ValidationGroups.Update.class) @RequestBody JdglMonthPlan jdglMonthPlanParam) {
         return AjaxResult.success(jdglMonthPlanService.updateJdglMonthPlan(jdglMonthPlanParam));
     }
@@ -92,6 +97,7 @@ public class JdglMonthPlanController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglMonthPlan:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "进度管理-计划管理-月度计划", name = "月度计划" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteJdglMonthPlan(@Validated(ValidationGroups.Delete.class) @RequestBody JdglMonthPlan jdglMonthPlanParam) {
         return toAjax(jdglMonthPlanService.deleteJdglMonthPlan(jdglMonthPlanParam));
     }
