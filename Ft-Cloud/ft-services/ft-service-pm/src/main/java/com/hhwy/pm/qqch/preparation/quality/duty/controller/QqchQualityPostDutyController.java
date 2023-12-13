@@ -7,6 +7,8 @@ import com.hhwy.pm.qqch.preparation.quality.duty.domain.QqchQualityPostDuty;
 import com.hhwy.pm.qqch.preparation.quality.duty.domain.vo.QqchQualityPostDutyVo;
 import com.hhwy.pm.qqch.preparation.quality.duty.service.IQqchQualityPostDutyService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -61,6 +63,8 @@ public class QqchQualityPostDutyController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchQualityPostDuty:add")
     @PostMapping("/batchSave")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-9.1质量组织设置及职责", name = "\n" +
+            "9.1.1岗位质量职责" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSave(@RequestBody QqchQualityPostDutyVo qqchQualityPostDutyVo) {
         qqchQualityPostDutyService.batchSave(qqchQualityPostDutyVo);
         return AjaxResult.success();

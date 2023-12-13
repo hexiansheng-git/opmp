@@ -2,17 +2,15 @@ package com.hhwy.pm.qqch.preparation.safe.organ.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.organ.domain.vo.QqchGridDivideVo;
 import com.hhwy.pm.qqch.preparation.safe.organ.service.IQqchGridDivideService;
-import java.math.BigDecimal;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 /**
  * @author zhenglili
@@ -48,6 +46,8 @@ public class QqchGridDivideController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchGridDivide:add")
     @PostMapping("/batchSave")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-8.1 安全组织机构及人员策划", name = "\n" +
+            "8.1.4 格子划分" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSave(@RequestBody QqchGridDivideVo qqchGridDivideVo) {
         qqchGridDivideService.batchSave(qqchGridDivideVo);
         return AjaxResult.success();

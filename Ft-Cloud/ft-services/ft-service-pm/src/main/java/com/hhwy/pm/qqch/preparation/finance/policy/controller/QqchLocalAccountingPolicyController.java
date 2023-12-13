@@ -7,22 +7,20 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalAccountingPolicy;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.vo.QqchLocalAccountingPolicyVo;
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalAccountingPolicyService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.ExportUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author zhenglili
@@ -59,6 +57,8 @@ public class QqchLocalAccountingPolicyController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchLocalAccountingPolicy:add")
     @PostMapping("/batchSave")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.2税务、会计、金融政策", name = "\n" +
+            "10.2.3 当地会计政策描述" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSave(@RequestBody QqchLocalAccountingPolicyVo qqchLocalAccountingPolicyVo) {
         qqchLocalAccountingPolicyService.batchSave(qqchLocalAccountingPolicyVo);
         return AjaxResult.success();
@@ -90,6 +90,8 @@ public class QqchLocalAccountingPolicyController extends BaseController {
      * @return
      */
     @PostMapping("/importExcel")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.2税务、会计、金融政策", name = "\n" +
+            "10.2.3 当地会计政策描述" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
         FtExcelUtil<QqchLocalAccountingPolicy> util = new FtExcelUtil<>(QqchLocalAccountingPolicy.class);
         try {

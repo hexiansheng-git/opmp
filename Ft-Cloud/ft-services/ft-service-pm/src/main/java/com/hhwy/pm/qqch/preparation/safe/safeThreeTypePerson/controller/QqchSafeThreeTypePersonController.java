@@ -5,6 +5,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.safe.safeThreeTypePerson.domain.QqchSafeThreeTypePerson;
 import com.hhwy.pm.qqch.preparation.safe.safeThreeTypePerson.service.IQqchSafeThreeTypePersonService;
 import com.hhwy.pm.qqch.preparation.safe.safeThreeTypePerson.vo.QqchSafeThreeTypePersonVo;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -41,6 +43,8 @@ public class QqchSafeThreeTypePersonController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSafeThreeTypePerson:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-8.1 安全组织机构及人员策划", name = "\n" +
+            "8.1.2 三类人员管控策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSafeThreeTypePersonList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSafeThreeTypePersonVo qqchSafeThreeTypePersonVo) {
         qqchSafeThreeTypePersonService.insertQqchSafeThreeTypePersonList(qqchSafeThreeTypePersonVo);
         return AjaxResult.success();

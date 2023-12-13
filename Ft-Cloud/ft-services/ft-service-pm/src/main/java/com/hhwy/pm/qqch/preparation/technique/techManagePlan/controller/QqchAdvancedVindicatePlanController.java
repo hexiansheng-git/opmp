@@ -8,6 +8,8 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchAdvanced
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanImportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchAdvancedVindicatePlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -87,6 +89,8 @@ public class QqchAdvancedVindicatePlanController extends BaseController {
      * @return
      */
     @PostMapping("/import")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.9 科技管理策划", name = "\n" +
+            "3.9.1高新维护计划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
         List<QqchAdvancedVindicatePlanImportVo> qqchAdvancedVindicatePlanImportVoList = null;
         try {
@@ -130,6 +134,8 @@ public class QqchAdvancedVindicatePlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.9 科技管理策划", name = "\n" +
+            "3.9.1高新维护计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchAdvancedVindicatePlanVo qqchAdvancedVindicatePlanVo) {
         qqchAdvancedVindicatePlanService.save(qqchAdvancedVindicatePlanVo);
         return AjaxResult.success();

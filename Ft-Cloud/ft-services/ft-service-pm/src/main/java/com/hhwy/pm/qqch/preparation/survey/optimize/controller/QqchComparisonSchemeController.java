@@ -6,6 +6,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonScheme;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchComparisonSchemeVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchComparisonSchemeService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -54,6 +56,8 @@ public class QqchComparisonSchemeController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchComparisonScheme:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计优化变更策划", name = "\n" +
+            "2.5.5 重大设计方案比选" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchComparisonSchemeVo qqchComparisonSchemeVo) {
         qqchComparisonSchemeService.save(qqchComparisonSchemeVo);
         return AjaxResult.success();
@@ -66,6 +70,8 @@ public class QqchComparisonSchemeController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchComparisonScheme:save")
     @PostMapping("/confirm")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-2.5 勘察设计优化变更策划", name = "\n" +
+            "2.5.5 重大设计方案比选" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchComparisonSchemeVo qqchComparisonSchemeVo) {
         qqchComparisonSchemeService.confirm(qqchComparisonSchemeVo);
         return AjaxResult.success("确认成功！");

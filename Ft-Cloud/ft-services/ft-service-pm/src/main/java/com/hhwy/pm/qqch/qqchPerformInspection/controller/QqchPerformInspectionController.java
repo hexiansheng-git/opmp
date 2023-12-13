@@ -4,7 +4,6 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
@@ -12,6 +11,8 @@ import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspectionDetail
 import com.hhwy.pm.qqch.qqchPerformInspection.service.IQqchPerformInspectionService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,8 @@ public class QqchPerformInspectionController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchPerformInspection:save")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划执行检查", name = "\n" +
+            "前期策划执行检查" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchPerformInspection(@Validated(ValidationGroups.Save.class) @RequestBody QqchPerformInspection qqchPerformInspectionParam) {
         try{
             return AjaxResult.success(qqchPerformInspectionService.insertQqchPerformInspection(qqchPerformInspectionParam));
@@ -78,6 +81,8 @@ public class QqchPerformInspectionController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchPerformInspection:save")
     @PostMapping("/update")
+    @CustomLogger(title = "前期策划-前期策划执行检查", name = "\n" +
+            "前期策划执行检查" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateQqchPerformInspection(@Validated(ValidationGroups.Update.class) @RequestBody QqchPerformInspection qqchPerformInspectionParam) {
         try{
             qqchPerformInspectionService.updateQqchPerformInspection(qqchPerformInspectionParam);
@@ -100,12 +105,16 @@ public class QqchPerformInspectionController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchPerformInspection:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "前期策划-前期策划执行检查", name = "\n" +
+            "前期策划执行检查" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteQqchPerformInspection(@Validated(ValidationGroups.Delete.class) @RequestBody QqchPerformInspection qqchPerformInspectionParam) {
         return toAjax(qqchPerformInspectionService.deleteQqchPerformInspection(qqchPerformInspectionParam));
     }
 
 //    @PreAuthorize(hasPermi = "qqchPerformInspection:remove")
     @PostMapping("/{ids}")
+    @CustomLogger(title = "前期策划-前期策划执行检查", name = "\n" +
+            "前期策划执行检查" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteQqchPerformInspectionByPks(@PathVariable Long[] ids) {
         List<Long> qqchPerformInspectionPkList = Arrays.asList(ids);
         return toAjax(qqchPerformInspectionService.deleteQqchPerformInspectionByPks(qqchPerformInspectionPkList));

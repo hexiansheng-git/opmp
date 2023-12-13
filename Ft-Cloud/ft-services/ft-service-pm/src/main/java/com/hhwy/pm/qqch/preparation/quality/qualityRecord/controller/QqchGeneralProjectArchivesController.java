@@ -9,6 +9,8 @@ import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchGeneralProj
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.GeneralProjectArchivesWbs;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.GeneralProjectArchivesWbsVo;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.service.IQqchGeneralProjectArchivesService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +24,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-08-24 15:32:35
- * @remark
+ * @remark 9.7.2 一般工程档案
  */
 @Validated
 @RestController
@@ -123,6 +125,8 @@ public class QqchGeneralProjectArchivesController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-9.7 质量档案", name = "\n" +
+            "9.7.2 一般工程档案" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody GeneralProjectArchivesWbsVo generalProjectArchivesWbsVo) {
         qqchGeneralProjectArchivesService.save(generalProjectArchivesWbsVo);
         return AjaxResult.success();

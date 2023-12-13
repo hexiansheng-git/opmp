@@ -8,6 +8,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.technique.expert.domain.QqchTargetExpert;
 import com.hhwy.pm.qqch.preparation.technique.expert.domain.vo.QqchTargetExpertVo;
 import com.hhwy.pm.qqch.preparation.technique.expert.service.IQqchTargetExpertService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -32,14 +34,14 @@ public class QqchTargetExpertController extends BaseController {
     private IQqchTargetExpertService qqchTargetExpertService;
 
 
-//    @PreAuthorize(hasPermi = "qqchTargetExpert:list")
+    //    @PreAuthorize(hasPermi = "qqchTargetExpert:list")
     @GetMapping
     public AjaxResult getQqchTargetExpert(@Validated(ValidationGroups.Get.class) QqchTargetExpert qqchTargetExpertParam) {
         QqchTargetExpert qqchTargetExpert = qqchTargetExpertService.getQqchTargetExpert(qqchTargetExpertParam);
         return AjaxResult.success(qqchTargetExpert);
     }
 
-//    @PreAuthorize(hasPermi = "qqchTargetExpert:list")
+    //    @PreAuthorize(hasPermi = "qqchTargetExpert:list")
     @GetMapping("/list")
     public AjaxResult getQqchTargetExpertList(@Validated(ValidationGroups.Select.class) QqchTargetExpert qqchTargetExpertParam) {
         startPage();
@@ -47,32 +49,32 @@ public class QqchTargetExpertController extends BaseController {
         return getDataTableAjaxResult(qqchTargetExpertList);
     }
 
-//    @PreAuthorize(hasPermi = "qqchTargetExpert:add")
+    //    @PreAuthorize(hasPermi = "qqchTargetExpert:add")
     @PostMapping("/add")
     public AjaxResult insertQqchTargetExpert(@Validated(ValidationGroups.Save.class) @RequestBody QqchTargetExpert qqchTargetExpertParam) {
         qqchTargetExpertService.insertQqchTargetExpert(qqchTargetExpertParam);
         return AjaxResult.success(qqchTargetExpertParam);
     }
 
-//    @PreAuthorize(hasPermi = "qqchTargetExpert:update")
+    //    @PreAuthorize(hasPermi = "qqchTargetExpert:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTargetExpert(@Validated(ValidationGroups.Update.class) @RequestBody QqchTargetExpert qqchTargetExpertParam) {
         return toAjax(qqchTargetExpertService.updateQqchTargetExpert(qqchTargetExpertParam));
     }
 
-//    @PreAuthorize(hasPermi = "qqchTargetExpert:update")
+    //    @PreAuthorize(hasPermi = "qqchTargetExpert:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchTargetExpertList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTargetExpert> qqchTargetExpertListParam) {
         return toAjax(qqchTargetExpertService.updateQqchTargetExpertList(qqchTargetExpertListParam));
     }
 
-//    @PreAuthorize(hasPermi = "qqchTargetExpert:remove")
+    //    @PreAuthorize(hasPermi = "qqchTargetExpert:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchTargetExpert(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTargetExpert qqchTargetExpertParam) {
         return toAjax(qqchTargetExpertService.deleteQqchTargetExpert(qqchTargetExpertParam));
     }
 
-//    @PreAuthorize(hasPermi = "qqchTargetExpert:remove")
+    //    @PreAuthorize(hasPermi = "qqchTargetExpert:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchTargetExpertByPks(@PathVariable Long[] ids) {
         List<Long> qqchTargetExpertPkList = Arrays.asList(ids);
@@ -88,6 +90,7 @@ public class QqchTargetExpertController extends BaseController {
 
     /**
      * 获取内外部目标专家选择Vo
+     *
      * @param qqchTargetExpert
      * @return
      */
@@ -99,22 +102,26 @@ public class QqchTargetExpertController extends BaseController {
 
     /**
      * 添加到专家库
+     *
      * @param list
      * @return
      */
     @PostMapping("addToQyzsSpeciallistLibrary")
-    public AjaxResult addToQyzsSpeciallistLibrary(@RequestBody List<QqchTargetExpert> list){
+    public AjaxResult addToQyzsSpeciallistLibrary(@RequestBody List<QqchTargetExpert> list) {
         qqchTargetExpertService.addToQyzsSpeciallistLibrary(list);
         return AjaxResult.success();
     }
 
     /**
      * 保存/确认/提交
+     *
      * @param qqchTargetExpertVo
      * @return
      */
 //    @PreAuthorize(hasPermi = "qqchTargetExpert:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.14 专家机构资源策划", name =
+            "3.14.1 内外部目标专家选择", businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTargetExpertVo qqchTargetExpertVo) {
         qqchTargetExpertService.save(qqchTargetExpertVo);
         return AjaxResult.success();
