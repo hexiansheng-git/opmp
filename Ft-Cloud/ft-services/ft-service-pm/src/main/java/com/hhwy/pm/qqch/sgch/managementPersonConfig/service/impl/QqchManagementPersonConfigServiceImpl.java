@@ -253,6 +253,8 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
      */
     @Override
     public Map<String, String> getProjectLeadershipPersonUserNameMap() {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
         //获取所有租户
         List<SysTenant> tenantList = systemServiceApi.tenantList();
         Map<String,String> userNameMap = new HashMap<>();
@@ -270,6 +272,7 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
             throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
         }
 
         return userNameMap;
