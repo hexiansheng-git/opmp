@@ -8,22 +8,21 @@ import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.vo.QqchMeasureExpEquExperimentExportVo;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.vo.QqchMeasureExpEquVo;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.service.IQqchMeasureExpEquService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.ExportUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author zhenglili
@@ -87,6 +86,8 @@ public class QqchMeasureExpEquController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchMeasureExpEqu:add")
     @PostMapping("/batchSaveMeasure")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.6 测量管理计划", name = "\n" +
+            "3.6.4 测量仪器设备配置计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSaveMeasure(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpEquVo qqchMeasureExpEquVo) {
         qqchMeasureExpEquVo.setType("1");
@@ -102,6 +103,8 @@ public class QqchMeasureExpEquController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchMeasureExpEqu:add")
     @PostMapping("/batchSaveExperiment")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.7 试验管理计划", name = "\n" +
+            "3.7.4 实验仪器设备配置计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSaveExperiment(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpEquVo qqchMeasureExpEquVo) {
         qqchMeasureExpEquVo.setType("2");

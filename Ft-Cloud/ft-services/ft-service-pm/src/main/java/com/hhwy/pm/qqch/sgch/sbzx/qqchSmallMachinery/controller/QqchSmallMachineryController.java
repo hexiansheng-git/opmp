@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchSmallMachinery.domain.QqchSmallMachinery;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchSmallMachinery.domain.vo.QqchSmallMachineryVo;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchSmallMachinery.service.IQqchSmallMachineryService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +32,7 @@ public class QqchSmallMachineryController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchSmallMachinery:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-设备总需计划", name = "1.7.4小型机具" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSmallMachinery(@Validated(ValidationGroups.Get.class) QqchSmallMachinery qqchSmallMachineryParam) {
         QqchSmallMachinery qqchSmallMachinery = qqchSmallMachineryService.getQqchSmallMachinery(qqchSmallMachineryParam);
         return AjaxResult.success(qqchSmallMachinery);
@@ -42,6 +45,7 @@ public class QqchSmallMachineryController extends BaseController {
      * @return
      */
     @PostMapping("/syncData")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-设备总需计划", name = "1.7.4小型机具" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult syncData(@Validated(ValidationGroups.Save.class) @RequestBody QqchSmallMachineryVo qqchSmallMachineryVo) {
         QqchSmallMachineryVo vo = qqchSmallMachineryService.syncData(qqchSmallMachineryVo);
         return AjaxResult.success(vo);
@@ -55,6 +59,7 @@ public class QqchSmallMachineryController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSmallMachinery:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-设备总需计划", name = "1.7.4小型机具" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSmallMachineryList(@Validated(ValidationGroups.Select.class) QqchSmallMachinery qqchSmallMachineryParam) {
         QqchSmallMachineryVo vo = qqchSmallMachineryService.getQqchSmallMachineryList(qqchSmallMachineryParam);
         return AjaxResult.success(vo);
@@ -68,6 +73,7 @@ public class QqchSmallMachineryController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSmallMachinery:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-设备总需计划", name = "1.7.4小型机具" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchSmallMachineryVo qqchSmallMachineryVo) {
         qqchSmallMachineryService.save(qqchSmallMachineryVo);
         return AjaxResult.success();
@@ -75,6 +81,7 @@ public class QqchSmallMachineryController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchSmallMachinery:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-设备总需计划", name = "1.7.4小型机具" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSmallMachinery(@Validated(ValidationGroups.Save.class) @RequestBody QqchSmallMachinery qqchSmallMachineryParam) {
         qqchSmallMachineryService.insertQqchSmallMachinery(qqchSmallMachineryParam);
         return AjaxResult.success(qqchSmallMachineryParam);

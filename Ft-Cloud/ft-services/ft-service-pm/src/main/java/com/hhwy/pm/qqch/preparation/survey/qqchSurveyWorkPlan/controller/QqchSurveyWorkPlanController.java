@@ -8,6 +8,8 @@ import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.domain.QqchSurveyW
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.service.IQqchSurveyWorkPlanService;
 import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
 import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,7 @@ public class QqchSurveyWorkPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSurveyWorkPlan:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计工作计划", name = "2.2勘察设计工作计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSurveyWorkPlanList(@Validated(ValidationGroups.Select.class) QqchSurveyWorkPlan qqchSurveyWorkPlanParam) {
         QqchSurveyWorkPlanVo vo = qqchSurveyWorkPlanService.getQqchSurveyWorkPlanList(qqchSurveyWorkPlanParam);
         return AjaxResult.success(vo);
@@ -54,6 +57,7 @@ public class QqchSurveyWorkPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSurveyWorkPlan:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计工作计划", name = "2.2勘察设计工作计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSurveyWorkPlanList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo) {
         qqchSurveyWorkPlanService.save(qqchSurveyWorkPlanVo);
         return AjaxResult.success(qqchSurveyWorkPlanVo);
@@ -67,6 +71,7 @@ public class QqchSurveyWorkPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSurveyWorkPlan:confirm")
     @PostMapping("/confirm")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计工作计划", name = "2.2勘察设计工作计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo) {
         qqchSurveyWorkPlanService.confirm(qqchSurveyWorkPlanVo);
         return AjaxResult.success(qqchSurveyWorkPlanVo);
@@ -77,6 +82,7 @@ public class QqchSurveyWorkPlanController extends BaseController {
      *  弹窗功能，整合弹框选中和列表中的数据
      */
     @PostMapping("/getActivityByids")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计工作计划", name = "2.2勘察设计工作计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult handleActivityData(@RequestBody QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo) {
         List<QqchSurveyWorkPlan> build = qqchSurveyWorkPlanService.handleActivityData(qqchSurveyWorkPlanVo);
         return AjaxResult.success(build);

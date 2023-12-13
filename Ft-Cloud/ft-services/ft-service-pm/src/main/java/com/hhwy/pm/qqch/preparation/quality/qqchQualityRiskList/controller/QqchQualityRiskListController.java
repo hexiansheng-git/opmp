@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskList.domain.QqchQualityRiskList;
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskList.domain.vo.QqchQualityRiskListVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskList.service.IQqchQualityRiskListService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -37,6 +39,7 @@ public class QqchQualityRiskListController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchQualityRiskList:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-质量风险", name = "9.3.1质量风险清单" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchQualityRiskListList(@Validated(ValidationGroups.Select.class) QqchQualityRiskList qqchQualityRiskListParam) {
         QqchQualityRiskListVo vo = qqchQualityRiskListService.getQqchQualityRiskListList(qqchQualityRiskListParam);
         return AjaxResult.success(vo);
@@ -50,6 +53,7 @@ public class QqchQualityRiskListController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchQualityRiskList:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-质量风险", name = "9.3.1质量风险清单" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchQualityRiskListVo vo) {
         qqchQualityRiskListService.save(vo);
         return AjaxResult.success();
@@ -58,6 +62,7 @@ public class QqchQualityRiskListController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchQualityRiskList:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-质量风险", name = "9.3.1质量风险清单" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchQualityRiskList(@Validated(ValidationGroups.Get.class) QqchQualityRiskList qqchQualityRiskListParam) {
         QqchQualityRiskList qqchQualityRiskList = qqchQualityRiskListService.getQqchQualityRiskList(qqchQualityRiskListParam);
         return AjaxResult.success(qqchQualityRiskList);
@@ -66,6 +71,7 @@ public class QqchQualityRiskListController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchQualityRiskList:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-质量风险", name = "9.3.1质量风险清单" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchQualityRiskList(@Validated(ValidationGroups.Save.class) @RequestBody QqchQualityRiskList qqchQualityRiskListParam) {
         qqchQualityRiskListService.insertQqchQualityRiskList(qqchQualityRiskListParam);
         return AjaxResult.success(qqchQualityRiskListParam);

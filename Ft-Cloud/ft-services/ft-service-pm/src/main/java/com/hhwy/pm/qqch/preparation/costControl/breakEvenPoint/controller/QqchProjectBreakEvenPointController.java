@@ -8,6 +8,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.costControl.breakEvenPoint.domain.QqchProjectBreakEvenPoint;
 import com.hhwy.pm.qqch.preparation.costControl.breakEvenPoint.domain.vo.QqchProjectBreakEvenPointVo;
 import com.hhwy.pm.qqch.preparation.costControl.breakEvenPoint.service.IQqchProjectBreakEvenPointService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -104,6 +106,8 @@ public class QqchProjectBreakEvenPointController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-成本管控策划-5.3 项目主要盈亏点分析", name =
+            "5.3 项目主要盈亏点分析", businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody QqchProjectBreakEvenPointVo qqchProjectBreakEvenPointVo) {
         qqchProjectBreakEvenPointService.save(qqchProjectBreakEvenPointVo);
         return AjaxResult.success(qqchProjectBreakEvenPointVo);

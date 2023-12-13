@@ -5,15 +5,14 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.measureexp.tech.domain.vo.QqchMeasureExpTechVo;
 import com.hhwy.pm.qqch.preparation.measureexp.tech.service.IQqchMeasureExpTechService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 /**
  * @author zhenglili
@@ -64,6 +63,8 @@ public class QqchMeasureExpTechController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchMeasureExpTech:add")
     @PostMapping("/batchSaveMeasure")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.6 测量管理计划", name = "\n" +
+            "3.6.3 测量技术方案计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSaveMeasure(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpTechVo qqchMeasureExpTechVo) {
         qqchMeasureExpTechVo.setType("1");
@@ -79,6 +80,8 @@ public class QqchMeasureExpTechController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchMeasureExpTech:add")
     @PostMapping("/batchSaveExperiment")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.7 试验管理计划", name = "\n" +
+            "3.7.3 实验方案计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSaveExperiment(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpTechVo qqchMeasureExpTechVo) {
         qqchMeasureExpTechVo.setType("2");

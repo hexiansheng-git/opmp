@@ -8,6 +8,8 @@ import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInv
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassifyVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.QqchKeyInventoryContentVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchKeyInventoryContentService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -98,6 +100,8 @@ public class QqchKeyInventoryContentController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-合同策划-4.1 主合同分析", name =
+            "4.1.4 须重点关注的清单及内容", businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody QqchKeyInventoryContentVo qqchKeyInventoryContentVo) {
         qqchKeyInventoryContentService.save(qqchKeyInventoryContentVo);
         return AjaxResult.success();

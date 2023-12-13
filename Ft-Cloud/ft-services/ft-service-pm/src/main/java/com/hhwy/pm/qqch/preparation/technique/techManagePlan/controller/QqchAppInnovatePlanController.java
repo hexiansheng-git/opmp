@@ -9,6 +9,8 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAppIn
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAppInnovatePlanImportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAppInnovatePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchAppInnovatePlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -90,6 +92,8 @@ public class QqchAppInnovatePlanController extends BaseController {
      * @return
      */
     @PostMapping("/import")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.9 科技管理策划", name = "\n" +
+            "3.9.3四新应用及创新计划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(@RequestPart("file") MultipartFile file){
         FtExcelUtil<QqchAppInnovatePlanImportVo> util = new FtExcelUtil<>(QqchAppInnovatePlanImportVo.class);
         try {
@@ -135,6 +139,8 @@ public class QqchAppInnovatePlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.9 科技管理策划", name = "\n" +
+            "3.9.3四新应用及创新计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchAppInnovatePlanVo qqchAppInnovatePlanVo) {
         qqchAppInnovatePlanService.save(qqchAppInnovatePlanVo);
         return AjaxResult.success();

@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qqchEmergencyImplementationPlan.domain.QqchEmergencyImplementationPlan;
 import com.hhwy.pm.qqch.preparation.quality.qqchEmergencyImplementationPlan.domain.vo.QqchEmergencyImplementationPlanVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchEmergencyImplementationPlan.service.IQqchEmergencyImplementationPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +31,7 @@ public class QqchEmergencyImplementationPlanController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-应急管控策划", name = "8.10.3应急演练实施策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchEmergencyImplementationPlanList(@Validated(ValidationGroups.Select.class) QqchEmergencyImplementationPlan qqchEmergencyImplementationPlanParam) {
         QqchEmergencyImplementationPlanVo vo = qqchEmergencyImplementationPlanService.getQqchEmergencyImplementationPlanList(qqchEmergencyImplementationPlanParam);
         return AjaxResult.success(vo);
@@ -36,6 +39,7 @@ public class QqchEmergencyImplementationPlanController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-应急管控策划", name = "8.10.3应急演练实施策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchEmergencyImplementationPlanList(@Validated(ValidationGroups.Save.class) @RequestBody QqchEmergencyImplementationPlanVo vo) {
         qqchEmergencyImplementationPlanService.save(vo);
         return AjaxResult.success();
@@ -43,6 +47,7 @@ public class QqchEmergencyImplementationPlanController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-应急管控策划", name = "8.10.3应急演练实施策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchEmergencyImplementationPlan(@Validated(ValidationGroups.Get.class) QqchEmergencyImplementationPlan qqchEmergencyImplementationPlanParam) {
         QqchEmergencyImplementationPlan qqchEmergencyImplementationPlan = qqchEmergencyImplementationPlanService.getQqchEmergencyImplementationPlan(qqchEmergencyImplementationPlanParam);
         return AjaxResult.success(qqchEmergencyImplementationPlan);
@@ -51,6 +56,7 @@ public class QqchEmergencyImplementationPlanController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-应急管控策划", name = "8.10.3应急演练实施策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchEmergencyImplementationPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchEmergencyImplementationPlan qqchEmergencyImplementationPlanParam) {
         qqchEmergencyImplementationPlanService.insertQqchEmergencyImplementationPlan(qqchEmergencyImplementationPlanParam);
         return AjaxResult.success(qqchEmergencyImplementationPlanParam);

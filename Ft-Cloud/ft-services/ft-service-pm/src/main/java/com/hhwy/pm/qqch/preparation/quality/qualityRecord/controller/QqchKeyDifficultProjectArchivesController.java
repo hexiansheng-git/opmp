@@ -8,6 +8,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchKeyDifficultProjectArchives;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.KeyDifficultWbsVo;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.service.IQqchKeyDifficultProjectArchivesService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -104,6 +106,8 @@ public class QqchKeyDifficultProjectArchivesController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-9.7 质量档案", name = "\n" +
+            "9.7.1 重难点工程档案" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody KeyDifficultWbsVo keyDifficultWbsVo) {
         qqchKeyDifficultProjectArchivesService.save(keyDifficultWbsVo);
         return AjaxResult.success();

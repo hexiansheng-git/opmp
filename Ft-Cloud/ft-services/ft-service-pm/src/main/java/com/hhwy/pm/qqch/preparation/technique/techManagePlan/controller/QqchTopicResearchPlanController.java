@@ -11,6 +11,8 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchTopic
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchTopicResearchPlanService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -94,6 +96,8 @@ public class QqchTopicResearchPlanController extends BaseController {
      * @return
      */
     @PostMapping("/import")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.9 科技管理策划", name = "\n" +
+            "3.9.2课题研究计划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(@RequestPart("file") MultipartFile file){
         FtExcelUtil<QqchTopicResearchPlanImportVo> util = new FtExcelUtil<>(QqchTopicResearchPlanImportVo.class);
         try {
@@ -149,6 +153,8 @@ public class QqchTopicResearchPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.9 科技管理策划", name = "\n" +
+            "3.9.2课题研究计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTopicResearchPlanVo qqchTopicResearchPlanVo) {
         qqchTopicResearchPlanService.save(qqchTopicResearchPlanVo);
         return AjaxResult.success();

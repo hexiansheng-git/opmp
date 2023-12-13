@@ -4,6 +4,8 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchKeyDifficultConstructionBriefVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchKeyDifficultConstructionBriefService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -32,6 +34,8 @@ public class QqchKeyDifficultConstructionBriefController extends BaseController 
     }
 
     @PostMapping("/batchSave")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.4 施工方案计划管理", name = "\n" +
+            "3.4.4 重难点分项施工方案简述" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchKeyDifficultConstructionBriefVo qqchKeyDifficultConstructionBriefVo) {
         qqchKeyDifficultConstructionBriefService.batchSave(qqchKeyDifficultConstructionBriefVo);

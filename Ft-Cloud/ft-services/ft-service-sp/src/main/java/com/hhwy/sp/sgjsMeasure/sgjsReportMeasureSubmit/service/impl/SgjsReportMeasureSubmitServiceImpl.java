@@ -8,10 +8,12 @@ import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureS
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import java.util.ArrayList;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,23 +68,6 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
         if (CollectionUtils.isEmpty(sgjsReportMeasureSubmitVo.getTreeList())) {
             return AjaxResult.error("数据异常");
         }
-        //逻辑删除库中WbsId对应数据
-        SgjsReportMeasureSubmit info = new SgjsReportMeasureSubmit();
-
-
-        if(sgjsReportMeasureSubmitVo.getTreeList().get(0).getWbsId() !=null){
-            info.setWbsId(sgjsReportMeasureSubmitVo.getTreeList().get(0).getWbsId());
-            List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList = sgjsReportMeasureSubmitMapper.getSgjsReportMeasureSubmitList(info);
-            if(sgjsReportMeasureSubmitList.size()>0){
-                info.setUpdateTime(DateTime.now());
-                info.setUpdateUser(SecurityUtils.getUserId() + "");
-                sgjsReportMeasureSubmitMapper.deleteWbsAll(info);
-            }
-        }else{
-            info.setUpdateTime(DateTime.now());
-            info.setUpdateUser(SecurityUtils.getUserId() + "");
-            sgjsReportMeasureSubmitMapper.deleteAll(info);
-        }
         for (SgjsReportMeasureSubmit sgjsReportMeasureSubmit : sgjsReportMeasureSubmitVo.getTreeList()) {
             sgjsReportMeasureSubmit.setRealStartDate(sgjsReportMeasureSubmit.getRealStartDateStr() == null ? null : FtDateUtils.parseDate(sgjsReportMeasureSubmit.getRealStartDateStr().replaceAll("(?:年|月|日)", "-")));
             sgjsReportMeasureSubmit.setPlanStartDate(sgjsReportMeasureSubmit.getPlanStartDateStr() == null ? null : FtDateUtils.parseDate(sgjsReportMeasureSubmit.getPlanStartDateStr().replaceAll("(?:年|月|日)", "-")));
@@ -90,8 +75,39 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
             sgjsReportMeasureSubmit.setCreateTime(DateUtils.getNowDate());
             sgjsReportMeasureSubmit.setId(IdWorker.createId());
         }
-        sgjsReportMeasureSubmitMapper.batchAdd(sgjsReportMeasureSubmitVo.getTreeList());
+        List<SgjsReportMeasureSubmit> insertList = sgjsReportMeasureSubmitVo.getTreeList().stream().filter(r -> StringUtils.isNotEmpty(r.getIsAdd()) && r.getIsAdd().equals("1")).collect(Collectors.toList());
+        //批量入库
+        if(!CollectionUtils.isEmpty(insertList)){
+            sgjsReportMeasureSubmitMapper.batchAdd(insertList);
+        }
+        //批量编辑
+        List<SgjsReportMeasureSubmit> updateList = sgjsReportMeasureSubmitVo.getTreeList().stream().filter(r -> StringUtils.isEmpty(r.getIsAdd())).collect(Collectors.toList());
+        if(!CollectionUtils.isEmpty(updateList)){
+            sgjsReportMeasureSubmitMapper.updateSgjsReportMeasureSubmitList(updateList);
+        }
+        //批量删除
+        deleteByIds(sgjsReportMeasureSubmitVo.getDelIdList());
         return AjaxResult.success();
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param delIdList
+     */
+    private void deleteByIds(List<String> delIdList){
+        List<SgjsReportMeasureSubmit> list =new ArrayList<>();
+        for (int i = 0; i < delIdList.size(); i++) {
+            SgjsReportMeasureSubmit info=new SgjsReportMeasureSubmit();
+            info.setId(Long.parseLong(delIdList.get(i)));
+            info.setUpdateUser(SecurityUtils.getUserId()+"");
+            info.setUpdateTime(DateUtils.getNowDate());
+            list.add(info);
+        }
+        //删除
+        if(!CollectionUtils.isEmpty(list)){
+            sgjsReportMeasureSubmitMapper.deleteInfoData(list);
+        }
     }
 
     @Transactional
@@ -121,4 +137,9 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
         public int deleteSgjsReportMeasureSubmitByPks(List<Long> sgjsReportMeasureSubmitPkList) {
             return sgjsReportMeasureSubmitMapper.deleteSgjsReportMeasureSubmitByPks(sgjsReportMeasureSubmitPkList);
         }
+
+    @Override
+    public List<SgjsReportMeasureSubmit> getIds(List<Long> ids) {
+        return sgjsReportMeasureSubmitMapper.getIds(ids);
     }
+}

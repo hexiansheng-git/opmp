@@ -5,6 +5,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.QqchManagementPersonConfig;
 import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.vo.QqchManagementPersonConfigVo;
 import com.hhwy.pm.qqch.sgch.managementPersonConfig.service.IQqchManagementPersonConfigService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -32,6 +34,7 @@ public class QqchManagementPersonConfigController extends BaseController {
      * 管理人员总数： 154中方管理： 35  外方管理 67  外方比例： 10%
      */
     @GetMapping("/personTypeStatistics")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.1管理人员配置" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult personTypeStatistics(@Validated(ValidationGroups.Select.class) QqchManagementPersonConfig qqchManagementPersonConfigParam) {
         Map<String, Integer> result = qqchManagementPersonConfigService.personNumCalc(qqchManagementPersonConfigParam);
         return AjaxResult.success(result);
@@ -40,6 +43,7 @@ public class QqchManagementPersonConfigController extends BaseController {
     /**
      * 同步项目组织数据
      */
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.1管理人员配置" ,businessType = CustomBusinessType.OTHER)
     @PostMapping("/synchData")
     public AjaxResult getInitData(@RequestBody QqchManagementPersonConfigVo vo) {
         QqchManagementPersonConfigVo qqchManagementPersonConfigVo = qqchManagementPersonConfigService.synchData(vo);
@@ -55,6 +59,7 @@ public class QqchManagementPersonConfigController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.1管理人员配置" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchManagementPersonConfigList(@Validated(ValidationGroups.Select.class) QqchManagementPersonConfig qqchManagementPersonConfigParam) {
         QqchManagementPersonConfigVo qqchManagementPersonConfigVo = qqchManagementPersonConfigService.getQqchManagementPersonConfigList(qqchManagementPersonConfigParam);
         return AjaxResult.success(qqchManagementPersonConfigVo);
@@ -75,6 +80,7 @@ public class QqchManagementPersonConfigController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.1管理人员配置" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchManagementPersonConfigList(@Validated(ValidationGroups.Save.class) @RequestBody QqchManagementPersonConfigVo qqchManagementPersonConfigVo) {
         qqchManagementPersonConfigService.save(qqchManagementPersonConfigVo);
         return AjaxResult.success(qqchManagementPersonConfigVo);
@@ -100,6 +106,7 @@ public class QqchManagementPersonConfigController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:remove")
     @PostMapping("/{ids}")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.1管理人员配置" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteQqchManagementPersonConfigByPks(@PathVariable Long[] ids) {
         List<Long> qqchManagementPersonConfigPkList = Arrays.asList(ids);
         return toAjax(qqchManagementPersonConfigService.deleteQqchManagementPersonConfigByPks(qqchManagementPersonConfigPkList));
@@ -138,6 +145,7 @@ public class QqchManagementPersonConfigController extends BaseController {
      * @return
      */
     @GetMapping("/getPopWindows")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.1管理人员配置" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getPopWindows(QqchManagementPersonConfig qqchManagementPersonConfig){
         List<QqchManagementPersonConfig> list = qqchManagementPersonConfigService.getPopWindows(qqchManagementPersonConfig);
         return AjaxResult.success(list);

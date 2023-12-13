@@ -4,6 +4,8 @@ import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeProced
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchOptimizeProcedurePlanService;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -43,6 +45,8 @@ public class QqchOptimizeProcedurePlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计优化变更策划", name = "\n" +
+            "2.5.2 优化程序策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo) {
         qqchOptimizeProcedurePlanService.save(qqchOptimizeProcedurePlanVo);
         return AjaxResult.success("保存成功！");
@@ -55,6 +59,8 @@ public class QqchOptimizeProcedurePlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:save")
     @PostMapping("/confirm")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-2.5 勘察设计优化变更策划", name = "\n" +
+            "2.5.2 优化程序策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo) {
         qqchOptimizeProcedurePlanService.confirm(qqchOptimizeProcedurePlanVo);
         return AjaxResult.success("确认成功！");

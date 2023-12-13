@@ -10,6 +10,8 @@ import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.Assembl
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.QqchSafeEnvirRiskListVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.SafeEnvirRiskListQueryVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.service.IQqchSafeEnvirRiskListService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -58,6 +60,8 @@ public class QqchSafeEnvirRiskListController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-8.8 环境风险管控策划", name = "\n" +
+            "8.8.1 环境风险管控" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSafeEnvirRiskListList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSafeEnvirRiskListVo qqchSafeEnvirRiskListVo) {
         qqchSafeEnvirRiskListService.insertQqchSafeEnvirRiskListList(qqchSafeEnvirRiskListVo);
         return AjaxResult.success();

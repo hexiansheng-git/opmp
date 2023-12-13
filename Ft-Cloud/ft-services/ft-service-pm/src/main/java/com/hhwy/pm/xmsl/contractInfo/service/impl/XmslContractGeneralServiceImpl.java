@@ -1,25 +1,18 @@
 package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.stream.StreamUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
-import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.domain.QqchSurveyWorkPlan;
-import com.hhwy.pm.qyzs.manage.qyzsManageContCondition.controller.QyzsManageContConditionController;
-import com.hhwy.pm.qyzs.manage.qyzsManageContCondition.domain.QyzsManageContCondition;
 import com.hhwy.pm.utils.HttpHeadersUtils;
 import com.hhwy.pm.utils.RestTemplateUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractGeneral;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.QyzsManageContConditionVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractGeneralVo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractGeneralMapper;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
@@ -27,9 +20,7 @@ import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractGeneralService;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
-import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -40,8 +31,10 @@ import org.springframework.util.Assert;
 import org.springframework.util.MultiValueMap;
 
 import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -220,7 +213,7 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
     @Override
     public List<XmslContractGeneral> dataHandler(XmslContractGeneralVo xmslContractGeneralVo) {
         //列表结构
-        List<QyzsManageContCondition> knowledgeList = xmslContractGeneralVo.getKnowledgeList();
+        List<QyzsManageContConditionVo> knowledgeList = xmslContractGeneralVo.getKnowledgeList();
         //树形结构
         List<XmslContractGeneral> alreadyTreeList = xmslContractGeneralVo.getAlreadyList();
         //弹窗未选择数据直接返回
@@ -228,7 +221,7 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
             return alreadyTreeList;
         }
         // 获取弹窗选中数据的所有父级和子集
-        List<QyzsManageContCondition> knowledgeAllList = getParentAndChilderNode(knowledgeList);
+        List<QyzsManageContConditionVo> knowledgeAllList = getParentAndChilderNode(knowledgeList);
         //若列表中无数据，只需返回弹窗选中的数据
         List<XmslContractGeneral> resultList = new ArrayList<>();
         if (CollectionUtil.isEmpty(alreadyTreeList)){
@@ -244,7 +237,7 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
         Set<String> alreadyCode = alreadyList.stream().map(XmslContractGeneral::getCode).collect(Collectors.toSet());
         //数据合并
         resultList.addAll(alreadyList);
-        for (QyzsManageContCondition condition : knowledgeAllList){
+        for (QyzsManageContConditionVo condition : knowledgeAllList){
             String contConditionNo = condition.getContConditionNo();
             if (alreadyCode.contains(contConditionNo)) {
                 //列表中已存在的无需处理
@@ -257,15 +250,16 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
     }
 
     //对象拷贝
-    private void transferBean(List<XmslContractGeneral> resultList, QyzsManageContCondition p) {
+    private void transferBean(List<XmslContractGeneral> resultList, QyzsManageContConditionVo p) {
         XmslContractGeneral xmslContractGeneral = new XmslContractGeneral();
         xmslContractGeneral.setCode(p.getContConditionNo());
         xmslContractGeneral.setName(p.getChineseConditonName());
         xmslContractGeneral.setContent(p.getChineseConditionContent());
-        xmslContractGeneral.setId(IdWorker.createId());
+        xmslContractGeneral.setId(p.getId());
         xmslContractGeneral.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
         xmslContractGeneral.setCreateUserName(SecurityUtils.getUserName());
         xmslContractGeneral.setCreateTime(DateUtils.getNowDate());
+        xmslContractGeneral.setPid(p.getPid());
         resultList.add(xmslContractGeneral);
     }
 
@@ -276,7 +270,9 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
             if (CollectionUtil.isEmpty(general.getChildren())) {
                 continue;
             }
-            treeToList(general.getChildren(), alreadyList);
+            List<XmslContractGeneral> children = general.getChildren();
+            general.setChildren(null);
+            treeToList(children, alreadyList);
         }
     }
 
@@ -285,12 +281,11 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
 
     /***
      * 功能描述: 获取传入id 的所有上下层级节点
-     * @param ids 节点
      * 作者: fushudong
      * 时间: 2023/12/11
      */
-    public List<QyzsManageContCondition> getParentAndChilderNode(List<QyzsManageContCondition> knowledgeList){
-        List<QyzsManageContCondition> resultList = new ArrayList<>();
+    public List<QyzsManageContConditionVo> getParentAndChilderNode(List<QyzsManageContConditionVo> knowledgeList){
+        List<QyzsManageContConditionVo> resultList = new ArrayList<>();
         //获取知识库合同通用条件列表
         String url = gmUrl + "/gm/qyzsManageContCondition/getAll";
         HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
@@ -298,9 +293,9 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
         AjaxResult ajaxResult = RestTemplateUtils.get(url, httpEntity, AjaxResult.class, new HashMap<>());
         Assert.isTrue(AjaxResult.isSuccess(ajaxResult), ObjectUtils.nvlString(ajaxResult.get(AjaxResult.MSG_TAG)));
         Object dataObj = ajaxResult.get(AjaxResult.DATA_TAG);
-//        List<QyzsManageContCondition> allList = (List<QyzsManageContCondition>);
+//        List<QyzsManageContConditionVo> allList = (List<QyzsManageContConditionVo>);
         String str = JSONObject.toJSONString(dataObj);
-        List<QyzsManageContCondition> allList = JSON.parseArray(str, QyzsManageContCondition.class);
+        List<QyzsManageContConditionVo> allList = JSON.parseArray(str, QyzsManageContConditionVo.class);
         if (CollectionUtil.isEmpty(allList)) {
             return resultList;
         }
@@ -309,20 +304,28 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
         searchParent(resultList, allList, knowledgeList, "c");
         //检索父级
         searchParent(resultList, allList, knowledgeList, "p");
-        return resultList.stream().distinct().sorted(Comparator.comparing(QyzsManageContCondition::getContConditionNo)).collect(Collectors.toList());
+        return resultList;
     }
 
-    //检索父级结点
-    private void searchParent(List<QyzsManageContCondition> resultList, List<QyzsManageContCondition> allList, List<QyzsManageContCondition> knowledgeList, String flag) {
-        List<QyzsManageContCondition> currentList = new ArrayList<>();
-        for (QyzsManageContCondition condition : knowledgeList) {
+    //检索祖籍、子集结点
+    private void searchParent(List<QyzsManageContConditionVo> resultList, List<QyzsManageContConditionVo> allList, List<QyzsManageContConditionVo> knowledgeList, String flag) {
+        Set<String> collect = resultList.stream().map(QyzsManageContConditionVo::getContConditionNo).collect(Collectors.toSet());
+        List<QyzsManageContConditionVo> currentList = new ArrayList<>();
+        for (QyzsManageContConditionVo condition : knowledgeList) {
             //检索祖级
             Long id = condition.getId();
-            List<QyzsManageContCondition> list = new ArrayList<>();
-            if (flag.equals("child")) {
-                list = allList.stream().filter(p -> id.equals(p.getPid())).collect(Collectors.toList());
+            Long pid = condition.getPid();
+            List<QyzsManageContConditionVo> list = new ArrayList<>();
+            if (flag.equals("c")) {
+                list = allList.stream()
+                        .filter(p -> !collect.contains(p.getContConditionNo()))
+                        .filter(p -> id != null && id.equals(p.getPid()))
+                        .collect(Collectors.toList());
             }else {
-                list = allList.stream().filter(p -> id.equals(p.getPid())).collect(Collectors.toList());
+                list = allList.stream()
+                        .filter(p -> !collect.contains(p.getContConditionNo()))
+                        .filter(p -> pid != null && pid.equals(p.getId()))
+                        .collect(Collectors.toList());
             }
             if (CollectionUtil.isEmpty(list)) {
                 continue;

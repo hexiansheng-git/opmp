@@ -7,6 +7,8 @@ import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanDto;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanVo;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.service.IQqchLabourDemandPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -34,6 +36,7 @@ public class QqchLabourDemandPlanController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.2劳动力需求计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchLabourDemandPlan(@Validated(ValidationGroups.Get.class) QqchLabourDemandPlan qqchLabourDemandPlanParam) {
         QqchLabourDemandPlan qqchLabourDemandPlan = qqchLabourDemandPlanService.getQqchLabourDemandPlan(qqchLabourDemandPlanParam);
         return AjaxResult.success(qqchLabourDemandPlan);
@@ -42,6 +45,7 @@ public class QqchLabourDemandPlanController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.2劳动力需求计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchLabourDemandPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchLabourDemandPlan qqchLabourDemandPlanParam) {
         qqchLabourDemandPlanService.insertQqchLabourDemandPlan(qqchLabourDemandPlanParam);
         return AjaxResult.success(qqchLabourDemandPlanParam);
@@ -79,6 +83,7 @@ public class QqchLabourDemandPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:list")
     @GetMapping("/personTypeStatistics")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.2劳动力需求计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult personTypeStatistics(@Validated(ValidationGroups.Select.class) QqchLabourDemandPlan qqchLabourDemandPlanParam){
         Map<String, Integer> result =  qqchLabourDemandPlanService.personNumCalc(qqchLabourDemandPlanParam);
         return AjaxResult.success(result);
@@ -92,6 +97,7 @@ public class QqchLabourDemandPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.2劳动力需求计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchLabourDemandPlanList(@Validated(ValidationGroups.Select.class) QqchLabourDemandPlan qqchLabourDemandPlanParam) {
         QqchLabourDemandPlanVo vo = qqchLabourDemandPlanService.getQqchLabourDemandPlanList(qqchLabourDemandPlanParam);
         return AjaxResult.success(vo);
@@ -106,6 +112,7 @@ public class QqchLabourDemandPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:list")
     @GetMapping("/listTreeWithSearch")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.2劳动力需求计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult listTreeWithSearch(@Validated(ValidationGroups.Select.class) QqchLabourDemandPlan qqchLabourDemandPlanParam) {
         QqchLabourDemandPlanVo vo = qqchLabourDemandPlanService.getQqchLabourDemandPlanListWithSearch(qqchLabourDemandPlanParam);
         return AjaxResult.success(vo);
@@ -120,6 +127,7 @@ public class QqchLabourDemandPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.2劳动力需求计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchLabourDemandPlanList(@Validated(ValidationGroups.Save.class) @RequestBody QqchLabourDemandPlanVo qqchLabourDemandPlanVo) {
         qqchLabourDemandPlanService.save(qqchLabourDemandPlanVo);
         return AjaxResult.success();
@@ -132,6 +140,7 @@ public class QqchLabourDemandPlanController extends BaseController {
      * @return
      */
     @PostMapping("/getAllWorkType")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.2劳动力需求计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getAllWorkType(@Validated(ValidationGroups.Save.class) @RequestBody QqchLabourDemandPlanVo qqchLabourDemandPlanVo) {
         List<String> list = qqchLabourDemandPlanService.getAllWorkType(qqchLabourDemandPlanVo);
         return AjaxResult.success(list);
@@ -145,6 +154,7 @@ public class QqchLabourDemandPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:selectCount")
     @PostMapping("/selectCount")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.2劳动力需求计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult select(@Validated(ValidationGroups.Save.class) @RequestBody QqchLabourDemandPlan qqchLabourDemandPlan) throws ParseException {
         if (qqchLabourDemandPlan.getStartTime() == null || qqchLabourDemandPlan.getEndTime() == null) {
             return AjaxResult.error("开始时间或者结束时间不能为空");
@@ -177,6 +187,7 @@ public class QqchLabourDemandPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:sychData")
     @PostMapping("/sychData")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.2劳动力需求计划" ,businessType = CustomBusinessType.OTHER)
     public AjaxResult sychData(@RequestBody QqchLabourDemandPlanVo vo1) {
         QqchLabourDemandPlanVo vo = qqchLabourDemandPlanService.sychData(vo1);
         return AjaxResult.success(vo);
@@ -190,6 +201,7 @@ public class QqchLabourDemandPlanController extends BaseController {
      * 时间: 2023/11/14
      */
     @GetMapping("/getWorkTeamList")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.2劳动力需求计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getWorkTeamList(@RequestParam(value = "workTeam", required = false) String workTeam){
         List<Map> result = qqchLabourDemandPlanService.getWorkTeamList(workTeam);
         return AjaxResult.success(result);

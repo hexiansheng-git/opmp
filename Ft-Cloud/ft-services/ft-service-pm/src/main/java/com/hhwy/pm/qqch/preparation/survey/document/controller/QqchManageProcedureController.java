@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.survey.document.controller;
 
 import com.hhwy.pm.qqch.preparation.survey.document.domain.vo.QqchManageProcedureVo;
 import com.hhwy.pm.qqch.preparation.survey.document.service.IQqchManageProcedureService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.web.bind.annotation.*;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
@@ -42,6 +44,8 @@ public class QqchManageProcedureController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchManageProcedure:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计优化变更策划", name = "\n" +
+            "2.8.1管理程序" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchManageProcedureVo qqchManageProcedureVo) {
         qqchManageProcedureService.save(qqchManageProcedureVo);
         return AjaxResult.success();
@@ -54,6 +58,8 @@ public class QqchManageProcedureController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchManageProcedure:save")
     @PostMapping("/confirm")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-2.8 勘察设计文件管理策划", name = "\n" +
+            "2.8.1管理程序" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchManageProcedureVo qqchManageProcedureVo) {
         qqchManageProcedureService.confirm(qqchManageProcedureVo);
         return AjaxResult.success();

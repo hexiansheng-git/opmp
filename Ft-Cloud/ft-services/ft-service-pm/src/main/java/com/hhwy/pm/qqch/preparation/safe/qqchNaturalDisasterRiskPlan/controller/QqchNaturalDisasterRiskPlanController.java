@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.qqchNaturalDisasterRiskPlan.domain.QqchNaturalDisasterRiskPlan;
 import com.hhwy.pm.qqch.preparation.safe.qqchNaturalDisasterRiskPlan.domain.vo.QqchNaturalDisasterRiskPlanVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchNaturalDisasterRiskPlan.service.IQqchNaturalDisasterRiskPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +37,7 @@ public class QqchNaturalDisasterRiskPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchNaturalDisasterRiskPlan:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-公共安全风险管控策划", name = "8.6.2自然灾害风险策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchNaturalDisasterRiskPlanList(@Validated(ValidationGroups.Select.class) QqchNaturalDisasterRiskPlan qqchNaturalDisasterRiskPlanParam) {
         QqchNaturalDisasterRiskPlanVo vo = qqchNaturalDisasterRiskPlanService.getQqchNaturalDisasterRiskPlanList(qqchNaturalDisasterRiskPlanParam);
         return AjaxResult.success(vo);
@@ -48,6 +51,7 @@ public class QqchNaturalDisasterRiskPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchNaturalDisasterRiskPlan:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-公共安全风险管控策划", name = "8.6.2自然灾害风险策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchNaturalDisasterRiskPlanList(@Validated(ValidationGroups.Save.class) @RequestBody QqchNaturalDisasterRiskPlanVo vo) {
         qqchNaturalDisasterRiskPlanService.save(vo);
         return AjaxResult.success();
@@ -56,6 +60,7 @@ public class QqchNaturalDisasterRiskPlanController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchNaturalDisasterRiskPlan:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-公共安全风险管控策划", name = "8.6.2自然灾害风险策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchNaturalDisasterRiskPlan(@Validated(ValidationGroups.Get.class) QqchNaturalDisasterRiskPlan qqchNaturalDisasterRiskPlanParam) {
         QqchNaturalDisasterRiskPlan qqchNaturalDisasterRiskPlan = qqchNaturalDisasterRiskPlanService.getQqchNaturalDisasterRiskPlan(qqchNaturalDisasterRiskPlanParam);
         return AjaxResult.success(qqchNaturalDisasterRiskPlan);
@@ -63,6 +68,7 @@ public class QqchNaturalDisasterRiskPlanController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchNaturalDisasterRiskPlan:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-公共安全风险管控策划", name = "8.6.2自然灾害风险策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchNaturalDisasterRiskPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchNaturalDisasterRiskPlan qqchNaturalDisasterRiskPlanParam) {
         qqchNaturalDisasterRiskPlanService.insertQqchNaturalDisasterRiskPlan(qqchNaturalDisasterRiskPlanParam);
         return AjaxResult.success(qqchNaturalDisasterRiskPlanParam);

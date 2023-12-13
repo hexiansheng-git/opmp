@@ -8,6 +8,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.QqchOtherContractItem;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.QqchOtherContractItemVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchOtherContractItemService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -104,6 +106,8 @@ public class QqchOtherContractItemController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchOtherContractItem:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-合同策划-4.1 主合同分析", name =
+            "4.1.3 其他合同事项分析", businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchOtherContractItemVo qqchOtherContractItemVo) {
         qqchOtherContractItemService.save(qqchOtherContractItemVo);
         return AjaxResult.success();

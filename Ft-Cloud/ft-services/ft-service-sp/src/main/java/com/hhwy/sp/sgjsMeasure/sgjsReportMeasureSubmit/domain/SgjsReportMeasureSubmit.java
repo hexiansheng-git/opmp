@@ -209,6 +209,13 @@ public class SgjsReportMeasureSubmit extends TreeNode<SgjsReportMeasureSubmit> {
     //@Excel(name = "预留字段5")
     private String ptVar5;
 
+    //导入查询
+    private List<Long> ids;
+
+    //新增标识
+    private String isAdd;
+
+
     @JsonIgnore
     public Long getId() {
         return id;

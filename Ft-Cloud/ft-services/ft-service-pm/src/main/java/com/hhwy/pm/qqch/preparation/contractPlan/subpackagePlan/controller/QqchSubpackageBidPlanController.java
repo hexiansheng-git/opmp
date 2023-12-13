@@ -9,6 +9,8 @@ import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.domain.QqchSubpa
 import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.domain.vo.QqchSubpackageBidPlanVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.service.IQqchSubpackageBidPlanService;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -105,6 +107,8 @@ public class QqchSubpackageBidPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-合同策划-4.2 分包招标策划", name =
+            "4.2 分包招标策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody QqchSubpackageBidPlanVo qqchSubpackageBidPlanVo) {
         qqchSubpackageBidPlanService.save(qqchSubpackageBidPlanVo);
         return AjaxResult.success();

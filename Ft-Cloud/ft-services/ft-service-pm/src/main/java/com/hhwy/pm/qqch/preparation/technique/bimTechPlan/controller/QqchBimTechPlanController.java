@@ -8,6 +8,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.technique.bimTechPlan.domain.QqchBimTechPlan;
 import com.hhwy.pm.qqch.preparation.technique.bimTechPlan.domain.vo.QqchBimTechPlanVo;
 import com.hhwy.pm.qqch.preparation.technique.bimTechPlan.service.IQqchBimTechPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -104,6 +106,8 @@ public class QqchBimTechPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchBimTechPlan:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.10 BIM技术策划", name = "\n" +
+            "3.10 BIM技术策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchBimTechPlanVo qqchBimTechPlanVo) {
         qqchBimTechPlanService.save(qqchBimTechPlanVo);
         return AjaxResult.success();

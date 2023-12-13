@@ -2,20 +2,18 @@ package com.hhwy.pm.qqch.preparation.safe.organ.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.organ.domain.QqchSafeOrganDutyPlan;
 import com.hhwy.pm.qqch.preparation.safe.organ.domain.vo.QqchSafeOrganDutyPlanVo;
 import com.hhwy.pm.qqch.preparation.safe.organ.service.IQqchSafeOrganDutyPlanService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
-import java.math.BigDecimal;
-import java.util.List;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -52,6 +50,8 @@ public class QqchSafeOrganDutyPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSafeOrganDutyPlan:add")
     @PostMapping("/batchSave")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-8.1 安全组织机构及人员策划", name = "\n" +
+            "8.1.1 安全组织职责策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSave(@RequestBody QqchSafeOrganDutyPlanVo qqchSafeOrganDutyPlanVo) {
         qqchSafeOrganDutyPlanService.batchSave(qqchSafeOrganDutyPlanVo);
         return AjaxResult.success();

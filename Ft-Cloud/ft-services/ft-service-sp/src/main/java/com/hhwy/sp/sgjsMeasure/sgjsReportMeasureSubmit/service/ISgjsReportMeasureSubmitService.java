@@ -27,4 +27,6 @@ public interface ISgjsReportMeasureSubmitService {
     int deleteSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
 
             int deleteSgjsReportMeasureSubmitByPks(List<Long> sgjsReportMeasureSubmitPkList);
-    }
+
+    List<SgjsReportMeasureSubmit> getIds(List<Long> ids);
+}

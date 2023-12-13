@@ -8,6 +8,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.vo.QqchProjectOperationObjectiveVo;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.service.IQqchProjectOperationObjectiveService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -104,6 +106,8 @@ public class QqchProjectOperationObjectiveController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-成本管控策划-5.2 项目整体经营目标", name =
+            "5.2 项目整体经营目标", businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody QqchProjectOperationObjectiveVo qqchProjectOperationObjectiveVo) {
         qqchProjectOperationObjectiveService.save(qqchProjectOperationObjectiveVo);
         return AjaxResult.success();
