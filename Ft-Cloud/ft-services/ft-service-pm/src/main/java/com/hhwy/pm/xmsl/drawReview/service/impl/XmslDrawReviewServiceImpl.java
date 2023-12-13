@@ -816,9 +816,14 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         //2、存储wbs以及清单的父级
 //        loadParentWbsList(id);
         String tenantKey = SecurityUtils.getTenantKey();
-        //3、生成工程量报表 & 主材报表
+        //3、同步挂接关系到最新wbs
+        syncRelate2Wbs(drawReview);
+        //4、生成工程量报表 & 主材报表
         ThreadPoolUtil.execute(()->{
             MySecurityUtils.set(tenantKey);
+            try {
+                Thread.sleep(700L);
+            } catch (InterruptedException e) {e.printStackTrace();}
             //切换租户
             String oldDataSource = DynamicDataSourceContextHolder.peek();
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
@@ -833,8 +838,6 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                 DynamicDataSourceContextHolder.push(oldDataSource);
             }
         });
-        //4、同步挂接关系到最新wbs
-        syncRelate2Wbs(drawReview);
     }
 
     //加载图纸复核、
