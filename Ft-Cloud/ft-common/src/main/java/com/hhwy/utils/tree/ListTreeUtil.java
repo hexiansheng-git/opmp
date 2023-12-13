@@ -180,6 +180,7 @@ public class ListTreeUtil {
     public static <T> List<T> formatList(List<T> source,BiConsumer<T,Long> setId,BiConsumer<T,Long> setPid, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
         List<T> resultList = new ArrayList<>();
         for (T node : source) {
+            setPid.accept(node,null);
             recur(node, resultList, setId, setPid, getChildren, setChildren);
         }
         return resultList;
