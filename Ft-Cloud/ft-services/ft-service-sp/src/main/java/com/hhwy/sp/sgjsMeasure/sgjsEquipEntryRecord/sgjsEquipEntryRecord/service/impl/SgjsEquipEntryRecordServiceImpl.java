@@ -6,13 +6,13 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.PmServiceApi;
-import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.mapper.SgjsEquipEntryRecordMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.service.ISgjsEquipEntryRecordService;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.mapper.SgjsEquipEntryRecordInfoMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.domain.SgjsEquipEntryRecordInfoDetail;
+import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.mapper.SgjsEquipEntryRecordInfoDetailMapper;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
@@ -40,6 +40,8 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
     private SgjsEquipEntryRecordMapper sgjsEquipEntryRecordMapper;
     @Autowired
     private SgjsEquipEntryRecordInfoMapper infoMapper;
+    @Autowired
+    private SgjsEquipEntryRecordInfoDetailMapper detailMapper;
     @Autowired
     private PmServiceApi pmServiceApi;
 
@@ -70,6 +72,17 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             String id = list.get(i).getId()+"";
             List<SgjsEquipEntryRecordInfo> infos = infoList.stream().filter(e -> String.valueOf(e.getRecordId()).equals(id)).collect(Collectors.toList());
             list.get(i).setInfoList(infos);
+        }
+        //查询自检自校详情表数据
+        List<String> infoIdList = infoList.stream().map(e -> e.getId() + "").collect(Collectors.toList());
+        List<SgjsEquipEntryRecordInfoDetail> detailList= detailMapper.selectByInfoId(infoIdList);
+        if(!CollectionUtils.isEmpty(detailList)){
+            for (int i = 0; i < infoList.size(); i++) {
+                SgjsEquipEntryRecordInfo info = infoList.get(i);
+                String infoId=info.getId()+"";
+                List<SgjsEquipEntryRecordInfoDetail> detaList = detailList.stream().filter(e -> String.valueOf(e.getInfoId()).equals(infoId)).collect(Collectors.toList());
+                info.setDetailList(detaList);
+            }
         }
         return list;
     }
@@ -150,7 +163,7 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             if(!CollectionUtils.isEmpty(dataList)){
                 sgjsEquipEntryRecordMapper.insertSgjsEquipEntryRecordList(dataList);
             }
-            return AjaxResult.success(list);
+            return AjaxResult.success(dataList);
         }
         logger.error("同步3.6.4异常");
         return null;

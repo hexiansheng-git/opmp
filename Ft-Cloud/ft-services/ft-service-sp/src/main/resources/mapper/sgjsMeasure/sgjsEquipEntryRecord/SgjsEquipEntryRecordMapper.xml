@@ -549,6 +549,11 @@
                     when `id`=#{item.id} then #{item.updateTime}
                 </foreach>
             </trim>
+            <trim prefix="actual_num  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.actualNum}
+                </foreach>
+            </trim>
         </trim>
         where `id` in
         <foreach collection="list" index="index" item="item" separator="," open="(" close=")">

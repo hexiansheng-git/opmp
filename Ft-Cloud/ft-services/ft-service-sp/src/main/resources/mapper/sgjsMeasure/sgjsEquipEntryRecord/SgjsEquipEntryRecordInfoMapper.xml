@@ -170,6 +170,12 @@
             <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+            <if test="null!=exportIdList and exportIdList.size()>0">
+             and id in
+             <foreach collection="exportIdList" item="id" open="(" close=")" separator=",">
+                 #{id}
+             </foreach>
+            </if>
         </where>
         order by create_time desc
     </select>
@@ -325,7 +331,7 @@
     <update id="updateSgjsEquipEntryRecordInfo">
         update sgjs_equip_entry_record_info
         <trim prefix="SET" suffixOverrides=",">
-            <if test="id != null ">`id` = #{id},</if>
+<!--            <if test="id != null ">`id` = #{id},</if>-->
             <if test="recordId != null ">`record_id` = #{recordId},</if>
             <if test="manageCode != null  and  manageCode != ''">`manage_code` = #{manageCode},</if>
             <if test="categoryCode != null  and  categoryCode != ''">`category_code` = #{categoryCode},</if>
@@ -611,11 +617,12 @@
     </update>
 
     <delete id="deleteAll" parameterType="com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo">
-        update `sgjs_equip_entry_record_info` set del_flag = 1 ,update_time=#{updateTime},update_user=#{updateUser}
+        <!-- update `sgjs_equip_entry_record_info` set del_flag = 1 ,update_time=#{updateTime},update_user=#{updateUser}-->
+        delete from  sgjs_equip_entry_record_info
     </delete>
 
     <select id="selectByIdList" resultMap="SgjsEquipEntryRecordInfoResultMap">
-        select  * from sgjs_equip_entry_record_info where record_id in
+        select  * from sgjs_equip_entry_record_info where del_flag='0' and record_id in
         <foreach collection="idList" separator="," open="(" close=")" item="id">
             #{id}
         </foreach>

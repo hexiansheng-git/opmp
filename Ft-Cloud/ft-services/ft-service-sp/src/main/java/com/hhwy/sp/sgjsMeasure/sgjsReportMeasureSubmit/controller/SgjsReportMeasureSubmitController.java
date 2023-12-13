@@ -129,4 +129,16 @@ public class SgjsReportMeasureSubmitController extends BaseController {
         ExcelUtils<SgjsReportMeasureSubmit> utils = new ExcelUtils<>(SgjsReportMeasureSubmit.class);
         utils.exportExcel(response,treeList,DateUtils.getDate());
     }
+
+
+    /**
+     * 批量导出附件压缩包
+     *
+     * @param response
+     * @param submit
+     */
+    @PostMapping("/bathExportZip")
+    public void bathExportZip(HttpServletResponse response,@RequestBody SgjsReportMeasureSubmit submit){
+        sgjsReportMeasureSubmitService.bathExportZip(response,submit);
+    }
 }

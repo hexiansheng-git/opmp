@@ -1,6 +1,8 @@
 package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.domain.SgjsEquipEntryRecordInfoDetail;
 
 /**
@@ -25,4 +27,11 @@ public interface ISgjsEquipEntryRecordInfoDetailService {
     int deleteSgjsEquipEntryRecordInfoDetail(SgjsEquipEntryRecordInfoDetail sgjsEquipEntryRecordInfoDetail);
 
     int deleteSgjsEquipEntryRecordInfoDetailByPks(List<Long> sgjsEquipEntryRecordInfoDetailPkList);
+
+    /**
+     * 批量新增
+     *
+     * @param map
+     */
+    void batchAddMap(Map<String, Object> map);
 }

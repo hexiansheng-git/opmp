@@ -3,6 +3,8 @@ package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDet
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
@@ -65,6 +67,20 @@ public class SgjsEquipEntryRecordInfoDetailController extends BaseController{
         sgjsEquipEntryRecordInfoDetailService.insertSgjsEquipEntryRecordInfoDetailList(sgjsEquipEntryRecordInfoDetailListParam);
         return AjaxResult.success();
     }
+    /**
+     * 批量新增
+     *
+     * @param map
+     * @return
+     */
+    @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfoDetail:batchAddMap")
+    @PostMapping("/batchAddMap")
+    public AjaxResult batchAddMap(@Validated(ValidationGroups.Save.class) @RequestBody Map<String,Object> map){
+        sgjsEquipEntryRecordInfoDetailService.batchAddMap(map);
+        return AjaxResult.success();
+    }
+
+
 
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfoDetail:update")
     @PostMapping("/update")

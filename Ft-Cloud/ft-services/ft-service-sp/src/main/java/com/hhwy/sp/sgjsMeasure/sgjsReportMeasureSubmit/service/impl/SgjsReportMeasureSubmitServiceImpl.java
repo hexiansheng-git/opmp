@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
+import com.hhwy.sp.utils.FileUtils;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import java.util.ArrayList;
@@ -13,7 +14,11 @@ import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +27,12 @@ import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.ISgjsReportMeasur
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
 import org.springframework.util.CollectionUtils;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author zmh
  * @date 2023-12-08 16:19:52
- * @remark 
+ * @remark
  */
 @Service
 public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSubmitService{
@@ -33,7 +40,7 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
     @Autowired
     private SgjsReportMeasureSubmitMapper sgjsReportMeasureSubmitMapper;
 
-                                                                                                                                                                                                                                                                                                                                                    
+
     public SgjsReportMeasureSubmit getSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit) {
         return sgjsReportMeasureSubmitMapper.getSgjsReportMeasureSubmit(sgjsReportMeasureSubmit);
     }
@@ -117,15 +124,15 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
         return sgjsReportMeasureSubmitMapper.updateSgjsReportMeasureSubmit(sgjsReportMeasureSubmit);
     }
 
-            @Transactional
-        public int updateSgjsReportMeasureSubmitList(List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList) {
-            for (SgjsReportMeasureSubmit sgjsReportMeasureSubmit : sgjsReportMeasureSubmitList) {
-                sgjsReportMeasureSubmit.setUpdateUser(SecurityUtils.getUserName());
-                sgjsReportMeasureSubmit.setUpdateTime(DateUtils.getNowDate());
-            }
-            return sgjsReportMeasureSubmitMapper.updateSgjsReportMeasureSubmitList(sgjsReportMeasureSubmitList);
+    @Transactional
+    public int updateSgjsReportMeasureSubmitList(List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList) {
+        for (SgjsReportMeasureSubmit sgjsReportMeasureSubmit : sgjsReportMeasureSubmitList) {
+            sgjsReportMeasureSubmit.setUpdateUser(SecurityUtils.getUserName());
+            sgjsReportMeasureSubmit.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return sgjsReportMeasureSubmitMapper.updateSgjsReportMeasureSubmitList(sgjsReportMeasureSubmitList);
+    }
+
     @Transactional
     public int deleteSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit) {
         sgjsReportMeasureSubmit.setUpdateUser(SecurityUtils.getUserName());
@@ -133,13 +140,29 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
         return sgjsReportMeasureSubmitMapper.deleteSgjsReportMeasureSubmit(sgjsReportMeasureSubmit);
     }
 
-            @Transactional
-        public int deleteSgjsReportMeasureSubmitByPks(List<Long> sgjsReportMeasureSubmitPkList) {
-            return sgjsReportMeasureSubmitMapper.deleteSgjsReportMeasureSubmitByPks(sgjsReportMeasureSubmitPkList);
-        }
+    @Transactional
+    public int deleteSgjsReportMeasureSubmitByPks(List<Long> sgjsReportMeasureSubmitPkList) {
+        return sgjsReportMeasureSubmitMapper.deleteSgjsReportMeasureSubmitByPks(sgjsReportMeasureSubmitPkList);
+    }
 
     @Override
     public List<SgjsReportMeasureSubmit> getIds(List<Long> ids) {
         return sgjsReportMeasureSubmitMapper.getIds(ids);
     }
+
+
+    @Override
+    public void bathExportZip(HttpServletResponse response, SgjsReportMeasureSubmit submit) {
+        List<SgjsReportMeasureSubmit> list = sgjsReportMeasureSubmitMapper.getSgjsReportMeasureSubmitList(submit);
+        if(!org.springframework.util.CollectionUtils.isEmpty(list)){
+            return;
+        }
+        List<String> fileGroupIdList = list.stream().map(e -> e.getFileGroupId()).collect(Collectors.toList());
+
+        FileUtils.getFileByGroupIds(fileGroupIdList);
+
+    }
+
+
+
 }
