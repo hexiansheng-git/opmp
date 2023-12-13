@@ -11,13 +11,15 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchMajorConstructio
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchMajorConstructionComparisonService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
-import java.math.BigDecimal;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -55,11 +57,16 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
         deleteParam.setVersion(qqchMajorConstructionComparisonVo.getVersion());
         qqchMajorConstructionComparisonMapper.deleteQqchMajorConstructionComparison(deleteParam);
 
-        if (!CollectionUtils.isEmpty(qqchMajorConstructionComparisonVo.getTreeList())) {
+        List<QqchMajorConstructionComparison> treeList = qqchMajorConstructionComparisonVo.getTreeList();
+        if (!CollectionUtils.isEmpty(treeList)) {
             // 树转list
-            List<QqchMajorConstructionComparison> insertList = TreeUtil
-                .treeToList(qqchMajorConstructionComparisonVo.getTreeList());
-
+            List<QqchMajorConstructionComparison> insertList = ListTreeUtil.formatList(
+                    treeList,
+                    QqchMajorConstructionComparison::setId,
+                    QqchMajorConstructionComparison::setPid,
+                    QqchMajorConstructionComparison::setSort,
+                    QqchMajorConstructionComparison::getChildren,
+                    QqchMajorConstructionComparison::setChildren);
             if (!CollectionUtils.isEmpty(insertList)) {
                 for (QqchMajorConstructionComparison insert : insertList) {
                     insert.setVersion(qqchMajorConstructionComparisonVo.getVersion());
