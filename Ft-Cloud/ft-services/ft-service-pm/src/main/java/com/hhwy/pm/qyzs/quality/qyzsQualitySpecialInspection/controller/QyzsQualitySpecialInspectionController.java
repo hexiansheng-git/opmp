@@ -2,10 +2,12 @@ package com.hhwy.pm.qyzs.quality.qyzsQualitySpecialInspection.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.pm.gm.wbs.service.ITWbsService;
 import com.hhwy.pm.qyzs.quality.qyzsQualitySpecialInspection.domain.QyzsQualitySpecialInspection;
 import com.hhwy.pm.utils.HttpHeadersUtils;
 import com.hhwy.pm.utils.RestTemplateUtils;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -27,16 +29,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/qyzsQualitySpecialInspection")
 public class QyzsQualitySpecialInspectionController extends BaseController {
 
+    @Autowired
+    private ITWbsService wbsService;
+
     @Value("${gm.back-url}")
     private String gmUrl;
 
 //    @PreAuthorize(hasPermi = "qyzsQualitySpecialInspection:list")
     @GetMapping("/list")
     public AjaxResult getQyzsQualitySpecialInspectionList(@Validated(ValidationGroups.Select.class) QyzsQualitySpecialInspection param) {
-        String url = gmUrl + "/gm/qyzsQualitySpecialInspection/list?inspectionName={inspectionName}&inspectionProject={inspectionProject}";
+        String projectType = wbsService.getDefaultEngineeringType();
+        String url = gmUrl + "/gm/qyzsQualitySpecialInspection/list?inspectionName={inspectionName}&inspectionProject={inspectionProject}&projectType={projectType}";
         HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
         HttpEntity<MultiValueMap<String,Object>> httpEntity = new HttpEntity<>(headers);
-        return RestTemplateUtils.get(url, httpEntity, AjaxResult.class, param.getInspectionName(), param.getInspectionProject());
+        return RestTemplateUtils.get(url, httpEntity, AjaxResult.class, param.getInspectionName(), param.getInspectionProject(), projectType);
     }
 
 }
