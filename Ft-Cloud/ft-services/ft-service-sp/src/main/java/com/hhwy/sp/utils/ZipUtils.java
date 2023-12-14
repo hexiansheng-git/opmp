@@ -24,7 +24,7 @@ public class ZipUtils {
      * @param files
      * @param response
      */
-    public void zipFile(List<File> files, HttpServletResponse response){
+    public static void zipFile(List<File> files, HttpServletResponse response){
         String zipFileName= "设备二维码";
         BufferedOutputStream bos = null ;
         FileInputStream in = null;
@@ -58,6 +58,7 @@ public class ZipUtils {
             }
         } catch (Exception e){
             e.printStackTrace();
+            System.out.println("异常拉！");
         }finally {
 
             try {
