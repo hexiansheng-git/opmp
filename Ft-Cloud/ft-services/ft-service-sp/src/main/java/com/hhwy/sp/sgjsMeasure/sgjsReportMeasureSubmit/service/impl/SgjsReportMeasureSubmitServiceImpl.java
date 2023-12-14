@@ -7,8 +7,13 @@ import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManag
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
 import com.hhwy.sp.utils.FileUtils;
+import com.hhwy.sp.utils.ZipUtils;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
@@ -19,6 +24,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.map.HashedMap;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,9 +84,11 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
         for (SgjsReportMeasureSubmit sgjsReportMeasureSubmit : sgjsReportMeasureSubmitVo.getTreeList()) {
             sgjsReportMeasureSubmit.setRealStartDate(sgjsReportMeasureSubmit.getRealStartDateStr() == null ? null : FtDateUtils.parseDate(sgjsReportMeasureSubmit.getRealStartDateStr().replaceAll("(?:年|月|日)", "-")));
             sgjsReportMeasureSubmit.setPlanStartDate(sgjsReportMeasureSubmit.getPlanStartDateStr() == null ? null : FtDateUtils.parseDate(sgjsReportMeasureSubmit.getPlanStartDateStr().replaceAll("(?:年|月|日)", "-")));
-            sgjsReportMeasureSubmit.setCreateUser(SecurityUtils.getUserName());
-            sgjsReportMeasureSubmit.setCreateTime(DateUtils.getNowDate());
-            sgjsReportMeasureSubmit.setId(IdWorker.createId());
+            sgjsReportMeasureSubmit.setCreateTime(DateTime.now());
+            sgjsReportMeasureSubmit.setCreateUser(SecurityUtils.getUserId() + "");
+            sgjsReportMeasureSubmit.setCreateUserName(SecurityUtils.getUserName() + "");
+            sgjsReportMeasureSubmit.setUpdateTime(DateTime.now());
+            sgjsReportMeasureSubmit.setUpdateUser(SecurityUtils.getUserId() + "");
         }
         List<SgjsReportMeasureSubmit> insertList = sgjsReportMeasureSubmitVo.getTreeList().stream().filter(r -> StringUtils.isNotEmpty(r.getIsAdd()) && r.getIsAdd().equals("1")).collect(Collectors.toList());
         //批量入库
@@ -109,6 +117,7 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
             info.setId(Long.parseLong(delIdList.get(i)));
             info.setUpdateUser(SecurityUtils.getUserId()+"");
             info.setUpdateTime(DateUtils.getNowDate());
+            info.setDelFlag("1");
             list.add(info);
         }
         //删除
@@ -154,13 +163,15 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
     @Override
     public void bathExportZip(HttpServletResponse response, SgjsReportMeasureSubmit submit) {
         List<SgjsReportMeasureSubmit> list = sgjsReportMeasureSubmitMapper.getSgjsReportMeasureSubmitList(submit);
-        if(!org.springframework.util.CollectionUtils.isEmpty(list)){
+        if(CollectionUtils.isEmpty(list)){
             return;
         }
         List<String> fileGroupIdList = list.stream().map(e -> e.getFileGroupId()).collect(Collectors.toList());
 
-        FileUtils.getFileByGroupIds(fileGroupIdList);
+        FileUtils fileUtils=new FileUtils();
+        List<File> fileList = fileUtils.getFileByGroupIds(fileGroupIdList);
 
+        ZipUtils.zipFile(fileList,response);
     }
 
 

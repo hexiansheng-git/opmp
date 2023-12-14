@@ -6,6 +6,7 @@ import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -309,6 +310,64 @@ public class TreeUtil {
             for (T child : children) {
                 child.setSort(sort++);
                 splitWithoutId(child, resultList);
+            }
+        }
+    }
+
+    /**
+     * 树形list转list 补充id(没有id生成id)
+     *
+     * @param source
+     * @return
+     */
+    public static <T extends TreeNode<T>> List<T> treeToListSupplyId(List<T> source) {
+        List<T> result = new ArrayList<>();
+        if (CollectionUtils.isEmpty(source)) {
+            return result;
+        }
+
+        int sort = 1;
+        for (T node : source) {
+            node.setSort(sort++);
+            splitSupplyId(node, result);
+        }
+        return result;
+    }
+
+    private static <T extends TreeNode<T>> void splitSupplyId(T node, List<T> resultList) {
+        Long id = IdWorker.createId();
+        int sort = 1;
+        List<T> children = node.getChildren();
+        if(node.getId() == null) {
+            node.setId(id);
+        } else {
+            try {
+                Field isAdd = node.getClass().getDeclaredField("isAdd");
+                isAdd.setAccessible(true);
+                String add = (String) isAdd.get(node);
+                if("1".equals(add)) node.setId(id);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        node.setChildren(null);
+        resultList.add(node);
+        if (!CollectionUtils.isEmpty(children)) {
+            for (T child : children) {
+                if(child.getPid() == null) {
+                    child.setPid(node.getId());
+                } else {
+                    try {
+                        Field isAdd = child.getClass().getDeclaredField("isAdd");
+                        isAdd.setAccessible(true);
+                        String add = (String) isAdd.get(child);
+                        if("1".equals(add)) child.setPid(node.getId());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                child.setSort(sort++);
+                splitSupplyId(child, resultList);
             }
         }
     }

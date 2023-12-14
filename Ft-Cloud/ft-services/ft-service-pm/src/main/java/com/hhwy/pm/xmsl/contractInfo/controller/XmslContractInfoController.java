@@ -181,4 +181,13 @@ public class XmslContractInfoController extends BaseController {
         return AjaxResult.success();
     }
 
+    @GetMapping("test1")
+    public AjaxResult test1(Long id){
+        XmslContractInfo query = new XmslContractInfo();
+        query.setId(id);
+        XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(query);
+        xmslContractInfoService.setEffectiveAmountDollar(xmslContractInfo);
+        return AjaxResult.success(xmslContractInfo);
+    }
+
 }

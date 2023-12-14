@@ -27,7 +27,7 @@ public class PreparationEntity {
     /**
      * 字段描述：版本
      */
-    @NotNull(message = "版本不能为空！",groups = ValidationGroups.Save.class)
+//    @NotNull(message = "版本不能为空！",groups = ValidationGroups.Save.class)
     private BigDecimal version;
     /**
      * 字段描述：菜单id

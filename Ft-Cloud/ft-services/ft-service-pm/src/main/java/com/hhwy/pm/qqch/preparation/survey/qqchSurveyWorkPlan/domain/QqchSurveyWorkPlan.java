@@ -245,4 +245,7 @@ public class QqchSurveyWorkPlan extends TreeNode<QqchSurveyWorkPlan> {
     private String taskStatus;
 
 
+    private Integer sort;
+
+
 }

@@ -110,8 +110,8 @@ public class SgjsReportMeasureSubmitController extends BaseController {
             sgjsReportMeasureSubmitPkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, SgjsReportMeasureSubmit sgjsReportMeasureSubmitParam) throws IOException {
+    @PostMapping("/export")
+    public void export(HttpServletResponse response,@RequestBody SgjsReportMeasureSubmit sgjsReportMeasureSubmitParam) throws IOException {
         List<Long> ids = sgjsReportMeasureSubmitParam.getIds();
         List<SgjsReportMeasureSubmit> treeList = null;
         if(CollectionUtils.isEmpty(ids)){
@@ -122,7 +122,7 @@ public class SgjsReportMeasureSubmitController extends BaseController {
             }
         }else{
             List<SgjsReportMeasureSubmit> list = sgjsReportMeasureSubmitService.getIds(ids);
-            if(!CollectionUtils.isEmpty(list)){
+            if(CollectionUtils.isNotEmpty(list)){
                 treeList = list;
             }
         }

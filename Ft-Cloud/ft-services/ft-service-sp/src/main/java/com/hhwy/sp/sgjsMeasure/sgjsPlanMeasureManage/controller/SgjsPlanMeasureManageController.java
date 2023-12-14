@@ -127,8 +127,8 @@ public class SgjsPlanMeasureManageController extends BaseController {
             sgjsPlanMeasureManagePkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, SgjsPlanMeasureManage sgjsPlanMeasureManageParam) throws IOException {
+    @PostMapping("/export")
+    public void export(HttpServletResponse response,@RequestBody SgjsPlanMeasureManage sgjsPlanMeasureManageParam) throws IOException {
         List<Long> ids = sgjsPlanMeasureManageParam.getIds();
         List<SgjsPlanMeasureManage> treeList = null;
         if(CollectionUtils.isEmpty(ids)){
@@ -139,7 +139,7 @@ public class SgjsPlanMeasureManageController extends BaseController {
             }
         }else{
             List<SgjsPlanMeasureManage> list = sgjsPlanMeasureManageService.getIds(ids);
-            if(CollectionUtils.isEmpty(list)){
+            if(CollectionUtils.isNotEmpty(list)){
                 treeList = list;
             }
         }
