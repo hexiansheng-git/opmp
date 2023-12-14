@@ -74,6 +74,9 @@ public class VersionUtil {
             /*查询当前最接近（小于等于）指定版本的版本号*/
             version = commonMapper.selectLessOrEqualAssignVersionByType(tableName, version, type);
         }
+        if(version == null){
+            version = BigDecimal.ONE;
+        }
         return version;
     }
 }
