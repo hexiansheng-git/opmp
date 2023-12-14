@@ -84,9 +84,11 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
         for (SgjsReportMeasureSubmit sgjsReportMeasureSubmit : sgjsReportMeasureSubmitVo.getTreeList()) {
             sgjsReportMeasureSubmit.setRealStartDate(sgjsReportMeasureSubmit.getRealStartDateStr() == null ? null : FtDateUtils.parseDate(sgjsReportMeasureSubmit.getRealStartDateStr().replaceAll("(?:年|月|日)", "-")));
             sgjsReportMeasureSubmit.setPlanStartDate(sgjsReportMeasureSubmit.getPlanStartDateStr() == null ? null : FtDateUtils.parseDate(sgjsReportMeasureSubmit.getPlanStartDateStr().replaceAll("(?:年|月|日)", "-")));
-            sgjsReportMeasureSubmit.setCreateUser(SecurityUtils.getUserName());
-            sgjsReportMeasureSubmit.setCreateTime(DateUtils.getNowDate());
-            sgjsReportMeasureSubmit.setId(IdWorker.createId());
+            sgjsReportMeasureSubmit.setCreateTime(DateTime.now());
+            sgjsReportMeasureSubmit.setCreateUser(SecurityUtils.getUserId() + "");
+            sgjsReportMeasureSubmit.setCreateUserName(SecurityUtils.getUserName() + "");
+            sgjsReportMeasureSubmit.setUpdateTime(DateTime.now());
+            sgjsReportMeasureSubmit.setUpdateUser(SecurityUtils.getUserId() + "");
         }
         List<SgjsReportMeasureSubmit> insertList = sgjsReportMeasureSubmitVo.getTreeList().stream().filter(r -> StringUtils.isNotEmpty(r.getIsAdd()) && r.getIsAdd().equals("1")).collect(Collectors.toList());
         //批量入库
@@ -115,6 +117,7 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
             info.setId(Long.parseLong(delIdList.get(i)));
             info.setUpdateUser(SecurityUtils.getUserId()+"");
             info.setUpdateTime(DateUtils.getNowDate());
+            info.setDelFlag("1");
             list.add(info);
         }
         //删除

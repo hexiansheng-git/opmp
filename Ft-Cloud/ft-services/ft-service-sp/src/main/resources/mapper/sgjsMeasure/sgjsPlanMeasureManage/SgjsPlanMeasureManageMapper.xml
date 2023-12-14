@@ -378,46 +378,6 @@
           when `id`=#{item.id} then #{item.updateTime}
         </foreach>
       </trim>
-      <trim prefix="del_user  = case" suffix="end,">
-        <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.delUser}
-        </foreach>
-      </trim>
-      <trim prefix="del_time  = case" suffix="end,">
-        <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.delTime}
-        </foreach>
-      </trim>
-      <trim prefix="del_flag  = case" suffix="end,">
-        <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.delFlag}
-        </foreach>
-      </trim>
-      <trim prefix="pt_var1  = case" suffix="end,">
-        <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.ptVar1}
-        </foreach>
-      </trim>
-      <trim prefix="pt_var2  = case" suffix="end,">
-        <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.ptVar2}
-        </foreach>
-      </trim>
-      <trim prefix="pt_var3  = case" suffix="end,">
-        <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.ptVar3}
-        </foreach>
-      </trim>
-      <trim prefix="pt_var4  = case" suffix="end,">
-        <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.ptVar4}
-        </foreach>
-      </trim>
-      <trim prefix="pt_var5  = case" suffix="end,">
-        <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.ptVar5}
-        </foreach>
-      </trim>
       <trim prefix="serial_number  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.serialNumber}
@@ -514,6 +474,11 @@
       <trim prefix="update_time  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.updateTime}
+        </foreach>
+      </trim>
+      <trim prefix="del_flag  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delFlag}
         </foreach>
       </trim>
     </trim>

@@ -615,6 +615,11 @@
           when `id`=#{item.id} then #{item.updateTime}
         </foreach>
       </trim>
+      <trim prefix="del_flag  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delFlag}
+        </foreach>
+      </trim>
     </trim>
     where `id` in
     <foreach collection="list" index="index" item="item" separator="," open="(" close=")">

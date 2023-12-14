@@ -126,11 +126,14 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
                 : FtDateUtils.parseDate(l.get("planBeginDate")));
             sgjsPlanMeasureManage.setPlanEndDate(
                 l.get("planEndDate") == null ? null : FtDateUtils.parseDate(l.get("planEndDate")));
+            sgjsPlanMeasureManage.setId(l.get("id") == null ? 0L : Long.parseLong(l.get("id").toString()));
             sgjsPlanMeasureManage.setPid(
                 l.get("pid") == null ? 0L : Long.parseLong(l.get("pid").toString()));
-            treeToList.add(sgjsPlanMeasureManage);
             //同步标识
             sgjsPlanMeasureManage.setDataSource("1");
+            sgjsPlanMeasureManage.setIsAdd("1");
+            treeToList.add(sgjsPlanMeasureManage);
+
             List<LinkedHashMap<String, Object>> children = (List<LinkedHashMap<String, Object>>) l.get("children");
             if (children.size() > 0) {
                 digui(children, treeToList);
@@ -152,12 +155,14 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         if (CollectionUtils.isEmpty(sgjsPlanMeasureManageVo.getTreeList())) {
             return AjaxResult.error("数据异常");
         }
-        treeToList = TreeUtil.treeToList(sgjsPlanMeasureManageVo.getTreeList());
+        treeToList = TreeUtil.treeToListWithoutId(sgjsPlanMeasureManageVo.getTreeList());
         for (int i = 0; i < treeToList.size(); i++) {
             SgjsPlanMeasureManage sgjsPlanMeasureManage = treeToList.get(i);
             sgjsPlanMeasureManage.setCreateTime(DateTime.now());
             sgjsPlanMeasureManage.setCreateUser(SecurityUtils.getUserId() + "");
             sgjsPlanMeasureManage.setCreateUserName(SecurityUtils.getUserName() + "");
+            sgjsPlanMeasureManage.setUpdateTime(DateTime.now());
+            sgjsPlanMeasureManage.setUpdateUser(SecurityUtils.getUserId() + "");
         }
         List<SgjsPlanMeasureManage> insertList = treeToList.stream().filter(p -> StringUtils.isNotEmpty(p.getIsAdd()) && p.getIsAdd().equals("1")).collect(Collectors.toList());
         //批量入库
@@ -186,6 +191,7 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
             info.setId(Long.parseLong(delIdList.get(i)));
             info.setUpdateUser(SecurityUtils.getUserId()+"");
             info.setUpdateTime(DateUtils.getNowDate());
+            info.setDelFlag("1");
             list.add(info);
         }
         //删除
