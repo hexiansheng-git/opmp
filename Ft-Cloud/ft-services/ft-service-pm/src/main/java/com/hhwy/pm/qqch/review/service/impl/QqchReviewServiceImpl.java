@@ -485,11 +485,11 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     private String getStageWarnScope(String planStage){
         StringBuilder warnScope = new StringBuilder();
         //获取填报人员
-        List<Long> editorList = qqchWorkPlanDetailService.getEditorListByPlanStage(planStage);
+        List<String> editorList = qqchWorkPlanDetailService.getEditorListByPlanStage(planStage);
         //获取工作小组组长
         List<QqchWorkGroupMember> groupLeader = qqchWorkGroupMemberService.getGroupLeader();
 
-        for (Long editor : editorList) {
+        for (String editor : editorList) {
             warnScope.append(editor).append(",");
         }
         for (QqchWorkGroupMember member : groupLeader) {

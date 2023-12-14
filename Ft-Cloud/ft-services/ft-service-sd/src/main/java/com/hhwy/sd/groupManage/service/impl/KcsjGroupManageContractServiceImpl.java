@@ -32,6 +32,13 @@ public class KcsjGroupManageContractServiceImpl implements IKcsjGroupManageContr
         return kcsjGroupManageContractMapper.getKcsjGroupManageContractList(kcsjGroupManageContract);
     }
 
+    @Override
+    public List<KcsjGroupManageContract> getListByMainId(Long mainId) {
+        KcsjGroupManageContract query = new KcsjGroupManageContract();
+        query.setMainId(mainId);
+        return kcsjGroupManageContractMapper.getKcsjGroupManageContractList(query);
+    }
+
     @Transactional
     public int insertKcsjGroupManageContract(KcsjGroupManageContract kcsjGroupManageContract) {
         kcsjGroupManageContract.setId(IdWorker.createId());
@@ -71,6 +78,13 @@ public class KcsjGroupManageContractServiceImpl implements IKcsjGroupManageContr
         kcsjGroupManageContract.setUpdateUser(SecurityUtils.getUserName());
         kcsjGroupManageContract.setUpdateTime(DateUtils.getNowDate());
         return kcsjGroupManageContractMapper.deleteKcsjGroupManageContract(kcsjGroupManageContract);
+    }
+
+    @Override
+    public void deleteByMainId(Long mainId) {
+        KcsjGroupManageContract delParam = new KcsjGroupManageContract();
+        delParam.setMainId(mainId);
+        kcsjGroupManageContractMapper.deleteKcsjGroupManageContract(delParam);
     }
 
     @Transactional

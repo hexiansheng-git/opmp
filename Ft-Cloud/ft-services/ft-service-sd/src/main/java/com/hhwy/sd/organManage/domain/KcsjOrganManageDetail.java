@@ -1,27 +1,28 @@
-package com.hhwy.sd.groupManage.domain;
+package com.hhwy.sd.organManage.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.math.BigDecimal;
+
+import com.hhwy.common.core.annotation.Excel;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
 /**
- * @author han
- * @date 2023-12-13 15:27:13
- * @remark kcsj_group_manage_detail
+ * @author cjh
+ * @date 2023-12-14 11:31:53
+ * @remark kcsj_organ_manage_detail
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class KcsjGroupManageDetail extends BaseEntity {
+public class KcsjOrganManageDetail extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -32,102 +33,42 @@ public class KcsjGroupManageDetail extends BaseEntity {
     @Excel(name = "主键")
     private Long id;
     /**
-     * 字段描述：父id
+     * 字段描述：勘察设计组织管理主表id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "父id")
-    private Long pid;
+    @Excel(name = "勘察设计组织管理主表id")
+    private Long organManageId;
     /**
-     * 字段描述：主表id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonProperty
-    @Excel(name = "主表id")
-    private Long mainId;
-    /**
-     * 字段描述：合同id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonProperty
-    @Excel(name = "合同id")
-    private Long contractId;
-    /**
-     * 字段描述：分包类型（1：总体分包，2：勘察分包，3：测绘分包，4：设计分包）
+     * 字段描述：进场时间
      */
     @JsonProperty
-    @Excel(name = "分包类型（1：总体分包，2：勘察分包，3：测绘分包，4：设计分包）")
-    private String subpackageType;
+    @Excel(name = "进场时间")
+    private Date entryDate;
     /**
-     * 字段描述：队伍编号
+     * 字段描述：离场时间
      */
     @JsonProperty
-    @Excel(name = "队伍编号")
-    private String groupCode;
+    @Excel(name = "离场时间")
+    private Date leaveDate;
     /**
-     * 字段描述：队伍名称
+     * 字段描述：在场天数
      */
     @JsonProperty
-    @Excel(name = "队伍名称")
-    private String groupName;
+    @Excel(name = "在场天数")
+    private Integer entryDay;
     /**
-     * 字段描述：计划进场时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @Excel(name = "计划进场时间", dateFormat = "yyyy-MM-dd")
-    private Date planApproachDate;
-    /**
-     * 字段描述：实际进场日期
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @Excel(name = "实际进场日期", dateFormat = "yyyy-MM-dd")
-    private Date actualApproachDate;
-    /**
-     * 字段描述：计划退场时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @Excel(name = "计划退场时间", dateFormat = "yyyy-MM-dd")
-    private Date planExitDate;
-    /**
-     * 字段描述：实际退场时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @Excel(name = "实际退场时间", dateFormat = "yyyy-MM-dd")
-    private Date actualExitDate;
-    /**
-     * 字段描述：叶子结点
+     * 字段描述：离场原因
      */
     @JsonProperty
-    @Excel(name = "叶子结点")
-    private String leaf;
+    @Excel(name = "离场原因")
+    private String leaveRemark;
     /**
-     * 字段描述：附件组id
+     * 字段描述：数据来源
      */
     @JsonProperty
-    @Excel(name = "附件组id")
-    private String fileGroupId;
-    /**
-     * 字段描述：备注
-     */
-    @JsonProperty
-    @Excel(name = "备注")
-    private String remark;
-    /**
-     * 字段描述：流程状态（5已完成）
-     */
-    @JsonProperty
-    @Excel(name = "流程状态（5已完成）")
-    private String taskStatus;
-    /**
-     * 字段描述：排序
-     */
-    @JsonProperty
-    @Excel(name = "排序")
-    private Integer sort;
+    @Excel(name = "数据来源 ")
+    private String dataSource;
     /**
      * 字段描述：所属区域id
      */
@@ -243,7 +184,6 @@ public class KcsjGroupManageDetail extends BaseEntity {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
-    private List<KcsjGroupManageDetail> children;
+    private String isAdd;
 
-    private List<KcsjGroupManageApproachStaff> staffList;
 }

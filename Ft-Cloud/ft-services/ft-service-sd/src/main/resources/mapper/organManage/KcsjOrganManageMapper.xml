@@ -2,27 +2,27 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.qqch.qqchWorkPlan.mapper.QqchWorkPlanDetailMapper">
+<mapper namespace="com.hhwy.sd.organManage.mapper.KcsjOrganManageMapper">
 
-    <resultMap type="com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail" id="QqchWorkPlanDetailResultMap">
+    <resultMap type="com.hhwy.sd.organManage.domain.KcsjOrganManage" id="KcsjOrganManageResultMap">
         <result property="id" column="id"/>
         <result property="pid" column="pid"/>
-        <result property="mainId" column="main_id"/>
-        <result property="itemId" column="item_id"/>
-        <result property="itemName" column="item_name"/>
         <result property="sort" column="sort"/>
-        <result property="workExplain" column="work_explain"/>
-        <result property="isFirst" column="is_first"/>
-        <result property="editorFirst" column="editor_first"/>
-        <result property="finishTimeFirst" column="finish_time_first"/>
-        <result property="isSecond" column="is_second"/>
-        <result property="editorSecond" column="editor_second"/>
-        <result property="finishTimeSecond" column="finish_time_second"/>
-        <result property="isThird" column="is_third"/>
-        <result property="editorThird" column="editor_third"/>
-        <result property="finishTimeThird" column="finish_time_third"/>
-        <result property="fileGroupId" column="file_group_id"/>
+        <result property="leaf" column="leaf"/>
+        <result property="postName" column="post_name"/>
+        <result property="speciality" column="speciality"/>
+        <result property="postJob" column="post_job"/>
+        <result property="headCount" column="head_count"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="workYears" column="work_years"/>
+        <result property="phone" column="phone"/>
+        <result property="actualEnterDate" column="actual_enter_date"/>
+        <result property="workOrNot" column="work_or_not"/>
+        <result property="actualExitDate" column="actual_exit_date"/>
         <result property="remark" column="remark"/>
+        <result property="dataSource" column="data_source"/>
+        <result property="path" column="path"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="projectId" column="project_id"/>
@@ -41,33 +41,26 @@
         <result property="ptVar3" column="pt_var3"/>
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
-        <result property="taskStatus" column="task_status"/>
-        <result property="editorFirstName" column="editor_first_name"/>
-        <result property="editorFirstUserName" column="editor_first_user_name"/>
-        <result property="editorSecondName" column="editor_second_name"/>
-        <result property="editorSecondUserName" column="editor_second_user_name"/>
-        <result property="editorThirdName" column="editor_third_name"/>
-        <result property="editorThirdUserName" column="editor_third_user_name"/>
     </resultMap>
-    <sql id="selectQqchWorkPlanDetailVo">
+    <sql id="selectKcsjOrganManageVo">
         select `id`
              , `pid`
-             , `main_id`
-             , `item_id`
-             , `item_name`
              , `sort`
-             , `work_explain`
-             , `is_first`
-             , `editor_first`
-             , `finish_time_first`
-             , `is_second`
-             , `editor_second`
-             , `finish_time_second`
-             , `is_third`
-             , `editor_third`
-             , `finish_time_third`
-             , `file_group_id`
+             , `leaf`
+             , `post_name`
+             , `speciality`
+             , `post_job`
+             , `head_count`
+             , `user_id`
+             , `user_name`
+             , `work_years`
+             , `phone`
+             , `actual_enter_date`
+             , `work_or_not`
+             , `actual_exit_date`
              , `remark`
+             , `data_source`
+             , `path`
              , `region_id`
              , `region_name`
              , `project_id`
@@ -86,37 +79,33 @@
              , `pt_var3`
              , `pt_var4`
              , `pt_var5`
-             , `task_status`
-             , `editor_first_name`
-             , `editor_first_user_name`
-             , `editor_second_name`
-             , `editor_second_user_name`
-             , `editor_third_name`
-             , `editor_third_user_name`
-        from qqch_work_plan_detail
+        from kcsj_organ_manage
     </sql>
-    <select id="getQqchWorkPlanDetail" resultMap="QqchWorkPlanDetailResultMap">
-        <include refid="selectQqchWorkPlanDetailVo"/>
+    <delete id="deleteKcsjOrganManage4All">
+        delete from kcsj_organ_manage
+    </delete>
+    <select id="getKcsjOrganManage" resultMap="KcsjOrganManageResultMap">
+        <include refid="selectKcsjOrganManageVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
-            <if test="mainId != null ">and `main_id` = #{mainId}</if>
-            <if test="itemId != null ">and `item_id` = #{itemId}</if>
-            <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
-            <if test="workExplain != null  and workExplain != ''">and `work_explain` = #{workExplain}</if>
-            <if test="isFirst != null  and isFirst != ''">and `is_first` = #{isFirst}</if>
-            <if test="editorFirst != null  and editorFirst != ''">and `editor_first` = #{editorFirst}</if>
-            <if test="finishTimeFirst != null ">and `finish_time_first` = #{finishTimeFirst}</if>
-            <if test="isSecond != null  and isSecond != ''">and `is_second` = #{isSecond}</if>
-            <if test="editorSecond != null  and editorSecond != ''">and `editor_second` = #{editorSecond}</if>
-            <if test="finishTimeSecond != null ">and `finish_time_second` = #{finishTimeSecond}</if>
-            <if test="isThird != null  and isThird != ''">and `is_third` = #{isThird}</if>
-            <if test="editorThird != null  and editorThird != ''">and `editor_third` = #{editorThird}</if>
-            <if test="finishTimeThird != null ">and `finish_time_third` = #{finishTimeThird}</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
+            <if test="postName != null  and postName != ''">and `post_name` = #{postName}</if>
+            <if test="speciality != null  and speciality != ''">and `speciality` = #{speciality}</if>
+            <if test="postJob != null  and postJob != ''">and `post_job` = #{postJob}</if>
+            <if test="headCount != null ">and `head_count` = #{headCount}</if>
+            <if test="userId != null ">and `user_id` = #{userId}</if>
+            <if test="userName != null  and userName != ''">and `user_name` = #{userName}</if>
+            <if test="workYears != null ">and `work_years` = #{workYears}</if>
+            <if test="phone != null  and phone != ''">and `phone` = #{phone}</if>
+            <if test="actualEnterDate != null ">and `actual_enter_date` = #{actualEnterDate}</if>
+            <if test="workOrNot != null  and workOrNot != ''">and `work_or_not` = #{workOrNot}</if>
+            <if test="actualExitDate != null ">and `actual_exit_date` = #{actualExitDate}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
+            <if test="path != null  and path != ''">and `path` = #{path}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -135,40 +124,32 @@
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
-            <if test="editorFirstName != null  and editorFirstName != ''">and `editor_first_name` = #{editorFirstName}
-            </if>
-            <if test="editorSecondName != null  and editorSecondName != ''">and `editor_second_name` =
-                #{editorSecondName}
-            </if>
-            <if test="editorThirdName != null  and editorThirdName != ''">and `editor_third_name` = #{editorThirdName}
-            </if>
         </where>
         order by create_time desc
     </select>
 
-    <select id="getQqchWorkPlanDetailList" resultMap="QqchWorkPlanDetailResultMap">
-        <include refid="selectQqchWorkPlanDetailVo"/>
+    <select id="getKcsjOrganManageList" resultMap="KcsjOrganManageResultMap">
+        <include refid="selectKcsjOrganManageVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
-            <if test="mainId != null ">and `main_id` = #{mainId}</if>
-            <if test="itemId != null ">and `item_id` = #{itemId}</if>
-            <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
-            <if test="workExplain != null  and workExplain != ''">and `work_explain` = #{workExplain}</if>
-            <if test="isFirst != null  and isFirst != ''">and `is_first` = #{isFirst}</if>
-            <if test="editorFirst != null  and editorFirst != ''">and `editor_first` = #{editorFirst}</if>
-            <if test="finishTimeFirst != null ">and `finish_time_first` = #{finishTimeFirst}</if>
-            <if test="isSecond != null  and isSecond != ''">and `is_second` = #{isSecond}</if>
-            <if test="editorSecond != null  and editorSecond != ''">and `editor_second` = #{editorSecond}</if>
-            <if test="finishTimeSecond != null ">and `finish_time_second` = #{finishTimeSecond}</if>
-            <if test="isThird != null  and isThird != ''">and `is_third` = #{isThird}</if>
-            <if test="editorThird != null  and editorThird != ''">and `editor_third` = #{editorThird}</if>
-            <if test="finishTimeThird != null ">and `finish_time_third` = #{finishTimeThird}</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
+            <if test="postName != null  and postName != ''">and `post_name` = #{postName}</if>
+            <if test="speciality != null  and speciality != ''">and `speciality` = #{speciality}</if>
+            <if test="postJob != null  and postJob != ''">and `post_job` = #{postJob}</if>
+            <if test="headCount != null ">and `head_count` = #{headCount}</if>
+            <if test="userId != null ">and `user_id` = #{userId}</if>
+            <if test="userName != null  and userName != ''">and `user_name` = #{userName}</if>
+            <if test="workYears != null ">and `work_years` = #{workYears}</if>
+            <if test="phone != null  and phone != ''">and `phone` = #{phone}</if>
+            <if test="actualEnterDate != null ">and `actual_enter_date` = #{actualEnterDate}</if>
+            <if test="workOrNot != null  and workOrNot != ''">and `work_or_not` = #{workOrNot}</if>
+            <if test="actualExitDate != null ">and `actual_exit_date` = #{actualExitDate}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
+            <if test="path != null  and path != ''">and `path` = #{path}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -187,44 +168,31 @@
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
-            <if test="editorFirstName != null  and editorFirstName != ''">and `editor_first_name` = #{editorFirstName}
-            </if>
-            <if test="editorSecondName != null  and editorSecondName != ''">and `editor_second_name` =
-                #{editorSecondName}
-            </if>
-            <if test="editorThirdName != null  and editorThirdName != ''">and `editor_third_name` = #{editorThirdName}
-            </if>
         </where>
-        order by sort
-    </select>
-    <select id="getEditorListByPlanStage" resultType="java.lang.String">
-        select ${var2} from qqch_work_plan_detail
-        where del_flag = '0' and ${var1} = '1'
-        group by ${var2}
+        order by create_time desc
     </select>
 
-    <insert id="insertQqchWorkPlanDetail" useGeneratedKeys="true" keyProperty="id">
-        insert into qqch_work_plan_detail
+    <insert id="insertKcsjOrganManage" useGeneratedKeys="true" keyProperty="id">
+        insert into kcsj_organ_manage
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="pid != null ">`pid`,</if>
-            <if test="mainId != null ">`main_id`,</if>
-            <if test="itemId != null ">`item_id`,</if>
-            <if test="itemName != null  and itemName != ''">`item_name`,</if>
             <if test="sort != null ">`sort`,</if>
-            <if test="workExplain != null  and workExplain != ''">`work_explain`,</if>
-            <if test="isFirst != null  and isFirst != ''">`is_first`,</if>
-            <if test="editorFirst != null  and editorFirst != ''">`editor_first`,</if>
-            <if test="finishTimeFirst != null ">`finish_time_first`,</if>
-            <if test="isSecond != null  and isSecond != ''">`is_second`,</if>
-            <if test="editorSecond != null  and editorSecond != ''">`editor_second`,</if>
-            <if test="finishTimeSecond != null ">`finish_time_second`,</if>
-            <if test="isThird != null  and isThird != ''">`is_third`,</if>
-            <if test="editorThird != null  and editorThird != ''">`editor_third`,</if>
-            <if test="finishTimeThird != null ">`finish_time_third`,</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+            <if test="leaf != null  and leaf != ''">`leaf`,</if>
+            <if test="postName != null  and postName != ''">`post_name`,</if>
+            <if test="speciality != null  and speciality != ''">`speciality`,</if>
+            <if test="postJob != null  and postJob != ''">`post_job`,</if>
+            <if test="headCount != null ">`head_count`,</if>
+            <if test="userId != null ">`user_id`,</if>
+            <if test="userName != null  and userName != ''">`user_name`,</if>
+            <if test="workYears != null ">`work_years`,</if>
+            <if test="phone != null  and phone != ''">`phone`,</if>
+            <if test="actualEnterDate != null ">`actual_enter_date`,</if>
+            <if test="workOrNot != null  and workOrNot != ''">`work_or_not`,</if>
+            <if test="actualExitDate != null ">`actual_exit_date`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="dataSource != null  and dataSource != ''">`data_source`,</if>
+            <if test="path != null  and path != ''">`path`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -243,33 +211,26 @@
             <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
             <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
-            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
-            <if test="editorFirstName != null  and editorFirstName != ''">`editor_first_name`,</if>
-            <if test="editorFirstUserName != null  and editorFirstUserName != ''">`editor_first_user_name`,</if>
-            <if test="editorSecondName != null  and editorSecondName != ''">`editor_second_name`,</if>
-            <if test="editorSecondUserName != null  and editorSecondUserName != ''">`editor_second_user_name`,</if>
-            <if test="editorThirdName != null  and editorThirdName != ''">`editor_third_name`,</if>
-            <if test="editorThirdUserName != null  and editorThirdUserName != ''">`editor_third_user_name`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
             <if test="pid != null ">#{pid},</if>
-            <if test="mainId != null ">#{mainId},</if>
-            <if test="itemId != null ">#{itemId},</if>
-            <if test="itemName != null  and itemName != ''">#{itemName},</if>
             <if test="sort != null ">#{sort},</if>
-            <if test="workExplain != null  and workExplain != ''">#{workExplain},</if>
-            <if test="isFirst != null  and isFirst != ''">#{isFirst},</if>
-            <if test="editorFirst != null  and editorFirst != ''">#{editorFirst},</if>
-            <if test="finishTimeFirst != null ">#{finishTimeFirst},</if>
-            <if test="isSecond != null  and isSecond != ''">#{isSecond},</if>
-            <if test="editorSecond != null  and editorSecond != ''">#{editorSecond},</if>
-            <if test="finishTimeSecond != null ">#{finishTimeSecond},</if>
-            <if test="isThird != null  and isThird != ''">#{isThird},</if>
-            <if test="editorThird != null  and editorThird != ''">#{editorThird},</if>
-            <if test="finishTimeThird != null ">#{finishTimeThird},</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+            <if test="leaf != null  and leaf != ''">#{leaf},</if>
+            <if test="postName != null  and postName != ''">#{postName},</if>
+            <if test="speciality != null  and speciality != ''">#{speciality},</if>
+            <if test="postJob != null  and postJob != ''">#{postJob},</if>
+            <if test="headCount != null ">#{headCount},</if>
+            <if test="userId != null ">#{userId},</if>
+            <if test="userName != null  and userName != ''">#{userName},</if>
+            <if test="workYears != null ">#{workYears},</if>
+            <if test="phone != null  and phone != ''">#{phone},</if>
+            <if test="actualEnterDate != null ">#{actualEnterDate},</if>
+            <if test="workOrNot != null  and workOrNot != ''">#{workOrNot},</if>
+            <if test="actualExitDate != null ">#{actualExitDate},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="dataSource != null  and dataSource != ''">#{dataSource},</if>
+            <if test="path != null  and path != ''">#{path},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>
@@ -288,38 +249,31 @@
             <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
             <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
-            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
-            <if test="editorFirstName != null  and editorFirstName != ''">#{editorFirstName},</if>
-            <if test="editorFirstUserName != null  and editorFirstUserName != ''">#{editorFirstUserName},</if>
-            <if test="editorSecondName != null  and editorSecondName != ''">#{editorSecondName},</if>
-            <if test="editorSecondUserName != null  and editorSecondUserName != ''">#{editorSecondUserName},</if>
-            <if test="editorThirdName != null  and editorThirdName != ''">#{editorThirdName},</if>
-            <if test="editorThirdUserName != null  and editorThirdUserName != ''">#{editorThirdUserName},</if>
         </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchWorkPlanDetail -->
-    <insert id="insertQqchWorkPlanDetailList">
-        insert into qqch_work_plan_detail
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertKcsjOrganManage -->
+    <insert id="insertKcsjOrganManageList">
+        insert into kcsj_organ_manage
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `pid`,
-            `main_id`,
-            `item_id`,
-            `item_name`,
             `sort`,
-            `work_explain`,
-            `is_first`,
-            `editor_first`,
-            `finish_time_first`,
-            `is_second`,
-            `editor_second`,
-            `finish_time_second`,
-            `is_third`,
-            `editor_third`,
-            `finish_time_third`,
-            `file_group_id`,
+            `leaf`,
+            `post_name`,
+            `speciality`,
+            `post_job`,
+            `head_count`,
+            `user_id`,
+            `user_name`,
+            `work_years`,
+            `phone`,
+            `actual_enter_date`,
+            `work_or_not`,
+            `actual_exit_date`,
             `remark`,
+            `data_source`,
+            `path`,
             `region_id`,
             `region_name`,
             `project_id`,
@@ -337,35 +291,28 @@
             `pt_var3`,
             `pt_var4`,
             `pt_var5`,
-            `task_status`,
-            `editor_first_name`,
-            `editor_first_user_name`,
-            `editor_second_name`,
-            `editor_second_user_name`,
-            `editor_third_name`,
-            `editor_third_user_name`,
         </trim>
         values
-        <foreach collection="qqchWorkPlanDetailList" item="item" separator=",">
+        <foreach collection="kcsjOrganManageList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
                 #{item.pid},
-                #{item.mainId},
-                #{item.itemId},
-                #{item.itemName},
                 #{item.sort},
-                #{item.workExplain},
-                #{item.isFirst},
-                #{item.editorFirst},
-                #{item.finishTimeFirst},
-                #{item.isSecond},
-                #{item.editorSecond},
-                #{item.finishTimeSecond},
-                #{item.isThird},
-                #{item.editorThird},
-                #{item.finishTimeThird},
-                #{item.fileGroupId},
+                #{item.leaf},
+                #{item.postName},
+                #{item.speciality},
+                #{item.postJob},
+                #{item.headCount},
+                #{item.userId},
+                #{item.userName},
+                #{item.workYears},
+                #{item.phone},
+                #{item.actualEnterDate},
+                #{item.workOrNot},
+                #{item.actualExitDate},
                 #{item.remark},
+                #{item.dataSource},
+                #{item.path},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.projectId},
@@ -383,38 +330,31 @@
                 #{item.ptVar3},
                 #{item.ptVar4},
                 #{item.ptVar5},
-                #{item.taskStatus},
-                #{item.editorFirstName},
-                #{item.editorFirstUserName},
-                #{item.editorSecondName},
-                #{item.editorSecondUserName},
-                #{item.editorThirdName},
-                #{item.editorThirdUserName},
             </trim>
         </foreach>
     </insert>
 
-    <update id="updateQqchWorkPlanDetail">
-        update qqch_work_plan_detail
+    <update id="updateKcsjOrganManage">
+        update kcsj_organ_manage
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
             <if test="pid != null ">`pid` = #{pid},</if>
-            <if test="mainId != null ">`main_id` = #{mainId},</if>
-            <if test="itemId != null ">`item_id` = #{itemId},</if>
-            <if test="itemName != null  and  itemName != ''">`item_name` = #{itemName},</if>
             <if test="sort != null ">`sort` = #{sort},</if>
-            <if test="workExplain != null  and  workExplain != ''">`work_explain` = #{workExplain},</if>
-            <if test="isFirst != null  and  isFirst != ''">`is_first` = #{isFirst},</if>
-            <if test="editorFirst != null  and  editorFirst != ''">`editor_first` = #{editorFirst},</if>
-            <if test="finishTimeFirst != null ">`finish_time_first` = #{finishTimeFirst},</if>
-            <if test="isSecond != null  and  isSecond != ''">`is_second` = #{isSecond},</if>
-            <if test="editorSecond != null  and  editorSecond != ''">`editor_second` = #{editorSecond},</if>
-            <if test="finishTimeSecond != null ">`finish_time_second` = #{finishTimeSecond},</if>
-            <if test="isThird != null  and  isThird != ''">`is_third` = #{isThird},</if>
-            <if test="editorThird != null  and  editorThird != ''">`editor_third` = #{editorThird},</if>
-            <if test="finishTimeThird != null ">`finish_time_third` = #{finishTimeThird},</if>
-            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+            <if test="leaf != null  and  leaf != ''">`leaf` = #{leaf},</if>
+            <if test="postName != null  and  postName != ''">`post_name` = #{postName},</if>
+            <if test="speciality != null  and  speciality != ''">`speciality` = #{speciality},</if>
+            <if test="postJob != null  and  postJob != ''">`post_job` = #{postJob},</if>
+            <if test="headCount != null ">`head_count` = #{headCount},</if>
+            <if test="userId != null ">`user_id` = #{userId},</if>
+            <if test="userName != null  and  userName != ''">`user_name` = #{userName},</if>
+            <if test="workYears != null ">`work_years` = #{workYears},</if>
+            <if test="phone != null  and  phone != ''">`phone` = #{phone},</if>
+            `actual_enter_date` = #{actualEnterDate},
+            `work_or_not` = #{workOrNot},
+            `actual_exit_date` = #{actualExitDate},
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="dataSource != null  and  dataSource != ''">`data_source` = #{dataSource},</if>
+            <if test="path != null  and  path != ''">`path` = #{path},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
@@ -433,25 +373,14 @@
             <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
-            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
-            <if test="editorFirstName != null  and  editorFirstName != ''">`editor_first_name` = #{editorFirstName},</if>
-            <if test="editorFirstUserName != null  and  editorFirstUserName != ''">`editor_first_user_name` = #{editorFirstUserName},</if>
-            <if test="editorSecondName != null  and  editorSecondName != ''">`editor_second_name` =
-                #{editorSecondName},
-            </if>
-            <if test="editorSecondUserName != null  and  editorSecondUserName != ''">`editor_second_user_name` =
-                #{editorSecondUserName},
-            </if>
-            <if test="editorThirdName != null  and  editorThirdName != ''">`editor_third_name` = #{editorThirdName},</if>
-            <if test="editorThirdUserName != null  and  editorThirdUserName != ''">`editor_third_user_name` = #{editorThirdUserName},</if>
         </trim>
         <where>
             <if test="id != null ">and `id` = #{id}</if>
         </where>
     </update>
 
-    <update id="updateQqchWorkPlanDetailList">
-        update qqch_work_plan_detail
+    <update id="updateKcsjOrganManageList">
+        update kcsj_organ_manage
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
@@ -463,84 +392,84 @@
                     when `id`=#{item.id} then #{item.pid}
                 </foreach>
             </trim>
-            <trim prefix="main_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.mainId}
-                </foreach>
-            </trim>
-            <trim prefix="item_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.itemId}
-                </foreach>
-            </trim>
-            <trim prefix="item_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.itemName}
-                </foreach>
-            </trim>
             <trim prefix="sort  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.sort}
                 </foreach>
             </trim>
-            <trim prefix="work_explain  = case" suffix="end,">
+            <trim prefix="leaf  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.workExplain}
+                    when `id`=#{item.id} then #{item.leaf}
                 </foreach>
             </trim>
-            <trim prefix="is_first  = case" suffix="end,">
+            <trim prefix="post_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.isFirst}
+                    when `id`=#{item.id} then #{item.postName}
                 </foreach>
             </trim>
-            <trim prefix="editor_first  = case" suffix="end,">
+            <trim prefix="speciality  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.editorFirst}
+                    when `id`=#{item.id} then #{item.speciality}
                 </foreach>
             </trim>
-            <trim prefix="finish_time_first  = case" suffix="end,">
+            <trim prefix="post_job  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.finishTimeFirst}
+                    when `id`=#{item.id} then #{item.postJob}
                 </foreach>
             </trim>
-            <trim prefix="is_second  = case" suffix="end,">
+            <trim prefix="head_count  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.isSecond}
+                    when `id`=#{item.id} then #{item.headCount}
                 </foreach>
             </trim>
-            <trim prefix="editor_second  = case" suffix="end,">
+            <trim prefix="user_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.editorSecond}
+                    when `id`=#{item.id} then #{item.userId}
                 </foreach>
             </trim>
-            <trim prefix="finish_time_second  = case" suffix="end,">
+            <trim prefix="user_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.finishTimeSecond}
+                    when `id`=#{item.id} then #{item.userName}
                 </foreach>
             </trim>
-            <trim prefix="is_third  = case" suffix="end,">
+            <trim prefix="work_years  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.isThird}
+                    when `id`=#{item.id} then #{item.workYears}
                 </foreach>
             </trim>
-            <trim prefix="editor_third  = case" suffix="end,">
+            <trim prefix="phone  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.editorThird}
+                    when `id`=#{item.id} then #{item.phone}
                 </foreach>
             </trim>
-            <trim prefix="finish_time_third  = case" suffix="end,">
+            <trim prefix="actual_enter_date  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.finishTimeThird}
+                    when `id`=#{item.id} then #{item.actualEnterDate}
                 </foreach>
             </trim>
-            <trim prefix="file_group_id  = case" suffix="end,">
+            <trim prefix="work_or_not  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.fileGroupId}
+                    when `id`=#{item.id} then #{item.workOrNot}
+                </foreach>
+            </trim>
+            <trim prefix="actual_exit_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.actualExitDate}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="data_source  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.dataSource}
+                </foreach>
+            </trim>
+            <trim prefix="path  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.path}
                 </foreach>
             </trim>
             <trim prefix="region_id  = case" suffix="end,">
@@ -633,69 +562,34 @@
                     when `id`=#{item.id} then #{item.ptVar5}
                 </foreach>
             </trim>
-            <trim prefix="task_status  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.taskStatus}
-                </foreach>
-            </trim>
-            <trim prefix="editor_first_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.editorFirstName}
-                </foreach>
-            </trim>
-            <trim prefix="editor_first_user_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.editorFirstUserName}
-                </foreach>
-            </trim>
-            <trim prefix="editor_second_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.editorSecondName}
-                </foreach>
-            </trim>
-            <trim prefix="editor_second_user_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.editorSecondUserName}
-                </foreach>
-            </trim>
-            <trim prefix="editor_third_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.editorThirdName}
-                </foreach>
-            </trim>
-            <trim prefix="editor_third_user_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.editorThirdUserName}
-                </foreach>
-            </trim>
         </trim>
         where `id` in
-        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </update>
 
-    <update id="deleteQqchWorkPlanDetail">
-        update `qqch_work_plan_detail` set del_flag = 1
+    <update id="deleteKcsjOrganManage">
+        update `kcsj_organ_manage` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
-            <if test="mainId != null ">and `main_id` = #{mainId}</if>
-            <if test="itemId != null ">and `item_id` = #{itemId}</if>
-            <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
-            <if test="workExplain != null  and workExplain != ''">and `work_explain` = #{workExplain}</if>
-            <if test="isFirst != null  and isFirst != ''">and `is_first` = #{isFirst}</if>
-            <if test="editorFirst != null  and editorFirst != ''">and `editor_first` = #{editorFirst}</if>
-            <if test="finishTimeFirst != null ">and `finish_time_first` = #{finishTimeFirst}</if>
-            <if test="isSecond != null  and isSecond != ''">and `is_second` = #{isSecond}</if>
-            <if test="editorSecond != null  and editorSecond != ''">and `editor_second` = #{editorSecond}</if>
-            <if test="finishTimeSecond != null ">and `finish_time_second` = #{finishTimeSecond}</if>
-            <if test="isThird != null  and isThird != ''">and `is_third` = #{isThird}</if>
-            <if test="editorThird != null  and editorThird != ''">and `editor_third` = #{editorThird}</if>
-            <if test="finishTimeThird != null ">and `finish_time_third` = #{finishTimeThird}</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
+            <if test="postName != null  and postName != ''">and `post_name` = #{postName}</if>
+            <if test="speciality != null  and speciality != ''">and `speciality` = #{speciality}</if>
+            <if test="postJob != null  and postJob != ''">and `post_job` = #{postJob}</if>
+            <if test="headCount != null ">and `head_count` = #{headCount}</if>
+            <if test="userId != null ">and `user_id` = #{userId}</if>
+            <if test="userName != null  and userName != ''">and `user_name` = #{userName}</if>
+            <if test="workYears != null ">and `work_years` = #{workYears}</if>
+            <if test="phone != null  and phone != ''">and `phone` = #{phone}</if>
+            <if test="actualEnterDate != null ">and `actual_enter_date` = #{actualEnterDate}</if>
+            <if test="workOrNot != null  and workOrNot != ''">and `work_or_not` = #{workOrNot}</if>
+            <if test="actualExitDate != null ">and `actual_exit_date` = #{actualExitDate}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
+            <if test="path != null  and path != ''">and `path` = #{path}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -714,22 +608,14 @@
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
-            <if test="editorFirstName != null  and editorFirstName != ''">and `editor_first_name` = #{editorFirstName}
-            </if>
-            <if test="editorSecondName != null  and editorSecondName != ''">and `editor_second_name` =
-                #{editorSecondName}
-            </if>
-            <if test="editorThirdName != null  and editorThirdName != ''">and `editor_third_name` = #{editorThirdName}
-            </if>
         </where>
     </update>
 
-    <update id="deleteQqchWorkPlanDetailByPks">
-        update `qqch_work_plan_detail` set del_flag = 1
+    <update id="deleteKcsjOrganManageByPks">
+        update `kcsj_organ_manage` set del_flag = 1
         <where>
             `id` in
-            <foreach item="id" collection="qqchWorkPlanDetailPkList" open="(" separator="," close=")">
+            <foreach item="id" collection="kcsjOrganManagePkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>

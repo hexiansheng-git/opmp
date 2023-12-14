@@ -28,6 +28,6 @@ public interface QqchWorkPlanDetailMapper {
 
     int deleteQqchWorkPlanDetailByPks(@Param("qqchWorkPlanDetailPkList") List<Long> qqchWorkPlanDetailPkList);
 
-    List<Long> getEditorListByPlanStage(@Param("mainId") Long mainId,@Param("var1") String var1,@Param("var2") String var2);
+    List<String> getEditorListByPlanStage(@Param("mainId") Long mainId, @Param("var1") String var1, @Param("var2") String var2);
 
 }
