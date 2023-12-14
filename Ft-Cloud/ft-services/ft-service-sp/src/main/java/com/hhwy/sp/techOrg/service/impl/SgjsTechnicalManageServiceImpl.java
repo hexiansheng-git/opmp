@@ -65,7 +65,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
     @Override
     public SgjsTechnicalManageVo list(SgjsTechnicalManage sgjsTechnicalManage) {
         SgjsTechnicalManageVo vo =new SgjsTechnicalManageVo();
-        //筛选条件
+        //筛选条件  实际进场日期，包含开始时间和结束时间
         if(StringUtils.isNotEmpty(sgjsTechnicalManage.getActualDateStr())){
             String actualDateStr = sgjsTechnicalManage.getActualDateStr();
             String[] split = actualDateStr.split("~");
@@ -75,9 +75,10 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             sgjsTechnicalManage.setActualDateEnd(FtDateUtils.parseDate(end));
         }
         List<SgjsTechnicalManage> list = sgjsTechnicalManageMapper.getSgjsTechnicalManageList(sgjsTechnicalManage);
-        //字典项处理
+        //字典项处理   根据字典项的类型查找字典项对应的值，然后设置给对应数据的属性
         AjaxResult result = systemServiceApi.dictType(DictType.WORK_OR_NOT);
         List<Map<String,Object>> dictDataList=null;
+
         if(result.get("code").toString().equals(Constant.SUCCESS_CODE)){
             dictDataList= (List<Map<String, Object>>) result.get("data");
         }

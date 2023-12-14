@@ -169,6 +169,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             sgjsExperProgressManage.setWorkload(map.get("workload") == null ? null : (Integer) map.get("workload"));
             sgjsExperProgressManage.setPlanStartDate(map.get("planBeginDate") == null ? null : FtDateUtils.parseDate(map.get("planbeginDate")));
             sgjsExperProgressManage.setPlanEndDate(map.get("planEndDate") == null ? null : FtDateUtils.parseDate(map.get("planEndDate")));
+            sgjsExperProgressManage.setDataSource("1");
             //所有父节点的pid都设置为0
             sgjsExperProgressManage.setPid(map.get("pid") == null ? 0L : Long.parseLong((String) map.get("pid")));
             treeToList.add(sgjsExperProgressManage);
@@ -193,27 +194,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
     @Transactional
     public AjaxResult batchAdd(SgjsExperProgressManageVo sgjsExperProgressManageVo) {
 
-        /*List<SgjsExperProgressManage> treeToList = null;
-        if (CollectionUtils.isEmpty(sgjsExperProgressManageVo.getTreeList())) {
-            return AjaxResult.error("数据异常");
-        }
-        //删除库中所有数据
-        SgjsExperProgressManage info = new SgjsExperProgressManage();
-        info.setUpdateTime(DateTime.now());
-        info.setUpdateUser(SecurityUtils.getUserId() + "");
-        sgjsExperProgressManageMapper.deleteAll(info);
-        //数据处理
-        treeToList = TreeUtil.treeToList(sgjsExperProgressManageVo.getTreeList());
-        for (int i = 0; i < treeToList.size(); i++) {
-            SgjsExperProgressManage sgjsExperProgressManage = treeToList.get(i);
-            sgjsExperProgressManage.setCreateTime(DateTime.now());
-            sgjsExperProgressManage.setCreateUser(SecurityUtils.getUserId() + "");
-            sgjsExperProgressManage.setCreateUserName(SecurityUtils.getUserName() + "");
-            sgjsExperProgressManage.setDelFlag("0");
-        }
-        sgjsExperProgressManageMapper.insertSgjsExperProgressManageList(treeToList);
-        return AjaxResult.success();*/
-
         //获取删除的id集合
         List<String> delIdList = sgjsExperProgressManageVo.getDelIdList();
         if (delIdList.size()>0){
@@ -221,7 +201,9 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             for (String idStr : delIdList) {
                 idsList.add(Long.valueOf(idStr));
             }
-            sgjsExperProgressManageMapper.deleteSgjsExperProgressManageByPks(idsList);
+
+            String delUser = SecurityUtils.getSysUser().getNickName();
+            sgjsExperProgressManageMapper.deleteSgjsExperProgressManageByPks(idsList,delUser);
         }
         //根据标志位判断是新增操作还是修改操作
         List<SgjsExperProgressManage> treeList = sgjsExperProgressManageVo.getTreeList();
@@ -230,9 +212,18 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         for (SgjsExperProgressManage sgjsExperProgressManage : treeList) {
 
             if ("1".equals(sgjsExperProgressManage.getType())){
+                sgjsExperProgressManage.setUpdateUser(SecurityUtils.getUserId()+"");
+                sgjsExperProgressManage.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(sgjsExperProgressManage);
             }
             if ("0".equals(sgjsExperProgressManage.getType())){
+
+                sgjsExperProgressManage.setCreateUserName(SecurityUtils.getUserName());
+                sgjsExperProgressManage.setCreateUser(SecurityUtils.getUserId()+"");
+                sgjsExperProgressManage.setCreateTime(DateUtils.getNowDate());
+                sgjsExperProgressManage.setId(IdWorker.createId());
+                sgjsExperProgressManage.setDelFlag("0");
+                sgjsExperProgressManage.setDataSource("0");
                 insertList.add(sgjsExperProgressManage);
             }
         }
@@ -250,4 +241,8 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
     }
 
 
+    @Override
+    public List<SgjsExperProgressManage> getIds(List<Long> ids) {
+        return sgjsExperProgressManageMapper.getIds(ids);
+    }
 }

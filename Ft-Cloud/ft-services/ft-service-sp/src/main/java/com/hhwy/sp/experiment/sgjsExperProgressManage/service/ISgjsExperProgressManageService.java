@@ -54,4 +54,6 @@ public interface ISgjsExperProgressManageService {
      */
     AjaxResult batchAdd(SgjsExperProgressManageVo sgjsExperProgressManageVo);
 
+
+    List<SgjsExperProgressManage> getIds(List<Long> ids);
 }

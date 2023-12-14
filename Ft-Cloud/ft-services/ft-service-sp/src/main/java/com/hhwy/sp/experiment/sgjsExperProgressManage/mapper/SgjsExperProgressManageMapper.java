@@ -35,18 +35,8 @@ public interface SgjsExperProgressManageMapper {
 
     int deleteSgjsExperProgressManage(SgjsExperProgressManage sgjsExperProgressManage);
 
-    int deleteSgjsExperProgressManageByPks(@Param("sgjsExperProgressManagePkList") List<Long> sgjsExperProgressManagePkList);
+    int deleteSgjsExperProgressManageByPks(@Param("sgjsExperProgressManagePkList") List<Long> sgjsExperProgressManagePkList, @Param("delUser") String delUser);
 
-    /**
-     * 全部删除
-     * @param info
-     */
-    void deleteAll(SgjsExperProgressManage info);
 
-    /**
-     * 查询子节点的父节点集合
-     * @param childrenIds
-     */
-    List<SgjsExperProgressManage> getParentList(@Param("childrenIds") List<Long> childrenIds);
-
+    List<SgjsExperProgressManage> getIds(@Param("ids") List<Long> ids);
 }

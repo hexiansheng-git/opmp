@@ -9,6 +9,7 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.tree.TreeNode;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author wll
@@ -250,13 +251,16 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     private Date realStartDate2;
 
 
-
+    //导入查询
+    private List<Long> ids;
 
 
     //标识新增才是修改  0新增；1修改
     private String type;
 
     //当前节点所在层级目录
+    @JsonProperty
+    @Excel(name = "当前节点路径"    )
     private String path;
 
 
@@ -267,6 +271,14 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     //实际开始日期范围字符串
     private String realStartDateStr;
 
+
+    public List<Long> getIds() {
+        return ids;
+    }
+
+    public void setIds(List<Long> ids) {
+        this.ids = ids;
+    }
 
     public String getPath() {
         return path;

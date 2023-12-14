@@ -5,7 +5,8 @@ spring:
     name: ft-service-job
   profiles:
     # 环境配置
-    active: dev
+    active: test
+#    active: dev
   cloud:
     nacos:
       discovery:

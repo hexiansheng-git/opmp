@@ -113,11 +113,22 @@ public class SgjsExperProgressManageController extends BaseController {
     @GetMapping("/export")
     public void export(HttpServletResponse response,
                        SgjsExperProgressManage sgjsExperProgressManageParam) throws IOException {
-        SgjsExperProgressManageVo sgjsExperProgressManageVo = sgjsExperProgressManageService.list(sgjsExperProgressManageParam);
-        List<SgjsExperProgressManage> treeList = sgjsExperProgressManageVo.getTreeList();
-        if(CollectionUtils.isNotEmpty(treeList)){
-            treeList = TreeUtil.treeToList(treeList);
-        }
+        List<Long> ids = sgjsExperProgressManageParam.getIds();
+        List<SgjsExperProgressManage> treeList=null;
+       if (CollectionUtils.isEmpty(ids)){
+
+           SgjsExperProgressManageVo sgjsExperProgressManageVo=sgjsExperProgressManageService.list(sgjsExperProgressManageParam);
+            treeList = sgjsExperProgressManageVo.getTreeList();
+           if(CollectionUtils.isNotEmpty(treeList)){
+               treeList = TreeUtil.treeToList(treeList);
+           }
+       }else {
+
+           List<SgjsExperProgressManage> list=sgjsExperProgressManageService.getIds(ids);
+           if(CollectionUtils.isEmpty(list)){
+               treeList = list;
+           }
+       }
         ExcelUtils<SgjsExperProgressManage> utils = new ExcelUtils<>(SgjsExperProgressManage.class);
         utils.exportExcel(response,treeList,DateUtils.getDate());
     }

@@ -5,8 +5,10 @@ spring:
   cloud:
     nacos:
       #天津测试nacos
-      namespace: cfhec-opmp-web
-      server-addr: 10.0.1.118:8848
+      namespace: wll_prj
+      server-addr: 127.0.0.1:8848
+#      namespace: cfhec-opmp-web
+#      server-addr: 10.0.1.118:8848
       discovery:
         # 服务注册地址
         server-addr: ${spring.cloud.nacos.server-addr}
