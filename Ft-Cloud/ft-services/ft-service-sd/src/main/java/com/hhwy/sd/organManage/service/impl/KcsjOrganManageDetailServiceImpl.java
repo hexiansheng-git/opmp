@@ -1,0 +1,142 @@
+package com.hhwy.sd.organManage.service.impl;
+
+import java.util.Date;
+import java.util.List;
+
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sd.organManage.domain.KcsjOrganManage;
+import com.hhwy.sd.organManage.domain.KcsjOrganManageDetail;
+import com.hhwy.sd.organManage.domain.KcsjOrganManageDetail4Update;
+import com.hhwy.sd.organManage.mapper.KcsjOrganManageDetailMapper;
+import com.hhwy.sd.organManage.service.IKcsjOrganManageDetailService;
+import com.hhwy.sd.organManage.service.IKcsjOrganManageService;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.utils.idworker.IdWorker;
+
+/**
+ * @author cjh
+ * @date 2023-12-14 11:31:53
+ * @remark
+ */
+@Service
+public class KcsjOrganManageDetailServiceImpl implements IKcsjOrganManageDetailService {
+
+    @Autowired
+    private KcsjOrganManageDetailMapper kcsjOrganManageDetailMapper;
+
+    @Autowired
+    private IKcsjOrganManageService kcsjOrganManageService;
+
+    public KcsjOrganManageDetail getKcsjOrganManageDetail(KcsjOrganManageDetail kcsjOrganManageDetail) {
+        return kcsjOrganManageDetailMapper.getKcsjOrganManageDetail(kcsjOrganManageDetail);
+    }
+
+    public List<KcsjOrganManageDetail> getKcsjOrganManageDetailList(KcsjOrganManageDetail kcsjOrganManageDetail) {
+        return kcsjOrganManageDetailMapper.getKcsjOrganManageDetailList(kcsjOrganManageDetail);
+    }
+
+    public List<KcsjOrganManageDetail> getKcsjOrganManageDetailList() {
+        return kcsjOrganManageDetailMapper.getKcsjOrganManageDetailList(new KcsjOrganManageDetail());
+    }
+
+    @Transactional
+    public int insertKcsjOrganManageDetail(KcsjOrganManageDetail kcsjOrganManageDetail) {
+        kcsjOrganManageDetail.setId(IdWorker.createId());
+        kcsjOrganManageDetail.setCreateUser(SecurityUtils.getSysUser().getNickName());
+        kcsjOrganManageDetail.setCreateTime(DateUtils.getNowDate());
+        return kcsjOrganManageDetailMapper.insertKcsjOrganManageDetail(kcsjOrganManageDetail);
+    }
+
+    @Transactional
+    public int insertKcsjOrganManageDetailList(List<KcsjOrganManageDetail> kcsjOrganManageDetailList) {
+        for (KcsjOrganManageDetail kcsjOrganManageDetail : kcsjOrganManageDetailList) {
+            kcsjOrganManageDetail.setId(IdWorker.createId());
+            kcsjOrganManageDetail.setCreateUser(SecurityUtils.getSysUser().getNickName());
+            kcsjOrganManageDetail.setCreateTime(DateUtils.getNowDate());
+        }
+        return kcsjOrganManageDetailMapper.insertKcsjOrganManageDetailList(kcsjOrganManageDetailList);
+    }
+
+    @Transactional
+    public int updateKcsjOrganManageDetail(KcsjOrganManageDetail kcsjOrganManageDetail) {
+        kcsjOrganManageDetail.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+        kcsjOrganManageDetail.setUpdateTime(DateUtils.getNowDate());
+        return kcsjOrganManageDetailMapper.updateKcsjOrganManageDetail(kcsjOrganManageDetail);
+    }
+
+    @Transactional
+    public int updateKcsjOrganManageDetailList(List<KcsjOrganManageDetail> kcsjOrganManageDetailList) {
+        for (KcsjOrganManageDetail kcsjOrganManageDetail : kcsjOrganManageDetailList) {
+            kcsjOrganManageDetail.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+            kcsjOrganManageDetail.setUpdateTime(DateUtils.getNowDate());
+        }
+        return kcsjOrganManageDetailMapper.updateKcsjOrganManageDetailList(kcsjOrganManageDetailList);
+    }
+
+    @Override
+    public int updateKcsjOrganManageDetailList(KcsjOrganManageDetail4Update kcsjOrganManageDetail4Update) {
+        Long organManageId = kcsjOrganManageDetail4Update.getOrganManageId();
+        if(organManageId == null) {
+            return 0;
+        }
+        int i = deleteKcsjOrganManageDetailByOrganManageId(organManageId);
+        List<KcsjOrganManageDetail> kcsjOrganManageDetailList = kcsjOrganManageDetail4Update.getKcsjOrganManageDetailList();
+
+        Date enterDate = null;
+        Date leaveDate = null;
+        if(CollectionUtils.isNotEmpty(kcsjOrganManageDetailList)) {
+            for (KcsjOrganManageDetail vo: kcsjOrganManageDetailList) {
+                vo.setOrganManageId(organManageId);
+                Date entryDate = vo.getEntryDate();
+                if(enterDate == null) {
+                    enterDate = entryDate;
+                } else {
+                    if(entryDate != null) {
+                        if(entryDate.before(enterDate)) enterDate = entryDate;
+                    }
+                }
+                Date leaveDate1 = vo.getLeaveDate();
+                if(leaveDate1 == null) {
+                    leaveDate = leaveDate1;
+                } else {
+                    if(leaveDate == null) {
+                        leaveDate = leaveDate1;
+                    } else {
+                        if(leaveDate1.after(leaveDate)) leaveDate = leaveDate1;
+                    }
+                }
+            }
+            i = insertKcsjOrganManageDetailList(kcsjOrganManageDetailList);
+        }
+
+        kcsjOrganManageService.updateKcsjOrganManage(organManageId, enterDate, leaveDate);
+
+        return i;
+    }
+
+    public int deleteKcsjOrganManageDetailByOrganManageId(Long organManageId) {
+        return kcsjOrganManageDetailMapper.deleteKcsjOrganManageDetailByOrganManageId(organManageId);
+    };
+
+    @Transactional
+    public int deleteKcsjOrganManageDetail(KcsjOrganManageDetail kcsjOrganManageDetail) {
+        kcsjOrganManageDetail.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+        kcsjOrganManageDetail.setUpdateTime(DateUtils.getNowDate());
+        return kcsjOrganManageDetailMapper.deleteKcsjOrganManageDetail(kcsjOrganManageDetail);
+    }
+
+    @Transactional
+    public int deleteKcsjOrganManageDetailByPks(List<Long> kcsjOrganManageDetailPkList) {
+        return kcsjOrganManageDetailMapper.deleteKcsjOrganManageDetailByPks(kcsjOrganManageDetailPkList);
+    }
+
+    @Override
+    public void deleteKcsjOrganManageDetail4All() {
+        kcsjOrganManageDetailMapper.deleteKcsjOrganManageDetail4All();
+    }
+}

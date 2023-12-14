@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.organization.controller;
 
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -8,6 +9,7 @@ import com.hhwy.pm.qqch.preparation.survey.organization.domain.QqchSurveyOrganiz
 import com.hhwy.pm.qqch.preparation.survey.organization.service.IQqchSurveyOrganizationService;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
+import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -40,6 +42,12 @@ public class QqchSurveyOrganizationController extends BaseController {
         return AjaxResult.success(vo);
     }
 
+    @GetMapping("/apiList")
+    public AjaxResult list() {
+        QqchSurveyOrganizationVo vo = qqchSurveyOrganizationService.getQqchSurveyOrganizationList(new QqchSurveyOrganization());
+        if(vo != null && StringUtils.isNotEmpty(vo.getQqchSurveyOrganizationList())) vo.setQqchSurveyOrganizationList(TreeUtil.treeToList(vo.getQqchSurveyOrganizationList()));
+        return AjaxResult.success(vo);
+    }
 
     /**
      * 批增

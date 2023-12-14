@@ -81,4 +81,12 @@ public interface PmServiceApi {
     @PostMapping("/qqchMeasureExpEqu/feignExperimentList")
     AjaxResult feignExperimentList();
 
+
+    /**
+     * 2.1.2 项目部勘察设计组织机构查询
+     * @param
+     * @return
+     */
+    @GetMapping("/qqchSurveyOrganization/apiList")
+    AjaxResult getQqchSurveyOrganizationList();
 }
