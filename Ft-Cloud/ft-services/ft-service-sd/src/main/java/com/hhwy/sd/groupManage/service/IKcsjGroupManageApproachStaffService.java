@@ -14,6 +14,8 @@ public interface IKcsjGroupManageApproachStaffService {
 
     KcsjGroupManageApproachStaff getKcsjGroupManageApproachStaff(KcsjGroupManageApproachStaff kcsjGroupManageApproachStaff);
 
+    List<KcsjGroupManageApproachStaff> getListByMainId(Long mainId);
+
     List<KcsjGroupManageApproachStaff> getKcsjGroupManageApproachStaffList(KcsjGroupManageApproachStaff kcsjGroupManageApproachStaff);
 
     int insertKcsjGroupManageApproachStaff(KcsjGroupManageApproachStaff kcsjGroupManageApproachStaff);
@@ -25,6 +27,8 @@ public interface IKcsjGroupManageApproachStaffService {
     int updateKcsjGroupManageApproachStaffList(List<KcsjGroupManageApproachStaff> kcsjGroupManageApproachStaffList);
 
     int deleteKcsjGroupManageApproachStaff(KcsjGroupManageApproachStaff kcsjGroupManageApproachStaff);
+
+    void deleteByMainId(Long mainId);
 
     int deleteKcsjGroupManageApproachStaffByPks(List<Long> kcsjGroupManageApproachStaffPkList);
 }

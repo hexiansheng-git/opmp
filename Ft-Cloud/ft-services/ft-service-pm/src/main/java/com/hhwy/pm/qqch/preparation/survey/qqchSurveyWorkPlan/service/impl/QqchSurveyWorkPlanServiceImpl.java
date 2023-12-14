@@ -1,9 +1,13 @@
 package com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.TreeUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.util.TreeNodeUtil;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -17,14 +21,12 @@ import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,8 +52,22 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
     public QqchSurveyWorkPlanVo getQqchSurveyWorkPlanList(QqchSurveyWorkPlan qqchSurveyWorkPlan) {
         BigDecimal version = VersionUtil.getVersion("qqch_survey_work_plan",qqchSurveyWorkPlan.getVersion());
         qqchSurveyWorkPlan.setVersion(version);
-        List<QqchSurveyWorkPlan> qqchSurveyWorkPlanList = qqchSurveyWorkPlanMapper.getQqchSurveyWorkPlanList(qqchSurveyWorkPlan);
-        List<QqchSurveyWorkPlan> qqchSurveyWorkPlans = TreeUtil.build(qqchSurveyWorkPlanList, null);
+        List<QqchSurveyWorkPlan> selectByCondition = qqchSurveyWorkPlanMapper.getQqchSurveyWorkPlanList(qqchSurveyWorkPlan);
+        QqchSurveyWorkPlan qqchSurveyWorkPlan1 = new QqchSurveyWorkPlan();
+        qqchSurveyWorkPlan1.setVersion(version);
+        List<QqchSurveyWorkPlan> selectAll = qqchSurveyWorkPlanMapper.getQqchSurveyWorkPlanList(qqchSurveyWorkPlan1);
+        //两个查询结果不一致时需要说明前端有查询条件，结果可能无法转成树结构，故需要获取这些结点的祖籍
+        if (CollectionUtil.isNotEmpty(selectByCondition) && CollectionUtil.isNotEmpty(selectAll) && selectByCondition.size() != selectAll.size()){
+            //获取结点的父节点，否则无法转成树结构
+            selectByCondition = TreeNodeUtil.getAncestral(selectAll, selectByCondition);
+        }
+        //按照编码排序，截取编号中的数字进行排序
+        selectByCondition.forEach(p -> {
+            String collect = ReUtil.findAll("\\d+", p.getPlanWbsCode(), 0).stream().collect(Collectors.joining(""));
+            p.setSort(Integer.valueOf(collect));
+        });
+        List<QqchSurveyWorkPlan> collect = selectByCondition.stream().sorted(Comparator.comparing(QqchSurveyWorkPlan::getSort)).collect(Collectors.toList());
+        List<QqchSurveyWorkPlan> qqchSurveyWorkPlans = TreeUtil.build(collect, null);
         QqchSurveyWorkPlanVo vo = new QqchSurveyWorkPlanVo();
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());

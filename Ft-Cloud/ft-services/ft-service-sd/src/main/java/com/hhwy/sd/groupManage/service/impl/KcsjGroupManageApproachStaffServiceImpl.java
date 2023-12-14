@@ -28,6 +28,13 @@ public class KcsjGroupManageApproachStaffServiceImpl implements IKcsjGroupManage
         return kcsjGroupManageApproachStaffMapper.getKcsjGroupManageApproachStaff(kcsjGroupManageApproachStaff);
     }
 
+    @Override
+    public List<KcsjGroupManageApproachStaff> getListByMainId(Long mainId) {
+        KcsjGroupManageApproachStaff query = new KcsjGroupManageApproachStaff();
+        query.setMainId(mainId);
+        return kcsjGroupManageApproachStaffMapper.getKcsjGroupManageApproachStaffList(query);
+    }
+
     public List<KcsjGroupManageApproachStaff> getKcsjGroupManageApproachStaffList(KcsjGroupManageApproachStaff kcsjGroupManageApproachStaff) {
         return kcsjGroupManageApproachStaffMapper.getKcsjGroupManageApproachStaffList(kcsjGroupManageApproachStaff);
     }
@@ -71,6 +78,13 @@ public class KcsjGroupManageApproachStaffServiceImpl implements IKcsjGroupManage
         kcsjGroupManageApproachStaff.setUpdateUser(SecurityUtils.getUserName());
         kcsjGroupManageApproachStaff.setUpdateTime(DateUtils.getNowDate());
         return kcsjGroupManageApproachStaffMapper.deleteKcsjGroupManageApproachStaff(kcsjGroupManageApproachStaff);
+    }
+
+    @Override
+    public void deleteByMainId(Long mainId) {
+        KcsjGroupManageApproachStaff delParam = new KcsjGroupManageApproachStaff();
+        delParam.setMainId(mainId);
+        kcsjGroupManageApproachStaffMapper.deleteKcsjGroupManageApproachStaff(delParam);
     }
 
     @Transactional

@@ -2,6 +2,7 @@ package com.hhwy.sd.groupManage.mapper;
 
 import com.hhwy.sd.groupManage.domain.KcsjGroupManageMain;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * @date 2023-12-13 15:27:15
  * @remark
  */
+@Repository
 public interface KcsjGroupManageMainMapper {
 
     KcsjGroupManageMain getKcsjGroupManageMain(KcsjGroupManageMain kcsjGroupManageMain);

@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -241,4 +242,8 @@ public class KcsjGroupManageDetail extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    private List<KcsjGroupManageDetail> children;
+
+    private List<KcsjGroupManageApproachStaff> staffList;
 }

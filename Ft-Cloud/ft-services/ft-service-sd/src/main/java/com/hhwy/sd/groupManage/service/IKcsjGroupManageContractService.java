@@ -14,6 +14,8 @@ public interface IKcsjGroupManageContractService {
 
     KcsjGroupManageContract getKcsjGroupManageContract(KcsjGroupManageContract kcsjGroupManageContract);
 
+    List<KcsjGroupManageContract> getListByMainId(Long mainId);
+
     List<KcsjGroupManageContract> getKcsjGroupManageContractList(KcsjGroupManageContract kcsjGroupManageContract);
 
     int insertKcsjGroupManageContract(KcsjGroupManageContract kcsjGroupManageContract);
@@ -25,6 +27,8 @@ public interface IKcsjGroupManageContractService {
     int updateKcsjGroupManageContractList(List<KcsjGroupManageContract> kcsjGroupManageContractList);
 
     int deleteKcsjGroupManageContract(KcsjGroupManageContract kcsjGroupManageContract);
+
+    void deleteByMainId(Long mainId);
 
     int deleteKcsjGroupManageContractByPks(List<Long> kcsjGroupManageContractPkList);
 }

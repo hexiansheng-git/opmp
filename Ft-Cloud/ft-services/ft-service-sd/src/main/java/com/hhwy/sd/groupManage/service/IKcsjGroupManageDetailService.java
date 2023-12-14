@@ -14,6 +14,8 @@ public interface IKcsjGroupManageDetailService {
 
     KcsjGroupManageDetail getKcsjGroupManageDetail(KcsjGroupManageDetail kcsjGroupManageDetail);
 
+    List<KcsjGroupManageDetail> getListByMainId(Long mainId);
+
     List<KcsjGroupManageDetail> getKcsjGroupManageDetailList(KcsjGroupManageDetail kcsjGroupManageDetail);
 
     int insertKcsjGroupManageDetail(KcsjGroupManageDetail kcsjGroupManageDetail);
@@ -25,6 +27,8 @@ public interface IKcsjGroupManageDetailService {
     int updateKcsjGroupManageDetailList(List<KcsjGroupManageDetail> kcsjGroupManageDetailList);
 
     int deleteKcsjGroupManageDetail(KcsjGroupManageDetail kcsjGroupManageDetail);
+
+    void deleteByMainId(Long mainId);
 
     int deleteKcsjGroupManageDetailByPks(List<Long> kcsjGroupManageDetailPkList);
 }

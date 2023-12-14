@@ -35,9 +35,10 @@ public interface IQqchWorkPlanDetailService {
 
     /**
      * 根据阶段获取当前阶段所有的编制人（用户名）
+     *
      * @param planStage
      * @return
      */
-    List<Long> getEditorListByPlanStage(String planStage);
+    List<String> getEditorListByPlanStage(String planStage);
 
 }

@@ -176,6 +176,7 @@ public class SysPmController {
         String flag=map.get("flag");
         StringBuffer sb = new StringBuffer();
         SysTenantDb db = new SysTenantDb();
+        db.setServiceName(map.get("serviceName"));//服务名称
         List<SysTenantDb> dbList = dbService.selectSysTenantDbList(db);
         for(SysTenantDb item:dbList){
             String sbStr = new String(sql);
