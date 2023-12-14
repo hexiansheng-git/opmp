@@ -228,7 +228,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
             this.updateQqchReviewList(qqchReviewList);
             this.updateFinishNum();
             //推送到总部
-            sysSyncInfoService.pushQqchReview(qqchReviewList);
+//            sysSyncInfoService.pushQqchReview(qqchReviewList);
         }else {
             this.reviewMapper.insertQqchReviewList(iData);
             sysSyncInfoService.pushQqchReview(iData);
@@ -287,8 +287,9 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         review.setUpdateUser(SecurityUtils.getUserName());
         review.setUpdateTime(DateUtils.getNowDate());
         int result = reviewMapper.updateQqchReview(review);
-        //推送到总部版
-        sysSyncInfoService.pushQqchReview(review);
+        //推送到总部版  前端传递数据不全，得重新查数据后推送
+        Review dbReview = this.getQqchReview(new Review(review.getId()));
+        sysSyncInfoService.pushQqchReview(dbReview);
         return result;
     }
 
