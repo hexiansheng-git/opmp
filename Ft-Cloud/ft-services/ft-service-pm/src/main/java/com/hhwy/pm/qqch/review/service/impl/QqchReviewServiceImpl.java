@@ -412,6 +412,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
 
                 if(!CollectionUtils.isEmpty(qqchReviewList)){
                     this.reviewMapper.updateQqchReviewList(qqchReviewList);
+                    this.sysSyncInfoService.pushQqchReview(qqchReviewList);
                 }
             }
         } finally {
