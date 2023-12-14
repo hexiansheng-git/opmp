@@ -16,7 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class KcsjGroupManageMainVo {
-    private static final long serialVersionUID = 1L;
 
     /**
      * 字段描述：分包类型（1：总体分包，2：勘察分包，3：测绘分包，4：设计分包）

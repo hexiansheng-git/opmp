@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-12-13 15:27:15
- * @remark
+ * @remark 勘察设计队伍管理-主表
  */
 @Validated
 @RestController
@@ -45,17 +45,17 @@ public class KcsjGroupManageMainController extends BaseController {
      * @return
      */
     @PreAuthorize(hasPermi = "kcsjGroupManageMain:list")
-    @GetMapping("/list")
+    @GetMapping("/getKcsjGroupManageMainVo")
     public AjaxResult getKcsjGroupManageMainVo(@Validated(ValidationGroups.Select.class) KcsjGroupManageMain kcsjGroupManageMain) {
         KcsjGroupManageMainVo kcsjGroupManageMainVo = kcsjGroupManageMainService.getKcsjGroupManageMainVo(kcsjGroupManageMain);
         return AjaxResult.success(kcsjGroupManageMainVo);
     }
 
-    @PreAuthorize(hasPermi = "kcsjGroupManageMain:add")
-    @PostMapping("/add")
-    public AjaxResult insertKcsjGroupManageMain(@Validated(ValidationGroups.Save.class) @RequestBody KcsjGroupManageMain kcsjGroupManageMainParam) {
-        kcsjGroupManageMainService.insertKcsjGroupManageMain(kcsjGroupManageMainParam);
-        return AjaxResult.success(kcsjGroupManageMainParam);
+    @PreAuthorize(hasPermi = "kcsjGroupManageMain:save")
+    @PostMapping("/save")
+    public AjaxResult insertKcsjGroupManageMain(@RequestBody KcsjGroupManageMainVo kcsjGroupManageMainVo) {
+        kcsjGroupManageMainService.save(kcsjGroupManageMainVo);
+        return AjaxResult.success();
     }
 
     @PreAuthorize(hasPermi = "kcsjGroupManageMain:add")

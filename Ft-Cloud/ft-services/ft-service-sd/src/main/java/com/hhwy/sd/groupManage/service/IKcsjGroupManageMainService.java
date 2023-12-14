@@ -30,4 +30,6 @@ public interface IKcsjGroupManageMainService {
     int deleteKcsjGroupManageMainByPks(List<Long> kcsjGroupManageMainPkList);
 
     KcsjGroupManageMainVo getKcsjGroupManageMainVo(KcsjGroupManageMain kcsjGroupManageMain);
+
+    void save(KcsjGroupManageMainVo kcsjGroupManageMainVo);
 }

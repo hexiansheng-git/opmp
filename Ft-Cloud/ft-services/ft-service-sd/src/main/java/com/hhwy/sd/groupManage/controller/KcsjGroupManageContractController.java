@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-12-13 15:27:09
- * @remark
+ * @remark 勘察设计队伍管理-合同表
  */
 @Validated
 @RestController
