@@ -155,7 +155,7 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         if (CollectionUtils.isEmpty(sgjsPlanMeasureManageVo.getTreeList())) {
             return AjaxResult.error("数据异常");
         }
-        treeToList = TreeUtil.treeToListWithoutId(sgjsPlanMeasureManageVo.getTreeList());
+        treeToList = TreeUtil.treeToList(sgjsPlanMeasureManageVo.getTreeList());
         for (int i = 0; i < treeToList.size(); i++) {
             SgjsPlanMeasureManage sgjsPlanMeasureManage = treeToList.get(i);
             sgjsPlanMeasureManage.setCreateTime(DateTime.now());
