@@ -297,8 +297,8 @@ public class CurrencyPeriodData {
         req.put("dicCode", "MDM26");
         Map<String, Object> whereCondition = new HashMap<>();
         whereCondition.put("year", year);
-        whereCondition.put("starttime", "2023-08-15T10:30:00.262+08:00");
-        whereCondition.put("endtime", "2024-06-15T10:30:00.262+08:00");
+        whereCondition.put("starttime", "2023-12-01T10:30:00.262+08:00");
+        whereCondition.put("endtime", "2023-12-31T10:30:00.262+08:00");
         whereCondition.put("PageNum", pageNum);
         whereCondition.put("IFPUB", "2");
         whereCondition.put("ORGID", "101140128");
