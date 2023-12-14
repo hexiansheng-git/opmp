@@ -212,6 +212,8 @@ public class TWbsServiceImpl implements ITWbsService {
                 idList.clear();
                 for (int j = 0; j < tempList.size(); j++) {
                     TWbs temp = tempList.get(j);
+                    temp.setPtVar3(temp.getName());
+                    temp.setName(ObjectUtils.nvlString(temp.getCode())+"-"+ObjectUtils.nvlString(temp.getName()));
                     String topId = i==0?temp.getParentId():realIdMap.get(temp.getParentId());
                     idList.add(Long.valueOf(temp.getId()));
                     realIdMap.put(temp.getId(), topId);
