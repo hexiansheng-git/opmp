@@ -17,6 +17,7 @@
         <module>ft-service-flowable</module>
         <module>ft-service-sd</module>
         <module>ft-service-sp</module>
+        <module>ft-service-log</module>
     </modules>
 
     <artifactId>ft-services</artifactId>

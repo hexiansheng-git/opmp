@@ -8,6 +8,8 @@ import com.hhwy.pm.qqch.preparation.sbch.imported.plan.domain.SbchImportPlan;
 import com.hhwy.pm.qqch.preparation.sbch.imported.plan.domain.SbchImportPlanDetail;
 import com.hhwy.pm.qqch.preparation.sbch.imported.plan.service.ISbchImportPlanDetailService;
 import com.hhwy.pm.qqch.preparation.sbch.imported.plan.service.ISbchImportPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -40,10 +42,9 @@ public class SbchImportPlanController extends BaseController {
     /**
      * 查询进口方案列表
      */
-//    @PreAuthorize(hasPermi="inquiry:plan:list")
     @PostMapping("/list")
-    //@CustomLogger(title = "设备进口方案 进口调查查询", businessType = CustomBusinessType.SELECT)
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.2进口方案", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody SbchImportPlan sbchImportPlan) {
 //        startPage(sbchImportPlan.getPageNum(),sbchImportPlan.getPageSize());
         List<SbchImportPlan> list = sbchImportPlanService.selectSbchImportPlanList(sbchImportPlan);
@@ -53,10 +54,9 @@ public class SbchImportPlanController extends BaseController {
     /**
      * 导出进口方案列表
      */
-//    @PreAuthorize(hasPermi="inquiry:plan:export")
-    //@CustomLogger(title = "设备进口方案 进口调查导出", businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.2进口方案", businessType = CustomBusinessType.EXPORT)
     public void export(@RequestBody SbchImportPlan sbchImportPlan, HttpServletResponse response) {
         try {
             List<SbchImportPlan> list = sbchImportPlanService.selectSbchImportPlanList(sbchImportPlan);
@@ -71,10 +71,9 @@ public class SbchImportPlanController extends BaseController {
     /**
      * 新增保存进口方案
      */
-//    @PreAuthorize(hasPermi="inquiry:plan:add")
-    //@CustomLogger(title = "设备进口方案 进口调查添加", businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.2进口方案", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody SbchImportPlan sbchImportPlan) {
         try{
             return toAjax(sbchImportPlanService.insertSbchImportPlan(sbchImportPlan));
@@ -91,10 +90,9 @@ public class SbchImportPlanController extends BaseController {
     /**
      * 修改保存进口方案
      */
-//    @PreAuthorize(hasPermi="inquiry:plan:edit")
-    //@CustomLogger(title = "设备进口策划 进口方案修改保存", businessType = CustomBusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.2进口方案", businessType = CustomBusinessType.SAVE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody SbchImportPlan sbchImportPlan) {
         try{
             return toAjax(sbchImportPlanService.updateSbchImportPlan(sbchImportPlan));
@@ -116,6 +114,7 @@ public class SbchImportPlanController extends BaseController {
      */
     @GetMapping("/detail/{id}")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.2进口方案", businessType = CustomBusinessType.SELECT)
     public AjaxResult detail(@PathVariable("id") Long id){
         SbchImportPlan sbchImportPlan = sbchImportPlanService.selectSbchImportPlanById(id);
         return AjaxResult.success(sbchImportPlan);
@@ -124,10 +123,9 @@ public class SbchImportPlanController extends BaseController {
     /**
      * 删除进口方案
      */
-//    @PreAuthorize(hasPermi="inquiry:plan:remove")
-    //@CustomLogger(title = "设备进口策划 进口方案修改删除", businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.2进口方案", businessType = CustomBusinessType.DELETE)
     public AjaxResult remove(@RequestBody Map map) {
         if(ObjectNullUtil.isEmpty(map.get("ids"))){
             return AjaxResult.error("id不可为空");
@@ -144,6 +142,7 @@ public class SbchImportPlanController extends BaseController {
      */
     @GetMapping("/detailList/{id}")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.2进口方案", businessType = CustomBusinessType.SELECT)
     public AjaxResult detailList(@PathVariable("id") Long id){
         SbchImportPlanDetail sbchImportPlanDetail = new SbchImportPlanDetail();
         sbchImportPlanDetail.setPlanId(id);
@@ -153,6 +152,7 @@ public class SbchImportPlanController extends BaseController {
 
     @GetMapping("/getList")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.2进口方案", businessType = CustomBusinessType.SELECT)
     public AjaxResult getList(BigDecimal version){
         SbchImportPlan sbchImportPlan =  sbchImportPlanService.getList(version);
         return AjaxResult.success(sbchImportPlan);
@@ -160,6 +160,7 @@ public class SbchImportPlanController extends BaseController {
 
     @PostMapping("/batchAdd")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.2进口方案", businessType = CustomBusinessType.SAVE)
     public AjaxResult batchAdd(@Validated(ValidationGroups.Save.class) @RequestBody SbchImportPlan sbchImportPlan){
         try{
             sbchImportPlanService.batchSave(sbchImportPlan);

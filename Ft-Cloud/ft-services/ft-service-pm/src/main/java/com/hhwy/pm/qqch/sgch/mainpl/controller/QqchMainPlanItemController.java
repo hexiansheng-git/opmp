@@ -10,6 +10,8 @@ import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
 import com.hhwy.pm.qqch.sgch.mainpl.domain.vo.QqchMainPlanItemVo;
 import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -56,6 +58,7 @@ public class QqchMainPlanItemController extends BaseController {
      * @return
      */
     //  // @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-总体进度计划", name = "1.2.1总体进度计划" ,businessType = CustomBusinessType.SELECT)
     @GetMapping("/list")
     public AjaxResult getQqchMainPlanItemList(@Validated(ValidationGroups.Select.class) QqchMainPlanItem qqchMainPlanItemParam) {
         List<QqchMainPlanItem> qqchMainPlanItemList = qqchMainPlanItemService.getQqchMainPlanItemListNoTree(qqchMainPlanItemParam);
@@ -68,6 +71,7 @@ public class QqchMainPlanItemController extends BaseController {
      * @return
      */
     //  // @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-总体进度计划", name = "1.2.1总体进度计划" ,businessType = CustomBusinessType.SELECT)
     @GetMapping("/list4page")
     public AjaxResult getQqchMainPlanItemList4page(@Validated(ValidationGroups.Select.class) QqchMainPlanItem qqchMainPlanItemParam) {
         BigDecimal version = VersionUtil.getVersion(QqchMainPlanItem.TABLE_NAME, qqchMainPlanItemParam.getVersion());
@@ -83,6 +87,7 @@ public class QqchMainPlanItemController extends BaseController {
      * @return
      */
     //  // @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-总体进度计划", name = "1.2.1总体进度计划" ,businessType = CustomBusinessType.SELECT)
     @GetMapping("/treelist")
     public AjaxResult getQqchMainPlanItemTreelist(@Validated(ValidationGroups.Select.class) QqchMainPlanItem qqchMainPlanItemParam) {
         List<QqchMainPlanItem> qqchMainPlanItemList = qqchMainPlanItemService.getQqchMainPlanItemList4Lazy(qqchMainPlanItemParam);
@@ -92,6 +97,7 @@ public class QqchMainPlanItemController extends BaseController {
 
 
     //  // @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-总体进度计划", name = "1.2.1总体进度计划" ,businessType = CustomBusinessType.SELECT)
     @GetMapping("/getKeyRoad")
     public AjaxResult getKeyRoad(@Validated(ValidationGroups.Select.class) QqchMainPlanItem qqchMainPlanItemParam) {
         List<QqchMainPlanItem> qqchMainPlanItemList = qqchMainPlanItemService.getKeyRoad(qqchMainPlanItemParam);

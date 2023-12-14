@@ -6,6 +6,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchDangerConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstructionListService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.ExportUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -39,6 +41,8 @@ public class QqchDangerConstructionListController extends BaseController {
     }
 
     @PostMapping("/batchSave")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.4 施工方案计划管理", name = "\n" +
+            "3.4.3 危大工程方案清单" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Update.class) @RequestBody QqchDangerConstructionListVo qqchDangerConstructionListVo) {
         qqchDangerConstructionListService.batchSave(qqchDangerConstructionListVo);

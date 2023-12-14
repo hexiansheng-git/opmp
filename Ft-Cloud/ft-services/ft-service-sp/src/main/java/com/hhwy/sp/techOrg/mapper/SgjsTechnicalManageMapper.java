@@ -40,4 +40,12 @@ public interface SgjsTechnicalManageMapper {
      *
      */
     void delectAll(SgjsTechnicalManage info);
+
+    /**
+     * 删除根据id
+     *
+     * @param list
+     * @return
+     */
+    int deleteInfoData(List<SgjsTechnicalManage> list);
 }

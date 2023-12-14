@@ -17,6 +17,7 @@ import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.sgch.prodplan.service.IQqchProdPlanService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.utils.ThreadPoolUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -34,6 +35,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 @Service
@@ -236,6 +238,22 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
 
         return returnList;
     }
+
+    /**
+     * 开单线程从p6获取数据
+     * @param tenantKey
+     * @param version
+     */
+    @Override
+    public void initQqchData4P64Thread(String tenantKey, BigDecimal version) {
+        ThreadPoolUtil.execute(new Runnable() {
+            @Override
+            public void run() {
+                initQqchData4P6(tenantKey, version);
+            }
+        });
+    }
+
     /**
      * 给wbs赋值开始结束时间
      * @param qqchMainPlanItems

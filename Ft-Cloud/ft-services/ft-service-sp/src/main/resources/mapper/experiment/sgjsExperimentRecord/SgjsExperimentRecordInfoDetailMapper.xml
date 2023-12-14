@@ -93,7 +93,7 @@
     <select id="getSgjsExperimentRecordInfoDetailList" resultMap="SgjsExperimentRecordInfoDetailResultMap">
         <include refid="selectSgjsExperimentRecordInfoDetailVo" />
         <where>
-            del_flag = "0"
+            del_flag = '0'
             <if test="id != null "> and `id` = #{id}</if>
             <if test="infoId != null "> and `info_id` = #{infoId}</if>
             <if test="checkDate != null "> and `check_date` = #{checkDate}</if>

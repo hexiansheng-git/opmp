@@ -22,5 +22,5 @@ public class XmslContractGeneralVo {
     /**
      * 字段描述：弹框选中的集合
      */
-    List<QyzsManageContCondition> knowledgeList;
+    List<QyzsManageContConditionVo> knowledgeList;
 }

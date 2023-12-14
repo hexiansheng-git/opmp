@@ -8,6 +8,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.technique.techManage.domain.QqchInterestedPartyManage;
 import com.hhwy.pm.qqch.preparation.technique.techManage.domain.vo.QqchInterestedPartyManageVo;
 import com.hhwy.pm.qqch.preparation.technique.techManage.service.IQqchInterestedPartyManageService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -104,6 +106,8 @@ public class QqchInterestedPartyManageController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.12 技术管理相关方管理及沟通管理", name = "\n" +
+            "3.12.1 技术管理相关方管理" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchInterestedPartyManageVo qqchInterestedPartyManageVo) {
         qqchInterestedPartyManageService.save(qqchInterestedPartyManageVo);
         return AjaxResult.success();

@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.domain.QqchSpecialBigEquList;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.domain.vo.QqchSpecialBigEquListVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service.IQqchSpecialBigEquListService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +37,7 @@ public class QqchSpecialBigEquListController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSpecialBigEquList:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划", name = "8.4.1 特种设备及大型设备清单" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSpecialBigEquListList(@Validated(ValidationGroups.Select.class) QqchSpecialBigEquList qqchSpecialBigEquListParam) {
         QqchSpecialBigEquListVo vo = qqchSpecialBigEquListService.getQqchSpecialBigEquListList(qqchSpecialBigEquListParam);
         return AjaxResult.success(vo);
@@ -47,6 +50,7 @@ public class QqchSpecialBigEquListController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSpecialBigEquList:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划", name = "8.4.1 特种设备及大型设备清单" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSpecialBigEquListList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSpecialBigEquListVo vo) {
         qqchSpecialBigEquListService.save(vo);
         return AjaxResult.success();
@@ -55,6 +59,7 @@ public class QqchSpecialBigEquListController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSpecialBigEquList:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划", name = "8.4.1 特种设备及大型设备清单" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSpecialBigEquList(@Validated(ValidationGroups.Get.class) QqchSpecialBigEquList qqchSpecialBigEquListParam) {
         QqchSpecialBigEquList qqchSpecialBigEquList = qqchSpecialBigEquListService.getQqchSpecialBigEquList(qqchSpecialBigEquListParam);
         return AjaxResult.success(qqchSpecialBigEquList);
@@ -63,6 +68,7 @@ public class QqchSpecialBigEquListController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSpecialBigEquList:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划", name = "8.4.1 特种设备及大型设备清单" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSpecialBigEquList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSpecialBigEquList qqchSpecialBigEquListParam) {
         qqchSpecialBigEquListService.insertQqchSpecialBigEquList(qqchSpecialBigEquListParam);
         return AjaxResult.success(qqchSpecialBigEquListParam);

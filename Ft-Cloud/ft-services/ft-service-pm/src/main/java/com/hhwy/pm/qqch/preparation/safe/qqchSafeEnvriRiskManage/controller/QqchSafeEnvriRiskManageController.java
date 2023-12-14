@@ -8,6 +8,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvriRiskManage.domain.QqchSafeEnvriRiskManage;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvriRiskManage.service.IQqchSafeEnvriRiskManageService;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvriRiskManage.vo.QqchSafeEnvriRiskManageVo;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +24,7 @@ import java.util.List;
 /**
  * @author zq
  * @date 2023-08-14 14:04:07
- * @remark
+ * @remark 8.8.3 环境风险过程管控措施
  */
 @Validated
 @RestController
@@ -57,6 +59,8 @@ public class QqchSafeEnvriRiskManageController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSafeEnvriRiskManage:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-8.8 环境风险管控策划", name = "\n" +
+            "8.8.3 环境风险过程管控措施" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSafeEnvriRiskManageList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSafeEnvriRiskManageVo qqchSafeEnvriRiskManageVo) {
         qqchSafeEnvriRiskManageService.insertQqchSafeEnvriRiskManageList(qqchSafeEnvriRiskManageVo);
         return AjaxResult.success();

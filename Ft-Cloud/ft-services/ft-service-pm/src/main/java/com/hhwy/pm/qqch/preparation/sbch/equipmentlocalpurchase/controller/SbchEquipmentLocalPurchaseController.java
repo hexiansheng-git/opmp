@@ -9,6 +9,8 @@ import com.hhwy.pm.qqch.preparation.sbch.equipmentlocalpurchase.domain.SbchEquip
 import com.hhwy.pm.qqch.preparation.sbch.equipmentlocalpurchase.service.ISbchEquipmentLocalPurchaseDetailsService;
 import com.hhwy.pm.qqch.preparation.sbch.equipmentlocalpurchase.service.ISbchEquipmentLocalPurchaseService;
 import com.hhwy.utils.common.PmsConstant;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +42,8 @@ public class SbchEquipmentLocalPurchaseController extends BaseController {
     /**
      * 查询设备申购管理列表
      */
-//    @PreAuthorize(hasPermi ="equipmentlocalpurchase:purchase:list")
     @GetMapping("/list")
-    //@CustomLogger(title = "设备属地化采购-列表查询",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.5设备属地化采购", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(BigDecimal version) {
         SbchEquipmentLocalPurchase list = sbchEquipmentPurchaseService.selectSbchEquipmentPurchaseList(version);
         return AjaxResult.success(list);
@@ -52,9 +53,8 @@ public class SbchEquipmentLocalPurchaseController extends BaseController {
     /**
      * 新增保存设备申购管理
      */
-//    @PreAuthorize(hasPermi ="equipmentlocalpurchase:purchase:add")
-    //@CustomLogger(title = "设备属地化采购-保存",businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.5设备属地化采购", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody SbchEquipmentLocalPurchase sbchEquipmentPurchase) {
         try {
             return new AjaxResult(200,"成功",sbchEquipmentPurchaseService.insertSbchEquipmentPurchaseAndDetails(sbchEquipmentPurchase));

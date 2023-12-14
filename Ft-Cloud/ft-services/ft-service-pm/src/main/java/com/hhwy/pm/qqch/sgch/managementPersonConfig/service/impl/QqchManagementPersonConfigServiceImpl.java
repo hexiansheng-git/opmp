@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.feign.service.SystemServiceApi;
@@ -24,6 +25,7 @@ import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -251,6 +253,8 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
      */
     @Override
     public Map<String, String> getProjectLeadershipPersonUserNameMap() {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
         //获取所有租户
         List<SysTenant> tenantList = systemServiceApi.tenantList();
         Map<String,String> userNameMap = new HashMap<>();
@@ -268,11 +272,11 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
             throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
         }
 
         return userNameMap;
     }
-
 
     private void getPersonType() throws ParserConfigurationException, IOException, SAXException {
         List<QqchManagementPersonConfig> list = qqchManagementPersonConfigMapper.getNonPersonTyep();
@@ -364,4 +368,39 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
         return qqchManagementPersonConfigMapper.getQqchManagementPersonConfigList(qqchManagementPersonConfig);
     }
 
+    @Override
+    public List<QqchManagementPersonConfig> getPopWindows(QqchManagementPersonConfig qqchManagementPersonConfig) {
+        List<QqchManagementPersonConfig> resultList;
+        BigDecimal version = VersionUtil.getVersion("qqch_management_person_config", null);
+        QqchManagementPersonConfig query = new QqchManagementPersonConfig();
+        query.setVersion(version);
+        //全量数据
+        List<QqchManagementPersonConfig> allList = qqchManagementPersonConfigMapper.getQqchManagementPersonConfigList(query);
+
+        String post = qqchManagementPersonConfig.getPost();
+        String name = qqchManagementPersonConfig.getName();
+
+        if(StringUtils.isNotBlank(post) || StringUtils.isNotBlank(name)){
+            query.setPost(post);
+            query.setName(name);
+            List<QqchManagementPersonConfig> subList = qqchManagementPersonConfigMapper.getQqchManagementPersonConfigList(query);
+            resultList = ListTreeUtil.getUpListBySublistToTree(
+                    subList,
+                    allList,
+                    QqchManagementPersonConfig::getId,
+                    QqchManagementPersonConfig::getPid,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchManagementPersonConfig::getChildren,
+                    QqchManagementPersonConfig::setChildren);
+        }else {
+            resultList = ListTreeUtil.formatTree(
+                    allList,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchManagementPersonConfig::getChildren,
+                    QqchManagementPersonConfig::setChildren);
+        }
+        return resultList;
+    }
 }

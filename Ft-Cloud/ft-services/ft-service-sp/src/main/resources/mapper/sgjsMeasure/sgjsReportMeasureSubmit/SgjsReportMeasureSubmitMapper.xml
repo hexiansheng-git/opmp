@@ -171,6 +171,12 @@
       <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
       <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
       <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+      <if test="null!=idList and idList.size()>0">
+        and id in
+        <foreach collection="idList" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
     </where>
     order by create_time desc
   </select>
@@ -346,7 +352,7 @@
     </where>
   </update>
 
-  <update id="updateSgjsReportMeasureSubmitList">
+  <update id="updateSgjsReportMeasureSubmitList" parameterType="list">
     update sgjs_report_measure_submit
     <trim prefix="set" suffixOverrides=",">
       <trim prefix="id  = case" suffix="end,">
@@ -486,7 +492,7 @@
       </trim>
     </trim>
     where `id` in
-    <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+    <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
       #{item.id}
     </foreach>
   </update>
@@ -542,11 +548,77 @@
     </where>
   </update>
 
-  <update id="deleteWbsAll" parameterType="com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit">
-    update `sgjs_report_measure_submit` set del_flag = "1"  , update_time=#{updateTime} , update_user=#{updateUser} where `wbs_id` = #{wbsId}
+  <update id="deleteAll" parameterType="com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit">
+    update `sgjs_report_measure_submit` set del_flag = "1" where `id` in
+    <foreach collection="delIdList" index="index" item="item" separator="," open="(" close=")">
+      #{item}
+    </foreach>
   </update>
 
-  <update id="deleteAll" parameterType="com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit">
-    update `sgjs_report_measure_submit` set del_flag = "1"  , update_time=#{updateTime} , update_user=#{updateUser}
+  <select id="getIds" resultMap="SgjsReportMeasureSubmitResultMap">
+    select
+    `id`
+    ,`pid`
+    ,`report_name`
+    ,`wbs_code`
+    ,`wbs_name`
+    ,`wbs_id`
+    ,`wbs_ancestors`
+    ,`plan_start_date`
+    ,`real_start_date`
+    ,`aurhorized_personnel`
+    ,`submitter`
+    ,`file_group_id`
+    ,`remark`
+    ,`data_source`
+    ,`create_user`
+    ,`create_user_name`
+    ,`create_time`
+    ,`update_user`
+    ,`update_time`
+    ,`del_user`
+    ,`del_time`
+    ,`del_flag`
+    ,`pt_var1`
+    ,`pt_var2`
+    ,`pt_var3`
+    ,`pt_var4`
+    ,`pt_var5`
+    from sgjs_report_measure_submit
+    <where>
+      del_flag = "0"
+      <if test="ids != null and ids.size() > 0">
+        and `id` in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+    </where>
+    order by create_time desc
+  </select>
+
+  <update id="deleteInfoData" parameterType="list">
+    update sgjs_report_measure_submit
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.id}
+        </foreach>
+      </trim>
+      <trim prefix="update_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.updateUser}
+        </foreach>
+      </trim>
+      <trim prefix="update_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.updateTime}
+        </foreach>
+      </trim>
+    </trim>
+    where `id` in
+    <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+      #{item.id}
+    </foreach>
   </update>
 </mapper>

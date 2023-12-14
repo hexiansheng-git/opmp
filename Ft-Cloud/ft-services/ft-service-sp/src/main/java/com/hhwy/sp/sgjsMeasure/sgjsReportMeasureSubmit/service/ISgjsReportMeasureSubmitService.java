@@ -5,13 +5,15 @@ import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureS
 import java.util.List;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author zmh
  * @date 2023-12-08 16:19:52
- * @remark 
+ * @remark
  */
 public interface ISgjsReportMeasureSubmitService {
-                                                                                                                                                                                                                                                                                                                                                    
+
     SgjsReportMeasureSubmit getSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
 
     SgjsReportMeasureSubmitVo list(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
@@ -22,9 +24,19 @@ public interface ISgjsReportMeasureSubmitService {
 
     int updateSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
 
-            int updateSgjsReportMeasureSubmitList(List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList);
-    
+    int updateSgjsReportMeasureSubmitList(List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList);
+
     int deleteSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit);
 
-            int deleteSgjsReportMeasureSubmitByPks(List<Long> sgjsReportMeasureSubmitPkList);
-    }
+    int deleteSgjsReportMeasureSubmitByPks(List<Long> sgjsReportMeasureSubmitPkList);
+
+    List<SgjsReportMeasureSubmit> getIds(List<Long> ids);
+
+    /**
+     * 批量导出附件压缩包
+     *
+     * @param response
+     * @param submit
+     */
+    void bathExportZip(HttpServletResponse response, SgjsReportMeasureSubmit submit);
+}

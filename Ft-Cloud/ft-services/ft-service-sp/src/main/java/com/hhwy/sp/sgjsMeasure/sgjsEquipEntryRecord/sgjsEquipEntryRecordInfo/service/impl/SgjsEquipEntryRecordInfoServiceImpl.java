@@ -11,6 +11,7 @@ import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.dom
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.mapper.SgjsEquipEntryRecordInfoMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.service.ISgjsEquipEntryRecordInfoService;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.domain.SgjsEquipEntryRecordInfoDetail;
+import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.mapper.SgjsEquipEntryRecordInfoDetailMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.service.ISgjsEquipEntryRecordInfoDetailService;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author lcf   测量管理--测试设备进场记录
@@ -43,6 +45,8 @@ public class SgjsEquipEntryRecordInfoServiceImpl implements ISgjsEquipEntryRecor
     private SgjsEquipEntryRecordMapper sgjsEquipEntryRecordMapper;
     @Autowired
     private ISgjsEquipEntryRecordInfoDetailService sgjsEquipEntryRecordInfoDetailService;
+    @Autowired
+    private SgjsEquipEntryRecordInfoDetailMapper detailMapper;
 
 
     public SgjsEquipEntryRecordInfo getSgjsEquipEntryRecordInfo(SgjsEquipEntryRecordInfo sgjsEquipEntryRecordInfo) {
@@ -59,7 +63,17 @@ public class SgjsEquipEntryRecordInfoServiceImpl implements ISgjsEquipEntryRecor
             sgjsEquipEntryRecordInfo.setEntryDateBegin(FtDateUtils.parseDate(begin));
             sgjsEquipEntryRecordInfo.setEntryDateEnd(FtDateUtils.parseDate(end));
         }
-        return sgjsEquipEntryRecordInfoMapper.getSgjsEquipEntryRecordInfoList(sgjsEquipEntryRecordInfo);
+        //详情表返回
+        List<SgjsEquipEntryRecordInfo> infoList = sgjsEquipEntryRecordInfoMapper.getSgjsEquipEntryRecordInfoList(sgjsEquipEntryRecordInfo);
+        List<String> infoIdList = infoList.stream().map(e -> e.getId()+"").collect(Collectors.toList());
+        List<SgjsEquipEntryRecordInfoDetail> detailList = detailMapper.selectByInfoId(infoIdList);
+        for (int i = 0; i < infoList.size(); i++) {
+            SgjsEquipEntryRecordInfo info = infoList.get(i);
+            String infoId=info.getId()+"";
+            List<SgjsEquipEntryRecordInfoDetail> dList = detailList.stream().filter(e -> String.valueOf(e.getInfoId()).equals(infoId)).collect(Collectors.toList());
+            info.setDetailList(dList);
+        }
+        return infoList;
     }
 
     @Transactional

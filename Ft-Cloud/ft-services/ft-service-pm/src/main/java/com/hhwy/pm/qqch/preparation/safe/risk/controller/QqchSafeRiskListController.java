@@ -8,6 +8,8 @@ import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskList;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskListVo;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.SafeRiskListQueryVo;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskListService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -57,6 +59,8 @@ public class QqchSafeRiskListController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSafeRiskList:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-8.2 安全风险管控策划", name = "\n" +
+            "8.2.1 安全风险清单/8.2.2 重大安全风险清单" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSafeRiskListList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSafeRiskListVo qqchSafeRiskListVo) {
         qqchSafeRiskListService.insertQqchSafeRiskListList(qqchSafeRiskListVo);
         return AjaxResult.success();

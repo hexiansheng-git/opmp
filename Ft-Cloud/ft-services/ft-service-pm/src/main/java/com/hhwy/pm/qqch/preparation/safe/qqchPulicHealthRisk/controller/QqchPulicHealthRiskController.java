@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.qqchPulicHealthRisk.domain.QqchPulicHealthRisk;
 import com.hhwy.pm.qqch.preparation.safe.qqchPulicHealthRisk.domain.vo.QqchPulicHealthRiskVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchPulicHealthRisk.service.IQqchPulicHealthRiskService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +31,7 @@ public class QqchPulicHealthRiskController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-职业健康策划", name = "8.7.2公共卫生风险策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchPulicHealthRiskList(@Validated(ValidationGroups.Select.class) QqchPulicHealthRisk qqchPulicHealthRiskParam) {
         QqchPulicHealthRiskVo vo = qqchPulicHealthRiskService.getQqchPulicHealthRiskList(qqchPulicHealthRiskParam);
         return AjaxResult.success(vo);
@@ -36,6 +39,7 @@ public class QqchPulicHealthRiskController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-职业健康策划", name = "8.7.2公共卫生风险策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchPulicHealthRiskList(@Validated(ValidationGroups.Save.class) @RequestBody QqchPulicHealthRiskVo vo) {
         qqchPulicHealthRiskService.save(vo);
         return AjaxResult.success();
@@ -44,6 +48,7 @@ public class QqchPulicHealthRiskController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-职业健康策划", name = "8.7.2公共卫生风险策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchPulicHealthRisk(@Validated(ValidationGroups.Get.class) QqchPulicHealthRisk qqchPulicHealthRiskParam) {
         QqchPulicHealthRisk qqchPulicHealthRisk = qqchPulicHealthRiskService.getQqchPulicHealthRisk(qqchPulicHealthRiskParam);
         return AjaxResult.success(qqchPulicHealthRisk);
@@ -51,6 +56,7 @@ public class QqchPulicHealthRiskController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-职业健康策划", name = "8.7.2公共卫生风险策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchPulicHealthRisk(@Validated(ValidationGroups.Save.class) @RequestBody QqchPulicHealthRisk qqchPulicHealthRiskParam) {
         qqchPulicHealthRiskService.insertQqchPulicHealthRisk(qqchPulicHealthRiskParam);
         return AjaxResult.success(qqchPulicHealthRiskParam);

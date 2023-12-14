@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.domain.QqchSafetyTrain;
 import com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.domain.vo.QqchSafetyTrainVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.service.IQqchSafetyTrainService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -36,6 +38,7 @@ public class QqchSafetyTrainController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSafetyTrain:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-安全培训策划", name = "8.9安全培训策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSafetyTrainList(@Validated(ValidationGroups.Select.class) QqchSafetyTrain qqchSafetyTrainParam) {
         QqchSafetyTrainVo vo = qqchSafetyTrainService.getQqchSafetyTrainList(qqchSafetyTrainParam);
         return AjaxResult.success(vo);
@@ -48,6 +51,7 @@ public class QqchSafetyTrainController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSafetyTrain:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-安全培训策划", name = "8.9安全培训策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSafetyTrainList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSafetyTrainVo vo) {
         qqchSafetyTrainService.save(vo);
         return AjaxResult.success();
@@ -56,6 +60,7 @@ public class QqchSafetyTrainController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSafetyTrain:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-安全培训策划", name = "8.9安全培训策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSafetyTrain(@Validated(ValidationGroups.Get.class) QqchSafetyTrain qqchSafetyTrainParam) {
         QqchSafetyTrain qqchSafetyTrain = qqchSafetyTrainService.getQqchSafetyTrain(qqchSafetyTrainParam);
         return AjaxResult.success(qqchSafetyTrain);
@@ -64,6 +69,7 @@ public class QqchSafetyTrainController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSafetyTrain:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-安全培训策划", name = "8.9安全培训策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSafetyTrain(@Validated(ValidationGroups.Save.class) @RequestBody QqchSafetyTrain qqchSafetyTrainParam) {
         qqchSafetyTrainService.insertQqchSafetyTrain(qqchSafetyTrainParam);
         return AjaxResult.success(qqchSafetyTrainParam);

@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
@@ -21,16 +22,22 @@ import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.utils.Constant;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excelUtil.ExcelUtilByTemplate;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.utils.validation.ValidationUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -52,6 +59,7 @@ public class XmslContractListController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractList:list")
     @GetMapping
+    @CustomLogger(title = "项目设立-合同信息-主合同清单", name = "主合同清单", businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslContractList(@Validated(ValidationGroups.Get.class)  XmslContractList xmslContractListParam) {
         List<XmslContractList> treeList  = xmslContractListService.getXmslContractList(xmslContractListParam);
         return AjaxResult.success(treeList);
@@ -64,6 +72,7 @@ public class XmslContractListController extends BaseController {
      */
     @PreAuthorize(hasPermi = "xmslContractList:list")
     @GetMapping("/lazylist")
+    @CustomLogger(title = "项目设立-合同信息-主合同清单", name = "主合同清单", businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslContractList2(@Validated(ValidationGroups.Get.class)  XmslContractList xmslContractListParam) {
         List<XmslContractList> list  = xmslContractListService.getXmslContractList2(xmslContractListParam);
         return AjaxResult.success(list);
@@ -76,6 +85,7 @@ public class XmslContractListController extends BaseController {
      * @return
      */
     @GetMapping("/getEffectList")
+    @CustomLogger(title = "项目设立-合同信息-主合同清单", name = "主合同清单", businessType = CustomBusinessType.SELECT)
     public AjaxResult getEffectList(@Validated(ValidationGroups.Get.class)  XmslContractList xmslContractListParam) {
         //默认第一层级
         if(xmslContractListParam.getPid() == null || xmslContractListParam.getPid() <= 0L){
@@ -91,6 +101,7 @@ public class XmslContractListController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractList:list")
     @GetMapping("/list")
+    @CustomLogger(title = "项目设立-合同信息-主合同清单", name = "主合同清单", businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslContractListList(@Validated(ValidationGroups.Select.class)  XmslContractList xmslContractListParam) {
         startPage();
         List<XmslContractList> xmslContractListList = xmslContractListService.getXmslContractListList(xmslContractListParam);
@@ -99,6 +110,7 @@ public class XmslContractListController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractList:add")
     @PostMapping("/add")
+    @CustomLogger(title = "项目设立-合同信息-主合同清单", name = "主合同清单", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertXmslContractList(@Validated(ValidationGroups.Save.class) @RequestBody XmslContractList xmslContractListParam) {
         xmslContractListService.insertXmslContractList(xmslContractListParam);
         return AjaxResult.success(xmslContractListParam);
@@ -106,11 +118,15 @@ public class XmslContractListController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractList:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "项目设立-合同信息-主合同清单", name = "主合同清单", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertXmslContractListList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslContractListVo> xmslContractListListParam) {
         int i = xmslContractListService.insertXmslContractListList(xmslContractListListParam);
         if (i == 500) return AjaxResult.error("保存异常，主合同清单编号重复");
+        if (i == 400) return AjaxResult.error("必填项为空,(清单编号、中标合同清单数量、中标合同清单单价)");
         return AjaxResult.success(xmslContractListListParam);
     }
+
+
 
     @PreAuthorize(hasPermi = "xmslContractList:update")
     @PostMapping("/update")
@@ -123,12 +139,14 @@ public class XmslContractListController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractList:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "项目设立-合同信息-主合同清单", name = "主合同清单", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteXmslContractList(@Validated(ValidationGroups.Delete.class) @RequestBody XmslContractList xmslContractListParam) {
         return toAjax(xmslContractListService.deleteXmslContractList(xmslContractListParam));
     }
 
     @PreAuthorize(hasPermi = "xmslContractList:remove")
     @PostMapping("/remove")
+    @CustomLogger(title = "项目设立-合同信息-主合同清单", name = "主合同清单", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteXmslContractListByPks(@RequestBody XmslContractList xmslContractListParam) {
         List<Long> xmslContractListPkList = Arrays.asList(xmslContractListParam.getIds());
         Long masterId = xmslContractListParam.getMasterId();
@@ -143,6 +161,7 @@ public class XmslContractListController extends BaseController {
      * @throws IOException
      */
     @PostMapping("/export")
+    @CustomLogger(title = "项目设立-合同信息-主合同清单", name = "主合同清单", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response,@RequestBody XmslContractList xmslContractListParam) throws IOException {
         try{
              InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("template/exportXmslContractList.xlsx");
@@ -166,9 +185,10 @@ public class XmslContractListController extends BaseController {
      * @throws IOException
      */
     @PostMapping("/import")
-    public AjaxResult importDate(@RequestPart("file") MultipartFile file) {
+    @CustomLogger(title = "项目设立-合同信息-主合同清单", name = "主合同清单", businessType = CustomBusinessType.IMPORT)
+    public AjaxResult importDate(@RequestPart("file") MultipartFile file) throws Exception {
         ExcelUtils<ImportXmslContractListVo> util = new ExcelUtils<>(ImportXmslContractListVo.class);
-        try {
+//        try {
             InputStream inputStream = file.getInputStream();
             List<ImportXmslContractListVo> importXmslContractListVos = util.importExcel(inputStream);
             //找到层级关系
@@ -179,9 +199,9 @@ public class XmslContractListController extends BaseController {
                     , ImportXmslContractListVo::getChildren
                     , ImportXmslContractListVo::setChildren);
             return AjaxResult.success(dateList);
-        } catch (Exception e) {
-            throw new RuntimeException("导入失败！");
-        }
+//        } catch (Exception e) {
+//            throw new RuntimeException("导入失败！");
+//        }
     }
 
     /**

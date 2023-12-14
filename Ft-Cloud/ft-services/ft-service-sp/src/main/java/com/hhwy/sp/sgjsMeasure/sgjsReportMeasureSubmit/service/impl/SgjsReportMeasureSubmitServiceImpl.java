@@ -6,12 +6,19 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
+import com.hhwy.sp.utils.FileUtils;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import java.util.ArrayList;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +27,12 @@ import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.ISgjsReportMeasur
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
 import org.springframework.util.CollectionUtils;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * @author zmh
  * @date 2023-12-08 16:19:52
- * @remark 
+ * @remark
  */
 @Service
 public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSubmitService{
@@ -31,7 +40,7 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
     @Autowired
     private SgjsReportMeasureSubmitMapper sgjsReportMeasureSubmitMapper;
 
-                                                                                                                                                                                                                                                                                                                                                    
+
     public SgjsReportMeasureSubmit getSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit) {
         return sgjsReportMeasureSubmitMapper.getSgjsReportMeasureSubmit(sgjsReportMeasureSubmit);
     }
@@ -66,23 +75,6 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
         if (CollectionUtils.isEmpty(sgjsReportMeasureSubmitVo.getTreeList())) {
             return AjaxResult.error("数据异常");
         }
-        //逻辑删除库中WbsId对应数据
-        SgjsReportMeasureSubmit info = new SgjsReportMeasureSubmit();
-
-
-        if(sgjsReportMeasureSubmitVo.getTreeList().get(0).getWbsId() !=null){
-            info.setWbsId(sgjsReportMeasureSubmitVo.getTreeList().get(0).getWbsId());
-            List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList = sgjsReportMeasureSubmitMapper.getSgjsReportMeasureSubmitList(info);
-            if(sgjsReportMeasureSubmitList.size()>0){
-                info.setUpdateTime(DateTime.now());
-                info.setUpdateUser(SecurityUtils.getUserId() + "");
-                sgjsReportMeasureSubmitMapper.deleteWbsAll(info);
-            }
-        }else{
-            info.setUpdateTime(DateTime.now());
-            info.setUpdateUser(SecurityUtils.getUserId() + "");
-            sgjsReportMeasureSubmitMapper.deleteAll(info);
-        }
         for (SgjsReportMeasureSubmit sgjsReportMeasureSubmit : sgjsReportMeasureSubmitVo.getTreeList()) {
             sgjsReportMeasureSubmit.setRealStartDate(sgjsReportMeasureSubmit.getRealStartDateStr() == null ? null : FtDateUtils.parseDate(sgjsReportMeasureSubmit.getRealStartDateStr().replaceAll("(?:年|月|日)", "-")));
             sgjsReportMeasureSubmit.setPlanStartDate(sgjsReportMeasureSubmit.getPlanStartDateStr() == null ? null : FtDateUtils.parseDate(sgjsReportMeasureSubmit.getPlanStartDateStr().replaceAll("(?:年|月|日)", "-")));
@@ -90,8 +82,39 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
             sgjsReportMeasureSubmit.setCreateTime(DateUtils.getNowDate());
             sgjsReportMeasureSubmit.setId(IdWorker.createId());
         }
-        sgjsReportMeasureSubmitMapper.batchAdd(sgjsReportMeasureSubmitVo.getTreeList());
+        List<SgjsReportMeasureSubmit> insertList = sgjsReportMeasureSubmitVo.getTreeList().stream().filter(r -> StringUtils.isNotEmpty(r.getIsAdd()) && r.getIsAdd().equals("1")).collect(Collectors.toList());
+        //批量入库
+        if(!CollectionUtils.isEmpty(insertList)){
+            sgjsReportMeasureSubmitMapper.batchAdd(insertList);
+        }
+        //批量编辑
+        List<SgjsReportMeasureSubmit> updateList = sgjsReportMeasureSubmitVo.getTreeList().stream().filter(r -> StringUtils.isEmpty(r.getIsAdd())).collect(Collectors.toList());
+        if(!CollectionUtils.isEmpty(updateList)){
+            sgjsReportMeasureSubmitMapper.updateSgjsReportMeasureSubmitList(updateList);
+        }
+        //批量删除
+        deleteByIds(sgjsReportMeasureSubmitVo.getDelIdList());
         return AjaxResult.success();
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param delIdList
+     */
+    private void deleteByIds(List<String> delIdList){
+        List<SgjsReportMeasureSubmit> list =new ArrayList<>();
+        for (int i = 0; i < delIdList.size(); i++) {
+            SgjsReportMeasureSubmit info=new SgjsReportMeasureSubmit();
+            info.setId(Long.parseLong(delIdList.get(i)));
+            info.setUpdateUser(SecurityUtils.getUserId()+"");
+            info.setUpdateTime(DateUtils.getNowDate());
+            list.add(info);
+        }
+        //删除
+        if(!CollectionUtils.isEmpty(list)){
+            sgjsReportMeasureSubmitMapper.deleteInfoData(list);
+        }
     }
 
     @Transactional
@@ -101,15 +124,15 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
         return sgjsReportMeasureSubmitMapper.updateSgjsReportMeasureSubmit(sgjsReportMeasureSubmit);
     }
 
-            @Transactional
-        public int updateSgjsReportMeasureSubmitList(List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList) {
-            for (SgjsReportMeasureSubmit sgjsReportMeasureSubmit : sgjsReportMeasureSubmitList) {
-                sgjsReportMeasureSubmit.setUpdateUser(SecurityUtils.getUserName());
-                sgjsReportMeasureSubmit.setUpdateTime(DateUtils.getNowDate());
-            }
-            return sgjsReportMeasureSubmitMapper.updateSgjsReportMeasureSubmitList(sgjsReportMeasureSubmitList);
+    @Transactional
+    public int updateSgjsReportMeasureSubmitList(List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList) {
+        for (SgjsReportMeasureSubmit sgjsReportMeasureSubmit : sgjsReportMeasureSubmitList) {
+            sgjsReportMeasureSubmit.setUpdateUser(SecurityUtils.getUserName());
+            sgjsReportMeasureSubmit.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return sgjsReportMeasureSubmitMapper.updateSgjsReportMeasureSubmitList(sgjsReportMeasureSubmitList);
+    }
+
     @Transactional
     public int deleteSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit) {
         sgjsReportMeasureSubmit.setUpdateUser(SecurityUtils.getUserName());
@@ -117,8 +140,29 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
         return sgjsReportMeasureSubmitMapper.deleteSgjsReportMeasureSubmit(sgjsReportMeasureSubmit);
     }
 
-            @Transactional
-        public int deleteSgjsReportMeasureSubmitByPks(List<Long> sgjsReportMeasureSubmitPkList) {
-            return sgjsReportMeasureSubmitMapper.deleteSgjsReportMeasureSubmitByPks(sgjsReportMeasureSubmitPkList);
-        }
+    @Transactional
+    public int deleteSgjsReportMeasureSubmitByPks(List<Long> sgjsReportMeasureSubmitPkList) {
+        return sgjsReportMeasureSubmitMapper.deleteSgjsReportMeasureSubmitByPks(sgjsReportMeasureSubmitPkList);
     }
+
+    @Override
+    public List<SgjsReportMeasureSubmit> getIds(List<Long> ids) {
+        return sgjsReportMeasureSubmitMapper.getIds(ids);
+    }
+
+
+    @Override
+    public void bathExportZip(HttpServletResponse response, SgjsReportMeasureSubmit submit) {
+        List<SgjsReportMeasureSubmit> list = sgjsReportMeasureSubmitMapper.getSgjsReportMeasureSubmitList(submit);
+        if(!org.springframework.util.CollectionUtils.isEmpty(list)){
+            return;
+        }
+        List<String> fileGroupIdList = list.stream().map(e -> e.getFileGroupId()).collect(Collectors.toList());
+
+        FileUtils.getFileByGroupIds(fileGroupIdList);
+
+    }
+
+
+
+}

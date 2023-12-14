@@ -4,6 +4,8 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionReviewPlanVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionReviewPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -39,6 +41,8 @@ public class QqchConstructionReviewPlanController extends BaseController {
     }
 
     @PostMapping("/batchSave")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.4 施工方案计划管理", name = "\n" +
+            "3.4.5 施工方案编审计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo) {
         qqchConstructionReviewPlanService.batchSave(qqchConstructionReviewPlanVo);

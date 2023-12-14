@@ -8,6 +8,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.technique.techRiskCounterMeasure.domain.QqchTechRiskSolutions;
 import com.hhwy.pm.qqch.preparation.technique.techRiskCounterMeasure.domain.vo.QqchTechRiskSolutionsVo;
 import com.hhwy.pm.qqch.preparation.technique.techRiskCounterMeasure.service.IQqchTechRiskSolutionsService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -104,6 +106,8 @@ public class QqchTechRiskSolutionsController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.13 技术风险及应对措施", name =
+            "3.13 技术风险及应对措施" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTechRiskSolutionsVo qqchTechRiskSolutionsVo) {
         qqchTechRiskSolutionsService.save(qqchTechRiskSolutionsVo);
         return AjaxResult.success();

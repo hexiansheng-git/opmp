@@ -13,6 +13,8 @@ import com.hhwy.pm.qqch.sgch.important.service.IQqchImportantService;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheCorr;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.ParamUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
@@ -55,6 +57,7 @@ public class QqchImportantController extends BaseController {
 
     //  // @PreAuthorize(hasPermi = "qqchImportant:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-开工前的重要工作策划", name = "1.2.3 开工前的重要工作策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchImportant qqchImportantParam) {
         CompileEntity qqchImportantList = qqchImportantService.list(qqchImportantParam);
         return AjaxResult.success(qqchImportantList);
@@ -62,6 +65,7 @@ public class QqchImportantController extends BaseController {
 
     // @PreAuthorize(hasPermi = "qqchImportant:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-开工前的重要工作策划", name = "1.2.3 开工前的重要工作策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchImportant>> dto) {
         List<QqchImportant> qqchImportants = dto.dealSaveDto();
         qqchImportantService.save(qqchImportants);
@@ -71,6 +75,7 @@ public class QqchImportantController extends BaseController {
 
     // @PreAuthorize(hasPermi = "qqchImportant:importData")
     @PostMapping("/importData")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-开工前的重要工作策划", name = "1.2.3 开工前的重要工作策划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(@RequestParam("file") MultipartFile file) {
         FtExcelUtil<QqchImportant> excelUtil = new FtExcelUtil<>(QqchImportant.class);
         try {
@@ -84,8 +89,8 @@ public class QqchImportantController extends BaseController {
 
 
     private void checkData(List<QqchImportant> list) {
-        if(CollectionUtils.isEmpty(list)) {
-            return ;
+        if (CollectionUtils.isEmpty(list)) {
+            return;
         }
         List<String> users = list.stream().map(QqchImportant::getDutyUserName).distinct().filter(StringUtils::isNotEmpty).collect(Collectors.toList());
         SysUser where = new SysUser();

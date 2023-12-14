@@ -9,6 +9,8 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractGeneral;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractGeneral;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractGeneralVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractGeneralService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,7 @@ public class XmslContractGeneralController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractGeneral:list")
     @GetMapping
+    @CustomLogger(title = "项目设立-合同信息-通用条件", name = "通用条件", businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslContractGeneral(@Validated(ValidationGroups.Get.class)  XmslContractGeneral xmslContractGeneralParam) {
         List<XmslContractGeneral> treeVOS = xmslContractGeneralService.getXmslContractGeneral(xmslContractGeneralParam);
         return AjaxResult.success(treeVOS);
@@ -44,6 +47,7 @@ public class XmslContractGeneralController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractGeneral:list")
     @GetMapping("/list")
+    @CustomLogger(title = "项目设立-合同信息-通用条件", name = "通用条件", businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslContractGeneralList(@Validated(ValidationGroups.Select.class)  XmslContractGeneral xmslContractGeneralParam) {
         startPage();
         List<XmslContractGeneral> xmslContractGeneralList = xmslContractGeneralService.getXmslContractGeneralList(xmslContractGeneralParam);
@@ -52,6 +56,7 @@ public class XmslContractGeneralController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractGeneral:add")
     @PostMapping("/add")
+    @CustomLogger(title = "项目设立-合同信息-通用条件", name = "通用条件", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertXmslContractGeneral(@Validated(ValidationGroups.Save.class) @RequestBody XmslContractGeneral xmslContractGeneralParam) {
         xmslContractGeneralService.insertXmslContractGeneral(xmslContractGeneralParam);
         return AjaxResult.success(xmslContractGeneralParam);
@@ -59,6 +64,7 @@ public class XmslContractGeneralController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractGeneral:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "项目设立-合同信息-通用条件", name = "通用条件", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertXmslContractGeneralList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslContractGeneral> xmslContractGeneralListParam) {
         xmslContractGeneralService.insertXmslContractGeneralList(xmslContractGeneralListParam);
         return AjaxResult.success(xmslContractGeneralListParam);
@@ -84,6 +90,7 @@ public class XmslContractGeneralController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractGeneral:remove")
     @PostMapping("/remove")
+    @CustomLogger(title = "项目设立-合同信息-通用条件", name = "通用条件", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteXmslContractGeneralByPks(@RequestBody XmslContractGeneral xmslContractGeneralParam) {
         Long [] ids = xmslContractGeneralParam.getIds();
         Long masterId = xmslContractGeneralParam.getMasterId();
@@ -99,6 +106,7 @@ public class XmslContractGeneralController extends BaseController {
      * @throws IOException
      */
     @GetMapping("/export")
+    @CustomLogger(title = "项目设立-合同信息-通用条件", name = "通用条件", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response,@RequestBody XmslContractGeneral xmslContractGeneralParam) throws IOException {
         List<XmslContractGeneral> xmslContractGeneralList = xmslContractGeneralService.getXmslContractGeneralList(xmslContractGeneralParam);
         ExcelUtils<XmslContractGeneral> util = new ExcelUtils<>(XmslContractGeneral.class);
@@ -112,6 +120,7 @@ public class XmslContractGeneralController extends BaseController {
      * @return
      */
     @PostMapping("/import")
+    @CustomLogger(title = "项目设立-合同信息-通用条件", name = "通用条件", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importDate(@RequestPart("file") MultipartFile file){
         ExcelUtils<ImportXmslContractGeneral> util = new ExcelUtils<>(ImportXmslContractGeneral.class);
         try {
@@ -131,6 +140,7 @@ public class XmslContractGeneralController extends BaseController {
      * @return
      */
     @PostMapping("/provideList")
+    @CustomLogger(title = "项目设立-合同信息-通用条件", name = "通用条件 - 给编制模块（合同策划）提供接口", businessType = CustomBusinessType.SELECT)
     public AjaxResult provideList(@Validated(ValidationGroups.Get.class) XmslContractGeneral xmslContractGeneralParam) {
         List<XmslContractGeneral> treeVOS = xmslContractGeneralService.provideList(xmslContractGeneralParam);
         return AjaxResult.success(treeVOS);
@@ -142,6 +152,7 @@ public class XmslContractGeneralController extends BaseController {
      * 作者: fushudong
      * 时间: 2023/12/11
      */
+    @PostMapping("/dataHandler")
     public AjaxResult dataHandler(@RequestBody XmslContractGeneralVo xmslContractGeneralVo){
         List<XmslContractGeneral> result = xmslContractGeneralService.dataHandler(xmslContractGeneralVo);
         return AjaxResult.success(result);

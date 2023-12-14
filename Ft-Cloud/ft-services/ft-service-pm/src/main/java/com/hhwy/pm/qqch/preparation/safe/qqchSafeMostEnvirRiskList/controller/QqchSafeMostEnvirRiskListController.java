@@ -8,6 +8,8 @@ import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.domain.QqchSa
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.domain.vo.QqchSafeMostEnvirRiskListVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.domain.vo.SafeMostEnvirRiskListQueryVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.service.IQqchSafeMostEnvirRiskListService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +23,7 @@ import java.util.List;
 /**
  * @author zq
  * @date 2023-08-14 14:04:02
- * @remark
+ * @remark 8.8.2 重大环境风险管控
  */
 @Validated
 @RestController
@@ -52,6 +54,8 @@ public class QqchSafeMostEnvirRiskListController extends BaseController {
     }
 
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-8.8 环境风险管控策划", name = "\n" +
+            "8.8.2 重大环境风险管控" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSafeMostEnvirRiskListList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSafeMostEnvirRiskListVo qqchSafeMostEnvirRiskListVo) {
         qqchSafeMostEnvirRiskListService.insertQqchSafeMostEnvirRiskListList(qqchSafeMostEnvirRiskListVo);
         return AjaxResult.success();

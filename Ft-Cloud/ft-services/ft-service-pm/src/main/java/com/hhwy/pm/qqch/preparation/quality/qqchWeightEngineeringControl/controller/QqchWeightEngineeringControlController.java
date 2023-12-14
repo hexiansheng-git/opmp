@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringControl.domain.QqchWeightEngineeringControl;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringControl.domain.vo.QqchWeightEngineeringControlVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringControl.service.IQqchWeightEngineeringControlService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +31,7 @@ public class QqchWeightEngineeringControlController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-重难点工程", name = "9.4.2重难点工程管控" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchWeightEngineeringControlList(@Validated(ValidationGroups.Select.class) QqchWeightEngineeringControl qqchWeightEngineeringControlParam) {
         QqchWeightEngineeringControlVo vo = qqchWeightEngineeringControlService.getQqchWeightEngineeringControlList(qqchWeightEngineeringControlParam);
         return AjaxResult.success(vo);
@@ -37,6 +40,7 @@ public class QqchWeightEngineeringControlController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-重难点工程", name = "9.4.2重难点工程管控" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchWeightEngineeringControlVo vo) {
         qqchWeightEngineeringControlService.save(vo);
         return AjaxResult.success();
@@ -45,6 +49,7 @@ public class QqchWeightEngineeringControlController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-重难点工程", name = "9.4.2重难点工程管控" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchWeightEngineeringControl(@Validated(ValidationGroups.Get.class) QqchWeightEngineeringControl qqchWeightEngineeringControlParam) {
         QqchWeightEngineeringControl qqchWeightEngineeringControl = qqchWeightEngineeringControlService.getQqchWeightEngineeringControl(qqchWeightEngineeringControlParam);
         return AjaxResult.success(qqchWeightEngineeringControl);
@@ -52,6 +57,7 @@ public class QqchWeightEngineeringControlController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-重难点工程", name = "9.4.2重难点工程管控" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchWeightEngineeringControl(@Validated(ValidationGroups.Save.class) @RequestBody QqchWeightEngineeringControl qqchWeightEngineeringControlParam) {
         qqchWeightEngineeringControlService.insertQqchWeightEngineeringControl(qqchWeightEngineeringControlParam);
         return AjaxResult.success(qqchWeightEngineeringControlParam);

@@ -10,6 +10,8 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPaten
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPatentDeclarePlanImportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPatentDeclarePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchPatentDeclarePlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -91,6 +93,8 @@ public class QqchPatentDeclarePlanController extends BaseController {
      * @return
      */
     @PostMapping("/import")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.9 科技管理策划", name = "\n" +
+            "3.9.5专利申报计划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(@RequestPart("file") MultipartFile file){
         FtExcelUtil<QqchPatentDeclarePlanImportVo> util = new FtExcelUtil<>(QqchPatentDeclarePlanImportVo.class);
         try {
@@ -136,6 +140,8 @@ public class QqchPatentDeclarePlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.9 科技管理策划", name = "\n" +
+            "3.9.5专利申报计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchPatentDeclarePlanVo qqchPatentDeclarePlanVo) {
         qqchPatentDeclarePlanService.save(qqchPatentDeclarePlanVo);
         return AjaxResult.success();

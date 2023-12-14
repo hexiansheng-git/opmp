@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.qqchPublicSafeControlMeasure.domain.QqchPublicSafeControlMeasure;
 import com.hhwy.pm.qqch.preparation.safe.qqchPublicSafeControlMeasure.domain.vo.QqchPublicSafeControlMeasureVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchPublicSafeControlMeasure.service.IQqchPublicSafeControlMeasureService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +37,7 @@ public class QqchPublicSafeControlMeasureController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-公共安全风险管控策划", name = "8.6.3公共安全过程管控措施" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchPublicSafeControlMeasureList(@Validated(ValidationGroups.Select.class) QqchPublicSafeControlMeasure qqchPublicSafeControlMeasureParam) {
         QqchPublicSafeControlMeasureVo vo = qqchPublicSafeControlMeasureService.getQqchPublicSafeControlMeasureList(qqchPublicSafeControlMeasureParam);
         return AjaxResult.success(vo);
@@ -48,6 +51,7 @@ public class QqchPublicSafeControlMeasureController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-公共安全风险管控策划", name = "8.6.3公共安全过程管控措施" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchPublicSafeControlMeasureList(@Validated(ValidationGroups.Save.class) @RequestBody QqchPublicSafeControlMeasureVo vo) {
         qqchPublicSafeControlMeasureService.save(vo);
         return AjaxResult.success();
@@ -56,6 +60,7 @@ public class QqchPublicSafeControlMeasureController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-公共安全风险管控策划", name = "8.6.3公共安全过程管控措施" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchPublicSafeControlMeasure(@Validated(ValidationGroups.Get.class) QqchPublicSafeControlMeasure qqchPublicSafeControlMeasureParam) {
         QqchPublicSafeControlMeasure qqchPublicSafeControlMeasure = qqchPublicSafeControlMeasureService.getQqchPublicSafeControlMeasure(qqchPublicSafeControlMeasureParam);
         return AjaxResult.success(qqchPublicSafeControlMeasure);
@@ -64,6 +69,7 @@ public class QqchPublicSafeControlMeasureController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-公共安全风险管控策划", name = "8.6.3公共安全过程管控措施" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchPublicSafeControlMeasure(@Validated(ValidationGroups.Save.class) @RequestBody QqchPublicSafeControlMeasure qqchPublicSafeControlMeasureParam) {
         qqchPublicSafeControlMeasureService.insertQqchPublicSafeControlMeasure(qqchPublicSafeControlMeasureParam);
         return AjaxResult.success(qqchPublicSafeControlMeasureParam);

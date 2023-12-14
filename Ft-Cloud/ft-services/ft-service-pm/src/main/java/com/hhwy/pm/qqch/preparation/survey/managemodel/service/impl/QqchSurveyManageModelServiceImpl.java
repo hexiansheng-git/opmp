@@ -1,8 +1,10 @@
 package com.hhwy.pm.qqch.preparation.survey.managemodel.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.stream.StreamUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -17,6 +19,7 @@ import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.QqchSurveyManageMo
 import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.QqchSurveyManageModelVo;
 import com.hhwy.pm.qqch.preparation.survey.managemodel.mapper.QqchSurveyManageModelMapper;
 import com.hhwy.pm.qqch.preparation.survey.managemodel.service.IQqchSurveyManageModelService;
+import com.hhwy.pm.qqch.preparation.survey.organization.domain.QqchSurveyOrganization;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
@@ -25,11 +28,16 @@ import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,6 +70,11 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
      * @return
      */
     public QqchSurveyManageModelVo getQqchSurveyManageModelList(QqchSurveyManageModel qqchSurveyManageModel) {
+        List<QqchSurveyManageModel> list = qqchSurveyManageModelMapper.getCount();
+        //空表时需要初始化数据
+        if (CollectionUtil.isEmpty(list)) {
+            this.init();
+        }
         QqchSurveyManageModelVo vo = new QqchSurveyManageModelVo();
         BigDecimal version = VersionUtil.getVersion("qqch_survey_manage_model", qqchSurveyManageModel.getVersion());
         qqchSurveyManageModel.setVersion(version);
@@ -172,4 +185,19 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
         return result;
     }
 
+    /**
+     * 初始化数据
+     */
+    @Transactional
+    public void init(){
+        try {
+            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/2_1_1.json");
+            String json = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+            List<QqchSurveyManageModel> list = JSONObject.parseArray(json, QqchSurveyManageModel.class);
+            list.forEach( p -> p.setId(IdWorker.createId()));
+            qqchSurveyManageModelMapper.insertQqchSurveyManageModelList(list);
+        }catch (IOException e){
+            throw new RuntimeException("初始化数据失败！");
+        }
+    }
 }

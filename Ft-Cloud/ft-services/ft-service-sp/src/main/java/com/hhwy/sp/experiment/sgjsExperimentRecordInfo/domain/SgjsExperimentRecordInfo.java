@@ -289,6 +289,8 @@ public class SgjsExperimentRecordInfo extends BaseEntity {
     @JsonProperty
     private String ptVar5;
 
+    private List<String> exportIdList;
+
     private List<SgjsExperimentRecordInfoDetail> detailList;
 
     public List<SgjsExperimentRecordInfoDetail> getDetailList() {
@@ -297,6 +299,14 @@ public class SgjsExperimentRecordInfo extends BaseEntity {
 
     public void setDetailList(List<SgjsExperimentRecordInfoDetail> detailList) {
         this.detailList = detailList;
+    }
+
+    public List<String> getExportIdList() {
+        return exportIdList;
+    }
+
+    public void setExportIdList(List<String> exportIdList) {
+        this.exportIdList = exportIdList;
     }
 
     @JsonIgnore

@@ -7,6 +7,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.domain.SbchEquipmentPurchase;
 import com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.domain.SbchEquipmentPurchaseDetails;
 import com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.service.ISbchEquipmentPurchaseService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -41,6 +43,7 @@ public class SbchEquipmentPurchaseController extends BaseController {
      */
 //    @PreAuthorize(hasPermi ="equipmentpurchase:purchase:list")
     @GetMapping("/getList")
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.1设备申购策划", businessType = CustomBusinessType.SELECT)
     //@CustomLogger(title = "设备申购-列表查询",businessType = CustomBusinessType.SELECT)
     public AjaxResult list(BigDecimal version) {
         SbchEquipmentPurchase temp = sbchEquipmentPurchaseService.selectSbchEquipmentPurchaseList(version);
@@ -53,6 +56,7 @@ public class SbchEquipmentPurchaseController extends BaseController {
 //    @PreAuthorize(hasPermi ="equipmentpurchase:purchase:add")
     //@CustomLogger(title = "设备申购-保存",businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.1设备申购策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody SbchEquipmentPurchase sbchEquipmentPurchase) {
         try {
             return new AjaxResult(200,"成功",sbchEquipmentPurchaseService.insertSbchEquipmentPurchaseAndDetails(sbchEquipmentPurchase));
@@ -67,6 +71,7 @@ public class SbchEquipmentPurchaseController extends BaseController {
 
     @PostMapping("/importData")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.1设备申购策划", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file){
         FtExcelUtil ftExcelUtil = new FtExcelUtil(SbchEquipmentPurchaseDetails.class);
         List<SbchEquipmentPurchaseDetails> detailsList = null;
@@ -85,6 +90,7 @@ public class SbchEquipmentPurchaseController extends BaseController {
      * 导出
      */
     @PostMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.1设备申购策划", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response) throws IOException {
         SbchEquipmentPurchase list = sbchEquipmentPurchaseService.selectSbchEquipmentPurchaseList(null);
         List<SbchEquipmentPurchaseDetails> detailsList = list.getDetailsList();

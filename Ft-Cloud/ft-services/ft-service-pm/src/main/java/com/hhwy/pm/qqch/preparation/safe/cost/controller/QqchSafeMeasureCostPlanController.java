@@ -5,14 +5,13 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.cost.domain.vo.QqchSafeMeasureCostPlanVo;
 import com.hhwy.pm.qqch.preparation.safe.cost.service.IQqchSafeMeasureCostPlanService;
-import java.math.BigDecimal;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 /**
  * @author zhenglili
@@ -49,6 +48,8 @@ public class QqchSafeMeasureCostPlanController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchSafeMeasureCostPlan:add")
     @PostMapping("/batchSave")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-8.11 安全文明措施费策划", name = "\n" +
+            "8.11 安全文明措施费策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSave(@RequestBody QqchSafeMeasureCostPlanVo qqchSafeMeasureCostPlanVo) {
         qqchSafeMeasureCostPlanService.batchSave(qqchSafeMeasureCostPlanVo);
         return AjaxResult.success();

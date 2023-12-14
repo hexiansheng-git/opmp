@@ -7,6 +7,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.technique.expert.domain.QqchTargetAdvisoryOrgan;
 import com.hhwy.pm.qqch.preparation.technique.expert.domain.vo.QqchTargetAdvisoryOrganVo;
 import com.hhwy.pm.qqch.preparation.technique.expert.service.IQqchTargetAdvisoryOrganService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -115,6 +117,8 @@ public class QqchTargetAdvisoryOrganController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchTargetAdvisoryOrgan:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.14 专家机构资源策划", name =
+            "3.14.2 外部目标咨询机构选择" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTargetAdvisoryOrganVo qqchTargetAdvisoryOrganVo) {
         qqchTargetAdvisoryOrganService.save(qqchTargetAdvisoryOrganVo);
         return AjaxResult.success();

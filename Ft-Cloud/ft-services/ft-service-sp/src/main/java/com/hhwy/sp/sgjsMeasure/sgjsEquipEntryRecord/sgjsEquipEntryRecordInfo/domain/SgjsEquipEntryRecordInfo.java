@@ -240,6 +240,16 @@ public class SgjsEquipEntryRecordInfo extends BaseEntity {
      */
     @JsonProperty
     private String ptVar5;
+    //导出idList
+    private List<String> exportIdList;
+
+    public List<String> getExportIdList() {
+        return exportIdList;
+    }
+
+    public void setExportIdList(List<String> exportIdList) {
+        this.exportIdList = exportIdList;
+    }
 
     public String getEntryDateStr() {
         return entryDateStr;

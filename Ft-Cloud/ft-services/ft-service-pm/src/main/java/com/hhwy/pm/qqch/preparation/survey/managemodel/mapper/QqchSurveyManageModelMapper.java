@@ -25,4 +25,6 @@ public interface QqchSurveyManageModelMapper {
     
     int deleteQqchSurveyManageModel(QqchSurveyManageModel qqchSurveyManageModel);
 
-    }
+    List<QqchSurveyManageModel> getCount();
+
+}

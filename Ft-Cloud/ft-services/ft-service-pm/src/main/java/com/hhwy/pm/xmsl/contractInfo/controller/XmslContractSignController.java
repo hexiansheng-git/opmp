@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSign;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractSignVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractSignService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +37,7 @@ public class XmslContractSignController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractSign:list")
     @GetMapping
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "签订信息", businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslContractSign(@Validated(ValidationGroups.Get.class)  XmslContractSign xmslContractSignParam) {
         XmslContractSign xmslContractSign = xmslContractSignService.getXmslContractSign(xmslContractSignParam);
         return AjaxResult.success(xmslContractSign);
@@ -42,6 +45,7 @@ public class XmslContractSignController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractSign:list")
     @GetMapping("/list")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "签订信息", businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslContractSignList(@Validated(ValidationGroups.Select.class)  XmslContractSign xmslContractSignParam) {
         startPage();
         List<XmslContractSign> xmslContractSignList = xmslContractSignService.getXmslContractSignList(xmslContractSignParam);
@@ -50,6 +54,7 @@ public class XmslContractSignController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractSign:add")
     @PostMapping("/add")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "签订信息", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertXmslContractSign(@Validated(ValidationGroups.Save.class) @RequestBody XmslContractSign xmslContractSignParam) {
         xmslContractSignService.insertXmslContractSign(xmslContractSignParam);
         return AjaxResult.success(xmslContractSignParam);
@@ -70,6 +75,7 @@ public class XmslContractSignController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractSign:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "签订信息", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteXmslContractSign(@Validated(ValidationGroups.Delete.class) @RequestBody XmslContractSign xmslContractSignParam) {
         return toAjax(xmslContractSignService.deleteXmslContractSign(xmslContractSignParam));
     }
@@ -82,6 +88,7 @@ public class XmslContractSignController extends BaseController {
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "签订信息", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, XmslContractSign xmslContractSignParam) throws IOException {
         List<XmslContractSign> xmslContractSignList = xmslContractSignService.getXmslContractSignList(xmslContractSignParam);
         ExcelUtils<XmslContractSign> util = new ExcelUtils<>(XmslContractSign.class);
@@ -93,6 +100,7 @@ public class XmslContractSignController extends BaseController {
      *
      */
     @PostMapping("import")
+    @CustomLogger(title = "项目设立-合同信息-主合同信息", name = "签订信息", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importFile(@RequestParam("file") MultipartFile file ) {
         try {
             ExcelUtils<XmslContractSignVo> util = new ExcelUtils<>(XmslContractSignVo.class);

@@ -9,6 +9,8 @@ import com.hhwy.pm.qqch.preparation.costControl.gatherPlan.domain.QqchGatherPlan
 import com.hhwy.pm.qqch.preparation.costControl.gatherPlan.domain.vo.GatherPlanTaskQueryVo;
 import com.hhwy.pm.qqch.preparation.costControl.gatherPlan.domain.vo.QqchGatherPlanTaskMainVo;
 import com.hhwy.pm.qqch.preparation.costControl.gatherPlan.service.IQqchGatherPlanTaskMainService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -113,6 +115,8 @@ public class QqchGatherPlanTaskMainController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchGatherPlanTaskMain:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-成本管控策划-5.4成本数据采集计划任务表", name =
+            "5.4成本数据采集计划任务表", businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody QqchGatherPlanTaskMainVo qqchGatherPlanTaskMainVo) {
         qqchGatherPlanTaskMainService.save(qqchGatherPlanTaskMainVo);
         return AjaxResult.success();

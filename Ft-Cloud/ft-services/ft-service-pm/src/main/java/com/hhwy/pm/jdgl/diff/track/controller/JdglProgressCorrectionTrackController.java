@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
 import com.hhwy.pm.jdgl.diff.track.domain.vo.ProgressCorrectionTrackQueryVo;
 import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.util.Arrays;
@@ -43,6 +45,7 @@ public class JdglProgressCorrectionTrackController extends BaseController {
      */
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrack:list")
     @GetMapping("/getOne")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪", businessType = CustomBusinessType.SELECT)
     public AjaxResult getOne(
         @Validated(ValidationGroups.Get.class) JdglProgressCorrectionTrack jdglProgressCorrectionTrackParam) {
         JdglProgressCorrectionTrack jdglProgressCorrectionTrack = jdglProgressCorrectionTrackService.getJdglProgressCorrectionTrack(jdglProgressCorrectionTrackParam);
@@ -57,6 +60,7 @@ public class JdglProgressCorrectionTrackController extends BaseController {
      */
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrack:list")
     @GetMapping("/getList")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪", businessType = CustomBusinessType.SELECT)
     public AjaxResult getJdglProgressCorrectionTrackList(
         @Validated(ValidationGroups.Select.class) JdglProgressCorrectionTrack jdglProgressCorrectionTrackParam) {
         startPage();
@@ -65,6 +69,7 @@ public class JdglProgressCorrectionTrackController extends BaseController {
     }
 
     @PostMapping("/gmList")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪", businessType = CustomBusinessType.SELECT)
     public AjaxResult gmList(@RequestBody ProgressCorrectionTrackQueryVo queryVo) {
         List<JdglProgressCorrectionTrack> jdglProgressCorrectionTrackList = jdglProgressCorrectionTrackService
             .gmList(queryVo);
@@ -79,6 +84,7 @@ public class JdglProgressCorrectionTrackController extends BaseController {
      */
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrack:add")
     @PostMapping("/add")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertJdglProgressCorrectionTrack(
         @Validated(ValidationGroups.Save.class) @RequestBody JdglProgressCorrectionTrack jdglProgressCorrectionTrackParam) {
         jdglProgressCorrectionTrackService.insertJdglProgressCorrectionTrack(jdglProgressCorrectionTrackParam);
@@ -90,6 +96,7 @@ public class JdglProgressCorrectionTrackController extends BaseController {
 
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrack:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertJdglProgressCorrectionTrackList(
         @Validated(ValidationGroups.Save.class) @RequestBody List<JdglProgressCorrectionTrack> jdglProgressCorrectionTrackListParam) {
         jdglProgressCorrectionTrackService.insertJdglProgressCorrectionTrackList(jdglProgressCorrectionTrackListParam);
@@ -123,6 +130,7 @@ public class JdglProgressCorrectionTrackController extends BaseController {
 
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrack:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteJdglProgressCorrectionTrack(
         @Validated(ValidationGroups.Delete.class) @RequestBody JdglProgressCorrectionTrack jdglProgressCorrectionTrackParam) {
         return toAjax(
@@ -137,6 +145,7 @@ public class JdglProgressCorrectionTrackController extends BaseController {
      */
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrack:remove")
     @PostMapping("/{ids}")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪", businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteJdglProgressCorrectionTrackByPks(@PathVariable Long[] ids) {
         List<Long> jdglProgressCorrectionTrackPkList = Arrays.asList(ids);
         return toAjax(jdglProgressCorrectionTrackService
@@ -144,6 +153,7 @@ public class JdglProgressCorrectionTrackController extends BaseController {
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, JdglProgressCorrectionTrack jdglProgressCorrectionTrackParam)
         throws IOException {
         List<JdglProgressCorrectionTrack> jdglProgressCorrectionTrackList = jdglProgressCorrectionTrackService
@@ -159,6 +169,7 @@ public class JdglProgressCorrectionTrackController extends BaseController {
      * @return
      */
     @PostMapping("/weekTimerTrack")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪", businessType = CustomBusinessType.SAVE)
     public AjaxResult weekTimerTrack() {
         jdglProgressCorrectionTrackService.weekTimerTrack();
         return AjaxResult.success();

@@ -8,6 +8,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.technique.techTrainPlan.domain.QqchTechTrainPlan;
 import com.hhwy.pm.qqch.preparation.technique.techTrainPlan.domain.vo.QqchTechTrainPlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techTrainPlan.service.IQqchTechTrainPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -104,6 +106,8 @@ public class QqchTechTrainPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchTechTrainPlan:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.15 技术培训策划", name =
+            "3.15 技术培训策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTechTrainPlanVo qqchTechTrainPlanVo) {
         qqchTechTrainPlanService.save(qqchTechTrainPlanVo);
         return AjaxResult.success();

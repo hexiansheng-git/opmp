@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquRiskMeasure.domain.QqchSpecialBigEquRiskMeasure;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquRiskMeasure.domain.vo.QqchSpecialBigEquRiskMeasureVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquRiskMeasure.service.IQqchSpecialBigEquRiskMeasureService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -29,6 +31,7 @@ public class QqchSpecialBigEquRiskMeasureController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSpecialBigEquRiskMeasure:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划", name = "8.4.2 特种设备及大型设备风险识别与措施策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSpecialBigEquRiskMeasureList(@Validated(ValidationGroups.Select.class) QqchSpecialBigEquRiskMeasure qqchSpecialBigEquRiskMeasureParam) {
         QqchSpecialBigEquRiskMeasureVo vo = qqchSpecialBigEquRiskMeasureService.getQqchSpecialBigEquRiskMeasureList(qqchSpecialBigEquRiskMeasureParam);
         return AjaxResult.success(vo);
@@ -36,6 +39,7 @@ public class QqchSpecialBigEquRiskMeasureController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSpecialBigEquRiskMeasure:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划", name = "8.4.2 特种设备及大型设备风险识别与措施策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSpecialBigEquRiskMeasureList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSpecialBigEquRiskMeasureVo vo) {
         qqchSpecialBigEquRiskMeasureService.save(vo);
         return AjaxResult.success();
@@ -44,6 +48,7 @@ public class QqchSpecialBigEquRiskMeasureController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSpecialBigEquRiskMeasure:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划", name = "8.4.2 特种设备及大型设备风险识别与措施策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSpecialBigEquRiskMeasure(@Validated(ValidationGroups.Get.class) QqchSpecialBigEquRiskMeasure qqchSpecialBigEquRiskMeasureParam) {
         QqchSpecialBigEquRiskMeasure qqchSpecialBigEquRiskMeasure = qqchSpecialBigEquRiskMeasureService.getQqchSpecialBigEquRiskMeasure(qqchSpecialBigEquRiskMeasureParam);
         return AjaxResult.success(qqchSpecialBigEquRiskMeasure);
@@ -52,6 +57,7 @@ public class QqchSpecialBigEquRiskMeasureController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSpecialBigEquRiskMeasure:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划", name = "8.4.2 特种设备及大型设备风险识别与措施策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSpecialBigEquRiskMeasure(@Validated(ValidationGroups.Save.class) @RequestBody QqchSpecialBigEquRiskMeasure qqchSpecialBigEquRiskMeasureParam) {
         qqchSpecialBigEquRiskMeasureService.insertQqchSpecialBigEquRiskMeasure(qqchSpecialBigEquRiskMeasureParam);
         return AjaxResult.success(qqchSpecialBigEquRiskMeasureParam);

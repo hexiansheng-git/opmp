@@ -114,15 +114,17 @@ public class SgjsEquipEntryRecordInfoController extends BaseController{
         return toAjax(sgjsEquipEntryRecordInfoService.deleteSgjsEquipEntryRecordInfoByPks(sgjsEquipEntryRecordInfoPkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, SgjsEquipEntryRecordInfo sgjsEquipEntryRecordInfoParam) throws IOException {
+    /**
+     * 导出
+     *
+     * @param response
+     * @param sgjsEquipEntryRecordInfoParam
+     * @throws IOException
+     */
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, @RequestBody SgjsEquipEntryRecordInfo sgjsEquipEntryRecordInfoParam) throws IOException {
         List<SgjsEquipEntryRecordInfo> sgjsEquipEntryRecordInfoList = sgjsEquipEntryRecordInfoService.getSgjsEquipEntryRecordInfoList(sgjsEquipEntryRecordInfoParam);
         ExcelUtils<SgjsEquipEntryRecordInfo> util = new ExcelUtils<>(SgjsEquipEntryRecordInfo.class);
         util.exportExcel(response, sgjsEquipEntryRecordInfoList, DateUtils.getDate());
     }
-
-
-
-
-
 }

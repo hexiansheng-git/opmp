@@ -72,6 +72,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
         try {
+            MySecurityUtils.set(tenantKey);
             syncInner(tenantKey);
         }catch (Exception e){
             e.printStackTrace();
@@ -83,6 +84,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
     }
 
 
+    @Transactional
     public void syncInner(String tenantKey) {
         XmslDrawReview drawReview = drawReviewService.getEffectLast();
         if(drawReview == null || drawReview.getId()==null)

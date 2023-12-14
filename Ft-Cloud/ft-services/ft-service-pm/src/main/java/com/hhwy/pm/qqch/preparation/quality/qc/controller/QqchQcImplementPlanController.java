@@ -5,14 +5,13 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.vo.QqchQcImplementPlanVo;
 import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcImplementPlanService;
-import java.math.BigDecimal;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 /**
  * @author zhenglili
@@ -48,6 +47,8 @@ public class QqchQcImplementPlanController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchQcImplementPlan:add")
     @PostMapping("/batchSave")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-9.6 QC活动", name = "\n" +
+            "9.6.2 QC实施计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSave(@RequestBody QqchQcImplementPlanVo qqchQcImplementPlanVo) {
         qqchQcImplementPlanService.batchSave(qqchQcImplementPlanVo);
         return AjaxResult.success();

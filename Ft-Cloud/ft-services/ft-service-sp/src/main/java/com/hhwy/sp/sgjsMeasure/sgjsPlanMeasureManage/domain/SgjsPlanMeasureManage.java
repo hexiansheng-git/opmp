@@ -38,8 +38,6 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
     //@Excel(name = "父级id")
     private Long pid;
 
-    @JsonProperty
-    @Excel(name = "序号")
     private String serialNumber;
 
     /**
@@ -48,18 +46,21 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
     @JsonProperty
     @Excel(name = "测量工作项")
     private String measureName;
+    
     /**
      * 字段描述：计量单位
      */
     @JsonProperty
     @Excel(name = "计量单位")
     private String measureUnit;
+
     /**
      * 字段描述：工作量
      */
     @JsonProperty
     @Excel(name = "工作量")
     private String workload;
+
     /**
      * 字段描述：计划开始日期
      */
@@ -67,6 +68,7 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
     @JsonProperty
     @Excel(name = "计划开始日期", dateFormat = "yyyy-MM-dd")
     private Date planStartDate;
+
     /**
      * 字段描述：计划结束日期
      */
@@ -74,6 +76,7 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
     @JsonProperty
     @Excel(name = "计划结束日期", dateFormat = "yyyy-MM-dd")
     private Date planEndDate;
+
     /**
      * 字段描述：实际开始日期
      */
@@ -81,6 +84,7 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
     @JsonProperty
     @Excel(name = "实际开始日期", dateFormat = "yyyy-MM-dd")
     private Date realStartDate;
+
     /**
      * 字段描述：实际结束日期
      */
@@ -88,30 +92,35 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
     @JsonProperty
     @Excel(name = "实际结束日期", dateFormat = "yyyy-MM-dd")
     private Date realEndDate;
+
     /**
      * 字段描述：备注
      */
     @JsonProperty
     @Excel(name = "备注")
     private String remark;
+
     /**
      * 字段描述：数据来源 0新增1同步
      */
     @JsonProperty
     //@Excel(name = "数据来源 0新增1同步")
     private String dataSource;
+
     /**
      * 字段描述：数据创建者id
      */
     @JsonProperty
     //@Excel(name = "数据创建者id")
     private String createUser;
+
     /**
      * 字段描述：数据创建者名称
      */
     @JsonProperty
     //@Excel(name = "数据创建者名称")
     private String createUserName;
+
     /**
      * 字段描述：数据创建系统时间
      */
@@ -119,12 +128,14 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
     @JsonProperty
     //@Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+
     /**
      * 字段描述：数据修改者id
      */
     @JsonProperty
     //@Excel(name = "数据修改者id")
     private String updateUser;
+
     /**
      * 字段描述：数据修改系统时间
      */
@@ -132,12 +143,14 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
     @JsonProperty
     //@Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+
     /**
      * 字段描述：数据删除者
      */
     @JsonProperty
     //@Excel(name = "数据删除者")
     private String delUser;
+
     /**
      * 字段描述：数据删除系统时间
      */
@@ -191,6 +204,15 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
     private String realStartDateStr;
 
     private String realEndDateStr;
+
+    //节点判断标识
+    private String path;
+
+    //导入查询
+    private List<Long> ids;
+
+    //新增标识
+    private String isAdd;
 
 
 }

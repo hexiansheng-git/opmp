@@ -5,6 +5,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchPostSettingVo;
 import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchPostSettingService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +35,8 @@ public class QqchPostSettingController extends BaseController {
     }
 
     @PostMapping("/batchSave")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.3 技术管理模式", name = "\n" +
+            "3.3.2 岗位设置" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchPostSettingVo qqchPostSettingVo) {
         qqchPostSettingService.batchSave(qqchPostSettingVo);

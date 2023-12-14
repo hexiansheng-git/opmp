@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchMeasuringInstrument.domain.QqchMeasuringInstrument;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchMeasuringInstrument.domain.vo.QqchMeasuringInstrumentVo;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchMeasuringInstrument.service.IQqchMeasuringInstrumentService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +32,7 @@ public class QqchMeasuringInstrumentController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchMeasuringInstrument:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-设备总需计划", name = "1.7.3试验测量仪器" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchMeasuringInstrument(@Validated(ValidationGroups.Get.class) QqchMeasuringInstrument qqchMeasuringInstrumentParam) {
         QqchMeasuringInstrument qqchMeasuringInstrument = qqchMeasuringInstrumentService.getQqchMeasuringInstrument(qqchMeasuringInstrumentParam);
         return AjaxResult.success(qqchMeasuringInstrument);
@@ -40,6 +43,7 @@ public class QqchMeasuringInstrumentController extends BaseController {
      * 拉取 施工部署数据(设备策划)
      */
     @PostMapping("/syncData")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-设备总需计划", name = "1.7.3试验测量仪器" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult syncData(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasuringInstrumentVo param) {
         QqchMeasuringInstrumentVo vo = qqchMeasuringInstrumentService.syncData(param);
         return AjaxResult.success(vo);
@@ -54,6 +58,7 @@ public class QqchMeasuringInstrumentController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchMeasuringInstrument:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-设备总需计划", name = "1.7.3试验测量仪器" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchMeasuringInstrumentList(@Validated(ValidationGroups.Select.class) QqchMeasuringInstrument qqchMeasuringInstrumentParam) {
         QqchMeasuringInstrumentVo vo = qqchMeasuringInstrumentService.getQqchMeasuringInstrumentList(qqchMeasuringInstrumentParam);
         return AjaxResult.success(vo);
@@ -67,6 +72,7 @@ public class QqchMeasuringInstrumentController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchMeasuringInstrument:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-设备总需计划", name = "1.7.3试验测量仪器" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasuringInstrumentVo vo) {
         qqchMeasuringInstrumentService.save(vo);
         return AjaxResult.success();
@@ -75,6 +81,7 @@ public class QqchMeasuringInstrumentController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchMeasuringInstrument:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-设备总需计划", name = "1.7.3试验测量仪器" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchMeasuringInstrument(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasuringInstrument qqchMeasuringInstrumentParam) {
         qqchMeasuringInstrumentService.insertQqchMeasuringInstrument(qqchMeasuringInstrumentParam);
         return AjaxResult.success(qqchMeasuringInstrumentParam);

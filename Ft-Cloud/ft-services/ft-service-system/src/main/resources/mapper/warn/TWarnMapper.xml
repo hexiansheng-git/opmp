@@ -112,7 +112,7 @@
         LEFT JOIN t_warn_record r ON w.warn_id = r.warn_id
         <where>
             w.tenant_key = #{tenantKey} AND
-            (w.warn_scope_type = '1' OR (w.warn_scope_type = '2' AND FIND_IN_SET(#{params.deptId},w.warn_scope)) OR (w.warn_scope_type = '3' AND FIND_IN_SET(#{params.userName},w.warn_scope)) OR (w.warn_scope_type = '4' AND FIND_IN_SET(#{params.roleKeys},w.warn_scope)))
+            (w.warn_scope_type = '1' OR (w.warn_scope_type = '2' AND FIND_IN_SET(#{params.deptId},w.warn_scope)) OR (w.warn_scope_type = '3' AND FIND_IN_SET(#{params.userName},w.warn_scope)) OR (w.warn_scope_type = '4' AND FIND_IN_SET(w.warn_scope,#{params.roleKeys})))
             <if test="handleStatus != null and handleStatus != ''">
                 <if test="handleStatus == '0'.toString()">
                     AND (r.`status` IS NULL or r.`status` = '0' )

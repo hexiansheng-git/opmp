@@ -8,6 +8,8 @@ import com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringList.doma
 import com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringList.domain.vo.QqchFirstArticleEngineeringListVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringList.service.IQqchFirstArticleEngineeringListService;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListHistory;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -38,6 +40,7 @@ public class QqchFirstArticleEngineeringListController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-首件工程", name = "9.5.1首件工程清单" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchFirstArticleEngineeringListList(@Validated(ValidationGroups.Select.class) QqchFirstArticleEngineeringList qqchFirstArticleEngineeringListParam) {
         QqchFirstArticleEngineeringListVo vo=qqchFirstArticleEngineeringListService.getQqchFirstArticleEngineeringListList(qqchFirstArticleEngineeringListParam);
         return AjaxResult.success(vo);
@@ -51,6 +54,7 @@ public class QqchFirstArticleEngineeringListController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-首件工程", name = "9.5.1首件工程清单" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchFirstArticleEngineeringListVo vo) {
         qqchFirstArticleEngineeringListService.save(vo);
         return AjaxResult.success();
@@ -61,6 +65,7 @@ public class QqchFirstArticleEngineeringListController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-首件工程", name = "9.5.1首件工程清单" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchFirstArticleEngineeringList(@Validated(ValidationGroups.Get.class) QqchFirstArticleEngineeringList qqchFirstArticleEngineeringListParam) {
         QqchFirstArticleEngineeringList qqchFirstArticleEngineeringList = qqchFirstArticleEngineeringListService.getQqchFirstArticleEngineeringList(qqchFirstArticleEngineeringListParam);
         return AjaxResult.success(qqchFirstArticleEngineeringList);
@@ -70,6 +75,7 @@ public class QqchFirstArticleEngineeringListController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-首件工程", name = "9.5.1首件工程清单" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchFirstArticleEngineeringList(@Validated(ValidationGroups.Save.class) @RequestBody QqchFirstArticleEngineeringList qqchFirstArticleEngineeringListParam) {
         qqchFirstArticleEngineeringListService.insertQqchFirstArticleEngineeringList(qqchFirstArticleEngineeringListParam);
         return AjaxResult.success(qqchFirstArticleEngineeringListParam);

@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.domain.QqchSurveyResultPlan;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.domain.QqchSurveyResultPlanVo;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.service.IQqchSurveyResultPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +35,7 @@ public class QqchSurveyResultPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSurveyResultPlan:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计成果策划", name = "2.3.1勘测成果验收计划-勘察成果清单及计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSurveyResultPlanList(@Validated(ValidationGroups.Select.class) QqchSurveyResultPlan qqchSurveyResultPlanParam) {
         QqchSurveyResultPlanVo vo = qqchSurveyResultPlanService.getQqchSurveyResultPlanList(qqchSurveyResultPlanParam);
         return AjaxResult.success(vo);
@@ -45,6 +48,7 @@ public class QqchSurveyResultPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSurveyResultPlan:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计成果策划", name = "2.3.1勘测成果验收计划-勘察成果清单及计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSurveyResultPlanList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyResultPlanVo qqchSurveyResultPlanVo) {
         qqchSurveyResultPlanService.save(qqchSurveyResultPlanVo);
         return AjaxResult.success(qqchSurveyResultPlanVo);
@@ -57,6 +61,7 @@ public class QqchSurveyResultPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSurveyResultPlan:confirm")
     @PostMapping("/confirm")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计成果策划", name = "2.3.1勘测成果验收计划-勘察成果清单及计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyResultPlanVo qqchSurveyResultPlanVo) {
         qqchSurveyResultPlanService.confirm(qqchSurveyResultPlanVo);
         return AjaxResult.success(qqchSurveyResultPlanVo);

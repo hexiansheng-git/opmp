@@ -192,7 +192,7 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
     public int insertQqchMainPlanItemList(List<QqchMainPlanItem> qqchMainPlanItemList) {
         for (QqchMainPlanItem qqchMainPlanItem : qqchMainPlanItemList) {
 //            qqchMainPlanItem.setId(IdWorker.createId());
-            qqchMainPlanItem.setCreateUser(SecurityUtils.getSysUser().getNickName());
+//            qqchMainPlanItem.setCreateUser(SecurityUtils.getSysUser().getNickName());
             qqchMainPlanItem.setCreateTime(DateUtils.getNowDate());
 //            qqchMainPlanItem.setUpdateUser(SecurityUtils.getSysUser().getNickName());
 //            qqchMainPlanItem.setUpdateTime(DateUtils.getNowDate());

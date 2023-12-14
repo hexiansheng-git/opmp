@@ -9,6 +9,8 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraft
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraftDeclarePlanImportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraftDeclarePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchCraftDeclarePlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -90,6 +92,8 @@ public class QqchCraftDeclarePlanController extends BaseController {
      * @return
      */
     @PostMapping("/import")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.9 科技管理策划", name = "\n" +
+            "3.9.4工艺工法申报计划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(@RequestPart("file") MultipartFile file){
         FtExcelUtil<QqchCraftDeclarePlanImportVo> util = new FtExcelUtil<>(QqchCraftDeclarePlanImportVo.class);
         try {
@@ -135,6 +139,8 @@ public class QqchCraftDeclarePlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchCraftDeclarePlan:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.9 科技管理策划", name = "\n" +
+            "3.9.4工艺工法申报计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchCraftDeclarePlanVo qqchCraftDeclarePlanVo) {
         qqchCraftDeclarePlanService.save(qqchCraftDeclarePlanVo);
         return AjaxResult.success();

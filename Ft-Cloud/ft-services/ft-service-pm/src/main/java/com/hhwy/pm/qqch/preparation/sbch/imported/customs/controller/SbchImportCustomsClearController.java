@@ -9,6 +9,8 @@ import com.hhwy.pm.qqch.preparation.sbch.imported.customs.domain.SbchImportCusto
 import com.hhwy.pm.qqch.preparation.sbch.imported.customs.domain.SbchImportCustomsClearDetail;
 import com.hhwy.pm.qqch.preparation.sbch.imported.customs.service.ISbchImportCustomsClearDetailService;
 import com.hhwy.pm.qqch.preparation.sbch.imported.customs.service.ISbchImportCustomsClearService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -42,9 +44,9 @@ public class SbchImportCustomsClearController extends BaseController {
     /**
      * 查询清关档案策划列表
      */
-//     @PreAuthorize(hasPermi="customs:clear:list")
     @PostMapping("/list")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.4清关档案策划", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody SbchImportCustomsClear sbchImportCustomsClear) {
 //        startPage(sbchImportCustomsClear.getPageNum(),sbchImportCustomsClear.getPageSize());
         List<SbchImportCustomsClear> list = sbchImportCustomsClearService.selectSbchImportCustomsClearList(sbchImportCustomsClear);
@@ -54,10 +56,9 @@ public class SbchImportCustomsClearController extends BaseController {
     /**
      * 导出清关档案策划列表
      */
-//     @PreAuthorize(hasPermi="customs:clear:export")
-    //@CustomLogger(title = "清关档案策划", businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.4清关档案策划", businessType = CustomBusinessType.EXPORT)
     public void export(@RequestBody SbchImportCustomsClear sbchImportCustomsClear, HttpServletResponse response) {
          try {
              List<SbchImportCustomsClear> list = sbchImportCustomsClearService.selectSbchImportCustomsClearList(sbchImportCustomsClear);
@@ -72,10 +73,9 @@ public class SbchImportCustomsClearController extends BaseController {
     /**
      * 新增保存清关档案策划
      */
-//     @PreAuthorize(hasPermi="customs:clear:add")
-    //@CustomLogger(title = "清关档案策划", businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.4清关档案策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody SbchImportCustomsClear sbchImportCustomsClear) {
          try{
              return toAjax(sbchImportCustomsClearService.insertSbchImportCustomsClear(sbchImportCustomsClear));
@@ -91,10 +91,9 @@ public class SbchImportCustomsClearController extends BaseController {
     /**
      * 修改保存清关档案策划
      */
-//     @PreAuthorize(hasPermi="customs:clear:edit")
-    //@CustomLogger(title = "清关档案策划", businessType = CustomBusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.4清关档案策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody SbchImportCustomsClear sbchImportCustomsClear) {
          try{
              return toAjax(sbchImportCustomsClearService.updateSbchImportCustomsClear(sbchImportCustomsClear));
@@ -116,6 +115,7 @@ public class SbchImportCustomsClearController extends BaseController {
      */
     @GetMapping("/detail/{id}")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.4清关档案策划", businessType = CustomBusinessType.SELECT)
     public AjaxResult detail(@PathVariable("id")Long id){
         SbchImportCustomsClear sbchImportCustomsClear = sbchImportCustomsClearService.selectSbchImportCustomsClearById(id);
         SbchImportCustomsClearDetail sbchImportCustomsClearDetail = new SbchImportCustomsClearDetail();
@@ -128,10 +128,9 @@ public class SbchImportCustomsClearController extends BaseController {
     /**
      * 删除清关档案策划
      */
-//     @PreAuthorize(hasPermi="customs:clear:remove")
-    //@CustomLogger(title = "清关档案策划", businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.4清关档案策划", businessType = CustomBusinessType.DELETE)
     public AjaxResult remove(@RequestBody Map map) {
          if(ObjectNullUtil.isEmpty(map.get("ids"))){
              return AjaxResult.error("id不可为空");
@@ -148,6 +147,7 @@ public class SbchImportCustomsClearController extends BaseController {
 
     @GetMapping("/getList")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.4清关档案策划", businessType = CustomBusinessType.SELECT)
     public AjaxResult getList(BigDecimal version){
         SbchImportCustomsClear sbchImportCustomsClear =  sbchImportCustomsClearService.getList(version);
         return AjaxResult.success(sbchImportCustomsClear);
@@ -155,6 +155,7 @@ public class SbchImportCustomsClearController extends BaseController {
 
     @PostMapping("/batchAdd")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备进口策划", name = "7.4.4清关档案策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult batchAdd(@Validated(ValidationGroups.Save.class) @RequestBody SbchImportCustomsClear sbchImportCustomsClear){
         try{
             sbchImportCustomsClearService.batchSave(sbchImportCustomsClear);

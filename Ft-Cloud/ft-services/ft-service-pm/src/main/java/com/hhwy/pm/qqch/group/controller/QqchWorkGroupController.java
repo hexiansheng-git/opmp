@@ -7,6 +7,8 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -72,6 +74,7 @@ public class QqchWorkGroupController extends BaseController {
      */
     @PostMapping("/add")
     @PreAuthorize(hasPermi = "qqchWorkGroup:save")
+    @CustomLogger(title = "前期策划", name = "前期策划工作小组" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchWorkGroup(@RequestBody QqchWorkGroup qqchWorkGroup) {
         qqchWorkGroupService.insertQqchWorkGroup(qqchWorkGroup);
         return AjaxResult.success(qqchWorkGroup.getId());
@@ -84,6 +87,7 @@ public class QqchWorkGroupController extends BaseController {
      */
     @PostMapping("/update")
     @PreAuthorize(hasPermi = "qqchWorkGroup:save")
+    @CustomLogger(title = "前期策划", name = "前期策划工作小组" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateQqchWorkGroup(@RequestBody QqchWorkGroup qqchWorkGroup) {
         qqchWorkGroupService.updateQqchWorkGroup(qqchWorkGroup);
         return AjaxResult.success(qqchWorkGroup.getId());
@@ -108,6 +112,7 @@ public class QqchWorkGroupController extends BaseController {
      */
     @PostMapping("/remove")
     @PreAuthorize(hasPermi = "qqchWorkGroup:remove")
+    @CustomLogger(title = "前期策划", name = "前期策划工作小组" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteQqchWorkGroup(@Validated(ValidationGroups.Delete.class) @RequestBody QqchWorkGroup qqchWorkGroupParam) {
         return toAjax(qqchWorkGroupService.deleteQqchWorkGroup(qqchWorkGroupParam));
     }

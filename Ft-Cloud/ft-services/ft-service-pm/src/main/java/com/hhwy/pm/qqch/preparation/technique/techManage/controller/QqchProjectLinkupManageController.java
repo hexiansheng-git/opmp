@@ -8,6 +8,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.technique.techManage.domain.QqchProjectLinkupManage;
 import com.hhwy.pm.qqch.preparation.technique.techManage.domain.vo.QqchProjectLinkupManageVo;
 import com.hhwy.pm.qqch.preparation.technique.techManage.service.IQqchProjectLinkupManageService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -104,6 +106,8 @@ public class QqchProjectLinkupManageController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.12 技术管理相关方管理及沟通管理", name = "\n" +
+            "3.12.2 技术管理项目沟通管理" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchProjectLinkupManageVo qqchProjectLinkupManageVo) {
         qqchProjectLinkupManageService.save(qqchProjectLinkupManageVo);
         return AjaxResult.success();

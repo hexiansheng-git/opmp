@@ -17,6 +17,8 @@ import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentallottransnational.service
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentallottransnational.service.ISbchEquipmentAllotTransnationalService;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentallottransnational.vo.ImportSbchEquipmentAllotTransnationalCost;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -53,7 +55,7 @@ public class SbchEquipmentAllotTransnationalController extends BaseController {
      */
     @GetMapping("baseInfo")
     @ResponseBody
-    //@CustomDatascope((title = "同国别-新增/编辑/详情查询数据",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.2设备调拨策划-跨国设备调拨详情", businessType = CustomBusinessType.SELECT)
     public AjaxResult baseInfo(@RequestParam Map<String, String> map) {
         return AjaxResult.success(sbchEquipmentAllotTransnationalService.baseInfo(map));
     }
@@ -63,8 +65,8 @@ public class SbchEquipmentAllotTransnationalController extends BaseController {
      */
 //    @PreAuthorize(hasPermi="crosscountry:transfers:list")
     @PostMapping("/list")
-    //@CustomDatascope((title = "跨国别设备调拨-列表查询",businessType = CustomBusinessType.SELECT)
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.2设备调拨策划-跨国别设备调拨", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody SbchEquipmentAllotTransnational sbchEquipmentAllotTransnational) {
         //分页
         List<SbchEquipmentAllotTransnational> list = sbchEquipmentAllotTransnationalService.selectSbchEquipmentAllotTransnationalList(sbchEquipmentAllotTransnational);

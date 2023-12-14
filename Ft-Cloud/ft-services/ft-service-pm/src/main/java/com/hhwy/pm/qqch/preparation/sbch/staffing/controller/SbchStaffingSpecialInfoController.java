@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.sbch.staffing.domain.SbchStaffingInfo;
 import com.hhwy.pm.qqch.preparation.sbch.staffing.domain.SbchStaffingSpecialInfo;
 import com.hhwy.pm.qqch.preparation.sbch.staffing.service.ISbchStaffingSpecialInfoService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +36,9 @@ public class SbchStaffingSpecialInfoController extends BaseController {
     /**
      * 查询特种设备人员配置策划列表
      */
-//    @PreAuthorize(hasPermi="staffing:info:list")
-    //@CustomLogger(title = "种设备人员配置策划列表-查询", businessType = CustomBusinessType.SELECT)
     @GetMapping("/getList")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备人员配置策划", name = "7.3.2特种设备人员要求", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(BigDecimal version) {
         SbchStaffingSpecialInfo info  = sbchStaffingSpecialInfoService.getList(version);
         return AjaxResult.success(info);
@@ -46,10 +47,9 @@ public class SbchStaffingSpecialInfoController extends BaseController {
     /**
      * 新增保存设备人员配置-特种设备爱人员
      */
-//    @PreAuthorize(hasPermi="specialStaffing:info:save")
-    //@CustomLogger(title = "特种设备人员列表-添加保存", businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
+    @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备人员配置策划", name = "7.3.2特种设备人员要求", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody SbchStaffingSpecialInfo sbchStaffingSpecialInfo) {
         try{
             Long id = sbchStaffingSpecialInfoService.insertSbchStaffingSpecialInfo(sbchStaffingSpecialInfo);

@@ -1,11 +1,13 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlanQueryVO;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItemPre;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemPreService;
@@ -64,7 +66,7 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
     }
 
 
-    public JdglMainPlan getJdglMainPlan(JdglMainPlan jdglMainPlan, String itemName, String tabNo) {
+    public JdglMainPlan getJdglMainPlan(JdglMainPlan jdglMainPlan,JdglMainPlanQueryVO queryVO) {
         JdglMainPlan jdglMainPlan1 = jdglMainPlanMapper.getJdglMainPlan(jdglMainPlan);
         if(jdglMainPlan1 == null) {
             jdglMainPlan1= new JdglMainPlan();
@@ -73,10 +75,16 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
             jdglMainPlan1.setKeyLoadList(new ArrayList<>());
             return jdglMainPlan1;
         }
+        String tabNo = queryVO.getTabNo();
+        String itemName = queryVO.getItemName();
+        Date startDate = queryVO.getStartDate();
+        Date endDate = queryVO.getEndDate();
+
         JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
         jdglMainPlanItem.setMainPlanId(jdglMainPlan1.getId());
         if("1".equals(tabNo)) {
             jdglMainPlanItem.setItemName(itemName);
+            jdglMainPlanItem.setStartDate(startDate);
         }
         List<JdglMainPlanItem> jdglMainPlanItemList = iJdglMainPlanItemService.getJdglMainPlanItemListNoTree(jdglMainPlanItem);
         jdglMainPlan1.setJdglMainPlanItemList(jdglMainPlanItemList == null ? new ArrayList<>() : jdglMainPlanItemList);
@@ -86,6 +94,7 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         jdglMainPlan1.setJdglMainPlanItemPreList(jdglMainPlanItemPreList == null ? new ArrayList<>() : jdglMainPlanItemPreList);
         if("2".equals(tabNo)) {
             jdglMainPlanItem.setItemName(itemName);
+            jdglMainPlanItem.setStartDate(startDate);
         }
         List<JdglMainPlanItem> keyRoad = iJdglMainPlanItemService.getKeyRoad(jdglMainPlanItem);
         jdglMainPlan1.setKeyLoadList(keyRoad == null ? new ArrayList<>() : keyRoad);
@@ -101,10 +110,10 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
     }
 
     @Override
-    public JdglMainPlan getUsingJdglMainPlan(String itemName, String tabNo) {
+    public JdglMainPlan getUsingJdglMainPlan(JdglMainPlanQueryVO queryVO) {
         JdglMainPlan jdglMainPlan = new JdglMainPlan();
         jdglMainPlan.setIsUse("1");
-        return getJdglMainPlan(jdglMainPlan, itemName, tabNo);
+        return getJdglMainPlan(jdglMainPlan, queryVO);
     }
 
     @Override

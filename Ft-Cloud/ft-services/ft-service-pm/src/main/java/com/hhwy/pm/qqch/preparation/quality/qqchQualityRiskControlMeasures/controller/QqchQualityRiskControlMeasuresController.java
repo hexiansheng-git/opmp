@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.domain.QqchQualityRiskControlMeasures;
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.domain.vo.QqchQualityRiskControlMeasuresVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.service.IQqchQualityRiskControlMeasuresService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -36,6 +38,7 @@ public class QqchQualityRiskControlMeasuresController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchQualityRiskControlMeasures:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-质量风险", name = "9.3.2质量风险管控措施" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchQualityRiskControlMeasuresList(@Validated(ValidationGroups.Select.class) QqchQualityRiskControlMeasures qqchQualityRiskControlMeasuresParam) {
         QqchQualityRiskControlMeasuresVo vo = qqchQualityRiskControlMeasuresService.getQqchQualityRiskControlMeasuresList(qqchQualityRiskControlMeasuresParam);
         return AjaxResult.success(vo);
@@ -50,6 +53,7 @@ public class QqchQualityRiskControlMeasuresController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchQualityRiskControlMeasures:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-质量风险", name = "9.3.2质量风险管控措施" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchQualityRiskControlMeasuresVo vo) {
         qqchQualityRiskControlMeasuresService.save(vo);
         return AjaxResult.success();
@@ -57,6 +61,7 @@ public class QqchQualityRiskControlMeasuresController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchQualityRiskControlMeasures:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-质量风险", name = "9.3.2质量风险管控措施" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchQualityRiskControlMeasures(@Validated(ValidationGroups.Get.class) QqchQualityRiskControlMeasures qqchQualityRiskControlMeasuresParam) {
         QqchQualityRiskControlMeasures qqchQualityRiskControlMeasures = qqchQualityRiskControlMeasuresService.getQqchQualityRiskControlMeasures(qqchQualityRiskControlMeasuresParam);
         return AjaxResult.success(qqchQualityRiskControlMeasures);
@@ -64,6 +69,7 @@ public class QqchQualityRiskControlMeasuresController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchQualityRiskControlMeasures:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-质量风险", name = "9.3.2质量风险管控措施" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchQualityRiskControlMeasures(@Validated(ValidationGroups.Save.class) @RequestBody QqchQualityRiskControlMeasures qqchQualityRiskControlMeasuresParam) {
         qqchQualityRiskControlMeasuresService.insertQqchQualityRiskControlMeasures(qqchQualityRiskControlMeasuresParam);
         return AjaxResult.success(qqchQualityRiskControlMeasuresParam);

@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qqchEmergencyExerciseControl.domain.QqchEmergencyExerciseControl;
 import com.hhwy.pm.qqch.preparation.quality.qqchEmergencyExerciseControl.domain.vo.QqchEmergencyExerciseControlVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchEmergencyExerciseControl.service.IQqchEmergencyExerciseControlService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +32,7 @@ public class QqchEmergencyExerciseControlController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchEmergencyExerciseControl:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-应急管控策划", name = "8.10.2应急演练管控" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchEmergencyExerciseControlList(@Validated(ValidationGroups.Select.class) QqchEmergencyExerciseControl qqchEmergencyExerciseControlParam) {
         QqchEmergencyExerciseControlVo vo = qqchEmergencyExerciseControlService.getQqchEmergencyExerciseControlList(qqchEmergencyExerciseControlParam);
         return AjaxResult.success(vo);
@@ -37,6 +40,7 @@ public class QqchEmergencyExerciseControlController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchEmergencyExerciseControl:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-应急管控策划", name = "8.10.2应急演练管控" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchEmergencyExerciseControlList(@Validated(ValidationGroups.Save.class) @RequestBody QqchEmergencyExerciseControlVo vo) {
         qqchEmergencyExerciseControlService.save(vo);
         return AjaxResult.success();
@@ -44,6 +48,7 @@ public class QqchEmergencyExerciseControlController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchEmergencyExerciseControl:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-应急管控策划", name = "8.10.2应急演练管控" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchEmergencyExerciseControl(@Validated(ValidationGroups.Get.class) QqchEmergencyExerciseControl qqchEmergencyExerciseControlParam) {
         QqchEmergencyExerciseControl qqchEmergencyExerciseControl = qqchEmergencyExerciseControlService.getQqchEmergencyExerciseControl(qqchEmergencyExerciseControlParam);
         return AjaxResult.success(qqchEmergencyExerciseControl);
@@ -52,6 +57,7 @@ public class QqchEmergencyExerciseControlController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchEmergencyExerciseControl:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-应急管控策划", name = "8.10.2应急演练管控" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchEmergencyExerciseControl(@Validated(ValidationGroups.Save.class) @RequestBody QqchEmergencyExerciseControl qqchEmergencyExerciseControlParam) {
         qqchEmergencyExerciseControlService.insertQqchEmergencyExerciseControl(qqchEmergencyExerciseControlParam);
         return AjaxResult.success(qqchEmergencyExerciseControlParam);

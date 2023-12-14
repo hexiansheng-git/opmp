@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResultAsk;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResultAskVo;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.service.IQqchSurveyResultAskService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +35,7 @@ public class QqchSurveyResultAskController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSurveyResultAsk:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计成果策划", name = "2.3.2勘测成果验收计划-勘测成果验收内容审查要求" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchSurveyResultAskList(@Validated(ValidationGroups.Select.class) QqchSurveyResultAsk qqchSurveyResultAskParam) {
         QqchSurveyResultAskVo vo = qqchSurveyResultAskService.getQqchSurveyResultAskList(qqchSurveyResultAskParam);
         return AjaxResult.success(vo);
@@ -47,6 +50,7 @@ public class QqchSurveyResultAskController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSurveyResultAsk:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计成果策划", name = "2.3.2勘测成果验收计划-勘测成果验收内容审查要求" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchSurveyResultAskList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyResultAskVo qqchSurveyResultAskVo) {
         qqchSurveyResultAskService.save(qqchSurveyResultAskVo);
         return AjaxResult.success(qqchSurveyResultAskVo);
@@ -60,6 +64,7 @@ public class QqchSurveyResultAskController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSurveyResultAsk:confirm")
     @PostMapping("/confirm")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计成果策划", name = "2.3.2勘测成果验收计划-勘测成果验收内容审查要求" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyResultAskVo qqchSurveyResultAskVo) {
         qqchSurveyResultAskService.confirm(qqchSurveyResultAskVo);
         return AjaxResult.success(qqchSurveyResultAskVo);

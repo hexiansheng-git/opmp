@@ -171,7 +171,9 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
         List<QqchProdPlan> qqchProdPlanList = new ArrayList<>();
 
         // 获取总体计划数据
-        List<QqchMainPlanItem> qqchMainPlanItemList = qqchMainPlanItemService.getQqchMainPlanItemListNoTree(new QqchMainPlanItem());
+        QqchMainPlanItem qqchMainPlanItem1 = new QqchMainPlanItem();
+        qqchMainPlanItem1.setVersion(version);
+        List<QqchMainPlanItem> qqchMainPlanItemList = qqchMainPlanItemService.getQqchMainPlanItemListNoTree(qqchMainPlanItem1);
         List<QqchMainPlanItem> workList = new ArrayList<>();
         if(CollectionUtils.isEmpty(qqchMainPlanItemList)) {
             return 0;
@@ -182,7 +184,7 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
         deleteQqchProdPlanByVersion(version);
 
         // 获取项目开始结束日期
-        QqchMainPlanItem projStartAndFinish = qqchMainPlanItemService.getProjStartAndFinish(null);
+        QqchMainPlanItem projStartAndFinish = qqchMainPlanItemService.getProjStartAndFinish(version);
 
         List<Date> dateList = new ArrayList<>();
         Date startDate = projStartAndFinish.getStartDate();
