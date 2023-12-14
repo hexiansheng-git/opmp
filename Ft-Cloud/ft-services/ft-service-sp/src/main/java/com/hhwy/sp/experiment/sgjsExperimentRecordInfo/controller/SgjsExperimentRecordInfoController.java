@@ -93,8 +93,8 @@ public class SgjsExperimentRecordInfoController extends BaseController{
         return toAjax(sgjsExperimentRecordInfoService.deleteSgjsExperimentRecordInfoByPks(sgjsExperimentRecordInfoPkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, SgjsExperimentRecordInfo sgjsExperimentRecordInfoParam) throws IOException {
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, @RequestBody SgjsExperimentRecordInfo sgjsExperimentRecordInfoParam) throws IOException {
         List<SgjsExperimentRecordInfo> sgjsExperimentRecordInfoList = sgjsExperimentRecordInfoService.getSgjsExperimentRecordInfoList(sgjsExperimentRecordInfoParam);
         ExcelUtils<SgjsExperimentRecordInfo> util = new ExcelUtils<>(SgjsExperimentRecordInfo.class);
         util.exportExcel(response, sgjsExperimentRecordInfoList, DateUtils.getDate());

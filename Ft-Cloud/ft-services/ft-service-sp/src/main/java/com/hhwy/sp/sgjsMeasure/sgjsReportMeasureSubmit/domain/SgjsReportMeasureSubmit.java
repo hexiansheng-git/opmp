@@ -215,6 +215,8 @@ public class SgjsReportMeasureSubmit extends TreeNode<SgjsReportMeasureSubmit> {
     //新增标识
     private String isAdd;
 
+    private List<Long> idList;
+
 
     @JsonIgnore
     public Long getId() {

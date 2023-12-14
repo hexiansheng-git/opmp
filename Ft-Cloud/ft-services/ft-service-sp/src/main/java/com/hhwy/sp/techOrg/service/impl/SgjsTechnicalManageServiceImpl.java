@@ -296,8 +296,9 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
     @Override
     public AjaxResult sync() {
         List<QqchPostSetting> list = pmServiceApi.getTechDeptList();
+        List<SgjsTechnicalManage> techList=new ArrayList<>();
         //递归处理
-        digui(list);
+        digui(list,techList);
         return AjaxResult.success(list);
     }
 
@@ -365,8 +366,9 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
      *
      * @param list
      */
-    private void digui(List<QqchPostSetting> list){
+    private void digui(List<QqchPostSetting> list,List<SgjsTechnicalManage> techList){
         for (QqchPostSetting info:list) {
+            SgjsTechnicalManage manage=new SgjsTechnicalManage();
             //技术部门+技术岗位=岗位
             String str="";
             if(!StringUtils.isEmpty(info.getTechDept()) && !StringUtils.isEmpty(info.getPostName())){
@@ -380,9 +382,13 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             }
             if(!StringUtils.isEmpty(str)){
                 info.setPostName(str);
+                manage.setPostName(str);
+            }
+            if(null!=info.getHeadcount()){
+                manage.setHeadCount(Integer.parseInt(info.getHeadcount()));
             }
             if(!CollectionUtils.isEmpty(info.getChildren())){
-                digui(info.getChildren());
+                digui(info.getChildren(),techList);
             }
         }
     }
