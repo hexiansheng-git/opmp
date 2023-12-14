@@ -299,7 +299,8 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         List<SgjsTechnicalManage> techList=new ArrayList<>();
         //递归处理
         digui(list,techList);
-        return AjaxResult.success(list);
+        List<SgjsTechnicalManage> build = TreeUtil.build(techList,0L);
+        return AjaxResult.success(build);
     }
 
     /**
@@ -367,8 +368,10 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
      * @param list
      */
     private void digui(List<QqchPostSetting> list,List<SgjsTechnicalManage> techList){
-        for (QqchPostSetting info:list) {
+        for (int i=0;i<list.size();i++) {
+            QqchPostSetting info = list.get(i);
             SgjsTechnicalManage manage=new SgjsTechnicalManage();
+            manage.setId(IdWorker.createId());
             //技术部门+技术岗位=岗位
             String str="";
             if(!StringUtils.isEmpty(info.getTechDept()) && !StringUtils.isEmpty(info.getPostName())){
@@ -380,6 +383,9 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             if(StringUtils.isEmpty(info.getPostName())){
                 str=info.getTechDept();
             }
+            if(null==info.getPid()){
+                manage.setPid(0L);
+            }
             if(!StringUtils.isEmpty(str)){
                 info.setPostName(str);
                 manage.setPostName(str);
@@ -387,6 +393,13 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             if(null!=info.getHeadcount()){
                 manage.setHeadCount(Integer.parseInt(info.getHeadcount()));
             }
+            if(StringUtils.isEmpty(manage.getPath())){
+                manage.setPath(manage.getId()+"/");
+            }else{
+                String id=manage.getId()+"";
+                manage.setPath(manage.getPath()+"/"+id);
+            }
+            techList.add(manage);
             if(!CollectionUtils.isEmpty(info.getChildren())){
                 digui(info.getChildren(),techList);
             }
