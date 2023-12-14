@@ -198,7 +198,7 @@
         </where>
         order by sort
     </select>
-    <select id="getEditorListByPlanStage" resultType="java.lang.Long">
+    <select id="getEditorListByPlanStage" resultType="java.lang.String">
         select ${var2} from qqch_work_plan_detail
         where del_flag = '0' and ${var1} = '1'
         group by ${var2}

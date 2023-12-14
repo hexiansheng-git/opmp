@@ -90,12 +90,13 @@ public class QqchWorkPlanDetailServiceImpl implements IQqchWorkPlanDetailService
 
     /**
      * 根据阶段获取当前阶段所有的编制人（用户名）
+     *
      * @param planStage
      * @return
      */
     @Override
-    public List<Long> getEditorListByPlanStage(String planStage){
-        List<Long> editorList = new ArrayList<>();
+    public List<String> getEditorListByPlanStage(String planStage){
+        List<String> editorList = new ArrayList<>();
         //查询最新的工作计划
         QqchWorkPlan workPlan = qqchWorkPlanMapper.getValidMaxVersionWorkPlan();
         if(workPlan == null){
