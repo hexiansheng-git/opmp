@@ -210,16 +210,6 @@
     </select>
 
 
-    <select id="getParentList"  resultMap="SgjsExperProgressManageResultMap">
-        <include refid="selectSgjsExperProgressManageVo" />
-        <where>
-            `id` in
-            <foreach item="id" collection="childrenIds" open="(" separator="," close=")">
-                #{id}
-            </foreach>
-        </where>
-
-    </select>
     <select id="getIds"
             resultType="com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManage">
         <include refid="selectSgjsExperProgressManageVo"/>
@@ -234,6 +224,24 @@
         </where>
         order by create_time desc
 
+
+    </select>
+
+
+    <select id="getChildrenList"
+            resultType="com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManage">
+
+        <include refid="selectSgjsExperProgressManageVo"/>
+        <where>
+            del_flag = "0"
+            <if test="ids != null and ids.size() > 0">
+                and `pid` in
+                <foreach item="id" collection="ids" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+        order by create_time desc
 
     </select>
 
@@ -628,6 +636,8 @@
 
         </where>
     </update>
+
+
 
     <update id="deleteSgjsExperProgressManageByPks">
         update `sgjs_exper_progress_manage` set del_flag = 1,del_user = #{delUser}, del_time = now()

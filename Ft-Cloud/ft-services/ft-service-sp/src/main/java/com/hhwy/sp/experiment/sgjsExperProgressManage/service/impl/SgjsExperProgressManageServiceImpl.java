@@ -19,10 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author wll
@@ -152,7 +150,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         List<LinkedHashMap<String, Object>> list = (List<LinkedHashMap<String, Object>>) data.get("dto");
 
         //递归处理同步数据，构建树形关系
-        digui(list,treeToList);
+        digui(list, treeToList);
         //设置返回值
         sgjsExperProgressManageVo.setTreeList(treeToList);
 
@@ -194,32 +192,57 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
     @Transactional
     public AjaxResult batchAdd(SgjsExperProgressManageVo sgjsExperProgressManageVo) {
 
+
         //获取删除的id集合
         List<String> delIdList = sgjsExperProgressManageVo.getDelIdList();
-        if (delIdList.size()>0){
-            List<Long> idsList=new ArrayList<>();
-            for (String idStr : delIdList) {
-                idsList.add(Long.valueOf(idStr));
-            }
+        //将集合转成long类型的集合
+        List<Long> collect = delIdList.stream().map(t -> Long.parseLong(t)).collect(Collectors.toList());
 
+        if (collect.size() > 0) {
             String delUser = SecurityUtils.getSysUser().getNickName();
-            sgjsExperProgressManageMapper.deleteSgjsExperProgressManageByPks(idsList,delUser);
+            sgjsExperProgressManageMapper.deleteSgjsExperProgressManageByPks(collect, delUser);
         }
+
+        //将所有数据都查询出来 用map保存
+        SgjsExperProgressManage sgjsExperProgressManage1 = new SgjsExperProgressManage();
+        List<SgjsExperProgressManage> list = sgjsExperProgressManageMapper.getSgjsExperProgressManageList(sgjsExperProgressManage1);
+        Map<String, SgjsExperProgressManage> map = new HashMap<>();
+        //将所有数据分别放入两个map中，一个以id为key,另一个以pid为key, value都是实体对象
+        list.stream().forEach(temp -> {
+            map.put(temp.getId() + "", temp);
+        });
+
+
+        Map<String, SgjsExperProgressManage> pidMap = new HashMap<>();
+        list.stream().forEach(temp -> {
+            pidMap.put(temp.getPid() + "", temp);
+        });
+
+        //处理子级数据
+        List<SgjsExperProgressManage> children = sgjsExperProgressManageMapper.getChildrenList(collect);
+        //out集合存放所有需要删除的数据
+        List<Long> out = new ArrayList<>();
+        out=getChildren(map,pidMap, children, out);
+
+        if (out.size() > 0) {
+            String delUser = SecurityUtils.getSysUser().getNickName();
+            sgjsExperProgressManageMapper.deleteSgjsExperProgressManageByPks(out, delUser);
+        }
+
+
         //根据标志位判断是新增操作还是修改操作
         List<SgjsExperProgressManage> treeList = sgjsExperProgressManageVo.getTreeList();
-        List<SgjsExperProgressManage>  updateList=new ArrayList<>();
-        List<SgjsExperProgressManage>  insertList=new ArrayList<>();
+        List<SgjsExperProgressManage> updateList = new ArrayList<>();
+        List<SgjsExperProgressManage> insertList = new ArrayList<>();
         for (SgjsExperProgressManage sgjsExperProgressManage : treeList) {
-
-            if ("1".equals(sgjsExperProgressManage.getType())){
-                sgjsExperProgressManage.setUpdateUser(SecurityUtils.getUserId()+"");
+            if ("1".equals(sgjsExperProgressManage.getType())) {
+                sgjsExperProgressManage.setUpdateUser(SecurityUtils.getUserId() + "");
                 sgjsExperProgressManage.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(sgjsExperProgressManage);
             }
-            if ("0".equals(sgjsExperProgressManage.getType())){
-
+            if ("0".equals(sgjsExperProgressManage.getType())) {
                 sgjsExperProgressManage.setCreateUserName(SecurityUtils.getUserName());
-                sgjsExperProgressManage.setCreateUser(SecurityUtils.getUserId()+"");
+                sgjsExperProgressManage.setCreateUser(SecurityUtils.getUserId() + "");
                 sgjsExperProgressManage.setCreateTime(DateUtils.getNowDate());
                 sgjsExperProgressManage.setId(IdWorker.createId());
                 sgjsExperProgressManage.setDelFlag("0");
@@ -228,17 +251,31 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             }
         }
         //批量进行修改和新增
-
-        if (insertList.size()>0){
+        if (insertList.size() > 0) {
             sgjsExperProgressManageMapper.insertSgjsExperProgressManageList(insertList);
         }
-        if (updateList.size()>0){
+        if (updateList.size() > 0) {
             sgjsExperProgressManageMapper.updateSgjsExperProgressManageList(updateList);
         }
-
         return AjaxResult.success();
-
     }
+
+    private List<Long> getChildren(Map<String, SgjsExperProgressManage> map,Map<String, SgjsExperProgressManage> pidMap, List<SgjsExperProgressManage> children, List<Long> out) {
+        //筛选出所有子级id
+        List<Long> collectId = children.stream().map(i -> i.getId()).collect(Collectors.toList());
+
+        for (Long id : collectId) {
+            //将子节点加入集合
+            out.add(id);
+            //获取子节点的孩子节点
+            if (pidMap.containsKey(id)){
+                out.add(pidMap.get(id.toString()).getId());
+                getChildren(map,pidMap,children,out);
+            }
+        }
+        return out;
+    }
+
 
 
     @Override
