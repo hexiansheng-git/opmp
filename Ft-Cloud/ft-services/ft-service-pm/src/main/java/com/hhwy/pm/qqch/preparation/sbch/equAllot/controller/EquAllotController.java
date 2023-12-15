@@ -25,6 +25,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/equAllot")
+@Validated
 public class EquAllotController extends BaseController {
     @Autowired
     private EquAllotService equAllotService;
@@ -38,7 +39,7 @@ public class EquAllotController extends BaseController {
 
     @PostMapping("/batchAdd")
     @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备配置与选型", name = "7.2.2设备调拨策划", businessType = CustomBusinessType.SAVE)
-    public AjaxResult batchAdd(@RequestBody EquAllotVo equAllotVo){
+    public AjaxResult batchAdd(@Validated(ValidationGroups.Save.class) @RequestBody EquAllotVo equAllotVo){
         try {
             equAllotService.batchAdd(equAllotVo);
             return AjaxResult.success();

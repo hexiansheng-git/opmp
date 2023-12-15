@@ -557,7 +557,7 @@
     <update id="updateReviewFinishTime" parameterType="Long">
         update qqch_change set review_finish_time = now() where id in
         <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
-            #{item.id}
+            #{item}
         </foreach>
     </update>
 

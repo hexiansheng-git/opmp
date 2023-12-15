@@ -8,6 +8,7 @@ import com.hhwy.utils.common.MyPrepareBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -20,8 +21,10 @@ import java.util.List;
 @Data
 public class EquAllotVo extends MyPrepareBaseEntity {
     //同国别调拨
+    @Valid
     private List<SbchEquipmentAllotDetails> sameCountryList;
     //跨国别调拨
+    @Valid
     private List<SbchEquipmentAllotTransnationalDetails> internationList;
 
 }

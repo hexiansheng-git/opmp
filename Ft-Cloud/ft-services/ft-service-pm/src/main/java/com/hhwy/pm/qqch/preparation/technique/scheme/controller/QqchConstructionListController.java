@@ -38,6 +38,7 @@ public class QqchConstructionListController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchConstructionList:list")
     @GetMapping("/getList")
+    @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.4 施工方案计划管理", name = "3.4.2 施工方案清单" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getList(
         @Validated(ValidationGroups.Select.class) QqchConstructionListVo qqchConstructionListParamVo) {
 //        if(StringUtils.isBlank(qqchConstructionListParamVo.getWbsCode()))

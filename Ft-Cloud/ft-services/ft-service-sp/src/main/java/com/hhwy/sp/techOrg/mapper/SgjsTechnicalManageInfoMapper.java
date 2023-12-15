@@ -36,4 +36,11 @@ public interface SgjsTechnicalManageInfoMapper {
      * @return
      */
     int deleteInfoByTechIds(@Param("techIdList") List<String> techIdList);
+
+    /**
+     * 全量删除之前的数据
+     *
+     * @param manageInfo
+     */
+    void delectAll(SgjsTechnicalManageInfo manageInfo);
 }

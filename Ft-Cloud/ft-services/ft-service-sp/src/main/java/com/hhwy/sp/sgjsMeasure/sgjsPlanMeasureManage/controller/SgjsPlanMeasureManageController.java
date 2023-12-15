@@ -87,7 +87,7 @@ public class SgjsPlanMeasureManageController extends BaseController {
      * @param
      * @return
      */
-    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:add")
+    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:list")
     @GetMapping("/qqchMeasureExpPlanSelect")
     public AjaxResult qqchMeasureExpPlanSelect() {
         SgjsPlanMeasureManageVo sgjsPlanMeasureManageVo = sgjsPlanMeasureManageService.qqchMeasureExpPlanSelect();

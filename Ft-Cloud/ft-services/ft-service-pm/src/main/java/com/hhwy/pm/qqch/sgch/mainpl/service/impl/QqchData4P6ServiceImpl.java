@@ -14,6 +14,7 @@ import com.hhwy.pm.qqch.sgch.mainpl.domain.*;
 import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchData4P6Service;
 import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemPreService;
 import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
+import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanLogService;
 import com.hhwy.pm.qqch.sgch.prodplan.service.IQqchProdPlanService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.system.api.domain.SysTenant;
@@ -56,6 +57,9 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
     @Autowired
     private IQqchProdPlanService qqchProdPlanService;
 
+    @Autowired
+    private IQqchMainPlanLogService qqchMainPlanLogService;
+
     @Value("${p6.ip_port}")
     private String p6IpPort;
 
@@ -71,7 +75,7 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
         version = VersionUtil.getVersion(QqchMainPlanItem.TABLE_NAME, version);
 
         List<QqchMainPlanItem> returnList = new ArrayList<>();
-
+        Date startTime = DateUtils.getNowDate();
         System.out.println("--获取p6项目数据--租户:" + tenantKey + "--开始:" +  DateUtils.getTime());
         ProjectInfo projectInfo = getProjectInfo(tenantKey);
         System.out.println("--获取p6项目数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime());
@@ -234,6 +238,13 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
                 qqchProdPlanService.putProdPlanData(version);
 //                iQqchMainPlanItemPreService.insertQqchMainPlanItemPreList(relInfos);
             }
+        }
+        Date endTime = DateUtils.getNowDate();
+        try {
+            Integer m = StatisticsUtils.getTimeByRangeDate(startTime, endTime, "m");
+            qqchMainPlanLogService.updateQqchMainPlanLog("allUpdateTimeNum","全量更新时长", m, "m");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return returnList;

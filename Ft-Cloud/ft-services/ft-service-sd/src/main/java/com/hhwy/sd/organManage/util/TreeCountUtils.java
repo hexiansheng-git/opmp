@@ -51,6 +51,14 @@ public class TreeCountUtils<T extends TreeNode> {
                             size --;
                         }
                     }
+
+                    if(Long.class.equals(type)) {
+                        Long queryValue = (Long) columnQueryMap.get(column);
+                        Long thisValue = (Long) declaredField.get(t);
+                        if(thisValue != null && thisValue.compareTo(queryValue) == 0) {
+                            size --;
+                        }
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

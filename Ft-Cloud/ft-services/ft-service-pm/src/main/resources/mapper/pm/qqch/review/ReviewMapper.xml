@@ -351,8 +351,8 @@
             <if test="stage != null  and  stage != ''">`stage` = #{stage},</if>
             <if test="reviewDeptId != null  and  reviewDeptId != ''">`review_dept_id` = #{reviewDeptId},</if>
             <if test="reviewDeptName != null  and  reviewDeptName != ''">`review_dept_name` = #{reviewDeptName},</if>
-            <if test="finishDate != null ">`review_complete_date` = #{finishDate},</if>
-            <if test="reviewCompleteDate != null ">`finish_date` = #{reviewCompleteDate},</if>
+            <if test="finishDate != null ">`finish_date` = #{finishDate},</if>
+            <if test="reviewCompleteDate != null ">`review_complete_date` = #{reviewCompleteDate},</if>
             <if test="reviewReq != null  and  reviewReq != ''">`review_req` = #{reviewReq},</if>
             <if test="planStage != null  and  planStage != ''">`plan_stage` = #{planStage},</if>
             <if test="planEstablishDirector != null  and  planEstablishDirector != ''">`plan_establish_director` =

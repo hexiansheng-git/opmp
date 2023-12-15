@@ -21,9 +21,11 @@ public interface KcsjEquipEntryRecordMapper {
 
     int updateKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
-    int updateKcsjEquipEntryRecordList(@Param("kcsjEquipEntryRecordList") List<KcsjEquipEntryRecord> kcsjEquipEntryRecordList);
+    int updateKcsjEquipEntryRecordList(@Param("list") List<KcsjEquipEntryRecord> kcsjEquipEntryRecordList);
 
     int deleteKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
     int deleteKcsjEquipEntryRecordByPks(@Param("kcsjEquipEntryRecordPkList") List<Long> kcsjEquipEntryRecordPkList);
+
+    int deleteInfoData(List<KcsjEquipEntryRecord> list);
 }

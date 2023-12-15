@@ -27,8 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author zqq
@@ -206,46 +204,30 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         detail.setInfoId(id);
         List<QqchPerformInspectionDetail> detailList = detailService.getQqchPerformInspectionDetailList(detail);
         if(!ObjectNullUtil.isEmpty(detailList)){
-            List<QqchPerformInspectionDetail> parentList = detailList.stream().filter(t -> ObjectNullUtil.isEmpty(t.getPid())).collect(Collectors.toList());
-            Map<Long, List<QqchPerformInspectionDetail>> pidMap = detailList.stream().filter(t -> !ObjectNullUtil.isEmpty(t.getPid())).collect(Collectors.groupingBy(t -> t.getPid()));
-            for (QqchPerformInspectionDetail qqchPerformInspectionDetail : parentList) {
-                List<QqchPerformInspectionDetail> detailList1 = pidMap.get(qqchPerformInspectionDetail.getId());
-                qqchPerformInspectionDetail.setChildren(detailList1);
-            }
-            temp.setDetailList(parentList);
+            detailList = ListTreeUtil.formatTree(
+                    detailList,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchPerformInspectionDetail::getChildren,
+                    QqchPerformInspectionDetail::setChildren);
         }
-
+        temp.setDetailList(detailList);
         return temp;
     }
 
     //处理策划项数据
     private List<QqchPerformInspectionDetail> handleDetailList(QqchPerformInspection qqchPerformInspection,List<QqchPerformInspectionDetail> detailList){
-        ArrayList<QqchPerformInspectionDetail> batchAddList = new ArrayList<>();
-        for (QqchPerformInspectionDetail detail : detailList) {
+        List<QqchPerformInspectionDetail> tileList = ListTreeUtil.formatList(
+                detailList,
+                QqchPerformInspectionDetail::setId,
+                QqchPerformInspectionDetail::setPid,
+                QqchPerformInspectionDetail::setSort,
+                QqchPerformInspectionDetail::getChildren,
+                QqchPerformInspectionDetail::setChildren);
+        for (QqchPerformInspectionDetail detail : tileList) {
             detail.setInfoId(qqchPerformInspection.getId());
-            detail.setId(IdWorker.createId());
-            List<QqchPerformInspectionDetail> childrenList = detail.getChildren();
-            if(!ObjectNullUtil.isEmpty(childrenList)){
-                for (QqchPerformInspectionDetail qqchPerformInspectionDetail : childrenList) {
-                    QqchPerformInspectionDetail detail1 = new QqchPerformInspectionDetail();
-                    detail1.setId(IdWorker.createId());
-                    detail1.setPid(detail.getId());
-                    detail1.setInfoId(qqchPerformInspection.getId());
-                    detail1.setItemId(qqchPerformInspectionDetail.getItemId());
-                    detail1.setItemName(qqchPerformInspectionDetail.getItemName());
-                    detail1.setSort(qqchPerformInspectionDetail.getSort());
-                    detail1.setWorkExplain(qqchPerformInspectionDetail.getWorkExplain());
-                    detail1.setEditor(qqchPerformInspectionDetail.getEditor());
-                    detail1.setPerformInspection(qqchPerformInspectionDetail.getPerformInspection());
-                    detail1.setInspectionPerson(qqchPerformInspectionDetail.getInspectionPerson());
-                    detail1.setInspectionPersonName(qqchPerformInspectionDetail.getInspectionPersonName());
-                    detail1.setRemark(qqchPerformInspectionDetail.getRemark());
-                    batchAddList.add(detail1);
-                }
-            }
-            batchAddList.add(detail);
         }
-        return batchAddList;
+        return tileList;
     }
 
     

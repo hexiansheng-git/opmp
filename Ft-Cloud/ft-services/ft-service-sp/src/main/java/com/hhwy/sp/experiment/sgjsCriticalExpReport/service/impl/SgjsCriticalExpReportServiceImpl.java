@@ -1,6 +1,7 @@
 package com.hhwy.sp.experiment.sgjsCriticalExpReport.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.SgjsCriticalExpReport;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportQueryVo;
@@ -13,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -98,6 +96,7 @@ public class SgjsCriticalExpReportServiceImpl implements ISgjsCriticalExpReportS
         List<SgjsCriticalExpReport> reportList = criticalExpReportVo.getReportList();
         List<Long> delIdList = criticalExpReportVo.getDelIdList();
         Set<Long> delIdSet = new HashSet<>(delIdList);
+        this.checkData(reportList,delIdSet);
         reportList = reportList.stream().filter(o -> !delIdSet.contains(o.getId())).collect(Collectors.toList());
         if(CollectionUtils.isEmpty(reportList) && CollectionUtils.isEmpty(delIdList)){
             return;
@@ -123,6 +122,44 @@ public class SgjsCriticalExpReportServiceImpl implements ISgjsCriticalExpReportS
 
         if(CollectionUtils.isNotEmpty(delIdList)){
             sgjsCriticalExpReportMapper.deleteSgjsCriticalExpReportByPks(delIdList);
+        }
+    }
+
+    public void checkData(List<SgjsCriticalExpReport> reportList,Set<Long> delIdSet){
+        reportList = reportList.stream().filter(o -> StringUtils.isNotBlank(o.getExpReportCode())).collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(reportList)){
+            return;
+        }
+        Set<String> codeSet1 = new HashSet<>();
+        for (SgjsCriticalExpReport report : reportList) {
+            String code = report.getExpReportCode();
+            if(codeSet1.contains(code)){
+                throw new RuntimeException(String.format("报告编码[%s]重复", report.getExpReportCode()));
+            }else {
+                codeSet1.add(code);
+            }
+        }
+
+        List<SgjsCriticalExpReport> allList = sgjsCriticalExpReportMapper.getSgjsCriticalExpReportList(new CriticalExpReportQueryVo());
+        allList = allList.stream().filter(o -> !delIdSet.contains(o.getId())).filter(o -> StringUtils.isNotBlank(o.getExpReportCode())).collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(allList)){
+            return;
+        }
+        Map<Long, String> idCodeMap = allList.stream().collect(Collectors.toMap(SgjsCriticalExpReport::getId, SgjsCriticalExpReport::getExpReportCode));
+        Set<String> codeSet2 = allList.stream().map(SgjsCriticalExpReport::getExpReportCode).collect(Collectors.toSet());
+
+        for(SgjsCriticalExpReport report : reportList) {
+            String isAdd = report.getIsAdd();
+            if ("1".equals(isAdd)) {
+                if (codeSet2.contains(report.getExpReportCode())) {
+                    throw new RuntimeException(String.format("报告编码[%s]已存在", report.getExpReportCode()));
+                }
+            } else {
+                String oldCode = idCodeMap.get(report.getId());
+                if (codeSet2.contains(report.getExpReportCode()) && !oldCode.equals(report.getExpReportCode())) {
+                    throw new RuntimeException(String.format("报告编码[%s]已存在", report.getExpReportCode()));
+                }
+            }
         }
     }
 }

@@ -39,6 +39,7 @@ public class ISbchEquipmentLeaseDetailsServiceImpl implements ISbchEquipmentLeas
 //                if (!isAdjust) {
 //                    id = item.getId() == null ? IdWorker.createId() : item.getId();
 //                }
+                item.setIsSpecialEqu("0");
                 item.setId(id);
                 item.setMainId(mainId);
                 EntityUtils.setCreateUpdateInfo(item);

@@ -180,7 +180,11 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         if(i > 0) {
             sysSyncInfoService.pushJdglDiffAnalysis(jdglDiffAnalysis);
             if(jdglDiffAnalysis.getRiskLevel() != null) {
-                jdglCorrectionMeasuresMakeService.syncData(period);
+                try {
+                    jdglCorrectionMeasuresMakeService.syncData(period);
+                } catch (Exception e) {
+                    System.out.println("推送进度纠偏接口异常:" + e.getMessage());
+                }
             }
         }
 
@@ -380,6 +384,8 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             Date handoverTime = validMaxVersionContractInfo.getHandoverTime();
             if(handoverTime != null && nowDate1.after(handoverTime)) {
                 isOver = "1";
+            } else {
+                isOver = "0";
             }
             effectiveAmountDollar = validMaxVersionContractInfo.getEffectiveAmountDollar();
             if(effectiveAmountDollar != null)jdglDiffAnalysis.setContractAmtDl(StatisticsUtils.getDivideTenThousand(effectiveAmountDollar));

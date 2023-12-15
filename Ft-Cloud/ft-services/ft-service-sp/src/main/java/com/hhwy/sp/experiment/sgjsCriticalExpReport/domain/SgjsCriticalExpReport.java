@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.excel.FtExcel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,19 +33,19 @@ public class SgjsCriticalExpReport extends BaseEntity {
      * 字段描述：试验报告编号
      */
     @JsonProperty
-    @Excel(name = "试验报告编号")
+    @FtExcel(name = "试验报告编号")
     private String expReportCode;
     /**
      * 字段描述：试验类型
      */
     @JsonProperty
-    @Excel(name = "试验类型")
+    @FtExcel(name = "试验类型",dictType = "exp_type")
     private String expType;
     /**
      * 字段描述：试验报告名称
      */
     @JsonProperty
-    @Excel(name = "试验报告名称")
+    @FtExcel(name = "试验报告名称")
     private String expReportName;
     /**
      * 字段描述：WBS编码
@@ -56,40 +56,40 @@ public class SgjsCriticalExpReport extends BaseEntity {
      * 字段描述：WBS名称
      */
     @JsonProperty
-    @Excel(name = "所属WBS名称")
+    @FtExcel(name = "所属WBS名称")
     private String wbsName;
     /**
      * 字段描述：计划实施日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划实施日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "计划实施日期", dateFormat = "yyyy-MM-dd")
     private Date planEffectDate;
     /**
      * 字段描述：是否外委（1：是，0：否）
      */
     @JsonProperty
-    @Excel(name = "是否外委")
+    @FtExcel(name = "是否外委",dictType = "common_yes")
     private String outsource;
     /**
      * 字段描述：是否监理审批（1：是，0：否）
      */
     @JsonProperty
-    @Excel(name = "是否监理审批")
+    @FtExcel(name = "是否监理审批",dictType = "common_yes")
     private String superviseApproval;
     /**
      * 字段描述：计划提交日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划提交日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "计划提交日期", dateFormat = "yyyy-MM-dd")
     private Date planCommitDate;
     /**
      * 字段描述：实际提交日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "实际提交日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "实际提交日期", dateFormat = "yyyy-MM-dd")
     private Date actualCommitDate;
     /**
      * 字段描述：提交人id
@@ -100,7 +100,7 @@ public class SgjsCriticalExpReport extends BaseEntity {
      * 字段描述：提交人名称
      */
     @JsonProperty
-    @Excel(name = "提交人名称")
+    @FtExcel(name = "提交人名称")
     private String submitterName;
     /**
      * 字段描述：附件组id

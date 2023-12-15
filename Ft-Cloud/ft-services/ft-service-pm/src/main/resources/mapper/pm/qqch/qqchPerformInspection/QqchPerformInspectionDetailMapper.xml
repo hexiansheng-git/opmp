@@ -116,7 +116,7 @@
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
         </where>
-        order by create_time desc
+        order by sort
     </select>
 
     <insert id="insertQqchPerformInspectionDetail" useGeneratedKeys="true" keyProperty="id">

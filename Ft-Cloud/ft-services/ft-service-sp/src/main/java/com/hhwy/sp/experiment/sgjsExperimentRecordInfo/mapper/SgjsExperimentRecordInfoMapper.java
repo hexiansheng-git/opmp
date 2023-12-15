@@ -43,5 +43,13 @@ public interface SgjsExperimentRecordInfoMapper {
      * @param codeList
      * @return
      */
-    List<SgjsExperimentRecordInfo> selectByExperimentNos(List<String> codeList);
+    List<SgjsExperimentRecordInfo> selectByExperimentNos(@Param(value = "codeList") List<String> codeList);
+
+    /**
+     * 根据主表id查询子表信息
+     *
+     * @param idList
+     * @return
+     */
+    List<SgjsExperimentRecordInfo> selectByIdList(@Param(value = "idList") List<String> idList);
 }

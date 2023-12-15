@@ -259,6 +259,45 @@ public class StatisticsUtils {
 
     }
 
+    /**
+     * 获取日期区间天数(1位小数)
+     * @return
+     */
+    public static Integer getTimeByRangeDate(Date startDate, Date endDate, String timeType) {
+
+        if(startDate == null || endDate == null || StringUtils.isEmpty(timeType)) {
+            return 0;
+        }
+
+        long timeS = startDate.getTime();
+        long timeE = endDate.getTime();
+
+        BigDecimal bigE = new BigDecimal(timeE);
+        BigDecimal bigS = new BigDecimal(timeS);
+
+        int devideNum = 0;
+        if("s".equals(timeType)) {
+            devideNum = 1000;
+        }
+        if("m".equals(timeType)) {
+            devideNum = 1000* 60;
+        }
+        if("h".equals(timeType)) {
+            devideNum = 1000* 60* 60;
+        }
+        if("d".equals(timeType)) {
+            devideNum = 24 * 60 * 60 * 1000;
+        }
+
+        BigDecimal divide = bigE.subtract(bigS).divide(new BigDecimal(devideNum), 0, BigDecimal.ROUND_UP).add(new BigDecimal(1));
+
+        return divide.intValue();
+//        int i = (int) Math.round((timeE - timeS) / 24 / 60 / 60 / 1000) + 1;
+
+//        return (int) Math.round((timeE - timeS) / 24 / 60 / 60 / 1000) + 1;
+
+    }
+
     private static final Pattern NUMBER_PATTERN = Pattern.compile("-?\\d+(\\.\\d+)?");
     public static boolean isNumeric2(String str) {
         return str != null && NUMBER_PATTERN.matcher(str).matches();

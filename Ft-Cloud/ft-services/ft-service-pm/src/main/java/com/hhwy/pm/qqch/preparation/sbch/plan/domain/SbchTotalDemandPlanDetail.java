@@ -79,38 +79,38 @@ public class SbchTotalDemandPlanDetail extends CommonBaseEntity {
     /** 总需求量 */
     @Excel(name = "总需求量")
 
-    @JsonSerialize(using= ToStringSerializer.class)
-    private Long totalNum;
+//    @JsonSerialize(using= ToStringSerializer.class)
+    private BigDecimal totalNum;
 
     /** 内部调拨数量 */
     @Excel(name = "内部调拨数量")
 
     @JsonSerialize(using= ToStringSerializer.class)
-    private Long allocateNum;
+    private BigDecimal allocateNum;
 
     /** 国内采购 */
     @Excel(name = "国内采购")
 
     @JsonSerialize(using= ToStringSerializer.class)
-    private Long countryBuyNum;
+    private BigDecimal countryBuyNum;
 
     /** 当地采购数量 */
     @Excel(name = "当地采购数量")
 
     @JsonSerialize(using= ToStringSerializer.class)
-    private Long localBuyNum;
+    private BigDecimal localBuyNum;
 
     /** 当地租赁数量 */
     @Excel(name = "当地租赁数量")
 
     @JsonSerialize(using= ToStringSerializer.class)
-    private Long localLeaseNum;
+    private BigDecimal localLeaseNum;
 
     /** 协作单位自带 */
     @Excel(name = "协作单位自带")
 
     @JsonSerialize(using= ToStringSerializer.class)
-    private Long companySelfNum;
+    private BigDecimal companySelfNum;
 
     /** 计划进场时间 */
     @Excel(name = "计划进场时间", width = 30, dateFormat = "yyyy-MM-dd")

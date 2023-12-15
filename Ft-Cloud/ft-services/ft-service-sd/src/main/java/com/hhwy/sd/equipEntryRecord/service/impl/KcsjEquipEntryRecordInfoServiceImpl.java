@@ -1,7 +1,10 @@
 package com.hhwy.sd.equipEntryRecord.service.impl;
 
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.sd.equipEntryRecord.mapper.KcsjEquipEntryRecordInfoMapper;
 import com.hhwy.sd.equipEntryRecord.service.IKcsjEquipEntryRecordInfoService;
+import com.hhwy.utils.date.FtDateUtils;
+import com.hhwy.utils.tree.TreeUtil;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -28,7 +31,19 @@ public class KcsjEquipEntryRecordInfoServiceImpl implements IKcsjEquipEntryRecor
     }
 
     public List<KcsjEquipEntryRecordInfo> getKcsjEquipEntryRecordInfoList(KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo) {
-        return kcsjEquipEntryRecordInfoMapper.getKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfo);
+        //判断日期
+        if (StringUtils.isNotEmpty(kcsjEquipEntryRecordInfo.getEntryDateStr())){
+            String entryDateStr = kcsjEquipEntryRecordInfo.getEntryDateStr();
+            String[] split = entryDateStr.split(",");
+            kcsjEquipEntryRecordInfo.setEntryDateStr(split[0].replaceAll("(?:年|月|日)", "-"));
+            kcsjEquipEntryRecordInfo.setEntryEndDateStr(split[1].replaceAll("(?:年|月|日)", "-"));
+        }
+        List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoMapper.getKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfo);
+        for (KcsjEquipEntryRecordInfo info:kcsjEquipEntryRecordInfoList) {
+            info.setEntryDateStr(info.getEntryDate() == null ? null : FtDateUtils.formatDate(info.getEntryDate()));
+            info.setExitDateStr(info.getExitDate() == null ? null : FtDateUtils.formatDate(info.getExitDate()));
+        }
+        return TreeUtil.newBuild(kcsjEquipEntryRecordInfoList);
     }
 
     @Transactional
@@ -76,5 +91,15 @@ public class KcsjEquipEntryRecordInfoServiceImpl implements IKcsjEquipEntryRecor
     @Transactional
     public int deleteKcsjEquipEntryRecordInfoByPks(List<Long> kcsjEquipEntryRecordInfoPkList) {
         return kcsjEquipEntryRecordInfoMapper.deleteKcsjEquipEntryRecordInfoByPks(kcsjEquipEntryRecordInfoPkList);
+    }
+
+    public List<KcsjEquipEntryRecordInfo> selectInfos(KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo) {
+        List<KcsjEquipEntryRecordInfo> list = kcsjEquipEntryRecordInfoMapper.selectInfos(kcsjEquipEntryRecordInfo);
+        return list;
+    }
+
+    @Override
+    public List<KcsjEquipEntryRecordInfo> getIds(List<Long> ids) {
+        return kcsjEquipEntryRecordInfoMapper.getIds(ids);
     }
 }

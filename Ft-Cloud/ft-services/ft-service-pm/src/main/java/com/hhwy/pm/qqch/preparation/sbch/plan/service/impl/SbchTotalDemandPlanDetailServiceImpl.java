@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.sbch.plan.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -89,8 +90,11 @@ public class SbchTotalDemandPlanDetailServiceImpl implements ISbchTotalDemandPla
         list.forEach(p -> {
             p.setId(IdWorker.createId());
             p.setPlanId(planId);
-            p.setPtVar1(p.getMaterialType());
+//            p.setPtVar1(p.getMaterialType());
             p.setIsSpecial("0");
+//            if (StrUtil.isBlank(p.getPtVar2()) || StrUtil.isBlank(p.getPtVar3())) {
+//                RedisService.getCacheObject(PmsConstant.CATEGORYREDISKEY);
+//            }
         });
         sbchTotalDemandPlanDetailMapper.deleteSbchTotalDemandPlanDetailByPlanId(planId, SecurityUtils.getUserId(), DateUtils.getNowDate());
         sbchTotalDemandPlanDetailMapper.batchInsert(list);
@@ -130,12 +134,12 @@ public class SbchTotalDemandPlanDetailServiceImpl implements ISbchTotalDemandPla
 
                 SbchTotalDemandPlanDetail detail = new SbchTotalDemandPlanDetail();
                 BeanUtils.copyProperties(detailList.get(0),detail);
-                detail.setTotalNum(Long.parseLong(totalNum+""));
-                detail.setAllocateNum(Long.parseLong(allocateNum+""));
-                detail.setLocalBuyNum(Long.parseLong(localBuyNum+""));
-                detail.setCountryBuyNum(Long.parseLong(countryBuyNum+""));
-                detail.setLocalLeaseNum(Long.parseLong(localLeaseNum+""));
-                detail.setCompanySelfNum(Long.parseLong(companySelfNum+""));
+                detail.setTotalNum(NumberUtil.toBigDecimal(totalNum));
+                detail.setAllocateNum(NumberUtil.toBigDecimal(allocateNum+""));
+                detail.setLocalBuyNum(NumberUtil.toBigDecimal(localBuyNum+""));
+                detail.setCountryBuyNum(NumberUtil.toBigDecimal(countryBuyNum+""));
+                detail.setLocalLeaseNum(NumberUtil.toBigDecimal(localLeaseNum+""));
+                detail.setCompanySelfNum(NumberUtil.toBigDecimal(companySelfNum+""));
                 returnList.add(detail);
             }
         }

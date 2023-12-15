@@ -142,6 +142,10 @@ public class SgjsExperimentRecordInfo extends BaseEntity {
     @JsonProperty
     @Excel(name = "实际进场日期"    ,dateFormat = "yyyy-MM-dd"  )
     private Date entryDate;
+
+    private Date entryDateBegin;
+
+    private Date entryDateEnd;
     /**
      * 字段描述：实际退场时间
      */
@@ -292,6 +296,22 @@ public class SgjsExperimentRecordInfo extends BaseEntity {
     private List<String> exportIdList;
 
     private List<SgjsExperimentRecordInfoDetail> detailList;
+
+    public Date getEntryDateBegin() {
+        return entryDateBegin;
+    }
+
+    public void setEntryDateBegin(Date entryDateBegin) {
+        this.entryDateBegin = entryDateBegin;
+    }
+
+    public Date getEntryDateEnd() {
+        return entryDateEnd;
+    }
+
+    public void setEntryDateEnd(Date entryDateEnd) {
+        this.entryDateEnd = entryDateEnd;
+    }
 
     public List<SgjsExperimentRecordInfoDetail> getDetailList() {
         return detailList;
