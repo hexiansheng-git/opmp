@@ -43,7 +43,7 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
         //判断日期
         if (StringUtils.isNotEmpty(sgjsReportMeasureSubmit.getRealStartDateStr())){
             String realStartDateStr = sgjsReportMeasureSubmit.getRealStartDateStr();
-            String[] split = realStartDateStr.split(",");
+            String[] split = realStartDateStr.split("~");
             sgjsReportMeasureSubmit.setRealStartDateStr(split[0].replaceAll("(?:年|月|日)", "-"));
             sgjsReportMeasureSubmit.setRealEndDateStr(split[1].replaceAll("(?:年|月|日)", "-"));
         }
@@ -65,27 +65,26 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
 
     @Transactional
     public AjaxResult batchAdd(SgjsReportMeasureSubmitVo sgjsReportMeasureSubmitVo) {
-        if (CollectionUtils.isEmpty(sgjsReportMeasureSubmitVo.getTreeList())) {
-            return AjaxResult.error("数据异常");
-        }
-        for (SgjsReportMeasureSubmit sgjsReportMeasureSubmit : sgjsReportMeasureSubmitVo.getTreeList()) {
-            sgjsReportMeasureSubmit.setRealStartDate(sgjsReportMeasureSubmit.getRealStartDateStr() == null ? null : FtDateUtils.parseDate(sgjsReportMeasureSubmit.getRealStartDateStr().replaceAll("(?:年|月|日)", "-")));
-            sgjsReportMeasureSubmit.setPlanStartDate(sgjsReportMeasureSubmit.getPlanStartDateStr() == null ? null : FtDateUtils.parseDate(sgjsReportMeasureSubmit.getPlanStartDateStr().replaceAll("(?:年|月|日)", "-")));
-            sgjsReportMeasureSubmit.setCreateTime(DateTime.now());
-            sgjsReportMeasureSubmit.setCreateUser(SecurityUtils.getUserId() + "");
-            sgjsReportMeasureSubmit.setCreateUserName(SecurityUtils.getUserName() + "");
-            sgjsReportMeasureSubmit.setUpdateTime(DateTime.now());
-            sgjsReportMeasureSubmit.setUpdateUser(SecurityUtils.getUserId() + "");
-        }
-        List<SgjsReportMeasureSubmit> insertList = sgjsReportMeasureSubmitVo.getTreeList().stream().filter(r -> StringUtils.isNotEmpty(r.getIsAdd()) && r.getIsAdd().equals("1")).collect(Collectors.toList());
-        //批量入库
-        if(!CollectionUtils.isEmpty(insertList)){
-            sgjsReportMeasureSubmitMapper.batchAdd(insertList);
-        }
-        //批量编辑
-        List<SgjsReportMeasureSubmit> updateList = sgjsReportMeasureSubmitVo.getTreeList().stream().filter(r -> StringUtils.isEmpty(r.getIsAdd())).collect(Collectors.toList());
-        if(!CollectionUtils.isEmpty(updateList)){
-            sgjsReportMeasureSubmitMapper.updateSgjsReportMeasureSubmitList(updateList);
+        if (!CollectionUtils.isEmpty(sgjsReportMeasureSubmitVo.getTreeList())) {
+            for (SgjsReportMeasureSubmit sgjsReportMeasureSubmit : sgjsReportMeasureSubmitVo.getTreeList()) {
+                sgjsReportMeasureSubmit.setRealStartDate(sgjsReportMeasureSubmit.getRealStartDateStr() == null ? null : FtDateUtils.parseDate(sgjsReportMeasureSubmit.getRealStartDateStr().replaceAll("(?:年|月|日)", "-")));
+                sgjsReportMeasureSubmit.setPlanStartDate(sgjsReportMeasureSubmit.getPlanStartDateStr() == null ? null : FtDateUtils.parseDate(sgjsReportMeasureSubmit.getPlanStartDateStr().replaceAll("(?:年|月|日)", "-")));
+                sgjsReportMeasureSubmit.setCreateTime(DateTime.now());
+                sgjsReportMeasureSubmit.setCreateUser(SecurityUtils.getUserId() + "");
+                sgjsReportMeasureSubmit.setCreateUserName(SecurityUtils.getUserName() + "");
+                sgjsReportMeasureSubmit.setUpdateTime(DateTime.now());
+                sgjsReportMeasureSubmit.setUpdateUser(SecurityUtils.getUserId() + "");
+            }
+            List<SgjsReportMeasureSubmit> insertList = sgjsReportMeasureSubmitVo.getTreeList().stream().filter(r -> StringUtils.isNotEmpty(r.getIsAdd()) && r.getIsAdd().equals("1")).collect(Collectors.toList());
+            //批量入库
+            if(!CollectionUtils.isEmpty(insertList)){
+                sgjsReportMeasureSubmitMapper.batchAdd(insertList);
+            }
+            //批量编辑
+            List<SgjsReportMeasureSubmit> updateList = sgjsReportMeasureSubmitVo.getTreeList().stream().filter(r -> StringUtils.isEmpty(r.getIsAdd())).collect(Collectors.toList());
+            if(!CollectionUtils.isEmpty(updateList)){
+                sgjsReportMeasureSubmitMapper.updateSgjsReportMeasureSubmitList(updateList);
+            }
         }
         //批量删除
         deleteByIds(sgjsReportMeasureSubmitVo.getDelIdList());
