@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.sbch.plan.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -130,7 +131,7 @@ public class SbchTotalDemandPlanDetailServiceImpl implements ISbchTotalDemandPla
 
                 SbchTotalDemandPlanDetail detail = new SbchTotalDemandPlanDetail();
                 BeanUtils.copyProperties(detailList.get(0),detail);
-                detail.setTotalNum(Long.parseLong(totalNum+""));
+                detail.setTotalNum(NumberUtil.toBigDecimal(totalNum));
                 detail.setAllocateNum(Long.parseLong(allocateNum+""));
                 detail.setLocalBuyNum(Long.parseLong(localBuyNum+""));
                 detail.setCountryBuyNum(Long.parseLong(countryBuyNum+""));

@@ -105,6 +105,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         return vo;
     }
 
+
     @Transactional
     public int insertSgjsTechnicalManage(SgjsTechnicalManage sgjsTechnicalManage) {
         sgjsTechnicalManage.setId(IdWorker.createId());
@@ -258,39 +259,39 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         return AjaxResult.error(msg);
     }
 
-   private void validDataDigui(List<SgjsTechnicalManage>list,List<String> msgList){
-       for (SgjsTechnicalManage info:list ) {
-           Integer headCount = info.getHeadCount();
-           if(headCount==1){
-               String name = info.getUserName();
-               if(StringUtils.isEmpty(name)){
-                   msgList.add(info.getPostName()+"人员姓名不能为空");
-               }
-           }
-           List<SgjsTechnicalManage> children = info.getChildren();
-           //headCount的量  校验实际进场和人员姓名
-           if(headCount==children.size()){
-               for (int i = 0; i < children.size(); i++) {
-                   if(null!=children.get(i).getHeadCount()){
-                       //实际日期
-                       String actualDateStr = children.get(i).getActualDateStr();
-                       if(StringUtils.isEmpty(actualDateStr)){
-                           msgList.add(info.getPostName()+"实际进场不能为空");
-                       }
-                       String userName = children.get(i).getUserName();
-                       if(StringUtils.isEmpty(userName)){
-                           msgList.add(info.getPostName()+"人员姓名不能为空");
-                       }
-                   }
-               }
-           }else{
+    private void validDataDigui(List<SgjsTechnicalManage>list,List<String> msgList){
+        for (SgjsTechnicalManage info:list ) {
+            Integer headCount = info.getHeadCount();
+            if(headCount==1){
+                String name = info.getUserName();
+                if(StringUtils.isEmpty(name)){
+                    msgList.add(info.getPostName()+"人员姓名不能为空");
+                }
+            }
+            List<SgjsTechnicalManage> children = info.getChildren();
+            //headCount的量  校验实际进场和人员姓名
+            if(headCount==children.size()){
+                for (int i = 0; i < children.size(); i++) {
+                    if(null!=children.get(i).getHeadCount()){
+                        //实际日期
+                        String actualDateStr = children.get(i).getActualDateStr();
+                        if(StringUtils.isEmpty(actualDateStr)){
+                            msgList.add(info.getPostName()+"实际进场不能为空");
+                        }
+                        String userName = children.get(i).getUserName();
+                        if(StringUtils.isEmpty(userName)){
+                            msgList.add(info.getPostName()+"人员姓名不能为空");
+                        }
+                    }
+                }
+            }else{
                 msgList.add("编制人数和子集不匹配");
-           }
+            }
 
-           if(!CollectionUtils.isEmpty(info.getChildren())){
-               validDataDigui(info.getChildren(),msgList);
-           }
-       }
+            if(!CollectionUtils.isEmpty(info.getChildren())){
+                validDataDigui(info.getChildren(),msgList);
+            }
+        }
     }
 
     @Override
@@ -298,9 +299,22 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         List<QqchPostSetting> list = pmServiceApi.getTechDeptList();
         List<SgjsTechnicalManage> techList=new ArrayList<>();
         //递归处理
-        digui(list,techList);
+        digui(list,techList,"");
+
         List<SgjsTechnicalManage> build = TreeUtil.build(techList,0L);
-        return AjaxResult.success(build);
+        //全量删库 并重新入库
+        SgjsTechnicalManage info=new SgjsTechnicalManage();
+        info.setUpdateUser(SecurityUtils.getUserId()+"");
+        info.setUpdateTime(DateUtils.getNowDate());
+        sgjsTechnicalManageMapper.delectAll(info);
+        SgjsTechnicalManageInfo manageInfo=new SgjsTechnicalManageInfo();
+        manageInfo.setUpdateTime(DateUtils.getNowDate());
+        manageInfo.setUpdateUser(SecurityUtils.getUserId()+"");
+        //删完主表删子表
+        sgjsTechnicalManageInfoMapper.delectAll(manageInfo);
+        List<SgjsTechnicalManage> manageList = TreeUtil.treeToList(build);
+        sgjsTechnicalManageMapper.insertSgjsTechnicalManageList(manageList);
+        return AjaxResult.success(techList);
     }
 
     /**
@@ -367,42 +381,106 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
      *
      * @param list
      */
-    private void digui(List<QqchPostSetting> list,List<SgjsTechnicalManage> techList){
+    private void digui(List<QqchPostSetting> list,List<SgjsTechnicalManage> techList,String path){
         for (int i=0;i<list.size();i++) {
-            QqchPostSetting info = list.get(i);
             SgjsTechnicalManage manage=new SgjsTechnicalManage();
-            manage.setId(IdWorker.createId());
-            //技术部门+技术岗位=岗位
-            String str="";
-            if(!StringUtils.isEmpty(info.getTechDept()) && !StringUtils.isEmpty(info.getPostName())){
-                str=info.getTechDept()+info.getPostName();
+            QqchPostSetting info = list.get(i);
+            //跟节点
+            handleData(info,manage,path);
+            List<QqchPostSetting> children = info.getChildren();
+            if(CollectionUtils.isEmpty(children)){
+                continue;
             }
-            if(StringUtils.isEmpty(info.getTechDept())){
-                str=info.getPostName();
+            List<SgjsTechnicalManage> childrenList=new ArrayList();
+            for (int j = 0; j < children.size(); j++) {
+                SgjsTechnicalManage sgjsTechnicalManage=new SgjsTechnicalManage();
+                //子节点
+                handleData2(children.get(j),sgjsTechnicalManage,path,manage.getPath());
+                childrenList.add(sgjsTechnicalManage);
             }
-            if(StringUtils.isEmpty(info.getPostName())){
-                str=info.getTechDept();
-            }
-            if(null==info.getPid()){
-                manage.setPid(0L);
-            }
-            if(!StringUtils.isEmpty(str)){
-                info.setPostName(str);
-                manage.setPostName(str);
-            }
-            if(null!=info.getHeadcount()){
-                manage.setHeadCount(Integer.parseInt(info.getHeadcount()));
-            }
-            if(StringUtils.isEmpty(manage.getPath())){
-                manage.setPath(manage.getId()+"/");
-            }else{
-                String id=manage.getId()+"";
-                manage.setPath(manage.getPath()+"/"+id);
-            }
+            manage.setChildren(childrenList);
             techList.add(manage);
             if(!CollectionUtils.isEmpty(info.getChildren())){
-                digui(info.getChildren(),techList);
+                digui(info.getChildren(),techList,path);
             }
         }
+    }
+
+    /**
+     * 数据处理
+     *
+     * @param info
+     * @param manage
+     */
+    private void handleData(QqchPostSetting info, SgjsTechnicalManage manage, String path){
+        manage.setId(IdWorker.createId());
+        //技术部门+技术岗位=岗位
+        String strMsg="";
+        if(!StringUtils.isEmpty(info.getTechDept()) && !StringUtils.isEmpty(info.getPostName())){
+            strMsg=info.getTechDept()+info.getPostName();
+        }
+        if(StringUtils.isEmpty(info.getTechDept())){
+            strMsg=info.getPostName();
+        }
+        if(StringUtils.isEmpty(info.getPostName())){
+            strMsg=info.getTechDept();
+        }
+        if(null==info.getPid()){
+            manage.setPid(0L);
+        }
+        if(!StringUtils.isEmpty(strMsg)){
+            manage.setPostName(strMsg);
+        }
+        if(null!=info.getHeadcount()){
+            manage.setHeadCount(Integer.parseInt(info.getHeadcount()));
+        }
+        if(StringUtils.isEmpty(manage.getPath())){
+            manage.setPath(manage.getId()+"/");
+        }else{
+            String id=manage.getId()+"";
+            manage.setPath(path+"/"+id);
+        }
+
+        manage.setPtVar5(info.getId()+"");
+        manage.setCreateUser(SecurityUtils.getUserId()+"");
+        manage.setCreateTime(DateUtils.getNowDate());
+    }
+
+
+    /**
+     * 数据处理
+     *
+     * @param info
+     * @param manage
+     */
+    private void handleData2(QqchPostSetting info, SgjsTechnicalManage manage, String path, String ter){
+        manage.setId(IdWorker.createId());
+        //技术部门+技术岗位=岗位
+        String strMsg="";
+        if(!StringUtils.isEmpty(info.getTechDept()) && !StringUtils.isEmpty(info.getPostName())){
+            strMsg=info.getTechDept()+info.getPostName();
+        }
+        if(StringUtils.isEmpty(info.getTechDept())){
+            strMsg=info.getPostName();
+        }
+        if(StringUtils.isEmpty(info.getPostName())){
+            strMsg=info.getTechDept();
+        }
+        if(null==info.getPid()){
+            manage.setPid(0L);
+        }
+        if(!StringUtils.isEmpty(strMsg)){
+            manage.setPostName(strMsg);
+        }
+        if(null!=info.getHeadcount()){
+            manage.setHeadCount(Integer.parseInt(info.getHeadcount()));
+        }
+
+            String id=manage.getId()+"";
+            manage.setPath(ter+id);
+
+        manage.setPtVar5(info.getId()+"");
+        manage.setCreateUser(SecurityUtils.getUserId()+"");
+        manage.setCreateTime(DateUtils.getNowDate());
     }
 }

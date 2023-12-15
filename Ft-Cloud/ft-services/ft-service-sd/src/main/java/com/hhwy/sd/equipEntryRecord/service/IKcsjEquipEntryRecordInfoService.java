@@ -25,4 +25,6 @@ public interface IKcsjEquipEntryRecordInfoService {
     int deleteKcsjEquipEntryRecordInfo(KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo);
 
     int deleteKcsjEquipEntryRecordInfoByPks(List<Long> kcsjEquipEntryRecordInfoPkList);
+
+    List<KcsjEquipEntryRecordInfo> getIds(List<Long> ids);
 }

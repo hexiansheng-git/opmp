@@ -1,7 +1,6 @@
 package com.hhwy.sp.experiment.sgjsCriticalExpReport.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -9,6 +8,7 @@ import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.SgjsCriticalExpReport
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportQueryVo;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportVo;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.service.ISgjsCriticalExpReportService;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +97,7 @@ public class SgjsCriticalExpReportController extends BaseController {
         }else {
             sgjsCriticalExpReportList = sgjsCriticalExpReportService.getListByIds(ids);
         }
-        ExcelUtils<SgjsCriticalExpReport> util = new ExcelUtils<>(SgjsCriticalExpReport.class);
+        FtExcelUtil<SgjsCriticalExpReport> util = new FtExcelUtil<>(SgjsCriticalExpReport.class);
         util.exportExcel(response, sgjsCriticalExpReportList, DateUtils.getDate());
     }
 }

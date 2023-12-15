@@ -132,12 +132,32 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
             //同步标识
             sgjsPlanMeasureManage.setDataSource("1");
             sgjsPlanMeasureManage.setIsAdd("1");
-            treeToList.add(sgjsPlanMeasureManage);
-
             List<LinkedHashMap<String, Object>> children = (List<LinkedHashMap<String, Object>>) l.get("children");
-            if (children.size() > 0) {
-                digui(children, treeToList);
+            if(children.size()>0){
+                for (LinkedHashMap<String, Object> linkedHashMap : children) {
+                    SgjsPlanMeasureManage sgjsPlanMeasureManage1 = new SgjsPlanMeasureManage();
+                    sgjsPlanMeasureManage1.setMeasureName(
+                        linkedHashMap.get("workItem") == null ? null : linkedHashMap.get("workItem").toString());
+                    sgjsPlanMeasureManage1.setMeasureUnit(
+                        linkedHashMap.get("unit") == null ? null : linkedHashMap.get("unit").toString());
+                    sgjsPlanMeasureManage1.setWorkload(
+                        linkedHashMap.get("workload") == null ? null : linkedHashMap.get("workload").toString());
+                    sgjsPlanMeasureManage1.setPlanStartDate(linkedHashMap.get("planBeginDate") == null ? null
+                        : FtDateUtils.parseDate(linkedHashMap.get("planBeginDate")));
+                    sgjsPlanMeasureManage1.setPlanEndDate(
+                        linkedHashMap.get("planEndDate") == null ? null : FtDateUtils.parseDate(linkedHashMap.get("planEndDate")));
+                    sgjsPlanMeasureManage1.setId(linkedHashMap.get("id") == null ? IdWorker.createId() : Long.parseLong(linkedHashMap.get("id").toString()));
+                    sgjsPlanMeasureManage1.setPid(
+                        linkedHashMap.get("pid") == null ? 0L : Long.parseLong(linkedHashMap.get("pid").toString()));
+                    //同步标识
+                    sgjsPlanMeasureManage1.setDataSource("1");
+                    sgjsPlanMeasureManage1.setIsAdd("1");
+                    sgjsPlanMeasureManage.getChildren().add(sgjsPlanMeasureManage1);
+                    List<LinkedHashMap<String, Object>> children1 = (List<LinkedHashMap<String, Object>>) linkedHashMap.get("children");
+                    digui(children1, treeToList);
+                }
             }
+            treeToList.add(sgjsPlanMeasureManage);
         }
     }
 
@@ -157,14 +177,13 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
             List<SgjsPlanMeasureManage> insertList = treeToList.stream().filter(p -> StringUtils.isNotEmpty(p.getIsAdd()) && p.getIsAdd().equals("1")).collect(Collectors.toList());
             //批量入库
             if(!CollectionUtils.isEmpty(insertList)){
-                List<SgjsPlanMeasureManage> list = TreeUtil.treeToList(insertList);
-                for (int i = 0; i < list.size(); i++) {
-                    SgjsPlanMeasureManage sgjsPlanMeasureManage = list.get(i);
+                for (int i = 0; i < insertList.size(); i++) {
+                    SgjsPlanMeasureManage sgjsPlanMeasureManage = insertList.get(i);
                     sgjsPlanMeasureManage.setCreateTime(DateTime.now());
                     sgjsPlanMeasureManage.setCreateUser(SecurityUtils.getUserId() + "");
                     sgjsPlanMeasureManage.setCreateUserName(SecurityUtils.getUserName() + "");
                 }
-                sgjsPlanMeasureManageMapper.insertSgjsPlanMeasureManageList(list);
+                sgjsPlanMeasureManageMapper.insertSgjsPlanMeasureManageList(insertList);
             }
             //批量编辑
             List<SgjsPlanMeasureManage> updateList = treeToList.stream().filter(p -> StringUtils.isEmpty(p.getIsAdd())).collect(Collectors.toList());
@@ -173,6 +192,7 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
                     SgjsPlanMeasureManage sgjsPlanMeasureManage = updateList.get(i);
                     sgjsPlanMeasureManage.setUpdateTime(DateTime.now());
                     sgjsPlanMeasureManage.setUpdateUser(SecurityUtils.getUserId() + "");
+                    sgjsPlanMeasureManage.setDelFlag("0");
                 }
                 sgjsPlanMeasureManageMapper.updateSgjsPlanMeasureManageList(updateList);
             }

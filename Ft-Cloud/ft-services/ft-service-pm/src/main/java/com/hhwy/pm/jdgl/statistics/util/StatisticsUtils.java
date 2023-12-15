@@ -208,19 +208,27 @@ public class StatisticsUtils {
     public static Map<String, Date> getDateRange4Week(String year, String week) {
 
         Map<String, Date> returnMap = new HashMap<>();
-
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         if(StringUtils.isEmpty(year)|| StringUtils.isEmpty(week)) {
             return returnMap;
         }
 
-        Calendar cl = Calendar.getInstance();
+        try {
+            Calendar cl = Calendar.getInstance();
 
-        cl.setWeekDate(Integer.valueOf(year), Integer.valueOf(week), 1);
-        cl.add(Calendar.DATE, 1);
-        returnMap.put("start", cl.getTime());
-        cl.setWeekDate(Integer.valueOf(year), Integer.valueOf(week), 7);
-        cl.add(Calendar.DATE, 1);
-        returnMap.put("end", cl.getTime());
+            cl.setWeekDate(Integer.valueOf(year), Integer.valueOf(week), 1);
+            cl.add(Calendar.DATE, 1);
+            Date time = cl.getTime();
+            String format = simpleDateFormat.format(time);
+            returnMap.put("start", simpleDateFormat.parse(format));
+            cl.setWeekDate(Integer.valueOf(year), Integer.valueOf(week), 7);
+            cl.add(Calendar.DATE, 1);
+            time = cl.getTime();
+            format = simpleDateFormat.format(time);
+            returnMap.put("end", simpleDateFormat.parse(format));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         return returnMap;
 

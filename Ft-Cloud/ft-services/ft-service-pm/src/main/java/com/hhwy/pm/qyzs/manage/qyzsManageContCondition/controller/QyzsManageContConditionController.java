@@ -33,10 +33,11 @@ public class QyzsManageContConditionController extends BaseController {
         String url = gmUrl + "/gm/qyzsManageContCondition/list?" +
                 "contConditionNo={contConditionNo}&" +
                 "chineseConditonName={chineseConditonName}&" +
+                "contVersion={contVersion}&" +
                 "&foreignConditonName={foreignConditonName}";
         HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
         HttpEntity<MultiValueMap<String,Object>> httpEntity = new HttpEntity<>(headers);
-        return RestTemplateUtils.get(url, httpEntity, AjaxResult.class, param.getContConditionNo(), param.getChineseConditonName(), param.getForeignConditonName());
+        return RestTemplateUtils.get(url, httpEntity, AjaxResult.class, param.getContConditionNo(), param.getChineseConditonName(), param.getContVersion(), param.getForeignConditonName());
     }
 
 }

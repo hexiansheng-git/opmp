@@ -55,7 +55,9 @@
 
     <select id="getAllDemandDevice" resultType="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail">
         select
-            SUBSTRING_INDEX(GROUP_CONCAT(equ_type), ',', 1)  as materialType, equ_code as materialCode, equ_name as materialName, brand as brandNames
+            SUBSTRING_INDEX(GROUP_CONCAT(equ_type), ',', 1)  as materialType,
+            pt_var1 as ptVar2, pt_var2 as ptVar3,
+            equ_code as materialCode, equ_name as materialName, brand as brandNames
                ,spec as materialSpec, rated_power as materialPower, unit as materialUnit, num as totalNum, equ_sourse
                , MIN(entry_date) as planEntryTime, MAX(exit_date) as planExitTime,
             IFNULL(sum(allocate_num), 0) as allocate_num,
@@ -73,13 +75,13 @@
              from
                  (select *
                   from
-                      (select '' as equ_type, equ_code,equ_name,'' as brand, spec,rated_power, unit, num,equ_sourse, entry_date, exit_date, version from qqch_construction_equipment where del_flag = '0' and valid = '1') a
+                      (select '' as equ_type, equ_code,equ_name,'' as brand, spec,rated_power, unit, num,equ_sourse, entry_date, exit_date, version, pt_var1, pt_var2 from qqch_construction_equipment where del_flag = '0' and valid = '1') a
                   UNION
-                  (select '' as equ_type, equ_code,equ_name,'' as brand, spec,rated_power, unit, num,equ_sourse, entry_date, exit_date, version from qqch_traffic_car where del_flag = '0' and valid = '1')
+                  (select '' as equ_type, equ_code,equ_name,'' as brand, spec,rated_power, unit, num,equ_sourse, entry_date, exit_date, version, pt_var1, pt_var2 from qqch_traffic_car where del_flag = '0' and valid = '1')
                   UNION
-                  (select equ_type,equ_code,equ_name,brand,spec,'' as rated_power, unit, num,equ_sourse, entry_date, exit_date, version from qqch_measuring_instrument where del_flag = '0' and valid = '1')
+                  (select equ_type,equ_code,equ_name,brand,spec,'' as rated_power, unit, num,equ_sourse, entry_date, exit_date, version, pt_var1, pt_var2 from qqch_measuring_instrument where del_flag = '0' and valid = '1')
                   UNION
-                  (select equ_type,equ_code,equ_name,brand,spec,'' as rated_power, unit, num,equ_sourse, entry_date, exit_date, version from qqch_small_machinery where del_flag = '0' and valid = '1')
+                  (select equ_type,equ_code,equ_name,brand,spec,'' as rated_power, unit, num,equ_sourse, entry_date, exit_date, version, pt_var1, pt_var2 from qqch_small_machinery where del_flag = '0' and valid = '1')
                  )unionAllDevice
              where version = #{version} and equ_code IS NOT NULL and equ_name IS NOT NULL and equ_type IS NOT NULL
             )columnToRow

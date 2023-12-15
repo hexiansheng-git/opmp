@@ -8,7 +8,6 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -256,7 +255,7 @@ public class QyzsSafeEnvRiskProc extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "综合分")
-    private BigDecimal totalScore;
+    private String totalScore;
     /**
      * 字段描述：是否重大环境因素
      */
