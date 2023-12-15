@@ -2,12 +2,20 @@ package com.hhwy.pm.qqch.qqchChange.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.constant.WarnItem;
+import com.hhwy.constant.WarnScopeType;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.enums.FlowStatusEnum;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
+import com.hhwy.pm.qqch.group.service.IQqchWorkGroupMemberService;
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChangeDetail;
 import com.hhwy.pm.qqch.qqchChange.mapper.QqchChangeMapper;
@@ -17,16 +25,19 @@ import com.hhwy.pm.qqch.qqchChange.vo.QqchChangeVo;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.warn.WarnService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysMenu;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.PlatMenuTreeUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.redisUtil.RedisUtils;
@@ -70,6 +81,10 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
     private RedisUtils redisUtils;
     @Autowired
     private IXmslContractInfoService contractInfoService;
+    @Autowired
+    private IQqchWorkGroupMemberService qqchWorkGroupMemberService;
+    @Autowired
+    private WarnService warnService;
 
 
     public QqchChange getQqchChange(QqchChange qqchChange) {
@@ -110,6 +125,17 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
             temp.setFinishRatio(ObjectUtils.nvlBigDecimal(ratio).multiply(new BigDecimal("100")));;
         }
         return list;
+    }
+
+    /**
+     * 获取审批中的变更数据
+     * @param tenantKey
+     * @return
+     */
+    public List<QqchChange> getListNoApproach(String tenantKey) {
+        List<QqchChange> list = qqchChangeMapper.getQqchChangeList(new QqchChange());
+        FlowInfoSearchUtil.setInstanceId(list,FlowEnum.QQCH_CHANGE,tenantKey);
+        return list.stream().filter(o -> FlowStatusEnum.FLOW_STATUS_AUDITING.getKey().equals(o.getTaskStatus())).collect(Collectors.toList());
     }
 
     public List<QqchChange> getQqchChangeList(QqchChange qqchChange) {
@@ -488,5 +514,65 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
         qqchChange.setProjectCategory(projectBasicInfo.getProjectCategory());
         qqchChange.setAmount(ObjectUtils.nvlBigDecimal(contractInfo.getEffectiveAmountDollar()).divide(new BigDecimal(10000),4, RoundingMode.HALF_UP));
+    }
+
+
+    @Override
+    public void changeApprovalWarn() {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+
+        try {
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+
+                //获取流程状态为 “审批中” 的工作计划数据
+                List<QqchChange> changeList = this.getListNoApproach(tenantKey);
+                if(CollectionUtils.isEmpty(changeList)){
+                    continue;
+                }
+
+                //获取工作小组组长
+                List<QqchWorkGroupMember> groupLeader = qqchWorkGroupMemberService.getGroupLeader();
+
+                for (QqchChange change : changeList) {
+                    //流程提交时间
+                    Date taskCommitDate = change.getChangeSubmitDate();
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(taskCommitDate);
+                    calendar.add(Calendar.DATE,3);
+
+                    Date nowDate = DateUtils.getNowDate();
+                    long diffDays = FtDateUtils.getDiffDays(taskCommitDate, nowDate);
+                    if(diffDays >= 3 ){
+
+                        StringBuilder warnScope = new StringBuilder();
+                        for (QqchWorkGroupMember qqchWorkGroupMember : groupLeader) {
+                            warnScope.append(qqchWorkGroupMember.getDirectorUserName()).append(",");
+                        }
+                        //获取审批人员
+                        /*流程实例id*/
+                        String instanceId = change.getInstanceId();
+                        String approve = FlowInfoSearchUtil.getApprove(instanceId);
+                        if(StringUtils.isNotBlank(approve)){
+                            warnScope.append(approve);
+                        }
+                        warnService.addWarn(WarnItem.QQCH_CHANGE_APPROVAL, WarnScopeType.USER,null,warnScope.toString(),tenantKey);
+                    }
+                }
+            }
+        }catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 }
