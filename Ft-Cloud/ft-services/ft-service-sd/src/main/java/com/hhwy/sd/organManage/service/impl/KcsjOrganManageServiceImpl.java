@@ -55,6 +55,11 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
             queryMap.put("postJob",postJob);
             kcsjOrganManage.setPostJob(null);
         }
+        Long userId = kcsjOrganManage.getUserId();
+        if(userId != null) {
+            queryMap.put("userId",userId);
+            kcsjOrganManage.setUserId(null);
+        }
         String userName = kcsjOrganManage.getUserName();
         if(StringUtils.isNotEmpty(userName)) {
             queryMap.put("userName",userName);
