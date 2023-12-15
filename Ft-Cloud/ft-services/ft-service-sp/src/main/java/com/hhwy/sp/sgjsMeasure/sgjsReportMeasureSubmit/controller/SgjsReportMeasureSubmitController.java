@@ -1,25 +1,26 @@
 package com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.controller;
 
 import com.alibaba.nacos.common.utils.CollectionUtils;
-import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
-import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
-import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
-import com.hhwy.utils.tree.TreeUtil;
-import com.hhwy.utils.validation.ValidationGroups;
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.ISgjsReportMeasureSubmitService;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
+import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
+import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.mapper.SgjsReportMeasureSubmitMapper;
+import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.ISgjsReportMeasureSubmitService;
+import com.hhwy.utils.tree.TreeUtil;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 测量管理--测量报告提交
@@ -34,6 +35,10 @@ public class SgjsReportMeasureSubmitController extends BaseController {
 
     @Autowired
     private ISgjsReportMeasureSubmitService sgjsReportMeasureSubmitService;
+    @Autowired
+    private SgjsReportMeasureSubmitMapper sgjsReportMeasureSubmitMapper;
+    @Value("${file.url}")
+    private String url;
 
     @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:list")
     @GetMapping
@@ -132,13 +137,14 @@ public class SgjsReportMeasureSubmitController extends BaseController {
 
 
     /**
-     * 批量导出附件压缩包
+     * 查询附件组id
      *
-     * @param response
+     * @param submit
      * @param submit
      */
     @PostMapping("/bathExportZip")
-    public void bathExportZip(HttpServletResponse response,@RequestBody SgjsReportMeasureSubmit submit){
-        sgjsReportMeasureSubmitService.bathExportZip(response,submit);
+    public AjaxResult bathExportZip(@RequestBody SgjsReportMeasureSubmit submit){
+        List<String> fileGroupIdList = sgjsReportMeasureSubmitService.bathExportZip(submit);
+        return AjaxResult.success(fileGroupIdList);
     }
 }
