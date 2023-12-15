@@ -27,8 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author zqq
@@ -206,15 +204,14 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         detail.setInfoId(id);
         List<QqchPerformInspectionDetail> detailList = detailService.getQqchPerformInspectionDetailList(detail);
         if(!ObjectNullUtil.isEmpty(detailList)){
-            List<QqchPerformInspectionDetail> parentList = detailList.stream().filter(t -> ObjectNullUtil.isEmpty(t.getPid())).collect(Collectors.toList());
-            Map<Long, List<QqchPerformInspectionDetail>> pidMap = detailList.stream().filter(t -> !ObjectNullUtil.isEmpty(t.getPid())).collect(Collectors.groupingBy(t -> t.getPid()));
-            for (QqchPerformInspectionDetail qqchPerformInspectionDetail : parentList) {
-                List<QqchPerformInspectionDetail> detailList1 = pidMap.get(qqchPerformInspectionDetail.getId());
-                qqchPerformInspectionDetail.setChildren(detailList1);
-            }
-            temp.setDetailList(parentList);
+            detailList = ListTreeUtil.formatTree(
+                    detailList,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchPerformInspectionDetail::getChildren,
+                    QqchPerformInspectionDetail::setChildren);
         }
-
+        temp.setDetailList(detailList);
         return temp;
     }
 
