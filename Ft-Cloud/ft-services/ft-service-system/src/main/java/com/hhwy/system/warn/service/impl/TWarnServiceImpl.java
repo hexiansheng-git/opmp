@@ -76,13 +76,15 @@ public class TWarnServiceImpl implements ITWarnService {
         tWarn.setCreateTime(DateUtils.getNowDate());
         int result = tWarnMapper.insertTWarn(tWarn);
 
-        //推送到总部版
-        this.push2Head(tWarn);
         if (result > 0) {
             ThreadUtil.execAsync(() -> {
                 this.notify(tWarn);
             });
         }
+
+        //推送到总部版
+        this.push2Head(tWarn);
+
         return result;
     }
 
