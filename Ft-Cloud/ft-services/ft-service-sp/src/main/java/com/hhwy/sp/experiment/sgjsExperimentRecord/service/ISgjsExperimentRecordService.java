@@ -1,6 +1,7 @@
 package com.hhwy.sp.experiment.sgjsExperimentRecord.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
@@ -34,4 +35,11 @@ public interface ISgjsExperimentRecordService {
      * @return
      */
     AjaxResult sync();
+
+    /**
+     * 同步物设项目
+     *
+     * @return
+     */
+    AjaxResult syncWuShe(Map<String,Object> map);
 }

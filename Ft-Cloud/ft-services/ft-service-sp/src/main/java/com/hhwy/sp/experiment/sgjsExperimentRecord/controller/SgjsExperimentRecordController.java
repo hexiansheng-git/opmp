@@ -3,6 +3,7 @@ package com.hhwy.sp.experiment.sgjsExperimentRecord.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import java.util.Map;
 
 import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.web.bind.annotation.*;
@@ -105,5 +106,16 @@ public class SgjsExperimentRecordController extends BaseController{
     public AjaxResult sync(){
         AjaxResult ajaxResult =sgjsExperimentRecordService.sync();
         return ajaxResult;
+    }
+
+    /**
+     * 同步物设项目设备进场记录
+     *
+     * @return
+     */
+    @PostMapping("/syncWuShe")
+    public AjaxResult syncWuShe(@RequestBody Map<String,Object> map){
+        AjaxResult ajaxResult = sgjsExperimentRecordService.syncWuShe(map);
+        return AjaxResult.success();
     }
 }

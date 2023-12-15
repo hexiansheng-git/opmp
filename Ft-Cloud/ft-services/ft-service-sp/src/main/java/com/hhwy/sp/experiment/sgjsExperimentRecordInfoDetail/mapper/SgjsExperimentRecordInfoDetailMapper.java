@@ -26,4 +26,12 @@ public interface SgjsExperimentRecordInfoDetailMapper {
     int deleteSgjsExperimentRecordInfoDetail(SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetail);
 
     int deleteSgjsExperimentRecordInfoDetailByPks(@Param("sgjsExperimentRecordInfoDetailPkList") List<Long> sgjsExperimentRecordInfoDetailPkList);
+
+    /**
+     * 批量查询自检自校记录
+     *
+     * @param infoIdList
+     * @return
+     */
+    List<SgjsExperimentRecordInfoDetail> selectByInfoIdList(@Param(value = "infoIdList") List<String> infoIdList);
 }

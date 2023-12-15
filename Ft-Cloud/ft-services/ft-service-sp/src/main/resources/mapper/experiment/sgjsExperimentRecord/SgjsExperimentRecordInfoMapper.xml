@@ -778,13 +778,21 @@
     </update>
 
     <update id="deleteAll" parameterType="com.hhwy.sp.experiment.sgjsExperimentRecordInfo.domain.SgjsExperimentRecordInfo">
-        update `sgjs_experiment_record_info` set del_flag = 1,update_time=#{updateTime},update_user=#{updateUser}
+       <!-- update `sgjs_experiment_record_info` set del_flag = 1,update_time=#{updateTime},update_user=#{updateUser}-->
+        delete from  sgjs_experiment_record_info
     </update>
 
     <select id="selectByExperimentNos" parameterType="list" resultMap="SgjsExperimentRecordInfoResultMap">
-        select  * from  where  experiment_code in
+        select  * from sgjs_experiment_record_info  where  experiment_code in
         <foreach collection="codeList" separator="," open="(" close=")" item="code">
             #{code}
+        </foreach>
+    </select>
+
+    <select id="selectByIdList" parameterType="list" resultMap="SgjsExperimentRecordInfoResultMap">
+        select  * from sgjs_experiment_record_info  where del_flag='0' and record_id in
+        <foreach collection="idList" separator="," open="(" close=")" item="id">
+            #{id}
         </foreach>
     </select>
 </mapper>
