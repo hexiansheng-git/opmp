@@ -34,10 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -244,11 +241,17 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         // 合同信息
         XmslContractInfo contractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
 
-        // 获取总体计划, 获取当月数据
+        List<JdglMainPlanItem> mainPlanItemList = new ArrayList<>();
+                // 获取总体计划, 获取当月数据
         List<JdglMainPlanItem> mainPlanItemListTree = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(firstDay, lastDay);
         // 树转列表
-        List<JdglMainPlanItem> mainPlanItemList = TreeUtil.treeToList(mainPlanItemListTree);
-        Map<String, List<JdglMainPlanItem>> mainPlanItemMap = mainPlanItemList.stream().collect(Collectors.groupingBy(JdglMainPlanItem::getItemCode));
+        if (CollectionUtil.isNotEmpty(mainPlanItemListTree)){
+            mainPlanItemList = TreeUtil.treeToList(mainPlanItemListTree);
+        }
+        Map<String, List<JdglMainPlanItem>> mainPlanItemMap = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(mainPlanItemList)){
+            mainPlanItemMap = mainPlanItemList.stream().collect(Collectors.groupingBy(JdglMainPlanItem::getItemCode));
+        }
 
         JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = new JdglCorrectionMeasuresMake();
         jdglCorrectionMeasuresMake.setId(IdWorker.createId());
@@ -258,8 +261,8 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         jdglCorrectionMeasuresMake.setWarnTime(FtDateUtils.getYearMonthDayDate());
         jdglCorrectionMeasuresMake.setRiskLevel(JdglDiffAnalysis.getRiskLevel());
         jdglCorrectionMeasuresMake.setPeriodTotalScore(JdglDiffAnalysis.getTotalGrade());
-        jdglCorrectionMeasuresMake.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-        jdglCorrectionMeasuresMake.setCreateUserName(SecurityUtils.getUserName());
+//        jdglCorrectionMeasuresMake.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+//        jdglCorrectionMeasuresMake.setCreateUserName(SecurityUtils.getUserName());
         jdglCorrectionMeasuresMake.setCreateTime(DateUtils.getNowDate());
         jdglCorrectionMeasuresMake.setTaskStatus("0");
         // 纠偏措施制定入库
