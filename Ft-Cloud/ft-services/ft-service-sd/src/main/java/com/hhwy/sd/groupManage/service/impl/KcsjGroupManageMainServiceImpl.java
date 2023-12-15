@@ -159,6 +159,8 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
             Long detailId = detail.getId();
             if(staffMap.containsKey(detailId)){
                 detail.setStaffList(staffMap.get(detailId));
+            }else {
+                detail.setStaffList(new ArrayList<>());
             }
         }
 
@@ -174,6 +176,8 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
                         KcsjGroupManageDetail::getChildren,
                         KcsjGroupManageDetail::setChildren);
                 contract.setDetailList(list);
+            }else {
+                contract.setDetailList(new ArrayList<>());
             }
         }
 
