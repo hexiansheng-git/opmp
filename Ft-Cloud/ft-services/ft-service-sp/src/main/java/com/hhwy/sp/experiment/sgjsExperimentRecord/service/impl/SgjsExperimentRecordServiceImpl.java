@@ -1,6 +1,5 @@
 package com.hhwy.sp.experiment.sgjsExperimentRecord.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
@@ -15,7 +14,8 @@ import com.hhwy.sp.experiment.sgjsExperimentRecordInfo.domain.SgjsExperimentReco
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfo.mapper.SgjsExperimentRecordInfoMapper;
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.domain.SgjsExperimentRecordInfoDetail;
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.mapper.SgjsExperimentRecordInfoDetailMapper;
-import com.hhwy.utils.HttpClientUtil;
+import com.hhwy.sp.utils.syncThirdInterface.wushe.GetMaterialInfoInterface;
+import com.hhwy.sp.utils.syncThirdInterface.wushe.vo.GetMaterialInfoVo;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +44,8 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
     private SgjsExperimentRecordInfoDetailMapper detailMapper;
     @Autowired
     private PmServiceApi pmServiceApi;
+    @Autowired
+    private GetMaterialInfoInterface materialInfoInterface;
 
 
     public SgjsExperimentRecord getSgjsExperimentRecord(SgjsExperimentRecord sgjsExperimentRecord) {
@@ -174,13 +176,37 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
 
     @Override
     public AjaxResult syncWuShe(Map<String, Object> map) {
-        String projectId = ObjectUtils.toString(map.get("projectId"));
+        String projectId = ObjectUtils.toString(map.get("projectCode"));
         if(StringUtils.isEmpty(projectId)) {
             return AjaxResult.error("项目编码不能为空");
         }
-       // HttpClientUtil.send();
-
-        return null;
+        AjaxResult result = materialInfoInterface.syncMaterialInfo(map);
+        if(!result.get("code").toString().equals("200")){
+            return result;
+        }
+        List<GetMaterialInfoVo> dataList = JSONArray.parseArray(JSONObject.toJSONString(result.get("data")), GetMaterialInfoVo.class);
+        List<SgjsExperimentRecordInfo> list=new ArrayList<>();
+        for (int i = 0; i < dataList.size(); i++) {
+            SgjsExperimentRecordInfo info=new SgjsExperimentRecordInfo();
+            GetMaterialInfoVo vo = dataList.get(i);
+            info.setManageCode(ObjectUtils.toString(vo.getManageCode()));//设备管理编码
+            info.setCategoryName(ObjectUtils.toString(vo.getCategoryName()));
+            info.setCategoryCode(ObjectUtils.toString(vo.getCategoryCode()));
+            info.setMaterialName(ObjectUtils.toString(vo.getMaterialName()));
+            info.setManufacturer(ObjectUtils.toString(vo.getCountryFactory()));
+            info.setPower(ObjectUtils.toString(vo.getMEnginePower()));
+            info.setBottomNo(ObjectUtils.toString(vo.getChassisNo()));
+            info.setProductDate(ObjectUtils.toDate(vo.getMProduceDate()));
+            info.setSizeMsg(ObjectUtils.toString(vo.getSizeMsg()));
+            info.setWeight(ObjectUtils.toString(vo.getTheWeight()));
+            info.setOriginalValue(ObjectUtils.toDecimal(vo.getOriginalValue()));
+            info.setAcceptDate(ObjectUtils.toDate(vo.getCheckDate()));
+            info.setEntryDate(ObjectUtils.toDate(vo.getCheckDate()));
+            info.setExitDate(ObjectUtils.toDate(vo.getExitDate()));
+            info.setSource(ObjectUtils.toString(vo.getSource()));
+            list.add(info);
+        }
+        return result;
     }
 
 }
