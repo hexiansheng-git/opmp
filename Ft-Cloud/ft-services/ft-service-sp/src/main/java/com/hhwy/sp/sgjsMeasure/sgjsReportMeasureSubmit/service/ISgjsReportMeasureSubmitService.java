@@ -1,11 +1,10 @@
 package com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
-import java.util.List;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
+import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
 
-import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author zmh
@@ -33,10 +32,9 @@ public interface ISgjsReportMeasureSubmitService {
     List<SgjsReportMeasureSubmit> getIds(List<Long> ids);
 
     /**
-     * 批量导出附件压缩包
+     * 查询附件组id
      *
-     * @param response
      * @param submit
      */
-    void bathExportZip(HttpServletResponse response, SgjsReportMeasureSubmit submit);
+    List<String> bathExportZip(SgjsReportMeasureSubmit submit);
 }

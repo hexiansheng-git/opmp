@@ -1,39 +1,24 @@
 package com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.impl;
 
 import cn.hutool.core.date.DateTime;
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
-import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
-import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
-import com.hhwy.sp.utils.FileUtils;
-import com.hhwy.sp.utils.ZipUtils;
-import com.hhwy.utils.date.FtDateUtils;
-import com.hhwy.utils.idworker.IdWorker;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
-
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.apache.commons.collections4.map.HashedMap;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
+import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.mapper.SgjsReportMeasureSubmitMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.ISgjsReportMeasureSubmitService;
-import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
+import com.hhwy.utils.date.FtDateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author zmh
@@ -45,6 +30,8 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
 
     @Autowired
     private SgjsReportMeasureSubmitMapper sgjsReportMeasureSubmitMapper;
+    @Value("${file.url}")
+    private String url;
 
 
     public SgjsReportMeasureSubmit getSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit) {
@@ -161,17 +148,13 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
 
 
     @Override
-    public void bathExportZip(HttpServletResponse response, SgjsReportMeasureSubmit submit) {
+    public List<String> bathExportZip(SgjsReportMeasureSubmit submit) {
         List<SgjsReportMeasureSubmit> list = sgjsReportMeasureSubmitMapper.getSgjsReportMeasureSubmitList(submit);
         if(CollectionUtils.isEmpty(list)){
-            return;
+            return null;
         }
         List<String> fileGroupIdList = list.stream().map(e -> e.getFileGroupId()).collect(Collectors.toList());
-
-        FileUtils fileUtils=new FileUtils();
-        List<File> fileList = fileUtils.getFileByGroupIds(fileGroupIdList);
-
-        ZipUtils.zipFile(fileList,response);
+        return fileGroupIdList;
     }
 
 

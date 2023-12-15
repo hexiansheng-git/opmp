@@ -139,7 +139,7 @@
       del_flag = "0"
       <if test="id != null ">and `id` = #{id}</if>
       <if test="pid != null ">and `pid` = #{pid}</if>
-      <if test="reportName != null  and reportName != ''">and `report_name` = #{reportName}</if>
+      <if test="reportName != null  and reportName != ''">and `report_name` like concat('%',#{reportName},'%')</if>
       <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
       <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
       <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>

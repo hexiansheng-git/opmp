@@ -58,6 +58,11 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             }
 
             @Override
+            public AjaxResult changeApprovalWarn() {
+                return null;
+            }
+
+            @Override
             public AjaxResult preparationFirstStageWarn() {
                 return null;
             }

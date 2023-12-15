@@ -26,4 +26,10 @@ public interface KcsjEquipEntryRecordInfoMapper {
     int deleteKcsjEquipEntryRecordInfo(KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo);
 
     int deleteKcsjEquipEntryRecordInfoByPks(@Param("kcsjEquipEntryRecordInfoPkList") List<Long> kcsjEquipEntryRecordInfoPkList);
+
+    int deleteInfoData(KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo);
+
+    List<KcsjEquipEntryRecordInfo> selectInfos(KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo);
+
+    List<KcsjEquipEntryRecordInfo> getIds(@Param("ids") List<Long> ids);
 }

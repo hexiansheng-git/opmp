@@ -15,13 +15,9 @@ import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
 import com.hhwy.pm.qqch.qqchChange.service.IQqchChangeService;
 import com.hhwy.pm.qqch.qqchChange.vo.QqchChangeVo;
 import com.hhwy.pm.qqch.sgch.dataShare.DataShareDevicePlanService;
-import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
-import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysMenu;
-import com.hhwy.system.api.domain.SysUser;
-import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +26,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -189,5 +182,13 @@ public class QqchChangeController extends BaseController {
         return AjaxResult.success();
     }
 
-
+    /**
+     * 变更审批预警
+     * @return
+     */
+    @GetMapping("changeApprovalWarn")
+    public AjaxResult changeApprovalWarn(){
+        qqchChangeService.changeApprovalWarn();
+        return AjaxResult.success();
+    }
 }

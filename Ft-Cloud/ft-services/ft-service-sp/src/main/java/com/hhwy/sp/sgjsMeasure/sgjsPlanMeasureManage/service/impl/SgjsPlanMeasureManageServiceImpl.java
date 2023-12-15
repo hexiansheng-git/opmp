@@ -192,6 +192,7 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
                     SgjsPlanMeasureManage sgjsPlanMeasureManage = updateList.get(i);
                     sgjsPlanMeasureManage.setUpdateTime(DateTime.now());
                     sgjsPlanMeasureManage.setUpdateUser(SecurityUtils.getUserId() + "");
+                    sgjsPlanMeasureManage.setDelFlag("0");
                 }
                 sgjsPlanMeasureManageMapper.updateSgjsPlanMeasureManageList(updateList);
             }

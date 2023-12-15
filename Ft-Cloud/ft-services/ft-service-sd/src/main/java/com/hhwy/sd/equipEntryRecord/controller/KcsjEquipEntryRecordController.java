@@ -1,9 +1,11 @@
 package com.hhwy.sd.equipEntryRecord.controller;
 
 import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecord;
+import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecordVo;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
@@ -38,11 +40,16 @@ public class KcsjEquipEntryRecordController extends BaseController {
         return AjaxResult.success(kcsjEquipEntryRecord);
     }
 
+    /**
+     * 台账页查询
+     * @param kcsjEquipEntryRecordParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:list")
     @GetMapping("/list")
     public AjaxResult getKcsjEquipEntryRecordList(@Validated(ValidationGroups.Select.class) KcsjEquipEntryRecord kcsjEquipEntryRecordParam) {
-        List<KcsjEquipEntryRecord> kcsjEquipEntryRecordList = kcsjEquipEntryRecordService.getKcsjEquipEntryRecordList(kcsjEquipEntryRecordParam);
-        return getDataTableAjaxResult(kcsjEquipEntryRecordList);
+        KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo = kcsjEquipEntryRecordService.getKcsjEquipEntryRecordList(kcsjEquipEntryRecordParam);
+        return AjaxResult.success(kcsjEquipEntryRecordVo);
     }
 
     @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:add")
@@ -54,14 +61,14 @@ public class KcsjEquipEntryRecordController extends BaseController {
 
     /**
      * 批量保存
-     * @param kcsjEquipEntryRecordListParam
+     * @param kcsjEquipEntryRecordVo
      * @return
      */
     @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:add")
     @PostMapping("/batchAdd")
-    public AjaxResult insertKcsjEquipEntryRecordList(@Validated(ValidationGroups.Save.class) @RequestBody List<KcsjEquipEntryRecord> kcsjEquipEntryRecordListParam) {
-        kcsjEquipEntryRecordService.insertKcsjEquipEntryRecordList(kcsjEquipEntryRecordListParam);
-        return AjaxResult.success(kcsjEquipEntryRecordListParam);
+    public AjaxResult insertKcsjEquipEntryRecordList(@Validated(ValidationGroups.Save.class) @RequestBody KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo) {
+        AjaxResult ajaxResul =  kcsjEquipEntryRecordService.insertKcsjEquipEntryRecordList(kcsjEquipEntryRecordVo);
+        return AjaxResult.success(ajaxResul);
     }
 
     @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:update")
@@ -91,8 +98,8 @@ public class KcsjEquipEntryRecordController extends BaseController {
 
     @GetMapping("/export")
     public void export(HttpServletResponse response, KcsjEquipEntryRecord kcsjEquipEntryRecordParam) throws IOException {
-        List<KcsjEquipEntryRecord> kcsjEquipEntryRecordList = kcsjEquipEntryRecordService.getKcsjEquipEntryRecordList(kcsjEquipEntryRecordParam);
+        KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo = kcsjEquipEntryRecordService.getKcsjEquipEntryRecordList(kcsjEquipEntryRecordParam);
         ExcelUtils<KcsjEquipEntryRecord> util = new ExcelUtils<>(KcsjEquipEntryRecord.class);
-        util.exportExcel(response, kcsjEquipEntryRecordList, DateUtils.getDate());
+        util.exportExcel(response, kcsjEquipEntryRecordVo.getTreeList(), DateUtils.getDate());
     }
 }

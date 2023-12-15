@@ -469,4 +469,8 @@
             </foreach>
         </where>
     </update>
+
+    <update id="delectAll" parameterType="com.hhwy.sp.techOrg.domain.SgjsTechnicalManageInfo">
+        update `sgjs_technical_manage_info` set del_flag = "1"  , update_time=#{updateTime} , update_user=#{updateUser}
+    </update>
 </mapper>

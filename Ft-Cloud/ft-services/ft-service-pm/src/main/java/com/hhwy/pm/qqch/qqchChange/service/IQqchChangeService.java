@@ -87,4 +87,6 @@ public interface IQqchChangeService {
     int deleteQqchChange(QqchChange qqchChange);
 
     int deleteQqchChangeByPks(List<Long> qqchChangePkList);
+
+    void changeApprovalWarn();
 }

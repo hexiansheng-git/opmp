@@ -74,7 +74,7 @@ public class TWbsServiceImpl implements ITWbsService {
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         DynamicDataSourceContextHolder.push("master");
         try {
-            boolean hasCondition = StringUtils.isNotBlank(wbs.getNodeType()) || StringUtils.isNotBlank(wbs.getName());
+            boolean hasCondition = StringUtils.isNotBlank(wbs.getNodeType()) || StringUtils.isNotBlank(wbs.getName()) || wbs.getMainId() != null;
 //        if(hasCondition && (StringUtils.trim(wbs.getNodeType())+StringUtils.trim(wbs.getName())).length() < 3)
 //            throw new RuntimeException("搜索参数过小");
             if(!hasCondition){
@@ -83,7 +83,7 @@ public class TWbsServiceImpl implements ITWbsService {
             }
             //如果是懒加载,找出满足条件的id，扔redis
             String key = "twbs::lazySearch_"+SecurityUtils.getTenantKey()+
-                    StringUtils.join(new String[]{wbs.getName(),wbs.getNodeType()},",");
+                    StringUtils.join(new String[]{wbs.getName(),wbs.getNodeType(),ObjectUtils.nvlLong(wbs.getMainId())+""},",");
             //获取ids
             Set<String> idSet = null;
             if(!redisUtils.hasKey(key) ){
@@ -198,12 +198,10 @@ public class TWbsServiceImpl implements ITWbsService {
         DynamicDataSourceContextHolder.push("master");
         try {
             //子级id : 最上级id
-            Map<String,String> realIdMap = new HashMap<>();
+//            Map<String,String> realIdMap = new HashMap<>();
             Map<String,List<TWbs>> resuMap = new HashMap<>();
             List<Long> idList = new ArrayList<>();
             idList.addAll(Arrays.asList(ids));
-            //旧Id : 新的UUID
-            Map<String,String> newIdMap = new HashMap<>();
             //遍历5级查找
             for (int i = 0; i < 5; i++) {
                 List<TWbs> tempList = tWbsMapper.getTWbsParentList(idList.toArray(new Long[]{}));
@@ -214,15 +212,10 @@ public class TWbsServiceImpl implements ITWbsService {
                     TWbs temp = tempList.get(j);
                     temp.setPtVar3(temp.getName());
                     temp.setName(ObjectUtils.nvlString(temp.getCode())+"-"+ObjectUtils.nvlString(temp.getName()));
-                    String topId = i==0?temp.getParentId():realIdMap.get(temp.getParentId());
-                    idList.add(Long.valueOf(temp.getId()));
-                    realIdMap.put(temp.getId(), topId);
-                    //替换掉Id和父级Id，否则前端id会重
-                    ObjectUtils.add2MapList(resuMap,topId,temp);
-                    String newId = UUIDUtils.getShortUuid();
-                    newIdMap.put(temp.getId(), newId);
-                    temp.setId(newId);
-                    temp.setParentId(i==0?temp.getParentId(): ObjectUtils.nvlString(newIdMap.get(temp.getParentId())));
+//                    String topId = i==0?temp.getParentId():realIdMap.get(temp.getParentId());
+//                    idList.add(Long.valueOf(temp.getId()));
+//                    realIdMap.put(temp.getId(), topId);
+//                    ObjectUtils.add2MapList(resuMap,topId,temp);
                 }
             }
             return resuMap;
