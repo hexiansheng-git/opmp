@@ -1,15 +1,16 @@
 package com.hhwy.sp.experiment.sgjsExperimentRecord.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-import java.util.Date;
-import java.math.BigDecimal;
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.util.List;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.sp.experiment.sgjsExperimentRecordInfo.domain.SgjsExperimentRecordInfo;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author lcf--试验设备进场记录
@@ -211,6 +212,16 @@ public class SgjsExperimentRecord extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5"    )
     private String ptVar5;
+
+    private List<SgjsExperimentRecordInfo> infoList;
+
+    public List<SgjsExperimentRecordInfo> getInfoList() {
+        return infoList;
+    }
+
+    public void setInfoList(List<SgjsExperimentRecordInfo> infoList) {
+        this.infoList = infoList;
+    }
 
     public Date getEntryDateBegin() {
         return entryDateBegin;

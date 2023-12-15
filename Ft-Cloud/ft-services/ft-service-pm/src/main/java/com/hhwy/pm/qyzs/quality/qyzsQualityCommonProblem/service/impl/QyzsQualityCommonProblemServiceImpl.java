@@ -30,7 +30,7 @@ public class QyzsQualityCommonProblemServiceImpl implements IQyzsQualityCommonPr
 
 
     public AjaxResult getQyzsQualityCommonProblemList(QualityCommonProblemQueryVo queryVo) {
-        String url = gmUrl + "/gm/qyzsQualityCommonProblem/list?projectType={projectType}&wbsCode={wbsCode}&problemName={problemName}&measure={measure}";
+        String url = gmUrl + "/gm/qyzsQualityCommonProblem/getList?projectType={projectType}&wbsCode={wbsCode}&problemName={problemName}&measure={measure}";
         HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
         HttpEntity<MultiValueMap<String,Object>> httpEntity = new HttpEntity<>(headers);
         String projectType = wbsService.getDefaultEngineeringType();
