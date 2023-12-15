@@ -91,7 +91,7 @@
       del_flag = "0"
       <if test="id != null ">and `id` = #{id}</if>
       <if test="recordId != null ">and `record_id` = #{recordId}</if>
-      <if test="teamNumber != null  and teamNumber != ''">and `team_number` = #{teamNumber}</if>
+      <if test="teamNumber != null  and teamNumber != ''">and `team_number` like concat('%',#{teamNumber},'%')</if>
       <if test="equipSource != null  and equipSource != ''">and `equip_source` = #{equipSource}</if>
       <if test="entryDateStr != null and entryDateStr != ''">and `entry_date` between #{entryDateStr} and #{entryEndDateStr}</if>
       <if test="currentState != null  and currentState != ''">and `current_state` =
@@ -110,7 +110,7 @@
       <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
       <if test="teamName != null  and teamName != ''">and `team_name` = #{teamName}</if>
       <if test="equipCode != null  and equipCode != ''">and `equip_code` = #{equipCode}</if>
-      <if test="equipName != null  and equipName != ''">and `equip_name` = #{equipName}</if>
+      <if test="equipName != null  and equipName != ''">and `equip_name` like concat('%',#{equipName},'%')</if>
       <if test="equipSpec != null  and equipSpec != ''">and `equip_spec` = #{equipSpec}</if>
       <if test="equipUnit != null  and equipUnit != ''">and `equip_unit` = #{equipUnit}</if>
     </where>

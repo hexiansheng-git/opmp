@@ -110,14 +110,14 @@
       <if test="id != null ">and `id` = #{id}</if>
       <if test="pid != null ">and `pid` = #{pid}</if>
       <if test="teamId != null  and teamId != ''">and `team_id` = #{teamId}</if>
-      <if test="teamName != null  and teamName != ''">and `team_name` = #{teamName}</if>
+      <if test="teamName != null  and teamName != ''">and `team_name` like concat('%',#{teamName},'%')</if>
       <if test="teamNumber != null  and teamNumber != ''">and `team_number` = #{teamNumber}</if>
       <if test="categoryName != null  and categoryName != ''">and `category_name` =
         #{categoryName}
       </if>
       <if test="categoryId != null ">and `category_id` = #{categoryId}</if>
-      <if test="equipCode != null  and equipCode != ''">and `equip_code` = #{equipCode}</if>
-      <if test="equipName != null  and equipName != ''">and `equip_name` = #{equipName}</if>
+      <if test="equipCode != null  and equipCode != ''">and `equip_code` like concat('%',#{equipCode},'%')</if>
+      <if test="equipName != null  and equipName != ''">and `equip_name` like concat('%',#{equipName},'%')</if>
       <if test="equipSpec != null  and equipSpec != ''">and `equip_spec` = #{equipSpec}</if>
       <if test="equipUnit != null  and equipUnit != ''">and `equip_unit` = #{equipUnit}</if>
       <if test="planNum != null ">and `plan_num` = #{planNum}</if>
