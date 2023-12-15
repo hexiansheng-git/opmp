@@ -125,6 +125,8 @@ public class SbchEquipmentPurchaseDetailsServiceImpl implements ISbchEquipmentPu
 //                if (!isAdjust) {
 //                    id = item.getId() == null ? IdWorker.createId() : item.getId();
 //                }
+                item.setPtVar2(item.getCategoryCode());
+                item.setPtVar3(item.getCategoryName());
                 item.setId(id);
                 item.setMainId(mainId);
                 EntityUtils.setCreateUpdateInfo(item);

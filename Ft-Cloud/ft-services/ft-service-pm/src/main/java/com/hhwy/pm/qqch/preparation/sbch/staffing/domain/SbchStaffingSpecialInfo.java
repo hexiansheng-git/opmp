@@ -7,6 +7,7 @@ import com.hhwy.utils.common.MyPrepareBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -102,6 +103,7 @@ public class SbchStaffingSpecialInfo extends MyPrepareBaseEntity {
     @JsonSerialize(using= ToStringSerializer.class)
     private Long deptId;
 
+    @Valid
     private List<SbchStaffingSpecialDetail> detailList;
 
     private String[] ids;
