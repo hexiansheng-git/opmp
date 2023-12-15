@@ -1,6 +1,7 @@
 package com.hhwy.sd.equipEntryRecord.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.tree.TreeNode;
 import java.util.Date;
 import java.math.BigDecimal;
 import com.hhwy.common.core.annotation.Excel;
@@ -10,13 +11,15 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 /**
  * @author zmh
  * @date 2023-12-14 11:08:15
  * @remark kcsj_equip_entry_record_info
  */
-public class KcsjEquipEntryRecordInfo extends BaseEntity {
+@Data
+public class KcsjEquipEntryRecordInfo extends TreeNode<KcsjEquipEntryRecordInfo> {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,14 +34,45 @@ public class KcsjEquipEntryRecordInfo extends BaseEntity {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主表id")
+    //@Excel(name = "主表id")
     private Long recordId;
+    /**
+     * 字段描述：班组名称
+     */
+    @JsonProperty
+    @Excel(name = "班组名称")
+    private String teamName;
+    /**
+     * 字段描述：设备编码
+     */
+    @JsonProperty
+    @Excel(name = "设备编码")
+    private String equipCode;
     /**
      * 字段描述：管理编码
      */
     @JsonProperty
     @Excel(name = "管理编码")
     private String teamNumber;
+    /**
+     * 字段描述：设备名称
+     */
+    @JsonProperty
+    @Excel(name = "设备名称")
+    private String equipName;
+    /**
+     * 字段描述：规格型号
+     */
+    @JsonProperty
+    @Excel(name = "规格型号")
+    private String equipSpec;
+    /**
+     * 字段描述：单位
+     */
+    @JsonProperty
+    @Excel(name = "单位")
+    private String equipUnit;
+
     /**
      * 字段描述：来源
      */
@@ -52,6 +86,10 @@ public class KcsjEquipEntryRecordInfo extends BaseEntity {
     @JsonProperty
     @Excel(name = "实际进场日期", dateFormat = "yyyy-MM-dd")
     private Date entryDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private String entryDateStr;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private String entryEndDateStr;
     /**
      * 字段描述：实际退场时间
      */
@@ -59,6 +97,8 @@ public class KcsjEquipEntryRecordInfo extends BaseEntity {
     @JsonProperty
     @Excel(name = "实际退场时间", dateFormat = "yyyy-MM-dd")
     private Date exitDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private String exitDateStr;
     /**
      * 字段描述：当前状态
      */
@@ -69,297 +109,61 @@ public class KcsjEquipEntryRecordInfo extends BaseEntity {
      * 字段描述：数据来源 0新增1同步
      */
     @JsonProperty
-    @Excel(name = "数据来源 0新增1同步")
+    //@Excel(name = "数据来源 0新增1同步")
     private String dataSource;
     /**
      * 字段描述：数据创建者id
      */
     @JsonProperty
-    @Excel(name = "数据创建者id")
+    //@Excel(name = "数据创建者id")
     private String createUser;
     /**
      * 字段描述：数据创建者名称
      */
     @JsonProperty
-    @Excel(name = "数据创建者名称")
+    //@Excel(name = "数据创建者名称")
     private String createUserName;
     /**
      * 字段描述：数据创建系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    //@Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     /**
      * 字段描述：数据修改者id
      */
     @JsonProperty
-    @Excel(name = "数据修改者id")
+    //@Excel(name = "数据修改者id")
     private String updateUser;
     /**
      * 字段描述：数据修改系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    //@Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     /**
      * 字段描述：数据删除者
      */
     @JsonProperty
-    @Excel(name = "数据删除者")
+    //@Excel(name = "数据删除者")
     private String delUser;
     /**
      * 字段描述：数据删除系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    //@Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date delTime;
     /**
      * 字段描述：删除标识：0未删除；1已删除
      */
     @JsonProperty
-    @Excel(name = "删除标识：0未删除；1已删除")
+    //@Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
-    /**
-     * 字段描述：预留字段1   项目编码
-     */
-    @JsonProperty
-    @Excel(name = "预留字段1   项目编码")
-    private String ptVar1;
-    /**
-     * 字段描述：预留字段2  leaf 是否是叶子节点 0否1是
-     */
-    @JsonProperty
-    @Excel(name = "预留字段2  leaf 是否是叶子节点 0否1是")
-    private String ptVar2;
-    /**
-     * 字段描述：预留字段3
-     */
-    @JsonProperty
-    @Excel(name = "预留字段3")
-    private String ptVar3;
-    /**
-     * 字段描述：预留字段4
-     */
-    @JsonProperty
-    @Excel(name = "预留字段4")
-    private String ptVar4;
-    /**
-     * 字段描述：预留字段5
-     */
-    @JsonProperty
-    @Excel(name = "预留字段5")
-    private String ptVar5;
 
-    @JsonIgnore
-    public Long getId() {
-        return id;
-    }
 
-    @JsonIgnore
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @JsonIgnore
-    public Long getRecordId() {
-        return recordId;
-    }
-
-    @JsonIgnore
-    public void setRecordId(Long recordId) {
-        this.recordId = recordId;
-    }
-
-    @JsonIgnore
-    public String getTeamNumber() {
-        return teamNumber;
-    }
-
-    @JsonIgnore
-    public void setTeamNumber(String teamNumber) {
-        this.teamNumber = teamNumber;
-    }
-
-    @JsonIgnore
-    public String getEquipSource() {
-        return equipSource;
-    }
-
-    @JsonIgnore
-    public void setEquipSource(String equipSource) {
-        this.equipSource = equipSource;
-    }
-
-    @JsonIgnore
-    public Date getEntryDate() {
-        return entryDate;
-    }
-
-    @JsonIgnore
-    public void setEntryDate(Date entryDate) {
-        this.entryDate = entryDate;
-    }
-
-    @JsonIgnore
-    public Date getExitDate() {
-        return exitDate;
-    }
-
-    @JsonIgnore
-    public void setExitDate(Date exitDate) {
-        this.exitDate = exitDate;
-    }
-
-    @JsonIgnore
-    public String getCurrentState() {
-        return currentState;
-    }
-
-    @JsonIgnore
-    public void setCurrentState(String currentState) {
-        this.currentState = currentState;
-    }
-
-    @JsonIgnore
-    public String getDataSource() {
-        return dataSource;
-    }
-
-    @JsonIgnore
-    public void setDataSource(String dataSource) {
-        this.dataSource = dataSource;
-    }
-
-    @JsonIgnore
-    public String getCreateUser() {
-        return createUser;
-    }
-
-    @JsonIgnore
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
-
-    @JsonIgnore
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    @JsonIgnore
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    @JsonIgnore
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    @JsonIgnore
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @JsonIgnore
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    @JsonIgnore
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    @JsonIgnore
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    @JsonIgnore
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @JsonIgnore
-    public String getDelUser() {
-        return delUser;
-    }
-
-    @JsonIgnore
-    public void setDelUser(String delUser) {
-        this.delUser = delUser;
-    }
-
-    @JsonIgnore
-    public Date getDelTime() {
-        return delTime;
-    }
-
-    @JsonIgnore
-    public void setDelTime(Date delTime) {
-        this.delTime = delTime;
-    }
-
-    @JsonIgnore
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    @JsonIgnore
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    @JsonIgnore
-    public String getPtVar1() {
-        return ptVar1;
-    }
-
-    @JsonIgnore
-    public void setPtVar1(String ptVar1) {
-        this.ptVar1 = ptVar1;
-    }
-
-    @JsonIgnore
-    public String getPtVar2() {
-        return ptVar2;
-    }
-
-    @JsonIgnore
-    public void setPtVar2(String ptVar2) {
-        this.ptVar2 = ptVar2;
-    }
-
-    @JsonIgnore
-    public String getPtVar3() {
-        return ptVar3;
-    }
-
-    @JsonIgnore
-    public void setPtVar3(String ptVar3) {
-        this.ptVar3 = ptVar3;
-    }
-
-    @JsonIgnore
-    public String getPtVar4() {
-        return ptVar4;
-    }
-
-    @JsonIgnore
-    public void setPtVar4(String ptVar4) {
-        this.ptVar4 = ptVar4;
-    }
-
-    @JsonIgnore
-    public String getPtVar5() {
-        return ptVar5;
-    }
-
-    @JsonIgnore
-    public void setPtVar5(String ptVar5) {
-        this.ptVar5 = ptVar5;
-    }
+    //导入查询
+    private List<Long> ids;
 }

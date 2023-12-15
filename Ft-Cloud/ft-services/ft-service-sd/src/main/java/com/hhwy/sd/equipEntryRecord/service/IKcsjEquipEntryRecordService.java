@@ -1,6 +1,8 @@
 package com.hhwy.sd.equipEntryRecord.service;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecord;
+import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecordVo;
 import java.util.List;
 
 /**
@@ -12,11 +14,11 @@ public interface IKcsjEquipEntryRecordService {
 
     KcsjEquipEntryRecord getKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
-    List<KcsjEquipEntryRecord> getKcsjEquipEntryRecordList(KcsjEquipEntryRecord kcsjEquipEntryRecord);
+    KcsjEquipEntryRecordVo getKcsjEquipEntryRecordList(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
     int insertKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
-    int insertKcsjEquipEntryRecordList(List<KcsjEquipEntryRecord> kcsjEquipEntryRecordList);
+    AjaxResult insertKcsjEquipEntryRecordList(KcsjEquipEntryRecordVo kcsjEquipEntryRecordList);
 
     int updateKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 

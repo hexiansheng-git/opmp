@@ -1,5 +1,7 @@
 package com.hhwy.sd.equipEntryRecord.controller;
 
+import com.alibaba.nacos.common.utils.CollectionUtils;
+import com.hhwy.utils.tree.TreeUtil;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
@@ -38,10 +40,14 @@ public class KcsjEquipEntryRecordInfoController extends BaseController {
         return AjaxResult.success(kcsjEquipEntryRecordInfo);
     }
 
+    /**
+     * 台账页list
+     * @param kcsjEquipEntryRecordInfoParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "kcsjEquipEntryRecordInfo:list")
     @GetMapping("/list")
     public AjaxResult getKcsjEquipEntryRecordInfoList(@Validated(ValidationGroups.Select.class) KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfoParam) {
-        startPage();
         List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoService.getKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfoParam);
         return getDataTableAjaxResult(kcsjEquipEntryRecordInfoList);
     }
@@ -83,11 +89,22 @@ public class KcsjEquipEntryRecordInfoController extends BaseController {
         return toAjax(kcsjEquipEntryRecordInfoService.deleteKcsjEquipEntryRecordInfoByPks(kcsjEquipEntryRecordInfoPkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response,
-        KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfoParam) throws IOException {
-        List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoService.getKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfoParam);
-        ExcelUtils<KcsjEquipEntryRecordInfo> util = new ExcelUtils<>(KcsjEquipEntryRecordInfo.class);
-        util.exportExcel(response, kcsjEquipEntryRecordInfoList, DateUtils.getDate());
+    @PostMapping("/export")
+    public void export(HttpServletResponse response,@RequestBody KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfoParam) throws IOException {
+        List<Long> ids = kcsjEquipEntryRecordInfoParam.getIds();
+        List<KcsjEquipEntryRecordInfo> list = null;
+        if(CollectionUtils.isEmpty(ids)){
+            List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoService.getKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfoParam);
+            if(CollectionUtils.isNotEmpty(kcsjEquipEntryRecordInfoList)){
+                list = kcsjEquipEntryRecordInfoList;
+            }
+        }else{
+            List<KcsjEquipEntryRecordInfo> byIdList = kcsjEquipEntryRecordInfoService.getIds(ids);
+            if(CollectionUtils.isNotEmpty(byIdList)){
+                list = byIdList;
+            }
+        }
+        ExcelUtils<KcsjEquipEntryRecordInfo> utils = new ExcelUtils<>(KcsjEquipEntryRecordInfo.class);
+        utils.exportExcel(response,list,DateUtils.getDate());
     }
 }

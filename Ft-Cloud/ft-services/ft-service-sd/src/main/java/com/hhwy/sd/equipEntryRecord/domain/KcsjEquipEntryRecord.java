@@ -1,6 +1,7 @@
 package com.hhwy.sd.equipEntryRecord.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.tree.TreeNode;
 import java.util.Date;
 import java.math.BigDecimal;
 import com.hhwy.common.core.annotation.Excel;
@@ -10,13 +11,15 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 /**
  * @author zmh
  * @date 2023-12-14 11:08:08
  * @remark kcsj_equip_entry_record
  */
-public class KcsjEquipEntryRecord extends BaseEntity {
+@Data
+public class KcsjEquipEntryRecord extends TreeNode<KcsjEquipEntryRecord> {
 
     private static final long serialVersionUID = 1L;
 
@@ -63,6 +66,12 @@ public class KcsjEquipEntryRecord extends BaseEntity {
     @JsonProperty
     @Excel(name = "类别id")
     private Long categoryId;
+    /**
+     * 字段描述：设备编码
+     */
+    @JsonProperty
+    @Excel(name = "设备编码")
+    private String equipCode;
     /**
      * 字段描述：设备名称
      */
@@ -181,263 +190,11 @@ public class KcsjEquipEntryRecord extends BaseEntity {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
-    @JsonIgnore
-    public Long getId() {
-        return id;
-    }
+    private List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList;
 
-    @JsonIgnore
-    public void setId(Long id) {
-        this.id = id;
-    }
+    //新增数据标识
+    private String isAdd;
 
-    @JsonIgnore
-    public Long getPid() {
-        return pid;
-    }
+    private List<String> delIdList;
 
-    @JsonIgnore
-    public void setPid(Long pid) {
-        this.pid = pid;
-    }
-
-    @JsonIgnore
-    public String getTeamId() {
-        return teamId;
-    }
-
-    @JsonIgnore
-    public void setTeamId(String teamId) {
-        this.teamId = teamId;
-    }
-
-    @JsonIgnore
-    public String getTeamName() {
-        return teamName;
-    }
-
-    @JsonIgnore
-    public void setTeamName(String teamName) {
-        this.teamName = teamName;
-    }
-
-    @JsonIgnore
-    public String getTeamNumber() {
-        return teamNumber;
-    }
-
-    @JsonIgnore
-    public void setTeamNumber(String teamNumber) {
-        this.teamNumber = teamNumber;
-    }
-
-    @JsonIgnore
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    @JsonIgnore
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    @JsonIgnore
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    @JsonIgnore
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    @JsonIgnore
-    public String getEquipName() {
-        return equipName;
-    }
-
-    @JsonIgnore
-    public void setEquipName(String equipName) {
-        this.equipName = equipName;
-    }
-
-    @JsonIgnore
-    public String getEquipSpec() {
-        return equipSpec;
-    }
-
-    @JsonIgnore
-    public void setEquipSpec(String equipSpec) {
-        this.equipSpec = equipSpec;
-    }
-
-    @JsonIgnore
-    public String getEquipUnit() {
-        return equipUnit;
-    }
-
-    @JsonIgnore
-    public void setEquipUnit(String equipUnit) {
-        this.equipUnit = equipUnit;
-    }
-
-    @JsonIgnore
-    public Integer getPlanNum() {
-        return planNum;
-    }
-
-    @JsonIgnore
-    public void setPlanNum(Integer planNum) {
-        this.planNum = planNum;
-    }
-
-    @JsonIgnore
-    public Integer getPracticalNum() {
-        return practicalNum;
-    }
-
-    @JsonIgnore
-    public void setPracticalNum(Integer practicalNum) {
-        this.practicalNum = practicalNum;
-    }
-
-    @JsonIgnore
-    public String getDataSource() {
-        return dataSource;
-    }
-
-    @JsonIgnore
-    public void setDataSource(String dataSource) {
-        this.dataSource = dataSource;
-    }
-
-    @JsonIgnore
-    public String getCreateUser() {
-        return createUser;
-    }
-
-    @JsonIgnore
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
-
-    @JsonIgnore
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    @JsonIgnore
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    @JsonIgnore
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    @JsonIgnore
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @JsonIgnore
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    @JsonIgnore
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    @JsonIgnore
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    @JsonIgnore
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @JsonIgnore
-    public String getDelUser() {
-        return delUser;
-    }
-
-    @JsonIgnore
-    public void setDelUser(String delUser) {
-        this.delUser = delUser;
-    }
-
-    @JsonIgnore
-    public Date getDelTime() {
-        return delTime;
-    }
-
-    @JsonIgnore
-    public void setDelTime(Date delTime) {
-        this.delTime = delTime;
-    }
-
-    @JsonIgnore
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    @JsonIgnore
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    @JsonIgnore
-    public String getPtVar1() {
-        return ptVar1;
-    }
-
-    @JsonIgnore
-    public void setPtVar1(String ptVar1) {
-        this.ptVar1 = ptVar1;
-    }
-
-    @JsonIgnore
-    public String getPtVar2() {
-        return ptVar2;
-    }
-
-    @JsonIgnore
-    public void setPtVar2(String ptVar2) {
-        this.ptVar2 = ptVar2;
-    }
-
-    @JsonIgnore
-    public String getPtVar3() {
-        return ptVar3;
-    }
-
-    @JsonIgnore
-    public void setPtVar3(String ptVar3) {
-        this.ptVar3 = ptVar3;
-    }
-
-    @JsonIgnore
-    public String getPtVar4() {
-        return ptVar4;
-    }
-
-    @JsonIgnore
-    public void setPtVar4(String ptVar4) {
-        this.ptVar4 = ptVar4;
-    }
-
-    @JsonIgnore
-    public String getPtVar5() {
-        return ptVar5;
-    }
-
-    @JsonIgnore
-    public void setPtVar5(String ptVar5) {
-        this.ptVar5 = ptVar5;
-    }
 }
