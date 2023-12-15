@@ -79,8 +79,8 @@ public class SbchTotalDemandPlanDetail extends CommonBaseEntity {
     /** 总需求量 */
     @Excel(name = "总需求量")
 
-    @JsonSerialize(using= ToStringSerializer.class)
-    private Long totalNum;
+//    @JsonSerialize(using= ToStringSerializer.class)
+    private BigDecimal totalNum;
 
     /** 内部调拨数量 */
     @Excel(name = "内部调拨数量")
