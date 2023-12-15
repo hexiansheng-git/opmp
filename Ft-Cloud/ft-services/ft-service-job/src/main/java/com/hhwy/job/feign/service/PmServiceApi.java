@@ -101,4 +101,11 @@ public interface PmServiceApi {
 
     @PostMapping("/jdglProgressCorrectionTrack/weekTimerTrack")
     AjaxResult weekTimerTrack();
+
+    /**
+     * 前期策划变更审批预警
+     * @return
+     */
+    @GetMapping("/qqchChange/changeApprovalWarn")
+    AjaxResult changeApprovalWarn();
 }
