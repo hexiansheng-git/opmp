@@ -31,6 +31,8 @@ import java.util.List;
 @RequestMapping("/sgjsExperProgressManage")
 public class SgjsExperProgressManageController extends BaseController {
 
+
+
     @Autowired
     private ISgjsExperProgressManageService sgjsExperProgressManageService;
 
@@ -110,9 +112,9 @@ public class SgjsExperProgressManageController extends BaseController {
      * @param sgjsExperProgressManageParam
      * @throws IOException
      */
-    @GetMapping("/export")
+    @PostMapping("/export")
     public void export(HttpServletResponse response,
-                       SgjsExperProgressManage sgjsExperProgressManageParam) throws IOException {
+                      @RequestBody SgjsExperProgressManage sgjsExperProgressManageParam) throws IOException {
         List<Long> ids = sgjsExperProgressManageParam.getIds();
         List<SgjsExperProgressManage> treeList=null;
        if (CollectionUtils.isEmpty(ids)){
@@ -124,9 +126,9 @@ public class SgjsExperProgressManageController extends BaseController {
            }
        }else {
            List<SgjsExperProgressManage> list=sgjsExperProgressManageService.getIds(ids);
-           if(CollectionUtils.isEmpty(list)){
-               treeList=TreeUtil.treeToListWithLevel(list);
-               //treeList = list;
+           if(!CollectionUtils.isEmpty(list)){
+              // treeList=TreeUtil.treeToListWithLevel(list);
+               treeList = list;
            }
        }
         ExcelUtils<SgjsExperProgressManage> utils = new ExcelUtils<>(SgjsExperProgressManage.class);

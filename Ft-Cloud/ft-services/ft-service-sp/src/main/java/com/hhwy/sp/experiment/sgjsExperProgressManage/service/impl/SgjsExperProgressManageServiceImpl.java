@@ -15,6 +15,7 @@ import com.hhwy.utils.Constant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
  * @date 2023-12-09 11:06:27
  * @remark
  */
+@Slf4j
 @Service
 public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressManageService {
 
@@ -192,7 +194,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
     @Transactional
     public AjaxResult batchAdd(SgjsExperProgressManageVo sgjsExperProgressManageVo) {
 
-
         //获取删除的id集合
         List<String> delIdList = sgjsExperProgressManageVo.getDelIdList();
         //将集合转成long类型的集合
@@ -201,34 +202,32 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         if (collect.size() > 0) {
             String delUser = SecurityUtils.getSysUser().getNickName();
             sgjsExperProgressManageMapper.deleteSgjsExperProgressManageByPks(collect, delUser);
+
+            //将所有数据都查询出来 用map保存
+            SgjsExperProgressManage sgjsExperProgressManage1 = new SgjsExperProgressManage();
+            List<SgjsExperProgressManage> list = sgjsExperProgressManageMapper.getSgjsExperProgressManageList(sgjsExperProgressManage1);
+            Map<String, SgjsExperProgressManage> map = new HashMap<>();
+            //将所有数据分别放入两个map中，一个以id为key,另一个以pid为key, value都是实体对象
+            list.stream().forEach(temp -> {
+                map.put(temp.getId() + "", temp);
+            });
+
+            Map<String, SgjsExperProgressManage> pidMap = new HashMap<>();
+            list.stream().forEach(temp -> {
+                pidMap.put(temp.getPid() + "", temp);
+            });
+
+            //处理子级数据
+            List<SgjsExperProgressManage> children = sgjsExperProgressManageMapper.getChildrenList(collect);
+            //out集合存放所有需要删除的数据
+            List<Long> out = new ArrayList<>();
+            out = getChildren(map, pidMap, children, out);
+
+            if (out.size() > 0) {
+                String delUser1 = SecurityUtils.getSysUser().getNickName();
+                sgjsExperProgressManageMapper.deleteSgjsExperProgressManageByPks(out, delUser1);
+            }
         }
-
-        //将所有数据都查询出来 用map保存
-        SgjsExperProgressManage sgjsExperProgressManage1 = new SgjsExperProgressManage();
-        List<SgjsExperProgressManage> list = sgjsExperProgressManageMapper.getSgjsExperProgressManageList(sgjsExperProgressManage1);
-        Map<String, SgjsExperProgressManage> map = new HashMap<>();
-        //将所有数据分别放入两个map中，一个以id为key,另一个以pid为key, value都是实体对象
-        list.stream().forEach(temp -> {
-            map.put(temp.getId() + "", temp);
-        });
-
-
-        Map<String, SgjsExperProgressManage> pidMap = new HashMap<>();
-        list.stream().forEach(temp -> {
-            pidMap.put(temp.getPid() + "", temp);
-        });
-
-        //处理子级数据
-        List<SgjsExperProgressManage> children = sgjsExperProgressManageMapper.getChildrenList(collect);
-        //out集合存放所有需要删除的数据
-        List<Long> out = new ArrayList<>();
-        out=getChildren(map,pidMap, children, out);
-
-        if (out.size() > 0) {
-            String delUser = SecurityUtils.getSysUser().getNickName();
-            sgjsExperProgressManageMapper.deleteSgjsExperProgressManageByPks(out, delUser);
-        }
-
 
         //根据标志位判断是新增操作还是修改操作
         List<SgjsExperProgressManage> treeList = sgjsExperProgressManageVo.getTreeList();
@@ -257,7 +256,12 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         if (updateList.size() > 0) {
             sgjsExperProgressManageMapper.updateSgjsExperProgressManageList(updateList);
         }
+
         return AjaxResult.success();
+
+
+
+
     }
 
     private List<Long> getChildren(Map<String, SgjsExperProgressManage> map,Map<String, SgjsExperProgressManage> pidMap, List<SgjsExperProgressManage> children, List<Long> out) {

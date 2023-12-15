@@ -179,9 +179,9 @@
             </if>
             <if test="measureUnit != null  and measureUnit != ''">and `measure_unit` = #{measureUnit}</if>
             <if test="workload != null ">and `workload` = #{workload}</if>
-            <if test="planStartDateStr != null ">and `plan_start_date` &gt;= #{planStartDate1} and `plan_start_date` &lt;= #{planStartDate2}</if>
+            <if test="planStartDateStr != null and planStartDateStr!=''">and `plan_start_date` &gt;= #{planStartDate1} and `plan_start_date` &lt;= #{planStartDate2}</if>
             <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
-            <if test="realStartDateStr != null ">and `real_start_date` &gt;= #{realStartDate1} and `real_start_date` &lt;= #{realStartDate2}</if>
+            <if test="realStartDateStr != null and realStartDateStr!='' ">and `real_start_date` &gt;= #{realStartDate1} and `real_start_date` &lt;= #{realStartDate2}</if>
             <if test="realEndDate != null ">and `real_end_date` = #{realEndDate}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
