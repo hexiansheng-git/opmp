@@ -380,6 +380,8 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             Date handoverTime = validMaxVersionContractInfo.getHandoverTime();
             if(handoverTime != null && nowDate1.after(handoverTime)) {
                 isOver = "1";
+            } else {
+                isOver = "0";
             }
             effectiveAmountDollar = validMaxVersionContractInfo.getEffectiveAmountDollar();
             if(effectiveAmountDollar != null)jdglDiffAnalysis.setContractAmtDl(StatisticsUtils.getDivideTenThousand(effectiveAmountDollar));
