@@ -105,6 +105,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         return vo;
     }
 
+
     @Transactional
     public int insertSgjsTechnicalManage(SgjsTechnicalManage sgjsTechnicalManage) {
         sgjsTechnicalManage.setId(IdWorker.createId());
@@ -298,7 +299,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         List<QqchPostSetting> list = pmServiceApi.getTechDeptList();
         List<SgjsTechnicalManage> techList=new ArrayList<>();
         //递归处理
-        digui(list,techList);
+        digui(list,techList,"");
         List<SgjsTechnicalManage> build = TreeUtil.build(techList,0L);
         return AjaxResult.success(build);
     }
@@ -367,7 +368,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
      *
      * @param list
      */
-    private void digui(List<QqchPostSetting> list,List<SgjsTechnicalManage> techList){
+    private void digui(List<QqchPostSetting> list,List<SgjsTechnicalManage> techList,String path){
         for (int i=0;i<list.size();i++) {
             QqchPostSetting info = list.get(i);
             SgjsTechnicalManage manage=new SgjsTechnicalManage();
@@ -397,11 +398,45 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
                 manage.setPath(manage.getId()+"/");
             }else{
                 String id=manage.getId()+"";
-                manage.setPath(manage.getPath()+"/"+id);
+                manage.setPath(path+"/"+id);
             }
+//            List<QqchPostSetting> children = info.getChildren();
+//            if(CollectionUtils.isEmpty(children)){
+//                continue;
+//            }
+//            for (int j = 0; j < children.size(); j++) {
+//                manage.setId(IdWorker.createId());
+//                //技术部门+技术岗位=岗位
+//                String strMsg="";
+//                if(!StringUtils.isEmpty(info.getTechDept()) && !StringUtils.isEmpty(info.getPostName())){
+//                    strMsg=info.getTechDept()+info.getPostName();
+//                }
+//                if(StringUtils.isEmpty(info.getTechDept())){
+//                    strMsg=info.getPostName();
+//                }
+//                if(StringUtils.isEmpty(info.getPostName())){
+//                    strMsg=info.getTechDept();
+//                }
+//                if(null==info.getPid()){
+//                    manage.setPid(0L);
+//                }
+//                if(!StringUtils.isEmpty(str)){
+//                    info.setPostName(str);
+//                    manage.setPostName(str);
+//                }
+//                if(null!=info.getHeadcount()){
+//                    manage.setHeadCount(Integer.parseInt(info.getHeadcount()));
+//                }
+//                if(StringUtils.isEmpty(manage.getPath())){
+//                    manage.setPath(manage.getId()+"/");
+//                }else{
+//                    String id=manage.getId()+"";
+//                    manage.setPath(path+"/"+id);
+//                }
+//            }
             techList.add(manage);
             if(!CollectionUtils.isEmpty(info.getChildren())){
-                digui(info.getChildren(),techList);
+                digui(info.getChildren(),techList,path);
             }
         }
     }
