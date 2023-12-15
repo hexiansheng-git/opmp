@@ -143,6 +143,8 @@ public class SbchEquipmentTeamDetailsServiceImpl implements ISbchEquipmentTeamDe
 //                        }
                         detailsDetails.setId(detailId);
                         detailsDetails.setMainId(item.getId());
+                        detailsDetails.setPtVar2(detailsDetails.getCategoryCode());
+                        detailsDetails.setPtVar3(detailsDetails.getCategoryName());
                         EntityUtils.setCreateUpdateInfo(detailsDetails);
                         return detailsDetails;
                     }).collect(Collectors.toList());

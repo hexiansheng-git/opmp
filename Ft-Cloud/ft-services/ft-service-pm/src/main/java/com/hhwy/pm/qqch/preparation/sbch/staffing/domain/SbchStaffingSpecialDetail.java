@@ -34,12 +34,12 @@ public class SbchStaffingSpecialDetail extends CommonBaseEntity {
 
     /** 总需计划主表id（sbch_total_demand_plan） */
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "总需计划主表id不能为空", groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+//    @NotNull(message = "总需计划主表id不能为空", groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private Long planId;
 
     /** 总需计划子表id（sbch_total_demand_plan_detail） */
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "总需计划子表id不能为空", groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+//    @NotNull(message = "总需计划子表id不能为空", groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private Long planDetailId;
 
     /** 设备编码 */
@@ -82,6 +82,7 @@ public class SbchStaffingSpecialDetail extends CommonBaseEntity {
     private String source;
 
     /** 工作经历 */
+    @NotBlank(message = "工作经历不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private String workGroupId;
 
     /** 资格证书 */

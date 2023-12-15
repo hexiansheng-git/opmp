@@ -49,7 +49,7 @@ public class SbchEquipmentAllotTransnationalDetails extends CommonBaseEntity {
 
     /** 可调出国 */
     @Excel(name = "可调出国")
-//    @NotBlank(message = "可调出国名称不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
+    @NotBlank(message = "可调出国名称不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String allotOutCountry;
 
     /** 预计运输时常 */
@@ -84,7 +84,7 @@ public class SbchEquipmentAllotTransnationalDetails extends CommonBaseEntity {
 
     /** 可调出项目 */
     @Excel(name = "可调出项目")
-//    @NotBlank(message = "可调出项目不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
+    @NotBlank(message = "可调出项目不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String projectName;
 
     /** 可调入国id */
@@ -95,7 +95,7 @@ public class SbchEquipmentAllotTransnationalDetails extends CommonBaseEntity {
 
     /** 可调入出国 */
     @Excel(name = "可调入出国")
-//    @NotBlank(message = "可调入出国不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
+    @NotBlank(message = "可调入出国不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String allotInCountry;
 
     /** 计划进场日期 */

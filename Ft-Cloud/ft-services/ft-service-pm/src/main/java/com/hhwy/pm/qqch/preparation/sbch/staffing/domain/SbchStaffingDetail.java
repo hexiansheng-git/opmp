@@ -35,13 +35,13 @@ public class SbchStaffingDetail extends CommonBaseEntity {
 
     /** 总需计划id（sbch_total_demand_plan） */
     @Excel(name = "总需计划id", readConverterExp = "s=bch_total_demand_plan")
-    @NotNull(message = "总需计划主表id不能为空", groups = {ValidationGroups.Save.class})
+//    @NotNull(message = "总需计划主表id不能为空", groups = {ValidationGroups.Save.class})
     @JsonSerialize(using= ToStringSerializer.class)
     private Long planId;
 
     /** sbch_total_demand_plan_detail id */
     @Excel(name = "sbch_total_demand_plan_detail id")
-    @NotNull(message = "总需计划子表id不能为空", groups = {ValidationGroups.Save.class})
+//    @NotNull(message = "总需计划子表id不能为空", groups = {ValidationGroups.Save.class})
     @JsonSerialize(using= ToStringSerializer.class)
     private Long planDetailId;
 
@@ -80,6 +80,7 @@ public class SbchStaffingDetail extends CommonBaseEntity {
 
     /** 工作经历 */
     @Excel(name = "工作经历")
+    @NotBlank(message = "工作经历不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private String workGroupId;
 
     /** 字典项 is_satisfy 是否满足岗位要求 */
