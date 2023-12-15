@@ -180,7 +180,11 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         if(i > 0) {
             sysSyncInfoService.pushJdglDiffAnalysis(jdglDiffAnalysis);
             if(jdglDiffAnalysis.getRiskLevel() != null) {
-                jdglCorrectionMeasuresMakeService.syncData(period);
+                try {
+                    jdglCorrectionMeasuresMakeService.syncData(period);
+                } catch (Exception e) {
+                    System.out.println("推送进度纠偏接口异常:" + e.getMessage());
+                }
             }
         }
 
