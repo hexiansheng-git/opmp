@@ -161,7 +161,7 @@ public class SbchEquipmentAllotTransnationalDetails extends CommonBaseEntity {
     /** 可调出项目id */
     @Excel(name = "可调出项目id")
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "可调出项目id不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotNull(message = "可调出项目id不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private Long projectId;
 
     /** 所属区域id */
