@@ -488,4 +488,8 @@
     </foreach>
   </update>
 
+  <update id="delAll">
+    update sgjs_plan_measure_manage set del_flag = '1', update_user = #{updateUser}, update_time = #{updateTime}
+  </update>
+
 </mapper>

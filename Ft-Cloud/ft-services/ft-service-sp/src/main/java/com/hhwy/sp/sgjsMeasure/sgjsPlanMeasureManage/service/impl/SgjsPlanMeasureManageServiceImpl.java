@@ -101,8 +101,14 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         List<LinkedHashMap<String, Object>> riskBigProjList = (List<LinkedHashMap<String, Object>>) dataMap.get(
             "dto");
         //递归处理3.6.2数据结果
-        digui(riskBigProjList, treeToList);
+        if(!CollectionUtils.isEmpty(riskBigProjList)){
+            digui(riskBigProjList, treeToList);
+        }
         sgjsPlanMeasureManageVo.setTreeList(treeToList);
+        SgjsPlanMeasureManage sgjsPlanMeasureManage = new SgjsPlanMeasureManage();
+        sgjsPlanMeasureManage.setUpdateTime(DateTime.now());
+        sgjsPlanMeasureManage.setUpdateUser(SecurityUtils.getUserId() + "");
+        sgjsPlanMeasureManageMapper.delAll(sgjsPlanMeasureManage);
         return sgjsPlanMeasureManageVo;
     }
 
