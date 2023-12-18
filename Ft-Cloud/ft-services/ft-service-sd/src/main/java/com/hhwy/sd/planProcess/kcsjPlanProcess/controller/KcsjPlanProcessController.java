@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import com.hhwy.sd.planProcess.kcsjPlanProcess.domain.KcsjPlanProcess4Update;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -82,8 +84,17 @@ public class KcsjPlanProcessController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjPlanProcess:update")
     @PostMapping("/batchUpdate")
-    public AjaxResult updateKcsjPlanProcessList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjPlanProcess> kcsjPlanProcessListParam) {
-        return toAjax(kcsjPlanProcessService.updateKcsjPlanProcessList(kcsjPlanProcessListParam));
+    public AjaxResult updateKcsjPlanProcessList(@Validated(ValidationGroups.Update.class) @RequestBody KcsjPlanProcess4Update kcsjPlanProcess4Update) {
+        List<KcsjPlanProcess> treeList = kcsjPlanProcess4Update.getTreeList();
+        int i = 0;
+        if(CollectionUtils.isNotEmpty(treeList)) {
+            i += kcsjPlanProcessService.updateKcsjPlanProcessList(treeList);
+        }
+        List<Long> delIdList = kcsjPlanProcess4Update.getDelIdList();
+        if(CollectionUtils.isNotEmpty(delIdList)) {
+            i += kcsjPlanProcessService.deleteKcsjPlanProcessByPks(delIdList);
+        }
+        return toAjax(i);
     }
 
     @PreAuthorize(hasPermi = "kcsjPlanProcess:remove")
