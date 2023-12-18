@@ -262,30 +262,34 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
     private void validDataDigui(List<SgjsTechnicalManage>list,List<String> msgList){
         for (SgjsTechnicalManage info:list ) {
             Integer headCount = info.getHeadCount();
-            if(headCount==1){
-                String name = info.getUserName();
-                if(StringUtils.isEmpty(name)){
-                    msgList.add(info.getPostName()+"人员姓名不能为空");
-                }
-            }
-            List<SgjsTechnicalManage> children = info.getChildren();
-            //headCount的量  校验实际进场和人员姓名
-            if(headCount==children.size()){
-                for (int i = 0; i < children.size(); i++) {
-                    if(null!=children.get(i).getHeadCount()){
-                        //实际日期
-                        String actualDateStr = children.get(i).getActualDateStr();
-                        if(StringUtils.isEmpty(actualDateStr)){
-                            msgList.add(info.getPostName()+"实际进场不能为空");
-                        }
-                        String userName = children.get(i).getUserName();
-                        if(StringUtils.isEmpty(userName)){
-                            msgList.add(info.getPostName()+"人员姓名不能为空");
-                        }
+            if(null==headCount){
+                msgList.add(info.getPostName()+"编制人数不能为空");
+            }else{
+                if(headCount==1){
+                    String name = info.getUserName();
+                    if(StringUtils.isEmpty(name)){
+                        msgList.add(info.getPostName()+"人员姓名不能为空");
                     }
                 }
-            }else{
-                msgList.add("编制人数和子集不匹配");
+                List<SgjsTechnicalManage> children = info.getChildren();
+                //headCount的量  校验实际进场和人员姓名
+                if(headCount==children.size()){
+                    for (int i = 0; i < children.size(); i++) {
+                        if(null!=children.get(i).getHeadCount()){
+                            //实际日期
+                            String actualDateStr = children.get(i).getActualDateStr();
+                            if(StringUtils.isEmpty(actualDateStr)){
+                                msgList.add(info.getPostName()+"实际进场不能为空");
+                            }
+                            String userName = children.get(i).getUserName();
+                            if(StringUtils.isEmpty(userName)){
+                                msgList.add(info.getPostName()+"人员姓名不能为空");
+                            }
+                        }
+                    }
+                }else{
+                    msgList.add("编制人数和子集不匹配");
+                }
             }
 
             if(!CollectionUtils.isEmpty(info.getChildren())){

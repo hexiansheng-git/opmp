@@ -120,11 +120,11 @@
             del_flag = "0"
             <if test="id != null "> and `id` = #{id}</if>
             <if test="pid != null "> and `pid` = #{pid}</if>
-            <if test="postName != null  and postName != ''"> and `post_name` = #{postName}</if>
-            <if test="postJob != null  and postJob != ''"> and `post_job` = #{postJob}</if>
+            <if test="postName != null  and postName != ''"> and `post_name` like concat ('%',#{postName},'%')</if>
+            <if test="postJob != null  and postJob != ''"> and `post_job` like concat ('%', #{postJob},'%')</if>
             <if test="headCount != null "> and `head_count` = #{headCount}</if>
             <if test="userId != null "> and `user_id` = #{userId}</if>
-            <if test="userName != null  and userName != ''"> and `user_name` = #{userName}</if>
+            <if test="userName != null  and userName != ''"> and `user_name` like concat ('%',#{userName},'%')</if>
             <if test="phone != null  and phone != ''"> and `phone` = #{phone}</if>
             <if test="actualDate != null  and actualDate != ''"> and `actual_date` = #{actualDate}</if>
             <if test="workOrNot != null  and workOrNot != ''"> and `work_or_not` = #{workOrNot}</if>

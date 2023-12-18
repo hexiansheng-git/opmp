@@ -27,4 +27,6 @@ public interface IKcsjEquipEntryRecordService {
     int deleteKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
     int deleteKcsjEquipEntryRecordByPks(List<Long> kcsjEquipEntryRecordPkList);
+
+    KcsjEquipEntryRecordVo sync();
 }

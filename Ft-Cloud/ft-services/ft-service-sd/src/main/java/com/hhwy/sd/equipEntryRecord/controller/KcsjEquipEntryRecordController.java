@@ -102,4 +102,17 @@ public class KcsjEquipEntryRecordController extends BaseController {
         ExcelUtils<KcsjEquipEntryRecord> util = new ExcelUtils<>(KcsjEquipEntryRecord.class);
         util.exportExcel(response, kcsjEquipEntryRecordVo.getTreeList(), DateUtils.getDate());
     }
+
+    /**
+     * 同步
+     *
+     * @param
+     * @return
+     */
+    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:list")
+    @GetMapping("/sync")
+    public AjaxResult sync() {
+        KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo = kcsjEquipEntryRecordService.sync();
+        return AjaxResult.success(kcsjEquipEntryRecordVo);
+    }
 }

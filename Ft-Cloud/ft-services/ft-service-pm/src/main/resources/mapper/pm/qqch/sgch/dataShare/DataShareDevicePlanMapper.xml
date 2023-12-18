@@ -130,76 +130,76 @@
 
         replace INTO `data_share_ws`.wzch_total_demand SELECT *,#{prjCode} FROM wzch_total_demand WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_total_demand_detail
-        (SELECT * FROM wzch_total_demand_detail WHERE del_flag = '0' AND total_demand_id = (select id from wzch_total_demand WHERE del_flag = '0' order by version desc LIMIT 1));
+        (SELECT *,#{prjCode} FROM wzch_total_demand_detail WHERE del_flag = '0' AND total_demand_id = (select id from wzch_total_demand WHERE del_flag = '0' order by version desc LIMIT 1));
         replace INTO `data_share_ws`.wzch_total_demand_time_count
-		(select * from wzch_total_demand_time_count where total_demand_detail_id in (
+		(select *,#{prjCode} from wzch_total_demand_time_count where total_demand_detail_id in (
             SELECT id FROM wzch_total_demand_detail WHERE del_flag = '0' AND total_demand_id = (select id from wzch_total_demand WHERE del_flag = '0' order by version desc LIMIT 1)));
 
         replace INTO `data_share_ws`.wzch_source SELECT *,#{prjCode} FROM wzch_source WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_source_detail
-        (SELECT * FROM wzch_source_detail WHERE del_flag = '0' AND source_id = (select id from wzch_source WHERE del_flag = '0' order by version desc LIMIT 1));
-        replace INTO `data_share_ws`.wzch_source_approach_year_count select * from wzch_source_approach_year_count where detail_id in
+        (SELECT *,#{prjCode} FROM wzch_source_detail WHERE del_flag = '0' AND source_id = (select id from wzch_source WHERE del_flag = '0' order by version desc LIMIT 1));
+        replace INTO `data_share_ws`.wzch_source_approach_year_count select *,#{prjCode} from wzch_source_approach_year_count where detail_id in
         (SELECT id FROM wzch_source_detail WHERE del_flag = '0' AND source_id = (select id from wzch_source WHERE del_flag = '0' order by version desc LIMIT 1));
 
         replace INTO `data_share_ws`.wzch_prior_approach SELECT *,#{prjCode} FROM wzch_prior_approach WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_prior_approach_detail
-            (select * from wzch_prior_approach_detail where prior_approach_id = (SELECT id FROM wzch_prior_approach WHERE del_flag = '0' order by version desc LIMIT 1));
-        replace INTO `data_share_ws`.wzch_prior_approach_year_count select * from wzch_prior_approach_year_count where detail_id in
+            (select *,#{prjCode} FROM wzch_prior_approach_detail where prior_approach_id = (SELECT id FROM wzch_prior_approach WHERE del_flag = '0' order by version desc LIMIT 1));
+        replace INTO `data_share_ws`.wzch_prior_approach_year_count select *,#{prjCode} FROM wzch_prior_approach_year_count where detail_id in
 	        (select id from wzch_prior_approach_detail where prior_approach_id = (SELECT id FROM wzch_prior_approach WHERE del_flag = '0' order by version desc LIMIT 1));
 
         replace INTO `data_share_ws`.wzch_purchase_supply SELECT *,#{prjCode} FROM wzch_purchase_supply WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_purchase_supply_detail
-            select * from wzch_purchase_supply_detail where purchase_supply_id =  (SELECT id FROM wzch_purchase_supply WHERE del_flag = '0' order by version desc LIMIT 1);
+            select *,#{prjCode} FROM wzch_purchase_supply_detail where purchase_supply_id =  (SELECT id FROM wzch_purchase_supply WHERE del_flag = '0' order by version desc LIMIT 1);
         replace INTO `data_share_ws`.wzch_purchase_supply_batch_detail
-            select * from wzch_purchase_supply_batch_detail where purchase_supply_detail_id in (
+            select *,#{prjCode} FROM wzch_purchase_supply_batch_detail where purchase_supply_detail_id in (
             select id from wzch_purchase_supply_detail where purchase_supply_id =  (SELECT id FROM wzch_purchase_supply WHERE del_flag = '0' order by version desc LIMIT 1)) ;
 
         replace INTO `data_share_ws`.wzch_local_purchase_supply SELECT *,#{prjCode} FROM wzch_local_purchase_supply WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_local_purchase_supply_detail
-            select * from wzch_local_purchase_supply_detail where purchase_supply_id =  (SELECT id FROM wzch_local_purchase_supply WHERE del_flag = '0' order by version desc LIMIT 1);
+            select *,#{prjCode} FROM wzch_local_purchase_supply_detail where purchase_supply_id =  (SELECT id FROM wzch_local_purchase_supply WHERE del_flag = '0' order by version desc LIMIT 1);
         replace INTO `data_share_ws`.wzch_local_purchase_supply_batch_detail
-            select * from wzch_local_purchase_supply_batch_detail where purchase_supply_detail_id in (
+            select *,#{prjCode} FROM wzch_local_purchase_supply_batch_detail where purchase_supply_detail_id in (
             select id from wzch_local_purchase_supply_detail where purchase_supply_id =  (SELECT id FROM wzch_local_purchase_supply WHERE del_flag = '0' order by version desc LIMIT 1)) ;
 
         replace INTO `data_share_ws`.wzch_revolve_rent SELECT *,#{prjCode} FROM wzch_revolve_rent WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_revolve_rent_detail
-            select * from wzch_revolve_rent_detail where revolve_rent_id =  (SELECT id FROM wzch_revolve_rent WHERE del_flag = '0' order by version desc LIMIT 1);
+            select *,#{prjCode} FROM wzch_revolve_rent_detail where revolve_rent_id =  (SELECT id FROM wzch_revolve_rent WHERE del_flag = '0' order by version desc LIMIT 1);
 
         replace INTO `data_share_ws`.wzch_prior_purchase SELECT *,#{prjCode} FROM wzch_prior_purchase WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_prior_purchase_detail
-            select * from wzch_prior_purchase_detail where prior_purchase_id = (SELECT id FROM wzch_prior_purchase WHERE del_flag = '0' order by version desc LIMIT 1);
+            select *,#{prjCode} FROM wzch_prior_purchase_detail where prior_purchase_id = (SELECT id FROM wzch_prior_purchase WHERE del_flag = '0' order by version desc LIMIT 1);
 
         replace INTO `data_share_ws`.wzch_special_project SELECT *,#{prjCode} FROM wzch_special_project WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_special_project_detail
-            select * from wzch_special_project_detail where special_project_id =  (SELECT id FROM wzch_special_project WHERE del_flag = '0' order by version desc LIMIT 1);
+            select *,#{prjCode} FROM wzch_special_project_detail where special_project_id =  (SELECT id FROM wzch_special_project WHERE del_flag = '0' order by version desc LIMIT 1);
 
         replace INTO `data_share_ws`.wzch_fund SELECT *,#{prjCode} FROM wzch_fund WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_fund_detail
-            select * from wzch_fund_detail where fund_id = (SELECT id FROM wzch_fund WHERE del_flag = '0' order by version desc LIMIT 1);
+            select *,#{prjCode} FROM wzch_fund_detail where fund_id = (SELECT id FROM wzch_fund WHERE del_flag = '0' order by version desc LIMIT 1);
 
         replace INTO `data_share_ws`.wzch_import_export_survey SELECT *,#{prjCode} FROM wzch_import_export_survey WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_import_export_survey_country
-            select * from wzch_import_export_survey_country where survey_id =  (SELECT id FROM wzch_import_export_survey WHERE del_flag = '0' order by version desc LIMIT 1);
+            select *,#{prjCode} FROM wzch_import_export_survey_country where survey_id =  (SELECT id FROM wzch_import_export_survey WHERE del_flag = '0' order by version desc LIMIT 1);
         replace INTO `data_share_ws`.wzch_import_export_survey_customs
-            select * from wzch_import_export_survey_customs where survey_id =  (SELECT id FROM wzch_import_export_survey WHERE del_flag = '0' order by version desc LIMIT 1);
+            select *,#{prjCode} FROM wzch_import_export_survey_customs where survey_id =  (SELECT id FROM wzch_import_export_survey WHERE del_flag = '0' order by version desc LIMIT 1);
 
         replace INTO `data_share_ws`.wzch_import_export_plan SELECT *,#{prjCode} FROM wzch_import_export_plan WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_import_export_plan_detail
-            select * from wzch_import_export_plan_detail where plan_id =  (SELECT id FROM wzch_import_export_plan WHERE del_flag = '0' order by version desc LIMIT 1);
+            select *,#{prjCode} FROM wzch_import_export_plan_detail where plan_id =  (SELECT id FROM wzch_import_export_plan WHERE del_flag = '0' order by version desc LIMIT 1);
 
         replace INTO `data_share_ws`.wzch_special_material_plan SELECT *,#{prjCode} FROM wzch_special_material_plan WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_special_material_plan_detail
-            select * from wzch_special_material_plan_detail where plan_id =  (SELECT id FROM wzch_special_material_plan WHERE del_flag = '0' order by version desc LIMIT 1);
+            select *,#{prjCode} FROM wzch_special_material_plan_detail where plan_id =  (SELECT id FROM wzch_special_material_plan WHERE del_flag = '0' order by version desc LIMIT 1);
         replace INTO `data_share_ws`.wzch_special_material_request_detail
-            select * from wzch_special_material_request_detail where plan_id =  (SELECT id FROM wzch_special_material_plan WHERE del_flag = '0' order by version desc LIMIT 1);
+            select *,#{prjCode} FROM wzch_special_material_request_detail where plan_id =  (SELECT id FROM wzch_special_material_plan WHERE del_flag = '0' order by version desc LIMIT 1);
 
         replace INTO `data_share_ws`.wzch_local_transport_plan SELECT *,#{prjCode} FROM wzch_local_transport_plan WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_local_transport_plan_detail
-            select * from wzch_local_transport_plan_detail where plan_id =  (SELECT id FROM wzch_local_transport_plan WHERE del_flag = '0' order by version desc LIMIT 1);
+            select *,#{prjCode} FROM wzch_local_transport_plan_detail where plan_id =  (SELECT id FROM wzch_local_transport_plan WHERE del_flag = '0' order by version desc LIMIT 1);
 
         replace INTO `data_share_ws`.wzch_scene_manage SELECT *,#{prjCode} FROM wzch_scene_manage WHERE del_flag = '0' order by version desc LIMIT 1;
         replace INTO `data_share_ws`.wzch_scene_manage_detail
-            select * from wzch_scene_manage_detail where scene_manage_id =  (SELECT id FROM wzch_scene_manage WHERE del_flag = '0' order by version desc LIMIT 1);
+            select *,#{prjCode} FROM wzch_scene_manage_detail where scene_manage_id =  (SELECT id FROM wzch_scene_manage WHERE del_flag = '0' order by version desc LIMIT 1);
 
     </select>
 

@@ -204,9 +204,15 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
             info.setEntryDate(ObjectUtils.toDate(vo.getCheckDate()));
             info.setExitDate(ObjectUtils.toDate(vo.getExitDate()));
             info.setSource(ObjectUtils.toString(vo.getSource()));
+            info.setPtVar5(ObjectUtils.toString(vo.getId()));
             list.add(info);
         }
         return result;
+    }
+
+    @Override
+    public List<SgjsExperimentRecord> selectList(SgjsExperimentRecord sgjsExperimentRecord) {
+        return sgjsExperimentRecordMapper.getSgjsExperimentRecordList(sgjsExperimentRecord);
     }
 
 }

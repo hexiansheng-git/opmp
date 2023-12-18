@@ -36,4 +36,7 @@ public interface SgjsPlanMeasureManageMapper {
     List<SgjsPlanMeasureManage> getIds(@Param("ids") List<Long> ids);
 
     int deleteInfoData(List<SgjsPlanMeasureManage> list);
+
+    // 同步覆盖，数据全部删除
+    void delAll(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 }

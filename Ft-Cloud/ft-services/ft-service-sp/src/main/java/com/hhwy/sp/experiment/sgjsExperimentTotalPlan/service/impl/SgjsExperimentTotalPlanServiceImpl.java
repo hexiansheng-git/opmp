@@ -43,7 +43,6 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
         sgjsExperimentTotalPlan.setId(IdWorker.createId());
         sgjsExperimentTotalPlan.setCreateUser(SecurityUtils.getUserName());
         sgjsExperimentTotalPlan.setCreateTime(DateUtils.getNowDate());
-        sgjsExperimentTotalPlan.setUpdateTime(DateUtils.getNowDate());
         return sgjsExperimentTotalPlanMapper.insertSgjsExperimentTotalPlan(sgjsExperimentTotalPlan);
     }
 
@@ -60,7 +59,6 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
     @Transactional
     public int updateSgjsExperimentTotalPlan(SgjsExperimentTotalPlan sgjsExperimentTotalPlan) {
         sgjsExperimentTotalPlan.setUpdateUser(SecurityUtils.getUserName());
-        sgjsExperimentTotalPlan.setUpdateTime(DateUtils.getNowDate());
         return sgjsExperimentTotalPlanMapper.updateSgjsExperimentTotalPlan(sgjsExperimentTotalPlan);
     }
 
@@ -112,6 +110,8 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
             info.setFileGroupId(list.get(0).getFileGroupId());
             if(null!=list.get(0).getId()){
                 info.setId(list.get(0).getId());
+                info.setUpdateTime(list.get(0).getUpdateTime());
+                info.setUpdateUser(list.get(0).getUpdateUser());
             }
         }
         return info;

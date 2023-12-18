@@ -4,6 +4,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.domain.CommonQqchMeasureExpRange;
+import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.dto.DesignDisclosurePlanDto;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +79,16 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             @Override
             public AjaxResult getData() {
                 return AjaxResult.error("请求失败:", throwable.getMessage());
+            }
+
+            @Override
+            public AjaxResult getqqchSurveyDesignTeams() {
+                return AjaxResult.error("请求失败:", throwable.getMessage());
+            }
+
+            @Override
+            public List<DesignDisclosurePlanDto> getDisclosurePlanDtoList() {
+                return null;
             }
         };
     }

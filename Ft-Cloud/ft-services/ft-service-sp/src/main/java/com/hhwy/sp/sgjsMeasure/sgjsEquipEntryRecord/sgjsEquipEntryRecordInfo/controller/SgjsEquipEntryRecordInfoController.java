@@ -122,6 +122,7 @@ public class SgjsEquipEntryRecordInfoController extends BaseController{
      * @throws IOException
      */
     @PostMapping("/export")
+    @PreAuthorize(hasPermi = "sgjsEquipEntryRecordInfo:export")
     public void export(HttpServletResponse response, @RequestBody SgjsEquipEntryRecordInfo sgjsEquipEntryRecordInfoParam) throws IOException {
         List<SgjsEquipEntryRecordInfo> sgjsEquipEntryRecordInfoList = sgjsEquipEntryRecordInfoService.getSgjsEquipEntryRecordInfoList(sgjsEquipEntryRecordInfoParam);
         ExcelUtils<SgjsEquipEntryRecordInfo> util = new ExcelUtils<>(SgjsEquipEntryRecordInfo.class);
