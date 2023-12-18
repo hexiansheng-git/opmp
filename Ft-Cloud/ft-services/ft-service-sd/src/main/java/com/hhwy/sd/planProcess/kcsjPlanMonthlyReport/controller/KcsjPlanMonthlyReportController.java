@@ -1,26 +1,24 @@
 package com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.controller;
 
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.KcsjPlanMonthlyReport;
+import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.vo.PlanMonthlyReportQueryVo;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.service.IKcsjPlanMonthlyReportService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
  * @author han
  * @date 2023-12-18 11:21:39
- * @remark
+ * @remark 勘察设计管理-计划进度管理-月报
  */
 @Validated
 @RestController
@@ -38,11 +36,16 @@ public class KcsjPlanMonthlyReportController extends BaseController {
         return AjaxResult.success(kcsjPlanMonthlyReport);
     }
 
+    /**
+     * 台账
+     * @param queryVo
+     * @return
+     */
     @PreAuthorize(hasPermi = "kcsjPlanMonthlyReport:list")
     @GetMapping("/list")
-    public AjaxResult getKcsjPlanMonthlyReportList(@Validated(ValidationGroups.Select.class) KcsjPlanMonthlyReport kcsjPlanMonthlyReportParam) {
+    public AjaxResult getKcsjPlanMonthlyReportList(@Validated(ValidationGroups.Select.class) PlanMonthlyReportQueryVo queryVo) {
         startPage();
-        List<KcsjPlanMonthlyReport> kcsjPlanMonthlyReportList = kcsjPlanMonthlyReportService.getKcsjPlanMonthlyReportList(kcsjPlanMonthlyReportParam);
+        List<KcsjPlanMonthlyReport> kcsjPlanMonthlyReportList = kcsjPlanMonthlyReportService.getKcsjPlanMonthlyReportList(queryVo);
         return getDataTableAjaxResult(kcsjPlanMonthlyReportList);
     }
 
@@ -66,10 +69,15 @@ public class KcsjPlanMonthlyReportController extends BaseController {
         return toAjax(kcsjPlanMonthlyReportService.updateKcsjPlanMonthlyReport(kcsjPlanMonthlyReportParam));
     }
 
+    /**
+     * 修改保存
+     * @param kcsjPlanMonthlyReportList
+     * @return
+     */
     @PreAuthorize(hasPermi = "kcsjPlanMonthlyReport:update")
     @PostMapping("/batchUpdate")
-    public AjaxResult updateKcsjPlanMonthlyReportList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjPlanMonthlyReport> kcsjPlanMonthlyReportListParam) {
-        return toAjax(kcsjPlanMonthlyReportService.updateKcsjPlanMonthlyReportList(kcsjPlanMonthlyReportListParam));
+    public AjaxResult updateKcsjPlanMonthlyReportList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjPlanMonthlyReport> kcsjPlanMonthlyReportList) {
+        return toAjax(kcsjPlanMonthlyReportService.updateKcsjPlanMonthlyReportList(kcsjPlanMonthlyReportList));
     }
 
     @PreAuthorize(hasPermi = "kcsjPlanMonthlyReport:remove")
@@ -85,10 +93,19 @@ public class KcsjPlanMonthlyReportController extends BaseController {
         return toAjax(kcsjPlanMonthlyReportService.deleteKcsjPlanMonthlyReportByPks(kcsjPlanMonthlyReportPkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, KcsjPlanMonthlyReport kcsjPlanMonthlyReportParam) throws IOException {
-        List<KcsjPlanMonthlyReport> kcsjPlanMonthlyReportList = kcsjPlanMonthlyReportService.getKcsjPlanMonthlyReportList(kcsjPlanMonthlyReportParam);
-        ExcelUtils<KcsjPlanMonthlyReport> util = new ExcelUtils<>(KcsjPlanMonthlyReport.class);
-        util.exportExcel(response, kcsjPlanMonthlyReportList, DateUtils.getDate());
+    /**
+     * 生成月报
+     * @return
+     */
+    @PostMapping("/generateMonthlyReport")
+    public AjaxResult generateMonthlyReport(){
+        kcsjPlanMonthlyReportService.generateMonthlyReport();
+        return AjaxResult.success();
+    }
+
+    @PostMapping("generateMonthlyReportByDate")
+    public AjaxResult generateMonthlyReportByDate(Date date){
+        kcsjPlanMonthlyReportService.generateMonthlyReportByDate(date);
+        return AjaxResult.success();
     }
 }

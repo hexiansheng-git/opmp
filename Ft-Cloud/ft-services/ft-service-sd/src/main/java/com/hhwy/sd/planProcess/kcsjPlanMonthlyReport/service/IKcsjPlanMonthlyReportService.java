@@ -1,7 +1,9 @@
 package com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.service;
 
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.KcsjPlanMonthlyReport;
+import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.vo.PlanMonthlyReportQueryVo;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,7 +15,7 @@ public interface IKcsjPlanMonthlyReportService {
 
     KcsjPlanMonthlyReport getKcsjPlanMonthlyReport(KcsjPlanMonthlyReport kcsjPlanMonthlyReport);
 
-    List<KcsjPlanMonthlyReport> getKcsjPlanMonthlyReportList(KcsjPlanMonthlyReport kcsjPlanMonthlyReport);
+    List<KcsjPlanMonthlyReport> getKcsjPlanMonthlyReportList(PlanMonthlyReportQueryVo queryVo);
 
     int insertKcsjPlanMonthlyReport(KcsjPlanMonthlyReport kcsjPlanMonthlyReport);
 
@@ -26,4 +28,8 @@ public interface IKcsjPlanMonthlyReportService {
     int deleteKcsjPlanMonthlyReport(KcsjPlanMonthlyReport kcsjPlanMonthlyReport);
 
     int deleteKcsjPlanMonthlyReportByPks(List<Long> kcsjPlanMonthlyReportPkList);
+
+    void generateMonthlyReport();
+
+    void generateMonthlyReportByDate(Date date);
 }

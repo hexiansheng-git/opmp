@@ -2,9 +2,9 @@ package com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.domain.QqchDesignDisclosurePlan;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.domain.vo.QqchDesignDisclosurePlanVo;
+import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.dto.DesignDisclosurePlanDto;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.service.IQqchDesignDisclosurePlanService;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
@@ -12,6 +12,8 @@ import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author ldd
@@ -70,5 +72,8 @@ public class QqchDesignDisclosurePlanController extends BaseController {
         return AjaxResult.success(qqchDesignDisclosurePlanVo);
     }
 
-
+    @GetMapping("getDisclosurePlanDtoList")
+    public List<DesignDisclosurePlanDto> getDisclosurePlanDtoList() {
+        return qqchDesignDisclosurePlanService.getDisclosurePlanDtoList();
+    }
 }

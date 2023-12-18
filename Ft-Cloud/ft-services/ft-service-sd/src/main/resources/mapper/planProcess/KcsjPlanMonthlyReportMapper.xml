@@ -103,35 +103,10 @@
         <include refid="selectKcsjPlanMonthlyReportVo"/>
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="period != null ">and `period` = #{period}</if>
-            <if test="submitUserId != null  and submitUserId != ''">and `submit_user_id` = #{submitUserId}</if>
-            <if test="submitUserName != null  and submitUserName != ''">and `submit_user_name` = #{submitUserName}</if>
-            <if test="submitDate != null ">and `submit_date` = #{submitDate}</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
-            <if test="sort != null ">and `sort` = #{sort}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="period != null ">and substr(`period`, 1, 7) = #{period}</if>
+            <if test="submitUserName != null  and submitUserName != ''">and `submit_user_name` like concat('%', #{submitUserName} , '%')</if>
         </where>
-        order by create_time desc
+        order by `period` desc
     </select>
 
     <insert id="insertKcsjPlanMonthlyReport" useGeneratedKeys="true" keyProperty="id">
@@ -480,5 +455,10 @@
                 #{id}
             </foreach>
         </where>
+    </update>
+
+    <update id="deleteMonthlyReportByYearMonth">
+        update `kcsj_plan_monthly_report` set del_flag = 1
+        where substr(period,1,7) = #{yearMonth}
     </update>
 </mapper>

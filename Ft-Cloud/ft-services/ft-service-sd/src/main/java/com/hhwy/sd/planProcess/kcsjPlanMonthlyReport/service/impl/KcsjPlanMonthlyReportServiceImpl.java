@@ -3,6 +3,7 @@ package com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.KcsjPlanMonthlyReport;
+import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.vo.PlanMonthlyReportQueryVo;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.mapper.KcsjPlanMonthlyReportMapper;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.service.IKcsjPlanMonthlyReportService;
 import com.hhwy.utils.idworker.IdWorker;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,14 +31,15 @@ public class KcsjPlanMonthlyReportServiceImpl implements IKcsjPlanMonthlyReportS
         return kcsjPlanMonthlyReportMapper.getKcsjPlanMonthlyReport(kcsjPlanMonthlyReport);
     }
 
-    public List<KcsjPlanMonthlyReport> getKcsjPlanMonthlyReportList(KcsjPlanMonthlyReport kcsjPlanMonthlyReport) {
-        return kcsjPlanMonthlyReportMapper.getKcsjPlanMonthlyReportList(kcsjPlanMonthlyReport);
+    public List<KcsjPlanMonthlyReport> getKcsjPlanMonthlyReportList(PlanMonthlyReportQueryVo queryVo) {
+        return kcsjPlanMonthlyReportMapper.getKcsjPlanMonthlyReportList(queryVo);
     }
 
     @Transactional
     public int insertKcsjPlanMonthlyReport(KcsjPlanMonthlyReport kcsjPlanMonthlyReport) {
         kcsjPlanMonthlyReport.setId(IdWorker.createId());
-        kcsjPlanMonthlyReport.setCreateUser(SecurityUtils.getUserName());
+        kcsjPlanMonthlyReport.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+        kcsjPlanMonthlyReport.setCreateUserName(SecurityUtils.getUserName());
         kcsjPlanMonthlyReport.setCreateTime(DateUtils.getNowDate());
         return kcsjPlanMonthlyReportMapper.insertKcsjPlanMonthlyReport(kcsjPlanMonthlyReport);
     }
@@ -76,5 +80,41 @@ public class KcsjPlanMonthlyReportServiceImpl implements IKcsjPlanMonthlyReportS
     @Transactional
     public int deleteKcsjPlanMonthlyReportByPks(List<Long> kcsjPlanMonthlyReportPkList) {
         return kcsjPlanMonthlyReportMapper.deleteKcsjPlanMonthlyReportByPks(kcsjPlanMonthlyReportPkList);
+    }
+
+    @Override
+    @Transactional
+    public void generateMonthlyReport() {
+        Date nowDate = DateUtils.getNowDate();
+        //删除当月月报
+        this.deleteMonthlyReportByDate(nowDate);
+
+        //插入当月月报
+        KcsjPlanMonthlyReport report = new KcsjPlanMonthlyReport();
+        report.setPeriod(nowDate);
+        report.setId(IdWorker.createId());
+        report.setCreateUserName("定时生成");
+        report.setCreateTime(nowDate);
+        kcsjPlanMonthlyReportMapper.insertKcsjPlanMonthlyReport(report);
+    }
+
+    public void deleteMonthlyReportByDate(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String yearMonth = sdf.format(date);
+        kcsjPlanMonthlyReportMapper.deleteMonthlyReportByYearMonth(yearMonth);
+    }
+
+    @Override
+    public void generateMonthlyReportByDate(Date date) {
+        //删除当月月报
+        this.deleteMonthlyReportByDate(date);
+
+        //插入当月月报
+        KcsjPlanMonthlyReport report = new KcsjPlanMonthlyReport();
+        report.setPeriod(date);
+        report.setId(IdWorker.createId());
+        report.setCreateUserName("定时生成");
+        report.setCreateTime(date);
+        kcsjPlanMonthlyReportMapper.insertKcsjPlanMonthlyReport(report);
     }
 }

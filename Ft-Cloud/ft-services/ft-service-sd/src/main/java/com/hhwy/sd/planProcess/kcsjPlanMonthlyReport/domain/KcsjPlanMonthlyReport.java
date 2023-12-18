@@ -33,7 +33,7 @@ public class KcsjPlanMonthlyReport extends BaseEntity {
     /**
      * 字段描述：月报期次
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月")
     @JsonProperty
     @Excel(name = "月报期次", dateFormat = "yyyy-MM-dd")
     private Date period;

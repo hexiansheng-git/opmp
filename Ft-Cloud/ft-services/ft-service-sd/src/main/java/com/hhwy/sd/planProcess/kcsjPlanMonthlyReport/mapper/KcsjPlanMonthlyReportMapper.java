@@ -1,6 +1,7 @@
 package com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.mapper;
 
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.KcsjPlanMonthlyReport;
+import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.vo.PlanMonthlyReportQueryVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface KcsjPlanMonthlyReportMapper {
 
     KcsjPlanMonthlyReport getKcsjPlanMonthlyReport(KcsjPlanMonthlyReport kcsjPlanMonthlyReport);
 
-    List<KcsjPlanMonthlyReport> getKcsjPlanMonthlyReportList(KcsjPlanMonthlyReport kcsjPlanMonthlyReport);
+    List<KcsjPlanMonthlyReport> getKcsjPlanMonthlyReportList(PlanMonthlyReportQueryVo queryVo);
 
     int insertKcsjPlanMonthlyReport(KcsjPlanMonthlyReport kcsjPlanMonthlyReport);
 
@@ -27,4 +28,6 @@ public interface KcsjPlanMonthlyReportMapper {
     int deleteKcsjPlanMonthlyReport(KcsjPlanMonthlyReport kcsjPlanMonthlyReport);
 
     int deleteKcsjPlanMonthlyReportByPks(@Param("kcsjPlanMonthlyReportPkList") List<Long> kcsjPlanMonthlyReportPkList);
+
+    void deleteMonthlyReportByYearMonth(@Param("yearMonth") String yearMonth);
 }

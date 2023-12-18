@@ -1,26 +1,32 @@
 package com.hhwy.sd.disclosureRecord.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sd.disclosureRecord.domain.KcsjDisclosureRecord;
+import com.hhwy.sd.disclosureRecord.domain.vo.DisclosureRecordQueryVo;
+import com.hhwy.sd.disclosureRecord.domain.vo.DisclosureRecordVo;
 import com.hhwy.sd.disclosureRecord.service.IKcsjDisclosureRecordService;
+import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author han
  * @date 2023-12-18 11:15:48
- * @remark
+ * @remark 勘察设计交底记录
  */
 @Validated
 @RestController
@@ -38,12 +44,16 @@ public class KcsjDisclosureRecordController extends BaseController {
         return AjaxResult.success(kcsjDisclosureRecord);
     }
 
+    /**
+     * 台账
+     * @param queryVo
+     * @return
+     */
     @PreAuthorize(hasPermi = "kcsjDisclosureRecord:list")
     @GetMapping("/list")
-    public AjaxResult getKcsjDisclosureRecordList(@Validated(ValidationGroups.Select.class) KcsjDisclosureRecord kcsjDisclosureRecordParam) {
-        startPage();
-        List<KcsjDisclosureRecord> kcsjDisclosureRecordList = kcsjDisclosureRecordService.getKcsjDisclosureRecordList(kcsjDisclosureRecordParam);
-        return getDataTableAjaxResult(kcsjDisclosureRecordList);
+    public AjaxResult getKcsjDisclosureRecordList(@Validated(ValidationGroups.Select.class) DisclosureRecordQueryVo queryVo) {
+        List<KcsjDisclosureRecord> kcsjDisclosureRecordList = kcsjDisclosureRecordService.getKcsjDisclosureRecordList(queryVo);
+        return AjaxResult.success(kcsjDisclosureRecordList);
     }
 
     @PreAuthorize(hasPermi = "kcsjDisclosureRecord:add")
@@ -53,11 +63,16 @@ public class KcsjDisclosureRecordController extends BaseController {
         return AjaxResult.success(kcsjDisclosureRecordParam);
     }
 
-    @PreAuthorize(hasPermi = "kcsjDisclosureRecord:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertKcsjDisclosureRecordList(@Validated(ValidationGroups.Save.class) @RequestBody List<KcsjDisclosureRecord> kcsjDisclosureRecordListParam) {
-        kcsjDisclosureRecordService.insertKcsjDisclosureRecordList(kcsjDisclosureRecordListParam);
-        return AjaxResult.success(kcsjDisclosureRecordListParam);
+    /**
+     * 保存
+     * @param recordVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "kcsjDisclosureRecord:save")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody DisclosureRecordVo recordVo) {
+        kcsjDisclosureRecordService.save(recordVo);
+        return AjaxResult.success();
     }
 
     @PreAuthorize(hasPermi = "kcsjDisclosureRecord:update")
@@ -85,10 +100,53 @@ public class KcsjDisclosureRecordController extends BaseController {
         return toAjax(kcsjDisclosureRecordService.deleteKcsjDisclosureRecordByPks(kcsjDisclosureRecordPkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, KcsjDisclosureRecord kcsjDisclosureRecordParam) throws IOException {
-        List<KcsjDisclosureRecord> kcsjDisclosureRecordList = kcsjDisclosureRecordService.getKcsjDisclosureRecordList(kcsjDisclosureRecordParam);
-        ExcelUtils<KcsjDisclosureRecord> util = new ExcelUtils<>(KcsjDisclosureRecord.class);
-        util.exportExcel(response, kcsjDisclosureRecordList, DateUtils.getDate());
+    /**
+     * 导入
+     * @param file
+     * @return
+     */
+    @PostMapping("/importData")
+    public AjaxResult importData(@RequestPart("file") MultipartFile file){
+        FtExcelUtil<KcsjDisclosureRecord> util = new FtExcelUtil<>(KcsjDisclosureRecord.class);
+        try {
+            InputStream inputStream = file.getInputStream();
+            List<KcsjDisclosureRecord> recordList = util.importExcel(inputStream);
+            recordList.stream().forEach(o -> {
+                o.setId(IdWorker.createId());
+                o.setIsAdd("1");
+            });
+            return AjaxResult.success(recordList);
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败！");
+        }
+    }
+
+    /**
+     * 导出
+     * @param response
+     * @param queryVo
+     * @throws IOException
+     */
+    @PostMapping("/export")
+    public void export(HttpServletResponse response,@RequestBody DisclosureRecordQueryVo queryVo) throws IOException {
+        List<Long> ids = queryVo.getIds();
+        List<KcsjDisclosureRecord> recordList;
+        if(CollectionUtils.isEmpty(ids)){
+            recordList = kcsjDisclosureRecordService.getKcsjDisclosureRecordList(queryVo);
+        }else {
+            recordList = kcsjDisclosureRecordService.getListByIds(ids);
+        }
+        FtExcelUtil<KcsjDisclosureRecord> util = new FtExcelUtil<>(KcsjDisclosureRecord.class);
+        util.exportExcel(response, recordList, DateUtils.getDate());
+    }
+
+    /**
+     * 同步前期策划交底记录
+     * @return
+     */
+    @PostMapping("sync")
+    public AjaxResult sync() {
+        List<KcsjDisclosureRecord> recordList = kcsjDisclosureRecordService.sync();
+        return AjaxResult.success(recordList);
     }
 }
