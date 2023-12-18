@@ -271,7 +271,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
                     }
                 }
                 BigDecimal planCompValue = StatisticsUtils.getDivideTenThousand(jdglMonthImagePlan.getPlanCompValue());
-                if(planCompValue != null) {
+                if(planCompValue != null && !jdglMonthImagePlan.getWbsCode().equals(jdglMonthImagePlan.getWorkCode())) {
                     thisTotalPlanAmt = thisTotalPlanAmt.add(planCompValue);
                 }
                 insertList.add(jdglDiffAnalysisSv);
