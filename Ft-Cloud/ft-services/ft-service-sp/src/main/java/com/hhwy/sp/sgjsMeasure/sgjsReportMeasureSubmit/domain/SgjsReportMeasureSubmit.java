@@ -119,7 +119,7 @@ public class SgjsReportMeasureSubmit extends TreeNode<SgjsReportMeasureSubmit> {
      * 字段描述：备注
      */
     @JsonProperty
-    @Excel(name = "备注")
+    //@Excel(name = "备注")
     private String remark;
     /**
      * 字段描述：数据来源 0新增1同步
