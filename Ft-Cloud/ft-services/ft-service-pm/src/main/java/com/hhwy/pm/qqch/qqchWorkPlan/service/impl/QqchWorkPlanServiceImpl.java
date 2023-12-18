@@ -292,9 +292,12 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         qqchWorkPlan.setId(IdWorker.createId());
         EntityUtils.setCreateUpdateInfo(qqchWorkPlan);
         // 设置版本号码
-        if (ObjectNullUtil.isEmpty(qqchWorkPlan.getVersion())) {
-            qqchWorkPlan.setVersion(new BigDecimal("1.0"));
+        BigDecimal version = qqchWorkPlan.getVersion();
+        if (ObjectNullUtil.isEmpty(version)) {
+            version = BigDecimal.ONE;
+            qqchWorkPlan.setVersion(version);
         }
+        this.checkVersion(version);
         // 是否生效
         qqchWorkPlan.setValid("0");
         ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
@@ -318,9 +321,12 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         qqchWorkPlan.setId(IdWorker.createId());
         EntityUtils.setCreateUpdateInfo(qqchWorkPlan);
         // 设置版本号码
-        if (ObjectNullUtil.isEmpty(qqchWorkPlan.getVersion())) {
-            qqchWorkPlan.setVersion(new BigDecimal("1.0"));
+        BigDecimal version = qqchWorkPlan.getVersion();
+        if (ObjectNullUtil.isEmpty(version)) {
+            version = BigDecimal.ONE;
+            qqchWorkPlan.setVersion(version);
         }
+        this.checkVersion(version);
         ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
         qqchWorkPlan.setProjectName(projectInfo.getProjectName());
         qqchWorkPlan.setProjectId(projectInfo.getProjectId());
@@ -636,6 +642,15 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         }finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+    }
+
+    public void checkVersion(BigDecimal version){
+        QqchWorkPlan query = new QqchWorkPlan();
+        query.setVersion(version);
+        List<QqchWorkPlan> qqchWorkPlanList = qqchWorkPlanMapper.getQqchWorkPlanList(query);
+        if(qqchWorkPlanList != null && qqchWorkPlanList.size() >= 1){
+            throw new CustomException("当前版本已存在，请重新编辑！");
         }
     }
 }
