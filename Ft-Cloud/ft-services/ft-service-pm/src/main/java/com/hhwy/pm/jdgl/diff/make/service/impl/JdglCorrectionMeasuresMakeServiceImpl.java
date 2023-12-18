@@ -359,6 +359,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             newDetailList.add(JdglCorrectionMeasuresMakeDetail);
         }
         // 纠偏方案入库
+        if (CollectionUtil.isEmpty(newDetailList)) return;
         jdglCorrectionMeasuresMakeDetailService.insertJdglCorrectionMeasuresMakeDetailList(newDetailList);
     }
 

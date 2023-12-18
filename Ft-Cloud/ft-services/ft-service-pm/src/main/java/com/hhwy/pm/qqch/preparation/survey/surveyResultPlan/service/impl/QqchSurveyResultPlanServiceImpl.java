@@ -44,8 +44,9 @@ public class QqchSurveyResultPlanServiceImpl implements IQqchSurveyResultPlanSer
      * @return
      */
     public QqchSurveyResultPlanVo getQqchSurveyResultPlanList(QqchSurveyResultPlan qqchSurveyResultPlan) {
-        BigDecimal version=new BigDecimal(1);
-        if (qqchSurveyResultPlan.getVersion() == null) {
+//        BigDecimal version=new BigDecimal(1);
+        BigDecimal version = qqchSurveyResultPlan.getVersion();
+        if (version == null) {
             // 获取最大版本号
              version = commonMapper.selectMaxVersion("qqch_survey_result_plan");
         }
