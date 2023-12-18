@@ -140,7 +140,7 @@
       <if test="id != null ">and `id` = #{id}</if>
       <if test="pid != null ">and `pid` = #{pid}</if>
       <if test="reportName != null  and reportName != ''">and `report_name` like concat('%',#{reportName},'%')</if>
-      <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
+      <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` REGEXP  concat('^',#{wbsCode})</if>
       <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
       <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
       <if test="wbsAncestors != null  and wbsAncestors != ''">and `wbs_ancestors` =
@@ -178,7 +178,7 @@
         </foreach>
       </if>
     </where>
-    order by create_time desc
+    order by wbs_code asc
   </select>
 
   <insert id="insertSgjsReportMeasureSubmit" useGeneratedKeys="true" keyProperty="id">

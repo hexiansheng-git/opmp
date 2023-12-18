@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.sbch.imported.material.domain;
 
+import cn.hutool.core.util.NumberUtil;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
@@ -11,6 +12,7 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -144,4 +146,13 @@ public class SbchMaterialTranPlanDetail extends CommonBaseEntity {
     private String materialName;
     //设备规格型号
     private String materialSpec;
+
+    public BigDecimal getMaterialSize() {
+        return NumberUtil.toBigDecimal(materialSize);
+    }
+
+    public BigDecimal getMaterialWeight() {
+        return NumberUtil.toBigDecimal(materialWeight);
+    }
+
 }

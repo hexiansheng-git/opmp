@@ -132,9 +132,7 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
                 : FtDateUtils.parseDate(l.get("planBeginDate")));
             sgjsPlanMeasureManage.setPlanEndDate(
                 l.get("planEndDate") == null ? null : FtDateUtils.parseDate(l.get("planEndDate")));
-            sgjsPlanMeasureManage.setId(l.get("id") == null ? 0L : Long.parseLong(l.get("id").toString()));
-            sgjsPlanMeasureManage.setPid(
-                l.get("pid") == null ? 0L : Long.parseLong(l.get("pid").toString()));
+            sgjsPlanMeasureManage.setId(IdWorker.createId());
             //同步标识
             sgjsPlanMeasureManage.setDataSource("1");
             sgjsPlanMeasureManage.setIsAdd("1");
@@ -152,9 +150,8 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
                         : FtDateUtils.parseDate(linkedHashMap.get("planBeginDate")));
                     sgjsPlanMeasureManage1.setPlanEndDate(
                         linkedHashMap.get("planEndDate") == null ? null : FtDateUtils.parseDate(linkedHashMap.get("planEndDate")));
-                    sgjsPlanMeasureManage1.setId(linkedHashMap.get("id") == null ? IdWorker.createId() : Long.parseLong(linkedHashMap.get("id").toString()));
-                    sgjsPlanMeasureManage1.setPid(
-                        linkedHashMap.get("pid") == null ? 0L : Long.parseLong(linkedHashMap.get("pid").toString()));
+                    sgjsPlanMeasureManage1.setId(IdWorker.createId());
+                    sgjsPlanMeasureManage1.setPid(sgjsPlanMeasureManage.getId());
                     //同步标识
                     sgjsPlanMeasureManage1.setDataSource("1");
                     sgjsPlanMeasureManage1.setIsAdd("1");

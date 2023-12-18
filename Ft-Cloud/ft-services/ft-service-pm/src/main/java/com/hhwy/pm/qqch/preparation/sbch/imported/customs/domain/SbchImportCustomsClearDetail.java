@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.sbch.imported.customs.domain;
 
+import cn.hutool.core.util.NumberUtil;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
@@ -8,6 +9,7 @@ import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -85,4 +87,8 @@ public class SbchImportCustomsClearDetail extends CommonBaseEntity {
     @JsonSerialize(using= ToStringSerializer.class)
     private Long deptId;
 
+
+    public BigDecimal getSaveYear(){
+        return NumberUtil.toBigDecimal(this.saveYear);
+    }
 }
