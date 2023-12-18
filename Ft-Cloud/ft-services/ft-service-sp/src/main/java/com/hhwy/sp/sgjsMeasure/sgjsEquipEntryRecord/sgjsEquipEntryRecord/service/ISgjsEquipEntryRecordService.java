@@ -34,4 +34,12 @@ public interface ISgjsEquipEntryRecordService {
      * @return
      */
     AjaxResult sync();
+
+    /**
+     * 查询
+     *
+     * @param sgjsEquipEntryRecord
+     * @return
+     */
+    List<SgjsEquipEntryRecord> selectList(SgjsEquipEntryRecord sgjsEquipEntryRecord);
 }

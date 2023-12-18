@@ -188,4 +188,9 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
         return AjaxResult.success("未同步到新数据！");
     }
 
+    @Override
+    public List<SgjsEquipEntryRecord> selectList(SgjsEquipEntryRecord sgjsEquipEntryRecord) {
+        return sgjsEquipEntryRecordMapper.getSgjsEquipEntryRecordList(sgjsEquipEntryRecord);
+    }
+
 }

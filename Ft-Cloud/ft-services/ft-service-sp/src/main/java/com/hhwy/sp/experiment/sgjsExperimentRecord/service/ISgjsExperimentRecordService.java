@@ -42,4 +42,12 @@ public interface ISgjsExperimentRecordService {
      * @return
      */
     AjaxResult syncWuShe(Map<String,Object> map);
+
+    /**
+     * 列表查询
+     *
+     * @param sgjsExperimentRecord
+     * @return
+     */
+    List<SgjsExperimentRecord> selectList(SgjsExperimentRecord sgjsExperimentRecord);
 }
