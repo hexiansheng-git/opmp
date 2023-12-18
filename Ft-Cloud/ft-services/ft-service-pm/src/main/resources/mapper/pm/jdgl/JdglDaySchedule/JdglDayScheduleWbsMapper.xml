@@ -173,7 +173,7 @@
             resultType="com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Value">
         select min(wd.date) editerDate,wd.wbs_code as wbsCode,wd.wbs_name as wbsName,wd.unit,wd.design_quantity designQuantity,
                sum(wd.this_quantity) thisQuantity,sum(wd.this_value) thisValue from (
-            select jds.date,jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity,sum(jdsb.this_quantity) this_quantity,sum(isnull(jds.exchange_rate,0,jdsb.bill_value/jds.exchange_rate)) this_value
+            select jds.date,jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity,sum(jdsb.this_quantity) this_quantity,sum(if(jds.exchange_rate is null or jds.exchange_rate = 0,0,jdsb.bill_value/jds.exchange_rate)) this_value
                 from (select * from jdgl_day_schedule where del_flag = '0' and `date` &gt;= #{startDate} and `date` &lt;= #{endDate} and task_status != "0") jds
                 inner join jdgl_day_schedule_wbs jdsw
                           on jds.id = jdsw.day_schedule_id
@@ -189,7 +189,7 @@
             resultType="com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Value">
         select min(wd.date) editerDate,wd.wbs_code wbsCode,wd.wbs_name wbsName,wd.unit,wd.design_quantity designQuantity,
                sum(wd.this_quantity) thisQuantity,sum(wd.this_value) thisValue from (
-             select jds.date,jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity,sum(jdsb.this_quantity) this_quantity,sum(isnull(jds.exchange_rate,0,jdsb.bill_value/jds.exchange_rate)) this_value
+             select jds.date,jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity,sum(jdsb.this_quantity) this_quantity,sum(if(jds.exchange_rate is null or jds.exchange_rate = 0,0,jdsb.bill_value/jds.exchange_rate)) this_value
              from (select * from jdgl_day_schedule where del_flag = '0' and `date` &lt;= #{endDate} and task_status != "0") jds
                       inner join jdgl_day_schedule_wbs jdsw
                                  on jds.id = jdsw.day_schedule_id
@@ -205,7 +205,7 @@
             resultType="com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Value">
         select min(wd.date) editerDate,wd.wbs_code wbsCode,wd.wbs_name wbsName,wd.unit,wd.design_quantity designQuantity,
                sum(wd.this_quantity) thisQuantity,sum(wd.this_value) thisValue from (
-            select jds.date,jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity,sum(jdsb.this_quantity) this_quantity,sum(jisnull(jds.exchange_rate,0,jdsb.bill_value/jds.exchange_rate)) this_value
+            select jds.date,jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity,sum(jdsb.this_quantity) this_quantity,sum(if(jds.exchange_rate is null or jds.exchange_rate = 0,0,jdsb.bill_value/jds.exchange_rate)) this_value
             from (select * from jdgl_day_schedule where del_flag = '0' and `date` &lt;= #{endDate} and task_status != "0") jds
                      inner join jdgl_day_schedule_wbs jdsw
                                 on jds.id = jdsw.day_schedule_id
