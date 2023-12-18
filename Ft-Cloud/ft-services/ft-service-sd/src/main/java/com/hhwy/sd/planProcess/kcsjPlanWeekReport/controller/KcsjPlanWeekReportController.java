@@ -23,7 +23,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 /**
  * @author cjh
  * @date 2023-12-18 11:12:15
- * @remark
+ * @remark 勘察设计管理-计划进度管理-周报
  */
 @Validated
 @RestController

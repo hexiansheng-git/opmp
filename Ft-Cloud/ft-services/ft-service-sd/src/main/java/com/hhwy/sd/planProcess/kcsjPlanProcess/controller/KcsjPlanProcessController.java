@@ -23,7 +23,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 /**
  * @author cjh
  * @date 2023-12-18 11:13:27
- * @remark
+ * @remark 勘察设计管理-计划进度管理-计划进度
  */
 @Validated
 @RestController
@@ -54,6 +54,17 @@ public class KcsjPlanProcessController extends BaseController {
     public AjaxResult insertKcsjPlanProcess(@Validated(ValidationGroups.Save.class) @RequestBody KcsjPlanProcess kcsjPlanProcessParam) {
         kcsjPlanProcessService.insertKcsjPlanProcess(kcsjPlanProcessParam);
         return AjaxResult.success(kcsjPlanProcessParam);
+    }
+
+    /**
+     * 同步前期策划工作计划
+     * @return
+     */
+    @PreAuthorize(hasPermi = "kcsjPlanProcess:add")
+    @GetMapping("/sync")
+    public AjaxResult sync() {
+        kcsjPlanProcessService.sync();
+        return AjaxResult.success();
     }
 
     @PreAuthorize(hasPermi = "kcsjPlanProcess:add")

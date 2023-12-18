@@ -70,8 +70,6 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
 
     @Transactional
     public int deleteKcsjPlanWeekReport(KcsjPlanWeekReport kcsjPlanWeekReport) {
-        kcsjPlanWeekReport.setUpdateUser(SecurityUtils.getUserName());
-        kcsjPlanWeekReport.setUpdateTime(DateUtils.getNowDate());
         return kcsjPlanWeekReportMapper.deleteKcsjPlanWeekReport(kcsjPlanWeekReport);
     }
 

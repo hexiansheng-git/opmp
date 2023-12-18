@@ -89,4 +89,13 @@ public interface PmServiceApi {
      */
     @GetMapping("/qqchSurveyOrganization/apiList")
     AjaxResult getQqchSurveyOrganizationList();
+
+
+    /**
+     * 2.2 勘察设计工作计划
+     * @param
+     * @return
+     */
+    @GetMapping("/qqchSurveyWorkPlan/getData")
+    AjaxResult getData();
 }

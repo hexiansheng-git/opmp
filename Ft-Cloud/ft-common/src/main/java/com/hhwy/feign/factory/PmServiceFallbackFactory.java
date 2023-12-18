@@ -74,6 +74,11 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             public AjaxResult getQqchSurveyOrganizationList() {
                 return AjaxResult.error("请求失败:", throwable.getMessage());
             }
+
+            @Override
+            public AjaxResult getData() {
+                return AjaxResult.error("请求失败:", throwable.getMessage());
+            }
         };
     }
 }

@@ -77,6 +77,9 @@
              , `sort`
         from kcsj_plan_process
     </sql>
+    <delete id="deleteAllKcsjPlanProcess">
+        delete from kcsj_plan_process
+    </delete>
     <select id="getKcsjPlanProcess" resultMap="KcsjPlanProcessResultMap">
         <include refid="selectKcsjPlanProcessVo"/>
         <where>
@@ -86,7 +89,7 @@
             <if test="workName != null  and workName != ''">and `work_name` = #{workName}</if>
             <if test="workContent != null  and workContent != ''">and `work_content` = #{workContent}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
-            <if test="quantity != null ">and `quantity` = #{quantity}</if>
+            <if test="quantity != null  and quantity != '' ">and `quantity` = #{quantity}</if>
             <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
             <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
             <if test="planDuration != null ">and `plan_duration` = #{planDuration}</if>
@@ -128,7 +131,7 @@
             <if test="workName != null  and workName != ''">and `work_name` = #{workName}</if>
             <if test="workContent != null  and workContent != ''">and `work_content` = #{workContent}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
-            <if test="quantity != null ">and `quantity` = #{quantity}</if>
+            <if test="quantity != null and quantity != ''">and `quantity` = #{quantity}</if>
             <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
             <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
             <if test="planDuration != null ">and `plan_duration` = #{planDuration}</if>
@@ -169,7 +172,7 @@
             <if test="workName != null  and workName != ''">`work_name`,</if>
             <if test="workContent != null  and workContent != ''">`work_content`,</if>
             <if test="unit != null  and unit != ''">`unit`,</if>
-            <if test="quantity != null ">`quantity`,</if>
+            <if test="quantity != null and quantity != ''">`quantity`,</if>
             <if test="planStartDate != null ">`plan_start_date`,</if>
             <if test="planEndDate != null ">`plan_end_date`,</if>
             <if test="planDuration != null ">`plan_duration`,</if>
@@ -205,7 +208,7 @@
             <if test="workName != null  and workName != ''">#{workName},</if>
             <if test="workContent != null  and workContent != ''">#{workContent},</if>
             <if test="unit != null  and unit != ''">#{unit},</if>
-            <if test="quantity != null ">#{quantity},</if>
+            <if test="quantity != null and quantity != ''">#{quantity},</if>
             <if test="planStartDate != null ">#{planStartDate},</if>
             <if test="planEndDate != null ">#{planEndDate},</if>
             <if test="planDuration != null ">#{planDuration},</if>
@@ -323,7 +326,7 @@
             <if test="workName != null  and  workName != ''">`work_name` = #{workName},</if>
             <if test="workContent != null  and  workContent != ''">`work_content` = #{workContent},</if>
             <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
-            <if test="quantity != null ">`quantity` = #{quantity},</if>
+            <if test="quantity != null and  quantity != ''">`quantity` = #{quantity},</if>
             <if test="planStartDate != null ">`plan_start_date` = #{planStartDate},</if>
             <if test="planEndDate != null ">`plan_end_date` = #{planEndDate},</if>
             <if test="planDuration != null ">`plan_duration` = #{planDuration},</if>
@@ -533,7 +536,7 @@
             </trim>
         </trim>
         where `id` in
-        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </update>
@@ -546,7 +549,7 @@
             <if test="workName != null  and workName != ''">and `work_name` = #{workName}</if>
             <if test="workContent != null  and workContent != ''">and `work_content` = #{workContent}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
-            <if test="quantity != null ">and `quantity` = #{quantity}</if>
+            <if test="quantity != null and quantity != ''">and `quantity` = #{quantity}</if>
             <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
             <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
             <if test="planDuration != null ">and `plan_duration` = #{planDuration}</if>

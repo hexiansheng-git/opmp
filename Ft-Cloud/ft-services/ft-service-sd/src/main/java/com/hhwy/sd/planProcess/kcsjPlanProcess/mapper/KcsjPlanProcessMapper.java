@@ -22,9 +22,11 @@ public interface KcsjPlanProcessMapper {
 
     int updateKcsjPlanProcess(KcsjPlanProcess kcsjPlanProcess);
 
-    int updateKcsjPlanProcessList(@Param("kcsjPlanProcessList") List<KcsjPlanProcess> kcsjPlanProcessList);
+    int updateKcsjPlanProcessList(@Param("list") List<KcsjPlanProcess> kcsjPlanProcessList);
 
     int deleteKcsjPlanProcess(KcsjPlanProcess kcsjPlanProcess);
 
     int deleteKcsjPlanProcessByPks(@Param("kcsjPlanProcessPkList") List<Long> kcsjPlanProcessPkList);
+
+    void deleteAllKcsjPlanProcess();
 }

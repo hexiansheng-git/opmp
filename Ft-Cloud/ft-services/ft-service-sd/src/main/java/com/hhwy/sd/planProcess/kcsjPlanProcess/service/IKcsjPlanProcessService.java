@@ -26,4 +26,6 @@ public interface IKcsjPlanProcessService {
     int deleteKcsjPlanProcess(KcsjPlanProcess kcsjPlanProcess);
 
     int deleteKcsjPlanProcessByPks(List<Long> kcsjPlanProcessPkList);
+
+    void sync();
 }

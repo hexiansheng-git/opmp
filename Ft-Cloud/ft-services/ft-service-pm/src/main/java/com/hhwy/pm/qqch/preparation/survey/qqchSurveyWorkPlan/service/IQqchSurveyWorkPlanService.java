@@ -23,4 +23,6 @@ public interface IQqchSurveyWorkPlanService {
     void confirm(QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo);
 
     List<QqchSurveyWorkPlan> handleActivityData(QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo);
+
+    List<QqchSurveyWorkPlan> getData();
 }

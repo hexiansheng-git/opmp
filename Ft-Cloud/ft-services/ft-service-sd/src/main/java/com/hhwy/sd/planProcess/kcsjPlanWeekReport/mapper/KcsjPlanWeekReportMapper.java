@@ -22,7 +22,7 @@ public interface KcsjPlanWeekReportMapper {
 
     int updateKcsjPlanWeekReport(KcsjPlanWeekReport kcsjPlanWeekReport);
 
-    int updateKcsjPlanWeekReportList(@Param("kcsjPlanWeekReportList") List<KcsjPlanWeekReport> kcsjPlanWeekReportList);
+    int updateKcsjPlanWeekReportList(@Param("list") List<KcsjPlanWeekReport> kcsjPlanWeekReportList);
 
     int deleteKcsjPlanWeekReport(KcsjPlanWeekReport kcsjPlanWeekReport);
 

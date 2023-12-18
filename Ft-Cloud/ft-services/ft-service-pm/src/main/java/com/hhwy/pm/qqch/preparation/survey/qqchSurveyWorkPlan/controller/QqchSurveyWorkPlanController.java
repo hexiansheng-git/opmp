@@ -89,5 +89,10 @@ public class QqchSurveyWorkPlanController extends BaseController {
     }
 
 
+    @GetMapping("/getData")
+    public AjaxResult getData() {
+        List<QqchSurveyWorkPlan> qqchSurveyWorkPlanList = qqchSurveyWorkPlanService.getData();
+        return AjaxResult.success(qqchSurveyWorkPlanList);
+    }
 
 }
