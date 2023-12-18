@@ -33,12 +33,12 @@ public class KcsjEquipEntryRecordController extends BaseController {
     private IKcsjEquipEntryRecordService kcsjEquipEntryRecordService;
 
 
-    @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:list")
-    @GetMapping
-    public AjaxResult getKcsjEquipEntryRecord(@Validated(ValidationGroups.Get.class) KcsjEquipEntryRecord kcsjEquipEntryRecordParam) {
-        KcsjEquipEntryRecord kcsjEquipEntryRecord = kcsjEquipEntryRecordService.getKcsjEquipEntryRecord(kcsjEquipEntryRecordParam);
-        return AjaxResult.success(kcsjEquipEntryRecord);
-    }
+//    @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:list")
+//    @GetMapping
+//    public AjaxResult getKcsjEquipEntryRecord(@Validated(ValidationGroups.Get.class) KcsjEquipEntryRecord kcsjEquipEntryRecordParam) {
+//        KcsjEquipEntryRecord kcsjEquipEntryRecord = kcsjEquipEntryRecordService.getKcsjEquipEntryRecord(kcsjEquipEntryRecordParam);
+//        return AjaxResult.success(kcsjEquipEntryRecord);
+//    }
 
     /**
      * 台账页查询

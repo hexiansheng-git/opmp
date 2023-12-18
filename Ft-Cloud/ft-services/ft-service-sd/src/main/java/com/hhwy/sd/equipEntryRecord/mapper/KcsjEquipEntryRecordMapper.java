@@ -11,7 +11,7 @@ import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecord;
  */
 public interface KcsjEquipEntryRecordMapper {
 
-    KcsjEquipEntryRecord getKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord);
+    List<KcsjEquipEntryRecord> getKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
     List<KcsjEquipEntryRecord> getKcsjEquipEntryRecordList(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
