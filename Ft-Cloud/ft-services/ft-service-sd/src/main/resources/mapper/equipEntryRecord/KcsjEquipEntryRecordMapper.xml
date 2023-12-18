@@ -66,41 +66,7 @@
   </sql>
   <select id="getKcsjEquipEntryRecord" resultMap="KcsjEquipEntryRecordResultMap">
     <include refid="selectKcsjEquipEntryRecordVo"/>
-    <where>
-      del_flag = "0"
-      <if test="id != null ">and `id` = #{id}</if>
-      <if test="pid != null ">and `pid` = #{pid}</if>
-      <if test="teamId != null  and teamId != ''">and `team_id` = #{teamId}</if>
-      <if test="teamName != null  and teamName != ''">and `team_name` = #{teamName}</if>
-      <if test="teamNumber != null  and teamNumber != ''">and `team_number` = #{teamNumber}</if>
-      <if test="categoryName != null  and categoryName != ''">and `category_name` =
-        #{categoryName}
-      </if>
-      <if test="categoryId != null ">and `category_id` = #{categoryId}</if>
-      <if test="equipCode != null  and equipCode != ''">and `equip_code` = #{equipCode}</if>
-      <if test="equipName != null  and equipName != ''">and `equip_name` = #{equipName}</if>
-      <if test="equipSpec != null  and equipSpec != ''">and `equip_spec` = #{equipSpec}</if>
-      <if test="equipUnit != null  and equipUnit != ''">and `equip_unit` = #{equipUnit}</if>
-      <if test="planNum != null ">and `plan_num` = #{planNum}</if>
-      <if test="practicalNum != null ">and `practical_num` = #{practicalNum}</if>
-      <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
-      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-      <if test="createUserName != null  and createUserName != ''">and `create_user_name` =
-        #{createUserName}
-      </if>
-      <if test="createTime != null ">and `create_time` = #{createTime}</if>
-      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-      <if test="delTime != null ">and `del_time` = #{delTime}</if>
-      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-      <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-      <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-    </where>
-    order by create_time desc
+    where del_flag = "0" and data_source = '1' and `team_name` = #{teamName}
   </select>
 
   <select id="getKcsjEquipEntryRecordList" resultMap="KcsjEquipEntryRecordResultMap">
@@ -533,5 +499,9 @@
     <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
       #{item.id}
     </foreach>
+  </update>
+
+  <update id="delEquipEntryAll">
+    update kcsj_equip_entry_record set del_flag = '1', update_user = #{updateUser}, update_time = #{updateTime}
   </update>
 </mapper>

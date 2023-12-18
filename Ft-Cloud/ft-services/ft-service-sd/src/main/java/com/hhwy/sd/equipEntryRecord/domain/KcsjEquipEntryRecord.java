@@ -95,13 +95,13 @@ public class KcsjEquipEntryRecord extends TreeNode<KcsjEquipEntryRecord> {
      */
     @JsonProperty
     @Excel(name = "计划进场数量")
-    private Integer planNum;
+    private BigDecimal planNum;
     /**
      * 字段描述：实际进场数量
      */
     @JsonProperty
     @Excel(name = "实际进场数量")
-    private Integer practicalNum;
+    private BigDecimal practicalNum;
     /**
      * 字段描述：数据来源 0新增1同步
      */

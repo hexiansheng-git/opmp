@@ -28,4 +28,6 @@ public interface KcsjEquipEntryRecordMapper {
     int deleteKcsjEquipEntryRecordByPks(@Param("kcsjEquipEntryRecordPkList") List<Long> kcsjEquipEntryRecordPkList);
 
     int deleteInfoData(List<KcsjEquipEntryRecord> list);
+
+    void delEquipEntryAll(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 }
