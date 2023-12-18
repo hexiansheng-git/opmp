@@ -44,7 +44,7 @@ public class QqchMainPlanLog extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "操作时间")
-    private int timeNum;
+    private Integer timeNum;
     /**
      * 字段描述：操作时间单位
      */
