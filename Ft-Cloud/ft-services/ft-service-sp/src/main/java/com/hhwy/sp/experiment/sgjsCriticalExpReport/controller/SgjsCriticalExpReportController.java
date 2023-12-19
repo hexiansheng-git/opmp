@@ -88,6 +88,7 @@ public class SgjsCriticalExpReportController extends BaseController {
         return toAjax(sgjsCriticalExpReportService.deleteSgjsCriticalExpReportByPks(idList));
     }
 
+    @PreAuthorize(hasPermi = "sgjsCriticalExpReport:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody CriticalExpReportQueryVo queryVo) throws IOException {
         List<Long> ids = queryVo.getIds();

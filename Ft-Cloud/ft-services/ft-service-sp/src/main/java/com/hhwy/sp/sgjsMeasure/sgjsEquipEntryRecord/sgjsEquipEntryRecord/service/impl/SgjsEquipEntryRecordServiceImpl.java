@@ -176,10 +176,13 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
         List<SgjsEquipEntryRecord> insertList =new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             String syncId = list.get(i).getPtVar5();
-            List<SgjsEquipEntryRecord> checkList = recordList.stream().filter(e -> e.getPtVar5().equals(syncId)).collect(Collectors.toList());
-            if(CollectionUtils.isEmpty(checkList)){//空说明库里没有
-                insertList.add(list.get(i));
+            if(StringUtils.isNotEmpty(syncId)){
+                List<SgjsEquipEntryRecord> checkList = recordList.stream().filter(e -> e.getPtVar5().equals(syncId)).collect(Collectors.toList());
+                if(CollectionUtils.isEmpty(checkList)){//空说明库里没有
+                    insertList.add(list.get(i));
+                }
             }
+
         }
         if(!CollectionUtils.isEmpty(insertList)){
             sgjsEquipEntryRecordMapper.insertSgjsEquipEntryRecordList(insertList);
