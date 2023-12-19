@@ -89,6 +89,7 @@ public class KcsjEquipEntryRecordInfoController extends BaseController {
         return toAjax(kcsjEquipEntryRecordInfoService.deleteKcsjEquipEntryRecordInfoByPks(kcsjEquipEntryRecordInfoPkList));
     }
 
+    @PreAuthorize(hasPermi = "kcsjEquipEntryRecordInfo:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfoParam) throws IOException {
         List<Long> ids = kcsjEquipEntryRecordInfoParam.getIds();
