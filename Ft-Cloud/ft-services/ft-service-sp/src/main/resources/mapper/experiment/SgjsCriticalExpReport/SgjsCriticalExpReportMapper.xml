@@ -129,8 +129,8 @@
         <include refid="selectSgjsCriticalExpReportVo"/>
         <where>
             del_flag = "0"
-            <if test="expReportCode != null  and expReportCode != ''">and `exp_report_code` = #{expReportCode}</if>
-            <if test="expReportName != null  and expReportName != ''">and `exp_report_name` = #{expReportName}</if>
+            <if test="expReportCode != null  and expReportCode != ''">and `exp_report_code` like concat('%' , #{expReportCode} , '%')</if>
+            <if test="expReportName != null  and expReportName != ''">and `exp_report_name` like concat('%' , #{expReportName} , '%')</if>
             <if test="actualCommitDateStart != null ">and `actual_commit_date` &gt;= #{actualCommitDateStart}</if>
             <if test="actualCommitDateEnd != null ">and `actual_commit_date` &lt;= #{actualCommitDateEnd}</if>
         </where>
