@@ -61,6 +61,9 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
 
     @Transactional
     public int updateKcsjPlanWeekReportList(List<KcsjPlanWeekReport> kcsjPlanWeekReportList) {
+        if(CollectionUtils.isEmpty(kcsjPlanWeekReportList)) {
+            return 0;
+        }
         for (KcsjPlanWeekReport kcsjPlanWeekReport : kcsjPlanWeekReportList) {
             kcsjPlanWeekReport.setUpdateUser(SecurityUtils.getUserName());
             kcsjPlanWeekReport.setUpdateTime(DateUtils.getNowDate());

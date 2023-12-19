@@ -128,15 +128,15 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
-            <if test="workName != null  and workName != ''">and `work_name` = #{workName}</if>
+            <if test="workName != null  and workName != ''">and `work_name` like concat('%',#{workName},'%')</if>
             <if test="workContent != null  and workContent != ''">and `work_content` = #{workContent}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
             <if test="quantity != null and quantity != ''">and `quantity` = #{quantity}</if>
-            <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
-            <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
+            <if test="planStartDate != null ">and `plan_end_date` &gt;= #{planStartDate}</if>
+            <if test="planEndDate != null ">and `plan_start_date` &lt;= #{planEndDate}</if>
             <if test="planDuration != null ">and `plan_duration` = #{planDuration}</if>
-            <if test="actStartDate != null ">and `act_start_date` = #{actStartDate}</if>
-            <if test="actEndDate != null ">and `act_end_date` = #{actEndDate}</if>
+            <if test="actStartDate != null ">and `act_end_date` &gt;= #{actStartDate}</if>
+            <if test="actEndDate != null ">and `act_start_date` &lt;= #{actEndDate}</if>
             <if test="actDuration != null ">and `act_duration` = #{actDuration}</if>
             <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>

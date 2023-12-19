@@ -227,4 +227,53 @@ public class TreeCountUtils<T extends TreeNode> {
 
     }
 
+    public List<T> queryTree(List<T> allList, List<T> filterList, Long pid) {
+
+        List<T> returnList = new ArrayList<>();
+
+        if(CollectionUtils.isEmpty(allList)) {
+            return returnList;
+        }
+
+        if(CollectionUtils.isEmpty(filterList)) {
+            return allList;
+        }
+
+        toAncestrals(allList, pid);
+
+        for (T t: filterList) {
+            T t1 = allList.stream().filter(vo -> t.getId().equals(vo.getId())).findFirst().orElse(null);
+            if(t1 != null) {
+                t.setPtVar5(t1.getPtVar5());
+                t.setLeaf(t1.getLeaf());
+            }
+        }
+
+        List<T> leafList = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(filterList)) {
+            for (T t: filterList) {
+                String ptVar5 = t.getPtVar5();
+                if(StringUtils.isNotEmpty(ptVar5)) {
+                    List<T> collect = allList.stream().filter(vo -> "1".equals(vo.getLeaf()) && StringUtils.isNotEmpty(vo.getPtVar5()) && vo.getPtVar5().contains(ptVar5)).collect(Collectors.toList());
+                    if(CollectionUtils.isNotEmpty(collect)) leafList.addAll(collect);
+                }
+            }
+        }
+        if(CollectionUtils.isNotEmpty(leafList)) {
+            leafList = leafList.stream().distinct().collect(Collectors.toList());
+            for (T t: leafList) {
+                String ptVar5 = t.getPtVar5();
+                if(StringUtils.isNotEmpty(ptVar5)) {
+                    List<T> collect = allList.stream().filter(vo -> StringUtils.isNotEmpty(vo.getPtVar5()) && ptVar5.contains(vo.getPtVar5())).collect(Collectors.toList());
+                    if (CollectionUtils.isNotEmpty(collect)) returnList.addAll(collect);
+                }
+            }
+        }
+
+        if(CollectionUtils.isNotEmpty(returnList)) {
+            returnList = returnList.stream().distinct().collect(Collectors.toList());
+        }
+        return returnList;
+
+    }
 }
