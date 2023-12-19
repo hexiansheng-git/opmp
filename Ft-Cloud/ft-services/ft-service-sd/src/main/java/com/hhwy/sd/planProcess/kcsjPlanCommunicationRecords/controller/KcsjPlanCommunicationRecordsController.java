@@ -37,6 +37,16 @@ public class KcsjPlanCommunicationRecordsController extends BaseController {
         return AjaxResult.success(kcsjPlanCommunicationRecords);
     }
 
+
+    @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:add")
+    @PostMapping("/add")
+    public AjaxResult insertKcsjPlanCommunicationRecords(@Validated(ValidationGroups.Save.class) @RequestBody KcsjPlanCommunicationRecords kcsjPlanCommunicationRecordsParam) {
+        kcsjPlanCommunicationRecordsService.insertKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecordsParam);
+        return AjaxResult.success(kcsjPlanCommunicationRecordsParam);
+    }
+
+
+
     /**
      * 分页查询&&条件查询
      *
@@ -46,17 +56,12 @@ public class KcsjPlanCommunicationRecordsController extends BaseController {
     @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:list")
     @GetMapping("/list")
     public AjaxResult getKcsjPlanCommunicationRecordsList(@Validated(ValidationGroups.Select.class) KcsjPlanCommunicationRecords kcsjPlanCommunicationRecordsParam) {
-        startPage();
+       startPage();
         List<KcsjPlanCommunicationRecords> kcsjPlanCommunicationRecordsList = kcsjPlanCommunicationRecordsService.getKcsjPlanCommunicationRecordsList(kcsjPlanCommunicationRecordsParam);
         return getDataTableAjaxResult(kcsjPlanCommunicationRecordsList);
     }
 
-    @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:add")
-    @PostMapping("/add")
-    public AjaxResult insertKcsjPlanCommunicationRecords(@Validated(ValidationGroups.Save.class) @RequestBody KcsjPlanCommunicationRecords kcsjPlanCommunicationRecordsParam) {
-        kcsjPlanCommunicationRecordsService.insertKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecordsParam);
-        return AjaxResult.success(kcsjPlanCommunicationRecordsParam);
-    }
+
 
     /**
      * 批量保存数据
@@ -71,23 +76,6 @@ public class KcsjPlanCommunicationRecordsController extends BaseController {
         return AjaxResult.success(kcsjPlanCommunicationRecordsListParam);
     }
 
-    @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:update")
-    @PostMapping("/update")
-    public AjaxResult updateKcsjPlanCommunicationRecords(@Validated(ValidationGroups.Update.class) @RequestBody KcsjPlanCommunicationRecords kcsjPlanCommunicationRecordsParam) {
-        return toAjax(kcsjPlanCommunicationRecordsService.updateKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecordsParam));
-    }
-
-    @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:update")
-    @PostMapping("/batchUpdate")
-    public AjaxResult updateKcsjPlanCommunicationRecordsList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjPlanCommunicationRecords> kcsjPlanCommunicationRecordsListParam) {
-        return toAjax(kcsjPlanCommunicationRecordsService.updateKcsjPlanCommunicationRecordsList(kcsjPlanCommunicationRecordsListParam));
-    }
-
-    @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:remove")
-    @PostMapping("/delete")
-    public AjaxResult deleteKcsjPlanCommunicationRecords(@Validated(ValidationGroups.Delete.class) @RequestBody KcsjPlanCommunicationRecords kcsjPlanCommunicationRecordsParam) {
-        return toAjax(kcsjPlanCommunicationRecordsService.deleteKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecordsParam));
-    }
 
     /**
      * 批量删除
@@ -113,5 +101,25 @@ public class KcsjPlanCommunicationRecordsController extends BaseController {
         ExcelUtils<KcsjPlanCommunicationRecords> util = new ExcelUtils<>(KcsjPlanCommunicationRecords.class);
         util.exportExcel(response, kcsjPlanCommunicationRecordsList, DateUtils.getDate());
     }
+
+    @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:update")
+    @PostMapping("/update")
+    public AjaxResult updateKcsjPlanCommunicationRecords(@Validated(ValidationGroups.Update.class) @RequestBody KcsjPlanCommunicationRecords kcsjPlanCommunicationRecordsParam) {
+        return toAjax(kcsjPlanCommunicationRecordsService.updateKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecordsParam));
+    }
+
+    @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:update")
+    @PostMapping("/batchUpdate")
+    public AjaxResult updateKcsjPlanCommunicationRecordsList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjPlanCommunicationRecords> kcsjPlanCommunicationRecordsListParam) {
+        return toAjax(kcsjPlanCommunicationRecordsService.updateKcsjPlanCommunicationRecordsList(kcsjPlanCommunicationRecordsListParam));
+    }
+
+    @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:remove")
+    @PostMapping("/delete")
+    public AjaxResult deleteKcsjPlanCommunicationRecords(@Validated(ValidationGroups.Delete.class) @RequestBody KcsjPlanCommunicationRecords kcsjPlanCommunicationRecordsParam) {
+        return toAjax(kcsjPlanCommunicationRecordsService.deleteKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecordsParam));
+    }
+
+
 
 }

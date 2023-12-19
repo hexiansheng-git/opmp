@@ -35,23 +35,23 @@ public class KcsjPlanCommunicationRecords extends BaseEntity {
     /**
      * 字段描述：沟通开始日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "沟通开始日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "沟通开始日期", dateFormat = "yyyy年MM月dd日")
     private Date communicationStartDate;
     /**
      * 字段描述：沟通结束日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "沟通结束日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "沟通结束日期", dateFormat = "yyyy年MM月dd日")
     private Date communicationEndDate;
     /**
      * 字段描述：附件名称
      */
     @JsonProperty
     @Excel(name = "附件名称")
-    private String annex;
+    private String fileGroupId;
     /**
      * 字段描述：所属区域
      */
@@ -100,11 +100,15 @@ public class KcsjPlanCommunicationRecords extends BaseEntity {
     /**
      * 字段描述：数据创建系统时间  编制时间用此字段显示
      */
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd ")
+    @JsonFormat(pattern = "yyyy年MM月dd日 ")
     @JsonProperty
     @Excel(name = "数据创建系统时间  编制时间用此字段显示", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
+
+  /*  @JsonFormat(pattern="yyyy年MM月dd日")
+    @JsonProperty
+    private Date compileDate;*/
+
     /**
      * 字段描述：数据修改者id
      */
@@ -238,13 +242,13 @@ public class KcsjPlanCommunicationRecords extends BaseEntity {
     }
 
     @JsonIgnore
-    public String getAnnex() {
-        return annex;
+    public String getFileGroupId() {
+        return fileGroupId;
     }
 
     @JsonIgnore
-    public void setAnnex(String annex) {
-        this.annex = annex;
+    public void setFileGroupId(String annex) {
+        this.fileGroupId = annex;
     }
 
     @JsonIgnore
@@ -426,4 +430,13 @@ public class KcsjPlanCommunicationRecords extends BaseEntity {
     public void setPtVar5(String ptVar5) {
         this.ptVar5 = ptVar5;
     }
+
+
+//    public Date getCompileDate() {
+//        return compileDate;
+//    }
+//
+//    public void setCompileDate(Date compileDate) {
+//        this.compileDate = compileDate;
+//    }
 }

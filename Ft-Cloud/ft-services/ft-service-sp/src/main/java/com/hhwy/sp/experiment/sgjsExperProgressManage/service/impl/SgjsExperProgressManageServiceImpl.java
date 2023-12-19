@@ -234,9 +234,10 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         List<SgjsExperProgressManage> updateList = new ArrayList<>();
         List<SgjsExperProgressManage> insertList = new ArrayList<>();
         for (SgjsExperProgressManage sgjsExperProgressManage : treeList) {
-            if ("1".equals(sgjsExperProgressManage.getType())) {
+            if (!"0".equals(sgjsExperProgressManage.getType())) {
                 sgjsExperProgressManage.setUpdateUser(SecurityUtils.getUserId() + "");
                 sgjsExperProgressManage.setUpdateTime(DateUtils.getNowDate());
+                sgjsExperProgressManage.setDelFlag("0");
                 updateList.add(sgjsExperProgressManage);
             }
             if ("0".equals(sgjsExperProgressManage.getType())) {

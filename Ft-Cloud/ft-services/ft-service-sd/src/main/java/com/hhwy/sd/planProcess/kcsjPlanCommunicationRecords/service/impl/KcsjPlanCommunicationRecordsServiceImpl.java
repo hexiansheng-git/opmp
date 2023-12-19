@@ -38,7 +38,6 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
      */
     public List<KcsjPlanCommunicationRecords> getKcsjPlanCommunicationRecordsList(KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords) {
 
-
         //筛选条件  沟通主题，沟通日期(前端传开始日期和结束日期)
 
         return kcsjPlanCommunicationRecordsMapper.getKcsjPlanCommunicationRecordsList(kcsjPlanCommunicationRecords);
@@ -65,28 +64,28 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
                 insertList.add(kcsjPlanCommunicationRecords);
             }
 
-            if ("1".equals(kcsjPlanCommunicationRecords.getType())) {
+            if (!"0".equals(kcsjPlanCommunicationRecords.getType())) {
                 updateList.add(kcsjPlanCommunicationRecords);
             }
         }
         if (insertList.size() > 0) {
             for (KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords : insertList) {
                 kcsjPlanCommunicationRecords.setId(IdWorker.createId());
-                kcsjPlanCommunicationRecords.setCreateUser(SecurityUtils.getUserName());
+                kcsjPlanCommunicationRecords.setCreateUser(SecurityUtils.getUserId().toString());
+                kcsjPlanCommunicationRecords.setCreateUserName(SecurityUtils.getUserName());
                 kcsjPlanCommunicationRecords.setCreateTime(DateUtils.getNowDate());
                 kcsjPlanCommunicationRecords.setDelFlag("0");
             }
+            kcsjPlanCommunicationRecordsMapper.insertKcsjPlanCommunicationRecordsList(insertList);
         }
 
         if (updateList.size() > 0) {
-            for (KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords : insertList) {
+            for (KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords :updateList) {
                 kcsjPlanCommunicationRecords.setUpdateUser(SecurityUtils.getUserName());
                 kcsjPlanCommunicationRecords.setUpdateTime(DateUtils.getNowDate());
             }
+            kcsjPlanCommunicationRecordsMapper.updateKcsjPlanCommunicationRecordsList(updateList);
         }
-
-        kcsjPlanCommunicationRecordsMapper.insertKcsjPlanCommunicationRecordsList(insertList);
-        kcsjPlanCommunicationRecordsMapper.updateKcsjPlanCommunicationRecordsList(updateList);
 
         return AjaxResult.success();
 

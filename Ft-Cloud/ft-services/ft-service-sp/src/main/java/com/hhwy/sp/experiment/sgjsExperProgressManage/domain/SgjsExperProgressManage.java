@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.tree.TreeNode;
 
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -57,28 +56,28 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     /**
      * 字段描述：计划开始日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
     @Excel(name = "计划开始日期", dateFormat = "yyyy-MM-dd")
     private Date planStartDate;
     /**
      * 字段描述：计划结束日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
     @Excel(name = "计划结束日期", dateFormat = "yyyy-MM-dd")
     private Date planEndDate;
     /**
      * 字段描述：实际开始日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
     @Excel(name = "实际开始日期", dateFormat = "yyyy-MM-dd")
     private Date realStartDate;
     /**
      * 字段描述：实际结束日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
     @Excel(name = "实际结束日期", dateFormat = "yyyy-MM-dd")
     private Date realEndDate;
