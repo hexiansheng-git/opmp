@@ -73,7 +73,7 @@ public class SgjsPlanMeasureManageController extends BaseController {
      * @param sgjsPlanMeasureManageVo
      * @return
      */
-    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:add")
+    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:batchAdd")
     @PostMapping("/batchAdd")
     public AjaxResult insertSgjsPlanMeasureManageList(
         @Validated(ValidationGroups.Save.class) @RequestBody SgjsPlanMeasureManageVo sgjsPlanMeasureManageVo) {
@@ -87,7 +87,7 @@ public class SgjsPlanMeasureManageController extends BaseController {
      * @param
      * @return
      */
-    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:list")
+    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:sync")
     @GetMapping("/qqchMeasureExpPlanSelect")
     public AjaxResult qqchMeasureExpPlanSelect() {
         SgjsPlanMeasureManageVo sgjsPlanMeasureManageVo = sgjsPlanMeasureManageService.qqchMeasureExpPlanSelect();
@@ -127,6 +127,7 @@ public class SgjsPlanMeasureManageController extends BaseController {
             sgjsPlanMeasureManagePkList));
     }
 
+    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody SgjsPlanMeasureManage sgjsPlanMeasureManageParam) throws IOException {
         List<Long> ids = sgjsPlanMeasureManageParam.getIds();

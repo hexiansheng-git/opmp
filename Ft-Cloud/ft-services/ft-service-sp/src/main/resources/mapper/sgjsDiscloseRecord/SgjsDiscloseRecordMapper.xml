@@ -156,7 +156,7 @@
             </if>
             <if test="queryStartDate != null ">and `act_disclose_date` &gt;= #{queryStartDate}</if>
             <if test="queryEndDate != null ">and `act_disclose_date` &lt;= #{queryEndDate}</if>
-            <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="wbsName != null  and wbsName != ''">and `wbs_name` like concat('%',#{wbsName},'%')</if>
             <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
             <if test="reviewUser != null  and reviewUser != ''">and `review_user` = #{reviewUser}</if>
             <if test="workTeam != null  and workTeam != ''">and `work_team` = #{workTeam}</if>

@@ -34,5 +34,5 @@ public interface IKcsjDisclosureRecordService {
 
     List<KcsjDisclosureRecord> getListByIds(List<Long> ids);
 
-    List<KcsjDisclosureRecord> sync();
+    void sync();
 }

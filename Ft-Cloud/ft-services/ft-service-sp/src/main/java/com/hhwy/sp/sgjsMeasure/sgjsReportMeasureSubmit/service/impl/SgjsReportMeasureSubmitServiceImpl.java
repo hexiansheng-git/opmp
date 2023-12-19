@@ -10,6 +10,7 @@ import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureS
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.mapper.SgjsReportMeasureSubmitMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.ISgjsReportMeasureSubmitService;
 import com.hhwy.utils.date.FtDateUtils;
+import java.text.SimpleDateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -49,8 +50,10 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
         }
         List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList = sgjsReportMeasureSubmitMapper.getSgjsReportMeasureSubmitList(sgjsReportMeasureSubmit);
         for (SgjsReportMeasureSubmit info:sgjsReportMeasureSubmitList) {
-            info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : FtDateUtils.formatDate(info.getPlanStartDate()));
-            info.setRealStartDateStr(info.getRealStartDate() == null ? null : FtDateUtils.formatDate(info.getRealStartDate()));
+            //info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : FtDateUtils.formatDate(info.getPlanStartDate()));
+            info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(info.getPlanStartDate()));
+            //info.setRealStartDateStr(info.getRealStartDate() == null ? null : FtDateUtils.formatDate(info.getRealStartDate()));
+            info.setRealStartDateStr(info.getRealStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(info.getRealStartDate()));
         }
         sgjsReportMeasureSubmitVo.setTreeList(sgjsReportMeasureSubmitList);
         return sgjsReportMeasureSubmitVo;

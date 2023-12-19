@@ -27,7 +27,13 @@ public class QqchMainPlanLogServiceImpl implements IQqchMainPlanLogService {
 
 
     public QqchMainPlanLog getQqchMainPlanLog(QqchMainPlanLog qqchMainPlanLog) {
-        return qqchMainPlanLogMapper.getQqchMainPlanLog(qqchMainPlanLog);
+        QqchMainPlanLog qqchMainPlanLog1 = qqchMainPlanLogMapper.getQqchMainPlanLog(qqchMainPlanLog);
+        if(qqchMainPlanLog1 == null) {
+            qqchMainPlanLog1 = new QqchMainPlanLog();
+            qqchMainPlanLog1.setTimeNumUnit("m");
+            qqchMainPlanLog1.setTimeNum(5);
+        }
+        return qqchMainPlanLog1;
     }
 
     public List<QqchMainPlanLog> getQqchMainPlanLogList(QqchMainPlanLog qqchMainPlanLog) {

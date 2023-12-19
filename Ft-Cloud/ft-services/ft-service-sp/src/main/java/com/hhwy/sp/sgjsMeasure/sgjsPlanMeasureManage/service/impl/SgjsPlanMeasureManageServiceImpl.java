@@ -13,6 +13,7 @@ import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.tree.TreeUtil;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -79,10 +80,14 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
             sgjsPlanMeasureManage);
         if (sgjsPlanMeasureManageList.size() > 0) {
             sgjsPlanMeasureManageList.forEach(plan -> {
-                plan.setPlanStartDateStr(FtDateUtils.formatDate(plan.getPlanStartDate()));
-                plan.setPlanEndDateStr(FtDateUtils.formatDate(plan.getPlanEndDate()));
-                plan.setRealStartDateStr(FtDateUtils.formatDate(plan.getRealStartDate()));
-                plan.setRealEndDateStr(FtDateUtils.formatDate(plan.getRealEndDate()));
+                //plan.setPlanStartDateStr(FtDateUtils.formatDate(plan.getPlanStartDate()));
+                plan.setPlanStartDateStr(new SimpleDateFormat("yyyy年MM月dd日").format(plan.getPlanStartDate()));
+                //plan.setPlanEndDateStr(FtDateUtils.formatDate(plan.getPlanEndDate()));
+                plan.setPlanEndDateStr(new SimpleDateFormat("yyyy年MM月dd日").format(plan.getPlanEndDate()));
+                //plan.setRealStartDateStr(FtDateUtils.formatDate(plan.getRealStartDate()));
+                plan.setRealStartDateStr(new SimpleDateFormat("yyyy年MM月dd日").format(plan.getRealStartDate()));
+                //plan.setRealEndDateStr(FtDateUtils.formatDate(plan.getRealEndDate()));
+                plan.setRealEndDateStr(new SimpleDateFormat("yyyy年MM月dd日").format(plan.getRealEndDate()));
             });
         }
         sgjsPlanMeasureManageVo.setTreeList(TreeUtil.newBuild(sgjsPlanMeasureManageList));
