@@ -1,14 +1,16 @@
 package com.hhwy.sd.planProcess.kcsjPlanWeekReport.service.impl;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sd.organManage.util.StatisticsUtils;
+import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.utils.exception.CustomBusinessException;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
 
     @Autowired
     private KcsjPlanWeekReportMapper kcsjPlanWeekReportMapper;
+
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
 
     public KcsjPlanWeekReport getKcsjPlanWeekReport(KcsjPlanWeekReport kcsjPlanWeekReport) {
@@ -87,7 +92,36 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
 
     @Override
     public int produceData() {
-        return produceDataByPeriod(DateUtils.getNowDate());
+
+        // 获取租户集合
+        List<String> tenantKeyList = new ArrayList<>();
+        //
+        List<SysTenant> sysTenants = systemServiceApi.tenantList();
+        int i = 0;
+        if(!CollectionUtils.isEmpty(sysTenants)) {
+            sysTenants.forEach(vo -> tenantKeyList.add(vo.getTenantKey()));
+            i = sysTenants.size();
+        }
+
+        if(!CollectionUtils.isEmpty(tenantKeyList)) {
+            for (String tenantKey : tenantKeyList) {
+                //切换租户
+                String oldDataSource = DynamicDataSourceContextHolder.peek();
+                DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+                try {
+                    produceDataByPeriod(DateUtils.getNowDate());
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw new CustomBusinessException(e.getMessage());
+                }finally {
+                    DynamicDataSourceContextHolder.poll();
+                    DynamicDataSourceContextHolder.push(oldDataSource);
+                }
+            }
+        }
+
+        return i;
+
     }
 
     @Override
