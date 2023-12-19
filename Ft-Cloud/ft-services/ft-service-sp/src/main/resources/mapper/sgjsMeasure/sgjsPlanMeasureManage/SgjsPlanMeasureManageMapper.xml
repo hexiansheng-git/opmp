@@ -28,7 +28,7 @@
     <result property="delFlag" column="del_flag"/>
     <result property="serialNumber" column="serial_number"/>
     <result property="path" column="path"/>
-    <result property="ptVar1" column="pt_var1"/>
+    <result property="syncId" column="sync_id"/>
     <result property="ptVar2" column="pt_var2"/>
     <result property="ptVar3" column="pt_var3"/>
     <result property="ptVar4" column="pt_var4"/>
@@ -55,7 +55,7 @@
          , `del_time`
          , `del_flag`
          , `serial_number`
-         , `pt_var1`
+         , `sync_id`
          , `pt_var2`
          , `pt_var3`
          , `pt_var4`
@@ -88,7 +88,7 @@
       <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
       <if test="delTime != null ">and `del_time` = #{delTime}</if>
       <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="syncId != null  and syncId != ''">and `sync_id` = #{syncId}</if>
       <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
       <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
       <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
@@ -124,7 +124,7 @@
       <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
       <if test="delTime != null ">and `del_time` = #{delTime}</if>
       <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="syncId != null  and syncId != ''">and `sync_id` = #{syncId}</if>
       <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
       <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
       <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
@@ -158,7 +158,7 @@
       <if test="delUser != null  and delUser != ''">`del_user`,</if>
       <if test="delTime != null ">`del_time`,</if>
       <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
-      <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+      <if test="syncId != null  and syncId != ''">`sync_id`,</if>
       <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
       <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
       <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
@@ -186,7 +186,7 @@
       <if test="delUser != null  and delUser != ''">#{delUser},</if>
       <if test="delTime != null ">#{delTime},</if>
       <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
-      <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+      <if test="syncId != null  and syncId != ''">#{syncId},</if>
       <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
       <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
       <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
@@ -219,7 +219,7 @@
       `del_user`,
       `del_time`,
       `serial_number`,
-      `pt_var1`,
+      `sync_id`,
       `pt_var2`,
       `pt_var3`,
       `pt_var4`,
@@ -248,7 +248,7 @@
         #{item.delUser},
         #{item.delTime},
         #{item.serialNumber},
-        #{item.ptVar1},
+        #{item.syncId},
         #{item.ptVar2},
         #{item.ptVar3},
         #{item.ptVar4},
@@ -282,7 +282,7 @@
       <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
       <if test="delTime != null ">`del_time` = #{delTime},</if>
       <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
-      <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+      <if test="syncId != null  and  syncId != ''">`sync_id` = #{syncId},</if>
       <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
       <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
       <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
@@ -419,7 +419,7 @@
       <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
       <if test="delTime != null ">and `del_time` = #{delTime}</if>
       <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="syncId != null  and syncId != ''">and `sync_id` = #{syncId}</if>
       <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
       <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
       <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
