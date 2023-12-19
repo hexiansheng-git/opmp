@@ -12,6 +12,7 @@ import com.hhwy.pm.jdgl.statistics.domain.export.PlanStatisticsWbsValueVO4Export
 import com.hhwy.pm.jdgl.statistics.service.IPlanStatisticsService;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,17 +39,29 @@ public class PlanStatisticsController  {
 
     @PostMapping("/getWbsValueList")
     public AjaxResult getWbsValueList(@RequestBody PlanStatisticsQueryVO iPlanStatisticsQueryVO) {
-        return AjaxResult.success(iPlanStatisticsService.getWbsValueList(iPlanStatisticsQueryVO));
+        List<PlanStatisticsWbsValueVO> wbsValueList = iPlanStatisticsService.getWbsValueList(iPlanStatisticsQueryVO);
+        if(CollectionUtils.isEmpty(wbsValueList)) {
+            wbsValueList = new ArrayList<>();
+        }
+        return AjaxResult.success(wbsValueList);
     };
 
     @PostMapping("/getBillValueList")
     public AjaxResult getBillValueList(@RequestBody PlanStatisticsQueryVO iPlanStatisticsQueryVO){
-        return AjaxResult.success(iPlanStatisticsService.getBillValueList(iPlanStatisticsQueryVO));
+        List<PlanStatisticsBillValueVO> billValueList = iPlanStatisticsService.getBillValueList(iPlanStatisticsQueryVO);
+        if(CollectionUtils.isEmpty(billValueList)) {
+            billValueList = new ArrayList<>();
+        }
+        return AjaxResult.success(billValueList);
     };
 
     @PostMapping("/getImageWbsList")
     public AjaxResult getImageWbsList(@RequestBody PlanStatisticsQueryVO iPlanStatisticsQueryVO){
-        return AjaxResult.success(iPlanStatisticsService.getImageWbsList(iPlanStatisticsQueryVO));
+        List<PlanStatisticsWbsImageVO> imageWbsList = iPlanStatisticsService.getImageWbsList(iPlanStatisticsQueryVO);
+        if(CollectionUtils.isEmpty(imageWbsList)) {
+            imageWbsList = new ArrayList<>();
+        }
+        return AjaxResult.success(imageWbsList);
     };
 
     @PostMapping("/getYearValueCompareList")
