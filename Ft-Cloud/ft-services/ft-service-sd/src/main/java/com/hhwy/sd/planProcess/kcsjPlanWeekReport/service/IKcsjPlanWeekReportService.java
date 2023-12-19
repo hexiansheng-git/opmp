@@ -1,5 +1,6 @@
 package com.hhwy.sd.planProcess.kcsjPlanWeekReport.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.hhwy.sd.planProcess.kcsjPlanWeekReport.domain.KcsjPlanWeekReport;
@@ -26,4 +27,8 @@ public interface IKcsjPlanWeekReportService {
     int deleteKcsjPlanWeekReport(KcsjPlanWeekReport kcsjPlanWeekReport);
 
     int deleteKcsjPlanWeekReportByPks(List<Long> kcsjPlanWeekReportPkList);
+
+    int produceData();
+
+    int produceDataByPeriod(Date period);
 }
