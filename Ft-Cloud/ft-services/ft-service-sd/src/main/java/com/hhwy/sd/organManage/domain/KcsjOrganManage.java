@@ -103,9 +103,9 @@ public class KcsjOrganManage extends TreeNode<KcsjOrganManage> {
     /**
      * 字段描述：实际进场日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "实际进场日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "实际进场日期", dateFormat = "yyyy年MM月dd日")
     private Date actualEnterDate;
     /**
      * 字段描述：是否在场
@@ -116,9 +116,9 @@ public class KcsjOrganManage extends TreeNode<KcsjOrganManage> {
     /**
      * 字段描述：实际退场日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "实际退场日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "实际退场日期", dateFormat = "yyyy年MM月dd日")
     private Date actualExitDate;
     /**
      * 字段描述：备注
