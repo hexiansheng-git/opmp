@@ -115,7 +115,7 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
         sgjsDiscloseRecord.setDataType(dataType);
         List<SgjsDiscloseRecord> sgjsDiscloseRecordList = getSgjsDiscloseRecordList(sgjsDiscloseRecord);
         if(CollectionUtils.isNotEmpty(sgjsDiscloseRecordList)) {
-            syncInfoService.pushSgjsDiscloseRecord(sgjsDiscloseRecordList);
+           // syncInfoService.pushSgjsDiscloseRecord(sgjsDiscloseRecordList);
         }
     };
 

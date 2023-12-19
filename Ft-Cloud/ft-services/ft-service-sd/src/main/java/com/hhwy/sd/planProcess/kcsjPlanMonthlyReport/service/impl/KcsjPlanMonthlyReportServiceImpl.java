@@ -1,11 +1,16 @@
 package com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.service.impl;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.KcsjPlanMonthlyReport;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.vo.PlanMonthlyReportQueryVo;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.mapper.KcsjPlanMonthlyReportMapper;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.service.IKcsjPlanMonthlyReportService;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +30,9 @@ public class KcsjPlanMonthlyReportServiceImpl implements IKcsjPlanMonthlyReportS
 
     @Autowired
     private KcsjPlanMonthlyReportMapper kcsjPlanMonthlyReportMapper;
+
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
 
     public KcsjPlanMonthlyReport getKcsjPlanMonthlyReport(KcsjPlanMonthlyReport kcsjPlanMonthlyReport) {
@@ -86,16 +94,37 @@ public class KcsjPlanMonthlyReportServiceImpl implements IKcsjPlanMonthlyReportS
     @Transactional
     public void generateMonthlyReport() {
         Date nowDate = DateUtils.getNowDate();
-        //删除当月月报
-        this.deleteMonthlyReportByDate(nowDate);
 
-        //插入当月月报
-        KcsjPlanMonthlyReport report = new KcsjPlanMonthlyReport();
-        report.setPeriod(nowDate);
-        report.setId(IdWorker.createId());
-        report.setCreateUserName("定时生成");
-        report.setCreateTime(nowDate);
-        kcsjPlanMonthlyReportMapper.insertKcsjPlanMonthlyReport(report);
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+
+        try {
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+
+                //删除当月月报
+                this.deleteMonthlyReportByDate(nowDate);
+
+                //插入当月月报
+                KcsjPlanMonthlyReport report = new KcsjPlanMonthlyReport();
+                report.setPeriod(nowDate);
+                report.setId(IdWorker.createId());
+                report.setCreateUserName("定时生成");
+                report.setCreateTime(nowDate);
+                kcsjPlanMonthlyReportMapper.insertKcsjPlanMonthlyReport(report);
+            }
+        }catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 
     public void deleteMonthlyReportByDate(Date date){

@@ -102,9 +102,9 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="weekPeriod != null  and weekPeriod != ''">and `week_period` = #{weekPeriod}</if>
-            <if test="startDate != null ">and `start_date` = #{startDate}</if>
-            <if test="endDate != null ">and `end_date` = #{endDate}</if>
-            <if test="submitter != null  and submitter != ''">and `submitter` = #{submitter}</if>
+            <if test="startDate != null ">and `end_date` &gt;= #{startDate}</if>
+            <if test="endDate != null ">and `start_date` &lt;= #{endDate}</if>
+            <if test="submitter != null  and submitter != ''">and `submitter` like concat('%',#{submitter},'%')</if>
             <if test="submitDate != null ">and `submit_date` = #{submitDate}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>

@@ -174,7 +174,7 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
      */
     @JsonProperty
     //@Excel(name = "预留字段1   项目编码")
-    private String ptVar1;
+    private Long syncId;
     /**
      * 字段描述：预留字段2  leaf 是否是叶子节点 0否1是
      */

@@ -1,9 +1,11 @@
 package com.hhwy.sd.planProcess.kcsjPlanWeekReport.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.io.IOException;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -93,5 +95,17 @@ public class KcsjPlanWeekReportController extends BaseController {
         List<KcsjPlanWeekReport> kcsjPlanWeekReportList = kcsjPlanWeekReportService.getKcsjPlanWeekReportList(kcsjPlanWeekReportParam);
         ExcelUtils<KcsjPlanWeekReport> util = new ExcelUtils<>(KcsjPlanWeekReport.class);
         util.exportExcel(response, kcsjPlanWeekReportList, DateUtils.getDate());
+    }
+
+    @GetMapping("/produceData")
+    public AjaxResult produceData() {
+        return AjaxResult.success(kcsjPlanWeekReportService.produceData());
+    }
+
+
+
+    @GetMapping("/produceDataByPeriod")
+    public AjaxResult produceDataByPeriod(@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date period) {
+        return AjaxResult.success(kcsjPlanWeekReportService.produceDataByPeriod(period));
     }
 }

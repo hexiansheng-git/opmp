@@ -1,10 +1,16 @@
 package com.hhwy.sd.planProcess.kcsjPlanWeekReport.service.impl;
 
-import java.util.List;
+import java.util.*;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.sd.organManage.util.StatisticsUtils;
+import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.utils.exception.CustomBusinessException;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +31,9 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
     @Autowired
     private KcsjPlanWeekReportMapper kcsjPlanWeekReportMapper;
 
+    @Autowired
+    private SystemServiceApi systemServiceApi;
+
 
     public KcsjPlanWeekReport getKcsjPlanWeekReport(KcsjPlanWeekReport kcsjPlanWeekReport) {
         return kcsjPlanWeekReportMapper.getKcsjPlanWeekReport(kcsjPlanWeekReport);
@@ -37,7 +46,7 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
     @Transactional
     public int insertKcsjPlanWeekReport(KcsjPlanWeekReport kcsjPlanWeekReport) {
         kcsjPlanWeekReport.setId(IdWorker.createId());
-        kcsjPlanWeekReport.setCreateUser(SecurityUtils.getUserName());
+//        kcsjPlanWeekReport.setCreateUser(SecurityUtils.getUserName());
         kcsjPlanWeekReport.setCreateTime(DateUtils.getNowDate());
         return kcsjPlanWeekReportMapper.insertKcsjPlanWeekReport(kcsjPlanWeekReport);
     }
@@ -61,6 +70,9 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
 
     @Transactional
     public int updateKcsjPlanWeekReportList(List<KcsjPlanWeekReport> kcsjPlanWeekReportList) {
+        if(CollectionUtils.isEmpty(kcsjPlanWeekReportList)) {
+            return 0;
+        }
         for (KcsjPlanWeekReport kcsjPlanWeekReport : kcsjPlanWeekReportList) {
             kcsjPlanWeekReport.setUpdateUser(SecurityUtils.getUserName());
             kcsjPlanWeekReport.setUpdateTime(DateUtils.getNowDate());
@@ -76,5 +88,53 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
     @Transactional
     public int deleteKcsjPlanWeekReportByPks(List<Long> kcsjPlanWeekReportPkList) {
         return kcsjPlanWeekReportMapper.deleteKcsjPlanWeekReportByPks(kcsjPlanWeekReportPkList);
+    }
+
+    @Override
+    public int produceData() {
+
+        // 获取租户集合
+        List<String> tenantKeyList = new ArrayList<>();
+        //
+        List<SysTenant> sysTenants = systemServiceApi.tenantList();
+        int i = 0;
+        if(!CollectionUtils.isEmpty(sysTenants)) {
+            sysTenants.forEach(vo -> tenantKeyList.add(vo.getTenantKey()));
+            i = sysTenants.size();
+        }
+
+        if(!CollectionUtils.isEmpty(tenantKeyList)) {
+            for (String tenantKey : tenantKeyList) {
+                //切换租户
+                String oldDataSource = DynamicDataSourceContextHolder.peek();
+                DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+                try {
+                    produceDataByPeriod(DateUtils.getNowDate());
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw new CustomBusinessException(e.getMessage());
+                }finally {
+                    DynamicDataSourceContextHolder.poll();
+                    DynamicDataSourceContextHolder.push(oldDataSource);
+                }
+            }
+        }
+
+        return i;
+
+    }
+
+    @Override
+    public int produceDataByPeriod(Date period) {
+        Calendar cl = Calendar.getInstance();
+        cl.setTime(period);
+        int year = cl.get(Calendar.YEAR);
+        int week = cl.get(Calendar.WEEK_OF_YEAR);
+        Map<String, Date> dateRange4Week = StatisticsUtils.getDateRange4Week(year + "", week + "");
+        KcsjPlanWeekReport kcsjPlanWeekReport = new KcsjPlanWeekReport();
+        kcsjPlanWeekReport.setWeekPeriod(year + "年第" + (week + 1) + "周");
+        kcsjPlanWeekReport.setStartDate(dateRange4Week.get("start"));
+        kcsjPlanWeekReport.setEndDate(dateRange4Week.get("end"));
+        return insertKcsjPlanWeekReport(kcsjPlanWeekReport);
     }
 }

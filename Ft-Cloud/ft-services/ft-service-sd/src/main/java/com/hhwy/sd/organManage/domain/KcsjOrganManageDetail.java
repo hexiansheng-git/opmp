@@ -42,12 +42,14 @@ public class KcsjOrganManageDetail extends BaseEntity {
     /**
      * 字段描述：进场时间
      */
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
     @Excel(name = "进场时间")
     private Date entryDate;
     /**
      * 字段描述：离场时间
      */
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
     @Excel(name = "离场时间")
     private Date leaveDate;
