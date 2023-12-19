@@ -62,7 +62,7 @@ public class KcsjPlanProcessController extends BaseController {
      * 同步前期策划工作计划
      * @return
      */
-    @PreAuthorize(hasPermi = "kcsjPlanProcess:add")
+    @PreAuthorize(hasPermi = "kcsjPlanProcess:update")
     @GetMapping("/sync")
     public AjaxResult sync() {
         kcsjPlanProcessService.sync();
