@@ -31,7 +31,7 @@ public class QqchMainPlanLogServiceImpl implements IQqchMainPlanLogService {
         if(qqchMainPlanLog1 == null) {
             qqchMainPlanLog1 = new QqchMainPlanLog();
             qqchMainPlanLog1.setTimeNumUnit("m");
-            qqchMainPlanLog1.setTimeNum(10);
+            qqchMainPlanLog1.setTimeNum(5);
         }
         return qqchMainPlanLog1;
     }
