@@ -113,8 +113,8 @@
         <where>
             del_flag = "0"
             <if test="id != null "> and `id` = #{id}</if>
-            <if test="materialCode != null  and materialCode != ''"> and `material_code` = #{materialCode}</if>
-            <if test="materialName != null  and materialName != ''"> and `material_name` = #{materialName}</if>
+            <if test="materialCode != null  and materialCode != ''"> and `material_code` like concat ('%',#{materialCode},'%')</if>
+            <if test="materialName != null  and materialName != ''"> and `material_name` like concat ('%', #{materialName},'%')</if>
             <if test="materialSpec != null  and materialSpec != ''"> and `material_spec` = #{materialSpec}</if>
             <if test="categoryName != null  and categoryName != ''"> and `category_name` = #{categoryName}</if>
             <if test="categoryId != null "> and `category_id` = #{categoryId}</if>

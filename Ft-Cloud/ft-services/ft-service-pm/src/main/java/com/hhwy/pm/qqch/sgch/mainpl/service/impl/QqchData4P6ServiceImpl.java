@@ -260,7 +260,19 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
         ThreadPoolUtil.execute(new Runnable() {
             @Override
             public void run() {
-                initQqchData4P6(tenantKey, version);
+                String oldDataSource = DynamicDataSourceContextHolder.peek();
+                DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+                try {
+                    initQqchData4P6(tenantKey, version);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("租户" + tenantKey + "获取p6异常:-----------------" + e.getMessage());
+//            throw new CustomBusinessException(e.getMessage());
+                } finally {
+                    DynamicDataSourceContextHolder.poll();
+                    DynamicDataSourceContextHolder.push(oldDataSource);
+                }
+
             }
         });
     }

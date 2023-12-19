@@ -33,12 +33,12 @@ public class KcsjEquipEntryRecordController extends BaseController {
     private IKcsjEquipEntryRecordService kcsjEquipEntryRecordService;
 
 
-    @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:list")
-    @GetMapping
-    public AjaxResult getKcsjEquipEntryRecord(@Validated(ValidationGroups.Get.class) KcsjEquipEntryRecord kcsjEquipEntryRecordParam) {
-        KcsjEquipEntryRecord kcsjEquipEntryRecord = kcsjEquipEntryRecordService.getKcsjEquipEntryRecord(kcsjEquipEntryRecordParam);
-        return AjaxResult.success(kcsjEquipEntryRecord);
-    }
+//    @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:list")
+//    @GetMapping
+//    public AjaxResult getKcsjEquipEntryRecord(@Validated(ValidationGroups.Get.class) KcsjEquipEntryRecord kcsjEquipEntryRecordParam) {
+//        KcsjEquipEntryRecord kcsjEquipEntryRecord = kcsjEquipEntryRecordService.getKcsjEquipEntryRecord(kcsjEquipEntryRecordParam);
+//        return AjaxResult.success(kcsjEquipEntryRecord);
+//    }
 
     /**
      * 台账页查询
@@ -64,7 +64,7 @@ public class KcsjEquipEntryRecordController extends BaseController {
      * @param kcsjEquipEntryRecordVo
      * @return
      */
-    @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:add")
+    @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:batchAdd")
     @PostMapping("/batchAdd")
     public AjaxResult insertKcsjEquipEntryRecordList(@Validated(ValidationGroups.Save.class) @RequestBody KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo) {
         AjaxResult ajaxResul =  kcsjEquipEntryRecordService.insertKcsjEquipEntryRecordList(kcsjEquipEntryRecordVo);
@@ -101,5 +101,18 @@ public class KcsjEquipEntryRecordController extends BaseController {
         KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo = kcsjEquipEntryRecordService.getKcsjEquipEntryRecordList(kcsjEquipEntryRecordParam);
         ExcelUtils<KcsjEquipEntryRecord> util = new ExcelUtils<>(KcsjEquipEntryRecord.class);
         util.exportExcel(response, kcsjEquipEntryRecordVo.getTreeList(), DateUtils.getDate());
+    }
+
+    /**
+     * 同步
+     *
+     * @param
+     * @return
+     */
+    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:sync")
+    @GetMapping("/sync")
+    public AjaxResult sync() {
+        KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo = kcsjEquipEntryRecordService.sync();
+        return AjaxResult.success(kcsjEquipEntryRecordVo);
     }
 }

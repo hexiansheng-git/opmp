@@ -4,6 +4,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.feign.factory.PmServiceFallbackFactory;
 import com.hhwy.feign.service.domain.CommonQqchMeasureExpRange;
+import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.dto.DesignDisclosurePlanDto;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,4 +90,30 @@ public interface PmServiceApi {
      */
     @GetMapping("/qqchSurveyOrganization/apiList")
     AjaxResult getQqchSurveyOrganizationList();
+
+
+    /**
+     * 2.2 勘察设计工作计划
+     * @param
+     * @return
+     */
+    @GetMapping("/qqchSurveyWorkPlan/getData")
+    AjaxResult getData();
+
+    /**
+     * 2.4设计交底策划数据
+     * @return
+     */
+    @GetMapping("/qqchDesignDisclosurePlan/getDisclosurePlanDtoList")
+    List<DesignDisclosurePlanDto> getDisclosurePlanDtoList();
+
+    /**
+     * 2.1.3 前期策划设备配置查询
+     * @param
+     * @return
+     */
+    @GetMapping("/qqchSurveyDesignTeams/list")
+    AjaxResult getqqchSurveyDesignTeams();
+
+
 }

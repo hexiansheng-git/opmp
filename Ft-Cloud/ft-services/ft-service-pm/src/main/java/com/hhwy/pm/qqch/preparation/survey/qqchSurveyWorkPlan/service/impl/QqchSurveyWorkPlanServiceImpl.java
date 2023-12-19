@@ -173,6 +173,14 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
         return build;
     }
 
+    @Override
+    public List<QqchSurveyWorkPlan> getData() {
+        QqchSurveyWorkPlan qqchSurveyWorkPlan = new QqchSurveyWorkPlan();
+        BigDecimal version = VersionUtil.getVersion("qqch_survey_work_plan", null);
+        qqchSurveyWorkPlan.setVersion(version);
+        return qqchSurveyWorkPlanMapper.getQqchSurveyWorkPlanList(qqchSurveyWorkPlan);
+    }
+
     /**
      * 根据pid，构建树节点
      */

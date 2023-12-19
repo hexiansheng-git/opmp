@@ -21,7 +21,7 @@ public interface SgjsTechnicalManageMapper {
 
     int updateSgjsTechnicalManage(SgjsTechnicalManage sgjsTechnicalManage);
 
-    int updateSgjsTechnicalManageList(@Param("sgjsTechnicalManageList") List<SgjsTechnicalManage> sgjsTechnicalManageList);
+    int updateSgjsTechnicalManageList(@Param("list") List<SgjsTechnicalManage> sgjsTechnicalManageList);
 
     int deleteSgjsTechnicalManage(SgjsTechnicalManage sgjsTechnicalManage);
 

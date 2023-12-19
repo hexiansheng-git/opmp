@@ -1,24 +1,22 @@
 package com.hhwy.sp.experiment.sgjsExperimentRecord.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-import java.util.Map;
-
-import org.aspectj.weaver.loadtime.Aj;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.sp.experiment.sgjsExperimentRecord.service.ISgjsExperimentRecordService;
-import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
+import com.hhwy.sp.experiment.sgjsExperimentRecord.service.ISgjsExperimentRecordService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author lcf--试验设备进场记录
@@ -116,6 +114,6 @@ public class SgjsExperimentRecordController extends BaseController{
     @PostMapping("/syncWuShe")
     public AjaxResult syncWuShe(@RequestBody Map<String,Object> map){
         AjaxResult ajaxResult = sgjsExperimentRecordService.syncWuShe(map);
-        return AjaxResult.success();
+        return ajaxResult;
     }
 }

@@ -268,13 +268,11 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
                         if(thisQuantity != null &&  planCompQuantity != null){
                             jdglDiffAnalysisSv.setThisDeviationNum(thisQuantity.subtract(planCompQuantity));
                         }
-                        if(planCompValue != null) {
-                            thisTotalPlanAmt = thisTotalPlanAmt.add(planCompValue);
-                        }
-                        if(thisValue != null) {
-                            thisTotalActAmt = thisTotalActAmt.add(thisValue);
-                        }
                     }
+                }
+                BigDecimal planCompValue = StatisticsUtils.getDivideTenThousand(jdglMonthImagePlan.getPlanCompValue());
+                if(planCompValue != null && !jdglMonthImagePlan.getWbsCode().equals(jdglMonthImagePlan.getWorkCode())) {
+                    thisTotalPlanAmt = thisTotalPlanAmt.add(planCompValue);
                 }
                 insertList.add(jdglDiffAnalysisSv);
             }
@@ -291,6 +289,14 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
             jdglDiffAnalysisSvMapper.insertJdglDiffAnalysisSvList(insertList);
         }
 
+        if(CollectionUtils.isNotEmpty(wbsListByDateRange)) {
+            for (JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value : wbsListByDateRange){
+                BigDecimal thisValue = StatisticsUtils.getDivideTenThousand(jdglDayScheduleWbs4Value.getThisValue());
+                if(thisValue != null) {
+                    thisTotalActAmt = thisTotalActAmt.add(thisValue);
+                }
+            };
+        }
         jdglDiffAnalysis.setTotalCompValue(thisTotalActAmt);
         jdglDiffAnalysis.setPtVar2(users);
 

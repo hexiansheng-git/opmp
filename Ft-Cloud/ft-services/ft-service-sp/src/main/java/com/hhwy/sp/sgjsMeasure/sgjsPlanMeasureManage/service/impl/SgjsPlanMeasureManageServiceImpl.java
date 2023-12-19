@@ -13,6 +13,7 @@ import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.tree.TreeUtil;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -79,10 +80,14 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
             sgjsPlanMeasureManage);
         if (sgjsPlanMeasureManageList.size() > 0) {
             sgjsPlanMeasureManageList.forEach(plan -> {
-                plan.setPlanStartDateStr(FtDateUtils.formatDate(plan.getPlanStartDate()));
-                plan.setPlanEndDateStr(FtDateUtils.formatDate(plan.getPlanEndDate()));
-                plan.setRealStartDateStr(FtDateUtils.formatDate(plan.getRealStartDate()));
-                plan.setRealEndDateStr(FtDateUtils.formatDate(plan.getRealEndDate()));
+                //plan.setPlanStartDateStr(FtDateUtils.formatDate(plan.getPlanStartDate()));
+                plan.setPlanStartDateStr(new SimpleDateFormat("yyyy年MM月dd日").format(plan.getPlanStartDate()));
+                //plan.setPlanEndDateStr(FtDateUtils.formatDate(plan.getPlanEndDate()));
+                plan.setPlanEndDateStr(new SimpleDateFormat("yyyy年MM月dd日").format(plan.getPlanEndDate()));
+                //plan.setRealStartDateStr(FtDateUtils.formatDate(plan.getRealStartDate()));
+                plan.setRealStartDateStr(new SimpleDateFormat("yyyy年MM月dd日").format(plan.getRealStartDate()));
+                //plan.setRealEndDateStr(FtDateUtils.formatDate(plan.getRealEndDate()));
+                plan.setRealEndDateStr(new SimpleDateFormat("yyyy年MM月dd日").format(plan.getRealEndDate()));
             });
         }
         sgjsPlanMeasureManageVo.setTreeList(TreeUtil.newBuild(sgjsPlanMeasureManageList));
@@ -101,8 +106,14 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         List<LinkedHashMap<String, Object>> riskBigProjList = (List<LinkedHashMap<String, Object>>) dataMap.get(
             "dto");
         //递归处理3.6.2数据结果
-        digui(riskBigProjList, treeToList);
+        if(!CollectionUtils.isEmpty(riskBigProjList)){
+            digui(riskBigProjList, treeToList);
+        }
         sgjsPlanMeasureManageVo.setTreeList(treeToList);
+        SgjsPlanMeasureManage sgjsPlanMeasureManage = new SgjsPlanMeasureManage();
+        sgjsPlanMeasureManage.setUpdateTime(DateTime.now());
+        sgjsPlanMeasureManage.setUpdateUser(SecurityUtils.getUserId() + "");
+        sgjsPlanMeasureManageMapper.delAll(sgjsPlanMeasureManage);
         return sgjsPlanMeasureManageVo;
     }
 
@@ -126,9 +137,8 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
                 : FtDateUtils.parseDate(l.get("planBeginDate")));
             sgjsPlanMeasureManage.setPlanEndDate(
                 l.get("planEndDate") == null ? null : FtDateUtils.parseDate(l.get("planEndDate")));
-            sgjsPlanMeasureManage.setId(l.get("id") == null ? 0L : Long.parseLong(l.get("id").toString()));
-            sgjsPlanMeasureManage.setPid(
-                l.get("pid") == null ? 0L : Long.parseLong(l.get("pid").toString()));
+            sgjsPlanMeasureManage.setId(IdWorker.createId());
+            sgjsPlanMeasureManage.setPid(0L);
             //同步标识
             sgjsPlanMeasureManage.setDataSource("1");
             sgjsPlanMeasureManage.setIsAdd("1");
@@ -146,9 +156,8 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
                         : FtDateUtils.parseDate(linkedHashMap.get("planBeginDate")));
                     sgjsPlanMeasureManage1.setPlanEndDate(
                         linkedHashMap.get("planEndDate") == null ? null : FtDateUtils.parseDate(linkedHashMap.get("planEndDate")));
-                    sgjsPlanMeasureManage1.setId(linkedHashMap.get("id") == null ? IdWorker.createId() : Long.parseLong(linkedHashMap.get("id").toString()));
-                    sgjsPlanMeasureManage1.setPid(
-                        linkedHashMap.get("pid") == null ? 0L : Long.parseLong(linkedHashMap.get("pid").toString()));
+                    sgjsPlanMeasureManage1.setId(IdWorker.createId());
+                    sgjsPlanMeasureManage1.setPid(sgjsPlanMeasureManage.getId());
                     //同步标识
                     sgjsPlanMeasureManage1.setDataSource("1");
                     sgjsPlanMeasureManage1.setIsAdd("1");

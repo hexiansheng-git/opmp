@@ -95,13 +95,13 @@ public class KcsjEquipEntryRecord extends TreeNode<KcsjEquipEntryRecord> {
      */
     @JsonProperty
     @Excel(name = "计划进场数量")
-    private Integer planNum;
+    private BigDecimal planNum;
     /**
      * 字段描述：实际进场数量
      */
     @JsonProperty
     @Excel(name = "实际进场数量")
-    private Integer practicalNum;
+    private BigDecimal practicalNum;
     /**
      * 字段描述：数据来源 0新增1同步
      */
@@ -160,11 +160,12 @@ public class KcsjEquipEntryRecord extends TreeNode<KcsjEquipEntryRecord> {
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：预留字段1   项目编码
+     * 字段描述：同步ID
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "预留字段1   项目编码")
-    private String ptVar1;
+    private String syncId;
+
     /**
      * 字段描述：预留字段2  leaf 是否是叶子节点 0否1是
      */

@@ -2,6 +2,9 @@ package com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.service;
 
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.domain.QqchDesignDisclosurePlan;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.domain.vo.QqchDesignDisclosurePlanVo;
+import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.dto.DesignDisclosurePlanDto;
+
+import java.util.List;
 
 /**
  * @author ldd
@@ -16,4 +19,6 @@ public interface IQqchDesignDisclosurePlanService {
     void confirm(QqchDesignDisclosurePlanVo qqchDesignDisclosurePlanVo);
 
     void save(QqchDesignDisclosurePlanVo qqchDesignDisclosurePlanVo);
+
+    List<DesignDisclosurePlanDto> getDisclosurePlanDtoList();
 }

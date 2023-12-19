@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface IKcsjEquipEntryRecordService {
 
-    KcsjEquipEntryRecord getKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord);
+    //KcsjEquipEntryRecord getKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
     KcsjEquipEntryRecordVo getKcsjEquipEntryRecordList(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
@@ -27,4 +27,6 @@ public interface IKcsjEquipEntryRecordService {
     int deleteKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
     int deleteKcsjEquipEntryRecordByPks(List<Long> kcsjEquipEntryRecordPkList);
+
+    KcsjEquipEntryRecordVo sync();
 }

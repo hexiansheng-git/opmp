@@ -8,9 +8,11 @@ import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.domain.QqchDesignDisclosurePlan;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.domain.vo.QqchDesignDisclosurePlanVo;
+import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.dto.DesignDisclosurePlanDto;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.mapper.QqchDesignDisclosurePlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.service.IQqchDesignDisclosurePlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -18,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.management.remote.rmi._RMIConnection_Stub;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,29 @@ public class QqchDesignDisclosurePlanServiceImpl implements IQqchDesignDisclosur
         qqchDesignDisclosurePlanMapper.deleteQqchDesignDisclosurePlan(qqchDesignDisclosurePlan);
         //插入新数据
         this.insertQqchDesignDisclosurePlanList(qqchDesignDisclosurePlanVo.getQqchDesignDisclosurePlanList(), qqchDesignDisclosurePlanVo.getVersion());
+    }
+
+    @Override
+    public List<DesignDisclosurePlanDto> getDisclosurePlanDtoList() {
+        BigDecimal version = VersionUtil.getVersion("qqch_design_disclosure_plan",null);
+        QqchDesignDisclosurePlan query = new QqchDesignDisclosurePlan();
+        query.setVersion(version);
+        List<QqchDesignDisclosurePlan> qqchDesignDisclosurePlanList = qqchDesignDisclosurePlanMapper.getQqchDesignDisclosurePlanList(query);
+
+        List<DesignDisclosurePlanDto> disclosurePlanDtoList = new ArrayList<>();
+        if(CollectionUtils.isEmpty(qqchDesignDisclosurePlanList)){
+            return disclosurePlanDtoList;
+        }
+
+        for (QqchDesignDisclosurePlan plan : qqchDesignDisclosurePlanList) {
+            DesignDisclosurePlanDto dto = new DesignDisclosurePlanDto();
+            dto.setName(plan.getName());
+            dto.setDisclosureUnit(plan.getDisclosureUnit());
+            dto.setPassiveDisclosureUnit(plan.getPassiveDisclosureUnit());
+            dto.setDisclosureContent(plan.getDisclosureContent());
+            disclosurePlanDtoList.add(dto);
+        }
+        return disclosurePlanDtoList;
     }
 
 

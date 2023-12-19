@@ -111,6 +111,7 @@ public class SgjsEquipEntryRecordController extends BaseController{
      * @return
      */
     @PostMapping("/sysnc")
+    @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:sysnc")
     public AjaxResult sysnc(){
         AjaxResult result = sgjsEquipEntryRecordService.sync();
         return result;

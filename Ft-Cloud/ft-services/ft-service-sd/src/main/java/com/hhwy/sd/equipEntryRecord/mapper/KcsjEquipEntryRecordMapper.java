@@ -11,7 +11,7 @@ import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecord;
  */
 public interface KcsjEquipEntryRecordMapper {
 
-    KcsjEquipEntryRecord getKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord);
+    List<KcsjEquipEntryRecord> getKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
     List<KcsjEquipEntryRecord> getKcsjEquipEntryRecordList(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
@@ -28,4 +28,6 @@ public interface KcsjEquipEntryRecordMapper {
     int deleteKcsjEquipEntryRecordByPks(@Param("kcsjEquipEntryRecordPkList") List<Long> kcsjEquipEntryRecordPkList);
 
     int deleteInfoData(List<KcsjEquipEntryRecord> list);
+
+    void delEquipEntryAll(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 }
