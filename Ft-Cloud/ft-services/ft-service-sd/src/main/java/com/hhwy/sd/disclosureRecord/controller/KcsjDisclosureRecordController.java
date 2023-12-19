@@ -149,7 +149,7 @@ public class KcsjDisclosureRecordController extends BaseController {
     @PreAuthorize(hasPermi = "kcsjDisclosureRecord:sync")
     @PostMapping("sync")
     public AjaxResult sync() {
-        List<KcsjDisclosureRecord> recordList = kcsjDisclosureRecordService.sync();
-        return AjaxResult.success(recordList);
+        kcsjDisclosureRecordService.sync();
+        return AjaxResult.success();
     }
 }

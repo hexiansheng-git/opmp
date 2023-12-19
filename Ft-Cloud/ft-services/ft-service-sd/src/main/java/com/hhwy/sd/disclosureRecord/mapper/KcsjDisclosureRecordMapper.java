@@ -32,4 +32,6 @@ public interface KcsjDisclosureRecordMapper {
     int deleteKcsjDisclosureRecordByPks(@Param("kcsjDisclosureRecordPkList") List<Long> kcsjDisclosureRecordPkList);
 
     List<KcsjDisclosureRecord> getListByIds(@Param("ids") List<Long> ids);
+
+    void deleteAll();
 }

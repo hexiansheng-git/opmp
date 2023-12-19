@@ -87,7 +87,12 @@ public class SgjsTechnicalTrainingController extends BaseController {
     @PostMapping("/delByIds")
     public AjaxResult deleteSgjsTechnicalTrainingByPks(@RequestBody SgjsTechnicalTraining sgjsTechnicalTraining) {
 
-        return toAjax(sgjsTechnicalTrainingService.deleteSgjsTechnicalTrainingByPks(sgjsTechnicalTraining.getIds()));
+        if(sgjsTechnicalTraining.getIds().size()>0){
+            return toAjax(sgjsTechnicalTrainingService.deleteSgjsTechnicalTrainingByPks(sgjsTechnicalTraining.getIds()));
+        }else {
+            return AjaxResult.error("未选中数据");
+        }
+
     }
 
     @GetMapping("/export")
