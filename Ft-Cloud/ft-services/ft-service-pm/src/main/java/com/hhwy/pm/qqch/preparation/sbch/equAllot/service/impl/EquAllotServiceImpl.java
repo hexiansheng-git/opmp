@@ -318,7 +318,7 @@ public class EquAllotServiceImpl implements EquAllotService {
             ajaxResult = JSON.parseObject(resp, AjaxResult.class);
         }catch (Exception e){
             e.printStackTrace();
-            ajaxResult = AjaxResult.error("请求无法到达");
+            ajaxResult = AjaxResult.error("网络异常，请求无法到达物设系统");
         }
         return ajaxResult;
     }

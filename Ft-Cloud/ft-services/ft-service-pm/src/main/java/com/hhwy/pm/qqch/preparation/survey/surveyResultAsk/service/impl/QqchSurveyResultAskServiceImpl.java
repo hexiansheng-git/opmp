@@ -15,6 +15,7 @@ import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResu
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.mapper.QqchSurveyResultAskMapper;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.service.IQqchSurveyResultAskService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -79,16 +80,17 @@ public class QqchSurveyResultAskServiceImpl implements IQqchSurveyResultAskServi
     @Override
     public void save(QqchSurveyResultAskVo qqchSurveyResultAskVo) {
         List<QqchSurveyResultAsk> qqchSurveyResultAskList = qqchSurveyResultAskVo.getQqchSurveyResultAskList();
+        BigDecimal version = VersionUtil.getVersion("qqch_survey_result_ask", qqchSurveyResultAskVo.getVersion());
         //删除旧数据
         QqchSurveyResultAsk qqchSurveyResultAsk = new QqchSurveyResultAsk();
-        qqchSurveyResultAsk.setVersion(qqchSurveyResultAskVo.getVersion());
+        qqchSurveyResultAsk.setVersion(version);
         qqchSurveyResultAskMapper.deleteQqchSurveyResultAsk(qqchSurveyResultAsk);
 
         if (CollectionUtil.isEmpty(qqchSurveyResultAskList)){
             return;
         }
         //插入新数据
-        this.insertQqchSurveyResultAskList(qqchSurveyResultAskList, qqchSurveyResultAskVo.getVersion());
+        this.insertQqchSurveyResultAskList(qqchSurveyResultAskList, version);
     }
 
 
