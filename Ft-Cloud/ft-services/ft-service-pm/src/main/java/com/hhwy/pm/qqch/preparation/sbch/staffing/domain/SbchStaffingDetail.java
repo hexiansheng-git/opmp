@@ -30,7 +30,7 @@ public class SbchStaffingDetail extends CommonBaseEntity {
     /** 主表id(sbch_staffing_info) */
     @Excel(name = "主表id(sbch_staffing_info)")
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "主表id不能为空", groups = {ValidationGroups.Save.class})
+//    @NotNull(message = "主表id不能为空", groups = {ValidationGroups.Save.class})
     private Long staffingId;
 
     /** 总需计划id（sbch_total_demand_plan） */

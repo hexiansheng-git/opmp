@@ -46,6 +46,7 @@ public class SgjsTechnicalTrainingServiceImpl implements ISgjsTechnicalTrainingS
 
     /**
      * 列表查询
+     *
      * @param sgjsTechnicalTraining
      * @return
      */
@@ -57,15 +58,18 @@ public class SgjsTechnicalTrainingServiceImpl implements ISgjsTechnicalTrainingS
         //字典项查询
         AjaxResult result = systemServiceApi.dictType(DictType.Technical_Training_Type);
 
-
         //存放字典项查询结果
         List<Map<String, Object>> dictDataList = null;
 
         if (result.get("code").toString().equals(Constant.SUCCESS_CODE)) {
+            //data里面存放的是字典项对象（SysDictData）的集合 ：分别是专业培训和岗位培训对应的字典项对象
+            //dictDataList集合来将字典项对象以键值的形式存在集合里面，键是字典项的属性，值是字典项的属性值（类型太多用的Object统一）
+
             dictDataList = (List<Map<String, Object>>) result.get("data");
+
         }
 
-        //分别过滤岗位培训和专业培训
+        //分别过滤岗位培训和专业培训所对应的字典项对象
         List<Map<String, Object>> oneList = dictDataList.stream().filter(e -> e.get("dictValue").equals("1")).collect(Collectors.toList());
         List<Map<String, Object>> twoList = dictDataList.stream().filter(e -> e.get("dictValue").equals("2")).collect(Collectors.toList());
         for (SgjsTechnicalTraining info : list) {
@@ -86,6 +90,7 @@ public class SgjsTechnicalTrainingServiceImpl implements ISgjsTechnicalTrainingS
             }
 
         }
+
         return list;
 
     }
@@ -95,18 +100,18 @@ public class SgjsTechnicalTrainingServiceImpl implements ISgjsTechnicalTrainingS
 
         //获取项目信息
         Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
-        if(CollectionUtils.isEmpty(prjInfo)){
+        if (CollectionUtils.isEmpty(prjInfo)) {
             return AjaxResult.error("获取项目信息异常");
         }
 
-        Long projectId = Long.parseLong(prjInfo.get("projectId")+"");
+        Long projectId = Long.parseLong(prjInfo.get("projectId") + "");
         sgjsTechnicalTraining.setProjectId(projectId);
         sgjsTechnicalTraining.setProjectName((String) prjInfo.get("projectName"));
 
         //id没有默认值会报错
         sgjsTechnicalTraining.setId(IdWorker.createId());
         //用工具填充创建人，创建时间等字段
-        sgjsTechnicalTraining= (SgjsTechnicalTraining) new AddBaseInfoUtil<SgjsTechnicalTraining>().addBaseEntity(sgjsTechnicalTraining);
+        sgjsTechnicalTraining = (SgjsTechnicalTraining) new AddBaseInfoUtil<SgjsTechnicalTraining>().addBaseEntity(sgjsTechnicalTraining);
 
         return AjaxResult.success(sgjsTechnicalTrainingMapper.insertSgjsTechnicalTraining(sgjsTechnicalTraining));
     }

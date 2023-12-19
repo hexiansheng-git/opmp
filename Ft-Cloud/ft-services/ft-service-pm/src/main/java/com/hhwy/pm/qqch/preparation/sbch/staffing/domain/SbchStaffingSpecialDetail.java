@@ -29,7 +29,7 @@ public class SbchStaffingSpecialDetail extends CommonBaseEntity {
 
     /** 主表id（sbch_staffing_special_info） */
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "主表id不能为空", groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+//    @NotNull(message = "主表id不能为空", groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private Long infoId;
 
     /** 总需计划主表id（sbch_total_demand_plan） */

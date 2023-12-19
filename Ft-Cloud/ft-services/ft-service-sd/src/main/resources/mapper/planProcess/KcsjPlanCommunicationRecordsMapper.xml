@@ -2,21 +2,15 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.sd.disclosureRecord.mapper.KcsjDisclosureRecordMapper">
+<mapper namespace="com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.mapper.KcsjPlanCommunicationRecordsMapper">
 
-    <resultMap type="com.hhwy.sd.disclosureRecord.domain.KcsjDisclosureRecord"
-               id="KcsjDisclosureRecordResultMap">
+    <resultMap type="com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.domain.KcsjPlanCommunicationRecords"
+               id="KcsjPlanCommunicationRecordsResultMap">
         <result property="id" column="id"/>
-        <result property="disclosureName" column="disclosure_name"/>
-        <result property="disclosureUnit" column="disclosure_unit"/>
-        <result property="beDisclosureUnit" column="be_disclosure_unit"/>
-        <result property="disclosureContent" column="disclosure_content"/>
-        <result property="actualDisclosureDate" column="actual_disclosure_date"/>
-        <result property="dataSource" column="data_source"/>
-        <result property="fileGroupId" column="file_group_id"/>
-        <result property="remark" column="remark"/>
-        <result property="taskStatus" column="task_status"/>
-        <result property="sort" column="sort"/>
+        <result property="communicationTheme" column="communication_theme"/>
+        <result property="communicationStartDate" column="communication_start_date"/>
+        <result property="communicationEndDate" column="communication_end_date"/>
+        <result property="annex" column="annex"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="projectId" column="project_id"/>
@@ -36,57 +30,44 @@
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
     </resultMap>
-    <sql id="selectKcsjDisclosureRecordVo">
-        select `id`
-             , `disclosure_name`
-             , `disclosure_unit`
-             , `be_disclosure_unit`
-             , `disclosure_content`
-             , `actual_disclosure_date`
-             , `data_source`
-             , `file_group_id`
-             , `remark`
-             , `task_status`
-             , `sort`
-             , `region_id`
-             , `region_name`
-             , `project_id`
-             , `project_name`
-             , `dept_id`
-             , `create_user`
-             , `create_user_name`
-             , `create_time`
-             , `update_user`
-             , `update_time`
-             , `del_user`
-             , `del_time`
-             , `del_flag`
-             , `pt_var1`
-             , `pt_var2`
-             , `pt_var3`
-             , `pt_var4`
-             , `pt_var5`
-        from kcsj_disclosure_record
+    <sql id="selectKcsjPlanCommunicationRecordsVo">
+        select
+                                                            `id`
+                                                         ,`communication_theme`
+                                                         ,`communication_start_date`
+                                                         ,`communication_end_date`
+                                                         ,`annex`
+                                                         ,`region_id`
+                                                         ,`region_name`
+                                                         ,`project_id`
+                                                         ,`project_name`
+                                                         ,`dept_id`
+                                                         ,`create_user`
+                                                         ,`create_user_name`
+                                                         ,`create_time`
+                                                         ,`update_user`
+                                                         ,`update_time`
+                                                         ,`del_user`
+                                                         ,`del_time`
+                                                         ,`del_flag`
+                                                         ,`pt_var1`
+                                                         ,`pt_var2`
+                                                         ,`pt_var3`
+                                                         ,`pt_var4`
+                                                         ,`pt_var5`
+                                    from kcsj_plan_communication_records
     </sql>
-    <select id="getKcsjDisclosureRecord" resultMap="KcsjDisclosureRecordResultMap">
-        <include refid="selectKcsjDisclosureRecordVo"/>
+    <select id="getKcsjPlanCommunicationRecords" resultMap="KcsjPlanCommunicationRecordsResultMap">
+        <include refid="selectKcsjPlanCommunicationRecordsVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="disclosureName != null  and disclosureName != ''">and `disclosure_name` = #{disclosureName}</if>
-            <if test="disclosureUnit != null  and disclosureUnit != ''">and `disclosure_unit` = #{disclosureUnit}</if>
-            <if test="beDisclosureUnit != null  and beDisclosureUnit != ''">and `be_disclosure_unit` =
-                #{beDisclosureUnit}
+            <if test="communicationTheme != null  and communicationTheme != ''">and `communication_theme` =
+                #{communicationTheme}
             </if>
-            <if test="disclosureContent != null  and disclosureContent != ''">and `disclosure_content` =
-                #{disclosureContent}
-            </if>
-            <if test="actualDisclosureDate != null ">and `actual_disclosure_date` = #{actualDisclosureDate}</if>
-            <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
-            <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="communicationStartDate != null ">and `communication_start_date` = #{communicationStartDate}</if>
+            <if test="communicationEndDate != null ">and `communication_end_date` = #{communicationEndDate}</if>
+            <if test="annex != null  and annex != ''">and `annex` = #{annex}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -109,45 +90,48 @@
         order by create_time desc
     </select>
 
-    <select id="getKcsjDisclosureRecordList" resultMap="KcsjDisclosureRecordResultMap">
-        <include refid="selectKcsjDisclosureRecordVo"/>
+    <select id="getKcsjPlanCommunicationRecordsList" resultMap="KcsjPlanCommunicationRecordsResultMap">
+        <include refid="selectKcsjPlanCommunicationRecordsVo"/>
         <where>
             del_flag = "0"
-            <if test="disclosureName != null  and disclosureName != ''">and `disclosure_name` like concat ('%' , #{disclosureName} , '%')</if>
-            <if test="beDisclosureUnit != null  and beDisclosureUnit != ''">and `be_disclosure_unit` like concat ('%' , #{beDisclosureUnit} , '%')</if>
-            <if test="disclosureContent != null  and disclosureContent != ''">and `disclosure_content` like concat ('%' , #{disclosureContent} , '%')</if>
-            <if test="actualDisclosureDate != null ">and `actual_disclosure_date` = #{actualDisclosureDate}</if>
-        </where>
-        order by create_time desc
-    </select>
-    <select id="getListByIds" resultMap="KcsjDisclosureRecordResultMap">
-        <include refid="selectKcsjDisclosureRecordVo"/>
-        <where>
-            del_flag = "0"
-            <if test="ids != null and ids.size() > 0">
-                and `id` in
-                <foreach item="id" collection="ids" open="(" separator="," close=")">
-                    #{id}
-                </foreach>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="communicationTheme != null  and communicationTheme != ''">and `communication_theme` like
+                concat('%',#{communicationTheme},'%')
             </if>
+            <if test="communicationStartDate != null ">and `communication_start_date` &lt;= #{communicationStartDate}
+            </if>
+            <if test="communicationEndDate != null ">and `communication_end_date` &gt;= #{communicationEndDate}</if>
+            <if test="annex != null  and annex != ''">and `annex` = #{annex}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
         order by create_time desc
     </select>
 
-    <insert id="insertKcsjDisclosureRecord" useGeneratedKeys="true" keyProperty="id">
-        insert into kcsj_disclosure_record
+    <insert id="insertKcsjPlanCommunicationRecords" useGeneratedKeys="true" keyProperty="id">
+        insert into kcsj_plan_communication_records
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="disclosureName != null  and disclosureName != ''">`disclosure_name`,</if>
-            <if test="disclosureUnit != null  and disclosureUnit != ''">`disclosure_unit`,</if>
-            <if test="beDisclosureUnit != null  and beDisclosureUnit != ''">`be_disclosure_unit`,</if>
-            <if test="disclosureContent != null  and disclosureContent != ''">`disclosure_content`,</if>
-            <if test="actualDisclosureDate != null ">`actual_disclosure_date`,</if>
-            <if test="dataSource != null  and dataSource != ''">`data_source`,</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
-            <if test="remark != null  and remark != ''">`remark`,</if>
-            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
-            <if test="sort != null ">`sort`,</if>
+            <if test="communicationTheme != null  and communicationTheme != ''">`communication_theme`,</if>
+            <if test="communicationStartDate != null ">`communication_start_date`,</if>
+            <if test="communicationEndDate != null ">`communication_end_date`,</if>
+            <if test="annex != null  and annex != ''">`annex`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -169,16 +153,10 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="disclosureName != null  and disclosureName != ''">#{disclosureName},</if>
-            <if test="disclosureUnit != null  and disclosureUnit != ''">#{disclosureUnit},</if>
-            <if test="beDisclosureUnit != null  and beDisclosureUnit != ''">#{beDisclosureUnit},</if>
-            <if test="disclosureContent != null  and disclosureContent != ''">#{disclosureContent},</if>
-            <if test="actualDisclosureDate != null ">#{actualDisclosureDate},</if>
-            <if test="dataSource != null  and dataSource != ''">#{dataSource},</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
-            <if test="remark != null  and remark != ''">#{remark},</if>
-            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
-            <if test="sort != null ">#{sort},</if>
+            <if test="communicationTheme != null  and communicationTheme != ''">#{communicationTheme},</if>
+            <if test="communicationStartDate != null ">#{communicationStartDate},</if>
+            <if test="communicationEndDate != null ">#{communicationEndDate},</if>
+            <if test="annex != null  and annex != ''">#{annex},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>
@@ -200,21 +178,15 @@
         </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertKcsjDisclosureRecord -->
-    <insert id="insertKcsjDisclosureRecordList">
-        insert into kcsj_disclosure_record
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertKcsjPlanCommunicationRecords -->
+    <insert id="insertKcsjPlanCommunicationRecordsList">
+        insert into kcsj_plan_communication_records
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
-            `disclosure_name`,
-            `disclosure_unit`,
-            `be_disclosure_unit`,
-            `disclosure_content`,
-            `actual_disclosure_date`,
-            `data_source`,
-            `file_group_id`,
-            `remark`,
-            `task_status`,
-            `sort`,
+            `communication_theme`,
+            `communication_start_date`,
+            `communication_end_date`,
+            `annex`,
             `region_id`,
             `region_name`,
             `project_id`,
@@ -227,6 +199,7 @@
             `update_time`,
             `del_user`,
             `del_time`,
+            `del_flag`,
             `pt_var1`,
             `pt_var2`,
             `pt_var3`,
@@ -234,19 +207,13 @@
             `pt_var5`,
         </trim>
         values
-        <foreach collection="kcsjDisclosureRecordList" item="item" separator=",">
+        <foreach collection="kcsjPlanCommunicationRecordsList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
-                #{item.disclosureName},
-                #{item.disclosureUnit},
-                #{item.beDisclosureUnit},
-                #{item.disclosureContent},
-                #{item.actualDisclosureDate},
-                #{item.dataSource},
-                #{item.fileGroupId},
-                #{item.remark},
-                #{item.taskStatus},
-                #{item.sort},
+                #{item.communicationTheme},
+                #{item.communicationStartDate},
+                #{item.communicationEndDate},
+                #{item.annex},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.projectId},
@@ -259,6 +226,7 @@
                 #{item.updateTime},
                 #{item.delUser},
                 #{item.delTime},
+                #{item.delFlag},
                 #{item.ptVar1},
                 #{item.ptVar2},
                 #{item.ptVar3},
@@ -268,24 +236,16 @@
         </foreach>
     </insert>
 
-    <update id="updateKcsjDisclosureRecord">
-        update kcsj_disclosure_record
+    <update id="updateKcsjPlanCommunicationRecords">
+        update kcsj_plan_communication_records
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
-            <if test="disclosureName != null  and  disclosureName != ''">`disclosure_name` = #{disclosureName},</if>
-            <if test="disclosureUnit != null  and  disclosureUnit != ''">`disclosure_unit` = #{disclosureUnit},</if>
-            <if test="beDisclosureUnit != null  and  beDisclosureUnit != ''">`be_disclosure_unit` =
-                #{beDisclosureUnit},
+            <if test="communicationTheme != null  and  communicationTheme != ''">`communication_theme` =
+                #{communicationTheme},
             </if>
-            <if test="disclosureContent != null  and  disclosureContent != ''">`disclosure_content` =
-                #{disclosureContent},
-            </if>
-            <if test="actualDisclosureDate != null ">`actual_disclosure_date` = #{actualDisclosureDate},</if>
-            <if test="dataSource != null  and  dataSource != ''">`data_source` = #{dataSource},</if>
-            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
-            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
-            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
-            <if test="sort != null ">`sort` = #{sort},</if>
+            <if test="communicationStartDate != null ">`communication_start_date` = #{communicationStartDate},</if>
+            <if test="communicationEndDate != null ">`communication_end_date` = #{communicationEndDate},</if>
+            <if test="annex != null  and  annex != ''">`annex` = #{annex},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
@@ -310,149 +270,141 @@
         </where>
     </update>
 
-    <update id="updateKcsjDisclosureRecordList">
-        update kcsj_disclosure_record
+    <update id="updateKcsjPlanCommunicationRecordsList">
+        update kcsj_plan_communication_records
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
                     when `id`=#{item.id} then #{item.id}
                 </foreach>
             </trim>
-            <trim prefix="disclosure_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.disclosureName}
+            <trim prefix="communication_theme  = case" suffix="end,">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
+                    when `id`=#{item.id} then #{item.communicationTheme}
                 </foreach>
             </trim>
-            <trim prefix="disclosure_unit  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.disclosureUnit}
+            <trim prefix="communication_start_date  = case" suffix="end,">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
+                    when `id`=#{item.id} then #{item.communicationStartDate}
                 </foreach>
             </trim>
-            <trim prefix="be_disclosure_unit  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.beDisclosureUnit}
+            <trim prefix="communication_end_date  = case" suffix="end,">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
+                    when `id`=#{item.id} then #{item.communicationEndDate}
                 </foreach>
             </trim>
-            <trim prefix="disclosure_content  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.disclosureContent}
-                </foreach>
-            </trim>
-            <trim prefix="actual_disclosure_date  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.actualDisclosureDate}
-                </foreach>
-            </trim>
-            <trim prefix="data_source  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.dataSource}
-                </foreach>
-            </trim>
-            <trim prefix="file_group_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.fileGroupId}
-                </foreach>
-            </trim>
-            <trim prefix="remark  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.remark}
-                </foreach>
-            </trim>
-            <trim prefix="task_status  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.taskStatus}
-                </foreach>
-            </trim>
-            <trim prefix="sort  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.sort}
+            <trim prefix="annex  = case" suffix="end,">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
+                    when `id`=#{item.id} then #{item.annex}
                 </foreach>
             </trim>
             <trim prefix="region_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
                     when `id`=#{item.id} then #{item.regionId}
                 </foreach>
             </trim>
             <trim prefix="region_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
                     when `id`=#{item.id} then #{item.regionName}
                 </foreach>
             </trim>
             <trim prefix="project_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
                     when `id`=#{item.id} then #{item.projectId}
                 </foreach>
             </trim>
             <trim prefix="project_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
                     when `id`=#{item.id} then #{item.projectName}
                 </foreach>
             </trim>
             <trim prefix="dept_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
                     when `id`=#{item.id} then #{item.deptId}
                 </foreach>
             </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
             <trim prefix="update_user  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
                     when `id`=#{item.id} then #{item.updateUser}
                 </foreach>
             </trim>
             <trim prefix="update_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
                     when `id`=#{item.id} then #{item.updateTime}
                 </foreach>
             </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
             <trim prefix="pt_var1  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
                     when `id`=#{item.id} then #{item.ptVar1}
                 </foreach>
             </trim>
             <trim prefix="pt_var2  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
                     when `id`=#{item.id} then #{item.ptVar2}
                 </foreach>
             </trim>
             <trim prefix="pt_var3  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
                     when `id`=#{item.id} then #{item.ptVar3}
                 </foreach>
             </trim>
             <trim prefix="pt_var4  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
                     when `id`=#{item.id} then #{item.ptVar4}
                 </foreach>
             </trim>
             <trim prefix="pt_var5  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
+                <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
                     when `id`=#{item.id} then #{item.ptVar5}
                 </foreach>
             </trim>
         </trim>
         where `id` in
-        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="kcsjPlanCommunicationRecordsList" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </update>
 
-    <update id="deleteKcsjDisclosureRecord">
-        update `kcsj_disclosure_record` set del_flag = 1
+    <update id="deleteKcsjPlanCommunicationRecords">
+        update `kcsj_plan_communication_records` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="disclosureName != null  and disclosureName != ''">and `disclosure_name` = #{disclosureName}</if>
-            <if test="disclosureUnit != null  and disclosureUnit != ''">and `disclosure_unit` = #{disclosureUnit}</if>
-            <if test="beDisclosureUnit != null  and beDisclosureUnit != ''">and `be_disclosure_unit` =
-                #{beDisclosureUnit}
+            <if test="communicationTheme != null  and communicationTheme != ''">and `communication_theme` =
+                #{communicationTheme}
             </if>
-            <if test="disclosureContent != null  and disclosureContent != ''">and `disclosure_content` =
-                #{disclosureContent}
-            </if>
-            <if test="actualDisclosureDate != null ">and `actual_disclosure_date` = #{actualDisclosureDate}</if>
-            <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
-            <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="communicationStartDate != null ">and `communication_start_date` = #{communicationStartDate}</if>
+            <if test="communicationEndDate != null ">and `communication_end_date` = #{communicationEndDate}</if>
+            <if test="annex != null  and annex != ''">and `annex` = #{annex}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -461,6 +413,8 @@
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
@@ -472,17 +426,13 @@
         </where>
     </update>
 
-    <update id="deleteKcsjDisclosureRecordByPks">
-        update `kcsj_disclosure_record` set del_flag = 1
+    <update id="deleteKcsjPlanCommunicationRecordsByPks">
+        update `kcsj_plan_communication_records` set del_flag = 1,del_user=#{delUser},del_time=now()
         <where>
             `id` in
-            <foreach item="id" collection="kcsjDisclosureRecordPkList" open="(" separator="," close=")">
+            <foreach item="id" collection="kcsjPlanCommunicationRecordsPkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>
-    </update>
-
-    <update id="deleteAll">
-        update `kcsj_disclosure_record` set del_flag = 1
     </update>
 </mapper>

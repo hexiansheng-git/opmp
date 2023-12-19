@@ -162,9 +162,11 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
         List<SgjsExperimentRecord> insertList =new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             String syncId = list.get(i).getPtVar5();
-            List<SgjsExperimentRecord> checkList = recordList.stream().filter(e -> e.getPtVar5().equals(syncId)).collect(Collectors.toList());
-            if(CollectionUtils.isEmpty(checkList)){//空说明库里没有
-                insertList.add(list.get(i));
+            if(StringUtils.isNotEmpty(syncId)){
+                List<SgjsExperimentRecord> checkList = recordList.stream().filter(e -> e.getPtVar5().equals(syncId)).collect(Collectors.toList());
+                if(CollectionUtils.isEmpty(checkList)){//空说明库里没有
+                    insertList.add(list.get(i));
+                }
             }
         }
         if(!CollectionUtils.isEmpty(insertList)){

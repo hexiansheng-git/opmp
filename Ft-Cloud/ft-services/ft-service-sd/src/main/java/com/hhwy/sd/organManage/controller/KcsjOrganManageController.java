@@ -5,7 +5,9 @@ import java.util.List;
 import java.io.IOException;
 
 import com.hhwy.sd.organManage.domain.KcsjOrganManage;
+import com.hhwy.sd.organManage.domain.KcsjOrganManage4Update;
 import com.hhwy.sd.organManage.service.IKcsjOrganManageService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -77,8 +79,17 @@ public class KcsjOrganManageController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjOrganManage:update")
     @PostMapping("/batchUpdate")
-    public AjaxResult updateKcsjOrganManageList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjOrganManage> kcsjOrganManageListParam) {
-        return toAjax(kcsjOrganManageService.updateKcsjOrganManageList(kcsjOrganManageListParam));
+    public AjaxResult updateKcsjOrganManageList(@Validated(ValidationGroups.Update.class) @RequestBody KcsjOrganManage4Update kcsjOrganManage4Update) {
+        List<KcsjOrganManage> treeList = kcsjOrganManage4Update.getTreeList();
+        List<Long> delIdList = kcsjOrganManage4Update.getDelIdList();
+        int i = 0;
+        if(CollectionUtils.isNotEmpty(treeList)) {
+            i += kcsjOrganManageService.updateKcsjOrganManageList(treeList);
+        }
+        if(CollectionUtils.isNotEmpty(delIdList)) {
+            i += kcsjOrganManageService.deleteKcsjOrganManageByPks(delIdList);
+        }
+        return toAjax(i);
     }
 
     @PreAuthorize(hasPermi = "kcsjOrganManage:remove")

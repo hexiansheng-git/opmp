@@ -5,7 +5,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
@@ -113,7 +115,28 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
 
     @Transactional
     public int deleteKcsjPlanProcessByPks(List<Long> kcsjPlanProcessPkList) {
-        return kcsjPlanProcessMapper.deleteKcsjPlanProcessByPks(kcsjPlanProcessPkList);
+        List<KcsjPlanProcess> kcsjPlanProcessList = kcsjPlanProcessMapper.getKcsjPlanProcessList(new KcsjPlanProcess());
+        List<Long> needDeleteIds = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(kcsjPlanProcessList) && CollectionUtils.isNotEmpty(kcsjPlanProcessPkList)) {
+            for (Long id: kcsjPlanProcessPkList) {
+                List<KcsjPlanProcess> build = TreeUtil.build(kcsjPlanProcessList, id);
+                if(CollectionUtils.isEmpty(build)) {
+                    continue;
+                }
+                List<KcsjPlanProcess> kcsjPlanProcesses = TreeUtil.treeToListWithoutId(build);
+                if(CollectionUtils.isEmpty(kcsjPlanProcesses)) {
+                    continue;
+                }
+                for (KcsjPlanProcess kcsjPlanProcess: kcsjPlanProcesses) {
+                    needDeleteIds.add(kcsjPlanProcess.getId());
+                }
+            }
+        }
+        List<Long> collect = needDeleteIds.stream().distinct().collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(collect)) {
+            return 0;
+        }
+        return kcsjPlanProcessMapper.deleteKcsjPlanProcessByPks(collect);
     }
 
     /**
@@ -137,7 +160,11 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
             JSONObject object = JSONObject.parseObject(JSONObject.toJSONString(array.get(i)));
             KcsjPlanProcess kcsjPlanProcess = new KcsjPlanProcess();
             if(object.get("id") != null) kcsjPlanProcess.setId(Long.valueOf(ObjectUtils.toString(object.get("id"))));
-            if(object.get("pid") != null) kcsjPlanProcess.setPid(Long.valueOf(ObjectUtils.toString(object.get("pid"))));
+            if(object.get("pid") != null) {
+                Long pid = Long.valueOf(ObjectUtils.toString(object.get("pid")));
+                if(pid == 0) pid = null;
+                kcsjPlanProcess.setPid(pid);
+            }
             String workCode = ObjectUtils.toString(object.get("planWbsCode"));
             kcsjPlanProcess.setWorkCode(workCode);
             kcsjPlanProcess.setWorkName(ObjectUtils.toString(object.get("planWbsName")));
@@ -151,8 +178,11 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
                     startTime = DateUtils.parseDate(ObjectUtils.toString(object.get("startTime")), "yyyy-MM-dd");
                     kcsjPlanProcess.setPlanStartDate(startTime);
                 }
-                endTime = DateUtils.parseDate(ObjectUtils.toString(object.get("endTime")), "yyyy-MM-dd");
-                if(object.get("endTime") != null) kcsjPlanProcess.setPlanStartDate(endTime);
+
+                if(object.get("endTime") != null) {
+                    endTime = DateUtils.parseDate(ObjectUtils.toString(object.get("endTime")), "yyyy-MM-dd");
+                    kcsjPlanProcess.setPlanEndDate(endTime);
+                }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -168,7 +198,7 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
             }
             kcsjPlanProcessList.add(kcsjPlanProcess);
         }
-        updateKcsjPlanProcessList(TreeUtil.treeToList(kcsjPlanProcessList));
+        updateKcsjPlanProcessList(TreeUtil.build(kcsjPlanProcessList, null));
     }
 
     public void deleteAllKcsjPlanProcess() {

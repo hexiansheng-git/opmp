@@ -75,7 +75,7 @@ public class SgjsReportMeasureSubmitController extends BaseController {
      * @param sgjsReportMeasureSubmitVo
      * @return
      */
-    @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:add")
+    @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:batchAdd")
     @PostMapping("/batchAdd")
     public AjaxResult insertSgjsReportMeasureSubmitList(
         @Validated(ValidationGroups.Save.class) @RequestBody SgjsReportMeasureSubmitVo sgjsReportMeasureSubmitVo) {
@@ -115,6 +115,7 @@ public class SgjsReportMeasureSubmitController extends BaseController {
             sgjsReportMeasureSubmitPkList));
     }
 
+    @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody SgjsReportMeasureSubmit sgjsReportMeasureSubmitParam) throws IOException {
         List<Long> ids = sgjsReportMeasureSubmitParam.getIds();

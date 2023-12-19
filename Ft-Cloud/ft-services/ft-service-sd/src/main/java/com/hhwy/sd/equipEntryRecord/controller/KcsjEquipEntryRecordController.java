@@ -64,7 +64,7 @@ public class KcsjEquipEntryRecordController extends BaseController {
      * @param kcsjEquipEntryRecordVo
      * @return
      */
-    @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:add")
+    @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:batchAdd")
     @PostMapping("/batchAdd")
     public AjaxResult insertKcsjEquipEntryRecordList(@Validated(ValidationGroups.Save.class) @RequestBody KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo) {
         AjaxResult ajaxResul =  kcsjEquipEntryRecordService.insertKcsjEquipEntryRecordList(kcsjEquipEntryRecordVo);
@@ -109,7 +109,7 @@ public class KcsjEquipEntryRecordController extends BaseController {
      * @param
      * @return
      */
-    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:list")
+    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:sync")
     @GetMapping("/sync")
     public AjaxResult sync() {
         KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo = kcsjEquipEntryRecordService.sync();
