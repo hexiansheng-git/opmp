@@ -164,10 +164,11 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         //遍历集合填充数据
         for (LinkedHashMap<String, Object> map : list) {
             SgjsExperProgressManage sgjsExperProgressManage = new SgjsExperProgressManage();
+            sgjsExperProgressManage.setId(IdWorker.createId());
             sgjsExperProgressManage.setExperimentalWorkItems(map.get("workItem") == null ? null : (String) map.get("workItem"));
             sgjsExperProgressManage.setMeasureUnit(map.get("unit") == null ? null : (String) map.get("unit"));
             sgjsExperProgressManage.setWorkload(map.get("workload") == null ? null : (Integer) map.get("workload"));
-            sgjsExperProgressManage.setPlanStartDate(map.get("planBeginDate") == null ? null : FtDateUtils.parseDate(map.get("planbeginDate")));
+            sgjsExperProgressManage.setPlanStartDate(map.get("planBeginDate") == null ? null : FtDateUtils.parseDate(map.get("planBeginDate")));
             sgjsExperProgressManage.setPlanEndDate(map.get("planEndDate") == null ? null : FtDateUtils.parseDate(map.get("planEndDate")));
             sgjsExperProgressManage.setDataSource("1");
             //所有父节点的pid都设置为0
