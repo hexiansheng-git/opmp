@@ -198,7 +198,7 @@ public class TWbsServiceImpl implements ITWbsService {
         DynamicDataSourceContextHolder.push("master");
         try {
             //子级id : 最上级id
-//            Map<String,String> realIdMap = new HashMap<>();
+            Map<String,String> realIdMap = new HashMap<>();
             Map<String,List<TWbs>> resuMap = new HashMap<>();
             List<Long> idList = new ArrayList<>();
             idList.addAll(Arrays.asList(ids));
@@ -212,10 +212,12 @@ public class TWbsServiceImpl implements ITWbsService {
                     TWbs temp = tempList.get(j);
                     temp.setPtVar3(temp.getName());
                     temp.setName(ObjectUtils.nvlString(temp.getCode())+"-"+ObjectUtils.nvlString(temp.getName()));
-//                    String topId = i==0?temp.getParentId():realIdMap.get(temp.getParentId());
-//                    idList.add(Long.valueOf(temp.getId()));
-//                    realIdMap.put(temp.getId(), topId);
-//                    ObjectUtils.add2MapList(resuMap,topId,temp);
+                    idList.add(Long.valueOf(temp.getId()));
+                    String topId = i==0?temp.getParentId():realIdMap.get(temp.getParentId());
+                    idList.add(Long.valueOf(temp.getId()));
+                    realIdMap.put(temp.getId(), topId);
+                    //替换掉Id和父级Id，否则前端id会重
+                    ObjectUtils.add2MapList(resuMap,topId,temp);
                 }
             }
             return resuMap;
