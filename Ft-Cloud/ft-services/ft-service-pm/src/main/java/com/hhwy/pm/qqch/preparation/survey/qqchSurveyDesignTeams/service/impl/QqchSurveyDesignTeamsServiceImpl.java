@@ -80,8 +80,9 @@ public class QqchSurveyDesignTeamsServiceImpl implements IQqchSurveyDesignTeamsS
     public void save(QqchSurveyDesignTeamsVo qqchSurveyDesignTeamsVo) {
         //删除旧数据
         QqchSurveyDesignTeams qqchSurveyDesignTeams = new QqchSurveyDesignTeams();
-        qqchSurveyDesignTeams.setVersion(qqchSurveyDesignTeamsVo.getVersion());
+        BigDecimal version = VersionUtil.getVersion("qqch_survey_design_teams", qqchSurveyDesignTeamsVo.getVersion());
         //1
+        qqchSurveyDesignTeams.setVersion(version);
         List<QqchSurveyDesignTeams> designTeamsList = qqchSurveyDesignTeamsMapper.getQqchSurveyDesignTeamsList(qqchSurveyDesignTeams);
         for (QqchSurveyDesignTeams surveyDesignTeams : designTeamsList) {
             QqchSurveyPersonPlan qqchSurveyPersonPlan = new QqchSurveyPersonPlan();
@@ -100,7 +101,7 @@ public class QqchSurveyDesignTeamsServiceImpl implements IQqchSurveyDesignTeamsS
             return;
         }
         //插入新数据
-        this.insertQqchSurveyDesignTeamsList(paramList, qqchSurveyDesignTeamsVo.getVersion());
+        this.insertQqchSurveyDesignTeamsList(paramList, version);
     }
 
     @Override
@@ -121,7 +122,7 @@ public class QqchSurveyDesignTeamsServiceImpl implements IQqchSurveyDesignTeamsS
         for (QqchSurveyDesignTeams qqchSurveyDesignTeams : qqchSurveyDesignTeamsList) {
             qqchSurveyDesignTeams.setId(IdWorker.createId());
             qqchSurveyDesignTeams.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchSurveyDesignTeams.setValid(Valid.YES);
             }
             //人员策划
