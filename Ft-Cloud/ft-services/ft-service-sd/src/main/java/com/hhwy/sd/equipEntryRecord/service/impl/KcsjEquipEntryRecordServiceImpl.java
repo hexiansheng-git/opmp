@@ -10,6 +10,7 @@ import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecordInfo;
 import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecordVo;
 import com.hhwy.sd.equipEntryRecord.mapper.KcsjEquipEntryRecordInfoMapper;
 import com.hhwy.utils.Constant;
+import com.hhwy.utils.tree.TreeNode;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -47,9 +48,9 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
     @Autowired
     private PmServiceApi pmServiceApi;
 
-    public KcsjEquipEntryRecord getKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord) {
-        return kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecord(kcsjEquipEntryRecord);
-    }
+//    public KcsjEquipEntryRecord getKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord) {
+//        return kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecord(kcsjEquipEntryRecord);
+//    }
 
     public KcsjEquipEntryRecordVo getKcsjEquipEntryRecordList(KcsjEquipEntryRecord kcsjEquipEntryRecord) {
         KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo = new KcsjEquipEntryRecordVo();
@@ -252,7 +253,6 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
     public KcsjEquipEntryRecordVo sync() {
         KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo = new KcsjEquipEntryRecordVo();
         List<KcsjEquipEntryRecord> treeToList = new ArrayList<>();
-        List<KcsjEquipEntryRecord> treeToListOld = new ArrayList<>();
         List<KcsjEquipEntryRecord> treeToListNew = new ArrayList<>();
         AjaxResult ajaxResult = pmServiceApi.getqqchSurveyDesignTeams();
         if (!ajaxResult.get("code").toString().equals(Constant.SUCCESS_CODE)) {
@@ -266,58 +266,50 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
             digui(riskBigProjList, treeToList);
         }
         // 同步，进行提示，以覆盖形式同步数据，但同步是要保留原数据中对应的挂接数据，如挂接的实际进场设备
-//        if(!CollectionUtils.isEmpty(treeToList)){
-//            treeToList.forEach(t->{
-//                KcsjEquipEntryRecord kcsjEquipEntryRecord = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecord(t);
-//                if(kcsjEquipEntryRecord != null){
-//                    treeToListOld.add(kcsjEquipEntryRecord);
-//                }
-//            });
-//            if(!CollectionUtils.isEmpty(treeToListOld)){
-//                List<String> collect1 = treeToListOld.stream().map(KcsjEquipEntryRecord::getTeamName).collect(Collectors.toList());
-//                List<KcsjEquipEntryRecord> collect = treeToList.stream().filter(a -> !collect1.contains(a.getTeamName())).collect(Collectors.toList());
-//                if(!CollectionUtils.isEmpty(collect)){
-//                    collect.forEach(c->{
-//                        c.setIsAdd("1");
-//                    });
-//                }
-//                treeToListOld.forEach(o->{
-//                    o.setIsAdd(null);
-//                });
-//                treeToListNew.addAll(collect);
-//                treeToListNew.addAll(treeToListOld);
-//            }else{
-//                treeToList.forEach(l->{
-//                    l.setIsAdd("1");
-//                });
-//                treeToListNew.addAll(treeToList);
-//            }
-//        }
         if(!CollectionUtils.isEmpty(treeToList)){
-            KcsjEquipEntryRecord kcsjEquipEntryRecord = new KcsjEquipEntryRecord();
-            kcsjEquipEntryRecord.setUpdateUser(SecurityUtils.getUserName());
-            kcsjEquipEntryRecord.setUpdateTime(DateUtils.getNowDate());
-            kcsjEquipEntryRecordMapper.delEquipEntryAll(kcsjEquipEntryRecord);
-        }
-        if(!CollectionUtils.isEmpty(treeToList)){
-            for (int i = 0; i < treeToList.size(); i++) {
-                if(!CollectionUtils.isEmpty(treeToList.get(i).getChildren())){
-                    List<KcsjEquipEntryRecord> children = treeToList.get(i).getChildren();
-                    for (int j = 0; j < children.size(); j++) {
-                        KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo = new KcsjEquipEntryRecordInfo();
-                        kcsjEquipEntryRecordInfo.setTeamName(treeToList.get(i).getTeamName());
-                        kcsjEquipEntryRecordInfo.setEquipCode(children.get(j).getEquipCode());
-                        List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoService.selectInfos(kcsjEquipEntryRecordInfo);
-                        if(!CollectionUtils.isEmpty(kcsjEquipEntryRecordInfoList)){
-                            children.get(j).setKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfoList);
-                        }else{
-                            children.get(j).setKcsjEquipEntryRecordInfoList(new ArrayList<>());
+            // 查询所有数据
+            List<KcsjEquipEntryRecord> kcsjEquipEntryRecords = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecord(new KcsjEquipEntryRecord());
+            if(kcsjEquipEntryRecords.size()>0){
+                // 同步数据 tree转list
+                List<KcsjEquipEntryRecord> list1 = TreeUtil.treeToListWithoutId(treeToList);
+                kcsjEquipEntryRecords.forEach(k->{
+                    k.setIsAdd(null);
+                });
+                // 已存在数据过滤
+                List<String> list2 = kcsjEquipEntryRecords.stream().map(KcsjEquipEntryRecord::getSyncId).collect(Collectors.toList());
+                // 获取差集
+                List<KcsjEquipEntryRecord> list3 = list1.stream().filter(a -> !list2.contains(a.getSyncId())).collect(Collectors.toList());
+                if(list3.size()>0){
+                    list3.forEach(l3->{
+                        l3.setIsAdd("1");
+                    });
+                    List<KcsjEquipEntryRecord> list5 = TreeUtil.newBuild(list3);
+                    treeToListNew.addAll(list5);
+                }
+                List<KcsjEquipEntryRecord> list4 = TreeUtil.newBuild(kcsjEquipEntryRecords);
+                for (int i = 0; i < list4.size(); i++) {
+                    if(!CollectionUtils.isEmpty(list4.get(i).getChildren())){
+                        List<KcsjEquipEntryRecord> children = list4.get(i).getChildren();
+                        for (int j = 0; j < children.size(); j++) {
+                            KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo = new KcsjEquipEntryRecordInfo();
+                            kcsjEquipEntryRecordInfo.setTeamName(list4.get(i).getTeamName());
+                            kcsjEquipEntryRecordInfo.setEquipCode(children.get(j).getEquipCode());
+                            List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoService.selectInfos(kcsjEquipEntryRecordInfo);
+                            if(!CollectionUtils.isEmpty(kcsjEquipEntryRecordInfoList)){
+                                children.get(j).setKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfoList);
+                            }else{
+                                children.get(j).setKcsjEquipEntryRecordInfoList(new ArrayList<>());
+                            }
                         }
                     }
                 }
+                treeToListNew.addAll(list4);
+
+            }else{
+                treeToListNew.addAll(treeToList);
             }
         }
-        kcsjEquipEntryRecordVo.setTreeList(treeToList);
+        kcsjEquipEntryRecordVo.setTreeList(treeToListNew);
         return kcsjEquipEntryRecordVo;
     }
     private void digui(List<LinkedHashMap<String, Object>> list, List<KcsjEquipEntryRecord> treeToList) {
@@ -325,6 +317,7 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
             KcsjEquipEntryRecord kcsjEquipEntryRecord = new KcsjEquipEntryRecord();
             kcsjEquipEntryRecord.setId(IdWorker.createId());
             kcsjEquipEntryRecord.setPid(0L);
+            kcsjEquipEntryRecord.setSyncId(l.get("id").toString());
             kcsjEquipEntryRecord.setTeamId(l.get("teamId") == null ? null : l.get("teamId").toString());
             kcsjEquipEntryRecord.setTeamNumber(l.get("teamNumber") == null ? null : l.get("teamNumber").toString());
             kcsjEquipEntryRecord.setTeamName(l.get("teamName") == null ? null : l.get("teamName").toString());
@@ -339,6 +332,10 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                     KcsjEquipEntryRecord kcsjEquipEntryRecord1 = new KcsjEquipEntryRecord();
                     kcsjEquipEntryRecord1.setId(IdWorker.createId());
                     kcsjEquipEntryRecord1.setPid(kcsjEquipEntryRecord.getId());
+                    kcsjEquipEntryRecord1.setSyncId(q.get("id").toString());
+                    kcsjEquipEntryRecord1.setTeamId(l.get("teamId") == null ? null : l.get("teamId").toString());
+                    kcsjEquipEntryRecord1.setTeamNumber(l.get("teamNumber") == null ? null : l.get("teamNumber").toString());
+                    kcsjEquipEntryRecord1.setTeamName(l.get("teamName") == null ? null : l.get("teamName").toString());
                     kcsjEquipEntryRecord1.setEquipCode(q.get("equCode") == null ? null : q.get("equCode").toString());
                     kcsjEquipEntryRecord1.setEquipName(q.get("equName") == null ? null : q.get("equName").toString());
                     kcsjEquipEntryRecord1.setEquipSpec(q.get("equSpec") == null ? null : q.get("equSpec").toString());

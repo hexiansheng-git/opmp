@@ -133,6 +133,7 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
             sgjsPlanMeasureManage.setPlanEndDate(
                 l.get("planEndDate") == null ? null : FtDateUtils.parseDate(l.get("planEndDate")));
             sgjsPlanMeasureManage.setId(IdWorker.createId());
+            sgjsPlanMeasureManage.setPid(0L);
             //同步标识
             sgjsPlanMeasureManage.setDataSource("1");
             sgjsPlanMeasureManage.setIsAdd("1");
