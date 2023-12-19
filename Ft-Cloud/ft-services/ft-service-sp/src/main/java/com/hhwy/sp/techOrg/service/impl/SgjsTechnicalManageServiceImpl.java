@@ -173,7 +173,8 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         AjaxResult result=validData(sgjsTechnicalManageVo.getTreeList());
         if(result.get("code").toString().equals("200")){
             treeToList=(List<SgjsTechnicalManage>)result.get("data");
-        }else {
+        }
+        else {
             return result;
         }
         //数据处理
@@ -192,6 +193,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             manage.setCreateUser(SecurityUtils.getUserId()+"");
         }
         List<SgjsTechnicalManage> insertList = treeToList.stream().filter(e -> StringUtils.isNotEmpty(e.getType()) && e.getType().equals("1")).collect(Collectors.toList());
+
         //批量入库
         if(!CollectionUtils.isEmpty(insertList)){
             sgjsTechnicalManageMapper.insertSgjsTechnicalManageList(insertList);
@@ -218,7 +220,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             logger.info("子表未删除。。。。。。。。。。");
         }
         //同步总部数据
-        syncDataToGm(treeToList);
+       // syncDataToGm(treeToList);
         return AjaxResult.success();
     }
 
@@ -235,6 +237,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             info.setId(Long.parseLong(delIdList.get(i)));
             info.setUpdateUser(SecurityUtils.getUserId()+"");
             info.setUpdateTime(DateUtils.getNowDate());
+            info.setDelFlag("1");
             list.add(info);
         }
         //删除
@@ -255,43 +258,31 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         if(CollectionUtils.isEmpty(msgList)){
             return AjaxResult.success(list);
         }
-        String msg = StringUtils.join(msgList, ",");
+        Set set=new HashSet(msgList);
+        String msg = StringUtils.join(set, ",");
         return AjaxResult.error(msg);
     }
 
+    /**
+     * 校验最后层级的用户姓名必填即可
+     *
+     * @param list
+     * @param msgList
+     */
     private void validDataDigui(List<SgjsTechnicalManage>list,List<String> msgList){
         for (SgjsTechnicalManage info:list ) {
-            Integer headCount = info.getHeadCount();
-            if(null==headCount){
-                msgList.add(info.getPostName()+"编制人数不能为空");
-            }else{
-                if(headCount==1){
-                    String name = info.getUserName();
-                    if(StringUtils.isEmpty(name)){
-                        msgList.add(info.getPostName()+"人员姓名不能为空");
-                    }
+            List<SgjsTechnicalManage> children = info.getChildren();
+            if(0==children.size() || null==children){
+                String userName = info.getUserName();
+                if(StringUtils.isEmpty(userName)){
+                    msgList.add(info.getPostName()+"人员姓名不能为空");
                 }
-                List<SgjsTechnicalManage> children = info.getChildren();
-                //headCount的量  校验实际进场和人员姓名
-                if(headCount==children.size()){
-                    for (int i = 0; i < children.size(); i++) {
-                        if(null!=children.get(i).getHeadCount()){
-                            //实际日期
-                            String actualDateStr = children.get(i).getActualDateStr();
-                            if(StringUtils.isEmpty(actualDateStr)){
-                                msgList.add(info.getPostName()+"实际进场不能为空");
-                            }
-                            String userName = children.get(i).getUserName();
-                            if(StringUtils.isEmpty(userName)){
-                                msgList.add(info.getPostName()+"人员姓名不能为空");
-                            }
-                        }
-                    }
-                }else{
-                    msgList.add("编制人数和子集不匹配");
+            }else{
+                String userName = children.get(children.size() - 1).getUserName();
+                if(StringUtils.isEmpty(userName)){
+                    msgList.add(children.get(children.size() - 1).getPostName()+"人员姓名不能为空");
                 }
             }
-
             if(!CollectionUtils.isEmpty(info.getChildren())){
                 validDataDigui(info.getChildren(),msgList);
             }
