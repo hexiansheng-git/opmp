@@ -393,21 +393,6 @@
                     when `id`=#{item.id} then #{item.deptId}
                 </foreach>
             </trim>
-            <trim prefix="create_user  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createUser}
-                </foreach>
-            </trim>
-            <trim prefix="create_user_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createUserName}
-                </foreach>
-            </trim>
-            <trim prefix="create_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createTime}
-                </foreach>
-            </trim>
             <trim prefix="update_user  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.updateUser}
@@ -416,21 +401,6 @@
             <trim prefix="update_time  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.updateTime}
-                </foreach>
-            </trim>
-            <trim prefix="del_user  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delUser}
-                </foreach>
-            </trim>
-            <trim prefix="del_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delTime}
-                </foreach>
-            </trim>
-            <trim prefix="del_flag  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delFlag}
                 </foreach>
             </trim>
             <trim prefix="pt_var1  = case" suffix="end,">
@@ -510,5 +480,9 @@
                 #{id}
             </foreach>
         </where>
+    </update>
+
+    <update id="deleteAll">
+        update `kcsj_disclosure_record` set del_flag = 1
     </update>
 </mapper>

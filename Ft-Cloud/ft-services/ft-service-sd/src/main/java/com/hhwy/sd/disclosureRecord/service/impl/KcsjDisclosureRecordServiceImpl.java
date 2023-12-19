@@ -131,7 +131,11 @@ public class KcsjDisclosureRecordServiceImpl implements IKcsjDisclosureRecordSer
     }
 
     @Override
+    @Transactional
     public List<KcsjDisclosureRecord> sync() {
+        //删除所有数据
+        kcsjDisclosureRecordMapper.deleteAll();
+
         List<KcsjDisclosureRecord> recordList = new ArrayList<>();
         List<DesignDisclosurePlanDto> disclosurePlanDtoList = pmServiceApi.getDisclosurePlanDtoList();
         if(CollectionUtils.isEmpty(disclosurePlanDtoList)){
@@ -147,12 +151,15 @@ public class KcsjDisclosureRecordServiceImpl implements IKcsjDisclosureRecordSer
             record.setDisclosureContent(dto.getDisclosureContent());
             record.setActualDisclosureDate(dto.getPlanDisclosureDate());
             record.setDataSource("1");
-            record.setIsAdd("1");
+            record.setIsAdd("0");
             record.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             record.setCreateUser(SecurityUtils.getUserName());
             record.setCreateTime(DateUtils.getNowDate());
             recordList.add(record);
         }
+
+        //入库
+        kcsjDisclosureRecordMapper.insertKcsjDisclosureRecordList(recordList);
         return recordList;
     }
 }
