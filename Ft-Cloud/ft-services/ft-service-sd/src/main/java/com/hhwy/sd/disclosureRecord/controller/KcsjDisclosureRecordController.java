@@ -105,6 +105,7 @@ public class KcsjDisclosureRecordController extends BaseController {
      * @param file
      * @return
      */
+    @PreAuthorize(hasPermi = "kcsjDisclosureRecord:import")
     @PostMapping("/importData")
     public AjaxResult importData(@RequestPart("file") MultipartFile file){
         FtExcelUtil<KcsjDisclosureRecord> util = new FtExcelUtil<>(KcsjDisclosureRecord.class);
@@ -127,6 +128,7 @@ public class KcsjDisclosureRecordController extends BaseController {
      * @param queryVo
      * @throws IOException
      */
+    @PreAuthorize(hasPermi = "kcsjDisclosureRecord:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody DisclosureRecordQueryVo queryVo) throws IOException {
         List<Long> ids = queryVo.getIds();
@@ -144,6 +146,7 @@ public class KcsjDisclosureRecordController extends BaseController {
      * 同步前期策划交底记录
      * @return
      */
+    @PreAuthorize(hasPermi = "kcsjDisclosureRecord:sync")
     @PostMapping("sync")
     public AjaxResult sync() {
         List<KcsjDisclosureRecord> recordList = kcsjDisclosureRecordService.sync();
