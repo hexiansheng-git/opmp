@@ -3,6 +3,7 @@ package com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.mapper;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.KcsjPlanMonthlyReport;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.vo.PlanMonthlyReportQueryVo;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @date 2023-12-18 11:21:39
  * @remark
  */
+@Repository
 public interface KcsjPlanMonthlyReportMapper {
 
     KcsjPlanMonthlyReport getKcsjPlanMonthlyReport(KcsjPlanMonthlyReport kcsjPlanMonthlyReport);
