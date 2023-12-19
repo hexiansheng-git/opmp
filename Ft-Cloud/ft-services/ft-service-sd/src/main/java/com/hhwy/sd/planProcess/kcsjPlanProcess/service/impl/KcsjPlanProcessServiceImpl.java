@@ -16,6 +16,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sd.organManage.util.StatisticsUtils;
+import com.hhwy.sd.organManage.util.TreeCountUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.stereotype.Service;
@@ -47,11 +48,19 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
     }
 
     public List<KcsjPlanProcess> getKcsjPlanProcessList(KcsjPlanProcess kcsjPlanProcess) {
+        Long pid = kcsjPlanProcess.getPid();
+        List<KcsjPlanProcess> allList = kcsjPlanProcessMapper.getKcsjPlanProcessList(new KcsjPlanProcess());
         List<KcsjPlanProcess> kcsjPlanProcessList = kcsjPlanProcessMapper.getKcsjPlanProcessList(kcsjPlanProcess);
+        if(CollectionUtils.isNotEmpty(allList) && CollectionUtils.isNotEmpty(kcsjPlanProcessList)) {
+            if(allList.size() == kcsjPlanProcessList.size()) {
+                return TreeUtil.build(kcsjPlanProcessList, pid);
+            }
+        }
         if(CollectionUtils.isEmpty(kcsjPlanProcessList)) {
             return kcsjPlanProcessList;
         }
-        return TreeUtil.build(kcsjPlanProcessList, kcsjPlanProcess.getPid());
+        TreeCountUtils<KcsjPlanProcess> treeCountUtils = new TreeCountUtils<>();
+        return TreeUtil.build(treeCountUtils.queryTree(allList, kcsjPlanProcessList, pid), pid);
     }
 
     @Transactional
