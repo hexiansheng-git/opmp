@@ -73,11 +73,11 @@ public class SgjsReportMeasureSubmit extends TreeNode<SgjsReportMeasureSubmit> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划提交日期", dateFormat = "yyyy-MM-dd")
+
     private Date planStartDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
+    @Excel(name = "计划提交日期")
     private String planStartDateStr;
 
     /**
@@ -85,14 +85,12 @@ public class SgjsReportMeasureSubmit extends TreeNode<SgjsReportMeasureSubmit> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "实际提交日期", dateFormat = "yyyy-MM-dd")
     private Date realStartDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
+    @Excel(name = "实际提交日期")
     private String realStartDateStr;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     private String realEndDateStr;
 

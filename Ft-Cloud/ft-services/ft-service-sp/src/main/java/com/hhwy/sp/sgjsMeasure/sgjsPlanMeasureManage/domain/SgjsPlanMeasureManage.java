@@ -66,32 +66,36 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划开始日期", dateFormat = "yyyy-MM-dd")
     private Date planStartDate;
+    @Excel(name = "计划开始日期")
+    private String planStartDateStr;
 
     /**
      * 字段描述：计划结束日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划结束日期", dateFormat = "yyyy-MM-dd")
     private Date planEndDate;
+    @Excel(name = "计划结束日期")
+    private String planEndDateStr;
 
     /**
      * 字段描述：实际开始日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "实际开始日期", dateFormat = "yyyy-MM-dd")
     private Date realStartDate;
+    @Excel(name = "实际开始日期")
+    private String realStartDateStr;
 
     /**
      * 字段描述：实际结束日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "实际结束日期", dateFormat = "yyyy-MM-dd")
     private Date realEndDate;
+    @Excel(name = "实际结束日期")
+    private String realEndDateStr;
 
     /**
      * 字段描述：备注
@@ -195,15 +199,6 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
     @JsonProperty
     //@Excel(name = "预留字段5")
     private String ptVar5;
-
-
-    private String planStartDateStr;
-
-    private String planEndDateStr;
-
-    private String realStartDateStr;
-
-    private String realEndDateStr;
 
     //节点判断标识
     private String path;
