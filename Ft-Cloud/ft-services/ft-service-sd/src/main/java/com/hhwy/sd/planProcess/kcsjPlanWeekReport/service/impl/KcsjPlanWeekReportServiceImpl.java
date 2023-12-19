@@ -41,7 +41,7 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
     @Transactional
     public int insertKcsjPlanWeekReport(KcsjPlanWeekReport kcsjPlanWeekReport) {
         kcsjPlanWeekReport.setId(IdWorker.createId());
-        kcsjPlanWeekReport.setCreateUser(SecurityUtils.getUserName());
+//        kcsjPlanWeekReport.setCreateUser(SecurityUtils.getUserName());
         kcsjPlanWeekReport.setCreateTime(DateUtils.getNowDate());
         return kcsjPlanWeekReportMapper.insertKcsjPlanWeekReport(kcsjPlanWeekReport);
     }
