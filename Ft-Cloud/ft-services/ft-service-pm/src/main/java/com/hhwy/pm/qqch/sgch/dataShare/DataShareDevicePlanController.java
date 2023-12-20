@@ -39,7 +39,8 @@ public class DataShareDevicePlanController {
             String oldDataSource = DynamicDataSourceContextHolder.peek();
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
             try {
-                dataShareDevicePlanService.eachStagePush(tenantKey);
+//                dataShareDevicePlanService.eachStagePush(tenantKey);
+                dataShareDevicePlanService.eachChangePush(tenantKey);
             }catch (Exception e){
                 e.printStackTrace();
                 throw new CustomException(e.getMessage());

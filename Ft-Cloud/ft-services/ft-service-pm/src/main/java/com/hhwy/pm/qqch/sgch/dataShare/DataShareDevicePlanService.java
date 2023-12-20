@@ -21,7 +21,7 @@ public class DataShareDevicePlanService {
     @Transactional
     public void eachStagePush(String tenantKey){
         //清空目标数据库版本为1.0的数据
-        dataShareDevicePlanMapper.deleteByOneVersion();
+//        dataShareDevicePlanMapper.deleteByOneVersion();
         //新增数据
         dataShareDevicePlanMapper.dataPush(tenantKey);
     }
@@ -29,9 +29,9 @@ public class DataShareDevicePlanService {
     //变更数据推送；每次变更版本+1,数据追加推送，最后把上一版本valid改为无效
     @Transactional
     public void eachChangePush(String tenantKey){
-        //新增数据
-        dataShareDevicePlanMapper.dataPush(tenantKey);
         //修改有效标识为失效
         dataShareDevicePlanMapper.updateValidFlag();
+        //新增数据
+        dataShareDevicePlanMapper.dataPush(tenantKey);
     }
 }
