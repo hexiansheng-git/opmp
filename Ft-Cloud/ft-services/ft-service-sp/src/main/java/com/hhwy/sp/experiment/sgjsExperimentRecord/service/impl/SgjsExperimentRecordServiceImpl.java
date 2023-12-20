@@ -67,11 +67,13 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
         }
         //根据子表查询 detail表
         List<String> infoIdList = infoList.stream().map(e -> e.getId()+"").collect(Collectors.toList());
-        List<SgjsExperimentRecordInfoDetail> detailList=detailMapper.selectByInfoIdList(infoIdList);
-        for (int i = 0; i < infoList.size(); i++) {
-            String infoId = infoList.get(i).getId()+"";
-            List<SgjsExperimentRecordInfoDetail> detaList = detailList.stream().filter(e -> StringUtils.valueOf(e.getInfoId()).equals(infoId)).collect(Collectors.toList());
-            infoList.get(i).setDetailList(detaList);
+        if(!CollectionUtils.isEmpty(infoIdList)){
+            List<SgjsExperimentRecordInfoDetail> detailList=detailMapper.selectByInfoIdList(infoIdList);
+            for (int i = 0; i < infoList.size(); i++) {
+                String infoId = infoList.get(i).getId()+"";
+                List<SgjsExperimentRecordInfoDetail> detaList = detailList.stream().filter(e -> StringUtils.valueOf(e.getInfoId()).equals(infoId)).collect(Collectors.toList());
+                infoList.get(i).setDetailList(detaList);
+            }
         }
         return list;
     }

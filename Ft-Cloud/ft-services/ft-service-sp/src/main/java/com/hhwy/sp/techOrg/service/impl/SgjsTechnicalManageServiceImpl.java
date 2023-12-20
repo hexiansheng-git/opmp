@@ -102,7 +102,8 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             }
             info.setLeaf(info.getPtVar2());
         }
-        vo.setTreeList(TreeUtil.newBuild(list));
+        List<SgjsTechnicalManage> manages =TreeUtil.newBuild(list) ;
+        vo.setTreeList(manages);
         return vo;
     }
 
@@ -179,7 +180,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             return result;
         }
         //数据处理
-        treeToList= TreeUtil.treeToList(sgjsTechnicalManageVo.getTreeList());
+        treeToList= TreeUtil.treeToListWithoutNewId(sgjsTechnicalManageVo.getTreeList());
         for (int i = 0; i < treeToList.size(); i++) {
             SgjsTechnicalManage manage = treeToList.get(i);
             String actualDateStr = manage.getActualDateStr();
@@ -228,23 +229,34 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
 
     /**
      * 批量删除
+     * 并删除根节点下的子节点
      *
      * @param delIdList
      */
     private void deleteByIds(List<String> delIdList){
+        if(CollectionUtils.isEmpty(delIdList)){
+            logger.error("暂无需要删除的数据");
+            return;
+        }
+        //	List<String>转List<Long>
+        List<Long> rootIds = delIdList.stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList());
+        //查出根节点下子节点
+        List<SgjsTechnicalManage> batchSelect = sgjsTechnicalManageMapper.batchSelect(rootIds);
+        if(CollectionUtils.isEmpty(batchSelect)){
+            return;
+        }
+        //取出删除id
+        List<String> delList = batchSelect.stream().map(e -> e.getId() + "").collect(Collectors.toList());
         List<SgjsTechnicalManage> list =new ArrayList<>();
-        for (int i = 0; i < delIdList.size(); i++) {
+        for (int i = 0; i < delList.size(); i++) {
             SgjsTechnicalManage info=new SgjsTechnicalManage();
-            info.setId(Long.parseLong(delIdList.get(i)));
+            info.setId(Long.parseLong(delList.get(i)));
             info.setUpdateUser(SecurityUtils.getUserId()+"");
             info.setUpdateTime(DateUtils.getNowDate());
             info.setDelFlag("1");
             list.add(info);
         }
-        //删除
-        if(!CollectionUtils.isEmpty(list)){
-            sgjsTechnicalManageMapper.deleteInfoData(list);
-        }
+        sgjsTechnicalManageMapper.deleteInfoData(list);
     }
 
     /**
@@ -325,12 +337,15 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         diguiTechTree(techIdList,treeToList);
         //根据techId 批量查询进/离场记录
         SgjsTechnicalManageInfo info=new SgjsTechnicalManageInfo();
-        info.setTechIdList(techIdList);
-        List<SgjsTechnicalManageInfo> infoList = sgjsTechnicalManageInfoMapper.getSgjsTechnicalManageInfoList(info);
-        // 主表、子表数据一起同步
         Map<String,Object> map=new HashMap<>();
+        if(!CollectionUtils.isEmpty(techIdList)){
+            info.setTechIdList(techIdList);
+            List<SgjsTechnicalManageInfo> infoList = sgjsTechnicalManageInfoMapper.getSgjsTechnicalManageInfoList(info);
+            // 主表、子表数据一起同步
+            map.put("infoList",infoList);
+        }
         map.put("techList",treeToList);
-        map.put("infoList",infoList);
+
         long beginMills = System.currentTimeMillis();
         Integer status = 1;
         String errMsg = "";

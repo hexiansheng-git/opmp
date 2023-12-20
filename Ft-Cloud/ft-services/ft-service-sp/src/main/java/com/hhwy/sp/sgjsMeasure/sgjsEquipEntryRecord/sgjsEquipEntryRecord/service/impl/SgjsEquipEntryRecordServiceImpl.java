@@ -75,13 +75,15 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
         }
         //查询自检自校详情表数据
         List<String> infoIdList = infoList.stream().map(e -> e.getId() + "").collect(Collectors.toList());
-        List<SgjsEquipEntryRecordInfoDetail> detailList= detailMapper.selectByInfoId(infoIdList);
-        if(!CollectionUtils.isEmpty(detailList)){
-            for (int i = 0; i < infoList.size(); i++) {
-                SgjsEquipEntryRecordInfo info = infoList.get(i);
-                String infoId=info.getId()+"";
-                List<SgjsEquipEntryRecordInfoDetail> detaList = detailList.stream().filter(e -> String.valueOf(e.getInfoId()).equals(infoId)).collect(Collectors.toList());
-                info.setDetailList(detaList);
+        if(!CollectionUtils.isEmpty(infoIdList)){
+            List<SgjsEquipEntryRecordInfoDetail> detailList= detailMapper.selectByInfoId(infoIdList);
+            if(!CollectionUtils.isEmpty(detailList)){
+                for (int i = 0; i < infoList.size(); i++) {
+                    SgjsEquipEntryRecordInfo info = infoList.get(i);
+                    String infoId=info.getId()+"";
+                    List<SgjsEquipEntryRecordInfoDetail> detaList = detailList.stream().filter(e -> String.valueOf(e.getInfoId()).equals(infoId)).collect(Collectors.toList());
+                    info.setDetailList(detaList);
+                }
             }
         }
         return list;
@@ -188,7 +190,7 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             sgjsEquipEntryRecordMapper.insertSgjsEquipEntryRecordList(insertList);
             return AjaxResult.success(list);
         }
-        return AjaxResult.success("未同步到新数据！");
+        return AjaxResult.success("暂未同步到新数据！");
     }
 
     @Override

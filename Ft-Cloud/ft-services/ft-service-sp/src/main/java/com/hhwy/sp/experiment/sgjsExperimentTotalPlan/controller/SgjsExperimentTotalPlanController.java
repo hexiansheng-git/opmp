@@ -1,25 +1,21 @@
 package com.hhwy.sp.experiment.sgjsExperimentTotalPlan.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-import java.util.Map;
-
-import com.hhwy.feign.service.PmServiceApi;
-import com.hhwy.utils.ObjectUtils;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.service.ISgjsExperimentTotalPlanService;
-import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.domain.SgjsExperimentTotalPlan;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.domain.SgjsExperimentTotalPlan;
+import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.service.ISgjsExperimentTotalPlanService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author lcf--试验总体计划
@@ -33,8 +29,6 @@ public class SgjsExperimentTotalPlanController extends BaseController{
 
     @Autowired
     private ISgjsExperimentTotalPlanService sgjsExperimentTotalPlanService;
-
-
 
 
     @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:list")
@@ -105,6 +99,7 @@ public class SgjsExperimentTotalPlanController extends BaseController{
      * @return
      */
     @GetMapping("/selectPrjById")
+    @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:selectPrjById")
     public AjaxResult selectPrjById(){
         SgjsExperimentTotalPlan info =sgjsExperimentTotalPlanService.selectDetailInfo();
         return AjaxResult.success(info);
