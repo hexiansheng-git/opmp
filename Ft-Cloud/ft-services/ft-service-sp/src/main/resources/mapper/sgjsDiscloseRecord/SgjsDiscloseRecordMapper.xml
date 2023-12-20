@@ -147,8 +147,8 @@
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="discloseLevel != null  and discloseLevel != ''">and `disclose_level` = #{discloseLevel}</if>
-            <if test="discloseName != null  and discloseName != ''">and `disclose_name` = #{discloseName}</if>
-            <if test="discloseUser != null  and discloseUser != ''">and `disclose_user` = #{discloseUser}</if>
+            <if test="discloseName != null  and discloseName != ''">and `disclose_name` like concat('%',#{discloseName},'%')</if>
+            <if test="discloseUser != null  and discloseUser != ''">and `disclose_user` like concat('%',#{discloseUser},'%')</if>
             <if test="discloseUserPost != null  and discloseUserPost != ''">and `disclose_user_post` =
                 #{discloseUserPost}
             </if>
