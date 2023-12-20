@@ -4,6 +4,7 @@ import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.tree.TreeUtil;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
@@ -141,7 +142,18 @@ public class SgjsPlanMeasureManageController extends BaseController {
         }else{
             List<SgjsPlanMeasureManage> list = sgjsPlanMeasureManageService.getIds(ids);
             if(CollectionUtils.isNotEmpty(list)){
+                list.forEach(plan -> {
+                    //plan.setPlanStartDateStr(FtDateUtils.formatDate(plan.getPlanStartDate()));
+                    plan.setPlanStartDateStr(plan.getPlanStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(plan.getPlanStartDate()));
+                    //plan.setPlanEndDateStr(FtDateUtils.formatDate(plan.getPlanEndDate()));
+                    plan.setPlanEndDateStr(plan.getPlanEndDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(plan.getPlanEndDate()));
+                    //plan.setRealStartDateStr(FtDateUtils.formatDate(plan.getRealStartDate()));
+                    plan.setRealStartDateStr(plan.getRealStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(plan.getRealStartDate()));
+                    //plan.setRealEndDateStr(FtDateUtils.formatDate(plan.getRealEndDate()));
+                    plan.setRealEndDateStr(plan.getRealEndDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(plan.getRealEndDate()));
+                });
                 treeList = list;
+
             }
         }
         ExcelUtils<SgjsPlanMeasureManage> utils = new ExcelUtils<>(SgjsPlanMeasureManage.class);

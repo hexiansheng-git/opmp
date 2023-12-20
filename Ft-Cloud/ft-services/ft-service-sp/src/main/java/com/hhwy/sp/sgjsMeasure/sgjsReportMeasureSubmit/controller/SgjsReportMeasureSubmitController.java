@@ -12,6 +12,7 @@ import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.mapper.SgjsReportMeasureS
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.ISgjsReportMeasureSubmitService;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import java.text.SimpleDateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
@@ -129,6 +130,12 @@ public class SgjsReportMeasureSubmitController extends BaseController {
         }else{
             List<SgjsReportMeasureSubmit> list = sgjsReportMeasureSubmitService.getIds(ids);
             if(CollectionUtils.isNotEmpty(list)){
+                for (SgjsReportMeasureSubmit info:list) {
+                    //info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : FtDateUtils.formatDate(info.getPlanStartDate()));
+                    info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(info.getPlanStartDate()));
+                    //info.setRealStartDateStr(info.getRealStartDate() == null ? null : FtDateUtils.formatDate(info.getRealStartDate()));
+                    info.setRealStartDateStr(info.getRealStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(info.getRealStartDate()));
+                }
                 treeList = list;
             }
         }

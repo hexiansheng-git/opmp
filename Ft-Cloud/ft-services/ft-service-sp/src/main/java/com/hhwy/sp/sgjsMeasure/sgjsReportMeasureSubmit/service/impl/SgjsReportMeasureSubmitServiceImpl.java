@@ -49,11 +49,13 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
             sgjsReportMeasureSubmit.setRealEndDateStr(split[1].replaceAll("(?:年|月|日)", "-"));
         }
         List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList = sgjsReportMeasureSubmitMapper.getSgjsReportMeasureSubmitList(sgjsReportMeasureSubmit);
-        for (SgjsReportMeasureSubmit info:sgjsReportMeasureSubmitList) {
-            //info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : FtDateUtils.formatDate(info.getPlanStartDate()));
-            info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(info.getPlanStartDate()));
-            //info.setRealStartDateStr(info.getRealStartDate() == null ? null : FtDateUtils.formatDate(info.getRealStartDate()));
-            info.setRealStartDateStr(info.getRealStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(info.getRealStartDate()));
+        if(sgjsReportMeasureSubmitList.size()>0){
+            for (SgjsReportMeasureSubmit info:sgjsReportMeasureSubmitList) {
+                //info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : FtDateUtils.formatDate(info.getPlanStartDate()));
+                info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(info.getPlanStartDate()));
+                //info.setRealStartDateStr(info.getRealStartDate() == null ? null : FtDateUtils.formatDate(info.getRealStartDate()));
+                info.setRealStartDateStr(info.getRealStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(info.getRealStartDate()));
+            }
         }
         sgjsReportMeasureSubmitVo.setTreeList(sgjsReportMeasureSubmitList);
         return sgjsReportMeasureSubmitVo;
