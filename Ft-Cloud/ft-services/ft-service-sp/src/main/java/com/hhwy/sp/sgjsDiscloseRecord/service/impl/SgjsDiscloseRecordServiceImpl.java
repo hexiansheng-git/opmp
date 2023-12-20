@@ -39,7 +39,7 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
     public List<SgjsDiscloseRecord> getSgjsDiscloseRecordList(SgjsDiscloseRecord sgjsDiscloseRecord) {
         String dataType = sgjsDiscloseRecord.getDataType();
         if(StringUtils.isEmpty(dataType)) {
-            throw new RuntimeException("参数异常！");
+            return new ArrayList<>();
         }
         return sgjsDiscloseRecordMapper.getSgjsDiscloseRecordList(sgjsDiscloseRecord);
     }
