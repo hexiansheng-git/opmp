@@ -152,6 +152,12 @@
             <if test="actualDateBegin != null"> and `actual_date` &gt;= #{actualDateBegin}</if>
             <if test="actualDateEnd != null"> and `actual_date` &lt;= #{actualDateEnd}</if>
             <if test="path != null  and path != ''"> and `path` = #{path}</if>
+            <if test="null!=pathList and pathList.size()>0">
+                and id in
+                <foreach collection="pathList" open="(" separator="," close=")" item="path">
+                    #{path}
+                </foreach>
+            </if>
         </where>
         order by create_time desc
     </select>

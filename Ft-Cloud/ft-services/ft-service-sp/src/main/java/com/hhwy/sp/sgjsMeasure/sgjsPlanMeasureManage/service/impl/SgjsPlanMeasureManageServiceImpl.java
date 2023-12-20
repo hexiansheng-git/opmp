@@ -99,10 +99,9 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
                 SgjsPlanMeasureManage sgjsPlanMeasureManage1 = new SgjsPlanMeasureManage();
                 for (int i = 0; i < list1.size(); i++) {
                     String[] split = list1.get(i).getPath().split("/");
-                    String path = split[0];
-                    sgjsPlanMeasureManage1.setId(Long.parseLong(path));
-                    SgjsPlanMeasureManage sgjsPlanMeasureManage2 = sgjsPlanMeasureManageMapper.getSgjsPlanMeasureManage(sgjsPlanMeasureManage1);
-                    sgjsPlanMeasureManageList.add(sgjsPlanMeasureManage2);
+                    sgjsPlanMeasureManage1.setPaths(split);
+                    List<SgjsPlanMeasureManage> sgjsPlanMeasureManage2 = sgjsPlanMeasureManageMapper.getSgjsPlanMeasureManageList(sgjsPlanMeasureManage1);
+                    sgjsPlanMeasureManageList.addAll(sgjsPlanMeasureManage2);
                 }
             }
             List<SgjsPlanMeasureManage> collect = sgjsPlanMeasureManageList.stream().distinct().collect(Collectors.toList());

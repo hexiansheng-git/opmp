@@ -102,9 +102,42 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             }
             info.setLeaf(info.getPtVar2());
         }
-        List<SgjsTechnicalManage> manages =TreeUtil.newBuild(list) ;
+
+        //组合显示根节点
+        List<SgjsTechnicalManage> handleData = handleData(list);
+        List<SgjsTechnicalManage> manages =TreeUtil.newBuild(handleData) ;
         vo.setTreeList(manages);
         return vo;
+    }
+
+    /**
+     * 查询子节点的根节点
+     *
+     * @param list
+     * @return
+     */
+    public List<SgjsTechnicalManage> handleData(List<SgjsTechnicalManage> list){
+        List<String> data=new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            String path = list.get(i).getPath();
+            if(StringUtils.isEmpty(path)){
+                continue;
+            }
+            if(path.contains("/")){
+                String[] split = path.split("/");
+                List allPath = Arrays.asList(split);
+                data.addAll(allPath);
+            }else{
+                data.add(path);
+            }
+        }
+        List<SgjsTechnicalManage> manageList=new ArrayList<>();
+        if(!CollectionUtils.isEmpty(data)){
+            SgjsTechnicalManage info=new SgjsTechnicalManage();
+            info.setPathList(data);
+            manageList = sgjsTechnicalManageMapper.getSgjsTechnicalManageList(info);
+        }
+        return manageList;
     }
 
 

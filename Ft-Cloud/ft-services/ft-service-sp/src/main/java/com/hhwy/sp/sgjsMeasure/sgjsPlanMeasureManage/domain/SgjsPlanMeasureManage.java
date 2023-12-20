@@ -204,6 +204,10 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
     //节点判断标识
     private String path;
 
+    //节点查询
+    private String[] paths;
+
+
     //导入查询
     private List<String> ids;
 

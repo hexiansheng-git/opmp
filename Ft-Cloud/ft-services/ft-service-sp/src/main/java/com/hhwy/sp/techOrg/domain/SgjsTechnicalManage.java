@@ -226,6 +226,16 @@ public class SgjsTechnicalManage extends TreeNode<SgjsTechnicalManage> {
 
     private String path;
 
+    private List<String> pathList;
+
+    public List<String> getPathList() {
+        return pathList;
+    }
+
+    public void setPathList(List<String> pathList) {
+        this.pathList = pathList;
+    }
+
     public String getPath() {
         return path;
     }
