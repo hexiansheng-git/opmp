@@ -10,6 +10,7 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
+import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord4Update;
 import com.hhwy.sp.sgjsDiscloseRecord.service.ISgjsDiscloseRecordService;
 import com.hhwy.utils.excel.FtExcelUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -84,13 +85,22 @@ public class SgjsDiscloseRecordController extends BaseController {
 
     /**
      * 保存接口
-     * @param sgjsDiscloseRecordListParam
+     * @param
      * @return
      */
     @PreAuthorize(hasPermi = "sgjsDiscloseRecord:update")
     @PostMapping("/batchUpdate")
-    public AjaxResult updateSgjsDiscloseRecordList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsDiscloseRecord> sgjsDiscloseRecordListParam) {
-        return toAjax(sgjsDiscloseRecordService.updateSgjsDiscloseRecordList(sgjsDiscloseRecordListParam));
+    public AjaxResult updateSgjsDiscloseRecordList(@Validated(ValidationGroups.Update.class) @RequestBody SgjsDiscloseRecord4Update sgjsDiscloseRecord4Update) {
+        List<SgjsDiscloseRecord> sgjsDiscloseRecordListParam = sgjsDiscloseRecord4Update.getTreeList();
+        List<Long> delIdList = sgjsDiscloseRecord4Update.getDelIdList();
+        int i = 0;
+        if(CollectionUtils.isNotEmpty(sgjsDiscloseRecordListParam)) {
+            i += sgjsDiscloseRecordService.updateSgjsDiscloseRecordList(sgjsDiscloseRecordListParam);
+        }
+        if(CollectionUtils.isNotEmpty(delIdList)) {
+            i += sgjsDiscloseRecordService.deleteSgjsDiscloseRecordByPks(delIdList);
+        }
+        return toAjax(i);
     }
 
     @PreAuthorize(hasPermi = "sgjsDiscloseRecord:remove")
