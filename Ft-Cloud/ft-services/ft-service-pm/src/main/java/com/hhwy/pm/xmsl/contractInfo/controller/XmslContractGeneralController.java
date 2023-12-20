@@ -65,9 +65,12 @@ public class XmslContractGeneralController extends BaseController {
     @PreAuthorize(hasPermi = "xmslContractGeneral:add")
     @PostMapping("/batchAdd")
     @CustomLogger(title = "项目设立-合同信息-通用条件", name = "通用条件", businessType = CustomBusinessType.SAVE)
-    public AjaxResult insertXmslContractGeneralList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslContractGeneral> xmslContractGeneralListParam) {
-        xmslContractGeneralService.insertXmslContractGeneralList(xmslContractGeneralListParam);
-        return AjaxResult.success(xmslContractGeneralListParam);
+    public AjaxResult insertXmslContractGeneralList(@Validated(ValidationGroups.Save.class) @RequestBody XmslContractGeneralVo param) {
+        if (null == param.getMasterId()) {
+            return AjaxResult.error("masterId不能为空");
+        }
+        xmslContractGeneralService.insertXmslContractGeneralList(param);
+        return AjaxResult.success(param);
     }
 
     @PreAuthorize(hasPermi = "xmslContractGeneral:update")

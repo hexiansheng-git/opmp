@@ -18,7 +18,7 @@ public interface IXmslContractGeneralService {
 
     int insertXmslContractGeneral(XmslContractGeneral xmslContractGeneral);
 
-    int insertXmslContractGeneralList(List<XmslContractGeneral> xmslContractGeneralList);
+    void insertXmslContractGeneralList(XmslContractGeneralVo param);
 
     int updateXmslContractGeneral(XmslContractGeneral xmslContractGeneral);
 

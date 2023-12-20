@@ -79,28 +79,23 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
      * @return
      */
     @Transactional
-    public int insertXmslContractGeneralList(List<XmslContractGeneral> xmslContractGeneralList) {
-        if(CollectionUtils.isEmpty(xmslContractGeneralList)){
-            return 0;
+    public void insertXmslContractGeneralList(XmslContractGeneralVo param) {
+        Long masterId = param.getMasterId();
+        List<XmslContractGeneral> alreadyList = param.getAlreadyList();
+        //全量删除  根据masterId
+        xmslContractGeneralMapper.deleteXmslContractGeneralByPks(new ArrayList<>(), masterId);
+        //全量保存
+        if(CollectionUtils.isEmpty(alreadyList)){
+            return;
         }
-        List<XmslContractGeneral> insertList = new ArrayList<>();
-        List<XmslContractGeneral> updateList = new ArrayList<>();
-        for (XmslContractGeneral xmslContractGeneral : xmslContractGeneralList) {
-            this.recursionSubset(xmslContractGeneral, insertList, updateList);
+        List<XmslContractGeneral> saveList = new ArrayList<>();
+        for (XmslContractGeneral xmslContractGeneral : alreadyList) {
+            this.recursionSubset(xmslContractGeneral, saveList);
         }
-
-        if (insertList.size() > 0) {
-            insertList.forEach(q->{
-                if (q.getPid() != null) {
-                    q.setPid(q.getPid());
-                }
-            });
-            xmslContractGeneralMapper.insertXmslContractGeneralList(insertList);
+        if (CollectionUtil.isEmpty(saveList)) {
+            return;
         }
-        if (updateList.size() > 0) {
-            xmslContractGeneralMapper.updateXmslContractGeneralList(updateList);
-        }
-        return 1;
+        xmslContractGeneralMapper.updateXmslContractGeneralList(saveList);
     }
 
     /**
@@ -109,29 +104,23 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
      * @param insertList
      * @param updateList
      */
-    private void recursionSubset(XmslContractGeneral xmslContractGeneral, List<XmslContractGeneral> insertList, List<XmslContractGeneral> updateList) {
-        Long id = xmslContractGeneral.getId();
+    private void recursionSubset(XmslContractGeneral xmslContractGeneral, List<XmslContractGeneral> saveList) {
+        Long id = IdWorker.createId();
         Long masterId = xmslContractGeneral.getMasterId();
-        if (id == null) {
-            id = IdWorker.createId();
-            xmslContractGeneral.setId(id);
-            xmslContractGeneral.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            xmslContractGeneral.setCreateUserName(SecurityUtils.getUserName());
-            xmslContractGeneral.setCreateTime(DateUtils.getNowDate());
-            insertList.add(xmslContractGeneral);
-        } else {
-            xmslContractGeneral.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            xmslContractGeneral.setUpdateTime(DateUtils.getNowDate());
-            updateList.add(xmslContractGeneral);
-        }
+        xmslContractGeneral.setId(id);
+        xmslContractGeneral.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+        xmslContractGeneral.setCreateUserName(SecurityUtils.getUserName());
+        xmslContractGeneral.setCreateTime(DateUtils.getNowDate());
+        saveList.add(xmslContractGeneral);
 
         List<XmslContractGeneral> children = xmslContractGeneral.getChildren();
-        if (!CollectionUtils.isEmpty(children)) {
-            for (XmslContractGeneral child : children) {
-                child.setPid(id);
-                child.setMasterId(masterId);
-                this.recursionSubset(child, insertList, updateList);
-            }
+        if (CollectionUtils.isEmpty(children)) {
+            return;
+        }
+        for (XmslContractGeneral child : children) {
+            child.setPid(id);
+            child.setMasterId(masterId);
+            this.recursionSubset(child, saveList);
         }
     }
 

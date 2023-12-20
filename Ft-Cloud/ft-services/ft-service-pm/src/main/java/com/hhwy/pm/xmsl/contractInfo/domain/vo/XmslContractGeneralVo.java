@@ -14,6 +14,9 @@ import java.util.List;
 @Data
 public class XmslContractGeneralVo {
 
+
+    private Long masterId;
+
     /**
      * 字段描述：列表集合
      */
