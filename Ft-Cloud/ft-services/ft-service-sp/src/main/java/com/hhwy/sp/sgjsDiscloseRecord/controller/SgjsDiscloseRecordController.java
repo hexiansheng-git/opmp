@@ -165,6 +165,7 @@ public class SgjsDiscloseRecordController extends BaseController {
      * @param dataType 页签:oneOrTwo（一、二级交底）、three（三级交底）
      * @return
      */
+    @PreAuthorize(hasPermi = "sgjsDiscloseRecord:update")
     @PostMapping("/importData")
     public AjaxResult importData(@RequestParam("file") MultipartFile file,@RequestParam("dataType") String dataType) {
         try {
