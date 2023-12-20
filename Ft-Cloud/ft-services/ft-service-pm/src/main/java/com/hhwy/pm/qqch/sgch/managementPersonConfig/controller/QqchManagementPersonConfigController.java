@@ -124,7 +124,7 @@ public class QqchManagementPersonConfigController extends BaseController {
         try {
             personType = qqchManagementPersonConfigService.getPersonType(userName);
         } catch (Exception e) {
-            return AjaxResult.error("获取人员类型异常");
+            return AjaxResult.error("未找到该用户或网络无法到达，获取人员类型失败");
         }
         return AjaxResult.success("success",personType);
     }

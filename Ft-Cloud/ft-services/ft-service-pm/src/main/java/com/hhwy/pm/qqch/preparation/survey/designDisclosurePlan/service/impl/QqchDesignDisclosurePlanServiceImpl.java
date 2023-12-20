@@ -69,12 +69,15 @@ public class QqchDesignDisclosurePlanServiceImpl implements IQqchDesignDisclosur
      */
     @Override
     public void save(QqchDesignDisclosurePlanVo qqchDesignDisclosurePlanVo) {
+        if (null == qqchDesignDisclosurePlanVo) return;
+        BigDecimal version = VersionUtil.getVersion("qqch_design_disclosure_plan", qqchDesignDisclosurePlanVo.getVersion());
         //删除旧数据
         QqchDesignDisclosurePlan qqchDesignDisclosurePlan = new QqchDesignDisclosurePlan();
-        qqchDesignDisclosurePlan.setVersion(qqchDesignDisclosurePlanVo.getVersion());
+        qqchDesignDisclosurePlan.setVersion(version);
         qqchDesignDisclosurePlanMapper.deleteQqchDesignDisclosurePlan(qqchDesignDisclosurePlan);
+
         //插入新数据
-        this.insertQqchDesignDisclosurePlanList(qqchDesignDisclosurePlanVo.getQqchDesignDisclosurePlanList(), qqchDesignDisclosurePlanVo.getVersion());
+        this.insertQqchDesignDisclosurePlanList(qqchDesignDisclosurePlanVo.getQqchDesignDisclosurePlanList(), version);
     }
 
     @Override
