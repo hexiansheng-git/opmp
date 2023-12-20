@@ -62,11 +62,11 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
         for (KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords : kcsjPlanCommunicationRecordsList) {
             if ("0".equals(kcsjPlanCommunicationRecords.getType())) {
                 insertList.add(kcsjPlanCommunicationRecords);
-            }
-
-            if (!"0".equals(kcsjPlanCommunicationRecords.getType())) {
+            }else{
                 updateList.add(kcsjPlanCommunicationRecords);
             }
+
+
         }
         if (insertList.size() > 0) {
             for (KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords : insertList) {

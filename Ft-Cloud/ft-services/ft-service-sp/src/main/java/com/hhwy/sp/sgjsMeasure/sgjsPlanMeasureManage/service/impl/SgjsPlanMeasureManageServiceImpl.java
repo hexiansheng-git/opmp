@@ -15,6 +15,7 @@ import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.tree.TreeUtil;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,7 +23,10 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -33,6 +37,7 @@ import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.service.ISgjsPlanMeasureMan
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StreamUtils;
 
 /**
  * @author zmh
@@ -76,8 +81,8 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
             sgjsPlanMeasureManage.setRealStartDate(FtDateUtils.parseDate(split[0].replaceAll("(?:年|月|日)", "-")));
             sgjsPlanMeasureManage.setRealEndDate(FtDateUtils.parseDate(split[1].replaceAll("(?:年|月|日)", "-")));
         }
-        List<SgjsPlanMeasureManage> sgjsPlanMeasureManageList = sgjsPlanMeasureManageMapper.getSgjsPlanMeasureManageList(
-            sgjsPlanMeasureManage);
+        List<SgjsPlanMeasureManage> sgjsPlanMeasureManageList = sgjsPlanMeasureManageMapper.getSgjsPlanMeasureManageList(sgjsPlanMeasureManage);
+        List<SgjsPlanMeasureManage> list = new ArrayList<>();
         if (sgjsPlanMeasureManageList.size() > 0) {
             sgjsPlanMeasureManageList.forEach(plan -> {
                 //plan.setPlanStartDateStr(FtDateUtils.formatDate(plan.getPlanStartDate()));
@@ -89,13 +94,27 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
                 //plan.setRealEndDateStr(FtDateUtils.formatDate(plan.getRealEndDate()));
                 plan.setRealEndDateStr(plan.getRealEndDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(plan.getRealEndDate()));
             });
+            List<SgjsPlanMeasureManage> list1 = sgjsPlanMeasureManageList.stream().filter(p -> StringUtils.isNotEmpty(p.getPid().toString()) && !p.getPid().toString().equals("0")).collect(Collectors.toList());
+            if(list1.size()>0){
+                SgjsPlanMeasureManage sgjsPlanMeasureManage1 = new SgjsPlanMeasureManage();
+                for (int i = 0; i < list1.size(); i++) {
+                    String[] split = list1.get(i).getPath().split("/");
+                    String path = split[0];
+                    sgjsPlanMeasureManage1.setId(Long.parseLong(path));
+                    SgjsPlanMeasureManage sgjsPlanMeasureManage2 = sgjsPlanMeasureManageMapper.getSgjsPlanMeasureManage(sgjsPlanMeasureManage1);
+                    sgjsPlanMeasureManageList.add(sgjsPlanMeasureManage2);
+                }
+            }
+            List<SgjsPlanMeasureManage> collect = sgjsPlanMeasureManageList.stream().distinct().collect(Collectors.toList());
+            list = collect.stream().sorted(Comparator.comparing(SgjsPlanMeasureManage::getSerialNumber)).collect(Collectors.toList());
         }
-        sgjsPlanMeasureManageVo.setTreeList(TreeUtil.newBuild(sgjsPlanMeasureManageList));
+        sgjsPlanMeasureManageVo.setTreeList(TreeUtil.newBuild(list));
         return sgjsPlanMeasureManageVo;
     }
 
+
     @Override
-    public List<SgjsPlanMeasureManage> getIds(List<Long> ids) {
+    public List<SgjsPlanMeasureManage> getIds(List<String> ids) {
         List<SgjsPlanMeasureManage> list = new ArrayList<>();
         List<SgjsPlanMeasureManage> list1 = sgjsPlanMeasureManageMapper.getIds(ids);
         for (int i = 0; i < list1.size(); i++) {
@@ -110,6 +129,7 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         }
         if(list.size()>0){
             list = TreeUtil.treeToListWithoutId(list);
+            list = list.stream().sorted(Comparator.comparing(SgjsPlanMeasureManage::getSerialNumber)).collect(Collectors.toList());
         }
         return list;
     }
@@ -232,7 +252,9 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
             }
         }
         //批量删除
-        deleteByIds(sgjsPlanMeasureManageVo.getDelIdList());
+        if(!CollectionUtils.isEmpty(sgjsPlanMeasureManageVo.getDelIdList())){
+            deleteByIds(sgjsPlanMeasureManageVo.getDelIdList());
+        }
         return AjaxResult.success();
     }
 
@@ -243,9 +265,10 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
      */
     private void deleteByIds(List<String> delIdList){
         List<SgjsPlanMeasureManage> list =new ArrayList<>();
-        for (int i = 0; i < delIdList.size(); i++) {
+        List<SgjsPlanMeasureManage> ids = getIds(delIdList);
+        for (int i = 0; i < ids.size(); i++) {
             SgjsPlanMeasureManage info=new SgjsPlanMeasureManage();
-            info.setId(Long.parseLong(delIdList.get(i)));
+            info.setId(ids.get(i).getId());
             info.setUpdateUser(SecurityUtils.getUserId()+"");
             info.setUpdateTime(DateUtils.getNowDate());
             info.setDelFlag("1");

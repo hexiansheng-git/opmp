@@ -33,7 +33,7 @@ public interface SgjsPlanMeasureManageMapper {
 
     void deleteAll(@Param("delIdList") List<String> delIdList);
 
-    List<SgjsPlanMeasureManage> getIds(@Param("ids") List<Long> ids);
+    List<SgjsPlanMeasureManage> getIds(@Param("ids") List<String> ids);
 
     int deleteInfoData(List<SgjsPlanMeasureManage> list);
 

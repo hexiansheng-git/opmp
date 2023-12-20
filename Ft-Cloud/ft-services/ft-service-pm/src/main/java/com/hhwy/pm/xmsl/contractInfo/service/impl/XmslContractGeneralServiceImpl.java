@@ -95,7 +95,7 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
         if (CollectionUtil.isEmpty(saveList)) {
             return;
         }
-        xmslContractGeneralMapper.updateXmslContractGeneralList(saveList);
+        xmslContractGeneralMapper.insertXmslContractGeneralList(saveList);
     }
 
     /**

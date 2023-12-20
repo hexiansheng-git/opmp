@@ -130,7 +130,7 @@ public class SgjsPlanMeasureManageController extends BaseController {
     @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody SgjsPlanMeasureManage sgjsPlanMeasureManageParam) throws IOException {
-        List<Long> ids = sgjsPlanMeasureManageParam.getIds();
+        List<String> ids = sgjsPlanMeasureManageParam.getIds();
         List<SgjsPlanMeasureManage> treeList = null;
         if(CollectionUtils.isEmpty(ids)){
             SgjsPlanMeasureManageVo sgjsPlanMeasureManageVo = sgjsPlanMeasureManageService.list(sgjsPlanMeasureManageParam);
