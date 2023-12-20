@@ -81,13 +81,13 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         if (sgjsPlanMeasureManageList.size() > 0) {
             sgjsPlanMeasureManageList.forEach(plan -> {
                 //plan.setPlanStartDateStr(FtDateUtils.formatDate(plan.getPlanStartDate()));
-                plan.setPlanStartDateStr(new SimpleDateFormat("yyyy年MM月dd日").format(plan.getPlanStartDate()));
+                plan.setPlanStartDateStr(plan.getPlanStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(plan.getPlanStartDate()));
                 //plan.setPlanEndDateStr(FtDateUtils.formatDate(plan.getPlanEndDate()));
-                plan.setPlanEndDateStr(new SimpleDateFormat("yyyy年MM月dd日").format(plan.getPlanEndDate()));
+                plan.setPlanEndDateStr(plan.getPlanEndDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(plan.getPlanEndDate()));
                 //plan.setRealStartDateStr(FtDateUtils.formatDate(plan.getRealStartDate()));
-                plan.setRealStartDateStr(new SimpleDateFormat("yyyy年MM月dd日").format(plan.getRealStartDate()));
+                plan.setRealStartDateStr(plan.getRealStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(plan.getRealStartDate()));
                 //plan.setRealEndDateStr(FtDateUtils.formatDate(plan.getRealEndDate()));
-                plan.setRealEndDateStr(new SimpleDateFormat("yyyy年MM月dd日").format(plan.getRealEndDate()));
+                plan.setRealEndDateStr(plan.getRealEndDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(plan.getRealEndDate()));
             });
         }
         sgjsPlanMeasureManageVo.setTreeList(TreeUtil.newBuild(sgjsPlanMeasureManageList));
@@ -96,7 +96,36 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
 
     @Override
     public List<SgjsPlanMeasureManage> getIds(List<Long> ids) {
-        return sgjsPlanMeasureManageMapper.getIds(ids);
+        List<SgjsPlanMeasureManage> list = new ArrayList<>();
+        List<SgjsPlanMeasureManage> list1 = sgjsPlanMeasureManageMapper.getIds(ids);
+        for (int i = 0; i < list1.size(); i++) {
+            list1.get(i);
+            SgjsPlanMeasureManage sgjsPlanMeasureManage = new SgjsPlanMeasureManage();
+            sgjsPlanMeasureManage.setPid(list1.get(i).getId());
+            List<SgjsPlanMeasureManage> list2 = sgjsPlanMeasureManageMapper.getSgjsPlanMeasureManageList(sgjsPlanMeasureManage);
+            if(list2.size()>0){
+                diguiList2(list2,list1.get(i));
+            }
+            list.add(list1.get(i));
+        }
+        if(list.size()>0){
+            list = TreeUtil.treeToListWithoutId(list);
+        }
+        return list;
+    }
+
+    private void diguiList2(List<SgjsPlanMeasureManage> list2, SgjsPlanMeasureManage manage) {
+        List<SgjsPlanMeasureManage> list = new ArrayList<>();
+        for (int i = 0; i < list2.size(); i++) {
+            SgjsPlanMeasureManage planMeasureManage = new SgjsPlanMeasureManage();
+            planMeasureManage.setPid(list2.get(i).getId());
+            List<SgjsPlanMeasureManage> list3 = sgjsPlanMeasureManageMapper.getSgjsPlanMeasureManageList(planMeasureManage);
+            if(list3.size()>0){
+                diguiList2(list3,list2.get(i));
+            }
+            list.add(list2.get(i));
+        }
+        manage.setChildren(list);
     }
 
     @Override
@@ -142,7 +171,6 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
             treeToList.add(manage);
         }
     }
-
     private void diguiChildren(List<LinkedHashMap<String, Object>> children, SgjsPlanMeasureManage manage) {
         List<SgjsPlanMeasureManage> sgjsPlanMeasureManageList = new ArrayList<>();
         for (int i = 0; i < children.size(); i++) {
