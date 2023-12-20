@@ -1,5 +1,8 @@
 package com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.service.impl;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
+
 import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -23,6 +26,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
@@ -104,7 +108,7 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
                     sgjsPlanMeasureManageList.addAll(sgjsPlanMeasureManage2);
                 }
             }
-            List<SgjsPlanMeasureManage> collect = sgjsPlanMeasureManageList.stream().distinct().collect(Collectors.toList());
+            List<SgjsPlanMeasureManage> collect = sgjsPlanMeasureManageList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(SgjsPlanMeasureManage::getId))), ArrayList::new));
             list = collect.stream().sorted(Comparator.comparing(SgjsPlanMeasureManage::getSerialNumber)).collect(Collectors.toList());
         }
         sgjsPlanMeasureManageVo.setTreeList(TreeUtil.newBuild(list));

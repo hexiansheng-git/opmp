@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.sd.designFileManage.mapper.KcsjDesignFileManageMapper">
+
+  <resultMap type="com.hhwy.sd.designFileManage.domain.KcsjDesignFileManage"
+    id="KcsjDesignFileManageResultMap">
+    <result property="id" column="id"/>
+    <result property="pid" column="pid"/>
+    <result property="designFileName" column="design_file_name"/>
+    <result property="versions" column="versions"/>
+    <result property="designScopeSketch" column="design_scope_sketch"/>
+    <result property="receptionDate" column="reception_date"/>
+    <result property="recipient" column="recipient"/>
+    <result property="submitUnit" column="submit_unit"/>
+    <result property="reportDate" column="report_date"/>
+    <result property="repleDate" column="reple_date"/>
+    <result property="remark" column="remark"/>
+    <result property="dataSource" column="data_source"/>
+    <result property="createUser" column="create_user"/>
+    <result property="createUserName" column="create_user_name"/>
+    <result property="createTime" column="create_time"/>
+    <result property="updateUser" column="update_user"/>
+    <result property="updateTime" column="update_time"/>
+    <result property="delUser" column="del_user"/>
+    <result property="delTime" column="del_time"/>
+    <result property="delFlag" column="del_flag"/>
+    <result property="fileGroupId" column="file_group_id"/>
+    <result property="path" column="path"/>
+    <result property="serialNumber" column="serial_number"/>
+    <result property="ptVar4" column="pt_var4"/>
+    <result property="ptVar5" column="pt_var5"/>
+  </resultMap>
+  <sql id="selectKcsjDesignFileManageVo">
+    select `id`
+         , `pid`
+         , `design_file_name`
+         , `versions`
+         , `design_scope_sketch`
+         , `reception_date`
+         , `recipient`
+         , `submit_unit`
+         , `report_date`
+         , `reple_date`
+         , `remark`
+         , `data_source`
+         , `create_user`
+         , `create_user_name`
+         , `create_time`
+         , `update_user`
+         , `update_time`
+         , `del_user`
+         , `del_time`
+         , `del_flag`
+         , `file_group_id`
+         , `path`
+         , `serial_number`
+         , `pt_var4`
+         , `pt_var5`
+    from kcsj_design_file_manage
+  </sql>
+  <select id="getKcsjDesignFileManage" resultMap="KcsjDesignFileManageResultMap">
+    <include refid="selectKcsjDesignFileManageVo"/>
+    <where>
+      del_flag = "0"
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="pid != null ">and `pid` = #{pid}</if>
+      <if test="designFileName != null  and designFileName != ''">and `design_file_name` =
+        #{designFileName}
+      </if>
+      <if test="versions != null  and versions != ''">and `versions` = #{versions}</if>
+      <if test="designScopeSketch != null  and designScopeSketch != ''">and `design_scope_sketch` =
+        #{designScopeSketch}
+      </if>
+      <if test="receptionDate != null ">and `reception_date` = #{receptionDate}</if>
+      <if test="recipient != null ">and `recipient` = #{recipient}</if>
+      <if test="submitUnit != null  and submitUnit != ''">and `submit_unit` = #{submitUnit}</if>
+      <if test="reportDate != null ">and `report_date` = #{reportDate}</if>
+      <if test="repleDate != null ">and `reple_date` = #{repleDate}</if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+      <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` =
+        #{createUserName}
+      </if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+      <if test="path != null  and path != ''">and `path` = #{path}</if>
+      <if test="serialNumber != null  and serialNumber != ''">and `serial_number` = #{serialNumber}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+    </where>
+    order by create_time desc
+  </select>
+
+  <select id="getKcsjDesignFileManageList" resultMap="KcsjDesignFileManageResultMap">
+    <include refid="selectKcsjDesignFileManageVo"/>
+    <where>
+      del_flag = "0"
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="pid != null ">and `pid` = #{pid}</if>
+      <if test="designFileName != null  and designFileName != ''">and `design_file_name` like concat('%',#{designFileName},'%')
+      </if>
+      <if test="versions != null  and versions != ''">and `versions` = #{versions}</if>
+      <if test="designScopeSketch != null  and designScopeSketch != ''">and `design_scope_sketch` like concat('%',#{designScopeSketch},'%')
+      </if>
+      <if test="receptionDate != null ">and `reception_date` = #{receptionDate}</if>
+      <if test="recipient != null ">and `recipient` = #{recipient}</if>
+      <if test="submitUnit != null  and submitUnit != ''">and `submit_unit` = #{submitUnit}</if>
+      <if test="reportDate != null ">and `report_date` = #{reportDate}</if>
+      <if test="repleDate != null ">and `reple_date` = #{repleDate}</if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+      <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` =
+        #{createUserName}
+      </if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+      <if test="path != null  and path != ''">and `path` = #{path}</if>
+      <if test="serialNumber != null  and serialNumber != ''">and `serial_number` = #{serialNumber}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+      <if test="path != null  and path != ''"> and `path` = #{path}</if>
+      <if test="paths != null  and paths != ''">
+        and `id` in
+        <foreach item="id" collection="paths" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+    </where>
+    order by create_time desc
+  </select>
+
+  <insert id="insertKcsjDesignFileManage" useGeneratedKeys="true" keyProperty="id">
+    insert into kcsj_design_file_manage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null ">`id`,</if>
+      <if test="pid != null ">`pid`,</if>
+      <if test="designFileName != null  and designFileName != ''">`design_file_name`,</if>
+      <if test="versions != null  and versions != ''">`versions`,</if>
+      <if test="designScopeSketch != null  and designScopeSketch != ''">`design_scope_sketch`,</if>
+      <if test="receptionDate != null ">`reception_date`,</if>
+      <if test="recipient != null ">`recipient`,</if>
+      <if test="submitUnit != null  and submitUnit != ''">`submit_unit`,</if>
+      <if test="reportDate != null ">`report_date`,</if>
+      <if test="repleDate != null ">`reple_date`,</if>
+      <if test="remark != null  and remark != ''">`remark`,</if>
+      <if test="dataSource != null  and dataSource != ''">`data_source`,</if>
+      <if test="createUser != null  and createUser != ''">`create_user`,</if>
+      <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+      <if test="createTime != null ">`create_time`,</if>
+      <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+      <if test="updateTime != null ">`update_time`,</if>
+      <if test="delUser != null  and delUser != ''">`del_user`,</if>
+      <if test="delTime != null ">`del_time`,</if>
+      <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+      <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+      <if test="path != null  and path != ''">`path`,</if>
+      <if test="serialNumber != null  and serialNumber != ''">`serial_number`,</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null ">#{id},</if>
+      <if test="pid != null ">#{pid},</if>
+      <if test="designFileName != null  and designFileName != ''">#{designFileName},</if>
+      <if test="versions != null  and versions != ''">#{versions},</if>
+      <if test="designScopeSketch != null  and designScopeSketch != ''">#{designScopeSketch},</if>
+      <if test="receptionDate != null ">#{receptionDate},</if>
+      <if test="recipient != null ">#{recipient},</if>
+      <if test="submitUnit != null  and submitUnit != ''">#{submitUnit},</if>
+      <if test="reportDate != null ">#{reportDate},</if>
+      <if test="repleDate != null ">#{repleDate},</if>
+      <if test="remark != null  and remark != ''">#{remark},</if>
+      <if test="dataSource != null  and dataSource != ''">#{dataSource},</if>
+      <if test="createUser != null  and createUser != ''">#{createUser},</if>
+      <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+      <if test="createTime != null ">#{createTime},</if>
+      <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+      <if test="updateTime != null ">#{updateTime},</if>
+      <if test="delUser != null  and delUser != ''">#{delUser},</if>
+      <if test="delTime != null ">#{delTime},</if>
+      <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+      <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+      <if test="path != null  and path != ''">#{path},</if>
+      <if test="serialNumber != null  and serialNumber != ''">#{serialNumber},</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+    </trim>
+  </insert>
+
+  <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertKcsjDesignFileManage -->
+  <insert id="insertKcsjDesignFileManageList">
+    insert into kcsj_design_file_manage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      `id`,
+      `pid`,
+      `design_file_name`,
+      `versions`,
+      `design_scope_sketch`,
+      `reception_date`,
+      `recipient`,
+      `submit_unit`,
+      `report_date`,
+      `reple_date`,
+      `remark`,
+      `data_source`,
+      `create_user`,
+      `create_user_name`,
+      `create_time`,
+      `update_user`,
+      `update_time`,
+      `del_user`,
+      `del_time`,
+      `file_group_id`,
+      `path`,
+      `serial_number`,
+      `pt_var4`,
+      `pt_var5`,
+    </trim>
+    values
+    <foreach collection="kcsjDesignFileManageList" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{item.id},
+        #{item.pid},
+        #{item.designFileName},
+        #{item.versions},
+        #{item.designScopeSketch},
+        #{item.receptionDate},
+        #{item.recipient},
+        #{item.submitUnit},
+        #{item.reportDate},
+        #{item.repleDate},
+        #{item.remark},
+        #{item.dataSource},
+        #{item.createUser},
+        #{item.createUserName},
+        #{item.createTime},
+        #{item.updateUser},
+        #{item.updateTime},
+        #{item.delUser},
+        #{item.delTime},
+        #{item.fileGroupId},
+        #{item.path},
+        #{item.serialNumber},
+        #{item.ptVar4},
+        #{item.ptVar5},
+      </trim>
+    </foreach>
+  </insert>
+
+  <update id="updateKcsjDesignFileManage">
+    update kcsj_design_file_manage
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="id != null ">`id` = #{id},</if>
+      <if test="pid != null ">`pid` = #{pid},</if>
+      <if test="designFileName != null  and  designFileName != ''">`design_file_name` =
+        #{designFileName},
+      </if>
+      <if test="versions != null  and  versions != ''">`versions` = #{versions},</if>
+      <if test="designScopeSketch != null  and  designScopeSketch != ''">`design_scope_sketch` =
+        #{designScopeSketch},
+      </if>
+      <if test="receptionDate != null ">`reception_date` = #{receptionDate},</if>
+      <if test="recipient != null ">`recipient` = #{recipient},</if>
+      <if test="submitUnit != null  and  submitUnit != ''">`submit_unit` = #{submitUnit},</if>
+      <if test="reportDate != null ">`report_date` = #{reportDate},</if>
+      <if test="repleDate != null ">`reple_date` = #{repleDate},</if>
+      <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+      <if test="dataSource != null  and  dataSource != ''">`data_source` = #{dataSource},</if>
+      <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+      <if test="createUserName != null  and  createUserName != ''">`create_user_name` =
+        #{createUserName},
+      </if>
+      <if test="createTime != null ">`create_time` = #{createTime},</if>
+      <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+      <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+      <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+      <if test="delTime != null ">`del_time` = #{delTime},</if>
+      <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+      <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+      <if test="path != null  and  path != ''">`path` = #{path},</if>
+      <if test="serialNumber != null  and  serialNumber != ''">`serial_number` = #{serialNumber},</if>
+      <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+      <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+    </trim>
+    <where>
+      <if test="id != null ">and `id` = #{id}</if>
+    </where>
+  </update>
+
+  <update id="updateKcsjDesignFileManageList" parameterType="list">
+    update kcsj_design_file_manage
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.id}
+        </foreach>
+      </trim>
+      <trim prefix="pid  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.pid}
+        </foreach>
+      </trim>
+      <trim prefix="design_file_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.designFileName}
+        </foreach>
+      </trim>
+      <trim prefix="versions  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.versions}
+        </foreach>
+      </trim>
+      <trim prefix="design_scope_sketch  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.designScopeSketch}
+        </foreach>
+      </trim>
+      <trim prefix="reception_date  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.receptionDate}
+        </foreach>
+      </trim>
+      <trim prefix="recipient  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.recipient}
+        </foreach>
+      </trim>
+      <trim prefix="submit_unit  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.submitUnit}
+        </foreach>
+      </trim>
+      <trim prefix="report_date  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.reportDate}
+        </foreach>
+      </trim>
+      <trim prefix="reple_date  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.repleDate}
+        </foreach>
+      </trim>
+      <trim prefix="remark  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.remark}
+        </foreach>
+      </trim>
+      <trim prefix="data_source  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.dataSource}
+        </foreach>
+      </trim>
+      <trim prefix="create_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createUser}
+        </foreach>
+      </trim>
+      <trim prefix="create_user_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createUserName}
+        </foreach>
+      </trim>
+      <trim prefix="create_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="update_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.updateUser}
+        </foreach>
+      </trim>
+      <trim prefix="update_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.updateTime}
+        </foreach>
+      </trim>
+      <trim prefix="del_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delUser}
+        </foreach>
+      </trim>
+      <trim prefix="del_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delTime}
+        </foreach>
+      </trim>
+      <trim prefix="del_flag  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delFlag}
+        </foreach>
+      </trim>
+      <trim prefix="file_group_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.fileGroupId}
+        </foreach>
+      </trim>
+      <trim prefix="path  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.path}
+        </foreach>
+      </trim>
+      <trim prefix="serial_number  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.serialNumber}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var4  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar4}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var5  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar5}
+        </foreach>
+      </trim>
+    </trim>
+    where `id` in
+    <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+      #{item.id}
+    </foreach>
+  </update>
+
+  <update id="deleteKcsjDesignFileManage">
+    update `kcsj_design_file_manage` set del_flag = 1
+    <where>
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="pid != null ">and `pid` = #{pid}</if>
+      <if test="designFileName != null  and designFileName != ''">and `design_file_name` =
+        #{designFileName}
+      </if>
+      <if test="versions != null  and versions != ''">and `versions` = #{versions}</if>
+      <if test="designScopeSketch != null  and designScopeSketch != ''">and `design_scope_sketch` =
+        #{designScopeSketch}
+      </if>
+      <if test="receptionDate != null ">and `reception_date` = #{receptionDate}</if>
+      <if test="recipient != null ">and `recipient` = #{recipient}</if>
+      <if test="submitUnit != null  and submitUnit != ''">and `submit_unit` = #{submitUnit}</if>
+      <if test="reportDate != null ">and `report_date` = #{reportDate}</if>
+      <if test="repleDate != null ">and `reple_date` = #{repleDate}</if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+      <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` =
+        #{createUserName}
+      </if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+      <if test="path != null  and path != ''">and `path` = #{path}</if>
+      <if test="serialNumber != null  and serialNumber != ''">and `serial_number` = #{serialNumber}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+    </where>
+  </update>
+
+  <update id="deleteKcsjDesignFileManageByPks">
+    update `kcsj_design_file_manage` set del_flag = 1
+    <where>
+      `id` in
+      <foreach item="id" collection="kcsjDesignFileManagePkList" open="(" separator="," close=")">
+        #{id}
+      </foreach>
+    </where>
+  </update>
+
+  <update id="deleteInfoData" parameterType="list">
+    update kcsj_design_file_manage
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.id}
+        </foreach>
+      </trim>
+      <trim prefix="update_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.updateUser}
+        </foreach>
+      </trim>
+      <trim prefix="update_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.updateTime}
+        </foreach>
+      </trim>
+      <trim prefix="del_flag  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delFlag}
+        </foreach>
+      </trim>
+    </trim>
+    where `id` in
+    <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+      #{item.id}
+    </foreach>
+  </update>
+
+  <select id="getIds" resultMap="KcsjDesignFileManageResultMap">
+    <include refid="selectKcsjDesignFileManageVo"/>
+    <where>
+      del_flag = "0"
+      <if test="ids != null and ids.size() > 0">
+        and `id` in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+    </where>
+    order by create_time desc
+  </select>
+</mapper>
