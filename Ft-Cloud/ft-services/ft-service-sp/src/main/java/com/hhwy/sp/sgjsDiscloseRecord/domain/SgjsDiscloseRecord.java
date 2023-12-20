@@ -222,8 +222,8 @@ public class SgjsDiscloseRecord extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "实际交底日期", dateFormat = "yyyy-MM-dd")
-    @FtExcel(name = "实际交底日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "实际交底日期", dateFormat = "yyyy年MM月dd日")
+    @FtExcel(name = "实际交底日期", dateFormat = "yyyy年MM月dd日")
     private Date actDiscloseDate;
 
     /**
