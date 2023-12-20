@@ -79,7 +79,9 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
 
         //查询符合条件的数据
         List<SgjsExperProgressManage> list = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(sgjsTechnicalManage);
-
+        for (SgjsExperProgressManage sgjsExperProgressManage : list) {
+            sgjsExperProgressManage.setLeaf(sgjsExperProgressManage.getPtVar2());
+        }
         vo.setTreeList(TreeUtil.newBuild(list));
         return vo;
     }
@@ -235,12 +237,8 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         List<SgjsExperProgressManage> updateList = new ArrayList<>();
         List<SgjsExperProgressManage> insertList = new ArrayList<>();
         for (SgjsExperProgressManage sgjsExperProgressManage : treeList) {
-            if (!"0".equals(sgjsExperProgressManage.getType())) {
-                sgjsExperProgressManage.setUpdateUser(SecurityUtils.getUserId() + "");
-                sgjsExperProgressManage.setUpdateTime(DateUtils.getNowDate());
-                sgjsExperProgressManage.setDelFlag("0");
-                updateList.add(sgjsExperProgressManage);
-            }
+
+            //处理新增数据
             if ("0".equals(sgjsExperProgressManage.getType())) {
                 sgjsExperProgressManage.setCreateUserName(SecurityUtils.getUserName());
                 sgjsExperProgressManage.setCreateUser(SecurityUtils.getUserId() + "");
@@ -249,6 +247,11 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
                 sgjsExperProgressManage.setDelFlag("0");
                 sgjsExperProgressManage.setDataSource("0");
                 insertList.add(sgjsExperProgressManage);
+            }else {
+                sgjsExperProgressManage.setUpdateUser(SecurityUtils.getUserId() + "");
+                sgjsExperProgressManage.setUpdateTime(DateUtils.getNowDate());
+                sgjsExperProgressManage.setDelFlag("0");
+                updateList.add(sgjsExperProgressManage);
             }
         }
         //批量进行修改和新增
