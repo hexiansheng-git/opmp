@@ -59,7 +59,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         JdglDaySchedule jdglDaySchedule1 = jdglDayScheduleMapper.getJdglDaySchedule(jdglDaySchedule);
         if(jdglDaySchedule1 != null) {
 
-            jdglDaySchedule1.setDayValueDl(jdglDaySchedule1.getDayValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getDayValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+            jdglDaySchedule1.setDayValueDl(jdglDaySchedule1.getDayValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getDayValueDl().divide(new BigDecimal(10000), 4, BigDecimal.ROUND_HALF_UP));
 //            jdglDaySchedule1.setTotalValueDl(jdglDaySchedule1.getTotalValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getTotalValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
 
             JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
@@ -78,7 +78,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         JdglDaySchedule jdglDaySchedule1 = jdglDayScheduleMapper.getJdglDaySchedule(jdglDayScheduleParam);
         if(jdglDaySchedule1 != null) {
 
-            jdglDaySchedule1.setDayValueDl(jdglDaySchedule1.getDayValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getDayValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+            jdglDaySchedule1.setDayValueDl(jdglDaySchedule1.getDayValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getDayValueDl().divide(new BigDecimal(10000), 4, BigDecimal.ROUND_HALF_UP));
 //            jdglDaySchedule1.setTotalValueDl(jdglDaySchedule1.getTotalValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getTotalValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
 
             JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
@@ -165,7 +165,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglDayScheduleList)) {
             for (JdglDaySchedule jdglDaySchedule1 : jdglDayScheduleList) {
-                jdglDaySchedule1.setDayValueDl(jdglDaySchedule1.getDayValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getDayValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+                jdglDaySchedule1.setDayValueDl(jdglDaySchedule1.getDayValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getDayValueDl().divide(new BigDecimal(10000), 4, BigDecimal.ROUND_HALF_UP));
 //                jdglDaySchedule1.setTotalValueDl(jdglDaySchedule1.getTotalValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getTotalValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
 
 //                JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
