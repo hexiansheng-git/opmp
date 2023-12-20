@@ -181,6 +181,7 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
             manage.setWorkload(list.get(i).get("workload") == null ? null : list.get(i).get("workload").toString());
             manage.setPlanStartDate(list.get(i).get("planBeginDate") == null ? null : FtDateUtils.parseDate(list.get(i).get("planBeginDate")));
             manage.setPlanEndDate(list.get(i).get("planEndDate") == null ? null : FtDateUtils.parseDate(list.get(i).get("planEndDate")));
+            manage.setRemark(list.get(i).get("remark") == null ? null : list.get(i).get("remark").toString());
             manage.setId(IdWorker.createId());
             manage.setPid(0L);
             manage.setSyncId(Long.parseLong(list.get(i).get("id").toString()));
@@ -203,6 +204,7 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
             planMeasureManage.setWorkload(children.get(i).get("workload") == null ? null : children.get(i).get("workload").toString());
             planMeasureManage.setPlanStartDate(children.get(i).get("planBeginDate") == null ? null : FtDateUtils.parseDate(children.get(i).get("planBeginDate")));
             planMeasureManage.setPlanEndDate(children.get(i).get("planEndDate") == null ? null : FtDateUtils.parseDate(children.get(i).get("planEndDate")));
+            planMeasureManage.setRemark(children.get(i).get("remark") == null ? null : children.get(i).get("remark").toString());
             planMeasureManage.setId(IdWorker.createId());
             planMeasureManage.setPid(manage.getId());
             planMeasureManage.setSyncId(Long.parseLong(children.get(i).get("id").toString()));
