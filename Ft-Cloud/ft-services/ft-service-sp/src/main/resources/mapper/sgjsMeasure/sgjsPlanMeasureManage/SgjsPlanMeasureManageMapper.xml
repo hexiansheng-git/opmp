@@ -108,10 +108,8 @@
       <if test="measureName != null  and measureName != ''">and `measure_name` like concat('%',#{measureName},'%')</if>
       <if test="measureUnit != null  and measureUnit != ''">and `measure_unit` = #{measureUnit}</if>
       <if test="workload != null ">and `workload` = #{workload}</if>
-      <if test="planStartDate != null ">and `plan_start_date` &gt;= #{planStartDate}</if>
-      <if test="planEndDate != null "> and `plan_end_date` &lt;= #{planEndDate}</if>
-      <if test="realStartDate != null ">and `real_start_date` &gt;= #{realStartDate}</if>
-      <if test="realEndDate != null ">and `real_end_date` &lt;= #{realEndDate}</if>
+      <if test="planStartDateStr != null and planStartDateStr != '' ">and `plan_start_date` between #{planStartDateStr} and #{planEndDateStr}</if>
+      <if test="realStartDateStr != null and realStartDateStr != ''">and `real_start_date` between #{realStartDateStr} and #{realEndDateStr}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
       <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>

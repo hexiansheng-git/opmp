@@ -2,6 +2,7 @@ package com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
+import java.text.ParseException;
 import java.util.List;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
 
@@ -28,7 +29,8 @@ public interface ISgjsPlanMeasureManageService {
 
             int deleteSgjsPlanMeasureManageByPks(List<Long> sgjsPlanMeasureManagePkList);
 
-    SgjsPlanMeasureManageVo list(SgjsPlanMeasureManage sgjsPlanMeasureManageParam);
+    SgjsPlanMeasureManageVo list(SgjsPlanMeasureManage sgjsPlanMeasureManageParam)
+        throws ParseException;
 
     SgjsPlanMeasureManageVo qqchMeasureExpPlanSelect();
 

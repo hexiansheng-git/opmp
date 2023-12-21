@@ -4,6 +4,7 @@ import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.tree.TreeUtil;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -54,7 +55,7 @@ public class SgjsPlanMeasureManageController extends BaseController {
     @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:list")
     @GetMapping("/list")
     public AjaxResult getSgjsPlanMeasureManageList(
-        @Validated(ValidationGroups.Select.class) SgjsPlanMeasureManage sgjsPlanMeasureManageParam) {
+        @Validated(ValidationGroups.Select.class) SgjsPlanMeasureManage sgjsPlanMeasureManageParam) throws ParseException {
         SgjsPlanMeasureManageVo sgjsPlanMeasureManageVo = sgjsPlanMeasureManageService.list(
             sgjsPlanMeasureManageParam);
         return AjaxResult.success(sgjsPlanMeasureManageVo);
@@ -130,7 +131,8 @@ public class SgjsPlanMeasureManageController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response,@RequestBody SgjsPlanMeasureManage sgjsPlanMeasureManageParam) throws IOException {
+    public void export(HttpServletResponse response,@RequestBody SgjsPlanMeasureManage sgjsPlanMeasureManageParam)
+        throws IOException, ParseException {
         List<String> ids = sgjsPlanMeasureManageParam.getIds();
         List<SgjsPlanMeasureManage> treeList = null;
         if(CollectionUtils.isEmpty(ids)){
