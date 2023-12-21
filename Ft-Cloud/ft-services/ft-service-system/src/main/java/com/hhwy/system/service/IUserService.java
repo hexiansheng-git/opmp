@@ -44,7 +44,7 @@ public interface IUserService {
 
     int insertSysUserList(List<SysUser> sysUserList);
 
-    List<SysUser> testUser(String s);
     List<SysUser> selectUserIdByTenant(String tenantKey);
 
+    String batchInsert(List<SysUser> userList);
 }

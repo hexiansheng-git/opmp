@@ -3,6 +3,7 @@ package com.hhwy.system.service.impl;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.system.api.domain.SysDept;
+import com.hhwy.system.core.mapper.SysDeptMapper;
 import com.hhwy.system.utils.TreeObject;
 import com.hhwy.domain.base.system.SysTreeUtil;
 import com.hhwy.system.mapper.DeptMapper;
@@ -28,6 +29,9 @@ public class DeptServiceImpl implements IDeptService {
     private SysRedisUtils redisUtils;
     public static final String DATA_SCOPE_ALL = "1";//全部数据权限
 
+    @Autowired
+    private SysDeptMapper sysDeptMapper;
+
     @Override
     public List<SysDept> list(SysDept dept) {
         
@@ -36,7 +40,9 @@ public class DeptServiceImpl implements IDeptService {
 
     @Override
     public List<SysTreeUtil> getDeptByTree() {
-        String tenantKey = SecurityUtils.getTenantKey();
+//        String tenantKey = SecurityUtils.getTenantKey();
+        //组织机构修改为全部人员 ,业务人员选择后进行权限由向上分配
+        String tenantKey = "master";
         List<SysTreeUtil> list = deptMapper.getDeptByTree(tenantKey);
         List<SysTreeUtil> deptTree = TreeObject.getDeptTree(list);
         return deptTree;
@@ -67,6 +73,27 @@ public class DeptServiceImpl implements IDeptService {
     @Override
     public List<SysDept> getProjectOrgInfo() {
         return deptMapper.getProjectOrgInfo();
+    }
+
+    @Override
+    public List<SysDept> selectDeptList(SysDept dept) {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("master");
+        return sysDeptMapper.selectDeptList(dept, list);
+    }
+
+    @Override
+    public List selectOneLevelDeptList(SysDept dept) {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("master");
+        return sysDeptMapper.selectOneLevelDeptList(dept, list);
+    }
+
+    @Override
+    public List selectChildrenDeptList(SysDept dept) {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("master");
+        return sysDeptMapper.selectChildrenDeptList(dept, list);
     }
 
 
