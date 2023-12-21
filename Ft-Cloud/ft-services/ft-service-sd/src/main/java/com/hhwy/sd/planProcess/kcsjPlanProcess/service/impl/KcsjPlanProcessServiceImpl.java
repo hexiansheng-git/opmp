@@ -126,6 +126,7 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
     public int deleteKcsjPlanProcessByPks(List<Long> kcsjPlanProcessPkList) {
         List<KcsjPlanProcess> kcsjPlanProcessList = kcsjPlanProcessMapper.getKcsjPlanProcessList(new KcsjPlanProcess());
         List<Long> needDeleteIds = new ArrayList<>();
+        needDeleteIds.addAll(kcsjPlanProcessPkList);
         if(CollectionUtils.isNotEmpty(kcsjPlanProcessList) && CollectionUtils.isNotEmpty(kcsjPlanProcessPkList)) {
             for (Long id: kcsjPlanProcessPkList) {
                 List<KcsjPlanProcess> build = TreeUtil.build(kcsjPlanProcessList, id);
