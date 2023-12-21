@@ -280,6 +280,9 @@ public class UserServiceImpl implements IUserService {
                 sb.append(user.getUserName()+"已存在,不进行添加").append(System.lineSeparator());
             } else {
                 user.setCreateUser(SecurityUtils.getUserName());
+                //暂时置空
+                user.setUserId(null);
+                user.setDeptId(null);
                 int i = this.userService.insertUser(user);
                 sb.append(user.getUserName()+"添加成功").append(System.lineSeparator());
                 roleUserList.add(user.getUserName());
@@ -289,7 +292,7 @@ public class UserServiceImpl implements IUserService {
         Map<String, Object> map = new HashMap<>();
         map.put("tenantKey",tenantKey);
         map.put("roleUserList",roleUserList);
-        String res= HttpRequest.post("http://localhost:8201/system/selfSysUser/insertRoleUserList")
+        String res= HttpRequest.post(pushGmRoleUrl)
                 .header("Content-Type","application/json")
                 .body(JSON.toJSONString(map)).execute().body();
 
