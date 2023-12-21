@@ -156,7 +156,20 @@
     </select>
     <select id="getBillListByYear"
             resultMap="JdglYearValuePlanResultMap">
-        select jwvp.* from jdgl_year_value_plan jwvp,
+        select jwvp.`id`
+             , jwvp.`pid`
+             , jwvp.`year_plan_id`
+             , jwvp.`inventory_id`
+             , jwvp.`inventory_code`
+             , jwvp.`inventory_name`
+             , jwvp.`unit`
+             , jwvp.`design_quantity`
+             , jwvp.`price_cu`
+             , jwvp.`total_comp_design_quantity`
+             , jwvp.`remain_design_quantity`
+             , jwvp.`year_plan_comp_design_quantity`
+             , sum(if(jwp.exchange_rate is null or jwp.exchange_rate = 0,0,jwvp.year_plan_value_cu/jwp.exchange_rate)) year_plan_value_cu
+            from jdgl_year_value_plan jwvp,
                            (select * from jdgl_year_plan where year = #{year}) jwp
         where jwp.id = jwvp.year_plan_id
     </select>

@@ -454,7 +454,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         List<JdglDayScheduleBill> billValueListByRangeDate = jdglDayScheduleBillService.getBillValueListByRangeDate(startDate, endDate);
 
         // 获取开累填报清单数据
-        List<JdglDayScheduleBill> billValueListByEndDate = jdglDayScheduleBillService.getBillValueListByEndDate(startDate);
+//        List<JdglDayScheduleBill> billValueListByEndDate = jdglDayScheduleBillService.getBillValueListByEndDate(startDate);
 
         if(CollectionUtils.isEmpty(billValueListByRangeDate)) {
             return returnList;
@@ -499,7 +499,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         }
 
         if(CollectionUtils.isEmpty(returnList)) {
-            return returnList;
+//            return returnList;
         }
 
         List<JdglWeekValuePlan> jdglWeekValuePlans = "z".equals(queryDateType) ? jdglWeekValuePlanService.getBillListByYearAndWeek(year, week) : null;

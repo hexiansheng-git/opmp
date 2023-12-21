@@ -136,12 +136,12 @@
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
-            <if test="postName != null  and postName != ''">and `post_name` = #{postName}</if>
-            <if test="speciality != null  and speciality != ''">and `speciality` = #{speciality}</if>
-            <if test="postJob != null  and postJob != ''">and `post_job` = #{postJob}</if>
+            <if test="postName != null  and postName != ''">and `post_name` like concat('%',#{postName},'%')</if>
+            <if test="speciality != null  and speciality != ''">and `speciality` like concat('%',#{speciality},'%')</if>
+            <if test="postJob != null  and postJob != ''">and `post_job` like concat('%',#{postJob},'%')</if>
             <if test="headCount != null ">and `head_count` = #{headCount}</if>
             <if test="userId != null ">and `user_id` = #{userId}</if>
-            <if test="userName != null  and userName != ''">and `user_name` = #{userName}</if>
+            <if test="userName != null  and userName != ''">and `user_name` like concat('%',#{userName},'%')</if>
             <if test="workYears != null ">and `work_years` = #{workYears}</if>
             <if test="phone != null  and phone != ''">and `phone` = #{phone}</if>
             <if test="actualEnterDate != null ">and `actual_enter_date` = #{actualEnterDate}</if>
