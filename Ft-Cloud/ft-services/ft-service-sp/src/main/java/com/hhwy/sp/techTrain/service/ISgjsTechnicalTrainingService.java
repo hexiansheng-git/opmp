@@ -32,4 +32,6 @@ public interface ISgjsTechnicalTrainingService {
     int deleteSgjsTechnicalTraining(SgjsTechnicalTraining sgjsTechnicalTraining);
 
     int deleteSgjsTechnicalTrainingByPks(List<Long> sgjsTechnicalTrainingPkList);
+
+    List<SgjsTechnicalTraining> getIds(List<Long> ids);
 }

@@ -47,9 +47,9 @@ public class SgjsTechnicalTraining extends CommonBaseEntity {
     /**
      * 字段描述：培训日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "培训日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "培训日期", dateFormat = "yyyy年MM月dd日")
     private Date trainingDate;
     /**
      * 字段描述：培训讲师id
@@ -66,9 +66,9 @@ public class SgjsTechnicalTraining extends CommonBaseEntity {
     /**
      * 字段描述：编制日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "编制日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "编制日期", dateFormat = "yyyy年MM月dd日")
     private Date compileDate;
     /**
      * 字段描述：培训记录

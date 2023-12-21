@@ -115,7 +115,7 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="trainingOrganizationUnit != null  and trainingOrganizationUnit != ''">and
-                `training_organization_unit` = #{trainingOrganizationUnit}
+                `training_organization_unit` like concat('%',#{trainingOrganizationUnit},'%')
             </if>
             <if test="trainingType != null  and trainingType != ''">and `training_type` = #{trainingType}</if>
             <if test="trainingName != null  and trainingName != ''">and `training_name` = #{trainingName}</if>
@@ -148,6 +148,23 @@
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    
+    <select id="getByIds" resultMap="SgjsTechnicalTrainingResultMap" resultType="com.hhwy.sp.techTrain.domain.SgjsTechnicalTraining">
+       <include refid="selectSgjsTechnicalTrainingVo"/>
+        
+        <where>
+
+            del_flag = "0"
+            <if test="ids != null and ids.size() > 0">
+                and `id` in
+                <foreach item="id" collection="ids" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
         </where>
         order by create_time desc
     </select>
@@ -577,4 +594,8 @@
             </foreach>
         </where>
     </update>
+
+
+
+    
 </mapper>

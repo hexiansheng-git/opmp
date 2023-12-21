@@ -159,4 +159,17 @@ public class SgjsTechnicalTrainingServiceImpl implements ISgjsTechnicalTrainingS
         String delUser = SecurityUtils.getSysUser().getNickName();
         return sgjsTechnicalTrainingMapper.deleteSgjsTechnicalTrainingByPks(sgjsTechnicalTrainingPkList, delUser);
     }
+
+
+    /**
+     * 根据Id集合查询数据
+     * @param ids
+     * @return
+     */
+    @Override
+    public List<SgjsTechnicalTraining> getIds(List<Long> ids) {
+
+        return sgjsTechnicalTrainingMapper.getByIds(ids);
+
+    }
 }
