@@ -1,5 +1,6 @@
 package com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.controller;
 
+import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,6 +62,22 @@ public class KcsjPlanCommunicationRecordsController extends BaseController {
     public AjaxResult getKcsjPlanCommunicationRecordsList(@Validated(ValidationGroups.Select.class) KcsjPlanCommunicationRecords kcsjPlanCommunicationRecordsParam) {
        startPage();
         List<KcsjPlanCommunicationRecords> kcsjPlanCommunicationRecordsList = kcsjPlanCommunicationRecordsService.getKcsjPlanCommunicationRecordsList(kcsjPlanCommunicationRecordsParam);
+        for (KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords : kcsjPlanCommunicationRecordsList) {
+
+            SimpleDateFormat format=new SimpleDateFormat("yyyy年MM月dd日");
+            Date parse = null;
+            try {
+                Date createTime = kcsjPlanCommunicationRecords.getCreateTime();
+                if (null !=createTime){
+                    String format1 = format.format(createTime);
+                    parse = format.parse(format1);
+                }
+
+            } catch (ParseException e) {
+                throw new BaseException("日期解析异常");
+            }
+            kcsjPlanCommunicationRecords.setCompileDate(parse);
+        }
         return getDataTableAjaxResult(kcsjPlanCommunicationRecordsList);
     }
 

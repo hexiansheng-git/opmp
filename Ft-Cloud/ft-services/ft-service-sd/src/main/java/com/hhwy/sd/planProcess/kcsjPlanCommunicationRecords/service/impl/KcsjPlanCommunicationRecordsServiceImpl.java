@@ -66,7 +66,6 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
                 updateList.add(kcsjPlanCommunicationRecords);
             }
 
-
         }
         if (insertList.size() > 0) {
             for (KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords : insertList) {
@@ -81,7 +80,7 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
 
         if (updateList.size() > 0) {
             for (KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords :updateList) {
-                kcsjPlanCommunicationRecords.setUpdateUser(SecurityUtils.getUserName());
+                kcsjPlanCommunicationRecords.setUpdateUser(SecurityUtils.getUserId().toString());
                 kcsjPlanCommunicationRecords.setUpdateTime(DateUtils.getNowDate());
             }
             kcsjPlanCommunicationRecordsMapper.updateKcsjPlanCommunicationRecordsList(updateList);
