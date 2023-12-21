@@ -10,7 +10,7 @@
         <result property="communicationTheme" column="communication_theme"/>
         <result property="communicationStartDate" column="communication_start_date"/>
         <result property="communicationEndDate" column="communication_end_date"/>
-        <result property="annex" column="annex"/>
+        <result property="fileGroupId" column="annex"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="projectId" column="project_id"/>
@@ -67,7 +67,7 @@
             </if>
             <if test="communicationStartDate != null ">and `communication_start_date` = #{communicationStartDate}</if>
             <if test="communicationEndDate != null ">and `communication_end_date` = #{communicationEndDate}</if>
-            <if test="annex != null  and annex != ''">and `annex` = #{annex}</if>
+            <if test="fileGroupId != null  and annex != ''">and `annex` = #{fileGroupId}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -101,7 +101,7 @@
             <if test="communicationStartDate != null ">and `communication_start_date` &lt;= #{communicationStartDate}
             </if>
             <if test="communicationEndDate != null ">and `communication_end_date` &gt;= #{communicationEndDate}</if>
-            <if test="annex != null  and annex != ''">and `annex` = #{annex}</if>
+            <if test="fileGroupId != null  and annex != ''">and `annex` = #{fileGroupId}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -131,7 +131,7 @@
             <if test="communicationTheme != null  and communicationTheme != ''">`communication_theme`,</if>
             <if test="communicationStartDate != null ">`communication_start_date`,</if>
             <if test="communicationEndDate != null ">`communication_end_date`,</if>
-            <if test="annex != null  and annex != ''">`annex`,</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">`annex`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -156,7 +156,7 @@
             <if test="communicationTheme != null  and communicationTheme != ''">#{communicationTheme},</if>
             <if test="communicationStartDate != null ">#{communicationStartDate},</if>
             <if test="communicationEndDate != null ">#{communicationEndDate},</if>
-            <if test="annex != null  and annex != ''">#{annex},</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>
@@ -213,7 +213,7 @@
                 #{item.communicationTheme},
                 #{item.communicationStartDate},
                 #{item.communicationEndDate},
-                #{item.annex},
+                #{item.fileGroupId},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.projectId},
@@ -245,7 +245,7 @@
             </if>
             <if test="communicationStartDate != null ">`communication_start_date` = #{communicationStartDate},</if>
             <if test="communicationEndDate != null ">`communication_end_date` = #{communicationEndDate},</if>
-            <if test="annex != null  and  annex != ''">`annex` = #{annex},</if>
+            <if test="fileGroupId != null  and  fileGroupId != ''">`annex` = #{fileGroupId},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
@@ -295,7 +295,7 @@
             </trim>
             <trim prefix="annex  = case" suffix="end,">
                 <foreach collection="kcsjPlanCommunicationRecordsList" item="item" index="index">
-                    when `id`=#{item.id} then #{item.annex}
+                    when `id`=#{item.id} then #{item.fileGroupId}
                 </foreach>
             </trim>
             <trim prefix="region_id  = case" suffix="end,">
@@ -404,7 +404,7 @@
             </if>
             <if test="communicationStartDate != null ">and `communication_start_date` = #{communicationStartDate}</if>
             <if test="communicationEndDate != null ">and `communication_end_date` = #{communicationEndDate}</if>
-            <if test="annex != null  and annex != ''">and `annex` = #{annex}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `annex` = #{fileGroupId}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>

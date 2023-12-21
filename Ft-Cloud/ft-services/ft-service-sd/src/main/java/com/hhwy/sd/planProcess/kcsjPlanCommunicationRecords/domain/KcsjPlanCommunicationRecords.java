@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
@@ -100,14 +101,20 @@ public class KcsjPlanCommunicationRecords extends BaseEntity {
     /**
      * 字段描述：数据创建系统时间  编制时间用此字段显示
      */
-    @JsonFormat(pattern = "yyyy年MM月dd日 ")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss ")
     @JsonProperty
     @Excel(name = "数据创建系统时间  编制时间用此字段显示", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
-  /*  @JsonFormat(pattern="yyyy年MM月dd日")
+    /**
+     * 字段描述：数据创建系统时间  编制时间用此字段显示
+     */
+    @DateTimeFormat(pattern = "yyyy年MM月dd日")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    private Date compileDate;*/
+    @Excel(name = "编制时间用此字段显示", dateFormat = "yyyy年MM月dd日")
+    private Date compileDate;
+
 
     /**
      * 字段描述：数据修改者id
@@ -432,11 +439,11 @@ public class KcsjPlanCommunicationRecords extends BaseEntity {
     }
 
 
-//    public Date getCompileDate() {
-//        return compileDate;
-//    }
-//
-//    public void setCompileDate(Date compileDate) {
-//        this.compileDate = compileDate;
-//    }
+    public Date getCompileDate() {
+        return compileDate;
+    }
+
+    public void setCompileDate(Date compileDate) {
+        this.compileDate = compileDate;
+    }
 }
