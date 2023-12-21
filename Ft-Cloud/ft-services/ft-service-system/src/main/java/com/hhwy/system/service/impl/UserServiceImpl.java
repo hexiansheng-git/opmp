@@ -13,6 +13,7 @@ import com.hhwy.system.api.domain.SysRole;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.system.api.model.LoginUser;
 import com.hhwy.system.core.domain.SysUserRole;
+import com.hhwy.system.core.mapper.SysUserMapper;
 import com.hhwy.system.core.mapper.SysUserRoleMapper;
 import com.hhwy.system.core.service.ISysUserService;
 import com.hhwy.system.mapper.UserMapper;
@@ -56,6 +57,9 @@ public class UserServiceImpl implements IUserService {
     @Value("${pushGmRole.url}")
     private String pushGmRoleUrl;
 
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
 
 
@@ -283,6 +287,8 @@ public class UserServiceImpl implements IUserService {
                 //暂时置空
                 user.setUserId(null);
                 user.setDeptId(null);
+                Long [] roleIds= {2L};
+                user.setRoleIds(roleIds);
                 int i = this.userService.insertUser(user);
                 sb.append(user.getUserName()+"添加成功").append(System.lineSeparator());
                 roleUserList.add(user.getUserName());
@@ -295,8 +301,15 @@ public class UserServiceImpl implements IUserService {
         String res= HttpRequest.post(pushGmRoleUrl)
                 .header("Content-Type","application/json")
                 .body(JSON.toJSONString(map)).execute().body();
-
+        sb.append(res);
         return sb.toString();
+    }
+
+    @Override
+    public List<SysUser> selectUserList(SysUser user) {
+        List<String> tenantKeyList = new ArrayList();
+        tenantKeyList.add("master");
+        return this.sysUserMapper.selectUserList(user, tenantKeyList);
     }
 
 
