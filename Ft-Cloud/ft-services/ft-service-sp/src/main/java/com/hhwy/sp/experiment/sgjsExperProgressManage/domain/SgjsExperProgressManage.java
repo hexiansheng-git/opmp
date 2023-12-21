@@ -58,28 +58,28 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
      */
     @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "计划开始日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "计划开始日期", dateFormat = "yyyy年MM月dd日")
     private Date planStartDate;
     /**
      * 字段描述：计划结束日期
      */
     @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "计划结束日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "计划结束日期", dateFormat = "yyyy年MM月dd日")
     private Date planEndDate;
     /**
      * 字段描述：实际开始日期
      */
     @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "实际开始日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "实际开始日期", dateFormat = "yyyy年MM月dd日")
     private Date realStartDate;
     /**
      * 字段描述：实际结束日期
      */
     @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "实际结束日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "实际结束日期", dateFormat = "yyyy年MM月dd日")
     private Date realEndDate;
     /**
      * 字段描述：备注

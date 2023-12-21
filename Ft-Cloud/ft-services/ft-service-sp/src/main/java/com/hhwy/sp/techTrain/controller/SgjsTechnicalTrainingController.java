@@ -30,6 +30,11 @@ public class SgjsTechnicalTrainingController extends BaseController {
     private ISgjsTechnicalTrainingService sgjsTechnicalTrainingService;
 
 
+    /**
+     * 详情
+     * @param sgjsTechnicalTrainingParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsTechnicalTraining:list")
     @GetMapping
     public AjaxResult getSgjsTechnicalTraining(@Validated(ValidationGroups.Get.class) SgjsTechnicalTraining sgjsTechnicalTrainingParam) {
@@ -51,6 +56,11 @@ public class SgjsTechnicalTrainingController extends BaseController {
         return getDataTableAjaxResult(sgjsTechnicalTrainingList);
     }
 
+    /**
+     * 新增
+     * @param sgjsTechnicalTrainingParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsTechnicalTraining:add")
     @PostMapping("/add")
     public AjaxResult insertSgjsTechnicalTraining(@Validated(ValidationGroups.Save.class) @RequestBody SgjsTechnicalTraining sgjsTechnicalTrainingParam) {
@@ -65,6 +75,11 @@ public class SgjsTechnicalTrainingController extends BaseController {
         return AjaxResult.success(sgjsTechnicalTrainingListParam);
     }
 
+    /**
+     * 修改
+     * @param sgjsTechnicalTrainingParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsTechnicalTraining:update")
     @PostMapping("/update")
     public AjaxResult updateSgjsTechnicalTraining(@Validated(ValidationGroups.Update.class) @RequestBody SgjsTechnicalTraining sgjsTechnicalTrainingParam) {
@@ -95,6 +110,7 @@ public class SgjsTechnicalTrainingController extends BaseController {
 
     }
 
+    @PreAuthorize(hasPermi = "sgjsTechnicalTraining:report")
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsTechnicalTraining sgjsTechnicalTrainingParam) throws IOException {
         List<SgjsTechnicalTraining> sgjsTechnicalTrainingList = sgjsTechnicalTrainingService.getSgjsTechnicalTrainingList(sgjsTechnicalTrainingParam);

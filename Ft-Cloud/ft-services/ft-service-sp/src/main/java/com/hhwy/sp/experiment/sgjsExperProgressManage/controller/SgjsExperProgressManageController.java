@@ -126,9 +126,9 @@ public class SgjsExperProgressManageController extends BaseController {
            }
        }else {
            List<SgjsExperProgressManage> list=sgjsExperProgressManageService.getIds(ids);
-           if(!CollectionUtils.isEmpty(list)){
-               treeList=TreeUtil.treeToListWithLevel(list);
-              // treeList = list;
+           if(CollectionUtils.isNotEmpty(list)){
+               //treeList=TreeUtil.treeToListWithLevel(list);
+              treeList = list;
            }
        }
         ExcelUtils<SgjsExperProgressManage> utils = new ExcelUtils<>(SgjsExperProgressManage.class);

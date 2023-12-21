@@ -1,16 +1,17 @@
 package com.hhwy.system.controller;
 
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.system.api.domain.SysDept;
+import com.hhwy.system.core.utils.DeptTreeUtils;
 import com.hhwy.system.service.IDeptService;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,49 @@ public class DeptController {
     @PostMapping("/getDeptByTree")
     public AjaxResult getDeptByTree(@RequestBody(required = false) Map map){
         return AjaxResult.success("查询成功!", deptService.getDeptByTree());
+    }
+    @GetMapping("/lazyList")
+    public AjaxResult lazyList(SysDept dept, boolean showNextLevel){
+        List depts;
+        if ((StringUtils.isNotEmpty(dept.getStatus()) || StringUtils.isNotEmpty(dept.getDeptName())) && dept.getDeptId() == null) {
+            List<SysDept> sysDeptList = this.deptService.selectDeptList(dept);
+            depts = (new DeptTreeUtils()).deptList(sysDeptList);
+            if (CollectionUtils.isNotEmpty(depts)) {
+                Iterator var5 = depts.iterator();
+
+                while(var5.hasNext()) {
+                    SysDept sysDept = (SysDept)var5.next();
+                    sysDept.setChildren((List)null);
+                }
+            }
+        } else {
+            if (dept.getDeptId() == null) {
+                depts = this.deptService.selectOneLevelDeptList(dept);
+            } else {
+                depts = this.deptService.selectChildrenDeptList(dept);
+            }
+
+            if (showNextLevel && CollectionUtils.isNotEmpty(depts)) {
+                this.setChildrenInfo(depts);
+            }
+        }
+
+        return AjaxResult.success(depts);
+    }
+
+    private void setChildrenInfo(List<SysDept> deptList) {
+        if (CollectionUtils.isNotEmpty(deptList)) {
+            Iterator var2 = deptList.iterator();
+
+            while(var2.hasNext()) {
+                SysDept dept = (SysDept)var2.next();
+                SysDept param = new SysDept();
+                param.setDeptId(dept.getDeptId());
+                List<SysDept> children = this.deptService.selectChildrenDeptList(param);
+                dept.setChildren(children);
+            }
+        }
+
     }
 
     /**

@@ -16,6 +16,7 @@ import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.tree.TreeUtil;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -68,22 +69,21 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         return sgjsPlanMeasureManageMapper.getSgjsPlanMeasureManageList(sgjsPlanMeasureManage);
     }
 
-    public SgjsPlanMeasureManageVo list(SgjsPlanMeasureManage sgjsPlanMeasureManage) {
+    public SgjsPlanMeasureManageVo list(SgjsPlanMeasureManage sgjsPlanMeasureManage)
+        throws ParseException {
         SgjsPlanMeasureManageVo sgjsPlanMeasureManageVo = new SgjsPlanMeasureManageVo();
         //查询条件 时间字段处理
         if (StringUtils.isNotEmpty(sgjsPlanMeasureManage.getPlanStartDateStr())) {
             String planStartDateStr = sgjsPlanMeasureManage.getPlanStartDateStr();
             String[] split = planStartDateStr.split("~");
-            sgjsPlanMeasureManage.setPlanStartDate(
-                FtDateUtils.parseDate(split[0].replaceAll("(?:年|月|日)", "-")));
-            sgjsPlanMeasureManage.setPlanEndDate(
-                FtDateUtils.parseDate(split[1].replaceAll("(?:年|月|日)", "-")));
+            sgjsPlanMeasureManage.setPlanStartDateStr(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy年MM月dd日").parse(split[0])));
+            sgjsPlanMeasureManage.setPlanEndDateStr(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy年MM月dd日").parse(split[1])));
         }
         if (StringUtils.isNotEmpty(sgjsPlanMeasureManage.getRealStartDateStr())) {
             String realStartDateStr = sgjsPlanMeasureManage.getRealStartDateStr();
             String[] split = realStartDateStr.split("~");
-            sgjsPlanMeasureManage.setRealStartDate(FtDateUtils.parseDate(split[0].replaceAll("(?:年|月|日)", "-")));
-            sgjsPlanMeasureManage.setRealEndDate(FtDateUtils.parseDate(split[1].replaceAll("(?:年|月|日)", "-")));
+            sgjsPlanMeasureManage.setRealStartDateStr(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy年MM月dd日").parse(split[0])));
+            sgjsPlanMeasureManage.setRealEndDateStr(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy年MM月dd日").parse(split[1])));
         }
         List<SgjsPlanMeasureManage> sgjsPlanMeasureManageList = sgjsPlanMeasureManageMapper.getSgjsPlanMeasureManageList(sgjsPlanMeasureManage);
         List<SgjsPlanMeasureManage> list = new ArrayList<>();
