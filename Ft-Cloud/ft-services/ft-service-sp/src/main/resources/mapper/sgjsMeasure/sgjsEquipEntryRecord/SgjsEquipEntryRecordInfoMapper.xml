@@ -137,7 +137,7 @@
             <if test="recordId != null "> and `record_id` = #{recordId}</if>
             <if test="manageCode != null  and manageCode != ''"> and `manage_code` like concat ('%',#{manageCode},'%')</if>
             <if test="categoryCode != null  and categoryCode != ''"> and `category_code` = #{categoryCode}</if>
-            <if test="materialName != null  and materialName != ''"> and `material_name` = #{materialName}</if>
+            <if test="materialName != null  and materialName != ''"> and `material_name` like concat('%',#{materialName},'%')</if>
             <if test="materialSpec != null  and materialSpec != ''"> and `material_spec` = #{materialSpec}</if>
             <if test="categoryName != null  and categoryName != ''"> and `category_name` = #{categoryName}</if>
             <if test="categoryId != null "> and `category_id` = #{categoryId}</if>

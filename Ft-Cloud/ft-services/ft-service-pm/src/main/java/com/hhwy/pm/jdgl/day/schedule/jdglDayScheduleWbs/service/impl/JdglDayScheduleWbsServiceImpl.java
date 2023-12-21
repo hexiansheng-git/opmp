@@ -451,6 +451,36 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
     }
 
     /**
+     * 根据日期区间查询wbs数据
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    @Override
+    public List<JdglDayScheduleWbs4Value> getWbsListByEndDate(Date endDate) {
+        List<JdglDayScheduleWbs4Value> wbsListByDateRange4Value = jdglDayScheduleWbsMapper.getWbsListByEndDate(endDate);
+        if(wbsListByDateRange4Value != null) {
+            List<String> itemCodes = new ArrayList<>();
+            wbsListByDateRange4Value.stream().forEach(vo -> {
+                itemCodes.add(vo.getWbsCode());
+            });
+
+            List<JdglMainPlanItem> mainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemByItemCodes(itemCodes);
+            if(mainPlanItemList != null) {
+                for (JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value : wbsListByDateRange4Value) {
+                    String wbsCode = jdglDayScheduleWbs4Value.getWbsCode();
+                    JdglMainPlanItem jdglMainPlanItem = mainPlanItemList.stream().filter(vo -> wbsCode != null && wbsCode.equals(vo.getItemCode())).findFirst().orElse(null);
+                    if(jdglMainPlanItem != null) {
+                        jdglDayScheduleWbs4Value.setId(jdglMainPlanItem.getId());
+                        jdglDayScheduleWbs4Value.setPid(jdglMainPlanItem.getPid());
+                    }
+                }
+            }
+        }
+        return wbsListByDateRange4Value;
+    }
+
+    /**
      * 根据日期获取开累信息
      * @param endDate
      * @return

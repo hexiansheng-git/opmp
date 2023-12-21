@@ -183,7 +183,7 @@
     <select id="getWbsListByYear"
             resultMap="JdglYearImagePlanResultMap">
         select jyip.wbs_code,jyip.wbs_name,jyip.work_name,jyip.work_code,sum(plan_comp_value) plan_comp_value
-        from (select * from jdgl_year_plan where task_status = '5' and year = #{year} ) jyp ,
+        from (select * from jdgl_year_plan where del_flag = '0' and is_use = '1' and task_status = '5' and year = #{year} ) jyp ,
              jdgl_year_image_plan jyip
         where jyp.id = jyip.year_plan_id
         group by jyip.wbs_code,jyip.wbs_name,jyip.work_name,jyip.work_code

@@ -4,6 +4,7 @@ import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.domain.JdglMonthImagePlan;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,4 +35,6 @@ public interface JdglMonthImagePlanMapper {
     int deleteJdglMonthImagePlanByPlanId(@Param("planId") Long planId);
 
     BigDecimal getThisPlanAmt(@Param("planId") Long planId);
+
+    List<JdglMonthImagePlan> getJdglMonthImagePlanListByEndDate(@Param("endDate") Date endDate);
 }

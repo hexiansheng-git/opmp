@@ -1,16 +1,21 @@
 package com.hhwy.system.controller;
 
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.service.TokenService;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.system.SelfUserInfo;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.system.api.model.LoginUser;
 import com.hhwy.system.core.service.ISysUserService;
 import com.hhwy.system.mapper.UserMapper;
 import com.hhwy.system.service.IUserService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -120,10 +125,12 @@ public class UserController extends BaseController {
         return AjaxResult.success(userList);
     }
 
-    @PostMapping("/testUser")
-    public AjaxResult testUser(@RequestBody Map<String,String> map){
-       iUserService.testUser(map.get("s").toString());
-        return AjaxResult.success();
+    //组件选择人员后添加人员;并且对总部版本该用户进行授权
+    @PostMapping("/add")
+    @CustomLogger(title = "选择用户进行授权", name = "选择用户进行授权" ,businessType = CustomBusinessType.SAVE)
+    public AjaxResult add(@RequestBody List<SysUser> userList) {
+        String sb=iUserService.batchInsert(userList);
+        return AjaxResult.success(sb.toString());
     }
 
 }

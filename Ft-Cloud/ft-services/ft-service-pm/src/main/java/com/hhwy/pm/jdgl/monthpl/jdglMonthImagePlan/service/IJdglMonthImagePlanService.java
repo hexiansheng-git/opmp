@@ -4,6 +4,7 @@ import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.domain.JdglMonthImagePlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,6 +19,8 @@ public interface IJdglMonthImagePlanService {
     List<JdglMonthImagePlan> getJdglMonthImagePlanList(JdglMonthImagePlan jdglMonthImagePlan);
 
     List<JdglMonthImagePlan> getJdglMonthImagePlanListByPlanId(Long planId);
+
+    List<JdglMonthImagePlan> getJdglMonthImagePlanListByEndDate(Date endDate);
 
     int insertJdglMonthImagePlan(JdglMonthImagePlan jdglMonthImagePlan);
 

@@ -182,8 +182,8 @@
     </select>
     <select id="getWbsListByYearAndWeek"
             resultMap="JdglWeekImagePlanResultMap">
-        select jyip.wbs_code,jyip.wbs_name,jyip.work_name,jyip.work_code,sum(plan_comp_value) plan_comp_value
-        from (select * from jdgl_week_plan where task_status = '5' and year = #{year} and week = #{week}) jyp ,
+        select jyip.wbs_code,jyip.wbs_name,jyip.work_name,jyip.work_code,sum(if(jyp.exchange_rate is null or jyp.exchange_rate = 0,0,plan_comp_value/jyp.exchange_rate)) plan_comp_value
+        from (select * from jdgl_week_plan where del_flag = '0' and task_status = '5' and year = #{year} and week = #{week}) jyp ,
              jdgl_week_image_plan jyip
         where jyp.id = jyip.plan_id
         group by jyip.wbs_code,jyip.wbs_name,jyip.work_name,jyip.work_code

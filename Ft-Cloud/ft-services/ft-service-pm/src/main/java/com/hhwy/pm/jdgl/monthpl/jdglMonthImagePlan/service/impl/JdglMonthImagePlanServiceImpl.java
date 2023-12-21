@@ -84,6 +84,30 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
         return getJdglMonthImagePlanList(jdglMonthImagePlan);
     }
 
+    @Override
+    public List<JdglMonthImagePlan> getJdglMonthImagePlanListByEndDate(Date endDate) {
+        List<JdglMonthImagePlan> jdglMonthImagePlanListByEndDate = jdglMonthImagePlanMapper.getJdglMonthImagePlanListByEndDate(endDate);
+        List<String> itemCodes = new ArrayList<>();
+        jdglMonthImagePlanListByEndDate.stream().forEach(vo -> {
+            itemCodes.add(vo.getWorkCode());
+        });
+
+        List<JdglMainPlanItem> mainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemByItemCodes(itemCodes);
+        if(mainPlanItemList != null) {
+            for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlanListByEndDate) {
+                String wbsCode = jdglMonthImagePlan.getWorkCode();
+                JdglMainPlanItem jdglMainPlanItem = mainPlanItemList.stream().filter(vo -> wbsCode != null && wbsCode.equals(vo.getItemCode())).findFirst().orElse(null);
+                if(jdglMainPlanItem != null) {
+                    jdglMonthImagePlan.setId(jdglMainPlanItem.getId());
+                    jdglMonthImagePlan.setPid(jdglMainPlanItem.getPid());
+                } else {
+                    jdglMonthImagePlan.setPid(-1L);
+                }
+            }
+        }
+        return jdglMonthImagePlanListByEndDate;
+    }
+
     @Transactional
     public int insertJdglMonthImagePlan(JdglMonthImagePlan jdglMonthImagePlan) {
         jdglMonthImagePlan.setId(IdWorker.createId());

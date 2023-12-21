@@ -136,6 +136,10 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             SgjsTechnicalManage info=new SgjsTechnicalManage();
             info.setPathList(data);
             manageList = sgjsTechnicalManageMapper.getSgjsTechnicalManageList(info);
+            for (int i = 0; i < manageList.size(); i++) {
+                SgjsTechnicalManage manage = manageList.get(i);
+                manage.setActualDateStr(FtDateUtils.formatDate(manage.getActualDate()));
+            }
         }
         return manageList;
     }
@@ -338,6 +342,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
     @Override
     public AjaxResult sync() {
         List<QqchPostSetting> list = pmServiceApi.getTechDeptList();
+        logger.info("同步结果数据：【{}】",list);
         List<SgjsTechnicalManage> techList=new ArrayList<>();
         //递归处理
         digui(list,techList,"");
@@ -354,7 +359,10 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         //删完主表删子表
         sgjsTechnicalManageInfoMapper.delectAll(manageInfo);
         List<SgjsTechnicalManage> manageList = TreeUtil.treeToList(build);
-        sgjsTechnicalManageMapper.insertSgjsTechnicalManageList(manageList);
+        logger.info("主表数据--->【{}】",manageList);
+        if(!CollectionUtils.isEmpty(manageList)){
+            sgjsTechnicalManageMapper.insertSgjsTechnicalManageList(manageList);
+        }
         return AjaxResult.success(techList);
     }
 
