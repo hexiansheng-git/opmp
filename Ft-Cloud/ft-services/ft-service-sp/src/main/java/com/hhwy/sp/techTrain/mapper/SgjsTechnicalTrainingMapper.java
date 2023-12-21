@@ -27,4 +27,6 @@ public interface SgjsTechnicalTrainingMapper {
     int deleteSgjsTechnicalTraining(SgjsTechnicalTraining sgjsTechnicalTraining);
 
     int deleteSgjsTechnicalTrainingByPks(@Param("sgjsTechnicalTrainingPkList") List<Long> sgjsTechnicalTrainingPkList, @Param("delUser") String delUser);
+
+    List<SgjsTechnicalTraining> getByIds(@Param("ids") List<Long> ids);
 }

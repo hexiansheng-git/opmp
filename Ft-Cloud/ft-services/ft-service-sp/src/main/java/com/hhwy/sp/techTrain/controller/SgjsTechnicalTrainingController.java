@@ -1,5 +1,6 @@
 package com.hhwy.sp.techTrain.controller;
 
+import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
@@ -111,10 +112,25 @@ public class SgjsTechnicalTrainingController extends BaseController {
     }
 
     @PreAuthorize(hasPermi = "sgjsTechnicalTraining:report")
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, SgjsTechnicalTraining sgjsTechnicalTrainingParam) throws IOException {
-        List<SgjsTechnicalTraining> sgjsTechnicalTrainingList = sgjsTechnicalTrainingService.getSgjsTechnicalTrainingList(sgjsTechnicalTrainingParam);
-        ExcelUtils<SgjsTechnicalTraining> util = new ExcelUtils<>(SgjsTechnicalTraining.class);
-        util.exportExcel(response, sgjsTechnicalTrainingList, DateUtils.getDate());
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, @RequestBody SgjsTechnicalTraining sgjsTechnicalTrainingParam) throws IOException {
+
+
+        List<Long> ids = sgjsTechnicalTrainingParam.getIds();
+        List<SgjsTechnicalTraining> list=null;
+        if (CollectionUtils.isEmpty(ids)){
+            List<SgjsTechnicalTraining> sgjsTechnicalTrainingList = sgjsTechnicalTrainingService.getSgjsTechnicalTrainingList(sgjsTechnicalTrainingParam);
+            if(CollectionUtils.isNotEmpty(sgjsTechnicalTrainingList)){
+                list=sgjsTechnicalTrainingList;
+            }
+        }else {
+            List<SgjsTechnicalTraining> sgjsTechnicalTrainingList=sgjsTechnicalTrainingService.getIds(ids);
+            if(CollectionUtils.isNotEmpty(sgjsTechnicalTrainingList)){
+                list=sgjsTechnicalTrainingList;
+            }
+        }
+        ExcelUtils<SgjsTechnicalTraining> utils = new ExcelUtils<>(SgjsTechnicalTraining.class);
+        utils.exportExcel(response,list,DateUtils.getDate());
+
     }
 }

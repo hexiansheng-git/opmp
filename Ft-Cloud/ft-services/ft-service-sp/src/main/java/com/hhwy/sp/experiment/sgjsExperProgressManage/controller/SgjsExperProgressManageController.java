@@ -112,6 +112,7 @@ public class SgjsExperProgressManageController extends BaseController {
      * @param sgjsExperProgressManageParam
      * @throws IOException
      */
+    @PreAuthorize(hasPermi = "sgjsExperProgressManage:report")
     @PostMapping("/export")
     public void export(HttpServletResponse response,
                       @RequestBody SgjsExperProgressManage sgjsExperProgressManageParam) throws IOException {
@@ -138,6 +139,7 @@ public class SgjsExperProgressManageController extends BaseController {
      * 同步前期策划的数据
      * @return
      */
+    @PreAuthorize(hasPermi = "sgjsExperProgressManage:sync")
     @GetMapping("/sync")
     public SgjsExperProgressManageVo sync(){
         return sgjsExperProgressManageService.sync();
