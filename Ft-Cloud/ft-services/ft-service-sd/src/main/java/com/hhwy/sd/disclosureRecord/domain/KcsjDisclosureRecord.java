@@ -63,7 +63,7 @@ public class KcsjDisclosureRecord extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "实际交底日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "实际交底日期", dateFormat = "yyyy年MM月dd日")
     @NotBlank(message = "实际交底日期不能为空",groups = ValidationGroups.Save.class)
     private Date actualDisclosureDate;
     /**

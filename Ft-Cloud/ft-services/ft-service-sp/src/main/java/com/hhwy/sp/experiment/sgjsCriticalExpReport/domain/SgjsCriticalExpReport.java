@@ -63,7 +63,7 @@ public class SgjsCriticalExpReport extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "计划实施日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "计划实施日期", dateFormat = "yyyy年MM月dd日")
     private Date planEffectDate;
     /**
      * 字段描述：是否外委（1：是，0：否）
@@ -82,14 +82,14 @@ public class SgjsCriticalExpReport extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "计划提交日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "计划提交日期", dateFormat = "yyyy年MM月dd日")
     private Date planCommitDate;
     /**
      * 字段描述：实际提交日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "实际提交日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "实际提交日期", dateFormat = "yyyy年MM月dd日")
     private Date actualCommitDate;
     /**
      * 字段描述：提交人id
