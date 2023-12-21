@@ -210,6 +210,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         jdglMonthPlan.setMonth((cl.get(Calendar.MONTH)+1) < 10 ? "0" + (cl.get(Calendar.MONTH)+1) : ""+(cl.get(Calendar.MONTH)+1));
         jdglMonthPlan.setYear(cl.get(Calendar.YEAR) +"");
         jdglMonthPlan.setTaskStatus("5");
+        jdglMonthPlan.setIsUse("1");
         JdglMonthPlan jdglMonthPlan1 = jdglMonthPlanService.getJdglMonthPlan(jdglMonthPlan);
 
         if(jdglMonthPlan1 != null) {

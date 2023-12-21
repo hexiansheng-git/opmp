@@ -209,81 +209,81 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
         String month = (cl.get(Calendar.MONTH)  + 1) > 10 ? "" + (cl.get(Calendar.MONTH)  + 1) : "0" + (cl.get(Calendar.MONTH)  + 1);
 
         // 月计划数据
-        JdglMonthPlan usingMonthPlanByYearAndMonth = jdglMonthPlanService.getUsingMonthPlanByYearAndMonth(year, month);
+//        JdglMonthPlan usingMonthPlanByYearAndMonth = jdglMonthPlanService.getUsingMonthPlanByYearAndMonth(year, month);
 
         Map<String, Date> map = StatisticsUtils.getDateRange4YearMonth(year, month);
         Date startDate = map.get("start");
         Date endDate = map.get("end");
 
         // 获取月产值数据
-        List<JdglDayScheduleWbs4Value> wbsListByDateRange = iJdglDayScheduleWbsService.getWbsListByDateRange(startDate, endDate);
+        List<JdglDayScheduleWbs4Value> wbsListByDateRange = iJdglDayScheduleWbsService.getWbsListByEndDate(endDate);
 
-        if(usingMonthPlanByYearAndMonth != null) {
-            List<JdglMonthImagePlan> jdglMonthImagePlanListByPlanId = jdglMonthImagePlanService.getJdglMonthImagePlanListByPlanId(usingMonthPlanByYearAndMonth.getId());
-            List<JdglMonthImagePlan> jdglMonthImagePlans = TreeUtil.treeToList(jdglMonthImagePlanListByPlanId);
+//        if(usingMonthPlanByYearAndMonth != null) {
+        List<JdglMonthImagePlan> jdglMonthImagePlanListByPlanId = jdglMonthImagePlanService.getJdglMonthImagePlanListByEndDate(endDate);
+//        List<JdglMonthImagePlan> jdglMonthImagePlans = TreeUtil.treeToList(jdglMonthImagePlanListByPlanId);
 
-            for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlans) {
-                JdglDiffAnalysisSv jdglDiffAnalysisSv = new JdglDiffAnalysisSv();
+        for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlanListByPlanId) {
+            JdglDiffAnalysisSv jdglDiffAnalysisSv = new JdglDiffAnalysisSv();
 
-                jdglDiffAnalysisSv.setId(IdWorker.createId());
-                jdglDiffAnalysisSv.setOldId(jdglMonthImagePlan.getId());
-                jdglDiffAnalysisSv.setOldPid(jdglMonthImagePlan.getPid());
-                jdglDiffAnalysisSv.setDiffAnalysisId(id);
-                jdglDiffAnalysisSv.setPlanItemCode(jdglMonthImagePlan.getWorkCode());
-                jdglDiffAnalysisSv.setPlanItemName(jdglMonthImagePlan.getWorkName());
-                jdglDiffAnalysisSv.setPlanStartDate(jdglMonthImagePlan.getPlanStartDate());
-                jdglDiffAnalysisSv.setPlanEndDate(jdglMonthImagePlan.getPlanEndDate());
-                jdglDiffAnalysisSv.setIsCriticalPath(jdglMonthImagePlan.getIsCriticalPath());
-                jdglDiffAnalysisSv.setUnit(jdglMonthImagePlan.getUnit());
-                jdglDiffAnalysisSv.setDesignNum(jdglMonthImagePlan.getPlanCompQuantity());
-                jdglDiffAnalysisSv.setSort(jdglMonthImagePlan.getSort());
+            jdglDiffAnalysisSv.setId(IdWorker.createId());
+            jdglDiffAnalysisSv.setOldId(jdglMonthImagePlan.getId());
+            jdglDiffAnalysisSv.setOldPid(jdglMonthImagePlan.getPid());
+            jdglDiffAnalysisSv.setDiffAnalysisId(id);
+            jdglDiffAnalysisSv.setPlanItemCode(jdglMonthImagePlan.getWorkCode());
+            jdglDiffAnalysisSv.setPlanItemName(jdglMonthImagePlan.getWorkName());
+            jdglDiffAnalysisSv.setPlanStartDate(jdglMonthImagePlan.getPlanStartDate());
+            jdglDiffAnalysisSv.setPlanEndDate(jdglMonthImagePlan.getPlanEndDate());
+            jdglDiffAnalysisSv.setIsCriticalPath(jdglMonthImagePlan.getIsCriticalPath());
+            jdglDiffAnalysisSv.setUnit(jdglMonthImagePlan.getUnit());
+            jdglDiffAnalysisSv.setDesignNum(jdglMonthImagePlan.getPlanCompQuantity());
+            jdglDiffAnalysisSv.setSort(jdglMonthImagePlan.getSort());
 //                jdglDiffAnalysisSv.setActStartDate(jdglMonthImagePlan.getCreateTime());
-                jdglDiffAnalysisSv.setActEndDate(jdglMonthImagePlan.getPlanEndDate());
+            jdglDiffAnalysisSv.setActEndDate(jdglMonthImagePlan.getPlanEndDate());
 
-                // 处理作业责任人给总部推送预警用
-                String responsePersonId = jdglMonthImagePlan.getResponsePersonId();
-                jdglDiffAnalysisSv.setPtVar2(responsePersonId);
-                if(StringUtils.isNotEmpty(responsePersonId)) {
-                    String[] split = users.split(",");
-                    String userId = "";
-                    if(split.length > 0) {
-                        userId = Arrays.stream(split).filter(str -> str.equals(responsePersonId)).findFirst().orElse(null);
-                    }
-                    if(StringUtils.isEmpty(userId)) {
-                        users = "".equals(users) ? responsePersonId : "," + responsePersonId;
-                    }
+            // 处理作业责任人给总部推送预警用
+            String responsePersonId = jdglMonthImagePlan.getResponsePersonId();
+            jdglDiffAnalysisSv.setPtVar2(responsePersonId);
+            if(StringUtils.isNotEmpty(responsePersonId)) {
+                String[] split = users.split(",");
+                String userId = "";
+                if(split.length > 0) {
+                    userId = Arrays.stream(split).filter(str -> str.equals(responsePersonId)).findFirst().orElse(null);
                 }
-
-                if(!CollectionUtils.isEmpty(wbsListByDateRange)) {
-                    JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = wbsListByDateRange.stream().filter(vo -> StringUtils.isNotEmpty(vo.getWbsCode()) && vo.getWbsCode().equals(jdglMonthImagePlan.getWorkCode())).findFirst().orElse(null);
-                    if(jdglDayScheduleWbs4Value != null) {
-                        jdglDiffAnalysisSv.setActStartDate(jdglDayScheduleWbs4Value.getEditerDate());
-                        BigDecimal planCompValue = StatisticsUtils.getDivideTenThousand(jdglMonthImagePlan.getPlanCompValue());
-                        BigDecimal thisValue = StatisticsUtils.getDivideTenThousand(jdglDayScheduleWbs4Value.getThisValue());
-                        if(thisValue != null && planCompValue!= null) {
-                            jdglDiffAnalysisSv.setSvNum(thisValue.subtract(planCompValue));
-                        }
-                        BigDecimal thisQuantity = jdglDayScheduleWbs4Value.getThisQuantity();
-                        BigDecimal planCompQuantity = jdglMonthImagePlan.getPlanCompQuantity();
-                        if(thisQuantity != null &&  planCompQuantity != null){
-                            jdglDiffAnalysisSv.setThisDeviationNum(thisQuantity.subtract(planCompQuantity));
-                        }
-                    }
+                if(StringUtils.isEmpty(userId)) {
+                    users = "".equals(users) ? responsePersonId : "," + responsePersonId;
                 }
-                BigDecimal planCompValue = StatisticsUtils.getDivideTenThousand(jdglMonthImagePlan.getPlanCompValue());
-                if(planCompValue != null && !jdglMonthImagePlan.getWbsCode().equals(jdglMonthImagePlan.getWorkCode())) {
-                    thisTotalPlanAmt = thisTotalPlanAmt.add(planCompValue);
-                }
-                insertList.add(jdglDiffAnalysisSv);
             }
 
-            for (JdglDiffAnalysisSv jdglDiffAnalysisSv : insertList) {
-                JdglDiffAnalysisSv jdglDiffAnalysisSv1 = insertList.stream().filter(vo -> vo.getOldId().equals(jdglDiffAnalysisSv.getOldPid())).findFirst().orElse(null);
-                if(jdglDiffAnalysisSv1 != null) {
-                    jdglDiffAnalysisSv.setPid(jdglDiffAnalysisSv1.getId());
+            if(!CollectionUtils.isEmpty(wbsListByDateRange)) {
+                JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = wbsListByDateRange.stream().filter(vo -> StringUtils.isNotEmpty(vo.getWbsCode()) && vo.getWbsCode().equals(jdglMonthImagePlan.getWorkCode())).findFirst().orElse(null);
+                if(jdglDayScheduleWbs4Value != null) {
+                    jdglDiffAnalysisSv.setActStartDate(jdglDayScheduleWbs4Value.getEditerDate());
+                    BigDecimal planCompValue = StatisticsUtils.getDivideTenThousand(jdglMonthImagePlan.getPlanCompValue());
+                    BigDecimal thisValue = StatisticsUtils.getDivideTenThousand(jdglDayScheduleWbs4Value.getThisValue());
+                    if(thisValue != null && planCompValue!= null) {
+                        jdglDiffAnalysisSv.setSvNum(thisValue.subtract(planCompValue));
+                    }
+                    BigDecimal thisQuantity = jdglDayScheduleWbs4Value.getThisQuantity();
+                    BigDecimal planCompQuantity = jdglMonthImagePlan.getPlanCompQuantity();
+                    if(thisQuantity != null &&  planCompQuantity != null){
+                        jdglDiffAnalysisSv.setThisDeviationNum(thisQuantity.subtract(planCompQuantity));
+                    }
                 }
+            }
+            BigDecimal planCompValue = StatisticsUtils.getDivideTenThousand(jdglMonthImagePlan.getPlanCompValue());
+            if(planCompValue != null && !jdglMonthImagePlan.getWbsCode().equals(jdglMonthImagePlan.getWorkCode())) {
+                thisTotalPlanAmt = thisTotalPlanAmt.add(planCompValue);
+            }
+            insertList.add(jdglDiffAnalysisSv);
+        }
+
+        for (JdglDiffAnalysisSv jdglDiffAnalysisSv : insertList) {
+            JdglDiffAnalysisSv jdglDiffAnalysisSv1 = insertList.stream().filter(vo -> vo.getOldId() != null && vo.getOldId().equals(jdglDiffAnalysisSv.getOldPid())).findFirst().orElse(null);
+            if(jdglDiffAnalysisSv1 != null) {
+                jdglDiffAnalysisSv.setPid(jdglDiffAnalysisSv1.getId());
             }
         }
+//        }
 
         if(!CollectionUtils.isEmpty(insertList)) {
             jdglDiffAnalysisSvMapper.insertJdglDiffAnalysisSvList(insertList);
