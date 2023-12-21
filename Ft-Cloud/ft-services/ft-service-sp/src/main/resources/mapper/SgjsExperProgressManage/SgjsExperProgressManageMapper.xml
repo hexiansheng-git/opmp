@@ -210,7 +210,7 @@
     </select>
 
 
-    <select id="getIds"
+    <select id="getIds" resultMap="SgjsExperProgressManageResultMap"
             resultType="com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManage">
         <include refid="selectSgjsExperProgressManageVo"/>
         <where>
