@@ -97,7 +97,7 @@ public class KcsjPlanMonthlyReportController extends BaseController {
      * 生成月报
      * @return
      */
-    @PostMapping("/generateMonthlyReport")
+    @GetMapping("/generateMonthlyReport")
     public AjaxResult generateMonthlyReport(){
         kcsjPlanMonthlyReportService.generateMonthlyReport();
         return AjaxResult.success();

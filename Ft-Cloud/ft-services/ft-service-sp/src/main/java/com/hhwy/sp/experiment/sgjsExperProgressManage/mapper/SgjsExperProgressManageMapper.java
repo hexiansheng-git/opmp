@@ -41,4 +41,7 @@ public interface SgjsExperProgressManageMapper {
     List<SgjsExperProgressManage> getIds(@Param("ids") List<Long> ids);
 
     List<SgjsExperProgressManage> getChildrenList(@Param("ids") List<Long> ids);
+
+    void deleteAll();
+
 }
