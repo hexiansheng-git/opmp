@@ -177,7 +177,8 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             SgjsExperProgressManage sgjsExperProgressManage = new SgjsExperProgressManage();
             sgjsExperProgressManage.setExperimentalWorkItems(map.get("workItem") == null ? null : (String) map.get("workItem"));
             sgjsExperProgressManage.setMeasureUnit(map.get("unit") == null ? null : (String) map.get("unit"));
-            sgjsExperProgressManage.setWorkload(map.get("workload") == null ? null : (BigDecimal) map.get("workload"));
+            sgjsExperProgressManage.setWorkload(
+                Objects.equals(map.get("workload"), new BigDecimal(0)) ? null : new BigDecimal(map.get("workload").toString()));
             sgjsExperProgressManage.setPlanStartDate(map.get("planBeginDate") == null ? null : FtDateUtils.parseDate(map.get("planBeginDate")));
             sgjsExperProgressManage.setPlanEndDate(map.get("planEndDate") == null ? null : FtDateUtils.parseDate(map.get("planEndDate")));
             sgjsExperProgressManage.setRemark(map.get("remark") == null ? null : map.get("remark").toString());
