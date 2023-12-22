@@ -218,6 +218,8 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
 
     @Override
     public List<QqchLabourDemandPlanDto> selectCount(QqchLabourDemandPlan qqchLabourDemandPlan) {
+        BigDecimal version = qqchLabourDemandPlan.getVersion();
+        version = VersionUtil.getVersion("qqch_labour_demand_plan", version);
         List<Date> dates = Getclasspath.getmous(qqchLabourDemandPlan.getStartTime(), qqchLabourDemandPlan.getEndTime());
         List<String> jobNames = qqchLabourDemandPlan.getJobNames();
         //思路：
@@ -226,6 +228,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         if (!jobNames.contains("全部工种")){
             qqchLabourDemandPlan1.setJobNames(jobNames);
         }
+        qqchLabourDemandPlan1.setVersion(version);
         List<QqchLabourDemandPlan> qqchLabourDemandPlanList = qqchLabourDemandPlanMapper.getQqchLabourDemandPlanList(qqchLabourDemandPlan1);
 
         List<QqchLabourDemandPlanDto> list = new ArrayList<>();
@@ -281,9 +284,10 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
     @Override
     public QqchLabourDemandPlanVo sychData(QqchLabourDemandPlanVo vo) {
         //1.保存页面数据
-        this.insertQqchLabourDemandPlanList(vo.getQqchLabourDemandPlanList(), vo.getVersion());
+        BigDecimal version = VersionUtil.getVersion("qqch_labour_demand_plan", vo.getVersion());
+        this.insertQqchLabourDemandPlanList(vo.getQqchLabourDemandPlanList(), version);
         //查询最新有效版本的施工数据
-        BigDecimal constVersion = commonMapper.selectMaxVersion("qqch_const");
+        BigDecimal constVersion = VersionUtil.getVersion("qqch_const", vo.getVersion());
         //2.查询1.3人员策划数据
         List<QqchConstStaffPlanResult> qqchConstList = qqchConstMapper.selectQqchConst(constVersion);
         if (CollectionUtils.isEmpty(qqchConstList)) {
@@ -293,7 +297,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
 //            param.setVersion(constVersion);
 //            this.deleteQqchLabourDemandPlan(param);
             QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
-            qqchLabourDemandPlan.setVersion(vo.getVersion());
+            qqchLabourDemandPlan.setVersion(version);
             return this.getQqchLabourDemandPlanList(qqchLabourDemandPlan);
         }
 
@@ -311,7 +315,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             List<QqchLabourDemandPlan> arrayList = this.toTreeList(qqchLabourDemandPlanResults);
             this.insertQqchLabourDemandPlanList(arrayList, labourVersion);
             QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
-            qqchLabourDemandPlan.setVersion(vo.getVersion());
+            qqchLabourDemandPlan.setVersion(version);
             return this.getQqchLabourDemandPlanList(qqchLabourDemandPlan);
         }
 
@@ -363,7 +367,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             this.insertQqchLabourDemandPlanList(arrayList, labourVersion);
         }
         QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
-        qqchLabourDemandPlan.setVersion(vo.getVersion());
+        qqchLabourDemandPlan.setVersion(version);
         return this.getQqchLabourDemandPlanList(qqchLabourDemandPlan);
     }
 
@@ -432,10 +436,10 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
                 list.add(qqchLabourDemandPlan1);
             }
             qqchLabourDemandPlan.setChildren(list);
-            qqchLabourDemandPlan.setChinaNum(list.stream().map(p -> p.getChinaNum()).reduce(BigDecimal.ZERO, BigDecimal::add));
-            qqchLabourDemandPlan.setOutNum(list.stream().map(p -> p.getOutNum()).reduce(BigDecimal.ZERO, BigDecimal::add));
-            qqchLabourDemandPlan.setTotal(list.stream().map(p -> p.getTotal()).reduce(BigDecimal.ZERO, BigDecimal::add));
-            qqchLabourDemandPlan.setOutProportion(list.stream().map(p -> p.getOutProportion()).reduce(BigDecimal.ZERO, BigDecimal::add));
+            qqchLabourDemandPlan.setChinaNum(list.stream().filter(p -> null != p.getChinaNum()).map(p -> p.getChinaNum()).reduce(BigDecimal.ZERO, BigDecimal::add));
+            qqchLabourDemandPlan.setOutNum(list.stream().filter(p -> null != p.getOutNum()).map(p -> p.getOutNum()).reduce(BigDecimal.ZERO, BigDecimal::add));
+            qqchLabourDemandPlan.setTotal(list.stream().filter(p -> null != p.getTotal()).map(p -> p.getTotal()).reduce(BigDecimal.ZERO, BigDecimal::add));
+            qqchLabourDemandPlan.setOutProportion(list.stream().filter(p -> null != p.getOutProportion()).map(p -> p.getOutProportion()).reduce(BigDecimal.ZERO, BigDecimal::add));
             arrayList.add(qqchLabourDemandPlan);
         }
         return arrayList;
