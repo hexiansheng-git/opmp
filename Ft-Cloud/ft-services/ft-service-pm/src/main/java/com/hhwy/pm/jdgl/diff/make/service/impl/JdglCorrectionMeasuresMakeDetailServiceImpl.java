@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.diff.make.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -8,7 +9,11 @@ import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMakeDetail;
 import com.hhwy.pm.jdgl.diff.make.mapper.JdglCorrectionMeasuresMakeDetailMapper;
 import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeDetailService;
 import com.hhwy.utils.idworker.IdWorker;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,14 +96,26 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
 
     @Override
     public List<JdglCorrectionMeasuresMakeDetail> getDetailListByMakeId(JdglCorrectionMeasuresMake make) {
-//        Long userId = SecurityUtils.getUserId();
-        String userName = SecurityUtils.getUserName();
         JdglCorrectionMeasuresMakeDetail jdglCorrectionMeasuresMakeDetail = new JdglCorrectionMeasuresMakeDetail();
         jdglCorrectionMeasuresMakeDetail.setMakeId(make.getId());
+        List<JdglCorrectionMeasuresMakeDetail> resultList = jdglCorrectionMeasuresMakeDetailMapper.getJdglCorrectionMeasuresMakeDetailList(jdglCorrectionMeasuresMakeDetail);
+        if (CollectionUtil.isEmpty(resultList))
+            return new ArrayList<>();
+        //所有责任人，给前端流程审批用
+        String directorIds = resultList.stream()
+                .filter(p -> StrUtil.isNotBlank(p.getDirectorId()))
+                .map(JdglCorrectionMeasuresMakeDetail::getDirectorId)
+                .collect(Collectors.joining());
+        make.setPtVar1(directorIds);
         //只能查看、编辑自己负责的数据，除非当前记录流程已结束
-//        if (StrUtil.isNotBlank(make.getTaskStatus()) &&  !make.getTaskStatus().equals("5") && !userName.equals("admin")) {
-//            jdglCorrectionMeasuresMakeDetail.setDirectorId(userName);
-//        }
-        return jdglCorrectionMeasuresMakeDetailMapper.getJdglCorrectionMeasuresMakeDetailList(jdglCorrectionMeasuresMakeDetail);
+        Long userId = SecurityUtils.getUserId();
+        String userName = SecurityUtils.getUserName();
+        //数据过滤
+        if (StrUtil.isNotBlank(make.getTaskStatus()) &&  !make.getTaskStatus().equals("5") && !userName.equals("admin")) {
+            resultList = resultList.stream()
+                    .filter(p -> StrUtil.isNotBlank(p.getDirectorId()) && p.getDirectorId().equals(String.valueOf(userId)))
+                    .collect(Collectors.toList());
+        }
+        return resultList;
     }
 }

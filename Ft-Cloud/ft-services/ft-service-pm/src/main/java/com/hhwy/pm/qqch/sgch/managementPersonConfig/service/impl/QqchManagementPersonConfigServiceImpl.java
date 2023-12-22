@@ -115,14 +115,14 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
     @Override
     public QqchManagementPersonConfigVo synchData(QqchManagementPersonConfigVo qqchManagementPersonConfigVo) {
         //保存表格现有数据
-        this.insertQqchManagementPersonConfigList(qqchManagementPersonConfigVo.getQqchManagementPersonConfigList(),qqchManagementPersonConfigVo.getVersion());
+        BigDecimal version = qqchManagementPersonConfigVo.getVersion();
+        this.insertQqchManagementPersonConfigList(qqchManagementPersonConfigVo.getQqchManagementPersonConfigList(), version);
 
         //需求：1.1的项目组织的子集为本功能的父集
         //获取1.1项目组织
-        QqchOrganizationListVo qqchOrganizationListVo = qqchOrganizationListService.getQqchOrganizationListVo(null);
+        QqchOrganizationListVo qqchOrganizationListVo = qqchOrganizationListService.getQqchOrganizationListVo(version);
         //根据版本获取组织数据,附件条件： pid!=''
         QqchOrganizationList qqchOrganizationList = new QqchOrganizationList();
-        BigDecimal version = qqchOrganizationListVo.getVersion();
         qqchOrganizationList.setVersion(version);
         List<QqchOrganizationList> organizationLists = qqchOrganizationListService.getQqchOrganizationListList2(qqchOrganizationList);
 
