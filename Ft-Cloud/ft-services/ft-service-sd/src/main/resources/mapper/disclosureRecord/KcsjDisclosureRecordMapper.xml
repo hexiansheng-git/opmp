@@ -116,7 +116,7 @@
             <if test="disclosureName != null  and disclosureName != ''">and `disclosure_name` like concat ('%' , #{disclosureName} , '%')</if>
             <if test="beDisclosureUnit != null  and beDisclosureUnit != ''">and `be_disclosure_unit` like concat ('%' , #{beDisclosureUnit} , '%')</if>
             <if test="disclosureContent != null  and disclosureContent != ''">and `disclosure_content` like concat ('%' , #{disclosureContent} , '%')</if>
-            <if test="actualDisclosureDate != null ">and `actual_disclosure_date` = #{actualDisclosureDate}</if>
+            <if test="actualDisclosureDate != null and actualDisclosureDate != ''">and `actual_disclosure_date` = #{actualDisclosureDate}</if>
         </where>
         order by create_time desc
     </select>

@@ -1,5 +1,8 @@
 package com.hhwy.sd.equipEntryRecord.service.impl;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
+
 import cn.hutool.core.date.DateTime;
 import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.utils.StringUtils;
@@ -14,12 +17,14 @@ import com.hhwy.utils.tree.TreeNode;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Service;
@@ -54,27 +59,41 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
 
     public KcsjEquipEntryRecordVo getKcsjEquipEntryRecordList(KcsjEquipEntryRecord kcsjEquipEntryRecord) {
         KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo = new KcsjEquipEntryRecordVo();
+        List<KcsjEquipEntryRecord> list = new ArrayList<>();
         List<KcsjEquipEntryRecord> kcsjEquipEntryRecordList = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(kcsjEquipEntryRecord);
-        List<KcsjEquipEntryRecord> kcsjEquipEntryRecords = TreeUtil.newBuild(kcsjEquipEntryRecordList);
-        if(!CollectionUtils.isEmpty(kcsjEquipEntryRecords)){
-            for (int i = 0; i < kcsjEquipEntryRecords.size(); i++) {
-                if(!CollectionUtils.isEmpty(kcsjEquipEntryRecords.get(i).getChildren())){
-                    List<KcsjEquipEntryRecord> children = kcsjEquipEntryRecords.get(i).getChildren();
-                    for (int j = 0; j < children.size(); j++) {
-                        KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo = new KcsjEquipEntryRecordInfo();
-                        kcsjEquipEntryRecordInfo.setTeamName(kcsjEquipEntryRecords.get(i).getTeamName());
-                        kcsjEquipEntryRecordInfo.setEquipCode(children.get(j).getEquipCode());
-                        List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoService.selectInfos(kcsjEquipEntryRecordInfo);
-                        if(!CollectionUtils.isEmpty(kcsjEquipEntryRecordInfoList)){
-                            children.get(j).setKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfoList);
-                        }else{
-                            children.get(j).setKcsjEquipEntryRecordInfoList(new ArrayList<>());
+        if(!CollectionUtils.isEmpty(kcsjEquipEntryRecordList)){
+            List<KcsjEquipEntryRecord> list1 = kcsjEquipEntryRecordList.stream().filter(e -> StringUtils.isNotEmpty(e.getPid().toString()) && !e.getPid().toString().equals("0")).collect(Collectors.toList());
+            if(list1.size()>0){
+                KcsjEquipEntryRecord kcsjEquipEntryRecord1 = new KcsjEquipEntryRecord();
+                for (int i = 0; i < list1.size(); i++) {
+                    kcsjEquipEntryRecord1.setId(list1.get(i).getPid());
+                    List<KcsjEquipEntryRecord> kcsjEquipEntryRecords1 = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(kcsjEquipEntryRecord1);
+                    kcsjEquipEntryRecordList.addAll(kcsjEquipEntryRecords1);
+                }
+            }
+            List<KcsjEquipEntryRecord> collect = kcsjEquipEntryRecordList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(KcsjEquipEntryRecord::getId))), ArrayList::new));
+            list = collect.stream().sorted(Comparator.comparing(KcsjEquipEntryRecord::getId)).collect(Collectors.toList());
+            if(list.size()>0){
+                list = TreeUtil.newBuild(list);
+                for (int i = 0; i < list.size(); i++) {
+                    if(!CollectionUtils.isEmpty(list.get(i).getChildren())){
+                        List<KcsjEquipEntryRecord> children = list.get(i).getChildren();
+                        for (int j = 0; j < children.size(); j++) {
+                            KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo = new KcsjEquipEntryRecordInfo();
+                            kcsjEquipEntryRecordInfo.setTeamName(list.get(i).getTeamName());
+                            kcsjEquipEntryRecordInfo.setEquipCode(children.get(j).getEquipCode());
+                            List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoService.selectInfos(kcsjEquipEntryRecordInfo);
+                            if(!CollectionUtils.isEmpty(kcsjEquipEntryRecordInfoList)){
+                                children.get(j).setKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfoList);
+                            }else{
+                                children.get(j).setKcsjEquipEntryRecordInfoList(new ArrayList<>());
+                            }
                         }
                     }
                 }
             }
         }
-        kcsjEquipEntryRecordVo.setTreeList(kcsjEquipEntryRecords);
+        kcsjEquipEntryRecordVo.setTreeList(list);
         kcsjEquipEntryRecordVo.setDelIdList(new ArrayList<>());
         return kcsjEquipEntryRecordVo;
     }
