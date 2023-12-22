@@ -55,6 +55,13 @@ public class SgjsTechnicalTrainingServiceImpl implements ISgjsTechnicalTrainingS
         //查询技术培训列表数据
         List<SgjsTechnicalTraining> list = sgjsTechnicalTrainingMapper.getSgjsTechnicalTrainingList(sgjsTechnicalTraining);
 
+        handleDict(list);
+
+        return list;
+
+    }
+
+    private void handleDict(List<SgjsTechnicalTraining> list) {
         //字典项查询
         AjaxResult result = systemServiceApi.dictType(DictType.Technical_Training_Type);
 
@@ -90,9 +97,6 @@ public class SgjsTechnicalTrainingServiceImpl implements ISgjsTechnicalTrainingS
             }
 
         }
-
-        return list;
-
     }
 
     @Transactional
@@ -168,8 +172,9 @@ public class SgjsTechnicalTrainingServiceImpl implements ISgjsTechnicalTrainingS
      */
     @Override
     public List<SgjsTechnicalTraining> getIds(List<Long> ids) {
-
-        return sgjsTechnicalTrainingMapper.getByIds(ids);
+        List<SgjsTechnicalTraining> byIds = sgjsTechnicalTrainingMapper.getByIds(ids);
+        handleDict(byIds);
+        return byIds;
 
     }
 }

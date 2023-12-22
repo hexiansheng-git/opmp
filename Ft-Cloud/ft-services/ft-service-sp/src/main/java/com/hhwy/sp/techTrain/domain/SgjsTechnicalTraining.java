@@ -24,7 +24,7 @@ public class SgjsTechnicalTraining extends CommonBaseEntity {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主键id")
+//    @Excel(name = "主键id")
     private Long id;
     /**
      * 字段描述：培训组织单位
@@ -93,7 +93,7 @@ public class SgjsTechnicalTraining extends CommonBaseEntity {
      * 字段描述：所属区域名称
      */
     @JsonProperty
-    @Excel(name = "所属区域名称")
+//    @Excel(name = "所属区域名称")
     private String regionName;
     /**
      * 字段描述：项目id
@@ -106,7 +106,7 @@ public class SgjsTechnicalTraining extends CommonBaseEntity {
      * 字段描述：项目名称
      */
     @JsonProperty
-    @Excel(name = "项目名称")
+//    @Excel(name = "项目名称")
     private String projectName;
     /**
      * 字段描述：部门id
@@ -125,7 +125,7 @@ public class SgjsTechnicalTraining extends CommonBaseEntity {
      * 字段描述：数据创建者名称,编制人用此字段表示
      */
     @JsonProperty
-//    @Excel(name = "数据创建者名称,编制人用此字段表示")
+    @Excel(name = "编制人")
     private String createUserName;
     /**
      * 字段描述：数据创建系统时间
