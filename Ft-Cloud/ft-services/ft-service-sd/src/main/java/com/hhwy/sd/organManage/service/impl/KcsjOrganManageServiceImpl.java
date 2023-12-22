@@ -115,9 +115,9 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
 //        kcsjOrganManage.setActualEnterDate(enterDate);
         kcsjOrganManage.setActualExitDate(leaveDate);
         if(leaveDate == null && enterDate != null) {
-            kcsjOrganManage.setWorkOrNot("1");
+            kcsjOrganManage.setWorkOrNot("是");
         } else {
-            kcsjOrganManage.setWorkOrNot("0");
+            kcsjOrganManage.setWorkOrNot("否");
         }
 
         return updateKcsjOrganManage(kcsjOrganManage);
