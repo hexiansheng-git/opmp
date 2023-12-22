@@ -50,8 +50,8 @@ public class QqchQualityPostDutyController extends BaseController {
      * @return
      */
     @GetMapping("/getPopWindows")
-    public AjaxResult getPopWindows() throws ParserConfigurationException, IOException, SAXException {
-        List<QqchQualityPostDuty> list = qqchQualityPostDutyService.getPopWindows();
+    public AjaxResult getPopWindows(BigDecimal version) throws ParserConfigurationException, IOException, SAXException {
+        List<QqchQualityPostDuty> list = qqchQualityPostDutyService.getPopWindows(version);
         return AjaxResult.success(list);
     }
 

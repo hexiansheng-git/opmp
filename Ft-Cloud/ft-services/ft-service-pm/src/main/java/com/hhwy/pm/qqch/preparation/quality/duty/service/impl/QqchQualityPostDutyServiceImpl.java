@@ -123,8 +123,8 @@ public class QqchQualityPostDutyServiceImpl implements IQqchQualityPostDutyServi
      * @return
      */
     @Override
-    public List<QqchQualityPostDuty> getPopWindows() throws ParserConfigurationException, IOException, SAXException {
-        BigDecimal version = VersionUtil.getVersion("qqch_quality_post_duty", null);
+    public List<QqchQualityPostDuty> getPopWindows(BigDecimal version) throws ParserConfigurationException, IOException, SAXException {
+        version = VersionUtil.getVersion("qqch_quality_post_duty", version);
         List<QqchQualityPostDuty> list = qqchQualityPostDutyMapper.getDistinctQualityPostDutyList(version);
 
         String userName4As = list.stream().map(QqchQualityPostDuty::getPersonId).collect(Collectors.joining());

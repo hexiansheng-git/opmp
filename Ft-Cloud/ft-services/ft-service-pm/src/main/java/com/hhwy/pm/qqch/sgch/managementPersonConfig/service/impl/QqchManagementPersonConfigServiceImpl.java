@@ -371,7 +371,7 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
     @Override
     public List<QqchManagementPersonConfig> getPopWindows(QqchManagementPersonConfig qqchManagementPersonConfig) {
         List<QqchManagementPersonConfig> resultList;
-        BigDecimal version = VersionUtil.getVersion("qqch_management_person_config", null);
+        BigDecimal version = VersionUtil.getVersion("qqch_management_person_config", qqchManagementPersonConfig.getVersion());
         QqchManagementPersonConfig query = new QqchManagementPersonConfig();
         query.setVersion(version);
         //全量数据

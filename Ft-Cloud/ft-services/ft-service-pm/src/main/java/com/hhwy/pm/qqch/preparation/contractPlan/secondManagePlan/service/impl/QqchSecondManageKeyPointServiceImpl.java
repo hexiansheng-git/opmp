@@ -74,8 +74,8 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
      * @return
      */
     public List<QqchSecondManageKeyPoint> getQqchSecondManageKeyPointList(QqchSecondManageKeyPoint qqchSecondManageKeyPoint) {
-        //获取最大生效版本
-        BigDecimal version = VersionUtil.getVersion("qqch_second_manage_key_point",null);
+        //获取版本
+        BigDecimal version = VersionUtil.getVersion("qqch_second_manage_key_point",qqchSecondManageKeyPoint.getVersion());
         qqchSecondManageKeyPoint.setVersion(version);
         List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointList = qqchSecondManageKeyPointMapper.getQqchSecondManageKeyPointList(qqchSecondManageKeyPoint);
 

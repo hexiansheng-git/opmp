@@ -26,6 +26,6 @@ public interface IQqchQualityPostDutyService {
      * 9.1.2弹窗
      * @return
      */
-    List<QqchQualityPostDuty> getPopWindows() throws ParserConfigurationException, IOException, SAXException;
+    List<QqchQualityPostDuty> getPopWindows(BigDecimal version) throws ParserConfigurationException, IOException, SAXException;
 
 }
