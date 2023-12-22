@@ -182,6 +182,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             sgjsExperProgressManage.setDataSource("1");
             sgjsExperProgressManage.setId(IdWorker.createId());
             sgjsExperProgressManage.setPid(0L);
+            sgjsExperProgressManage.setType("0");
             sgjsExperProgressManage.setSyncId(Long.parseLong(map.get("id").toString()));
             //递归遍历子节点
             List<LinkedHashMap<String, Object>> children = (List<LinkedHashMap<String, Object>>) map.get("children");
@@ -211,6 +212,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
 
             //同步标识
             sgjsExperProgressManage.setDataSource("1");
+            sgjsExperProgressManage.setType("0");
             List<LinkedHashMap<String, Object>> children1 = (List<LinkedHashMap<String, Object>>) children.get(i).get("children");
             if (children1.size() > 0) {
                 diguiChildren(children1, sgjsExperProgressManage);
@@ -232,7 +234,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
     public AjaxResult batchAdd(SgjsExperProgressManageVo sgjsExperProgressManageVo) {
 
         //删除操作
-        delete(sgjsExperProgressManageVo);
+        //delete(sgjsExperProgressManageVo);
 
         List<SgjsExperProgressManage> treeToList = null;
         if (!CollectionUtils.isEmpty(sgjsExperProgressManageVo.getTreeList())) {
