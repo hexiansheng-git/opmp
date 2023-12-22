@@ -11,6 +11,7 @@ import com.hhwy.pm.qqch.preparation.survey.designCheckPlan.domain.vo.QqchDesignC
 import com.hhwy.pm.qqch.preparation.survey.designCheckPlan.mapper.QqchDesignCheckPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.designCheckPlan.service.IQqchDesignCheckPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -48,7 +49,7 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
      */
     public QqchDesignCheckPlanVo getQqchDesignCheckPlanList(QqchDesignCheckPlan qqchDesignCheckPlan) {
         BigDecimal version = qqchDesignCheckPlan.getVersion();
-        version = commonMapper.selectMaxVersion("qqch_design_check_plan");
+        version = VersionUtil.getVersion("qqch_design_check_plan", version);
         qqchDesignCheckPlan.setVersion(version);
         List<QqchDesignCheckPlan> qqchDesignCheckPlanList = qqchDesignCheckPlanMapper.getQqchDesignCheckPlanList(qqchDesignCheckPlan);
         QqchDesignCheckPlanVo vo = new QqchDesignCheckPlanVo();
