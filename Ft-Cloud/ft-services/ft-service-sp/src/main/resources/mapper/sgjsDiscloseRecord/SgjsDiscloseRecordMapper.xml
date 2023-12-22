@@ -296,6 +296,7 @@
             `review_user`,
             `work_team`,
             `data_type`,
+            `del_flag`
         </trim>
         values
         <foreach collection="sgjsDiscloseRecordList" item="item" separator=",">
@@ -332,6 +333,7 @@
                 #{item.reviewUser},
                 #{item.workTeam},
                 #{item.dataType},
+                '0'
             </trim>
         </foreach>
     </insert>
