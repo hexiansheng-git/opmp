@@ -172,36 +172,7 @@ public class SysPmController {
     //生成同步sql
     @PostMapping("/createSql")
     public String createSql(@RequestBody Map<String,String> map) {
-       // String sql=map.get("sql");
-        String sql="CREATE TABLE `opmp-sp`.`sgjs_plan_measure_manage` (\n" +
-                "  `id` bigint(20) NOT NULL,\n" +
-                "  `pid` bigint(20) DEFAULT NULL COMMENT '父级id',\n" +
-                "  `measure_name` varchar(255) DEFAULT NULL COMMENT '测量工作项',\n" +
-                "  `measure_unit` varchar(255) DEFAULT NULL COMMENT '计量单位',\n" +
-                "  `workload` int(10) DEFAULT NULL COMMENT '工作量',\n" +
-                "  `plan_start_date` date DEFAULT NULL COMMENT '计划开始日期',\n" +
-                "  `plan_end_date` date DEFAULT NULL COMMENT '计划结束日期',\n" +
-                "  `real_start_date` date DEFAULT NULL COMMENT '实际开始日期',\n" +
-                "  `real_end_date` date DEFAULT NULL COMMENT '实际结束日期',\n" +
-                "  `remark` text COMMENT '备注',\n" +
-                "  `data_source` varchar(50) DEFAULT NULL COMMENT '数据来源 0新增1同步',\n" +
-                "  `create_user` varchar(20) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '数据创建者id',\n" +
-                "  `create_user_name` varchar(50) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '数据创建者名称',\n" +
-                "  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '数据创建系统时间',\n" +
-                "  `update_user` varchar(20) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '数据修改者id',\n" +
-                "  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改系统时间',\n" +
-                "  `del_user` varchar(20) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '数据删除者',\n" +
-                "  `del_time` datetime DEFAULT NULL COMMENT '数据删除系统时间',\n" +
-                "  `del_flag` varchar(2) CHARACTER SET utf8mb4 DEFAULT '0' COMMENT '删除标识：0未删除；1已删除',\n" +
-                "  `pt_var1` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '预留字段1   项目编码',\n" +
-                "  `pt_var2` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '预留字段2  leaf 是否是叶子节点 0否1是',\n" +
-                "  `pt_var3` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '预留字段3',\n" +
-                "  `pt_var4` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '预留字段4',\n" +
-                "  `pt_var5` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '预留字段5',\n" +
-                "  `serial_number` varchar(255) DEFAULT NULL COMMENT '序号',\n" +
-                "  `path` varchar(255) DEFAULT NULL COMMENT '节点标识',\n" +
-                "  PRIMARY KEY (`id`)\n" +
-                ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='施工技术管理--测量管理--测量计划进度管理主表';";
+        String sql=map.get("sql");
         String flag=map.get("flag");
         StringBuffer sb = new StringBuffer();
         SysTenantDb db = new SysTenantDb();
