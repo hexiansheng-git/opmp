@@ -195,6 +195,13 @@
             </if>
             <if test="editorThirdName != null  and editorThirdName != ''">and `editor_third_name` = #{editorThirdName}
             </if>
+            <if test="editorFirstUserName != null  and editorFirstUserName != ''">and `editor_first_user_name` = #{editorFirstUserName}
+            </if>
+            <if test="editorSecondUserName != null  and editorSecondUserName != ''">and `editor_second_user_name` =
+                #{editorSecondUserName}
+            </if>
+            <if test="editorThirdUserName != null  and editorThirdUserName != ''">and `editor_third_user_name` = #{editorThirdUserName}
+            </if>
         </where>
         order by sort
     </select>

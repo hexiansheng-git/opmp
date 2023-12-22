@@ -118,7 +118,7 @@ public class CommonService {
         }
 
         //获取当前登录人信息
-        Long userId = SecurityUtils.getUserId();
+        String userName = SecurityUtils.getUserName();
         // 根据当前阶段和登录人查询有没有编辑权限
         QqchWorkPlan qqchWorkPlan = new QqchWorkPlan();
         qqchWorkPlan.setValid("1");
@@ -143,15 +143,15 @@ public class CommonService {
         switch (currentStage) {
             case PmConstant.ONE:
                 planDetail.setIsFirst(PmConstant.ONE);
-                planDetail.setEditorFirst(userId + "");
+                planDetail.setEditorFirstUserName(userName);
                 break;
             case PmConstant.TWO:
                 planDetail.setIsSecond(PmConstant.ONE);
-                planDetail.setEditorSecond(userId + "");
+                planDetail.setEditorSecondUserName(userName);
                 break;
             case PmConstant.THREE:
                 planDetail.setIsThird(PmConstant.ONE);
-                planDetail.setEditorThird(userId + "");
+                planDetail.setEditorThirdUserName(userName);
                 break;
             default:
         }
