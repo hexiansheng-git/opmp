@@ -91,7 +91,6 @@ public class KcsjPlanMonthlyReportServiceImpl implements IKcsjPlanMonthlyReportS
     }
 
     @Override
-    @Transactional
     public void generateMonthlyReport() {
         Date nowDate = DateUtils.getNowDate();
 
