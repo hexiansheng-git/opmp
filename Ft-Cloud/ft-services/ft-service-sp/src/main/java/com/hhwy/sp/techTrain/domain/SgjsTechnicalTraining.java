@@ -199,7 +199,7 @@ public class SgjsTechnicalTraining extends CommonBaseEntity {
 
 
     /**
-     * 字段描述：删除的id集合
+     * 字段描述：删除的id集合，或导出数据的集合
      */
     private List<Long> ids;
 

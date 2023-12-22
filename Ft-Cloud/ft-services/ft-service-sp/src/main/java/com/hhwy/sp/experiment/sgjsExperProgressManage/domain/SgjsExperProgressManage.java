@@ -52,7 +52,7 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
      */
     @JsonProperty
     @Excel(name = "工作量")
-    private Integer workload;
+    private String workload;
     /**
      * 字段描述：计划开始日期
      */
@@ -182,7 +182,7 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
      */
     @JsonProperty
 //    @Excel(name = "预留字段1")
-    private String ptVar1;
+    private Long syncId;
     /**
      * 字段描述：预留字段2  leaf是否是叶子节点 0否1是
      */
@@ -384,11 +384,11 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
         this.measureUnit = measureUnit;
     }
 
-    public Integer getWorkload() {
+    public String getWorkload() {
         return workload;
     }
 
-    public void setWorkload(Integer workload) {
+    public void setWorkload(String workload) {
         this.workload = workload;
     }
 
@@ -556,14 +556,12 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
         this.delFlag = delFlag;
     }
 
-    @Override
-    public String getPtVar1() {
-        return ptVar1;
+    public Long getSyncId() {
+        return syncId;
     }
 
-    @Override
-    public void setPtVar1(String ptVar1) {
-        this.ptVar1 = ptVar1;
+    public void setSyncId(Long syncId) {
+        this.syncId = syncId;
     }
 
     @Override
