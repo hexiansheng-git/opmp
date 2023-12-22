@@ -112,11 +112,12 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
         if(!CollectionUtils.isEmpty(kcsjEquipEntryRecordVo.getDelIdList())){
             deleteByIds(kcsjEquipEntryRecordVo.getDelIdList());
         }
+        if(!CollectionUtils.isEmpty(kcsjEquipEntryRecordVo.getDelInfoList())){
+            deleteInfoIds(kcsjEquipEntryRecordVo.getDelInfoList());
+        }
 
         List<KcsjEquipEntryRecord> treeToList = null;
         if (!CollectionUtils.isEmpty(kcsjEquipEntryRecordVo.getTreeList())) {
-            //批量删除实验设备数据
-            deleteByIdInfo();
             //设备数据处理
             inFoAdd(kcsjEquipEntryRecordVo.getTreeList());
             //数据处理
@@ -136,6 +137,10 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                 insertList.forEach(i->{
                     KcsjEquipEntryRecord kcsjEquipEntryRecord = new KcsjEquipEntryRecord();
                     kcsjEquipEntryRecord.setTeamName(i.getTeamName());
+                    List<KcsjEquipEntryRecord> equipEntryRecords = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(kcsjEquipEntryRecord);
+                    if(equipEntryRecords.size()>0){
+                        throw new RuntimeException("班组名称不可重复！");
+                    }
                     kcsjEquipEntryRecord.setEquipCode(i.getEquipCode());
                     List<KcsjEquipEntryRecord> kcsjEquipEntryRecordList = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(kcsjEquipEntryRecord);
                     if(kcsjEquipEntryRecordList.size()>0){
@@ -155,6 +160,25 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
     }
 
     /**
+     * 删除实验设备数据
+     * @param delInfoList
+     */
+    private void deleteInfoIds(List<String> delInfoList) {
+        List<KcsjEquipEntryRecordInfo> list =new ArrayList<>();
+        for (int i = 0; i < delInfoList.size(); i++) {
+            KcsjEquipEntryRecordInfo info=new KcsjEquipEntryRecordInfo();
+            info.setId(Long.parseLong(delInfoList.get(i)));
+            info.setUpdateUser(SecurityUtils.getUserId()+"");
+            info.setUpdateTime(DateUtils.getNowDate());
+            info.setDelFlag("1");
+            list.add(info);
+        }
+        if(!CollectionUtils.isEmpty(list)){
+            kcsjEquipEntryRecordInfoMapper.deleteInfo(list);
+        }
+    }
+
+    /**
      * 设备数据处理
      * @param list
      */
@@ -164,41 +188,62 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                List<KcsjEquipEntryRecord> children = list.get(i).getChildren();
                 KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo = new KcsjEquipEntryRecordInfo();
                 kcsjEquipEntryRecordInfo.setTeamName(list.get(i).getTeamName());
-                kcsjEquipEntryRecordInfo.setId(IdWorker.createId());
-                kcsjEquipEntryRecordInfo.setCreateTime(DateTime.now());
-                kcsjEquipEntryRecordInfo.setCreateUser(SecurityUtils.getUserId() + "");
-                kcsjEquipEntryRecordInfo.setCreateUserName(SecurityUtils.getUserName() + "");
-                kcsjEquipEntryRecordInfoMapper.insertKcsjEquipEntryRecordInfo(kcsjEquipEntryRecordInfo);
+                List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList1 = kcsjEquipEntryRecordInfoMapper.getKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfo);
+                if(CollectionUtils.isEmpty(kcsjEquipEntryRecordInfoList1)){
+                    kcsjEquipEntryRecordInfo.setId(IdWorker.createId());
+                    kcsjEquipEntryRecordInfo.setPid(0L);
+                    kcsjEquipEntryRecordInfo.setCreateTime(DateTime.now());
+                    kcsjEquipEntryRecordInfo.setCreateUser(SecurityUtils.getUserId() + "");
+                    kcsjEquipEntryRecordInfo.setCreateUserName(SecurityUtils.getUserName() + "");
+                    kcsjEquipEntryRecordInfoMapper.insertKcsjEquipEntryRecordInfo(kcsjEquipEntryRecordInfo);
+                }else{
+                    kcsjEquipEntryRecordInfo.setId(kcsjEquipEntryRecordInfoList1.get(0).getId());
+                }
                 for (int j = 0; j < children.size(); j++) {
                     if(!CollectionUtils.isEmpty(children.get(j).getKcsjEquipEntryRecordInfoList())){
                         List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = children.get(j).getKcsjEquipEntryRecordInfoList();
-                        for (int k = 0; k < kcsjEquipEntryRecordInfoList.size(); k++) {
-                            //校验
-                            KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo1 = new KcsjEquipEntryRecordInfo();
-                            kcsjEquipEntryRecordInfo1.setTeamName(list.get(i).getTeamName());
-                            kcsjEquipEntryRecordInfo1.setEquipCode(children.get(j).getEquipCode());
-//                            List<KcsjEquipEntryRecordInfo> list1 = kcsjEquipEntryRecordInfoMapper.selectInfos(kcsjEquipEntryRecordInfo1);
-//                            if(list1.size()>0){
-//                                throw new RuntimeException("同一班组下的设备编码不可重复！");
-//                            }
-                            // 班组名称
-                            kcsjEquipEntryRecordInfoList.get(k).setTeamName(list.get(i).getTeamName() == null ? null : list.get(i).getTeamName());
-                            // 设备编码
-                            kcsjEquipEntryRecordInfoList.get(k).setEquipCode(children.get(j).getEquipCode() == null ? null : children.get(j).getEquipCode());
-                            // 设备名称
-                            kcsjEquipEntryRecordInfoList.get(k).setEquipName(children.get(j).getEquipName() == null ? null : children.get(j).getEquipName());
-                            // 规格型号
-                            kcsjEquipEntryRecordInfoList.get(k).setEquipSpec(children.get(j).getEquipSpec() == null ? null : children.get(j).getEquipSpec());
-                            // 单位
-                            kcsjEquipEntryRecordInfoList.get(k).setEquipUnit(children.get(j).getEquipUnit() == null ? null : children.get(j).getEquipUnit());
-                            kcsjEquipEntryRecordInfoList.get(k).setId(IdWorker.createId());
-                            kcsjEquipEntryRecordInfoList.get(k).setRecordId(kcsjEquipEntryRecordInfo.getId());
-                            kcsjEquipEntryRecordInfoList.get(k).setCreateTime(DateTime.now());
-                            kcsjEquipEntryRecordInfoList.get(k).setCreateUser(SecurityUtils.getUserId() + "");
-                            kcsjEquipEntryRecordInfoList.get(k).setCreateUserName(SecurityUtils.getUserName() + "");
+                        List<KcsjEquipEntryRecordInfo> insertList = kcsjEquipEntryRecordInfoList.stream().filter(e -> StringUtils.isNotEmpty(e.getIsAdd()) && e.getIsAdd().equals("1")).collect(Collectors.toList());
+                        if(!CollectionUtils.isEmpty(insertList)){
+                            for (int add = 0; add < insertList.size(); add++) {
+                                // 班组名称
+                                insertList.get(add).setTeamName(list.get(i).getTeamName() == null ? null : list.get(i).getTeamName());
+                                // 设备编码
+                                insertList.get(add).setEquipCode(children.get(j).getEquipCode() == null ? null : children.get(j).getEquipCode());
+                                // 设备名称
+                                insertList.get(add).setEquipName(children.get(j).getEquipName() == null ? null : children.get(j).getEquipName());
+                                // 规格型号
+                                insertList.get(add).setEquipSpec(children.get(j).getEquipSpec() == null ? null : children.get(j).getEquipSpec());
+                                // 单位
+                                insertList.get(add).setEquipUnit(children.get(j).getEquipUnit() == null ? null : children.get(j).getEquipUnit());
+                                insertList.get(add).setId(IdWorker.createId());
+                                insertList.get(add).setPid(kcsjEquipEntryRecordInfo.getId());
+                                insertList.get(add).setCreateTime(DateTime.now());
+                                insertList.get(add).setCreateUser(SecurityUtils.getUserId() + "");
+                                insertList.get(add).setCreateUserName(SecurityUtils.getUserName() + "");
+                                insertList.get(add).setDelFlag("0");
+                            }
+                            kcsjEquipEntryRecordInfoMapper.insertKcsjEquipEntryRecordInfoList(insertList);
                         }
-                        //新增或覆盖 设备数据
-                        kcsjEquipEntryRecordInfoMapper.insertKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfoList);
+                        List<KcsjEquipEntryRecordInfo> updateList = kcsjEquipEntryRecordInfoList.stream().filter(e -> StringUtils.isEmpty(e.getIsAdd())).collect(Collectors.toList());
+                        if(!CollectionUtils.isEmpty(updateList)){
+                            for (int upd = 0; upd < updateList.size(); upd++) {
+                                // 班组名称
+                                updateList.get(upd).setTeamName(list.get(i).getTeamName() == null ? null : list.get(i).getTeamName());
+                                // 设备编码
+                                updateList.get(upd).setEquipCode(children.get(j).getEquipCode() == null ? null : children.get(j).getEquipCode());
+                                // 设备名称
+                                updateList.get(upd).setEquipName(children.get(j).getEquipName() == null ? null : children.get(j).getEquipName());
+                                // 规格型号
+                                updateList.get(upd).setEquipSpec(children.get(j).getEquipSpec() == null ? null : children.get(j).getEquipSpec());
+                                // 单位
+                                updateList.get(upd).setEquipUnit(children.get(j).getEquipUnit() == null ? null : children.get(j).getEquipUnit());
+                                updateList.get(upd).setPid(kcsjEquipEntryRecordInfo.getId());
+                                updateList.get(upd).setUpdateTime(DateTime.now());
+                                updateList.get(upd).setUpdateUser(SecurityUtils.getUserId() + "");
+                                updateList.get(upd).setDelFlag("0");
+                            }
+                            kcsjEquipEntryRecordInfoMapper.updateKcsjEquipEntryRecordInfoList(updateList);
+                        }
                     }
                 }
             }
@@ -224,19 +269,26 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
         if(!CollectionUtils.isEmpty(list)){
             kcsjEquipEntryRecordMapper.deleteInfoData(list);
         }
+        //删除设备数据
+        deleteByIdInfo(delIdList);
     }
-
-    /**
-     * 删除设备数据
-     * @param
-     */
-    private void deleteByIdInfo(){
-        KcsjEquipEntryRecordInfo info=new KcsjEquipEntryRecordInfo();
-        info.setUpdateUser(SecurityUtils.getUserId()+"");
-        info.setUpdateTime(DateUtils.getNowDate());
-        info.setDelFlag("1");
-        //删除
-        kcsjEquipEntryRecordInfoMapper.deleteInfoData(info);
+    // 1
+    private void deleteByIdInfo(List<String> delIdList) {
+        KcsjEquipEntryRecord kcsjEquipEntryRecord = new KcsjEquipEntryRecord();
+        kcsjEquipEntryRecord.setDelIdList(delIdList);
+        List<KcsjEquipEntryRecord> kcsjEquipEntryRecordList = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(kcsjEquipEntryRecord);
+        kcsjEquipEntryRecordList.forEach(e->{
+            if(("0").equals(e.getPid().toString())){
+                KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo = new KcsjEquipEntryRecordInfo();
+                kcsjEquipEntryRecordInfo.setTeamName(e.getTeamName());
+                kcsjEquipEntryRecordInfoMapper.deleteKcsjEquipEntryRecordInfo(kcsjEquipEntryRecordInfo);
+            }else{
+                KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo = new KcsjEquipEntryRecordInfo();
+                kcsjEquipEntryRecordInfo.setTeamName(e.getTeamName());
+                kcsjEquipEntryRecordInfo.setEquipCode(e.getEquipCode());
+                kcsjEquipEntryRecordInfoMapper.deleteKcsjEquipEntryRecordInfo(kcsjEquipEntryRecordInfo);
+            }
+        });
     }
 
 

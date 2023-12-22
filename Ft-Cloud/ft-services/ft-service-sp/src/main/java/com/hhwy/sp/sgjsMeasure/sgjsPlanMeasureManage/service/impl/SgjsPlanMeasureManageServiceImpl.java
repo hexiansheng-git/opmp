@@ -223,7 +223,7 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
     @Transactional
     public int insertSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage) {
         sgjsPlanMeasureManage.setId(IdWorker.createId());
-        sgjsPlanMeasureManage.setCreateUser(SecurityUtils.getUserName());
+        sgjsPlanMeasureManage.setCreateUser(SecurityUtils.getUserName()); 
         sgjsPlanMeasureManage.setCreateTime(DateUtils.getNowDate());
         return sgjsPlanMeasureManageMapper.insertSgjsPlanMeasureManage(sgjsPlanMeasureManage);
     }

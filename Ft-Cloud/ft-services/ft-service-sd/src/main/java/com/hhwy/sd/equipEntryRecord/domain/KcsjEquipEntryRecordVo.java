@@ -5,9 +5,15 @@ import lombok.Data;
 
 @Data
 public class KcsjEquipEntryRecordVo {
-    //新增数据
+    // 新增数据
     private List<KcsjEquipEntryRecord> treeList;
-    //删除Ids
+    // 删除Ids
     private List<String> delIdList;
+    // 删除实验设备数据
+    private List<String> delInfoList;
+
+
+
+
 
 }
