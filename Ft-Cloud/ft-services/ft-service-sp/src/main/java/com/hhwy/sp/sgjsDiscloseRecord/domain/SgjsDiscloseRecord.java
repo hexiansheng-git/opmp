@@ -171,8 +171,8 @@ public class SgjsDiscloseRecord extends BaseEntity {
      * 字段描述：wbs名称
      */
     @JsonProperty
-    @Excel(name = "wbs名称")
-    @FtExcel(name = "wbs名称")
+    @Excel(name = "项目WBS")
+    @FtExcel(name = "项目WBS")
     private String wbsName;
 
     /**

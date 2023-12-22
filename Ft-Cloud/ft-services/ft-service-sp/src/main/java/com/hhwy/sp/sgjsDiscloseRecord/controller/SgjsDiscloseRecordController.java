@@ -179,8 +179,9 @@ public class SgjsDiscloseRecordController extends BaseController {
     @PostMapping("/importData")
     public AjaxResult importData(@RequestParam("file") MultipartFile file,@RequestParam("dataType") String dataType) {
         try {
-            ExcelUtils<SgjsDiscloseRecord> excelUtils = new ExcelUtils<>(SgjsDiscloseRecord.class);
-            List<SgjsDiscloseRecord> sgjsDiscloseRecordList = excelUtils.importExcel("sheet1", file.getInputStream());
+//            ExcelUtils<SgjsDiscloseRecord> excelUtils = new ExcelUtils<>(SgjsDiscloseRecord.class);
+            FtExcelUtil<SgjsDiscloseRecord> excelUtil = new FtExcelUtil<>(SgjsDiscloseRecord.class);
+            List<SgjsDiscloseRecord> sgjsDiscloseRecordList = excelUtil.importExcel("sheet1", file.getInputStream());
             sgjsDiscloseRecordService.importData(sgjsDiscloseRecordList, dataType);
             return AjaxResult.success(sgjsDiscloseRecordList);
         } catch (Exception e) {

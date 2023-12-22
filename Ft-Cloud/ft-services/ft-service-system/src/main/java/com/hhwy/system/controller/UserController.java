@@ -16,10 +16,7 @@ import com.hhwy.utils.customLog.CustomLogger;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -132,5 +129,11 @@ public class UserController extends BaseController {
         String sb=iUserService.batchInsert(userList);
         return AjaxResult.success(sb.toString());
     }
-
+    //流程组件选择所有人员
+    @GetMapping({"/list"})
+    public AjaxResult list(SysUser user) {
+        this.startPage();
+        List<SysUser> list = iUserService.selectUserList(user);
+        return this.getDataTableAjaxResult(list);
+    }
 }

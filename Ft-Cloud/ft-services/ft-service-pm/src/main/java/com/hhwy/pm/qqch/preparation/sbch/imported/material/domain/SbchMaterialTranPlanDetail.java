@@ -155,4 +155,7 @@ public class SbchMaterialTranPlanDetail extends CommonBaseEntity {
         return NumberUtil.toBigDecimal(materialWeight);
     }
 
+    public BigDecimal getBulkVolume() {
+        return NumberUtil.toBigDecimal(bulkVolume);
+    }
 }

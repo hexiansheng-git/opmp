@@ -264,12 +264,14 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
         if(CollectionUtils.isEmpty(contractList)){
             return;
         }
+        int sort = 1;
         for (KcsjGroupManageContract contract : contractList) {
             long contractId = IdWorker.createId();
             /*插入详情表数据*/
             this.addDetailList(mainId,contractId,subpackageType,contract.getDetailList());
             contract.setId(contractId);
             contract.setMainId(mainId);
+            contract.setSort(sort++);
             contract.setSubpackageType(subpackageType);
             contract.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             contract.setCreateUser(SecurityUtils.getUserName());

@@ -32,6 +32,7 @@ public class DeptController {
     public AjaxResult getDeptByTree(@RequestBody(required = false) Map map){
         return AjaxResult.success("查询成功!", deptService.getDeptByTree());
     }
+    //选择人员组件懒加载全部部门信息
     @GetMapping("/lazyList")
     public AjaxResult lazyList(SysDept dept, boolean showNextLevel){
         List depts;
