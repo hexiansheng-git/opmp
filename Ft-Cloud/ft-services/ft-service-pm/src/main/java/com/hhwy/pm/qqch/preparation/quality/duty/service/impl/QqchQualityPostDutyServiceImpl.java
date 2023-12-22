@@ -25,6 +25,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -159,6 +160,9 @@ public class QqchQualityPostDutyServiceImpl implements IQqchQualityPostDutyServi
 //                    personCertifyCompetencyList.add(competency1);
 //                }
 //            }
+            if(personCertifyCompetencyList == null){
+                personCertifyCompetencyList = new ArrayList<>();
+            }
             duty.setPersonCertifyCompetencyList(personCertifyCompetencyList);
         });
         return list;
