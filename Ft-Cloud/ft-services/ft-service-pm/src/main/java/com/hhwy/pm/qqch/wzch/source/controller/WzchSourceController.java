@@ -17,6 +17,8 @@ import com.hhwy.pm.qqch.wzch.source.vo.ProjectOfChangeInfoRequest;
 import com.hhwy.pm.qqch.wzch.source.vo.ReminderOfChangeResponse;
 import com.hhwy.pm.qqch.wzch.source.vo.WzchSourceAddResponse;
 import com.hhwy.utils.common.PmsConstant;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
@@ -49,6 +51,7 @@ public class WzchSourceController extends BaseController {
 //    @PreAuthorize(hasPermi ="wzch:source:list")
 //    @CustomLogger(title = "来源策划-列表查询",businessType = CustomBusinessType.SELECT)
     @PostMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.2来源策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@RequestBody WzchSource wzchSource){
         //分页
         startPage();
@@ -65,6 +68,7 @@ public class WzchSourceController extends BaseController {
      */
 //    @CustomLogger(title = "来源策划-导出",businessType = CustomBusinessType.SELECT)
     @PostMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.2来源策划" ,businessType = CustomBusinessType.EXPORT)
     public void export( @RequestBody WzchSource wzchSource, HttpServletResponse response) {
         try {
             List<WzchSource> list = wzchSourceService.selectWzchSourceList(wzchSource);
@@ -80,6 +84,7 @@ public class WzchSourceController extends BaseController {
      */
 //    @CustomLogger(title = "来源策划-详情",businessType = CustomBusinessType.SELECT)
     @PostMapping("/detail")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.2来源策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult detail(@RequestBody WzchSourceTotalDemandVO vo) {
         //通过来源策划获取详情
         WzchSource wzchSource = wzchSourceService.detail(vo);
@@ -93,6 +98,7 @@ public class WzchSourceController extends BaseController {
 //    @PreAuthorize(hasPermi ="wzch:source:remove")
 //    @CustomLogger(title = "来源策划-删除",businessType = CustomBusinessType.DELETE)
     @GetMapping( "/remove")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.2来源策划" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult remove(String id) {
         try{
             return new AjaxResult(200,"删除成功",wzchSourceService.remove(id));

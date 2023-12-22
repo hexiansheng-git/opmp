@@ -12,6 +12,8 @@ import com.hhwy.pm.qqch.wzch.specialproject.dto.WzchSpecialProjectDTO;
 import com.hhwy.pm.qqch.wzch.specialproject.service.IWzchSpecialProjectDetailService;
 import com.hhwy.pm.qqch.wzch.specialproject.service.IWzchSpecialProjectService;
 import com.hhwy.utils.MaterialUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -60,7 +62,7 @@ public class WzchSpecialProjectController extends BaseController {
      * 新增 编辑 详情数据回显
      */
     @GetMapping("baseInfo")
-//    @CustomLogger(title = "新增 编辑 详情数据回显", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.6专项物资策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult baseInfo(@RequestParam(required = false) WzchSpecialProjectDTO dto) {
         return AjaxResult.success(wzchSpecialProjectService.baseInfo(dto==null?new WzchSpecialProjectDTO():dto));
     }
@@ -71,7 +73,7 @@ public class WzchSpecialProjectController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:specialproject:list")
     @PostMapping("/list")
-//    @CustomLogger(title = "查询专项物资策划列表", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.6专项物资策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchSpecialProject wzchSpecialProject) {
         startPage();
         List<WzchSpecialProject> list = wzchSpecialProjectService.selectWzchSpecialProjectList(wzchSpecialProject);
@@ -83,6 +85,7 @@ public class WzchSpecialProjectController extends BaseController {
      */
 //    @CustomLogger(title = "导出优先进场物资设备采购策划列表", businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.6专项物资策划" ,businessType = CustomBusinessType.EXPORT)
     public void export(@Validated(ValidationGroups.Other.class) @RequestBody WzchSpecialProject wzchSpecialProject, HttpServletResponse response) {
         try {
             List<WzchSpecialProject> list = wzchSpecialProjectService.selectWzchSpecialProjectList(wzchSpecialProject);
@@ -99,7 +102,7 @@ public class WzchSpecialProjectController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:specialproject:add")
     @PostMapping("/add")
-//    @CustomLogger(title = "新增保存专项物资策划", businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.6专项物资策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult add(@Validated(ValidationGroups.Save.class) @RequestBody WzchSpecialProjectDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchSpecialProjectService.insert(dto)));
     }
@@ -110,7 +113,7 @@ public class WzchSpecialProjectController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:specialproject:edit")
     @PostMapping("/edit")
-//    @CustomLogger(title = "修改保存专项物资策划", businessType = CustomBusinessType.UPDATE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.6专项物资策划" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchSpecialProjectDTO wzchSpecialProject) {
         return AjaxResult.success("操作成功", String.valueOf(wzchSpecialProjectService.edit(wzchSpecialProject)));
     }
@@ -127,7 +130,7 @@ public class WzchSpecialProjectController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:specialproject:save")
     @PostMapping("/save")
-//    @CustomLogger(title = "新增保存专项物资策划", businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.6专项物资策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody WzchSpecialProjectDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchSpecialProjectService.save(dto)));
     }
@@ -137,6 +140,7 @@ public class WzchSpecialProjectController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:specialproject:remove")
     @PostMapping("/remove")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.6专项物资策划" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult remove(String ids) {
         return toAjax(wzchSpecialProjectService.deleteWzchSpecialProjectByIds(ids));
     }
@@ -165,7 +169,7 @@ public class WzchSpecialProjectController extends BaseController {
      * 导出专项物资策划详情
      */
     @PostMapping("detail/export")
-//    @CustomLogger(title = "导出专项物资策划详情", businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.6专项物资策划" ,businessType = CustomBusinessType.EXPORT)
     public void exportDetail(@Validated(ValidationGroups.Other.class) @RequestBody Map<String, List<WzchSpecialProjectDetail>> params, HttpServletResponse response) {
         try {
             List<WzchSpecialProjectDetail> detailList = params.get("detailList");
@@ -180,7 +184,7 @@ public class WzchSpecialProjectController extends BaseController {
 
 
     @PostMapping("detail/importData")
-//    @CustomLogger(title = "导入专项物资策划详情", businessType = CustomBusinessType.IMPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.6专项物资策划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, @RequestParam Map map) {
         try {
             ExcelUtils<WzchSpecialProjectDetail> util = new ExcelUtils<>(WzchSpecialProjectDetail.class);
@@ -215,7 +219,7 @@ public class WzchSpecialProjectController extends BaseController {
      * 根据项目id获取物资详情
      */
     @PostMapping("detail/getMtlDetailList")
-//    @CustomLogger(title = "根据项目id获取物资详情", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.6专项物资策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getMtlDetailList(@RequestBody WzchSpecialProjectDetail dto) {
         try {
             List<WzchSpecialProjectDetail> list = detailService.getMtlDetailList(dto);

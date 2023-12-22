@@ -10,6 +10,8 @@ import com.hhwy.pm.qqch.wzch.survey.domain.WzchImportExportSurveyCustoms;
 import com.hhwy.pm.qqch.wzch.survey.service.IWzchImportExportSurveyCountryService;
 import com.hhwy.pm.qqch.wzch.survey.service.IWzchImportExportSurveyCustomsService;
 import com.hhwy.pm.qqch.wzch.survey.service.IWzchImportExportSurveyService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,6 +43,7 @@ public class WzchImportExportSurveyDetailController extends BaseController {
 //    @PreAuthorize(hasPermi ="wzch:surveyDetail:save")
 //    @CustomLogger(title = "国别-列表查询",businessType = CustomBusinessType.EXPORT)
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.1进出口调查" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody WzchImportExportSurvey wzchImportExportSurvey) {
         try{
             wzchImportExportSurveyService.save(wzchImportExportSurvey);
@@ -59,6 +62,7 @@ public class WzchImportExportSurveyDetailController extends BaseController {
    //  @PreAuthorize(hasPermi ="wzch:surveyDetail:export")
 //    @CustomLogger(title = "国家详情-导出",businessType = CustomBusinessType.EXPORT)
     @PostMapping("/country/export")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.1进出口调查" ,businessType = CustomBusinessType.EXPORT)
     public void countryExport(@RequestBody List<WzchImportExportSurveyCountry> list, HttpServletResponse response) {
         try{
             ExcelUtils<WzchImportExportSurveyCountry> util = new ExcelUtils<WzchImportExportSurveyCountry>(WzchImportExportSurveyCountry.class);
@@ -76,6 +80,7 @@ public class WzchImportExportSurveyDetailController extends BaseController {
    //  @PreAuthorize(hasPermi ="wzch:surveyDetail:import")
 //    @CustomLogger(title = "国家详情-导入",businessType = CustomBusinessType.IMPORT)
     @PostMapping("/country/import")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.1进出口调查" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult countryImport( MultipartFile file) {
         try{
             List<WzchImportExportSurveyCountry> list = wzchImportExportSurveyCountryService.importCountry(file);
@@ -95,6 +100,7 @@ public class WzchImportExportSurveyDetailController extends BaseController {
    //  @PreAuthorize(hasPermi ="wzch:surveyDetail:export")
 //    @CustomLogger(title = "海关详情-导出",businessType = CustomBusinessType.EXPORT)
     @PostMapping("/customs/export")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.1进出口调查" ,businessType = CustomBusinessType.EXPORT)
     public void customsExport(@RequestBody List<WzchImportExportSurveyCustoms> list, HttpServletResponse response) {
         try{
             ExcelUtils<WzchImportExportSurveyCustoms> util = new ExcelUtils<WzchImportExportSurveyCustoms>(WzchImportExportSurveyCustoms.class);
@@ -112,6 +118,7 @@ public class WzchImportExportSurveyDetailController extends BaseController {
   //   @PreAuthorize(hasPermi ="wzch:surveyDetail:import")
 //    @CustomLogger(title = "海关详情-导入",businessType = CustomBusinessType.IMPORT)
     @PostMapping("/customs/import")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.1进出口调查" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult customsImport(MultipartFile file) {
         try{
             List<WzchImportExportSurveyCustoms> list = wzchImportExportSurveyCustomsService.importCustoms(file);
@@ -148,6 +155,7 @@ public class WzchImportExportSurveyDetailController extends BaseController {
  //    @PreAuthorize(hasPermi ="wzch:surveyDetail:detail")
 //    @CustomLogger(title = "国别-列表查询",businessType = CustomBusinessType.SELECT)
     @PostMapping("/detail")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.1进出口调查" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult detail(WzchImportExportSurvey wzchImportExportSurvey) {
         try{
             WzchImportExportSurvey survey = wzchImportExportSurveyService.edit(wzchImportExportSurvey);

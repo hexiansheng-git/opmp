@@ -10,6 +10,8 @@ import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCost;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCostDetail;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.service.IQqchTaxCostService;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.vo.TaxCostVO;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
@@ -46,6 +48,7 @@ public class QqchTaxCostController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchTaxCost:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.4属地账成本明细" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchTaxCostList(@Validated(ValidationGroups.Select.class) QqchTaxCost qqchTaxCostParam) {
         startPage();
         List<QqchTaxCost> qqchTaxCostList = qqchTaxCostService.getQqchTaxCostList(qqchTaxCostParam);
@@ -54,6 +57,7 @@ public class QqchTaxCostController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchTaxCost:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.4属地账成本明细" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchTaxCost(@Validated(ValidationGroups.Save.class) @RequestBody QqchTaxCost qqchTaxCostParam) {
         qqchTaxCostService.insertQqchTaxCost(qqchTaxCostParam);
         return AjaxResult.success(qqchTaxCostParam);
@@ -61,6 +65,7 @@ public class QqchTaxCostController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchTaxCost:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.4属地账成本明细" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchTaxCostList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTaxCost> qqchTaxCostListParam) {
         qqchTaxCostService.insertQqchTaxCostList(qqchTaxCostListParam);
         return AjaxResult.success(qqchTaxCostListParam);
@@ -68,18 +73,21 @@ public class QqchTaxCostController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchTaxCost:update")
     @PostMapping("/update")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.4属地账成本明细" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateQqchTaxCost(@Validated(ValidationGroups.Update.class) @RequestBody QqchTaxCost qqchTaxCostParam) {
         return toAjax(qqchTaxCostService.updateQqchTaxCost(qqchTaxCostParam));
     }
 
 //    @PreAuthorize(hasPermi = "qqchTaxCost:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.4属地账成本明细" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateQqchTaxCostList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTaxCost> qqchTaxCostListParam) {
         return toAjax(qqchTaxCostService.updateQqchTaxCostList(qqchTaxCostListParam));
     }
 
 //    @PreAuthorize(hasPermi = "qqchTaxCost:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.4属地账成本明细" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteQqchTaxCost(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTaxCost qqchTaxCostParam) {
         return toAjax(qqchTaxCostService.deleteQqchTaxCost(qqchTaxCostParam));
     }
@@ -92,6 +100,7 @@ public class QqchTaxCostController extends BaseController {
     }
 
     @PostMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.4属地账成本明细" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, @RequestBody CompileEntity<TaxCostVO> dto) throws IOException {
         TaxCostVO dto1 = dto.getDto();
         List<String> yearList = dto1.getYearList();
@@ -328,6 +337,7 @@ public class QqchTaxCostController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchTaxCost:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.4属地账成本明细" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<TaxCostVO> dto) {
         qqchTaxCostService.save(dto);
         return AjaxResult.success(dto);
@@ -345,6 +355,7 @@ public class QqchTaxCostController extends BaseController {
 
 
     @PostMapping("/importData")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.4属地账成本明细" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(@RequestParam("file") MultipartFile file, @RequestParam Map<String, Object> params) {
         try {
             return AjaxResult.success(qqchTaxCostService.importData(file, params));

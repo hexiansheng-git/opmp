@@ -13,6 +13,8 @@ import com.hhwy.pm.qqch.wzch.transport.domain.WzchLocalTransportPlan;
 import com.hhwy.pm.qqch.wzch.transport.service.IWzchLocalTransportPlanService;
 import com.hhwy.pm.qqch.wzch.transport.vo.WzchLocalTransportPlanAddResponse;
 import com.hhwy.utils.common.PmsConstant;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +43,7 @@ public class WzchLocalTransportPlanController extends BaseController {
      */
 //    @PreAuthorize(hasPermi ="wzch:transport:list")
     @PostMapping("/list")
-//    @CustomLogger(title = "当地运输方案策划-列表查询",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.4当地运输方案策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@RequestBody WzchLocalTransportPlan wzchLocalTransportPlan) {
         startPage();
         List<WzchLocalTransportPlan> list = wzchLocalTransportPlanService.selectWzchLocalTransportPlanList(wzchLocalTransportPlan);
@@ -55,7 +57,7 @@ public class WzchLocalTransportPlanController extends BaseController {
     /**
      * 导出当地运输方案策划列表
      */
-//    @CustomLogger(title = "当地运输方案策划-导出",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.4当地运输方案策划" ,businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@RequestBody WzchLocalTransportPlan wzchLocalTransportPlan, HttpServletResponse response) {
         try{
@@ -73,7 +75,7 @@ public class WzchLocalTransportPlanController extends BaseController {
      * 当地运输方案策划调整
      */
 //    @PreAuthorize(hasPermi ="wzch:transport:edit")
-//    @CustomLogger(title = "当地运输方案策划-调整",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.4当地运输方案策划" ,businessType = CustomBusinessType.UPDATE)
     @PostMapping("/modify")
     public AjaxResult modify(@RequestBody WzchLocalTransportPlan wzchLocalTransportPlan) {
         try{
@@ -148,7 +150,7 @@ public class WzchLocalTransportPlanController extends BaseController {
      * 删除当地运输方案策划
      */
 //    @PreAuthorize(hasPermi ="wzch:transport:remove")
-//    @CustomLogger(title = "当地运输方案策划-导出",businessType = CustomBusinessType.DELETE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.4当地运输方案策划" ,businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     public AjaxResult remove(@RequestBody WzchLocalTransportPlan wzchLocalTransportPlan) {
         try{

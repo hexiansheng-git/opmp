@@ -8,6 +8,8 @@ import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.vo.InstallmentVO;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
@@ -42,6 +44,7 @@ public class QqchTaxInstallmentController extends BaseController{
 
 //    @PreAuthorize(hasPermi = "qqchTaxInstallment:list")
     @GetMapping
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.2属地账分期" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchTaxInstallment(@Validated(ValidationGroups.Get.class)  QqchTaxInstallment qqchTaxInstallmentParam){
         QqchTaxInstallment qqchTaxInstallment =  qqchTaxInstallmentService.getQqchTaxInstallment(qqchTaxInstallmentParam);
         return AjaxResult.success(qqchTaxInstallment);
@@ -49,6 +52,7 @@ public class QqchTaxInstallmentController extends BaseController{
 
 //    @PreAuthorize(hasPermi = "qqchTaxInstallment:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.2属地账分期" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchTaxInstallmentList(@Validated(ValidationGroups.Select.class) QqchTaxInstallment dto){
         QqchTaxInstallment qqchTaxInstallment = CompileEntity.dealListDto(VersionUtil.getVersion(TN, dto.getVersion()), dto);
         InstallmentVO sss= qqchTaxInstallmentService.list(qqchTaxInstallment);
@@ -63,6 +67,7 @@ public class QqchTaxInstallmentController extends BaseController{
      */
 //    @PreAuthorize(hasPermi = "qqchTaxInstallment:confirm")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.2属地账分期" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchTaxInstallment dto){
         // 20230915 改成只有确认按钮 确认按钮就是为了在评审功能已确认功能加1
         qqchTaxInstallmentService.confirm(dto);
@@ -91,6 +96,7 @@ public class QqchTaxInstallmentController extends BaseController{
     
 //    @PreAuthorize(hasPermi = "qqchTaxInstallment:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.2属地账分期" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchTaxInstallmentList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTaxInstallment> qqchTaxInstallmentListParam){
         qqchTaxInstallmentService.insertQqchTaxInstallmentList(qqchTaxInstallmentListParam);
         return AjaxResult.success(qqchTaxInstallmentListParam);
@@ -98,6 +104,7 @@ public class QqchTaxInstallmentController extends BaseController{
 
 //    @PreAuthorize(hasPermi = "qqchTaxInstallment:update")
     @PostMapping("/update")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.2属地账分期" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateQqchTaxInstallment(@Validated(ValidationGroups.Update.class) @RequestBody QqchTaxInstallment qqchTaxInstallmentParam){
         return toAjax(qqchTaxInstallmentService.updateQqchTaxInstallment(qqchTaxInstallmentParam));
     }
@@ -110,6 +117,7 @@ public class QqchTaxInstallmentController extends BaseController{
     
 //    @PreAuthorize(hasPermi = "qqchTaxInstallment:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.2属地账分期" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteQqchTaxInstallment(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTaxInstallment qqchTaxInstallmentParam){
         return toAjax(qqchTaxInstallmentService.deleteQqchTaxInstallment(qqchTaxInstallmentParam));
     }
@@ -122,6 +130,7 @@ public class QqchTaxInstallmentController extends BaseController{
         }
     
     @GetMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.2属地账分期" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, QqchTaxInstallment qqchTaxInstallmentParam) throws IOException {
         List<QqchTaxInstallment> qqchTaxInstallmentList = qqchTaxInstallmentService.getQqchTaxInstallmentList(qqchTaxInstallmentParam);
         ExcelUtils<QqchTaxInstallment> util = new ExcelUtils<>(QqchTaxInstallment.class);

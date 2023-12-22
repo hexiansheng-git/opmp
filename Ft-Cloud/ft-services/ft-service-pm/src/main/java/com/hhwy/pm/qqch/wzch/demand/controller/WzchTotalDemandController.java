@@ -20,6 +20,8 @@ import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandAddVO;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandDetailExportVO;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandDetailVO;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandExportRequest;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -49,6 +51,7 @@ public class WzchTotalDemandController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:demand:add")
     @GetMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.1物资总需台账" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave() {
         WzchTotalDemandAddVO wzchTotalDemandAddVO = wzchTotalDemandService.add();
         return new AjaxResult(200,"成功",wzchTotalDemandAddVO);
@@ -69,6 +72,7 @@ public class WzchTotalDemandController extends BaseController {
      */
 //    @PreAuthorize(hasPermi ="wzch:demand:adjust")
     @GetMapping("/modify")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.1物资总需台账" ,businessType = CustomBusinessType.SAVE)
 //    @CustomLogger(title = "物资总需-调整",businessType = CustomBusinessType.UPDATE)
     public AjaxResult modify(Long id) {
         return wzchTotalDemandService.modify(new WzchTotalDemand(id));
@@ -78,6 +82,7 @@ public class WzchTotalDemandController extends BaseController {
      * 详情
      */
     @GetMapping("/detail")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.1物资总需台账" ,businessType = CustomBusinessType.SELECT)
 //    @CustomLogger(title = "物资总需-详情",businessType = CustomBusinessType.SELECT)
     public AjaxResult detail(WzchTotalDemandDetailVO vo) {
         return AjaxResult.success(wzchTotalDemandService.detail(vo));
@@ -89,6 +94,7 @@ public class WzchTotalDemandController extends BaseController {
      * @return
      */
     @PostMapping("/sync")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.1物资总需台账" ,businessType = CustomBusinessType.OTHER)
 //    @CustomLogger(title = "物资总需-详情",businessType = CustomBusinessType.SELECT)
     public AjaxResult sync(String version) {
         Assert.isTrue(StringUtils.isNotBlank(version), "version不能为空");

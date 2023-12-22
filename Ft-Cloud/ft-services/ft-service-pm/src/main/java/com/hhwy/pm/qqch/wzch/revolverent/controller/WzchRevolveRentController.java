@@ -16,6 +16,8 @@ import com.hhwy.pm.qqch.wzch.revolverent.dto.WzchRevolveRentDetailDTO;
 import com.hhwy.pm.qqch.wzch.revolverent.service.IWzchRevolveRentDetailService;
 import com.hhwy.pm.qqch.wzch.revolverent.service.IWzchRevolveRentService;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -54,7 +56,7 @@ public class WzchRevolveRentController extends BaseController {
     private WzchCommonService wzchCommonService;
 
     @PostMapping("cghtZzc")
-//    @CustomLogger(title = "采购合同 周转材租赁", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.3周转材租赁策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult cghtZzc(@RequestBody Map<String, String> map) {
         String projectId = map.get("projectId");
         WzchRevolveRentDetail wzchRevolveRentDetail = new WzchRevolveRentDetail();
@@ -69,7 +71,7 @@ public class WzchRevolveRentController extends BaseController {
      * 新增 编辑 详情数据回显
      */
     @GetMapping("baseInfo")
-//    @CustomLogger(title = "新增 编辑 详情数据回显", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.3周转材租赁策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult baseInfo(@RequestParam(required = false) WzchRevolveRentDTO vo) {
         return AjaxResult.success(wzchRevolveRentService.baseInfo(vo==null?new WzchRevolveRentDTO():vo));
     }
@@ -80,7 +82,7 @@ public class WzchRevolveRentController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:revolverent:list")
     @PostMapping("/list")
-//    @CustomLogger(title = "查询周转材租赁策划列表", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.3周转材租赁策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchRevolveRent wzchRevolveRent) {
         startPage();
         List<WzchRevolveRent> list = wzchRevolveRentService.selectWzchRevolveRentList(wzchRevolveRent);
@@ -91,7 +93,7 @@ public class WzchRevolveRentController extends BaseController {
      * 导出周转材租赁策划列表
      */
     @PostMapping("/export")
-//    @CustomLogger(title = "导出周转材租赁策划列表", businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.3周转材租赁策划" ,businessType = CustomBusinessType.EXPORT)
     public void export(@RequestBody WzchRevolveRent wzchRevolveRent, HttpServletResponse response) {
         try {
             List<WzchRevolveRent> list = wzchRevolveRentService.selectWzchRevolveRentList(wzchRevolveRent);
@@ -109,7 +111,7 @@ public class WzchRevolveRentController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:revolverent:add")
     @PostMapping("/add")
-//    @CustomLogger(title = "新增保存周转材租赁策划", businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.3周转材租赁策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody WzchRevolveRentDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchRevolveRentService.insert(dto)));
     }
@@ -120,7 +122,7 @@ public class WzchRevolveRentController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:revolverent:edit")
     @PostMapping("/edit")
-//    @CustomLogger(title = "修改保存周转材租赁策划", businessType = CustomBusinessType.UPDATE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.3周转材租赁策划" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchRevolveRentDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchRevolveRentService.edit(dto)));
     }
@@ -131,14 +133,14 @@ public class WzchRevolveRentController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:revolverent:adjust")
     @PostMapping("/adjust")
-//    @CustomLogger(title = "修改保存周转材租赁策划", businessType = CustomBusinessType.UPDATE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.3周转材租赁策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult adjust(@Validated(ValidationGroups.Update.class) @RequestBody WzchRevolveRentDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchRevolveRentService.adjust(dto)));
     }
 
 //    @PreAuthorize(hasPermi = "wzch:revolverent:save")
     @PostMapping("/save")
-//    @CustomLogger(title = "修改保存周转材租赁策划", businessType = CustomBusinessType.UPDATE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.3周转材租赁策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody WzchRevolveRentDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchRevolveRentService.save(dto)));
     }
@@ -148,7 +150,7 @@ public class WzchRevolveRentController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:revolverent:remove")
     @PostMapping("/remove")
-//    @CustomLogger(title = "删除周转材租赁策划", businessType = CustomBusinessType.DELETE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.3周转材租赁策划" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult remove(@Validated(ValidationGroups.Delete.class) @RequestBody Map map) {
         String ids = String.valueOf(map.get("ids"));
         return toAjax(wzchRevolveRentService.deleteWzchRevolveRentByIds(ids));
@@ -183,7 +185,7 @@ public class WzchRevolveRentController extends BaseController {
      * 导出周转材料详情列表
      */
     @PostMapping("detail/export")
-//    @CustomLogger(title = "导出周转材料详情列表", businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.3周转材租赁策划" ,businessType = CustomBusinessType.EXPORT)
     public void exportDetail(@Validated(ValidationGroups.Other.class) @RequestBody Map<String, List<WzchRevolveRentDetailDTO>> params, HttpServletResponse response) {
         try {
             List<WzchRevolveRentDetailDTO> detailList = params.get("detailList");
@@ -201,7 +203,7 @@ public class WzchRevolveRentController extends BaseController {
     }
 
     @PostMapping("detail/importData")
-//    @CustomLogger(title = "导入周转材料详情列表", businessType = CustomBusinessType.IMPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.3周转材租赁策划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, @RequestParam Map map) {
         try {
             Assert.isTrue(!ObjectUtils.isBlank(map.get("version")),"version不能为空");
@@ -238,6 +240,7 @@ public class WzchRevolveRentController extends BaseController {
     }
 
     @PostMapping("/sync")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.3周转材租赁策划" ,businessType = CustomBusinessType.OTHER)
     public AjaxResult sync(@RequestBody WzchRevolveRentDTO wzchRevolveRent) {
         try{
             Assert.notNull(wzchRevolveRent.getVersion(), "version不能为空");

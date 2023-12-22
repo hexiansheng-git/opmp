@@ -8,6 +8,8 @@ import com.hhwy.pm.qqch.wzch.approach.domain.WzchPriorApproach;
 import com.hhwy.pm.qqch.wzch.approach.domain.WzchPriorApproachDetail;
 import com.hhwy.pm.qqch.wzch.approach.service.IWzchPriorApproachDetailService;
 import com.hhwy.pm.qqch.wzch.approach.vo.WzchPriorApproachDetailResponse;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,6 +63,7 @@ public class WzchPriorApproachDetailController extends BaseController {
 //    @PreAuthorize(hasPermi = "wzch:approachDetail:export")
 //    @CustomLogger(title = "优先进场物资详情-导出",businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.3优先进场物资台账" ,businessType = CustomBusinessType.EXPORT)
     public void export(@RequestBody List<WzchPriorApproachDetail> wzchPriorApproachDetailList, HttpServletResponse response) throws IOException {
         wzchPriorApproachDetailService.export(wzchPriorApproachDetailList,response);
     }
@@ -71,6 +74,7 @@ public class WzchPriorApproachDetailController extends BaseController {
 //    @PreAuthorize(hasPermi ="wzch:approachDetail:import")
 //    @CustomLogger(title = "优先进场物资详情列表-导入",businessType = CustomBusinessType.IMPORT)
     @PostMapping("/import")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.3优先进场物资台账" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file) {
         try{
             List<WzchPriorApproachDetail> list =  wzchPriorApproachDetailService.importData(file);
@@ -88,6 +92,7 @@ public class WzchPriorApproachDetailController extends BaseController {
     /*@PreAuthorize(hasPermi ="wzch:approach:save")*/
 //    @CustomLogger(title = "优先进场物资-保存",businessType = CustomBusinessType.SAVE)
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.3优先进场物资台账" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody WzchPriorApproach wzchPriorApproach) {
         try {
             wzchPriorApproachDetailService.save(wzchPriorApproach);

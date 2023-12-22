@@ -13,6 +13,8 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.qqch.wzch.specialmaterial.domain.WzchSpecialMaterialPlan;
 import com.hhwy.pm.qqch.wzch.specialmaterial.service.IWzchSpecialMaterialPlanService;
 import com.hhwy.pm.qqch.wzch.specialmaterial.vo.WzchSpecialMaterialPlanAddResponse;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -52,7 +54,7 @@ public class WzchSpecialMaterialPlanController extends BaseController {
     /**
      * 导出专项物资发运策划列表
      */
-//    @CustomLogger(title = "专项物资发运策划-导出",businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.3专项物资发运策划" ,businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
     public void export(@RequestBody WzchSpecialMaterialPlan wzchSpecialMaterialPlan, HttpServletResponse response) {
@@ -85,7 +87,7 @@ public class WzchSpecialMaterialPlanController extends BaseController {
      * 当地运输方案策划调整
      */
 //    @PreAuthorize(hasPermi ="wzch:special:modify")
-//    @CustomLogger(title = "专项物资发运策划-调整",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.3专项物资发运策划" ,businessType = CustomBusinessType.UPDATE)
     @PostMapping("/modify")
     public AjaxResult modify(@RequestBody WzchSpecialMaterialPlan wzchSpecialMaterialPlan) {
         try{
@@ -127,7 +129,7 @@ public class WzchSpecialMaterialPlanController extends BaseController {
     /**
      * 专项物资发运策划详情
      */
-//    @CustomLogger(title = "专项物资发运策划-详情",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.3专项物资发运策划" ,businessType = CustomBusinessType.SELECT)
     @PostMapping("/detail")
     @ResponseBody
     public AjaxResult detail(@RequestBody WzchSpecialMaterialPlan wzchSpecialMaterialPlan) {
@@ -148,7 +150,7 @@ public class WzchSpecialMaterialPlanController extends BaseController {
      * 删除专项物资发运策划
      */
 //    @PreAuthorize(hasPermi ="wzch:special:remove")
-//    @CustomLogger(title = "专项物资发运策划-详情",businessType = CustomBusinessType.DELETE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.3专项物资发运策划" ,businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
     public AjaxResult remove(@RequestBody WzchSpecialMaterialPlan wzchSpecialMaterialPlan) {

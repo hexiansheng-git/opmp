@@ -7,6 +7,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.wzch.transport.domain.WzchLocalTransportPlan;
 import com.hhwy.pm.qqch.wzch.transport.domain.WzchLocalTransportPlanDetail;
 import com.hhwy.pm.qqch.wzch.transport.service.IWzchLocalTransportPlanDetailService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,8 +37,8 @@ public class WzchLocalTransportPlanDetailController extends BaseController {
      * 导出当地运输方案策划详情列表
      */
    //  @PreAuthorize(hasPermi ="wzch:transportDetail:export")
-//    @CustomLogger(title = "当地运输方案策划-导出",businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.4当地运输方案策划" ,businessType = CustomBusinessType.EXPORT)
     public void export(@RequestBody List<WzchLocalTransportPlanDetail> list, HttpServletResponse response) {
         try{
             ExcelUtils<WzchLocalTransportPlanDetail> util = new ExcelUtils<WzchLocalTransportPlanDetail>(WzchLocalTransportPlanDetail.class);
@@ -53,7 +55,7 @@ public class WzchLocalTransportPlanDetailController extends BaseController {
      * 新增保存当地运输方案策划详情
      */
    //  @PreAuthorize(hasPermi ="wzch:transportDetail:save")
-//    @CustomLogger(title = "当地运输方案策划-保存",businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.4当地运输方案策划" ,businessType = CustomBusinessType.SAVE)
     @PostMapping("/save")
     public AjaxResult save(@RequestBody WzchLocalTransportPlan wzchLocalTransportPlan) {
         try{
@@ -73,7 +75,7 @@ public class WzchLocalTransportPlanDetailController extends BaseController {
      * 当地运输方案策划详情导入
      */
     // @PreAuthorize(hasPermi ="wzch:transportDetail:import")
-//    @CustomLogger(title = "当地运输方案策划详情-导入",businessType = CustomBusinessType.IMPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.4当地运输方案策划" ,businessType = CustomBusinessType.IMPORT)
     @PostMapping("/import")
     public AjaxResult importData(MultipartFile file) {
         try{

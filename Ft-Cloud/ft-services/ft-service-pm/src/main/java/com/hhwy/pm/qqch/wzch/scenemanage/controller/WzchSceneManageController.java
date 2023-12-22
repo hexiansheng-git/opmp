@@ -8,6 +8,8 @@ import com.hhwy.pm.qqch.wzch.scenemanage.domain.WzchSceneManage;
 import com.hhwy.pm.qqch.wzch.scenemanage.domain.WzchSceneManageDetail;
 import com.hhwy.pm.qqch.wzch.scenemanage.dto.WzchSceneManageDTO;
 import com.hhwy.pm.qqch.wzch.scenemanage.service.WzchSceneManageService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.validation.annotation.Validated;
@@ -37,7 +39,7 @@ public class WzchSceneManageController extends BaseController {
      * 新增 编辑 详情数据回显
      */
     @GetMapping("baseInfo")
-//    @CustomLogger(title = "新增 编辑 详情数据回显", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划", name = "6.4现场管理策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult baseInfo(@RequestParam(required = false) WzchSceneManageDTO dto) {
         return AjaxResult.success(wzchSceneManageService.baseInfo(dto==null?new WzchSceneManageDTO():dto));
     }
@@ -48,7 +50,7 @@ public class WzchSceneManageController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:sceneManage:list")
     @PostMapping("/list")
-//    @CustomLogger(title = "查询资金策划列表", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划", name = "6.4现场管理策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchSceneManage wzchSceneManage) {
         startPage();
         List<WzchSceneManage> list = wzchSceneManageService.selectWzchSceneManageList(wzchSceneManage);
@@ -59,7 +61,7 @@ public class WzchSceneManageController extends BaseController {
      * 导出资金策划列表
      */
     @PostMapping("/export")
-//    @CustomLogger(title = "导出资金策划列表", businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划", name = "6.4现场管理策划" ,businessType = CustomBusinessType.EXPORT)
     public void export(WzchSceneManage wzchSceneManage, HttpServletResponse response) {
         try {
             List<WzchSceneManage> list = wzchSceneManageService.selectWzchSceneManageList(wzchSceneManage);
@@ -76,7 +78,7 @@ public class WzchSceneManageController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:sceneManage:add")
     @PostMapping("/add")
-//    @CustomLogger(title = "新增保存资金策划", businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划", name = "6.4现场管理策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody WzchSceneManageDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchSceneManageService.insert(dto)));
     }
@@ -87,7 +89,7 @@ public class WzchSceneManageController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:sceneManage:edit")
     @PostMapping("/edit")
-//    @CustomLogger(title = "修改保存资金策划", businessType = CustomBusinessType.UPDATE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划", name = "6.4现场管理策划" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchSceneManageDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchSceneManageService.edit(dto)));
     }
@@ -97,6 +99,7 @@ public class WzchSceneManageController extends BaseController {
      * 删除资金策划
      */
     @PostMapping("/remove")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划", name = "6.4现场管理策划" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult remove(@RequestBody Map<String,String> map) {
         String ids = map.get("ids");
         return toAjax(wzchSceneManageService.deleteByIds(ids));
@@ -107,7 +110,7 @@ public class WzchSceneManageController extends BaseController {
      * 导出资金策划详情
      */
     @PostMapping("detail/export")
-//    @CustomLogger(title = "导出资金策划详情", businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划", name = "6.4现场管理策划" ,businessType = CustomBusinessType.EXPORT)
     public void exportDetail(@Validated(ValidationGroups.Other.class) @RequestBody Map<String, List<WzchSceneManageDetail>> params, HttpServletResponse response) {
         try {
             List<WzchSceneManageDetail> details = params.get("detailList");
@@ -121,7 +124,7 @@ public class WzchSceneManageController extends BaseController {
 
 
     @PostMapping("detail/importData")
-//    @CustomLogger(title = "导入周转材料详情列表", businessType = CustomBusinessType.IMPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划", name = "6.4现场管理策划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, @RequestParam Map map) {
         try {
             ExcelUtils<WzchSceneManageDetail> util = new ExcelUtils<>(WzchSceneManageDetail.class);

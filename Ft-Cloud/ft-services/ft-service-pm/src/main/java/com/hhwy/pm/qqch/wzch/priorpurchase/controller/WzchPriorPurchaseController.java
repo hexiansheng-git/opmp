@@ -11,6 +11,8 @@ import com.hhwy.pm.qqch.wzch.priorpurchase.domain.WzchPriorPurchase;
 import com.hhwy.pm.qqch.wzch.priorpurchase.dto.WzchPriorPurchaseDTO;
 import com.hhwy.pm.qqch.wzch.priorpurchase.service.IWzchPriorPurchaseService;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.lang3.StringUtils;
@@ -44,7 +46,7 @@ public class WzchPriorPurchaseController extends BaseController {
      * 新增 编辑 详情数据回显
      */
     @GetMapping("baseInfo")
-//    @CustomLogger(title = "新增 编辑 详情数据回显", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.5优先进场物资设备采购策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult baseInfo(@RequestParam(required = false) WzchPriorPurchaseDTO vo) {
         return AjaxResult.success(wzchPriorPurchaseService.baseInfo(vo==null?new WzchPriorPurchaseDTO():vo));
     }
@@ -55,7 +57,7 @@ public class WzchPriorPurchaseController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:priorpurchase:list")
     @PostMapping("/list")
-//    @CustomLogger(title = "查询优先进场物资设备采购策划列表", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.5优先进场物资设备采购策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchPriorPurchase wzchPriorPurchase) {
         startPage();
         List<WzchPriorPurchase> list = wzchPriorPurchaseService.selectWzchPriorPurchaseList(wzchPriorPurchase);
@@ -66,7 +68,7 @@ public class WzchPriorPurchaseController extends BaseController {
      * 导出优先进场物资设备采购策划列表
      */
     @PostMapping("/export")
-//    @CustomLogger(title = "导出优先进场物资设备采购策划列表", businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.5优先进场物资设备采购策划" ,businessType = CustomBusinessType.EXPORT)
     public void export(@RequestBody WzchPriorPurchase wzchPriorPurchase, HttpServletResponse response) {
         try {
             List<WzchPriorPurchase> list = wzchPriorPurchaseService.selectWzchPriorPurchaseList(wzchPriorPurchase);
@@ -86,7 +88,7 @@ public class WzchPriorPurchaseController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:priorpurchase:add")
     @PostMapping("/add")
-//    @CustomLogger(title = "新增保存优先进场物资设备采购策划", businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.5优先进场物资设备采购策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult add(@Validated(ValidationGroups.Save.class) @RequestBody WzchPriorPurchaseDTO wzchPriorPurchaseDTO) {
         return AjaxResult.success("操作成功", String.valueOf(wzchPriorPurchaseService.insert(wzchPriorPurchaseDTO)));
     }
@@ -97,7 +99,7 @@ public class WzchPriorPurchaseController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:priorpurchase:edit")
     @PostMapping("/edit")
-//    @CustomLogger(title = "修改保存优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.5优先进场物资设备采购策划" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchPriorPurchaseDTO wzchPriorPurchaseDTO) {
         return AjaxResult.success("操作成功", String.valueOf(wzchPriorPurchaseService.edit(wzchPriorPurchaseDTO)));
     }
@@ -105,14 +107,14 @@ public class WzchPriorPurchaseController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "wzch:priorpurchase:adjust")
     @PostMapping("/adjust")
-//    @CustomLogger(title = "调整优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.5优先进场物资设备采购策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult adjust(@Validated(ValidationGroups.Update.class) @RequestBody WzchPriorPurchaseDTO wzchPriorPurchaseDTO) {
         return AjaxResult.success("操作成功", String.valueOf(wzchPriorPurchaseService.adjust(wzchPriorPurchaseDTO)));
     }
 
 //    @PreAuthorize(hasPermi = "wzch:priorpurchase:save")
     @PostMapping("/save")
-//    @CustomLogger(title = "调整优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.5优先进场物资设备采购策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody WzchPriorPurchaseDTO wzchPriorPurchaseDTO) {
         return AjaxResult.success("操作成功", String.valueOf(wzchPriorPurchaseService.save(wzchPriorPurchaseDTO)));
     }
@@ -122,7 +124,7 @@ public class WzchPriorPurchaseController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:priorpurchase:remove")
     @PostMapping("/remove")
-//    @CustomLogger(title = "删除优先进场物资设备采购策划", businessType = CustomBusinessType.DELETE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.5优先进场物资设备采购策划" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult remove(@Validated(ValidationGroups.Delete.class) @RequestBody Map map) {
         String ids = String.valueOf(map.get("ids"));
         return toAjax(wzchPriorPurchaseService.deleteWzchPriorPurchaseByIds(ids));
@@ -134,6 +136,7 @@ public class WzchPriorPurchaseController extends BaseController {
      * @return
      */
     @PostMapping("/sync")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.5优先进场物资设备采购策划" ,businessType = CustomBusinessType.OTHER)
     public AjaxResult sync(@RequestBody WzchPriorPurchaseDTO dto) {
         try{
             Assert.notNull(dto.getVersion(), "version不能为空");

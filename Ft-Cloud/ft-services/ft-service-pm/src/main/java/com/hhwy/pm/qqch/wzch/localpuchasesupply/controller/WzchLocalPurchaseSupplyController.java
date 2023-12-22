@@ -15,6 +15,8 @@ import com.hhwy.pm.qqch.wzch.localpuchasesupply.service.IWzchLocalPurchaseSupply
 import com.hhwy.pm.qqch.wzch.localpuchasesupply.service.IWzchLocalPurchaseSupplyService;
 import com.hhwy.pm.qqch.wzch.puchasesupply.domain.WzchPurchaseSupply;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -75,7 +77,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
      * 新增 编辑 详情数据回显
      */
     @GetMapping("baseInfo")
-//    @CustomLogger(title = "新增 编辑 详情数据回显", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.2属地化采购供应策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult baseInfo(@RequestParam(required = false) WzchLocalPurchaseSupplyDTO dto) {
         return AjaxResult.success(wzchPurchaseSupplyService.baseInfo(dto==null?new WzchLocalPurchaseSupplyDTO():dto));
     }
@@ -85,7 +87,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:list")
     @PostMapping("/list")
-//    @CustomLogger(title = "查询采购供应策划列表", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.2属地化采购供应策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchLocalPurchaseSupply wzchPurchaseSupply) {
         startPage();
         List<WzchLocalPurchaseSupply> list = wzchPurchaseSupplyService.selectWzchPurchaseSupplyList(wzchPurchaseSupply);
@@ -96,7 +98,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
      * 导出采购供应策划列表
      */
     @PostMapping("/export")
-//    @CustomLogger(title = "导出采购供应策划列表", businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.2属地化采购供应策划" ,businessType = CustomBusinessType.EXPORT)
     public void export(@RequestBody Map<String, List<WzchLocalPurchaseSupply>> params, HttpServletResponse response) {
         try {
             List<WzchLocalPurchaseSupply> detailList = params.get("detailList");
@@ -114,7 +116,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:add")
     @PostMapping("/add")
-//    @CustomLogger(title = "新增保存采购供应策划", businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.2属地化采购供应策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody WzchLocalPurchaseSupplyDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchPurchaseSupplyService.insert(dto)));
 
@@ -126,7 +128,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:edit")
     @PostMapping("/edit")
-//    @CustomLogger(title = "修改保存优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.2属地化采购供应策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchLocalPurchaseSupplyDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchPurchaseSupplyService.edit(dto)));
 
@@ -137,7 +139,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:save")
     @PostMapping("/save")
-//    @CustomLogger(title = "修改保存优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.2属地化采购供应策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody WzchLocalPurchaseSupplyDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchPurchaseSupplyService.save(dto)));
 
@@ -160,6 +162,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:remove")
     @PostMapping("/remove")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.2属地化采购供应策划" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult remove(@RequestBody Map<String, String> params) {
         String ids = params.get("ids");
         return toAjax(wzchPurchaseSupplyService.deleteWzchPurchaseSupplyByIds(ids));
@@ -193,7 +196,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
      * 导出采购供应策划详情列表
      */
     @PostMapping("detail/export")
-//    @CustomLogger(title = "导出采购供应策划详情列表", businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.2属地化采购供应策划" ,businessType = CustomBusinessType.EXPORT)
     public void exportDetail(@Validated(ValidationGroups.Other.class) @RequestBody Map<String, List<WzchLocalPurchaseSupplyDetailDTO>> params, HttpServletResponse response) {
         try {
             List<WzchLocalPurchaseSupplyDetailDTO> detailList = params.get("detailList");
@@ -222,7 +225,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
      * 导入采购供应策划物资详情
      */
     @PostMapping("detail/importData")
-//    @CustomLogger(title = "导入采购供应策划物资详情", businessType = CustomBusinessType.IMPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.2属地化采购供应策划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, @RequestParam Map map) {
         try {
             Assert.isTrue(!ObjectUtils.isBlank(map.get("version")),"version不能为空");
@@ -268,7 +271,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
 
 
     @PostMapping("detail/savePurchaseView")
-//    @CustomLogger(title = "保存采购视角", businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.2属地化采购供应策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult savePurchaseView(@RequestBody SavePurchaseViewDTO dto) {
         List<WzchLocalPurchaseViewDetailDTO> viewList = dto.getViewList();
         String projectId = dto.getProjectId();
@@ -285,6 +288,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
     }
 
     @PostMapping("/sync")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.2属地化采购供应策划" ,businessType = CustomBusinessType.OTHER)
     public AjaxResult sync(@RequestBody  WzchLocalPurchaseSupply purchaseSupply) {
         try{
             Assert.notNull(purchaseSupply.getVersion(), "version不能为空");

@@ -8,6 +8,8 @@ import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
 import com.hhwy.pm.qqch.wzch.importplan.domain.WzchImportExportPlan;
 import com.hhwy.pm.qqch.wzch.importplan.domain.WzchImportExportPlanDetail;
 import com.hhwy.pm.qqch.wzch.importplan.service.IWzchImportExportPlanDetailService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,7 +42,7 @@ public class WzchImportExportPlanDetailController extends BaseController {
      * 导出进出口策划详情列表
      */
     // @PreAuthorize(hasPermi ="wzch:importPlanDetail:export")
-//    @CustomLogger(title = "进出口策划情-导出",businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.2进出口策划" ,businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@RequestBody List<WzchImportExportPlanDetail> list, HttpServletResponse response) {
         try{
@@ -56,7 +58,7 @@ public class WzchImportExportPlanDetailController extends BaseController {
      * 导出进出口策划详情列表
      */
     // @PreAuthorize(hasPermi ="wzch:importPlanDetail:import")
-//    @CustomLogger(title = "进出口策划详情-导入",businessType = CustomBusinessType.IMPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.2进出口策划" ,businessType = CustomBusinessType.IMPORT)
     @PostMapping("/import")
     public AjaxResult importData(MultipartFile file) {
         try{
@@ -76,7 +78,7 @@ public class WzchImportExportPlanDetailController extends BaseController {
      * 导出进出口策划详情列表
      */
     // @PreAuthorize(hasPermi ="wzch:importPlanDetail:save")
-//    @CustomLogger(title = "进出口策划详情-保存",businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.2进出口策划" ,businessType = CustomBusinessType.SAVE)
     @PostMapping("/save")
     public AjaxResult save(@RequestBody WzchImportExportPlan wzchImportExportPlan) {
         try {

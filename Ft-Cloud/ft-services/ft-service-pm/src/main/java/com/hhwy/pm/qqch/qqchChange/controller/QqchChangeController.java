@@ -18,6 +18,8 @@ import com.hhwy.pm.qqch.sgch.dataShare.DataShareDevicePlanService;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysMenu;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +56,7 @@ public class QqchChangeController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchChange:list")
     @PostMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划变更", name = "前期策划变更" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchChangeList(@RequestBody @Validated(ValidationGroups.Select.class) QqchChange qqchChangeParam) {
         startPage();
         List<QqchChange> qqchChangeList = qqchChangeService.list(qqchChangeParam);
@@ -67,6 +70,7 @@ public class QqchChangeController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchChange:adjust")
     @GetMapping("/adjust")
+    @CustomLogger(title = "前期策划-前期策划变更", name = "前期策划变更" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult adjust(){
         QqchChangeVo vo = qqchChangeService.adjustDetail();
         FlowInfoSearchUtil.getFlowInfo(vo,FlowEnum.QQCH_CHANGE);
@@ -74,6 +78,7 @@ public class QqchChangeController extends BaseController {
     }
 
     @GetMapping("/detail")
+    @CustomLogger(title = "前期策划-前期策划变更", name = "前期策划变更" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult detail(Long id){
         QqchChangeVo vo = qqchChangeService.detail(id);
         FlowInfoSearchUtil.getFlowInfo(vo,FlowEnum.QQCH_CHANGE);
@@ -82,6 +87,7 @@ public class QqchChangeController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchChange:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划变更", name = "前期策划变更" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody QqchChangeVo vo) {
         qqchChangeService.save(vo);
         Map resuMap = new HashMap<>();
@@ -95,11 +101,13 @@ public class QqchChangeController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchChange:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "前期策划-前期策划变更", name = "前期策划变更" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteQqchChange(@Validated(ValidationGroups.Delete.class) @RequestBody QqchChange qqchChangeParam) {
         return toAjax(qqchChangeService.deleteQqchChange(qqchChangeParam));
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划变更", name = "前期策划变更" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, QqchChange qqchChangeParam) throws IOException {
         List<QqchChange> qqchChangeList = qqchChangeService.getQqchChangeList(qqchChangeParam);
         ExcelUtils<QqchChange> util = new ExcelUtils<>(QqchChange.class);

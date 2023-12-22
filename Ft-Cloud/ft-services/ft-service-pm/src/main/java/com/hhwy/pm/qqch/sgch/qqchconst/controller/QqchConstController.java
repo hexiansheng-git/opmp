@@ -10,6 +10,8 @@ import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlan;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstService;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstStaffPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -38,6 +40,7 @@ public class QqchConstController extends BaseController {
     
     // 郑丽丽 要所有的施工部署的工种名称
     @GetMapping("jobList")
+    @CustomLogger(title = "前期策划-前期策划编制", name = "1.3施工部署" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult jobList(String codeOrName) {
         List<QqchConstStaffPlan> qqchConstJobList = staffPlanService.jobList(codeOrName);
         return getDataTableAjaxResult(qqchConstJobList);
@@ -52,6 +55,7 @@ public class QqchConstController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchConst:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制", name = "1.3施工部署" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchConstList(@Validated(ValidationGroups.Select.class) CompileEntity<QqchConst> dto) {
         QqchConst qqchConst = CompileEntity.dealListDto(dto.getVersion(), new QqchConst());
         CompileEntity qqchConstList = qqchConstService.list(qqchConst);
@@ -70,6 +74,7 @@ public class QqchConstController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchConst:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制", name = "1.3施工部署" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchConst>> dtoList) {
         List<QqchConst> qqchConsts = dtoList.dealSaveDto();
         qqchConstService.save(qqchConsts,dtoList);
