@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.tree.TreeNode;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,17 @@ import java.util.List;
 
 public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     private static final long serialVersionUID = 1L;
+
+
+    private List<String> pathList;
+
+    public List<String> getPathList() {
+        return pathList;
+    }
+
+    public void setPathList(List<String> pathList) {
+        this.pathList = pathList;
+    }
 
     /**
      * 字段描述：主键id
@@ -52,7 +64,7 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
      */
     @JsonProperty
     @Excel(name = "工作量")
-    private String workload;
+    private BigDecimal workload;
     /**
      * 字段描述：计划开始日期
      */
@@ -104,7 +116,7 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
      * 字段描述：所属区域名称
      */
     @JsonProperty
-    @Excel(name = "所属区域名称")
+//    @Excel(name = "所属区域名称")
     private String regionName;
     /**
      * 字段描述：项目id
@@ -117,7 +129,7 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
      * 字段描述：项目名称
      */
     @JsonProperty
-    @Excel(name = "项目名称")
+//    @Excel(name = "项目名称")
     private String projectName;
     /**
      * 字段描述：部门id
@@ -141,6 +153,7 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     /**
      * 字段描述：数据创建系统时间
      */
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
 //    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
@@ -384,11 +397,11 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
         this.measureUnit = measureUnit;
     }
 
-    public String getWorkload() {
+    public BigDecimal getWorkload() {
         return workload;
     }
 
-    public void setWorkload(String workload) {
+    public void setWorkload(BigDecimal workload) {
         this.workload = workload;
     }
 

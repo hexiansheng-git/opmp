@@ -61,14 +61,14 @@ public class SgjsTechnicalTraining extends CommonBaseEntity {
      * 字段描述：培训讲师
      */
     @JsonProperty
-    @Excel(name = "培训讲师")
+//    @Excel(name = "培训讲师")
     private String trainingInstructor;
     /**
      * 字段描述：编制日期
      */
     @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "编制日期", dateFormat = "yyyy年MM月dd日")
+//    @Excel(name = "编制日期", dateFormat = "yyyy年MM月dd日")
     private Date compileDate;
     /**
      * 字段描述：培训记录
