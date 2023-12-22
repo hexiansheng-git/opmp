@@ -234,7 +234,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
     public AjaxResult batchAdd(SgjsExperProgressManageVo sgjsExperProgressManageVo) {
 
         //删除操作
-        //delete(sgjsExperProgressManageVo);
+        delete(sgjsExperProgressManageVo);
 
         List<SgjsExperProgressManage> treeToList = null;
         if (!CollectionUtils.isEmpty(sgjsExperProgressManageVo.getTreeList())) {
