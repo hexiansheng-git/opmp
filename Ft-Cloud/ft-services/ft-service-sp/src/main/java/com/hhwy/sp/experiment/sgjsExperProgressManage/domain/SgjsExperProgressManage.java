@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.tree.TreeNode;
+import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * @remark sgjs_exper_progress_manage
  */
 //CommonCompileEntity<SgjsExperProgressManage>
-
+@Data
 public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     private static final long serialVersionUID = 1L;
 
@@ -64,7 +64,7 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
      */
     @JsonProperty
     @Excel(name = "工作量")
-    private BigDecimal workload;
+    private String workload;
     /**
      * 字段描述：计划开始日期
      */
@@ -230,7 +230,6 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     private String serialNumber;
 
 
-
     /**
      * 字段描述：计划开始时间搜索1
      */
@@ -245,7 +244,6 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     private Date planStartDate2;
-
 
 
     /**
@@ -284,344 +282,4 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     //实际开始日期范围字符串
     private String realStartDateStr;
 
-
-    public List<Long> getIds() {
-        return ids;
-    }
-
-    public void setIds(List<Long> ids) {
-        this.ids = ids;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Date getPlanStartDate1() {
-        return planStartDate1;
-    }
-
-    public void setPlanStartDate1(Date planStartDate1) {
-        this.planStartDate1 = planStartDate1;
-    }
-
-    public Date getPlanStartDate2() {
-        return planStartDate2;
-    }
-
-    public void setPlanStartDate2(Date planStartDate2) {
-        this.planStartDate2 = planStartDate2;
-    }
-
-    public Date getRealStartDate1() {
-        return realStartDate1;
-    }
-
-    public void setRealStartDate1(Date realStartDate1) {
-        this.realStartDate1 = realStartDate1;
-    }
-
-    public Date getRealStartDate2() {
-        return realStartDate2;
-    }
-
-    public void setRealStartDate2(Date realStartDate2) {
-        this.realStartDate2 = realStartDate2;
-    }
-
-    public String getPlanStartDateStr() {
-        return planStartDateStr;
-    }
-
-    public void setPlanStartDateStr(String planStartDateStr) {
-        this.planStartDateStr = planStartDateStr;
-    }
-
-    public String getRealStartDateStr() {
-        return realStartDateStr;
-    }
-
-    public void setRealStartDateStr(String realStartDateStr) {
-        this.realStartDateStr = realStartDateStr;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public Long getPid() {
-        return pid;
-    }
-
-    @Override
-    public void setPid(Long pid) {
-        this.pid = pid;
-    }
-
-    public String getExperimentalWorkItems() {
-        return experimentalWorkItems;
-    }
-
-    public void setExperimentalWorkItems(String experimentalWorkItems) {
-        this.experimentalWorkItems = experimentalWorkItems;
-    }
-
-    public String getMeasureUnit() {
-        return measureUnit;
-    }
-
-    public void setMeasureUnit(String measureUnit) {
-        this.measureUnit = measureUnit;
-    }
-
-    public BigDecimal getWorkload() {
-        return workload;
-    }
-
-    public void setWorkload(BigDecimal workload) {
-        this.workload = workload;
-    }
-
-    public Date getPlanStartDate() {
-        return planStartDate;
-    }
-
-    public void setPlanStartDate(Date planStartDate) {
-        this.planStartDate = planStartDate;
-    }
-
-    public Date getPlanEndDate() {
-        return planEndDate;
-    }
-
-    public void setPlanEndDate(Date planEndDate) {
-        this.planEndDate = planEndDate;
-    }
-
-    public Date getRealStartDate() {
-        return realStartDate;
-    }
-
-    public void setRealStartDate(Date realStartDate) {
-        this.realStartDate = realStartDate;
-    }
-
-    public Date getRealEndDate() {
-        return realEndDate;
-    }
-
-    public void setRealEndDate(Date realEndDate) {
-        this.realEndDate = realEndDate;
-    }
-
-    @Override
-    public String getRemark() {
-        return remark;
-    }
-
-    @Override
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public String getDataSource() {
-        return dataSource;
-    }
-
-    public void setDataSource(String dataSource) {
-        this.dataSource = dataSource;
-    }
-
-    public Long getRegionId() {
-        return regionId;
-    }
-
-    public void setRegionId(Long regionId) {
-        this.regionId = regionId;
-    }
-
-    public String getRegionName() {
-        return regionName;
-    }
-
-    public void setRegionName(String regionName) {
-        this.regionName = regionName;
-    }
-
-    public Long getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    public Long getDeptId() {
-        return deptId;
-    }
-
-    public void setDeptId(Long deptId) {
-        this.deptId = deptId;
-    }
-
-    @Override
-    public String getCreateUser() {
-        return createUser;
-    }
-
-    @Override
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
-
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    @Override
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    @Override
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @Override
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    @Override
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    @Override
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    @Override
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getDelUser() {
-        return delUser;
-    }
-
-    public void setDelUser(String delUser) {
-        this.delUser = delUser;
-    }
-
-    public Date getDelTime() {
-        return delTime;
-    }
-
-    public void setDelTime(Date delTime) {
-        this.delTime = delTime;
-    }
-
-    @Override
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    @Override
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    public Long getSyncId() {
-        return syncId;
-    }
-
-    public void setSyncId(Long syncId) {
-        this.syncId = syncId;
-    }
-
-    @Override
-    public String getPtVar2() {
-        return ptVar2;
-    }
-
-    @Override
-    public void setPtVar2(String ptVar2) {
-        this.ptVar2 = ptVar2;
-    }
-
-    @Override
-    public String getPtVar3() {
-        return ptVar3;
-    }
-
-    @Override
-    public void setPtVar3(String ptVar3) {
-        this.ptVar3 = ptVar3;
-    }
-
-    @Override
-    public String getPtVar4() {
-        return ptVar4;
-    }
-
-    @Override
-    public void setPtVar4(String ptVar4) {
-        this.ptVar4 = ptVar4;
-    }
-
-    @Override
-    public String getPtVar5() {
-        return ptVar5;
-    }
-
-    @Override
-    public void setPtVar5(String ptVar5) {
-        this.ptVar5 = ptVar5;
-    }
-
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
 }

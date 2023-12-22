@@ -115,7 +115,6 @@ public class SgjsTechnicalTrainingController extends BaseController {
     @PostMapping("/export")
     public void export(HttpServletResponse response, @RequestBody SgjsTechnicalTraining sgjsTechnicalTrainingParam) throws IOException {
 
-
         List<Long> ids = sgjsTechnicalTrainingParam.getIds();
         List<SgjsTechnicalTraining> list=null;
         if (CollectionUtils.isEmpty(ids)){

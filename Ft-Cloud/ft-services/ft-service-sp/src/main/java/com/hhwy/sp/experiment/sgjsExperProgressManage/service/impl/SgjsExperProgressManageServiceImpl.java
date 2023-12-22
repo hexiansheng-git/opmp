@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -70,7 +69,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             String[] split = planStartDateStr.split("~");
             sgjsTechnicalManage.setPlanStartDate1(FtDateUtils.parseDate(split[0].replaceAll("(?:年|月|日)", "-")));
             sgjsTechnicalManage.setPlanStartDate2(FtDateUtils.parseDate(split[1].replaceAll("(?:年|月|日)", "-")));
-
         }
 
         if (StringUtils.isNotEmpty(sgjsTechnicalManage.getRealStartDateStr())) {
@@ -177,7 +175,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             SgjsExperProgressManage sgjsExperProgressManage = new SgjsExperProgressManage();
             sgjsExperProgressManage.setExperimentalWorkItems(map.get("workItem") == null ? null : (String) map.get("workItem"));
             sgjsExperProgressManage.setMeasureUnit(map.get("unit") == null ? null : (String) map.get("unit"));
-            sgjsExperProgressManage.setWorkload(Objects.equals(map.get("workload"), new BigDecimal(0)) ? null : new BigDecimal(map.get("workload").toString()));
+            sgjsExperProgressManage.setWorkload(map.get("workload") == null ? null : map.get("workload").toString());
             sgjsExperProgressManage.setPlanStartDate(map.get("planBeginDate") == null ? null : FtDateUtils.parseDate(map.get("planBeginDate")));
             sgjsExperProgressManage.setPlanEndDate(map.get("planEndDate") == null ? null : FtDateUtils.parseDate(map.get("planEndDate")));
             sgjsExperProgressManage.setRemark(map.get("remark") == null ? null : map.get("remark").toString());
@@ -204,7 +202,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             SgjsExperProgressManage sgjsExperProgressManage = new SgjsExperProgressManage();
             sgjsExperProgressManage.setExperimentalWorkItems(children.get(i).get("workItem") == null ? null : children.get(i).get("workItem").toString());
             sgjsExperProgressManage.setMeasureUnit(children.get(i).get("unit") == null ? null : children.get(i).get("unit").toString());
-            sgjsExperProgressManage.setWorkload(children.get(i).get("workload") == null ? null : (BigDecimal)children.get(i).get("workload"));
+            sgjsExperProgressManage.setWorkload(children.get(i).get("workload") == null ? null : children.get(i).get("workload").toString());
             sgjsExperProgressManage.setPlanStartDate(children.get(i).get("planBeginDate") == null ? null : FtDateUtils.parseDate(children.get(i).get("planBeginDate")));
             sgjsExperProgressManage.setPlanEndDate(children.get(i).get("planEndDate") == null ? null : FtDateUtils.parseDate(children.get(i).get("planEndDate")));
             sgjsExperProgressManage.setRemark(children.get(i).get("remark") == null ? null : children.get(i).get("remark").toString());
@@ -282,7 +280,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
                 newInsertList.add(sgjsExperProgressManage);
                 //处理子节点
                 handleChildren(newInsertList, sgjsExperProgressManage);
-
             }
             sgjsExperProgressManageMapper.insertSgjsExperProgressManageList(newInsertList);
         }
@@ -383,20 +380,50 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
      */
     @Override
     public List<SgjsExperProgressManage> getIds(List<Long> ids) {
+//        //所有子父级数据
+//        List<SgjsExperProgressManage> total = new ArrayList<>();
+//        //获取父级数据
+//        List<SgjsExperProgressManage> list = sgjsExperProgressManageMapper.getIds(ids);
+//        total.addAll(list);
+//
+//        //获取子级所有数据
+//        List<Long> out = handleTotalData(ids);
+//        if (out.size()>0){
+//            //查询数据
+//            List<SgjsExperProgressManage> sgjsExperProgressManages = sgjsExperProgressManageMapper.getIds(out);
+//            total.addAll(sgjsExperProgressManages);
+//        }
+//        return total;
 
-        //所有子父级数据
-        List<SgjsExperProgressManage> total = new ArrayList<>();
-        //获取父级数据
-        List<SgjsExperProgressManage> list = sgjsExperProgressManageMapper.getIds(ids);
-        total.addAll(list);
-
-        //获取子级所有数据
-        List<Long> out = handleTotalData(ids);
-        if (out.size()>0){
-            //查询数据
-            List<SgjsExperProgressManage> sgjsExperProgressManages = sgjsExperProgressManageMapper.getIds(out);
-            total.addAll(sgjsExperProgressManages);
+        List<SgjsExperProgressManage> list = new ArrayList<>();
+        List<SgjsExperProgressManage> list1 = sgjsExperProgressManageMapper.getIds(ids);
+        for (int i = 0; i < list1.size(); i++) {
+            SgjsExperProgressManage sgjsPlanMeasureManage = new SgjsExperProgressManage();
+            sgjsPlanMeasureManage.setPid(list1.get(i).getId());
+            List<SgjsExperProgressManage> list2 = sgjsExperProgressManageMapper.getSgjsExperProgressManageList(sgjsPlanMeasureManage);
+            if(list2.size()>0){
+                diguiList2(list2,list1.get(i));
+            }
+            list.add(list1.get(i));
         }
-        return total;
+        if(list.size()>0){
+            list = TreeUtil.treeToListWithoutId(list);
+            list = list.stream().sorted(Comparator.comparing(SgjsExperProgressManage::getSerialNumber)).collect(Collectors.toList());
+        }
+        return list;
+    }
+
+    private void diguiList2(List<SgjsExperProgressManage> list2, SgjsExperProgressManage manage) {
+        List<SgjsExperProgressManage> list = new ArrayList<>();
+        for (int i = 0; i < list2.size(); i++) {
+            SgjsExperProgressManage planMeasureManage = new SgjsExperProgressManage();
+            planMeasureManage.setPid(list2.get(i).getId());
+            List<SgjsExperProgressManage> list3 = sgjsExperProgressManageMapper.getSgjsExperProgressManageList(planMeasureManage);
+            if(list3.size()>0){
+                diguiList2(list3,list2.get(i));
+            }
+            list.add(list2.get(i));
+        }
+        manage.setChildren(list);
     }
 }
