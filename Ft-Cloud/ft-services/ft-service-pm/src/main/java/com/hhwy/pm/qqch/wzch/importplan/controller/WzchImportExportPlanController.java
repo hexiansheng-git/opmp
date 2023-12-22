@@ -10,6 +10,8 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.wzch.importplan.domain.WzchImportExportPlan;
 import com.hhwy.pm.qqch.wzch.importplan.service.IWzchImportExportPlanService;
 import com.hhwy.system.api.domain.SysUser;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +36,7 @@ public class WzchImportExportPlanController extends BaseController {
      * 查询进出口策划列表
      */
 //    @PreAuthorize(hasPermi ="wzch:importPlan:list")
-//    @CustomLogger(title = "进出口策划-列表查询",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.2进出口策划" ,businessType = CustomBusinessType.SELECT)
     @PostMapping("/list")
     public AjaxResult list(@RequestBody WzchImportExportPlan wzchImportExportPlan) {
         try{
@@ -53,7 +55,7 @@ public class WzchImportExportPlanController extends BaseController {
     /**
      * 导出进出口策划列表
      */
-//    @CustomLogger(title = "进出口策划-导出",businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.2进出口策划" ,businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@RequestBody WzchImportExportPlan wzchImportExportPlan , HttpServletResponse response) {
         try{
@@ -71,8 +73,8 @@ public class WzchImportExportPlanController extends BaseController {
      * 修改保存进出口策划
      */
 //    @PreAuthorize(hasPermi ="wzch:importPlan:modify")
-//    @CustomLogger(title = "进出口策划-导出",businessType = CustomBusinessType.SELECT)
     @PostMapping("/modify")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.2进出口策划" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult modify(@RequestBody WzchImportExportPlan wzchImportExportPlan) {
         try{
             WzchImportExportPlan list =  wzchImportExportPlanService.modify(wzchImportExportPlan);
@@ -94,7 +96,7 @@ public class WzchImportExportPlanController extends BaseController {
      * 修改保存进出口策划
      */
 //    @PreAuthorize(hasPermi ="wzch:importPlan:edit")
-//    @CustomLogger(title = "进出口策划-导出",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.2进出口策划" ,businessType = CustomBusinessType.UPDATE)
     @PostMapping("/edit")
     public AjaxResult edit(@RequestBody WzchImportExportPlan wzchImportExportPlan) {
         try{
@@ -112,7 +114,7 @@ public class WzchImportExportPlanController extends BaseController {
     /**
      * 进出口策划详情
      */
-//    @CustomLogger(title = "进出口策划-详情",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.2进出口策划" ,businessType = CustomBusinessType.SELECT)
     @PostMapping("/detail")
     public AjaxResult detail(@RequestBody WzchImportExportPlan wzchImportExportPlan) {
         try{
@@ -131,7 +133,7 @@ public class WzchImportExportPlanController extends BaseController {
      * 删除进出口策划
      */
 //    @PreAuthorize(hasPermi ="wzch:importPlan:remove")
-//    @CustomLogger(title = "进出口策划-删除",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.2进出口策划" ,businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     public AjaxResult remove(@RequestBody WzchImportExportPlan wzchImportExportPlan) {
         try {

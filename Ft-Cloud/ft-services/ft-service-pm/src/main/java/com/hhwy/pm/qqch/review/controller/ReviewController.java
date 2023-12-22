@@ -16,6 +16,8 @@ import com.hhwy.pm.qqch.sgch.dataShare.DataShareDevicePlanService;
 import com.hhwy.utils.JsonUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +62,7 @@ public class ReviewController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchReview:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划评审", name = "前期策划评审" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchReviewList(@Validated(ValidationGroups.Select.class) Review reviewParam) {
         startPage();
         List<Review> reviewList = qqchReviewService.getQqchReviewList(reviewParam);
@@ -183,6 +186,7 @@ public class ReviewController extends BaseController {
 
     //    @PreAuthorize(hasPermi = "qqchReview:add")
     @PostMapping("/add")
+    @CustomLogger(title = "前期策划-前期策划评审", name = "前期策划评审" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchReview(@Validated(ValidationGroups.Save.class) @RequestBody Map<String, Object> params) {
         qqchReviewService.savePlan(Long.valueOf(params.get("id") + ""));
         return AjaxResult.success();
@@ -190,6 +194,7 @@ public class ReviewController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchReview:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划评审", name = "前期策划评审" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchReviewList(@Validated(ValidationGroups.Save.class) @RequestBody List<Review> reviewListParam) {
         qqchReviewService.insertQqchReviewList(reviewListParam);
         return AjaxResult.success(reviewListParam);
@@ -197,18 +202,21 @@ public class ReviewController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchReview:update")
     @PostMapping("/update")
+    @CustomLogger(title = "前期策划-前期策划评审", name = "前期策划评审" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateQqchReview(@Validated(ValidationGroups.Update.class) @RequestBody Review reviewParam) {
         return toAjax(qqchReviewService.updateQqchReview(reviewParam));
     }
 
 //    @PreAuthorize(hasPermi = "qqchReview:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "前期策划-前期策划评审", name = "前期策划评审" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateQqchReviewList(@Validated(ValidationGroups.Update.class) @RequestBody List<Review> reviewListParam) {
         return toAjax(qqchReviewService.updateQqchReviewList(reviewListParam));
     }
 
 //    @PreAuthorize(hasPermi = "qqchReview:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "前期策划-前期策划评审", name = "前期策划评审" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteQqchReview(@Validated(ValidationGroups.Delete.class) @RequestBody Review reviewParam) {
         return toAjax(qqchReviewService.deleteQqchReview(reviewParam));
     }
@@ -221,6 +229,7 @@ public class ReviewController extends BaseController {
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划评审", name = "前期策划评审" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, Review reviewParam) throws IOException {
         List<Review> reviewList = qqchReviewService.getQqchReviewList(reviewParam);
         ExcelUtils<Review> util = new ExcelUtils<>(Review.class);
@@ -241,14 +250,14 @@ public class ReviewController extends BaseController {
     }
 
     @PostMapping("/save")
-//    @PreAuthorize(hasPermi = "qqchReview:reviewInfo")
+    @CustomLogger(title = "前期策划-前期策划评审", name = "前期策划评审" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody Review review) {
         qqchReviewService.updateQqchReview(review);
         return AjaxResult.success("操作成功", review.getId() + "");
     }
 
     @PostMapping("/submit")
-//    @PreAuthorize(hasPermi = "qqchReview:reviewInfo")
+    @CustomLogger(title = "前期策划-前期策划评审", name = "前期策划评审" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult submit(@RequestBody Review review) {
         review.setTaskStatus("1");
         review.setReviewStatus("3");

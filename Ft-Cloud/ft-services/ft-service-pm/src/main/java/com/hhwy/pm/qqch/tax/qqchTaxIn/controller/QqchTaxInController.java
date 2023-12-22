@@ -8,6 +8,8 @@ import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxIn;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.vo.TaxInVO;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -44,6 +46,7 @@ public class QqchTaxInController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchTaxIn:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.3属地账收入明细" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchTaxInList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTaxIn> qqchTaxInListParam) {
         qqchTaxInService.insertQqchTaxInList(qqchTaxInListParam);
         return AjaxResult.success(qqchTaxInListParam);
@@ -51,18 +54,21 @@ public class QqchTaxInController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchTaxIn:update")
     @PostMapping("/update")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.3属地账收入明细" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateQqchTaxIn(@Validated(ValidationGroups.Update.class) @RequestBody QqchTaxIn qqchTaxInParam) {
         return toAjax(qqchTaxInService.updateQqchTaxIn(qqchTaxInParam));
     }
 
 //    @PreAuthorize(hasPermi = "qqchTaxIn:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.3属地账收入明细" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateQqchTaxInList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTaxIn> qqchTaxInListParam) {
         return toAjax(qqchTaxInService.updateQqchTaxInList(qqchTaxInListParam));
     }
 
 //    @PreAuthorize(hasPermi = "qqchTaxIn:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.3属地账收入明细" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteQqchTaxIn(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTaxIn qqchTaxInParam) {
         return toAjax(qqchTaxInService.deleteQqchTaxIn(qqchTaxInParam));
     }
@@ -75,6 +81,7 @@ public class QqchTaxInController extends BaseController {
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.3属地账收入明细" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, QqchTaxIn qqchTaxInParam) throws IOException {
         List<QqchTaxIn> qqchTaxInList = qqchTaxInService.getQqchTaxInList(qqchTaxInParam);
         ExcelUtils<QqchTaxIn> util = new ExcelUtils<>(QqchTaxIn.class);
@@ -95,6 +102,7 @@ public class QqchTaxInController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchTaxIn:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.3属地账收入明细" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchTaxIn qqchTaxInParam) {
         CompileEntity<TaxInVO> qqchTaxInList = qqchTaxInService.list(qqchTaxInParam);
         return AjaxResult.success(qqchTaxInList);
@@ -102,6 +110,7 @@ public class QqchTaxInController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchTaxIn:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-财务策划-10.3属地帐税务策划", name = "10.3.3属地账收入明细" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<TaxInVO> qqchTaxInParam) {
         qqchTaxInService.save(qqchTaxInParam);
         return AjaxResult.success(qqchTaxInParam);

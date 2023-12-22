@@ -10,6 +10,8 @@ import com.hhwy.pm.qqch.preparation.quality.emp.domain.QqchEmpItem;
 import com.hhwy.pm.qqch.preparation.quality.emp.service.IQqchEmpItemService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -39,6 +41,7 @@ public class QqchEmpItemController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchEmpItem:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-9.4重难点工程", name = "9.4.3重难点工程检查项" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getList(@Validated(ValidationGroups.Select.class) QqchEmpItem qqchEmpItemParam) {
         startPage();
         List<QqchEmpItem> qqchEmpItemList = qqchEmpItemService.getQqchEmpItemList(qqchEmpItemParam);
@@ -47,6 +50,7 @@ public class QqchEmpItemController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchEmpItem:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-9.4重难点工程", name = "9.4.3重难点工程检查项" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody CompileEntity<List<List<QqchEmpItem>>> dto) {
       
         qqchEmpItemService.save(dto);
@@ -71,6 +75,7 @@ public class QqchEmpItemController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchEmpItem:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-9.4重难点工程", name = "9.4.3重难点工程检查项" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchEmpItemList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchEmpItem> qqchEmpItemListParam) {
         qqchEmpItemService.insertQqchEmpItemList(qqchEmpItemListParam);
         return AjaxResult.success(qqchEmpItemListParam);
@@ -78,6 +83,7 @@ public class QqchEmpItemController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchEmpItem:update")
     @PostMapping("/update")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-9.4重难点工程", name = "9.4.3重难点工程检查项" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateQqchEmpItem(@Validated(ValidationGroups.Update.class) @RequestBody QqchEmpItem qqchEmpItemParam) {
         return toAjax(qqchEmpItemService.updateQqchEmpItem(qqchEmpItemParam));
     }
@@ -90,6 +96,7 @@ public class QqchEmpItemController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchEmpItem:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-9.4重难点工程", name = "9.4.3重难点工程检查项" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteQqchEmpItem(@Validated(ValidationGroups.Delete.class) @RequestBody QqchEmpItem qqchEmpItemParam) {
         return toAjax(qqchEmpItemService.deleteQqchEmpItem(qqchEmpItemParam));
     }
@@ -102,6 +109,7 @@ public class QqchEmpItemController extends BaseController {
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-质量策划-9.4重难点工程", name = "9.4.3重难点工程检查项" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, QqchEmpItem qqchEmpItemParam) throws IOException {
         List<QqchEmpItem> qqchEmpItemList = qqchEmpItemService.getQqchEmpItemList(qqchEmpItemParam);
         ExcelUtils<QqchEmpItem> util = new ExcelUtils<>(QqchEmpItem.class);

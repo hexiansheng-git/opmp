@@ -12,6 +12,8 @@ import com.hhwy.pm.qqch.wzch.approach.domain.WzchPriorApproach;
 import com.hhwy.pm.qqch.wzch.approach.service.IWzchPriorApproachService;
 import com.hhwy.pm.qqch.wzch.approach.vo.WzchPriorApproachAddResponse;
 import com.hhwy.pm.qqch.wzch.approach.vo.WzchPriorApproachExportRequest;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +43,7 @@ public class WzchPriorApproachController extends BaseController {
 
 //    @PreAuthorize(hasPermi ="wzch:approach:list")
     @PostMapping("/list")
-//    @CustomLogger(title = "优先进场物资-列表查询",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.3优先进场物资台账" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchPriorApproach wzchPriorApproach) {
         //分页
         startPage();
@@ -59,6 +61,7 @@ public class WzchPriorApproachController extends BaseController {
      */
 //    @CustomLogger(title = "优先进场物资-导出",businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.3优先进场物资台账" ,businessType = CustomBusinessType.EXPORT)
     public void export(@RequestBody WzchPriorApproachExportRequest request, HttpServletResponse response) {
         try {
             List<WzchPriorApproach> list = wzchPriorApproachService.exportData(request);
@@ -120,6 +123,7 @@ public class WzchPriorApproachController extends BaseController {
 //    @PreAuthorize(hasPermi ="wzch:approach:edit")
 //    @CustomLogger(title = "优先进场物资-编辑",businessType = CustomBusinessType.SELECT)
     @PostMapping("/detail")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.3优先进场物资台账" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult detail(@RequestBody WzchPriorApproach approach) {
         try{
             WzchPriorApproach wzchPriorApproach = wzchPriorApproachService.detail(approach);

@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.doc.techmae.domain.QqchDocTechMae;
 import com.hhwy.pm.qqch.preparation.doc.techmae.domain.QqchDocTechMaeV0;
 import com.hhwy.pm.qqch.preparation.doc.techmae.service.IQqchDocTechMaeService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -32,6 +34,7 @@ public class QqchDocTechMaeController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchDocTechMae:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-3.8施工技术文件资料", name = "技术材料清单" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchDocTechMaeList(BigDecimal version) {
         QqchDocTechMaeV0 qqchDocTechVo = qqchDocTechMaeService.geteQqchDocTechMaeVo(version);
         return AjaxResult.success(qqchDocTechVo);
@@ -45,6 +48,7 @@ public class QqchDocTechMaeController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchDocTech:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-3.8施工技术文件资料", name = "技术材料清单" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertQqchDocTech(@Validated(ValidationGroups.Update.class) @RequestBody QqchDocTechMaeV0 qqchDocTechParam) {
         try {
             return AjaxResult.success(qqchDocTechMaeService.inserteQqchDocTechMaeVo(qqchDocTechParam));
@@ -66,6 +70,7 @@ public class QqchDocTechMaeController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchDocTech:add")
     @PostMapping("/importData")
+    @CustomLogger(title = "前期策划-前期策划编制-3.8施工技术文件资料", name = "技术材料清单" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file) {
 
         FtExcelUtil<QqchDocTechMae> excelUtil = new FtExcelUtil<>(QqchDocTechMae.class);

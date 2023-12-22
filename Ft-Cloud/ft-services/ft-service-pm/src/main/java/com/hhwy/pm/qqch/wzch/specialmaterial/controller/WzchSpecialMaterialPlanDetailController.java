@@ -16,6 +16,8 @@ import com.hhwy.pm.qqch.wzch.specialmaterial.domain.WzchSpecialMaterialPlanDetai
 import com.hhwy.pm.qqch.wzch.specialmaterial.domain.WzchSpecialMaterialRequestDetail;
 import com.hhwy.pm.qqch.wzch.specialmaterial.service.IWzchSpecialMaterialPlanDetailService;
 import com.hhwy.pm.qqch.wzch.specialmaterial.service.IWzchSpecialMaterialRequestDetailService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,7 @@ public class WzchSpecialMaterialPlanDetailController extends BaseController {
     /**
      * 导出专项物资发运策划-发运策划列表
      */
-//    @CustomLogger(title = "专项物资发运策划-列表查询",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.3专项物资发运策划" ,businessType = CustomBusinessType.EXPORT)
     // @PreAuthorize(hasPermi ="wzch:transportPlan:export")
     @PostMapping("/export")
     @ResponseBody
@@ -64,7 +66,7 @@ public class WzchSpecialMaterialPlanDetailController extends BaseController {
      * 当地运输方案策划详情导入
      */
     // @PreAuthorize(hasPermi ="wzch:transportPlan:import")
-//    @CustomLogger(title = "专项物资发运策划-发运策划-导入",businessType = CustomBusinessType.IMPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.3专项物资发运策划" ,businessType = CustomBusinessType.IMPORT)
     @PostMapping("/import")
     public AjaxResult importPlanDetail(MultipartFile file) {
         try{
@@ -84,7 +86,7 @@ public class WzchSpecialMaterialPlanDetailController extends BaseController {
      * 导出专项物资发运策划-发运要求
      */
     // @PreAuthorize(hasPermi ="wzch:transportPlan:import")
-//    @CustomLogger(title = "项物资发运策划-发运要求-导出",businessType = CustomBusinessType.IMPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.3专项物资发运策划" ,businessType = CustomBusinessType.EXPORT)
     @PostMapping("/request/export")
     public void exportRequestDetail(@RequestBody List<WzchSpecialMaterialRequestDetail> list, HttpServletResponse response) {
         try{
@@ -106,7 +108,7 @@ public class WzchSpecialMaterialPlanDetailController extends BaseController {
      * 专项物资发运策划-发运要求-导入
      */
     // @PreAuthorize(hasPermi ="wzch:transportPlan:export")
-//    @CustomLogger(title = "专项物资发运策划-发运要求-导入",businessType = CustomBusinessType.IMPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.3专项物资发运策划" ,businessType = CustomBusinessType.IMPORT)
     @PostMapping("/request/import")
     public AjaxResult importRequestDetail(MultipartFile file) {
         try{
@@ -127,7 +129,7 @@ public class WzchSpecialMaterialPlanDetailController extends BaseController {
      * 专项物资发运策划-发运要求-保存
      */
     // @PreAuthorize(hasPermi ="wzch:transportPlan:save")
-//    @CustomLogger(title = "专项物资发运策划-发运策划-保存",businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.3专项物资发运策划" ,businessType = CustomBusinessType.SAVE)
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody WzchSpecialMaterialPlan wzchSpecialMaterialPlan) {
         try{

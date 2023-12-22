@@ -8,6 +8,8 @@ import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.domain.QqchMeasureExpPlan;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.service.IQqchMeasureExpPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -46,6 +48,7 @@ public class QqchMeasureExpPlanController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:list")
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-3.6测量管理计划", name = "3.6.2测量工作计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchMeasureExpPlanList(@Validated(ValidationGroups.Select.class) QqchMeasureExpPlan qqchMeasureExpPlanParam) {
         CompileEntity res = new CompileEntity<>();
         List<QqchMeasureExpPlan> qqchMeasureExpPlanList = qqchMeasureExpPlanService.getQqchMeasureExpPlanListByVersion(qqchMeasureExpPlanParam);
@@ -80,6 +83,7 @@ public class QqchMeasureExpPlanController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-3.6测量管理计划", name = "3.6.2测量工作计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchMeasureExpPlan>> map) {
         qqchMeasureExpPlanService.saveTree(map);
         return AjaxResult.success("操作成功");
@@ -114,6 +118,7 @@ public class QqchMeasureExpPlanController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "前期策划-前期策划编制-3.6测量管理计划", name = "3.6.2测量工作计划" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteQqchMeasureExpPlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchMeasureExpPlan qqchMeasureExpPlanParam) {
         return toAjax(qqchMeasureExpPlanService.deleteQqchMeasureExpPlan(qqchMeasureExpPlanParam));
     }
@@ -126,6 +131,7 @@ public class QqchMeasureExpPlanController extends BaseController {
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-3.6测量管理计划", name = "3.6.2测量工作计划" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, QqchMeasureExpPlan qqchMeasureExpPlanParam) throws IOException {
         List<QqchMeasureExpPlan> qqchMeasureExpPlanList = qqchMeasureExpPlanService.getQqchMeasureExpPlanList(qqchMeasureExpPlanParam);
         ExcelUtils<QqchMeasureExpPlan> util = new ExcelUtils<>(QqchMeasureExpPlan.class);

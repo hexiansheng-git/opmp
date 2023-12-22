@@ -9,6 +9,8 @@ import com.hhwy.pm.qqch.wzch.fund.domain.WzchFund;
 import com.hhwy.pm.qqch.wzch.fund.domain.WzchFundDetail;
 import com.hhwy.pm.qqch.wzch.fund.dto.WzchFundDTO;
 import com.hhwy.pm.qqch.wzch.fund.service.IWzchFundService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -52,7 +54,7 @@ public class WzchFundController extends BaseController {
      * 新增 编辑 详情数据回显
      */
     @GetMapping("baseInfo")
-//    @CustomLogger(title = "新增 编辑 详情数据回显", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.7资金策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult baseInfo(@RequestParam(required = false) WzchFundDTO dto) {
         return AjaxResult.success(wzchFundService.baseInfo(dto==null?new WzchFundDTO():dto));
     }
@@ -63,7 +65,7 @@ public class WzchFundController extends BaseController {
      * 导出资金策划列表
      */
     @PostMapping("/export")
-//    @CustomLogger(title = "导出资金策划列表", businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.7资金策划" ,businessType = CustomBusinessType.EXPORT)
     public void export(WzchFund wzchFund, HttpServletResponse response) {
         try {
             List<WzchFund> list = wzchFundService.selectWzchFundList(wzchFund);
@@ -80,7 +82,7 @@ public class WzchFundController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:fund:add")
     @PostMapping("/add")
-//    @CustomLogger(title = "新增保存资金策划", businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.7资金策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody WzchFundDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchFundService.insert(dto)));
     }
@@ -91,7 +93,7 @@ public class WzchFundController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:fund:edit")
     @PostMapping("/edit")
-//    @CustomLogger(title = "修改保存资金策划", businessType = CustomBusinessType.UPDATE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.7资金策划" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchFundDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchFundService.edit(dto)));
     }
@@ -100,6 +102,7 @@ public class WzchFundController extends BaseController {
      * 删除资金策划
      */
     @PostMapping("/remove")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.7资金策划" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult remove(@RequestBody Map<String, String> params) {
         String ids = params.get("ids");
         return toAjax(wzchFundService.deleteWzchFundByIds(ids));
@@ -107,7 +110,7 @@ public class WzchFundController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "wzch:fund:save")
     @PostMapping("/save")
-//    @CustomLogger(title = "修改保存资金策划", businessType = CustomBusinessType.UPDATE)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.7资金策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody WzchFundDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchFundService.save(dto)));
     }
@@ -117,7 +120,7 @@ public class WzchFundController extends BaseController {
      * 导出资金策划详情
      */
     @PostMapping("detail/export")
-//    @CustomLogger(title = "导出资金策划详情", businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.7资金策划" ,businessType = CustomBusinessType.EXPORT)
     public void exportDetail(@Validated(ValidationGroups.Other.class) @RequestBody Map<String, List<WzchFundDetail>> params, HttpServletResponse response) {
         try {
             List<WzchFundDetail> wzchFundDetails = params.get("detailList");
@@ -131,7 +134,7 @@ public class WzchFundController extends BaseController {
 
 
     @PostMapping("detail/importData")
-//    @CustomLogger(title = "导入周转材料详情列表", businessType = CustomBusinessType.IMPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.7资金策划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, @RequestParam Map map) {
         try {
             FtExcelUtil<WzchFundDetail> util = new FtExcelUtil<>(WzchFundDetail.class);

@@ -15,6 +15,8 @@ import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpRang
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureOrgService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
+/**list
  * 3.6.1 测量工作
  * @author mls
  * @date 2023-07-25 18:01:34
@@ -62,6 +64,7 @@ public class QqchMeasureExpRangeController extends BaseController {
     }
 
     @GetMapping("/list")
+    @CustomLogger(title = "前期策划-前期策划编制-3.6测量管理计划", name = "3.6.1测量工作概述" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchMeasureExpRangeList(@Validated(ValidationGroups.Select.class) QqchMeasureExpRange dto) {
         Map<String, Object> res = new HashMap<>();
         CompileEntity compileEntity = new CompileEntity();
@@ -91,6 +94,7 @@ public class QqchMeasureExpRangeController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchMeasureExpRange:add")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划-前期策划编制-3.6测量管理计划", name = "3.6.1测量工作概述" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpDTO expVO) {
         measureService.saveAll(expVO);
         return AjaxResult.success("操作成功");
@@ -137,6 +141,7 @@ public class QqchMeasureExpRangeController extends BaseController {
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "前期策划-前期策划编制-3.6测量管理计划", name = "3.6.1测量工作概述" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, QqchMeasureExpRange qqchMeasureExpRangeParam) throws IOException {
         List<QqchMeasureExpRange> qqchMeasureExpRangeList = qqchMeasureExpRangeService.getQqchMeasureExpRangeList(qqchMeasureExpRangeParam);
         ExcelUtils<QqchMeasureExpRange> util = new ExcelUtils<>(QqchMeasureExpRange.class);

@@ -12,6 +12,8 @@ import com.hhwy.pm.qqch.wzch.survey.domain.WzchImportExportSurvey;
 import com.hhwy.pm.qqch.wzch.survey.service.IWzchImportExportSurveyService;
 import com.hhwy.pm.qqch.wzch.survey.vo.WzchImportExportSurveyAddResponse;
 import com.hhwy.utils.common.PmsConstant;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +40,7 @@ public class WzchImportExportSurveyController extends BaseController {
      */
 //    @PreAuthorize(hasPermi ="wzch:survey:list")
     @PostMapping("/list")
-//    @CustomLogger(title = "口调查列表-列表查询",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.1进出口调查" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@RequestBody WzchImportExportSurvey wzchImportExportSurvey) {
         startPage();
         List<WzchImportExportSurvey> list = wzchImportExportSurveyService.selectWzchImportExportSurveyList(wzchImportExportSurvey);
@@ -52,7 +54,7 @@ public class WzchImportExportSurveyController extends BaseController {
 
 //    @PreAuthorize(hasPermi ="wzch:survey:add")
     @GetMapping("/add")
-//    @CustomLogger(title = "口调查列表-新增",businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.1进出口调查" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult add() {
         WzchImportExportSurveyAddResponse wzchImportExportSurveyAddResponse = new WzchImportExportSurveyAddResponse();
         wzchImportExportSurveyAddResponse.setId(IdWorker.createId());
@@ -64,7 +66,7 @@ public class WzchImportExportSurveyController extends BaseController {
     /**
      * 导出进出口调查列表
      */
-//    @CustomLogger(title = "进出口调查-导出",businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.1进出口调查" ,businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@RequestBody WzchImportExportSurvey wzchImportExportSurvey, HttpServletResponse response) {
         try{
@@ -84,6 +86,7 @@ public class WzchImportExportSurveyController extends BaseController {
 //    @PreAuthorize(hasPermi ="wzch:survey:edit")
 //    @CustomLogger(title = "进出口调查-编辑",businessType = CustomBusinessType.SELECT)
     @PostMapping("/edit")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.1进出口调查" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult edit(@RequestBody WzchImportExportSurvey wzchImportExportSurvey) {
         try{
             WzchImportExportSurvey survey = wzchImportExportSurveyService.edit(wzchImportExportSurvey);
@@ -103,6 +106,7 @@ public class WzchImportExportSurveyController extends BaseController {
 //    @PreAuthorize(hasPermi ="wzch:survey:detail")
 //    @CustomLogger(title = "进出口调查-详情",businessType = CustomBusinessType.SELECT)
     @PostMapping("/detail")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.1进出口调查" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult detail(@RequestBody WzchImportExportSurvey wzchImportExportSurvey) {
         try{
             WzchImportExportSurvey survey = wzchImportExportSurveyService.edit(wzchImportExportSurvey);
@@ -121,8 +125,8 @@ public class WzchImportExportSurveyController extends BaseController {
      * 删除进出口调查
      */
 //    @PreAuthorize(hasPermi ="wzch:survey:remove")
-//    @CustomLogger(title = "进出口调查-删除",businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.3物流运输策划", name = "6.3.1进出口调查" ,businessType = CustomBusinessType.DELETE)
     @ResponseBody
     public AjaxResult remove(@RequestBody WzchImportExportSurvey wzchImportExportSurvey) {
           if(wzchImportExportSurvey==null || wzchImportExportSurvey.getId()==null){
