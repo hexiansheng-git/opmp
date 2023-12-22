@@ -112,7 +112,7 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
         KcsjOrganManage kcsjOrganManage = new KcsjOrganManage();
 
         kcsjOrganManage.setId(id);
-        kcsjOrganManage.setActualEnterDate(enterDate);
+//        kcsjOrganManage.setActualEnterDate(enterDate);
         kcsjOrganManage.setActualExitDate(leaveDate);
         if(leaveDate == null && enterDate != null) {
             kcsjOrganManage.setWorkOrNot("1");
@@ -132,7 +132,14 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
         List<KcsjOrganManage> updateList = new ArrayList<>();
 
         List<KcsjOrganManage> kcsjOrganManages = TreeUtil.treeToListSupplyId(kcsjOrganManageList);
+        int validNum = 0;
         for (KcsjOrganManage kcsjOrganManage : kcsjOrganManages) {
+            if(StringUtils.isNotEmpty(kcsjOrganManage.getUserName()) && kcsjOrganManage.getActualEnterDate() == null) {
+                validNum ++;
+            }
+            if(StringUtils.isEmpty(kcsjOrganManage.getPostName()) && StringUtils.isEmpty(kcsjOrganManage.getUserName())) {
+                validNum ++;
+            }
             if("1".equals(kcsjOrganManage.getIsAdd())) {
                 kcsjOrganManage.setCreateUser(SecurityUtils.getSysUser().getNickName());
                 kcsjOrganManage.setCreateTime(DateUtils.getNowDate());
@@ -143,6 +150,9 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
                 kcsjOrganManage.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(kcsjOrganManage);
             }
+        }
+        if(validNum > 0) {
+            throw new RuntimeException("必填字段为空!");
         }
         int i = 0;
         if(CollectionUtils.isNotEmpty(updateList)) {
