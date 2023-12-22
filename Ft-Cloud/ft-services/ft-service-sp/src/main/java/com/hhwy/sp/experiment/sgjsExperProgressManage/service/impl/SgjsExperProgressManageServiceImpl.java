@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -176,7 +177,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             SgjsExperProgressManage sgjsExperProgressManage = new SgjsExperProgressManage();
             sgjsExperProgressManage.setExperimentalWorkItems(map.get("workItem") == null ? null : (String) map.get("workItem"));
             sgjsExperProgressManage.setMeasureUnit(map.get("unit") == null ? null : (String) map.get("unit"));
-            sgjsExperProgressManage.setWorkload(map.get("workload") == null ? null :  map.get("workload"));
+            sgjsExperProgressManage.setWorkload(map.get("workload") == null ? null : (BigDecimal) map.get("workload"));
             sgjsExperProgressManage.setPlanStartDate(map.get("planBeginDate") == null ? null : FtDateUtils.parseDate(map.get("planBeginDate")));
             sgjsExperProgressManage.setPlanEndDate(map.get("planEndDate") == null ? null : FtDateUtils.parseDate(map.get("planEndDate")));
             sgjsExperProgressManage.setRemark(map.get("remark") == null ? null : map.get("remark").toString());
@@ -203,7 +204,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             SgjsExperProgressManage sgjsExperProgressManage = new SgjsExperProgressManage();
             sgjsExperProgressManage.setExperimentalWorkItems(children.get(i).get("workItem") == null ? null : children.get(i).get("workItem").toString());
             sgjsExperProgressManage.setMeasureUnit(children.get(i).get("unit") == null ? null : children.get(i).get("unit").toString());
-            sgjsExperProgressManage.setWorkload(children.get(i).get("workload") == null ? null : children.get(i).get("workload"));
+            sgjsExperProgressManage.setWorkload(children.get(i).get("workload") == null ? null : (BigDecimal)children.get(i).get("workload"));
             sgjsExperProgressManage.setPlanStartDate(children.get(i).get("planBeginDate") == null ? null : FtDateUtils.parseDate(children.get(i).get("planBeginDate")));
             sgjsExperProgressManage.setPlanEndDate(children.get(i).get("planEndDate") == null ? null : FtDateUtils.parseDate(children.get(i).get("planEndDate")));
             sgjsExperProgressManage.setRemark(children.get(i).get("remark") == null ? null : children.get(i).get("remark").toString());
