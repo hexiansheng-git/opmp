@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.StringUtils;
@@ -82,6 +83,7 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
         List<SgjsDiscloseRecord> updateList = new ArrayList<>();
 
         for (SgjsDiscloseRecord sgjsDiscloseRecord : sgjsDiscloseRecordList) {
+            sgjsDiscloseRecord.setDelFlag("0");
             if("1".equals(sgjsDiscloseRecord.getIsAdd())) {
                 addList.add(sgjsDiscloseRecord);
             } else {
@@ -153,6 +155,17 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
             sgjsDiscloseRecord.setDataType(dataType);
             String discloseName = sgjsDiscloseRecord.getDiscloseName();
             sgjsDiscloseRecord.setIsAdd("1");
+            String discloseLevel = sgjsDiscloseRecord.getDiscloseLevel();
+            if("一级交底".equals(discloseLevel)) {
+                discloseLevel = "1";
+            }
+            if("二级交底".equals(discloseLevel)) {
+                discloseLevel = "2";
+            }
+            if("三级交底".equals(discloseLevel)) {
+                discloseLevel = "3";
+            }
+            sgjsDiscloseRecord.setDiscloseLevel(discloseLevel);
             if(CollectionUtils.isNotEmpty(exists)) {
                 SgjsDiscloseRecord sgjsDiscloseRecord1 = exists.stream().filter(vo -> discloseName.equals(vo.getDiscloseName())).findFirst().orElse(null);
                 if(sgjsDiscloseRecord1 != null) {
