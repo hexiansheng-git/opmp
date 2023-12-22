@@ -1,5 +1,6 @@
 package com.hhwy.sp.sgjsDiscloseRecord.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -135,8 +136,11 @@ public class SgjsDiscloseRecordController extends BaseController {
         if(StringUtils.isEmpty(dataType)) {
             throw new RuntimeException("参数异常！");
         }
+        List<SgjsDiscloseRecord> sgjsDiscloseRecordList = sgjsDiscloseRecordParam.getExportList();
 
-        List<SgjsDiscloseRecord> sgjsDiscloseRecordList = sgjsDiscloseRecordService.getSgjsDiscloseRecordList(sgjsDiscloseRecordParam);
+        if(CollectionUtils.isEmpty(sgjsDiscloseRecordList)) {
+            sgjsDiscloseRecordList = sgjsDiscloseRecordService.getSgjsDiscloseRecordList(sgjsDiscloseRecordParam);
+        }
 
         if(CollectionUtils.isNotEmpty(sgjsDiscloseRecordList)) {
             sgjsDiscloseRecordList.stream().forEach(vo -> {

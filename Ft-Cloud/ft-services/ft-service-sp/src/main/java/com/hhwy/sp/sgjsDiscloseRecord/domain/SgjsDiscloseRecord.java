@@ -262,4 +262,7 @@ public class SgjsDiscloseRecord extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     private Date queryEndDate;
+
+    @JsonProperty
+    private List<SgjsDiscloseRecord> exportList;
 }
