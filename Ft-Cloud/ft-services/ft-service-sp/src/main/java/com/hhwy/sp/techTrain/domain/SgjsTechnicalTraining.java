@@ -125,7 +125,7 @@ public class SgjsTechnicalTraining extends CommonBaseEntity {
      * 字段描述：数据创建者名称,编制人用此字段表示
      */
     @JsonProperty
-//    @Excel(name = "数据创建者名称,编制人用此字段表示")
+    @Excel(name = "编制人")
     private String createUserName;
     /**
      * 字段描述：数据创建系统时间
