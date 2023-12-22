@@ -1,6 +1,7 @@
 package com.hhwy.sp.experiment.sgjsExperProgressManage.service.impl;
 
 
+import cn.hutool.core.date.DateTime;
 import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -140,7 +141,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
     @Override
     public SgjsExperProgressManageVo sync() {
 
-        sgjsExperProgressManageMapper.deleteAll();
+        //sgjsExperProgressManageMapper.deleteAll();
 
         SgjsExperProgressManageVo sgjsExperProgressManageVo = new SgjsExperProgressManageVo();
         List<SgjsExperProgressManage> treeToList = new ArrayList<>();
@@ -155,10 +156,16 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         List<LinkedHashMap<String, Object>> list = (List<LinkedHashMap<String, Object>>) data.get("dto");
 
         //递归处理同步数据，构建树形关系
-        digui(list, treeToList);
+        if (!CollectionUtils.isEmpty(list)){
+            digui(list, treeToList);
+        }
+
         //设置返回值
         sgjsExperProgressManageVo.setTreeList(treeToList);
-
+        SgjsExperProgressManage sgjsExperProgressManage=new SgjsExperProgressManage();
+        sgjsExperProgressManage.setUpdateTime(DateTime.now());
+        sgjsExperProgressManage.setUpdateUser(SecurityUtils.getUserId()+"");
+        sgjsExperProgressManageMapper.deleteAll();
         return sgjsExperProgressManageVo;
     }
 
@@ -197,6 +204,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             sgjsExperProgressManage.setWorkload(children.get(i).get("workload") == null ? null : children.get(i).get("workload").toString());
             sgjsExperProgressManage.setPlanStartDate(children.get(i).get("planBeginDate") == null ? null : FtDateUtils.parseDate(children.get(i).get("planBeginDate")));
             sgjsExperProgressManage.setPlanEndDate(children.get(i).get("planEndDate") == null ? null : FtDateUtils.parseDate(children.get(i).get("planEndDate")));
+            sgjsExperProgressManage.setRemark(children.get(i).get("remark") == null ? null : children.get(i).get("remark").toString());
             sgjsExperProgressManage.setId(IdWorker.createId());
             sgjsExperProgressManage.setPid(manage.getId());
             sgjsExperProgressManage.setSyncId(Long.parseLong(children.get(i).get("id").toString()));
