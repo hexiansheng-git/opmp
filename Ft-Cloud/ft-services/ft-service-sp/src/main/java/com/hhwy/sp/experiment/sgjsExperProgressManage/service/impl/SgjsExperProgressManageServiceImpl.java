@@ -177,8 +177,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             SgjsExperProgressManage sgjsExperProgressManage = new SgjsExperProgressManage();
             sgjsExperProgressManage.setExperimentalWorkItems(map.get("workItem") == null ? null : (String) map.get("workItem"));
             sgjsExperProgressManage.setMeasureUnit(map.get("unit") == null ? null : (String) map.get("unit"));
-            sgjsExperProgressManage.setWorkload(
-                Objects.equals(map.get("workload"), new BigDecimal(0)) ? null : new BigDecimal(map.get("workload").toString()));
+            sgjsExperProgressManage.setWorkload(Objects.equals(map.get("workload"), new BigDecimal(0)) ? null : new BigDecimal(map.get("workload").toString()));
             sgjsExperProgressManage.setPlanStartDate(map.get("planBeginDate") == null ? null : FtDateUtils.parseDate(map.get("planBeginDate")));
             sgjsExperProgressManage.setPlanEndDate(map.get("planEndDate") == null ? null : FtDateUtils.parseDate(map.get("planEndDate")));
             sgjsExperProgressManage.setRemark(map.get("remark") == null ? null : map.get("remark").toString());
@@ -393,10 +392,11 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
 
         //获取子级所有数据
         List<Long> out = handleTotalData(ids);
-        //查询数据
-        List<SgjsExperProgressManage> sgjsExperProgressManages = sgjsExperProgressManageMapper.getIds(out);
-        total.addAll(sgjsExperProgressManages);
-
+        if (out.size()>0){
+            //查询数据
+            List<SgjsExperProgressManage> sgjsExperProgressManages = sgjsExperProgressManageMapper.getIds(out);
+            total.addAll(sgjsExperProgressManages);
+        }
         return total;
     }
 }
