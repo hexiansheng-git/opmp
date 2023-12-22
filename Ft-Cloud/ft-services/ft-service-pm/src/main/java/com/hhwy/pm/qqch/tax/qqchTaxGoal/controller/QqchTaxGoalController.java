@@ -12,6 +12,7 @@ import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -110,6 +111,9 @@ public class QqchTaxGoalController extends BaseController {
     public AjaxResult importData(@RequestParam("file") MultipartFile file) throws Exception {
         FtExcelUtil<QqchTaxGoal> excelUtil = new FtExcelUtil<>(QqchTaxGoal.class);
         List<QqchTaxGoal> qqchTaxGoals = excelUtil.importExcel(file.getInputStream(), 3);
+        for (int i = 0; i < qqchTaxGoals.size(); i++) {
+            qqchTaxGoals.get(i).setId(IdWorker.createId());
+        }
         return AjaxResult.success(qqchTaxGoals);
     }
 }
