@@ -22,6 +22,16 @@ import java.util.List;
 public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     private static final long serialVersionUID = 1L;
 
+    //节点查询
+    private String[] paths;
+
+    public String[] getPaths() {
+        return paths;
+    }
+
+    public void setPaths(String[] paths) {
+        this.paths = paths;
+    }
 
     private List<String> pathList;
 
@@ -281,5 +291,8 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
 
     //实际开始日期范围字符串
     private String realStartDateStr;
+
+
+
 
 }
