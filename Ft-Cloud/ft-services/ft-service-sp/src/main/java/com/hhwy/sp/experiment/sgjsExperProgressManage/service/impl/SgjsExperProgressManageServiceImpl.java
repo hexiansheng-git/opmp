@@ -249,7 +249,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
 
     private void handleUpdate(List<SgjsExperProgressManage> treeToList) {
         //批量编辑
-        List<SgjsExperProgressManage> updateList = treeToList.stream().filter(p -> StringUtils.isNotEmpty(p.getType()) && (!p.getType().equals("0"))).collect(Collectors.toList());
+        List<SgjsExperProgressManage> updateList = treeToList.stream().filter(p -> StringUtils.isEmpty(p.getType())).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(updateList)) {
             List<SgjsExperProgressManage> newUpdateList = new ArrayList<>();
             for (int i = 0; i < updateList.size(); i++) {
