@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -85,75 +84,37 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         //查询符合条件的数据
         List<SgjsExperProgressManage> sgjsExperProgressManageList = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(sgjsTechnicalManage);
 
+
         List<SgjsExperProgressManage> list = new ArrayList<>();
         if (sgjsExperProgressManageList.size() > 0) {
-            sgjsExperProgressManageList.forEach(exper -> {
-                String start1 = exper.getPlanStartDate1() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(exper.getPlanStartDate1());
-                String start2 = exper.getPlanStartDate2() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(exper.getPlanStartDate2());
-                exper.setPlanStartDateStr(start1+start2);
-                String end1 = exper.getRealStartDate1() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(exper.getRealStartDate1());
-                String end2 = exper.getRealStartDate2() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(exper.getRealStartDate2());
-                exper.setRealStartDateStr(end1+end2);
-            });
+
             List<SgjsExperProgressManage> list1 = sgjsExperProgressManageList.stream().filter(p -> StringUtils.isNotEmpty(p.getPid().toString()) && !p.getPid().toString().equals("0")).collect(Collectors.toList());
             if(list1.size()>0){
-                SgjsExperProgressManage sgjsExperProgressManage = new SgjsExperProgressManage();
+                List<String> data=new ArrayList<>();
+                SgjsExperProgressManage sgjsPlanMeasureManage1 = new SgjsExperProgressManage();
                 for (int i = 0; i < list1.size(); i++) {
-                    String[] split = list1.get(i).getPath().split("/");
-                    sgjsExperProgressManage.setPaths(split);
-                    List<SgjsExperProgressManage> sgjsPlanMeasureManage2 = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(sgjsExperProgressManage);
-                    sgjsExperProgressManageList.addAll(sgjsPlanMeasureManage2);
+                    if(StringUtils.isEmpty(list1.get(i).getPath())){
+                        continue;
+                    }
+                    if(list1.get(i).getPath().contains("/")){
+                        String[] split = list1.get(i).getPath().split("/");
+                        List allPath = Arrays.asList(split);
+                        data.addAll(allPath);
+                    }else{
+                        data.add(list1.get(i).getPath());
+                    }
                 }
+                sgjsPlanMeasureManage1.setPaths(data);
+                List<SgjsExperProgressManage> sgjsExperProgressManages = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(sgjsPlanMeasureManage1);
+                sgjsExperProgressManageList.addAll(sgjsExperProgressManages);
             }
             List<SgjsExperProgressManage> collect = sgjsExperProgressManageList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(SgjsExperProgressManage::getId))), ArrayList::new));
             list = collect.stream().sorted(Comparator.comparing(SgjsExperProgressManage::getSerialNumber)).collect(Collectors.toList());
         }
         vo.setTreeList(TreeUtil.newBuild(list));
         return vo;
-
-
-//        //组合显示根节点
-//        List<SgjsExperProgressManage> handleData = handleData(sgjsExperProgressManageList);
-//        List<SgjsExperProgressManage> manages =TreeUtil.newBuild(handleData) ;
-//        vo.setTreeList(manages);
-//        return vo;
     }
 
-
-
-    /**
-     * 查询子节点的根节点
-     *
-     * @param list
-     * @return
-     */
-    public List<SgjsExperProgressManage> handleData(List<SgjsExperProgressManage> list){
-        List<String> data=new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            String path = list.get(i).getPath();
-            if(StringUtils.isEmpty(path)){
-                continue;
-            }
-            if(path.contains("/")){
-                String[] split = path.split("/");
-                List allPath = Arrays.asList(split);
-                data.addAll(allPath);
-            }else{
-                data.add(path);
-            }
-        }
-        List<SgjsExperProgressManage> manageList=new ArrayList<>();
-        if(!CollectionUtils.isEmpty(data)){
-            SgjsExperProgressManage info=new SgjsExperProgressManage();
-            info.setPathList(data);
-            manageList = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(info);
-//            for (int i = 0; i < manageList.size(); i++) {
-//                SgjsExperProgressManage manage = manageList.get(i);
-//                manage.setActualDateStr(FtDateUtils.formatDate(manage.getActualDate()));
-//            }
-        }
-        return manageList;
-    }
 
 
     @Transactional

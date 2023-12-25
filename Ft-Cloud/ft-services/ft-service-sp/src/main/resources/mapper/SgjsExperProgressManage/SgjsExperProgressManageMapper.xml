@@ -211,12 +211,7 @@
                     #{id}
                 </foreach>
             </if>
-<!--            <if test="null!=pathList and pathList.size()>0">-->
-<!--                and id in-->
-<!--                <foreach collection="pathList" open="(" separator="," close=")" item="path">-->
-<!--                    #{path}-->
-<!--                </foreach>-->
-<!--            </if>-->
+
         </where>
 
     </select>
