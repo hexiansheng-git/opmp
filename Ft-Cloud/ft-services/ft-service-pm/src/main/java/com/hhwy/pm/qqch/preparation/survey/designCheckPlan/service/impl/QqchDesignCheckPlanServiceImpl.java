@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.designCheckPlan.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
@@ -92,6 +93,9 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
 
 
     private void insertQqchDesignCheckPlanList(List<QqchDesignCheckPlan> qqchDesignCheckPlanList, BigDecimal version) {
+        if (CollectionUtil.isEmpty(qqchDesignCheckPlanList)) {
+            return;
+        }
         for (QqchDesignCheckPlan qqchDesignCheckPlan : qqchDesignCheckPlanList) {
             qqchDesignCheckPlan.setId(IdWorker.createId());
             qqchDesignCheckPlan.setVersion(version);
