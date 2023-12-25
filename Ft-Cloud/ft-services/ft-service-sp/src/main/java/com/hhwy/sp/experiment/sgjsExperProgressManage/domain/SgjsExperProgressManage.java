@@ -21,7 +21,12 @@ import java.util.List;
 @Data
 public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     private static final long serialVersionUID = 1L;
-
+    /**
+     * 字段描述： 序号
+     */
+    @JsonProperty
+    @Excel(name = "序号"    )
+    private String serialNumber;
     //节点查询
     private String[] paths;
 
@@ -232,12 +237,7 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     private String ptVar5;
 
 
-    /**
-     * 字段描述： 序号
-     */
-    @JsonProperty
-//    @Excel(name = "序号"    )
-    private String serialNumber;
+
 
 
     /**
