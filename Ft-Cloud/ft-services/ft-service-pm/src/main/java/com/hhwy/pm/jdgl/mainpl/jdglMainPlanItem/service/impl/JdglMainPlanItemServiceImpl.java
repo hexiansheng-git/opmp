@@ -305,7 +305,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
     @Override
     public List<JdglMainPlanItem> getUsingJdglMainPlanItemListByDateRange(Date startDate, Date endDate) {
         Long mainPlanId = 0l;
-        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlanNoItem();
         if(usingJdglMainPlan != null) {
             mainPlanId = usingJdglMainPlan.getId();
         }
@@ -314,7 +314,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
 
     public JdglMainPlanItem getMaxActualStartDate() {
         Long mainPlanId = 0l;
-        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlanNoItem();
         if(usingJdglMainPlan != null) {
             mainPlanId = usingJdglMainPlan.getId();
         }
@@ -424,7 +424,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
      */
     @Override
     public JdglMainPlanItem getProjStartAndFinish() {
-        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlanNoItem();
         if(usingJdglMainPlan == null) {
             return null;
         }
@@ -474,7 +474,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
             return null;
         }
 
-        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlanNoItem();
 
         if(usingJdglMainPlan == null) {
             return null;
