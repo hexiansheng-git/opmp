@@ -211,4 +211,6 @@ public class SbchTotalDemandPlanDetail extends CommonBaseEntity {
     private Integer pageNum;
 
     private Integer pageSize;
+
+    private BigDecimal version;
 }

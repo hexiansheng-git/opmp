@@ -66,7 +66,7 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
 
     @Override
     public SbchTotalDemandPlan getLeaderList(SbchTotalDemandPlanDetail param) {
-        return this.getSbchTotalDemandPlan(null, param);
+        return this.getSbchTotalDemandPlan(param.getVersion(), param);
     }
 
     private SbchTotalDemandPlan getSbchTotalDemandPlan(BigDecimal version, SbchTotalDemandPlanDetail param) {
