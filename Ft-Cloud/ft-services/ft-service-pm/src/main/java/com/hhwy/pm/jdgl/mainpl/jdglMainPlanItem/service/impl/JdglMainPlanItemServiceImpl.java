@@ -406,7 +406,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
             throw new RuntimeException("参数异常!");
         }
 
-        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlanNoItem();
 
         if(usingJdglMainPlan != null) {
             jdglMainPlanItemParam.setMainPlanId(usingJdglMainPlan.getId());
