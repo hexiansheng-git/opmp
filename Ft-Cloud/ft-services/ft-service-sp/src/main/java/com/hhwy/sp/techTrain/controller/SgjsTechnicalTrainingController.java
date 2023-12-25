@@ -36,7 +36,7 @@ public class SgjsTechnicalTrainingController extends BaseController {
      * @param sgjsTechnicalTrainingParam
      * @return
      */
-    @PreAuthorize(hasPermi = "sgjsTechnicalTraining:list")
+    @PreAuthorize(hasPermi = "sgjsTechnicalTraining:select")
     @GetMapping
     public AjaxResult getSgjsTechnicalTraining(@Validated(ValidationGroups.Get.class) SgjsTechnicalTraining sgjsTechnicalTrainingParam) {
         SgjsTechnicalTraining sgjsTechnicalTraining = sgjsTechnicalTrainingService.getSgjsTechnicalTraining(sgjsTechnicalTrainingParam);
@@ -114,7 +114,6 @@ public class SgjsTechnicalTrainingController extends BaseController {
     @PreAuthorize(hasPermi = "sgjsTechnicalTraining:report")
     @PostMapping("/export")
     public void export(HttpServletResponse response, @RequestBody SgjsTechnicalTraining sgjsTechnicalTrainingParam) throws IOException {
-
 
         List<Long> ids = sgjsTechnicalTrainingParam.getIds();
         List<SgjsTechnicalTraining> list=null;

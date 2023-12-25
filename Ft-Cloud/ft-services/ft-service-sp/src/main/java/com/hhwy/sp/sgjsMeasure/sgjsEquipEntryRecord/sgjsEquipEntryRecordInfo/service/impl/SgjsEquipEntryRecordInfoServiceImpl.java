@@ -65,14 +65,17 @@ public class SgjsEquipEntryRecordInfoServiceImpl implements ISgjsEquipEntryRecor
         }
         //详情表返回
         List<SgjsEquipEntryRecordInfo> infoList = sgjsEquipEntryRecordInfoMapper.getSgjsEquipEntryRecordInfoList(sgjsEquipEntryRecordInfo);
-        List<String> infoIdList = infoList.stream().map(e -> e.getId()+"").collect(Collectors.toList());
-        List<SgjsEquipEntryRecordInfoDetail> detailList = detailMapper.selectByInfoId(infoIdList);
-        for (int i = 0; i < infoList.size(); i++) {
-            SgjsEquipEntryRecordInfo info = infoList.get(i);
-            String infoId=info.getId()+"";
-            List<SgjsEquipEntryRecordInfoDetail> dList = detailList.stream().filter(e -> String.valueOf(e.getInfoId()).equals(infoId)).collect(Collectors.toList());
-            info.setDetailList(dList);
+        if(!CollectionUtils.isEmpty(infoList)){
+            List<String> infoIdList = infoList.stream().map(e -> e.getId()+"").collect(Collectors.toList());
+            List<SgjsEquipEntryRecordInfoDetail> detailList = detailMapper.selectByInfoId(infoIdList);
+            for (int i = 0; i < infoList.size(); i++) {
+                SgjsEquipEntryRecordInfo info = infoList.get(i);
+                String infoId=info.getId()+"";
+                List<SgjsEquipEntryRecordInfoDetail> dList = detailList.stream().filter(e -> String.valueOf(e.getInfoId()).equals(infoId)).collect(Collectors.toList());
+                info.setDetailList(dList);
+            }
         }
+
         return infoList;
     }
 

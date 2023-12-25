@@ -242,7 +242,7 @@ public class QqchConstServiceImpl implements IQqchConstService {
     public List<QqchConst> popUpWindows(QqchConst qqchConst) {
         List<QqchConst> resultList;
 
-        BigDecimal version = VersionUtil.getVersion(TN, null);
+        BigDecimal version = VersionUtil.getVersion(TN, qqchConst.getVersion());
         QqchConst query = new QqchConst();
         query.setVersion(version);
         //版本全量数据

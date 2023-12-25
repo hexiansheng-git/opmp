@@ -13,13 +13,11 @@ public interface SgjsPlanMeasureManageMapper {
 
     SgjsPlanMeasureManage getSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
-    List<SgjsPlanMeasureManage> getSgjsPlanMeasureManageList(
-        SgjsPlanMeasureManage sgjsPlanMeasureManage);
+    List<SgjsPlanMeasureManage> getSgjsPlanMeasureManageList(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
     int insertSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
-    int insertSgjsPlanMeasureManageList(
-        @Param("sgjsPlanMeasureManageList") List<SgjsPlanMeasureManage> sgjsPlanMeasureManageList);
+    int insertSgjsPlanMeasureManageList(@Param("sgjsPlanMeasureManageList") List<SgjsPlanMeasureManage> sgjsPlanMeasureManageList);
 
     int updateSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
@@ -27,9 +25,7 @@ public interface SgjsPlanMeasureManageMapper {
 
     int deleteSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage);
 
-    int deleteSgjsPlanMeasureManageByPks(
-        @Param("sgjsPlanMeasureManagePkList") List<Long> sgjsPlanMeasureManagePkList);
-
+    int deleteSgjsPlanMeasureManageByPks(@Param("sgjsPlanMeasureManagePkList") List<Long> sgjsPlanMeasureManagePkList);
 
     void deleteAll(@Param("delIdList") List<String> delIdList);
 

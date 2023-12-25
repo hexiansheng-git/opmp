@@ -32,8 +32,7 @@ public class KcsjEquipEntryRecordInfoController extends BaseController {
     @Autowired
     private IKcsjEquipEntryRecordInfoService kcsjEquipEntryRecordInfoService;
 
-
-    @PreAuthorize(hasPermi = "kcsjEquipEntryRecordInfo:list")
+    
     @GetMapping
     public AjaxResult getKcsjEquipEntryRecordInfo(@Validated(ValidationGroups.Get.class) KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfoParam) {
         KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo = kcsjEquipEntryRecordInfoService.getKcsjEquipEntryRecordInfo(kcsjEquipEntryRecordInfoParam);

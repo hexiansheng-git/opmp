@@ -105,7 +105,7 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
         String directorIds = resultList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getDirectorId()))
                 .map(JdglCorrectionMeasuresMakeDetail::getDirectorId)
-                .collect(Collectors.joining());
+                .collect(Collectors.joining(","));
         make.setPtVar1(directorIds);
         //只能查看、编辑自己负责的数据，除非当前记录流程已结束
         Long userId = SecurityUtils.getUserId();

@@ -35,7 +35,7 @@ public class KcsjEquipEntryRecordInfo extends TreeNode<KcsjEquipEntryRecordInfo>
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     //@Excel(name = "主表id")
-    private Long recordId;
+    private Long pid;
     /**
      * 字段描述：班组名称
      */
@@ -166,4 +166,6 @@ public class KcsjEquipEntryRecordInfo extends TreeNode<KcsjEquipEntryRecordInfo>
 
     //导入查询
     private List<Long> ids;
+
+    private String isAdd;
 }

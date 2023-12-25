@@ -33,7 +33,6 @@ public class SgjsExperimentRecordController extends BaseController{
 
 
 
-    @PreAuthorize(hasPermi = "sgjsExperimentRecord:list")
     @GetMapping
     public AjaxResult getSgjsExperimentRecord(@Validated(ValidationGroups.Get.class)  SgjsExperimentRecord sgjsExperimentRecordParam){
         SgjsExperimentRecord sgjsExperimentRecord =  sgjsExperimentRecordService.getSgjsExperimentRecord(sgjsExperimentRecordParam);

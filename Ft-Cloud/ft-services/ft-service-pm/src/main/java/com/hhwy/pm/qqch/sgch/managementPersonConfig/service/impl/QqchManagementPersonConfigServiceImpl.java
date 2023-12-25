@@ -28,6 +28,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import io.seata.common.util.CollectionUtils;
+import jdk.nashorn.internal.runtime.Version;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -116,12 +117,11 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
     public QqchManagementPersonConfigVo synchData(QqchManagementPersonConfigVo qqchManagementPersonConfigVo) {
         //保存表格现有数据
         BigDecimal version = qqchManagementPersonConfigVo.getVersion();
+        version = VersionUtil.getVersion("qqch_management_person_config", version);
         this.insertQqchManagementPersonConfigList(qqchManagementPersonConfigVo.getQqchManagementPersonConfigList(), version);
 
         //需求：1.1的项目组织的子集为本功能的父集
-        //获取1.1项目组织
-        QqchOrganizationListVo qqchOrganizationListVo = qqchOrganizationListService.getQqchOrganizationListVo(version);
-        //根据版本获取组织数据,附件条件： pid!=''
+        //根据版本获取1.1项目组织数据,条件： pid!=''
         QqchOrganizationList qqchOrganizationList = new QqchOrganizationList();
         qqchOrganizationList.setVersion(version);
         List<QqchOrganizationList> organizationLists = qqchOrganizationListService.getQqchOrganizationListList2(qqchOrganizationList);
@@ -159,7 +159,9 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
         if (list.size() > 0) {
             qqchManagementPersonConfigMapper.insertQqchManagementPersonConfigList(list);
         }
-        return this.getQqchManagementPersonConfigList(new QqchManagementPersonConfig());
+        QqchManagementPersonConfig qqchManagementPersonConfig = new QqchManagementPersonConfig();
+        qqchManagementPersonConfig.setVersion(version);
+        return this.getQqchManagementPersonConfigList(qqchManagementPersonConfig);
     }
 
     @Override
@@ -213,12 +215,6 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
             String stageIdentity = qqchManagementPersonConfigVo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
-//        //回填人员类别字段
-//        try {
-//            this.getPersonType();
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
     }
 
     /***
@@ -371,7 +367,7 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
     @Override
     public List<QqchManagementPersonConfig> getPopWindows(QqchManagementPersonConfig qqchManagementPersonConfig) {
         List<QqchManagementPersonConfig> resultList;
-        BigDecimal version = VersionUtil.getVersion("qqch_management_person_config", null);
+        BigDecimal version = VersionUtil.getVersion("qqch_management_person_config", qqchManagementPersonConfig.getVersion());
         QqchManagementPersonConfig query = new QqchManagementPersonConfig();
         query.setVersion(version);
         //全量数据

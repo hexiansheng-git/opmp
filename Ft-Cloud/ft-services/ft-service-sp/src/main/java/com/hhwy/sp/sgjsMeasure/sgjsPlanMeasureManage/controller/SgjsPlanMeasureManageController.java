@@ -37,7 +37,6 @@ public class SgjsPlanMeasureManageController extends BaseController {
     private ISgjsPlanMeasureManageService sgjsPlanMeasureManageService;
 
 
-    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:list")
     @GetMapping
     public AjaxResult getSgjsPlanMeasureManage(
         @Validated(ValidationGroups.Get.class) SgjsPlanMeasureManage sgjsPlanMeasureManageParam) {

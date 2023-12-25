@@ -1,18 +1,27 @@
 package com.hhwy.sd.equipEntryRecord.service.impl;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
+
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecord;
 import com.hhwy.sd.equipEntryRecord.mapper.KcsjEquipEntryRecordInfoMapper;
 import com.hhwy.sd.equipEntryRecord.service.IKcsjEquipEntryRecordInfoService;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.tree.TreeUtil;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecordInfo;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author zmh
@@ -31,6 +40,7 @@ public class KcsjEquipEntryRecordInfoServiceImpl implements IKcsjEquipEntryRecor
     }
 
     public List<KcsjEquipEntryRecordInfo> getKcsjEquipEntryRecordInfoList(KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo) {
+        List<KcsjEquipEntryRecordInfo> list = new ArrayList<>();
         //判断日期
         if (StringUtils.isNotEmpty(kcsjEquipEntryRecordInfo.getEntryDateStr())){
             String entryDateStr = kcsjEquipEntryRecordInfo.getEntryDateStr();
@@ -43,7 +53,20 @@ public class KcsjEquipEntryRecordInfoServiceImpl implements IKcsjEquipEntryRecor
             info.setEntryDateStr(info.getEntryDate() == null ? null : FtDateUtils.formatDate(info.getEntryDate()));
             info.setExitDateStr(info.getExitDate() == null ? null : FtDateUtils.formatDate(info.getExitDate()));
         }
-        return TreeUtil.newBuild(kcsjEquipEntryRecordInfoList);
+        if(!CollectionUtils.isEmpty(kcsjEquipEntryRecordInfoList)){
+            List<KcsjEquipEntryRecordInfo> list1 = kcsjEquipEntryRecordInfoList.stream().filter(e -> StringUtils.isNotEmpty(e.getPid().toString()) && !e.getPid().toString().equals("0")).collect(Collectors.toList());
+            if(list1.size()>0){
+                KcsjEquipEntryRecordInfo entryRecordInfo = new KcsjEquipEntryRecordInfo();
+                for (int i = 0; i < list1.size(); i++) {
+                    entryRecordInfo.setId(list1.get(i).getPid());
+                    List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecords1 = kcsjEquipEntryRecordInfoMapper.getKcsjEquipEntryRecordInfoList(entryRecordInfo);
+                    kcsjEquipEntryRecordInfoList.addAll(kcsjEquipEntryRecords1);
+                }
+            }
+            List<KcsjEquipEntryRecordInfo> collect = kcsjEquipEntryRecordInfoList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(KcsjEquipEntryRecordInfo::getId))), ArrayList::new));
+            list = collect.stream().sorted(Comparator.comparing(KcsjEquipEntryRecordInfo::getId)).collect(Collectors.toList());
+        }
+        return TreeUtil.newBuild(list);
     }
 
     @Transactional

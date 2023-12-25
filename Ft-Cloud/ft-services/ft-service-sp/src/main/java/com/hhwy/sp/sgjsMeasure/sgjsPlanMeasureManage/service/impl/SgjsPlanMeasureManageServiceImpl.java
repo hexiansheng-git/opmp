@@ -19,6 +19,7 @@ import com.hhwy.utils.tree.TreeUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -89,24 +90,30 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         List<SgjsPlanMeasureManage> list = new ArrayList<>();
         if (sgjsPlanMeasureManageList.size() > 0) {
             sgjsPlanMeasureManageList.forEach(plan -> {
-                //plan.setPlanStartDateStr(FtDateUtils.formatDate(plan.getPlanStartDate()));
                 plan.setPlanStartDateStr(plan.getPlanStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(plan.getPlanStartDate()));
-                //plan.setPlanEndDateStr(FtDateUtils.formatDate(plan.getPlanEndDate()));
                 plan.setPlanEndDateStr(plan.getPlanEndDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(plan.getPlanEndDate()));
-                //plan.setRealStartDateStr(FtDateUtils.formatDate(plan.getRealStartDate()));
                 plan.setRealStartDateStr(plan.getRealStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(plan.getRealStartDate()));
-                //plan.setRealEndDateStr(FtDateUtils.formatDate(plan.getRealEndDate()));
                 plan.setRealEndDateStr(plan.getRealEndDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(plan.getRealEndDate()));
             });
             List<SgjsPlanMeasureManage> list1 = sgjsPlanMeasureManageList.stream().filter(p -> StringUtils.isNotEmpty(p.getPid().toString()) && !p.getPid().toString().equals("0")).collect(Collectors.toList());
             if(list1.size()>0){
+                List<String> data=new ArrayList<>();
                 SgjsPlanMeasureManage sgjsPlanMeasureManage1 = new SgjsPlanMeasureManage();
                 for (int i = 0; i < list1.size(); i++) {
-                    String[] split = list1.get(i).getPath().split("/");
-                    sgjsPlanMeasureManage1.setPaths(split);
-                    List<SgjsPlanMeasureManage> sgjsPlanMeasureManage2 = sgjsPlanMeasureManageMapper.getSgjsPlanMeasureManageList(sgjsPlanMeasureManage1);
-                    sgjsPlanMeasureManageList.addAll(sgjsPlanMeasureManage2);
+                    if(StringUtils.isEmpty(list1.get(i).getPath())){
+                        continue;
+                    }
+                    if(list1.get(i).getPath().contains("/")){
+                        String[] split = list1.get(i).getPath().split("/");
+                        List allPath = Arrays.asList(split);
+                        data.addAll(allPath);
+                    }else{
+                        data.add(list1.get(i).getPath());
+                    }
                 }
+                sgjsPlanMeasureManage1.setPaths(data);
+                List<SgjsPlanMeasureManage> sgjsPlanMeasureManage2 = sgjsPlanMeasureManageMapper.getSgjsPlanMeasureManageList(sgjsPlanMeasureManage1);
+                sgjsPlanMeasureManageList.addAll(sgjsPlanMeasureManage2);
             }
             List<SgjsPlanMeasureManage> collect = sgjsPlanMeasureManageList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(SgjsPlanMeasureManage::getId))), ArrayList::new));
             list = collect.stream().sorted(Comparator.comparing(SgjsPlanMeasureManage::getSerialNumber)).collect(Collectors.toList());
@@ -223,7 +230,7 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
     @Transactional
     public int insertSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage) {
         sgjsPlanMeasureManage.setId(IdWorker.createId());
-        sgjsPlanMeasureManage.setCreateUser(SecurityUtils.getUserName());
+        sgjsPlanMeasureManage.setCreateUser(SecurityUtils.getUserName()); 
         sgjsPlanMeasureManage.setCreateTime(DateUtils.getNowDate());
         return sgjsPlanMeasureManageMapper.insertSgjsPlanMeasureManage(sgjsPlanMeasureManage);
     }
