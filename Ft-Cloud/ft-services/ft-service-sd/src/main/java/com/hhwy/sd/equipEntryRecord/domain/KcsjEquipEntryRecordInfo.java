@@ -164,8 +164,11 @@ public class KcsjEquipEntryRecordInfo extends TreeNode<KcsjEquipEntryRecordInfo>
     private String delFlag;
 
 
-    //导入查询
+    //模糊 查询上级
     private List<Long> ids;
+
+    //导入查询
+    private List<Long> pids;
 
     private String isAdd;
 }

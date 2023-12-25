@@ -57,14 +57,16 @@ public class KcsjEquipEntryRecordInfoServiceImpl implements IKcsjEquipEntryRecor
             List<KcsjEquipEntryRecordInfo> list1 = kcsjEquipEntryRecordInfoList.stream().filter(e -> StringUtils.isNotEmpty(e.getPid().toString()) && !e.getPid().toString().equals("0")).collect(Collectors.toList());
             if(list1.size()>0){
                 KcsjEquipEntryRecordInfo entryRecordInfo = new KcsjEquipEntryRecordInfo();
+                List<Long> pidAll = new ArrayList<>();
                 for (int i = 0; i < list1.size(); i++) {
-                    entryRecordInfo.setId(list1.get(i).getPid());
-                    List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecords1 = kcsjEquipEntryRecordInfoMapper.getKcsjEquipEntryRecordInfoList(entryRecordInfo);
-                    kcsjEquipEntryRecordInfoList.addAll(kcsjEquipEntryRecords1);
+                    pidAll.add(list1.get(i).getPid());
                 }
+                entryRecordInfo.setIds(pidAll);
+                List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecords1 = kcsjEquipEntryRecordInfoMapper.getKcsjEquipEntryRecordInfoList(entryRecordInfo);
+                kcsjEquipEntryRecordInfoList.addAll(kcsjEquipEntryRecords1);
             }
-            List<KcsjEquipEntryRecordInfo> collect = kcsjEquipEntryRecordInfoList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(KcsjEquipEntryRecordInfo::getId))), ArrayList::new));
-            list = collect.stream().sorted(Comparator.comparing(KcsjEquipEntryRecordInfo::getId)).collect(Collectors.toList());
+            //List<KcsjEquipEntryRecordInfo> collect = kcsjEquipEntryRecordInfoList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(KcsjEquipEntryRecordInfo::getId))), ArrayList::new));
+            list = kcsjEquipEntryRecordInfoList.stream().distinct().sorted(Comparator.comparing(KcsjEquipEntryRecordInfo::getId)).collect(Collectors.toList());
         }
         return TreeUtil.newBuild(list);
     }
@@ -123,6 +125,22 @@ public class KcsjEquipEntryRecordInfoServiceImpl implements IKcsjEquipEntryRecor
 
     @Override
     public List<KcsjEquipEntryRecordInfo> getIds(List<Long> ids) {
-        return kcsjEquipEntryRecordInfoMapper.getIds(ids);
+        List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoMapper.getIds(ids);
+        if(kcsjEquipEntryRecordInfoList.size()>0){
+            List<KcsjEquipEntryRecordInfo> list1 = kcsjEquipEntryRecordInfoList.stream().filter(e -> StringUtils.isNotEmpty(e.getPid().toString()) && e.getPid().toString().equals("0")).collect(Collectors.toList());
+            if(list1.size()>0){
+                KcsjEquipEntryRecordInfo entryRecordInfo = new KcsjEquipEntryRecordInfo();
+                List<Long> pidAll = new ArrayList<>();
+                for (int i = 0; i < list1.size(); i++) {
+                    pidAll.add(list1.get(i).getId());
+                }
+                entryRecordInfo.setPids(pidAll);
+                List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecords1 = kcsjEquipEntryRecordInfoMapper.getKcsjEquipEntryRecordInfoList(entryRecordInfo);
+                kcsjEquipEntryRecordInfoList.addAll(kcsjEquipEntryRecords1);
+            }
+            //List<KcsjEquipEntryRecordInfo> collect = kcsjEquipEntryRecordInfoList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(KcsjEquipEntryRecordInfo::getId))), ArrayList::new));
+            kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoList.stream().distinct().sorted(Comparator.comparing(KcsjEquipEntryRecordInfo::getId)).collect(Collectors.toList());
+        }
+        return kcsjEquipEntryRecordInfoList;
     }
 }

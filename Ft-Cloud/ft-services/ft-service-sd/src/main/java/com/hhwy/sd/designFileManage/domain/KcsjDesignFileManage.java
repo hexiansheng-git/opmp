@@ -163,7 +163,7 @@ public class KcsjDesignFileManage extends TreeNode<KcsjDesignFileManage> {
 
     private String path;
 
-    private String[] paths;
+    private List<String> paths;
 
     /**
      * 字段描述：同步id

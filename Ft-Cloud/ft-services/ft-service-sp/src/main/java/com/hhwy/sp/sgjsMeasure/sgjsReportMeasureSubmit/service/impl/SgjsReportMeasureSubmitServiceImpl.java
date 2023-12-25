@@ -1,16 +1,22 @@
 package com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.impl;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
+
 import cn.hutool.core.date.DateTime;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.mapper.SgjsReportMeasureSubmitMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.ISgjsReportMeasureSubmitService;
 import com.hhwy.utils.date.FtDateUtils;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.TreeSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -147,7 +153,8 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
 
     @Override
     public List<SgjsReportMeasureSubmit> getIds(List<Long> ids) {
-        return sgjsReportMeasureSubmitMapper.getIds(ids);
+        List<SgjsReportMeasureSubmit> reportMeasureSubmitList = sgjsReportMeasureSubmitMapper.getIds(ids);
+        return reportMeasureSubmitList;
     }
 
 
