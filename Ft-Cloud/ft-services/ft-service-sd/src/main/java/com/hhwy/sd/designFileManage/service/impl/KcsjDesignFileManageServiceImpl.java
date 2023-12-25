@@ -11,6 +11,7 @@ import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.tree.TreeUtil;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
@@ -64,17 +65,26 @@ public class KcsjDesignFileManageServiceImpl implements IKcsjDesignFileManageSer
             });
             List<KcsjDesignFileManage> list1 = kcsjDesignFileManageList.stream().filter(d -> StringUtils.isNotEmpty(d.getPid().toString()) && !d.getPid().toString().equals("0")).collect(Collectors.toList());
             if(list1.size()>0){
+                List<String> data=new ArrayList<>();
                 KcsjDesignFileManage designFileManage = new KcsjDesignFileManage();
                 for (int i = 0; i < list1.size(); i++) {
-                    String[] split = list1.get(i).getPath().split("/");
-                    designFileManage.setPaths(split);
+                    if(StringUtils.isEmpty(list1.get(i).getPath())){
+                        continue;
+                    }
+                    if(list1.get(i).getPath().contains("/")){
+                        String[] split = list1.get(i).getPath().split("/");
+                        List allPath = Arrays.asList(split);
+                        data.addAll(allPath);
+                    }else{
+                        data.add(list1.get(i).getPath());
+                    }
+                    designFileManage.setPaths(data);
                     List<KcsjDesignFileManage> sgjsPlanMeasureManage2 = kcsjDesignFileManageMapper.getKcsjDesignFileManageList(designFileManage);
                     kcsjDesignFileManageList.addAll(sgjsPlanMeasureManage2);
                 }
             }
-            List<KcsjDesignFileManage> collect = kcsjDesignFileManageList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(KcsjDesignFileManage::getId))), ArrayList::new));
-
-            list = collect.stream().sorted(Comparator.comparing(KcsjDesignFileManage::getSerialNumber)).collect(Collectors.toList());
+            //List<KcsjDesignFileManage> collect = kcsjDesignFileManageList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(KcsjDesignFileManage::getId))), ArrayList::new));
+            list = kcsjDesignFileManageList.stream().distinct().sorted(Comparator.comparing(KcsjDesignFileManage::getSerialNumber)).collect(Collectors.toList());
         }
         kcsjDesignFileManageVo.setTreeList(TreeUtil.newBuild(list));
         return kcsjDesignFileManageVo;

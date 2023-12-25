@@ -130,9 +130,7 @@ public class SgjsReportMeasureSubmitController extends BaseController {
             List<SgjsReportMeasureSubmit> list = sgjsReportMeasureSubmitService.getIds(ids);
             if(CollectionUtils.isNotEmpty(list)){
                 for (SgjsReportMeasureSubmit info:list) {
-                    //info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : FtDateUtils.formatDate(info.getPlanStartDate()));
                     info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(info.getPlanStartDate()));
-                    //info.setRealStartDateStr(info.getRealStartDate() == null ? null : FtDateUtils.formatDate(info.getRealStartDate()));
                     info.setRealStartDateStr(info.getRealStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(info.getRealStartDate()));
                 }
                 treeList = list;

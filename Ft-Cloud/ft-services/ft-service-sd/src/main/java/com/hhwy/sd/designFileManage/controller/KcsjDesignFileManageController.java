@@ -32,7 +32,6 @@ public class KcsjDesignFileManageController extends BaseController {
     private IKcsjDesignFileManageService kcsjDesignFileManageService;
 
 
-    @PreAuthorize(hasPermi = "kcsjDesignFileManage:list")
     @GetMapping
     public AjaxResult getKcsjDesignFileManage(@Validated(ValidationGroups.Get.class) KcsjDesignFileManage kcsjDesignFileManageParam) {
         KcsjDesignFileManage kcsjDesignFileManage = kcsjDesignFileManageService.getKcsjDesignFileManage(kcsjDesignFileManageParam);

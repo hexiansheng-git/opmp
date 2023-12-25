@@ -113,6 +113,18 @@
       <if test="equipName != null  and equipName != ''">and `equip_name` like concat('%',#{equipName},'%')</if>
       <if test="equipSpec != null  and equipSpec != ''">and `equip_spec` = #{equipSpec}</if>
       <if test="equipUnit != null  and equipUnit != ''">and `equip_unit` = #{equipUnit}</if>
+      <if test="null!=ids and ids.size()>0">
+        and id in
+        <foreach collection="ids" open="(" separator="," close=")" item="pid">
+          #{pid}
+        </foreach>
+      </if>
+      <if test="null!=pids and pids.size()>0">
+        and pid in
+        <foreach collection="pids" open="(" separator="," close=")" item="id">
+          #{id}
+        </foreach>
+      </if>
     </where>
     order by create_time desc
   </select>
