@@ -271,12 +271,13 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
             info.setDelFlag("1");
             list.add(info);
         }
+        //删除设备数据
+        deleteByIdInfo(delIdList);
         //删除主表数据
         if(!CollectionUtils.isEmpty(list)){
             kcsjEquipEntryRecordMapper.deleteInfoData(list);
         }
-        //删除设备数据
-        deleteByIdInfo(delIdList);
+
     }
     // 1
     private void deleteByIdInfo(List<String> delIdList) {
