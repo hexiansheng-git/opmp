@@ -205,7 +205,7 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
     private String path;
 
     //节点查询
-    private String[] paths;
+    private List<String> paths;
 
 
     //导入查询
