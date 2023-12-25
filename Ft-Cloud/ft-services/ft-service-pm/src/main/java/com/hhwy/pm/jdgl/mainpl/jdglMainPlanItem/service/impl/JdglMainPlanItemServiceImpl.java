@@ -295,7 +295,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
     @Override
     public List<JdglMainPlanItem> getUsingJdglMainPlanItemListByDate(Date date) {
         Long mainPlanId = 0l;
-        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlanNoItem();
         if(usingJdglMainPlan != null) {
             mainPlanId = usingJdglMainPlan.getId();
         }
