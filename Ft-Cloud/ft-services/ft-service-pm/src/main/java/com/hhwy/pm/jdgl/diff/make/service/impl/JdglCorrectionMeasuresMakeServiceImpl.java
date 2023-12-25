@@ -1,11 +1,14 @@
 package com.hhwy.pm.jdgl.diff.make.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.flowable.api.RemoteBpmnService;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.common.FlowStartUtil;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisSv;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
@@ -27,6 +30,7 @@ import com.hhwy.utils.core.DateUtil;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +39,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -43,6 +49,7 @@ import java.util.stream.Collectors;
  * @remark 纠偏措施制定
  */
 @Service
+@Slf4j
 public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMeasuresMakeService {
 
     @Autowired
@@ -59,6 +66,8 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
     private IJdglMainPlanItemService jdglMainPlanItemService;
     @Autowired
     private IXmslContractInfoService xmslContractInfoService;
+    @Autowired
+    private RemoteBpmnService RemoteBpmnService;
 
     /**
      * 查询单条数据-详情
@@ -212,9 +221,8 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
     @Transactional
     public void syncData(Date period) {
         String periodStr = FtDateUtils.getYearMonthStr(period);
-
-        Date firstDay = DateUtil.getfirstDay(period);
-        Date lastDay = DateUtil.getLastDay(period);
+        Date beginOfMonth = DateUtil.getfirstDay(period);
+        Date endOfMonth = DateUtil.getLastDay(period);
 
         JdglCorrectionMeasuresMake qryMake = new JdglCorrectionMeasuresMake();
         qryMake.setWarnPeriod(periodStr);
@@ -226,7 +234,6 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             makeDetail.setMakeId(qryMake.getId());
             jdglCorrectionMeasuresMakeDetailService.deleteJdglCorrectionMeasuresMakeDetail(makeDetail);
         }
-
         // 获取差异化分析数据
         JdglDiffAnalysis qryAnalysis = new JdglDiffAnalysis();
         qryAnalysis.setPeriod(period);
@@ -234,27 +241,25 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         if (JdglDiffAnalysis == null) {
             return;
         }
-
         // 获取项目信息数据
         ProjectBasicInfo projectBasicInfo = xmslProjectBasicInfoService.projectInfo();
-
         // 合同信息
         XmslContractInfo contractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
-
         List<JdglMainPlanItem> mainPlanItemList = new ArrayList<>();
-                // 获取总体计划, 获取当月数据
-        List<JdglMainPlanItem> mainPlanItemListTree = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(firstDay, lastDay);
+        // 获取总体计划, 获取当月数据
+        List<JdglMainPlanItem> mainPlanItemListTree = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(beginOfMonth, endOfMonth);
         // 树转列表
-        if (CollectionUtil.isNotEmpty(mainPlanItemListTree)){
+        if (CollectionUtil.isNotEmpty(mainPlanItemListTree)) {
             mainPlanItemList = TreeUtil.treeToList(mainPlanItemListTree);
         }
         Map<String, List<JdglMainPlanItem>> mainPlanItemMap = new HashMap<>();
-        if (CollectionUtil.isNotEmpty(mainPlanItemList)){
+        if (CollectionUtil.isNotEmpty(mainPlanItemList)) {
             mainPlanItemMap = mainPlanItemList.stream().collect(Collectors.groupingBy(JdglMainPlanItem::getItemCode));
         }
 
         JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = new JdglCorrectionMeasuresMake();
-        jdglCorrectionMeasuresMake.setId(IdWorker.createId());
+        Long id = IdWorker.createId();
+        jdglCorrectionMeasuresMake.setId(id);
         jdglCorrectionMeasuresMake.setProjectId(projectBasicInfo.getProjectId());
         jdglCorrectionMeasuresMake.setProjectName(projectBasicInfo.getProjectName());
         jdglCorrectionMeasuresMake.setWarnPeriod(periodStr);
@@ -285,7 +290,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
                 .collect(Collectors.toList());
 
         ArrayList<JdglDiffAnalysisSv> objects = new ArrayList<>();
-        svList.forEach(p ->{
+        svList.forEach(p -> {
             List<JdglDiffAnalysisSv> collect = svListList.stream()
                     .filter(p1 -> p.getPtVar5().contains(p1.getPtVar5())).collect(Collectors.toList());
             collect.forEach(p2 -> p2.setPlanItemCode(p.getPlanItemCode()));
@@ -305,13 +310,13 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             JdglCorrectionMeasuresMakeDetail.setIsKeyLine(jdglDiffAnalysisSv.getIsCriticalPath());
             JdglCorrectionMeasuresMakeDetail.setUnit(jdglDiffAnalysisSv.getUnit());
             JdglCorrectionMeasuresMakeDetail.setQuantity(
-                jdglDiffAnalysisSv.getDesignNum() == null ? BigDecimal.ZERO : jdglDiffAnalysisSv.getDesignNum());
+                    jdglDiffAnalysisSv.getDesignNum() == null ? BigDecimal.ZERO : jdglDiffAnalysisSv.getDesignNum());
             JdglCorrectionMeasuresMakeDetail.setDeviationQuantity(jdglDiffAnalysisSv.getThisDeviationNum() == null ?
-                BigDecimal.ZERO : jdglDiffAnalysisSv.getThisDeviationNum());
+                    BigDecimal.ZERO : jdglDiffAnalysisSv.getThisDeviationNum());
             //总时差
             BigDecimal totalFloat = new BigDecimal("0");
             List<JdglMainPlanItem> jdglMainPlanItems = mainPlanItemMap.get(jdglDiffAnalysisSv.getPlanItemCode());
-            if (CollectionUtil.isNotEmpty(jdglMainPlanItems)){
+            if (CollectionUtil.isNotEmpty(jdglMainPlanItems)) {
                 totalFloat = BigDecimal.valueOf(jdglMainPlanItems.get(0).getTotalFloat());
             }
             JdglCorrectionMeasuresMakeDetail.setTotalFloat(totalFloat);
@@ -335,7 +340,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
                     BigDecimal days = BigDecimal.ZERO;
                     if (item.getActualStartDate() != null) {
                         // 当前开始时间(当月底)—实际开始时间
-                        days = new BigDecimal(FtDateUtils.getDays(item.getActualStartDate(), lastDay));
+                        days = new BigDecimal(FtDateUtils.getDays(item.getActualStartDate(), endOfMonth));
                     }
 
                     // 总体计划时间 取合同工期
@@ -351,7 +356,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
                     // 完成工期百分比 = 总体计划：当前开始时间(当月底)—实际开始时间/总体计划时间
                     if (BigDecimal.ZERO.compareTo(totalDays) != 0) {
                         completeDatePercentage = BigDecimalUtils.divide0(days, totalDays, 4)
-                            .multiply(new BigDecimal(100));
+                                .multiply(new BigDecimal(100));
                     }
                 }
             }
@@ -361,6 +366,17 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         // 纠偏方案入库
         if (CollectionUtil.isEmpty(newDetailList)) return;
         jdglCorrectionMeasuresMakeDetailService.insertJdglCorrectionMeasuresMakeDetailList(newDetailList);
+
+        //发起流程
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(() -> {
+            //获取用户名
+            List<String> userNameList = newDetailList.stream()
+                    .filter(p -> StrUtil.isNotBlank(p.getDirectorId()))
+                    .map(JdglCorrectionMeasuresMakeDetail::getDirectorId)
+                    .distinct().collect(Collectors.toList());
+            FlowStartUtil.start("process_jdgl_correction_measures_make", String.valueOf(id), "jdgl_correction_measures_make", userNameList, "");
+        });
     }
 
     @Override
