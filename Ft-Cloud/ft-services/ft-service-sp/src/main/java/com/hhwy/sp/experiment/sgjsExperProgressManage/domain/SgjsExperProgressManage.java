@@ -27,26 +27,18 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     @JsonProperty
     @Excel(name = "序号"    )
     private String serialNumber;
-    //节点查询
-    private String[] paths;
 
-    public String[] getPaths() {
+    private List<String> paths;
+
+    public List<String> getPaths() {
         return paths;
     }
 
-    public void setPaths(String[] paths) {
+    public void setPaths(List<String> paths) {
         this.paths = paths;
     }
 
-    private List<String> pathList;
 
-    public List<String> getPathList() {
-        return pathList;
-    }
-
-    public void setPathList(List<String> pathList) {
-        this.pathList = pathList;
-    }
 
     /**
      * 字段描述：主键id
