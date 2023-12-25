@@ -337,5 +337,8 @@ public class UserServiceImpl implements IUserService {
         return this.sysUserMapper.selectUserList(user, tenantKeyList);
     }
 
-
+    @Override
+    public List<SysUser> selectUserInfoByUserNameAndTenant(Map<String, String> map) {
+        return userMapper.selectUserInfoByUserNameAndTenant(map);
+    }
 }
