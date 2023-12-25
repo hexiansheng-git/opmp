@@ -41,7 +41,6 @@ public class SgjsReportMeasureSubmitController extends BaseController {
     @Value("${file.url}")
     private String url;
 
-    @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:list")
     @GetMapping
     public AjaxResult getSgjsReportMeasureSubmit(
         SgjsReportMeasureSubmit sgjsReportMeasureSubmitParam) {
