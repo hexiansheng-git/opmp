@@ -1,16 +1,22 @@
 package com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.impl;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
+
 import cn.hutool.core.date.DateTime;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.mapper.SgjsReportMeasureSubmitMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.ISgjsReportMeasureSubmitService;
 import com.hhwy.utils.date.FtDateUtils;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.TreeSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -51,9 +57,7 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
         List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitList = sgjsReportMeasureSubmitMapper.getSgjsReportMeasureSubmitList(sgjsReportMeasureSubmit);
         if(sgjsReportMeasureSubmitList.size()>0){
             for (SgjsReportMeasureSubmit info:sgjsReportMeasureSubmitList) {
-                //info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : FtDateUtils.formatDate(info.getPlanStartDate()));
                 info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(info.getPlanStartDate()));
-                //info.setRealStartDateStr(info.getRealStartDate() == null ? null : FtDateUtils.formatDate(info.getRealStartDate()));
                 info.setRealStartDateStr(info.getRealStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(info.getRealStartDate()));
             }
         }
@@ -147,7 +151,8 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
 
     @Override
     public List<SgjsReportMeasureSubmit> getIds(List<Long> ids) {
-        return sgjsReportMeasureSubmitMapper.getIds(ids);
+        List<SgjsReportMeasureSubmit> reportMeasureSubmitList = sgjsReportMeasureSubmitMapper.getIds(ids);
+        return reportMeasureSubmitList;
     }
 
 

@@ -64,7 +64,7 @@ public class UserController extends BaseController {
         //获取当前登录人的部门id
         LoginUser loginUser = this.tokenService.getLoginUser();
         selfUserInfo.setDeptId(loginUser.getSysUser().getDeptId());
-        return AjaxResult.success("查询成功!", iUserService.getUserInfoBy(selfUserInfo));
+        return AjaxResult.success("查询成功!", iUserService.getUserInfoBySameDept(selfUserInfo));
     }
 
     //最近选择的用户RecentSelectUser

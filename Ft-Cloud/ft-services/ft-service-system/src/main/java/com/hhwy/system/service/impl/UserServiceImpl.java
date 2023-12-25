@@ -75,25 +75,50 @@ public class UserServiceImpl implements IUserService {
         if(CollectionUtils.isEmpty(list)){
             return new ArrayList<>();
         }
-        //处理人员岗位信息
-        List<Long> userIds = new ArrayList<>();
-        list.stream().forEachOrdered(t -> userIds.add(t.getUserId()));
-        UserPostInfo queryUserPostInfo = new UserPostInfo();
-        queryUserPostInfo.setUserIds(userIds);
-        List<UserPostInfo> userPostInfos = userMapper.getUserPostsBy(queryUserPostInfo);
-        if(!CollectionUtils.isEmpty(userPostInfos)){
-            Map<Long, List<UserPostInfo>> userPostInfoMap = userPostInfos.stream().collect(Collectors.groupingBy(UserPostInfo :: getUserId));
-            list.parallelStream().forEach(u -> {
-                List<UserPostInfo> userPostInfoList = userPostInfoMap.get(u.getUserId());
-                if(userPostInfoList != null){
-                    u.setPostNames(userPostInfoList.get(0).getPostNames());
-                    u.setPostIds(userPostInfoList.get(0).getPostIds());
-                }
-            });
-        }
+//        //处理人员岗位信息
+//        List<Long> userIds = new ArrayList<>();
+//        list.stream().forEachOrdered(t -> userIds.add(t.getUserId()));
+//        UserPostInfo queryUserPostInfo = new UserPostInfo();
+//        queryUserPostInfo.setUserIds(userIds);
+//        List<UserPostInfo> userPostInfos = userMapper.getUserPostsBy(queryUserPostInfo);
+//        if(!CollectionUtils.isEmpty(userPostInfos)){
+//            Map<Long, List<UserPostInfo>> userPostInfoMap = userPostInfos.stream().collect(Collectors.groupingBy(UserPostInfo :: getUserId));
+//            list.parallelStream().forEach(u -> {
+//                List<UserPostInfo> userPostInfoList = userPostInfoMap.get(u.getUserId());
+//                if(userPostInfoList != null){
+//                    u.setPostNames(userPostInfoList.get(0).getPostNames());
+//                    u.setPostIds(userPostInfoList.get(0).getPostIds());
+//                }
+//            });
+//        }
         return list;
     }
 
+    @Override
+    public List<SelfUserInfo> getUserInfoBySameDept(SelfUserInfo selfUserInfo) {
+        String tenantKey = SecurityUtils.getTenantKey();
+        List<SelfUserInfo> list = userMapper.getUserInfoBy(selfUserInfo,tenantKey);
+        if(CollectionUtils.isEmpty(list)){
+            return new ArrayList<>();
+        }
+//        //处理人员岗位信息
+//        List<Long> userIds = new ArrayList<>();
+//        list.stream().forEachOrdered(t -> userIds.add(t.getUserId()));
+//        UserPostInfo queryUserPostInfo = new UserPostInfo();
+//        queryUserPostInfo.setUserIds(userIds);
+//        List<UserPostInfo> userPostInfos = userMapper.getUserPostsBy(queryUserPostInfo);
+//        if(!CollectionUtils.isEmpty(userPostInfos)){
+//            Map<Long, List<UserPostInfo>> userPostInfoMap = userPostInfos.stream().collect(Collectors.groupingBy(UserPostInfo :: getUserId));
+//            list.parallelStream().forEach(u -> {
+//                List<UserPostInfo> userPostInfoList = userPostInfoMap.get(u.getUserId());
+//                if(userPostInfoList != null){
+//                    u.setPostNames(userPostInfoList.get(0).getPostNames());
+//                    u.setPostIds(userPostInfoList.get(0).getPostIds());
+//                }
+//            });
+//        }
+        return list;
+    }
 
 
     @Override

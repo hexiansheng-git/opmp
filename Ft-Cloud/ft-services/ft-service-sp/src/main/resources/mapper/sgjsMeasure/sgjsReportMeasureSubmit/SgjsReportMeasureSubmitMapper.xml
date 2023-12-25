@@ -177,6 +177,12 @@
           #{id}
         </foreach>
       </if>
+      <if test="null!=ids and ids.size()>0">
+        and id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
     </where>
     order by wbs_code asc
   </select>

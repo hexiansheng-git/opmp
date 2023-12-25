@@ -38,7 +38,7 @@ public class KcsjPlanCommunicationRecordsController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:add")
+    @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:insert")
     @PostMapping("/add")
     public AjaxResult insertKcsjPlanCommunicationRecords(@Validated(ValidationGroups.Save.class) @RequestBody KcsjPlanCommunicationRecords kcsjPlanCommunicationRecordsParam) {
         kcsjPlanCommunicationRecordsService.insertKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecordsParam);

@@ -38,7 +38,7 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
     //@Excel(name = "父级id")
     private Long pid;
 
-    @Excel(name = "序号")
+    //@Excel(name = "序号")
     private String serialNumber;
 
     /**

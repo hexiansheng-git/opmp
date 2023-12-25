@@ -115,8 +115,8 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
                 List<SgjsPlanMeasureManage> sgjsPlanMeasureManage2 = sgjsPlanMeasureManageMapper.getSgjsPlanMeasureManageList(sgjsPlanMeasureManage1);
                 sgjsPlanMeasureManageList.addAll(sgjsPlanMeasureManage2);
             }
-            List<SgjsPlanMeasureManage> collect = sgjsPlanMeasureManageList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(SgjsPlanMeasureManage::getId))), ArrayList::new));
-            list = collect.stream().sorted(Comparator.comparing(SgjsPlanMeasureManage::getSerialNumber)).collect(Collectors.toList());
+            //List<SgjsPlanMeasureManage> collect = sgjsPlanMeasureManageList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(SgjsPlanMeasureManage::getId))), ArrayList::new));
+            list = sgjsPlanMeasureManageList.stream().distinct().sorted(Comparator.comparing(SgjsPlanMeasureManage::getSerialNumber)).collect(Collectors.toList());
         }
         sgjsPlanMeasureManageVo.setTreeList(TreeUtil.newBuild(list));
         return sgjsPlanMeasureManageVo;
@@ -139,7 +139,8 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         }
         if(list.size()>0){
             list = TreeUtil.treeToListWithoutId(list);
-            list = list.stream().sorted(Comparator.comparing(SgjsPlanMeasureManage::getSerialNumber)).collect(Collectors.toList());
+            //list = list.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(SgjsPlanMeasureManage::getId))), ArrayList::new));
+            list = list.stream().distinct().sorted(Comparator.comparing(SgjsPlanMeasureManage::getSerialNumber)).collect(Collectors.toList());
         }
         return list;
     }

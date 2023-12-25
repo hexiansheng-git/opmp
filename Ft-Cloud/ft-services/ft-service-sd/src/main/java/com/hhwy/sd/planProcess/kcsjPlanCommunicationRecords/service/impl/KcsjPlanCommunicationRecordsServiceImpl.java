@@ -46,7 +46,7 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
     @Transactional
     public int insertKcsjPlanCommunicationRecords(KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords) {
         kcsjPlanCommunicationRecords.setId(IdWorker.createId());
-        kcsjPlanCommunicationRecords.setCreateUser(SecurityUtils.getUserName());
+        kcsjPlanCommunicationRecords.setCreateUserName(SecurityUtils.getSysUser().getNickName());
         kcsjPlanCommunicationRecords.setCreateTime(DateUtils.getNowDate());
         return kcsjPlanCommunicationRecordsMapper.insertKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecords);
     }
@@ -71,7 +71,7 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
             for (KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords : insertList) {
                 kcsjPlanCommunicationRecords.setId(IdWorker.createId());
                 kcsjPlanCommunicationRecords.setCreateUser(SecurityUtils.getUserId().toString());
-                kcsjPlanCommunicationRecords.setCreateUserName(SecurityUtils.getUserName());
+                kcsjPlanCommunicationRecords.setCreateUserName(SecurityUtils.getSysUser().getNickName());
                 kcsjPlanCommunicationRecords.setCreateTime(DateUtils.getNowDate());
                 kcsjPlanCommunicationRecords.setDelFlag("0");
             }

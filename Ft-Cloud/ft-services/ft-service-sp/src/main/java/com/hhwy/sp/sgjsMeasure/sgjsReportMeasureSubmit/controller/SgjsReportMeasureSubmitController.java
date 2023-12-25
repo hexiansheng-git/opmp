@@ -13,6 +13,7 @@ import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.ISgjsReportMeasur
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
@@ -118,28 +119,19 @@ public class SgjsReportMeasureSubmitController extends BaseController {
     @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody SgjsReportMeasureSubmit sgjsReportMeasureSubmitParam) throws IOException {
+        List<SgjsReportMeasureSubmit> list = new ArrayList<>();
         List<Long> ids = sgjsReportMeasureSubmitParam.getIds();
-        List<SgjsReportMeasureSubmit> treeList = null;
-        if(CollectionUtils.isEmpty(ids)){
-            SgjsReportMeasureSubmitVo sgjsReportMeasureSubmitVo = sgjsReportMeasureSubmitService.list(sgjsReportMeasureSubmitParam);
-            treeList = sgjsReportMeasureSubmitVo.getTreeList();
-            if(CollectionUtils.isNotEmpty(treeList)){
-                treeList = TreeUtil.treeToList(treeList);
-            }
+        if(CollectionUtils.isNotEmpty(ids)){
+            SgjsReportMeasureSubmit sgjsReportMeasureSubmit  = new SgjsReportMeasureSubmit();
+            sgjsReportMeasureSubmit.setIds(ids);
+            SgjsReportMeasureSubmitVo sgjsReportMeasureSubmitVo = sgjsReportMeasureSubmitService.list(sgjsReportMeasureSubmit);
+            list = sgjsReportMeasureSubmitVo.getTreeList();
         }else{
-            List<SgjsReportMeasureSubmit> list = sgjsReportMeasureSubmitService.getIds(ids);
-            if(CollectionUtils.isNotEmpty(list)){
-                for (SgjsReportMeasureSubmit info:list) {
-                    //info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : FtDateUtils.formatDate(info.getPlanStartDate()));
-                    info.setPlanStartDateStr(info.getPlanStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(info.getPlanStartDate()));
-                    //info.setRealStartDateStr(info.getRealStartDate() == null ? null : FtDateUtils.formatDate(info.getRealStartDate()));
-                    info.setRealStartDateStr(info.getRealStartDate() == null ? null : new SimpleDateFormat("yyyy年MM月dd日").format(info.getRealStartDate()));
-                }
-                treeList = list;
-            }
+            SgjsReportMeasureSubmitVo sgjsReportMeasureSubmitVo = sgjsReportMeasureSubmitService.list(sgjsReportMeasureSubmitParam);
+            list = sgjsReportMeasureSubmitVo.getTreeList();
         }
         ExcelUtils<SgjsReportMeasureSubmit> utils = new ExcelUtils<>(SgjsReportMeasureSubmit.class);
-        utils.exportExcel(response,treeList,DateUtils.getDate());
+        utils.exportExcel(response,list,DateUtils.getDate());
     }
 
 

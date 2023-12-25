@@ -21,6 +21,7 @@ public interface SgjsExperProgressManageMapper {
      * @return
      */
 
+//    List<SgjsExperProgressManage> getSgjsExperProgressManageListByCondition(SgjsExperProgressManage sgjsExperProgressManage);
     List<SgjsExperProgressManage> getSgjsExperProgressManageListByCondition(SgjsExperProgressManage sgjsExperProgressManage);
 
     List<SgjsExperProgressManage> getSgjsExperProgressManageList(SgjsExperProgressManage sgjsExperProgressManage);
