@@ -84,7 +84,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         //查询符合条件的数据
         List<SgjsExperProgressManage> sgjsExperProgressManageList = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(sgjsTechnicalManage);
 
-
         List<SgjsExperProgressManage> list = new ArrayList<>();
         if (sgjsExperProgressManageList.size() > 0) {
 
@@ -265,7 +264,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
     @Override
     @Transactional
     public AjaxResult batchAdd(SgjsExperProgressManageVo sgjsExperProgressManageVo) {
-        
+
 
         //批量删除
         if (!CollectionUtils.isEmpty(sgjsExperProgressManageVo.getDelIdList())) {
@@ -300,7 +299,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         }
         if (list.size() > 0) {
             list = TreeUtil.treeToListWithoutId(list);
-            list = list.stream().sorted(Comparator.comparing(SgjsExperProgressManage::getSerialNumber)).collect(Collectors.toList());
+            list = list.stream().distinct().sorted(Comparator.comparing(SgjsExperProgressManage::getSerialNumber)).collect(Collectors.toList());
         }
         return list;
     }
