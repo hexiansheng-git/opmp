@@ -196,9 +196,15 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     public void updateProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo) {
         xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
 
+        //项目可以自行修改项目信息
         ProjectBasicInfo projectInfo = this.projectInfo();
+        xmslContractInfoService.updateProjectInfo(projectInfo);
+
         xmslProjectBasicInfo.setId(projectInfo.getId());
         this.editSublist(xmslProjectBasicInfo);
+
+
+
     }
 
     @Override

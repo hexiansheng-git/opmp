@@ -1,5 +1,8 @@
 package com.hhwy.pm.xmsl.project.controller;
 
+import cn.hutool.http.HttpRequest;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -7,12 +10,15 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.pm.utils.HttpHeadersUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectInfoWithOther;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +40,10 @@ public class XmslProjectBasicInfoController extends BaseController{
 
     @Autowired
     private IXmslProjectBasicInfoService projectBasicInfoService;
+
+
+    @Value("${gm.back-url}")
+    private String gmUrl;
 
     /**
      * 根据id获取项目基本信息
@@ -112,8 +122,21 @@ public class XmslProjectBasicInfoController extends BaseController{
      */
     @PostMapping("/update")
     public AjaxResult updateProjectBasicInfo(@Validated(ValidationGroups.Update.class) @RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
-        projectBasicInfoService.updateProjectBasicInfo(xmslProjectBasicInfoParam);
-        return AjaxResult.success("修改成功！");
+        try {
+            projectBasicInfoService.updateProjectBasicInfo(xmslProjectBasicInfoParam);
+            String res = HttpRequest.post(gmUrl + "/gm/projectBasicInfo/updateFromPm")
+                    .header("Content-Type", "application/json")
+                    .header(HttpHeadersUtils.getCommonHeaders())
+                    .body(JSON.toJSONString(xmslProjectBasicInfoParam)).execute().body();
+            JSONObject resObj = JSON.parseObject(res);
+            if(!resObj.get("code").equals(200)){
+                return AjaxResult.success("项目信息修改成功! 项目信息同步异常请联系管理员进行处理.");
+            }
+            return AjaxResult.success("修改成功！");
+        }catch (Exception e){
+            return AjaxResult.error("修改失败！");
+        }
+
     }
     
     @PostMapping("/remove")

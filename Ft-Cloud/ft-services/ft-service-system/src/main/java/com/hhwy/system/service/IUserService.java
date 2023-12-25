@@ -12,6 +12,9 @@ public interface IUserService {
 
     List<SelfUserInfo> getUserInfoBy(SelfUserInfo selfUserInfo);
 
+    List<SelfUserInfo> getUserInfoBySameDept(SelfUserInfo selfUserInfo);
+
+
     int updateRecentSelectUser(List<String> userIds);
 
     List<SelfUserInfo> getRecentSelectUser();
@@ -49,4 +52,5 @@ public interface IUserService {
     String batchInsert(List<SysUser> userList);
 
     List<SysUser> selectUserList(SysUser user);
+
 }
