@@ -33,7 +33,6 @@ public class SgjsTechnicalManageInfoController extends BaseController{
     private ISgjsTechnicalManageInfoService sgjsTechnicalManageInfoService;
 
 
-    @PreAuthorize(hasPermi = "sgjsTechnicalManageInfo:list")
     @GetMapping
     public AjaxResult getSgjsTechnicalManageInfo(@Validated(ValidationGroups.Get.class)  SgjsTechnicalManageInfo sgjsTechnicalManageInfoParam){
         SgjsTechnicalManageInfo sgjsTechnicalManageInfo =  sgjsTechnicalManageInfoService.getSgjsTechnicalManageInfo(sgjsTechnicalManageInfoParam);
@@ -46,7 +45,7 @@ public class SgjsTechnicalManageInfoController extends BaseController{
      * @param sgjsTechnicalManageInfoParam
      * @return
      */
-    @PreAuthorize(hasPermi = "sgjsTechnicalManageInfo:list")
+    //@PreAuthorize(hasPermi = "sgjsTechnicalManageInfo:list")
     @GetMapping("/list")
     public AjaxResult getSgjsTechnicalManageInfoList(@Validated(ValidationGroups.Select.class) SgjsTechnicalManageInfo sgjsTechnicalManageInfoParam){
         List<SgjsTechnicalManageInfo> sgjsTechnicalManageInfoList = sgjsTechnicalManageInfoService.getSgjsTechnicalManageInfoList(sgjsTechnicalManageInfoParam);

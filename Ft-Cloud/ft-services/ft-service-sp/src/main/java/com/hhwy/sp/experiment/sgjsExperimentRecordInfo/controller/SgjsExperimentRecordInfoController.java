@@ -32,7 +32,7 @@ public class SgjsExperimentRecordInfoController extends BaseController{
     private ISgjsExperimentRecordInfoService sgjsExperimentRecordInfoService;
 
 
-    @PreAuthorize(hasPermi = "sgjsExperimentRecordInfo:list")
+//    @PreAuthorize(hasPermi = "sgjsExperimentRecordInfo:list")
     @GetMapping
     public AjaxResult getSgjsExperimentRecordInfo(@Validated(ValidationGroups.Get.class)  SgjsExperimentRecordInfo sgjsExperimentRecordInfoParam){
         SgjsExperimentRecordInfo sgjsExperimentRecordInfo =  sgjsExperimentRecordInfoService.getSgjsExperimentRecordInfo(sgjsExperimentRecordInfoParam);
@@ -45,7 +45,7 @@ public class SgjsExperimentRecordInfoController extends BaseController{
      * @param sgjsExperimentRecordInfoParam
      * @return
      */
-    @PreAuthorize(hasPermi = "sgjsExperimentRecordInfo:list")
+//    @PreAuthorize(hasPermi = "sgjsExperimentRecordInfo:list")
     @GetMapping("/list")
     public AjaxResult getSgjsExperimentRecordInfoList(@Validated(ValidationGroups.Select.class) SgjsExperimentRecordInfo sgjsExperimentRecordInfoParam){
         startPage();

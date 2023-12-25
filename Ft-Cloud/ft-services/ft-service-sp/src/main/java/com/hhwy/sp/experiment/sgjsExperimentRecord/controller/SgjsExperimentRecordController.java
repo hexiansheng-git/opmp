@@ -45,7 +45,7 @@ public class SgjsExperimentRecordController extends BaseController{
      * @param sgjsExperimentRecordParam
      * @return
      */
-    @PreAuthorize(hasPermi = "sgjsExperimentRecord:list")
+    //@PreAuthorize(hasPermi = "sgjsExperimentRecord:list")
     @GetMapping("/list")
     public AjaxResult getSgjsExperimentRecordList(@Validated(ValidationGroups.Select.class) SgjsExperimentRecord sgjsExperimentRecordParam){
         startPage();
