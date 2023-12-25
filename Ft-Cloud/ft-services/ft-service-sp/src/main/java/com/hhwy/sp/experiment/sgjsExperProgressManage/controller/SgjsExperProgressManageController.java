@@ -129,7 +129,7 @@ public class SgjsExperProgressManageController extends BaseController {
        }else {
            List<String> idsStr=new ArrayList<>();
            for (Long id : ids) {
-               idsStr.add(id.toString());
+               idsStr.add(String.valueOf(id));
            }
            List<SgjsExperProgressManage> list=sgjsExperProgressManageService.getIds(idsStr);
            if(CollectionUtils.isNotEmpty(list)){
