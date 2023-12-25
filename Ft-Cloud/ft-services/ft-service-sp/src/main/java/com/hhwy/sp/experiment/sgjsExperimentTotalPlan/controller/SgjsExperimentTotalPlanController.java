@@ -53,7 +53,7 @@ public class SgjsExperimentTotalPlanController extends BaseController{
         return AjaxResult.success(sgjsExperimentTotalPlanParam);
     }
 
-    @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:add")
+    @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:batchAdd")
     @PostMapping("/batchAdd")
     public AjaxResult insertSgjsExperimentTotalPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsExperimentTotalPlan> sgjsExperimentTotalPlanListParam){
         sgjsExperimentTotalPlanService.insertSgjsExperimentTotalPlanList(sgjsExperimentTotalPlanListParam);
@@ -66,13 +66,13 @@ public class SgjsExperimentTotalPlanController extends BaseController{
         return toAjax(sgjsExperimentTotalPlanService.updateSgjsExperimentTotalPlan(sgjsExperimentTotalPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:update")
+    @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:batchUpdate")
     @PostMapping("/batchUpdate")
     public AjaxResult updateSgjsExperimentTotalPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsExperimentTotalPlan> sgjsExperimentTotalPlanListParam){
         return toAjax(sgjsExperimentTotalPlanService.updateSgjsExperimentTotalPlanList(sgjsExperimentTotalPlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:remove")
+    @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:delete")
     @PostMapping("/delete")
     public AjaxResult deleteSgjsExperimentTotalPlan(@Validated(ValidationGroups.Delete.class) @RequestBody SgjsExperimentTotalPlan sgjsExperimentTotalPlanParam){
         return toAjax(sgjsExperimentTotalPlanService.deleteSgjsExperimentTotalPlan(sgjsExperimentTotalPlanParam));
