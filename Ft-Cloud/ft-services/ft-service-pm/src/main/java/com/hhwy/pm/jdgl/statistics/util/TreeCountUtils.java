@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.statistics.util;
 
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.utils.tree.TreeNode;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -9,6 +10,90 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TreeCountUtils<T extends TreeNode> {
+
+    public List<T> queryTree(List<T> treeList, Map<String, Object> columnQueryMap, Long pid) {
+
+        List<T> returnList = new ArrayList<>();
+
+        if(CollectionUtils.isEmpty(treeList)) {
+            return returnList;
+        }
+
+        if(columnQueryMap == null || columnQueryMap.isEmpty()) {
+            return treeList;
+        }
+
+        toAncestrals(treeList, pid);
+
+        Set<String> columns = columnQueryMap.keySet();
+
+        List<T> filterList = new ArrayList<>();
+
+        for (T t: treeList) {
+            int size = columns.size();
+            for (String column: columns) {
+                try {
+                    Field declaredField = t.getClass().getDeclaredField(column);
+                    declaredField.setAccessible(true);
+                    Class<?> type = declaredField.getType();
+                    if(String.class.equals(type)) {
+                        String queryValue = (String) columnQueryMap.get(column);
+                        String thisValue = (String) declaredField.get(t);
+                        if(StringUtils.isNotEmpty(thisValue) && StringUtils.isNotEmpty(queryValue) && thisValue.contains(queryValue)) {
+                            size --;
+                        }
+                    }
+
+                    if(Date.class.equals(type)) {
+                        Date queryValue = (Date) columnQueryMap.get(column);
+                        Date thisValue = (Date) declaredField.get(t);
+                        if(thisValue != null && thisValue.compareTo(queryValue) == 0) {
+                            size --;
+                        }
+                    }
+
+                    if(Long.class.equals(type)) {
+                        Long queryValue = (Long) columnQueryMap.get(column);
+                        Long thisValue = (Long) declaredField.get(t);
+                        if(thisValue != null && thisValue.compareTo(queryValue) == 0) {
+                            size --;
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if(size == 0) {
+                filterList.add(t);
+            }
+        }
+
+        List<T> leafList = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(filterList)) {
+            for (T t: filterList) {
+                String ptVar5 = t.getPtVar5();
+                if(StringUtils.isNotEmpty(ptVar5)) {
+                    List<T> collect = treeList.stream().filter(vo -> "1".equals(vo.getLeaf()) && StringUtils.isNotEmpty(vo.getPtVar5()) && vo.getPtVar5().contains(ptVar5)).collect(Collectors.toList());
+                    if(CollectionUtils.isNotEmpty(collect)) leafList.addAll(collect);
+                }
+            }
+        }
+        if(CollectionUtils.isNotEmpty(leafList)) {
+            leafList = leafList.stream().distinct().collect(Collectors.toList());
+            for (T t: leafList) {
+                String ptVar5 = t.getPtVar5();
+                if(StringUtils.isNotEmpty(ptVar5)) {
+                    List<T> collect = treeList.stream().filter(vo -> StringUtils.isNotEmpty(vo.getPtVar5()) && ptVar5.contains(vo.getPtVar5())).collect(Collectors.toList());
+                    if (CollectionUtils.isNotEmpty(collect)) returnList.addAll(collect);
+                }
+            }
+        }
+
+        if(CollectionUtils.isNotEmpty(returnList)) {
+            returnList = returnList.stream().distinct().collect(Collectors.toList());
+        }
+        return returnList;
+    }
 
     public List<T> upCountValue(List<T> treeList, String columnName) {
 
@@ -142,4 +227,53 @@ public class TreeCountUtils<T extends TreeNode> {
 
     }
 
+    public List<T> queryTree(List<T> allList, List<T> filterList, Long pid) {
+
+        List<T> returnList = new ArrayList<>();
+
+        if(CollectionUtils.isEmpty(allList)) {
+            return returnList;
+        }
+
+        if(CollectionUtils.isEmpty(filterList)) {
+            return allList;
+        }
+
+        toAncestrals(allList, pid);
+
+        for (T t: filterList) {
+            T t1 = allList.stream().filter(vo -> t.getId().equals(vo.getId())).findFirst().orElse(null);
+            if(t1 != null) {
+                t.setPtVar5(t1.getPtVar5());
+                t.setLeaf(t1.getLeaf());
+            }
+        }
+
+        List<T> leafList = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(filterList)) {
+            for (T t: filterList) {
+                String ptVar5 = t.getPtVar5();
+                if(StringUtils.isNotEmpty(ptVar5)) {
+                    List<T> collect = allList.stream().filter(vo -> "1".equals(vo.getLeaf()) && StringUtils.isNotEmpty(vo.getPtVar5()) && vo.getPtVar5().contains(ptVar5)).collect(Collectors.toList());
+                    if(CollectionUtils.isNotEmpty(collect)) leafList.addAll(collect);
+                }
+            }
+        }
+        if(CollectionUtils.isNotEmpty(leafList)) {
+            leafList = leafList.stream().distinct().collect(Collectors.toList());
+            for (T t: leafList) {
+                String ptVar5 = t.getPtVar5();
+                if(StringUtils.isNotEmpty(ptVar5)) {
+                    List<T> collect = allList.stream().filter(vo -> StringUtils.isNotEmpty(vo.getPtVar5()) && ptVar5.contains(vo.getPtVar5())).collect(Collectors.toList());
+                    if (CollectionUtils.isNotEmpty(collect)) returnList.addAll(collect);
+                }
+            }
+        }
+
+        if(CollectionUtils.isNotEmpty(returnList)) {
+            returnList = returnList.stream().distinct().collect(Collectors.toList());
+        }
+        return returnList;
+
+    }
 }

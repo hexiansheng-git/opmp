@@ -11,6 +11,7 @@ import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.mapper.JdglMainPlanItemMapper;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglData4P6Service;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
+import com.hhwy.pm.jdgl.statistics.util.TreeCountUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 
@@ -54,6 +55,55 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         }
 //        List<JdglMainPlanItem> build = TreeUtil.build(jdglMainPlanItemList, jdglMainPlanItem.getPid());
         return jdglMainPlanItemList;
+    }
+
+    @Override
+    public List<JdglMainPlanItem> treelist(JdglMainPlanItem jdglMainPlanItemParam) {
+        List<JdglMainPlanItem> returnList = new ArrayList<>();
+        Long mainPlanId = jdglMainPlanItemParam.getMainPlanId();
+        Long pid = jdglMainPlanItemParam.getPid();
+        // 如果没有传入主表数据，则获取启用中的作业数据
+        if(mainPlanId == null) {
+            JdglMainPlan usingJdglMainPlanNoItem = jdglMainPlanService.getUsingJdglMainPlanNoItem();
+            if(usingJdglMainPlanNoItem != null) mainPlanId = usingJdglMainPlanNoItem.getId();
+        }
+        jdglMainPlanItemParam.setMainPlanId(mainPlanId);
+        jdglMainPlanItemParam.setPid(null);
+        // 获取筛选项筛选的作业数据
+        List<JdglMainPlanItem> filterList = getJdglMainPlanItemList(jdglMainPlanItemParam);
+        JdglMainPlanItem queryAll = new JdglMainPlanItem();
+        queryAll.setMainPlanId(mainPlanId);
+        // 获取所有的作业数据
+        List<JdglMainPlanItem> allList = getJdglMainPlanItemList(queryAll);
+        if(CollectionUtils.isEmpty(allList)) {
+            return returnList;
+        }
+        if(CollectionUtils.isEmpty(filterList)) {
+            return returnList;
+        }
+        // 如果存在过滤条件，则需要将查询的数据的上下级查询出来，并组装成树进行返回。
+        if(allList.size() != filterList.size()) {
+            TreeCountUtils<JdglMainPlanItem> treeCountUtils = new TreeCountUtils<>();
+            List<JdglMainPlanItem> jdglMainPlanItems = treeCountUtils.queryTree(allList, filterList, pid);
+            return TreeUtil.build(jdglMainPlanItems, pid);
+
+        // 如果不存在过滤条件，则进行树形懒加载处理。
+        } else {
+            if(pid == null) {
+                returnList = allList.stream().filter(vo -> vo.getPid() == null).collect(Collectors.toList());
+            } else {
+                returnList = allList.stream().filter(vo -> vo.getPid() != null && pid.compareTo(vo.getPid()) == 0).collect(Collectors.toList());
+            }
+            if (!CollectionUtils.isEmpty(returnList)) {
+                for (JdglMainPlanItem jdglMainPlanItem1 : returnList) {
+                    if("1".equals(jdglMainPlanItem1.getLeaf())) jdglMainPlanItem1.setHaveChildren(0);
+                    if(!"1".equals(jdglMainPlanItem1.getLeaf())) jdglMainPlanItem1.setHaveChildren(1);
+                }
+            }
+        }
+
+
+        return returnList;
     }
 
     /**

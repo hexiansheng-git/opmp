@@ -58,6 +58,13 @@ public class JdglMainPlanItemController extends BaseController {
     }
 
     // // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
+    @GetMapping("/treelist")
+    public AjaxResult treelist(@Validated(ValidationGroups.Select.class) JdglMainPlanItem jdglMainPlanItemParam) {
+        List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.treelist(jdglMainPlanItemParam);
+        return getDataTableAjaxResult(jdglMainPlanItemList);
+    }
+
+    // // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
     @GetMapping("/getUsinglist")
     public AjaxResult getUsingJdglMainPlanItemList(@Validated(ValidationGroups.Select.class) JdglMainPlanItem jdglMainPlanItemParam) {
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemList(jdglMainPlanItemParam);
