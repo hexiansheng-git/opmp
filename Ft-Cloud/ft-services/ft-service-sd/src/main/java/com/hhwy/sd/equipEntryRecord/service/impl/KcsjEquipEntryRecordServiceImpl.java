@@ -137,9 +137,11 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                 insertList.forEach(i->{
                     KcsjEquipEntryRecord kcsjEquipEntryRecord = new KcsjEquipEntryRecord();
                     kcsjEquipEntryRecord.setTeamName(i.getTeamName());
-                    List<KcsjEquipEntryRecord> equipEntryRecords = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(kcsjEquipEntryRecord);
-                    if(equipEntryRecords.size()>0){
-                        throw new RuntimeException("班组名称不可重复！");
+                    if("0".equals(i.getPid().toString())){
+                        List<KcsjEquipEntryRecord> equipEntryRecords = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(kcsjEquipEntryRecord);
+                        if(equipEntryRecords.size()>0){
+                            throw new RuntimeException("班组名称不可重复！");
+                        }
                     }
                     kcsjEquipEntryRecord.setEquipCode(i.getEquipCode());
                     List<KcsjEquipEntryRecord> kcsjEquipEntryRecordList = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(kcsjEquipEntryRecord);
@@ -197,7 +199,8 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                     kcsjEquipEntryRecordInfo.setCreateUserName(SecurityUtils.getUserName() + "");
                     kcsjEquipEntryRecordInfoMapper.insertKcsjEquipEntryRecordInfo(kcsjEquipEntryRecordInfo);
                 }else{
-                    kcsjEquipEntryRecordInfo.setId(kcsjEquipEntryRecordInfoList1.get(0).getId());
+                    List<KcsjEquipEntryRecordInfo> recordInfos = kcsjEquipEntryRecordInfoList1.stream().filter(e -> StringUtils.isNotEmpty(e.getPid().toString()) && e.getPid().toString().equals("0")).collect(Collectors.toList());
+                    kcsjEquipEntryRecordInfo.setId(recordInfos.get(0).getId());
                 }
                 for (int j = 0; j < children.size(); j++) {
                     if(!CollectionUtils.isEmpty(children.get(j).getKcsjEquipEntryRecordInfoList())){
