@@ -38,10 +38,11 @@ public interface SgjsExperProgressManageMapper {
     int deleteSgjsExperProgressManageByPks(@Param("sgjsExperProgressManagePkList") List<Long> sgjsExperProgressManagePkList, @Param("delUser") String delUser);
 
 
-    List<SgjsExperProgressManage> getIds(@Param("ids") List<Long> ids);
+    List<SgjsExperProgressManage> getIds(@Param("ids") List<String> ids);
 
     List<SgjsExperProgressManage> getChildrenList(@Param("ids") List<Long> ids);
 
     void deleteAll();
 
+    void deleteInfoData(List<SgjsExperProgressManage> list);
 }

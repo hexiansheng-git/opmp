@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -126,7 +127,11 @@ public class SgjsExperProgressManageController extends BaseController {
                //treeList = TreeUtil.treeToList(treeList);
            }
        }else {
-           List<SgjsExperProgressManage> list=sgjsExperProgressManageService.getIds(ids);
+           List<String> idsStr=new ArrayList<>();
+           for (Long id : ids) {
+               idsStr.add(id.toString());
+           }
+           List<SgjsExperProgressManage> list=sgjsExperProgressManageService.getIds(idsStr);
            if(CollectionUtils.isNotEmpty(list)){
                //treeList=TreeUtil.treeToListWithLevel(list);
               treeList = list;
