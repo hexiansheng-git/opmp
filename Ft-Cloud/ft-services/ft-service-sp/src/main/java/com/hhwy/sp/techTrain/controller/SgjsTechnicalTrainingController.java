@@ -36,7 +36,7 @@ public class SgjsTechnicalTrainingController extends BaseController {
      * @param sgjsTechnicalTrainingParam
      * @return
      */
-    @PreAuthorize(hasPermi = "sgjsTechnicalTraining:list")
+    @PreAuthorize(hasPermi = "sgjsTechnicalTraining:select")
     @GetMapping
     public AjaxResult getSgjsTechnicalTraining(@Validated(ValidationGroups.Get.class) SgjsTechnicalTraining sgjsTechnicalTrainingParam) {
         SgjsTechnicalTraining sgjsTechnicalTraining = sgjsTechnicalTrainingService.getSgjsTechnicalTraining(sgjsTechnicalTrainingParam);

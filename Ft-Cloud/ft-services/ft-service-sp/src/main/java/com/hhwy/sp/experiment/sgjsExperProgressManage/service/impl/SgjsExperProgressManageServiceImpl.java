@@ -84,12 +84,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
 
         //查询符合条件的数据
         List<SgjsExperProgressManage> sgjsExperProgressManageList = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(sgjsTechnicalManage);
-//        //组合显示根节点
-//        List<SgjsExperProgressManage> handleData = handleData(sgjsExperProgressManageList);
-//        List<SgjsExperProgressManage> manages =TreeUtil.newBuild(handleData) ;
-//        vo.setTreeList(manages);
-//        return vo;
-
 
         List<SgjsExperProgressManage> list = new ArrayList<>();
         if (sgjsExperProgressManageList.size() > 0) {
@@ -116,7 +110,16 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         }
         vo.setTreeList(TreeUtil.newBuild(list));
         return vo;
+
+
+
+//        //组合显示根节点
+//        List<SgjsExperProgressManage> handleData = handleData(sgjsExperProgressManageList);
+//        List<SgjsExperProgressManage> manages =TreeUtil.newBuild(handleData) ;
+//        vo.setTreeList(manages);
+//        return vo;
     }
+
 
 
     /**
@@ -145,10 +148,10 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             SgjsExperProgressManage info=new SgjsExperProgressManage();
             info.setPathList(data);
             manageList = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(info);
-            for (int i = 0; i < manageList.size(); i++) {
-                SgjsExperProgressManage manage = manageList.get(i);
-                manage.setPlanStartDateStr (FtDateUtils.formatDate(manage.getPlanStartDate()));
-            }
+//            for (int i = 0; i < manageList.size(); i++) {
+//                SgjsExperProgressManage manage = manageList.get(i);
+//                manage.setActualDateStr(FtDateUtils.formatDate(manage.getActualDate()));
+//            }
         }
         return manageList;
     }
@@ -276,6 +279,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             sgjsExperProgressManage.setPlanStartDate(children.get(i).get("planBeginDate") == null ? null : FtDateUtils.parseDate(children.get(i).get("planBeginDate")));
             sgjsExperProgressManage.setPlanEndDate(children.get(i).get("planEndDate") == null ? null : FtDateUtils.parseDate(children.get(i).get("planEndDate")));
             sgjsExperProgressManage.setRemark(children.get(i).get("remark") == null ? null : children.get(i).get("remark").toString());
+
             sgjsExperProgressManage.setId(IdWorker.createId());
             sgjsExperProgressManage.setPid(manage.getId());
             sgjsExperProgressManage.setSyncId(Long.parseLong(children.get(i).get("id").toString()));
@@ -450,20 +454,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
      */
     @Override
     public List<SgjsExperProgressManage> getIds(List<Long> ids) {
-//        //所有子父级数据
-//        List<SgjsExperProgressManage> total = new ArrayList<>();
-//        //获取父级数据
-//        List<SgjsExperProgressManage> list = sgjsExperProgressManageMapper.getIds(ids);
-//        total.addAll(list);
-//
-//        //获取子级所有数据
-//        List<Long> out = handleTotalData(ids);
-//        if (out.size()>0){
-//            //查询数据
-//            List<SgjsExperProgressManage> sgjsExperProgressManages = sgjsExperProgressManageMapper.getIds(out);
-//            total.addAll(sgjsExperProgressManages);
-//        }
-//        return total;
 
         List<SgjsExperProgressManage> list = new ArrayList<>();
         List<SgjsExperProgressManage> list1 = sgjsExperProgressManageMapper.getIds(ids);
