@@ -32,7 +32,7 @@ public class FlowStartUtil {
         R r = remoteBpmnService.nextNodesForFeign(nextNodesParam);
         int code = r.getCode();
         if (code != 200) {
-            log.error("纠偏措施制定，发起流程失败，状态code：{}---响应mas：{}---响应data：{}", r.getCode(), r.getMsg(), r.getData());
+            log.error("发起流程失败，状态code：{}---响应mas：{}---响应data：{}", r.getCode(), r.getMsg(), r.getData());
             return;
         }
         StartFlowResource startFlowResource = new StartFlowResource();

@@ -293,7 +293,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         svList.forEach(p -> {
             List<JdglDiffAnalysisSv> collect = svListList.stream()
                     .filter(p1 -> p.getPtVar5().contains(p1.getPtVar5())).collect(Collectors.toList());
-            collect.forEach(p2 -> p2.setPlanItemCode(p.getPlanItemCode()));
+//            collect.forEach(p2 -> p2.setPlanItemCode(p.getPlanItemCode()));
             objects.addAll(collect);
         });
         List<JdglDiffAnalysisSv> collect = objects.stream().distinct().collect(Collectors.toList());
