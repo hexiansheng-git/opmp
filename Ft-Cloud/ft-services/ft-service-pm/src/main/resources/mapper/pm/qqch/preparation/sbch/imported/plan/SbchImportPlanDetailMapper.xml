@@ -454,7 +454,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="regionName != null  and regionName != ''"> and detail.`region_name` like concat('%', #{regionName}, '%')</if>
             <if test="deptId != null "> and detail.`dept_id` = #{deptId}</if>
         </where>
-        order by detail.`id` desc
+#         order by detail.`id` desc
     </select>
 
     <update id="deleteSbchImportPlanDetailByPlanId">
