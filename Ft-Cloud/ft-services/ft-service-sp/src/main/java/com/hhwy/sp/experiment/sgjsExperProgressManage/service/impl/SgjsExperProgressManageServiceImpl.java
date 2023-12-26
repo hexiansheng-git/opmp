@@ -245,19 +245,13 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
     @Override
     public List<SgjsExperProgressManage> getIds(List<String> ids) {
 
-       /* //查询出所有数据
+        //查询出所有数据
         SgjsExperProgressManage sgjsExperProgressManage = new SgjsExperProgressManage();
         List<SgjsExperProgressManage> manageList = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(sgjsExperProgressManage);
         Map<String, SgjsExperProgressManage> map = new HashMap<>();
-        Map<String, SgjsExperProgressManage> pMap = new HashMap<>();
-        //将所有数据放进集合
+        //将所有数据放进集合，id为key,对象为value
         manageList.stream().forEach(temp -> {
             map.put(temp.getId() + "", temp);
-        });
-
-        //将所有数据放进集合
-        manageList.stream().forEach(temp -> {
-            pMap.put(temp.getPid() + "", temp);
         });
 
         //该集合存放所有父子级数据
@@ -267,9 +261,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         List<SgjsExperProgressManage> list = sgjsExperProgressManageMapper.getIds(ids);
         total.addAll(list);
         for (SgjsExperProgressManage experProgressManage : list) {
-            SgjsExperProgressManage sgjsExperProgressManage1 = new SgjsExperProgressManage();
-            findChildren(pMap, total, experProgressManage, sgjsExperProgressManage1);
-
+            findTotal(map, total, experProgressManage);
         }
 
         if (total.size() > 0) {
@@ -277,10 +269,10 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             total = total.stream().distinct().sorted(Comparator.comparing(SgjsExperProgressManage::getSerialNumber)).collect(Collectors.toList());
         }
 
-        return total;*/
+        return total;
 
 
-        List<SgjsExperProgressManage> list = new ArrayList<>();
+        /*List<SgjsExperProgressManage> list = new ArrayList<>();
         List<SgjsExperProgressManage> list1 = sgjsExperProgressManageMapper.getIds(ids);
         for (int i = 0; i < list1.size(); i++) {
 
@@ -297,20 +289,24 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             list = TreeUtil.treeToListWithoutId(list);
             list = list.stream().distinct().sorted(Comparator.comparing(SgjsExperProgressManage::getSerialNumber)).collect(Collectors.toList());
         }
-        return list;
+        return list;*/
     }
 
-    private void findChildren(Map<String, SgjsExperProgressManage> pMap, List<SgjsExperProgressManage> total, SgjsExperProgressManage experProgressManage, SgjsExperProgressManage sgjsExperProgressManage1) {
-        sgjsExperProgressManage1.setPid(experProgressManage.getId());
-        SgjsExperProgressManage sgjsExperProgressManage2 = pMap.get(sgjsExperProgressManage1.getPid() + "");
-        total.add(sgjsExperProgressManage2);
-        if (pMap.containsKey(sgjsExperProgressManage2.getId() + "")) {
-            findChildren(pMap, total, experProgressManage, sgjsExperProgressManage2);
+    private void findTotal(Map<String, SgjsExperProgressManage> map, List<SgjsExperProgressManage> total, SgjsExperProgressManage experProgressManage) {
+        //查找以当前数据的id为pid的数据
+        Set<Map.Entry<String, SgjsExperProgressManage>> entries = map.entrySet();
+        for (Map.Entry<String, SgjsExperProgressManage> entry : entries) {
+            if (entry.getValue().getPid().equals(experProgressManage.getId())){
+                SgjsExperProgressManage sgjsExperProgressManage = map.get(entry.getKey());
+                total.add(sgjsExperProgressManage);
+              findTotal(map,total,sgjsExperProgressManage);
+            }
         }
     }
 
 
-    private void diguiList2(List<SgjsExperProgressManage> list2, SgjsExperProgressManage manage) {
+
+    /*private void diguiList2(List<SgjsExperProgressManage> list2, SgjsExperProgressManage manage) {
         List<SgjsExperProgressManage> list = new ArrayList<>();
         for (int i = 0; i < list2.size(); i++) {
             SgjsExperProgressManage planMeasureManage = new SgjsExperProgressManage();
@@ -322,7 +318,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             list.add(list2.get(i));
         }
         manage.setChildren(list);
-    }
+    }*/
 
 
     /**
