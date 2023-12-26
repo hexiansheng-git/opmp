@@ -75,7 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="region != null  and region != ''"> and `region` = #{region}</if>
         </where>
-        order by `id` desc
+#         order by `id` desc
     </select>
     
     <select id="selectSbchEquipmentSpecialDetailsById" parameterType="Long" resultMap="SbchEquipmentSpecialDetailsResult">

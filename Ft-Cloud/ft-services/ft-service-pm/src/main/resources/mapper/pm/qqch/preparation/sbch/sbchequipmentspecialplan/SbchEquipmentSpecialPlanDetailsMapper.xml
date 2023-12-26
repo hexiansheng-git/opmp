@@ -55,7 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="region != null  and region != ''"> and `region` = #{region}</if>
         </where>
-        order by ISNULL(`pt_var1`)|| `pt_var1`='' asc, `pt_var1` asc
+#         order by ISNULL(`pt_var1`)|| `pt_var1`='' asc, `pt_var1` asc
     </select>
 
     <select id="selectSbchEquipmentSpecialPlanDetailshistoryList" parameterType="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialplan.domain.SbchEquipmentSpecialPlanDetails" resultMap="SbchEquipmentSpecialPlanDetailsResult">
