@@ -124,7 +124,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
     @Override
     public SgjsExperProgressManageVo sync() {
 
-        //sgjsExperProgressManageMapper.deleteAll();
 
         SgjsExperProgressManageVo sgjsExperProgressManageVo = new SgjsExperProgressManageVo();
         List<SgjsExperProgressManage> treeToList = new ArrayList<>();
@@ -237,7 +236,34 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
 
 
     /**
-     * 获取传入集合的所有子级数据
+     * 批量删除
+     *
+     * @param delIdList
+     */
+    public void deleteByIds(List<String> delIdList) {
+        List<SgjsExperProgressManage> list = new ArrayList<>();
+        //获取所有父子级数据
+        List<SgjsExperProgressManage> ids = getIds(delIdList);
+        for (int i = 0; i < ids.size(); i++) {
+            SgjsExperProgressManage info = new SgjsExperProgressManage();
+            info.setId(ids.get(i).getId());
+            info.setUpdateUser(SecurityUtils.getUserId() + "");
+            info.setUpdateTime(DateUtils.getNowDate());
+            info.setDelFlag("1");
+            list.add(info);
+        }
+        //删除
+        if (!CollectionUtils.isEmpty(list)) {
+            sgjsExperProgressManageMapper.deleteInfoData(list);
+        }
+    }
+
+
+
+
+
+    /**
+     * 获取传入集合的所有子级数据(包括自身)
      *
      * @param ids
      * @return
@@ -292,7 +318,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         return list;*/
     }
 
-    private void findTotal(Map<String, SgjsExperProgressManage> map, List<SgjsExperProgressManage> total, SgjsExperProgressManage experProgressManage) {
+    public void findTotal(Map<String, SgjsExperProgressManage> map, List<SgjsExperProgressManage> total, SgjsExperProgressManage experProgressManage) {
         //查找以当前数据的id为pid的数据
         Set<Map.Entry<String, SgjsExperProgressManage>> entries = map.entrySet();
         for (Map.Entry<String, SgjsExperProgressManage> entry : entries) {
@@ -321,28 +347,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
     }*/
 
 
-    /**
-     * 批量删除
-     *
-     * @param delIdList
-     */
-    public void deleteByIds(List<String> delIdList) {
-        List<SgjsExperProgressManage> list = new ArrayList<>();
-        //获取所有父子级数据
-        List<SgjsExperProgressManage> ids = getIds(delIdList);
-        for (int i = 0; i < ids.size(); i++) {
-            SgjsExperProgressManage info = new SgjsExperProgressManage();
-            info.setId(ids.get(i).getId());
-            info.setUpdateUser(SecurityUtils.getUserId() + "");
-            info.setUpdateTime(DateUtils.getNowDate());
-            info.setDelFlag("1");
-            list.add(info);
-        }
-        //删除
-        if (!CollectionUtils.isEmpty(list)) {
-            sgjsExperProgressManageMapper.deleteInfoData(list);
-        }
-    }
+
 
 
     private void handleUpdate(List<SgjsExperProgressManage> treeToList) {
