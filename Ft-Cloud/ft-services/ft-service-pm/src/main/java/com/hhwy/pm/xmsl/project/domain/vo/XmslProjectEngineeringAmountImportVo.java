@@ -1,9 +1,13 @@
 package com.hhwy.pm.xmsl.project.domain.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hhwy.common.core.annotation.Excel;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.utils.excel.FtExcel;
+import com.hhwy.utils.idworker.IdWorker;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author han
@@ -11,48 +15,46 @@ import lombok.Data;
  * @remark 主要工程数量导入类
  */
 @Data
-public class XmslProjectEngineeringAmountImportVo {
+public class XmslProjectEngineeringAmountImportVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Excel(name = "层级码")
-    private String innerCode;
-    @Excel(name = "父层级码")
-    private String parentInnerCode;
-
     /**
-     * 字段描述：树id
+     * 字段描述：主键id
      */
-    @JsonProperty
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Long treeId;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id = IdWorker.createId();
     /**
      * 字段描述：父id
      */
-    @JsonProperty
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Long parentTreeId;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long pid;
+
+    /**
+     * 序号  导入用
+     */
+    @FtExcel(name = "序号",serialNumFlag = true)
+    private String serialNum;
     /**
      * 字段描述：工程项目
      */
-    @JsonProperty
-    @Excel(name = "工程项目")
+    @FtExcel(name = "工程项目")
     private String engineeringProject;
     /**
      * 字段描述：单位
      */
-    @JsonProperty
-    @Excel(name = "单位")
+    @FtExcel(name = "单位")
     private String units;
     /**
      * 字段描述：数量
      */
-    @JsonProperty
-    @Excel(name = "数量")
+    @FtExcel(name = "数量")
     private String amount;
     /**
      * 字段描述：备注/描述
      */
-    @JsonProperty
-    @Excel(name = "备注/描述")
+    @FtExcel(name = "备注/描述")
     private String remark;
+
+    private List<XmslProjectEngineeringAmountImportVo> children;
+
 }

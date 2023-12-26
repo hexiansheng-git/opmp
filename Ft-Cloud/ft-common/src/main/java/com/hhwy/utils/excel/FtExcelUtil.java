@@ -34,6 +34,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class FtExcelUtil<T> {
@@ -207,7 +208,7 @@ public class FtExcelUtil<T> {
                     } else {
                         val = Convert.toLong(val);
                     }
-                } else if (StringUtils.isNotEmpty(attr.readConverterExp())) { //int类型的字段使用了readConvertExp直接进入else BUG修复 
+                } else if (StringUtils.isNotEmpty(attr.readConverterExp())) { //int类型的字段使用了readConvertExp直接进入else BUG修复
 
                 } else {
                     val = Convert.toInt(val);
@@ -1046,7 +1047,7 @@ public class FtExcelUtil<T> {
         }
         // 没有指定序号列 抛出异常
         if (serFieldName == null) throw new RuntimeException("请指定序号列");
-        // 
+        //
         FieldUtils init = FieldUtils.init();
 
         // 树形结果
@@ -1062,7 +1063,7 @@ public class FtExcelUtil<T> {
             // 序号
             String serNum = init.getFieldVal(serFieldName, t) + "";
             String[] split = serNum.split(".".equals(serStr) ? "\\." : serStr);
-            // 
+            //
             List<T> lenList = lengthMap.get(split.length);
             // 如果当前数据为空 就new一个  然后
             lenList = CollectionUtils.isEmpty(lenList) ? new ArrayList<>() : lenList;
@@ -1134,7 +1135,7 @@ public class FtExcelUtil<T> {
         }
         // 没有指定序号列 抛出异常
         if (serFieldName == null) throw new RuntimeException("请指定序号列");
-        // 
+        //
         FieldUtils init = FieldUtils.init();
 
         // 树形结果
@@ -1152,7 +1153,7 @@ public class FtExcelUtil<T> {
             // 序号
             String serNum = init.getFieldVal(serFieldName, t) + "";
             String[] split = serNum.split(".".equals(serStr) ? "\\." : serStr);
-            // 
+            //
             List<T> lenList = lengthMap.get(split.length);
             // 如果当前数据为空 就new一个  然后
             lenList = CollectionUtils.isEmpty(lenList) ? new ArrayList<>() : lenList;
@@ -1190,6 +1191,72 @@ public class FtExcelUtil<T> {
     public static void main(String[] args) {
 
     }
+
+    public List<T> importTreeExcelxx(InputStream inputStream, Function<T, List<T>> getChildren) throws Exception {
+
+        List<T> ts = importExcel(inputStream,2);
+        this.init(list, sheetName, FtExcel.Type.IMPORT);
+        List<Object[]> fieldsAnno = this.fields;
+        String serFieldName = null;
+        String childrenFieldName = null;
+        String serStr = null;
+
+        for (Object[] objects : fieldsAnno) {
+            FtExcel ftExcel = (FtExcel) objects[1];
+            if (ftExcel.serialNumFlag()) {
+                // 如果当前的字段是序号列  就先存起来 等下用
+                serFieldName = ((Field) objects[0]).getName();
+                serStr = ftExcel.serialStr();
+                childrenFieldName = ftExcel.childrenFieldName();
+                break;
+            }
+        }
+        // 没有指定序号列 抛出异常
+        if (serFieldName == null) throw new RuntimeException("请指定序号列");
+        //
+        FieldUtils init = FieldUtils.init();
+
+        // 树形结果
+        List<T> res = new ArrayList<>();
+        String finalSerFieldName = serFieldName;
+
+        HashMap<Integer, List<T>> lengthMap = new HashMap<>();
+        for (T t : ts) {
+            // 序号
+            String serNum = init.getFieldVal(serFieldName, t) + "";
+            String[] split = serNum.split(".".equals(serStr) ? "\\." : serStr);
+            //
+            List<T> lenList = lengthMap.get(split.length);
+            // 如果当前数据为空 就new一个  然后
+            lenList = CollectionUtils.isEmpty(lenList) ? new ArrayList<>() : lenList;
+            lenList.add(t);
+            // 放入map 等会儿用
+            lengthMap.put(split.length, lenList);
+        }
+
+        // 由大到小
+        String finalSerStr = serStr;
+        String finalChildrenFieldName = childrenFieldName;
+        lengthMap.keySet().stream().sorted(Comparator.comparing(Integer::intValue).reversed()).forEach(length -> {
+            List<T> lengthList = lengthMap.get(length);
+            if (length == 1) {
+                res.addAll(lengthList);
+            } else {
+                for (T t : lengthList) {
+                    String serNum = init.getFieldVal(finalSerFieldName, t) + "";
+                    String parentSerNum = getStrBefore(serNum, finalSerStr);
+                    ts.stream().filter(item -> parentSerNum.equals(init.getFieldVal(finalSerFieldName, item))).findFirst().ifPresent(i -> {
+                        List<T> children = getChildren.apply(i);
+                        children = CollectionUtils.isEmpty(children) ? new ArrayList<>() : children;
+                        children.add(t);
+                        init.setFieldVal(finalChildrenFieldName, children, i);
+                    });
+                }
+            }
+        });
+        return res;
+    }
+
 
 
     private String getStrBefore(String strOrig, String str) {
