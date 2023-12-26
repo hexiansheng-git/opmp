@@ -1,6 +1,7 @@
 package com.hhwy.pm.jdgl.diff.make.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -10,7 +11,9 @@ import com.hhwy.flowable.api.RemoteBpmnService;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.common.FlowStartUtil;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
+import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisPath;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisSv;
+import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisPathService;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisSvService;
 import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMake;
@@ -41,6 +44,7 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -69,6 +73,8 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
     @Autowired
     private RemoteBpmnService RemoteBpmnService;
 
+    @Autowired
+    private IJdglDiffAnalysisPathService jdglDiffAnalysisPathService;
     /**
      * 查询单条数据-详情
      *
@@ -220,10 +226,17 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
      */
     @Transactional
     public void syncData(Date period) {
+        // 获取差异化分析主表数据
+        JdglDiffAnalysis qryAnalysis = new JdglDiffAnalysis();
+        qryAnalysis.setPeriod(period);
+        JdglDiffAnalysis JdglDiffAnalysis = jdglDiffAnalysisService.getJdglDiffAnalysis(qryAnalysis);
+        if (JdglDiffAnalysis == null) {
+            return;
+        }
         String periodStr = FtDateUtils.getYearMonthStr(period);
         Date beginOfMonth = DateUtil.getfirstDay(period);
         Date endOfMonth = DateUtil.getLastDay(period);
-
+        //查询是否已存在当期数据,已存在则删除
         JdglCorrectionMeasuresMake qryMake = new JdglCorrectionMeasuresMake();
         qryMake.setWarnPeriod(periodStr);
         JdglCorrectionMeasuresMake make = jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMake(qryMake);
@@ -234,29 +247,9 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             makeDetail.setMakeId(qryMake.getId());
             jdglCorrectionMeasuresMakeDetailService.deleteJdglCorrectionMeasuresMakeDetail(makeDetail);
         }
-        // 获取差异化分析数据
-        JdglDiffAnalysis qryAnalysis = new JdglDiffAnalysis();
-        qryAnalysis.setPeriod(period);
-        JdglDiffAnalysis JdglDiffAnalysis = jdglDiffAnalysisService.getJdglDiffAnalysis(qryAnalysis);
-        if (JdglDiffAnalysis == null) {
-            return;
-        }
         // 获取项目信息数据
         ProjectBasicInfo projectBasicInfo = xmslProjectBasicInfoService.projectInfo();
-        // 合同信息
-        XmslContractInfo contractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
-        List<JdglMainPlanItem> mainPlanItemList = new ArrayList<>();
-        // 获取总体计划, 获取当月数据
-        List<JdglMainPlanItem> mainPlanItemListTree = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(beginOfMonth, endOfMonth);
-        // 树转列表
-        if (CollectionUtil.isNotEmpty(mainPlanItemListTree)) {
-            mainPlanItemList = TreeUtil.treeToList(mainPlanItemListTree);
-        }
-        Map<String, List<JdglMainPlanItem>> mainPlanItemMap = new HashMap<>();
-        if (CollectionUtil.isNotEmpty(mainPlanItemList)) {
-            mainPlanItemMap = mainPlanItemList.stream().collect(Collectors.groupingBy(JdglMainPlanItem::getItemCode));
-        }
-
+        //保存纠偏措施制定主表数据
         JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = new JdglCorrectionMeasuresMake();
         Long id = IdWorker.createId();
         jdglCorrectionMeasuresMake.setId(id);
@@ -266,21 +259,19 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         jdglCorrectionMeasuresMake.setWarnTime(FtDateUtils.getYearMonthDayDate());
         jdglCorrectionMeasuresMake.setRiskLevel(JdglDiffAnalysis.getRiskLevel());
         jdglCorrectionMeasuresMake.setPeriodTotalScore(JdglDiffAnalysis.getTotalGrade());
-//        jdglCorrectionMeasuresMake.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-//        jdglCorrectionMeasuresMake.setCreateUserName(SecurityUtils.getUserName());
         jdglCorrectionMeasuresMake.setCreateTime(DateUtils.getNowDate());
         jdglCorrectionMeasuresMake.setTaskStatus("0");
         // 纠偏措施制定入库
         jdglCorrectionMeasuresMakeMapper.insertJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake);
 
-        // 获取差异分析得分
+        // 获取差异化分析-sv偏差分析
         JdglDiffAnalysisSv qrySv = new JdglDiffAnalysisSv();
         qrySv.setDiffAnalysisId(JdglDiffAnalysis.getId());
         List<JdglDiffAnalysisSv> svTreeList = jdglDiffAnalysisSvService.getJdglDiffAnalysisSvList(qrySv);
         if (CollectionUtils.isEmpty(svTreeList)) {
             return;
         }
-        // 树转列表
+        // 获取差异化分析-sv偏差分析  数据过滤，同时将满足条件的数据上层级拿到转成树
         List<JdglDiffAnalysisSv> svListList = TreeUtil.treeToList(svTreeList);
         TreeCountUtils treeCountUtils = new TreeCountUtils();
         treeCountUtils.toAncestrals(svListList, null);
@@ -288,19 +279,39 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         List<JdglDiffAnalysisSv> svList = svListList.stream()
                 .filter(p -> null != p.getThisDeviationNum() && p.getThisDeviationNum().compareTo(BigDecimal.ZERO) < 0)
                 .collect(Collectors.toList());
-
         ArrayList<JdglDiffAnalysisSv> objects = new ArrayList<>();
         svList.forEach(p -> {
             List<JdglDiffAnalysisSv> collect = svListList.stream()
                     .filter(p1 -> p.getPtVar5().contains(p1.getPtVar5())).collect(Collectors.toList());
-//            collect.forEach(p2 -> p2.setPlanItemCode(p.getPlanItemCode()));
             objects.addAll(collect);
         });
-        List<JdglDiffAnalysisSv> collect = objects.stream().distinct().collect(Collectors.toList());
-
-        // 构建新的list
+        List<JdglDiffAnalysisSv> diffAnalysisSvList = objects.stream().distinct().collect(Collectors.toList());
+        // 总体进度计划详情
+        List<JdglMainPlanItem> mainPlanItemList = new ArrayList<>();
+        List<JdglMainPlanItem> mainPlanItemListTree = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(beginOfMonth, endOfMonth);
+        if (CollectionUtil.isNotEmpty(mainPlanItemListTree)) {
+            mainPlanItemList = TreeUtil.treeToList(mainPlanItemListTree);
+        }
+        Map<String, JdglMainPlanItem> mainPlanItemMap = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(mainPlanItemList)) {
+            //用于回填总时差、责任人
+            mainPlanItemMap = mainPlanItemList.stream()
+                    .filter(p -> StrUtil.isBlank(p.getItemCode()))
+                    .collect(Collectors.toMap(JdglMainPlanItem::getItemCode, Function.identity(), (k1, k2) -> k1));
+        }
+        //获取 差异化分析-关键/非关键线路进度分析  回填工期完成百分比、进度完成百分比
+        JdglDiffAnalysisPath jdglDiffAnalysisPath = new JdglDiffAnalysisPath();
+        jdglDiffAnalysisPath.setDiffAnalysisId(JdglDiffAnalysis.getId());
+        List<JdglDiffAnalysisPath> jdglDiffAnalysisPathList = jdglDiffAnalysisPathService.getJdglDiffAnalysisPathList(jdglDiffAnalysisPath);
+        Map<String, JdglDiffAnalysisPath> pathMap = new HashMap<>();
+        if (CollectionUtil.isNotEmpty(jdglDiffAnalysisPathList)) {
+            pathMap = jdglDiffAnalysisPathList.stream()
+                    .filter(p -> StrUtil.isBlank(p.getPlanItemCode()) && null != p.getTotalDayCompRate())
+                    .collect(Collectors.toMap(JdglDiffAnalysisPath::getPlanItemCode, Function.identity(), (k1, k2) -> k1));
+        }
+        //开始处理数据，差异化分析数据组装到纠偏指定
         List<JdglCorrectionMeasuresMakeDetail> newDetailList = new ArrayList<>();
-        for (JdglDiffAnalysisSv jdglDiffAnalysisSv : collect) {
+        for (JdglDiffAnalysisSv jdglDiffAnalysisSv : diffAnalysisSvList) {
             JdglCorrectionMeasuresMakeDetail JdglCorrectionMeasuresMakeDetail = new JdglCorrectionMeasuresMakeDetail();
             JdglCorrectionMeasuresMakeDetail.setId(jdglDiffAnalysisSv.getId());
             JdglCorrectionMeasuresMakeDetail.setPid(jdglDiffAnalysisSv.getPid());
@@ -309,64 +320,38 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             JdglCorrectionMeasuresMakeDetail.setWorkName(jdglDiffAnalysisSv.getPlanItemName());
             JdglCorrectionMeasuresMakeDetail.setIsKeyLine(jdglDiffAnalysisSv.getIsCriticalPath());
             JdglCorrectionMeasuresMakeDetail.setUnit(jdglDiffAnalysisSv.getUnit());
-            JdglCorrectionMeasuresMakeDetail.setQuantity(
-                    jdglDiffAnalysisSv.getDesignNum() == null ? BigDecimal.ZERO : jdglDiffAnalysisSv.getDesignNum());
-            JdglCorrectionMeasuresMakeDetail.setDeviationQuantity(jdglDiffAnalysisSv.getThisDeviationNum() == null ?
-                    BigDecimal.ZERO : jdglDiffAnalysisSv.getThisDeviationNum());
+            JdglCorrectionMeasuresMakeDetail.setQuantity(jdglDiffAnalysisSv.getDesignNum() == null ? BigDecimal.ZERO : jdglDiffAnalysisSv.getDesignNum());
+            JdglCorrectionMeasuresMakeDetail.setDeviationQuantity(jdglDiffAnalysisSv.getThisDeviationNum() == null ? BigDecimal.ZERO : jdglDiffAnalysisSv.getThisDeviationNum());
             //总时差
-            BigDecimal totalFloat = new BigDecimal("0");
-            List<JdglMainPlanItem> jdglMainPlanItems = mainPlanItemMap.get(jdglDiffAnalysisSv.getPlanItemCode());
-            if (CollectionUtil.isNotEmpty(jdglMainPlanItems)) {
-                totalFloat = BigDecimal.valueOf(jdglMainPlanItems.get(0).getTotalFloat());
+            JdglMainPlanItem jdglMainPlanItems = mainPlanItemMap.get(jdglDiffAnalysisSv.getPlanItemCode());
+            if (jdglMainPlanItems != null) {
+                Integer totalFloat = jdglMainPlanItems.getTotalFloat();
+                BigDecimal aa = BigDecimal.ZERO;
+                if (totalFloat != null ){
+                    aa = NumberUtil.toBigDecimal(jdglMainPlanItems.getTotalFloat());
+                }
+                JdglCorrectionMeasuresMakeDetail.setTotalFloat(aa);
+                // 责任人
+                JdglCorrectionMeasuresMakeDetail.setDirectorId(jdglMainPlanItems.getExecuterId());
+                JdglCorrectionMeasuresMakeDetail.setDirector(jdglMainPlanItems.getExecuter());
             }
-            JdglCorrectionMeasuresMakeDetail.setTotalFloat(totalFloat);
             //SV值
             JdglCorrectionMeasuresMakeDetail.setSvValue(jdglDiffAnalysisSv.getSvNum());
-            // 实际工程量
-            BigDecimal actQuantity = JdglCorrectionMeasuresMakeDetail.getQuantity().add(JdglCorrectionMeasuresMakeDetail.getDeviationQuantity());
-            if (JdglCorrectionMeasuresMakeDetail.getQuantity().compareTo(BigDecimal.ZERO) != 0) {
-                actQuantity.divide(actQuantity, 2, RoundingMode.HALF_UP);
+            JdglDiffAnalysisPath jdglDiffAnalysis = pathMap.get(jdglDiffAnalysisSv.getPlanItemCode());
+            if (jdglDiffAnalysis != null ) {
+                //完成进度百分比
+                BigDecimal totalProgressCompRate = jdglDiffAnalysis.getTotalProgressCompRate();
+                JdglCorrectionMeasuresMakeDetail.setCompleteProgressPercentage(totalProgressCompRate == null ? BigDecimal.ZERO : totalProgressCompRate);
+                // 完成工期百分比
+                BigDecimal totalDayCompRate = jdglDiffAnalysis.getTotalDayCompRate();
+                JdglCorrectionMeasuresMakeDetail.setCompleteDatePercentage(totalDayCompRate == null ? BigDecimal.ZERO : totalDayCompRate);
             }
-            JdglCorrectionMeasuresMakeDetail.setCompleteProgressPercentage(actQuantity);
-
-            // 完成工期百分比
-            BigDecimal completeDatePercentage = BigDecimal.ZERO;
-            // 责任人
-            for (JdglMainPlanItem item : mainPlanItemList) {
-                if (item.getItemCode().equals(jdglDiffAnalysisSv.getPlanItemCode())) {
-                    JdglCorrectionMeasuresMakeDetail.setDirectorId(item.getExecuterId());
-                    JdglCorrectionMeasuresMakeDetail.setDirector(item.getExecuter());
-
-                    BigDecimal days = BigDecimal.ZERO;
-                    if (item.getActualStartDate() != null) {
-                        // 当前开始时间(当月底)—实际开始时间
-                        days = new BigDecimal(FtDateUtils.getDays(item.getActualStartDate(), endOfMonth));
-                    }
-
-                    // 总体计划时间 取合同工期
-                    BigDecimal totalDays = BigDecimal.ZERO;
-//                    if (item.getStartDate() != null && item.getFinishDate() != null) {
-//                        totalDays = new BigDecimal(
-//                            FtDateUtils.getDays(item.getStartDate(), item.getFinishDate()).longValue());
-//                    }
-                    if (contractInfo != null && StringUtils.isNotBlank(contractInfo.getDuration())) {
-                        // 工期
-                        totalDays = new BigDecimal(contractInfo.getDuration());
-                    }
-                    // 完成工期百分比 = 总体计划：当前开始时间(当月底)—实际开始时间/总体计划时间
-                    if (BigDecimal.ZERO.compareTo(totalDays) != 0) {
-                        completeDatePercentage = BigDecimalUtils.divide0(days, totalDays, 4)
-                                .multiply(new BigDecimal(100));
-                    }
-                }
-            }
-            JdglCorrectionMeasuresMakeDetail.setCompleteDatePercentage(completeDatePercentage);
             newDetailList.add(JdglCorrectionMeasuresMakeDetail);
         }
         // 纠偏方案入库
         if (CollectionUtil.isEmpty(newDetailList)) return;
         jdglCorrectionMeasuresMakeDetailService.insertJdglCorrectionMeasuresMakeDetailList(newDetailList);
-
+        log.info("纠偏措施制定，纠偏方案入库完成");
         //发起流程
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.submit(() -> {

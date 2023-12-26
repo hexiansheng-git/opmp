@@ -111,6 +111,8 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
         //只能查看、编辑自己负责的数据，除非当前记录流程已结束
         Long userId = SecurityUtils.getUserId();
         String userName = SecurityUtils.getUserName();
+        log.info("用户名：{} ---- 密码：{}", userId, userName);
+        log.info("流程状态：{} ----", make.getTaskStatus());
         //数据过滤
         if (StrUtil.isNotBlank(make.getTaskStatus()) &&  !make.getTaskStatus().equals("5") && !userName.equals("admin")) {
             resultList = resultList.stream()
