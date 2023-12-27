@@ -247,7 +247,7 @@ public class JdglCorrectionMeasuresMakeDetail extends TreeNode<JdglCorrectionMea
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：会签责任人审批标识，默认空
      */
     @JsonProperty
     @Excel(name = "预留字段1")

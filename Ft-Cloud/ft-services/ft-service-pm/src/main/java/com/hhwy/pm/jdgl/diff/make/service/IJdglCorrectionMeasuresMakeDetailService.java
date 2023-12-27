@@ -32,4 +32,6 @@ public interface IJdglCorrectionMeasuresMakeDetailService {
     int deleteJdglCorrectionMeasuresMakeDetailByPks(List<Long> jdglCorrectionMeasuresMakeDetailPkList);
 
     List<JdglCorrectionMeasuresMakeDetail> getDetailListByMakeId(JdglCorrectionMeasuresMake makeId);
+
+    int setEidtFlag();
 }

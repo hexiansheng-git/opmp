@@ -1,5 +1,7 @@
 package com.hhwy.pm.common;
 
+import cn.hutool.core.collection.CollUtil;
+import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.flowable.api.RemoteBpmnService;
@@ -29,10 +31,32 @@ public class FlowStartUtil {
     public static void start(String processDefinitionKey, String businessKey, String tableName, List<String> userNameList, String routeId){
         NextNodesParam nextNodesParam = new NextNodesParam();
         nextNodesParam.setProcessDefinitionKey(processDefinitionKey);
+        //BpmnController  nextNodesForFeign
         R r = remoteBpmnService.nextNodesForFeign(nextNodesParam);
         int code = r.getCode();
         if (code != 200) {
             log.error("发起流程失败，获取下一节点实例失败，状态code：{}---响应mas：{}---响应data：{}", r.getCode(), r.getMsg(), r.getData());
+            return;
+        }
+        if (r.getData() == null){
+            log.error("发起流程失败，r.getData() == null");
+            return;
+        }
+        String s = JSON.toJSONString(r.getData());
+        List<Map> maps = JSON.parseArray(s, Map.class);
+        if (CollUtil.isEmpty(maps)){
+            log.error("发起流程失败，CollUtil.isEmpty(maps)");
+            return;
+        }
+        Map map = maps.get(0);
+        if (null == map) {
+            log.error("发起流程失败，null == map");
+            return;
+        }
+        Object nodeId = map.get("nodeId");
+        if (nodeId == null)
+        {
+            log.error("发起流程失败，nodeId == null");
             return;
         }
         StartFlowResource startFlowResource = new StartFlowResource();
@@ -46,8 +70,9 @@ public class FlowStartUtil {
         startFlowResource.setVariables(variableParam);
         variableParam.put("routeId", routeId);
         variableParam.put("tableName", tableName);
-        String assginList = "assigneeList_" + r.getData();
+        String assginList = "assigneeList_" + nodeId;
         variableParam.put(assginList, userNameList);
+        //BpmnController  startAndCompleteFlowForFeign
         R r1 = remoteBpmnService.startAndCompleteFlowForFeign(startFlowResource);
         if (r1.getCode() == 200){
             log.error("流程发起成功，状态code：{}---响应mas：{}---响应data：{}", r1.getCode(), r1.getMsg(), r1.getData());
