@@ -8,6 +8,7 @@ import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpRang
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureOrgService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -25,6 +26,7 @@ public class QqchMeasureServiceImpl implements IQqchMeasureService {
     private IQqchMeasureExpPersonService personService;
 
     @Override
+    @Transactional
     public void saveAll(QqchMeasureExpDTO expVO) {
         measureExpRangeService.saveTreeList(expVO);
         personService.saveList(expVO);
