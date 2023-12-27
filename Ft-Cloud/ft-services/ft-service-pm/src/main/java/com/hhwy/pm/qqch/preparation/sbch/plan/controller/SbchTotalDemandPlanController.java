@@ -68,6 +68,11 @@ public class SbchTotalDemandPlanController extends BaseController {
 
     /**
      * 查询设备总部计划总需用详情列表--领导视角 其他功能调用
+     *
+     * 7.4.3 选择7.1的设备，查询条件：当地采购数量 大于0
+     * 7.3.2 选择7.1的设备，查询条件：是特种设备
+     * 7.2.4 选择7.1的设备，查询条件：协作单位自带数量 大于0
+     * 7.2.5 选择7.1的设备，查询条件：当地采购数量 大于0
      */
     @PostMapping("/leaderList")
     @ResponseBody

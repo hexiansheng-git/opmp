@@ -3,6 +3,7 @@ package com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.domain.KcsjPlanCommunicationRecords;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.mapper.KcsjPlanCommunicationRecordsMapper;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.service.IKcsjPlanCommunicationRecordsService;
@@ -25,6 +26,8 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
     @Autowired
     private KcsjPlanCommunicationRecordsMapper kcsjPlanCommunicationRecordsMapper;
 
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
     public KcsjPlanCommunicationRecords getKcsjPlanCommunicationRecords(KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords) {
         return kcsjPlanCommunicationRecordsMapper.getKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecords);
@@ -38,9 +41,27 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
      */
     public List<KcsjPlanCommunicationRecords> getKcsjPlanCommunicationRecordsList(KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords) {
 
-        //筛选条件  沟通主题，沟通日期(前端传开始日期和结束日期)
+        List<KcsjPlanCommunicationRecords> list = kcsjPlanCommunicationRecordsMapper.getKcsjPlanCommunicationRecordsList(kcsjPlanCommunicationRecords);
 
-        return kcsjPlanCommunicationRecordsMapper.getKcsjPlanCommunicationRecordsList(kcsjPlanCommunicationRecords);
+        /*if(!CollectionUtils.isEmpty(list)) {
+            //用户昵称处理
+            List<String> userNameList = list.stream().map(e -> e.getCreateUserName()).collect(Collectors.toList());
+            Map<String, Object> map = new HashMap<>();
+            map.put("tenantKey", SecurityUtils.getTenantKey());
+            map.put("user_name", String.join(",", userNameList));
+            List<SysUser> sysUserList = systemServiceApi.selectUserInfoByNickNameAndTenant(map);
+            for (int i = 0; i < list.size(); i++) {
+                String userName = list.get(i).getCreateUserName();
+                List<SysUser> userList = sysUserList.stream().filter(e -> e.getUserName().equals(userName)).collect(Collectors.toList());
+                if (!CollectionUtils.isEmpty(userList)) {
+                    list.get(i).setPtVar1(userList.get(0).getNickName());
+                }
+            }
+        }*/
+
+
+        return list;
+
     }
 
     @Transactional
@@ -52,7 +73,8 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
     }
 
     @Transactional
-    public AjaxResult insertKcsjPlanCommunicationRecordsList(List<KcsjPlanCommunicationRecords> kcsjPlanCommunicationRecordsList) {
+    public AjaxResult insertKcsjPlanCommunicationRecordsList
+            (List<KcsjPlanCommunicationRecords> kcsjPlanCommunicationRecordsList) {
 
         //获取需要新增的数据集合
         List<KcsjPlanCommunicationRecords> insertList = new ArrayList<>();
@@ -62,7 +84,7 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
         for (KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords : kcsjPlanCommunicationRecordsList) {
             if ("0".equals(kcsjPlanCommunicationRecords.getType())) {
                 insertList.add(kcsjPlanCommunicationRecords);
-            }else{
+            } else {
                 updateList.add(kcsjPlanCommunicationRecords);
             }
 
@@ -79,7 +101,7 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
         }
 
         if (updateList.size() > 0) {
-            for (KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords :updateList) {
+            for (KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords : updateList) {
                 kcsjPlanCommunicationRecords.setUpdateUser(SecurityUtils.getUserId().toString());
                 kcsjPlanCommunicationRecords.setUpdateTime(DateUtils.getNowDate());
             }
@@ -98,7 +120,8 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
     }
 
     @Transactional
-    public int updateKcsjPlanCommunicationRecordsList(List<KcsjPlanCommunicationRecords> kcsjPlanCommunicationRecordsList) {
+    public int updateKcsjPlanCommunicationRecordsList
+            (List<KcsjPlanCommunicationRecords> kcsjPlanCommunicationRecordsList) {
         for (KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords : kcsjPlanCommunicationRecordsList) {
             kcsjPlanCommunicationRecords.setUpdateUser(SecurityUtils.getUserName());
             kcsjPlanCommunicationRecords.setUpdateTime(DateUtils.getNowDate());

@@ -1,18 +1,23 @@
 package com.hhwy.pm.xmsl.project.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount;
 import com.hhwy.pm.xmsl.project.domain.vo.XmslProjectEngineeringAmountExportVo;
+import com.hhwy.pm.xmsl.project.domain.vo.XmslProjectEngineeringAmountImportVo;
 import com.hhwy.pm.xmsl.project.mapper.XmslProjectEngineeringAmountMapper;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectEngineeringAmountService;
+import com.hhwy.utils.collection.ListUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -96,6 +101,24 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
     @Transactional
     public int deleteProjectEngineeringAmountByPks(List<Long> projectEngineeringAmountPkList) {
         return xmslProjectEngineeringAmountMapper.deleteProjectEngineeringAmountByPks(projectEngineeringAmountPkList);
+    }
+
+    @Override
+    public void checkoutImportData(List<XmslProjectEngineeringAmountImportVo> list) throws IOException, ClassNotFoundException {
+        List<XmslProjectEngineeringAmountImportVo> newList = ListUtil.deepCopy(list);
+        newList = ListTreeUtil.formatList(newList,XmslProjectEngineeringAmountImportVo::getChildren,XmslProjectEngineeringAmountImportVo::setChildren);
+        for (int i = 0; i < newList.size(); i++) {
+            XmslProjectEngineeringAmountImportVo xmslProjectEngineeringAmountImportVo = newList.get(i);
+            String amount = xmslProjectEngineeringAmountImportVo.getAmount();
+            if(StringUtils.isNotBlank(amount)){
+                try {
+                    Double.valueOf(amount);
+                }catch (Exception e){
+                    int j = i + 1;
+                    throw new NumberFormatException("第" + j +"行 数量不符合文字规范，请重新导入！");
+                }
+            }
+        }
     }
 
     @Override

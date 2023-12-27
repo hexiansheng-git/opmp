@@ -2,7 +2,10 @@ package com.hhwy.pm.xmsl.project.service;
 
 import com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount;
 import com.hhwy.pm.xmsl.project.domain.vo.XmslProjectEngineeringAmountExportVo;
+import com.hhwy.pm.xmsl.project.domain.vo.XmslProjectEngineeringAmountImportVo;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -19,6 +22,7 @@ public interface IXmslProjectEngineeringAmountService {
     int deleteProjectEngineeringAmount(XmslProjectEngineeringAmount xmslProjectEngineeringAmount);
 
     int deleteProjectEngineeringAmountByPks(List<Long> projectEngineeringAmountPkList);
+    void checkoutImportData(List<XmslProjectEngineeringAmountImportVo> list) throws ParseException, IOException, ClassNotFoundException;
 
     List<XmslProjectEngineeringAmountExportVo> getProjectEngineeringAmountExportVoList(XmslProjectEngineeringAmount projectEngineeringAmountParam);
 }

@@ -12,7 +12,9 @@ import com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount;
 import com.hhwy.pm.xmsl.project.domain.vo.XmslProjectEngineeringAmountExportVo;
 import com.hhwy.pm.xmsl.project.domain.vo.XmslProjectEngineeringAmountImportVo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectEngineeringAmountService;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.BeanUtils;
 import org.springframework.validation.annotation.Validated;
@@ -52,38 +54,45 @@ public class XmslProjectEngineeringAmountController extends BaseController{
      * @param file
      * @return
      */
-    @PostMapping("import")
-    public AjaxResult importProjectEngineeringAmount(@RequestPart("file") MultipartFile file){
-        ExcelUtils<XmslProjectEngineeringAmountImportVo> util = new ExcelUtils<>(XmslProjectEngineeringAmountImportVo.class);
-        try {
-            InputStream inputStream = file.getInputStream();
-            List<XmslProjectEngineeringAmountImportVo> xmslProjectEngineeringAmountImportVoList = util.importExcel(inputStream);
-            for (XmslProjectEngineeringAmountImportVo xmslProjectEngineeringAmountImportVo : xmslProjectEngineeringAmountImportVoList) {
-                xmslProjectEngineeringAmountImportVo.setTreeId(IdWorker.createId());
-            }
-            for (XmslProjectEngineeringAmountImportVo projectEngineeringAmountImportVo1 : xmslProjectEngineeringAmountImportVoList) {
-                String parentInnerCode = projectEngineeringAmountImportVo1.getParentInnerCode();
-                if(StringUtils.isNotBlank(parentInnerCode)){
-                    for (XmslProjectEngineeringAmountImportVo projectEngineeringAmountImportVo2 : xmslProjectEngineeringAmountImportVoList) {
-                        if(parentInnerCode.equals(projectEngineeringAmountImportVo2.getInnerCode())){
-                            projectEngineeringAmountImportVo1.setParentTreeId(projectEngineeringAmountImportVo2.getTreeId());
-                            break;
-                        }
-                    }
-                }
-            }
-            ArrayList<XmslProjectEngineeringAmount> resultList = new ArrayList<>();
-            for (XmslProjectEngineeringAmountImportVo projectEngineeringAmountImportVo : xmslProjectEngineeringAmountImportVoList) {
-                XmslProjectEngineeringAmount xmslProjectEngineeringAmount = new XmslProjectEngineeringAmount();
-                BeanUtils.copyProperties(projectEngineeringAmountImportVo,xmslProjectEngineeringAmount);
-                resultList.add(xmslProjectEngineeringAmount);
-            }
-            return AjaxResult.success(resultList);
-        } catch (Exception e) {
-            throw new RuntimeException("导入失败！");
-        }
+//    @PostMapping("import")
+//    public AjaxResult importProjectEngineeringAmount(@RequestPart("file") MultipartFile file){
+//        ExcelUtils<XmslProjectEngineeringAmountImportVo> util = new ExcelUtils<>(XmslProjectEngineeringAmountImportVo.class);
+//        try {
+//            InputStream inputStream = file.getInputStream();
+//            List<XmslProjectEngineeringAmountImportVo> xmslProjectEngineeringAmountImportVoList = util.importExcel(inputStream);
+//            for (XmslProjectEngineeringAmountImportVo xmslProjectEngineeringAmountImportVo : xmslProjectEngineeringAmountImportVoList) {
+//                xmslProjectEngineeringAmountImportVo.setTreeId(IdWorker.createId());
+//            }
+//            for (XmslProjectEngineeringAmountImportVo projectEngineeringAmountImportVo1 : xmslProjectEngineeringAmountImportVoList) {
+//                String parentInnerCode = projectEngineeringAmountImportVo1.getParentInnerCode();
+//                if(StringUtils.isNotBlank(parentInnerCode)){
+//                    for (XmslProjectEngineeringAmountImportVo projectEngineeringAmountImportVo2 : xmslProjectEngineeringAmountImportVoList) {
+//                        if(parentInnerCode.equals(projectEngineeringAmountImportVo2.getInnerCode())){
+//                            projectEngineeringAmountImportVo1.setParentTreeId(projectEngineeringAmountImportVo2.getTreeId());
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//            ArrayList<XmslProjectEngineeringAmount> resultList = new ArrayList<>();
+//            for (XmslProjectEngineeringAmountImportVo projectEngineeringAmountImportVo : xmslProjectEngineeringAmountImportVoList) {
+//                XmslProjectEngineeringAmount xmslProjectEngineeringAmount = new XmslProjectEngineeringAmount();
+//                BeanUtils.copyProperties(projectEngineeringAmountImportVo,xmslProjectEngineeringAmount);
+//                resultList.add(xmslProjectEngineeringAmount);
+//            }
+//            return AjaxResult.success(resultList);
+//        } catch (Exception e) {
+//            throw new RuntimeException("导入失败！");
+//        }
+//    }
+    @PostMapping("/import")
+    public AjaxResult importData(@RequestPart("file") MultipartFile file) throws Exception {
+        FtExcelUtil<XmslProjectEngineeringAmountImportVo> excelUtil = new FtExcelUtil<>(XmslProjectEngineeringAmountImportVo.class);
+        List<XmslProjectEngineeringAmountImportVo> list = excelUtil.importTreeExcelxx(file.getInputStream(),XmslProjectEngineeringAmountImportVo::getChildren);
+        projectEngineeringAmountService.checkoutImportData(list);
+        ListTreeUtil.preserveIdPid(list,XmslProjectEngineeringAmountImportVo::setId,XmslProjectEngineeringAmountImportVo::setPid,XmslProjectEngineeringAmountImportVo::getChildren);
+        return AjaxResult.success(list);
     }
-
     /**
      * 导出
      * @param response

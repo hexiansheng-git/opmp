@@ -58,7 +58,7 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
 
     @Transactional
     public int updateSgjsExperimentTotalPlan(SgjsExperimentTotalPlan sgjsExperimentTotalPlan) {
-        sgjsExperimentTotalPlan.setUpdateUser(SecurityUtils.getUserName());
+        sgjsExperimentTotalPlan.setPtVar2(SecurityUtils.getUserId()+"");
         return sgjsExperimentTotalPlanMapper.updateSgjsExperimentTotalPlan(sgjsExperimentTotalPlan);
     }
 

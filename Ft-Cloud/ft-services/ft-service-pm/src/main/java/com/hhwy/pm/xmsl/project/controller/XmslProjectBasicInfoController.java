@@ -16,6 +16,7 @@ import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectInfoWithOther;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -123,11 +124,13 @@ public class XmslProjectBasicInfoController extends BaseController{
     @PostMapping("/update")
     public AjaxResult updateProjectBasicInfo(@Validated(ValidationGroups.Update.class) @RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
         try {
+            String resStr = JSON.toJSONString(xmslProjectBasicInfoParam);
             projectBasicInfoService.updateProjectBasicInfo(xmslProjectBasicInfoParam);
+
             String res = HttpRequest.post(gmUrl + "/gm/projectBasicInfo/updateFromPm")
                     .header("Content-Type", "application/json")
                     .header(HttpHeadersUtils.getCommonHeaders())
-                    .body(JSON.toJSONString(xmslProjectBasicInfoParam)).execute().body();
+                    .body(resStr).execute().body();
             JSONObject resObj = JSON.parseObject(res);
             if(!resObj.get("code").equals(200)){
                 return AjaxResult.success("项目信息修改成功! 项目信息同步异常请联系管理员进行处理.");

@@ -136,4 +136,10 @@ public class UserController extends BaseController {
         List<SysUser> list = iUserService.selectUserList(user);
         return this.getDataTableAjaxResult(list);
     }
+
+    @PostMapping("/selectUserInfoByUserNameAndTenant")
+    public List<SysUser> selectUserInfoByUserNameAndTenant(@RequestBody Map<String,String> map) {
+        List<SysUser> userList = iUserService.selectUserInfoByUserNameAndTenant(map);
+        return userList;
+    }
 }

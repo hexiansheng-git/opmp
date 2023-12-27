@@ -107,6 +107,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             public AjaxResult addWarn(TWarn tWarn) {
                 return null;
             }
+
+            @Override
+            public List<SysUser> selectUserInfoByUserNameAndTenant(Map map) {
+                return new ArrayList<>();
+            }
         };
     }
 }

@@ -53,4 +53,5 @@ public interface IUserService {
 
     List<SysUser> selectUserList(SysUser user);
 
+    List<SysUser> selectUserInfoByUserNameAndTenant(Map<String, String> map);
 }

@@ -83,8 +83,8 @@ public class KcsjDesignFileManageServiceImpl implements IKcsjDesignFileManageSer
                     kcsjDesignFileManageList.addAll(sgjsPlanMeasureManage2);
                 }
             }
-            //List<KcsjDesignFileManage> collect = kcsjDesignFileManageList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(KcsjDesignFileManage::getId))), ArrayList::new));
-            list = kcsjDesignFileManageList.stream().distinct().sorted(Comparator.comparing(KcsjDesignFileManage::getSerialNumber)).collect(Collectors.toList());
+            List<KcsjDesignFileManage> collect = kcsjDesignFileManageList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(KcsjDesignFileManage::getId))), ArrayList::new));
+            list = collect.stream().sorted(Comparator.comparing(KcsjDesignFileManage::getSerialNumber)).collect(Collectors.toList());
         }
         kcsjDesignFileManageVo.setTreeList(TreeUtil.newBuild(list));
         return kcsjDesignFileManageVo;

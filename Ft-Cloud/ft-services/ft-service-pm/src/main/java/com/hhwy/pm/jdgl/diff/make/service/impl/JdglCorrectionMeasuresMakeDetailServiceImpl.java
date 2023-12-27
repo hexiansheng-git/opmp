@@ -4,19 +4,23 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMake;
 import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMakeDetail;
 import com.hhwy.pm.jdgl.diff.make.mapper.JdglCorrectionMeasuresMakeDetailMapper;
 import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeDetailService;
+import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.idworker.IdWorker;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zhenglili
@@ -24,10 +28,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @remark 纠偏措施制定详情
  */
 @Service
+@Slf4j
 public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrectionMeasuresMakeDetailService {
 
     @Autowired
     private JdglCorrectionMeasuresMakeDetailMapper jdglCorrectionMeasuresMakeDetailMapper;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
     public JdglCorrectionMeasuresMakeDetail getJdglCorrectionMeasuresMakeDetail(
         JdglCorrectionMeasuresMakeDetail jdglCorrectionMeasuresMakeDetail) {
@@ -101,21 +108,43 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
         List<JdglCorrectionMeasuresMakeDetail> resultList = jdglCorrectionMeasuresMakeDetailMapper.getJdglCorrectionMeasuresMakeDetailList(jdglCorrectionMeasuresMakeDetail);
         if (CollectionUtil.isEmpty(resultList))
             return new ArrayList<>();
-        //所有责任人，给前端流程审批用
-        String directorIds = resultList.stream()
-                .filter(p -> StrUtil.isNotBlank(p.getDirectorId()))
-                .map(JdglCorrectionMeasuresMakeDetail::getDirectorId)
-                .collect(Collectors.joining(","));
-        make.setPtVar1(directorIds);
         //只能查看、编辑自己负责的数据，除非当前记录流程已结束
         Long userId = SecurityUtils.getUserId();
         String userName = SecurityUtils.getUserName();
+        log.info("用户名：{} ---- 密码：{}", userId, userName);
+        log.info("流程状态：{} ----", make.getTaskStatus());
         //数据过滤
         if (StrUtil.isNotBlank(make.getTaskStatus()) &&  !make.getTaskStatus().equals("5") && !userName.equals("admin")) {
             resultList = resultList.stream()
-                    .filter(p -> StrUtil.isNotBlank(p.getDirectorId()) && p.getDirectorId().equals(String.valueOf(userId)))
+                    .filter(p -> StrUtil.isNotBlank(p.getDirectorId()) && p.getDirectorId().equals(userName))
                     .collect(Collectors.toList());
         }
+        //将所有责任人username和nickname返回前端，给流程审批用
+        String loginAcccount = resultList.stream()
+                .filter(p -> StrUtil.isNotBlank(p.getDirectorId()))
+                .map(JdglCorrectionMeasuresMakeDetail::getDirectorId)
+                .distinct().collect(Collectors.joining(","));
+        if (StrUtil.isBlank(loginAcccount))
+            return resultList;
+        //username
+        make.setPtVar1(loginAcccount);
+        //nickname
+        Map<String, String> parm = new HashMap<>();
+        parm.put("userNames", loginAcccount);
+        parm.put("tenantKey", SecurityUtils.getTenantKey());
+        List<SysUser> userList = systemServiceApi.selectUserInfoByUserNameAndTenant(parm);
+        if (CollectionUtil.isEmpty(userList)) {
+            log.error("未查到用户信息：username--{}，tenantKey--{}", loginAcccount, SecurityUtils.getTenantKey());
+            return resultList;
+        }
+        StringBuilder sb = new StringBuilder();
+        Map<String,String> nickNameMap = userList.stream().collect(Collectors.toMap(SysUser::getUserName, SysUser::getNickName));
+        String[] usernameArr = loginAcccount.split(",");
+        for (String username : usernameArr) {
+            sb.append(",").append(nickNameMap.get(username));
+        }
+        //nickname
+        make.setPtVar2(StrUtil.isBlank(sb.toString())?"":sb.toString().substring(1));
         return resultList;
     }
 }

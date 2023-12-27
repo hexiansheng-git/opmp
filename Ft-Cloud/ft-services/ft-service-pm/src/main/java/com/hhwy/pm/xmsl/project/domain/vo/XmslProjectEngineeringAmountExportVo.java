@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.common.core.annotation.Excel;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-03 09:48:34
@@ -30,7 +32,7 @@ public class XmslProjectEngineeringAmountExportVo {
      */
     @JsonProperty
     @Excel(name = "数量")
-    private String amount;
+    private BigDecimal amount;
     /**
      * 字段描述：备注/描述
      */

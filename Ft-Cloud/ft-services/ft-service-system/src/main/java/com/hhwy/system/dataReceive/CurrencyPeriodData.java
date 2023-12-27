@@ -1,5 +1,7 @@
 package com.hhwy.system.dataReceive;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -18,12 +20,10 @@ import com.hhwy.utils.redisUtil.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,15 +45,26 @@ public class CurrencyPeriodData {
     @Autowired
     private IPeriodCurrencyService periodCurrencyService;
 
-    private String caiwuyun_url = "http://esb.cfhec.net/env-101/por-1002/esb/haiwai_ju_caiwuyun/caiwuyun_url";
-    private String caiwuyun_apiKey = "duZXF5cW654rhAOeSJrfVSXrePw4d5gl";
+    private static String caiwuyun_url = "http://esb.cfhec.net/env-101/por-1002/esb/haiwai_ju_caiwuyun/caiwuyun_url";
+    private static String caiwuyun_apiKey = "duZXF5cW654rhAOeSJrfVSXrePw4d5gl";
 
+    /***
+     * 功能描述: 拉取期次汇率，每月底拉取一次,拉取下个月的数据
+     * 作者: fushudong
+     * 时间: 2023/12/21
+     */
     @GetMapping("pullPeriodCurrency")
     public AjaxResult pullPeriodCurrency() {
 
         log.info("---------------------------------------------------------------");
         //请求参数
         String year = String.valueOf(DateUtil.thisYear());
+        Date date = new Date();
+        DateTime dateTime = DateUtil.offsetMonth(date, 1);
+        DateTime beginOfMonth = DateUtil.beginOfMonth(dateTime);
+        DateTime endOfMonth = DateUtil.endOfMonth(dateTime);
+        String beginOfMonthStr = DateUtil.format(beginOfMonth, DatePattern.NORM_DATETIME_PATTERN);
+        String endOfMonthStr = DateUtil.format(endOfMonth, DatePattern.NORM_DATETIME_PATTERN);
         Map<String, String> header = new HashMap<>();
         header.put("apikey", caiwuyun_apiKey);
         //数据拼装结果
@@ -64,7 +75,7 @@ public class CurrencyPeriodData {
         while (flag){
             log.info("拉取期次、汇率开始， 页码：{}", pageNum);
             //发送请求
-            String resp = HttpRequestUtils.post(caiwuyun_url, header, getReqParams(year, pageNum));
+            String resp = HttpRequestUtils.post(caiwuyun_url, header, getReqParams(year, pageNum, beginOfMonthStr, endOfMonthStr));
             // 结果解析
             JSONObject jsonObject = JSONObject.parseObject(resp, JSONObject.class);
             if(!"success".equals(jsonObject.get("msg"))){
@@ -255,16 +266,16 @@ public class CurrencyPeriodData {
     }
 
 
-    public static void main(String[] args) throws ParseException {
-//        String str="20230331";
-//        SimpleDateFormat sf=new SimpleDateFormat("yyyy-MM-dd");
-//        String format = sf.format(str);
-//        Date date = sf.parse(format);
-//        System.out.println("111");
-
-        String str=String.format("%02d",78);
-        System.out.println(str);
-    }
+//    public static void main(String[] args) throws ParseException {
+////        String str="20230331";
+////        SimpleDateFormat sf=new SimpleDateFormat("yyyy-MM-dd");
+////        String format = sf.format(str);
+////        Date date = sf.parse(format);
+////        System.out.println("111");
+//
+//        String str=String.format("%02d",78);
+//        System.out.println(str);
+//    }
 
     /**
      * yyyyMMdd转yyyy-MM-dd
@@ -289,7 +300,7 @@ public class CurrencyPeriodData {
      * @param pageNum
      * @return
      */
-    private Map<String, Object> getReqParams(String year, int pageNum){
+    private static Map<String, Object> getReqParams(String year, int pageNum, String starttime, String endtime){
         Map<String, Object> req = new HashMap<>();
         req.put("appInstanceCode", "10000");
         req.put("unitCode", "MDM");
@@ -297,8 +308,8 @@ public class CurrencyPeriodData {
         req.put("dicCode", "MDM26");
         Map<String, Object> whereCondition = new HashMap<>();
         whereCondition.put("year", year);
-        whereCondition.put("starttime", "2023-12-01T10:30:00.262+08:00");
-        whereCondition.put("endtime", "2023-12-31T10:30:00.262+08:00");
+        whereCondition.put("starttime", starttime);
+        whereCondition.put("endtime", endtime);
         whereCondition.put("PageNum", pageNum);
         whereCondition.put("IFPUB", "2");
         whereCondition.put("ORGID", "101140128");
@@ -306,5 +317,29 @@ public class CurrencyPeriodData {
         whereCondition.put("fieldValue", "");
         req.put("whereCondition", whereCondition);
         return req;
+    }
+
+    public static void main(String[] args) {
+        String year = String.valueOf(DateUtil.thisYear());
+        Date date = new Date();
+        DateTime endDate = DateUtil.offsetDay(date, 29);
+        String beginOfMonthStr = DateUtil.format(date, DatePattern.UTC_MS_WITH_XXX_OFFSET_PATTERN);
+//        String beginOfMonthStr = "2023-12-01T10:30:00.262+08:00";
+//        String endOfMonthStr = "2023-12-20T10:30:00.262+08:00";
+        String endOfMonthStr = DateUtil.format(endDate, DatePattern.UTC_MS_WITH_XXX_OFFSET_PATTERN);
+        System.out.println(beginOfMonthStr);
+        System.out.println(endOfMonthStr);
+        Map<String, String> header = new HashMap<>();
+        header.put("apikey", caiwuyun_apiKey);
+        //发送请求
+        String resp = HttpRequestUtils.post(caiwuyun_url, header, getReqParams(year, 1, beginOfMonthStr, endOfMonthStr));
+        // 结果解析
+        JSONObject jsonObject = JSONObject.parseObject(resp, JSONObject.class);
+        if(!"success".equals(jsonObject.get("msg"))){
+            log.error("拉取期次、汇率请求失败， 响应msg：{}", jsonObject.get("msg"));
+        }
+        int totalPage = (int) jsonObject.get("TotalPage");
+        List<JSONObject> data = (List<JSONObject>) jsonObject.get("data");
+        data.forEach(System.out::println);
     }
 }

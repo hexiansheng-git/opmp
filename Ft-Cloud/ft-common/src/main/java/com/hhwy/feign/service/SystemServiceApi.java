@@ -107,4 +107,13 @@ public interface SystemServiceApi {
      */
     @PostMapping("/tWarn/addWarn")
     AjaxResult addWarn(@RequestBody TWarn tWarn);
+
+    /**
+     * 根据用户名，租户标识获取用户信息
+     * @param usernames 登录账号，多个逗号分割
+     * @param tenanKey 租户标识
+     * @return
+     */
+    @GetMapping({"/selfSysUser/selectUserInfoByUserNameAndTenant"})
+    List<SysUser> selectUserInfoByUserNameAndTenant(Map map);
 }
