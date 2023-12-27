@@ -212,8 +212,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         AjaxResult result=validData(sgjsTechnicalManageVo.getTreeList());
         if(result.get("code").toString().equals("200")){
             treeToList=(List<SgjsTechnicalManage>)result.get("data");
-        }
-        else {
+        } else {
             return result;
         }
         //数据处理
@@ -259,7 +258,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             logger.info("子表未删除。。。。。。。。。。");
         }
         //同步总部数据
-        syncDataToGm(treeToList);
+        syncDataToGm(treeToList,sgjsTechnicalManageVo.getDelIdList());
         return AjaxResult.success();
     }
 
@@ -322,7 +321,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
     private void validDataDigui(List<SgjsTechnicalManage>list,List<String> msgList){
         for (SgjsTechnicalManage info:list ) {
             List<SgjsTechnicalManage> children = info.getChildren();
-            if(0==children.size() || null==children){
+            if(null==children || 0==children.size()){
                 String userName = info.getUserName();
                 if(StringUtils.isEmpty(userName)){
                     msgList.add(info.getPostName()+"人员姓名不能为空");
@@ -354,8 +353,9 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         List<SgjsTechnicalManage> techList=new ArrayList<>();
         //递归处理
         digui(list,techList,"");
-
+        logger.info("递归后的数据处理结果:【{}】",techList);
         List<SgjsTechnicalManage> build = TreeUtil.build(techList,0L);
+        logger.info("同步数据处理后结果:【{}】",build);
         //全量删库 并重新入库
         SgjsTechnicalManage info=new SgjsTechnicalManage();
         info.setUpdateUser(SecurityUtils.getUserId()+"");
@@ -366,7 +366,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         manageInfo.setUpdateUser(SecurityUtils.getUserId()+"");
         //删完主表删子表
         sgjsTechnicalManageInfoMapper.delectAll(manageInfo);
-        List<SgjsTechnicalManage> manageList = TreeUtil.treeToList(build);
+        List<SgjsTechnicalManage> manageList = TreeUtil.treeToListWithoutId(build);
         logger.info("主表数据--->【{}】",manageList);
         if(!CollectionUtils.isEmpty(manageList)){
             sgjsTechnicalManageMapper.insertSgjsTechnicalManageList(manageList);
@@ -381,20 +381,22 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
      * @return
      */
     @Override
-    public void syncDataToGm(List<SgjsTechnicalManage> treeToList) {
+    public void syncDataToGm(List<SgjsTechnicalManage> treeToList,List<String> delIdList) {
         List<Long> techIdList=new ArrayList<>();
         diguiTechTree(techIdList,treeToList);
-        //根据techId 批量查询进/离场记录
-        SgjsTechnicalManageInfo info=new SgjsTechnicalManageInfo();
         Map<String,Object> map=new HashMap<>();
         if(!CollectionUtils.isEmpty(techIdList)){
+            SgjsTechnicalManageInfo info=new SgjsTechnicalManageInfo();
             info.setTechIdList(techIdList);
+            //根据主表id 批量查询子表信息
             List<SgjsTechnicalManageInfo> infoList = sgjsTechnicalManageInfoMapper.getSgjsTechnicalManageInfoList(info);
-            // 主表、子表数据一起同步
+            // 子表数据
             map.put("infoList",infoList);
         }
+        //主表数据
         map.put("techList",treeToList);
-
+        //需要删除的数据
+        map.put("delIdList",delIdList);
         long beginMills = System.currentTimeMillis();
         Integer status = 1;
         String errMsg = "";
@@ -448,17 +450,17 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             //跟节点
             handleData(info,manage,path);
             List<QqchPostSetting> children = info.getChildren();
-            if(CollectionUtils.isEmpty(children)){
-                continue;
+            //children
+            if(!CollectionUtils.isEmpty(children)){
+                List<SgjsTechnicalManage> childrenList=new ArrayList();
+                for (int j = 0; j < children.size(); j++) {
+                    SgjsTechnicalManage sgjsTechnicalManage=new SgjsTechnicalManage();
+                    //子节点
+                    handleData2(children.get(j),sgjsTechnicalManage,path,manage.getPath());
+                    childrenList.add(sgjsTechnicalManage);
+                }
+                manage.setChildren(childrenList);
             }
-            List<SgjsTechnicalManage> childrenList=new ArrayList();
-            for (int j = 0; j < children.size(); j++) {
-                SgjsTechnicalManage sgjsTechnicalManage=new SgjsTechnicalManage();
-                //子节点
-                handleData2(children.get(j),sgjsTechnicalManage,path,manage.getPath());
-                childrenList.add(sgjsTechnicalManage);
-            }
-            manage.setChildren(childrenList);
             techList.add(manage);
             if(!CollectionUtils.isEmpty(info.getChildren())){
                 digui(info.getChildren(),techList,path);
@@ -500,7 +502,8 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             String id=manage.getId()+"";
             manage.setPath(path+"/"+id);
         }
-
+        String newPath = manage.getPath().substring(0, manage.getPath().length() - 1);
+        manage.setPath(newPath);
         manage.setPtVar5(info.getId()+"");
         manage.setCreateUser(SecurityUtils.getUserId()+"");
         manage.setCreateTime(DateUtils.getNowDate());
@@ -535,10 +538,8 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         if(null!=info.getHeadcount()){
             manage.setHeadCount(Integer.parseInt(info.getHeadcount()));
         }
-
-            String id=manage.getId()+"";
-            manage.setPath(ter+id);
-
+        String id=manage.getId()+"";
+        manage.setPath(ter+id);
         manage.setPtVar5(info.getId()+"");
         manage.setCreateUser(SecurityUtils.getUserId()+"");
         manage.setCreateTime(DateUtils.getNowDate());

@@ -58,5 +58,5 @@ public interface ISgjsTechnicalManageService {
      * @param list
      * @return
      */
-    void syncDataToGm(List<SgjsTechnicalManage> list);
+    void syncDataToGm(List<SgjsTechnicalManage> list,List<String> delIdList);
 }

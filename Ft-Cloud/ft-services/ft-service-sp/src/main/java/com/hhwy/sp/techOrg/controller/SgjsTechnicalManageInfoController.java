@@ -65,7 +65,7 @@ public class SgjsTechnicalManageInfoController extends BaseController{
         return AjaxResult.success();
     }
 
-    @PreAuthorize(hasPermi = "sgjsTechnicalManageInfo:add")
+    @PreAuthorize(hasPermi = "sgjsTechnicalManageInfo:batchAdd")
     @PostMapping("/batchAdd")
     public AjaxResult insertSgjsTechnicalManageInfoList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsTechnicalManageInfo> sgjsTechnicalManageInfoListParam){
         sgjsTechnicalManageInfoService.insertSgjsTechnicalManageInfoList(sgjsTechnicalManageInfoListParam);

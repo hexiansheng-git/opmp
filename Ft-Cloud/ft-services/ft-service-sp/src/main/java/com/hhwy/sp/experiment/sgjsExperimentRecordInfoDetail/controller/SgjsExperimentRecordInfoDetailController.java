@@ -32,14 +32,14 @@ public class SgjsExperimentRecordInfoDetailController extends BaseController{
 
                                                                                                                                                                                                                                                                                                     
 
-    @PreAuthorize(hasPermi = "sgjsExperimentRecordInfoDetail:list")
+//    @PreAuthorize(hasPermi = "sgjsExperimentRecordInfoDetail:list")
     @GetMapping
     public AjaxResult getSgjsExperimentRecordInfoDetail(@Validated(ValidationGroups.Get.class)  SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetailParam){
         SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetail =  sgjsExperimentRecordInfoDetailService.getSgjsExperimentRecordInfoDetail(sgjsExperimentRecordInfoDetailParam);
         return AjaxResult.success(sgjsExperimentRecordInfoDetail);
     }
 
-    @PreAuthorize(hasPermi = "sgjsExperimentRecordInfoDetail:list")
+//    @PreAuthorize(hasPermi = "sgjsExperimentRecordInfoDetail:list")
     @GetMapping("/list")
     public AjaxResult getSgjsExperimentRecordInfoDetailList(@Validated(ValidationGroups.Select.class) SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetailParam){
         startPage();
