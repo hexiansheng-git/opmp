@@ -3,7 +3,6 @@ package com.hhwy.pm.qqch.preparation.safe.organ.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
-import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.safe.organ.domain.QqchSpecialPersonControlPlan;
 import com.hhwy.pm.qqch.preparation.safe.organ.domain.vo.QqchSpecialPersonControlPlanVo;
@@ -14,12 +13,13 @@ import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -71,23 +71,21 @@ public class QqchSpecialPersonControlPlanServiceImpl implements IQqchSpecialPers
 
         String buttonMark = voParam.getButtonMark();
 
-        if (!CollectionUtils.isEmpty(voParam.getList())) {
+        List<QqchSpecialPersonControlPlan> list = voParam.getList();
+        if (!CollectionUtils.isEmpty(list)) {
             // 校验非空
             if (!ButtonMark.SAVE.equals(buttonMark)) {
-                JyDetailsUtil.jyDetails(voParam.getList(), ValidationGroups.Save.class);
+                JyDetailsUtil.jyDetails(list, ValidationGroups.Save.class);
             }
 
-            for (QqchSpecialPersonControlPlan qqchSpecialPersonControlPlan : voParam.getList()) {
+            for (QqchSpecialPersonControlPlan qqchSpecialPersonControlPlan : list) {
                 qqchSpecialPersonControlPlan.setId(IdWorker.createId());
                 qqchSpecialPersonControlPlan.setVersion(voParam.getVersion());
-                if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
-                    qqchSpecialPersonControlPlan.setValid(Valid.YES);
-                }
                 qqchSpecialPersonControlPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 qqchSpecialPersonControlPlan.setCreateUserName(SecurityUtils.getUserName());
                 qqchSpecialPersonControlPlan.setCreateTime(DateUtils.getNowDate());
             }
-            qqchSpecialPersonControlPlanMapper.insertQqchSpecialPersonControlPlanList(voParam.getList());
+            qqchSpecialPersonControlPlanMapper.insertQqchSpecialPersonControlPlanList(list);
         }
 
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
