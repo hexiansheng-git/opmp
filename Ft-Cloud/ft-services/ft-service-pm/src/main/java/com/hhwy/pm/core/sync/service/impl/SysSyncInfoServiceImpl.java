@@ -1,6 +1,7 @@
 package com.hhwy.pm.core.sync.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.pm.core.sync.domain.SysSyncInfo;
 import com.hhwy.pm.core.sync.enums.SyncBusinessEnum;
 import com.hhwy.pm.core.sync.mapper.SysSyncInfoMapper;
@@ -34,7 +35,6 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -404,6 +404,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 jsonObject.put("projectId", projectBasicInfo.getProjectId());
                 jsonObject.put("projectName", projectBasicInfo.getProjectName());
                 jsonObject.put("projectCode", projectBasicInfo.getProjectCode());
+                jsonObject.put("renewalDate", DateUtils.getDate());
                 jsonObjectList.add(jsonObject);
             }
             rocketMQTemplate.convertAndSend("jdgl_main_plan:tenantSuccess", JSONObject.toJSONString(jsonObjectList));

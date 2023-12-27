@@ -41,4 +41,9 @@ public class EnvReport {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     private Date uploadTime;
+
+    /**
+     * 功能标识
+     */
+    private String moduleIdentity;
 }

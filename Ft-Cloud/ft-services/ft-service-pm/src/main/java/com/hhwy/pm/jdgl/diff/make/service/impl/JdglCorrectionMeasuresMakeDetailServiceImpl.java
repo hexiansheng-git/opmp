@@ -124,7 +124,7 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
         List<JdglCorrectionMeasuresMakeDetail> resultList = TreeNodeUtil.getAncestral(allList, afterFilterList);
         //将所有责任人username和nickname返回前端，给流程审批用
         String loginAcccount = allList.stream()
-                .filter(p -> StrUtil.isNotBlank(p.getDirectorId()))
+                .filter(p -> StrUtil.isNotBlank(p.getDirectorId()) && StrUtil.isBlank(p.getPtVar1()))
                 .map(JdglCorrectionMeasuresMakeDetail::getDirectorId)
                 .distinct().collect(Collectors.joining(","));
         if (StrUtil.isBlank(loginAcccount))
@@ -149,5 +149,14 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
         //nickname
         make.setPtVar2(StrUtil.isBlank(sb.toString())?"":sb.toString().substring(1));
         return resultList;
+    }
+
+    @Override
+    public int setEidtFlag() {
+        JdglCorrectionMeasuresMakeDetail makeDetail = new JdglCorrectionMeasuresMakeDetail();
+        String userName = SecurityUtils.getUserName();
+        makeDetail.setPtVar1("1");
+        makeDetail.setDirectorId(userName);
+        return jdglCorrectionMeasuresMakeDetailMapper.setEidtFlag(makeDetail);
     }
 }

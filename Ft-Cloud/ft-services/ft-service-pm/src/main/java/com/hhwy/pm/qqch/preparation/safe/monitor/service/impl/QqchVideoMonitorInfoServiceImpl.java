@@ -3,26 +3,25 @@ package com.hhwy.pm.qqch.preparation.safe.monitor.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
-import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.safe.monitor.domain.QqchVideoMonitorInfo;
 import com.hhwy.pm.qqch.preparation.safe.monitor.domain.vo.QqchVideoMonitorInfoVo;
 import com.hhwy.pm.qqch.preparation.safe.monitor.mapper.QqchVideoMonitorInfoMapper;
 import com.hhwy.pm.qqch.preparation.safe.monitor.service.IQqchVideoMonitorInfoService;
-import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
 import com.hhwy.pm.qqch.preparation.survey.extend.service.impl.QqchPreparationSurveyExtendServiceImpl;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -55,14 +54,6 @@ public class QqchVideoMonitorInfoServiceImpl implements IQqchVideoMonitorInfoSer
         qryParam.setVersion(version);
         List<QqchVideoMonitorInfo> list = qqchVideoMonitorInfoMapper.getQqchVideoMonitorInfoList(qryParam);
 
-        //获取附件组id（页面标识和版本号控制）
-        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendService
-            .getQqchPreparationSurveyExtend(ModuleIdentity.QQCH_VIDEO_MONITOR_INFO, version);
-        if (qqchPreparationSurveyExtend != null) {
-            vo.setFileGroupId(qqchPreparationSurveyExtend.getFileGroupId());
-            vo.setFileUploadDate(qqchPreparationSurveyExtend.getCreateTime());
-        }
-
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(list);
@@ -80,10 +71,6 @@ public class QqchVideoMonitorInfoServiceImpl implements IQqchVideoMonitorInfoSer
         QqchVideoMonitorInfo deleteParam = new QqchVideoMonitorInfo();
         deleteParam.setVersion(voParam.getVersion());
         qqchVideoMonitorInfoMapper.deleteQqchVideoMonitorInfo(deleteParam);
-
-        // 维护附件
-        qqchPreparationSurveyExtendService
-            .preserveFile(ModuleIdentity.QQCH_VIDEO_MONITOR_INFO, voParam.getVersion(), voParam.getFileGroupId());
 
         String buttonMark = voParam.getButtonMark();
         if (!CollectionUtils.isEmpty(voParam.getList())) {

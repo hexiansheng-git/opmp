@@ -41,7 +41,7 @@ public interface IQqchPreparationSurveyExtendService {
 
     int deleteQqchPreparationSurveyExtendByPks(List<Long> qqchPreparationSurveyExtendPkList);
 
-    EnvReport getEnvReport(BigDecimal version);
+    EnvReport getEnvReport(BigDecimal version, String moduleIdentity);
 
     void saveEnvReport(EnvReport envReport);
 }

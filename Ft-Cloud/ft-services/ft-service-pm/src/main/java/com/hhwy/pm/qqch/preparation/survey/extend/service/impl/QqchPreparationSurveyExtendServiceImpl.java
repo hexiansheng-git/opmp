@@ -3,7 +3,6 @@ package com.hhwy.pm.qqch.preparation.survey.extend.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.extend.domain.EnvReport;
 import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,6 +74,34 @@ public class QqchPreparationSurveyExtendServiceImpl implements IQqchPreparationS
         addData.setVersion(version);
         addData.setValid(Valid.YES);
         this.insertQqchPreparationSurveyExtend(addData);
+    }
+
+    /**
+     * 维护附件
+     * @param moduleIdentity
+     * @param version
+     * @param fileGroupId
+     * @param uploadUser
+     * @param uploadTime
+     */
+    @Transactional
+    public void preserveFile(String moduleIdentity, BigDecimal version, String fileGroupId, String uploadUser, Date uploadTime){
+        //删除附件数据
+        QqchPreparationSurveyExtend delParam = new QqchPreparationSurveyExtend();
+        delParam.setModuleIdentity(moduleIdentity);
+        delParam.setVersion(version);
+        qqchPreparationSurveyExtendMapper.deleteQqchPreparationSurveyExtend(delParam);
+
+        //插入新数据
+        QqchPreparationSurveyExtend addData = new QqchPreparationSurveyExtend();
+        addData.setId(IdWorker.createId());
+        addData.setFileGroupId(fileGroupId);
+        addData.setModuleIdentity(moduleIdentity);
+        addData.setVersion(version);
+        addData.setCreateUserName(uploadUser);
+        addData.setCreateTime(uploadTime);
+        addData.setValid(Valid.YES);
+        qqchPreparationSurveyExtendMapper.insertQqchPreparationSurveyExtend(addData);
     }
 
     /**
@@ -148,16 +176,17 @@ public class QqchPreparationSurveyExtendServiceImpl implements IQqchPreparationS
     }
 
     @Override
-    public EnvReport getEnvReport(BigDecimal version) {
+    public EnvReport getEnvReport(BigDecimal version, String moduleIdentity) {
         if(version == null){
             version = BigDecimal.ONE;
         }
-        QqchPreparationSurveyExtend extend = this.getQqchPreparationSurveyExtend(ModuleIdentity.QQCH_SAFE_ENVIR_RISK_LIST, version);
+        QqchPreparationSurveyExtend extend = this.getQqchPreparationSurveyExtend(moduleIdentity, version);
         EnvReport envReport = new EnvReport();
         if(extend == null){
             return envReport;
         }
         envReport.setVersion(version);
+        envReport.setModuleIdentity(moduleIdentity);
         envReport.setFileGroupId(extend.getFileGroupId());
         envReport.setUploadUser(extend.getCreateUserName());
         envReport.setUploadTime(extend.getCreateTime());
@@ -171,6 +200,6 @@ public class QqchPreparationSurveyExtendServiceImpl implements IQqchPreparationS
         if(version == null){
             version = BigDecimal.ONE;
         }
-        this.preserveFile(ModuleIdentity.QQCH_SAFE_ENVIR_RISK_LIST,version, envReport.getFileGroupId());
+        this.preserveFile(envReport.getModuleIdentity(),version, envReport.getFileGroupId());
     }
 }

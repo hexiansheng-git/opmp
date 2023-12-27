@@ -31,4 +31,6 @@ public interface JdglCorrectionMeasuresMakeDetailMapper {
 
     int deleteJdglCorrectionMeasuresMakeDetailByPks(
         @Param("jdglCorrectionMeasuresMakeDetailPkList") List<Long> jdglCorrectionMeasuresMakeDetailPkList);
+
+    int setEidtFlag(JdglCorrectionMeasuresMakeDetail jdglCorrectionMeasuresMakeDetailParam);
 }

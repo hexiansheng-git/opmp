@@ -714,4 +714,9 @@
       </foreach>
     </where>
   </update>
+
+  <update id="setEidtFlag">
+    UPDATE `jdgl_correction_measures_make_detail` set pt_var1 = #{ptVar1}
+    where del_flag = 0 and `director_id` = #{directorId}
+  </update>
 </mapper>
