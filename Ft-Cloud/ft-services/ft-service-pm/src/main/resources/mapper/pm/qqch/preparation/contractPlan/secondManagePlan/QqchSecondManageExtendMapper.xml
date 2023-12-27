@@ -397,7 +397,7 @@
     </update>
 
     <select id="selectMaxVersion" resultType="java.math.BigDecimal">
-        select ifnull(max(version), 1) from qqch_second_manage_extend where del_flag = '0' and valid = '1' and type = #{keyPointType} order by version desc;
+        select ifnull(max(version), 1) from qqch_second_manage_extend where del_flag = '0' and type = #{keyPointType} order by version desc;
     </select>
     <select id="selectLessOrEqualAssignVersion" resultType="java.math.BigDecimal">
         select version

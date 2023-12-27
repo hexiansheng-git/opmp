@@ -63,6 +63,8 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
     @Autowired
     private IQqchReviewService qqchReviewService;
 
+    private static final String TN = "qqch_second_manage_key_point";
+
 
     public QqchSecondManageKeyPoint getQqchSecondManageKeyPoint(QqchSecondManageKeyPoint qqchSecondManageKeyPoint) {
         return qqchSecondManageKeyPointMapper.getQqchSecondManageKeyPoint(qqchSecondManageKeyPoint);
@@ -75,7 +77,7 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
      */
     public List<QqchSecondManageKeyPoint> getQqchSecondManageKeyPointList(QqchSecondManageKeyPoint qqchSecondManageKeyPoint) {
         //获取版本
-        BigDecimal version = VersionUtil.getVersion("qqch_second_manage_key_point",qqchSecondManageKeyPoint.getVersion());
+        BigDecimal version = VersionUtil.getVersion(TN,qqchSecondManageKeyPoint.getVersion());
         qqchSecondManageKeyPoint.setVersion(version);
         List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointList = qqchSecondManageKeyPointMapper.getQqchSecondManageKeyPointList(qqchSecondManageKeyPoint);
 
@@ -142,7 +144,7 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
     /**
      * 获取普通要点策划/变更策划/索赔策划Vo
      *
-     * @param version 版本
+     * @param version 变更版本
      * @param keyPointType 要点类型
      * @return
      */
@@ -150,14 +152,15 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
     public SecondManageKeyPointPlanVo getSecondManageKeyPointPlanVo(BigDecimal version, String keyPointType) {
         CommonAssert.notBlank(keyPointType,"要点类型不能为空！");
 
-        version = qqchSecondManageExtendService.getVersion(version,keyPointType);
+        BigDecimal mainVersion = VersionUtil.getVersion(TN,version);
+        BigDecimal subVersion = qqchSecondManageExtendService.getVersion(version,keyPointType);
 
         SecondManageKeyPointPlanVo secondManageKeyPointPlanVo = new SecondManageKeyPointPlanVo();
 
         //获取附件数据
         QqchSecondManageExtend qqchSecondManageExtend = new QqchSecondManageExtend();
         qqchSecondManageExtend.setType(keyPointType);
-        qqchSecondManageExtend.setVersion(version);
+        qqchSecondManageExtend.setVersion(subVersion);
         qqchSecondManageExtend = qqchSecondManageExtendService.getQqchSecondManageExtend(qqchSecondManageExtend);
         if(qqchSecondManageExtend != null){
             String fileGroupId = qqchSecondManageExtendService.getQqchSecondManageExtend(qqchSecondManageExtend).getFileGroupId();
@@ -165,9 +168,9 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
         }
 
         //获取二次经营要点识别数据
-        List<SecondManageKeyPointPlan> secondManageKeyPointPlanList = this.getTableData(version, keyPointType);
+        List<SecondManageKeyPointPlan> secondManageKeyPointPlanList = this.getTableData(mainVersion, keyPointType);
 
-        secondManageKeyPointPlanVo.setVersion(version);
+        secondManageKeyPointPlanVo.setVersion(subVersion);
         secondManageKeyPointPlanVo.setKeyPointType(keyPointType);
         secondManageKeyPointPlanVo.setStageIdentity(qqchReviewService.getStage());
         secondManageKeyPointPlanVo.setList(secondManageKeyPointPlanList);
