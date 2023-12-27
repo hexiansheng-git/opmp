@@ -1,11 +1,9 @@
 package com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.TreeUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.util.TreeNodeUtil;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -21,7 +19,6 @@ import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -82,11 +79,18 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
         qqchSurveyWorkPlan.setVersion(qqchSurveyWorkPlanVo.getVersion());
         qqchSurveyWorkPlanMapper.deleteQqchSurveyWorkPlan(qqchSurveyWorkPlan);
         List<QqchSurveyWorkPlan> paramList = qqchSurveyWorkPlanVo.getQqchSurveyWorkPlanList();
-        if (CollectionUtils.isEmpty(paramList)){
-            return;
+        if (CollectionUtils.isNotEmpty(paramList)){
+            //插入新数据
+            this.insertQqchSurveyWorkPlanList(paramList, qqchSurveyWorkPlanVo.getVersion());
         }
-        //插入新数据
-        this.insertQqchSurveyWorkPlanList(paramList, qqchSurveyWorkPlanVo.getVersion());
+
+        String buttonMark = qqchSurveyWorkPlanVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认状态
+            String menuId = qqchSurveyWorkPlanVo.getMenuId();
+            String stageIdentity = qqchSurveyWorkPlanVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
     }
 
     @Override
