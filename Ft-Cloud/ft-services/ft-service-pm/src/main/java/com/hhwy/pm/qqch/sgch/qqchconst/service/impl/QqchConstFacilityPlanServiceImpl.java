@@ -11,6 +11,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain.QqchSurveyDesignTeams;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain.QqchSurveyEquPlan;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain.QqchSurveyParam;
@@ -113,9 +114,13 @@ public class QqchConstFacilityPlanServiceImpl implements IQqchConstFacilityPlanS
 
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
-    public void saveList(List<QqchConstFacilityPlan> iFacList) {
-        if (CollectionUtils.isEmpty(iFacList)) return;
-        this.insertQqchConstFacilityPlanList(iFacList);
+    public void saveList(List<QqchConstFacilityPlan> iFacList,BigDecimal version) {
+        QqchConstFacilityPlan query = new QqchConstFacilityPlan();
+        query.setVersion(version);
+        this.qqchConstFacilityPlanMapper.deleteQqchConstFacilityPlan(query);
+        if(org.apache.commons.collections4.CollectionUtils.isNotEmpty(iFacList) && iFacList.get(0) instanceof QqchConstFacilityPlan) {
+            this.insertQqchConstFacilityPlanList(iFacList);
+        }
     }
 
     @Override

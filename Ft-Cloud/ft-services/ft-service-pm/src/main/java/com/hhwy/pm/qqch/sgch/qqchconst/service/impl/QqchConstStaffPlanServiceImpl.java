@@ -6,16 +6,17 @@ import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstJob;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlan;
 import com.hhwy.pm.qqch.sgch.qqchconst.mapper.QqchConstStaffPlanMapper;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstStaffPlanService;
 import com.hhwy.pm.qqch.utils.DistinctUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -97,37 +98,40 @@ public class QqchConstStaffPlanServiceImpl implements IQqchConstStaffPlanService
 
 
         CompileEntity staffPlan = iStaffList.get(0);
-        if (iStaffList.size() == 1 && PmConstant.MINUS_ONE.equals(staffPlan.getSubmitFlag())) {
+//        if (iStaffList.size() == 1 && PmConstant.MINUS_ONE.equals(staffPlan.getSubmitFlag())) {
             // 如果前端将所有数据删除了 这边根据version删除数据
             this.qqchConstStaffPlanMapper.deleteByVersion(staffPlan.getVersion());
-            return;
+//            return;
+//        }
+        if(CollectionUtils.isNotEmpty(iStaffList) && staffPlan instanceof QqchConstStaffPlan){
+            this.qqchConstStaffPlanMapper.insertQqchConstStaffPlanList(iStaffList);
         }
-        BigDecimal version = iStaffList.get(0).getVersion();
+//        BigDecimal version = iStaffList.get(0).getVersion();
 
-        // 先将当前版本的所有的数据查询出来 跟前端传入的数据进行比较 交集进行更新 数据库有的前端没有的,删除 前端有的数据库没有的,新增
-        QqchConstStaffPlan where = new QqchConstStaffPlan();
-        where.setVersion(version);
-        where.setDelFlag("0");
-        List<QqchConstStaffPlan> dbJobList = this.qqchConstStaffPlanMapper.getQqchConstStaffPlanList(where);
-
-        // 数据库中的id
-        List<Long> dbIdList = dbJobList.stream().map(QqchConstStaffPlan::getId).collect(Collectors.toList());
-        // 前端的id
-        List<Long> paramIdList = iStaffList.stream().map(QqchConstStaffPlan::getId).collect(Collectors.toList());
-
-
-        // 数据库中有 但是前端没有的数据 删掉
-        List<Long> delIdList = dbIdList.stream().filter(item -> !paramIdList.contains(item)).collect(Collectors.toList());
-        if (!CollectionUtils.isEmpty(delIdList))  this.qqchConstStaffPlanMapper.deleteQqchConstStaffPlanByPks(delIdList);
-
-        // 前端有 数据库中没有 新增
-        List<QqchConstStaffPlan> insertDataList = iStaffList.stream().filter(item -> item.getId() == null || !dbIdList.contains(item.getId())).collect(Collectors.toList());
-        insertDataList.stream().forEach(r->r.setId(IdWorker.createId()));
-        if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(insertDataList))  this.qqchConstStaffPlanMapper.insertQqchConstStaffPlanList(insertDataList);
-
-        // 前端和后台都有的数据 更新
-        List<QqchConstStaffPlan> updateDataList = iStaffList.stream().filter(item -> dbIdList.contains(item.getId())).collect(Collectors.toList());
-        if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(updateDataList)) this.qqchConstStaffPlanMapper.updateQqchConstStaffPlanList(updateDataList);
+//        // 先将当前版本的所有的数据查询出来 跟前端传入的数据进行比较 交集进行更新 数据库有的前端没有的,删除 前端有的数据库没有的,新增
+//        QqchConstStaffPlan where = new QqchConstStaffPlan();
+//        where.setVersion(version);
+//        where.setDelFlag("0");
+//        List<QqchConstStaffPlan> dbJobList = this.qqchConstStaffPlanMapper.getQqchConstStaffPlanList(where);
+//
+//        // 数据库中的id
+//        List<Long> dbIdList = dbJobList.stream().map(QqchConstStaffPlan::getId).collect(Collectors.toList());
+//        // 前端的id
+//        List<Long> paramIdList = iStaffList.stream().map(QqchConstStaffPlan::getId).collect(Collectors.toList());
+//
+//
+//        // 数据库中有 但是前端没有的数据 删掉
+//        List<Long> delIdList = dbIdList.stream().filter(item -> !paramIdList.contains(item)).collect(Collectors.toList());
+//        if (!CollectionUtils.isEmpty(delIdList))  this.qqchConstStaffPlanMapper.deleteQqchConstStaffPlanByPks(delIdList);
+//
+//        // 前端有 数据库中没有 新增
+//        List<QqchConstStaffPlan> insertDataList = iStaffList.stream().filter(item -> item.getId() == null || !dbIdList.contains(item.getId())).collect(Collectors.toList());
+//        insertDataList.stream().forEach(r->r.setId(IdWorker.createId()));
+//        if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(insertDataList))  this.qqchConstStaffPlanMapper.insertQqchConstStaffPlanList(insertDataList);
+//
+//        // 前端和后台都有的数据 更新
+//        List<QqchConstStaffPlan> updateDataList = iStaffList.stream().filter(item -> dbIdList.contains(item.getId())).collect(Collectors.toList());
+//        if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(updateDataList)) this.qqchConstStaffPlanMapper.updateQqchConstStaffPlanList(updateDataList);
         
     }
 

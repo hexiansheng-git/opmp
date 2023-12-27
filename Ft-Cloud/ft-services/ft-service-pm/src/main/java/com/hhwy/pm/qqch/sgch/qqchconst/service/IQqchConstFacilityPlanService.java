@@ -34,7 +34,7 @@ public interface IQqchConstFacilityPlanService {
 
     int deleteQqchConstFacilityPlanByPks(List<Long> qqchConstFacilityPlanPkList);
 
-    void saveList(List<QqchConstFacilityPlan> iFacList);
+    void saveList(List<QqchConstFacilityPlan> iFacList,BigDecimal version);
 
     /**
      * @param dto 

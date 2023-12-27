@@ -141,16 +141,26 @@ public class QqchConstServiceImpl implements IQqchConstService {
 
             // 给子表数据赋值
             if (!CollectionUtils.isEmpty(jobList)) {
-                List<QqchConstJob> qqchConstJobList = TreeUtil.treeToListWithoutNewId(jobList);
-                for (QqchConstJob qqchConstJob : qqchConstJobList) {
+                List<QqchConstJob> qqchConstJobList = new ArrayList<>();
+                for (QqchConstJob qqchConstJob : jobList) {
                     qqchConstJob = CompileEntity.dealSaveDtoWithoutTree(cons, qqchConstJob);
+                    qqchConstJob.setId(IdWorker.createId());
                     qqchConstJob.setMasterId(id);
+                    qqchConstJobList.add(qqchConstJob);
+                    for (int i = 0; qqchConstJob.getChildren() != null && i < qqchConstJob.getChildren().size(); i++) {
+                        QqchConstJob temp = qqchConstJob.getChildren().get(i);
+                        temp.setId(IdWorker.createId());
+                        temp.setPid(qqchConstJob.getId());
+                        temp.setMasterId(id);
+                        qqchConstJobList.add(temp);
+                    }
                 }
                 iJobList.addAll(qqchConstJobList);
             }
             if (!CollectionUtils.isEmpty(staffList)) {
                 for (QqchConstStaffPlan qqchConstStaffPlan : staffList) {
                     qqchConstStaffPlan = CompileEntity.dealSaveDtoWithoutTree(cons, qqchConstStaffPlan);
+                    qqchConstStaffPlan.setId(IdWorker.createId());
                     qqchConstStaffPlan.setMasterId(id);
                     if (qqchConstStaffPlan.getId() == null) qqchConstStaffPlan.setId(IdWorker.createId());
                 }
@@ -159,6 +169,7 @@ public class QqchConstServiceImpl implements IQqchConstService {
             if (!CollectionUtils.isEmpty(facilityPlanList)) {
                 for (QqchConstFacilityPlan qqchConstFacilityPlan : facilityPlanList) {
                     qqchConstFacilityPlan = CompileEntity.dealSaveDtoWithoutTree(cons, qqchConstFacilityPlan);
+                    qqchConstFacilityPlan.setId(IdWorker.createId());
                     qqchConstFacilityPlan.setMasterId(id);
                     if (qqchConstFacilityPlan.getId() == null) qqchConstFacilityPlan.setId(IdWorker.createId());
                 }
@@ -169,12 +180,12 @@ public class QqchConstServiceImpl implements IQqchConstService {
             this.qqchConstMapper.insertQqchConstList(qqchConsts);
 
         // 保存
-        if(!CollectionUtils.isEmpty(iJobList))
+//        if(!CollectionUtils.isEmpty(iJobList))
             jobService.saveList(CompileEntity.dealSaveDtoWithoutTree(dtoList, iJobList));
-        if(!CollectionUtils.isEmpty(iStaffList))
+//        if(!CollectionUtils.isEmpty(iStaffList))
             staffPlanService.saveList(CompileEntity.dealSaveDtoWithoutTree(dtoList, iStaffList));
-        if(!CollectionUtils.isEmpty(iFacList))
-            facilityPlanService.saveList(CompileEntity.dealSaveDtoWithoutTree(dtoList, iFacList));
+//        if(!CollectionUtils.isEmpty(iFacList))
+            facilityPlanService.saveList(CompileEntity.dealSaveDtoWithoutTree(dtoList, iFacList),dtoList.getVersion());
 
 
     }
