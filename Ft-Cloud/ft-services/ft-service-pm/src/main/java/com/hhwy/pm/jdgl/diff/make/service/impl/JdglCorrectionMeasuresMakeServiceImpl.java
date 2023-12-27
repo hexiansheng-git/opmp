@@ -1,6 +1,9 @@
 package com.hhwy.pm.jdgl.diff.make.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
@@ -29,7 +32,6 @@ import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
-import com.hhwy.utils.core.DateUtil;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
@@ -221,24 +223,27 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
     /**
      * 同步差异化分析数据
      *
-     * @param period
-     * @return
+     * @param 期次 yyyy-MM
      */
     @Transactional
-    public void syncData(Date period) {
+    public void syncData(Date yearMonth) {
         // 获取差异化分析主表数据
         JdglDiffAnalysis qryAnalysis = new JdglDiffAnalysis();
-        qryAnalysis.setPeriod(period);
+        qryAnalysis.setPeriod(yearMonth);
         JdglDiffAnalysis JdglDiffAnalysis = jdglDiffAnalysisService.getJdglDiffAnalysis(qryAnalysis);
         if (JdglDiffAnalysis == null) {
             return;
         }
-        String periodStr = FtDateUtils.getYearMonthStr(period);
-        Date beginOfMonth = DateUtil.getfirstDay(period);
-        Date endOfMonth = DateUtil.getLastDay(period);
+        //时间处理
+        String yearMonthStr = FtDateUtils.getYearMonthStr(yearMonth);
+        DateTime dateTime = DateUtil.offsetDay(yearMonth, -1);
+        String startDateStr = DateUtil.format(dateTime, DatePattern.NORM_MONTH_FORMAT) + "-21";
+        String endDateStr = yearMonthStr + "-20";
+        DateTime startDate = DateUtil.parse(startDateStr, DatePattern.NORM_DATE_PATTERN);
+        DateTime endDate = DateUtil.parse(endDateStr, DatePattern.NORM_DATE_PATTERN);
         //查询是否已存在当期数据,已存在则删除
         JdglCorrectionMeasuresMake qryMake = new JdglCorrectionMeasuresMake();
-        qryMake.setWarnPeriod(periodStr);
+        qryMake.setWarnPeriod(yearMonthStr);
         JdglCorrectionMeasuresMake make = jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMake(qryMake);
         if (make != null) {
             //删除该期次历史版本
@@ -255,7 +260,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         jdglCorrectionMeasuresMake.setId(id);
         jdglCorrectionMeasuresMake.setProjectId(projectBasicInfo.getProjectId());
         jdglCorrectionMeasuresMake.setProjectName(projectBasicInfo.getProjectName());
-        jdglCorrectionMeasuresMake.setWarnPeriod(periodStr);
+        jdglCorrectionMeasuresMake.setWarnPeriod(yearMonthStr);
         jdglCorrectionMeasuresMake.setWarnTime(FtDateUtils.getYearMonthDayDate());
         jdglCorrectionMeasuresMake.setRiskLevel(JdglDiffAnalysis.getRiskLevel());
         jdglCorrectionMeasuresMake.setPeriodTotalScore(JdglDiffAnalysis.getTotalGrade());
@@ -288,7 +293,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         List<JdglDiffAnalysisSv> diffAnalysisSvList = objects.stream().distinct().collect(Collectors.toList());
         // 总体进度计划详情
         List<JdglMainPlanItem> mainPlanItemList = new ArrayList<>();
-        List<JdglMainPlanItem> mainPlanItemListTree = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(beginOfMonth, endOfMonth);
+        List<JdglMainPlanItem> mainPlanItemListTree = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(startDate, endDate);
         if (CollectionUtil.isNotEmpty(mainPlanItemListTree)) {
             mainPlanItemList = TreeUtil.treeToList(mainPlanItemListTree);
         }
@@ -296,7 +301,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         if (CollectionUtil.isNotEmpty(mainPlanItemList)) {
             //用于回填总时差、责任人
             mainPlanItemMap = mainPlanItemList.stream()
-                    .filter(p -> StrUtil.isBlank(p.getItemCode()))
+                    .filter(p -> StrUtil.isNotBlank(p.getItemCode()))
                     .collect(Collectors.toMap(JdglMainPlanItem::getItemCode, Function.identity(), (k1, k2) -> k1));
         }
         //获取 差异化分析-关键/非关键线路进度分析  回填工期完成百分比、进度完成百分比
@@ -353,15 +358,15 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         jdglCorrectionMeasuresMakeDetailService.insertJdglCorrectionMeasuresMakeDetailList(newDetailList);
         log.info("纠偏措施制定，纠偏方案入库完成");
         //发起流程
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.submit(() -> {
+//        ExecutorService executorService = Executors.newSingleThreadExecutor();
+//        executorService.submit(() -> {
             //获取用户名
             List<String> userNameList = newDetailList.stream()
                     .filter(p -> StrUtil.isNotBlank(p.getDirectorId()))
                     .map(JdglCorrectionMeasuresMakeDetail::getDirectorId)
                     .distinct().collect(Collectors.toList());
             FlowStartUtil.start("process_jdgl_correction_measures_make", String.valueOf(id), "jdgl_correction_measures_make", userNameList, "");
-        });
+//        });
     }
 
     @Override
