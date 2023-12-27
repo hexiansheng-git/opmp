@@ -184,7 +184,7 @@ public class QqchTargetAdvisoryOrganServiceImpl implements IQqchTargetAdvisoryOr
             orgLibrary.setMainBusiness(organ.getPrimaryBusiness());
             orgLibrary.setSpecialtyDirection(organ.getMajorField());
             orgLibrary.setDataSource(projectInfo.getProjectName());
-            orgLibrary.setPersonId(Math.toIntExact(SecurityUtils.getUserId()));
+            orgLibrary.setPersonId(SecurityUtils.getUserId());
             orgLibrary.setPersonName(SecurityUtils.getUserName());
             orgLibrary.setEditTime(DateUtils.getNowDate());
             orgLibrary.setRemark(organ.getRemark());
