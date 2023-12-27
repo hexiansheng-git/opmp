@@ -361,12 +361,12 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
 //        ExecutorService executorService = Executors.newSingleThreadExecutor();
 //        executorService.submit(() -> {
             //获取用户名
-            List<String> userNameList = newDetailList.stream()
-                    .filter(p -> StrUtil.isNotBlank(p.getDirectorId()))
-                    .map(JdglCorrectionMeasuresMakeDetail::getDirectorId)
-                    .distinct().collect(Collectors.toList());
-            FlowStartUtil.start("process_jdgl_correction_measures_make", String.valueOf(id), "jdgl_correction_measures_make", userNameList, "");
-//        });
+//            List<String> userNameList = newDetailList.stream()
+//                    .filter(p -> StrUtil.isNotBlank(p.getDirectorId()))
+//                    .map(JdglCorrectionMeasuresMakeDetail::getDirectorId)
+//                    .distinct().collect(Collectors.toList());
+//            FlowStartUtil.start("process_jdgl_correction_measures_make", String.valueOf(id), "jdgl_correction_measures_make", userNameList, "");
+////        });
     }
 
     @Override

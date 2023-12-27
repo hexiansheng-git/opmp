@@ -32,7 +32,7 @@ public class FlowStartUtil {
         R r = remoteBpmnService.nextNodesForFeign(nextNodesParam);
         int code = r.getCode();
         if (code != 200) {
-            log.error("发起流程失败，状态code：{}---响应mas：{}---响应data：{}", r.getCode(), r.getMsg(), r.getData());
+            log.error("发起流程失败，获取下一节点实例失败，状态code：{}---响应mas：{}---响应data：{}", r.getCode(), r.getMsg(), r.getData());
             return;
         }
         StartFlowResource startFlowResource = new StartFlowResource();
@@ -50,9 +50,9 @@ public class FlowStartUtil {
         variableParam.put(assginList, userNameList);
         R r1 = remoteBpmnService.startAndCompleteFlowForFeign(startFlowResource);
         if (r1.getCode() == 200){
-            log.info("流程发起成功");
+            log.error("流程发起成功，状态code：{}---响应mas：{}---响应data：{}", r1.getCode(), r1.getMsg(), r1.getData());
         }else {
-            log.error("流程发起失败");
+            log.error("流程发起失败，状态code：{}---响应mas：{}---响应data：{}", r1.getCode(), r1.getMsg(), r1.getData());
         }
     }
 }

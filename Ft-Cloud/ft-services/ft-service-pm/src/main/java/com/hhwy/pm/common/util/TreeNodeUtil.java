@@ -1,16 +1,15 @@
 package com.hhwy.pm.common.util;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import com.hhwy.common.core.domain.R;
 import com.hhwy.utils.tree.TreeNode;
-import org.apache.poi.ss.formula.functions.T;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * 功能：树结构处理
@@ -32,7 +31,8 @@ public class TreeNodeUtil {
             if (StrUtil.isBlank(t.getPtVar5())) {
                 continue;
             }
-            List<T> collect = allList.stream().filter(p -> t.getPtVar5().contains(p.getId() + "")).collect(Collectors.toList());
+            Set<String> pidList = new HashSet<>(CollUtil.toList(t.getPtVar5().split(",")));
+            List<T> collect = allList.stream() .filter(p -> pidList.contains(p.getId() + "")).collect(Collectors.toList());
             result.addAll(collect);
         }
         return result.stream().distinct().collect(Collectors.toList());
