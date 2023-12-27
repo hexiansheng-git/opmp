@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.common.util.TreeNodeUtil;
 import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMake;
 import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMakeDetail;
 import com.hhwy.pm.jdgl.diff.make.mapper.JdglCorrectionMeasuresMakeDetailMapper;
@@ -105,22 +106,24 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
     public List<JdglCorrectionMeasuresMakeDetail> getDetailListByMakeId(JdglCorrectionMeasuresMake make) {
         JdglCorrectionMeasuresMakeDetail jdglCorrectionMeasuresMakeDetail = new JdglCorrectionMeasuresMakeDetail();
         jdglCorrectionMeasuresMakeDetail.setMakeId(make.getId());
-        List<JdglCorrectionMeasuresMakeDetail> resultList = jdglCorrectionMeasuresMakeDetailMapper.getJdglCorrectionMeasuresMakeDetailList(jdglCorrectionMeasuresMakeDetail);
-        if (CollectionUtil.isEmpty(resultList))
+        List<JdglCorrectionMeasuresMakeDetail> allList = jdglCorrectionMeasuresMakeDetailMapper.getJdglCorrectionMeasuresMakeDetailList(jdglCorrectionMeasuresMakeDetail);
+        if (CollectionUtil.isEmpty(allList))
             return new ArrayList<>();
         //只能查看、编辑自己负责的数据，除非当前记录流程已结束
         Long userId = SecurityUtils.getUserId();
         String userName = SecurityUtils.getUserName();
-        log.info("用户名：{} ---- 密码：{}", userId, userName);
+        log.info("用户名：{} ---- id：{}", userName, userId);
         log.info("流程状态：{} ----", make.getTaskStatus());
         //数据过滤
+        List<JdglCorrectionMeasuresMakeDetail> afterFilterList = new ArrayList<>();
         if (StrUtil.isNotBlank(make.getTaskStatus()) &&  !make.getTaskStatus().equals("5") && !userName.equals("admin")) {
-            resultList = resultList.stream()
+            afterFilterList = allList.stream()
                     .filter(p -> StrUtil.isNotBlank(p.getDirectorId()) && p.getDirectorId().equals(userName))
                     .collect(Collectors.toList());
         }
+        List<JdglCorrectionMeasuresMakeDetail> resultList = TreeNodeUtil.getAncestral(allList, afterFilterList);
         //将所有责任人username和nickname返回前端，给流程审批用
-        String loginAcccount = resultList.stream()
+        String loginAcccount = allList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getDirectorId()))
                 .map(JdglCorrectionMeasuresMakeDetail::getDirectorId)
                 .distinct().collect(Collectors.joining(","));
