@@ -190,6 +190,7 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
         for (WzchPriorApproachDetail wzchPriorApproachDetail : wzchPriorApproach.getWzchPriorApproachDetailList()) {
             wzchPriorApproachDetail.setPriorApproachId(wzchPriorApproach.getId());
             wzchPriorApproachDetail.setVersion(wzchPriorApproach.getVersion());
+            wzchPriorApproachDetail.setId(IdWorker.createId());
             //设置version
             List<WzchPriorApproachYearCount> list = wzchPriorApproachDetail.getWzchPriorApproachYearCountList();
             for (int i = 0; i < list.size(); i++)
