@@ -1,12 +1,9 @@
 package com.hhwy.pm.qqch.preparation.safe.monitor.domain.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.qqch.common.domain.PreparationEntity;
 import com.hhwy.pm.qqch.preparation.safe.monitor.domain.QqchVideoMonitorInfo;
 import lombok.Data;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,23 +15,6 @@ import java.util.List;
 public class QqchVideoMonitorInfoVo extends PreparationEntity {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 附件组id
-     */
-    private String fileGroupId;
-
-    /**
-     * 附件上传时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date fileUploadDate;
-
-    /**
-     * 字段描述：上传人
-     */
-    @JsonProperty
-    private String uploadUser;
 
     /**
      * 字段描述：视频监控信息集合

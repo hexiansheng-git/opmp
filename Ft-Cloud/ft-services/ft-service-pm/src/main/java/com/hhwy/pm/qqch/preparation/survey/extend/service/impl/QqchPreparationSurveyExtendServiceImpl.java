@@ -3,7 +3,6 @@ package com.hhwy.pm.qqch.preparation.survey.extend.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.extend.domain.EnvReport;
 import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
@@ -177,16 +176,17 @@ public class QqchPreparationSurveyExtendServiceImpl implements IQqchPreparationS
     }
 
     @Override
-    public EnvReport getEnvReport(BigDecimal version) {
+    public EnvReport getEnvReport(BigDecimal version, String moduleIdentity) {
         if(version == null){
             version = BigDecimal.ONE;
         }
-        QqchPreparationSurveyExtend extend = this.getQqchPreparationSurveyExtend(ModuleIdentity.QQCH_SAFE_ENVIR_RISK_LIST, version);
+        QqchPreparationSurveyExtend extend = this.getQqchPreparationSurveyExtend(moduleIdentity, version);
         EnvReport envReport = new EnvReport();
         if(extend == null){
             return envReport;
         }
         envReport.setVersion(version);
+        envReport.setModuleIdentity(moduleIdentity);
         envReport.setFileGroupId(extend.getFileGroupId());
         envReport.setUploadUser(extend.getCreateUserName());
         envReport.setUploadTime(extend.getCreateTime());
@@ -200,6 +200,6 @@ public class QqchPreparationSurveyExtendServiceImpl implements IQqchPreparationS
         if(version == null){
             version = BigDecimal.ONE;
         }
-        this.preserveFile(ModuleIdentity.QQCH_SAFE_ENVIR_RISK_LIST,version, envReport.getFileGroupId());
+        this.preserveFile(envReport.getModuleIdentity(),version, envReport.getFileGroupId());
     }
 }

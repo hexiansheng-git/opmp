@@ -64,18 +64,19 @@ public class QqchPreparationSurveyExtendController extends BaseController {
     }
 
     /**
-     * 获取环评报告
-     * @param version
+     * 获取附件
+     * @param version 版本
+     * @param moduleIdentity 功能标识
      * @return
      */
     @GetMapping("getEnvReport")
-    public AjaxResult getEnvReport(BigDecimal version){
-        EnvReport envReport = qqchPreparationSurveyExtendService.getEnvReport(version);
+    public AjaxResult getEnvReport(BigDecimal version,String moduleIdentity){
+        EnvReport envReport = qqchPreparationSurveyExtendService.getEnvReport(version,moduleIdentity);
         return AjaxResult.success(envReport);
     }
 
     /**
-     * 保存环评报告
+     * 保存附件
      * @param envReport
      * @return
      */
