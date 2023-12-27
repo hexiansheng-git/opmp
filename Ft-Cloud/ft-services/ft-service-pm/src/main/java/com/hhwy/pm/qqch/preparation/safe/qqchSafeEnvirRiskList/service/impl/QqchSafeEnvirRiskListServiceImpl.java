@@ -7,6 +7,7 @@ import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.gm.wbs.domain.TWbs;
 import com.hhwy.pm.gm.wbs.service.ITWbsService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskList;
@@ -157,7 +158,7 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
      */
     public void pushSafeEiaReport(BigDecimal version){
         //获取环评报告
-        EnvReport envReport = qqchPreparationSurveyExtendService.getEnvReport(version, );
+        EnvReport envReport = qqchPreparationSurveyExtendService.getEnvReport(version, ModuleIdentity.QQCH_SAFE_ENVIR_RISK_LIST);
         ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
         Map<String,Object> map = new HashMap<>();
         map.put("projectName",projectInfo.getProjectName());
