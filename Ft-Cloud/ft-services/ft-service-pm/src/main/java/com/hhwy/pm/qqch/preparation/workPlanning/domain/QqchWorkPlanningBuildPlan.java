@@ -1,25 +1,18 @@
 package com.hhwy.pm.qqch.preparation.workPlanning.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.util.Date;
-import java.math.BigDecimal;
-
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author zq
@@ -59,7 +52,7 @@ public class QqchWorkPlanningBuildPlan extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "到主线距离（m）")
-    @NotNull(message = "'到主线距离'只能输入数字",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+//    @NotNull(message = "'到主线距离'只能输入数字",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     @Digits(integer = 15, fraction=2, message = "到主线距离格式不正确",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     @DecimalMin(value = "0.00", message = "到主线距离式不正确",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private Double distanceToMain;
@@ -68,7 +61,7 @@ public class QqchWorkPlanningBuildPlan extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "占地面积（㎡）")
-    @NotNull(message = "'占地面积'只能输入数字",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+//    @NotNull(message = "'占地面积'只能输入数字",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     @Digits(integer = 15, fraction=2, message = "占地面积格式不正确",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     @DecimalMin(value = "0.00", message = "占地面积格式不正确",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private Double coverAnArea;
@@ -77,7 +70,7 @@ public class QqchWorkPlanningBuildPlan extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "建筑面积（㎡）")
-    @NotNull(message = "'占地面积'只能输入数字",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+//    @NotNull(message = "'占地面积'只能输入数字",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     @Digits(integer = 15, fraction=2, message = "占地面积格式不正确",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     @DecimalMin(value = "0.00", message = "占地面积格式不正确",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private Double floorSpace;
@@ -86,7 +79,7 @@ public class QqchWorkPlanningBuildPlan extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "距离不良地质、爆破区（m）")
-    @NotNull(message = "'距离不良地质、爆破区'只能输入数字",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+//    @NotNull(message = "'距离不良地质、爆破区'只能输入数字",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     @Digits(integer = 15, fraction=2, message = "距离不良地质、爆破区格式不正确",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     @DecimalMin(value = "0.00", message = "距离不良地质、爆破区格式不正确",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private Double distanceToBoom;
