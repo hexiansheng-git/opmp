@@ -17,12 +17,13 @@ import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -61,6 +62,7 @@ public class QqchVideoMonitorInfoServiceImpl implements IQqchVideoMonitorInfoSer
         if (qqchPreparationSurveyExtend != null) {
             vo.setFileGroupId(qqchPreparationSurveyExtend.getFileGroupId());
             vo.setFileUploadDate(qqchPreparationSurveyExtend.getCreateTime());
+            vo.setUploadUser(qqchPreparationSurveyExtend.getCreateUserName());
         }
 
         vo.setVersion(version);
@@ -83,7 +85,7 @@ public class QqchVideoMonitorInfoServiceImpl implements IQqchVideoMonitorInfoSer
 
         // 维护附件
         qqchPreparationSurveyExtendService
-            .preserveFile(ModuleIdentity.QQCH_VIDEO_MONITOR_INFO, voParam.getVersion(), voParam.getFileGroupId());
+            .preserveFile(ModuleIdentity.QQCH_VIDEO_MONITOR_INFO, voParam.getVersion(), voParam.getFileGroupId(),voParam.getUploadUser(),voParam.getFileUploadDate());
 
         String buttonMark = voParam.getButtonMark();
         if (!CollectionUtils.isEmpty(voParam.getList())) {

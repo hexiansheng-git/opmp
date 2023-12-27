@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,6 +75,34 @@ public class QqchPreparationSurveyExtendServiceImpl implements IQqchPreparationS
         addData.setVersion(version);
         addData.setValid(Valid.YES);
         this.insertQqchPreparationSurveyExtend(addData);
+    }
+
+    /**
+     * 维护附件
+     * @param moduleIdentity
+     * @param version
+     * @param fileGroupId
+     * @param uploadUser
+     * @param uploadTime
+     */
+    @Transactional
+    public void preserveFile(String moduleIdentity, BigDecimal version, String fileGroupId, String uploadUser, Date uploadTime){
+        //删除附件数据
+        QqchPreparationSurveyExtend delParam = new QqchPreparationSurveyExtend();
+        delParam.setModuleIdentity(moduleIdentity);
+        delParam.setVersion(version);
+        qqchPreparationSurveyExtendMapper.deleteQqchPreparationSurveyExtend(delParam);
+
+        //插入新数据
+        QqchPreparationSurveyExtend addData = new QqchPreparationSurveyExtend();
+        addData.setId(IdWorker.createId());
+        addData.setFileGroupId(fileGroupId);
+        addData.setModuleIdentity(moduleIdentity);
+        addData.setVersion(version);
+        addData.setCreateUserName(uploadUser);
+        addData.setCreateTime(uploadTime);
+        addData.setValid(Valid.YES);
+        qqchPreparationSurveyExtendMapper.insertQqchPreparationSurveyExtend(addData);
     }
 
     /**
