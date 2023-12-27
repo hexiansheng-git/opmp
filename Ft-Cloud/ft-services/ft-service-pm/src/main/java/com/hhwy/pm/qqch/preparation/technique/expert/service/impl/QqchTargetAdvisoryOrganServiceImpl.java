@@ -194,6 +194,6 @@ public class QqchTargetAdvisoryOrganServiceImpl implements IQqchTargetAdvisoryOr
             orgLibraryList.add(orgLibrary);
         }
 
-        rocketMQTemplate.convertAndSend("qqch_target_advisory_organ:tenantSuccess",orgLibraryList);
+        rocketMQTemplate.convertAndSend("qyzs_enquiry_org_library:tenantSuccess",orgLibraryList);
     }
 }

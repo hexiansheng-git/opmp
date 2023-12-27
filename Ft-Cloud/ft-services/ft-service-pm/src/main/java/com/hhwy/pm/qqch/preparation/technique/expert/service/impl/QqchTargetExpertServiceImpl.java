@@ -194,6 +194,6 @@ public class QqchTargetExpertServiceImpl implements IQqchTargetExpertService {
             speciallistLibraryList.add(library);
         }
 
-        rocketMQTemplate.convertAndSend("qqch_target_expert:tenantSuccess",speciallistLibraryList);
+        rocketMQTemplate.convertAndSend("qyzs_speciallist_library:tenantSuccess",speciallistLibraryList);
     }
 }
