@@ -641,7 +641,7 @@
                 RIGHT JOIN qqch_const_staff_plan as p on c.id  = p.master_id
         WHERE
 #             c.valid  =1
-                AND c.version = #{version}
+                c.version = #{version}
                 AND c.del_flag = '0'
                 AND p.del_flag = '0'
                 and const_type = '4'
