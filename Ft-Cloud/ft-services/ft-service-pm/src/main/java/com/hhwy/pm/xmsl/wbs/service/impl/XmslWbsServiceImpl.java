@@ -314,7 +314,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     public List<XmslWbs> importData(MultipartFile file) throws Exception {
         //读取excel中的数据，替换id
         FtExcelUtil<XmslWbs> excelUtil = new FtExcelUtil<>(XmslWbs.class);
-        List<XmslWbs> list = excelUtil.importExcel(file.getInputStream());
+        List<XmslWbs> list = excelUtil.importExcel(1,file.getInputStream());
         Map<String,XmslWbs> codeMap = new HashMap<>(list.size());
         List<XmslWbs> resuList = new ArrayList<>();
         List<SysDictData> nodeTypeDictList = systemApiService.selectDictDataByType("xmsl_wbs_type");
