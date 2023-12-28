@@ -200,16 +200,17 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
             List<WzchTotalDemandTimeCount> totalDemandTimeCounts = new ArrayList<>();
             //设置version
             for (WzchTotalDemandDetail wzchTotalDemandDetail : wzchTotalDemandDetailList) {
+                wzchTotalDemandDetail.setId(IdWorker.createId());
+                wzchTotalDemandDetail.setVersion(wzchTotalDemand.getVersion());
+                wzchTotalDemandDetail.setTotalDemandId(wzchTotalDemand.getId());
                 totalDemandTimeCounts.addAll(wzchTotalDemandDetail.getWzchTotalDemandTimeCountList());
                 List<WzchTotalDemandTimeCount> timeCountList = wzchTotalDemandDetail.getWzchTotalDemandTimeCountList();
                 for (int i = 0; i < timeCountList.size(); i++) {
                     WzchTotalDemandTimeCount time = timeCountList.get(i);
                     time.setVersion(wzchTotalDemand.getVersion());
                     time.setId(IdWorker.createId());
+                    time.setTotalDemandDetailId(wzchTotalDemandDetail.getId());
                 }
-                wzchTotalDemandDetail.setId(IdWorker.createId());
-                wzchTotalDemandDetail.setVersion(wzchTotalDemand.getVersion());
-                wzchTotalDemandDetail.setTotalDemandId(wzchTotalDemand.getId());
             }
             wzchTotalDemandDetailMapper.batchInsert(wzchTotalDemandDetailList);
             List<Long> detailIds = wzchTotalDemandDetailList.stream().map(WzchTotalDemandDetail::getId).collect(Collectors.toList());
