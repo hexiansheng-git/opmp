@@ -118,9 +118,10 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
 
     @Transactional
     public void syncData(QqchDangerConstructionListVo qqchDangerConstructionListVo) {
+        /*此版本为空或者为变更版本*/
         BigDecimal version = qqchDangerConstructionListVo.getVersion();
         // 获取施工方案清单中危大等级为危大、超危大的方案数据
-        List<QqchConstructionList> constructionList = qqchConstructionListService.getBigDangerLevelConstructionList();
+        List<QqchConstructionList> constructionList = qqchConstructionListService.getBigDangerLevelConstructionList(version);
 
         List<QqchDangerConstructionList> dangerList = qqchDangerConstructionListVo.getList();
         Map<String, QqchDangerConstructionList> map = dangerList.stream().collect(Collectors.toMap(QqchDangerConstructionList::getSchemeCode,o -> o));

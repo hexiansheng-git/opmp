@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.ConstructionListQueryVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionListMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
@@ -65,7 +66,7 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
             QqchConstructionList qryParam = new QqchConstructionList();
             qryParam.setVersion(version);
             qryParam.setSchemeName(paramVo.getSchemeName());
-            qryParam.setSchemeLevel(paramVo.getSchemeType());
+            qryParam.setSchemeType(paramVo.getSchemeType());
             qryParam.setWbsCode(paramVo.getWbsCode());
             List<QqchConstructionList> list = qqchConstructionListMapper.getQqchConstructionListList(qryParam);
             vo.setList(list);
@@ -120,11 +121,11 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
      * @return
      */
     @Override
-    public List<QqchConstructionList> getLatest(){
-        // 获取方案清单最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion(TN);
+    public List<QqchConstructionList> getLatest(BigDecimal version){
+        // 获取方案清单版本号
+        version = VersionUtil.getVersion(TN, version);
         QqchConstructionList qryParam = new QqchConstructionList();
-        qryParam.setVersion(maxVersion);
+        qryParam.setVersion(version);
         // 获取方案清单数据
         return qqchConstructionListMapper.getQqchConstructionListList(qryParam);
     }
@@ -270,9 +271,20 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
      * @return
      */
     @Override
-    public List<QqchConstructionList> getBigDangerLevelConstructionList() {
-        // 获取方案清单最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion(TN);
-        return qqchConstructionListMapper.getBigDangerLevelConstructionList(maxVersion);
+    public List<QqchConstructionList> getBigDangerLevelConstructionList(BigDecimal version) {
+        version = VersionUtil.getVersion(TN,version);
+        return qqchConstructionListMapper.getBigDangerLevelConstructionList(version);
+    }
+
+    @Override
+    public List<QqchConstructionList> getConstructionListList(ConstructionListQueryVo queryVo) {
+        BigDecimal version = queryVo.getVersion();
+        version = VersionUtil.getVersion(TN, version);
+        QqchConstructionList qryParam = new QqchConstructionList();
+        qryParam.setVersion(version);
+        qryParam.setSchemeName(queryVo.getSchemeName());
+        qryParam.setSchemeType(queryVo.getSchemeType());
+        qryParam.setWbsCode(queryVo.getWbsCode());
+        return qqchConstructionListMapper.getQqchConstructionListList(qryParam);
     }
 }

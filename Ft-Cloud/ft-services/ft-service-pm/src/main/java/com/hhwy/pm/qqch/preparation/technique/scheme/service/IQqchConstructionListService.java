@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.service;
 
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.ConstructionListQueryVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 
 import java.math.BigDecimal;
@@ -21,7 +22,7 @@ public interface IQqchConstructionListService {
      * 获取最新的施工方案清单数据
      * @return
      */
-    List<QqchConstructionList> getLatest();
+    List<QqchConstructionList> getLatest(BigDecimal version);
 
     void batchSave(QqchConstructionListVo qqchConstructionListVo);
 
@@ -33,5 +34,7 @@ public interface IQqchConstructionListService {
      * 获取施工方案清单中危大等级为危大、超危大的方案数据
      * @return
      */
-    List<QqchConstructionList> getBigDangerLevelConstructionList();
+    List<QqchConstructionList> getBigDangerLevelConstructionList(BigDecimal version);
+
+    List<QqchConstructionList> getConstructionListList(ConstructionListQueryVo queryVo);
 }
