@@ -6,9 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.excel.FtExcel;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * @author zhenglili
@@ -94,7 +95,7 @@ public class QqchMeasureExpEqu extends BaseEntity {
      * 字段描述：来源
      */
     @JsonProperty
-    @FtExcel(name = "来源")
+    @FtExcel(name = "来源",dictType = "equ_sourse")
     private String source;
     /**
      * 字段描述：备注
