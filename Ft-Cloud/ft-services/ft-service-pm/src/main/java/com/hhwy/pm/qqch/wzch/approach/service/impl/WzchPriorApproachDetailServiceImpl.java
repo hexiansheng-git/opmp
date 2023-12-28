@@ -193,13 +193,15 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
             wzchPriorApproachDetail.setId(IdWorker.createId());
             //设置version
             List<WzchPriorApproachYearCount> list = wzchPriorApproachDetail.getWzchPriorApproachYearCountList();
-            for (int i = 0; i < list.size(); i++)
+            for (int i = 0; i < list.size(); i++){
                 list.get(i).setVersion(wzchPriorApproach.getVersion());
+                list.get(i).setId(IdWorker.createId());
+            }
             wzchPriorApproachYearCounts.addAll(wzchPriorApproachDetail.getWzchPriorApproachYearCountList());
         }
-        List<Long> detialIds = wzchPriorApproach.getWzchPriorApproachDetailList().stream().map(WzchPriorApproachDetail::getId).collect(Collectors.toList());
+//        List<Long> detialIds = wzchPriorApproach.getWzchPriorApproachDetailList().stream().map(WzchPriorApproachDetail::getId).collect(Collectors.toList());
         wzchPriorApproachDetailMapper.deleteDirectByVersion(wzchPriorApproach.getVersion());
-        List<Long> countIds = wzchPriorApproachYearCounts.stream().map(WzchPriorApproachYearCount::getId).collect(Collectors.toList());
+//        List<Long> countIds = wzchPriorApproachYearCounts.stream().map(WzchPriorApproachYearCount::getId).collect(Collectors.toList());
         wzchPriorApproachDetailMapper.deleteYearDirectByVersion(wzchPriorApproach.getVersion());
         if(CollectionUtils.isNotEmpty(wzchPriorApproach.getWzchPriorApproachDetailList()))
             wzchPriorApproachDetailMapper.batchInsert(wzchPriorApproach.getWzchPriorApproachDetailList());

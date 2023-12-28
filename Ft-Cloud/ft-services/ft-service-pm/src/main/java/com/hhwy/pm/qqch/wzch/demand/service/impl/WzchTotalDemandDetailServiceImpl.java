@@ -205,7 +205,9 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
                 for (int i = 0; i < timeCountList.size(); i++) {
                     WzchTotalDemandTimeCount time = timeCountList.get(i);
                     time.setVersion(wzchTotalDemand.getVersion());
+                    time.setId(IdWorker.createId());
                 }
+                wzchTotalDemandDetail.setId(IdWorker.createId());
                 wzchTotalDemandDetail.setVersion(wzchTotalDemand.getVersion());
                 wzchTotalDemandDetail.setTotalDemandId(wzchTotalDemand.getId());
             }
@@ -519,7 +521,6 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
      */
     private WzchTotalDemand buildDefaultTotalDemand(WzchTotalDemand totalDemand){
         totalDemand.setId(IdWorker.createId());
-        totalDemand.setDemandCode("");   //单据编号
         totalDemand.setTitle("物资总需用"+totalDemand.getVersion());
         new AddBaseInfoUtil<>(totalDemand);
         totalDemand.setDeptId(SecurityUtils.getSysUser().getDeptId());

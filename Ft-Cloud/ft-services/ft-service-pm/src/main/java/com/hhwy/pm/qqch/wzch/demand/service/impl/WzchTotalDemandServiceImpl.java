@@ -512,6 +512,7 @@ public class WzchTotalDemandServiceImpl implements IWzchTotalDemandService
     @Override
     public WzchTotalDemandDetailVO detail(WzchTotalDemandDetailVO vo) {
         BigDecimal version = VersionUtil.getVersion("wzch_total_demand_detail", vo.getVersion());
+        boolean isMatchVersion = version.equals(vo.getVersion());
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
 
@@ -520,7 +521,7 @@ public class WzchTotalDemandServiceImpl implements IWzchTotalDemandService
             vo.setWzchTotalDemandDetailList(new ArrayList<>(2));
             return vo;
         }
-        vo.setId(totalDemand.getId());
+        vo.setId(isMatchVersion?totalDemand.getId():null); //若取得不是本版本，将id滞空，
         WzchTotalDemandDetail query = new WzchTotalDemandDetail();
         query.setTotalDemandId(totalDemand.getId());
         List<WzchTotalDemandDetail> wzchTotalDemandDetailList = wzchTotalDemandDetailService.selectWzchTotalDemandDetailList(query);

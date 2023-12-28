@@ -22,6 +22,7 @@ import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandTimeCount;
 import com.hhwy.pm.qqch.wzch.demand.mapper.WzchTotalDemandTimeCountMapper;
 import com.hhwy.pm.qqch.wzch.demand.service.IWzchTotalDemandDetailService;
 import com.hhwy.utils.AddBaseInfoUtil;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -273,7 +274,7 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
         List<WzchPriorApproach> list = this.wzchPriorApproachMapper.selectWzchPriorApproachList(query);
         if(CollectionUtils.isNotEmpty(list))
             approach = list.get(0);
-        approach.setVersion(version);
+        approach.setVersion(ObjectUtils.nvlBigDecimal(approach.getVersion(),version));
         approach.setStageIdentity(qqchReviewService.getStage());
 
         WzchPriorApproachDetail queryDetail = new WzchPriorApproachDetail();
