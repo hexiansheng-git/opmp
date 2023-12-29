@@ -78,7 +78,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
      */
     @GetMapping("baseInfo")
     @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.2属地化采购供应策划" ,businessType = CustomBusinessType.SELECT)
-    public AjaxResult baseInfo(@RequestParam(required = false) WzchLocalPurchaseSupplyDTO dto) {
+    public AjaxResult baseInfo( WzchLocalPurchaseSupplyDTO dto) {
         return AjaxResult.success(wzchPurchaseSupplyService.baseInfo(dto==null?new WzchLocalPurchaseSupplyDTO():dto));
     }
 

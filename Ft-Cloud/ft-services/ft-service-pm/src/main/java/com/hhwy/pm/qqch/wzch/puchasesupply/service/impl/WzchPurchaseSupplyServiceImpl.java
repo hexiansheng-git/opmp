@@ -30,6 +30,7 @@ import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.MaterialUtils;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -166,7 +167,7 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
     @Override
     public WzchPurchaseSupplyDTO baseInfo(WzchPurchaseSupplyDTO vo) {
         BigDecimal version = VersionUtil.getVersion("wzch_purchase_supply", vo.getVersion());
-        vo.setVersion(version);
+        vo.setVersion(ObjectUtils.nvlBigDecimal(vo.getVersion(),version));
         vo.setStageIdentity(qqchReviewService.getStage());
         List<WzchPurchaseSupply> list = this.wzchPurchaseSupplyMapper.selectWzchPurchaseSupplyList(new WzchPurchaseSupply(version));
         if(CollectionUtils.isEmpty(list)){

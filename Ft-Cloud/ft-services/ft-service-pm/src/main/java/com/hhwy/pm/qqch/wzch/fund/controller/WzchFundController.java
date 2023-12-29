@@ -55,7 +55,7 @@ public class WzchFundController extends BaseController {
      */
     @GetMapping("baseInfo")
     @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.7资金策划" ,businessType = CustomBusinessType.SELECT)
-    public AjaxResult baseInfo(@RequestParam(required = false) WzchFundDTO dto) {
+    public AjaxResult baseInfo(WzchFundDTO dto) {
         return AjaxResult.success(wzchFundService.baseInfo(dto==null?new WzchFundDTO():dto));
     }
 

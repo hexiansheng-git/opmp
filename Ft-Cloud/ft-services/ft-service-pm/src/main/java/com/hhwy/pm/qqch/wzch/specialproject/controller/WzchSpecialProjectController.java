@@ -63,7 +63,7 @@ public class WzchSpecialProjectController extends BaseController {
      */
     @GetMapping("baseInfo")
     @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.2组织供应策划", name = "6.2.6专项物资策划" ,businessType = CustomBusinessType.SELECT)
-    public AjaxResult baseInfo(@RequestParam(required = false) WzchSpecialProjectDTO dto) {
+    public AjaxResult baseInfo(WzchSpecialProjectDTO dto) {
         return AjaxResult.success(wzchSpecialProjectService.baseInfo(dto==null?new WzchSpecialProjectDTO():dto));
     }
 
