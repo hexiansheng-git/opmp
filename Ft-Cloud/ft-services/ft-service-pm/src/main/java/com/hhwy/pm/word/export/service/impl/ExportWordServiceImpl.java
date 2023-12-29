@@ -83,6 +83,9 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("climateConditionList",policy) // 气候条件
                     .bind("basicFacilitiesConditionsList",policy) // 水、电、交通、通讯条件
                     .bind("constructionInterferenceList",policy) // 施工干扰
+                    .bind("localWorkerSupplyList",policy) // 属地工人供应情况
+                    .bind("localMaterialsSupplyList",policy) // 属地物资供应情况
+                    .bind("localEquipmentSupplyList",policy) // 属地设备供应情况
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -340,6 +343,28 @@ public class ExportWordServiceImpl implements ExportWordService {
                 constructionInterferenceList4Picture.add(map);
             }
             projectWordData.setConstructionInterferenceList4Picture(constructionInterferenceList4Picture);
+        }
+
+        /*当地资源供应*/
+        LocalResourceSupply localResourceSupply = implementVo.getLocalResourceSupply();
+        if(null != localResourceSupply) {
+            /*属地工人供应情况*/
+            List<XmslLocalWorkerSupply> localWorkerSupplyList = localResourceSupply.getLocalWorkerSupplyList();
+            if(CollectionUtils.isNotEmpty(localWorkerSupplyList)) {
+                projectWordData.setLocalWorkerSupplyList(localWorkerSupplyList);
+            }
+
+            /*属地物资供应情况*/
+            List<XmslLocalMaterialsSupply> localMaterialsSupplyList = localResourceSupply.getLocalMaterialsSupplyList();
+            if(CollectionUtils.isNotEmpty(localMaterialsSupplyList)) {
+                projectWordData.setLocalMaterialsSupplyList(localMaterialsSupplyList);
+            }
+
+            /*属地设备供应情况*/
+            List<XmslLocalEquipmentSupply> localEquipmentSupplyList = localResourceSupply.getLocalEquipmentSupplyList();
+            if(CollectionUtils.isNotEmpty(localEquipmentSupplyList)) {
+                projectWordData.setLocalEquipmentSupplyList(localEquipmentSupplyList);
+            }
         }
 
     }

@@ -178,5 +178,17 @@ public class ProjectWordData {
      * 施工干扰附件
      */
     private List<Map<String,PictureRenderData>> constructionInterferenceList4Picture;
+    /**
+     * 属地工人供应情况
+     */
+    private List<XmslLocalWorkerSupply> localWorkerSupplyList;
+    /**
+     * 属地物资供应情况
+     */
+    private List<XmslLocalMaterialsSupply> localMaterialsSupplyList;
+    /**
+     * 属地设备供应情况
+     */
+    private List<XmslLocalEquipmentSupply> localEquipmentSupplyList;
 
 }
