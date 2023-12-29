@@ -77,6 +77,14 @@ public class QqchQualityProblemListServiceImpl implements IQqchQualityProblemLis
         return vo;
     }
 
+    @Override
+    public List<QqchQualityProblemList> getListByVersion(BigDecimal version) {
+        version = VersionUtil.getVersion("qqch_quality_problem_list", version);
+        QqchQualityProblemList qryParam = new QqchQualityProblemList();
+        qryParam.setVersion(version);
+        return qqchQualityProblemListMapper.getQqchQualityProblemListList(qryParam);
+    }
+
     /**
      * 保存/确认/提交
      *

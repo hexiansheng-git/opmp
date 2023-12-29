@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.quality.problem.service;
 
+import com.hhwy.pm.qqch.preparation.quality.problem.domain.QqchQualityProblemList;
 import com.hhwy.pm.qqch.preparation.quality.problem.domain.vo.QqchQualityProblemListVo;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -11,6 +13,8 @@ import java.math.BigDecimal;
 public interface IQqchQualityProblemListService {
 
     QqchQualityProblemListVo getQqchQualityProblemListList(BigDecimal version);
+
+    List<QqchQualityProblemList> getListByVersion(BigDecimal version);
 
     void batchSave(QqchQualityProblemListVo qqchQualityProblemListVo);
 

@@ -45,24 +45,22 @@ public class QqchQualityProblemControlServiceImpl implements IQqchQualityProblem
     /**
      * 列表
      *
-     * @param version
+     * @param version 为空或者为变更版本
      * @return
      */
     public QqchQualityProblemControlVo getQqchQualityProblemControlList(BigDecimal version) {
         QqchQualityProblemControlVo vo = new QqchQualityProblemControlVo();
-        version = VersionUtil.getVersion("qqch_quality_problem_list", version);
+        BigDecimal controlVersion = VersionUtil.getVersion("qqch_quality_problem_control", version);
 
         QqchQualityProblemControl qryParam = new QqchQualityProblemControl();
-        qryParam.setVersion(version);
-        List<QqchQualityProblemControl> controlList = qqchQualityProblemControlMapper
-            .getQqchQualityProblemControlList(qryParam);
+        qryParam.setVersion(controlVersion);
+        List<QqchQualityProblemControl> controlList = qqchQualityProblemControlMapper.getQqchQualityProblemControlList(qryParam);
 
         // 组装列表
         List<QqchQualityProblemControl> newList = new ArrayList<>();
 
         // 质量通病清单
-        List<QqchQualityProblemList> problemList = qqchQualityProblemListService.getQqchQualityProblemListList(version)
-            .getList();
+        List<QqchQualityProblemList> problemList = qqchQualityProblemListService.getListByVersion(version);
 
         for (QqchQualityProblemList qqchQualityProblemList : problemList) {
             QqchQualityProblemControl qqchQualityProblemControl = new QqchQualityProblemControl();
@@ -78,7 +76,7 @@ public class QqchQualityProblemControlServiceImpl implements IQqchQualityProblem
             newList.add(qqchQualityProblemControl);
         }
 
-        vo.setVersion(version);
+        vo.setVersion(controlVersion);
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(newList);
         return vo;
