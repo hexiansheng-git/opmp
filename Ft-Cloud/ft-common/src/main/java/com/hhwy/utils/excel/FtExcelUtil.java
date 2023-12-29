@@ -122,6 +122,11 @@ public class FtExcelUtil<T> {
         return this.importExcel("", is);
     }
 
+    public List<T> importExcel(int startRowIndex,InputStream is) throws Exception {
+        this.startRowIndex = startRowIndex;
+        return this.importExcel("", is);
+    }
+
     public List<T> importExcel(String sheetName, InputStream is) throws Exception {
         this.type = FtExcel.Type.IMPORT;
         this.wb = WorkbookFactory.create(is);
@@ -141,7 +146,7 @@ public class FtExcelUtil<T> {
         if (rows <= 0) return this.list;
 
         Map<String, Integer> cellMap = new HashMap<>();
-        Row head = sheet.getRow(0);
+        Row head = sheet.getRow(startRowIndex);
 
         for (int i = 0; i < head.getPhysicalNumberOfCells(); ++i) {
             String value = this.getCellValue(head, i).toString();
@@ -164,7 +169,7 @@ public class FtExcelUtil<T> {
             }
         }
 
-        for (int i = 1; i < rows; ++i) {
+        for (int i = startRowIndex+1; i < rows; ++i) {
             Row row = sheet.getRow(i);
             T entity = null;
 

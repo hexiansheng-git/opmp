@@ -170,10 +170,9 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             wzchSource.setPrjCode(SecurityUtils.getTenantKey());
             wzchSource.setTitle(wzchSource.getVersion()+"");
             wzchSource.setValid("0");
-            //插入前校验不能有其他数据
-            List list = wzchSourceService.selectWzchSourceList(new WzchSource());
-            if(CollectionUtils.isNotEmpty(list))
-                throw new RuntimeException("已存在物资来源数据，无法新增。请勿点击过快");
+//            List list = wzchSourceService.selectWzchSourceList(new WzchSource());
+//            if(CollectionUtils.isNotEmpty(list))
+//                throw new RuntimeException("已存在物资来源数据，无法新增。请勿点击过快");
             wzchSourceService.insertWzchSource(wzchSource);
         }else{
             wzchSource.setTitle(wzchSource.getVersion()+"");

@@ -124,7 +124,7 @@ public class WzchPriorApproachController extends BaseController {
 //    @CustomLogger(title = "优先进场物资-编辑",businessType = CustomBusinessType.SELECT)
     @PostMapping("/detail")
     @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.3优先进场物资台账" ,businessType = CustomBusinessType.SELECT)
-    public AjaxResult detail(@RequestBody WzchPriorApproach approach) {
+    public AjaxResult detail(WzchPriorApproach approach) {
         try{
             WzchPriorApproach wzchPriorApproach = wzchPriorApproachService.detail(approach);
             return new AjaxResult(200,"成功",wzchPriorApproach);

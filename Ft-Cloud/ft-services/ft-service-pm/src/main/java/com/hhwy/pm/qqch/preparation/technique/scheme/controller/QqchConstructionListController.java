@@ -4,6 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.ConstructionListQueryVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
 import com.hhwy.utils.customLog.CustomBusinessType;
@@ -45,6 +46,17 @@ public class QqchConstructionListController extends BaseController {
 //            return AjaxResult.success(new ArrayList<>(2));
         QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService.getQqchConstructionListList(qqchConstructionListParamVo);
         return AjaxResult.success(qqchConstructionListVo);
+    }
+
+    /**
+     * 3.4.4选择方案弹窗
+     * @param queryVo
+     * @return
+     */
+    @GetMapping("getConstructionListList")
+    public AjaxResult getConstructionListList(@Validated(ValidationGroups.Select.class) ConstructionListQueryVo queryVo){
+        List<QqchConstructionList> list = qqchConstructionListService.getConstructionListList(queryVo);
+        return AjaxResult.success(list);
     }
 
 //    @PreAuthorize(hasPermi = "qqchConstructionList:add")

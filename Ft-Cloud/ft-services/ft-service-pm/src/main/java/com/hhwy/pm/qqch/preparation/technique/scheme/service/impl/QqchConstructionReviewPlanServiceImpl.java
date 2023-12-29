@@ -85,8 +85,10 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
 
     @Transactional
     public void syncData(QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo) {
+        /*该版本为后端返回或者为变更版本*/
+        BigDecimal version = qqchConstructionReviewPlanVo.getVersion();
         //获取方案清单数据
-        List<QqchConstructionList> latestList = qqchConstructionListService.getLatest();
+        List<QqchConstructionList> latestList = qqchConstructionListService.getLatest(version);
 
         Map<String, QqchConstructionReviewPlan> map = new HashMap<>();
         List<QqchConstructionReviewPlan> list = qqchConstructionReviewPlanVo.getList();
@@ -98,7 +100,6 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
                 });
             }
         });
-        BigDecimal version = qqchConstructionReviewPlanVo.getVersion();
 
         // 构造新的list
         List<QqchConstructionReviewPlan> insertList = new ArrayList<>();
