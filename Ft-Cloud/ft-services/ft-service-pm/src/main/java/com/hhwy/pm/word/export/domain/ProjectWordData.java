@@ -2,6 +2,7 @@ package com.hhwy.pm.word.export.domain;
 
 import com.deepoove.poi.data.PictureRenderData;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.pm.xmsl.implement.domain.*;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectMaterialsAmount;
 import lombok.Data;
@@ -127,4 +128,47 @@ public class ProjectWordData {
      * 字段描述：工程结构形式附件集合
      */
     private List<Map<String,PictureRenderData>> structurePictureList;
+
+    /*---------------------------------------实施条件----------------------------------------*/
+    /**
+     * 地形地貌
+     */
+    private List<XmslTerrainLandforms> terrainLandformsList;
+    /**
+     * 地形地貌附件
+     */
+    private List<Map<String,PictureRenderData>> terrainLandformsList4Picture;
+    /**
+     * 主线典型地质勘察表
+     */
+    private List<XmslMainTypicalGeologySurvey> mainTypicalGeologySurveyList;
+    /**
+     * 主线典型地质勘察表附件
+     */
+    private List<Map<String,PictureRenderData>> mainTypicalGeologySurveyList4Picture;
+    /**
+     * 不良地质调查表
+     */
+    private List<XmslBadGeologySurvey> badGeologySurveyList;
+    /**
+     * 不良地质调查表附件
+     */
+    private List<Map<String,PictureRenderData>> badGeologySurveyList4Picture;
+    /**
+     *主要构造物水文条件
+     */
+    private List<XmslMainStructureHydrology> mainStructureHydrologyList;
+    /**
+     * 主要构造物水文条件附件
+     */
+    private List<Map<String,PictureRenderData>> mainStructureHydrologyList4Picture;
+    /**
+     *气候条件
+     */
+    private List<XmslClimateCondition> climateConditionList;
+    /**
+     * 气候条件附件
+     */
+    private List<Map<String,PictureRenderData>> climateConditionList4Picture;
+
 }

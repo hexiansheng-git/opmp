@@ -11,6 +11,9 @@ import com.deepoove.poi.util.PoitlIOUtils;
 import com.hhwy.pm.word.export.domain.FileDto;
 import com.hhwy.pm.word.export.domain.ProjectWordData;
 import com.hhwy.pm.word.export.service.ExportWordService;
+import com.hhwy.pm.xmsl.implement.domain.*;
+import com.hhwy.pm.xmsl.implement.domain.vo.ImplementVo;
+import com.hhwy.pm.xmsl.implement.service.IXmslTerrainLandformsService;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectMaterialsAmount;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
@@ -53,6 +56,9 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IXmslProjectEngineeringAmountService xmslProjectEngineeringAmountService;
 
+    @Autowired
+    private IXmslTerrainLandformsService xmslTerrainLandformsService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -69,7 +75,13 @@ public class ExportWordServiceImpl implements ExportWordService {
             }
 
             LoopRowTableRenderPolicy policy = new LoopRowTableRenderPolicy();
-            Configure config = Configure.builder().bind("materialsAmountList",policy).bind("engineeringAmountList",policy).build();
+            Configure config = Configure.builder().bind("materialsAmountList",policy).bind("engineeringAmountList",policy)
+                    .bind("terrainLandformsList",policy) // 地形地貌
+                    .bind("mainTypicalGeologySurveyList",policy) // 主线典型地质勘察表
+                    .bind("badGeologySurveyList",policy) // 不良地质调查表
+                    .bind("mainStructureHydrologyList",policy) // 主要构造物水文条件
+                    .bind("climateConditionList",policy) // 气候条件
+                    .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
             ProjectWordData projectWordData = new ProjectWordData();
@@ -147,6 +159,11 @@ public class ExportWordServiceImpl implements ExportWordService {
             structureList.add(map);
         }
         projectWordData.setStructurePictureList(structureList);
+
+        /*--实施条件--*/
+        initImplement(projectWordData);
+
+
     }
 
     /*图片基础宽度*/
@@ -194,4 +211,111 @@ public class ExportWordServiceImpl implements ExportWordService {
         }
         return pictureRenderDataList;
     }
+
+    /**
+     * 初始实施条件数据
+     */
+    public void initImplement(ProjectWordData projectWordData) {
+        ImplementVo implementVo = xmslTerrainLandformsService.getAllList();
+        if(null == implementVo) {
+            return;
+        }
+        /*地形地貌*/
+        List<XmslTerrainLandforms> terrainLandformsList = implementVo.getTerrainLandformsList();
+
+        if(CollectionUtils.isNotEmpty(terrainLandformsList)) {
+            projectWordData.setTerrainLandformsList(terrainLandformsList);
+            List<PictureRenderData> terrainLandformsPictureList = new ArrayList<>();
+            for (XmslTerrainLandforms xmslTerrainLandforms : terrainLandformsList) {
+                String fileGroupId = xmslTerrainLandforms.getFileGroupId();
+                terrainLandformsPictureList.addAll(this.getPictureRenderDataList(fileGroupId));
+            }
+            List<Map<String,PictureRenderData>> terrainLandformsList4Picture = new ArrayList<>();
+            for (PictureRenderData pictureRenderData : terrainLandformsPictureList) {
+                Map<String,PictureRenderData> map = new HashMap<>();
+                map.put("terrainLandformsPicture",pictureRenderData);
+                terrainLandformsList4Picture.add(map);
+            }
+            projectWordData.setTerrainLandformsList4Picture(terrainLandformsList4Picture);
+        }
+
+        /*主线典型地质勘察表*/
+        GeologicalCondition geologicalCondition = implementVo.getGeologicalCondition();
+        if(null != geologicalCondition) {
+            List<XmslMainTypicalGeologySurvey> mainTypicalGeologySurveyList = geologicalCondition.getMainTypicalGeologySurveyList();
+            if(CollectionUtils.isNotEmpty(mainTypicalGeologySurveyList)) {
+                projectWordData.setMainTypicalGeologySurveyList(mainTypicalGeologySurveyList);
+                List<PictureRenderData> mainTypicalGeologySurveyPictureList = new ArrayList<>();
+                for (XmslMainTypicalGeologySurvey xmslMainTypicalGeologySurvey : mainTypicalGeologySurveyList) {
+                    String fileGroupId = xmslMainTypicalGeologySurvey.getFileGroupId();
+                    mainTypicalGeologySurveyPictureList.addAll(this.getPictureRenderDataList(fileGroupId));
+                }
+                List<Map<String,PictureRenderData>> mainTypicalGeologySurveyList4Picture = new ArrayList<>();
+                for (PictureRenderData pictureRenderData : mainTypicalGeologySurveyPictureList) {
+                    Map<String,PictureRenderData> map = new HashMap<>();
+                    map.put("mainTypicalGeologySurveyPicture",pictureRenderData);
+                    mainTypicalGeologySurveyList4Picture.add(map);
+                }
+                projectWordData.setMainTypicalGeologySurveyList4Picture(mainTypicalGeologySurveyList4Picture);
+            }
+        }
+
+        /*不良地质调查表*/
+        if(null != geologicalCondition) {
+            List<XmslBadGeologySurvey> badGeologySurveyList = geologicalCondition.getBadGeologySurveyList();
+            if(CollectionUtils.isNotEmpty(badGeologySurveyList)) {
+                projectWordData.setBadGeologySurveyList(badGeologySurveyList);
+                List<PictureRenderData> badGeologySurveyPictureList = new ArrayList<>();
+                for (XmslBadGeologySurvey xmslBadGeologySurvey : badGeologySurveyList) {
+                    String fileGroupId = xmslBadGeologySurvey.getFileGroupId();
+                    badGeologySurveyPictureList.addAll(this.getPictureRenderDataList(fileGroupId));
+                }
+                List<Map<String,PictureRenderData>> badGeologySurveyList4Picture = new ArrayList<>();
+                for (PictureRenderData pictureRenderData : badGeologySurveyPictureList) {
+                    Map<String,PictureRenderData> map = new HashMap<>();
+                    map.put("badGeologySurveyPicture",pictureRenderData);
+                    badGeologySurveyList4Picture.add(map);
+                }
+                projectWordData.setBadGeologySurveyList4Picture(badGeologySurveyList4Picture);
+            }
+        }
+
+        /*主要构造物水文条件*/
+        List<XmslMainStructureHydrology> mainStructureHydrologyList = implementVo.getMainStructureHydrologyList();
+        if(CollectionUtils.isNotEmpty(mainStructureHydrologyList)) {
+            projectWordData.setMainStructureHydrologyList(mainStructureHydrologyList);
+            List<PictureRenderData> mainStructureHydrologyPictureList = new ArrayList<>();
+            for (XmslMainStructureHydrology xmslMainStructureHydrology : mainStructureHydrologyList) {
+                String fileGroupId = xmslMainStructureHydrology.getFileGroupId();
+                mainStructureHydrologyPictureList.addAll(this.getPictureRenderDataList(fileGroupId));
+            }
+            List<Map<String,PictureRenderData>> mainStructureHydrologyList4Picture = new ArrayList<>();
+            for (PictureRenderData pictureRenderData : mainStructureHydrologyPictureList) {
+                Map<String,PictureRenderData> map = new HashMap<>();
+                map.put("mainStructureHydrologyPicture",pictureRenderData);
+                mainStructureHydrologyList4Picture.add(map);
+            }
+            projectWordData.setMainStructureHydrologyList4Picture(mainStructureHydrologyList4Picture);
+        }
+
+        /*气候条件*/
+        List<XmslClimateCondition> climateConditionList = implementVo.getClimateConditionList();
+        if(CollectionUtils.isNotEmpty(climateConditionList)) {
+            projectWordData.setClimateConditionList(climateConditionList);
+            List<PictureRenderData> climateConditionPictureList = new ArrayList<>();
+            for (XmslClimateCondition xmslClimateCondition : climateConditionList) {
+                String fileGroupId = xmslClimateCondition.getFileGroupId();
+                climateConditionPictureList.addAll(this.getPictureRenderDataList(fileGroupId));
+            }
+            List<Map<String,PictureRenderData>> climateConditionList4Picture = new ArrayList<>();
+            for (PictureRenderData pictureRenderData : climateConditionPictureList) {
+                Map<String,PictureRenderData> map = new HashMap<>();
+                map.put("climateConditionPicture",pictureRenderData);
+                climateConditionList4Picture.add(map);
+            }
+            projectWordData.setClimateConditionList4Picture(climateConditionList4Picture);
+        }
+
+    }
+
 }
