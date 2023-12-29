@@ -81,6 +81,8 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("badGeologySurveyList",policy) // 不良地质调查表
                     .bind("mainStructureHydrologyList",policy) // 主要构造物水文条件
                     .bind("climateConditionList",policy) // 气候条件
+                    .bind("basicFacilitiesConditionsList",policy) // 水、电、交通、通讯条件
+                    .bind("constructionInterferenceList",policy) // 施工干扰
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -314,6 +316,30 @@ public class ExportWordServiceImpl implements ExportWordService {
 //                climateConditionList4Picture.add(map);
 //            }
 //            projectWordData.setClimateConditionList4Picture(climateConditionList4Picture);
+        }
+
+        /*水、电、交通、通讯条件*/
+        List<XmslBasicFacilitiesConditions> basicFacilitiesConditionsList = implementVo.getBasicFacilitiesConditionsList();
+        if(CollectionUtils.isNotEmpty(basicFacilitiesConditionsList)) {
+            projectWordData.setBasicFacilitiesConditionsList(basicFacilitiesConditionsList);
+        }
+
+        /*施工干扰*/
+        List<XmslConstructionInterference> constructionInterferenceList = implementVo.getConstructionInterferenceList();
+        if(CollectionUtils.isNotEmpty(constructionInterferenceList)) {
+            projectWordData.setConstructionInterferenceList(constructionInterferenceList);
+            List<PictureRenderData> constructionInterferencePictureList = new ArrayList<>();
+            for (XmslConstructionInterference xmslConstructionInterference : constructionInterferenceList) {
+                String fileGroupId = xmslConstructionInterference.getFileGroupId();
+                constructionInterferencePictureList.addAll(this.getPictureRenderDataList(fileGroupId));
+            }
+            List<Map<String,PictureRenderData>> constructionInterferenceList4Picture = new ArrayList<>();
+            for (PictureRenderData pictureRenderData : constructionInterferencePictureList) {
+                Map<String,PictureRenderData> map = new HashMap<>();
+                map.put("constructionInterferencePicture",pictureRenderData);
+                constructionInterferenceList4Picture.add(map);
+            }
+            projectWordData.setConstructionInterferenceList4Picture(constructionInterferenceList4Picture);
         }
 
     }

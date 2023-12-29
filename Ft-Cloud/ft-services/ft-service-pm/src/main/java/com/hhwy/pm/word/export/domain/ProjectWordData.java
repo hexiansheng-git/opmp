@@ -167,8 +167,16 @@ public class ProjectWordData {
      */
     private List<XmslClimateCondition> climateConditionList;
     /**
-     * 气候条件附件
+     *水、电、交通、通讯条件
      */
-    private List<Map<String,PictureRenderData>> climateConditionList4Picture;
+    private List<XmslBasicFacilitiesConditions> basicFacilitiesConditionsList;
+    /**
+     *施工干扰
+     */
+    private List<XmslConstructionInterference> constructionInterferenceList;
+    /**
+     * 施工干扰附件
+     */
+    private List<Map<String,PictureRenderData>> constructionInterferenceList4Picture;
 
 }
