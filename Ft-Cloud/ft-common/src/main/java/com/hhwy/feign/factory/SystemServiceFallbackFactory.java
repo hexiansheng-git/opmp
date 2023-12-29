@@ -7,6 +7,7 @@ import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.domain.base.system.period.PeriodInfo;
 import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.system.api.domain.SysMenu;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import org.slf4j.Logger;
@@ -110,6 +111,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
 
             @Override
             public List<SysUser> selectUserInfoByUserNameAndTenant(Map map) {
+                return new ArrayList<>();
+            }
+
+            @Override
+            public List<SysMenu> getMenuId(String component, String tenantKey) {
                 return new ArrayList<>();
             }
         };
