@@ -20,6 +20,7 @@ import com.hhwy.pm.qqch.wzch.specialproject.service.IWzchSpecialProjectService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.BusinessTaskResultUtil;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -161,7 +162,7 @@ public class WzchSpecialProjectServiceImpl implements IWzchSpecialProjectService
             return vo;
         }
         BeanUtils.copyProperties(list.get(0), vo);
-        vo.setVersion(version);
+        vo.setVersion(ObjectUtils.nvlBigDecimal(vo.getVersion(),version));
         vo.setStageIdentity(qqchReviewService.getStage());
         WzchSpecialProjectDetail detail = new WzchSpecialProjectDetail();
         detail.setSpecialProjectId(vo.getId());

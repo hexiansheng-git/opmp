@@ -24,6 +24,7 @@ import com.hhwy.pm.qqch.wzch.puchasesupply.dto.WzchPurchaseSupplyDetailDTO;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.MaterialUtils;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -163,7 +164,7 @@ public class WzchLocalPurchaseSupplyServiceImpl implements IWzchLocalPurchaseSup
     @Override
     public WzchLocalPurchaseSupplyDTO baseInfo(WzchLocalPurchaseSupplyDTO vo) {
         BigDecimal version = VersionUtil.getVersion("wzch_local_purchase_supply", vo.getVersion());
-        vo.setVersion(version);
+        vo.setVersion(ObjectUtils.nvlBigDecimal(vo.getVersion(),version));
         vo.setStageIdentity(qqchReviewService.getStage());
 
         

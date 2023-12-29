@@ -139,5 +139,10 @@ public class BigDecimalUtils {
         return Arrays.stream(numbers).map(item -> new BigDecimal(item + "")).reduce(BigDecimal::multiply).get();
     }
 
+    public static boolean equals(BigDecimal n1,BigDecimal n2) {
+        if(n1==null|| n2 == null)
+            return false;
+        return n1.compareTo(n2)==0;
+    }
 
 }

@@ -90,7 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 </foreach>
             </if>
         </where>
-        order by `id` desc
+        order by `id`
     </select>
     
     <select id="selectWzchImportExportPlanDetailById" parameterType="Long" resultMap="WzchImportExportPlanDetailResult">

@@ -20,6 +20,8 @@ import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +51,7 @@ public class XmslDrawReviewController extends BaseController{
 
     @PreAuthorize(hasPermi = "xmslDrawReview:historyList")
     @GetMapping("/historyList")
+    @CustomLogger(title = "项目设立", name = "图纸复核" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getXmslDrawReviewList(@Validated(ValidationGroups.Select.class) XmslDrawReview xmslDrawReviewParam){
         startPage();
         List<XmslDrawReview> xmslDrawReviewList = xmslDrawReviewService.getXmslDrawReviewList(xmslDrawReviewParam);
@@ -57,6 +60,7 @@ public class XmslDrawReviewController extends BaseController{
     }
 
     @PreAuthorize(hasPermi = "xmslDrawReview:list")
+    @CustomLogger(title = "项目设立", name = "图纸复核" ,businessType = CustomBusinessType.SELECT)
     @PostMapping("/detail")
     public AjaxResult detail(@RequestBody XmslDrawReview drawReview) {
         if(drawReview.getId() == null){
@@ -82,6 +86,7 @@ public class XmslDrawReviewController extends BaseController{
      * @return
      */
     @PreAuthorize(hasPermi = "xmslDrawReview:adjust")
+    @CustomLogger(title = "项目设立", name = "图纸复核" ,businessType = CustomBusinessType.SELECT)
     @PostMapping("/adjustDetail")
     public AjaxResult adjustDetail() {
         XmslDrawReview last =xmslDrawReviewService.getLast();
@@ -206,6 +211,7 @@ public class XmslDrawReviewController extends BaseController{
 
     @PreAuthorize(hasPermi = "xmslDrawReview:save")
     @PostMapping("/save")
+    @CustomLogger(title = "项目设立", name = "图纸复核" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody XmslDrawReviewDto dto){
         try{
             xmslDrawReviewService.save(dto);
@@ -217,6 +223,7 @@ public class XmslDrawReviewController extends BaseController{
     }
 
     @PreAuthorize(hasPermi = "xmslDrawReview:delete")
+    @CustomLogger(title = "项目设立", name = "图纸复核" ,businessType = CustomBusinessType.DELETE)
     @PostMapping("/delete")
     public AjaxResult delete(@Validated(ValidationGroups.Delete.class) @RequestBody XmslDrawReview drawReview){
         xmslDrawReviewService.deleteXmslDrawReview(drawReview);

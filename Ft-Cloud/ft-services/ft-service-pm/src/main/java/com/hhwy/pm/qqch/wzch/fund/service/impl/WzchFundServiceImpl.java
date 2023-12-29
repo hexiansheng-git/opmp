@@ -19,6 +19,7 @@ import com.hhwy.pm.qqch.wzch.fund.service.IWzchFundService;
 import com.hhwy.pm.qqch.wzch.puchasesupply.domain.WzchPurchaseSupply;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -147,7 +148,7 @@ public class WzchFundServiceImpl implements IWzchFundService {
     @Override
     public WzchFundDTO baseInfo(WzchFundDTO vo) {
         BigDecimal version = VersionUtil.getVersion("wzch_purchase_supply", vo.getVersion());
-        vo.setVersion(version);
+        vo.setVersion(ObjectUtils.nvlBigDecimal(vo.getVersion(),version));
         vo.setStageIdentity(qqchReviewService.getStage());
         
         List<WzchFund> list = this.wzchFundMapper.selectWzchFundList(new WzchFund(version));

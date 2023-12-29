@@ -7,6 +7,7 @@ import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.domain.base.system.period.PeriodInfo;
 import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.feign.factory.SystemServiceFallbackFactory;
+import com.hhwy.system.api.domain.SysMenu;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -116,4 +117,7 @@ public interface SystemServiceApi {
      */
     @GetMapping({"/selfSysUser/selectUserInfoByUserNameAndTenant"})
     List<SysUser> selectUserInfoByUserNameAndTenant(Map map);
+
+    @GetMapping({"/syspm/getMenuId"})
+    List<SysMenu> getMenuId(@RequestParam("component") String component, @RequestParam("tenantKey") String tenantKey);
 }

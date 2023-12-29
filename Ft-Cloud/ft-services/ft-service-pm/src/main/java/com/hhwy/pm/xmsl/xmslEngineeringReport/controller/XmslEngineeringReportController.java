@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.domain.XmslEngineeringReport;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -36,6 +38,7 @@ public class XmslEngineeringReportController extends BaseController {
 
 
 //    @PreAuthorize(hasPermi = "xmslEngineeringReport:list")
+    @CustomLogger(title = "项目设立", name = "工程量报表" ,businessType = CustomBusinessType.SELECT)
     @PostMapping("/list")
     public AjaxResult getXmslEngineeringReportList(@RequestBody @Validated(ValidationGroups.Select.class) XmslEngineeringReport xmslEngineeringReportParam) {
         List<XmslEngineeringReport> xmslEngineeringReportList = xmslEngineeringReportService.getXmslEngineeringReportList(xmslEngineeringReportParam);
@@ -51,6 +54,7 @@ public class XmslEngineeringReportController extends BaseController {
     }
 
     @PreAuthorize(hasPermi = "xmslEngineeringReport:export")
+    @CustomLogger(title = "项目设立", name = "工程量报表" ,businessType = CustomBusinessType.EXPORT)
     @PostMapping("/exportData")
     public void exportData(HttpServletRequest request,HttpServletResponse response, @RequestBody XmslEngineeringReport xmslEngineeringReportParam) throws IOException {
         if(xmslEngineeringReportParam.getReportType() == 2){ //清单

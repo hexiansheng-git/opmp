@@ -9,6 +9,8 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.xmslMaterialReport.domain.XmslMaterialReport;
 import com.hhwy.pm.xmsl.xmslMaterialReport.service.IXmslMaterialReportService;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,7 @@ public class XmslMaterialReportController extends BaseController {
     private IXmslMaterialReportService xmslMaterialReportService;
 
 //    @PreAuthorize(hasPermi = "xmslMaterialReport:list")
+    @CustomLogger(title = "项目设立", name = "主材报表" ,businessType = CustomBusinessType.SELECT)
     @GetMapping("/list")
     public AjaxResult getXmslMaterialReportList(@Validated(ValidationGroups.Select.class) XmslMaterialReport xmslMaterialReportParam) {
         startPage();
@@ -56,6 +59,7 @@ public class XmslMaterialReportController extends BaseController {
     }
 
 
+    @CustomLogger(title = "项目设立", name = "主材报表" ,businessType = CustomBusinessType.EXPORT)
     @GetMapping("/exportData")
     public void export(HttpServletResponse response) throws IOException {
         List<XmslMaterialReport> xmslMaterialReportList = xmslMaterialReportService.getXmslMaterialReportList(new XmslMaterialReport());
