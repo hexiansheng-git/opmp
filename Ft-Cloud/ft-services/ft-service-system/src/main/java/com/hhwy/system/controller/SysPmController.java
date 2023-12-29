@@ -13,6 +13,7 @@ import com.hhwy.system.core.service.*;
 import com.hhwy.system.mapper.SysPmMapper;
 import com.hhwy.system.service.IDeptService;
 import com.hhwy.system.service.ISysPmService;
+import com.hhwy.system.service.MenuService;
 import com.hhwy.utils.ObjectUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,10 @@ public class SysPmController {
 
     @Autowired
     private IMenuService menuService;
+
+    @Autowired
+    private MenuService menuService1;
+
     @Autowired
     private ISysTenantService tenantService;
     
@@ -334,6 +339,15 @@ public class SysPmController {
         }
 
         return  resStr.toString();
+    }
+
+    /**
+     * 获取菜单id
+     * @return
+     */
+    @GetMapping("/getMenuId")
+    public List<SysMenu> getMenuId(@RequestParam("component") String component,  @RequestParam("tenantKey") String tenantKey) {
+        return menuService1.getMenuId(tenantKey, component);
     }
 
 }

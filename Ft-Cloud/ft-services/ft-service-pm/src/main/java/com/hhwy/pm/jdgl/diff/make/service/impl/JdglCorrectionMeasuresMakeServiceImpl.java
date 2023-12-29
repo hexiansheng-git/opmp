@@ -10,6 +10,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.flowable.api.RemoteBpmnService;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.common.FlowStartUtil;
@@ -31,6 +32,7 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.system.api.domain.SysMenu;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
@@ -71,9 +73,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
     @Autowired
     private IJdglMainPlanItemService jdglMainPlanItemService;
     @Autowired
-    private IXmslContractInfoService xmslContractInfoService;
-    @Autowired
-    private RemoteBpmnService RemoteBpmnService;
+    private SystemServiceApi systemServiceApi;
 
     @Autowired
     private IJdglDiffAnalysisPathService jdglDiffAnalysisPathService;
@@ -361,12 +361,23 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
 //        ExecutorService executorService = Executors.newSingleThreadExecutor();
 //        executorService.submit(() -> {
             //获取用户名
-//            List<String> userNameList = newDetailList.stream()
-//                    .filter(p -> StrUtil.isNotBlank(p.getDirectorId()))
-//                    .map(JdglCorrectionMeasuresMakeDetail::getDirectorId)
-//                    .distinct().collect(Collectors.toList());
-//            FlowStartUtil.start("process_jdgl_correction_measures_make", String.valueOf(id), "jdgl_correction_measures_make", userNameList, "");
-////        });
+            List<String> userNameList = newDetailList.stream()
+                    .filter(p -> StrUtil.isNotBlank(p.getDirectorId()))
+                    .map(JdglCorrectionMeasuresMakeDetail::getDirectorId)
+                    .distinct().collect(Collectors.toList());
+            //获取菜单id
+        if (CollectionUtil.isEmpty(userNameList)) return;
+        String tenantKey = SecurityUtils.getTenantKey();
+        List<SysMenu> menuIdList = systemServiceApi.getMenuId("scheduleManagement/FormulateCorrectiveMeasures/detail", tenantKey + ",master");
+        if (CollectionUtil.isEmpty(menuIdList)) return;
+        List<SysMenu> collect = menuIdList.stream().filter(p -> tenantKey.equals(p.getTenantKey())).collect(Collectors.toList());
+        if (CollectionUtil.isEmpty(collect)) {
+            collect = menuIdList.stream().filter(p -> "master".equals(p.getTenantKey())).collect(Collectors.toList());
+        }
+        if (CollectionUtil.isEmpty(collect)) return;
+        String processKey = "process_jdgl_correction_measures_make";
+        FlowStartUtil.start(processKey, String.valueOf(id), "jdgl_correction_measures_make", userNameList, String.valueOf(collect.get(0).getMenuId()));
+//        });
     }
 
     @Override
