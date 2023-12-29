@@ -20,6 +20,8 @@ import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVo;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -52,6 +54,7 @@ public class XmslWbsMainController extends BaseController {
     @Autowired
     private PmServiceApi pmServiceApi;
 
+    @CustomLogger(title = "项目设立", name = "项目WBS管理" ,businessType = CustomBusinessType.SELECT)
     @PreAuthorize(hasPermi = "xmslWbsMain:list")
     @GetMapping
     public AjaxResult getXmslWbsMain(@Validated(ValidationGroups.Get.class) @RequestBody XmslWbsMain xmslWbsMainParam) {
@@ -59,6 +62,7 @@ public class XmslWbsMainController extends BaseController {
         return AjaxResult.success(xmslWbsMain);
     }
 
+    @CustomLogger(title = "项目设立", name = "项目WBS管理" ,businessType = CustomBusinessType.SELECT)
     @PreAuthorize(hasPermi = "xmslWbsMain:list")
     @GetMapping("/list")
     public AjaxResult getXmslWbsMainList(@Validated(ValidationGroups.Select.class) XmslWbsMain xmslWbsMainParam) {
@@ -68,6 +72,7 @@ public class XmslWbsMainController extends BaseController {
         return getDataTableAjaxResult(xmslWbsMainList);
     }
 
+    @CustomLogger(title = "项目设立", name = "项目WBS管理" ,businessType = CustomBusinessType.SELECT)
     @PreAuthorize(hasPermi = "xmslWbsMain:detail")
     @PostMapping("/detail")
     public AjaxResult detail(@RequestBody XmslWbsMain xmslWbsMainParam) {
@@ -90,6 +95,7 @@ public class XmslWbsMainController extends BaseController {
      * 获取当前调整数据
      * @return
      */
+    @CustomLogger(title = "项目设立", name = "项目WBS管理" ,businessType = CustomBusinessType.SELECT)
     @PreAuthorize(hasPermi = "xmslWbsMain:adjust")
     @GetMapping("/adjustInfo")
     public AjaxResult adjustInfo() {
@@ -111,6 +117,7 @@ public class XmslWbsMainController extends BaseController {
     }
 
     @PreAuthorize(hasPermi = "xmslWbsMain:remove")
+    @CustomLogger(title = "项目设立", name = "项目WBS管理" ,businessType = CustomBusinessType.DELETE)
     @PostMapping("/delete")
     public AjaxResult deleteXmslWbsMain(@Validated(ValidationGroups.Delete.class) @RequestBody XmslWbsMain xmslWbsMainParam) {
         xmslWbsMainService.deleteXmslWbsMain(xmslWbsMainParam);
@@ -118,6 +125,7 @@ public class XmslWbsMainController extends BaseController {
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "项目设立", name = "项目WBS管理" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, XmslWbsMain xmslWbsMainParam) throws IOException {
         List<XmslWbsMain> xmslWbsMainList = xmslWbsMainService.getXmslWbsMainList(xmslWbsMainParam);
         ExcelUtils<XmslWbsMain> util = new ExcelUtils<>(XmslWbsMain.class);
