@@ -52,7 +52,7 @@ public class QqchProdPlanController extends BaseController {
 
     //  // @PreAuthorize(hasPermi = "qqchProdPlan:list")
     @GetMapping("/list")
-    @CustomLogger(title = "前期策划-前期策划编制-施工策划-产值计划S曲线", name = "1.2.5 产值计划S曲线" ,businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-1施工策划-1.2总体进度计划-1.2.5产值计划S曲线", name = "1.2.5 产值计划S曲线" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchProdPlanList(@Validated(ValidationGroups.Select.class) QqchProdPlan qqchProdPlanParam) {
         CompileEntity<HashMap<String, Object>> qqchProdPlanList = qqchProdPlanService.selectList(qqchProdPlanParam);
         return AjaxResult.success(qqchProdPlanList);

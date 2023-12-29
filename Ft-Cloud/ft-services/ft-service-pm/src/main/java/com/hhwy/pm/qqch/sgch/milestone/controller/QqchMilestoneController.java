@@ -46,7 +46,7 @@ public class QqchMilestoneController extends BaseController {
 
     //  // @PreAuthorize(hasPermi = "qqchMilestone:list")
     @GetMapping("/list")
-    @CustomLogger(title = "前期策划-前期策划编制-施工策划-里程碑节点策划", name = "1.2.2 里程碑节点策划" ,businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-1施工策划-1.2总体进度计划-1.2.2里程碑节点策划", name = "1.2.2 里程碑节点策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchMilestone qqchMilestoneParam) {
         BigDecimal version = VersionUtil.getVersion(QqchMilestone.TABLE_NAME, qqchMilestoneParam.getVersion());
         qqchMilestoneParam.setVersion(version);
@@ -60,7 +60,7 @@ public class QqchMilestoneController extends BaseController {
 
     // @PreAuthorize(hasPermi = "qqchMilestone:add")
     @PostMapping("/save")
-    @CustomLogger(title = "前期策划-前期策划编制-施工策划-里程碑节点策划", name = "1.2.2 里程碑节点策划" ,businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-1施工策划-1.2总体进度计划-1.2.2里程碑节点策划", name = "1.2.2 里程碑节点策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchMilestone>> dtoList) {
         List<QqchMilestone> dto = dtoList.dealSaveDto();
         qqchMilestoneService.save(dto);
@@ -69,7 +69,7 @@ public class QqchMilestoneController extends BaseController {
 
     // @PreAuthorize(hasPermi = "qqchMilestone:add")
     @PostMapping("/saveDataFromMainP6")
-    @CustomLogger(title = "前期策划-前期策划编制-施工策划-里程碑节点策划", name = "1.2.2 里程碑节点策划" ,businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-1施工策划-1.2总体进度计划-1.2.2里程碑节点策划", name = "1.2.2 里程碑节点策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult saveDataFromMainP6(@Validated(ValidationGroups.Select.class) QqchMilestone qqchMilestoneParam) {
         List<QqchMilestone> dto = qqchMilestoneService.saveDataFromMainP6(qqchMilestoneParam);
         return AjaxResult.success(dto);

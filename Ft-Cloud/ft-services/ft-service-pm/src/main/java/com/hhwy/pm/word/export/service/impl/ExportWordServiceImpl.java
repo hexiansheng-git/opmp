@@ -302,18 +302,18 @@ public class ExportWordServiceImpl implements ExportWordService {
         List<XmslClimateCondition> climateConditionList = implementVo.getClimateConditionList();
         if(CollectionUtils.isNotEmpty(climateConditionList)) {
             projectWordData.setClimateConditionList(climateConditionList);
-            List<PictureRenderData> climateConditionPictureList = new ArrayList<>();
-            for (XmslClimateCondition xmslClimateCondition : climateConditionList) {
-                String fileGroupId = xmslClimateCondition.getFileGroupId();
-                climateConditionPictureList.addAll(this.getPictureRenderDataList(fileGroupId));
-            }
-            List<Map<String,PictureRenderData>> climateConditionList4Picture = new ArrayList<>();
-            for (PictureRenderData pictureRenderData : climateConditionPictureList) {
-                Map<String,PictureRenderData> map = new HashMap<>();
-                map.put("climateConditionPicture",pictureRenderData);
-                climateConditionList4Picture.add(map);
-            }
-            projectWordData.setClimateConditionList4Picture(climateConditionList4Picture);
+//            List<PictureRenderData> climateConditionPictureList = new ArrayList<>();
+//            for (XmslClimateCondition xmslClimateCondition : climateConditionList) {
+//                String fileGroupId = xmslClimateCondition.getFileGroupId();
+//                climateConditionPictureList.addAll(this.getPictureRenderDataList(fileGroupId));
+//            }
+//            List<Map<String,PictureRenderData>> climateConditionList4Picture = new ArrayList<>();
+//            for (PictureRenderData pictureRenderData : climateConditionPictureList) {
+//                Map<String,PictureRenderData> map = new HashMap<>();
+//                map.put("climateConditionPicture",pictureRenderData);
+//                climateConditionList4Picture.add(map);
+//            }
+//            projectWordData.setClimateConditionList4Picture(climateConditionList4Picture);
         }
 
     }

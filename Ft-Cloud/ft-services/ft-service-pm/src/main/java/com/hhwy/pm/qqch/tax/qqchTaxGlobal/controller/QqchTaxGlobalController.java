@@ -58,7 +58,7 @@ public class QqchTaxGlobalController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchTaxGlobal:list")
     @GetMapping("/list")
-    @CustomLogger(title = "前期策划-前期策划编制-财务策划-整体资金计划", name = "10.4 整体资金计划" ,businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-10财务策划-10.4整体资金计划", name = "10.4 整体资金计划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchTaxGlobal dto) {
         CompileEntity<List<QqchTaxGlobal>> qqchTaxGlobalList = null;
         try {
@@ -71,7 +71,7 @@ public class QqchTaxGlobalController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchTaxGlobal:save")
     @PostMapping("/save")
-    @CustomLogger(title = "前期策划-前期策划编制-财务策划-整体资金计划", name = "10.4 整体资金计划" ,businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-10财务策划-10.4整体资金计划", name = "10.4 整体资金计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchTaxGlobal>> params) {
         String yearStr = params.getYearStr();
         CommonAssert.notBlank(yearStr,"年份不能为空");
@@ -162,7 +162,7 @@ public class QqchTaxGlobalController extends BaseController {
 
 
     @PostMapping("/importData")
-    @CustomLogger(title = "前期策划-前期策划编制-财务策划-整体资金计划", name = "10.4 整体资金计划" ,businessType = CustomBusinessType.IMPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-10财务策划-10.4整体资金计划", name = "10.4 整体资金计划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(@RequestParam("file") MultipartFile file) {
 
         try {

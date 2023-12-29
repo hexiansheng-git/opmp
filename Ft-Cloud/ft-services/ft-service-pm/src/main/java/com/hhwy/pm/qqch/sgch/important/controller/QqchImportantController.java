@@ -57,7 +57,7 @@ public class QqchImportantController extends BaseController {
 
     //  // @PreAuthorize(hasPermi = "qqchImportant:list")
     @GetMapping("/list")
-    @CustomLogger(title = "前期策划-前期策划编制-施工策划-开工前的重要工作策划", name = "1.2.3 开工前的重要工作策划" ,businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-1施工策划-1.2总体进度计划-1.2.3开工前的重要工作策划", name = "1.2.3 开工前的重要工作策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchImportant qqchImportantParam) {
         CompileEntity qqchImportantList = qqchImportantService.list(qqchImportantParam);
         return AjaxResult.success(qqchImportantList);
@@ -65,7 +65,7 @@ public class QqchImportantController extends BaseController {
 
     // @PreAuthorize(hasPermi = "qqchImportant:add")
     @PostMapping("/save")
-    @CustomLogger(title = "前期策划-前期策划编制-施工策划-开工前的重要工作策划", name = "1.2.3 开工前的重要工作策划" ,businessType = CustomBusinessType.SAVE)
+    @CustomLogger(title = "前期策划-前期策划编制-1施工策划-1.2总体进度计划-1.2.3开工前的重要工作策划", name = "1.2.3 开工前的重要工作策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchImportant>> dto) {
         List<QqchImportant> qqchImportants = dto.dealSaveDto();
         qqchImportantService.save(qqchImportants);
@@ -75,7 +75,7 @@ public class QqchImportantController extends BaseController {
 
     // @PreAuthorize(hasPermi = "qqchImportant:importData")
     @PostMapping("/importData")
-    @CustomLogger(title = "前期策划-前期策划编制-施工策划-开工前的重要工作策划", name = "1.2.3 开工前的重要工作策划" ,businessType = CustomBusinessType.IMPORT)
+    @CustomLogger(title = "前期策划-前期策划编制-1施工策划-1.2总体进度计划-1.2.3开工前的重要工作策划", name = "1.2.3 开工前的重要工作策划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(@RequestParam("file") MultipartFile file) {
         FtExcelUtil<QqchImportant> excelUtil = new FtExcelUtil<>(QqchImportant.class);
         try {
