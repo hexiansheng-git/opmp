@@ -113,6 +113,14 @@
         </where>
         order by id
     </select>
+    <select id="selectLessOrEqualAssignVersion" resultType="java.math.BigDecimal">
+        select version
+        from qqch_measure_exp_range
+        where del_flag = '0' and data_type = #{dataType} and version &lt;= #{version}
+        group by version
+        order by version desc
+        limit 1
+    </select>
 
     <insert id="insertQqchMeasureExpRange" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_measure_exp_range

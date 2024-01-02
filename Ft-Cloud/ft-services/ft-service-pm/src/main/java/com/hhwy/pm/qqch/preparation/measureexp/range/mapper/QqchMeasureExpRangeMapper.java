@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.measureexp.range.mapper;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpRange;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,4 +28,6 @@ public interface QqchMeasureExpRangeMapper {
     int deleteQqchMeasureExpRange(QqchMeasureExpRange qqchMeasureExpRange);
 
     int deleteQqchMeasureExpRangeByPks(@Param("qqchMeasureExpRangePkList") List<Long> qqchMeasureExpRangePkList);
+
+    BigDecimal selectLessOrEqualAssignVersion(@Param("version") BigDecimal version, @Param("dataType") String dataType);
 }
