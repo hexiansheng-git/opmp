@@ -1,27 +1,23 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlan.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlanQueryVO;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
-import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author 陈锦豪
@@ -111,5 +107,11 @@ public class JdglMainPlanController extends BaseController {
         List<JdglMainPlan> jdglMainPlanList = jdglMainPlanService.getJdglMainPlanList(jdglMainPlanParam);
         ExcelUtils<JdglMainPlan> util = new ExcelUtils<>(JdglMainPlan.class);
         util.exportExcel(response, jdglMainPlanList, DateUtils.getDate());
+    }
+
+    @GetMapping("test")
+    public AjaxResult test(Long id){
+        jdglMainPlanService.test(id);
+        return AjaxResult.success();
     }
 }
