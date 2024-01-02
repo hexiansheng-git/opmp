@@ -47,8 +47,12 @@ public class JyDetailsUtil {
         if (!beanValidationResult.isSuccess()) {
             List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();
             for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
-                if(str.indexOf(errorMessage.getMessage()) == -1){
-                    str.append(errorMessage.getMessage()).append(",");
+                String message = errorMessage.getMessage();
+                if(str.indexOf(message) == -1){
+                    if(str.length() > 0){
+                        str.append(",");
+                    }
+                    str.append(message);
                 }
             }
         }
