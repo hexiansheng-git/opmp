@@ -116,12 +116,13 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
         log.info("流程状态：{} ----", make.getTaskStatus());
         //数据过滤
         List<JdglCorrectionMeasuresMakeDetail> afterFilterList = new ArrayList<>();
+        List<JdglCorrectionMeasuresMakeDetail> resultList = allList;
         if (StrUtil.isNotBlank(make.getTaskStatus()) &&  !make.getTaskStatus().equals("5") && !userName.equals("admin")) {
             afterFilterList = allList.stream()
                     .filter(p -> StrUtil.isNotBlank(p.getDirectorId()) && p.getDirectorId().equals(userName))
                     .collect(Collectors.toList());
+            resultList = TreeNodeUtil.getAncestral(allList, afterFilterList);
         }
-        List<JdglCorrectionMeasuresMakeDetail> resultList = TreeNodeUtil.getAncestral(allList, afterFilterList);
         //将所有责任人username和nickname返回前端，给流程审批用
         String loginAcccount = allList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getDirectorId()) && StrUtil.isBlank(p.getPtVar1()))

@@ -29,6 +29,7 @@ public class FlowStartUtil {
      * 时间: 2023/12/25
      */
     public static void start(String processDefinitionKey, String businessKey, String tableName, List<String> userNameList, String routeId){
+        log.info("流程KEY：{}，业务KEY: {}， 表名：{}， 用户列表：{}， 菜单id：{}", processDefinitionKey, businessKey, tableName, userNameList, routeId);
         NextNodesParam nextNodesParam = new NextNodesParam();
         nextNodesParam.setProcessDefinitionKey(processDefinitionKey);
         //BpmnController  nextNodesForFeign
@@ -68,7 +69,7 @@ public class FlowStartUtil {
 
         Map<String, Object> variableParam = new HashMap<>();
         startFlowResource.setVariables(variableParam);
-        variableParam.put("routeId", routeId);
+        variableParam.put("routerId", routeId);
         variableParam.put("tableName", tableName);
         String assginList = "assigneeList_" + nodeId;
         variableParam.put(assginList, userNameList);
