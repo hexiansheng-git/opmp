@@ -11,12 +11,15 @@ import com.hhwy.pm.qqch.preparation.measureexp.range.mapper.QqchMeasureExpRangeM
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpPersonService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpRangeService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureOrgService;
+import com.hhwy.pm.qqch.qqchChange.service.IQqchChangeService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -36,6 +39,9 @@ public class QqchMeasureExpRangeServiceImpl implements IQqchMeasureExpRangeServi
 
     @Resource
     private QqchMeasureExpRangeMapper qqchMeasureExpRangeMapper;
+
+    @Autowired
+    private IQqchChangeService qqchChangeService;
 
 
     public QqchMeasureExpRange getQqchMeasureExpRange(QqchMeasureExpRange qqchMeasureExpRange) {
@@ -130,5 +136,18 @@ public class QqchMeasureExpRangeServiceImpl implements IQqchMeasureExpRangeServi
 //        personService.saveList(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), "asasasasa",expVO.getPersonList()));
 //        QqchMeasureOrg org = expVO.getOrg();
 //        orgService.save(CompileEntity.dealSaveDto(expVO.getVersion(), "asasasasa",expVO.getSubmitFlag(),org));
+    }
+
+    @Override
+    public BigDecimal getMaxVersion(BigDecimal version, String dataType) {
+        if (version == null) {
+            version  = qqchChangeService.effectVersion();
+        }
+        /*查询当前最接近（小于等于）指定版本的版本号*/
+        version = qqchMeasureExpRangeMapper.selectLessOrEqualAssignVersion(version,dataType);
+        if(version == null){
+            version = BigDecimal.ONE;
+        }
+        return version;
     }
 }

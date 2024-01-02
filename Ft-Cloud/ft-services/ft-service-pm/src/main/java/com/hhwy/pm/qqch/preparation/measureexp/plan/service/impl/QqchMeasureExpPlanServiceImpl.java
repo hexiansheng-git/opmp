@@ -6,10 +6,13 @@ import com.hhwy.pm.qqch.common.CompileInterface;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.domain.QqchMeasureExpPlan;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.mapper.QqchMeasureExpPlanMapper;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.service.IQqchMeasureExpPlanService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -29,6 +32,9 @@ public class QqchMeasureExpPlanServiceImpl implements IQqchMeasureExpPlanService
     private final static String TN = "qqch_measure_exp_plan";
     @Resource
     private QqchMeasureExpPlanMapper qqchMeasureExpPlanMapper;
+
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
 
     public QqchMeasureExpPlan getQqchMeasureExpPlan(QqchMeasureExpPlan qqchMeasureExpPlan) {
@@ -96,8 +102,17 @@ public class QqchMeasureExpPlanServiceImpl implements IQqchMeasureExpPlanService
         //插入新数据
         List<QqchMeasureExpPlan> dto = map.dealSaveDto();
         this.checkData(dto);
-        if (CollectionUtils.isEmpty(dto)) return;
-        this.qqchMeasureExpPlanMapper.insertQqchMeasureExpPlanList(dto);
+        if (!CollectionUtils.isEmpty(dto)){
+            this.qqchMeasureExpPlanMapper.insertQqchMeasureExpPlanList(dto);
+        }
+
+        String submitFlag = map.getSubmitFlag();
+        if(ButtonMark.CONFIRM.equals(submitFlag)){
+            //插入确认状态
+            String menuId = map.getModuleIdentity();
+            String stageIdentity = map.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
     }
 
     private void checkData(List<QqchMeasureExpPlan> dtos) {

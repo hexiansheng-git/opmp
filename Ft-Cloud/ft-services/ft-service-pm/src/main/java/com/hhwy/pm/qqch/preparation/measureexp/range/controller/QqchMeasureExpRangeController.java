@@ -4,7 +4,6 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpPerson;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpRange;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -67,9 +67,14 @@ public class QqchMeasureExpRangeController extends BaseController {
     @CustomLogger(title = "前期策划-前期策划编制-3.6测量管理计划", name = "3.6.1测量工作概述" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getQqchMeasureExpRangeList(@Validated(ValidationGroups.Select.class) QqchMeasureExpRange dto) {
         Map<String, Object> res = new HashMap<>();
+        BigDecimal version = dto.getVersion();
+        String dataType = dto.getDataType();
+        version = qqchMeasureExpRangeService.getMaxVersion(version,dataType);
         CompileEntity compileEntity = new CompileEntity();
-        compileEntity.setVersion(dto.getVersion());
+        compileEntity.setVersion(version);
         compileEntity.setStageIdentity(reviewService.getStage());
+
+        dto.setVersion(version);
 
         // 组织模式
         List<QqchMeasureOrg> measureOrgListByVersion = orgService.getQqchMeasureOrgListByVersion(new QqchMeasureOrg());
@@ -77,7 +82,7 @@ public class QqchMeasureExpRangeController extends BaseController {
         List<QqchMeasureExpRange> measureExpRangeList = qqchMeasureExpRangeService.getQqchMeasureExpRangeListByVersion(dto);
         // 人员配置
         QqchMeasureExpPerson wherePer = new QqchMeasureExpPerson();
-        wherePer.setDataType(dto.getDataType());
+        wherePer.setDataType(dataType);
         List<QqchMeasureExpPerson> measureExpPersonList = personService.getQqchMeasureExpPersonListByVersionCode(CompileEntity.dealListDto(dto.getVersion(), wherePer));
         
         res.put("org", CollectionUtils.isEmpty(measureOrgListByVersion) ? new QqchMeasureExpRange() : measureOrgListByVersion.get(0));

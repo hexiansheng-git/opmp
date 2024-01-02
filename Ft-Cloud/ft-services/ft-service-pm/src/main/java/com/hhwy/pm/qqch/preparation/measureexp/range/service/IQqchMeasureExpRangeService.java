@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.measureexp.range.service;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpRange;
 import com.hhwy.pm.qqch.preparation.measureexp.range.dto.QqchMeasureExpDTO;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -34,5 +35,6 @@ public interface IQqchMeasureExpRangeService {
     void saveTreeList(QqchMeasureExpDTO expVO);
 
     void saveAll(QqchMeasureExpDTO expVO);
-    
+
+    BigDecimal getMaxVersion(BigDecimal version, String dataType);
 }
