@@ -250,12 +250,12 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
             //切换到master
             DynamicDataSourceContextHolder.push("master");
             //获取所有租户
-//            List<SysTenant> tenantList = systemServiceApi.tenantList();
-            ArrayList<SysTenant> objects = new ArrayList<>();
-            SysTenant sysTenant = new SysTenant();
-            sysTenant.setTenantKey("PJ2023009583");
             List<SysTenant> tenantList = systemServiceApi.tenantList();
-            tenantList.add(sysTenant);
+//            ArrayList<SysTenant> objects = new ArrayList<>();
+//            SysTenant sysTenant = new SysTenant();
+//            sysTenant.setTenantKey("PJ2023009583");
+//            List<SysTenant> tenantList = systemServiceApi.tenantList();
+//            tenantList.add(sysTenant);
 //            tenantList.forEach(System.out::println);
             for (SysTenant tenant : tenantList) {
                 try {
