@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -100,6 +101,11 @@ public class QqchAppInnovatePlanController extends BaseController {
             InputStream inputStream = file.getInputStream();
             List<QqchAppInnovatePlanImportVo> qqchAppInnovatePlanImportVoList = util.importExcel(inputStream);
             qqchAppInnovatePlanImportVoList.stream().forEach(o -> {
+                Date startTime = o.getStartTime();
+                Date endTime = o.getEndTime();
+                if(startTime != null && endTime != null && startTime.after(endTime)){
+                    throw new RuntimeException("开始时间不能大于结束时间！");
+                }
                 o.setId(IdWorker.createId());
             });
             return AjaxResult.success(qqchAppInnovatePlanImportVoList);
