@@ -233,25 +233,30 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         Date dateTime = new Date();
         //默认生成上一周的数据
         DateTime date = DateUtil.offsetWeek(dateTime, -1);
-        int thisYear = DateUtil.thisYear();
-        int thisMonth = DateUtil.thisMonth();
         Date beginOfMonth = DateUtil.beginOfMonth(date);
         Date endOfMonth = DateUtil.endOfMonth(date);
         Date beginOfWeek = DateUtil.beginOfWeek(date);
         Date endOfWeek = DateUtil.endOfWeek(date);
         //处理年初和年尾日期
-        if (DateUtil.year(beginOfWeek) != DateUtil.year(endOfWeek)){
-            beginOfWeek = DateUtil.beginOfYear(date);
-            endOfWeek = DateUtil.endOfYear(date);
-        }
+//        if (DateUtil.year(beginOfWeek) != DateUtil.year(endOfWeek)){
+//            beginOfWeek = DateUtil.beginOfYear(date);
+//            endOfWeek = DateUtil.endOfYear(date);
+//        }
+        int thisYear = DateUtil.year(beginOfWeek);
+        int thisMonth = DateUtil.month(beginOfWeek) + 1;
 
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         try {
             //切换到master
             DynamicDataSourceContextHolder.push("master");
             //获取所有租户
+//            List<SysTenant> tenantList = systemServiceApi.tenantList();
+            ArrayList<SysTenant> objects = new ArrayList<>();
+            SysTenant sysTenant = new SysTenant();
+            sysTenant.setTenantKey("PJ2023009583");
             List<SysTenant> tenantList = systemServiceApi.tenantList();
-            tenantList.forEach(System.out::println);
+            tenantList.add(sysTenant);
+//            tenantList.forEach(System.out::println);
             for (SysTenant tenant : tenantList) {
                 try {
                     //切换租户
@@ -302,7 +307,7 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
                         }
                     }
                     // 周报期数
-                    jdglProgressCorrectionTrack.setWeekReportPeriod(DateUtil.thisYear() + "年第" + DateUtil.weekOfYear(date) + "周");
+                    jdglProgressCorrectionTrack.setWeekReportPeriod(thisYear + "年第" + DateUtil.weekOfYear(date) + "周");
                     // 周报生成日期
                     jdglProgressCorrectionTrack.setWeekReportBuildDate(FtDateUtils.getYearMonthDayDate());
                     // 周报时间
@@ -320,7 +325,7 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
                     jdglProgressCorrectionTrack.setWeekValuePlan(thisPlanValueDl);
                     // 本周产值完成
                     BigDecimal weekValueComplete = jdglDayScheduleService.getCountValueNotApprove(beginOfWeek, endOfWeek);
-                    jdglProgressCorrectionTrack.setWeekValueComplete(weekValueComplete);
+                    jdglProgressCorrectionTrack.setWeekValueComplete(weekValueComplete==null?BigDecimal.ZERO:weekValueComplete);
                     // 周完成比例 本周产值完成/本周产值计划*100%
                     BigDecimal weekCompleteRatio = BigDecimalUtils.divide0(thisPlanValueDl, weekValueComplete, 4).multiply(new BigDecimal(100));
                     jdglProgressCorrectionTrack.setWeekCompleteRatio(weekCompleteRatio);
@@ -392,7 +397,7 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
                     planStatisticsQueryVO.setQueryDateType("j");
     //                planStatisticsQueryVO.setEndDate(endOfWeek);
                     planStatisticsQueryVO.setYear(String.valueOf(thisYear));
-                    planStatisticsQueryVO.setQuarter("0" + DateUtil.quarter(endOfWeek));
+                    planStatisticsQueryVO.setQuarter(DateUtil.quarter(endOfWeek)+"");
                     Map<String, Map<String, BigDecimal>> statisticsMap = planStatisticsService.getValueCompData(planStatisticsQueryVO);
                     log.info("每周定时生成追踪数据，---------------9");
                     Map<String, BigDecimal> quarterMap = statisticsMap.get("quarter");
@@ -501,12 +506,13 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
     public BigDecimal sumMeter(Date currentDate) {
         List<JdglDiffAnalysis> list = jdglDiffAnalysisService.getJdglDiffAnalysisList(new JdglDiffAnalysis());
         BigDecimal totalMeterValue = BigDecimal.ZERO;
-        if (!CollectionUtils.isEmpty(list)) {
-            for (JdglDiffAnalysis jdglDiffAnalysis : list) {
-                // 当前日期在指定日期之后或与指定日期相等
-                if (!currentDate.before(jdglDiffAnalysis.getPeriod())) {
-                    totalMeterValue = totalMeterValue.add(jdglDiffAnalysis.getMeterValue());
-                }
+        if (CollectionUtil.isEmpty(list))
+            return totalMeterValue;
+        List<JdglDiffAnalysis> collect = list.stream().filter(p -> p.getMeterValue() != null).collect(Collectors.toList());
+        for (JdglDiffAnalysis jdglDiffAnalysis : collect) {
+            // 当前日期在指定日期之后或与指定日期相等
+            if (!currentDate.before(jdglDiffAnalysis.getPeriod())) {
+                totalMeterValue = totalMeterValue.add(jdglDiffAnalysis.getMeterValue());
             }
         }
         return totalMeterValue;
