@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -120,5 +121,27 @@ public class QqchStandardExpenseAccountServiceImpl implements IQqchStandardExpen
     @Transactional
     public int deleteQqchStandardExpenseAccountByPks(List<Long> qqchStandardExpenseAccountPkList) {
         return qqchStandardExpenseAccountMapper.deleteQqchStandardExpenseAccountByPks(qqchStandardExpenseAccountPkList);
+    }
+
+    @Override
+    public List<QqchStandardExpenseAccount> changeId(List<QqchStandardExpenseAccount> qqchStandardExpenseAccountList) {
+        List<QqchStandardExpenseAccount> list = new ArrayList<>();
+        if(CollectionUtils.isEmpty(qqchStandardExpenseAccountList)){
+            return list;
+        }
+        list = ListTreeUtil.formatList(
+                qqchStandardExpenseAccountList,
+                QqchStandardExpenseAccount::setId,
+                QqchStandardExpenseAccount::setPid,
+                QqchStandardExpenseAccount::getChildren,
+                QqchStandardExpenseAccount::setChildren);
+
+        list = ListTreeUtil.formatTree(
+                list,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchStandardExpenseAccount::getChildren,
+                QqchStandardExpenseAccount::setChildren);
+        return list;
     }
 }

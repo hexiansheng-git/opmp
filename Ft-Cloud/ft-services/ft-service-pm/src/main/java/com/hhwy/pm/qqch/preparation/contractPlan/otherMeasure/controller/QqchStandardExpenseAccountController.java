@@ -49,6 +49,12 @@ public class QqchStandardExpenseAccountController extends BaseController {
         return AjaxResult.success(qqchStandardExpenseAccountList);
     }
 
+    @PostMapping("changeId")
+    public AjaxResult changeId(@RequestBody List<QqchStandardExpenseAccount> qqchStandardExpenseAccountList){
+        List<QqchStandardExpenseAccount> list = qqchStandardExpenseAccountService.changeId(qqchStandardExpenseAccountList);
+        return AjaxResult.success(list);
+    }
+
 //    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:add")
     @PostMapping("/add")
     public AjaxResult insertQqchStandardExpenseAccount(@Validated(ValidationGroups.Save.class) @RequestBody QqchStandardExpenseAccount qqchStandardExpenseAccountParam) {

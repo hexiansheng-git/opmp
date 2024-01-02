@@ -26,4 +26,6 @@ public interface IQqchStandardExpenseAccountService {
     int deleteQqchStandardExpenseAccount(QqchStandardExpenseAccount qqchStandardExpenseAccount);
 
     int deleteQqchStandardExpenseAccountByPks(List<Long> qqchStandardExpenseAccountPkList);
+
+    List<QqchStandardExpenseAccount> changeId(List<QqchStandardExpenseAccount> qqchStandardExpenseAccountList);
 }
