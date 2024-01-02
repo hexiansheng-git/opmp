@@ -86,6 +86,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("localWorkerSupplyList",policy) // 属地工人供应情况
                     .bind("localMaterialsSupplyList",policy) // 属地物资供应情况
                     .bind("localEquipmentSupplyList",policy) // 属地设备供应情况
+                    .bind("keyPersonCommunicationList",policy) // 社会和人文条件说明
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -367,6 +368,21 @@ public class ExportWordServiceImpl implements ExportWordService {
             }
         }
 
+        XmslExtend xmslExtend = implementVo.getXmslExtend();
+        if(xmslExtend != null) {
+            /*当地政策要点说明*/
+            String policyKeyPointsExplanation = xmslExtend.getPolicyKeyPointsExplanation();
+            projectWordData.setPolicyKeyPointsExplanation(policyKeyPointsExplanation);
+            /*社会和人文条件说明*/
+            String socialHumanisticExplanation = xmslExtend.getSocialHumanisticExplanation();
+            projectWordData.setSocialHumanisticExplanation(socialHumanisticExplanation);
+        }
+
+        /*重要干系人识别及沟通*/
+        List<XmslKeyPersonCommunication> keyPersonCommunicationList = implementVo.getKeyPersonCommunicationList();
+        if(CollectionUtils.isNotEmpty(keyPersonCommunicationList)) {
+            projectWordData.setKeyPersonCommunicationList(keyPersonCommunicationList);
+        }
     }
 
 }

@@ -190,5 +190,17 @@ public class ProjectWordData {
      * 属地设备供应情况
      */
     private List<XmslLocalEquipmentSupply> localEquipmentSupplyList;
+    /**
+     * 当地政策要点说明
+     */
+    private String policyKeyPointsExplanation;
+    /**
+     * 社会和人文条件说明
+     */
+    private String socialHumanisticExplanation;
+    /**
+     * 重要干系人识别及沟通
+     */
+    private List<XmslKeyPersonCommunication> keyPersonCommunicationList;
 
 }
