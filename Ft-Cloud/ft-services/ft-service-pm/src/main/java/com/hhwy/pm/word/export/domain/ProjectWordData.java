@@ -166,6 +166,11 @@ public class ProjectWordData {
      *气候条件
      */
     private List<XmslClimateCondition> climateConditionList;
+
+    /**
+     * 气候条件附件
+     */
+    private List<Map<String,PictureRenderData>> climateConditionList4Picture;
     /**
      *水、电、交通、通讯条件
      */
