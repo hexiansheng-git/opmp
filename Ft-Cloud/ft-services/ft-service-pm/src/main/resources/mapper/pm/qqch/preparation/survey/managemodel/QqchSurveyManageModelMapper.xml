@@ -104,7 +104,9 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="manageModel != null  and manageModel != ''">and `manage_model` = #{manageModel}</if>
+            <if test="manageModel != null  and manageModel != ''">
+                and `manage_model` like concat('%', #{manageModel} '%')
+            </if>
             <if test="advantage != null  and advantage != ''">and `advantage` = #{advantage}</if>
             <if test="disadvantage != null  and disadvantage != ''">and `disadvantage` = #{disadvantage}</if>
             <if test="results != null  and results != ''">and `results` = #{results}</if>
