@@ -106,6 +106,20 @@ public class XmslBidWinHandoverInfoServiceImpl implements IXmslBidWinHandoverInf
         }
     }
 
+    @Override
+    public List<XmslBidWinHandoverFile> getBidWinHandoverFileList() {
+        List<XmslBidWinHandoverFile> fileList = new ArrayList<>();
+        XmslBidWinHandoverInfo info = xmslBidWinHandoverInfoMapper.getXmslBidWinHandoverInfo(new XmslBidWinHandoverInfo());
+        if(info == null){
+            return fileList;
+        }
+
+        XmslBidWinHandoverFile xmslBidWinHandoverFile = new XmslBidWinHandoverFile();
+        xmslBidWinHandoverFile.setHandoverInfoId(info.getId());
+        fileList = xmslBidWinHandoverFileService.getXmslBidWinHandoverFileList(xmslBidWinHandoverFile);
+        return fileList;
+    }
+
     /**
      * 获取初始化数据
      *

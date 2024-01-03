@@ -10,7 +10,10 @@ import com.deepoove.poi.plugin.table.LoopRowTableRenderPolicy;
 import com.deepoove.poi.util.PoitlIOUtils;
 import com.hhwy.pm.word.export.domain.FileDto;
 import com.hhwy.pm.word.export.domain.ProjectWordData;
+import com.hhwy.pm.word.export.domain.vo.BidWinHandoverFileVo;
 import com.hhwy.pm.word.export.service.ExportWordService;
+import com.hhwy.pm.xmsl.bid.domain.XmslBidWinHandoverFile;
+import com.hhwy.pm.xmsl.bid.service.IXmslBidWinHandoverInfoService;
 import com.hhwy.pm.xmsl.implement.domain.*;
 import com.hhwy.pm.xmsl.implement.domain.vo.ImplementVo;
 import com.hhwy.pm.xmsl.implement.service.IXmslTerrainLandformsService;
@@ -59,6 +62,9 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IXmslTerrainLandformsService xmslTerrainLandformsService;
 
+    @Autowired
+    private IXmslBidWinHandoverInfoService xmslBidWinHandoverInfoService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -75,7 +81,9 @@ public class ExportWordServiceImpl implements ExportWordService {
             }
 
             LoopRowTableRenderPolicy policy = new LoopRowTableRenderPolicy();
-            Configure config = Configure.builder().bind("materialsAmountList",policy).bind("engineeringAmountList",policy)
+            Configure config = Configure.builder()
+                    .bind("materialsAmountList",policy)
+                    .bind("engineeringAmountList",policy)
                     .bind("terrainLandformsList",policy) // 地形地貌
                     .bind("mainTypicalGeologySurveyList",policy) // 主线典型地质勘察表
                     .bind("badGeologySurveyList",policy) // 不良地质调查表
@@ -87,13 +95,14 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("localMaterialsSupplyList",policy) // 属地物资供应情况
                     .bind("localEquipmentSupplyList",policy) // 属地设备供应情况
                     .bind("keyPersonCommunicationList",policy) // 社会和人文条件说明
+                    .bind("handoverFileVoList",policy) // 中标资料移交
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
             ProjectWordData projectWordData = new ProjectWordData();
 
-            /*设置项目基本信息*/
-            this.setProjectInfo(projectWordData);
+            /*设置数据*/
+            this.initAll(projectWordData);
 
             template.render(projectWordData);
 
@@ -108,7 +117,79 @@ public class ExportWordServiceImpl implements ExportWordService {
         }
     }
 
-    private void setProjectInfo(ProjectWordData projectWordData){
+    private void initAll(ProjectWordData projectWordData){
+        /*--项目信息--*/
+        initProjectInfo(projectWordData);
+        /*--实施条件--*/
+        initImplement(projectWordData);
+        /*--合同条件--*/
+        /*中标资料移交*/
+        this.initBidWinHandoverFile(projectWordData);
+    }
+
+
+    /*图片基础宽度*/
+    private static final int BASE_WIDTH = 500;
+
+    /**
+     * 获取附件组id关联的所有图片流
+     * @param fileGroupId
+     * @return
+     */
+    public List<PictureRenderData> getPictureRenderDataList(String fileGroupId){
+        List<PictureRenderData> pictureRenderDataList = new ArrayList<>();
+        if(StringUtils.isBlank(fileGroupId)){
+            return pictureRenderDataList;
+        }
+        String url = fileUrl + "list/" + fileGroupId;
+        String jsonString = restTemplate.getForObject(url, String.class);
+        List<FileDto> fileDtoList = JSONObject.parseArray(jsonString, FileDto.class);
+        if(CollectionUtils.isEmpty(fileDtoList)){
+            return pictureRenderDataList;
+        }
+        for (FileDto fileDto : fileDtoList) {
+            String fileId = fileDto.getFileId();
+            String urlF = fileUrl + fileId;
+            ResponseEntity<byte[]> entity = restTemplate.getForEntity(urlF, byte[].class);
+            byte[] body = entity.getBody();
+            if(body == null){
+                continue;
+            }
+            InputStream is = new ByteArrayInputStream(body);
+            try {
+                BufferedImage image = ImageIO.read(is);
+                int width = image.getWidth();
+                int height = image.getHeight();
+                if(width > BASE_WIDTH){
+                    double times = (double) width / BASE_WIDTH;
+                    width = (int) Math.round(width / times);
+                    height = (int) Math.round(height / times);
+                }
+                PictureRenderData pictureRenderData = Pictures.ofBufferedImage(image, PictureType.suggestFileType(fileDto.getExtension())).size(width, height).create();
+                pictureRenderDataList.add(pictureRenderData);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return pictureRenderDataList;
+    }
+
+    /**
+     * 根据附件组id判断是否存在关联附件
+     * @param fileGroupId
+     * @return
+     */
+    private boolean ifExistFileByFileGroupId(String fileGroupId){
+        if(StringUtils.isBlank(fileGroupId)){
+            return false;
+        }
+        String url = fileUrl + "list/" + fileGroupId;
+        String jsonString = restTemplate.getForObject(url, String.class);
+        List<FileDto> fileDtoList = JSONObject.parseArray(jsonString, FileDto.class);
+        return !CollectionUtils.isEmpty(fileDtoList);
+    }
+
+    private void initProjectInfo(ProjectWordData projectWordData){
         ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
         Long id = projectInfo.getId();
 
@@ -165,58 +246,8 @@ public class ExportWordServiceImpl implements ExportWordService {
             structureList.add(map);
         }
         projectWordData.setStructurePictureList(structureList);
-
-        /*--实施条件--*/
-        initImplement(projectWordData);
-
-
     }
 
-    /*图片基础宽度*/
-    private static final int BASE_WIDTH = 500;
-
-    /**
-     * 获取附件组id关联的所有图片流
-     * @param fileGroupId
-     * @return
-     */
-    public List<PictureRenderData> getPictureRenderDataList(String fileGroupId){
-        List<PictureRenderData> pictureRenderDataList = new ArrayList<>();
-        if(StringUtils.isBlank(fileGroupId)){
-            return pictureRenderDataList;
-        }
-        String url = fileUrl + "list/" + fileGroupId;
-        String jsonString = restTemplate.getForObject(url, String.class);
-        List<FileDto> fileDtoList = JSONObject.parseArray(jsonString, FileDto.class);
-        if(CollectionUtils.isEmpty(fileDtoList)){
-            return pictureRenderDataList;
-        }
-        for (FileDto fileDto : fileDtoList) {
-            String fileId = fileDto.getFileId();
-            String urlF = fileUrl + fileId;
-            ResponseEntity<byte[]> entity = restTemplate.getForEntity(urlF, byte[].class);
-            byte[] body = entity.getBody();
-            if(body == null){
-                continue;
-            }
-            InputStream is = new ByteArrayInputStream(body);
-            try {
-                BufferedImage image = ImageIO.read(is);
-                int width = image.getWidth();
-                int height = image.getHeight();
-                if(width > BASE_WIDTH){
-                    double times = (double) width / BASE_WIDTH;
-                    width = (int) Math.round(width / times);
-                    height = (int) Math.round(height / times);
-                }
-                PictureRenderData pictureRenderData = Pictures.ofBufferedImage(image, PictureType.suggestFileType(fileDto.getExtension())).size(width, height).create();
-                pictureRenderDataList.add(pictureRenderData);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return pictureRenderDataList;
-    }
 
     /**
      * 初始实施条件数据
@@ -384,4 +415,25 @@ public class ExportWordServiceImpl implements ExportWordService {
         }
     }
 
+    /**
+     * 初始化中标资料移交数据
+     * @param projectWordData
+     */
+    private void initBidWinHandoverFile(ProjectWordData projectWordData){
+        List<BidWinHandoverFileVo> handoverFileVoList = new ArrayList<>();
+        List<XmslBidWinHandoverFile> bidWinHandoverFileList = xmslBidWinHandoverInfoService.getBidWinHandoverFileList();
+        if(CollectionUtils.isNotEmpty(bidWinHandoverFileList)) {
+            for (XmslBidWinHandoverFile xmslBidWinHandoverFile : bidWinHandoverFileList) {
+                BidWinHandoverFileVo vo = new BidWinHandoverFileVo();
+                vo.setFileName(xmslBidWinHandoverFile.getFileName());
+                vo.setRemark(xmslBidWinHandoverFile.getRemark());
+                String fileGroupId = xmslBidWinHandoverFile.getFileGroupId();
+                if(this.ifExistFileByFileGroupId(fileGroupId)){
+                    vo.setHandover("是");
+                }
+                handoverFileVoList.add(vo);
+            }
+        }
+        projectWordData.setHandoverFileVoList(handoverFileVoList);
+    }
 }

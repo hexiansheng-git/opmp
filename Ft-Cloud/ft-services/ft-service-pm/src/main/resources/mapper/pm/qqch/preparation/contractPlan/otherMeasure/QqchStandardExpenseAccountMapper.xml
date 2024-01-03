@@ -113,7 +113,7 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="code != null  and code != ''">and `code` = #{code}</if>
-            <if test="expenseName != null  and expenseName != ''">and `expense_name` = #{expenseName}</if>
+            <if test="expenseName != null  and expenseName != ''">and `expense_name` like concat('%' , #{expenseName} , '%')</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="source != null  and source != ''">and `source` = #{source}</if>
             <if test="level != null ">and `level` = #{level}</if>

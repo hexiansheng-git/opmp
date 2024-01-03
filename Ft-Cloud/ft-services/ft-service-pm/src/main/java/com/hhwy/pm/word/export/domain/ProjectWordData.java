@@ -2,6 +2,7 @@ package com.hhwy.pm.word.export.domain;
 
 import com.deepoove.poi.data.PictureRenderData;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.pm.word.export.domain.vo.BidWinHandoverFileVo;
 import com.hhwy.pm.xmsl.implement.domain.*;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectMaterialsAmount;
@@ -208,4 +209,9 @@ public class ProjectWordData {
      */
     private List<XmslKeyPersonCommunication> keyPersonCommunicationList;
 
+    /*---------------------------------------合同条件----------------------------------------*/
+    /**
+     * 中标资料移交
+     */
+    private List<BidWinHandoverFileVo> handoverFileVoList;
 }
