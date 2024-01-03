@@ -99,6 +99,7 @@
             iad.`del_flag` = 0
             AND tdd.material_code = iad.material_code
             AND tdd.material_standard = iad.material_standard
+            and tdd.version = #{version}
             AND tdd.del_flag = 0
             <if test="internalAdjustId != null ">and iad.`internal_adjust_id` = #{internalAdjustId}</if>
             <if test="materialCode != null  and materialCode != ''">and iad.`material_code` = #{materialCode}</if>
@@ -143,7 +144,6 @@
             <if test="ptVar2 != null  and ptVar2 != ''">and iad.`pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and iad.`pt_var3` = #{ptVar3}</if>
         </where>
-        group by iad.`material_code`
         order by iad.`material_code` asc
     </select>
 
@@ -151,6 +151,11 @@
         <include refid="selectWzchInternalAdjustDetailVo"/>
         where iad.`id` = #{id}
     </select>
+
+    <select id="selectWzchSourceVersion" parameterType="BigDecimal" resultMap="WzchInternalAdjustDetailResult">
+        select version from wzch_source where version &lt;= #{version} and del_flag = 0 order by version desc limit 1
+    </select>
+
     <insert id="insertWzchInternalAdjustDetail"
             parameterType="com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchInternalAdjustDetail">
         insert into `wzch_internal_adjust_detail`

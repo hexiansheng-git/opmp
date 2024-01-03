@@ -247,6 +247,9 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
             WzchInternalAdjustDetail detail = new WzchInternalAdjustDetail();
             detail.setInternalAdjustId(dto.getId());
             detail.setDelFlag("0");
+            //获取来源策划版本，否则关联来源策划会出多条数据
+            BigDecimal sourceVersion = wzchInternalAdjustDetailMapper.selectWzchSourceVersion(dto.getVersion());
+            detail.setVersion(ObjectUtils.nvlBigDecimal(sourceVersion,dto.getVersion()));
             List<WzchInternalAdjustDetail> detailList = detailService.selectWzchInternalAdjustDetailList(detail);
             HashMap<String, String> dictMap = new HashMap<>();
             dictMap.put("materialStandard_materialStandardName", "material_standard");
