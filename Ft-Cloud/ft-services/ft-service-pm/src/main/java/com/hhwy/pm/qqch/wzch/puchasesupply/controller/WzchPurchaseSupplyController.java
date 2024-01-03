@@ -20,6 +20,8 @@ import com.hhwy.pm.qqch.wzch.puchasesupply.dto.WzchPurchaseSupplyDetailDTO;
 import com.hhwy.pm.qqch.wzch.puchasesupply.dto.WzchPurchaseViewDetailDTO;
 import com.hhwy.pm.qqch.wzch.puchasesupply.service.IWzchPurchaseSupplyDetailService;
 import com.hhwy.pm.qqch.wzch.puchasesupply.service.IWzchPurchaseSupplyService;
+import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
+import com.hhwy.pm.qqch.wzch.source.service.IWzchSourceService;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
@@ -54,6 +56,8 @@ public class WzchPurchaseSupplyController extends BaseController {
     private IWzchPurchaseSupplyDetailService detailService;
     @Resource
     private WzchCommonService wzchCommonService;
+    @Resource
+    private IWzchSourceService wzchSourceService;
 
     private final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -190,6 +194,9 @@ public class WzchPurchaseSupplyController extends BaseController {
             FtExcelUtil<WzchPurchaseSupplyDetailDTO> util = new FtExcelUtil<>(WzchPurchaseSupplyDetailDTO.class);
             List<WzchPurchaseSupplyDetailDTO> dtoList = util.importExcel(file.getInputStream());
             //校验物资信息必须存在于来源策划 且物资编码有效
+            WzchSource wzchSource = wzchSourceService.selectWzchSourceByVersion(version);
+            if(wzchSource != null)
+                version = wzchSource.getVersion();
             List<WzchPurchaseSupplyDetailDTO> list = detailService.getListByPrjId(new WzchPurchaseSupplyDetailDTO(version));
             Set<String> materCodeSet = list.stream().map(r->r.getMaterialCode()).collect(Collectors.toSet());
             for (int i = 0; i < dtoList.size(); i++) {
