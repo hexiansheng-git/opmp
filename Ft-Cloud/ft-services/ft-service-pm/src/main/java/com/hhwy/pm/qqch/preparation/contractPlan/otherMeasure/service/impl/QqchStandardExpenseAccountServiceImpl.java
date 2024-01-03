@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.domain.QqchStandardExpenseAccount;
 import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.mapper.QqchStandardExpenseAccountMapper;
@@ -42,16 +43,26 @@ public class QqchStandardExpenseAccountServiceImpl implements IQqchStandardExpen
         if(CollectionUtils.isEmpty(qqchStandardExpenseAccountList)){
             this.init();
         }
-        List<QqchStandardExpenseAccount> list = qqchStandardExpenseAccountMapper.getQqchStandardExpenseAccountList(qqchStandardExpenseAccount);
+
+        //全量数据
+        List<QqchStandardExpenseAccount> allList = qqchStandardExpenseAccountMapper.getQqchStandardExpenseAccountList(new QqchStandardExpenseAccount());
+        List<QqchStandardExpenseAccount> resultList;
+        String expenseName = qqchStandardExpenseAccount.getExpenseName();
+        if(StringUtils.isBlank(expenseName)){
+            resultList = allList;
+        }else {
+            List<QqchStandardExpenseAccount> subList = qqchStandardExpenseAccountMapper.getQqchStandardExpenseAccountList(qqchStandardExpenseAccount);
+            resultList = ListTreeUtil.getUpListBySublist(subList,allList,QqchStandardExpenseAccount::getId,QqchStandardExpenseAccount::getPid);
+        }
 
         //转树列表
-        List<QqchStandardExpenseAccount> treeList = ListTreeUtil.formatTree(
-                list,
+        resultList = ListTreeUtil.formatTree(
+                resultList,
                 o -> o.getPid() == null,
                 (r, n) -> r.getId().equals(n.getPid()),
                 QqchStandardExpenseAccount::getChildren,
                 QqchStandardExpenseAccount::setChildren);
-        return treeList;
+        return resultList;
     }
 
     /**
