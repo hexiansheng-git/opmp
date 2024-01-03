@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.wzch.internaladjust.mapper;
 
 import com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchInternalAdjust;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -59,6 +60,10 @@ public interface WzchInternalAdjustMapper {
      * @return 结果
      */
     int deleteWzchInternalAdjustByIds(String[] ids);
+
+    int deleteWzchInternalAdjustByVersion(BigDecimal version);
+
+    int deleteWzchInternalAdjustDetailByVersion(BigDecimal version);
 
     int updateDetailValidStatus(String id);
 

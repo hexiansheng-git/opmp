@@ -472,6 +472,13 @@
         where `id` = #{id}
     </update>
 
+    <update id="deleteWzchInternalAdjustByVersion" parameterType="BigDecimal">
+        update `wzch_internal_adjust` set del_flag = 1 where `version` = #{version}
+    </update>
+    <update id="deleteWzchInternalAdjustDetailByVersion" parameterType="BigDecimal">
+        update `wzch_internal_adjust_detail` set del_flag = 1 where `version` = #{version}
+    </update>
+
     <update id="deleteWzchInternalAdjustByIds" parameterType="String">
         update `wzch_internal_adjust` set del_flag = 1 where `id` in
         <foreach item="id" collection="array" open="(" separator="," close=")">

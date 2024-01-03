@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
 import com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchAllotMaterial;
 import com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchAllotMaterialRange;
@@ -17,11 +20,13 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.log.annotation.Log;
 import com.hhwy.common.log.enums.BusinessType;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +43,8 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/wzch/allotMaterial")
 public class WzchAllotMaterialController extends BaseController {
-
+    @Value("${WSPlatform}")
+    private String WSPlatform;
     @Autowired
     private IWzchAllotMaterialService wzchAllotMaterialService;
 
@@ -153,19 +159,25 @@ public class WzchAllotMaterialController extends BaseController {
 
     /**
      * 可调拨计划表
+     * 调用物设
      */
     @PostMapping("adjustMtlList")
     @ResponseBody
 //    @CustomLogger(title = "可调拨计划表", businessType = CustomBusinessType.SELECT)
     public AjaxResult adjustMtlList(@RequestBody MtlDTO dto) {
-
-        List<WzchAllotMaterial> list = wzchAllotMaterialService.adjustMtlList(dto.getMaterialCode(), dto.getProjectId());
-
-        Map<String, String> map = new HashMap<>(1);
-        map.put("materialStandard_materialStandardName","material_standard");
-        this.wzchCommonService.setDicValue(list,map);
-
-        return AjaxResult.success(list);
+        String url = WSPlatform + "/basic-api/pms/wzch/allotMaterial/adjustMtlListForPm";
+        AjaxResult ajaxResult;
+        String tenantKey = SecurityUtils.getTenantKey();
+        tenantKey = "PJ2022016704";
+        Map map = ObjectUtils.toMap("projectCode",tenantKey);
+        try {
+            String resp = HttpUtil.post(url, JSON.toJSONString(map), 3000);
+            ajaxResult = JSON.parseObject(resp, AjaxResult.class);
+        }catch (Exception e){
+            e.printStackTrace();
+            ajaxResult = AjaxResult.error("网络异常，请求无法到达物设系统");
+        }
+        return ajaxResult;
     }
 
 

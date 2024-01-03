@@ -6,6 +6,7 @@ import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
 import com.hhwy.pm.qqch.wzch.source.vo.ProjectOfChangeInfoRequest;
 import com.hhwy.pm.qqch.wzch.source.vo.ReminderOfChangeResponse;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -30,6 +31,13 @@ public interface IWzchSourceService {
      * @return 来源策划集合
      */
     List<WzchSource> selectWzchSourceList(WzchSource wzchSource);
+
+    /**
+     * 获取指定版本的来源策划
+     * @param version
+     * @return
+     */
+    WzchSource selectWzchSourceByVersion(BigDecimal version);
 
     /**
      * 新增来源策划

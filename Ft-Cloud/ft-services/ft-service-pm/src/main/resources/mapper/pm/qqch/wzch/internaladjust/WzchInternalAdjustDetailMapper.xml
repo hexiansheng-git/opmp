@@ -39,6 +39,7 @@
         <result property="ptVar1" column="pt_var1"/>
         <result property="ptVar2" column="pt_var2"/>
         <result property="ptVar3" column="pt_var3"/>
+        <result property="version" column="version"/>
     </resultMap>
 
     <sql id="selectWzchInternalAdjustDetailVo">
@@ -49,19 +50,7 @@
             tdd.total_demand_amount,
             tdd.category_name,
 /*来源策划需用量*/
-            (
-                SELECT
-                    SUM(
-                            IFNULL( sayc.inner_adjust_num, 0 ))
-                FROM
-                    wzch_source_detail AS sd
-                        LEFT JOIN wzch_source_approach_year_count AS sayc ON sd.id = sayc.detail_id
-                WHERE
-                    sd.project_id = iad.project_id
-                  AND sd.material_code = iad.material_code
-                  AND sd.material_standard = iad.material_standard
-                  AND sd.del_flag = 0
-            ) AS inner_adjust_num,
+            iad.inner_adjust_num,
 /*内部调剂材料策划*/
             iad.`internal_adjust_id`,
             iad.`material_code`,
@@ -198,6 +187,7 @@
             <if test="ptVar1 != null">`pt_var1`,</if>
             <if test="ptVar2 != null">`pt_var2`,</if>
             <if test="ptVar3 != null">`pt_var3`,</if>
+            <if test="version != null">`version`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -233,6 +223,7 @@
             <if test="ptVar1 != null">#{ptVar1},</if>
             <if test="ptVar2 != null">#{ptVar2},</if>
             <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="version != null">#{version},</if>
         </trim>
     </insert>
 
@@ -271,6 +262,7 @@
         `pt_var1`,
         `pt_var2`,
         `pt_var3`,
+        `version`
         )values
         <foreach collection="dataList" separator="," item="item" index="index">
             #{item.id}
@@ -306,6 +298,7 @@
             #{item.ptVar1}
             #{item.ptVar2}
             #{item.ptVar3}
+            #{item.version}
         </foreach>
     </insert>
 
@@ -644,7 +637,8 @@
         valid,
         pt_var1,
         pt_var2,
-        pt_var3
+        pt_var3,
+        version
         )
         values
         <foreach collection="entities" item="entity" separator=",">
@@ -682,7 +676,9 @@
             #{entity.valid},
             #{entity.ptVar1},
             #{entity.ptVar2},
-            #{entity.ptVar3})
+            #{entity.ptVar3},
+            #{entity.version}
+            )
         </foreach>
         on duplicate key update
         internal_adjust_id = values(internal_adjust_id),

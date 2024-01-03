@@ -38,6 +38,13 @@ public interface IWzchSourceDetailService {
     List<WzchSourceDetail> selectWzchSourceDetailList(WzchSourceDetail wzchSourceDetail);
 
     /**
+     * 获取内部调剂物资信息
+     * @param id 来源策划Id
+     * @return
+     */
+    List<WzchSourceDetail> selectInnerAdjustList(Long id);
+
+    /**
      * 新增来源策划物资详情
      * 
      * @param wzchSourceDetail 来源策划物资详情

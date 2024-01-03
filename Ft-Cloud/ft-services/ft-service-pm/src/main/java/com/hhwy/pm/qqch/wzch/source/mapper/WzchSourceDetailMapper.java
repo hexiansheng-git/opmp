@@ -31,6 +31,13 @@ public interface WzchSourceDetailMapper {
     List<WzchSourceDetail> selectWzchSourceDetailList(WzchSourceDetail wzchSourceDetail);
 
     /**
+     * 获取内部调剂明细
+     * @param id
+     * @return
+     */
+    List<WzchSourceDetail> selectInnerAdjustList(Long id);
+
+    /**
      * 新增来源策划物资详情
      * 
      * @param wzchSourceDetail 来源策划物资详情

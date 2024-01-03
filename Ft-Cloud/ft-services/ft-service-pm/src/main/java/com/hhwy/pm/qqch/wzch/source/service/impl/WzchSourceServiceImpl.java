@@ -79,6 +79,11 @@ public class WzchSourceServiceImpl implements IWzchSourceService {
         return wzchSourceMapper.selectWzchSourceList(wzchSource);
     }
 
+    @Override
+    public WzchSource selectWzchSourceByVersion(BigDecimal version) {
+        return wzchSourceMapper.selectWzchSourceByVersion(version);
+    }
+
     /**
      * 新增来源策划9
      * 
