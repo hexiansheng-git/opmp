@@ -42,7 +42,6 @@ public class QqchPersonControlPlan extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "人员id")
-    @NotBlank(message = "人员id不能为空", groups = {ValidationGroups.Save.class})
     private String personId;
     /**
      * 字段描述：人员姓名
