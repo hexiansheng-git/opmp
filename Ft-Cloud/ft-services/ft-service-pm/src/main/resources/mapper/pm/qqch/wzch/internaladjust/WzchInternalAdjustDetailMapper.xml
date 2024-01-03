@@ -143,6 +143,7 @@
             <if test="ptVar2 != null  and ptVar2 != ''">and iad.`pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and iad.`pt_var3` = #{ptVar3}</if>
         </where>
+        group by iad.`material_code`
         order by iad.`material_code` asc
     </select>
 

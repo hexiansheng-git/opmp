@@ -134,7 +134,8 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
             adjustDetail.setAdjustableNum(adjustDetail.getAdjustableNum());
             detailList.add(adjustDetail);
         }
-        wzchInternalAdjustDetailMapper.insertOrUpdateBatch(detailList);
+        if(CollectionUtils.isNotEmpty(detailList))
+            wzchInternalAdjustDetailMapper.insertOrUpdateBatch(detailList);
     }
 
     private Long save(WzchInternalAdjust adjust,WzchInternalAdjust temp){
