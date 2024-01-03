@@ -141,8 +141,7 @@
             <if test="name != null  and name != ''">and `name` like concat('%' , #{name} , '%')</if>
             <if test="content != null  and content != ''">and `content` like concat('%' , #{content} , '%')</if>
             <if test="generalCode != null  and generalCode != ''">and `general_code` = #{generalCode}</if>
-            <if test="advantageAnalyse != null  and advantageAnalyse != ''">and `advantage_analyse` =
-                #{advantageAnalyse}
+            <if test="advantageAnalyse != null  and advantageAnalyse != ''">and find_in_set(#{advantageAnalyse},`advantage_analyse`)
             </if>
             <if test="riskGrade != null  and riskGrade != ''">and `risk_grade` = #{riskGrade}</if>
             <if test="analyseSolutions != null  and analyseSolutions != ''">and `analyse_solutions` =

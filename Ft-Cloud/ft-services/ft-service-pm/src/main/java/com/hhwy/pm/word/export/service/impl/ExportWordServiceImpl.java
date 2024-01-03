@@ -8,9 +8,21 @@ import com.deepoove.poi.data.PictureType;
 import com.deepoove.poi.data.Pictures;
 import com.deepoove.poi.plugin.table.LoopRowTableRenderPolicy;
 import com.deepoove.poi.util.PoitlIOUtils;
+import com.hhwy.pm.qqch.constant.AdvantageAnalyse;
+import com.hhwy.pm.qqch.constant.ConditionRiskGrade;
+import com.hhwy.pm.qqch.constant.ItemClassify;
+import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.QqchGeneralCondition;
+import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.QqchOtherContractItem;
+import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.QqchSpecialCondition;
+import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassifyVo;
+import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchGeneralConditionService;
+import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchKeyInventoryContentService;
+import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchOtherContractItemService;
+import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchSpecialConditionService;
 import com.hhwy.pm.word.export.domain.FileDto;
 import com.hhwy.pm.word.export.domain.ProjectWordData;
 import com.hhwy.pm.word.export.domain.vo.BidWinHandoverFileVo;
+import com.hhwy.pm.word.export.domain.vo.ConditionVo;
 import com.hhwy.pm.word.export.service.ExportWordService;
 import com.hhwy.pm.xmsl.bid.domain.XmslBidWinHandoverFile;
 import com.hhwy.pm.xmsl.bid.service.IXmslBidWinHandoverInfoService;
@@ -65,6 +77,18 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IXmslBidWinHandoverInfoService xmslBidWinHandoverInfoService;
 
+    @Autowired
+    private IQqchKeyInventoryContentService qqchKeyInventoryContentService;
+
+    @Autowired
+    private IQqchSpecialConditionService qqchSpecialConditionService;
+
+    @Autowired
+    private IQqchGeneralConditionService qqchGeneralConditionService;
+
+    @Autowired
+    private IQqchOtherContractItemService qqchOtherContractItemService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -96,6 +120,14 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("localEquipmentSupplyList",policy) // 属地设备供应情况
                     .bind("keyPersonCommunicationList",policy) // 社会和人文条件说明
                     .bind("handoverFileVoList",policy) // 中标资料移交
+                    .bind("largeQuantityDifferenceInventoryList",policy) // 量差较大清单
+                    .bind("wideSpreadInventoryList",policy) // 价差较大清单
+                    .bind("ulcerativeCervicalScrofulaInventoryList",policy) // 主要漏项清单
+                    .bind("exceptionConditionList",policy) // 特殊条款
+                    .bind("advantage2ConditionList",policy) // 经营不利条款
+                    .bind("advantage1ConditionList",policy) // 经营有利条款
+                    .bind("advantage4ConditionList",policy) // 技术不利条款
+                    .bind("advantage3ConditionList",policy) // 技术有利条款
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -124,7 +156,11 @@ public class ExportWordServiceImpl implements ExportWordService {
         initImplement(projectWordData);
         /*--合同条件--*/
         /*中标资料移交*/
-        this.initBidWinHandoverFile(projectWordData);
+        initBidWinHandoverFile(projectWordData);
+        /*须重点关注的清单及内容*/
+        initQqchKeyInventoryContent(projectWordData);
+        /*四个条款*/
+        initCondition(projectWordData);
     }
 
 
@@ -435,5 +471,104 @@ public class ExportWordServiceImpl implements ExportWordService {
             }
         }
         projectWordData.setHandoverFileVoList(handoverFileVoList);
+    }
+
+    /**
+     * 须重点关注的清单及内容
+     * @param projectWordData
+     */
+    private void initQqchKeyInventoryContent(ProjectWordData projectWordData){
+        /*量差较大清单*/
+        KeyInventoryContentItemClassifyVo largeQuantityDifferenceInventoryVo = qqchKeyInventoryContentService.getSubentryInventoryByType4Word(ItemClassify.LARGE_QUANTITY_DIFFERENCE_INVENTORY);
+        projectWordData.setLargeQuantityDifferenceInventoryList(largeQuantityDifferenceInventoryVo.getList());
+        projectWordData.setLargeQuantityDifferenceInventoryTotal(largeQuantityDifferenceInventoryVo.getTotalPriceDifferenceTotal());
+
+        /*价差较大清单*/
+        KeyInventoryContentItemClassifyVo wideSpreadInventoryVo = qqchKeyInventoryContentService.getSubentryInventoryByType4Word(ItemClassify.WIDE_SPREAD_INVENTORY);
+        projectWordData.setWideSpreadInventoryList(wideSpreadInventoryVo.getList());
+        projectWordData.setWideSpreadInventoryTotal(wideSpreadInventoryVo.getTotalPriceDifferenceTotal());
+
+        /*主要漏项清单*/
+        KeyInventoryContentItemClassifyVo ulcerativeCervicalScrofulaInventoryVo = qqchKeyInventoryContentService.getSubentryInventoryByType4Word(ItemClassify.ULCERATIVE_CERVICAL_SCROFULA_INVENTORY);
+        projectWordData.setUlcerativeCervicalScrofulaInventoryList(ulcerativeCervicalScrofulaInventoryVo.getList());
+        projectWordData.setUlcerativeCervicalScrofulaInventoryTotal(ulcerativeCervicalScrofulaInventoryVo.getTotalPriceDifferenceTotal());
+    }
+
+    /**
+     * 初始化各项条款
+     * @param projectWordData
+     */
+    private void initCondition(ProjectWordData projectWordData){
+        List<ConditionVo> exceptionConditionVoList = this.getConditionVoListByAdvantageAnalyse(AdvantageAnalyse.ADVANTAGE_ANALYSE_5);
+        List<ConditionVo> conditionVo1List = this.getConditionVoListByAdvantageAnalyse(AdvantageAnalyse.ADVANTAGE_ANALYSE_1);
+        List<ConditionVo> conditionVo2List = this.getConditionVoListByAdvantageAnalyse(AdvantageAnalyse.ADVANTAGE_ANALYSE_2);
+        List<ConditionVo> conditionVo3List = this.getConditionVoListByAdvantageAnalyse(AdvantageAnalyse.ADVANTAGE_ANALYSE_3);
+        List<ConditionVo> conditionVo4List = this.getConditionVoListByAdvantageAnalyse(AdvantageAnalyse.ADVANTAGE_ANALYSE_4);
+        projectWordData.setExceptionConditionList(exceptionConditionVoList);
+        projectWordData.setAdvantage1ConditionList(conditionVo1List);
+        projectWordData.setAdvantage2ConditionList(conditionVo2List);
+        projectWordData.setAdvantage3ConditionList(conditionVo3List);
+        projectWordData.setAdvantage4ConditionList(conditionVo4List);
+    }
+
+    private List<ConditionVo> getConditionVoListByAdvantageAnalyse(String advantageAnalyse){
+        List<QqchSpecialCondition> specialConditionList = qqchSpecialConditionService.getListByAdvantageAnalyse(advantageAnalyse);
+        List<QqchGeneralCondition> generalConditionList = qqchGeneralConditionService.getListByAdvantageAnalyse(advantageAnalyse);
+        List<QqchOtherContractItem> otherContractItemList = qqchOtherContractItemService.getListByAdvantageAnalyse(advantageAnalyse);
+
+        List<ConditionVo> conditionVoList = new ArrayList<>();
+        for (QqchSpecialCondition specialCondition : specialConditionList) {
+            ConditionVo conditionVo = new ConditionVo();
+            conditionVo.setId(specialCondition.getId());
+            conditionVo.setPid(specialCondition.getPid());
+            conditionVo.setName(specialCondition.getName());
+            conditionVo.setContent(specialCondition.getContent());
+            conditionVo.setRiskGrade(getRiskGradeValue(specialCondition.getRiskGrade()));
+            conditionVo.setAnalyseSolutions(specialCondition.getAnalyseSolutions());
+            conditionVoList.add(conditionVo);
+        }
+        for (QqchGeneralCondition generalCondition : generalConditionList) {
+            ConditionVo conditionVo = new ConditionVo();
+            conditionVo.setId(generalCondition.getId());
+            conditionVo.setPid(generalCondition.getPid());
+            conditionVo.setName(generalCondition.getName());
+            conditionVo.setContent(generalCondition.getContent());
+            conditionVo.setRiskGrade(getRiskGradeValue(generalCondition.getRiskGrade()));
+            conditionVo.setAnalyseSolutions(generalCondition.getAnalyseSolutions());
+            conditionVoList.add(conditionVo);
+        }
+        for (QqchOtherContractItem otherContractItem : otherContractItemList) {
+            ConditionVo conditionVo = new ConditionVo();
+            conditionVo.setId(otherContractItem.getId());
+            conditionVo.setPid(otherContractItem.getPid());
+            conditionVo.setName(otherContractItem.getRelatedFileName());
+            conditionVo.setContent(otherContractItem.getContent());
+            conditionVo.setRiskGrade(getRiskGradeValue(otherContractItem.getRiskGrade()));
+            conditionVo.setAnalyseSolutions(otherContractItem.getRiskSolutions());
+            conditionVoList.add(conditionVo);
+        }
+
+        conditionVoList = ListTreeUtil.preserveSerialNumber(
+                conditionVoList,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                ConditionVo::getChildren,
+                ConditionVo::setChildren,
+                ConditionVo::getSerialNumber,
+                ConditionVo::setSerialNumber);
+        return conditionVoList;
+    }
+
+    private String getRiskGradeValue(String riskGradeLabel){
+        if(ConditionRiskGrade.HIGH.getLabel().equals(riskGradeLabel)){
+            return ConditionRiskGrade.HIGH.getValue();
+        }
+        if(ConditionRiskGrade.MIDDLE.getLabel().equals(riskGradeLabel)){
+            return ConditionRiskGrade.MIDDLE.getValue();
+        }
+        if(ConditionRiskGrade.LOW.getLabel().equals(riskGradeLabel)){
+            return ConditionRiskGrade.LOW.getValue();
+        }
+        return null;
     }
 }

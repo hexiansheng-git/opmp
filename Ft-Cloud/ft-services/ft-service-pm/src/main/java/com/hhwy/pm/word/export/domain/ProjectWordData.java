@@ -2,7 +2,9 @@ package com.hhwy.pm.word.export.domain;
 
 import com.deepoove.poi.data.PictureRenderData;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassify;
 import com.hhwy.pm.word.export.domain.vo.BidWinHandoverFileVo;
+import com.hhwy.pm.word.export.domain.vo.ConditionVo;
 import com.hhwy.pm.xmsl.implement.domain.*;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectMaterialsAmount;
@@ -214,4 +216,43 @@ public class ProjectWordData {
      * 中标资料移交
      */
     private List<BidWinHandoverFileVo> handoverFileVoList;
+    /**
+     * 量差较大清单
+     */
+    private List<KeyInventoryContentItemClassify> largeQuantityDifferenceInventoryList;
+    /*量差较大清单的合计*/
+    private BigDecimal largeQuantityDifferenceInventoryTotal;
+    /**
+     * 价差较大清单
+     */
+    private List<KeyInventoryContentItemClassify> wideSpreadInventoryList;
+    /*价差较大清单的合计*/
+    private BigDecimal wideSpreadInventoryTotal;
+    /**
+     * 主要漏项清单
+     */
+    private List<KeyInventoryContentItemClassify> ulcerativeCervicalScrofulaInventoryList;
+    /*主要漏项清单的合计*/
+    private BigDecimal ulcerativeCervicalScrofulaInventoryTotal;
+
+    /**
+     * 特殊条款
+     */
+    private List<ConditionVo> exceptionConditionList;
+    /**
+     * 经营有利条款
+     */
+    private List<ConditionVo> advantage1ConditionList;
+    /**
+     * 经营不利条款
+     */
+    private List<ConditionVo> advantage2ConditionList;
+    /**
+     * 技术有利条款
+     */
+    private List<ConditionVo> advantage3ConditionList;
+    /**
+     * 技术不利条款
+     */
+    private List<ConditionVo> advantage4ConditionList;
 }

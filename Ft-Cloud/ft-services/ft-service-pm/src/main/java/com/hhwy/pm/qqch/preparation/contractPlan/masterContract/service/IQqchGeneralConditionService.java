@@ -16,6 +16,8 @@ public interface IQqchGeneralConditionService {
 
     List<QqchGeneralCondition> getQqchGeneralConditionList(QqchGeneralCondition qqchGeneralCondition);
 
+    List<QqchGeneralCondition> getListByAdvantageAnalyse(String advantageAnalyse);
+
     int insertQqchGeneralCondition(QqchGeneralCondition qqchGeneralCondition);
 
     int updateQqchGeneralCondition(QqchGeneralCondition qqchGeneralCondition);

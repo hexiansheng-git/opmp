@@ -56,6 +56,15 @@ public class QqchSpecialConditionServiceImpl implements IQqchSpecialConditionSer
         return qqchSpecialConditionMapper.getQqchSpecialConditionList(qqchSpecialCondition);
     }
 
+    @Override
+    public List<QqchSpecialCondition> getListByAdvantageAnalyse(String advantageAnalyse) {
+        BigDecimal version = VersionUtil.getVersion("qqch_special_condition",null);
+        QqchSpecialCondition query = new QqchSpecialCondition();
+        query.setVersion(version);
+        query.setAdvantageAnalyse(advantageAnalyse);
+        return qqchSpecialConditionMapper.getQqchSpecialConditionList(query);
+    }
+
     @Transactional
     public int insertQqchSpecialCondition(QqchSpecialCondition qqchSpecialCondition) {
         qqchSpecialCondition.setId(IdWorker.createId());

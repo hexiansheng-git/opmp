@@ -24,6 +24,8 @@ public interface IQqchKeyInventoryContentService {
      */
     KeyInventoryContentItemClassifyVo getSubentryInventoryByType(KeyInventoryContentItemClassifyQueryVo queryVo);
 
+    KeyInventoryContentItemClassifyVo getSubentryInventoryByType4Word(String itemClassify);
+
     int insertQqchKeyInventoryContent(QqchKeyInventoryContent qqchKeyInventoryContent);
 
     int updateQqchKeyInventoryContent(QqchKeyInventoryContent qqchKeyInventoryContent);
