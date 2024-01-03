@@ -126,16 +126,16 @@ public class WzchInternalAdjustDetailServiceImpl implements IWzchInternalAdjustD
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int insertOrUpdateBatch(List<WzchInternalAdjustDetail> detailList, Long adjustId) {
+        // 先将之前数据都进行删除
+        wzchInternalAdjustDetailMapper.deleteByAdjustId(adjustId);
         if (CollectionUtils.isEmpty(detailList)) {
             return 0;
             // TODO throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "物资详情不能为空");
         }
-        // 先将之前数据都进行删除
-        wzchInternalAdjustDetailMapper.deleteByAdjustId(adjustId);
 
         // 集合类型转化 设置id 设置purchaseId
         List<WzchInternalAdjustDetail> insertOrUpdateData = detailList.stream().peek(item -> {
-            Long id = item.getId() == null ? IdWorker.createId() : item.getId();
+            Long id =  IdWorker.createId();
             item.setId(id);
 //            item.setProjectId(projectId);
             item.setValid("0");
