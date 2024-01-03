@@ -140,19 +140,7 @@ public class QqchStandardExpenseAccountServiceImpl implements IQqchStandardExpen
         if(CollectionUtils.isEmpty(qqchStandardExpenseAccountList)){
             return list;
         }
-        list = ListTreeUtil.formatList(
-                qqchStandardExpenseAccountList,
-                QqchStandardExpenseAccount::setId,
-                QqchStandardExpenseAccount::setPid,
-                QqchStandardExpenseAccount::getChildren,
-                QqchStandardExpenseAccount::setChildren);
-
-        list = ListTreeUtil.formatTree(
-                list,
-                o -> o.getPid() == null,
-                (r, n) -> r.getId().equals(n.getPid()),
-                QqchStandardExpenseAccount::getChildren,
-                QqchStandardExpenseAccount::setChildren);
+        ListTreeUtil.preserveIdPid(list, QqchStandardExpenseAccount::setId,QqchStandardExpenseAccount::setPid,QqchStandardExpenseAccount::getChildren);
         return list;
     }
 }
