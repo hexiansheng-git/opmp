@@ -209,7 +209,7 @@ public class WzchInternalAdjustDetail extends CommonBaseEntity {
     private String valid;
 
     /**
-     * 预留字段1
+     * 调出项目PJ码
      */
     private String ptVar1;
 

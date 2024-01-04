@@ -21,6 +21,7 @@ import com.hhwy.pm.qqch.wzch.localpuchasesupply.domain.WzchLocalPurchaseSupply;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
@@ -204,6 +205,9 @@ public class WzchInternalAdjustController extends BaseController {
         try {
             ExcelUtils<WzchInternalAdjustDetail> util = new ExcelUtils<>(WzchInternalAdjustDetail.class);
             List<WzchInternalAdjustDetail> dtoList = util.importExcel(file.getInputStream());
+            for (int i = 0; i < dtoList.size(); i++) {
+                dtoList.get(i).setId(IdWorker.createId());
+            }
             wzchInternalAdjustService.setAdjustProjectIds(dtoList);
             wzchCommonService.importDealDict(dtoList, this.getDictMap());
             wzchCommonService.setDicValue(dtoList, this.getDictNameMap());
