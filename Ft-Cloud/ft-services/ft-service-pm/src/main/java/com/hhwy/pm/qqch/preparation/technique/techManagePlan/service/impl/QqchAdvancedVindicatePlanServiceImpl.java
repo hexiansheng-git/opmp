@@ -13,6 +13,7 @@ import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchAdvancedVindicatePlan;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchAdvancedVindicatePlanBudget;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.MergeDataVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanExportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanImportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanVo;
@@ -303,27 +304,31 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
             qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
-
+    
     /**
      * 导入
      * @param file
      * @return
      */
     @Override
-    public List<QqchAdvancedVindicatePlanImportVo> importExcel(MultipartFile file) throws FileNotFoundException, IllegalAccessException {
+    public List<QqchAdvancedVindicatePlan> importExcel(MultipartFile file) throws FileNotFoundException, IllegalAccessException {
         List<QqchAdvancedVindicatePlanImportVo> importVoList = this.makeData(file);
         if(CollectionUtils.isEmpty(importVoList)){
             return new ArrayList<>();
         }
         //获取项目信息
         ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
-        if(projectInfo != null){
-            String projectName = projectInfo.getProjectName();
-            for (QqchAdvancedVindicatePlanImportVo importVo : importVoList) {
-                importVo.setUnitName(projectName);
+        List<QqchAdvancedVindicatePlan> resultList = new ArrayList<>();
+        for (QqchAdvancedVindicatePlanImportVo importVo : importVoList) {
+            QqchAdvancedVindicatePlan plan = new QqchAdvancedVindicatePlan();
+            plan.setId(IdWorker.createId());
+            BeanUtils.copyProperties(importVo, plan);
+            if(projectInfo != null){
+                plan.setUnitName(projectInfo.getProjectName());
             }
+            resultList.add(plan);
         }
-        return importVoList;
+        return resultList;
     }
 
 
@@ -631,5 +636,47 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
             list.add(listChild);
         }
         return list;
+    }
+
+    @Override
+    public QqchAdvancedVindicatePlanVo mergeData(MergeDataVo mergeDataVo) {
+        QqchAdvancedVindicatePlanVo planVo = new QqchAdvancedVindicatePlanVo();
+        List<QqchAdvancedVindicatePlan> importDataList = mergeDataVo.getImportDataList();
+        List<QqchAdvancedVindicatePlan> pageDataList = mergeDataVo.getPageDataList();
+        List<QqchAdvancedVindicatePlan> finalList = new ArrayList<>(pageDataList);
+        finalList.addAll(importDataList);
+        if(CollectionUtils.isEmpty(finalList)){
+            return planVo;
+        }
+
+        Date minStartDate = finalList.stream().map(QqchAdvancedVindicatePlan::getStartDate).filter(Objects::nonNull).min(Date::compareTo).orElse(null);
+        Date maxEndDate = finalList.stream().map(QqchAdvancedVindicatePlan::getEndDate).filter(Objects::nonNull).max(Date::compareTo).orElse(null);
+        List<String> vintageList = this.getVintageList(minStartDate, maxEndDate);
+        planVo.setVintageList(vintageList);
+        planVo.setList(finalList);
+        return planVo;
+    }
+
+    private List<String> getVintageList(Date minStartDate,Date maxEndDate){
+        List<String> vintageList = new ArrayList<>();
+
+        if(minStartDate == null || maxEndDate == null){
+            return vintageList;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(minStartDate);
+        //开始年份
+        int startYear = calendar.get(Calendar.YEAR);
+
+        calendar.setTime(maxEndDate);
+        //结束年份
+        int endYear = calendar.get(Calendar.YEAR);
+
+        do {
+            vintageList.add(startYear++ + "年");
+        }while (startYear <= endYear);
+
+        return vintageList;
     }
 }

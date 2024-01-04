@@ -1,7 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.service;
 
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchAdvancedVindicatePlan;
-import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanImportVo;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.MergeDataVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanVo;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,7 +36,7 @@ public interface IQqchAdvancedVindicatePlanService {
      * @param file
      * @return
      */
-    List<QqchAdvancedVindicatePlanImportVo> importExcel(MultipartFile file) throws FileNotFoundException, IllegalAccessException;
+    List<QqchAdvancedVindicatePlan> importExcel(MultipartFile file) throws FileNotFoundException, IllegalAccessException;
 
     /**
      * 导出
@@ -59,4 +59,6 @@ public interface IQqchAdvancedVindicatePlanService {
      * @return
      */
     void save(QqchAdvancedVindicatePlanVo qqchAdvancedVindicatePlanVo);
+
+    QqchAdvancedVindicatePlanVo mergeData(MergeDataVo mergeDataVo);
 }
