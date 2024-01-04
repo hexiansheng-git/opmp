@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.wzch.source.mapper;
 
 import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,6 +28,13 @@ public interface WzchSourceMapper {
      * @return 来源策划集合
      */
     List<WzchSource> selectWzchSourceList(WzchSource wzchSource);
+
+    /**
+     * 获取指定version 来源策划
+     * @param version
+     * @return
+     */
+    WzchSource selectWzchSourceByVersion(BigDecimal version);
 
     /**
      * 新增来源策划

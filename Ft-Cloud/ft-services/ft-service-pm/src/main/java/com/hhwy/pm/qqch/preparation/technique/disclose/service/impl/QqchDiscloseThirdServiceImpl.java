@@ -1,6 +1,5 @@
 package com.hhwy.pm.qqch.preparation.technique.disclose.service.impl;
 
-import com.alibaba.cloud.nacos.discovery.NacosWatch;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -20,18 +19,14 @@ import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
-import java.math.BigDecimal;
-import java.security.cert.CollectionCertStoreParameters;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import com.sun.javafx.util.TempState;
-import org.apache.commons.collections4.SetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.metadata.TableMetaDataProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author zhenglili
@@ -192,6 +187,19 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
             // 插入确认状态
             String menuId = qqchDiscloseThirdVo.getMenuId();
             String stageIdentity = qqchDiscloseThirdVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void saveData(QqchDiscloseThirdVo vo){
+        this.save(vo);
+        String buttonMark = vo.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = vo.getMenuId();
+            String stageIdentity = vo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
     }

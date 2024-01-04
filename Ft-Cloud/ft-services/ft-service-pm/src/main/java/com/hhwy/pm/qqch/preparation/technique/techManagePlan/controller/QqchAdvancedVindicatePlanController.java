@@ -3,9 +3,8 @@ package com.hhwy.pm.qqch.preparation.technique.techManagePlan.controller;
 import cn.hutool.core.date.DateException;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchAdvancedVindicatePlan;
-import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanImportVo;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.MergeDataVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchAdvancedVindicatePlanService;
 import com.hhwy.utils.customLog.CustomBusinessType;
@@ -92,9 +91,9 @@ public class QqchAdvancedVindicatePlanController extends BaseController {
     @CustomLogger(title = "前期策划-前期策划编制-施工技术策划-3.9 科技管理策划", name = "\n" +
             "3.9.1高新维护计划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
-        List<QqchAdvancedVindicatePlanImportVo> qqchAdvancedVindicatePlanImportVoList = null;
+        List<QqchAdvancedVindicatePlan> importDataList = null;
         try {
-            qqchAdvancedVindicatePlanImportVoList = qqchAdvancedVindicatePlanService.importExcel(file);
+            importDataList = qqchAdvancedVindicatePlanService.importExcel(file);
         } catch (FileNotFoundException e) {
             throw new RuntimeException("文件不存在！");
         } catch (IllegalAccessException e) {
@@ -102,7 +101,13 @@ public class QqchAdvancedVindicatePlanController extends BaseController {
         } catch (DateException e){
             throw new DateException("日期类型错误！");
         }
-        return AjaxResult.success(qqchAdvancedVindicatePlanImportVoList);
+        return AjaxResult.success(importDataList);
+    }
+
+    @PostMapping("mergeData")
+    public AjaxResult mergeData(@RequestBody MergeDataVo mergeDataVo){
+        QqchAdvancedVindicatePlanVo planVo = qqchAdvancedVindicatePlanService.mergeData(mergeDataVo);;
+        return AjaxResult.success(planVo);
     }
 
     /**

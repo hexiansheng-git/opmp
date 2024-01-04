@@ -18,6 +18,8 @@ import com.hhwy.pm.qqch.wzch.internaladjust.dto.WzchInternalAdjustDTO;
 import com.hhwy.pm.qqch.wzch.internaladjust.service.IWzchInternalAdjustDetailService;
 import com.hhwy.pm.qqch.wzch.internaladjust.service.IWzchInternalAdjustService;
 import com.hhwy.pm.qqch.wzch.localpuchasesupply.domain.WzchLocalPurchaseSupply;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.util.Assert;
@@ -60,7 +62,7 @@ public class WzchInternalAdjustController extends BaseController {
      * 新增 编辑 详情数据回显
      */
     @GetMapping("baseInfo")
-//    @CustomLogger(title = "新增 编辑 详情数据回显", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划编制-6.2组织供应策划", name = "6.2.4内部调剂材料策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult baseInfo(@RequestParam(required = false) WzchInternalAdjustDTO dto) {
         return AjaxResult.success(wzchInternalAdjustService.baseInfo(dto==null?new WzchInternalAdjustDTO():dto));
     }
@@ -71,7 +73,7 @@ public class WzchInternalAdjustController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:internaladjust:list")
     @PostMapping("/list")
-//    @CustomLogger(title = "查询内部调剂材料策划列表", businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划编制-6.2组织供应策划", name = "6.2.4内部调剂材料策划" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchInternalAdjust wzchInternalAdjust) {
         startPage();
         List<WzchInternalAdjust> list = wzchInternalAdjustService.selectWzchInternalAdjustList(wzchInternalAdjust);
@@ -82,7 +84,7 @@ public class WzchInternalAdjustController extends BaseController {
      * 导出内部调剂材料策划列表
      */
     @PostMapping("/export")
-//    @CustomLogger(title = "导出内部调剂材料策划列表", businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划编制-6.2组织供应策划", name = "6.2.4内部调剂材料策划" ,businessType = CustomBusinessType.EXPORT)
     public void export(@RequestBody Map<String, List<WzchInternalAdjust>> params, HttpServletResponse response) {
         try {
             List<WzchInternalAdjust> detailList = params.get("detailList");
@@ -117,6 +119,7 @@ public class WzchInternalAdjustController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "wzch:internaladjust:save")
     @PostMapping("/save")
+    @CustomLogger(title = "前期策划编制-6.2组织供应策划", name = "6.2.4内部调剂材料策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody WzchInternalAdjustDTO dto) {
         long id = wzchInternalAdjustService.save(dto);
         return AjaxResult.success("操作成功", String.valueOf(id));
@@ -181,7 +184,7 @@ public class WzchInternalAdjustController extends BaseController {
      * 导出采购供应策划详情列表
      */
     @PostMapping("detail/export")
-//    @CustomLogger(title = "导出采购供应策划详情列表", businessType = CustomBusinessType.EXPORT)
+    @CustomLogger(title = "前期策划编制-6.2组织供应策划", name = "6.2.4内部调剂材料策划" ,businessType = CustomBusinessType.EXPORT)
     public void exportDetail(@Validated(ValidationGroups.Other.class) @RequestBody Map<String, List<WzchInternalAdjustDetail>> map, HttpServletResponse response) {
         try {
             List<WzchInternalAdjustDetail> detailList = map.get("detailList");
@@ -196,7 +199,7 @@ public class WzchInternalAdjustController extends BaseController {
 
 
     @PostMapping("detail/importData")
-//    @CustomLogger(title = "导入采购供应策划物资详情", businessType = CustomBusinessType.IMPORT)
+    @CustomLogger(title = "前期策划编制-6.2组织供应策划", name = "6.2.4内部调剂材料策划" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, @RequestParam Map map) {
         try {
             ExcelUtils<WzchInternalAdjustDetail> util = new ExcelUtils<>(WzchInternalAdjustDetail.class);
@@ -212,6 +215,7 @@ public class WzchInternalAdjustController extends BaseController {
     }
 
     @PostMapping("/sync")
+    @CustomLogger(title = "前期策划编制-6.2组织供应策划", name = "6.2.4内部调剂材料策划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult sync(@RequestBody WzchInternalAdjustDTO dto) {
         try{
             Assert.notNull(dto.getVersion(), "version不能为空");

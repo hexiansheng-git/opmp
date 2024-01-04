@@ -79,6 +79,11 @@ public class WzchSourceServiceImpl implements IWzchSourceService {
         return wzchSourceMapper.selectWzchSourceList(wzchSource);
     }
 
+    @Override
+    public WzchSource selectWzchSourceByVersion(BigDecimal version) {
+        return wzchSourceMapper.selectWzchSourceByVersion(version);
+    }
+
     /**
      * 新增来源策划9
      * 
@@ -134,7 +139,7 @@ public class WzchSourceServiceImpl implements IWzchSourceService {
 //            throw new BaseException("未查询到数据");
 //        }
         WzchSource wzchSource = new WzchSource();
-        BigDecimal version = VersionUtil.getVersion("wzch_source_detail", vo.getVersion());
+        BigDecimal version = VersionUtil.getVersion("wzch_source", vo.getVersion());
         wzchSource.setVersion(version);
         wzchSource.setStageIdentity(qqchReviewService.getStage());
         if(version == null){

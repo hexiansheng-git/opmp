@@ -16,6 +16,22 @@ import java.util.function.Predicate;
 public class ListTreeUtil {
 
     /**
+     * 整理数据顺序
+     * @param source
+     * @param checkRoot
+     * @param checkParent
+     * @param getChildren
+     * @param setChildren
+     * @return
+     * @param <T>
+     */
+    public static <T> List<T> clearUpOrder(List<T> source, Predicate<T> checkRoot, BiPredicate<T, T> checkParent, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren){
+        source = formatTree(source, checkRoot, checkParent, getChildren, setChildren);
+        source = formatList(source,getChildren,setChildren);
+        return source;
+    }
+
+    /**
      * 设置树结构的id和pid
      * @param source
      * @param setId

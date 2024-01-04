@@ -41,7 +41,7 @@ public class QqchDocTech extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "文档名称")
-    @NotBlank(message = "文档名称不能为空", groups = {ValidationGroups.Save.class})
+//    @NotBlank(message = "文档名称不能为空", groups = {ValidationGroups.Save.class})
     private String docName;
     /**
      * 字段描述：提交日期

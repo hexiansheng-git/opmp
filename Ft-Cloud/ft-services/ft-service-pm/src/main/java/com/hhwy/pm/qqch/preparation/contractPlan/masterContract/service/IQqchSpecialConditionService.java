@@ -16,6 +16,8 @@ public interface IQqchSpecialConditionService {
 
     List<QqchSpecialCondition> getQqchSpecialConditionList(QqchSpecialCondition qqchSpecialCondition);
 
+    List<QqchSpecialCondition> getListByAdvantageAnalyse(String advantageAnalyse);
+
     int insertQqchSpecialCondition(QqchSpecialCondition qqchSpecialCondition);
 
     int updateQqchSpecialCondition(QqchSpecialCondition qqchSpecialCondition);

@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.domain.QqchStandardExpenseAccount;
 import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.mapper.QqchStandardExpenseAccountMapper;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,16 +43,26 @@ public class QqchStandardExpenseAccountServiceImpl implements IQqchStandardExpen
         if(CollectionUtils.isEmpty(qqchStandardExpenseAccountList)){
             this.init();
         }
-        List<QqchStandardExpenseAccount> list = qqchStandardExpenseAccountMapper.getQqchStandardExpenseAccountList(qqchStandardExpenseAccount);
+
+        //全量数据
+        List<QqchStandardExpenseAccount> allList = qqchStandardExpenseAccountMapper.getQqchStandardExpenseAccountList(new QqchStandardExpenseAccount());
+        List<QqchStandardExpenseAccount> resultList;
+        String expenseName = qqchStandardExpenseAccount.getExpenseName();
+        if(StringUtils.isBlank(expenseName)){
+            resultList = allList;
+        }else {
+            List<QqchStandardExpenseAccount> subList = qqchStandardExpenseAccountMapper.getQqchStandardExpenseAccountList(qqchStandardExpenseAccount);
+            resultList = ListTreeUtil.getUpListBySublist(subList,allList,QqchStandardExpenseAccount::getId,QqchStandardExpenseAccount::getPid);
+        }
 
         //转树列表
-        List<QqchStandardExpenseAccount> treeList = ListTreeUtil.formatTree(
-                list,
+        resultList = ListTreeUtil.formatTree(
+                resultList,
                 o -> o.getPid() == null,
                 (r, n) -> r.getId().equals(n.getPid()),
                 QqchStandardExpenseAccount::getChildren,
                 QqchStandardExpenseAccount::setChildren);
-        return treeList;
+        return resultList;
     }
 
     /**
@@ -120,5 +132,15 @@ public class QqchStandardExpenseAccountServiceImpl implements IQqchStandardExpen
     @Transactional
     public int deleteQqchStandardExpenseAccountByPks(List<Long> qqchStandardExpenseAccountPkList) {
         return qqchStandardExpenseAccountMapper.deleteQqchStandardExpenseAccountByPks(qqchStandardExpenseAccountPkList);
+    }
+
+    @Override
+    public List<QqchStandardExpenseAccount> changeId(List<QqchStandardExpenseAccount> qqchStandardExpenseAccountList) {
+        List<QqchStandardExpenseAccount> list = new ArrayList<>();
+        if(CollectionUtils.isEmpty(qqchStandardExpenseAccountList)){
+            return list;
+        }
+        ListTreeUtil.preserveIdPid(list, QqchStandardExpenseAccount::setId,QqchStandardExpenseAccount::setPid,QqchStandardExpenseAccount::getChildren);
+        return list;
     }
 }

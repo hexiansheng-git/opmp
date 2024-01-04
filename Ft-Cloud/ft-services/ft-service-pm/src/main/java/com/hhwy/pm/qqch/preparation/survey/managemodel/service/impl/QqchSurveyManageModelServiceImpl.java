@@ -133,6 +133,7 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
     @Override
     public List<QqchSurveyManageModel> getSameTypeProject(QqchSurveyManageModel param) {
         String projectName = param.getProjectName();
+        String manageModel = param.getManageModel();
         List<QqchSurveyManageModel> result = new ArrayList<>();
         // 获取当前租户
         String currentTenantKey = SecurityUtils.getTenantKey();

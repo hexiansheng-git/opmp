@@ -151,8 +151,7 @@
             <if test="performanceImpact != null  and performanceImpact != ''">and `performance_impact` =
                 #{performanceImpact}
             </if>
-            <if test="advantageAnalyse != null  and advantageAnalyse != ''">and `advantage_analyse` =
-                #{advantageAnalyse}
+            <if test="advantageAnalyse != null  and advantageAnalyse != ''">and find_in_set(#{advantageAnalyse},`advantage_analyse`)
             </if>
             <if test="riskGrade != null  and riskGrade != ''">and `risk_grade` = #{riskGrade}</if>
             <if test="riskSolutions != null  and riskSolutions != ''">and `risk_solutions` = #{riskSolutions}</if>

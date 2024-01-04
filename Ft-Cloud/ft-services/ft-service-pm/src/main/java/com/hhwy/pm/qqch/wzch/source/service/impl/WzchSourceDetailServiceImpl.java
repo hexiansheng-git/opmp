@@ -120,6 +120,13 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         return wzchSourceDetailMapper.selectWzchSourceDetailList(wzchSourceDetail);
     }
 
+    @Override
+    public List<WzchSourceDetail> selectInnerAdjustList(Long id) {
+        if(id == null)
+            return new ArrayList<>(2);
+        return wzchSourceDetailMapper.selectInnerAdjustList(id);
+    }
+
     /**
      * 新增来源策划物资详情
      * 

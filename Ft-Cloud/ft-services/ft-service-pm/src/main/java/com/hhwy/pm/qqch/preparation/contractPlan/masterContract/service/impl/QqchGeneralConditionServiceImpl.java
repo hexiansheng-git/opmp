@@ -51,6 +51,15 @@ public class QqchGeneralConditionServiceImpl implements IQqchGeneralConditionSer
         return qqchGeneralConditionMapper.getQqchGeneralConditionList(qqchGeneralCondition);
     }
 
+    @Override
+    public List<QqchGeneralCondition> getListByAdvantageAnalyse(String advantageAnalyse) {
+        BigDecimal version = VersionUtil.getVersion("qqch_general_condition",null);
+        QqchGeneralCondition query = new QqchGeneralCondition();
+        query.setVersion(version);
+        query.setAdvantageAnalyse(advantageAnalyse);
+        return qqchGeneralConditionMapper.getQqchGeneralConditionList(query);
+    }
+
     @Transactional
     public int insertQqchGeneralCondition(QqchGeneralCondition qqchGeneralCondition) {
         qqchGeneralCondition.setId(IdWorker.createId());

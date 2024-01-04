@@ -404,7 +404,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 jsonObject.put("projectId", projectBasicInfo.getProjectId());
                 jsonObject.put("projectName", projectBasicInfo.getProjectName());
                 jsonObject.put("projectCode", projectBasicInfo.getProjectCode());
-                jsonObject.put("renewalDate", DateUtils.getDate());
+                jsonObject.put("renewalDate", DateUtils.getTime());
                 jsonObjectList.add(jsonObject);
             }
             rocketMQTemplate.convertAndSend("jdgl_main_plan:tenantSuccess", JSONObject.toJSONString(jsonObjectList));

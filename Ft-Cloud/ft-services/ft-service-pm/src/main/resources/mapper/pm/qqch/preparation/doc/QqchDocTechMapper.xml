@@ -106,7 +106,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by doc_code
+        order by id
     </select>
 
     <insert id="insertQqchDocTech" useGeneratedKeys="true" keyProperty="id">

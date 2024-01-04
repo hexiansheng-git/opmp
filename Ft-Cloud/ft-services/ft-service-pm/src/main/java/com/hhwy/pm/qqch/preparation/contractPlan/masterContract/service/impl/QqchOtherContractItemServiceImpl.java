@@ -50,6 +50,15 @@ public class QqchOtherContractItemServiceImpl implements IQqchOtherContractItemS
         return qqchOtherContractItemMapper.getQqchOtherContractItemList(qqchOtherContractItem);
     }
 
+    @Override
+    public List<QqchOtherContractItem> getListByAdvantageAnalyse(String advantageAnalyse) {
+        BigDecimal version = VersionUtil.getVersion("qqch_other_contract_item",null);
+        QqchOtherContractItem query = new QqchOtherContractItem();
+        query.setVersion(version);
+        query.setAdvantageAnalyse(advantageAnalyse);
+        return qqchOtherContractItemMapper.getQqchOtherContractItemList(query);
+    }
+
     @Transactional
     public int insertQqchOtherContractItem(QqchOtherContractItem qqchOtherContractItem) {
         qqchOtherContractItem.setId(IdWorker.createId());

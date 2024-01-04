@@ -1,25 +1,25 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlanQueryVO;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.mapper.JdglMainPlanMapper;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItemPre;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemPreService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.mapper.JdglMainPlanMapper;
-import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
-import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author 陈锦豪
@@ -202,5 +202,13 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         Long id = jdglMainPlan.getId();
         vo.setId(id);
         return getJdglMainPlan(vo);
+    }
+
+    @Override
+    public void test(Long id) {
+        JdglMainPlan query = new JdglMainPlan();
+        query.setId(id);
+        JdglMainPlan jdglMainPlan = jdglMainPlanMapper.getJdglMainPlan(query);
+        sysSyncInfoService.pushJdglMainPlan(jdglMainPlan);
     }
 }

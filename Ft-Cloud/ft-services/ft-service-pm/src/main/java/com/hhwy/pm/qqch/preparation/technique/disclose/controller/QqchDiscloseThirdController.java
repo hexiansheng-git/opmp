@@ -53,7 +53,7 @@ public class QqchDiscloseThirdController extends BaseController {
             "3.5.2 三级交底" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchDiscloseThirdVo qqchDiscloseThirdVo) {
-        qqchDiscloseThirdService.save(qqchDiscloseThirdVo);
+        qqchDiscloseThirdService.saveData(qqchDiscloseThirdVo);
         return AjaxResult.success();
     }
 }

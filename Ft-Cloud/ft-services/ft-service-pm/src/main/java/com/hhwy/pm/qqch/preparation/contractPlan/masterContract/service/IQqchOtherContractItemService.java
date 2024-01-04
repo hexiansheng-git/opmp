@@ -16,6 +16,8 @@ public interface IQqchOtherContractItemService {
 
     List<QqchOtherContractItem> getQqchOtherContractItemList(QqchOtherContractItem qqchOtherContractItem);
 
+    List<QqchOtherContractItem> getListByAdvantageAnalyse(String advantageAnalyse);
+
     int insertQqchOtherContractItem(QqchOtherContractItem qqchOtherContractItem);
 
     int updateQqchOtherContractItem(QqchOtherContractItem qqchOtherContractItem);

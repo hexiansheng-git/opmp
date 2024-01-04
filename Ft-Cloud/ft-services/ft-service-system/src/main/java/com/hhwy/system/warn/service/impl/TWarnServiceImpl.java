@@ -4,13 +4,13 @@ import cn.hutool.core.thread.ThreadUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.HtmlToText;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.socket.service.ISocketIOServerService;
 import com.hhwy.constant.WarnItem;
 import com.hhwy.constant.WarnScopeType;
 import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.domain.base.system.warn.TWarnRecord;
 import com.hhwy.system.api.domain.SysRole;
 import com.hhwy.system.api.domain.SysUser;
-import com.hhwy.system.core.config.SseEmitterServer;
 import com.hhwy.system.core.mapper.SysRoleMapper;
 import com.hhwy.system.core.mapper.SysUserMapper;
 import com.hhwy.system.mapper.UserMapper;
@@ -52,6 +52,9 @@ public class TWarnServiceImpl implements ITWarnService {
 
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
+
+    @Autowired
+    private ISocketIOServerService socketIOServerService;
 
 
 
@@ -124,14 +127,14 @@ public class TWarnServiceImpl implements ITWarnService {
         String warnScopeType = tWarn.getWarnScopeType();
         String warnContent = tWarn.getWarnContent();
         if (WarnScopeType.ALL.getWarnScopeType().equals(warnScopeType)) {
-            SseEmitterServer.batchSendMessage("system", HtmlToText.filterHtmlStr(warnContent));
+            socketIOServerService.pushMessageToClient("system", HtmlToText.filterHtmlStr(warnContent));
         }
 
         if (StringUtils.isNotBlank(warnScopeType) && WarnScopeType.DEPT.getWarnScopeType().equals(warnScopeType)) {
             List<SysUser> userList = this.userMapper.selectUserListByDeptIds(tWarn.getWarnScope());
 
             for (SysUser user : userList) {
-                SseEmitterServer.sendMessage(user.getUserName(), "system", HtmlToText.filterHtmlStr(warnContent));
+                socketIOServerService.pushMessageToClient("system",user.getUserName(), HtmlToText.filterHtmlStr(warnContent));
             }
         }
 
@@ -140,7 +143,7 @@ public class TWarnServiceImpl implements ITWarnService {
             String[] userList = tWarnUsers.split(",");
 
             for (String tWarnUser : userList) {
-                SseEmitterServer.sendMessage(tWarnUser, "system", HtmlToText.filterHtmlStr(warnContent));
+                socketIOServerService.pushMessageToClient("system",tWarnUser, HtmlToText.filterHtmlStr(warnContent));
             }
         }
 
@@ -149,7 +152,7 @@ public class TWarnServiceImpl implements ITWarnService {
             String[] roleKeyList = warnScope.split(",");
             List<SysUser> userList = myUserMapper.selectByRoleKeyList(roleKeyList, tWarn.getTenantKey());
             for (SysUser user : userList) {
-                SseEmitterServer.sendMessage(user.getUserName(), "system", HtmlToText.filterHtmlStr(warnContent));
+                socketIOServerService.pushMessageToClient("system",user.getUserName(), HtmlToText.filterHtmlStr(warnContent));
             }
         }
     }

@@ -24,6 +24,8 @@ public interface IQqchDiscloseThirdService {
     @Deprecated
     void batchSave(QqchDiscloseThirdVo qqchDiscloseThirdVo);
 
+    void saveData(QqchDiscloseThirdVo vo);
+
     /**
      * 保存
      * @param qqchDiscloseThirdVo

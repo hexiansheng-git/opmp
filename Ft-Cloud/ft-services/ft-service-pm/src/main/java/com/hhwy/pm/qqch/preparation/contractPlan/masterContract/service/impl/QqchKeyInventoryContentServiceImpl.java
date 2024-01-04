@@ -71,25 +71,64 @@ public class QqchKeyInventoryContentServiceImpl implements IQqchKeyInventoryCont
 
         KeyInventoryContentItemClassifyVo keyInventoryContentItemClassifyVo = new KeyInventoryContentItemClassifyVo();
 
-        List<QqchKeyInventoryContent> qqchKeyInventoryContentList = queryVo.getList();
-        if(CollectionUtils.isEmpty(qqchKeyInventoryContentList)){
+        List<QqchKeyInventoryContent> contentList = queryVo.getList();
+        if(CollectionUtils.isEmpty(contentList)){
             return keyInventoryContentItemClassifyVo;
         }
 
-        qqchKeyInventoryContentList = ListTreeUtil.formatList(qqchKeyInventoryContentList,QqchKeyInventoryContent::getChildren,QqchKeyInventoryContent::setChildren);
+        contentList = ListTreeUtil.formatList(contentList,QqchKeyInventoryContent::getChildren,QqchKeyInventoryContent::setChildren);
+        List<KeyInventoryContentItemClassify> itemClassifyList = this.clearUpData(contentList,itemClassify);
+        /*总价差值合计*/
+        BigDecimal totalPriceDifferenceTotal = this.getTotalPriceDifferenceTotal(itemClassifyList);
+        keyInventoryContentItemClassifyVo.setTotalPriceDifferenceTotal(totalPriceDifferenceTotal);
+        keyInventoryContentItemClassifyVo.setList(itemClassifyList);
+        return keyInventoryContentItemClassifyVo;
+    }
 
-        List<KeyInventoryContentItemClassify> keyInventoryContentItemClassifyList = new ArrayList<>();
-        for (QqchKeyInventoryContent keyInventoryContent : qqchKeyInventoryContentList) {
+    public KeyInventoryContentItemClassifyVo getSubentryInventoryByType4Word(String itemClassify){
+        CommonAssert.notBlank(itemClassify,"事项分类不能为空！");
+        KeyInventoryContentItemClassifyVo keyInventoryContentItemClassifyVo = new KeyInventoryContentItemClassifyVo();
+
+        BigDecimal version = VersionUtil.getVersion("qqch_key_inventory_content",null);
+        QqchKeyInventoryContent query = new QqchKeyInventoryContent();
+        query.setItemClassify(itemClassify);
+        query.setVersion(version);
+        List<QqchKeyInventoryContent> contentList = qqchKeyInventoryContentMapper.getQqchKeyInventoryContentList(query);
+        if(CollectionUtils.isEmpty(contentList)){
+            return keyInventoryContentItemClassifyVo;
+        }
+        contentList = ListTreeUtil.clearUpOrder(
+                contentList,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchKeyInventoryContent::getChildren,
+                QqchKeyInventoryContent::setChildren);
+
+        List<KeyInventoryContentItemClassify> itemClassifyList = this.clearUpData(contentList,itemClassify);
+        ListTreeUtil.preserveSerialNumber(itemClassifyList, KeyInventoryContentItemClassify::setSerialNumber);
+        /*总价差值合计*/
+        BigDecimal totalPriceDifferenceTotal = this.getTotalPriceDifferenceTotal(itemClassifyList);
+        keyInventoryContentItemClassifyVo.setTotalPriceDifferenceTotal(totalPriceDifferenceTotal);
+        keyInventoryContentItemClassifyVo.setList(itemClassifyList);
+        return keyInventoryContentItemClassifyVo;
+    }
+
+    private List<KeyInventoryContentItemClassify> clearUpData(List<QqchKeyInventoryContent> contentList,String itemClassify){
+        List<KeyInventoryContentItemClassify> itemClassifyList = new ArrayList<>();
+        if(CollectionUtils.isEmpty(contentList)){
+            return itemClassifyList;
+        }
+        for (QqchKeyInventoryContent keyInventoryContent : contentList) {
             if(itemClassify.equals(keyInventoryContent.getItemClassify())){
                 KeyInventoryContentItemClassify keyInventoryContentItemClassify = new KeyInventoryContentItemClassify();
                 BeanUtils.copyProperties(keyInventoryContent,keyInventoryContentItemClassify);
-                keyInventoryContentItemClassifyList.add(keyInventoryContentItemClassify);
+                itemClassifyList.add(keyInventoryContentItemClassify);
             }
         }
 
         /*量差较大清单*/
         if(ItemClassify.LARGE_QUANTITY_DIFFERENCE_INVENTORY.equals(itemClassify)){
-            for (KeyInventoryContentItemClassify keyInventoryContentItemClassify : keyInventoryContentItemClassifyList) {
+            for (KeyInventoryContentItemClassify keyInventoryContentItemClassify : itemClassifyList) {
                 //复核数量
                 BigDecimal blueprintReviewCount = keyInventoryContentItemClassify.getBlueprintReviewCount();
                 if(blueprintReviewCount == null){
@@ -106,7 +145,7 @@ public class QqchKeyInventoryContentServiceImpl implements IQqchKeyInventoryCont
         }
         /*价差较大清单*/
         if(ItemClassify.WIDE_SPREAD_INVENTORY.equals(itemClassify)){
-            for (KeyInventoryContentItemClassify keyInventoryContentItemClassify : keyInventoryContentItemClassifyList) {
+            for (KeyInventoryContentItemClassify keyInventoryContentItemClassify : itemClassifyList) {
                 //清单单价
                 BigDecimal contractUnivalence = keyInventoryContentItemClassify.getContractUnivalence();
                 if(contractUnivalence == null){
@@ -121,18 +160,27 @@ public class QqchKeyInventoryContentServiceImpl implements IQqchKeyInventoryCont
                 keyInventoryContentItemClassify.setUnivalenceDifference(univalenceDifference);
             }
         }
+        return itemClassifyList;
+    }
 
-        /*总价差值合计*/
+    /**
+     * 获取总价差值
+     * @param itemClassifyList
+     * @return
+     */
+    private BigDecimal getTotalPriceDifferenceTotal(List<KeyInventoryContentItemClassify> itemClassifyList){
         BigDecimal totalPriceDifferenceTotal = BigDecimal.ZERO;
-        for (KeyInventoryContentItemClassify keyInventoryContentItemClassify : keyInventoryContentItemClassifyList) {
+        if(CollectionUtils.isEmpty(itemClassifyList)){
+            return totalPriceDifferenceTotal;
+        }
+
+        for (KeyInventoryContentItemClassify keyInventoryContentItemClassify : itemClassifyList) {
             BigDecimal totalPriceDifference = keyInventoryContentItemClassify.getTotalPriceDifference();
             if(totalPriceDifference != null){
                 totalPriceDifferenceTotal = totalPriceDifferenceTotal.add(totalPriceDifference);
             }
         }
-        keyInventoryContentItemClassifyVo.setTotalPriceDifferenceTotal(totalPriceDifferenceTotal);
-        keyInventoryContentItemClassifyVo.setList(keyInventoryContentItemClassifyList);
-        return keyInventoryContentItemClassifyVo;
+        return totalPriceDifferenceTotal;
     }
 
     public List<QqchKeyInventoryContent> getItemClassifyList(List<QqchKeyInventoryContent> source,String itemClassify){

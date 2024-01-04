@@ -32,6 +32,12 @@ public interface IWzchInternalAdjustService {
     List<WzchInternalAdjust> selectWzchInternalAdjustList(WzchInternalAdjust wzchInternalAdjust);
 
     /**
+     * 同步数据
+     * @param wzchInternalAdjust{version}
+     */
+    void sync(WzchInternalAdjust wzchInternalAdjust);
+
+    /**
      * 新增内部调剂材料策划
      *
      * @param wzchInternalAdjust 内部调剂材料策划
@@ -99,7 +105,7 @@ public interface IWzchInternalAdjustService {
 
     long save(WzchInternalAdjustDTO dto);
     
-    long sync(WzchInternalAdjustDTO dto);
+//    long sync(WzchInternalAdjustDTO dto);
 
 
     int updateValidStatus(String id);

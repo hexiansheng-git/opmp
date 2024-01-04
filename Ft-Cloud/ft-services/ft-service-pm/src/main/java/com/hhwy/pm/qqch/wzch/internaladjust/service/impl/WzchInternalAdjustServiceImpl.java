@@ -1,10 +1,8 @@
 package com.hhwy.pm.qqch.wzch.internaladjust.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
@@ -18,24 +16,30 @@ import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
 import com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchInternalAdjust;
 import com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchInternalAdjustDetail;
 import com.hhwy.pm.qqch.wzch.internaladjust.dto.WzchInternalAdjustDTO;
+import com.hhwy.pm.qqch.wzch.internaladjust.mapper.WzchInternalAdjustDetailMapper;
 import com.hhwy.pm.qqch.wzch.internaladjust.mapper.WzchInternalAdjustMapper;
 import com.hhwy.pm.qqch.wzch.internaladjust.service.IWzchInternalAdjustDetailService;
 import com.hhwy.pm.qqch.wzch.internaladjust.service.IWzchInternalAdjustService;
 import com.hhwy.pm.qqch.wzch.localpuchasesupply.dto.WzchLocalPurchaseSupplyDetailDTO;
 import com.hhwy.pm.qqch.wzch.puchasesupply.domain.WzchPurchaseSupply;
+import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
+import com.hhwy.pm.qqch.wzch.source.domain.WzchSourceDetail;
+import com.hhwy.pm.qqch.wzch.source.service.IWzchSourceDetailService;
+import com.hhwy.pm.qqch.wzch.source.service.IWzchSourceService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import io.jsonwebtoken.lang.Assert;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import com.hhwy.common.core.text.Convert;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
@@ -50,8 +54,6 @@ import javax.annotation.Resource;
 public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService {
     @Resource
     private WzchInternalAdjustMapper wzchInternalAdjustMapper;
-
-
     @Resource
     private IWzchInternalAdjustDetailService detailService;
 
@@ -62,6 +64,12 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
     private GenCodeService genCodeService;
     @Resource
     private IQqchReviewService qqchReviewService;
+    @Resource
+    private IWzchSourceService wzchSourceService;
+    @Resource
+    private IWzchSourceDetailService wzchSourceDetailService;
+    @Resource
+    private WzchInternalAdjustDetailMapper wzchInternalAdjustDetailMapper;
 
 
     private final static String ONE = "1";
@@ -90,6 +98,74 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
 //    @CustomDatascope(alias = "ia")
     public List<WzchInternalAdjust> selectWzchInternalAdjustList(WzchInternalAdjust wzchInternalAdjust) {
         return wzchInternalAdjustMapper.selectWzchInternalAdjustList(wzchInternalAdjust);
+    }
+
+    @Override
+    @Transactional
+    public void sync(WzchInternalAdjust wzchInternalAdjust) {
+        Assert.notNull(wzchInternalAdjust,"数据缺失");
+        Assert.notNull(wzchInternalAdjust.getVersion(),"version不能为空");
+        wzchInternalAdjustMapper.deleteWzchInternalAdjustByVersion(wzchInternalAdjust.getVersion());
+        wzchInternalAdjustMapper.deleteWzchInternalAdjustDetailByVersion(wzchInternalAdjust.getVersion());
+        //1、获取来源策划
+        WzchSource wzchSource = wzchSourceService.selectWzchSourceByVersion(wzchInternalAdjust.getVersion());
+        WzchInternalAdjust dbAdjust = getByVersion(wzchInternalAdjust.getVersion());
+        Long id = save(dbAdjust,wzchInternalAdjust);
+        if(wzchSource == null)
+            return ;
+        //2、同步来源策划明细
+        List<WzchSourceDetail> list = wzchSourceDetailService.selectInnerAdjustList(wzchSource.getId());
+        // > 内部调剂明细
+        List<WzchInternalAdjustDetail> detailList = new ArrayList<>(list.size());
+        for (int i = 0; i < list.size(); i++) {
+            WzchSourceDetail temp = list.get(i);
+            WzchInternalAdjustDetail adjustDetail = new WzchInternalAdjustDetail();
+            BeanUtils.copyProperties(temp,adjustDetail);
+            adjustDetail.setInnerAdjustNum(temp.getSelfDemandAmount());
+            try{
+                Date date = new SimpleDateFormat("yyyy").parse(adjustDetail.getRemark());
+                adjustDetail.setAdjustableDate(date);  //可调出日期
+                adjustDetail.setPlanReqDate(date);     //计划需用日期
+            }catch(Exception e){}
+            new AddBaseInfoUtil<>().addBaseEntity(adjustDetail);
+            adjustDetail.setId(IdWorker.createId());
+            adjustDetail.setInternalAdjustId(id);
+            adjustDetail.setVersion(wzchInternalAdjust.getVersion());
+            adjustDetail.setAdjustableNum(adjustDetail.getAdjustableNum());
+            detailList.add(adjustDetail);
+        }
+        if(CollectionUtils.isNotEmpty(detailList))
+            wzchInternalAdjustDetailMapper.insertOrUpdateBatch(detailList);
+    }
+
+    private Long save(WzchInternalAdjust adjust,WzchInternalAdjust temp){
+        if(adjust ==null){
+            adjust = temp;
+        }else{
+            adjust.setVersion(temp.getVersion());
+            adjust.setLimitPriceDesc(temp.getLimitPriceDesc());
+        }
+        if(adjust.getId() == null){
+            adjust.setId(IdWorker.createId());
+            new AddBaseInfoUtil<>().addBaseEntity(adjust);
+            adjust.setAdjustCode(genCodeService.getSetCode(CodeEnum.WPS));
+            adjust.setTitle(adjust.getAdjustCode());
+            this.wzchInternalAdjustMapper.insertWzchInternalAdjust(adjust);
+        }else{
+            new AddBaseInfoUtil<>().updateBaseEntity(adjust);
+            wzchInternalAdjustMapper.updateWzchInternalAdjust(adjust);
+        }
+        return adjust.getId();
+    }
+
+
+    private WzchInternalAdjust getByVersion(BigDecimal version){
+        WzchInternalAdjust query = new WzchInternalAdjust();
+        query.setVersion(version);
+        List<WzchInternalAdjust> list = this.wzchInternalAdjustMapper.selectWzchInternalAdjustList(query);
+        if(CollectionUtils.isEmpty(list))
+            return null;
+        return list.get(0);
     }
 
     /**
@@ -151,8 +227,8 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
      */
     @Override
     public WzchInternalAdjustDTO baseInfo(WzchInternalAdjustDTO dto) {
-        BigDecimal version = VersionUtil.getVersion("wzch_purchase_supply", dto.getVersion());
-        dto.setVersion(version);
+        BigDecimal version = VersionUtil.getVersion("wzch_internal_adjust", dto.getVersion());
+        dto.setVersion(ObjectUtils.nvlBigDecimal(dto.getVersion(),version));
         dto.setStageIdentity(qqchReviewService.getStage());
         
         List<WzchInternalAdjust> list = this.wzchInternalAdjustMapper.selectWzchInternalAdjustList(new WzchInternalAdjustDTO(version));
@@ -162,6 +238,7 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
         }
         WzchInternalAdjustDTO busData = new WzchInternalAdjustDTO();
         BeanUtils.copyProperties(list.get(0), dto);
+
         dto.setStageIdentity(qqchReviewService.getStage());
         
         WzchInternalAdjust lastVersionData = list.get(0);
@@ -170,6 +247,9 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
             WzchInternalAdjustDetail detail = new WzchInternalAdjustDetail();
             detail.setInternalAdjustId(dto.getId());
             detail.setDelFlag("0");
+            //获取来源策划版本，否则关联来源策划会出多条数据
+            BigDecimal sourceVersion = wzchInternalAdjustDetailMapper.selectWzchSourceVersion(dto.getVersion());
+            detail.setVersion(ObjectUtils.nvlBigDecimal(sourceVersion,dto.getVersion()));
             List<WzchInternalAdjustDetail> detailList = detailService.selectWzchInternalAdjustDetailList(detail);
             HashMap<String, String> dictMap = new HashMap<>();
             dictMap.put("materialStandard_materialStandardName", "material_standard");
@@ -328,40 +408,40 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
 //        if (!StringUtils.isEmpty(errorMsg.toString())) throw new RuntimeException(errorMsg.toString());
     }
 
-    @Override
-    @Transactional
-    public long sync(WzchInternalAdjustDTO dto) {
-        Assert.notNull(dto.getVersion(),"version不能为空");
-        List<WzchInternalAdjust> masterList = this.wzchInternalAdjustMapper.selectWzchInternalAdjustList(dto);
-        boolean isNew = CollectionUtils.isEmpty(masterList);
-        if(isNew){
-            dto.setId(IdWorker.createId());
-            new AddBaseInfoUtil().addBaseEntity(dto);
-            this.wzchInternalAdjustMapper.insertWzchInternalAdjust(dto);
-        }else{
-            masterList.get(0).setLimitPriceDesc(dto.getLimitPriceDesc());
-            dto.setId(masterList.get(0).getId());
-            wzchInternalAdjustMapper.updateWzchInternalAdjust(masterList.get(0));
-        }
-        //1、从来源策划中获取来源为当地采购的数据
-        WzchInternalAdjustDetail queryDetail = new WzchInternalAdjustDetail();
-        queryDetail.setVersion(dto.getVersion());
-        List<WzchInternalAdjustDetail> list = this.detailService.getMtlDetailList(queryDetail);
-        //2、删除
-        if(!isNew){
-            wzchInternalAdjustMapper.deleteDirectByMasterId(dto.getId());
-        }
-//        //3、插入明细
-        if(CollectionUtils.isNotEmpty(list)){
-//            for (int i = 0; i < list.size(); i++) {
-//                WzchLocalPurchaseSupplyDetailDTO temp = list.get(i);
-//                temp.setPurchaseSupplyId(purchaseSupply.getId());
-//                temp.setDelFlag("0");
-//            }
-            this.detailService.insertOrUpdateBatch(list, dto.getId());
-        }
-        return dto.getId();
-    }
+//    @Override
+//    @Transactional
+//    public long sync(WzchInternalAdjustDTO dto) {
+//        Assert.notNull(dto.getVersion(),"version不能为空");
+//        List<WzchInternalAdjust> masterList = this.wzchInternalAdjustMapper.selectWzchInternalAdjustList(dto);
+//        boolean isNew = CollectionUtils.isEmpty(masterList);
+//        if(isNew){
+//            dto.setId(IdWorker.createId());
+//            new AddBaseInfoUtil().addBaseEntity(dto);
+//            this.wzchInternalAdjustMapper.insertWzchInternalAdjust(dto);
+//        }else{
+//            masterList.get(0).setLimitPriceDesc(dto.getLimitPriceDesc());
+//            dto.setId(masterList.get(0).getId());
+//            wzchInternalAdjustMapper.updateWzchInternalAdjust(masterList.get(0));
+//        }
+//        //1、从来源策划中获取来源为当地采购的数据
+//        WzchInternalAdjustDetail queryDetail = new WzchInternalAdjustDetail();
+//        queryDetail.setVersion(dto.getVersion());
+//        List<WzchInternalAdjustDetail> list = this.detailService.getMtlDetailList(queryDetail);
+//        //2、删除
+//        if(!isNew){
+//            wzchInternalAdjustMapper.deleteDirectByMasterId(dto.getId());
+//        }
+////        //3、插入明细
+//        if(CollectionUtils.isNotEmpty(list)){
+////            for (int i = 0; i < list.size(); i++) {
+////                WzchLocalPurchaseSupplyDetailDTO temp = list.get(i);
+////                temp.setPurchaseSupplyId(purchaseSupply.getId());
+////                temp.setDelFlag("0");
+////            }
+//            this.detailService.insertOrUpdateBatch(list, dto.getId());
+//        }
+//        return dto.getId();
+//    }
 
     @Override
     @Transactional

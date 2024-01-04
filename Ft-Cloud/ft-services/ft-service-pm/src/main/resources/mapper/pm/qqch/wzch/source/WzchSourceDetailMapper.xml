@@ -98,6 +98,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectWzchSourceDetailVo"/>
         where `id` = #{id}
     </select>
+
+    <select id="selectInnerAdjustList" parameterType="Long" resultMap="WzchSourceDetailResult">
+        select sum(c.inner_adjust_num) self_demand_amount,
+            min(year) remark,
+			d.id,
+              d.`category_name`,
+              d.`source_id`,
+              d.valid,
+              d.`material_code`,
+              d.`material_tech_param`,
+              d.`material_standard`,
+              d.`total_demand_amount`,
+              d.`file_group_id`,
+              d.`project_id`,
+              d.`project_name`,
+              d.`dept_id`,
+              d.`create_user`,
+              d.`create_user_name`,
+              d.`create_time`,
+              d.`update_user`,
+              d.`update_user_name`,
+              d.`update_time`,
+              d.`del_user`,
+              d.`del_time`,
+              d.`del_flag`,
+              d.`pt_var1`,
+              d.`pt_var2`,
+              d.`pt_var3`
+        from wzch_source_approach_year_count c
+        inner join wzch_source_detail d on d.id = c.detail_id and d.source_id = #{id} and d.del_flag = 0
+        where c.inner_adjust_num &gt; 0
+        group by d.id
+    </select>
+
+
     <select id="selectWzchSourceDetailBySourceId" resultType="com.hhwy.pm.qqch.wzch.source.domain.WzchSourceDetail">
         select a.`id`,a.valid, a.`source_id` sourceId, a.`material_code` materialCode, a.`material_tech_param` materialTechParam,
         a.`material_standard` materialStandard, a.`total_demand_amount` totalDemandAmount, a.`self_demand_amount` selfDemandAmount,

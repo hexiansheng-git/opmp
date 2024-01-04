@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.wzch.internaladjust.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchInternalAdjustDetail;
@@ -19,6 +20,8 @@ public interface WzchInternalAdjustDetailMapper {
      * @return 内部调剂材料策划物资详情
      */
     WzchInternalAdjustDetail selectWzchInternalAdjustDetailById(Long id);
+
+    BigDecimal selectWzchSourceVersion(BigDecimal version);
 
     /**
      * 查询内部调剂材料策划物资详情列表

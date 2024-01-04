@@ -1,11 +1,9 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service;
 
-import java.util.Date;
-import java.util.List;
-
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlanQueryVO;
-import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
+
+import java.util.List;
 
 /**
  * @author 陈锦豪
@@ -37,4 +35,6 @@ public interface IJdglMainPlanService {
     int deleteJdglMainPlanByPks(List<Long> jdglMainPlanPkList);
 
     JdglMainPlan getBaseMainPlan();
+
+    void test(Long id);
 }

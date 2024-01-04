@@ -18,6 +18,8 @@ import java.math.BigDecimal;
 public class KeyInventoryContentItemClassify {
     private static final long serialVersionUID = 1L;
 
+    private String serialNumber;
+
     /**
      * 字段描述：清单编码
      */

@@ -72,12 +72,6 @@ public interface IQqchWorkGroupService {
      */
     QqchWorkGroup getMaxVersionQqchWorkGroup();
 
-    /**
-     * 获取某租户下的工作小组
-     * @param qqchWorkGroup {ptVar5:租户标识}
-     * @return
-     */
-    List<QqchWorkGroup> gmList(QqchWorkGroup qqchWorkGroup);
 
     void updateWorkGroupProcess(Long id);
 
