@@ -152,7 +152,7 @@
         where iad.`id` = #{id}
     </select>
 
-    <select id="selectWzchSourceVersion" parameterType="BigDecimal" resultMap="WzchInternalAdjustDetailResult">
+    <select id="selectWzchSourceVersion" parameterType="BigDecimal" resultType="BigDecimal">
         select version from wzch_source where version &lt;= #{version} and del_flag = 0 order by version desc limit 1
     </select>
 
