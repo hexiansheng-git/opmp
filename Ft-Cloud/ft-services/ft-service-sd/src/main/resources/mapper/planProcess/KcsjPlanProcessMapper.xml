@@ -161,7 +161,7 @@
             <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
         </where>
-        order by create_time desc
+        order by sort asc
     </select>
 
     <insert id="insertKcsjPlanProcess" useGeneratedKeys="true" keyProperty="id">
