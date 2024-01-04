@@ -57,7 +57,7 @@ public class UserController extends BaseController {
         return AjaxResult.success("查询成功!", iUserService.getUserInfoBy(selfUserInfo));
     }
 
-    //获取同部门的人员
+    //获取同部门的人员  202401 修改为获取本项目人员
 //    @CustomLogger(title = "公共接口-获取同部门人员信息", businessType = CustomBusinessType.SELECT)
     @PostMapping("/getUserInfoBySameDept")
     public AjaxResult getUserInfoBySameDept(@RequestBody SelfUserInfo selfUserInfo){

@@ -228,9 +228,13 @@ public class SysPmController {
     @PostMapping("/createData")
     public String createData() {
         String loginStr = "登录人数";
-        
+        String accountStr = "账号开通人数";
+
         ArrayList<Map> list = new ArrayList<>();
         Map<String, String> map = new HashMap<>();
+        map.put("项目信息","xmsl_project_basic_info");
+        map.put("项目WBS","t_wbs_main");
+        map.put("图纸复核","xmsl_draw_review");
         map.put("项目设立合同信息","xmsl_contract_info");
         map.put("前期策划小组","qqch_work_group");
         map.put("前期策划工作计划","qqch_work_plan");
@@ -249,9 +253,16 @@ public class SysPmController {
         for(Map item:loginCountList){
             countMap.put(item.get("tenantKey"),item.get("count"));
         }
-
+        //开通账号
+        Map<Object, Object> accountMap = new HashMap<>();
+        List<Map> acountList = sysPmMapper.selectAccountLogin();
+        for(Map item:acountList){
+            accountMap.put(item.get("tenantKey"),item.get("count"));
+        }
         //数据库信息
-        List<SysTenantDb> dbList = dbService.selectSysTenantDbList(new SysTenantDb());
+        SysTenantDb db = new SysTenantDb();
+        db.setServiceName("ft-service-pm");
+        List<SysTenantDb> dbList = dbService.selectSysTenantDbList(db);
         Map<String, String> dbMap = new HashMap<>();
         for(SysTenantDb item:dbList){
             dbMap.put(item.getTenantKey(),item.getDbName());
@@ -264,6 +275,7 @@ public class SysPmController {
             dataMap.put("projectName",item.getTenantName());
             dataMap.put("projectCode",item.getTenantKey());
             dataMap.put("loginCount",countMap.get(item.getTenantKey()));
+            dataMap.put("account",accountMap.get(item.getTenantKey()));
 
             String dbStr = dbMap.get(item.getTenantKey());
             for(String key:map.keySet()){
@@ -297,6 +309,7 @@ public class SysPmController {
                     projectcountMap.put(loginStr,1);
                 }
             };
+
             for(String key:map.keySet()){
                 String value = map.get(key).toString();
                 Integer count= ObjectUtils.toInteger(item.get(value));
