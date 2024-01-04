@@ -5,6 +5,8 @@ import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecordVo;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+
+import com.hhwy.utils.tree.TreeUtil;
 import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
@@ -100,7 +102,7 @@ public class KcsjEquipEntryRecordController extends BaseController {
     public void export(HttpServletResponse response, KcsjEquipEntryRecord kcsjEquipEntryRecordParam) throws IOException {
         KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo = kcsjEquipEntryRecordService.getKcsjEquipEntryRecordList(kcsjEquipEntryRecordParam);
         ExcelUtils<KcsjEquipEntryRecord> util = new ExcelUtils<>(KcsjEquipEntryRecord.class);
-        util.exportExcel(response, kcsjEquipEntryRecordVo.getTreeList(), DateUtils.getDate());
+        util.exportExcel(response, TreeUtil.treeToList(kcsjEquipEntryRecordVo.getTreeList()), DateUtils.getDate());
     }
 
     /**

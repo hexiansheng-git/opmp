@@ -96,7 +96,7 @@ public class KcsjEquipEntryRecordInfoController extends BaseController {
         if(CollectionUtils.isEmpty(ids)){
             List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoService.getKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfoParam);
             if(CollectionUtils.isNotEmpty(kcsjEquipEntryRecordInfoList)){
-                list = kcsjEquipEntryRecordInfoList;
+                list = TreeUtil.treeToList(kcsjEquipEntryRecordInfoList);
             }
         }else{
             List<KcsjEquipEntryRecordInfo> byIdList = kcsjEquipEntryRecordInfoService.getIds(ids);
