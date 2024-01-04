@@ -45,7 +45,9 @@ public class GetMaterialInfoInterface {
      *
      * curl -X POST -H 'authToken: bMdnHQzByb' -H 'Accept: text/html,text/plain,application/xhtml+xml,application/xml,application/json' -H 'apikey: pJWDnryyVsmDiiPeEI5Bfv0B4Lm3nOoI'
      * -H 'Content-Type: application/json' -d '{ "equCode": "", "type": "0", "prjCode": "PJ2021012102" }'
-     * 'http://esb.cfhec.net/env-101/hhwy-wsxt/wsxt/bsy/fms/xcsb/outXcsbEquInfo/getInfo'
+     * 'http://esb.cfhec.net/env-101/hhwy-wsxt/wsxt/bsy/fms/xcsb/chooseEqu/getEquipList'
+     *
+     *
      */
     public AjaxResult syncMaterialInfo(@RequestBody Map<String,Object> map){
         Map<String,String> headerMap=new HashMap();
