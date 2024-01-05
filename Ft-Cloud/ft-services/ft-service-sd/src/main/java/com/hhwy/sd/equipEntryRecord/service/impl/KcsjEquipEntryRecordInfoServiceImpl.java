@@ -64,6 +64,8 @@ public class KcsjEquipEntryRecordInfoServiceImpl implements IKcsjEquipEntryRecor
                 entryRecordInfo.setIds(pidAll);
                 List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecords1 = kcsjEquipEntryRecordInfoMapper.getKcsjEquipEntryRecordInfoList(entryRecordInfo);
                 kcsjEquipEntryRecordInfoList.addAll(kcsjEquipEntryRecords1);
+            } else {
+                return new ArrayList<>();
             }
             List<KcsjEquipEntryRecordInfo> collect = kcsjEquipEntryRecordInfoList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(KcsjEquipEntryRecordInfo::getId))), ArrayList::new));
             list = collect.stream().sorted(Comparator.comparing(KcsjEquipEntryRecordInfo::getId)).collect(Collectors.toList());
