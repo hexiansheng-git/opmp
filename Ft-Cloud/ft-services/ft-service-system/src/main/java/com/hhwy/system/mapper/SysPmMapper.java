@@ -22,4 +22,6 @@ public interface SysPmMapper {
     void batchInsert(@Param("list")  ArrayList<Map> list);
 
     void delete();
+
+    List<Map> selectAccountLogin();
 }

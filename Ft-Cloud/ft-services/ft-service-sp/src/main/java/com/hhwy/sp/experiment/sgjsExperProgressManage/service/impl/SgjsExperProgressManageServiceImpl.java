@@ -83,7 +83,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
 
         //查询符合条件的数据
         List<SgjsExperProgressManage> sgjsExperProgressManageList = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(sgjsTechnicalManage);
-
         List<SgjsExperProgressManage> list = new ArrayList<>();
         if (sgjsExperProgressManageList.size() > 0) {
 
@@ -106,6 +105,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
                 sgjsPlanMeasureManage1.setPaths(data);
                 List<SgjsExperProgressManage> sgjsExperProgressManages = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(sgjsPlanMeasureManage1);
                 sgjsExperProgressManageList.addAll(sgjsExperProgressManages);
+
             }
             List<SgjsExperProgressManage> collect = sgjsExperProgressManageList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(SgjsExperProgressManage::getId))), ArrayList::new));
             list = collect.stream().sorted(Comparator.comparing(SgjsExperProgressManage::getSerialNumber)).collect(Collectors.toList());
@@ -175,7 +175,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             }
             treeToList.add(sgjsExperProgressManage);
         }
-
     }
 
     private void diguiChildren(List<LinkedHashMap<String, Object>> children, SgjsExperProgressManage manage) {
@@ -257,8 +256,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             sgjsExperProgressManageMapper.deleteInfoData(list);
         }
     }
-
-
 
 
 
@@ -345,8 +342,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         }
         manage.setChildren(list);
     }*/
-
-
 
 
 

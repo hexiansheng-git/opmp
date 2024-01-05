@@ -159,7 +159,7 @@
                 </foreach>
             </if>
         </where>
-        order by update_time desc
+        order by pt_var5 esc
     </select>
 
     <insert id="insertSgjsTechnicalManage"  useGeneratedKeys="true" keyProperty="id"  >
@@ -455,6 +455,11 @@
             <trim prefix="path  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.path}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar5}
                 </foreach>
             </trim>
         </trim>

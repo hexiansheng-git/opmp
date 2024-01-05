@@ -3,7 +3,6 @@ package com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.domain.KcsjPlanCommunicationRecords;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.mapper.KcsjPlanCommunicationRecordsMapper;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.service.IKcsjPlanCommunicationRecordsService;
@@ -26,8 +25,6 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
     @Autowired
     private KcsjPlanCommunicationRecordsMapper kcsjPlanCommunicationRecordsMapper;
 
-    @Autowired
-    private SystemServiceApi systemServiceApi;
 
     public KcsjPlanCommunicationRecords getKcsjPlanCommunicationRecords(KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords) {
         return kcsjPlanCommunicationRecordsMapper.getKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecords);

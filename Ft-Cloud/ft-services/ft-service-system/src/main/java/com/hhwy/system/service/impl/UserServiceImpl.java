@@ -97,7 +97,8 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<SelfUserInfo> getUserInfoBySameDept(SelfUserInfo selfUserInfo) {
         String tenantKey = SecurityUtils.getTenantKey();
-        List<SelfUserInfo> list = userMapper.getUserInfoBy(selfUserInfo,tenantKey);
+        //202401 修改为获取本项目人员
+        List<SelfUserInfo> list = userMapper.getUserInfoBy(new SelfUserInfo(),tenantKey);
         if(CollectionUtils.isEmpty(list)){
             return new ArrayList<>();
         }
