@@ -16,6 +16,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchSimilarProject
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
 import io.seata.common.util.CollectionUtils;
 import io.seata.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -205,13 +206,58 @@ public class QqchSimilarProjectSchemeServiceImpl implements IQqchSimilarProjectS
         String currentPrjCode = projectInfo.getProjectCode();
         //当前项目的业务领域及产品
         String currentBAP = projectInfo.getBusinessAreasAndProducts();
-
-        List<QqchSimilarProjectScheme> resultList = new ArrayList<>();
+        List<QqchSimilarProjectScheme> schemeList = new ArrayList<>();
         if(StringUtils.isBlank(currentBAP)){
-            return resultList;
+            return schemeList;
         }
+        //当前数据源
+        String oldDataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(currentPrjCode);
 
+        try {
+            //切换到master
+            DynamicDataSourceContextHolder.push("master");
+            QqchSimilarProjectScheme query = new QqchSimilarProjectScheme();
+            query.setProjectName(queryVo.getProjectName());
+            query.setBusinessAreasAndProducts(currentBAP);
+            schemeList = qqchSimilarProjectSchemeMapper.getQqchSimilarProjectSchemeList(query);
+            String schemeName = queryVo.getSchemeName();
+            if(StringUtils.isNotBlank(schemeName)){
+                schemeList = schemeList.stream().filter(scheme -> {
+                    String ptVar1 = scheme.getPtVar1();
+                    if ("prj".equals(ptVar1)) {
+                        return true;
+                    }
+                    String name = scheme.getSchemeName();
+                    return StringUtils.isNotBlank(name) && name.contains(schemeName);
+                }).collect(Collectors.toList());
+            }
+            String schemeLevel = queryVo.getSchemeLevel();
+            if(StringUtils.isNotBlank(schemeLevel)){
+                schemeList = schemeList.stream().filter(scheme -> {
+                    String ptVar1 = scheme.getPtVar1();
+                    if ("prj".equals(ptVar1)) {
+                        return true;
+                    }
+                    String level = scheme.getSchemeLevel();
+                    return StringUtils.isNotBlank(level) && level.equals(schemeLevel);
+                }).collect(Collectors.toList());
+            }
 
-        return resultList;
+            schemeList = ListTreeUtil.formatTree(
+                    schemeList,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchSimilarProjectScheme::getChildren,
+                    QqchSimilarProjectScheme::setChildren);
+
+            schemeList.removeIf(scheme -> CollectionUtils.isEmpty(scheme.getChildren()) || scheme.getProjectCode().equals(currentPrjCode));
+
+            return schemeList;
+        }catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 }

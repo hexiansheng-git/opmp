@@ -8,6 +8,7 @@ import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -176,4 +177,6 @@ public class QqchSimilarProjectScheme extends BaseEntity {
      */
     @JsonProperty
     private String ptVar5;
+
+    private List<QqchSimilarProjectScheme> children;
 }

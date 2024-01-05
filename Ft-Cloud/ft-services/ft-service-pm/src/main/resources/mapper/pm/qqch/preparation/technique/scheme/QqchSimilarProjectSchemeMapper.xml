@@ -120,7 +120,7 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` like concat('%' , #{projectName} ,'%')</if>
             <if test="schemeName != null  and schemeName != ''">and `scheme_name` = #{schemeName}</if>
             <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
             <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
