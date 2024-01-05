@@ -49,6 +49,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectAccountLogin" resultType="map">
 		select tenant_key as  tenantKey, count(user_id) as count from    sys_user    GROUP BY tenant_key
 	</select>
+
+	<select id="selectChCount" resultType="map">
+		SELECT
+			COUNT( a.i ) as count,
+			a.tenantkey
+		FROM
+			( SELECT interface_name AS i,
+					 tenantkey
+				FROM
+					`opmp-log`.sys_interface_log
+				WHERE
+					interface_name  like concat('%', #{chkey},'%')
+					AND type = 'SAVE' AND tenantkey != 'master' GROUP BY tenantkey, interface_name
+			) a
+		GROUP BY
+			a.tenantkey
+	</select>
+
 	<insert id="batchInsert">
 
 		INSERT INTO `data_info`
@@ -65,14 +83,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			`hetong`,
 			`xiaozu`,
 			`jihua`,
-<!--			`bianzhi`,-->
+			`bianzhi`,
 <!--			`jieduan`,-->
 <!--			`pingshen`,-->
 			`nian`,
 			`ji`,
 			`yue`,
 			`zhou`,
-			`jindu`
+			`jindu`,
+
+			`sgch`,
+			`kcsj`,
+			`sgjs`,
+			`htch`,
+			`cbgk`,
+			`wzch`,
+			`sbch`,
+			`aqch`,
+			`zlch`,
+			`cwch`
+
 		)
 		VALUES
 		<foreach collection="list" item="info" separator=",">
@@ -84,20 +114,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 			#{info.account},
 			#{info.xmsl_project_basic_info},
-			#{info.t_wbs_main},
+			#{info.xmsl_wbs_main},
 			#{info.xmsl_draw_review},
 
 			#{info.xmsl_contract_info},
 			#{info.qqch_work_group},
 			#{info.qqch_work_plan},
-<!--			#{info.bianzhi},-->
+			#{info.bianzhi},
 <!--			#{info.jieduan},-->
 <!--			#{info.pingshen},-->
 			#{info.jdgl_year_plan},
 			#{info.jdgl_quarter_plan},
 			#{info.jdgl_month_plan},
 			#{info.jdgl_week_plan},
-			#{info.jdgl_day_schedule}
+			#{info.jdgl_day_schedule},
+
+			#{info.sgch},
+			#{info.kcsj},
+			#{info.sgjs},
+			#{info.htch},
+			#{info.cbgk},
+			#{info.wzch},
+			#{info.sbch},
+			#{info.aqch},
+			#{info.zlch},
+			#{info.cwch}
 			)
 		</foreach>
 

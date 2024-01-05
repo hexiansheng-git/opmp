@@ -24,4 +24,6 @@ public interface SysPmMapper {
     void delete();
 
     List<Map> selectAccountLogin();
+
+    List<Map> selectChCount(@Param("chkey") String chkey);
 }
