@@ -36,7 +36,7 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
             for (int i = 0; i < list.size(); i++) {
                 SgjsDiscloseRecord temp = list.get(i);
                 temp.setPtVar2(SecurityUtils.getTenantKey());
-                temp.setRegionId((Long) prjInfo.get("regionId"));
+                if(prjInfo.get("regionId") != null)temp.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
                 temp.setRegionName((String) prjInfo.get("regionName"));
                 JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(list.get(i)));
                 finalList.add(json);
