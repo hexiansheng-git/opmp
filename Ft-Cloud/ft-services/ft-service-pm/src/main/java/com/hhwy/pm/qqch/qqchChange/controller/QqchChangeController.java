@@ -11,6 +11,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchSimilarProjectSchemeService;
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
 import com.hhwy.pm.qqch.qqchChange.service.IQqchChangeService;
 import com.hhwy.pm.qqch.qqchChange.vo.QqchChangeVo;
@@ -53,6 +54,8 @@ public class QqchChangeController extends BaseController {
     private IXmslProjectBasicInfoService projectBasicInfoService;
     @Autowired
     private DataShareDevicePlanService dataShareDevicePlanService;
+    @Autowired
+    private IQqchSimilarProjectSchemeService qqchSimilarProjectSchemeService;
 
     @PreAuthorize(hasPermi = "qqchChange:list")
     @PostMapping("/list")
@@ -187,6 +190,9 @@ public class QqchChangeController extends BaseController {
                 DynamicDataSourceContextHolder.push(oldDataSource);
             }
         });
+
+        //推送同类项目方案
+        qqchSimilarProjectSchemeService.pushData();
         return AjaxResult.success();
     }
 

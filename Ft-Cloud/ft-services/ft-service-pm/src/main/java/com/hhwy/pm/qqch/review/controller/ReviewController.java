@@ -10,6 +10,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchSimilarProjectSchemeService;
 import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.sgch.dataShare.DataShareDevicePlanService;
@@ -47,6 +48,8 @@ public class ReviewController extends BaseController {
     private IQqchReviewService qqchReviewService;
     @Autowired
     private DataShareDevicePlanService dataShareDevicePlanService;
+    @Autowired
+    private IQqchSimilarProjectSchemeService qqchSimilarProjectSchemeService;
 
 
     public static void main(String[] args) {
@@ -291,6 +294,12 @@ public class ReviewController extends BaseController {
                 DynamicDataSourceContextHolder.push(oldDataSource);
             }
         });
+
+        //推送同类项目方案
+        String stage = qqchReviewService.getStage();
+        if("end".equals(stage)){
+            qqchSimilarProjectSchemeService.pushData();
+        }
         return AjaxResult.success("成功");
     }
 
