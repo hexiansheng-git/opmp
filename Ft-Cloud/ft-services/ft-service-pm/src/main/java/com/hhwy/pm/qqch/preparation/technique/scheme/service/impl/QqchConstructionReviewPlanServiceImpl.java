@@ -90,6 +90,10 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         //获取方案清单数据
         List<QqchConstructionList> latestList = qqchConstructionListService.getLatest(version);
 
+        if(version == null){
+            version = BigDecimal.ONE;
+        }
+
         Map<String, QqchConstructionReviewPlan> map = new HashMap<>();
         List<QqchConstructionReviewPlan> list = qqchConstructionReviewPlanVo.getList();
         list.stream().forEach(plan -> {
@@ -103,7 +107,7 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
 
         // 构造新的list
         List<QqchConstructionReviewPlan> insertList = new ArrayList<>();
-        latestList.stream().forEach(construction -> {
+        for (QqchConstructionList construction : latestList) {
             QqchConstructionReviewPlan insert = new QqchConstructionReviewPlan();
             BeanUtils.copyProperties(construction, insert);
 
@@ -122,7 +126,7 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
                 insert.setReviewMainBody(plan.getReviewMainBody());
             }
             insertList.add(insert);
-        });
+        }
 
         // 先清空表中旧数据
         this.deleteByVersion(version);
