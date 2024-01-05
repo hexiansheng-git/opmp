@@ -15,7 +15,9 @@ import com.hhwy.system.service.IDeptService;
 import com.hhwy.system.service.ISysPmService;
 import com.hhwy.system.service.MenuService;
 import com.hhwy.utils.ObjectUtils;
+import javafx.fxml.FXMLLoader;
 import org.apache.commons.collections4.CollectionUtils;
+import org.omg.CORBA.OBJ_ADAPTER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.web.bind.annotation.*;
@@ -232,8 +234,9 @@ public class SysPmController {
 
         ArrayList<Map> list = new ArrayList<>();
         Map<String, String> map = new HashMap<>();
+        Map<String, String> chmap = new HashMap<>();
         map.put("项目信息","xmsl_project_basic_info");
-        map.put("项目WBS","t_wbs_main");
+        map.put("项目WBS","xmsl_wbs_main");
         map.put("图纸复核","xmsl_draw_review");
         map.put("项目设立合同信息","xmsl_contract_info");
         map.put("前期策划小组","qqch_work_group");
@@ -245,6 +248,32 @@ public class SysPmController {
         map.put("进度管理-月度产值计划","jdgl_month_plan");
         map.put("进度管理-每周产值计划","jdgl_week_plan");
         map.put("进度管理-进度填报","jdgl_day_schedule");
+
+        //前期策划编制
+        chmap.put("施工策划","sgch");
+        chmap.put("勘察设计策划","kcsj");
+        chmap.put("施工技术策划","sgjs");
+        chmap.put("合同策划","htch");
+        chmap.put("成本管控策划","cbgk");
+        chmap.put("物资策划","wzch");
+        chmap.put("设备策划","sbch");
+        chmap.put("安全策划","aqch");
+        chmap.put("质量策划","zlch");
+        chmap.put("财务策划","cwch");
+
+        //策划调用数据
+        Map<String, Integer> tenantChMap = new HashMap<>();
+        for(String key:chmap.keySet()){
+            String chValue = chmap.get(key);
+            //项目内策划调用次数
+            List<Map> tenantChlist = sysPmMapper.selectChCount(key);
+            for(Map item:tenantChlist){
+                Integer count = ObjectUtils.toInteger(item.get("count"));
+                String tenantKey = ObjectUtils.toString(item.get("tenantkey"));
+                tenantChMap.put(tenantKey+"_"+chValue,count);
+            }
+        }
+
         List<SysTenant> tenantList = tenantService.selectSysTenantList(new SysTenant());
 
         //登录情况
@@ -270,6 +299,7 @@ public class SysPmController {
         Map<String, Object> resMap = new HashMap<>();
         //查询
         for(SysTenant item:tenantList){
+            String tenantKey = item.getTenantKey();
             //结果数据集合
             Map<Object, Object> dataMap = new HashMap<>();
             dataMap.put("projectName",item.getTenantName());
@@ -277,11 +307,16 @@ public class SysPmController {
             dataMap.put("loginCount",countMap.get(item.getTenantKey()));
             dataMap.put("account",accountMap.get(item.getTenantKey()));
 
-            String dbStr = dbMap.get(item.getTenantKey());
+            String dbStr = dbMap.get(tenantKey);
             for(String key:map.keySet()){
                 String value = map.get(key).toString();
                 int count = sysPmMapper.selectDbCount(dbStr,value);
                 dataMap.put(value,count);
+            }
+            for(String key:chmap.keySet()){
+                String value = chmap.get(key);
+                Integer chcount = tenantChMap.get(tenantKey + "_" + value);
+                dataMap.put(value,chcount);
             }
             list.add(dataMap);
         }
@@ -326,6 +361,14 @@ public class SysPmController {
                     }
                 };
             }
+            Integer bianzhiCount=0;
+            for(String key:chmap.keySet()){
+                String value = chmap.get(key).toString();
+                Integer c = ObjectUtils.toInteger(item.get(value),0);
+                bianzhiCount+=c;
+            }
+            item.put("bianzhi",bianzhiCount);
+
         }
 
 
