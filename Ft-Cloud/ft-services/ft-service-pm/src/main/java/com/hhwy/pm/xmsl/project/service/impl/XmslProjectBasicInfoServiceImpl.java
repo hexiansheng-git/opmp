@@ -1,7 +1,10 @@
 package com.hhwy.pm.xmsl.project.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.system.country.CountryInfo;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchSimilarProjectSchemeService;
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -72,6 +76,9 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
 
     @Autowired
     private IQqchSimilarProjectSchemeService qqchSimilarProjectSchemeService;
+
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
     /**
      * 根据id获取项目基本信息
@@ -345,7 +352,10 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     @Override
     public Map<String, Object> getPrjInfo() {
         Map<String,Object> map = new HashMap<>();
+        List<CountryInfo> countryInfoList = systemServiceApi.getCountryInfoList();
+        Map<String, CountryInfo> countryMap = countryInfoList.stream().filter(o -> StringUtils.isNotBlank(o.getCountryCode())).collect(Collectors.toMap(CountryInfo::getCountryCode, o -> o, (k,v) -> k));
         XmslProjectBasicInfo xmslProjectBasicInfo = xmslProjectBasicInfoMapper.getProjectBasicInfo(new XmslProjectBasicInfo());
+        String projectLocation = xmslProjectBasicInfo.getProjectLocation();
         /*项目id*/
         map.put("projectId",xmslProjectBasicInfo.getProjectId());
         /*项目名称*/
@@ -357,7 +367,16 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         /*机构名称*/
         map.put("regionName",xmslProjectBasicInfo.getRegionName());
         /*项目所在地（国）*/
-        map.put("projectLocation",xmslProjectBasicInfo.getProjectLocation());
+        map.put("projectLocation",projectLocation);
+        if(StringUtils.isNotBlank(projectLocation)){
+            CountryInfo countryInfo = countryMap.get(projectLocation);
+            if(countryInfo != null){
+                /*国别中文名称*/
+                map.put("countryName",countryInfo.getCountryName());
+                /*国别英文名称*/
+                map.put("countryEnName",countryInfo.getCountryEnName());
+            }
+        }
         /*中标单位*/
         map.put("winTheBiddingUnit",xmslProjectBasicInfo.getWinTheBiddingUnit());
         /*业务领域及产品*/

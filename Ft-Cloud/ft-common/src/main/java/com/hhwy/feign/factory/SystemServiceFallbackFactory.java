@@ -118,6 +118,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             public List<SysMenu> getMenuId(String component, String tenantKey) {
                 return new ArrayList<>();
             }
+
+            @Override
+            public List<CountryInfo> getCountryInfoList() {
+                return null;
+            }
         };
     }
 }
