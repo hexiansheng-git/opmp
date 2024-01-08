@@ -1,7 +1,6 @@
 package com.hhwy.system.country.service;
 
 
-import com.hhwy.domain.base.system.SysTreeUtil;
 import com.hhwy.domain.base.system.country.CountryInfo;
 
 import java.util.List;
@@ -64,6 +63,8 @@ public interface ICountryInfoService {
     List<CountryInfo> selectCountryInfoByNames(String name);
 
     List<CountryInfo> selectCountryInfoByCodes(String countryCodes);
+
+    List<CountryInfo> getCountryInfoList();
 
 //    /**
 //     * 国家下的项目（级联）

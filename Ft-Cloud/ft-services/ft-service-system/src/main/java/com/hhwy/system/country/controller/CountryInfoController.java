@@ -3,7 +3,6 @@ package com.hhwy.system.country.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.http.HttpUtils;
@@ -12,7 +11,6 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.page.TableDataInfo;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.domain.base.system.SysTreeUtil;
 import com.hhwy.domain.base.system.country.CountryInfo;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.system.country.service.ICountryInfoService;
@@ -20,7 +18,6 @@ import com.hhwy.system.currency.service.ICurrencyInfoService;
 import com.hhwy.utils.common.PmsConstant;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
-
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -66,6 +63,11 @@ public class CountryInfoController extends BaseController {
             return new AjaxResult(PmsConstant.WARN_CODE,"未查询到数据");
         }
         return AjaxResult.success(dataTable);
+    }
+
+    @GetMapping("getCountryInfoList")
+    public List<CountryInfo> getCountryInfoList(){
+        return countryInfoService.getCountryInfoList();
     }
 
     //@PreAuthorize(hasPermi = "qqchModuleConfirmCase:list")

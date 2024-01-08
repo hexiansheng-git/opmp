@@ -120,4 +120,7 @@ public interface SystemServiceApi {
 
     @GetMapping({"/syspm/getMenuId"})
     List<SysMenu> getMenuId(@RequestParam("component") String component, @RequestParam("tenantKey") String tenantKey);
+
+    @GetMapping("/country/info/getCountryInfoList")
+    List<CountryInfo> getCountryInfoList();
 }

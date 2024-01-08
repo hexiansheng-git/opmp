@@ -4,21 +4,15 @@ package com.hhwy.system.country.service.impl;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SecurityUtils;
-import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.domain.base.system.country.CountryInfo;
 import com.hhwy.system.country.mapper.CountryInfoMapper;
 import com.hhwy.system.country.service.ICountryInfoService;
 import com.hhwy.utils.idworker.IdWorker;
-
 import com.hhwy.utils.selfEmpty.SelfEmpty;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 国别Service业务层处理
@@ -138,6 +132,11 @@ public class CountryInfoServiceImpl implements ICountryInfoService {
     @Override
     public List<CountryInfo> selectCountryInfoByCodes(String code) {
         return countryInfoMapper.selectCountryInfoByCodes(code);
+    }
+
+    @Override
+    public List<CountryInfo> getCountryInfoList() {
+        return countryInfoMapper.selectCountryInfoList(new CountryInfo());
     }
 
     /* *//**
