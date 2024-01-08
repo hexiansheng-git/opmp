@@ -101,6 +101,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
                 info.setWorkOrNot(zeroDictLabel);
             }
             info.setLeaf(info.getPtVar2());
+            info.setType("0");
         }
 
         //组合显示根节点
@@ -139,6 +140,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             for (int i = 0; i < manageList.size(); i++) {
                 SgjsTechnicalManage manage = manageList.get(i);
                 manage.setActualDateStr(FtDateUtils.formatDate(manage.getActualDate()));
+                manage.setType("0");
             }
         }
         return manageList;
@@ -237,7 +239,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             sgjsTechnicalManageMapper.insertSgjsTechnicalManageList(insertList);
         }
         //批量编辑
-        List<SgjsTechnicalManage> updateList = treeToList.stream().filter(e -> StringUtils.isEmpty(e.getType())).collect(Collectors.toList());
+        List<SgjsTechnicalManage> updateList = treeToList.stream().filter(e -> StringUtils.isNotEmpty(e.getType()) && "0".equals(e.getType())).collect(Collectors.toList());
         if(!CollectionUtils.isEmpty(updateList)){
             sgjsTechnicalManageMapper.updateSgjsTechnicalManageList(updateList);
         }
@@ -258,7 +260,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             logger.info("子表未删除。。。。。。。。。。");
         }
         //同步总部数据
-        syncDataToGm(treeToList,sgjsTechnicalManageVo.getDelIdList());
+        //syncDataToGm(treeToList,sgjsTechnicalManageVo.getDelIdList());
         return AjaxResult.success();
     }
 
