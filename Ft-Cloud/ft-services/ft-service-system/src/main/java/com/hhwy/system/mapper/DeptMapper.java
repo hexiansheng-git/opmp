@@ -27,5 +27,5 @@ public interface DeptMapper {
 
     List<SysDept> getProjectOrgInfo();
 
-    List<SysDept> selectDeptList(SysDept dept, String master);
+    List<SysDept> selectDeptList(@Param("dept") SysDept dept, @Param("tenantKey") String master);
 }

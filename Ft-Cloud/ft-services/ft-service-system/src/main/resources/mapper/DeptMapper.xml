@@ -121,7 +121,17 @@
                 AND dept_type = "prjInfo"
     </select>
     <select id="selectDeptList" resultMap="SysDeptResult">
-
+        SELECT
+            dept_id ,
+            parent_id ,
+            dept_name ,
+            pt_var_5 ,
+            dept_type
+        FROM
+            sys_dept
+        WHERE
+            del_flag = '0'
+            AND tenant_key = #{tenantKey}
     </select>
 
 

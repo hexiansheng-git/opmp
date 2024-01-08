@@ -28,6 +28,7 @@ public interface UserMapper {
                 ",u.sex sex " +
                 ",u.phone_number phoneNumber " +
                 ",d.dept_name deptName " +
+                ",d.ancestors ancestors " +
             "from sys_user u " +
             "left join sys_dept d on d.dept_id=u.dept_id " +
             "where u.`status`=0 and u.del_flag=0 " +
