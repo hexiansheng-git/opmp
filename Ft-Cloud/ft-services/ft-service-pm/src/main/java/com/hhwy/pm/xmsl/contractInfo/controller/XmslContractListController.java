@@ -1,47 +1,36 @@
 package com.hhwy.pm.xmsl.contractInfo.controller;
 
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
-import com.hhwy.common.core.utils.StringUtils;
-import com.hhwy.common.core.utils.UUIDUtils;
+import cn.hutool.core.collection.CollUtil;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.excel.Util;
+import com.hhwy.pm.common.util.TreeNodeUtil;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ContractListQueryVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListDto;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
-import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
-import com.hhwy.utils.Constant;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excelUtil.ExcelUtilByTemplate;
-import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.utils.validation.ValidationUtil;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author ldd
@@ -188,20 +177,28 @@ public class XmslContractListController extends BaseController {
     @CustomLogger(title = "项目设立-合同信息-主合同清单", name = "主合同清单", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importDate(@RequestPart("file") MultipartFile file) throws Exception {
         ExcelUtils<ImportXmslContractListVo> util = new ExcelUtils<>(ImportXmslContractListVo.class);
-//        try {
-            InputStream inputStream = file.getInputStream();
-            List<ImportXmslContractListVo> importXmslContractListVos = util.importExcel(inputStream);
-            //找到层级关系
-            List<ImportXmslContractListVo> treeList = xmslContractListService.parseLevelStruct(importXmslContractListVos);
-            //格式化为前端可用的树形机构
-            List<ImportXmslContractListVo> dateList = ListTreeUtil.formatTree(treeList, o -> o.getPid()==null
-                    , (r, n) -> r.getId().equals(n.getPid())
-                    , ImportXmslContractListVo::getChildren
-                    , ImportXmslContractListVo::setChildren);
-            return AjaxResult.success(dateList);
-//        } catch (Exception e) {
-//            throw new RuntimeException("导入失败！");
-//        }
+        InputStream inputStream = file.getInputStream();
+        List<ImportXmslContractListVo> importXmslContractListVos = util.importExcel(inputStream);
+        if (CollUtil.isEmpty(importXmslContractListVos)) {
+            return AjaxResult.error("无数据可处理");
+        }
+        //处理字典
+        Util dictionary = new Util();
+        importXmslContractListVos.forEach(p -> {
+            //设置DataFrom("new") 用于前端保存时清空id，因为保存时接口会根据id判断做修改还是新增
+            p.setDataFrom("new");
+            //字段值翻译
+            String s = dictionary.reverseDict("list_type", p.getListType());
+            p.setListType(s);
+        });
+        //找到层级关系
+        List<ImportXmslContractListVo> treeList = TreeNodeUtil.parseLevelStruct(importXmslContractListVos);
+        //格式化为前端可用的树形机构
+        List<ImportXmslContractListVo> dateList = ListTreeUtil.formatTree(treeList, o -> o.getPid()==null
+                , (r, n) -> r.getId().equals(n.getPid())
+                , ImportXmslContractListVo::getChildren
+                , ImportXmslContractListVo::setChildren);
+        return AjaxResult.success(dateList);
     }
 
     /**
