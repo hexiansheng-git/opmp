@@ -4,12 +4,16 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.excel.Util;
 import com.hhwy.pm.common.util.TreeNodeUtil;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractGeneral;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSpecial;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportTreeNodeVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractListVo;
@@ -17,6 +21,7 @@ import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractSpecial;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractSpecialService;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
+import com.hhwy.utils.excelUtil.ExcelUtilByTemplate;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.poi.ss.formula.functions.T;
@@ -28,10 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -119,9 +121,17 @@ public class XmslContractSpecialController extends BaseController {
     @GetMapping("/export")
     @CustomLogger(title = "项目设立-合同信息-专用条件", name = "专用条件", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response,@RequestBody XmslContractSpecial xmslContractSpecialParam) throws IOException {
-        List<XmslContractSpecial> xmslContractSpecialList = xmslContractSpecialService.getXmslContractSpecialList(xmslContractSpecialParam);
-        ExcelUtils<XmslContractSpecial> util = new ExcelUtils<>(XmslContractSpecial.class);
-        util.exportExcel(response, xmslContractSpecialList, DateUtils.getDate());
+        try{
+            InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("template/exportXmslContractSpecial.xlsx");
+            Map<String, Object> map = new HashMap<>();
+            List<XmslContractSpecial> list = xmslContractSpecialService.getXmslContractSpecialList(xmslContractSpecialParam);
+            if (CollUtil.isEmpty(list)) return;
+            List<XmslContractSpecial> collect = list.stream().filter(p -> StrUtil.isNotBlank(p.getCode())).collect(Collectors.toList());
+            collect.sort((k1, k2) -> k1.getCode().compareToIgnoreCase(k2.getCode()));
+            ExcelUtilByTemplate.exportExcel(response, collect, map, "xmslContractSpecial", resourceAsStream);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
