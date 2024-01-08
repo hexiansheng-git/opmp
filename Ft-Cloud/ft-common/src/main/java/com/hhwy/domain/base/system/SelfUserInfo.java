@@ -30,6 +30,15 @@ public class SelfUserInfo implements Serializable {
     private Set userIds;
     //手机号
     private String phoneNumber;
+    private String ancestors;
+
+    public String getAncestors() {
+        return this.ancestors;
+    }
+
+    public void setAncestors(final String ancestors) {
+        this.ancestors = ancestors;
+    }
 
     public String getPhoneNumber() {
         return phoneNumber;

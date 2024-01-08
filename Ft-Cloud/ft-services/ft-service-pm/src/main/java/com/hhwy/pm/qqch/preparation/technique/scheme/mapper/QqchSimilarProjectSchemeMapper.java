@@ -29,4 +29,6 @@ public interface QqchSimilarProjectSchemeMapper {
     int deleteQqchSimilarProjectScheme(QqchSimilarProjectScheme qqchSimilarProjectScheme);
 
     int deleteQqchSimilarProjectSchemeByPks(@Param("qqchSimilarProjectSchemePkList") List<Long> qqchSimilarProjectSchemePkList);
+
+    void updateBAPByProjectCode(@Param("projectCode") String projectCode,@Param("businessAreasAndProducts") String businessAreasAndProducts);
 }

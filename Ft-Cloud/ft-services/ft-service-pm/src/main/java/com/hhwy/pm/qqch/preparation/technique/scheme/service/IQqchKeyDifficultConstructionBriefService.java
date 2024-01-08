@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service;
 
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchKeyDifficultConstructionBrief;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchKeyDifficultConstructionBriefVo;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -18,4 +19,9 @@ public interface IQqchKeyDifficultConstructionBriefService {
 
     List<QqchKeyDifficultConstructionBrief> getByWbsCodes(String[] wbsCodes);
 
+    /**
+     * 查询最新版的重难点分项施工方案简述数据
+     * @return
+     */
+    List<QqchKeyDifficultConstructionBrief> getLatestList();
 }

@@ -2,13 +2,13 @@ package com.hhwy.pm.common.util;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportTreeNodeVo;
 import com.hhwy.utils.tree.TreeNode;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -57,5 +57,40 @@ public class TreeNodeUtil {
             String ancestral = ids.stream().collect(Collectors.joining(","));
             p.setPtVar5(ancestral + "," + p.getId());
         }
+    }
+
+    /**
+     * 功能描述: 导入功能，将excel中的数据组成树形结构返回前端
+     * @param list excel数据
+     * @return java.util.List<T> 树形结构
+     * 作者: fushudong
+     * 时间: 2024/1/8
+     */
+    public static <T extends ImportTreeNodeVo> List<T> parseLevelStruct(List<T> list) {
+        Map<String, T> collect = list.stream()
+                .filter(p -> com.hhwy.common.core.utils.StringUtils.isNotEmpty(p.getInnerCode()))
+                .collect(Collectors.toMap(key -> key.getInnerCode(), value -> value, (v1, v2) -> v1));
+        for (int i = 0;  i< list.size(); i++) {
+            T t = list.get(i);
+            t.setId(IdUtil.getSnowflakeNextId());
+            String innerCode = t.getInnerCode();
+            if (!innerCode.contains("-")) {
+                //第一层级
+                continue;
+            }
+            String parentCode = innerCode.substring(0, innerCode.lastIndexOf("-"));
+            String curentCode = innerCode.substring(innerCode.lastIndexOf("-") +1);
+            //获取当前数据的父层级
+            T parent = collect.get(parentCode);
+            Assert.notNull(parent, "层级码：{} 未找到父层级：{}，请确认是否存在", innerCode, parentCode);
+            //获取父层级的children，将当前记录add进去
+            List<T> children = parent.getChildren();
+            if (CollectionUtil.isEmpty(children)) {
+                children = new ArrayList<>();
+            }
+            t.setPid(parent.getId());
+            children.add(t);
+        }
+        return new ArrayList<>(collect.values());
     }
 }

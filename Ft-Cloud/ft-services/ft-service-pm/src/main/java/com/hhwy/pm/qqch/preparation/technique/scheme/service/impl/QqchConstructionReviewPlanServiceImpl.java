@@ -181,4 +181,12 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         List<QqchConstructionReviewPlan> planList = qqchConstructionReviewPlanMapper.getQqchConstructionReviewPlanList(qryParam);
         return planList.stream().filter(o -> StringUtils.isNotBlank(o.getSchemeLevel())).collect(Collectors.groupingBy(QqchConstructionReviewPlan::getSchemeLevel));
     }
+
+    @Override
+    public List<QqchConstructionReviewPlan> getLatestList() {
+        BigDecimal version = VersionUtil.getVersion("qqch_construction_review_plan", null);
+        QqchConstructionReviewPlan qryParam = new QqchConstructionReviewPlan();
+        qryParam.setVersion(version);
+        return qqchConstructionReviewPlanMapper.getQqchConstructionReviewPlanList(qryParam);
+    }
 }

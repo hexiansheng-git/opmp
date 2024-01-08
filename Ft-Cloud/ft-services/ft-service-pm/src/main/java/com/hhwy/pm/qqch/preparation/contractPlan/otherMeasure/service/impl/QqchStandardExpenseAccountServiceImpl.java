@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -136,11 +135,10 @@ public class QqchStandardExpenseAccountServiceImpl implements IQqchStandardExpen
 
     @Override
     public List<QqchStandardExpenseAccount> changeId(List<QqchStandardExpenseAccount> qqchStandardExpenseAccountList) {
-        List<QqchStandardExpenseAccount> list = new ArrayList<>();
         if(CollectionUtils.isEmpty(qqchStandardExpenseAccountList)){
-            return list;
+            return qqchStandardExpenseAccountList;
         }
-        ListTreeUtil.preserveIdPid(list, QqchStandardExpenseAccount::setId,QqchStandardExpenseAccount::setPid,QqchStandardExpenseAccount::getChildren);
-        return list;
+        ListTreeUtil.preserveIdPid(qqchStandardExpenseAccountList, QqchStandardExpenseAccount::setId,QqchStandardExpenseAccount::setPid,QqchStandardExpenseAccount::getChildren);
+        return qqchStandardExpenseAccountList;
     }
 }

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.service;
 
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchSimilarProjectScheme;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.SimilarProjectSchemeQueryVo;
 
 import java.util.List;
 
@@ -27,4 +28,11 @@ public interface IQqchSimilarProjectSchemeService {
     int deleteQqchSimilarProjectScheme(QqchSimilarProjectScheme qqchSimilarProjectScheme);
 
     int deleteQqchSimilarProjectSchemeByPks(List<Long> qqchSimilarProjectSchemePkList);
+
+    void updateBAPByProjectCode(String projectCode,String businessAreasAndProducts);
+
+    void pushData();
+
+    List<QqchSimilarProjectScheme> getSimilarProjectScheme(SimilarProjectSchemeQueryVo queryVo);
+
 }

@@ -1,12 +1,15 @@
 package com.hhwy.pm.xmsl.contractInfo.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.common.util.TreeNodeUtil;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractGeneral;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractGeneral;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractGeneralVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractGeneralService;
 import com.hhwy.utils.customLog.CustomBusinessType;
@@ -124,16 +127,20 @@ public class XmslContractGeneralController extends BaseController {
      */
     @PostMapping("/import")
     @CustomLogger(title = "项目设立-合同信息-通用条件", name = "通用条件", businessType = CustomBusinessType.IMPORT)
-    public AjaxResult importDate(@RequestPart("file") MultipartFile file){
+    public AjaxResult importDate(@RequestPart("file") MultipartFile file) throws Exception {
         ExcelUtils<ImportXmslContractGeneral> util = new ExcelUtils<>(ImportXmslContractGeneral.class);
-        try {
-            InputStream inputStream = file.getInputStream();
-            List<ImportXmslContractGeneral> xmslContractLists = util.importExcel(inputStream);
-            List<ImportXmslContractGeneral> dateList = ListTreeUtil.formatTree(xmslContractLists, o -> o.getParentInnerCode()==0, (r, n) -> r.getInnerCode().equals(n.getParentInnerCode()), ImportXmslContractGeneral::getChildren, ImportXmslContractGeneral::setChildren);
-            return AjaxResult.success(dateList);
-        } catch (Exception e) {
-            throw new RuntimeException("导入失败！");
+        InputStream inputStream = file.getInputStream();
+        List<ImportXmslContractGeneral> xmslContractLists = util.importExcel(inputStream);
+        if (CollUtil.isEmpty(xmslContractLists)) {
+            return AjaxResult.error("无数据可处理");
         }
+        //找到层级关系
+        List<ImportXmslContractGeneral> treeList = TreeNodeUtil.parseLevelStruct(xmslContractLists);
+        List<ImportXmslContractGeneral> dateList = ListTreeUtil.formatTree(treeList, o -> o.getPid()==null
+                , (r, n) -> r.getInnerCode().equals(n.getParentInnerCode())
+                , ImportXmslContractGeneral::getChildren
+                , ImportXmslContractGeneral::setChildren);
+        return AjaxResult.success(dateList);
     }
 
 

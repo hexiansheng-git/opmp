@@ -4,6 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
+import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchSimilarProjectSchemeService;
 import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
@@ -68,6 +69,9 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
 
     @Autowired
     private IQqchReviewService qqchReviewService;
+
+    @Autowired
+    private IQqchSimilarProjectSchemeService qqchSimilarProjectSchemeService;
 
     /**
      * 根据id获取项目基本信息
@@ -194,6 +198,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
      */
     @Transactional
     public void updateProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo) {
+        this.updateQqchSimilarProjectScheme(xmslProjectBasicInfo.getBusinessAreasAndProducts());
         xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
 
         //项目可以自行修改项目信息
@@ -202,9 +207,19 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
 
         xmslProjectBasicInfo.setId(projectInfo.getId());
         this.editSublist(xmslProjectBasicInfo);
+    }
 
-
-
+    private void updateQqchSimilarProjectScheme(String pageDataBAP){
+        try {
+            ProjectBasicInfo projectInfo = this.projectInfo();
+            String oldBAP = projectInfo.getBusinessAreasAndProducts();
+            String projectCode = projectInfo.getProjectCode();
+            if(!pageDataBAP.equals(oldBAP)){
+                qqchSimilarProjectSchemeService.updateBAPByProjectCode(projectCode, pageDataBAP);
+            }
+        }catch (Exception e){
+            System.out.println("修改同类项目方案出错！！！！");
+        }
     }
 
     @Override
@@ -213,6 +228,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         //查询数据库中是否存在项目数据
         boolean exist = this.ifExistProject();
         if(exist){
+            this.updateQqchSimilarProjectScheme(xmslProjectBasicInfo.getBusinessAreasAndProducts());
             xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
         }else {
             xmslProjectBasicInfoMapper.insertProjectBasicInfo(xmslProjectBasicInfo);

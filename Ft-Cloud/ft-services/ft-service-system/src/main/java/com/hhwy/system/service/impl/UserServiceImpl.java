@@ -4,6 +4,7 @@ import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.system.SelfUserInfo;
@@ -15,7 +16,9 @@ import com.hhwy.system.api.model.LoginUser;
 import com.hhwy.system.core.domain.SysUserRole;
 import com.hhwy.system.core.mapper.SysUserMapper;
 import com.hhwy.system.core.mapper.SysUserRoleMapper;
+import com.hhwy.system.core.service.ISysDeptService;
 import com.hhwy.system.core.service.ISysUserService;
+import com.hhwy.system.mapper.DeptMapper;
 import com.hhwy.system.mapper.UserMapper;
 import com.hhwy.system.service.IDeptService;
 import com.hhwy.system.service.IRoleService;
@@ -29,6 +32,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -46,12 +51,17 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
+    private DeptMapper deptMapper;
+    @Autowired
     private TokenService tokenService;
     @Autowired
     private SysRedisUtils redisUtils;
 
     @Autowired
     private ISysUserService userService;
+
+    @Autowired
+    private ISysDeptService sysDeptService;
 
     //向总部推送角色接口地址
     @Value("${pushGmRole.url}")
@@ -75,22 +85,31 @@ public class UserServiceImpl implements IUserService {
         if(CollectionUtils.isEmpty(list)){
             return new ArrayList<>();
         }
-//        //处理人员岗位信息
-//        List<Long> userIds = new ArrayList<>();
-//        list.stream().forEachOrdered(t -> userIds.add(t.getUserId()));
-//        UserPostInfo queryUserPostInfo = new UserPostInfo();
-//        queryUserPostInfo.setUserIds(userIds);
-//        List<UserPostInfo> userPostInfos = userMapper.getUserPostsBy(queryUserPostInfo);
-//        if(!CollectionUtils.isEmpty(userPostInfos)){
-//            Map<Long, List<UserPostInfo>> userPostInfoMap = userPostInfos.stream().collect(Collectors.groupingBy(UserPostInfo :: getUserId));
-//            list.parallelStream().forEach(u -> {
-//                List<UserPostInfo> userPostInfoList = userPostInfoMap.get(u.getUserId());
-//                if(userPostInfoList != null){
-//                    u.setPostNames(userPostInfoList.get(0).getPostNames());
-//                    u.setPostIds(userPostInfoList.get(0).getPostIds());
-//                }
-//            });
+
+        //查询master部门层级数据
+//        List<SysDept> alldeptList = deptMapper.selectDeptList(new SysDept(),"master");
+//        Map<String, String> deptMap = new HashMap<>();
+//
+//        for(SysDept item:alldeptList){
+//            String deptId = item.getDeptId().toString();
+//            String deptName = item.getDeptName();
+//            deptMap.put(deptId,deptName);
 //        }
+//
+//        for(SelfUserInfo item:list){
+//            String ancestors = item.getAncestors();
+//            List<String> split= Arrays.asList(ancestors.split(","));
+//            StringBuffer sb = new StringBuffer();
+//            for(String str:split){
+//                String dn = deptMap.get(str);
+//                if(StringUtils.isNotBlank(dn))
+//                    sb.append("/").append(dn);
+//
+//            }
+//            sb.append(item.getDeptName());
+//            item.setDeptName(sb.toString());
+//        }
+
         return list;
     }
 
@@ -102,25 +121,49 @@ public class UserServiceImpl implements IUserService {
         if(CollectionUtils.isEmpty(list)){
             return new ArrayList<>();
         }
-//        //处理人员岗位信息
-//        List<Long> userIds = new ArrayList<>();
-//        list.stream().forEachOrdered(t -> userIds.add(t.getUserId()));
-//        UserPostInfo queryUserPostInfo = new UserPostInfo();
-//        queryUserPostInfo.setUserIds(userIds);
-//        List<UserPostInfo> userPostInfos = userMapper.getUserPostsBy(queryUserPostInfo);
-//        if(!CollectionUtils.isEmpty(userPostInfos)){
-//            Map<Long, List<UserPostInfo>> userPostInfoMap = userPostInfos.stream().collect(Collectors.groupingBy(UserPostInfo :: getUserId));
-//            list.parallelStream().forEach(u -> {
-//                List<UserPostInfo> userPostInfoList = userPostInfoMap.get(u.getUserId());
-//                if(userPostInfoList != null){
-//                    u.setPostNames(userPostInfoList.get(0).getPostNames());
-//                    u.setPostIds(userPostInfoList.get(0).getPostIds());
-//                }
-//            });
-//        }
+        //获取master中的人员数据
+        Map<String, String> masterUserDeptMap = new HashMap<>();
+        List<SelfUserInfo> masterlist = userMapper.getUserInfoBy(new SelfUserInfo(),"master");
+        for(SelfUserInfo item:masterlist){
+            masterUserDeptMap.put(item.getUserName(),item.getAncestors());
+        }
+
+
+        //添加部门层级数据
+        List<SysDept> alldeptList = deptMapper.selectDeptList(new SysDept(),"master");
+        Map<String, String> deptMap = new HashMap<>();
+
+        for(SysDept item:alldeptList){
+            String deptId = item.getDeptId().toString();
+            String deptName = item.getDeptName();
+            deptMap.put(deptId,deptName);
+        }
+
+        for(SelfUserInfo item:list){
+            //人员登陆账号,以中交4A编码为准
+            String userName = item.getUserName();
+            //查询master上该人员的组织机构信息
+            String masterAncestors = masterUserDeptMap.get(userName);
+            if(StringUtils.isNotBlank(masterAncestors)){
+                List<String> split= Arrays.asList(masterAncestors.split(","));
+                StringBuffer sb = new StringBuffer();
+                for(String str:split){
+                    String dn = deptMap.get(str);
+                    if(StringUtils.isNotBlank(dn))
+                        sb.append("/").append(dn);
+
+                }
+                if(StringUtils.isNotBlank(item.getDeptName())){
+                    sb.append("/");
+                    sb.append(item.getDeptName());
+                }
+
+                item.setAncestors(sb.toString());
+            }
+
+        }
         return list;
     }
-
 
     @Override
     public int updateRecentSelectUser(List<String> userIds) {

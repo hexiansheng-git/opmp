@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.service;
 
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionReviewPlan;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionReviewPlanVo;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -15,4 +17,6 @@ public interface IQqchConstructionReviewPlanService {
     void syncData(QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo);
 
     void batchSave(QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo);
+
+    List<QqchConstructionReviewPlan> getLatestList();
 }

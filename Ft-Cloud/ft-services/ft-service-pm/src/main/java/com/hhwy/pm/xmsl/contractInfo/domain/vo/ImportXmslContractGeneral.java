@@ -18,14 +18,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImportXmslContractGeneral extends BaseEntity {
+public class ImportXmslContractGeneral extends ImportTreeNodeVo {
     private static final long serialVersionUID = 1L;
-
-    @Excel(name = "层级码")
-    private Long innerCode;
-    @Excel(name = "父层级码")
-    private Long parentInnerCode;
-
     /**
      * 字段描述：主键
      */
@@ -176,6 +170,4 @@ public class ImportXmslContractGeneral extends BaseEntity {
     private String ptVar5;
 
     private Long[]  ids;
-
-    private List<ImportXmslContractGeneral> children;
 }

@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchSimilarProjectScheme;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.SimilarProjectSchemeQueryVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchSimilarProjectSchemeService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,5 +91,22 @@ public class QqchSimilarProjectSchemeController extends BaseController {
         List<QqchSimilarProjectScheme> qqchSimilarProjectSchemeList = qqchSimilarProjectSchemeService.getQqchSimilarProjectSchemeList(qqchSimilarProjectSchemeParam);
         ExcelUtils<QqchSimilarProjectScheme> util = new ExcelUtils<>(QqchSimilarProjectScheme.class);
         util.exportExcel(response, qqchSimilarProjectSchemeList, DateUtils.getDate());
+    }
+
+    @GetMapping("testPushData")
+    public AjaxResult testPushData() {
+        qqchSimilarProjectSchemeService.pushData();
+        return AjaxResult.success();
+    }
+
+    /**
+     * 同类项目方案查询
+     * @param queryVo
+     * @return
+     */
+    @GetMapping("getSimilarProjectScheme")
+    public AjaxResult getSimilarProjectScheme(SimilarProjectSchemeQueryVo queryVo){
+        List<QqchSimilarProjectScheme> similarProjectSchemeVoList = qqchSimilarProjectSchemeService.getSimilarProjectScheme(queryVo);
+        return AjaxResult.success(similarProjectSchemeVoList);
     }
 }

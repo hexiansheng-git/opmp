@@ -13,12 +13,13 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchKeyDifficultCo
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
-import java.math.BigDecimal;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -36,6 +37,7 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
     private CommonMapper commonMapper;
     @Autowired
     private IQqchReviewService qqchReviewService;
+
 
     public QqchKeyDifficultConstructionBriefVo getQqchKeyDifficultConstructionBriefList(BigDecimal version) {
         QqchKeyDifficultConstructionBriefVo vo = new QqchKeyDifficultConstructionBriefVo();
@@ -87,5 +89,13 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
     public List<QqchKeyDifficultConstructionBrief> getByWbsCodes(String[] wbsCodes) {
         BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_key_difficult_construction_brief");
         return qqchKeyDifficultConstructionBriefMapper.getByWbsCodes(wbsCodes, maxVersion);
+    }
+
+    @Override
+    public List<QqchKeyDifficultConstructionBrief> getLatestList() {
+        BigDecimal version = VersionUtil.getVersion("qqch_key_difficult_construction_brief", null);
+        QqchKeyDifficultConstructionBrief qryParam = new QqchKeyDifficultConstructionBrief();
+        qryParam.setVersion(version);
+        return qqchKeyDifficultConstructionBriefMapper.getQqchKeyDifficultConstructionBriefList(qryParam);
     }
 }
