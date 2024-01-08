@@ -118,7 +118,7 @@ public class XmslContractSpecialController extends BaseController {
      * @param xmslContractSpecialParam
      * @throws IOException
      */
-    @GetMapping("/export")
+    @PostMapping("/export")
     @CustomLogger(title = "项目设立-合同信息-专用条件", name = "专用条件", businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response,@RequestBody XmslContractSpecial xmslContractSpecialParam) throws IOException {
         try{
