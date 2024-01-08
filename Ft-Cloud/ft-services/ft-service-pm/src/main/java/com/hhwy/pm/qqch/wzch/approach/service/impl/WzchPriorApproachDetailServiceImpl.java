@@ -30,6 +30,7 @@ import com.hhwy.pm.qqch.wzch.demand.service.IWzchTotalDemandDetailService;
 import com.hhwy.pm.qqch.wzch.demand.service.IWzchTotalDemandService;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.AddBaseInfoUtil;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.compress.utils.Lists;
@@ -548,8 +549,8 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
                 list.add(detail.getCategoryName());
             }
             list.add(detail.getPriorApproachNum());
-            list.add(new SimpleDateFormat("yyyy-MM-dd").format(detail.getEarliestReqTime()));
-            list.add(new SimpleDateFormat("yyyy-MM-dd").format(detail.getPresentTime()));
+            list.add(FtDateUtils.formatDate(detail.getEarliestReqTime()));
+            list.add(FtDateUtils.formatDate(detail.getPresentTime()));
             List<WzchPriorApproachYearCount> yearCountList = detail.getWzchPriorApproachYearCountList();
 
             for(String year:yesrs){
