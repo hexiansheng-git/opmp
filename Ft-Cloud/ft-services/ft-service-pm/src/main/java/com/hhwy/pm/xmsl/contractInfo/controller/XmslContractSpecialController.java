@@ -129,7 +129,7 @@ public class XmslContractSpecialController extends BaseController {
      * @param file
      * @return
      */
-    @GetMapping("/import")
+    @PostMapping("/import")
     @CustomLogger(title = "项目设立-合同信息-专用条件", name = "专用条件", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importDate(@RequestPart("file") MultipartFile file) throws Exception {
         ExcelUtils<ImportXmslContractSpecial> util = new ExcelUtils<>(ImportXmslContractSpecial.class);
