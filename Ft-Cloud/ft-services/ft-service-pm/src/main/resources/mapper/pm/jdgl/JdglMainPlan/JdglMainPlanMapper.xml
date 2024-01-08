@@ -110,7 +110,7 @@
     </select>
     <select id="getMinVersionMainPlan" resultMap="JdglMainPlanResultMap">
         select * from jdgl_main_plan where version = (
-            select min(version) from jdgl_main_plan where del_flag = '0')
+            select min(version) from jdgl_main_plan)
     </select>
 
     <insert id="insertJdglMainPlan" useGeneratedKeys="true" keyProperty="id">
