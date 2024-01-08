@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,13 +15,24 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImportXmslContractListVo extends ImportTreeNodeVo {
+public class ImportXmslContractListVo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
+
+    @Excel(name = "层级码")
+    private String innerCode;
+    @Excel(name = "父层级码")
+    private String parentInnerCode;
+
+    /**
+     *
+     */
+    private String dataFrom;
 
     /**
      * 字段描述：主键
@@ -270,4 +282,6 @@ public class ImportXmslContractListVo extends ImportTreeNodeVo {
     private String ptVar5;
 
     private Long[] ids;
+
+    private List<ImportXmslContractListVo> children;
 }

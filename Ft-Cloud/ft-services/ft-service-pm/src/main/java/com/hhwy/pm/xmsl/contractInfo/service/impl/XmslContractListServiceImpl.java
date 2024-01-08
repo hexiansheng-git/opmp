@@ -460,6 +460,48 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         }
     }
 
+    /***
+     * 功能描述:  处理导入数据的层级结构
+     * 作者: fushudong
+     * 时间: 2023/10/17
+     */
+    @Override
+    public List<ImportXmslContractListVo> parseLevelStruct(List<ImportXmslContractListVo> importXmslContractListVos) {
+        Util util = new Util();
+        importXmslContractListVos.forEach(p -> {
+            //设置DataFrom("new") 用于前端保存时清空id，因为保存时接口会根据id判断做修改还是新增
+            p.setDataFrom("new");
+            //字段值翻译
+            String s = util.reverseDict("list_type", p.getListType());
+            p.setListType(s);
+        });
+        Map<String, ImportXmslContractListVo> collect = importXmslContractListVos.stream()
+                .filter(p -> com.hhwy.common.core.utils.StringUtils.isNotEmpty(p.getInnerCode()))
+                .collect(Collectors.toMap(key -> key.getInnerCode(), value -> value, (v1, v2) -> v1));
+        for (int i = 0;  i< importXmslContractListVos.size(); i++) {
+            ImportXmslContractListVo importXmslContractListVo = importXmslContractListVos.get(i);
+            importXmslContractListVo.setId(IdUtil.getSnowflakeNextId());
+            String innerCode = importXmslContractListVo.getInnerCode();
+            if (!innerCode.contains("-")) {
+                //第一层级
+                continue;
+            }
+            String parentCode = innerCode.substring(0, innerCode.lastIndexOf("-"));
+            String curentCode = innerCode.substring(innerCode.lastIndexOf("-") +1);
+            //获取当前数据的父层级
+            ImportXmslContractListVo parent = collect.get(parentCode);
+            Assert.notNull(parent, "层级码：{} 未找到父层级：{}，请确认是否存在", innerCode, parentCode);
+            //获取父层级的children，将当前记录add进去
+            List<ImportXmslContractListVo> children = parent.getChildren();
+            if (CollectionUtil.isEmpty(children)) {
+                children = new ArrayList<>();
+            }
+            importXmslContractListVo.setPid(parent.getId());
+            children.add(importXmslContractListVo);
+        }
+        return new ArrayList<>(collect.values());
+    }
+
     @Override
     public void updateToRemoveDisable(Long id) {
         xmslContractListMapper.updateToRemoveDisable(id);

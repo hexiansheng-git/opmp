@@ -1,6 +1,9 @@
 package com.hhwy.pm.xmsl.contractInfo.controller;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.IdUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
@@ -8,12 +11,15 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.common.util.TreeNodeUtil;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSpecial;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportTreeNodeVo;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractSpecial;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractSpecialService;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +28,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author ldd
@@ -101,7 +110,7 @@ public class XmslContractSpecialController extends BaseController {
     }
 
     /**
-     *  导入
+     *  导出
      *
      * @param response
      * @param xmslContractSpecialParam
@@ -116,7 +125,7 @@ public class XmslContractSpecialController extends BaseController {
     }
 
     /**
-     *  导出
+     *  导入
      * @param file
      * @return
      */
@@ -129,9 +138,9 @@ public class XmslContractSpecialController extends BaseController {
         if (CollUtil.isEmpty(xmslContractLists)) {
             return AjaxResult.error("无数据可处理");
         }
-        List<ImportXmslContractSpecial> importXmslContractSpecials = TreeNodeUtil.parseLevelStruct(xmslContractLists);
+        List<ImportXmslContractSpecial> importXmslContractSpecials = this.parseLevelStruct(xmslContractLists);
         List<ImportXmslContractSpecial> dateList = ListTreeUtil.formatTree(importXmslContractSpecials, o -> o.getPid()==null
-                , (r, n) -> r.getInnerCode().equals(n.getParentInnerCode())
+                , (r, n) -> r.getId().equals(n.getPid())
                 , ImportXmslContractSpecial::getChildren
                 , ImportXmslContractSpecial::setChildren);
         return AjaxResult.success(dateList);
@@ -147,5 +156,41 @@ public class XmslContractSpecialController extends BaseController {
     public AjaxResult provideList(@Validated(ValidationGroups.Get.class) XmslContractSpecial xmslContractSpecialParam) {
         List<XmslContractSpecial> treeVOS = xmslContractSpecialService.provideList(xmslContractSpecialParam);
         return AjaxResult.success(treeVOS);
+    }
+
+
+    /**
+     * 功能描述: 导入功能，将excel中的数据组成树形结构返回前端
+     * @param list excel数据
+     * @return java.util.List<T> 树形结构
+     * 作者: fushudong
+     * 时间: 2024/1/8
+     */
+    public static List<ImportXmslContractSpecial> parseLevelStruct(List<ImportXmslContractSpecial> list) {
+        Map<String, ImportXmslContractSpecial> collect = list.stream()
+                .filter(p -> com.hhwy.common.core.utils.StringUtils.isNotEmpty(p.getInnerCode()))
+                .collect(Collectors.toMap(key -> key.getInnerCode(), value -> value, (v1, v2) -> v1));
+        for (int i = 0;  i< list.size(); i++) {
+            ImportXmslContractSpecial t = list.get(i);
+            t.setId(IdUtil.getSnowflakeNextId());
+            String innerCode = t.getInnerCode();
+            if (!innerCode.contains("-")) {
+                //第一层级
+                continue;
+            }
+            String parentCode = innerCode.substring(0, innerCode.lastIndexOf("-"));
+            String curentCode = innerCode.substring(innerCode.lastIndexOf("-") +1);
+            //获取当前数据的父层级
+            ImportXmslContractSpecial parent = collect.get(parentCode);
+            Assert.notNull(parent, "层级码：{} 未找到父层级：{}，请确认是否存在", innerCode, parentCode);
+            //获取父层级的children，将当前记录add进去
+            List<ImportXmslContractSpecial> children = parent.getChildren();
+            if (CollectionUtil.isEmpty(children)) {
+                children = new ArrayList<>();
+            }
+            t.setPid(parent.getId());
+            children.add(t);
+        }
+        return new ArrayList<>(collect.values());
     }
 }
