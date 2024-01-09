@@ -27,6 +27,12 @@ public class QqchProjectOperationObjective extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 字段描述：序号
+     */
+    @JsonProperty
+    private String serialNumber;
+
+    /**
      * 字段描述：主键
      */
     @JsonSerialize(using = ToStringSerializer.class)

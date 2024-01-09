@@ -33,6 +33,8 @@ public interface IQqchProjectOperationObjectiveService {
      */
     QqchProjectOperationObjectiveVo getQqchProjectOperationObjectiveVo(QqchProjectOperationObjective qqchProjectOperationObjective);
 
+    List<QqchProjectOperationObjective> getLatestList();
+
     /**
      * 保存/确认/提交
      * @param qqchProjectOperationObjectiveVo

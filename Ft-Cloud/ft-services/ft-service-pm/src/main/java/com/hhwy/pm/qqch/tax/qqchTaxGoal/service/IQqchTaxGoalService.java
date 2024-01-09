@@ -43,4 +43,6 @@ public interface IQqchTaxGoalService {
      */
     CompileEntity<List<QqchTaxGoal>> list(QqchTaxGoal qqchTaxGoalParam);
 
+    List<QqchTaxGoal> getLatestList();
+
 }

@@ -14,16 +14,18 @@ import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcTopicListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -79,6 +81,12 @@ public class QqchQcImplementPlanServiceImpl implements IQqchQcImplementPlanServi
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(newList);
         return vo;
+    }
+
+    public List<QqchQcImplementPlan> getLatestList() {
+        List<QqchQcImplementPlan> list = this.getQqchQcImplementPlanList(null).getList();
+        ListTreeUtil.preserveSerialNumber(list, QqchQcImplementPlan::setSerialNumber);
+        return list;
     }
 
     /**

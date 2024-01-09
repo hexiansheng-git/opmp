@@ -7,10 +7,11 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
+import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.validation.constraints.NotBlank;
-import lombok.Data;
 
 /**
  * @author zhenglili
@@ -21,6 +22,8 @@ import lombok.Data;
 public class QqchQcImplementPlan extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
+
+    private String serialNumber;
 
     /**
      * 字段描述：主键
