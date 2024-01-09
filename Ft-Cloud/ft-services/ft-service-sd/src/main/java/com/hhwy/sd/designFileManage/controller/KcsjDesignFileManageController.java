@@ -4,6 +4,8 @@ import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManageVo;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+
+import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
@@ -99,6 +101,6 @@ public class KcsjDesignFileManageController extends BaseController {
         throws IOException {
         KcsjDesignFileManageVo kcsjDesignFileManageList = kcsjDesignFileManageService.getKcsjDesignFileManageList(kcsjDesignFileManageParam);
         ExcelUtils<KcsjDesignFileManage> util = new ExcelUtils<>(KcsjDesignFileManage.class);
-        util.exportExcel(response, kcsjDesignFileManageList.getTreeList(), DateUtils.getDate());
+        util.exportExcel(response, TreeUtil.treeToList(kcsjDesignFileManageList.getTreeList()), DateUtils.getDate());
     }
 }
