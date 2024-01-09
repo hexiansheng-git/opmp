@@ -118,7 +118,7 @@
                 `training_organization_unit` like concat('%',#{trainingOrganizationUnit},'%')
             </if>
             <if test="trainingType != null  and trainingType != ''">and `training_type` = #{trainingType}</if>
-            <if test="trainingName != null  and trainingName != ''">and `training_name` = #{trainingName}</if>
+            <if test="trainingName != null  and trainingName != ''">and `training_name` like concat('%',#{trainingName},'%')</if>
             <if test="trainingDate != null ">and `training_date` = #{trainingDate}</if>
             <if test="trainingInstructorId != null  and trainingInstructorId != ''">and `training_instructor_id` =
                 #{trainingInstructorId}
