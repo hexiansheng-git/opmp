@@ -550,7 +550,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         List<XmslDrawReviewMaterial> errMaterList = xmslDrawReviewMapper.selectNullMater(dto.getId());
         for (int i = 0; i < errMaterList.size(); i++) {
             XmslDrawReviewMaterial temp = errMaterList.get(i);
-            sb.append(String.format("WBS[%s]下的清单[%s],物资:[%s]未填报本部位复核数量;\n",temp.getWbsCode(),temp.getListCode(),temp.getCode()));
+            sb.append(String.format("WBS[%s]下的清单[%s],物资:[%s]未填报设计量;\n",temp.getWbsCode(),temp.getListCode(),temp.getCode()));
         }
         Assert.isTrue(sb.length()<1,sb.toString());
     }
