@@ -474,6 +474,9 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
             //字段值翻译
             String s = util.reverseDict("list_type", p.getListType());
             p.setListType(s);
+            if (p.getWinUnitPrice() == null) {
+                p.setWinUnitPrice(BigDecimal.ZERO);
+            }
         });
         Map<String, ImportXmslContractListVo> collect = importXmslContractListVos.stream()
                 .filter(p -> com.hhwy.common.core.utils.StringUtils.isNotEmpty(p.getInnerCode()))
