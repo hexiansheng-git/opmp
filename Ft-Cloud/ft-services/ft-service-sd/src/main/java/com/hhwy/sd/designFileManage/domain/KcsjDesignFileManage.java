@@ -103,58 +103,58 @@ public class KcsjDesignFileManage extends TreeNode<KcsjDesignFileManage> {
      * 字段描述：数据来源 0新增1同步
      */
     @JsonProperty
-    @Excel(name = "数据来源 0新增1同步")
+//    @Excel(name = "数据来源 0新增1同步")
     private String dataSource;
     /**
      * 字段描述：数据创建者id
      */
     @JsonProperty
-    @Excel(name = "数据创建者id")
+//    @Excel(name = "数据创建者id")
     private String createUser;
     /**
      * 字段描述：数据创建者名称
      */
     @JsonProperty
-    @Excel(name = "数据创建者名称")
+//    @Excel(name = "数据创建者名称")
     private String createUserName;
     /**
      * 字段描述：数据创建系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+//    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     /**
      * 字段描述：数据修改者id
      */
     @JsonProperty
-    @Excel(name = "数据修改者id")
+//    @Excel(name = "数据修改者id")
     private String updateUser;
     /**
      * 字段描述：数据修改系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+//    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     /**
      * 字段描述：数据删除者
      */
     @JsonProperty
-    @Excel(name = "数据删除者")
+//    @Excel(name = "数据删除者")
     private String delUser;
     /**
      * 字段描述：数据删除系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+//    @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date delTime;
     /**
      * 字段描述：删除标识：0未删除；1已删除
      */
     @JsonProperty
-    @Excel(name = "删除标识：0未删除；1已删除")
+//    @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
 
     private String isAdd;
@@ -169,30 +169,30 @@ public class KcsjDesignFileManage extends TreeNode<KcsjDesignFileManage> {
      * 字段描述：同步id
      */
     @JsonProperty
-    @Excel(name = "附件id")
+//    @Excel(name = "附件id")
     private String fileGroupId;
     /**
      * 字段描述：预留字段2  leaf 是否是叶子节点 0否1是
      */
     @JsonProperty
-    @Excel(name = "预留字段2  leaf 是否是叶子节点 0否1是")
+//    @Excel(name = "预留字段2  leaf 是否是叶子节点 0否1是")
     private String ptVar2;
     /**
      * 字段描述：预留字段3
      */
     @JsonProperty
-    @Excel(name = "预留字段3")
+//    @Excel(name = "预留字段3")
     private String ptVar3;
     /**
      * 字段描述：预留字段4
      */
     @JsonProperty
-    @Excel(name = "预留字段4")
+//    @Excel(name = "预留字段4")
     private String ptVar4;
     /**
      * 字段描述：预留字段5
      */
     @JsonProperty
-    @Excel(name = "预留字段5")
+//    @Excel(name = "预留字段5")
     private String ptVar5;
 }
