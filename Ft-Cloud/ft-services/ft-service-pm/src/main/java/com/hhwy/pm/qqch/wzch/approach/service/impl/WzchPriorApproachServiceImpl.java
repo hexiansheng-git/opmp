@@ -290,12 +290,12 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
         List<String> years = wzchPriorApproachYearCounts.stream().map(WzchPriorApproachYearCount::getYear).collect(Collectors.toList());
         years = years.stream().distinct().sorted().collect(Collectors.toList());
         if(CollectionUtils.isEmpty(wzchPriorApproachYearCounts)){
-            throw new BaseException("数据缺失！");
+            return approach;
         }
         Map<Long, List<WzchPriorApproachYearCount>> map = wzchPriorApproachYearCounts.stream().collect(Collectors.groupingBy(WzchPriorApproachYearCount::getDetailId));
         for (WzchPriorApproachDetail wzchPriorApproachDetail : wzchPriorApproachDetails) {
             if(wzchPriorApproachDetail==null){
-                throw new BaseException("数据缺失！");
+                return approach;
             }
             wzchPriorApproachDetail.setYearList(years);
             for(Map.Entry<Long, List<WzchPriorApproachYearCount>> entry:map.entrySet()){

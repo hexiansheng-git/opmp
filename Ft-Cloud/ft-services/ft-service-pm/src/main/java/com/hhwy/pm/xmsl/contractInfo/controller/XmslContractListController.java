@@ -192,7 +192,7 @@ public class XmslContractListController extends BaseController {
             p.setListType(s);
         });
         //找到层级关系
-        List<ImportXmslContractListVo> treeList = TreeNodeUtil.parseLevelStruct(importXmslContractListVos);
+        List<ImportXmslContractListVo> treeList = xmslContractListService.parseLevelStruct(importXmslContractListVos);
         //格式化为前端可用的树形机构
         List<ImportXmslContractListVo> dateList = ListTreeUtil.formatTree(treeList, o -> o.getPid()==null
                 , (r, n) -> r.getId().equals(n.getPid())
