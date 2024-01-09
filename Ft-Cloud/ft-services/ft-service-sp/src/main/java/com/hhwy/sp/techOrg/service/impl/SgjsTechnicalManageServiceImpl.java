@@ -260,7 +260,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             logger.info("子表未删除。。。。。。。。。。");
         }
         //同步总部数据
-        //syncDataToGm(treeToList,sgjsTechnicalManageVo.getDelIdList());
+        syncDataToGm(treeToList,sgjsTechnicalManageVo.getDelIdList());
         return AjaxResult.success();
     }
 
@@ -326,20 +326,24 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             if(null==children || 0==children.size()){
                 String userName = info.getUserName();
                 if(StringUtils.isEmpty(userName)){
-                    msgList.add(info.getPostName()+"人员姓名不能为空");
+                   // msgList.add(info.getPostName()+"人员姓名不能为空");
+                    msgList.add("人员姓名不能为空");
                 }
                 String actualDateStr = info.getActualDateStr();
                 if(StringUtils.isEmpty(actualDateStr)){
-                    msgList.add(info.getPostName()+"实际进场日期不能为空");
+                    //msgList.add(info.getPostName()+"实际进场日期不能为空");
+                    msgList.add("实际进场日期不能为空");
                 }
             }else{
                 String userName = children.get(children.size() - 1).getUserName();
                 if(StringUtils.isEmpty(userName)){
-                    msgList.add(children.get(children.size() - 1).getPostName()+"人员姓名不能为空");
+                   // msgList.add(children.get(children.size() - 1).getPostName()+"人员姓名不能为空");
+                    msgList.add("人员姓名不能为空");
                 }
                 String actualDateStr = children.get(children.size() - 1).getActualDateStr();
                 if(StringUtils.isEmpty(actualDateStr)){
-                    msgList.add(children.get(children.size() - 1).getPostName()+"实际进场日期不能为空");
+                   // msgList.add(children.get(children.size() - 1).getPostName()+"实际进场日期不能为空");
+                    msgList.add("实际进场日期不能为空");
                 }
             }
             if(!CollectionUtils.isEmpty(info.getChildren())){

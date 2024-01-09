@@ -19,6 +19,12 @@ import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchGen
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchKeyInventoryContentService;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchOtherContractItemService;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchSpecialConditionService;
+import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
+import com.hhwy.pm.qqch.preparation.costControl.operateTarget.service.IQqchProjectOperationObjectiveService;
+import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
+import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcImplementPlanService;
+import com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal;
+import com.hhwy.pm.qqch.tax.qqchTaxGoal.service.IQqchTaxGoalService;
 import com.hhwy.pm.word.export.domain.FileDto;
 import com.hhwy.pm.word.export.domain.ProjectWordData;
 import com.hhwy.pm.word.export.domain.vo.BidWinHandoverFileVo;
@@ -89,6 +95,15 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchOtherContractItemService qqchOtherContractItemService;
 
+    @Autowired
+    private IQqchProjectOperationObjectiveService qqchProjectOperationObjectiveService;
+
+    @Autowired
+    private IQqchQcImplementPlanService qqchQcImplementPlanService;
+
+    @Autowired
+    private IQqchTaxGoalService qqchTaxGoalService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -128,6 +143,9 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("advantage1ConditionList",policy) // 经营有利条款
                     .bind("advantage4ConditionList",policy) // 技术不利条款
                     .bind("advantage3ConditionList",policy) // 技术有利条款
+                    .bind("projectOperationObjectiveList",policy) // 经营目标
+                    .bind("qcImplementPlanList",policy) // 质量目标
+                    .bind("taxGoalList",policy) // 财务目标
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -161,6 +179,8 @@ public class ExportWordServiceImpl implements ExportWordService {
         initQqchKeyInventoryContent(projectWordData);
         /*四个条款*/
         initCondition(projectWordData);
+        /*项目目标*/
+        initProjectOperation(projectWordData);
     }
 
 
@@ -570,5 +590,22 @@ public class ExportWordServiceImpl implements ExportWordService {
             return ConditionRiskGrade.LOW.getValue();
         }
         return null;
+    }
+
+    /**
+     * 初始化项目目标数据
+     * @param projectWordData
+     */
+    private void initProjectOperation(ProjectWordData projectWordData) {
+        /*经营目标*/
+        List<QqchProjectOperationObjective> operationObjectiveList = qqchProjectOperationObjectiveService.getLatestList();
+        projectWordData.setProjectOperationObjectiveList(operationObjectiveList);
+
+        /*质量目标*/
+        List<QqchQcImplementPlan> qcImplementPlanList = qqchQcImplementPlanService.getLatestList();
+        projectWordData.setQcImplementPlanList(qcImplementPlanList);
+
+        List<QqchTaxGoal> taxGoalList = qqchTaxGoalService.getLatestList();
+        projectWordData.setTaxGoalList(taxGoalList);
     }
 }

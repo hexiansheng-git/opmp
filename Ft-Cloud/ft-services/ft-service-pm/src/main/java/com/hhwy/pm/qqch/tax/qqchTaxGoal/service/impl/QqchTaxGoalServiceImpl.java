@@ -8,12 +8,15 @@ import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.mapper.QqchTaxGoalMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.service.IQqchTaxGoalService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -100,5 +103,15 @@ public class QqchTaxGoalServiceImpl implements IQqchTaxGoalService {
         objectCompileEntity.setDto(qqchTaxGoalList);
         objectCompileEntity.setVersion(qqchTaxGoalParam.getVersion());
         return objectCompileEntity;
+    }
+
+    @Override
+    public List<QqchTaxGoal> getLatestList() {
+        BigDecimal version = VersionUtil.getVersion(TN,null);
+        QqchTaxGoal query = new QqchTaxGoal();
+        query.setVersion(version);
+        List<QqchTaxGoal> taxGoalList = qqchTaxGoalMapper.getQqchTaxGoalList(query);
+        ListTreeUtil.preserveSerialNumber(taxGoalList,QqchTaxGoal::setSerNum);
+        return taxGoalList;
     }
 }

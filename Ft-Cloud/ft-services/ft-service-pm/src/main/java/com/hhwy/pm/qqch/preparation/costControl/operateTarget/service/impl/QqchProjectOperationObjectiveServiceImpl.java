@@ -113,6 +113,23 @@ public class QqchProjectOperationObjectiveServiceImpl implements IQqchProjectOpe
         return qqchProjectOperationObjectiveVo;
     }
 
+    public List<QqchProjectOperationObjective> getLatestList() {
+        BigDecimal version = VersionUtil.getVersion("qqch_project_operation_objective",null);
+
+        QqchProjectOperationObjective query = new QqchProjectOperationObjective();
+        query.setVersion(version);
+        List<QqchProjectOperationObjective> qqchProjectOperationObjectiveList = qqchProjectOperationObjectiveMapper.getQqchProjectOperationObjectiveList(query);
+        qqchProjectOperationObjectiveList = ListTreeUtil.preserveSerialNumber(
+                qqchProjectOperationObjectiveList,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchProjectOperationObjective::getChildren,
+                QqchProjectOperationObjective::setChildren,
+                QqchProjectOperationObjective::getSerialNumber,
+                QqchProjectOperationObjective::setSerialNumber);
+        return qqchProjectOperationObjectiveList;
+    }
+
     /**
      * 保存/确认/提交
      * @param qqchProjectOperationObjectiveVo

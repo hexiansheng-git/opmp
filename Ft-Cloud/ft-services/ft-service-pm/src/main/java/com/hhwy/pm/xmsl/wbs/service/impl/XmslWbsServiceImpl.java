@@ -335,7 +335,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                 parentCode = StringUtils.substringBeforeLast(code,"-");
                 //查找父级
                 XmslWbs parent = codeMap.get(parentCode);
-                Assert.notNull(parent, "未找到父级,请确保父级编码写在子级的前面，行号:"+(i+2));
+                Assert.notNull(parent, "未找到父级,请确保父级编码写在子级的前面，行号:"+(i+1));
                 temp.setParentId(parent.getId());
                 temp.setLevel(parent.getLevel()+1);
                 parent.setHaveChildren(Constant.YES_INT);

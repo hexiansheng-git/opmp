@@ -3,6 +3,9 @@ package com.hhwy.pm.word.export.domain;
 import com.deepoove.poi.data.PictureRenderData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassify;
+import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
+import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
+import com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal;
 import com.hhwy.pm.word.export.domain.vo.BidWinHandoverFileVo;
 import com.hhwy.pm.word.export.domain.vo.ConditionVo;
 import com.hhwy.pm.xmsl.implement.domain.*;
@@ -255,4 +258,18 @@ public class ProjectWordData {
      * 技术不利条款
      */
     private List<ConditionVo> advantage4ConditionList;
+
+    /*---------------------------------------项目目标----------------------------------------*/
+    /**
+     * 经营目标
+     */
+    private List<QqchProjectOperationObjective> projectOperationObjectiveList;
+    /**
+     * 质量目标
+     */
+    private List<QqchQcImplementPlan> qcImplementPlanList;
+    /**
+     * 财务目标
+     */
+    private List<QqchTaxGoal> taxGoalList;
 }

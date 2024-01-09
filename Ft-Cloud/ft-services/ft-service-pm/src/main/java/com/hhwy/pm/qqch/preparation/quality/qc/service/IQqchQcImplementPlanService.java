@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.quality.qc.service;
 
+import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.vo.QqchQcImplementPlanVo;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -17,6 +19,8 @@ public interface IQqchQcImplementPlanService {
      * @return
      */
     QqchQcImplementPlanVo getQqchQcImplementPlanList(BigDecimal version);
+
+    List<QqchQcImplementPlan> getLatestList();
 
     /**
      * 保存/确认/提交
