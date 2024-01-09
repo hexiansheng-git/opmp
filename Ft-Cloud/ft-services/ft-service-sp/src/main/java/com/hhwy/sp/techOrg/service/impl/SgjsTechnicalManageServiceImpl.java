@@ -260,7 +260,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             logger.info("子表未删除。。。。。。。。。。");
         }
         //同步总部数据
-        //syncDataToGm(treeToList,sgjsTechnicalManageVo.getDelIdList());
+        syncDataToGm(treeToList,sgjsTechnicalManageVo.getDelIdList());
         return AjaxResult.success();
     }
 
