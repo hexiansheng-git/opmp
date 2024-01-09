@@ -532,7 +532,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 //                iteration4Date(jdglMainPlanItems, collect);
                 for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItems) {
                     if (JdglMainPlanItem.ITEMTYPE_WBS.equals(jdglMainPlanItem.getItemType())) {
-                        List<JdglMainPlanItem> workInWbs = workList.stream().filter(vo -> vo.getAncestors().contains(jdglMainPlanItem.getAncestors())).collect(Collectors.toList());
+                        List<JdglMainPlanItem> workInWbs = workList.stream().filter(vo -> StringUtils.isNotEmpty(vo.getAncestors()) && vo.getAncestors().contains(jdglMainPlanItem.getAncestors())).collect(Collectors.toList());
                         if (!CollectionUtils.isEmpty(workInWbs)) {
                             Date startDate = workInWbs.get(0).getStartDate();
                             Date finishDate = workInWbs.get(0).getFinishDate();
