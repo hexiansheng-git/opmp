@@ -131,7 +131,7 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
         List<KcsjOrganManage> addList = new ArrayList<>();
         List<KcsjOrganManage> updateList = new ArrayList<>();
 
-        List<KcsjOrganManage> kcsjOrganManages = TreeUtil.treeToListSupplyId(kcsjOrganManageList);
+        List<KcsjOrganManage> kcsjOrganManages = TreeUtil.treeToListWithoutId(kcsjOrganManageList);
         int validNum = 0;
         for (KcsjOrganManage kcsjOrganManage : kcsjOrganManages) {
             if(StringUtils.isNotEmpty(kcsjOrganManage.getUserName()) && kcsjOrganManage.getActualEnterDate() == null) {
