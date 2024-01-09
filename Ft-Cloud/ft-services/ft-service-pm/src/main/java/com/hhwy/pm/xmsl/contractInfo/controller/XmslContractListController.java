@@ -182,15 +182,6 @@ public class XmslContractListController extends BaseController {
         if (CollUtil.isEmpty(importXmslContractListVos)) {
             return AjaxResult.error("无数据可处理");
         }
-        //处理字典
-        Util dictionary = new Util();
-        importXmslContractListVos.forEach(p -> {
-            //设置DataFrom("new") 用于前端保存时清空id，因为保存时接口会根据id判断做修改还是新增
-            p.setDataFrom("new");
-            //字段值翻译
-            String s = dictionary.reverseDict("list_type", p.getListType());
-            p.setListType(s);
-        });
         //找到层级关系
         List<ImportXmslContractListVo> treeList = xmslContractListService.parseLevelStruct(importXmslContractListVos);
         //格式化为前端可用的树形机构
