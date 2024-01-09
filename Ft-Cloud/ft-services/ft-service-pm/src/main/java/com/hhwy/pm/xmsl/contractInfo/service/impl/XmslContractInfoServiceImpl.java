@@ -326,6 +326,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             param.setVersion(bean.getVersion());
             XmslContractInfo result = xmslContractInfoMapper.getXmslContractInfo(param);
             getSonTable(result, bean.getVersion());
+            FlowInfoSearchUtil.getFlowInfo(result,FlowEnum.XMSL_CONTRACT);
             return result;
         }
     }
