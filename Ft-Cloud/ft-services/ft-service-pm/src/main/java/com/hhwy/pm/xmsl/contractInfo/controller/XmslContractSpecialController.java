@@ -149,7 +149,10 @@ public class XmslContractSpecialController extends BaseController {
             return AjaxResult.error("无数据可处理");
         }
         List<ImportXmslContractSpecial> importXmslContractSpecials = this.parseLevelStruct(xmslContractLists);
-        List<ImportXmslContractSpecial> dateList = ListTreeUtil.formatTree(importXmslContractSpecials, o -> o.getPid()==null
+        List<ImportXmslContractSpecial> collect = importXmslContractSpecials.stream()
+                .filter(p -> p.getSort() != null)
+                .sorted(Comparator.comparing(ImportXmslContractSpecial::getSort)).collect(Collectors.toList());
+        List<ImportXmslContractSpecial> dateList = ListTreeUtil.formatTree(collect, o -> o.getPid()==null
                 , (r, n) -> r.getId().equals(n.getPid())
                 , ImportXmslContractSpecial::getChildren
                 , ImportXmslContractSpecial::setChildren);
@@ -176,16 +179,20 @@ public class XmslContractSpecialController extends BaseController {
      * 作者: fushudong
      * 时间: 2024/1/8
      */
-    public static List<ImportXmslContractSpecial> parseLevelStruct(List<ImportXmslContractSpecial> list) {
+    public List<ImportXmslContractSpecial> parseLevelStruct(List<ImportXmslContractSpecial> list) {
         Map<String, ImportXmslContractSpecial> collect = list.stream()
-                .filter(p -> com.hhwy.common.core.utils.StringUtils.isNotEmpty(p.getInnerCode()))
+                .filter(p -> StrUtil.isNotBlank(p.getInnerCode()))
                 .collect(Collectors.toMap(key -> key.getInnerCode(), value -> value, (v1, v2) -> v1));
         for (int i = 0;  i< list.size(); i++) {
             ImportXmslContractSpecial t = list.get(i);
             t.setId(IdUtil.getSnowflakeNextId());
             String innerCode = t.getInnerCode();
+            if (StrUtil.isBlank(innerCode)) {
+                continue;
+            }
             if (!innerCode.contains("-")) {
                 //第一层级
+                t.setSort(Integer.valueOf(innerCode));
                 continue;
             }
             String parentCode = innerCode.substring(0, innerCode.lastIndexOf("-"));
@@ -198,6 +205,7 @@ public class XmslContractSpecialController extends BaseController {
             if (CollectionUtil.isEmpty(children)) {
                 children = new ArrayList<>();
             }
+            t.setSort(Integer.valueOf(curentCode));
             t.setPid(parent.getId());
             children.add(t);
         }
