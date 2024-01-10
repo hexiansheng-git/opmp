@@ -4,7 +4,6 @@ import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionReviewPlan;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchKeyDifficultConstructionBrief;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchSimilarProjectScheme;
@@ -107,7 +106,7 @@ public class QqchSimilarProjectSchemeServiceImpl implements IQqchSimilarProjectS
      * @param businessAreasAndProducts
      */
     public void updateBAPByProjectCode(String projectCode,String businessAreasAndProducts){
-        String oldDataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(projectCode);
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
         try {
             //切换到master
             DynamicDataSourceContextHolder.push("master");
@@ -124,13 +123,8 @@ public class QqchSimilarProjectSchemeServiceImpl implements IQqchSimilarProjectS
     public void pushData() {
         ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
         String currentPrjCode = projectInfo.getProjectCode();
-        String tenantKey = SecurityUtils.getTenantKey();
-        System.out.println(tenantKey);
         //当前数据源
-        String test = DynamicDataSourceContextHolder.peek();
-        System.out.println(test);
-        String oldDataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(currentPrjCode);
-
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
         String projectName = projectInfo.getProjectName();
         Long regionId = projectInfo.getRegionId();
         String regionName = projectInfo.getRegionName();
@@ -215,7 +209,7 @@ public class QqchSimilarProjectSchemeServiceImpl implements IQqchSimilarProjectS
             return schemeList;
         }
         //当前数据源
-        String oldDataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(currentPrjCode);
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
 
         try {
             //切换到master
