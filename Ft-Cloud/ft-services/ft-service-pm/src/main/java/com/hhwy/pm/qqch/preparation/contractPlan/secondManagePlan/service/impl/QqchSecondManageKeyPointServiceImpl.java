@@ -439,6 +439,8 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
      * @param buttonMark
      */
     private void disposeData(List<QqchSecondManageKeyPoint> tileList, BigDecimal version, String buttonMark) {
+        //根据版本删除数据
+        this.deleteDate(version);
         if(CollectionUtils.isEmpty(tileList)){
             return;
         }
@@ -464,9 +466,6 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
         if(!ButtonMark.SAVE.equals(buttonMark)){
             JyDetailsUtil.jyDetails(keyPointContractClauseList, ValidationGroups.Save.class);
         }
-
-        //根据版本删除数据
-        this.deleteDate(version);
 
         /*插入数据*/
         qqchSecondManageKeyPointMapper.insertQqchSecondManageKeyPointList(tileList);
