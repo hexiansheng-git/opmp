@@ -492,7 +492,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
                 continue;
             }
             String parentCode = innerCode.substring(0, innerCode.lastIndexOf("-"));
-            String curentCode = innerCode.substring(innerCode.length() - 1);
+            String curentCode = innerCode.substring(innerCode.lastIndexOf("-") + 1);
             //获取当前数据的父层级
             ImportXmslContractListVo parent = collect.get(parentCode);
             Assert.notNull(parent, "层级码：{} 未找到父层级：{}，请确认是否存在", innerCode, parentCode);
