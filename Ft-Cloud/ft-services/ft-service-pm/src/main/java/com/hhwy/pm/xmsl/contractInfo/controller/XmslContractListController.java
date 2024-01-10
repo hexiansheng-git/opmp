@@ -27,10 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author ldd
@@ -184,6 +181,7 @@ public class XmslContractListController extends BaseController {
         }
         //找到层级关系
         List<ImportXmslContractListVo> treeList = xmslContractListService.parseLevelStruct(importXmslContractListVos);
+        treeList.sort(Comparator.comparing(ImportXmslContractListVo::getSort));
         //格式化为前端可用的树形机构
         List<ImportXmslContractListVo> dateList = ListTreeUtil.formatTree(treeList, o -> o.getPid()==null
                 , (r, n) -> r.getId().equals(n.getPid())

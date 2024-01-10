@@ -281,6 +281,13 @@ public class ImportXmslContractListVo extends BaseEntity {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
+    /**
+     * 字段描述：排序
+     */
+    @JsonProperty
+    @Excel(name = "排序")
+    private Integer sort;
+
     private Long[] ids;
 
     private List<ImportXmslContractListVo> children;
