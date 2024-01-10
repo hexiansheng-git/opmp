@@ -60,11 +60,12 @@ public class CurrencyPeriodData {
         //请求参数
         String year = String.valueOf(DateUtil.thisYear());
         Date date = new Date();
-        DateTime dateTime = DateUtil.offsetMonth(date, 1);
-        DateTime beginOfMonth = DateUtil.beginOfMonth(dateTime);
-        DateTime endOfMonth = DateUtil.endOfMonth(dateTime);
-        String beginOfMonthStr = DateUtil.format(beginOfMonth, DatePattern.NORM_DATETIME_PATTERN);
-        String endOfMonthStr = DateUtil.format(endOfMonth, DatePattern.NORM_DATETIME_PATTERN);
+        DateTime startDate = DateUtil.offsetDay(date,-10);
+        DateTime endDate = DateUtil.offsetDay(date,19);
+        String beginOfMonthStr = DateUtil.format(startDate, DatePattern.UTC_MS_WITH_XXX_OFFSET_PATTERN);
+        String endOfMonthStr = DateUtil.format(endDate, DatePattern.UTC_MS_WITH_XXX_OFFSET_PATTERN);
+        System.out.println(beginOfMonthStr);
+        System.out.println(endOfMonthStr);
         Map<String, String> header = new HashMap<>();
         header.put("apikey", caiwuyun_apiKey);
         //数据拼装结果
@@ -244,7 +245,7 @@ public class CurrencyPeriodData {
                     }
                 }
                 if(null!=dataMap.get("qujianhuilv")){//期末汇率
-                    BigDecimal qujianhuilv = (BigDecimal) dataMap.get("qujianhuilv");
+                    BigDecimal qujianhuilv = new BigDecimal(String.valueOf(dataMap.get("qujianhuilv")));
                     if(null==qujianhuilv){
                         continue;
                     }
