@@ -124,63 +124,67 @@ public class QqchSimilarProjectSchemeServiceImpl implements IQqchSimilarProjectS
     public void pushData() {
         ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
         String currentPrjCode = projectInfo.getProjectCode();
+        String tenantKey = SecurityUtils.getTenantKey();
+        System.out.println(tenantKey);
         //当前数据源
+        String test = DynamicDataSourceContextHolder.peek();
+        System.out.println(test);
         String oldDataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(currentPrjCode);
+
+        String projectName = projectInfo.getProjectName();
+        Long regionId = projectInfo.getRegionId();
+        String regionName = projectInfo.getRegionName();
+        String businessAreasAndProducts = projectInfo.getBusinessAreasAndProducts();
+        /*查询最新版本的重难点分项施工方案简述数据*/
+        List<QqchKeyDifficultConstructionBrief> briefList = qqchKeyDifficultConstructionBriefService.getLatestList();
+        /*查询最新版本的施工方案编审计划数据*/
+        List<QqchConstructionReviewPlan> reviewPlanList = qqchConstructionReviewPlanService.getLatestList();
+        if(StringUtils.isBlank(businessAreasAndProducts) || CollectionUtils.isEmpty(briefList)){
+            return;
+        }
+
+        List<QqchSimilarProjectScheme> schemeList = new ArrayList<>();
+
+        QqchSimilarProjectScheme prjScheme = new QqchSimilarProjectScheme();
+        Long id = IdWorker.createId();
+        prjScheme.setId(id);
+        prjScheme.setProjectCode(currentPrjCode);
+        prjScheme.setProjectName(projectName);
+        prjScheme.setBusinessAreasAndProducts(businessAreasAndProducts);
+        prjScheme.setRegionId(regionId);
+        prjScheme.setRegionName(regionName);
+        prjScheme.setPtVar1("prj");
+        schemeList.add(prjScheme);
+
+
+        Map<String, QqchConstructionReviewPlan> reviewPlanMap = reviewPlanList.stream().collect(Collectors.toMap(QqchConstructionReviewPlan::getSchemeCode, o -> o));
+
+        for (QqchKeyDifficultConstructionBrief brief : briefList) {
+            QqchSimilarProjectScheme scheme = new QqchSimilarProjectScheme();
+            scheme.setId(IdWorker.createId());
+            scheme.setPid(id);
+            scheme.setProjectCode(currentPrjCode);
+            scheme.setProjectName(projectName);
+            scheme.setBusinessAreasAndProducts(businessAreasAndProducts);
+            scheme.setSchemeName(brief.getSchemeName());
+            scheme.setSchemeLevel(brief.getSchemeLevel());
+            scheme.setWbsName(brief.getWbsName());
+            scheme.setConstructionContent(brief.getConstructionContent());
+            scheme.setAdoptProcess(brief.getAdoptProcess());
+            scheme.setMainEquipment(brief.getMainEquipment());
+            scheme.setFileGroupId(brief.getFileGroupId());
+            scheme.setRemark(brief.getRemark());
+            scheme.setRegionId(regionId);
+            scheme.setRegionName(regionName);
+            scheme.setPtVar1("data");
+
+            if(reviewPlanMap.containsKey(brief.getSchemeCode())){
+                QqchConstructionReviewPlan plan = reviewPlanMap.get(brief.getSchemeCode());
+                scheme.setSchemeLevelDescription(plan.getSchemeLevelDescription());
+            }
+            schemeList.add(scheme);
+        }
         try {
-            String projectName = projectInfo.getProjectName();
-            Long regionId = projectInfo.getRegionId();
-            String regionName = projectInfo.getRegionName();
-            String businessAreasAndProducts = projectInfo.getBusinessAreasAndProducts();
-            /*查询最新版本的重难点分项施工方案简述数据*/
-            List<QqchKeyDifficultConstructionBrief> briefList = qqchKeyDifficultConstructionBriefService.getLatestList();
-            /*查询最新版本的施工方案编审计划数据*/
-            List<QqchConstructionReviewPlan> reviewPlanList = qqchConstructionReviewPlanService.getLatestList();
-            if(StringUtils.isBlank(businessAreasAndProducts) || CollectionUtils.isEmpty(briefList)){
-                return;
-            }
-
-            List<QqchSimilarProjectScheme> schemeList = new ArrayList<>();
-
-            QqchSimilarProjectScheme prjScheme = new QqchSimilarProjectScheme();
-            Long id = IdWorker.createId();
-            prjScheme.setId(id);
-            prjScheme.setProjectCode(currentPrjCode);
-            prjScheme.setProjectName(projectName);
-            prjScheme.setBusinessAreasAndProducts(businessAreasAndProducts);
-            prjScheme.setRegionId(regionId);
-            prjScheme.setRegionName(regionName);
-            prjScheme.setPtVar1("prj");
-            schemeList.add(prjScheme);
-
-
-            Map<String, QqchConstructionReviewPlan> reviewPlanMap = reviewPlanList.stream().collect(Collectors.toMap(QqchConstructionReviewPlan::getSchemeCode, o -> o));
-
-            for (QqchKeyDifficultConstructionBrief brief : briefList) {
-                QqchSimilarProjectScheme scheme = new QqchSimilarProjectScheme();
-                scheme.setId(IdWorker.createId());
-                scheme.setPid(id);
-                scheme.setProjectCode(currentPrjCode);
-                scheme.setProjectName(projectName);
-                scheme.setBusinessAreasAndProducts(businessAreasAndProducts);
-                scheme.setSchemeName(brief.getSchemeName());
-                scheme.setSchemeLevel(brief.getSchemeLevel());
-                scheme.setWbsName(brief.getWbsName());
-                scheme.setConstructionContent(brief.getConstructionContent());
-                scheme.setAdoptProcess(brief.getAdoptProcess());
-                scheme.setMainEquipment(brief.getMainEquipment());
-                scheme.setFileGroupId(brief.getFileGroupId());
-                scheme.setRemark(brief.getRemark());
-                scheme.setRegionId(regionId);
-                scheme.setRegionName(regionName);
-                scheme.setPtVar1("data");
-
-                if(reviewPlanMap.containsKey(brief.getSchemeCode())){
-                    QqchConstructionReviewPlan plan = reviewPlanMap.get(brief.getSchemeCode());
-                    scheme.setSchemeLevelDescription(plan.getSchemeLevelDescription());
-                }
-                schemeList.add(scheme);
-            }
-
             //切换到master
             DynamicDataSourceContextHolder.push("master");
             this.deleteByProjectCode(currentPrjCode);
