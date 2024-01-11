@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * @author zq
  * @date 2023-07-19 11:49:17
- * @remark 
+ * @remark
  */
 @Service
 public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrangeService {
@@ -40,6 +40,7 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Autowired
     private IQqchReviewService iQqchReviewService;
+
     public QqchWorkPlaningArrange getQqchWorkPlaningArrange(QqchWorkPlaningArrange qqchWorkPlaningArrange) {
         return qqchWorkPlaningArrangeMapper.getQqchWorkPlaningArrange(qqchWorkPlaningArrange);
     }
@@ -60,14 +61,14 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
     public int insertQqchWorkPlaningArrangeList(QqchWorkPlaningArrangeVo qqchWorkPlaningArrangeVo) {
         List<QqchWorkPlaningArrange> qqchWorkPlaningArrangeList = new ArrayList<>();
         //判断是确认还是保存
-        if("0".equals(qqchWorkPlaningArrangeVo.getButtonMark())){
+        if ("0".equals(qqchWorkPlaningArrangeVo.getButtonMark())) {
 
             String valid = "1";
-            if(new BigDecimal(InitVersionConstant.INIT_VERSION).compareTo(qqchWorkPlaningArrangeVo.getVersion()) != 0){
+            if (new BigDecimal(InitVersionConstant.INIT_VERSION).compareTo(qqchWorkPlaningArrangeVo.getVersion()) != 0) {
                 valid = "0";
             }
             qqchWorkPlaningArrangeList = qqchWorkPlaningArrangeVo.getDataList();
-            if(!ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeList)){
+            if (!ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeList)) {
                 for (QqchWorkPlaningArrange qqchWorkPlaningArrange : qqchWorkPlaningArrangeList) {
                     qqchWorkPlaningArrange.setId(IdWorker.createId());
                     qqchWorkPlaningArrange.setCreateUser(SecurityUtils.getUserName());
@@ -79,11 +80,11 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
 //            else{
 //                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"便道部署不可为空");
 //            }
-        }else if("1".equals(qqchWorkPlaningArrangeVo.getButtonMark())){//确认
+        } else if ("1".equals(qqchWorkPlaningArrangeVo.getButtonMark())) {//确认
             //确认
             //新增一条确认记录
             qqchWorkPlaningArrangeList = qqchWorkPlaningArrangeVo.getDataList();
-            if(!ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeList)){
+            if (!ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeList)) {
                 for (QqchWorkPlaningArrange qqchWorkPlaningArrange : qqchWorkPlaningArrangeList) {
                     qqchWorkPlaningArrange.setId(IdWorker.createId());
                     qqchWorkPlaningArrange.setCreateUser(SecurityUtils.getUserName());
@@ -91,15 +92,15 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
                     qqchWorkPlaningArrange.setValid("1");
                     qqchWorkPlaningArrange.setVersion(ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeVo.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : qqchWorkPlaningArrangeVo.getVersion());
                 }
-                qqchModuleConfirmCaseService.addConfirmRecord(qqchWorkPlaningArrangeVo.getMenuId(),qqchWorkPlaningArrangeVo.getStageIdentity());
-                qqchReviewService.updateFinishNum(qqchWorkPlaningArrangeVo.getStageIdentity(),qqchWorkPlaningArrangeVo.getMenuId());
+                qqchModuleConfirmCaseService.addConfirmRecord(qqchWorkPlaningArrangeVo.getMenuId(), qqchWorkPlaningArrangeVo.getStageIdentity());
+//                qqchReviewService.updateFinishNum(qqchWorkPlaningArrangeVo.getStageIdentity(), qqchWorkPlaningArrangeVo.getMenuId());
             }
 //            else{
 //                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"便道部署不可为空");
 //            }
-        }else if("2".equals(qqchWorkPlaningArrangeVo.getButtonMark())){//提交
+        } else if ("2".equals(qqchWorkPlaningArrangeVo.getButtonMark())) {//提交
             qqchWorkPlaningArrangeList = qqchWorkPlaningArrangeVo.getDataList();
-            if(!ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeList)){
+            if (!ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeList)) {
                 for (QqchWorkPlaningArrange qqchWorkPlaningArrange : qqchWorkPlaningArrangeList) {
                     qqchWorkPlaningArrange.setId(IdWorker.createId());
                     qqchWorkPlaningArrange.setCreateUser(SecurityUtils.getUserName());
@@ -111,14 +112,14 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
 //            else{
 //                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"便道部署不可为空");
 //            }
-        }else{
-            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"标识不符合规范");
+        } else {
+            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "标识不符合规范");
         }
         //先删除旧的 再添加新的
         QqchWorkPlaningArrange temp = new QqchWorkPlaningArrange();
         temp.setVersion(qqchWorkPlaningArrangeVo.getVersion());
         qqchWorkPlaningArrangeMapper.deleteQqchWorkPlaningArrange(temp);
-        if(!ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeList)){
+        if (!ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeList)) {
             qqchWorkPlaningArrangeMapper.insertQqchWorkPlaningArrangeList(qqchWorkPlaningArrangeList);
         }
         return 1;
@@ -131,15 +132,15 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
         return qqchWorkPlaningArrangeMapper.updateQqchWorkPlaningArrange(qqchWorkPlaningArrange);
     }
 
-            @Transactional
-        public int updateQqchWorkPlaningArrangeList(List<QqchWorkPlaningArrange> qqchWorkPlaningArrangeList) {
-            for (QqchWorkPlaningArrange qqchWorkPlaningArrange : qqchWorkPlaningArrangeList) {
-                qqchWorkPlaningArrange.setUpdateUser(SecurityUtils.getUserName());
-                qqchWorkPlaningArrange.setUpdateTime(DateUtils.getNowDate());
-            }
-            return qqchWorkPlaningArrangeMapper.updateQqchWorkPlaningArrangeList(qqchWorkPlaningArrangeList);
+    @Transactional
+    public int updateQqchWorkPlaningArrangeList(List<QqchWorkPlaningArrange> qqchWorkPlaningArrangeList) {
+        for (QqchWorkPlaningArrange qqchWorkPlaningArrange : qqchWorkPlaningArrangeList) {
+            qqchWorkPlaningArrange.setUpdateUser(SecurityUtils.getUserName());
+            qqchWorkPlaningArrange.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return qqchWorkPlaningArrangeMapper.updateQqchWorkPlaningArrangeList(qqchWorkPlaningArrangeList);
+    }
+
     @Transactional
     public int deleteQqchWorkPlaningArrange(QqchWorkPlaningArrange qqchWorkPlaningArrange) {
         qqchWorkPlaningArrange.setUpdateUser(SecurityUtils.getUserName());
@@ -147,10 +148,10 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
         return qqchWorkPlaningArrangeMapper.deleteQqchWorkPlaningArrange(qqchWorkPlaningArrange);
     }
 
-            @Transactional
-        public int deleteQqchWorkPlaningArrangeByPks(List<Long> qqchWorkPlaningArrangePkList) {
-            return qqchWorkPlaningArrangeMapper.deleteQqchWorkPlaningArrangeByPks(qqchWorkPlaningArrangePkList);
-        }
+    @Transactional
+    public int deleteQqchWorkPlaningArrangeByPks(List<Long> qqchWorkPlaningArrangePkList) {
+        return qqchWorkPlaningArrangeMapper.deleteQqchWorkPlaningArrangeByPks(qqchWorkPlaningArrangePkList);
+    }
 
     @Override
     public List<QqchWorkPlaningArrange> getMaxVVData(QqchWorkPlaningArrange arrangeVo) {
@@ -169,7 +170,7 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
     @Override
     public QqchWorkPlaningArrangeVo detail(QqchWorkPlaningArrange arrange) {
         BigDecimal version = arrange.getVersion();
-        version = VersionUtil.getVersion("qqch_work_planing_arrange",version);
+        version = VersionUtil.getVersion("qqch_work_planing_arrange", version);
         arrange.setVersion(version);
         List<QqchWorkPlaningArrange> qqchWorkPlaningArrangeList = getQqchWorkPlaningArrangeList(arrange);
         QqchWorkPlaningArrangeVo qqchWorkPlaningArrangeVo = new QqchWorkPlaningArrangeVo();
