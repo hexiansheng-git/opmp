@@ -23,7 +23,9 @@ import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProject
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.service.IQqchProjectOperationObjectiveService;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
 import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcImplementPlanService;
+import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
+import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningBuildPlanService;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningPrjImgService;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.service.IQqchTaxGoalService;
@@ -109,6 +111,9 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchWorkPlanningPrjImgService qqchWorkPlanningPrjImgService;
 
+    @Autowired
+    private IQqchWorkPlanningBuildPlanService qqchWorkPlanningBuildPlanService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -151,6 +156,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("projectOperationObjectiveList",policy) // 经营目标
                     .bind("qcImplementPlanList",policy) // 质量目标
                     .bind("taxGoalList",policy) // 财务目标
+                    .bind("workPlanBuildPlanList",policy) // 大临设施一览表
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -638,5 +644,9 @@ public class ExportWordServiceImpl implements ExportWordService {
             projectWordData.setWorkPlanPrjImg(workPlanPrjImgList.get(0));
         }
 
+        /*大临设施一览表*/
+        List<QqchWorkPlanningBuildPlan> workPlanBuildPlanList = qqchWorkPlanningBuildPlanService.detail(new QqchWorkPlanningBuildPlan()).getDataList();
+        ListTreeUtil.preserveSerialNumber(workPlanBuildPlanList,QqchWorkPlanningBuildPlan::setSerialNumber);
+        projectWordData.setWorkPlanBuildPlanList(workPlanBuildPlanList);
     }
 }

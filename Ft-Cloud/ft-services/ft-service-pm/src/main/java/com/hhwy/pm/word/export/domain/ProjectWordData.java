@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassify;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
+import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal;
 import com.hhwy.pm.word.export.domain.vo.BidWinHandoverFileVo;
 import com.hhwy.pm.word.export.domain.vo.ConditionVo;
@@ -279,4 +280,8 @@ public class ProjectWordData {
      * 大临设施-图片
      */
     private PictureRenderData workPlanPrjImg;
+    /**
+     * 大临设施-大临设施一览表
+     */
+    private List<QqchWorkPlanningBuildPlan> workPlanBuildPlanList;
 }
