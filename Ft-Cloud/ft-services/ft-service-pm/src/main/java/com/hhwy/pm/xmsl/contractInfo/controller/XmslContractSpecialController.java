@@ -5,26 +5,19 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
-import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.excel.Util;
-import com.hhwy.pm.common.util.TreeNodeUtil;
-import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractGeneral;
-import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSpecial;
-import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportTreeNodeVo;
-import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractSpecial;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractSpecialVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractSpecialService;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excelUtil.ExcelUtilByTemplate;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -78,9 +71,12 @@ public class XmslContractSpecialController extends BaseController {
     @PreAuthorize(hasPermi = "xmslContractSpecial:add")
     @PostMapping("/batchAdd")
     @CustomLogger(title = "项目设立-合同信息-专用条件", name = "专用条件", businessType = CustomBusinessType.SAVE)
-    public AjaxResult insertXmslContractSpecialList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslContractSpecial> xmslContractSpecialListParam) {
-        xmslContractSpecialService.insertXmslContractSpecialList(xmslContractSpecialListParam);
-        return AjaxResult.success(xmslContractSpecialListParam);
+    public AjaxResult insertXmslContractSpecialList(@Validated(ValidationGroups.Save.class) @RequestBody XmslContractSpecialVo param) {
+        if (null == param.getMasterId()) {
+            return AjaxResult.error("masterId不能为空");
+        }
+        xmslContractSpecialService.insertXmslContractSpecialList(param);
+        return AjaxResult.success(param);
     }
 
     @PreAuthorize(hasPermi = "xmslContractSpecial:update")
