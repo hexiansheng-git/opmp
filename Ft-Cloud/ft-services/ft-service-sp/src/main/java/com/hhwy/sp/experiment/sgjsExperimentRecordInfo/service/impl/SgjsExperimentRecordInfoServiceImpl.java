@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -101,7 +98,6 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
     @Override
     @Transactional
     public int batchAddMap(Map<String, Object> map) {
-        //数据校验  试验编号不能重复
         List<LinkedHashMap<String,Object>> equipList= (List<LinkedHashMap<String,Object>>)map.get("equipList");
         if(CollectionUtils.isEmpty(equipList)){
             logger.error("传参equipList空了");
@@ -111,6 +107,26 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
         if(CollectionUtils.isEmpty(infoList)){
             logger.error("传参infoList空了");
             return -2;
+        }
+        List<SgjsExperimentRecordInfoDetail> list=new ArrayList<>();
+        List<SgjsExperimentRecordInfo> iList=new ArrayList<>();
+        for (LinkedHashMap<String,Object> mInfo:infoList) {
+            String s = JSONObject.toJSONString(mInfo);
+            SgjsExperimentRecordInfo info = JSONObject.parseObject(s, SgjsExperimentRecordInfo.class);
+            info.setCreateTime(DateUtils.getNowDate());
+            info.setCreateUser(SecurityUtils.getUserId()+"");
+            info.setCreateUserName(SecurityUtils.getSysUser().getNickName());
+            List<SgjsExperimentRecordInfoDetail> detailList = info.getDetailList();
+            if(!CollectionUtils.isEmpty(detailList)){
+                list.addAll(detailList);
+            }
+            iList.add(info);
+        }
+        //校验
+        int i = validData(iList);
+        if(i!=1){
+            //不等于1  不成功 直接返回
+            return i;
         }
         //1、批量修改主表实际进场数量
         List<SgjsExperimentRecord> eList=new ArrayList<>();
@@ -128,28 +144,7 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
         record.setUpdateTime(DateUtils.getNowDate());
         record.setUpdateUser(SecurityUtils.getUserId()+"");
         sgjsExperimentRecordInfoMapper.deleteAll(record);
-        List<SgjsExperimentRecordInfoDetail> list=new ArrayList<>();
-        List<SgjsExperimentRecordInfo> iList=new ArrayList<>();
-        for (LinkedHashMap<String,Object> mInfo:infoList) {
-            String s = JSONObject.toJSONString(mInfo);
-            SgjsExperimentRecordInfo info = JSONObject.parseObject(s, SgjsExperimentRecordInfo.class);
-            info.setCreateTime(DateUtils.getNowDate());
-            info.setCreateUser(SecurityUtils.getUserId()+"");
-            info.setCreateUserName(SecurityUtils.getSysUser().getNickName());
-            List<SgjsExperimentRecordInfoDetail> detailList = info.getDetailList();
-            if(!CollectionUtils.isEmpty(detailList)){
-                list.addAll(detailList);
-            }
-            iList.add(info);
-        }
-        //3、校验试验管理编号 是否重复
-        List<String> codeList = iList.stream().map(e -> e.getExperimentCode()).collect(Collectors.toList());
-        List<SgjsExperimentRecordInfo> rstList=sgjsExperimentRecordInfoMapper.selectByExperimentNos(codeList);
-        if(!CollectionUtils.isEmpty(rstList)){
-            logger.error("试验编码重复了【{}】",JSONObject.toJSONString(rstList));
-            return -1;
-        }
-        //4、重新添加数据
+        //3、重新添加数据
         sgjsExperimentRecordInfoMapper.insertSgjsExperimentRecordInfoList(iList);
         //4、自检自校数据新增
         if(!CollectionUtils.isEmpty(list)){
@@ -157,4 +152,32 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
         }
         return 0;
     }
+
+    /**
+     * 校验数据是否重复
+     *
+     * @param iList
+     * @return
+     */
+    private int validData(List<SgjsExperimentRecordInfo> iList){
+        //1、校验传过来的试验管理编号 是否重复 experimentCode
+        Map<String,List<SgjsExperimentRecordInfo>> filterMap = iList.stream().collect(Collectors.groupingBy(e->e.getExperimentCode()));
+        Set<String> keySet = filterMap.keySet();
+        for (String key : keySet) {
+            List<SgjsExperimentRecordInfo> filterList = filterMap.get(key);
+            if(filterList.size()>1){
+                logger.info("重复啦啦啦啦啦啦"+filterList.get(0).getExperimentCode());
+                return -1;
+            }
+        }
+        //2、校验库中是否重复
+        List<String> codeList = iList.stream().map(e -> e.getExperimentCode()).collect(Collectors.toList());
+        List<SgjsExperimentRecordInfo> rstList=sgjsExperimentRecordInfoMapper.selectByExperimentNos(codeList);
+        if(!CollectionUtils.isEmpty(rstList)){
+            logger.error("试验编码重复了【{}】",JSONObject.toJSONString(rstList));
+            return -1;
+        }
+        return 1;
+    }
+
 }
