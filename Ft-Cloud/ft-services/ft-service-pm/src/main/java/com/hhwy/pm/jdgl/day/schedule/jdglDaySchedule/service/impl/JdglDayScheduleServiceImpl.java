@@ -196,7 +196,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
             JdglDaySchedule jdglDaySchedule = jdglDayScheduleMapper.getJdglDaySchedule(jdglDayScheduleParam);
             if(jdglDaySchedule != null) {
                 jdglDayScheduleParam.setId(jdglDaySchedule.getId());
-                return jdglDayScheduleParam;
+//                return jdglDayScheduleParam;
             }
         }
 
