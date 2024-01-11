@@ -192,6 +192,12 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         Date date = jdglDayScheduleParam.getDate();
         if(date == null){
             return null;
+        } else {
+            JdglDaySchedule jdglDaySchedule = jdglDayScheduleMapper.getJdglDaySchedule(jdglDayScheduleParam);
+            if(jdglDaySchedule != null) {
+                jdglDayScheduleParam.setId(jdglDaySchedule.getId());
+                return jdglDayScheduleParam;
+            }
         }
 
         ProjectBasicInfo projectBasicInfo = xmslProjectBasicInfoService.projectInfo();
