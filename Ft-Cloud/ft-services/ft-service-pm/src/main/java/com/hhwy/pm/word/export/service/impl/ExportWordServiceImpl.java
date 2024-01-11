@@ -23,6 +23,8 @@ import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProject
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.service.IQqchProjectOperationObjectiveService;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
 import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcImplementPlanService;
+import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
+import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningPrjImgService;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.service.IQqchTaxGoalService;
 import com.hhwy.pm.word.export.domain.FileDto;
@@ -104,6 +106,9 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchTaxGoalService qqchTaxGoalService;
 
+    @Autowired
+    private IQqchWorkPlanningPrjImgService qqchWorkPlanningPrjImgService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -181,6 +186,8 @@ public class ExportWordServiceImpl implements ExportWordService {
         initCondition(projectWordData);
         /*项目目标*/
         initProjectOperation(projectWordData);
+        /*项目组织及*/
+        initProjectOrganization(projectWordData);
     }
 
 
@@ -214,6 +221,9 @@ public class ExportWordServiceImpl implements ExportWordService {
             InputStream is = new ByteArrayInputStream(body);
             try {
                 BufferedImage image = ImageIO.read(is);
+                if(image == null){
+                    continue;
+                }
                 int width = image.getWidth();
                 int height = image.getHeight();
                 if(width > BASE_WIDTH){
@@ -605,7 +615,28 @@ public class ExportWordServiceImpl implements ExportWordService {
         List<QqchQcImplementPlan> qcImplementPlanList = qqchQcImplementPlanService.getLatestList();
         projectWordData.setQcImplementPlanList(qcImplementPlanList);
 
+        /*财务目标*/
         List<QqchTaxGoal> taxGoalList = qqchTaxGoalService.getLatestList();
         projectWordData.setTaxGoalList(taxGoalList);
+    }
+
+    /**
+     * 初始化项目组织及施工部署
+     * @param projectWordData
+     */
+    private void initProjectOrganization(ProjectWordData projectWordData) {
+        //TODO 1.1项目组织机构
+
+        //TODO 1.5.1,1.5.2表格
+
+        //TODO 1.3上表
+
+        /*大临设施-项目总平面图*/
+        QqchWorkPlanningPrjImg workPlanningPrjImg = qqchWorkPlanningPrjImgService.getLatestQqchWorkPlanningPrjImg();
+        List<PictureRenderData> workPlanPrjImgList = getPictureRenderDataList(workPlanningPrjImg.getPtVar1());
+        if(workPlanPrjImgList != null && workPlanPrjImgList.size() > 0){
+            projectWordData.setWorkPlanPrjImg(workPlanPrjImgList.get(0));
+        }
+
     }
 }

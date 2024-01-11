@@ -272,4 +272,11 @@ public class ProjectWordData {
      * 财务目标
      */
     private List<QqchTaxGoal> taxGoalList;
+
+
+    /*---------------------------------------项目组织及施工部署----------------------------------------*/
+    /**
+     * 大临设施-图片
+     */
+    private PictureRenderData workPlanPrjImg;
 }
