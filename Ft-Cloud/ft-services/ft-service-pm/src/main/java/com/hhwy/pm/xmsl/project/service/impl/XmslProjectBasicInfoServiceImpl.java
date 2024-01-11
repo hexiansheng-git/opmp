@@ -205,7 +205,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
      */
     @Transactional
     public void updateProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo) {
-        this.updateQqchSimilarProjectScheme(xmslProjectBasicInfo.getBusinessAreasAndProducts());
+        this.updateOtherBAP(xmslProjectBasicInfo.getBusinessAreasAndProducts());
         xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
 
         //项目可以自行修改项目信息
@@ -216,7 +216,11 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         this.editSublist(xmslProjectBasicInfo);
     }
 
-    private void updateQqchSimilarProjectScheme(String pageDataBAP){
+    /**
+     * 修改其他地方的业务领域及产品
+     * @param pageDataBAP
+     */
+    private void updateOtherBAP(String pageDataBAP){
         try {
             ProjectBasicInfo projectInfo = this.projectInfo();
             String oldBAP = projectInfo.getBusinessAreasAndProducts();
@@ -235,7 +239,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         //查询数据库中是否存在项目数据
         boolean exist = this.ifExistProject();
         if(exist){
-            this.updateQqchSimilarProjectScheme(xmslProjectBasicInfo.getBusinessAreasAndProducts());
+            this.updateOtherBAP(xmslProjectBasicInfo.getBusinessAreasAndProducts());
             xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
         }else {
             xmslProjectBasicInfoMapper.insertProjectBasicInfo(xmslProjectBasicInfo);

@@ -474,20 +474,25 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
             //字段值翻译
             String s = util.reverseDict("list_type", p.getListType());
             p.setListType(s);
+            if (p.getWinUnitPrice() == null) {
+                p.setWinUnitPrice(BigDecimal.ZERO);
+            }
         });
         Map<String, ImportXmslContractListVo> collect = importXmslContractListVos.stream()
-                .filter(p -> com.hhwy.common.core.utils.StringUtils.isNotEmpty(p.getInnerCode()))
+                .filter(p -> StrUtil.isNotBlank(p.getInnerCode()))
                 .collect(Collectors.toMap(key -> key.getInnerCode(), value -> value, (v1, v2) -> v1));
         for (int i = 0;  i< importXmslContractListVos.size(); i++) {
             ImportXmslContractListVo importXmslContractListVo = importXmslContractListVos.get(i);
             importXmslContractListVo.setId(IdUtil.getSnowflakeNextId());
             String innerCode = importXmslContractListVo.getInnerCode();
+            if (StrUtil.isBlank(innerCode)) continue;
             if (!innerCode.contains("-")) {
                 //第一层级
+                importXmslContractListVo.setSort(Integer.valueOf(innerCode));
                 continue;
             }
             String parentCode = innerCode.substring(0, innerCode.lastIndexOf("-"));
-            String curentCode = innerCode.substring(innerCode.lastIndexOf("-") +1);
+            String curentCode = innerCode.substring(innerCode.lastIndexOf("-") + 1);
             //获取当前数据的父层级
             ImportXmslContractListVo parent = collect.get(parentCode);
             Assert.notNull(parent, "层级码：{} 未找到父层级：{}，请确认是否存在", innerCode, parentCode);
@@ -496,6 +501,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
             if (CollectionUtil.isEmpty(children)) {
                 children = new ArrayList<>();
             }
+            importXmslContractListVo.setSort(Integer.valueOf(curentCode));
             importXmslContractListVo.setPid(parent.getId());
             children.add(importXmslContractListVo);
         }

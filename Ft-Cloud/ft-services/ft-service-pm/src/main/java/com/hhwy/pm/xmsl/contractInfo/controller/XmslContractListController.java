@@ -27,10 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author ldd
@@ -182,17 +179,9 @@ public class XmslContractListController extends BaseController {
         if (CollUtil.isEmpty(importXmslContractListVos)) {
             return AjaxResult.error("无数据可处理");
         }
-        //处理字典
-        Util dictionary = new Util();
-        importXmslContractListVos.forEach(p -> {
-            //设置DataFrom("new") 用于前端保存时清空id，因为保存时接口会根据id判断做修改还是新增
-            p.setDataFrom("new");
-            //字段值翻译
-            String s = dictionary.reverseDict("list_type", p.getListType());
-            p.setListType(s);
-        });
         //找到层级关系
         List<ImportXmslContractListVo> treeList = xmslContractListService.parseLevelStruct(importXmslContractListVos);
+        treeList.sort(Comparator.comparing(ImportXmslContractListVo::getSort));
         //格式化为前端可用的树形机构
         List<ImportXmslContractListVo> dateList = ListTreeUtil.formatTree(treeList, o -> o.getPid()==null
                 , (r, n) -> r.getId().equals(n.getPid())

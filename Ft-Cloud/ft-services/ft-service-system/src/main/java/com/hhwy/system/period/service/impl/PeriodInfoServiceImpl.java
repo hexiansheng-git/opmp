@@ -264,10 +264,9 @@ public class PeriodInfoServiceImpl implements IPeriodInfoService {
         return startTime;
     }
 
-    @Transactional
     @Override
     public void dataSync(List<PeriodInfo> list) {
-        periodInfoMapper.deleteAll();
+//        periodInfoMapper.deleteAll();
         periodInfoMapper.batchInsert(list);
     }
 }

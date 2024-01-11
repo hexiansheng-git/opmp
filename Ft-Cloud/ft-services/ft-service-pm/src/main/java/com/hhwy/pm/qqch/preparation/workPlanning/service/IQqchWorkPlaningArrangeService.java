@@ -8,10 +8,10 @@ import java.util.List;
 /**
  * @author zq
  * @date 2023-07-19 11:49:17
- * @remark 
+ * @remark
  */
 public interface IQqchWorkPlaningArrangeService {
-                                                                                                                                                                                                                                                                                                                
+
     QqchWorkPlaningArrange getQqchWorkPlaningArrange(QqchWorkPlaningArrange qqchWorkPlaningArrange);
 
     List<QqchWorkPlaningArrange> getQqchWorkPlaningArrangeList(QqchWorkPlaningArrange qqchWorkPlaningArrange);
@@ -22,11 +22,11 @@ public interface IQqchWorkPlaningArrangeService {
 
     int updateQqchWorkPlaningArrange(QqchWorkPlaningArrange qqchWorkPlaningArrange);
 
-            int updateQqchWorkPlaningArrangeList(List<QqchWorkPlaningArrange> qqchWorkPlaningArrangeList);
-    
+    int updateQqchWorkPlaningArrangeList(List<QqchWorkPlaningArrange> qqchWorkPlaningArrangeList);
+
     int deleteQqchWorkPlaningArrange(QqchWorkPlaningArrange qqchWorkPlaningArrange);
 
-            int deleteQqchWorkPlaningArrangeByPks(List<Long> qqchWorkPlaningArrangePkList);
+    int deleteQqchWorkPlaningArrangeByPks(List<Long> qqchWorkPlaningArrangePkList);
 
     List<QqchWorkPlaningArrange> getMaxVVData(QqchWorkPlaningArrange arrangeVo);
 

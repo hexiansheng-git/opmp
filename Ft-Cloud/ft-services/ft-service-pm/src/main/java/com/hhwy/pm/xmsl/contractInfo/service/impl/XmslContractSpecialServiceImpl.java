@@ -1,11 +1,13 @@
 package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSpecial;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractSpecialVo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractSpecialMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractSpecialService;
@@ -56,52 +58,40 @@ public class XmslContractSpecialServiceImpl implements IXmslContractSpecialServi
     }
 
     @Transactional
-    public int insertXmslContractSpecialList(List<XmslContractSpecial> xmslContractSpecialList) {
+    public int insertXmslContractSpecialList(XmslContractSpecialVo param) {
+        Long masterId = param.getMasterId();
+        xmslContractSpecialMapper.deleteXmslContractSpecialByPks(new ArrayList<>(), masterId);
+        List<XmslContractSpecial> xmslContractSpecialList = param.getAlreadyList();
         if(CollectionUtils.isEmpty(xmslContractSpecialList)){
             return 0;
         }
-        List<XmslContractSpecial> insertList = new ArrayList<>();
-        List<XmslContractSpecial> updateList = new ArrayList<>();
+        List<XmslContractSpecial> saveList = new ArrayList<>();
         for (XmslContractSpecial xmslContractSpecial : xmslContractSpecialList) {
-            this.recursionSubset(xmslContractSpecial, insertList, updateList);
+            this.recursionSubset(xmslContractSpecial, saveList);
         }
-        if (insertList.size() > 0) {
-            insertList.forEach(q->{
-                if (q.getPid() != null) {
-                    q.setPid(q.getPid());
-                }
-            });
-            xmslContractSpecialMapper.insertXmslContractSpecialList(insertList);
+        if (CollUtil.isEmpty(saveList)) {
+            return 0;
         }
-        if (updateList.size() > 0) {
-            xmslContractSpecialMapper.updateXmslContractSpecialList(updateList);
-        }
-        return 1;
+        return xmslContractSpecialMapper.insertXmslContractSpecialList(saveList);
     }
 
-    private void recursionSubset(XmslContractSpecial xmslContractSpecial, List<XmslContractSpecial> insertList, List<XmslContractSpecial> updateList) {
-        Long id = xmslContractSpecial.getId();
+    private void recursionSubset(XmslContractSpecial xmslContractSpecial, List<XmslContractSpecial> saveList) {
+        Long id = IdWorker.createId();
         Long masterId = xmslContractSpecial.getMasterId();
-        if (id == null) {
-            id = IdWorker.createId();
-            xmslContractSpecial.setId(id);
-            xmslContractSpecial.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            xmslContractSpecial.setCreateUserName(SecurityUtils.getUserName());
-            xmslContractSpecial.setCreateTime(DateUtils.getNowDate());
-            insertList.add(xmslContractSpecial);
-        } else {
-            xmslContractSpecial.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            xmslContractSpecial.setUpdateTime(DateUtils.getNowDate());
-            updateList.add(xmslContractSpecial);
-        }
+        xmslContractSpecial.setId(id);
+        xmslContractSpecial.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+        xmslContractSpecial.setCreateUserName(SecurityUtils.getUserName());
+        xmslContractSpecial.setCreateTime(DateUtils.getNowDate());
+        saveList.add(xmslContractSpecial);
 
         List<XmslContractSpecial> children = xmslContractSpecial.getChildren();
-        if (!CollectionUtils.isEmpty(children)) {
-            for (XmslContractSpecial child : children) {
-                child.setPid(id);
-                child.setMasterId(masterId);
-                this.recursionSubset(child, insertList, updateList);
-            }
+        if (CollectionUtils.isEmpty(children)) {
+            return;
+        }
+        for (XmslContractSpecial child : children) {
+            child.setPid(id);
+            child.setMasterId(masterId);
+            this.recursionSubset(child, saveList);
         }
     }
 

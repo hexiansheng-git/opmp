@@ -69,6 +69,7 @@
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
         </where>
         order by create_time desc
+        limit 1
     </select>
 
     <select id="getQqchWorkPlanningPrjImgList" resultMap="QqchWorkPlanningPrjImgResultMap">

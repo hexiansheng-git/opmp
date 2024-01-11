@@ -1,27 +1,26 @@
 package com.hhwy.pm.qqch.preparation.workPlanning.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrangeVo;
-import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.preparation.workPlanning.mapper.QqchWorkPlaningArrangeMapper;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlaningArrangeService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
-import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.utils.idworker.IdWorker;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zq
@@ -169,19 +168,13 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
 
     @Override
     public QqchWorkPlaningArrangeVo detail(QqchWorkPlaningArrange arrange) {
-        List<QqchWorkPlaningArrange> qqchWorkPlaningArrangeList = null;
-        if(ObjectNullUtil.isEmpty(arrange.getVersion())){//直接版本号最大且有效版本
-            qqchWorkPlaningArrangeList = getMaxVVData(arrange);
-        }else{//历史版本的详情
-            qqchWorkPlaningArrangeList = getQqchWorkPlaningArrangeList(arrange);
-        }
+        BigDecimal version = arrange.getVersion();
+        version = VersionUtil.getVersion("qqch_work_planing_arrange",version);
+        arrange.setVersion(version);
+        List<QqchWorkPlaningArrange> qqchWorkPlaningArrangeList = getQqchWorkPlaningArrangeList(arrange);
         QqchWorkPlaningArrangeVo qqchWorkPlaningArrangeVo = new QqchWorkPlaningArrangeVo();
         qqchWorkPlaningArrangeVo.setDataList(qqchWorkPlaningArrangeList);
-        if(ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeList)){
-            qqchWorkPlaningArrangeVo.setVersion(new BigDecimal(InitVersionConstant.INIT_VERSION));
-        }else{
-            qqchWorkPlaningArrangeVo.setVersion(qqchWorkPlaningArrangeList.get(0).getVersion());
-        }
+        qqchWorkPlaningArrangeVo.setVersion(version);
         //查询阶段
         String stage = iQqchReviewService.getStage();
         qqchWorkPlaningArrangeVo.setStageIdentity(stage);

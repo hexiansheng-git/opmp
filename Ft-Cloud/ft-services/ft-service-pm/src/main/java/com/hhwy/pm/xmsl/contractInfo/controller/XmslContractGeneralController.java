@@ -5,17 +5,12 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
-import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.pm.common.util.TreeNodeUtil;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractGeneral;
-import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSpecial;
-import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportTreeNodeVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractGeneral;
-import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractGeneralVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractGeneralService;
 import com.hhwy.utils.customLog.CustomBusinessType;
@@ -23,7 +18,6 @@ import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excelUtil.ExcelUtilByTemplate;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -152,13 +146,15 @@ public class XmslContractGeneralController extends BaseController {
         }
         //找到层级关系
         List<ImportXmslContractGeneral> treeList = this.parseLevelStruct(xmslContractLists);
-        List<ImportXmslContractGeneral> dateList = ListTreeUtil.formatTree(treeList, o -> o.getPid()==null
+        List<ImportXmslContractGeneral> collect = treeList.stream()
+                .filter(p -> p.getSort() != null)
+                .sorted(Comparator.comparing(ImportXmslContractGeneral::getSort)).collect(Collectors.toList());
+        List<ImportXmslContractGeneral> dateList = ListTreeUtil.formatTree(collect, o -> o.getPid()==null
                 , (r, n) -> r.getId().equals(n.getPid())
                 , ImportXmslContractGeneral::getChildren
                 , ImportXmslContractGeneral::setChildren);
         return AjaxResult.success(dateList);
     }
-
 
     /**
      *  给编制模块（合同策划）提供接口
@@ -191,7 +187,7 @@ public class XmslContractGeneralController extends BaseController {
      * 作者: fushudong
      * 时间: 2024/1/8
      */
-    public static  List<ImportXmslContractGeneral> parseLevelStruct(List<ImportXmslContractGeneral> list) {
+    public List<ImportXmslContractGeneral> parseLevelStruct(List<ImportXmslContractGeneral> list) {
         Map<String, ImportXmslContractGeneral> collect = list.stream()
                 .filter(p -> com.hhwy.common.core.utils.StringUtils.isNotEmpty(p.getInnerCode()))
                 .collect(Collectors.toMap(key -> key.getInnerCode(), value -> value, (v1, v2) -> v1));
@@ -199,8 +195,10 @@ public class XmslContractGeneralController extends BaseController {
             ImportXmslContractGeneral t = list.get(i);
             t.setId(IdUtil.getSnowflakeNextId());
             String innerCode = t.getInnerCode();
+            if (StrUtil.isBlank(innerCode)) continue;
             if (!innerCode.contains("-")) {
                 //第一层级
+                t.setSort(Integer.valueOf(innerCode));
                 continue;
             }
             String parentCode = innerCode.substring(0, innerCode.lastIndexOf("-"));
@@ -213,6 +211,7 @@ public class XmslContractGeneralController extends BaseController {
             if (CollectionUtil.isEmpty(children)) {
                 children = new ArrayList<>();
             }
+            t.setSort(Integer.valueOf(curentCode));
             t.setPid(parent.getId());
             children.add(t);
         }

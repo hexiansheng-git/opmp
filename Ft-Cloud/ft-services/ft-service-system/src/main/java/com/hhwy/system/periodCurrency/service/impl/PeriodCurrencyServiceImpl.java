@@ -190,10 +190,9 @@ public class PeriodCurrencyServiceImpl implements IPeriodCurrencyService {
         return periodCurrencyMapper.batchInsert(list);
     }
 
-    @Transactional
     @Override
     public void dataSync(List<PeriodCurrency> list) {
-        periodCurrencyMapper.deleteAll();
+//        periodCurrencyMapper.deleteAll();
         periodCurrencyMapper.batchInsert(list);
     }
 }
