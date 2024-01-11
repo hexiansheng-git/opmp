@@ -153,8 +153,8 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         JdglDaySchedule jdglDaySchedule1 = getJdglDaySchedule(jdglDaySchedule);
         if (jdglDaySchedule1 != null) {
             String taskStatus = jdglDaySchedule1.getTaskStatus();
-            jdglDaySchedule.setTaskStatus("0".equals(taskStatus)? "1" : "5");
-            jdglDaySchedule1.setTaskStatus("0".equals(taskStatus)? "1" : "5");
+            jdglDaySchedule.setTaskStatus("5");
+            jdglDaySchedule1.setTaskStatus("5");
             sysSyncInfoService.pushJdglDaySchedule(jdglDaySchedule1);
             jdglDayScheduleMapper.updateJdglDaySchedule(jdglDaySchedule);
         }
