@@ -71,7 +71,7 @@ public class ITenantProcessorImpl implements ITenantProcessor {
     public void masterToTenant(SysTenant sysTenant) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("tenantKey",sysTenant.getTenantKey());
-        remoteBpmnSyncService.masterToTenant(jsonObject);
+        remoteBpmnSyncService.masterToTenants(jsonObject);
     }
     //给租户用户分配默认角色
     public void addRoleToTenant(SysTenant sysTenant) {

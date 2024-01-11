@@ -87,28 +87,32 @@ public class UserServiceImpl implements IUserService {
         }
 
         //查询master部门层级数据
-//        List<SysDept> alldeptList = deptMapper.selectDeptList(new SysDept(),"master");
-//        Map<String, String> deptMap = new HashMap<>();
-//
-//        for(SysDept item:alldeptList){
-//            String deptId = item.getDeptId().toString();
-//            String deptName = item.getDeptName();
-//            deptMap.put(deptId,deptName);
-//        }
-//
-//        for(SelfUserInfo item:list){
-//            String ancestors = item.getAncestors();
-//            List<String> split= Arrays.asList(ancestors.split(","));
-//            StringBuffer sb = new StringBuffer();
-//            for(String str:split){
-//                String dn = deptMap.get(str);
-//                if(StringUtils.isNotBlank(dn))
-//                    sb.append("/").append(dn);
-//
-//            }
-//            sb.append(item.getDeptName());
-//            item.setDeptName(sb.toString());
-//        }
+        List<SysDept> alldeptList = deptMapper.selectDeptList(new SysDept(),"master");
+        Map<String, String> deptMap = new HashMap<>();
+
+        for(SysDept item:alldeptList){
+            String deptId = item.getDeptId().toString();
+            String deptName = item.getDeptName();
+            deptMap.put(deptId,deptName);
+        }
+
+        for(SelfUserInfo item:list){
+            String ancestors = item.getAncestors();
+            if(StringUtils.isNotBlank(ancestors)){
+                List<String> split= Arrays.asList(ancestors.split(","));
+                StringBuffer sb = new StringBuffer();
+                for(String str:split){
+                    String dn = deptMap.get(str);
+                    if(StringUtils.isNotBlank(dn))
+                        sb.append("/").append(dn);
+                }
+                if(StringUtils.isNotBlank(item.getDeptName())){
+                    sb.append("/");
+                    sb.append(item.getDeptName());
+                }
+                item.setAncestors(sb.toString());
+            }
+        }
 
         return list;
     }
