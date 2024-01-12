@@ -66,7 +66,7 @@ import java.util.stream.Collectors;
 @Service
 @Log
 public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
-    @Value("${gm.url}")
+    @Value("${gm.back-url}")
     private String gmUrl;
 
     @Autowired
