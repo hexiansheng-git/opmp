@@ -23,6 +23,8 @@ import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProject
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.service.IQqchProjectOperationObjectiveService;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
 import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcImplementPlanService;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
+import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchDesignTechnologyOptimizeService;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
@@ -119,6 +121,9 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchWorkPlaningArrangeService qqchWorkPlaningArrangeService;
 
+    @Autowired
+    private IQqchDesignTechnologyOptimizeService qqchDesignTechnologyOptimizeService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -163,6 +168,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("taxGoalList",policy) // 财务目标
                     .bind("workPlanBuildPlanList",policy) // 大临设施一览表
                     .bind("workPlanArrangeList",policy) // 施工便道跨越障碍物措施
+                    .bind("designTechnologyOptimizeList",policy) // 优化点清单
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -200,6 +206,8 @@ public class ExportWordServiceImpl implements ExportWordService {
         initProjectOperation(projectWordData);
         /*项目组织及*/
         initProjectOrganization(projectWordData);
+        /*设计技术管理*/
+        initDesignTechnologyManage(projectWordData);
     }
 
 
@@ -658,5 +666,16 @@ public class ExportWordServiceImpl implements ExportWordService {
         /*施工便道跨越障碍物措施*/
         List<QqchWorkPlaningArrange> workPlanArrangeList = qqchWorkPlaningArrangeService.detail(new QqchWorkPlaningArrange()).getDataList();
         projectWordData.setWorkPlanArrangeList(workPlanArrangeList);
+    }
+
+    /**
+     * 初始化设计技术管理
+     * @param projectWordData
+     */
+    private void initDesignTechnologyManage(ProjectWordData projectWordData){
+        /*优化点清单*/
+        List<QqchDesignTechnologyOptimize> designTechnologyOptimizeList = qqchDesignTechnologyOptimizeService.getQqchDesignTechnologyOptimizeVo(null).getQqchDesignTechnologyOptimizeList();
+        ListTreeUtil.preserveSerialNumber(designTechnologyOptimizeList,QqchDesignTechnologyOptimize::setPtVar1);
+        projectWordData.setDesignTechnologyOptimizeList(designTechnologyOptimizeList);
     }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassify;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal;
@@ -289,4 +290,10 @@ public class ProjectWordData {
      * 大临设施-施工便道跨越障碍物措施
      */
     private List<QqchWorkPlaningArrange> workPlanArrangeList;
+
+    /*---------------------------------------设计技术管理----------------------------------------*/
+    /**
+     * 优化点清单
+     */
+    private List<QqchDesignTechnologyOptimize> designTechnologyOptimizeList;
 }
