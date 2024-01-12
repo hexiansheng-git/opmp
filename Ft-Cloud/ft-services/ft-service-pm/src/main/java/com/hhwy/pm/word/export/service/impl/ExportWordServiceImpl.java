@@ -25,6 +25,10 @@ import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
 import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcImplementPlanService;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchDesignTechnologyOptimizeService;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructionComparison;
+import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstructionListService;
+import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchMajorConstructionComparisonService;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
@@ -124,6 +128,12 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchDesignTechnologyOptimizeService qqchDesignTechnologyOptimizeService;
 
+    @Autowired
+    private IQqchDangerConstructionListService qqchDangerConstructionListService;
+
+    @Autowired
+    private IQqchMajorConstructionComparisonService qqchMajorConstructionComparisonService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -169,6 +179,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("workPlanBuildPlanList",policy) // 大临设施一览表
                     .bind("workPlanArrangeList",policy) // 施工便道跨越障碍物措施
                     .bind("designTechnologyOptimizeList",policy) // 优化点清单
+                    .bind("constructionComparisonList",policy) // 重大施工方案比选
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -677,5 +688,11 @@ public class ExportWordServiceImpl implements ExportWordService {
         List<QqchDesignTechnologyOptimize> designTechnologyOptimizeList = qqchDesignTechnologyOptimizeService.getQqchDesignTechnologyOptimizeVo(null).getQqchDesignTechnologyOptimizeList();
         ListTreeUtil.preserveSerialNumber(designTechnologyOptimizeList,QqchDesignTechnologyOptimize::setPtVar1);
         projectWordData.setDesignTechnologyOptimizeList(designTechnologyOptimizeList);
+
+        /*重大施工方案比选*/
+        List<QqchMajorConstructionComparison> constructionComparisonList = qqchMajorConstructionComparisonService.getLatestList();
+        projectWordData.setConstructionComparisonList(constructionComparisonList);
+        /*危险性较大的分部分项工程*/
+        List<QqchDangerConstructionList> dangerConstructionListList = qqchDangerConstructionListService.getQqchDangerConstructionListList(null).getList();
     }
 }

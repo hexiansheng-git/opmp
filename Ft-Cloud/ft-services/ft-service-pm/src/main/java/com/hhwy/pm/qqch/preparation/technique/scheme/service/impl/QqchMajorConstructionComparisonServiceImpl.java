@@ -50,6 +50,23 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
         return vo;
     }
 
+    @Override
+    public List<QqchMajorConstructionComparison> getLatestList() {
+        BigDecimal version = VersionUtil.getVersion("qqch_major_construction_comparison", null);
+        QqchMajorConstructionComparison qryParam = new QqchMajorConstructionComparison();
+        qryParam.setVersion(version);
+        List<QqchMajorConstructionComparison> list = qqchMajorConstructionComparisonMapper.getQqchMajorConstructionComparisonList(qryParam);
+        list = ListTreeUtil.preserveSerialNumber(
+                list,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchMajorConstructionComparison::getChildren,
+                QqchMajorConstructionComparison::setChildren,
+                QqchMajorConstructionComparison::getPtVar1,
+                QqchMajorConstructionComparison::setPtVar1);
+        return list;
+    }
+
     @Transactional
     public void batchSave(QqchMajorConstructionComparisonVo qqchMajorConstructionComparisonVo) {
         // 先批量删除当前版本所有数据
