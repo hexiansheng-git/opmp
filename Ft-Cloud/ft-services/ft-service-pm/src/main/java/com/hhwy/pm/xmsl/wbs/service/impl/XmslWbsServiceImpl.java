@@ -322,7 +322,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         Map<String,Integer> sortMap = new HashMap<>(list.size());
         for (int i = 0; i < list.size(); i++) {
             XmslWbs temp = list.get(i);
-            if(StringUtils.isBlank(temp.getCode()))
+            if(temp == null || StringUtils.isBlank(temp.getCode()))
                 break;
             resuList.add(temp);
             String code = temp.getCode().trim();
