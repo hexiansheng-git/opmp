@@ -221,6 +221,9 @@ public class QqchEmpItem extends CompileEntity<QqchEmpItem> {
     @Excel(name = "序号")
     private Integer sort;
 
+    //检查表Id
+    private Long inspectionId;
+
 
     public static void main(String[] args) {
         JsonUtils.soutJsonStr(QqchEmpItem.class);

@@ -29,10 +29,11 @@ public interface TWbsMapper {
 
     /**
      * 根据产品类型获取生效的工程类型
-     * @param list
+     * @param type
      * @return
      */
     String getEffectEngineeringTypeByProType(String type);
+    String getEngineeringTypeByMainId(Long mainId);
 
     int insertTWbs(TWbs tWbs);
 

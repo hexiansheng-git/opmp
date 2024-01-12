@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.quality.emp.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
@@ -8,8 +9,10 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.quality.emp.domain.QqchEmpItem;
 import com.hhwy.pm.qqch.preparation.quality.emp.service.IQqchEmpItemService;
+import com.hhwy.pm.qqch.preparation.quality.emp.vo.EmpItemMergeDto;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -19,8 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author mls
@@ -29,7 +31,7 @@ import java.util.List;
  */
 @Validated
 @RestController
-@RequestMapping("/qqchEmpItem")
+    @RequestMapping("/qqchEmpItem")
 public class QqchEmpItemController extends BaseController {
 
     @Autowired
@@ -48,6 +50,19 @@ public class QqchEmpItemController extends BaseController {
         return getDataTableAjaxResult(qqchEmpItemList);
     }
 
+    //检查表接口
+    @PostMapping("/inspectionList")
+    public AjaxResult inspectionList(@RequestBody Map map) {
+        if(ObjectUtils.isBlank(map.get("standardId")))
+            return AjaxResult.success("",new HashMap<>(2));
+        Object resuObj = qqchEmpItemService.getQyzsQualitySpecialInspectionList(
+                ObjectUtils.toLong(map.get("standardId")),ObjectUtils.nvlString(map.get("inspectionProject")),
+                ObjectUtils.nvlString(map.get("inspectionName"))
+        );
+        return AjaxResult.success(resuObj);
+    }
+
+
 //    @PreAuthorize(hasPermi = "qqchEmpItem:add")
     @PostMapping("/save")
     @CustomLogger(title = "前期策划-前期策划编制-质量策划-9.4重难点工程", name = "9.4.3重难点工程检查项" ,businessType = CustomBusinessType.SAVE)
@@ -55,6 +70,15 @@ public class QqchEmpItemController extends BaseController {
       
         qqchEmpItemService.save(dto);
         return AjaxResult.success(dto);
+    }
+
+    //合并选择知识库的数据与现有清单
+    @PostMapping("/merge")
+//    @CustomLogger(title = "前期策划-前期策划编制-质量策划-9.4重难点工程", name = "9.4.3重难点工程检查项" ,businessType = CustomBusinessType.SAVE)
+    public AjaxResult merge(@RequestBody EmpItemMergeDto dto) {
+        List<QqchEmpItem> list = qqchEmpItemService.merge(dto.getItem(),dto.getInspectionList(),dto.getList());
+        System.out.println(JSONObject.toJSONString(list));
+        return AjaxResult.success(list);
     }
 
 
