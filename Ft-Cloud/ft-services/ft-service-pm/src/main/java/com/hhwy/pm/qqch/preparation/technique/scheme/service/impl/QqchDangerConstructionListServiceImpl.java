@@ -80,9 +80,6 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
         for (QqchDangerConstructionList qqchDangerConstructionList : dangerConstructionListVoList) {
             qqchDangerConstructionList.setId(IdWorker.createId());
             qqchDangerConstructionList.setVersion(qqchDangerConstructionListVo.getVersion());
-            if (qqchDangerConstructionListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
-                qqchDangerConstructionList.setValid(Valid.YES);
-            }
             qqchDangerConstructionList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchDangerConstructionList.setCreateUserName(SecurityUtils.getUserName());
             qqchDangerConstructionList.setCreateTime(DateUtils.getNowDate());
@@ -126,9 +123,13 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
         List<QqchDangerConstructionList> dangerList = qqchDangerConstructionListVo.getList();
         Map<String, QqchDangerConstructionList> map = dangerList.stream().collect(Collectors.toMap(QqchDangerConstructionList::getSchemeCode,o -> o));
 
+        if(version == null){
+            version = VersionUtil.getVersion("qqch_danger_construction_list",version);
+        }
+
         // 构造新的list
         List<QqchDangerConstructionList> insertList = new ArrayList<>();
-        constructionList.stream().forEach(construction -> {
+        for (QqchConstructionList construction : constructionList) {
             QqchDangerConstructionList insert = new QqchDangerConstructionList();
             BeanUtils.copyProperties(construction, insert);
             insert.setId(IdWorker.createId());
@@ -144,8 +145,9 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
                 insert.setMainMeasure(qqchDangerConstructionList.getMainMeasure());
             }
             insertList.add(insert);
-        });
+        }
 
+        qqchDangerConstructionListVo.setVersion(version);
         qqchDangerConstructionListVo.setList(insertList);
         this.batchSave(qqchDangerConstructionListVo);
     }
