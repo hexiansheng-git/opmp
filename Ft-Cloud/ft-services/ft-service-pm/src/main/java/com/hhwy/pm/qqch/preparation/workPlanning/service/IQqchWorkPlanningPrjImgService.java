@@ -7,11 +7,13 @@ import java.util.List;
 /**
  * @author zq
  * @date 2023-07-17 14:18:26
- * @remark 
+ * @remark
  */
 public interface IQqchWorkPlanningPrjImgService {
-                                                                                                                                                                
+
     QqchWorkPlanningPrjImg getQqchWorkPlanningPrjImg(QqchWorkPlanningPrjImg qqchWorkPlanningPrjImg);
+
+    QqchWorkPlanningPrjImg getLatestQqchWorkPlanningPrjImg();
 
     List<QqchWorkPlanningPrjImg> getQqchWorkPlanningPrjImgList(QqchWorkPlanningPrjImg qqchWorkPlanningPrjImg);
 
@@ -21,11 +23,11 @@ public interface IQqchWorkPlanningPrjImgService {
 
     int updateQqchWorkPlanningPrjImg(QqchWorkPlanningPrjImg qqchWorkPlanningPrjImg);
 
-            int updateQqchWorkPlanningPrjImgList(List<QqchWorkPlanningPrjImg> qqchWorkPlanningPrjImgList);
-    
+    int updateQqchWorkPlanningPrjImgList(List<QqchWorkPlanningPrjImg> qqchWorkPlanningPrjImgList);
+
     int deleteQqchWorkPlanningPrjImg(QqchWorkPlanningPrjImg qqchWorkPlanningPrjImg);
 
-            int deleteQqchWorkPlanningPrjImgByPks(List<Long> qqchWorkPlanningPrjImgPkList);
+    int deleteQqchWorkPlanningPrjImgByPks(List<Long> qqchWorkPlanningPrjImgPkList);
 
     QqchWorkPlanningPrjImg getQqchWorkPlanningPrjIsValid(QqchWorkPlanningPrjImg img);
 

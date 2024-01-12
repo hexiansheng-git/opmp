@@ -1,19 +1,9 @@
 package com.hhwy.pm.qqch.preparation.workPlanning.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
-import com.hhwy.pm.qqch.preparation.doc.dwg.service.IQqchDocDwgService;
-import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlanVo;
 import com.hhwy.pm.qqch.preparation.workPlanning.mapper.QqchWorkPlanningBuildPlanMapper;
@@ -21,15 +11,16 @@ import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningBuildP
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
-import io.swagger.models.auth.In;
-import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.hhwy.utils.idworker.IdWorker;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zq
@@ -187,19 +178,14 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
 
     @Override
     public QqchWorkPlanningBuildPlanVo detail(QqchWorkPlanningBuildPlan plan) {
-        List<QqchWorkPlanningBuildPlan> qqchWorkPlanningBuildPlanList = null;
-        if(ObjectNullUtil.isEmpty(plan.getVersion())){//直接版本号最大且有效版本
-            qqchWorkPlanningBuildPlanList = getMaxVVData(plan);
-        }else{//历史版本的详情
-            qqchWorkPlanningBuildPlanList = getQqchWorkPlanningBuildPlanList(plan);
-        }
+        BigDecimal version = plan.getVersion();
+        version = VersionUtil.getVersion("qqch_work_planning_build_plan", version);
+        plan.setVersion(version);
+        List<QqchWorkPlanningBuildPlan> qqchWorkPlanningBuildPlanList = getQqchWorkPlanningBuildPlanList(plan);;
+
         QqchWorkPlanningBuildPlanVo qqchWorkPlanningBuildPlanVo = new QqchWorkPlanningBuildPlanVo();
         qqchWorkPlanningBuildPlanVo.setDataList(qqchWorkPlanningBuildPlanList);
-        if(ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanList)){
-            qqchWorkPlanningBuildPlanVo.setVersion(new BigDecimal(InitVersionConstant.INIT_VERSION));
-        }else{
-            qqchWorkPlanningBuildPlanVo.setVersion(qqchWorkPlanningBuildPlanList.get(0).getVersion());
-        }
+        qqchWorkPlanningBuildPlanVo.setVersion(version);
         //查询阶段
         String stage = iQqchReviewService.getStage();
         qqchWorkPlanningBuildPlanVo.setStageIdentity(stage);

@@ -81,8 +81,8 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
         System.out.println("--获取p6项目数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime());
         if(projectInfo == null)  return returnList;
 
-        String urlwbs= p6IpPort + pre + "/wbsInfo";
-        String urlwork= p6IpPort + pre + "/activityInfo";
+        String urlwbs= p6IpPort + pre + "/wbsInfoRealTime";
+        String urlwork= p6IpPort + pre + "/activityInfoRealTime";
 
         HttpEntity<?> entity=new HttpEntity(new HttpHeaders());
 
@@ -370,7 +370,7 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
      * @return
      */
     public ProjectInfo getProjectInfo(String projectCode) {
-        String urlProj = p6IpPort + pre + "/projectInfo";
+        String urlProj = p6IpPort + pre + "/projectInfoRealTime";
         ParameterizedTypeReference<List<ProjectInfo>> responseType4Proj = new ParameterizedTypeReference<List<ProjectInfo>>() {};
         HttpEntity<?> entity=new HttpEntity(new HttpHeaders());
 
@@ -398,7 +398,7 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
 
         List<QqchMainPlanItemPre> returnList = new ArrayList<>();
 
-        String urlRel = p6IpPort + pre + "/relationInfo";
+        String urlRel = p6IpPort + pre + "/relationInfoRealTime";
 
         HttpEntity<?> entity=new HttpEntity(new HttpHeaders());
 

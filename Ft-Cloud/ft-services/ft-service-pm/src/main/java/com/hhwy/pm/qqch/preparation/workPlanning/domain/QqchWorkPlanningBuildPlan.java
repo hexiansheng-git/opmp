@@ -23,6 +23,7 @@ import java.util.Date;
 public class QqchWorkPlanningBuildPlan extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
+    private String serialNumber;
     /**
      * 字段描述：
      */

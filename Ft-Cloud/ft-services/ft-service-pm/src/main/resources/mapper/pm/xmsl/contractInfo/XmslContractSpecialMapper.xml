@@ -585,10 +585,12 @@
     <update id="deleteXmslContractSpecialByPks">
         update `xmsl_contract_special` set del_flag = 1
         <where>
+            <if test="xmslContractSpecialPkList != null and xmslContractSpecialPkList.size() > 0">
             `id` in
             <foreach item="id" collection="xmslContractSpecialPkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
+            </if>
             <if test="masterId != null ">and `master_id` = #{masterId}</if>
         </where>
     </update>

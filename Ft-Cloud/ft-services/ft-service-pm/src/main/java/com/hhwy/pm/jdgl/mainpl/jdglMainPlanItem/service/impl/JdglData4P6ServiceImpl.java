@@ -63,12 +63,15 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
     private String pre = "";
 
+    private String alex = "";
+
     @Override
     public List<JdglMainPlanItem> initJdglData4P6ByThis() {
         String tenantKey = SecurityUtils.getTenantKey();
         if(StringUtils.isEmpty(tenantKey)) {
             return new ArrayList<>();
         }
+        this.alex = "RealTime";
         return initJdglData4P6ByOne(tenantKey);
     }
 
@@ -85,8 +88,8 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
             return returnList;
         }
 
-        String urlwbs = p6IpPort + pre + "/wbsInfo";
-        String urlwork = p6IpPort + pre + "/activityInfo";
+        String urlwbs = p6IpPort + pre + "/wbsInfo" + this.alex;
+        String urlwork = p6IpPort + pre + "/activityInfo" + this.alex;
 
         HttpEntity<?> entity = new HttpEntity(new HttpHeaders());
 
@@ -672,7 +675,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
      * @return
      */
     public ProjectInfo getProjectInfo(String projectCode) {
-        String urlProj = p6IpPort + pre + "/projectInfo";
+        String urlProj = p6IpPort + pre + "/projectInfoRealTime";
         ParameterizedTypeReference<List<ProjectInfo>> responseType4Proj = new ParameterizedTypeReference<List<ProjectInfo>>() {
         };
         HttpEntity<?> entity = new HttpEntity(new HttpHeaders());
@@ -767,7 +770,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
         List<JdglMainPlanItemPre> returnList = new ArrayList<>();
 
-        String urlRel = p6IpPort + pre + "/relationInfo";
+        String urlRel = p6IpPort + pre + "/relationInfo"  + this.alex;
 
         HttpEntity<?> entity = new HttpEntity(new HttpHeaders());
 
