@@ -370,7 +370,7 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
      * @return
      */
     public ProjectInfo getProjectInfo(String projectCode) {
-        String urlProj = p6IpPort + pre + "/projectInfo";
+        String urlProj = p6IpPort + pre + "/projectInfoRealTime";
         ParameterizedTypeReference<List<ProjectInfo>> responseType4Proj = new ParameterizedTypeReference<List<ProjectInfo>>() {};
         HttpEntity<?> entity=new HttpEntity(new HttpHeaders());
 
