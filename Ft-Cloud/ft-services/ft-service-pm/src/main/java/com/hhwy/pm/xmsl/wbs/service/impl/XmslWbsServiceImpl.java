@@ -36,6 +36,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -313,6 +314,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     @Override
     public List<XmslWbs> importData(MultipartFile file) throws Exception {
         //读取excel中的数据，替换id
+        ZipSecureFile.setMinInflateRatio(-1.0d);  //
         FtExcelUtil<XmslWbs> excelUtil = new FtExcelUtil<>(XmslWbs.class);
         List<XmslWbs> list = excelUtil.importExcel(1,file.getInputStream());
         Map<String,XmslWbs> codeMap = new HashMap<>(list.size());
