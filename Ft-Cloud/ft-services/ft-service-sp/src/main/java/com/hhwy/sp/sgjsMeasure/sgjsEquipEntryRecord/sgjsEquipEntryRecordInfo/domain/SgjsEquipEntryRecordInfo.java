@@ -243,6 +243,16 @@ public class SgjsEquipEntryRecordInfo extends BaseEntity {
     //导出idList
     private List<String> exportIdList;
 
+    private List<String> delIdList;
+
+    public List<String> getDelIdList() {
+        return delIdList;
+    }
+
+    public void setDelIdList(List<String> delIdList) {
+        this.delIdList = delIdList;
+    }
+
     public List<String> getExportIdList() {
         return exportIdList;
     }

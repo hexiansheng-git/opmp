@@ -619,6 +619,14 @@
     <delete id="deleteAll" parameterType="com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo">
         <!-- update `sgjs_equip_entry_record_info` set del_flag = 1 ,update_time=#{updateTime},update_user=#{updateUser}-->
         delete from  sgjs_equip_entry_record_info
+        <where>
+            <if test="null!=delIdList and delIdList.size()>0">
+                id in
+                <foreach collection="delIdList" item="delId" open="(" separator="," close=")">
+                    #{delId}
+                </foreach>
+            </if>
+        </where>
     </delete>
 
     <select id="selectByIdList" resultMap="SgjsEquipEntryRecordInfoResultMap">

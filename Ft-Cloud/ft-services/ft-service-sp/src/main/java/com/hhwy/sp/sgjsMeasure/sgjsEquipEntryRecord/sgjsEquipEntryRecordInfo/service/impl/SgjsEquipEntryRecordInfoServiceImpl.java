@@ -150,10 +150,12 @@ public class SgjsEquipEntryRecordInfoServiceImpl implements ISgjsEquipEntryRecor
             eList.add(info);
         }
         sgjsEquipEntryRecordMapper.bathUpdateByList(eList);
-        //2、删除子表所有数据
+        //2、删除子表本次修改所有数据
         SgjsEquipEntryRecordInfo record=new SgjsEquipEntryRecordInfo();
         record.setUpdateTime(DateUtils.getNowDate());
         record.setUpdateUser(SecurityUtils.getUserId()+"");
+        List<String> id = infoList.stream().map(e -> e.get("id") + "").collect(Collectors.toList());
+        record.setDelIdList(id);
         sgjsEquipEntryRecordInfoMapper.deleteAll(record);
         List<SgjsEquipEntryRecordInfoDetail> list=new ArrayList<>();
         List<SgjsEquipEntryRecordInfo> iList=new ArrayList<>();
