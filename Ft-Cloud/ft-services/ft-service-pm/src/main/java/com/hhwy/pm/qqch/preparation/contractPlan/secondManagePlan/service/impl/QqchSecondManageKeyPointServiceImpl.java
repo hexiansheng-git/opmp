@@ -254,7 +254,6 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
             secondManageKeyPointPlan.setClauseCode(contractClause);
             secondManageKeyPointPlan.setOptimizedDirection(secondManageKeyPoint.getOptimizedDirection());
             secondManageKeyPointPlan.setContentDescription(secondManageKeyPoint.getContentDescription());
-            secondManageKeyPointPlan.setContractBasis(contractClause);
             secondManageKeyPointPlan.setProposedMeasures(secondManageKeyPoint.getProposedMeasures());
             secondManageKeyPointPlan.setRemark(secondManageKeyPoint.getRemark());
             resultList.add(secondManageKeyPointPlan);
@@ -265,17 +264,19 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
         qqchKeyPointContractClause.setVersion(version);
         qqchKeyPointContractClause.setKeyPointType(keyPointType);
         List<QqchKeyPointContractClause> qqchKeyPointContractClauseList = qqchKeyPointContractClauseMapper.getQqchKeyPointContractClauseList(qqchKeyPointContractClause);
+        Map<Long, List<QqchKeyPointContractClause>> contractClauseMap = qqchKeyPointContractClauseList.stream().collect(Collectors.groupingBy(QqchKeyPointContractClause::getMasterId));
 
         for (SecondManageKeyPointPlan secondManageKeyPointPlan : resultList) {
             Long masterId = secondManageKeyPointPlan.getId();
-            StringBuilder contractRight = new StringBuilder();
+            StringBuilder contractBasis = new StringBuilder();
             StringBuilder triggerCondition = new StringBuilder();
 
-            for (QqchKeyPointContractClause keyPointContractClause : qqchKeyPointContractClauseList) {
-                if(masterId.equals(keyPointContractClause.getMasterId())){
+            List<QqchKeyPointContractClause> clauseList = contractClauseMap.get(masterId);
+            if(CollectionUtils.isNotEmpty(clauseList)){
+                for (QqchKeyPointContractClause keyPointContractClause : clauseList) {
                     String clauseContent = keyPointContractClause.getClauseContent();
                     if(StringUtils.isNotBlank(clauseContent)){
-                        contractRight.append(clauseContent);
+                        contractBasis.append(clauseContent);
                     }
                     String trigger = keyPointContractClause.getTriggerCondition();
                     if(StringUtils.isNotBlank(trigger)){
@@ -283,7 +284,8 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
                     }
                 }
             }
-            secondManageKeyPointPlan.setContractRight(contractRight.toString());
+
+            secondManageKeyPointPlan.setContractBasis(contractBasis.toString());
             secondManageKeyPointPlan.setTriggerCondition(triggerCondition.toString());
         }
 
