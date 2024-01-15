@@ -74,11 +74,11 @@
             IFNULL(sum(company_self_num), 0) as companySelfNum
         from
             (select unionAllDevice.*,
-                 CASE equ_sourse WHEN '1' THEN 1 END as allocate_num,
-                 CASE equ_sourse WHEN '2' THEN 1 END as country_buy_num,
-                 CASE equ_sourse WHEN '3' THEN 1 END as local_buy_num,
-                 CASE equ_sourse WHEN '4' THEN 1 END as local_lease_num,
-                 CASE equ_sourse WHEN '5' THEN 1 END as company_self_num
+                 CASE equ_sourse WHEN '1' THEN SUM(num) END as allocate_num,
+                 CASE equ_sourse WHEN '2' THEN SUM(num) END as country_buy_num,
+                 CASE equ_sourse WHEN '3' THEN SUM(num) END as local_buy_num,
+                 CASE equ_sourse WHEN '4' THEN SUM(num) END as local_lease_num,
+                 CASE equ_sourse WHEN '5' THEN SUM(num) END as company_self_num
              from
                  (select *
                   from
@@ -91,6 +91,7 @@
                   (select equ_type,equ_code,equ_name,brand,spec,'' as rated_power, unit, num,equ_sourse, entry_date, exit_date, version, pt_var1, pt_var2 from qqch_small_machinery where del_flag = '0' and valid = '1')
                  )unionAllDevice
              where version = #{version} and equ_code IS NOT NULL and equ_name IS NOT NULL and equ_type IS NOT NULL
+             GROUP BY equ_code, equ_sourse
             )columnToRow
         group by
             equ_code
