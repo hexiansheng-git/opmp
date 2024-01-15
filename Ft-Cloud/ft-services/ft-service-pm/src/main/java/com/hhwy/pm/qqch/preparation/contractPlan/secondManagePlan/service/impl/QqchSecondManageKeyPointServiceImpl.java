@@ -276,11 +276,11 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
                 for (QqchKeyPointContractClause keyPointContractClause : clauseList) {
                     String clauseContent = keyPointContractClause.getClauseContent();
                     if(StringUtils.isNotBlank(clauseContent)){
-                        contractBasis.append(clauseContent);
+                        contractBasis.append(clauseContent).append("; ");
                     }
                     String trigger = keyPointContractClause.getTriggerCondition();
                     if(StringUtils.isNotBlank(trigger)){
-                        triggerCondition.append(trigger);
+                        triggerCondition.append(trigger).append("; ");
                     }
                 }
             }
