@@ -20,15 +20,14 @@ import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
+import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsHistoryMapper;
 import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsMapper;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsHistoryService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.system.api.domain.SysDictData;
-import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.*;
 import com.hhwy.utils.excel.FtExcelUtil;
-import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
@@ -61,6 +60,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     private Logger logger= LoggerFactory.getLogger(XmslWbsServiceImpl.class);
     @Autowired
     private XmslWbsMapper xmslWbsMapper;
+    @Autowired
+    private XmslWbsHistoryMapper xmslWbsHistoryMapper;
     @Resource
     private IXmslWbsMainService wbsMainService;
     @Resource
@@ -577,7 +578,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             wbsHistoryService.updateXmslWbsHistoryList(updateList);
         //删除
         if(StringUtils.isNotBlank(dto.getDelIds())){
-            wbsHistoryService.deleteXmslWbsHistoryByPks(Arrays.asList(Convert.toLongArray(dto.getDelIds())));
+            delById(dto.getMainId(),dto.getDelIds());
         }
         //提交校验
         submitCheck(dto);
@@ -649,6 +650,18 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             return id;
         String temp = idRepalceMap.get(id);
         return temp == null?IdWorker.createId()+"":temp;
+    }
+
+    //删除所有子级，
+    private void delById(Long mainId,String delIdStr){
+        Long[] delIds = Convert.toLongArray(delIdStr);
+        Set<Long> delAlIdList = new HashSet<>(Arrays.asList(delIds));
+        Set<Long> childIdList = new HashSet<>(Arrays.asList(delIds));
+        do{
+            delAlIdList.addAll(childIdList);
+            childIdList= xmslWbsHistoryMapper.selectIdByParentIds(mainId,childIdList);
+        }while(CollectionUtils.isNotEmpty(childIdList));
+        wbsHistoryService.deleteXmslWbsHistoryByPks(new ArrayList<>(delAlIdList));
     }
 
 
