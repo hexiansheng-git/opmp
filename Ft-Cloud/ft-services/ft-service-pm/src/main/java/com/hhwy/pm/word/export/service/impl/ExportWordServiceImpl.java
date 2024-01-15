@@ -180,6 +180,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("workPlanArrangeList",policy) // 施工便道跨越障碍物措施
                     .bind("designTechnologyOptimizeList",policy) // 优化点清单
                     .bind("constructionComparisonList",policy) // 重大施工方案比选
+                    .bind("dangerConstructionListList",policy) // 危险性较大的分部分项工程
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -692,7 +693,10 @@ public class ExportWordServiceImpl implements ExportWordService {
         /*重大施工方案比选*/
         List<QqchMajorConstructionComparison> constructionComparisonList = qqchMajorConstructionComparisonService.getLatestList();
         projectWordData.setConstructionComparisonList(constructionComparisonList);
+
         /*危险性较大的分部分项工程*/
         List<QqchDangerConstructionList> dangerConstructionListList = qqchDangerConstructionListService.getQqchDangerConstructionListList(null).getList();
+        projectWordData.setDangerConstructionListList(dangerConstructionListList);
+        ListTreeUtil.preserveSerialNumber(dangerConstructionListList,QqchDangerConstructionList::setSerialNum);
     }
 }

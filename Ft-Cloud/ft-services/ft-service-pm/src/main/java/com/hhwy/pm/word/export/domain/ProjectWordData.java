@@ -6,6 +6,7 @@ import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInv
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructionComparison;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
@@ -301,4 +302,8 @@ public class ProjectWordData {
      * 重大施工方案比选
      */
     private List<QqchMajorConstructionComparison> constructionComparisonList;
+    /**
+     * 危险性较大的分部分项工程
+     */
+    private List<QqchDangerConstructionList> dangerConstructionListList;
 }
