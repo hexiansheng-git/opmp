@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.service;
 
+import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchKeyPointContractClause;
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchSecondManageKeyPoint;
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.vo.QqchSecondManageKeyPointVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.vo.SecondManageKeyPointPlanVo;
@@ -41,6 +42,8 @@ public interface IQqchSecondManageKeyPointService {
      * @return
      */
     QqchSecondManageKeyPointVo getQqchSecondManageKeyPointVo(QqchSecondManageKeyPoint qqchSecondManageKeyPoint);
+
+    List<QqchKeyPointContractClause> getKeyPointContractClauseList4Word();
 
     /**
      * 保存/确认/提交

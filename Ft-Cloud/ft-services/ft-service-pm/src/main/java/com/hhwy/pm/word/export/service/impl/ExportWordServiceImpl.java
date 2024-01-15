@@ -19,6 +19,8 @@ import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchGen
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchKeyInventoryContentService;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchOtherContractItemService;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchSpecialConditionService;
+import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchKeyPointContractClause;
+import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.service.IQqchSecondManageKeyPointService;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.service.IQqchProjectOperationObjectiveService;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
@@ -140,6 +142,9 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchMeasureExpEquService qqchMeasureExpEquService;
 
+    @Autowired
+    private IQqchSecondManageKeyPointService qqchSecondManageKeyPointService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -189,6 +194,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("dangerConstructionListList",policy) // 危险性较大的分部分项工程
                     .bind("measureList",policy) // 测量仪器设备配置表
                     .bind("experimentList",policy) // 试验仪器设备配置表
+                    .bind("claimPointList",policy) // 索赔点
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -228,6 +234,8 @@ public class ExportWordServiceImpl implements ExportWordService {
         initProjectOrganization(projectWordData);
         /*设计技术管理*/
         initDesignTechnologyManage(projectWordData);
+        /*经营管理*/
+        initOperateManage(projectWordData);
     }
 
 
@@ -718,5 +726,15 @@ public class ExportWordServiceImpl implements ExportWordService {
         ListTreeUtil.preserveSerialNumber(experimentList,QqchMeasureExpEqu::setSerialNum);
         DictUtil.dictValueToLabel(experimentList,"equ_sourse",QqchMeasureExpEqu::getSource,QqchMeasureExpEqu::setSource);
         projectWordData.setExperimentList(experimentList);
+    }
+
+    /**
+     * 初始化经营管理数据
+     * @param projectWordData
+     */
+    private void initOperateManage(ProjectWordData projectWordData){
+        /*索赔点*/
+        List<QqchKeyPointContractClause> claimPointList = qqchSecondManageKeyPointService.getKeyPointContractClauseList4Word();
+        projectWordData.setClaimPointList(claimPointList);
     }
 }

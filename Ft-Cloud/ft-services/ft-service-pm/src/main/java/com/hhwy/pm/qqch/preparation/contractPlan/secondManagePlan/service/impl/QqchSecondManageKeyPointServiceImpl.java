@@ -20,6 +20,7 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.common.CommonAssert;
+import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
@@ -33,6 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -364,6 +367,29 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
         qqchSecondManageKeyPointVo.setList(treeList);
 
         return qqchSecondManageKeyPointVo;
+    }
+
+    @Override
+    public List<QqchKeyPointContractClause> getKeyPointContractClauseList4Word() {
+        BigDecimal version = VersionUtil.getVersion("qqch_second_manage_key_point",null);
+        QqchSecondManageKeyPoint query = new QqchSecondManageKeyPoint();
+        query.setVersion(version);
+        query.setKeyPointType("3");
+        List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointList = qqchSecondManageKeyPointMapper.getQqchSecondManageKeyPointList(query);
+        Map<Long, String> secondManageKeyPointMap = qqchSecondManageKeyPointList.stream().filter(o -> StringUtils.isNotBlank(o.getContentDescription())).collect(Collectors.toMap(QqchSecondManageKeyPoint::getId, QqchSecondManageKeyPoint::getContentDescription));
+
+        //二次经营要点识别关联合同条款
+        QqchKeyPointContractClause qqchKeyPointContractClause = new QqchKeyPointContractClause();
+        qqchKeyPointContractClause.setVersion(version);
+        qqchKeyPointContractClause.setKeyPointType("3");
+        List<QqchKeyPointContractClause> qqchKeyPointContractClauseList = qqchKeyPointContractClauseMapper.getQqchKeyPointContractClauseList(qqchKeyPointContractClause);
+        for (QqchKeyPointContractClause contractClause : qqchKeyPointContractClauseList) {
+            String contentDescription = secondManageKeyPointMap.get(contractClause.getMasterId());
+            contractClause.setPtVar2(contentDescription);
+        }
+        DictUtil.dictValueToLabel(qqchKeyPointContractClauseList,"this_project_occur_prob",QqchKeyPointContractClause::getOccurProb,QqchKeyPointContractClause::setOccurProb);
+        ListTreeUtil.preserveSerialNumber(qqchKeyPointContractClauseList,QqchKeyPointContractClause::setPtVar1);
+        return qqchKeyPointContractClauseList;
     }
 
     /**

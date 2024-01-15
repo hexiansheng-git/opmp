@@ -3,6 +3,7 @@ package com.hhwy.pm.word.export.domain;
 import com.deepoove.poi.data.PictureRenderData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassify;
+import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchKeyPointContractClause;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
@@ -315,4 +316,10 @@ public class ProjectWordData {
      * 试验仪器设备配置表
      */
     private List<QqchMeasureExpEqu> experimentList;
+
+    /*---------------------------------------经营管理---------------------------------------*/
+    /**
+     * 索赔点
+     */
+    private List<QqchKeyPointContractClause> claimPointList;
 }
