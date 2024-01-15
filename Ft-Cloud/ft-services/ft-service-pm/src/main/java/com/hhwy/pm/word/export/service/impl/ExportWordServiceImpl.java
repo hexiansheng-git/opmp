@@ -188,6 +188,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("constructionComparisonList",policy) // 重大施工方案比选
                     .bind("dangerConstructionListList",policy) // 危险性较大的分部分项工程
                     .bind("measureList",policy) // 测量仪器设备配置表
+                    .bind("experimentList",policy) // 试验仪器设备配置表
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -711,5 +712,11 @@ public class ExportWordServiceImpl implements ExportWordService {
         ListTreeUtil.preserveSerialNumber(measureList,QqchMeasureExpEqu::setSerialNum);
         DictUtil.dictValueToLabel(measureList,"equ_sourse",QqchMeasureExpEqu::getSource,QqchMeasureExpEqu::setSource);
         projectWordData.setMeasureList(measureList);
+
+        /*试验仪器设备配置表*/
+        List<QqchMeasureExpEqu> experimentList = qqchMeasureExpEquService.getQqchMeasureExpEquList(null, "2").getExperimentList();
+        ListTreeUtil.preserveSerialNumber(experimentList,QqchMeasureExpEqu::setSerialNum);
+        DictUtil.dictValueToLabel(experimentList,"equ_sourse",QqchMeasureExpEqu::getSource,QqchMeasureExpEqu::setSource);
+        projectWordData.setExperimentList(experimentList);
     }
 }

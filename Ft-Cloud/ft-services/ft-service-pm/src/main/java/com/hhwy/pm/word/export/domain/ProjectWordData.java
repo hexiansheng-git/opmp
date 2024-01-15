@@ -311,4 +311,8 @@ public class ProjectWordData {
      * 测量仪器设备配置表
      */
     private List<QqchMeasureExpEqu> measureList;
+    /**
+     * 试验仪器设备配置表
+     */
+    private List<QqchMeasureExpEqu> experimentList;
 }
