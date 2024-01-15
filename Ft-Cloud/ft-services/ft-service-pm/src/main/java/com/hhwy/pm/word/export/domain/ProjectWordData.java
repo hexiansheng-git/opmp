@@ -4,6 +4,7 @@ import com.deepoove.poi.data.PictureRenderData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassify;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
+import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
@@ -306,4 +307,8 @@ public class ProjectWordData {
      * 危险性较大的分部分项工程
      */
     private List<QqchDangerConstructionList> dangerConstructionListList;
+    /**
+     * 测量仪器设备配置表
+     */
+    private List<QqchMeasureExpEqu> measureList;
 }

@@ -21,6 +21,8 @@ import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchOth
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchSpecialConditionService;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.service.IQqchProjectOperationObjectiveService;
+import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
+import com.hhwy.pm.qqch.preparation.measureexp.equ.service.IQqchMeasureExpEquService;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
 import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcImplementPlanService;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
@@ -53,6 +55,7 @@ import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectEngineeringAmountService;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectMaterialsAmountService;
+import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
 import io.seata.common.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -134,6 +137,9 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchMajorConstructionComparisonService qqchMajorConstructionComparisonService;
 
+    @Autowired
+    private IQqchMeasureExpEquService qqchMeasureExpEquService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -181,6 +187,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("designTechnologyOptimizeList",policy) // 优化点清单
                     .bind("constructionComparisonList",policy) // 重大施工方案比选
                     .bind("dangerConstructionListList",policy) // 危险性较大的分部分项工程
+                    .bind("measureList",policy) // 测量仪器设备配置表
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -696,7 +703,13 @@ public class ExportWordServiceImpl implements ExportWordService {
 
         /*危险性较大的分部分项工程*/
         List<QqchDangerConstructionList> dangerConstructionListList = qqchDangerConstructionListService.getQqchDangerConstructionListList(null).getList();
-        projectWordData.setDangerConstructionListList(dangerConstructionListList);
         ListTreeUtil.preserveSerialNumber(dangerConstructionListList,QqchDangerConstructionList::setSerialNum);
+        projectWordData.setDangerConstructionListList(dangerConstructionListList);
+
+        /*测量仪器设备配置表*/
+        List<QqchMeasureExpEqu> measureList = qqchMeasureExpEquService.getQqchMeasureExpEquList(null, "1").getMeasureList();
+        ListTreeUtil.preserveSerialNumber(measureList,QqchMeasureExpEqu::setSerialNum);
+        DictUtil.dictValueToLabel(measureList,"equ_sourse",QqchMeasureExpEqu::getSource,QqchMeasureExpEqu::setSource);
+        projectWordData.setMeasureList(measureList);
     }
 }
