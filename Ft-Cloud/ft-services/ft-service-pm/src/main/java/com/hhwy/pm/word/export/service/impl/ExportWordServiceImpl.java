@@ -26,9 +26,11 @@ import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.service.IQqchS
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.service.IQqchProjectOperationObjectiveService;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalAccountingPolicy;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalBankSituation;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalTariffPolicy;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchMainTaxItemRate;
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalAccountingPolicyService;
+import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalBankSituationService;
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalTariffPolicyService;
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchMainTaxItemRateService;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
@@ -165,6 +167,9 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchLocalTariffPolicyService qqchLocalTariffPolicyService;
 
+    @Autowired
+    private IQqchLocalBankSituationService qqchLocalBankSituationService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -219,6 +224,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("mainTaxItemRateList",policy) // 当地税法政策
                     .bind("localAccountingPolicyList",policy) // 当地会计政策描述
                     .bind("localTariffPolicyList",policy) // 当地关税政策描述
+                    .bind("localBankSituationList",policy) // 当地银行情况描述
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -782,8 +788,14 @@ public class ExportWordServiceImpl implements ExportWordService {
         ListTreeUtil.preserveSerialNumber(localAccountingPolicyList,QqchLocalAccountingPolicy::setSerialNum);
         projectWordData.setLocalAccountingPolicyList(localAccountingPolicyList);
 
+        /*当地关税政策描述*/
         List<QqchLocalTariffPolicy> localTariffPolicyList = qqchLocalTariffPolicyService.getQqchLocalTariffPolicyList(null).getList();
         ListTreeUtil.preserveSerialNumber(localTariffPolicyList,QqchLocalTariffPolicy::setPtVar1);
         projectWordData.setLocalTariffPolicyList(localTariffPolicyList);
+
+        /*当地银行情况描述*/
+        List<QqchLocalBankSituation> localBankSituationList = qqchLocalBankSituationService.getQqchLocalBankSituationList(null).getList();
+        DictUtil.dictValueToLabel(localBankSituationList,"bank_nature",QqchLocalBankSituation::getBankNature,QqchLocalBankSituation::setBankNature);
+        projectWordData.setLocalBankSituationList(localBankSituationList);
     }
 }
