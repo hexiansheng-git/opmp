@@ -7,6 +7,7 @@ import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.domain.QqchEnhance
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchKeyPointContractClause;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalAccountingPolicy;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalTariffPolicy;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchMainTaxItemRate;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
@@ -339,4 +340,8 @@ public class ProjectWordData {
      * 当地会计政策描述
      */
     private List<QqchLocalAccountingPolicy> localAccountingPolicyList;
+    /**
+     * 当地关税政策描述
+     */
+    private List<QqchLocalTariffPolicy> localTariffPolicyList;
 }

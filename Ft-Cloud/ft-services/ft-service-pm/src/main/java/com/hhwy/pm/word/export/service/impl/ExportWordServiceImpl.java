@@ -26,8 +26,10 @@ import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.service.IQqchS
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.service.IQqchProjectOperationObjectiveService;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalAccountingPolicy;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalTariffPolicy;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchMainTaxItemRate;
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalAccountingPolicyService;
+import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalTariffPolicyService;
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchMainTaxItemRateService;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.service.IQqchMeasureExpEquService;
@@ -160,6 +162,9 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchLocalAccountingPolicyService qqchLocalAccountingPolicyService;
 
+    @Autowired
+    private IQqchLocalTariffPolicyService qqchLocalTariffPolicyService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -213,6 +218,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("enhanceEffectOtherMeasureList",policy) // 提高经营效果的其他措施
                     .bind("mainTaxItemRateList",policy) // 当地税法政策
                     .bind("localAccountingPolicyList",policy) // 当地会计政策描述
+                    .bind("localTariffPolicyList",policy) // 当地关税政策描述
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -775,5 +781,9 @@ public class ExportWordServiceImpl implements ExportWordService {
         List<QqchLocalAccountingPolicy> localAccountingPolicyList = qqchLocalAccountingPolicyService.getQqchLocalAccountingPolicyList(null).getList();
         ListTreeUtil.preserveSerialNumber(localAccountingPolicyList,QqchLocalAccountingPolicy::setSerialNum);
         projectWordData.setLocalAccountingPolicyList(localAccountingPolicyList);
+
+        List<QqchLocalTariffPolicy> localTariffPolicyList = qqchLocalTariffPolicyService.getQqchLocalTariffPolicyList(null).getList();
+        ListTreeUtil.preserveSerialNumber(localTariffPolicyList,QqchLocalTariffPolicy::setPtVar1);
+        projectWordData.setLocalTariffPolicyList(localTariffPolicyList);
     }
 }
