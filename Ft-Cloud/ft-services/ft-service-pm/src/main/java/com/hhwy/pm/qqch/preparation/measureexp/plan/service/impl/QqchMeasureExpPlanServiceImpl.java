@@ -102,7 +102,7 @@ public class QqchMeasureExpPlanServiceImpl implements IQqchMeasureExpPlanService
         //插入新数据
         List<QqchMeasureExpPlan> dto = map.dealSaveDto();
         this.checkData(dto);
-        if (!CollectionUtils.isEmpty(dto)){
+        if (!CollectionUtils.isEmpty(dto) && dto.get(0) instanceof QqchMeasureExpPlan){
             this.qqchMeasureExpPlanMapper.insertQqchMeasureExpPlanList(dto);
         }
 
