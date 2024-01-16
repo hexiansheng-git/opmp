@@ -25,6 +25,8 @@ import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchKey
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.service.IQqchSecondManageKeyPointService;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.service.IQqchProjectOperationObjectiveService;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchMainTaxItemRate;
+import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchMainTaxItemRateService;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.service.IQqchMeasureExpEquService;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
@@ -150,6 +152,9 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchEnhanceEffectOtherMeasureService qqchEnhanceEffectOtherMeasureService;
 
+    @Autowired
+    private IQqchMainTaxItemRateService IQqchMainTaxItemRateService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -201,6 +206,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("experimentList",policy) // 试验仪器设备配置表
                     .bind("claimPointList",policy) // 索赔点
                     .bind("enhanceEffectOtherMeasureList",policy) // 提高经营效果的其他措施
+                    .bind("mainTaxItemRateList",policy) // 当地税法政策
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -242,6 +248,8 @@ public class ExportWordServiceImpl implements ExportWordService {
         initDesignTechnologyManage(projectWordData);
         /*经营管理*/
         initOperateManage(projectWordData);
+        /*财务管理策划*/
+        initFinancialManagePlan(projectWordData);
     }
 
 
@@ -746,5 +754,15 @@ public class ExportWordServiceImpl implements ExportWordService {
         /*提高经营效果的其他措施*/
         List<QqchEnhanceEffectOtherMeasure> enhanceEffectOtherMeasureList = qqchEnhanceEffectOtherMeasureService.getList4Word();
         projectWordData.setEnhanceEffectOtherMeasureList(enhanceEffectOtherMeasureList);
+    }
+
+    /**
+     * 初始化财务管理策划数据
+     * @param projectWordData
+     */
+    private void initFinancialManagePlan(ProjectWordData projectWordData){
+        /*当地税法政策*/
+        List<QqchMainTaxItemRate> mainTaxItemRateList = IQqchMainTaxItemRateService.getQqchMainTaxItemRateList(null).getList();
+        projectWordData.setMainTaxItemRateList(mainTaxItemRateList);
     }
 }

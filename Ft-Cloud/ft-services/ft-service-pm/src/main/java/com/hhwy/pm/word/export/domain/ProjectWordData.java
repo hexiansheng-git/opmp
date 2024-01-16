@@ -6,6 +6,7 @@ import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInv
 import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.domain.QqchEnhanceEffectOtherMeasure;
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchKeyPointContractClause;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchMainTaxItemRate;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
@@ -327,4 +328,10 @@ public class ProjectWordData {
      * 提高经营效果的其他措施
      */
     private List<QqchEnhanceEffectOtherMeasure> enhanceEffectOtherMeasureList;
+
+    /*---------------------------------------财务管理策划---------------------------------------*/
+    /**
+     * 当地税法政策
+     */
+    private List<QqchMainTaxItemRate> mainTaxItemRateList;
 }
