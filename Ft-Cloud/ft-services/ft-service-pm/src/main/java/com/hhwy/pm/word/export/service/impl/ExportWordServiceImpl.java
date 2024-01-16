@@ -19,10 +19,20 @@ import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchGen
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchKeyInventoryContentService;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchOtherContractItemService;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchSpecialConditionService;
+import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.domain.QqchEnhanceEffectOtherMeasure;
+import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.service.IQqchEnhanceEffectOtherMeasureService;
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchKeyPointContractClause;
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.service.IQqchSecondManageKeyPointService;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.service.IQqchProjectOperationObjectiveService;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalAccountingPolicy;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalBankSituation;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalTariffPolicy;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchMainTaxItemRate;
+import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalAccountingPolicyService;
+import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalBankSituationService;
+import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalTariffPolicyService;
+import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchMainTaxItemRateService;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.service.IQqchMeasureExpEquService;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
@@ -145,6 +155,21 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchSecondManageKeyPointService qqchSecondManageKeyPointService;
 
+    @Autowired
+    private IQqchEnhanceEffectOtherMeasureService qqchEnhanceEffectOtherMeasureService;
+
+    @Autowired
+    private IQqchMainTaxItemRateService IQqchMainTaxItemRateService;
+
+    @Autowired
+    private IQqchLocalAccountingPolicyService qqchLocalAccountingPolicyService;
+
+    @Autowired
+    private IQqchLocalTariffPolicyService qqchLocalTariffPolicyService;
+
+    @Autowired
+    private IQqchLocalBankSituationService qqchLocalBankSituationService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -195,6 +220,11 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("measureList",policy) // 测量仪器设备配置表
                     .bind("experimentList",policy) // 试验仪器设备配置表
                     .bind("claimPointList",policy) // 索赔点
+                    .bind("enhanceEffectOtherMeasureList",policy) // 提高经营效果的其他措施
+                    .bind("mainTaxItemRateList",policy) // 当地税法政策
+                    .bind("localAccountingPolicyList",policy) // 当地会计政策描述
+                    .bind("localTariffPolicyList",policy) // 当地关税政策描述
+                    .bind("localBankSituationList",policy) // 当地银行情况描述
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -236,6 +266,8 @@ public class ExportWordServiceImpl implements ExportWordService {
         initDesignTechnologyManage(projectWordData);
         /*经营管理*/
         initOperateManage(projectWordData);
+        /*财务管理策划*/
+        initFinancialManagePlan(projectWordData);
     }
 
 
@@ -736,5 +768,34 @@ public class ExportWordServiceImpl implements ExportWordService {
         /*索赔点*/
         List<QqchKeyPointContractClause> claimPointList = qqchSecondManageKeyPointService.getKeyPointContractClauseList4Word();
         projectWordData.setClaimPointList(claimPointList);
+
+        /*提高经营效果的其他措施*/
+        List<QqchEnhanceEffectOtherMeasure> enhanceEffectOtherMeasureList = qqchEnhanceEffectOtherMeasureService.getList4Word();
+        projectWordData.setEnhanceEffectOtherMeasureList(enhanceEffectOtherMeasureList);
+    }
+
+    /**
+     * 初始化财务管理策划数据
+     * @param projectWordData
+     */
+    private void initFinancialManagePlan(ProjectWordData projectWordData){
+        /*当地税法政策*/
+        List<QqchMainTaxItemRate> mainTaxItemRateList = IQqchMainTaxItemRateService.getQqchMainTaxItemRateList(null).getList();
+        projectWordData.setMainTaxItemRateList(mainTaxItemRateList);
+
+        /*当地会计政策描述*/
+        List<QqchLocalAccountingPolicy> localAccountingPolicyList = qqchLocalAccountingPolicyService.getQqchLocalAccountingPolicyList(null).getList();
+        ListTreeUtil.preserveSerialNumber(localAccountingPolicyList,QqchLocalAccountingPolicy::setSerialNum);
+        projectWordData.setLocalAccountingPolicyList(localAccountingPolicyList);
+
+        /*当地关税政策描述*/
+        List<QqchLocalTariffPolicy> localTariffPolicyList = qqchLocalTariffPolicyService.getQqchLocalTariffPolicyList(null).getList();
+        ListTreeUtil.preserveSerialNumber(localTariffPolicyList,QqchLocalTariffPolicy::setPtVar1);
+        projectWordData.setLocalTariffPolicyList(localTariffPolicyList);
+
+        /*当地银行情况描述*/
+        List<QqchLocalBankSituation> localBankSituationList = qqchLocalBankSituationService.getQqchLocalBankSituationList(null).getList();
+        DictUtil.dictValueToLabel(localBankSituationList,"bank_nature",QqchLocalBankSituation::getBankNature,QqchLocalBankSituation::setBankNature);
+        projectWordData.setLocalBankSituationList(localBankSituationList);
     }
 }

@@ -3,8 +3,13 @@ package com.hhwy.pm.word.export.domain;
 import com.deepoove.poi.data.PictureRenderData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassify;
+import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.domain.QqchEnhanceEffectOtherMeasure;
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchKeyPointContractClause;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalAccountingPolicy;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalBankSituation;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalTariffPolicy;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchMainTaxItemRate;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
@@ -322,4 +327,26 @@ public class ProjectWordData {
      * 索赔点
      */
     private List<QqchKeyPointContractClause> claimPointList;
+    /**
+     * 提高经营效果的其他措施
+     */
+    private List<QqchEnhanceEffectOtherMeasure> enhanceEffectOtherMeasureList;
+
+    /*---------------------------------------财务管理策划---------------------------------------*/
+    /**
+     * 当地税法政策
+     */
+    private List<QqchMainTaxItemRate> mainTaxItemRateList;
+    /**
+     * 当地会计政策描述
+     */
+    private List<QqchLocalAccountingPolicy> localAccountingPolicyList;
+    /**
+     * 当地关税政策描述
+     */
+    private List<QqchLocalTariffPolicy> localTariffPolicyList;
+    /**
+     * 当地银行情况描述
+     */
+    private List<QqchLocalBankSituation> localBankSituationList;
 }

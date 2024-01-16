@@ -443,4 +443,13 @@
     <delete id="deleteAllData">
         delete from sgjs_equip_entry_record_info_detail
     </delete>
+
+
+    <delete id="deleteByIdList">
+        update sgjs_equip_entry_record_info_detail set del_flag="1"
+        where info_id in
+        <foreach collection="delIdList" open="(" separator="," close=")" item="id">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>
