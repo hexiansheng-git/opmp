@@ -3,6 +3,7 @@ package com.hhwy.pm.word.export.domain;
 import com.deepoove.poi.data.PictureRenderData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassify;
+import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.domain.QqchEnhanceEffectOtherMeasure;
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchKeyPointContractClause;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
@@ -322,4 +323,8 @@ public class ProjectWordData {
      * 索赔点
      */
     private List<QqchKeyPointContractClause> claimPointList;
+    /**
+     * 提高经营效果的其他措施
+     */
+    private List<QqchEnhanceEffectOtherMeasure> enhanceEffectOtherMeasureList;
 }

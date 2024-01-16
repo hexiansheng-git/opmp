@@ -112,6 +112,22 @@ public class QqchEnhanceEffectOtherMeasureServiceImpl implements IQqchEnhanceEff
         return qqchEnhanceEffectOtherMeasureVo;
     }
 
+    public List<QqchEnhanceEffectOtherMeasure> getList4Word(){
+        BigDecimal version = VersionUtil.getVersion("qqch_enhance_effect_other_measure",null);
+        QqchEnhanceEffectOtherMeasure query = new QqchEnhanceEffectOtherMeasure();
+        query.setVersion(version);
+        List<QqchEnhanceEffectOtherMeasure> qqchEnhanceEffectOtherMeasureList = qqchEnhanceEffectOtherMeasureMapper.getQqchEnhanceEffectOtherMeasureList(query);
+        qqchEnhanceEffectOtherMeasureList = ListTreeUtil.preserveSerialNumber(
+                qqchEnhanceEffectOtherMeasureList,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchEnhanceEffectOtherMeasure::getChildren,
+                QqchEnhanceEffectOtherMeasure::setChildren,
+                QqchEnhanceEffectOtherMeasure::getPtVar1,
+                QqchEnhanceEffectOtherMeasure::setPtVar1);
+        return qqchEnhanceEffectOtherMeasureList;
+    }
+
     /**
      * 保存/确认/提交
      * @param qqchEnhanceEffectOtherMeasureVo

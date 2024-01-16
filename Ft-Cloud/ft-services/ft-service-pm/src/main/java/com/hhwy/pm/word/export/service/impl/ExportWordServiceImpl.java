@@ -19,6 +19,8 @@ import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchGen
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchKeyInventoryContentService;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchOtherContractItemService;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchSpecialConditionService;
+import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.domain.QqchEnhanceEffectOtherMeasure;
+import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.service.IQqchEnhanceEffectOtherMeasureService;
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchKeyPointContractClause;
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.service.IQqchSecondManageKeyPointService;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
@@ -145,6 +147,9 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchSecondManageKeyPointService qqchSecondManageKeyPointService;
 
+    @Autowired
+    private IQqchEnhanceEffectOtherMeasureService qqchEnhanceEffectOtherMeasureService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -195,6 +200,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("measureList",policy) // 测量仪器设备配置表
                     .bind("experimentList",policy) // 试验仪器设备配置表
                     .bind("claimPointList",policy) // 索赔点
+                    .bind("enhanceEffectOtherMeasureList",policy) // 提高经营效果的其他措施
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -736,5 +742,9 @@ public class ExportWordServiceImpl implements ExportWordService {
         /*索赔点*/
         List<QqchKeyPointContractClause> claimPointList = qqchSecondManageKeyPointService.getKeyPointContractClauseList4Word();
         projectWordData.setClaimPointList(claimPointList);
+
+        /*提高经营效果的其他措施*/
+        List<QqchEnhanceEffectOtherMeasure> enhanceEffectOtherMeasureList = qqchEnhanceEffectOtherMeasureService.getList4Word();
+        projectWordData.setEnhanceEffectOtherMeasureList(enhanceEffectOtherMeasureList);
     }
 }

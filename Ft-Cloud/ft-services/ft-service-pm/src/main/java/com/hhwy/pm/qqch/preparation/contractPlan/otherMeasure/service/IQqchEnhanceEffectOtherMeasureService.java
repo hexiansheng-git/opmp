@@ -33,6 +33,8 @@ public interface IQqchEnhanceEffectOtherMeasureService {
      */
     QqchEnhanceEffectOtherMeasureVo getQqchEnhanceEffectOtherMeasureVo(QqchEnhanceEffectOtherMeasure qqchEnhanceEffectOtherMeasure);
 
+    List<QqchEnhanceEffectOtherMeasure> getList4Word();
+
     /**
      * 保存/确认/提交
      * @param qqchEnhanceEffectOtherMeasureVo
