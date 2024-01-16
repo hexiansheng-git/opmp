@@ -43,4 +43,12 @@ public interface SgjsEquipEntryRecordInfoDetailMapper {
     List<SgjsEquipEntryRecordInfoDetail> selectByInfoId(@Param(value = "infoIdList") List<String> infoIdList);
 
     void deleteAllData();
+
+    /**
+     * 数据删除根据关联id
+     *
+     * @param delIdList
+     * @return
+     */
+    int deleteByIdList(@Param(value = "delIdList") List<Long> delIdList);
 }

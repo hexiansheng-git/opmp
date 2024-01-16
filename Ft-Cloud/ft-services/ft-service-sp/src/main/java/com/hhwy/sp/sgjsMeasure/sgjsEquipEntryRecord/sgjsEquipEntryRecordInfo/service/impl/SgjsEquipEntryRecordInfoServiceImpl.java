@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.mapper.SgjsEquipEntryRecordMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
@@ -15,7 +14,6 @@ import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDeta
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.service.ISgjsEquipEntryRecordInfoDetailService;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
-import org.apache.commons.collections4.map.LinkedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,6 +127,12 @@ public class SgjsEquipEntryRecordInfoServiceImpl implements ISgjsEquipEntryRecor
     @Override
     @Transactional
     public int batchAddMap(Map<String, Object> map) {
+        //删除数据
+        List<Long> delIdList=(List<Long>)map.get("delIdList");
+        if(!CollectionUtils.isEmpty(delIdList)){
+            //删除 设备进场表 和 进场/离场记录表
+            handleDelData(delIdList);
+        }
         List<LinkedHashMap<String,Object>> equipList= (List<LinkedHashMap<String,Object>>)map.get("equipList");
         if(CollectionUtils.isEmpty(equipList)){
             logger.error("传参equipList空了");
@@ -178,5 +182,17 @@ public class SgjsEquipEntryRecordInfoServiceImpl implements ISgjsEquipEntryRecor
             sgjsEquipEntryRecordInfoDetailService.insertSgjsEquipEntryRecordInfoDetailList(list);
         }
         return 1;
+    }
+
+    /**
+     * 数据删除
+     *
+     * @param delIdList
+     */
+    private void handleDelData(List<Long> delIdList) {
+        //删除设备进场记录数据
+        sgjsEquipEntryRecordInfoMapper.deleteSgjsEquipEntryRecordInfoByPks(delIdList);
+        //删除进场/离场数据
+        detailMapper.deleteByIdList(delIdList);
     }
 }
