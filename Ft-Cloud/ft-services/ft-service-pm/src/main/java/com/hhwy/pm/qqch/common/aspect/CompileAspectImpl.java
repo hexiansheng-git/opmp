@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.common.aspect;
 
 
 import com.hhwy.common.core.utils.SpringUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -105,7 +106,11 @@ public class CompileAspectImpl {
     private void addConfirmAndUpdateFinishNum(CompileEntity compileEntity) {
         String reqId = compileEntity.getReqId();
         if (!redisUtils.hasKey(reqId) && "1".equals(compileEntity.getSubmitFlag())) {
-            moduleConfirmCaseService.addConfirmRecord(compileEntity.getMenuId(), compileEntity.getStageIdentity());
+            String menuId = compileEntity.getMenuId();
+            if(StringUtils.isBlank(menuId)){
+                menuId = compileEntity.getModuleIdentity();
+            }
+            moduleConfirmCaseService.addConfirmRecord(menuId, compileEntity.getStageIdentity());
             redisUtils.setEx(reqId, reqId, 60000);
         }
     }
