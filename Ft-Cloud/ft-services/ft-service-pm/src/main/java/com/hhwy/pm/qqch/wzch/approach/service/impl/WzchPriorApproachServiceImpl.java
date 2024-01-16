@@ -280,8 +280,8 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
         WzchPriorApproachDetail queryDetail = new WzchPriorApproachDetail();
         queryDetail.setVersion(version);
         List<WzchPriorApproachDetail> wzchPriorApproachDetails = wzchPriorApproachDetailService.selectWzchPriorApproachDetailList(queryDetail);
+        approach.setWzchPriorApproachDetailList(wzchPriorApproachDetails);
         if(CollectionUtils.isEmpty(wzchPriorApproachDetails)){
-            approach.setWzchPriorApproachDetailList(wzchPriorApproachDetails);
             return approach;
         }
         List<Long> detailIds = wzchPriorApproachDetails.stream().map(WzchPriorApproachDetail::getId).collect(Collectors.toList());

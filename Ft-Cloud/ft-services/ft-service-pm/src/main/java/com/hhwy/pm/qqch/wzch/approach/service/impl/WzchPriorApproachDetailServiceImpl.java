@@ -27,7 +27,6 @@ import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandDetail;
 import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandTimeCount;
 import com.hhwy.pm.qqch.wzch.demand.mapper.WzchTotalDemandTimeCountMapper;
 import com.hhwy.pm.qqch.wzch.demand.service.IWzchTotalDemandDetailService;
-import com.hhwy.pm.qqch.wzch.demand.service.IWzchTotalDemandService;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.date.FtDateUtils;
@@ -43,11 +42,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -196,6 +193,7 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
             List<WzchPriorApproachYearCount> list = wzchPriorApproachDetail.getWzchPriorApproachYearCountList();
             for (int i = 0; i < list.size(); i++){
                 list.get(i).setVersion(wzchPriorApproach.getVersion());
+                list.get(i).setDetailId(wzchPriorApproachDetail.getId());
                 list.get(i).setId(IdWorker.createId());
             }
             wzchPriorApproachYearCounts.addAll(wzchPriorApproachDetail.getWzchPriorApproachYearCountList());
