@@ -2,21 +2,13 @@ package com.hhwy.pm.qqch.preparation.quality.emp.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
-import com.hhwy.common.core.utils.TreeUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.common.tenant.service.TenantDynamicDataSourceService;
-import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
-import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.constant.PmConstant;
-import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.gm.wbs.domain.TWbs;
 import com.hhwy.pm.gm.wbs.service.ITWbsService;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -24,12 +16,10 @@ import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.quality.emp.domain.QqchEmpItem;
 import com.hhwy.pm.qqch.preparation.quality.emp.mapper.QqchEmpItemMapper;
 import com.hhwy.pm.qqch.preparation.quality.emp.service.IQqchEmpItemService;
-import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.domain.QqchQualityRiskControlMeasures;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.QqchWeightEngineeringList;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.service.IQqchWeightEngineeringListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
-import com.hhwy.pm.qyzs.quality.qyzsQualityRisk.domain.QyzsQualityRisk;
 import com.hhwy.pm.qyzs.quality.qyzsQualitySpecialInspection.domain.QyzsQualitySpecialInspection;
 import com.hhwy.pm.utils.HttpHeadersUtils;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
@@ -49,13 +39,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 /**
@@ -379,6 +366,8 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
             List<XmslWbs> collect = WbsRedisUtils.getWbs(split).stream().map(i -> {
                 XmslWbs xmslWbs = new XmslWbs();
                 xmslWbs.setId(i.getId());
+                xmslWbs.setAncestorsName(i.getAncestorsName());
+                xmslWbs.setAncestors(i.getAncestors());
                 xmslWbs.setParentId(i.getParentId());
                 xmslWbs.setCode(i.getCode());
                 xmslWbs.setName(i.getName());

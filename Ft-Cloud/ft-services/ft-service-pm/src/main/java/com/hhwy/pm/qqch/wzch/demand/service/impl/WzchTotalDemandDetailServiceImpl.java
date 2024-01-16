@@ -12,7 +12,6 @@ import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemand.domain.QqchTotalDemand;
-import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemand.domain.vo.QqchTotalDemandVo;
 import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemand.service.IQqchTotalDemandService;
 import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.domain.QqchTotalDemandTimeCount;
 import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.service.IQqchTotalDemandTimeCountService;
@@ -32,13 +31,11 @@ import com.hhwy.pm.qqch.wzch.demand.vo.WzchSourceTotalDemandDetailExportRequest;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandDetailRequest;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandValidVO;
 import com.hhwy.pm.qqch.wzch.enums.YesOrNoEnum;
-import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
 import com.hhwy.pm.qqch.wzch.source.service.IWzchSourceService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.AddBaseInfoUtil;
-import com.hhwy.utils.MaterialUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.excelUtil.handler.DictHandler;
 import com.hhwy.utils.idworker.IdWorker;
@@ -48,7 +45,6 @@ import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.xmlbeans.impl.xb.ltgfmt.impl.TestsDocumentImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,7 +58,6 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
-import java.util.logging.Handler;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -1082,11 +1077,11 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
                 List<String> vlist = subList(datas, sStart, sEnd);
                 //循环头部
                 for (int i = 0; i < iList.size(); i++) {
-                    //年度
+                    //季度
                     if ("Q".equals(viewType)) {
                         timeCount = fillQuarterCountData(timeCount, iList, vlist, i);
                     }
-                    //季度
+                    //月度
                     if ("M".equals(viewType)) {
                         timeCount = fillMonthCountData(timeCount, iList, vlist, i);
                     }
@@ -1226,6 +1221,13 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         if (12 == iList.get(i)) {
             timeCount.setDecNum(StringUtils.isBlank(vlist.get(i)) ? null : new BigDecimal(vlist.get(i)));
         }
+        //统计季度数量
+        timeCount.setFirstQuarterNum(BigDecimalUtils.sum(timeCount.getJanNum(),timeCount.getFebNum(),timeCount.getMarNum()));
+        timeCount.setSecondQuarterNum(BigDecimalUtils.sum(timeCount.getAprNum(),timeCount.getMayNum(),timeCount.getJunNum()));
+        timeCount.setThirdQuarterNum(BigDecimalUtils.sum(timeCount.getJulNum(),timeCount.getAugNum(),timeCount.getSeptNum()));
+        timeCount.setFourthQuarterNum(BigDecimalUtils.sum(timeCount.getOctNum(),timeCount.getNovNum(),timeCount.getDecNum()));
+        //统计年度
+        timeCount.setYearNum(BigDecimalUtils.sum(timeCount.getFirstQuarterNum(),timeCount.getSecondQuarterNum(),timeCount.getThirdQuarterNum(),timeCount.getFourthQuarterNum()));
         return timeCount;
     }
 
@@ -1242,6 +1244,8 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         if (QuarterEnum.FOURTH.getValue().equals(iList.get(i))) {
             timeCount.setFourthQuarterNum(StringUtils.isBlank(vlist.get(i)) ? null : new BigDecimal(vlist.get(i)));
         }
+        //统计年度
+        timeCount.setYearNum(BigDecimalUtils.sum(timeCount.getFirstQuarterNum(),timeCount.getSecondQuarterNum(),timeCount.getThirdQuarterNum(),timeCount.getFourthQuarterNum()));
         return timeCount;
     }
 
