@@ -6,6 +6,7 @@ import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInv
 import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.domain.QqchEnhanceEffectOtherMeasure;
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchKeyPointContractClause;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalAccountingPolicy;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchMainTaxItemRate;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
@@ -334,4 +335,8 @@ public class ProjectWordData {
      * 当地税法政策
      */
     private List<QqchMainTaxItemRate> mainTaxItemRateList;
+    /**
+     * 当地会计政策描述
+     */
+    private List<QqchLocalAccountingPolicy> localAccountingPolicyList;
 }

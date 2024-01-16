@@ -25,7 +25,9 @@ import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchKey
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.service.IQqchSecondManageKeyPointService;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.service.IQqchProjectOperationObjectiveService;
+import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalAccountingPolicy;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchMainTaxItemRate;
+import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalAccountingPolicyService;
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchMainTaxItemRateService;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.service.IQqchMeasureExpEquService;
@@ -155,6 +157,9 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchMainTaxItemRateService IQqchMainTaxItemRateService;
 
+    @Autowired
+    private IQqchLocalAccountingPolicyService qqchLocalAccountingPolicyService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -207,6 +212,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("claimPointList",policy) // 索赔点
                     .bind("enhanceEffectOtherMeasureList",policy) // 提高经营效果的其他措施
                     .bind("mainTaxItemRateList",policy) // 当地税法政策
+                    .bind("localAccountingPolicyList",policy) // 当地会计政策描述
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -764,5 +770,10 @@ public class ExportWordServiceImpl implements ExportWordService {
         /*当地税法政策*/
         List<QqchMainTaxItemRate> mainTaxItemRateList = IQqchMainTaxItemRateService.getQqchMainTaxItemRateList(null).getList();
         projectWordData.setMainTaxItemRateList(mainTaxItemRateList);
+
+        /*当地会计政策描述*/
+        List<QqchLocalAccountingPolicy> localAccountingPolicyList = qqchLocalAccountingPolicyService.getQqchLocalAccountingPolicyList(null).getList();
+        ListTreeUtil.preserveSerialNumber(localAccountingPolicyList,QqchLocalAccountingPolicy::setSerialNum);
+        projectWordData.setLocalAccountingPolicyList(localAccountingPolicyList);
     }
 }
