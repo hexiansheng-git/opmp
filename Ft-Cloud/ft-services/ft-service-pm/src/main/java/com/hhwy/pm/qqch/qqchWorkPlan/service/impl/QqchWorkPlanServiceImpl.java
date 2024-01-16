@@ -494,7 +494,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public void updateWorkPlanProcess(Long id) {
         System.out.println("工作计划id：    "+id + "----------------------");
         //所有都置为无效
