@@ -53,9 +53,11 @@ public class KcsjEquipEntryRecordInfoServiceImpl implements IKcsjEquipEntryRecor
             info.setEntryDateStr(info.getEntryDate() == null ? null : FtDateUtils.formatDate(info.getEntryDate()));
             info.setExitDateStr(info.getExitDate() == null ? null : FtDateUtils.formatDate(info.getExitDate()));
         }
+        List<KcsjEquipEntryRecordInfo> allList = new ArrayList<>();
         if(!CollectionUtils.isEmpty(kcsjEquipEntryRecordInfoList)){
             List<KcsjEquipEntryRecordInfo> list1 = kcsjEquipEntryRecordInfoList.stream().filter(e -> StringUtils.isNotEmpty(e.getPid().toString()) && !e.getPid().toString().equals("0")).collect(Collectors.toList());
             if(list1.size()>0){
+                allList.addAll(list1);
                 KcsjEquipEntryRecordInfo entryRecordInfo = new KcsjEquipEntryRecordInfo();
                 List<Long> pidAll = new ArrayList<>();
                 for (int i = 0; i < list1.size(); i++) {
@@ -64,10 +66,11 @@ public class KcsjEquipEntryRecordInfoServiceImpl implements IKcsjEquipEntryRecor
                 entryRecordInfo.setIds(pidAll);
                 List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecords1 = kcsjEquipEntryRecordInfoMapper.getKcsjEquipEntryRecordInfoList(entryRecordInfo);
                 kcsjEquipEntryRecordInfoList.addAll(kcsjEquipEntryRecords1);
+                allList.addAll(kcsjEquipEntryRecords1);
             } else {
                 return new ArrayList<>();
             }
-            List<KcsjEquipEntryRecordInfo> collect = kcsjEquipEntryRecordInfoList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(KcsjEquipEntryRecordInfo::getId))), ArrayList::new));
+            List<KcsjEquipEntryRecordInfo> collect = allList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(KcsjEquipEntryRecordInfo::getId))), ArrayList::new));
             list = collect.stream().sorted(Comparator.comparing(KcsjEquipEntryRecordInfo::getId)).collect(Collectors.toList());
         }
         return TreeUtil.newBuild(list);
