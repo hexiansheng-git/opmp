@@ -56,22 +56,29 @@
     <select id="getAllDemandDevice" resultType="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail">
         select
             SUBSTRING_INDEX(GROUP_CONCAT(equ_type), ',', 1)  as materialType,
-            pt_var1 as ptVar2, pt_var2 as ptVar3,
-            equ_code as materialCode, equ_name as materialName, brand as brandNames
-               ,spec as materialSpec, rated_power as materialPower, unit as materialUnit, num as totalNum, equ_sourse
-               , MIN(entry_date) as planEntryTime, MAX(exit_date) as planExitTime,
-            IFNULL(sum(allocate_num), 0) as allocate_num,
-            IFNULL(sum(country_buy_num), 0) as country_buy_num,
-            IFNULL(sum(local_buy_num), 0) as local_buy_num,
-            IFNULL(sum(local_lease_num), 0) as local_lease_num,
-            IFNULL(sum(company_self_num), 0) as company_self_num
+            pt_var1 as ptVar2,
+            pt_var2 as ptVar3,
+            equ_code as materialCode,
+            equ_name as materialName,
+            brand as brandNames,
+            spec as materialSpec,
+            rated_power as materialPower,
+            unit as materialUnit,
+            MIN(entry_date) as planEntryTime,
+            MAX(exit_date) as planExitTime,
+            IFNULL(sum(num), 0) as  totalNum,
+            IFNULL(sum(allocate_num), 0) as allocateNum,
+            IFNULL(sum(country_buy_num), 0) as countryBuyNum,
+            IFNULL(sum(local_buy_num), 0) as localBuyNum,
+            IFNULL(sum(local_lease_num), 0) as localLeaseNum,
+            IFNULL(sum(company_self_num), 0) as companySelfNum
         from
             (select unionAllDevice.*,
-                 CASE equ_sourse WHEN '1' THEN 1 END as allocate_num,
-                 CASE equ_sourse WHEN '2' THEN 1 END as country_buy_num,
-                 CASE equ_sourse WHEN '3' THEN 1 END as local_buy_num,
-                 CASE equ_sourse WHEN '4' THEN 1 END as local_lease_num,
-                 CASE equ_sourse WHEN '5' THEN 1 END as company_self_num
+                 CASE equ_sourse WHEN '1' THEN SUM(num) END as allocate_num,
+                 CASE equ_sourse WHEN '2' THEN SUM(num) END as country_buy_num,
+                 CASE equ_sourse WHEN '3' THEN SUM(num) END as local_buy_num,
+                 CASE equ_sourse WHEN '4' THEN SUM(num) END as local_lease_num,
+                 CASE equ_sourse WHEN '5' THEN SUM(num) END as company_self_num
              from
                  (select *
                   from
@@ -84,6 +91,7 @@
                   (select equ_type,equ_code,equ_name,brand,spec,'' as rated_power, unit, num,equ_sourse, entry_date, exit_date, version, pt_var1, pt_var2 from qqch_small_machinery where del_flag = '0' and valid = '1')
                  )unionAllDevice
              where version = #{version} and equ_code IS NOT NULL and equ_name IS NOT NULL and equ_type IS NOT NULL
+             GROUP BY equ_code, equ_sourse
             )columnToRow
         group by
             equ_code

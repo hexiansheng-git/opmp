@@ -18,6 +18,8 @@ public interface ITWbsService {
 
     List<TWbs> getTWbsListByMainId(Long id);
 
+    TWbs getTWbsById(Long id);
+
     List<TWbs> getTWbsList(TWbs tWbs);
 
     /**
@@ -55,6 +57,13 @@ public interface ITWbsService {
      * @return
      */
     String getDefaultEngineeringType();
+
+    /**
+     * 获取工程类型
+     * @param mainId
+     * @return
+     */
+    String getEngineeringTypeByMainId(Long mainId);
 
     /**
      * 获取项目wbs关联的标准wbs

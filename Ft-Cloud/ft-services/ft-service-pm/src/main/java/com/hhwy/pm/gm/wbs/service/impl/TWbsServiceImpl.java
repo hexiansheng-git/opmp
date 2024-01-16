@@ -56,6 +56,23 @@ public class TWbsServiceImpl implements ITWbsService {
     }
 
     @Override
+    public TWbs getTWbsById(Long id) {
+        if(id == null)
+            return null;
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        try {
+            TWbs query = new TWbs();
+            query.setId(id+"");
+            return this.tWbsMapper.getTWbs(query);
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+    }
+
+    @Override
     public List<TWbs> getTWbsListByMainId(Long id) {
         if(id == null)
             return new ArrayList<>();
@@ -264,6 +281,13 @@ public class TWbsServiceImpl implements ITWbsService {
     }
 
     @Override
+    public String getEngineeringTypeByMainId(Long mainId) {
+        if(mainId == null)
+            return null;
+        return this.tWbsMapper.getEngineeringTypeByMainId(mainId);
+    }
+
+    @Override
     public Map<String, TWbs> getTWbsByPrjWbsCode(Set<String> set) {
         List<XmslWbs> wbsList = WbsRedisUtils.getWbsByCodes(set);
         if(CollectionUtils.isEmpty(wbsList))
@@ -286,8 +310,6 @@ public class TWbsServiceImpl implements ITWbsService {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
         }
-
-
     }
 
     public List<TWbs> getTWbsByIds(Collection<Long> ids){

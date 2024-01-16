@@ -236,6 +236,10 @@
         order by version desc limit 1
     </select>
 
+    <select id="getEngineeringTypeByMainId" parameterType="Long" resultType="String">
+        select engineering_type from `opmp-pm`.t_wbs_main where id = #{id}
+    </select>
+
     <insert id="insertTWbs" useGeneratedKeys="true" keyProperty="id">
         insert into t_wbs
         <trim prefix="(" suffix=")" suffixOverrides=",">

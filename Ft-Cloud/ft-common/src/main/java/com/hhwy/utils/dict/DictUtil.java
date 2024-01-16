@@ -5,11 +5,16 @@ package com.hhwy.utils.dict;/**
  */
 
 import com.hhwy.common.core.utils.SpringUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.feign.service.SystemServiceApi;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * @author zq
@@ -62,5 +67,26 @@ public class DictUtil {
             valuelist.add(temp.get("dictValue").toString());
         });
         return valuelist;
+    }
+
+    /**
+     * 字典转换
+     * @param source
+     * @param dictType
+     * @param getDictValue
+     * @param setDictLabel
+     * @param <T>
+     */
+    public static <T> void dictValueToLabel(List<T> source, String dictType, Function<T,String> getDictValue, BiConsumer<T,String> setDictLabel){
+        LinkedHashMap<String, String> valueLabelMap = getDictDataName(dictType);
+        for (T t : source) {
+            String dictValue = getDictValue.apply(t);
+            if(StringUtils.isNotBlank(dictValue)){
+                String dictLabel = valueLabelMap.get(dictValue);
+                if(StringUtils.isNotBlank(dictLabel)){
+                    setDictLabel.accept(t,dictLabel);
+                }
+            }
+        }
     }
 }

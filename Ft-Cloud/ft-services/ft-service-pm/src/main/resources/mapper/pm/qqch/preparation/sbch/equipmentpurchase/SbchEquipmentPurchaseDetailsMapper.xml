@@ -43,7 +43,7 @@
     </sql>
 
     <select id="selectSbchEquipmentPurchaseDetailsList" parameterType="com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.domain.SbchEquipmentPurchaseDetails" resultMap="SbchEquipmentPurchaseDetailsResult">
-        select detail.`id`, `main_id`, detail.`category_code`, detail.`material_code`, detail.`material_name`
+        select detail.`id`, `main_id`, detail.`category_code`, detail.`material_code`, detail.`material_name`,detail.`sb_purchase_source`
                , detail.`material_spec`, `sb_advice_brand_id`, `sb_advice_brand`, `sb_power`, `unit_code`, `unit`, `sb_num`, `sb_forecast_price`
                , `sb_forecast_total_price`, `sb_plan_enter_date`, detail.`remark`, detail.`create_user`, detail.`create_user_name`, detail.`create_time`
                , detail.`update_user`, detail.`update_user_name`, detail.`update_time`, detail.`del_user`, detail.`del_time`, detail.`del_flag`
@@ -84,7 +84,7 @@
                 </foreach>
             </if>
         </where>
-        order by detail.`id` desc
+#         order by detail.`id` desc
     </select>
 
     <select id="selectSbchEquipmentPurchaseDetailsById" parameterType="Long" resultMap="SbchEquipmentPurchaseDetailsResult">

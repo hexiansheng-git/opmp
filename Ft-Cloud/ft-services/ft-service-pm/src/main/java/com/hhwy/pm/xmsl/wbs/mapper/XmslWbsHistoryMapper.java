@@ -4,6 +4,7 @@ import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author wk
@@ -15,6 +16,8 @@ public interface XmslWbsHistoryMapper {
     XmslWbsHistory getXmslWbsHistory(XmslWbsHistory xmslWbsHistory);
 
     List<XmslWbsHistory> getXmslWbsHistoryList(XmslWbsHistory xmslWbsHistory);
+
+    Set<Long> selectIdByParentIds(@Param("mainId") Long mainId,@Param("ids") Set<Long> ids);
 
     int insertXmslWbsHistory(XmslWbsHistory xmslWbsHistory);
 

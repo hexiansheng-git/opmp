@@ -1,8 +1,5 @@
 package com.hhwy.pm.qqch.wzch.demand.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -22,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 物资总需用详情Controller

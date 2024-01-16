@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import java.net.URLEncoder;
 
 @Component
 public class SelfTaskNotifyProcessor implements TaskNotifyProcessor {
@@ -22,8 +23,13 @@ public class SelfTaskNotifyProcessor implements TaskNotifyProcessor {
         notifyService.publish(clientId,topic,message);
         if(StringUtils.isNotEmpty(remoteSystemServerUri)){
             String url = remoteSystemServerUri + "/notify/publish/" + clientId;
-            String param = "topic="+topic+"&message="+message;
             try {
+                String param;
+                if(StringUtils.isNotEmpty(message)){
+                    param = "topic="+URLEncoder.encode(topic,"UTF-8")+"&message="+ URLEncoder.encode(message,"UTF-8");
+                }else {
+                    param = "topic="+URLEncoder.encode(topic,"UTF-8");
+                }
                 String result = HttpUtils.sendGet(url, param);
                 System.out.println("---notify result---:"+result);
             } catch (Exception e) {

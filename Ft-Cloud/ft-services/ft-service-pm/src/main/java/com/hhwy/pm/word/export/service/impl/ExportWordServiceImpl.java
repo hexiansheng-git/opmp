@@ -19,10 +19,20 @@ import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchGen
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchKeyInventoryContentService;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchOtherContractItemService;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchSpecialConditionService;
+import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchKeyPointContractClause;
+import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.service.IQqchSecondManageKeyPointService;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.service.IQqchProjectOperationObjectiveService;
+import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
+import com.hhwy.pm.qqch.preparation.measureexp.equ.service.IQqchMeasureExpEquService;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
 import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcImplementPlanService;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
+import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchDesignTechnologyOptimizeService;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructionComparison;
+import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstructionListService;
+import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchMajorConstructionComparisonService;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
@@ -47,6 +57,7 @@ import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectEngineeringAmountService;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectMaterialsAmountService;
+import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
 import io.seata.common.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -119,6 +130,21 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchWorkPlaningArrangeService qqchWorkPlaningArrangeService;
 
+    @Autowired
+    private IQqchDesignTechnologyOptimizeService qqchDesignTechnologyOptimizeService;
+
+    @Autowired
+    private IQqchDangerConstructionListService qqchDangerConstructionListService;
+
+    @Autowired
+    private IQqchMajorConstructionComparisonService qqchMajorConstructionComparisonService;
+
+    @Autowired
+    private IQqchMeasureExpEquService qqchMeasureExpEquService;
+
+    @Autowired
+    private IQqchSecondManageKeyPointService qqchSecondManageKeyPointService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -163,6 +189,12 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("taxGoalList",policy) // 财务目标
                     .bind("workPlanBuildPlanList",policy) // 大临设施一览表
                     .bind("workPlanArrangeList",policy) // 施工便道跨越障碍物措施
+                    .bind("designTechnologyOptimizeList",policy) // 优化点清单
+                    .bind("constructionComparisonList",policy) // 重大施工方案比选
+                    .bind("dangerConstructionListList",policy) // 危险性较大的分部分项工程
+                    .bind("measureList",policy) // 测量仪器设备配置表
+                    .bind("experimentList",policy) // 试验仪器设备配置表
+                    .bind("claimPointList",policy) // 索赔点
                     .build();
             XWPFTemplate template = XWPFTemplate.compile(inputStream,config);
 
@@ -200,6 +232,10 @@ public class ExportWordServiceImpl implements ExportWordService {
         initProjectOperation(projectWordData);
         /*项目组织及*/
         initProjectOrganization(projectWordData);
+        /*设计技术管理*/
+        initDesignTechnologyManage(projectWordData);
+        /*经营管理*/
+        initOperateManage(projectWordData);
     }
 
 
@@ -658,5 +694,47 @@ public class ExportWordServiceImpl implements ExportWordService {
         /*施工便道跨越障碍物措施*/
         List<QqchWorkPlaningArrange> workPlanArrangeList = qqchWorkPlaningArrangeService.detail(new QqchWorkPlaningArrange()).getDataList();
         projectWordData.setWorkPlanArrangeList(workPlanArrangeList);
+    }
+
+    /**
+     * 初始化设计技术管理
+     * @param projectWordData
+     */
+    private void initDesignTechnologyManage(ProjectWordData projectWordData){
+        /*优化点清单*/
+        List<QqchDesignTechnologyOptimize> designTechnologyOptimizeList = qqchDesignTechnologyOptimizeService.getQqchDesignTechnologyOptimizeVo(null).getQqchDesignTechnologyOptimizeList();
+        ListTreeUtil.preserveSerialNumber(designTechnologyOptimizeList,QqchDesignTechnologyOptimize::setPtVar1);
+        projectWordData.setDesignTechnologyOptimizeList(designTechnologyOptimizeList);
+
+        /*重大施工方案比选*/
+        List<QqchMajorConstructionComparison> constructionComparisonList = qqchMajorConstructionComparisonService.getLatestList();
+        projectWordData.setConstructionComparisonList(constructionComparisonList);
+
+        /*危险性较大的分部分项工程*/
+        List<QqchDangerConstructionList> dangerConstructionListList = qqchDangerConstructionListService.getQqchDangerConstructionListList(null).getList();
+        ListTreeUtil.preserveSerialNumber(dangerConstructionListList,QqchDangerConstructionList::setSerialNum);
+        projectWordData.setDangerConstructionListList(dangerConstructionListList);
+
+        /*测量仪器设备配置表*/
+        List<QqchMeasureExpEqu> measureList = qqchMeasureExpEquService.getQqchMeasureExpEquList(null, "1").getMeasureList();
+        ListTreeUtil.preserveSerialNumber(measureList,QqchMeasureExpEqu::setSerialNum);
+        DictUtil.dictValueToLabel(measureList,"equ_sourse",QqchMeasureExpEqu::getSource,QqchMeasureExpEqu::setSource);
+        projectWordData.setMeasureList(measureList);
+
+        /*试验仪器设备配置表*/
+        List<QqchMeasureExpEqu> experimentList = qqchMeasureExpEquService.getQqchMeasureExpEquList(null, "2").getExperimentList();
+        ListTreeUtil.preserveSerialNumber(experimentList,QqchMeasureExpEqu::setSerialNum);
+        DictUtil.dictValueToLabel(experimentList,"equ_sourse",QqchMeasureExpEqu::getSource,QqchMeasureExpEqu::setSource);
+        projectWordData.setExperimentList(experimentList);
+    }
+
+    /**
+     * 初始化经营管理数据
+     * @param projectWordData
+     */
+    private void initOperateManage(ProjectWordData projectWordData){
+        /*索赔点*/
+        List<QqchKeyPointContractClause> claimPointList = qqchSecondManageKeyPointService.getKeyPointContractClauseList4Word();
+        projectWordData.setClaimPointList(claimPointList);
     }
 }

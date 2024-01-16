@@ -3,8 +3,13 @@ package com.hhwy.pm.word.export.domain;
 import com.deepoove.poi.data.PictureRenderData;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassify;
+import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchKeyPointContractClause;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
+import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructionComparison;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal;
@@ -289,4 +294,32 @@ public class ProjectWordData {
      * 大临设施-施工便道跨越障碍物措施
      */
     private List<QqchWorkPlaningArrange> workPlanArrangeList;
+
+    /*---------------------------------------设计技术管理----------------------------------------*/
+    /**
+     * 优化点清单
+     */
+    private List<QqchDesignTechnologyOptimize> designTechnologyOptimizeList;
+    /**
+     * 重大施工方案比选
+     */
+    private List<QqchMajorConstructionComparison> constructionComparisonList;
+    /**
+     * 危险性较大的分部分项工程
+     */
+    private List<QqchDangerConstructionList> dangerConstructionListList;
+    /**
+     * 测量仪器设备配置表
+     */
+    private List<QqchMeasureExpEqu> measureList;
+    /**
+     * 试验仪器设备配置表
+     */
+    private List<QqchMeasureExpEqu> experimentList;
+
+    /*---------------------------------------经营管理---------------------------------------*/
+    /**
+     * 索赔点
+     */
+    private List<QqchKeyPointContractClause> claimPointList;
 }

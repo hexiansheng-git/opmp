@@ -20,15 +20,14 @@ import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
+import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsHistoryMapper;
 import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsMapper;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsHistoryService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.system.api.domain.SysDictData;
-import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.*;
 import com.hhwy.utils.excel.FtExcelUtil;
-import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
@@ -36,6 +35,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +60,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     private Logger logger= LoggerFactory.getLogger(XmslWbsServiceImpl.class);
     @Autowired
     private XmslWbsMapper xmslWbsMapper;
+    @Autowired
+    private XmslWbsHistoryMapper xmslWbsHistoryMapper;
     @Resource
     private IXmslWbsMainService wbsMainService;
     @Resource
@@ -313,6 +315,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     @Override
     public List<XmslWbs> importData(MultipartFile file) throws Exception {
         //读取excel中的数据，替换id
+        ZipSecureFile.setMinInflateRatio(-1.0d);  //
         FtExcelUtil<XmslWbs> excelUtil = new FtExcelUtil<>(XmslWbs.class);
         List<XmslWbs> list = excelUtil.importExcel(1,file.getInputStream());
         Map<String,XmslWbs> codeMap = new HashMap<>(list.size());
@@ -322,7 +325,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         Map<String,Integer> sortMap = new HashMap<>(list.size());
         for (int i = 0; i < list.size(); i++) {
             XmslWbs temp = list.get(i);
-            if(StringUtils.isBlank(temp.getCode()))
+            if(temp == null || StringUtils.isBlank(temp.getCode()))
                 break;
             resuList.add(temp);
             String code = temp.getCode().trim();
@@ -575,7 +578,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             wbsHistoryService.updateXmslWbsHistoryList(updateList);
         //删除
         if(StringUtils.isNotBlank(dto.getDelIds())){
-            wbsHistoryService.deleteXmslWbsHistoryByPks(Arrays.asList(Convert.toLongArray(dto.getDelIds())));
+            delById(dto.getMainId(),dto.getDelIds());
         }
         //提交校验
         submitCheck(dto);
@@ -647,6 +650,18 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             return id;
         String temp = idRepalceMap.get(id);
         return temp == null?IdWorker.createId()+"":temp;
+    }
+
+    //删除所有子级，
+    private void delById(Long mainId,String delIdStr){
+        Long[] delIds = Convert.toLongArray(delIdStr);
+        Set<Long> delAlIdList = new HashSet<>(Arrays.asList(delIds));
+        Set<Long> childIdList = new HashSet<>(Arrays.asList(delIds));
+        do{
+            delAlIdList.addAll(childIdList);
+            childIdList= xmslWbsHistoryMapper.selectIdByParentIds(mainId,childIdList);
+        }while(CollectionUtils.isNotEmpty(childIdList));
+        wbsHistoryService.deleteXmslWbsHistoryByPks(new ArrayList<>(delAlIdList));
     }
 
 

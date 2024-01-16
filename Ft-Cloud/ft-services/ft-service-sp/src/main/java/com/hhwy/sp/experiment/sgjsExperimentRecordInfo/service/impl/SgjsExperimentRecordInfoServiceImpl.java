@@ -23,7 +23,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @author lcf--设备实际进场记录
+ * 设备实际进场记录
+ *
+ * @author lcf
  * @date 2023-12-11 15:03:58
  * @remark
  */
