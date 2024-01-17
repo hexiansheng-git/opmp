@@ -138,11 +138,6 @@ public class SgjsEquipEntryRecordInfoServiceImpl implements ISgjsEquipEntryRecor
             logger.error("传参equipList空了");
             return -1;
         }
-        List<LinkedHashMap<String,Object>> infoList= (List<LinkedHashMap<String,Object>>)map.get("infoList");
-        if(CollectionUtils.isEmpty(infoList)){
-            logger.error("传参infoList空了");
-            return -2;
-        }
         //1、批量修改主表实际进场数量
         List<SgjsEquipEntryRecord> eList=new ArrayList<>();
         for (LinkedHashMap<String,Object> mInfo:equipList) {
@@ -154,6 +149,11 @@ public class SgjsEquipEntryRecordInfoServiceImpl implements ISgjsEquipEntryRecor
             eList.add(info);
         }
         sgjsEquipEntryRecordMapper.bathUpdateByList(eList);
+        List<LinkedHashMap<String,Object>> infoList= (List<LinkedHashMap<String,Object>>)map.get("infoList");
+        if(CollectionUtils.isEmpty(infoList)){
+            logger.error("传参infoList空了");
+            return -2;
+        }
         //2、删除子表本次修改所有数据
         SgjsEquipEntryRecordInfo record=new SgjsEquipEntryRecordInfo();
         record.setUpdateTime(DateUtils.getNowDate());
