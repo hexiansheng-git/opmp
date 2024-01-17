@@ -640,8 +640,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             String wrongCodes = this.xmslWbsMapper.countWbsOnlyOne(dto.getMainId());
             Assert.isTrue(StringUtils.isBlank(wrongCodes),"wbs编号为:["+wrongCodes+"]的数据未填写项目部位（桩号）或标准WBS名称");
             //校验重复编码
-            List<String> repeatCodeList = xmslWbsMapper.repeatWbsCode(dto.getMainId());
-            Assert.isTrue(CollectionUtils.isEmpty(repeatCodeList),"["+StringUtils.join(repeatCodeList,",")+"]WBS编号重复");
+//            List<String> repeatCodeList = xmslWbsMapper.repeatWbsCode(dto.getMainId());
+//            Assert.isTrue(CollectionUtils.isEmpty(repeatCodeList),"["+StringUtils.join(repeatCodeList,",")+"]WBS编号重复");
         }
     }
 
