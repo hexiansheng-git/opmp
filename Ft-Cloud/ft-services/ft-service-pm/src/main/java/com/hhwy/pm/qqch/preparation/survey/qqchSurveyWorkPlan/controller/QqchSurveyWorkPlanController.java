@@ -96,6 +96,7 @@ public class QqchSurveyWorkPlanController extends BaseController {
     }
 
     @GetMapping("/remove")
+    @CustomLogger(title = "前期策划-前期策划编制-勘察设计策划-勘察设计工作计划", name = "2.2勘察设计工作计划" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult remove(@RequestParam("ids") String ids) {
         qqchSurveyWorkPlanService.remove(ids);
         return AjaxResult.success();

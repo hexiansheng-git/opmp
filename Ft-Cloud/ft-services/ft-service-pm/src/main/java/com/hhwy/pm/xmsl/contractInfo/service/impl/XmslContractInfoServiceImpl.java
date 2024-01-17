@@ -110,9 +110,12 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             StringBuilder sb = new StringBuilder();
             for (String s : split) {
                 String business_areas_and_products = util.resolveDict("business_areas_and_products", s);
+                if (StringUtils.isBlank(business_areas_and_products)) continue;
                 sb.append(",").append(business_areas_and_products);
             }
-            contractInfo.setBusinessAreasAndProducts(sb.toString().substring(1));
+            if (StringUtils.isNotBlank(sb)) {
+                contractInfo.setBusinessAreasAndProducts(sb.substring(1));
+            }
         }
 
         //资金来源

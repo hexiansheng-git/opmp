@@ -8,6 +8,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.domain.SbchEquipmentTeam;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.domain.SbchEquipmentTeamDetails;
@@ -159,6 +160,13 @@ public class SbchEquipmentTeamServiceImpl implements ISbchEquipmentTeamService {
             }
             // 协作单位详情
             detailsService.insertOrEditBatchByMainId(detailsList, sbchEquipmentTeam.getId(), false);
+        }
+        //判断是否是确认
+        if(ButtonMark.CONFIRM.equals(sbchEquipmentTeam.getButtonMark())){
+            //插入确认记录
+            String menuId = sbchEquipmentTeam.getMenuId();
+            String stageIdentity = sbchEquipmentTeam.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
         return sbchEquipmentTeam.getId().toString();
     }
