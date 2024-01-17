@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.tax.qqchTaxIn.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -11,6 +12,7 @@ import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
 import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.sgch.prodplan.domain.QqchProdPlan;
@@ -75,6 +77,9 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
     private IXmslContractInfoService contractInfoService;
     @Resource
     private SystemServiceApi systemServiceApi;
+
+    @Resource
+    private IQqchModuleConfirmCaseService moduleConfirmCaseService;
 
     public QqchTaxIn getQqchTaxIn(QqchTaxIn qqchTaxIn) {
         return qqchTaxInMapper.getQqchTaxIn(qqchTaxIn);
@@ -314,7 +319,12 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         }
 
         // 所有的详情
-        List<QqchTaxInDetail> allDetails = this.saveInList(allTaxInList,version);
+        QqchTaxInServiceImpl bean = SpringUtils.getBean(QqchTaxInServiceImpl.class);
+        List<QqchTaxInDetail> allDetails = bean.saveInList(allTaxInList,version);
+
+        if("1".equals(qqchTaxInParam.getSubmitFlag())){
+            moduleConfirmCaseService.addConfirmRecord(qqchTaxInParam.getModuleIdentity(),qqchTaxInParam.getStageIdentity());
+        }
         // 新增年份数据
         if(!CollectionUtils.isEmpty(allDetails)){
             this.detailService.save(CompileEntity.dealSaveDto(qqchTaxInParam, allDetails));
@@ -322,7 +332,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
     }
 
 
-    @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
+//    @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public List<QqchTaxInDetail> saveInList(List<QqchTaxIn> list,BigDecimal version) {
         List<QqchTaxInDetail> allDetails = new ArrayList<>();
         if(CollectionUtils.isEmpty(list)){

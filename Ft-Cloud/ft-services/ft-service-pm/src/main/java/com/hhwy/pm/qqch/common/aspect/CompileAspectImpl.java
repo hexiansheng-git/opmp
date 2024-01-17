@@ -75,7 +75,7 @@ public class CompileAspectImpl {
 
             if (arg instanceof List) {
                 List list = (List) arg;
-                if (list.get(0) instanceof CompileEntity) {
+                if (!CollectionUtils.isEmpty(list) && list.get(0) instanceof CompileEntity) {
                     List<CompileEntity> compileEntityList = (List<CompileEntity>) arg;
                     CompileEntity compileEntity = compileEntityList.get(0);
                     if (CompileOptEnum.SAVE_LIST.equals(compileAspect.type()) && compileAspect.delFlag()) {
