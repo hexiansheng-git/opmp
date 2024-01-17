@@ -72,8 +72,10 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
         QqchModuleConfirmCase qqchModuleConfirmCase = new QqchModuleConfirmCase();
         qqchModuleConfirmCase.setModuleIdentity(menuId);
         qqchModuleConfirmCase.setStageIdentity(stageIdentity);
-        qqchModuleConfirmCase.setConfirmUser(String.valueOf(SecurityUtils.getUserId()));
+//        qqchModuleConfirmCase.setConfirmUser(String.valueOf(SecurityUtils.getUserName()));
         qqchModuleConfirmCase = qqchModuleConfirmCaseMapper.getQqchModuleConfirmCase(qqchModuleConfirmCase);
+
+        System.out.println(SecurityUtils.getTenantKey());
 
         if(qqchModuleConfirmCase != null){
             throw new RuntimeException("该页面已确认完成，请勿重复确认！");

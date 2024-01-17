@@ -69,7 +69,6 @@ public class CompileAspectImpl {
                 }
                 if (CompileOptEnum.SAVE.equals(compileAspect.type()) && compileAspect.delFlag()) {
                     this.addConfirmAndUpdateFinishNum(arg1);
-
                     commonMapper.deleteByVersion(tableName, (arg1).getVersion());
                 }
             }

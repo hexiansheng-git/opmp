@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.preparation.measureexp.range.service.impl;
 
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
-import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureOrg;
 import com.hhwy.pm.qqch.preparation.measureexp.range.dto.QqchMeasureExpDTO;
@@ -39,12 +38,12 @@ public class QqchMeasureServiceImpl implements IQqchMeasureService {
         QqchMeasureOrg org = expVO.getOrg();
         orgService.save(CompileEntity.dealSaveDto(expVO, org));
 
-        String submitFlag = expVO.getSubmitFlag();
-        if(ButtonMark.CONFIRM.equals(submitFlag)){
-            //插入确认状态
-            String menuId = expVO.getModuleIdentity();
-            String stageIdentity = expVO.getStageIdentity();
-            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
-        }
+//        String submitFlag = expVO.getSubmitFlag();
+//        if(ButtonMark.CONFIRM.equals(submitFlag)){
+//            //插入确认状态
+//            String menuId = expVO.getModuleIdentity();
+//            String stageIdentity = expVO.getStageIdentity();
+//            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+//        }
     }
 }
