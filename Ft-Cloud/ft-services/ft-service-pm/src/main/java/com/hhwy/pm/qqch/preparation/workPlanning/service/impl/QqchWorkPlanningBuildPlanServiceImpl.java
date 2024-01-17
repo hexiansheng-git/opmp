@@ -87,7 +87,6 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
         }else if("1".equals(qqchWorkPlanningBuildPlanVo.getButtonMark())){//确认
             //确认
             //新增一条确认记录
-            String valid = "1";
             if(!ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanVo.getDataList())){
                qqchWorkPlanningBuildPlanList = qqchWorkPlanningBuildPlanVo.getDataList();
                 for (QqchWorkPlanningBuildPlan qqchWorkPlanningBuildPlan : qqchWorkPlanningBuildPlanList) {
@@ -96,12 +95,10 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
                     qqchWorkPlanningBuildPlan.setCreateTime(DateUtils.getNowDate());
                     qqchWorkPlanningBuildPlan.setVersion(qqchWorkPlanningBuildPlanVo.getVersion());
                     qqchWorkPlanningBuildPlan.setVersion(ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanVo.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : qqchWorkPlanningBuildPlanVo.getVersion());
-
-                    qqchWorkPlanningBuildPlan.setValid(valid);
                 }
-                qqchModuleConfirmCaseService.addConfirmRecord(qqchWorkPlanningBuildPlanVo.getMenuId(),qqchWorkPlanningBuildPlanVo.getStageIdentity());
-                qqchReviewService.updateFinishNum(qqchWorkPlanningBuildPlanVo.getStageIdentity(),qqchWorkPlanningBuildPlanVo.getMenuId());
+//                qqchReviewService.updateFinishNum(qqchWorkPlanningBuildPlanVo.getStageIdentity(),qqchWorkPlanningBuildPlanVo.getMenuId());
             }
+            qqchModuleConfirmCaseService.addConfirmRecord(qqchWorkPlanningBuildPlanVo.getMenuId(),qqchWorkPlanningBuildPlanVo.getStageIdentity());
 //            else{
 //                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"营地场站规划不可为空");
 //            }

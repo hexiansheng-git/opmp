@@ -92,9 +92,9 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
                     qqchWorkPlaningArrange.setValid("1");
                     qqchWorkPlaningArrange.setVersion(ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeVo.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : qqchWorkPlaningArrangeVo.getVersion());
                 }
-                qqchModuleConfirmCaseService.addConfirmRecord(qqchWorkPlaningArrangeVo.getMenuId(), qqchWorkPlaningArrangeVo.getStageIdentity());
 //                qqchReviewService.updateFinishNum(qqchWorkPlaningArrangeVo.getStageIdentity(), qqchWorkPlaningArrangeVo.getMenuId());
             }
+            qqchModuleConfirmCaseService.addConfirmRecord(qqchWorkPlaningArrangeVo.getMenuId(), qqchWorkPlaningArrangeVo.getStageIdentity());
 //            else{
 //                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"便道部署不可为空");
 //            }
