@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
@@ -213,5 +214,13 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
                     .collect(Collectors.toList());
         }
         return collect;
+    }
+
+    @Override
+    public void remove(String ids) {
+        List<String> split = StrUtil.split(ids, ",", true, true);
+        List<Long> collect = split.stream().map(p -> Long.parseLong(p)).collect(Collectors.toList());
+        qqchSurveyWorkPlanMapper.deleteQqchSurveyWorkPlanByPks(collect);
+
     }
 }

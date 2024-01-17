@@ -25,4 +25,6 @@ public interface IQqchSurveyWorkPlanService {
     List<QqchSurveyWorkPlan> handleActivityData(QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo);
 
     List<QqchSurveyWorkPlan> getData();
+
+    void remove(String ids);
 }

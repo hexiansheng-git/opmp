@@ -95,4 +95,10 @@ public class QqchSurveyWorkPlanController extends BaseController {
         return AjaxResult.success(qqchSurveyWorkPlanList);
     }
 
+    @GetMapping("/remove")
+    public AjaxResult remove(@RequestParam("ids") String ids) {
+        qqchSurveyWorkPlanService.remove(ids);
+        return AjaxResult.success();
+    }
+
 }
