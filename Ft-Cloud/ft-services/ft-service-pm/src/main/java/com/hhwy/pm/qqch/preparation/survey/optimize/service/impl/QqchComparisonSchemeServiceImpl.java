@@ -156,6 +156,14 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
 
         //插入新数据
         this.insertQqchComparisonSchemeList(qqchComparisonSchemeVo.getQqchComparisonSchemeList(),qqchComparisonSchemeVo.getVersion());
+
+        String buttonMark = qqchComparisonSchemeVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认状态
+            String menuId = qqchComparisonSchemeVo.getMenuId();
+            String stageIdentity = qqchComparisonSchemeVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
     }
 
     /**
