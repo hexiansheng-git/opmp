@@ -171,10 +171,16 @@ public class QqchLabourDemandPlanController extends BaseController {
         String[] dates1 = stringDate.toArray(new String[stringDate.size()]);
         List<BigDecimal> num = list.stream().map(QqchLabourDemandPlanDto::getNum).collect(Collectors.toList());
         BigDecimal[] num1 = num.toArray(new BigDecimal[num.size()]);
+        List<BigDecimal> chinaNum = list.stream().map(QqchLabourDemandPlanDto::getChinaNum).collect(Collectors.toList());
+        BigDecimal[] chinaNum1 = chinaNum.toArray(new BigDecimal[num.size()]);
+        List<BigDecimal> foreignNum = list.stream().map(QqchLabourDemandPlanDto::getForeignNum).collect(Collectors.toList());
+        BigDecimal[] foreignNum1 = foreignNum.toArray(new BigDecimal[num.size()]);
 
         List<Object[]> list1 = new ArrayList<>();
         list1.add(dates1);
         list1.add(num1);
+        list1.add(chinaNum1);
+        list1.add(foreignNum1);
         return AjaxResult.success(list1);
     }
 

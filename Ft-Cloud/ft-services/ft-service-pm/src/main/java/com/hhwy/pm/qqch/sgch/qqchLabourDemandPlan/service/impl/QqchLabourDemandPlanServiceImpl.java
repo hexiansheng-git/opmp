@@ -258,6 +258,8 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
                 boolean in1 = DateUtil.isIn(endTime, beginOfMonth, endOfMonth);
                 if (in || in1) {
                     qqchLabourDemandPlanDto.setNum(qqchLabourDemandPlanDto.getNum().add(labourDemandPlanDto.getNum()));
+                    qqchLabourDemandPlanDto.setNum(qqchLabourDemandPlanDto.getChinaNum().add(labourDemandPlanDto.getChinaNum()));
+                    qqchLabourDemandPlanDto.setNum(qqchLabourDemandPlanDto.getForeignNum().add(labourDemandPlanDto.getForeignNum()));
                 }
             }
         }

@@ -18,4 +18,6 @@ public class QqchLabourDemandPlanDto {
     private Date time;
 
     private BigDecimal num;
+    private BigDecimal chinaNum;
+    private BigDecimal foreignNum;
 }
