@@ -250,8 +250,21 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
             SecondManageKeyPointPlan secondManageKeyPointPlan = new SecondManageKeyPointPlan();
             secondManageKeyPointPlan.setId(secondManageKeyPoint.getId());
             secondManageKeyPointPlan.setPid(secondManageKeyPoint.getPid());
-            String contractClause = secondManageKeyPoint.getSpecialContractClause()==null?"":secondManageKeyPoint.getSpecialContractClause() + (secondManageKeyPoint.getGeneralContractClause()==null?"":secondManageKeyPoint.getGeneralContractClause());
-            secondManageKeyPointPlan.setClauseCode(contractClause);
+            StringBuilder contractClause = new StringBuilder();
+            String specialContractClause = secondManageKeyPoint.getSpecialContractClause();
+            if(StringUtils.isNotBlank(specialContractClause)){
+                contractClause = new StringBuilder(specialContractClause);
+                String generalContractClause = secondManageKeyPoint.getGeneralContractClause();
+                if(StringUtils.isNotBlank(generalContractClause)){
+                    contractClause.append(" ; ").append(generalContractClause);
+                }
+            }else {
+                String generalContractClause = secondManageKeyPoint.getGeneralContractClause();
+                if(StringUtils.isNotBlank(generalContractClause)){
+                    contractClause = new StringBuilder(generalContractClause);
+                }
+            }
+            secondManageKeyPointPlan.setClauseCode(contractClause.toString());
             secondManageKeyPointPlan.setOptimizedDirection(secondManageKeyPoint.getOptimizedDirection());
             secondManageKeyPointPlan.setContentDescription(secondManageKeyPoint.getContentDescription());
             secondManageKeyPointPlan.setProposedMeasures(secondManageKeyPoint.getProposedMeasures());
