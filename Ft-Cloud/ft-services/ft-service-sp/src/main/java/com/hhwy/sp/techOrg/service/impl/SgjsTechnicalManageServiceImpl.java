@@ -5,10 +5,8 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.constant.DictType;
 import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.feign.service.PmServiceApi;
-import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageInfo;
@@ -16,7 +14,6 @@ import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageVo;
 import com.hhwy.sp.techOrg.mapper.SgjsTechnicalManageInfoMapper;
 import com.hhwy.sp.techOrg.mapper.SgjsTechnicalManageMapper;
 import com.hhwy.sp.techOrg.service.ISgjsTechnicalManageService;
-import com.hhwy.utils.Constant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
@@ -43,8 +40,6 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
     private SgjsTechnicalManageMapper sgjsTechnicalManageMapper;
     @Autowired
     private PmServiceApi pmServiceApi;
-    @Autowired
-    private SystemServiceApi systemServiceApi;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
     @Autowired
@@ -75,31 +70,8 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
             sgjsTechnicalManage.setActualDateEnd(FtDateUtils.parseDate(end));
         }
         List<SgjsTechnicalManage> list = sgjsTechnicalManageMapper.getSgjsTechnicalManageList(sgjsTechnicalManage);
-        //字典项处理   根据字典项的类型查找字典项对应的值，然后设置给对应数据的属性
-        AjaxResult result = systemServiceApi.dictType(DictType.WORK_OR_NOT);
-        List<Map<String,Object>> dictDataList=null;
-
-        if(result.get("code").toString().equals(Constant.SUCCESS_CODE)){
-            dictDataList= (List<Map<String, Object>>) result.get("data");
-        }
-        List<Map<String, Object>> oneList = dictDataList.stream().filter(e -> e.get("dictValue").equals("0")).collect(Collectors.toList());
-        List<Map<String, Object>> zeroList = dictDataList.stream().filter(e -> e.get("dictValue").equals("1")).collect(Collectors.toList());
         for (SgjsTechnicalManage info:list) {
             info.setActualDateStr(FtDateUtils.formatDate(info.getActualDate()));
-            String one = (String)oneList.get(0).get("dictValue");
-            String zero = (String)zeroList.get(0).get("dictValue");
-            String workOrNot = info.getWorkOrNot();
-            if(StringUtils.isEmpty(workOrNot)){
-                continue;
-            }
-            if(workOrNot.equals(one)){
-                String oneDictLabel = (String)oneList.get(0).get("dictLabel");
-                info.setWorkOrNot(oneDictLabel);
-            }
-            if(workOrNot.equals(zero)){
-                String zeroDictLabel = (String)zeroList.get(0).get("dictLabel");
-                info.setWorkOrNot(zeroDictLabel);
-            }
             info.setLeaf(info.getPtVar2());
             info.setType("0");
         }
