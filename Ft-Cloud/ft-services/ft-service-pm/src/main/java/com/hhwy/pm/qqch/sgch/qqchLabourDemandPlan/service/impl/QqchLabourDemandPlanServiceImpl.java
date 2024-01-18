@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.NumberUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -245,6 +246,8 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             qqchLabourDemandPlanDto.setStartTime(DateUtil.beginOfMonth(date));
             qqchLabourDemandPlanDto.setEndTime(DateUtil.endOfMonth(date));
             qqchLabourDemandPlanDto.setNum(new BigDecimal(0));
+            qqchLabourDemandPlanDto.setChinaNum(new BigDecimal(0));
+            qqchLabourDemandPlanDto.setForeignNum(new BigDecimal(0));
             list2.add(qqchLabourDemandPlanDto);
         }
 
@@ -257,9 +260,9 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
                 boolean in = DateUtil.isIn(startTime, beginOfMonth, endOfMonth);
                 boolean in1 = DateUtil.isIn(endTime, beginOfMonth, endOfMonth);
                 if (in || in1) {
-                    qqchLabourDemandPlanDto.setNum(qqchLabourDemandPlanDto.getNum().add(labourDemandPlanDto.getNum()));
-                    qqchLabourDemandPlanDto.setNum(qqchLabourDemandPlanDto.getChinaNum().add(labourDemandPlanDto.getChinaNum()));
-                    qqchLabourDemandPlanDto.setNum(qqchLabourDemandPlanDto.getForeignNum().add(labourDemandPlanDto.getForeignNum()));
+                    qqchLabourDemandPlanDto.setNum(qqchLabourDemandPlanDto.getNum().add(labourDemandPlanDto.getNum() == null ? NumberUtil.toBigDecimal("0"):labourDemandPlanDto.getNum()));
+                    qqchLabourDemandPlanDto.setChinaNum(qqchLabourDemandPlanDto.getChinaNum().add(labourDemandPlanDto.getChinaNum() == null ? NumberUtil.toBigDecimal("0") :labourDemandPlanDto.getChinaNum()));
+                    qqchLabourDemandPlanDto.setForeignNum(qqchLabourDemandPlanDto.getForeignNum().add(labourDemandPlanDto.getForeignNum() == null ? NumberUtil.toBigDecimal("0"):labourDemandPlanDto.getForeignNum()));
                 }
             }
         }
