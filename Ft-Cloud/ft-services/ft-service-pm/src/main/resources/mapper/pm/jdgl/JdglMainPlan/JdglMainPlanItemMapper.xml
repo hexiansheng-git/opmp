@@ -761,11 +761,6 @@
                     when `id`=#{item.id} then #{item.taskStatus}
                 </foreach>
             </trim>
-            <trim prefix="is_critical  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.isCritical}
-                </foreach>
-            </trim>
             <trim prefix="is_longest_path  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.isLongestPath}

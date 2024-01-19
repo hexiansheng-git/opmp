@@ -124,8 +124,8 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
                 if(qqchMainPlanItem1.getFreeFloat() != null)
                     qqchMainPlanItem1.setFreeFloat(new BigDecimal(qqchMainPlanItem1.getFreeFloat()).divide(new BigDecimal(8), 0, BigDecimal.ROUND_UP).intValue());
                 // 是否关键线路转换 0：否，1：是
-                if(qqchMainPlanItem1.getIsCritical() != null && JdglMainPlanItem.ITEMTYPE_ITEM.equals(qqchMainPlanItem1.getItemType()))
-                    qqchMainPlanItem1.setIsCritical("1".equals(qqchMainPlanItem1.getIsCritical()) ? "是" : "否");
+                if(JdglMainPlanItem.ITEMTYPE_ITEM.equals(qqchMainPlanItem1.getItemType()))
+                    qqchMainPlanItem1.setIsCritical("1".equals(qqchMainPlanItem1.getIsCritical()) || "1".equals(qqchMainPlanItem1.getIsLongestPath()) ? "是" : "否");
 
                 qqchMainPlanItem1.setPlannedDuration(StatisticsUtils.getDaysByRangeDate(qqchMainPlanItem1.getStartDate(), qqchMainPlanItem1.getFinishDate()));
 
@@ -387,7 +387,8 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
             List<QqchMainPlanItem> allLinkList = getAllLinkList(Arrays.asList(id));
 
             if(!CollectionUtils.isEmpty(allLinkList)) {
-                QqchMainPlanItem qqchMainPlanItem1 = allLinkList.stream().filter(vo -> QqchMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType()) && "1".equals(vo.getIsCritical())).findFirst().orElse(null);
+                QqchMainPlanItem qqchMainPlanItem1 = allLinkList.stream().filter(vo -> QqchMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType())
+                        && ("1".equals(vo.getIsCritical()) || "1".equals(vo.getIsLongestPath()))).findFirst().orElse(null);
                 if(qqchMainPlanItem1 != null) qqchMainPlanItem.setIsCritical("1");
             }
             if(qqchMainPlanItem.getIsCritical() == null) qqchMainPlanItem.setIsCritical("0");
@@ -429,7 +430,7 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
         if(!CollectionUtils.isEmpty(returnList)) {
             for (QqchMainPlanItem qqchMainPlanItem : returnList) {
                 QqchMainPlanItem qqchMainPlanItem1 = qqchMainPlanItemList.stream().filter(vo ->
-                        "1".equals(vo.getIsCritical())
+                        ("1".equals(vo.getIsCritical()) || "1".equals(vo.getIsLongestPath()))
                                 && QqchMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType())
                                 && vo.getAncestors().contains(qqchMainPlanItem.getAncestors())
                 ).findFirst().orElse(null);

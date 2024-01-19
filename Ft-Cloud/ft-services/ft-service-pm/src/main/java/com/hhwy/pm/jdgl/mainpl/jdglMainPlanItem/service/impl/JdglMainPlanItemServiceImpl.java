@@ -203,8 +203,8 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                 if(jdglMainPlanItem1.getFreeFloat() != null)
                     jdglMainPlanItem1.setFreeFloat(new BigDecimal(jdglMainPlanItem1.getFreeFloat()).divide(new BigDecimal(8), 0, BigDecimal.ROUND_UP).intValue());
                 // 是否关键线路转换 0：否，1：是
-                if(jdglMainPlanItem1.getIsCritical() != null && JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem1.getItemType()))
-                    jdglMainPlanItem1.setIsCritical("1".equals(jdglMainPlanItem1.getIsCritical()) ? "是" : "否");
+                if(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem1.getItemType()))
+                    jdglMainPlanItem1.setIsCritical("1".equals(jdglMainPlanItem1.getIsCritical()) || "1".equals(jdglMainPlanItem1.getIsLongestPath()) ? "是" : "否");
 
                 jdglMainPlanItem1.setPlannedDuration(StatisticsUtils.getDaysByRangeDate(jdglMainPlanItem1.getStartDate(), jdglMainPlanItem1.getFinishDate()));
 
@@ -298,7 +298,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         List<JdglMainPlanItem> jdglMainPlanItems = TreeUtil.treeToListWithoutId(jdglMainPlanItemList);
         List<ActivityInfoVoBean> activityInfoVoBeanList = new ArrayList<>();
         for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItems) {
-            jdglMainPlanItem.setIsCritical(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) && "是".equals(jdglMainPlanItem.getIsCritical()) ? "1" : "0");
+//            jdglMainPlanItem.setIsCritical(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) && "是".equals(jdglMainPlanItem.getIsCritical()) ? "1" : "0");
             jdglMainPlanItem.setUpdateUser(SecurityUtils.getSysUser().getNickName());
             jdglMainPlanItem.setUpdateTime(DateUtils.getNowDate());
             if(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType())) {
@@ -489,7 +489,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         if (CollectionUtils.isEmpty(usingJdglMainPlanItemList)) return returnList;
 
         List<JdglMainPlanItem> collect = usingJdglMainPlanItemList.stream().filter(vo -> JdglMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType())
-                && "1".equals(vo.getIsCritical())).collect(Collectors.toList());
+                && ("1".equals(vo.getIsCritical()) || "1".equals(vo.getIsLongestPath()))).collect(Collectors.toList());
         returnList.addAll(collect);
         for (JdglMainPlanItem jdglMainPlanItem : collect) {
             List<JdglMainPlanItem> collect1 = usingJdglMainPlanItemList.stream().filter(vo -> jdglMainPlanItem.getAncestors().contains(vo.getAncestors())).collect(Collectors.toList());
@@ -505,7 +505,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         List<JdglMainPlanItem> usingJdglMainPlanItemList = getUsingJdglMainPlanItemList(new JdglMainPlanItem());
         if(CollectionUtils.isEmpty(usingJdglMainPlanItemList)) return returnList;
         List<JdglMainPlanItem> collect = usingJdglMainPlanItemList.stream().filter(vo -> JdglMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType())
-                && "0".equals(vo.getIsCritical())).collect(Collectors.toList());
+                && "0".equals(vo.getIsCritical()) && "0".equals(vo.getIsLongestPath())).collect(Collectors.toList());
         returnList.addAll(collect);
         for (JdglMainPlanItem jdglMainPlanItem : collect) {
             List<JdglMainPlanItem> collect1 = usingJdglMainPlanItemList.stream().filter(vo -> jdglMainPlanItem.getAncestors().contains(vo.getAncestors())).collect(Collectors.toList());
