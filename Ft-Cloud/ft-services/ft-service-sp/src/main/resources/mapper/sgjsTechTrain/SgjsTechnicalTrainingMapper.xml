@@ -316,7 +316,7 @@
             <if test="trainingInstructorId != null  and  trainingInstructorId != ''">`training_instructor_id` =
                 #{trainingInstructorId},
             </if>
-            <if test="trainingInstructor != null  and  trainingInstructor != ''">`training_instructor` =
+            <if test="trainingInstructor != null ">`training_instructor` =
                 #{trainingInstructor},
             </if>
             <if test="compileDate != null ">`compile_date` = #{compileDate},</if>
