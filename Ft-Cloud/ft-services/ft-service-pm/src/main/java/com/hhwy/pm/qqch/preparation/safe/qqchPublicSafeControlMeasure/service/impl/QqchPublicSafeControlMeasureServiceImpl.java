@@ -102,9 +102,6 @@ public class QqchPublicSafeControlMeasureServiceImpl implements IQqchPublicSafeC
         List<QqchPublicSafeControlMeasure> qqchPublicSafeControlMeasureList = vo.getQqchPublicSafeControlMeasureList();
         this.insertQqchPublicSafeControlMeasureList(qqchPublicSafeControlMeasureList,version);
 
-        if(CollectionUtils.isEmpty(qqchPublicSafeControlMeasureList)){
-            return;
-        }
         //判断是否是确认
         if(ButtonMark.CONFIRM.equals(buttonMark)){
             //校验数据必填

@@ -121,7 +121,7 @@ public class QqchEmergencyPlanControlServiceImpl implements IQqchEmergencyPlanCo
         //处理确认状态是确认
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             //校验数据必填
-            JyDetailsUtil.jyDetails(qqchEmergencyPlanControlList, ValidationGroups.Save.class);
+//            JyDetailsUtil.jyDetails(qqchEmergencyPlanControlList, ValidationGroups.Save.class);
             //插入确认记录
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();

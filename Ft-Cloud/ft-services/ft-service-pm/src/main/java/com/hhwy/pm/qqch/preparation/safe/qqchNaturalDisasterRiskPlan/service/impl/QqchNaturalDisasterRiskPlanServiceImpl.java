@@ -111,9 +111,6 @@ public class QqchNaturalDisasterRiskPlanServiceImpl implements IQqchNaturalDisas
         List<QqchNaturalDisasterRiskPlan> qqchNaturalDisasterRiskPlanList = vo.getQqchNaturalDisasterRiskPlanList();
         this.insertQqchNaturalDisasterRiskPlanList(qqchNaturalDisasterRiskPlanList,version);
 
-        if(CollectionUtils.isEmpty(qqchNaturalDisasterRiskPlanList)){
-            return;
-        }
         //判断是否是确认
         if(ButtonMark.CONFIRM.equals(buttonMark)){
             //校验数据必填
