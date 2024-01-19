@@ -113,9 +113,7 @@ public class QqchFirstArticleEngineeringControlServiceImpl implements IQqchFirst
 
         BigDecimal version = vo.getVersion();
         List<QqchFirstArticleEngineeringControl> qqchFirstArticleEngineeringControlList = vo.getQqchFirstArticleEngineeringControlList();
-        if(CollectionUtils.isEmpty(qqchFirstArticleEngineeringControlList)){
-            return;
-        }else {
+        if(!CollectionUtils.isEmpty(qqchFirstArticleEngineeringControlList)){
             //校验数据必填
             if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
                 JyDetailsUtil.jyDetails(qqchFirstArticleEngineeringControlList, ValidationGroups.Save.class);
@@ -138,6 +136,10 @@ public class QqchFirstArticleEngineeringControlServiceImpl implements IQqchFirst
         QqchFirstArticleEngineeringControl qqchFirstArticleEngineeringControl = new QqchFirstArticleEngineeringControl();
         qqchFirstArticleEngineeringControl.setVersion(version);
         qqchFirstArticleEngineeringControlMapper.deleteQqchFirstArticleEngineeringControl(qqchFirstArticleEngineeringControl);
+
+        if(CollectionUtils.isEmpty(qqchFirstArticleEngineeringControlList)){
+            return;
+        }
 
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
