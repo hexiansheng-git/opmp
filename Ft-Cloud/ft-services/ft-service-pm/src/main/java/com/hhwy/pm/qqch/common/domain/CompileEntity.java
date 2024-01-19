@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.redisUtil.RedisUtils;
@@ -174,7 +175,9 @@ public class CompileEntity<T> extends TreeNode<T> {
         if ((dto != null && dto instanceof List && (list = (List) dto).size() == 0)) {
             CompileEntity entity = new CompileEntity<>();
             entity.setVersion(this.version);
-            entity.setSubmitFlag(PmConstant.MINUS_ONE);
+            entity.setSubmitFlag(ObjectUtils.nvlString(this.submitFlag,PmConstant.MINUS_ONE));
+            entity.setMenuId(this.menuId);
+            entity.setStageIdentity(this.stageIdentity);
             list.add(entity);
             return (T) list;
         }

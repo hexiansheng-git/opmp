@@ -89,7 +89,7 @@ public class QqchImportantServiceImpl implements IQqchImportantService {
     @Transactional(rollbackFor = Exception.class)
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void save(List<QqchImportant> dtos) {
-        if (CollectionUtils.isEmpty(dtos)) return;
+        if (CollectionUtils.isEmpty(dtos) || !(dtos.get(0) instanceof QqchImportant)) return;
         for (QqchImportant dto : dtos) {
             dto.setId(IdWorker.createId());
         }
