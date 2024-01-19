@@ -55,4 +55,6 @@ public interface IQqchManagementPersonConfigService {
     Map<String, String> getProjectLeadershipPersonUserNameMap();
 
     List<QqchManagementPersonConfig> getPopWindows(QqchManagementPersonConfig qqchManagementPersonConfig);
+
+    int removeById(String ids);
 }

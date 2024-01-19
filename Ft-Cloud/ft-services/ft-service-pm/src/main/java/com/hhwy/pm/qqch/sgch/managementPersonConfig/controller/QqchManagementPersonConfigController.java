@@ -112,6 +112,12 @@ public class QqchManagementPersonConfigController extends BaseController {
         return toAjax(qqchManagementPersonConfigService.deleteQqchManagementPersonConfigByPks(qqchManagementPersonConfigPkList));
     }
 
+    @GetMapping("/remove")
+    @CustomLogger(title = "前期策划-前期策划编制-施工策划-人员总需计划", name = "1.5.1管理人员配置" ,businessType = CustomBusinessType.DELETE)
+    public AjaxResult remove(@RequestParam("ids") String ids) {
+        return toAjax(qqchManagementPersonConfigService.removeById(ids));
+    }
+
     /***
      * 功能描述:
      * @param userName 员工账号
