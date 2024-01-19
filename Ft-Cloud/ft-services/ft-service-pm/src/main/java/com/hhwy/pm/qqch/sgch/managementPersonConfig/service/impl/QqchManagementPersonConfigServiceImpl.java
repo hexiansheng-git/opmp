@@ -37,10 +37,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -398,5 +395,13 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
                     QqchManagementPersonConfig::setChildren);
         }
         return resultList;
+    }
+
+    @Override
+    public int removeById(String ids) {
+        if (StrUtil.isBlank(ids)) return 0;
+        String[] strings = StrUtil.splitToArray(ids, ',');
+        List<Long> collect = Arrays.stream(strings).map(Long::valueOf).collect(Collectors.toList());
+        return qqchManagementPersonConfigMapper.deleteQqchManagementPersonConfigByPks(collect);
     }
 }
