@@ -1,0 +1,95 @@
+package com.hhwy.sd.designDocumentApproval.controller;
+
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApproval;
+import com.hhwy.sd.designDocumentApproval.service.IKcsjDesignDocumentApprovalService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * @author wll
+ * @date 2024-01-19 17:10:08
+ * @remark 
+ */
+@Validated
+@RestController
+@RequestMapping("/kcsjDesignDocumentApproval")
+public class KcsjDesignDocumentApprovalController extends BaseController{
+
+    @Autowired
+    private IKcsjDesignDocumentApprovalService kcsjDesignDocumentApprovalService;
+
+                                                                                                                                                                                                                                                                                                                                                                
+
+    @PreAuthorize(hasPermi = "kcsjDesignDocumentApproval:list")
+    @GetMapping
+    public AjaxResult getKcsjDesignDocumentApproval(@Validated(ValidationGroups.Get.class)  KcsjDesignDocumentApproval kcsjDesignDocumentApprovalParam){
+        KcsjDesignDocumentApproval kcsjDesignDocumentApproval =  kcsjDesignDocumentApprovalService.getKcsjDesignDocumentApproval(kcsjDesignDocumentApprovalParam);
+        return AjaxResult.success(kcsjDesignDocumentApproval);
+    }
+
+    @PreAuthorize(hasPermi = "kcsjDesignDocumentApproval:list")
+    @GetMapping("/list")
+    public AjaxResult getKcsjDesignDocumentApprovalList(@Validated(ValidationGroups.Select.class) KcsjDesignDocumentApproval kcsjDesignDocumentApprovalParam){
+        startPage();
+        List<KcsjDesignDocumentApproval> kcsjDesignDocumentApprovalList = kcsjDesignDocumentApprovalService.getKcsjDesignDocumentApprovalList(kcsjDesignDocumentApprovalParam);
+        return getDataTableAjaxResult(kcsjDesignDocumentApprovalList);
+    }
+
+    @PreAuthorize(hasPermi = "kcsjDesignDocumentApproval:add")
+    @PostMapping("/add")
+    public AjaxResult insertKcsjDesignDocumentApproval(@Validated(ValidationGroups.Save.class) @RequestBody KcsjDesignDocumentApproval kcsjDesignDocumentApprovalParam){
+        kcsjDesignDocumentApprovalService.insertKcsjDesignDocumentApproval(kcsjDesignDocumentApprovalParam);
+        return AjaxResult.success(kcsjDesignDocumentApprovalParam);
+    }
+
+    @PreAuthorize(hasPermi = "kcsjDesignDocumentApproval:add")
+    @PostMapping("/batchAdd")
+    public AjaxResult insertKcsjDesignDocumentApprovalList(@Validated(ValidationGroups.Save.class) @RequestBody List<KcsjDesignDocumentApproval> kcsjDesignDocumentApprovalListParam){
+        kcsjDesignDocumentApprovalService.insertKcsjDesignDocumentApprovalList(kcsjDesignDocumentApprovalListParam);
+        return AjaxResult.success(kcsjDesignDocumentApprovalListParam);
+    }
+
+    @PreAuthorize(hasPermi = "kcsjDesignDocumentApproval:update")
+    @PostMapping("/update")
+    public AjaxResult updateKcsjDesignDocumentApproval(@Validated(ValidationGroups.Update.class) @RequestBody KcsjDesignDocumentApproval kcsjDesignDocumentApprovalParam){
+        return toAjax(kcsjDesignDocumentApprovalService.updateKcsjDesignDocumentApproval(kcsjDesignDocumentApprovalParam));
+    }
+
+            @PreAuthorize(hasPermi = "kcsjDesignDocumentApproval:update")
+        @PostMapping("/batchUpdate")
+        public AjaxResult updateKcsjDesignDocumentApprovalList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjDesignDocumentApproval> kcsjDesignDocumentApprovalListParam){
+            return toAjax(kcsjDesignDocumentApprovalService.updateKcsjDesignDocumentApprovalList(kcsjDesignDocumentApprovalListParam));
+        }
+    
+    @PreAuthorize(hasPermi = "kcsjDesignDocumentApproval:remove")
+    @PostMapping("/delete")
+    public AjaxResult deleteKcsjDesignDocumentApproval(@Validated(ValidationGroups.Delete.class) @RequestBody KcsjDesignDocumentApproval kcsjDesignDocumentApprovalParam){
+        return toAjax(kcsjDesignDocumentApprovalService.deleteKcsjDesignDocumentApproval(kcsjDesignDocumentApprovalParam));
+    }
+
+            @PreAuthorize(hasPermi = "kcsjDesignDocumentApproval:remove")
+        @PostMapping("/{ids}")
+        public AjaxResult deleteKcsjDesignDocumentApprovalByPks(@PathVariable Long[] ids){
+            List<Long> kcsjDesignDocumentApprovalPkList = Arrays.asList(ids);
+            return toAjax(kcsjDesignDocumentApprovalService.deleteKcsjDesignDocumentApprovalByPks(kcsjDesignDocumentApprovalPkList));
+        }
+    
+    @GetMapping("/export")
+    public void export(HttpServletResponse response, KcsjDesignDocumentApproval kcsjDesignDocumentApprovalParam) throws IOException {
+        List<KcsjDesignDocumentApproval> kcsjDesignDocumentApprovalList = kcsjDesignDocumentApprovalService.getKcsjDesignDocumentApprovalList(kcsjDesignDocumentApprovalParam);
+        ExcelUtils<KcsjDesignDocumentApproval> util = new ExcelUtils<>(KcsjDesignDocumentApproval.class);
+        util.exportExcel(response, kcsjDesignDocumentApprovalList, DateUtils.getDate());
+    }
+}
