@@ -6,11 +6,11 @@ import java.util.List;
 
 /**
  * @author wll
- * @date 2024-01-19 17:10:08
- * @remark
+ * @date 2024-01-19 17:39:21
+ * @remark 
  */
 public interface IKcsjDesignDocumentApprovalService {
-
+                                                                                                                                                                                                                                                                                                                                                                                                    
     KcsjDesignDocumentApproval getKcsjDesignDocumentApproval(KcsjDesignDocumentApproval kcsjDesignDocumentApproval);
 
     List<KcsjDesignDocumentApproval> getKcsjDesignDocumentApprovalList(KcsjDesignDocumentApproval kcsjDesignDocumentApproval);
@@ -21,9 +21,9 @@ public interface IKcsjDesignDocumentApprovalService {
 
     int updateKcsjDesignDocumentApproval(KcsjDesignDocumentApproval kcsjDesignDocumentApproval);
 
-    int updateKcsjDesignDocumentApprovalList(List<KcsjDesignDocumentApproval> kcsjDesignDocumentApprovalList);
-
+            int updateKcsjDesignDocumentApprovalList(List<KcsjDesignDocumentApproval> kcsjDesignDocumentApprovalList);
+    
     int deleteKcsjDesignDocumentApproval(KcsjDesignDocumentApproval kcsjDesignDocumentApproval);
 
-    int deleteKcsjDesignDocumentApprovalByPks(List<Long> kcsjDesignDocumentApprovalPkList);
-}
+            int deleteKcsjDesignDocumentApprovalByPks(List<Long> kcsjDesignDocumentApprovalPkList);
+    }

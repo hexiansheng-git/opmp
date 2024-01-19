@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * @author wll
- * @date 2024-01-19 17:10:08
+ * @date 2024-01-19 17:39:21
  * @remark 
  */
 @Validated
@@ -30,7 +30,7 @@ public class KcsjDesignDocumentApprovalController extends BaseController{
     @Autowired
     private IKcsjDesignDocumentApprovalService kcsjDesignDocumentApprovalService;
 
-                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                    
 
     @PreAuthorize(hasPermi = "kcsjDesignDocumentApproval:list")
     @GetMapping

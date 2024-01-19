@@ -12,7 +12,7 @@ import java.util.Date;
 
 /**
  * @author wll
- * @date 2024-01-19 17:10:08
+ * @date 2024-01-19 17:39:21
  * @remark kcsj_design_document_approval
  */
 public class KcsjDesignDocumentApproval extends BaseEntity {
@@ -44,6 +44,12 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
     @Excel(name = "附件组id")
     private String fileGroupId;
     /**
+     * 字段描述：负责人id
+     */
+    @JsonProperty
+    @Excel(name = "负责人id")
+    private Long manageId;
+    /**
      * 字段描述：负责人
      */
     @JsonProperty
@@ -63,11 +69,11 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
     @Excel(name = "监理业主联系人")
     private String supervisingOwnerContacts;
     /**
-     * 字段描述：联系人
+     * 字段描述：联系方式
      */
     @JsonProperty
-    @Excel(name = "联系人")
-    private String contacts;
+    @Excel(name = "联系方式")
+    private String contactsInformation;
     /**
      * 字段描述：下次跟进日期
      */
@@ -101,6 +107,19 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
     @JsonProperty
     @Excel(name = "所属区域名称")
     private String regionName;
+    /**
+     * 字段描述：项目id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "项目id")
+    private Long projectId;
+    /**
+     * 字段描述：项目名称
+     */
+    @JsonProperty
+    @Excel(name = "项目名称")
+    private String projectName;
     /**
      * 字段描述：部门id
      */
@@ -237,6 +256,16 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
     }
 
     @JsonIgnore
+    public Long getManageId() {
+        return manageId;
+    }
+
+    @JsonIgnore
+    public void setManageId(Long manageId) {
+        this.manageId = manageId;
+    }
+
+    @JsonIgnore
     public String getManager() {
         return manager;
     }
@@ -267,13 +296,13 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
     }
 
     @JsonIgnore
-    public String getContacts() {
-        return contacts;
+    public String getContactsInformation() {
+        return contactsInformation;
     }
 
     @JsonIgnore
-    public void setContacts(String contacts) {
-        this.contacts = contacts;
+    public void setContactsInformation(String contactsInformation) {
+        this.contactsInformation = contactsInformation;
     }
 
     @JsonIgnore
@@ -324,6 +353,26 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
     @JsonIgnore
     public void setRegionName(String regionName) {
         this.regionName = regionName;
+    }
+
+    @JsonIgnore
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    @JsonIgnore
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
+    }
+
+    @JsonIgnore
+    public String getProjectName() {
+        return projectName;
+    }
+
+    @JsonIgnore
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     @JsonIgnore

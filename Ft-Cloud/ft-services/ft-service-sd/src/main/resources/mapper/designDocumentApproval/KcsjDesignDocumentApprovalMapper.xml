@@ -3,21 +3,24 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhwy.designDocumentApproval.mapper.KcsjDesignDocumentApprovalMapper">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
     <resultMap type="com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApproval" id="KcsjDesignDocumentApprovalResultMap">
                     <result property="id" column="id" />
                     <result property="designDocumentName" column="design_document_name" />
                     <result property="designScopeDescription" column="design_scope_description" />
                     <result property="fileGroupId" column="file_group_id" />
+                    <result property="manageId" column="manage_id" />
                     <result property="manager" column="manager" />
                     <result property="reportSupervisingOwnerDate" column="report_supervising_owner_date" />
                     <result property="supervisingOwnerContacts" column="supervising_owner_contacts" />
-                    <result property="contacts" column="contacts" />
+                    <result property="contactsInformation" column="contacts_information" />
                     <result property="nextFollowupDate" column="next_followup_date" />
                     <result property="actualFeedbackDate" column="actual_feedback_date" />
                     <result property="feedbackSituation" column="feedback_situation" />
                     <result property="regionId" column="region_id" />
                     <result property="regionName" column="region_name" />
+                    <result property="projectId" column="project_id" />
+                    <result property="projectName" column="project_name" />
                     <result property="deptId" column="dept_id" />
                     <result property="createUser" column="create_user" />
                     <result property="createUserName" column="create_user_name" />
@@ -40,15 +43,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                          ,`design_document_name`
                                                          ,`design_scope_description`
                                                          ,`file_group_id`
+                                                         ,`manage_id`
                                                          ,`manager`
                                                          ,`report_supervising_owner_date`
                                                          ,`supervising_owner_contacts`
-                                                         ,`contacts`
+                                                         ,`contacts_information`
                                                          ,`next_followup_date`
                                                          ,`actual_feedback_date`
                                                          ,`feedback_situation`
                                                          ,`region_id`
                                                          ,`region_name`
+                                                         ,`project_id`
+                                                         ,`project_name`
                                                          ,`dept_id`
                                                          ,`create_user`
                                                          ,`create_user_name`
@@ -74,15 +80,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="designDocumentName != null  and designDocumentName != ''"> and `design_document_name` = #{designDocumentName}</if>
                             <if test="designScopeDescription != null  and designScopeDescription != ''"> and `design_scope_description` = #{designScopeDescription}</if>
                             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+                            <if test="manageId != null  "> and `manage_id` = #{manageId}</if>
                             <if test="manager != null  and manager != ''"> and `manager` = #{manager}</if>
                             <if test="reportSupervisingOwnerDate != null "> and `report_supervising_owner_date` = #{reportSupervisingOwnerDate}</if>
                             <if test="supervisingOwnerContacts != null  and supervisingOwnerContacts != ''"> and `supervising_owner_contacts` = #{supervisingOwnerContacts}</if>
-                            <if test="contacts != null  and contacts != ''"> and `contacts` = #{contacts}</if>
+                            <if test="contactsInformation != null  and contactsInformation != ''"> and `contacts_information` = #{contactsInformation}</if>
                             <if test="nextFollowupDate != null "> and `next_followup_date` = #{nextFollowupDate}</if>
                             <if test="actualFeedbackDate != null "> and `actual_feedback_date` = #{actualFeedbackDate}</if>
                             <if test="feedbackSituation != null  and feedbackSituation != ''"> and `feedback_situation` = #{feedbackSituation}</if>
                             <if test="regionId != null "> and `region_id` = #{regionId}</if>
                             <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+                            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+                            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
                             <if test="deptId != null "> and `dept_id` = #{deptId}</if>
                             <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
                             <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
@@ -110,15 +119,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="designDocumentName != null  and designDocumentName != ''"> and `design_document_name` = #{designDocumentName}</if>
                             <if test="designScopeDescription != null  and designScopeDescription != ''"> and `design_scope_description` = #{designScopeDescription}</if>
                             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+                            <if test="manageId != null  "> and `manage_id` = #{manageId}</if>
                             <if test="manager != null  and manager != ''"> and `manager` = #{manager}</if>
                             <if test="reportSupervisingOwnerDate != null "> and `report_supervising_owner_date` = #{reportSupervisingOwnerDate}</if>
                             <if test="supervisingOwnerContacts != null  and supervisingOwnerContacts != ''"> and `supervising_owner_contacts` = #{supervisingOwnerContacts}</if>
-                            <if test="contacts != null  and contacts != ''"> and `contacts` = #{contacts}</if>
+                            <if test="contactsInformation != null  and contactsInformation != ''"> and `contacts_information` = #{contactsInformation}</if>
                             <if test="nextFollowupDate != null "> and `next_followup_date` = #{nextFollowupDate}</if>
                             <if test="actualFeedbackDate != null "> and `actual_feedback_date` = #{actualFeedbackDate}</if>
                             <if test="feedbackSituation != null  and feedbackSituation != ''"> and `feedback_situation` = #{feedbackSituation}</if>
                             <if test="regionId != null "> and `region_id` = #{regionId}</if>
                             <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+                            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+                            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
                             <if test="deptId != null "> and `dept_id` = #{deptId}</if>
                             <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
                             <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
@@ -145,15 +157,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="designDocumentName != null  and designDocumentName != ''">`design_document_name`,</if>
                             <if test="designScopeDescription != null  and designScopeDescription != ''">`design_scope_description`,</if>
                             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+                            <if test="manageId != null  ">`manage_id`,</if>
                             <if test="manager != null  and manager != ''">`manager`,</if>
                             <if test="reportSupervisingOwnerDate != null ">`report_supervising_owner_date`,</if>
                             <if test="supervisingOwnerContacts != null  and supervisingOwnerContacts != ''">`supervising_owner_contacts`,</if>
-                            <if test="contacts != null  and contacts != ''">`contacts`,</if>
+                            <if test="contactsInformation != null  and contactsInformation != ''">`contacts_information`,</if>
                             <if test="nextFollowupDate != null ">`next_followup_date`,</if>
                             <if test="actualFeedbackDate != null ">`actual_feedback_date`,</if>
                             <if test="feedbackSituation != null  and feedbackSituation != ''">`feedback_situation`,</if>
                             <if test="regionId != null ">`region_id`,</if>
                             <if test="regionName != null  and regionName != ''">`region_name`,</if>
+                            <if test="projectId != null ">`project_id`,</if>
+                            <if test="projectName != null  and projectName != ''">`project_name`,</if>
                             <if test="deptId != null ">`dept_id`,</if>
                             <if test="createUser != null  and createUser != ''">`create_user`,</if>
                             <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
@@ -175,15 +190,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="designDocumentName != null  and designDocumentName != ''">#{designDocumentName},</if>
                             <if test="designScopeDescription != null  and designScopeDescription != ''">#{designScopeDescription},</if>
                             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+                            <if test="manageId != null  ">#{manageId},</if>
                             <if test="manager != null  and manager != ''">#{manager},</if>
                             <if test="reportSupervisingOwnerDate != null ">#{reportSupervisingOwnerDate},</if>
                             <if test="supervisingOwnerContacts != null  and supervisingOwnerContacts != ''">#{supervisingOwnerContacts},</if>
-                            <if test="contacts != null  and contacts != ''">#{contacts},</if>
+                            <if test="contactsInformation != null  and contactsInformation != ''">#{contactsInformation},</if>
                             <if test="nextFollowupDate != null ">#{nextFollowupDate},</if>
                             <if test="actualFeedbackDate != null ">#{actualFeedbackDate},</if>
                             <if test="feedbackSituation != null  and feedbackSituation != ''">#{feedbackSituation},</if>
                             <if test="regionId != null ">#{regionId},</if>
                             <if test="regionName != null  and regionName != ''">#{regionName},</if>
+                            <if test="projectId != null ">#{projectId},</if>
+                            <if test="projectName != null  and projectName != ''">#{projectName},</if>
                             <if test="deptId != null ">#{deptId},</if>
                             <if test="createUser != null  and createUser != ''">#{createUser},</if>
                             <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
@@ -210,15 +228,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                 `design_document_name`,
                                                                 `design_scope_description`,
                                                                 `file_group_id`,
+                                                                `manage_id`,
                                                                 `manager`,
                                                                 `report_supervising_owner_date`,
                                                                 `supervising_owner_contacts`,
-                                                                `contacts`,
+                                                                `contacts_information`,
                                                                 `next_followup_date`,
                                                                 `actual_feedback_date`,
                                                                 `feedback_situation`,
                                                                 `region_id`,
                                                                 `region_name`,
+                                                                `project_id`,
+                                                                `project_name`,
                                                                 `dept_id`,
                                                                 `create_user`,
                                                                 `create_user_name`,
@@ -241,15 +262,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                                 #{item.designDocumentName},
                                                                                 #{item.designScopeDescription},
                                                                                 #{item.fileGroupId},
+                                                                                #{item.manageId},
                                                                                 #{item.manager},
                                                                                 #{item.reportSupervisingOwnerDate},
                                                                                 #{item.supervisingOwnerContacts},
-                                                                                #{item.contacts},
+                                                                                #{item.contactsInformation},
                                                                                 #{item.nextFollowupDate},
                                                                                 #{item.actualFeedbackDate},
                                                                                 #{item.feedbackSituation},
                                                                                 #{item.regionId},
                                                                                 #{item.regionName},
+                                                                                #{item.projectId},
+                                                                                #{item.projectName},
                                                                                 #{item.deptId},
                                                                                 #{item.createUser},
                                                                                 #{item.createUserName},
@@ -275,15 +299,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="designDocumentName != null  and  designDocumentName != ''">`design_document_name` = #{designDocumentName},</if>
                             <if test="designScopeDescription != null  and  designScopeDescription != ''">`design_scope_description` = #{designScopeDescription},</if>
                             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+                            <if test="manageId != null  and  manageId != ''">`manage_id` = #{manageId},</if>
                             <if test="manager != null  and  manager != ''">`manager` = #{manager},</if>
                             <if test="reportSupervisingOwnerDate != null ">`report_supervising_owner_date` = #{reportSupervisingOwnerDate},</if>
                             <if test="supervisingOwnerContacts != null  and  supervisingOwnerContacts != ''">`supervising_owner_contacts` = #{supervisingOwnerContacts},</if>
-                            <if test="contacts != null  and  contacts != ''">`contacts` = #{contacts},</if>
+                            <if test="contactsInformation != null  and  contactsInformation != ''">`contacts_information` = #{contactsInformation},</if>
                             <if test="nextFollowupDate != null ">`next_followup_date` = #{nextFollowupDate},</if>
                             <if test="actualFeedbackDate != null ">`actual_feedback_date` = #{actualFeedbackDate},</if>
                             <if test="feedbackSituation != null  and  feedbackSituation != ''">`feedback_situation` = #{feedbackSituation},</if>
                             <if test="regionId != null ">`region_id` = #{regionId},</if>
                             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+                            <if test="projectId != null ">`project_id` = #{projectId},</if>
+                            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
                             <if test="deptId != null ">`dept_id` = #{deptId},</if>
                             <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
                             <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
@@ -302,7 +329,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </trim>
         <where>
                                                                         <if test="id != null "> and `id` = #{id}</if>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
     </update>
 
             <update id="updateKcsjDesignDocumentApprovalList">
@@ -328,6 +355,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             when `id`=#{item.id} then #{item.fileGroupId}
                         </foreach>
                     </trim>
+                                    <trim prefix="manage_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.manageId}
+                        </foreach>
+                    </trim>
                                     <trim prefix="manager  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
                             when `id`=#{item.id} then #{item.manager}
@@ -343,9 +375,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             when `id`=#{item.id} then #{item.supervisingOwnerContacts}
                         </foreach>
                     </trim>
-                                    <trim prefix="contacts  = case" suffix="end,">
+                                    <trim prefix="contacts_information  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.contacts}
+                            when `id`=#{item.id} then #{item.contactsInformation}
                         </foreach>
                     </trim>
                                     <trim prefix="next_followup_date  = case" suffix="end,">
@@ -371,6 +403,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                     <trim prefix="region_name  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
                             when `id`=#{item.id} then #{item.regionName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="project_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.projectId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="project_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.projectName}
                         </foreach>
                     </trim>
                                     <trim prefix="dept_id  = case" suffix="end,">
@@ -462,15 +504,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                     <if test="designDocumentName != null  and designDocumentName != ''"> and `design_document_name` = #{designDocumentName}</if>
                                     <if test="designScopeDescription != null  and designScopeDescription != ''"> and `design_scope_description` = #{designScopeDescription}</if>
                                     <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+                                    <if test="manageId != null  "> and `manage_id` = #{manageId}</if>
                                     <if test="manager != null  and manager != ''"> and `manager` = #{manager}</if>
                                     <if test="reportSupervisingOwnerDate != null "> and `report_supervising_owner_date` = #{reportSupervisingOwnerDate}</if>
                                     <if test="supervisingOwnerContacts != null  and supervisingOwnerContacts != ''"> and `supervising_owner_contacts` = #{supervisingOwnerContacts}</if>
-                                    <if test="contacts != null  and contacts != ''"> and `contacts` = #{contacts}</if>
+                                    <if test="contactsInformation != null  and contactsInformation != ''"> and `contacts_information` = #{contactsInformation}</if>
                                     <if test="nextFollowupDate != null "> and `next_followup_date` = #{nextFollowupDate}</if>
                                     <if test="actualFeedbackDate != null "> and `actual_feedback_date` = #{actualFeedbackDate}</if>
                                     <if test="feedbackSituation != null  and feedbackSituation != ''"> and `feedback_situation` = #{feedbackSituation}</if>
                                     <if test="regionId != null "> and `region_id` = #{regionId}</if>
                                     <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+                                    <if test="projectId != null "> and `project_id` = #{projectId}</if>
+                                    <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
                                     <if test="deptId != null "> and `dept_id` = #{deptId}</if>
                                     <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
                                     <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>

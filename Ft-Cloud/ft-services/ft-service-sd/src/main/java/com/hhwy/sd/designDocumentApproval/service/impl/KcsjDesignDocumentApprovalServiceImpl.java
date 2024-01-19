@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * @author wll
- * @date 2024-01-19 17:10:08
+ * @date 2024-01-19 17:39:21
  * @remark 
  */
 @Service
@@ -23,7 +23,7 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
     @Autowired
     private KcsjDesignDocumentApprovalMapper kcsjDesignDocumentApprovalMapper;
 
-                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                    
     public KcsjDesignDocumentApproval getKcsjDesignDocumentApproval(KcsjDesignDocumentApproval kcsjDesignDocumentApproval) {
         return kcsjDesignDocumentApprovalMapper.getKcsjDesignDocumentApproval(kcsjDesignDocumentApproval);
     }
