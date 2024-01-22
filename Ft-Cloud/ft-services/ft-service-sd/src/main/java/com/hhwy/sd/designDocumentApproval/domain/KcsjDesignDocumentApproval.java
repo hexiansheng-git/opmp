@@ -7,7 +7,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -29,6 +32,7 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
      * 字段描述：设计文件名称
      */
     @JsonProperty
+    @NotBlank(message = "请填写设计文件名称",groups ={ValidationGroups.Save.class})
     @Excel(name = "设计文件名称")
     private String designDocumentName;
     /**
@@ -53,6 +57,7 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
      * 字段描述：负责人
      */
     @JsonProperty
+    @NotBlank(message = "请填写负责人",groups ={ValidationGroups.Save.class})
     @Excel(name = "负责人")
     private String manager;
     /**
@@ -60,6 +65,7 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
+    @NotNull(message = "请填写报监理业主日期",groups ={ValidationGroups.Save.class})
     @Excel(name = "报监理业主日期", dateFormat = "yyyy年MM月dd日")
     private Date reportSupervisingOwnerDate;
     /**
