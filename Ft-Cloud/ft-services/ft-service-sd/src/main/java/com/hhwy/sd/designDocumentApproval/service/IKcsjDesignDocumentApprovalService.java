@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author wll
  * @date 2024-01-19 17:39:21
- * @remark
+ * @remark 勘察设计-设计文件报批
  */
 public interface IKcsjDesignDocumentApprovalService {
 

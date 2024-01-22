@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * @author wll
  * @date 2024-01-19 17:39:21
- * @remark
+ * @remark 勘察设计-设计文件报批
  */
 @Validated
 @RestController
@@ -62,13 +62,14 @@ public class KcsjDesignDocumentApprovalController extends BaseController {
 
     /**
      * 批量保存
+     *
      * @param kcsjDesignDocumentApprovalListVo
      * @return
      */
     @PreAuthorize(hasPermi = "kcsjDesignDocumentApproval:save")
     @PostMapping("/batchSave")
     public AjaxResult insertKcsjDesignDocumentApprovalList(@Validated(ValidationGroups.Save.class) @RequestBody KcsjDesignDocumentApprovalVo kcsjDesignDocumentApprovalListVo) {
-        return  kcsjDesignDocumentApprovalService.saveKcsjDesignDocumentApprovalList(kcsjDesignDocumentApprovalListVo);
+        return kcsjDesignDocumentApprovalService.saveKcsjDesignDocumentApprovalList(kcsjDesignDocumentApprovalListVo);
 
     }
 
