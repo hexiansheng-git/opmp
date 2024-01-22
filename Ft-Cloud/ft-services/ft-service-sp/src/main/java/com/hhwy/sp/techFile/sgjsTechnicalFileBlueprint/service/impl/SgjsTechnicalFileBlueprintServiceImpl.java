@@ -34,7 +34,7 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
         return sgjsTechnicalFileBlueprintMapper.getSgjsTechnicalFileBlueprint(sgjsTechnicalFileBlueprint);
     }
 
-    public List<SgjsTechnicalFileBlueprint> getSgjsTechnicalFileBlueprintList(SgjsTechnicalFileBlueprintParam sgjsTechnicalFileBlueprint) {
+    public List<SgjsTechnicalFileBlueprint> getTreeList(SgjsTechnicalFileBlueprintParam sgjsTechnicalFileBlueprint) {
         List<SgjsTechnicalFileBlueprint> list = sgjsTechnicalFileBlueprintMapper.getSgjsTechnicalFileBlueprintList(sgjsTechnicalFileBlueprint);
         List<SgjsTechnicalFileBlueprint> TreeList = TreeUtil.build(list, null);
         if (CollUtil.isNotEmpty(list) && CollUtil.isEmpty(TreeList)) {
@@ -43,6 +43,9 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
             TreeList = TreeUtil.build(ancestral, null);
         }
         return TreeList;
+    }
+    public List<SgjsTechnicalFileBlueprint> getList(SgjsTechnicalFileBlueprintParam sgjsTechnicalFileBlueprint) {
+        return sgjsTechnicalFileBlueprintMapper.getSgjsTechnicalFileBlueprintList(sgjsTechnicalFileBlueprint);
     }
 
     @Transactional
