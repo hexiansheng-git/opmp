@@ -108,41 +108,43 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
     public AjaxResult saveKcsjDesignDocumentApprovalList(KcsjDesignDocumentApprovalVo kcsjDesignDocumentApprovalVo) {
 
         List<KcsjDesignDocumentApproval> kcsjDesignDocumentApprovalList = kcsjDesignDocumentApprovalVo.getKcsjDesignDocumentApprovalList();
-        //处理新增数据
-        List<KcsjDesignDocumentApproval> insertKcsjDesignDocumentApprovals = kcsjDesignDocumentApprovalList.stream().filter(p -> StringUtils.isNotEmpty(p.getIsAdd()) && p.getIsAdd().equals("1")).collect(Collectors.toList());
-        if (insertKcsjDesignDocumentApprovals.size() > 0) {
-            //填充数据记录有关字段
-            for (KcsjDesignDocumentApproval kcsjDesignDocumentApproval : insertKcsjDesignDocumentApprovals) {
-                kcsjDesignDocumentApproval.setId(IdWorker.createId());
-                kcsjDesignDocumentApproval.setCreateUserName(SecurityUtils.getSysUser().getNickName());
-                kcsjDesignDocumentApproval.setCreateUser(SecurityUtils.getUserId().toString());
-                kcsjDesignDocumentApproval.setCreateTime(DateUtils.getNowDate());
-                kcsjDesignDocumentApproval.setDelFlag("0");
-            }
-            kcsjDesignDocumentApprovalMapper.insertKcsjDesignDocumentApprovalList(insertKcsjDesignDocumentApprovals);
+        if (kcsjDesignDocumentApprovalList.size()>0) {
 
-        }
+            //处理新增数据
+            List<KcsjDesignDocumentApproval> insertKcsjDesignDocumentApprovals = kcsjDesignDocumentApprovalList.stream().filter(p -> StringUtils.isNotEmpty(p.getIsAdd()) && p.getIsAdd().equals("1")).collect(Collectors.toList());
+            if (insertKcsjDesignDocumentApprovals.size() > 0) {
+                //填充数据记录有关字段
+                for (KcsjDesignDocumentApproval kcsjDesignDocumentApproval : insertKcsjDesignDocumentApprovals) {
+                    kcsjDesignDocumentApproval.setId(IdWorker.createId());
+                    kcsjDesignDocumentApproval.setCreateUserName(SecurityUtils.getSysUser().getNickName());
+                    kcsjDesignDocumentApproval.setCreateUser(SecurityUtils.getUserId().toString());
+                    kcsjDesignDocumentApproval.setCreateTime(DateUtils.getNowDate());
+                    kcsjDesignDocumentApproval.setDelFlag("0");
+                }
+                kcsjDesignDocumentApprovalMapper.insertKcsjDesignDocumentApprovalList(insertKcsjDesignDocumentApprovals);
 
-        //处理更新数据
-        List<KcsjDesignDocumentApproval> updateKcsjDesignDocumentApprovals = kcsjDesignDocumentApprovalList.stream().filter(p -> StringUtils.isEmpty(p.getIsAdd()) || (!p.getIsAdd().equals("1"))).collect(Collectors.toList());
-        if (updateKcsjDesignDocumentApprovals.size() > 0) {
-            for (KcsjDesignDocumentApproval kcsjDesignDocumentApproval : updateKcsjDesignDocumentApprovals) {
-                kcsjDesignDocumentApproval.setUpdateUser(SecurityUtils.getSysUser().getNickName());
-                kcsjDesignDocumentApproval.setUpdateTime(DateUtils.getNowDate());
             }
-            kcsjDesignDocumentApprovalMapper.updateKcsjDesignDocumentApprovalList(updateKcsjDesignDocumentApprovals);
-        }
-        //处理删除数据
-        List<String> delIdList = kcsjDesignDocumentApprovalVo.getDelIdList();
-        List<Long> delIds = new ArrayList<>();
-        if (kcsjDesignDocumentApprovalVo.getDelIdList().size() > 0) {
-            for (String s : delIdList) {
-                delIds.add(Long.valueOf(s));
-            }
-            String delUser = SecurityUtils.getSysUser().getNickName();
-            kcsjDesignDocumentApprovalMapper.deleteKcsjDesignDocumentApprovalByIdPks(delIds, delUser);
-        }
 
+            //处理更新数据
+            List<KcsjDesignDocumentApproval> updateKcsjDesignDocumentApprovals = kcsjDesignDocumentApprovalList.stream().filter(p -> StringUtils.isEmpty(p.getIsAdd()) || (!p.getIsAdd().equals("1"))).collect(Collectors.toList());
+            if (updateKcsjDesignDocumentApprovals.size() > 0) {
+                for (KcsjDesignDocumentApproval kcsjDesignDocumentApproval : updateKcsjDesignDocumentApprovals) {
+                    kcsjDesignDocumentApproval.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+                    kcsjDesignDocumentApproval.setUpdateTime(DateUtils.getNowDate());
+                }
+                kcsjDesignDocumentApprovalMapper.updateKcsjDesignDocumentApprovalList(updateKcsjDesignDocumentApprovals);
+            }
+            //处理删除数据
+            List<String> delIdList = kcsjDesignDocumentApprovalVo.getDelIdList();
+            List<Long> delIds = new ArrayList<>();
+            if (kcsjDesignDocumentApprovalVo.getDelIdList().size() > 0) {
+                for (String s : delIdList) {
+                    delIds.add(Long.valueOf(s));
+                }
+                String delUser = SecurityUtils.getSysUser().getNickName();
+                kcsjDesignDocumentApprovalMapper.deleteKcsjDesignDocumentApprovalByIdPks(delIds, delUser);
+            }
+        }
         return AjaxResult.success();
     }
 
