@@ -279,7 +279,7 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
     private Date  actualFeedbackDateEnd;
 
     /**
-     * 新增标识 为1为新增，0为更新
+     * 新增标识 1为新增
      */
     @JsonProperty
     private String isAdd;

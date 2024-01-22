@@ -115,7 +115,7 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
         }
 
         //处理更新数据
-        List<KcsjDesignDocumentApproval> updateKcsjDesignDocumentApprovals = kcsjDesignDocumentApprovalList.stream().filter(p -> StringUtils.isNotEmpty(p.getIsAdd()) && p.getIsAdd().equals("0")).collect(Collectors.toList());
+        List<KcsjDesignDocumentApproval> updateKcsjDesignDocumentApprovals = kcsjDesignDocumentApprovalList.stream().filter(p -> StringUtils.isEmpty(p.getIsAdd()) || (!p.getIsAdd().equals("1"))).collect(Collectors.toList());
         if (updateKcsjDesignDocumentApprovals.size()>0){
             for (KcsjDesignDocumentApproval kcsjDesignDocumentApproval : updateKcsjDesignDocumentApprovals) {
                 kcsjDesignDocumentApproval.setUpdateUser(SecurityUtils.getSysUser().getNickName());

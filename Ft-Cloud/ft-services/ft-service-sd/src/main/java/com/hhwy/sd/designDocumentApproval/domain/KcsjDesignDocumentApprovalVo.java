@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 public class KcsjDesignDocumentApprovalVo {
 
-    //新增数据
+    //页面数据集合
     private List<KcsjDesignDocumentApproval> kcsjDesignDocumentApprovalList;
 
     //删除id
