@@ -197,7 +197,7 @@
                 and `send_date` BETWEEN #{beginDate} and #{endDate}
             </if>
         </where>
-        order by create_time desc
+        order by sort
     </select>
 
     <insert id="insertSgjsTechnicalFileBlueprint" useGeneratedKeys="true" keyProperty="id">
