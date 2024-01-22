@@ -1,0 +1,730 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.mapper.SgjsTechnicalFileBlueprintMapper">
+
+    <resultMap type="com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprintParam"
+               id="SgjsTechnicalFileBlueprintResultMap">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="sort" column="sort"/>
+        <result property="ancestors" column="ancestors"/>
+        <result property="leaf" column="leaf"/>
+        <result property="blueprintNum" column="blueprint_num"/>
+        <result property="blueprintName" column="blueprint_name"/>
+        <result property="version" column="version"/>
+        <result property="blueprintCount" column="blueprint_count"/>
+        <result property="wbsCode" column="wbs_code"/>
+        <result property="wbsName" column="wbs_name"/>
+        <result property="startDatePlan" column="start_date_plan"/>
+        <result property="senderId" column="sender_id"/>
+        <result property="senderName" column="sender_name"/>
+        <result property="sendDate" column="send_date"/>
+        <result property="receiverId" column="receiver_id"/>
+        <result property="receiverName" column="receiver_name"/>
+        <result property="changeOr" column="change_or"/>
+        <result property="blueprintValid" column="blueprint_valid"/>
+        <result property="recycleOr" column="recycle_or"/>
+        <result property="signetValid" column="signet_valid"/>
+        <result property="cancelDate" column="cancel_date"/>
+        <result property="fileGroupId" column="file_group_id"/>
+        <result property="remark" column="remark"/>
+        <result property="regionId" column="region_id"/>
+        <result property="regionName" column="region_name"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="ptVar5" column="pt_var5"/>
+    </resultMap>
+    <sql id="selectSgjsTechnicalFileBlueprintVo">
+        SELECT `id`
+                , `pid`
+                , `sort`
+                , `ancestors`
+                , `leaf`
+                , `blueprint_num`
+                , `blueprint_name`
+                , `version`
+                , `blueprint_count`
+                , `wbs_code`
+                , `wbs_name`
+                , `start_date_plan`
+                , `sender_id`
+                , `sender_name`
+                , `send_date`
+                , `receiver_id`
+                , `receiver_name`
+                , `change_or`
+                , `blueprint_valid`
+                , `recycle_or`
+                , `signet_valid`
+                , `cancel_date`
+                , `file_group_id`
+                , `remark`
+                , `region_id`
+                , `region_name`
+                , `project_id`
+                , `project_name`
+                , `dept_id`
+                , `create_user`
+                , `create_user_name`
+                , `create_time`
+                , `update_user`
+                , `update_time`
+                , `del_user`
+                , `del_time`
+                , `del_flag`
+                , `pt_var1`
+                , `pt_var2`
+                , `pt_var3`
+                , `pt_var4`
+                , `pt_var5`
+        FROM sgjs_technical_file_blueprint
+    </sql>
+    <select id="getSgjsTechnicalFileBlueprint" resultMap="SgjsTechnicalFileBlueprintResultMap">
+        <include refid="selectSgjsTechnicalFileBlueprintVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
+            <if test="blueprintNum != null  and blueprintNum != ''">and `blueprint_num` = #{blueprintNum}</if>
+            <if test="blueprintName != null  and blueprintName != ''">
+                and `blueprint_name` like concat('%',#{blueprintName},'%')
+            </if>
+            <if test="version != null  and version != ''">and `version` = #{version}</if>
+            <if test="blueprintCount != null ">and `blueprint_count` = #{blueprintCount}</if>
+            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="startDatePlan != null ">and `start_date_plan` = #{startDatePlan}</if>
+            <if test="senderId != null  and senderId != ''">and `sender_id` = #{senderId}</if>
+            <if test="senderName != null  and senderName != ''">and `sender_name` = #{senderName}</if>
+            <if test="sendDate != null ">and `send_date` = #{sendDate}</if>
+            <if test="receiverId != null ">and `receiver_id` = #{receiverId}</if>
+            <if test="receiverName != null  and receiverName != ''">and `receiver_name` = #{receiverName}</if>
+            <if test="changeOr != null  and changeOr != ''">and `change_or` = #{changeOr}</if>
+            <if test="blueprintValid != null  and blueprintValid != ''">and `blueprint_valid` = #{blueprintValid}</if>
+            <if test="recycleOr != null  and recycleOr != ''">and `recycle_or` = #{recycleOr}</if>
+            <if test="signetValid != null  and signetValid != ''">and `signet_valid` = #{signetValid}</if>
+            <if test="cancelDate != null ">and `cancel_date` = #{cancelDate}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+    </select>
+
+    <select id="getSgjsTechnicalFileBlueprintList" resultMap="SgjsTechnicalFileBlueprintResultMap">
+        <include refid="selectSgjsTechnicalFileBlueprintVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
+            <if test="blueprintNum != null  and blueprintNum != ''">and `blueprint_num` = #{blueprintNum}</if>
+            <if test="blueprintName != null  and blueprintName != ''">
+                and `blueprint_name` like concat('%',#{blueprintName},'%')
+            </if>
+            <if test="version != null  and version != ''">and `version` = #{version}</if>
+            <if test="blueprintCount != null ">and `blueprint_count` = #{blueprintCount}</if>
+            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="startDatePlan != null ">and `start_date_plan` = #{startDatePlan}</if>
+            <if test="senderId != null  and senderId != ''">and `sender_id` = #{senderId}</if>
+            <if test="senderName != null  and senderName != ''">and `sender_name` = #{senderName}</if>
+            <if test="sendDate != null ">and `send_date` = #{sendDate}</if>
+            <if test="receiverId != null ">and `receiver_id` = #{receiverId}</if>
+            <if test="receiverName != null  and receiverName != ''">and `receiver_name` = #{receiverName}</if>
+            <if test="changeOr != null  and changeOr != ''">and `change_or` = #{changeOr}</if>
+            <if test="blueprintValid != null  and blueprintValid != ''">and `blueprint_valid` = #{blueprintValid}</if>
+            <if test="recycleOr != null  and recycleOr != ''">and `recycle_or` = #{recycleOr}</if>
+            <if test="signetValid != null  and signetValid != ''">and `signet_valid` = #{signetValid}</if>
+            <if test="cancelDate != null ">and `cancel_date` = #{cancelDate}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
+                and `send_date` BETWEEN #{beginDate} and #{endDate}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertSgjsTechnicalFileBlueprint" useGeneratedKeys="true" keyProperty="id">
+        insert into sgjs_technical_file_blueprint
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="pid != null ">`pid`,</if>
+            <if test="sort != null ">`sort`,</if>
+            <if test="ancestors != null  and ancestors != ''">`ancestors`,</if>
+            <if test="leaf != null  and leaf != ''">`leaf`,</if>
+            <if test="blueprintNum != null  and blueprintNum != ''">`blueprint_num`,</if>
+            <if test="blueprintName != null  and blueprintName != ''">`blueprint_name`,</if>
+            <if test="version != null  and version != ''">`version`,</if>
+            <if test="blueprintCount != null ">`blueprint_count`,</if>
+            <if test="wbsCode != null  and wbsCode != ''">`wbs_code`,</if>
+            <if test="wbsName != null  and wbsName != ''">`wbs_name`,</if>
+            <if test="startDatePlan != null ">`start_date_plan`,</if>
+            <if test="senderId != null  and senderId != ''">`sender_id`,</if>
+            <if test="senderName != null  and senderName != ''">`sender_name`,</if>
+            <if test="sendDate != null ">`send_date`,</if>
+            <if test="receiverId != null ">`receiver_id`,</if>
+            <if test="receiverName != null  and receiverName != ''">`receiver_name`,</if>
+            <if test="changeOr != null  and changeOr != ''">`change_or`,</if>
+            <if test="blueprintValid != null  and blueprintValid != ''">`blueprint_valid`,</if>
+            <if test="recycleOr != null  and recycleOr != ''">`recycle_or`,</if>
+            <if test="signetValid != null  and signetValid != ''">`signet_valid`,</if>
+            <if test="cancelDate != null ">`cancel_date`,</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="regionId != null ">`region_id`,</if>
+            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+            <if test="projectId != null ">`project_id`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="deptId != null ">`dept_id`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="pid != null ">#{pid},</if>
+            <if test="sort != null ">#{sort},</if>
+            <if test="ancestors != null  and ancestors != ''">#{ancestors},</if>
+            <if test="leaf != null  and leaf != ''">#{leaf},</if>
+            <if test="blueprintNum != null  and blueprintNum != ''">#{blueprintNum},</if>
+            <if test="blueprintName != null  and blueprintName != ''">#{blueprintName},</if>
+            <if test="version != null  and version != ''">#{version},</if>
+            <if test="blueprintCount != null ">#{blueprintCount},</if>
+            <if test="wbsCode != null  and wbsCode != ''">#{wbsCode},</if>
+            <if test="wbsName != null  and wbsName != ''">#{wbsName},</if>
+            <if test="startDatePlan != null ">#{startDatePlan},</if>
+            <if test="senderId != null  and senderId != ''">#{senderId},</if>
+            <if test="senderName != null  and senderName != ''">#{senderName},</if>
+            <if test="sendDate != null ">#{sendDate},</if>
+            <if test="receiverId != null ">#{receiverId},</if>
+            <if test="receiverName != null  and receiverName != ''">#{receiverName},</if>
+            <if test="changeOr != null  and changeOr != ''">#{changeOr},</if>
+            <if test="blueprintValid != null  and blueprintValid != ''">#{blueprintValid},</if>
+            <if test="recycleOr != null  and recycleOr != ''">#{recycleOr},</if>
+            <if test="signetValid != null  and signetValid != ''">#{signetValid},</if>
+            <if test="cancelDate != null ">#{cancelDate},</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="regionId != null ">#{regionId},</if>
+            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsTechnicalFileBlueprint -->
+    <insert id="insertSgjsTechnicalFileBlueprintList">
+        insert into sgjs_technical_file_blueprint
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `pid`,
+            `sort`,
+            `ancestors`,
+            `leaf`,
+            `blueprint_num`,
+            `blueprint_name`,
+            `version`,
+            `blueprint_count`,
+            `wbs_code`,
+            `wbs_name`,
+            `start_date_plan`,
+            `sender_id`,
+            `sender_name`,
+            `send_date`,
+            `receiver_id`,
+            `receiver_name`,
+            `change_or`,
+            `blueprint_valid`,
+            `recycle_or`,
+            `signet_valid`,
+            `cancel_date`,
+            `file_group_id`,
+            `remark`,
+            `region_id`,
+            `region_name`,
+            `project_id`,
+            `project_name`,
+            `dept_id`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+        </trim>
+        values
+        <foreach collection="sgjsTechnicalFileBlueprintList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.pid},
+                #{item.sort},
+                #{item.ancestors},
+                #{item.leaf},
+                #{item.blueprintNum},
+                #{item.blueprintName},
+                #{item.version},
+                #{item.blueprintCount},
+                #{item.wbsCode},
+                #{item.wbsName},
+                #{item.startDatePlan},
+                #{item.senderId},
+                #{item.senderName},
+                #{item.sendDate},
+                #{item.receiverId},
+                #{item.receiverName},
+                #{item.changeOr},
+                #{item.blueprintValid},
+                #{item.recycleOr},
+                #{item.signetValid},
+                #{item.cancelDate},
+                #{item.fileGroupId},
+                #{item.remark},
+                #{item.regionId},
+                #{item.regionName},
+                #{item.projectId},
+                #{item.projectName},
+                #{item.deptId},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateSgjsTechnicalFileBlueprint">
+        update sgjs_technical_file_blueprint
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="pid != null ">`pid` = #{pid},</if>
+            <if test="sort != null ">`sort` = #{sort},</if>
+            <if test="ancestors != null  and  ancestors != ''">`ancestors` = #{ancestors},</if>
+            <if test="leaf != null  and  leaf != ''">`leaf` = #{leaf},</if>
+            <if test="blueprintNum != null  and  blueprintNum != ''">`blueprint_num` = #{blueprintNum},</if>
+            <if test="blueprintName != null  and  blueprintName != ''">`blueprint_name` = #{blueprintName},</if>
+            <if test="version != null  and  version != ''">`version` = #{version},</if>
+            <if test="blueprintCount != null ">`blueprint_count` = #{blueprintCount},</if>
+            <if test="wbsCode != null  and  wbsCode != ''">`wbs_code` = #{wbsCode},</if>
+            <if test="wbsName != null  and  wbsName != ''">`wbs_name` = #{wbsName},</if>
+            <if test="startDatePlan != null ">`start_date_plan` = #{startDatePlan},</if>
+            <if test="senderId != null  and  senderId != ''">`sender_id` = #{senderId},</if>
+            <if test="senderName != null  and  senderName != ''">`sender_name` = #{senderName},</if>
+            <if test="sendDate != null ">`send_date` = #{sendDate},</if>
+            <if test="receiverId != null ">`receiver_id` = #{receiverId},</if>
+            <if test="receiverName != null  and  receiverName != ''">`receiver_name` = #{receiverName},</if>
+            <if test="changeOr != null  and  changeOr != ''">`change_or` = #{changeOr},</if>
+            <if test="blueprintValid != null  and  blueprintValid != ''">`blueprint_valid` = #{blueprintValid},</if>
+            <if test="recycleOr != null  and  recycleOr != ''">`recycle_or` = #{recycleOr},</if>
+            <if test="signetValid != null  and  signetValid != ''">`signet_valid` = #{signetValid},</if>
+            <if test="cancelDate != null ">`cancel_date` = #{cancelDate},</if>
+            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="regionId != null ">`region_id` = #{regionId},</if>
+            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+        </trim>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateSgjsTechnicalFileBlueprintList">
+        update sgjs_technical_file_blueprint
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="pid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.pid}
+                </foreach>
+            </trim>
+            <trim prefix="sort  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.sort}
+                </foreach>
+            </trim>
+            <trim prefix="ancestors  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ancestors}
+                </foreach>
+            </trim>
+            <trim prefix="leaf  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.leaf}
+                </foreach>
+            </trim>
+            <trim prefix="blueprint_num  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.blueprintNum}
+                </foreach>
+            </trim>
+            <trim prefix="blueprint_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.blueprintName}
+                </foreach>
+            </trim>
+            <trim prefix="version  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.version}
+                </foreach>
+            </trim>
+            <trim prefix="blueprint_count  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.blueprintCount}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.wbsCode}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.wbsName}
+                </foreach>
+            </trim>
+            <trim prefix="start_date_plan  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.startDatePlan}
+                </foreach>
+            </trim>
+            <trim prefix="sender_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.senderId}
+                </foreach>
+            </trim>
+            <trim prefix="sender_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.senderName}
+                </foreach>
+            </trim>
+            <trim prefix="send_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.sendDate}
+                </foreach>
+            </trim>
+            <trim prefix="receiver_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.receiverId}
+                </foreach>
+            </trim>
+            <trim prefix="receiver_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.receiverName}
+                </foreach>
+            </trim>
+            <trim prefix="change_or  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.changeOr}
+                </foreach>
+            </trim>
+            <trim prefix="blueprint_valid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.blueprintValid}
+                </foreach>
+            </trim>
+            <trim prefix="recycle_or  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.recycleOr}
+                </foreach>
+            </trim>
+            <trim prefix="signet_valid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.signetValid}
+                </foreach>
+            </trim>
+            <trim prefix="cancel_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.cancelDate}
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.fileGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="region_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionId}
+                </foreach>
+            </trim>
+            <trim prefix="region_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionName}
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.deptId}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar3}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar4}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar5}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+    <update id="deleteSgjsTechnicalFileBlueprint">
+        update `sgjs_technical_file_blueprint` set del_flag = 1
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
+            <if test="blueprintNum != null  and blueprintNum != ''">and `blueprint_num` = #{blueprintNum}</if>
+            <if test="blueprintName != null  and blueprintName != ''">and `blueprint_name` = #{blueprintName}</if>
+            <if test="version != null  and version != ''">and `version` = #{version}</if>
+            <if test="blueprintCount != null ">and `blueprint_count` = #{blueprintCount}</if>
+            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="startDatePlan != null ">and `start_date_plan` = #{startDatePlan}</if>
+            <if test="senderId != null  and senderId != ''">and `sender_id` = #{senderId}</if>
+            <if test="senderName != null  and senderName != ''">and `sender_name` = #{senderName}</if>
+            <if test="sendDate != null ">and `send_date` = #{sendDate}</if>
+            <if test="receiverId != null ">and `receiver_id` = #{receiverId}</if>
+            <if test="receiverName != null  and receiverName != ''">and `receiver_name` = #{receiverName}</if>
+            <if test="changeOr != null  and changeOr != ''">and `change_or` = #{changeOr}</if>
+            <if test="blueprintValid != null  and blueprintValid != ''">and `blueprint_valid` = #{blueprintValid}</if>
+            <if test="recycleOr != null  and recycleOr != ''">and `recycle_or` = #{recycleOr}</if>
+            <if test="signetValid != null  and signetValid != ''">and `signet_valid` = #{signetValid}</if>
+            <if test="cancelDate != null ">and `cancel_date` = #{cancelDate}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+    </update>
+
+    <update id="deleteSgjsTechnicalFileBlueprintByPks">
+        update `sgjs_technical_file_blueprint` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="sgjsTechnicalFileBlueprintPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="deleteWithChildren">
+        update `sgjs_technical_file_blueprint` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="sgjsTechnicalFileBlueprintPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+            or pid in
+            <foreach item="id" collection="sgjsTechnicalFileBlueprintPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+</mapper>

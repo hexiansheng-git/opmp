@@ -58,9 +58,9 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
     /**
      * 字段描述：报监理业主日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "报监理业主日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "报监理业主日期", dateFormat = "yyyy年MM月dd日")
     private Date reportSupervisingOwnerDate;
     /**
      * 字段描述：监理业主联系人
@@ -77,16 +77,16 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
     /**
      * 字段描述：下次跟进日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "下次跟进日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "下次跟进日期", dateFormat = "yyyy年MM月dd日")
     private Date nextFollowupDate;
     /**
      * 字段描述：实际反馈日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "实际反馈日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "实际反馈日期", dateFormat = "yyyy年MM月dd日")
     private Date actualFeedbackDate;
     /**
      * 字段描述：反馈情况
@@ -214,6 +214,156 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
     @JsonProperty
     @Excel(name = "备注")
     private String remark;
+
+    /**
+     * 报监理业主日期搜索字符串
+     */
+    @JsonProperty
+    private String reportSupervisingOwnerDateStr;
+
+    /**
+     * 报监理业主日期开始日期
+     */
+    @JsonFormat(pattern = "yyyy年MM月dd日")
+    @JsonProperty
+    private Date reportSupervisingOwnerDateBegin;
+
+    /**
+     * 报监理业主日期结束日期
+     */
+    @JsonFormat(pattern = "yyyy年MM月dd日")
+    @JsonProperty
+    private Date reportSupervisingOwnerDateEnd;
+
+    /**
+     * 下次跟进日期搜索字符串
+     */
+    @JsonProperty
+    private String nextFollowupDateStr;
+
+    /**
+     * 下次跟进日期开始日期
+     */
+    @JsonFormat(pattern = "yyyy年MM月dd日")
+    @JsonProperty
+    private Date  nextFollowupDateBegin;
+
+
+    /**
+     * 下次跟进日期结束日期
+     */
+    @JsonFormat(pattern = "yyyy年MM月dd日")
+    @JsonProperty
+    private Date  nextFollowupDateEnd;
+
+
+    /**
+     * 实际反馈日期搜索字符串
+     */
+    @JsonProperty
+    private String actualFeedbackDateStr;
+
+    /**
+     * 实际反馈日期开始日期
+     */
+    @JsonFormat(pattern = "yyyy年MM月dd日")
+    @JsonProperty
+    private Date  actualFeedbackDateBegin;
+
+
+    /**
+     * 实际反馈日期结束日期
+     */
+    @JsonFormat(pattern = "yyyy年MM月dd日")
+    @JsonProperty
+    private Date  actualFeedbackDateEnd;
+
+    /**
+     * 新增标识 1为新增
+     */
+    @JsonProperty
+    private String isAdd;
+
+
+    public String getIsAdd() {
+        return isAdd;
+    }
+
+    public void setIsAdd(String isAdd) {
+        this.isAdd = isAdd;
+    }
+
+    public String getReportSupervisingOwnerDateStr() {
+        return reportSupervisingOwnerDateStr;
+    }
+
+    public void setReportSupervisingOwnerDateStr(String reportSupervisingOwnerDateStr) {
+        this.reportSupervisingOwnerDateStr = reportSupervisingOwnerDateStr;
+    }
+
+    public String getNextFollowupDateStr() {
+        return nextFollowupDateStr;
+    }
+
+    public void setNextFollowupDateStr(String nextFollowupDateStr) {
+        this.nextFollowupDateStr = nextFollowupDateStr;
+    }
+
+    public String getActualFeedbackDateStr() {
+        return actualFeedbackDateStr;
+    }
+
+    public void setActualFeedbackDateStr(String actualFeedbackDateStr) {
+        this.actualFeedbackDateStr = actualFeedbackDateStr;
+    }
+
+    public Date getReportSupervisingOwnerDateBegin() {
+        return reportSupervisingOwnerDateBegin;
+    }
+
+    public void setReportSupervisingOwnerDateBegin(Date reportSupervisingOwnerDateBegin) {
+        this.reportSupervisingOwnerDateBegin = reportSupervisingOwnerDateBegin;
+    }
+
+    public Date getReportSupervisingOwnerDateEnd() {
+        return reportSupervisingOwnerDateEnd;
+    }
+
+    public void setReportSupervisingOwnerDateEnd(Date reportSupervisingOwnerDateEnd) {
+        this.reportSupervisingOwnerDateEnd = reportSupervisingOwnerDateEnd;
+    }
+
+    public Date getNextFollowupDateBegin() {
+        return nextFollowupDateBegin;
+    }
+
+    public void setNextFollowupDateBegin(Date nextFollowupDateBegin) {
+        this.nextFollowupDateBegin = nextFollowupDateBegin;
+    }
+
+    public Date getNextFollowupDateEnd() {
+        return nextFollowupDateEnd;
+    }
+
+    public void setNextFollowupDateEnd(Date nextFollowupDateEnd) {
+        this.nextFollowupDateEnd = nextFollowupDateEnd;
+    }
+
+    public Date getActualFeedbackDateBegin() {
+        return actualFeedbackDateBegin;
+    }
+
+    public void setActualFeedbackDateBegin(Date actualFeedbackDateBegin) {
+        this.actualFeedbackDateBegin = actualFeedbackDateBegin;
+    }
+
+    public Date getActualFeedbackDateEnd() {
+        return actualFeedbackDateEnd;
+    }
+
+    public void setActualFeedbackDateEnd(Date actualFeedbackDateEnd) {
+        this.actualFeedbackDateEnd = actualFeedbackDateEnd;
+    }
 
     @JsonIgnore
     public Long getId() {
