@@ -1,13 +1,18 @@
 package com.hhwy.sd.designDocumentApproval.service.impl;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApproval;
 import com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApprovalVo;
 import com.hhwy.sd.designDocumentApproval.mapper.KcsjDesignDocumentApprovalMapper;
 import com.hhwy.sd.designDocumentApproval.service.IKcsjDesignDocumentApprovalService;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +33,8 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
 
     @Autowired
     private KcsjDesignDocumentApprovalMapper kcsjDesignDocumentApprovalMapper;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
 
     public KcsjDesignDocumentApproval getKcsjDesignDocumentApproval(KcsjDesignDocumentApproval kcsjDesignDocumentApproval) {
@@ -165,5 +172,32 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
     @Transactional
     public int deleteKcsjDesignDocumentApprovalByPks(List<Long> kcsjDesignDocumentApprovalPkList) {
         return kcsjDesignDocumentApprovalMapper.deleteKcsjDesignDocumentApprovalByPks(kcsjDesignDocumentApprovalPkList);
+    }
+
+
+    @Override
+    public void designFileTask() {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+        try{
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+                //超过日期后未进行填写实际反馈日期及反馈情况，发送消息提醒负责人进行跟进填写日期后允许删除，显示空白
+                //nextFollowupDate 查下次跟进日期大于等于今日，且实际反馈内容和反馈日期不等于空的
+                kcsjDesignDocumentApprovalMapper.selectByFollowUpDate();
+            }
+        }catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+
     }
 }

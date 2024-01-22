@@ -104,4 +104,16 @@ public class KcsjDesignDocumentApprovalController extends BaseController {
         ExcelUtils<KcsjDesignDocumentApproval> util = new ExcelUtils<>(KcsjDesignDocumentApproval.class);
         util.exportExcel(response, kcsjDesignDocumentApprovalList, DateUtils.getDate());
     }
+
+    /**
+     * 设计文件报批每晚8点发送消息
+     *
+     * @auth lcf
+     * @date 2024-01-22
+     */
+    @GetMapping("/designFileTask")
+    public void designFileTask(){
+        kcsjDesignDocumentApprovalService.designFileTask();
+    }
+
 }

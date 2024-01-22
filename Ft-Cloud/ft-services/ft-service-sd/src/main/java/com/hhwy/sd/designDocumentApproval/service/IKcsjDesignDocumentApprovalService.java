@@ -30,4 +30,12 @@ public interface IKcsjDesignDocumentApprovalService {
     int deleteKcsjDesignDocumentApproval(KcsjDesignDocumentApproval kcsjDesignDocumentApproval);
 
     int deleteKcsjDesignDocumentApprovalByPks(List<Long> kcsjDesignDocumentApprovalPkList);
+
+    /**
+     * 设计文件报批每晚8点发送消息
+     *
+     * @auth lcf
+     * @date 2024-01-22
+     */
+    void designFileTask();
 }

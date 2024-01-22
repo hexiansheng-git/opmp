@@ -29,4 +29,15 @@ public interface KcsjDesignDocumentApprovalMapper {
     int deleteKcsjDesignDocumentApprovalByIdPks(@Param("kcsjDesignDocumentApprovalPkList") List<Long> kcsjDesignDocumentApprovalPkList, @Param("delUser") String delUser);
 
     int deleteKcsjDesignDocumentApprovalByPks(@Param("kcsjDesignDocumentApprovalPkList") List<Long> kcsjDesignDocumentApprovalPkList);
+
+    /**
+     * 查询下次跟进日期不为空
+     * 且反馈日期和反馈内容不为空的数据
+     *
+     * @author lcf
+     * @date 2024-01-22
+     * @return
+     */
+    List<KcsjDesignDocumentApproval> selectByFollowUpDate();
+
 }
