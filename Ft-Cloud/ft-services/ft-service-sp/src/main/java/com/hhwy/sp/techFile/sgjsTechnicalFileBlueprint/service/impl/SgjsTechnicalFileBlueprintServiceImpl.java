@@ -1,8 +1,10 @@
 package com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprint;
@@ -52,18 +54,32 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
     }
 
     @Transactional
-    public int insertSgjsTechnicalFileBlueprintList(List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList) {
+    public void insertSgjsTechnicalFileBlueprintList(List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList) {
         if (CollUtil.isEmpty(sgjsTechnicalFileBlueprintList)) {
-            sgjsTechnicalFileBlueprintMapper.deleteSgjsTechnicalFileBlueprint(new SgjsTechnicalFileBlueprint());
-            return 1;
+            return;
         }
-        List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprints = TreeUtil.treeToList(sgjsTechnicalFileBlueprintList);
+        List<SgjsTechnicalFileBlueprint> save = new ArrayList<>();
+        List<SgjsTechnicalFileBlueprint> update = new ArrayList<>();
+        List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprints = TreeUtil.treeToListWithoutNewId(sgjsTechnicalFileBlueprintList);
         for (SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint : sgjsTechnicalFileBlueprints) {
-            sgjsTechnicalFileBlueprint.setId(IdWorker.createId());
+            String isAdd = sgjsTechnicalFileBlueprint.getIsAdd();
+            if (StrUtil.isBlank(isAdd)) {
+                sgjsTechnicalFileBlueprint.setUpdateUser(SecurityUtils.getUserName());
+                sgjsTechnicalFileBlueprint.setUpdateTime(DateUtils.getNowDate());
+                update.add(sgjsTechnicalFileBlueprint);
+                continue;
+            }
             sgjsTechnicalFileBlueprint.setCreateUser(SecurityUtils.getUserName());
             sgjsTechnicalFileBlueprint.setCreateTime(DateUtils.getNowDate());
+            save.add(sgjsTechnicalFileBlueprint);
         }
-        return sgjsTechnicalFileBlueprintMapper.insertSgjsTechnicalFileBlueprintList(sgjsTechnicalFileBlueprints);
+        if (CollUtil.isNotEmpty(save)){
+            sgjsTechnicalFileBlueprintMapper.insertSgjsTechnicalFileBlueprintList(save);
+        }
+        if (CollUtil.isNotEmpty(update)){
+            sgjsTechnicalFileBlueprintMapper.updateSgjsTechnicalFileBlueprintList(update);
+        }
+        //维护ancestors
     }
 
     @Transactional
@@ -84,13 +100,15 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
 
     @Transactional
     public int deleteSgjsTechnicalFileBlueprint(SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint) {
-        sgjsTechnicalFileBlueprint.setUpdateUser(SecurityUtils.getUserName());
-        sgjsTechnicalFileBlueprint.setUpdateTime(DateUtils.getNowDate());
         return sgjsTechnicalFileBlueprintMapper.deleteSgjsTechnicalFileBlueprint(sgjsTechnicalFileBlueprint);
     }
 
     @Transactional
     public int deleteSgjsTechnicalFileBlueprintByPks(List<Long> sgjsTechnicalFileBlueprintPkList) {
         return sgjsTechnicalFileBlueprintMapper.deleteSgjsTechnicalFileBlueprintByPks(sgjsTechnicalFileBlueprintPkList);
+    }
+
+    public int deleteWithChildren(List<Long> sgjsTechnicalFileBlueprintPkList) {
+        return sgjsTechnicalFileBlueprintMapper.deleteWithChildren(sgjsTechnicalFileBlueprintPkList);
     }
 }

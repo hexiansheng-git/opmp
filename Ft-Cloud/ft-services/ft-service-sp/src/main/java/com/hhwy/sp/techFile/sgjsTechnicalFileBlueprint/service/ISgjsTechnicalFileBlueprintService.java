@@ -18,7 +18,7 @@ public interface ISgjsTechnicalFileBlueprintService {
 
     int insertSgjsTechnicalFileBlueprint(SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint);
 
-    int insertSgjsTechnicalFileBlueprintList(List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList);
+    void insertSgjsTechnicalFileBlueprintList(List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList);
 
     int updateSgjsTechnicalFileBlueprint(SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint);
 
@@ -27,4 +27,6 @@ public interface ISgjsTechnicalFileBlueprintService {
     int deleteSgjsTechnicalFileBlueprint(SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint);
 
     int deleteSgjsTechnicalFileBlueprintByPks(List<Long> sgjsTechnicalFileBlueprintPkList);
+
+    int deleteWithChildren(List<Long> sgjsTechnicalFileBlueprintPkList);
 }

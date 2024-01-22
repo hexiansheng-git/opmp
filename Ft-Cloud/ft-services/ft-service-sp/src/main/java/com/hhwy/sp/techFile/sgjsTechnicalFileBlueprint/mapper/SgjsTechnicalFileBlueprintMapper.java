@@ -23,9 +23,11 @@ public interface SgjsTechnicalFileBlueprintMapper {
 
     int updateSgjsTechnicalFileBlueprint(SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint);
 
-    int updateSgjsTechnicalFileBlueprintList(@Param("sgjsTechnicalFileBlueprintList") List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList);
+    int updateSgjsTechnicalFileBlueprintList(@Param("list") List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList);
 
     int deleteSgjsTechnicalFileBlueprint(SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint);
 
     int deleteSgjsTechnicalFileBlueprintByPks(@Param("sgjsTechnicalFileBlueprintPkList") List<Long> sgjsTechnicalFileBlueprintPkList);
+
+    int deleteWithChildren(@Param("sgjsTechnicalFileBlueprintPkList") List<Long> sgjsTechnicalFileBlueprintPkList);
 }

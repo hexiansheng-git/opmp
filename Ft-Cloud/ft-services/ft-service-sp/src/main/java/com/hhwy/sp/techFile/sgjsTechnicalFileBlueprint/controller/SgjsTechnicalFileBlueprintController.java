@@ -90,10 +90,10 @@ public class SgjsTechnicalFileBlueprintController extends BaseController {
     }
 
     @PreAuthorize(hasPermi = "sgjsTechnicalFileBlueprint:remove")
-    @PostMapping("/{ids}")
-    public AjaxResult deleteSgjsTechnicalFileBlueprintByPks(@PathVariable Long[] ids) {
+    @PostMapping("/remove")
+    public AjaxResult deleteSgjsTechnicalFileBlueprintByPks(Long[] ids) {
         List<Long> sgjsTechnicalFileBlueprintPkList = Arrays.asList(ids);
-        return toAjax(sgjsTechnicalFileBlueprintService.deleteSgjsTechnicalFileBlueprintByPks(sgjsTechnicalFileBlueprintPkList));
+        return toAjax(sgjsTechnicalFileBlueprintService.deleteWithChildren(sgjsTechnicalFileBlueprintPkList));
     }
 
     @GetMapping("/export")

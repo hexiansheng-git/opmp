@@ -1,6 +1,7 @@
 package com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,4 +18,5 @@ public class SgjsTechnicalFileBlueprintParam extends SgjsTechnicalFileBlueprint{
     private String beginDate;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private String endDate;
+
 }

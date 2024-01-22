@@ -10,7 +10,7 @@
         <result property="pid" column="pid"/>
         <result property="sort" column="sort"/>
         <result property="ancestors" column="ancestors"/>
-        <result property="haveChildren" column="have_children"/>
+        <result property="leaf" column="leaf"/>
         <result property="blueprintNum" column="blueprint_num"/>
         <result property="blueprintName" column="blueprint_name"/>
         <result property="version" column="version"/>
@@ -54,7 +54,7 @@
                 , `pid`
                 , `sort`
                 , `ancestors`
-                , `have_children`
+                , `leaf`
                 , `blueprint_num`
                 , `blueprint_name`
                 , `version`
@@ -102,7 +102,7 @@
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
-            <if test="haveChildren != null  and haveChildren != ''">and `have_children` = #{haveChildren}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="blueprintNum != null  and blueprintNum != ''">and `blueprint_num` = #{blueprintNum}</if>
             <if test="blueprintName != null  and blueprintName != ''">
                 and `blueprint_name` like concat('%',#{blueprintName},'%')
@@ -153,7 +153,7 @@
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
-            <if test="haveChildren != null  and haveChildren != ''">and `have_children` = #{haveChildren}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="blueprintNum != null  and blueprintNum != ''">and `blueprint_num` = #{blueprintNum}</if>
             <if test="blueprintName != null  and blueprintName != ''">
                 and `blueprint_name` like concat('%',#{blueprintName},'%')
@@ -207,7 +207,7 @@
             <if test="pid != null ">`pid`,</if>
             <if test="sort != null ">`sort`,</if>
             <if test="ancestors != null  and ancestors != ''">`ancestors`,</if>
-            <if test="haveChildren != null  and haveChildren != ''">`have_children`,</if>
+            <if test="leaf != null  and leaf != ''">`leaf`,</if>
             <if test="blueprintNum != null  and blueprintNum != ''">`blueprint_num`,</if>
             <if test="blueprintName != null  and blueprintName != ''">`blueprint_name`,</if>
             <if test="version != null  and version != ''">`version`,</if>
@@ -251,7 +251,7 @@
             <if test="pid != null ">#{pid},</if>
             <if test="sort != null ">#{sort},</if>
             <if test="ancestors != null  and ancestors != ''">#{ancestors},</if>
-            <if test="haveChildren != null  and haveChildren != ''">#{haveChildren},</if>
+            <if test="leaf != null  and leaf != ''">#{leaf},</if>
             <if test="blueprintNum != null  and blueprintNum != ''">#{blueprintNum},</if>
             <if test="blueprintName != null  and blueprintName != ''">#{blueprintName},</if>
             <if test="version != null  and version != ''">#{version},</if>
@@ -300,7 +300,7 @@
             `pid`,
             `sort`,
             `ancestors`,
-            `have_children`,
+            `leaf`,
             `blueprint_num`,
             `blueprint_name`,
             `version`,
@@ -345,7 +345,7 @@
                 #{item.pid},
                 #{item.sort},
                 #{item.ancestors},
-                #{item.haveChildren},
+                #{item.leaf},
                 #{item.blueprintNum},
                 #{item.blueprintName},
                 #{item.version},
@@ -393,7 +393,7 @@
             <if test="pid != null ">`pid` = #{pid},</if>
             <if test="sort != null ">`sort` = #{sort},</if>
             <if test="ancestors != null  and  ancestors != ''">`ancestors` = #{ancestors},</if>
-            <if test="haveChildren != null  and  haveChildren != ''">`have_children` = #{haveChildren},</if>
+            <if test="leaf != null  and  leaf != ''">`leaf` = #{leaf},</if>
             <if test="blueprintNum != null  and  blueprintNum != ''">`blueprint_num` = #{blueprintNum},</if>
             <if test="blueprintName != null  and  blueprintName != ''">`blueprint_name` = #{blueprintName},</if>
             <if test="version != null  and  version != ''">`version` = #{version},</if>
@@ -460,9 +460,9 @@
                     when `id`=#{item.id} then #{item.ancestors}
                 </foreach>
             </trim>
-            <trim prefix="have_children  = case" suffix="end,">
+            <trim prefix="leaf  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.haveChildren}
+                    when `id`=#{item.id} then #{item.leaf}
                 </foreach>
             </trim>
             <trim prefix="blueprint_num  = case" suffix="end,">
@@ -652,11 +652,10 @@
             </trim>
         </trim>
         where `id` in
-        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </update>
-
     <update id="deleteSgjsTechnicalFileBlueprint">
         update `sgjs_technical_file_blueprint` set del_flag = 1
         <where>
@@ -664,7 +663,7 @@
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
-            <if test="haveChildren != null  and haveChildren != ''">and `have_children` = #{haveChildren}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="blueprintNum != null  and blueprintNum != ''">and `blueprint_num` = #{blueprintNum}</if>
             <if test="blueprintName != null  and blueprintName != ''">and `blueprint_name` = #{blueprintName}</if>
             <if test="version != null  and version != ''">and `version` = #{version}</if>
@@ -709,6 +708,20 @@
         update `sgjs_technical_file_blueprint` set del_flag = 1
         <where>
             `id` in
+            <foreach item="id" collection="sgjsTechnicalFileBlueprintPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="deleteWithChildren">
+        update `sgjs_technical_file_blueprint` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="sgjsTechnicalFileBlueprintPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+            or pid in
             <foreach item="id" collection="sgjsTechnicalFileBlueprintPkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
