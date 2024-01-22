@@ -8,10 +8,10 @@ import java.util.List;
 /**
  * @author wll
  * @date 2024-01-19 17:39:21
- * @remark 
+ * @remark
  */
 public interface KcsjDesignDocumentApprovalMapper {
-                                                                                                                                                                                                                                                                                                                                                                                                    
+
     KcsjDesignDocumentApproval getKcsjDesignDocumentApproval(KcsjDesignDocumentApproval kcsjDesignDocumentApproval);
 
     List<KcsjDesignDocumentApproval> getKcsjDesignDocumentApprovalList(KcsjDesignDocumentApproval kcsjDesignDocumentApproval);
@@ -22,9 +22,11 @@ public interface KcsjDesignDocumentApprovalMapper {
 
     int updateKcsjDesignDocumentApproval(KcsjDesignDocumentApproval kcsjDesignDocumentApproval);
 
-            int updateKcsjDesignDocumentApprovalList(@Param("kcsjDesignDocumentApprovalList") List<KcsjDesignDocumentApproval> kcsjDesignDocumentApprovalList);
-    
+    int updateKcsjDesignDocumentApprovalList(@Param("list") List<KcsjDesignDocumentApproval> list);
+
     int deleteKcsjDesignDocumentApproval(KcsjDesignDocumentApproval kcsjDesignDocumentApproval);
 
-            int deleteKcsjDesignDocumentApprovalByPks(@Param("kcsjDesignDocumentApprovalPkList") List<Long> kcsjDesignDocumentApprovalPkList);
-    }
+    int deleteKcsjDesignDocumentApprovalByIdPks(@Param("kcsjDesignDocumentApprovalPkList") List<Long> kcsjDesignDocumentApprovalPkList,@Param("delUser") String delUser);
+
+    int deleteKcsjDesignDocumentApprovalByPks(@Param("kcsjDesignDocumentApprovalPkList") List<Long> kcsjDesignDocumentApprovalPkList);
+}
