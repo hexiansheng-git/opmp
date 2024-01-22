@@ -1,9 +1,11 @@
 package com.hhwy.sd.designFileManage.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManageVo;
-import java.util.List;
 import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManage;
+import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManageVo;
+import com.hhwy.sd.designFileManage.domain.vo.KcsjDesignFileManageQueryVo;
+
+import java.util.List;
 
 /**
  * @author zmh
@@ -14,7 +16,7 @@ public interface IKcsjDesignFileManageService {
 
     KcsjDesignFileManage getKcsjDesignFileManage(KcsjDesignFileManage kcsjDesignFileManage);
 
-    KcsjDesignFileManageVo getKcsjDesignFileManageList(KcsjDesignFileManage kcsjDesignFileManage);
+    KcsjDesignFileManageVo getKcsjDesignFileManageList(KcsjDesignFileManageQueryVo queryVo);
 
     int insertKcsjDesignFileManage(KcsjDesignFileManage kcsjDesignFileManage);
 

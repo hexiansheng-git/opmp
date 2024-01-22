@@ -1,8 +1,10 @@
 package com.hhwy.sd.designFileManage.mapper;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManage;
+import com.hhwy.sd.designFileManage.domain.vo.KcsjDesignFileManageQueryVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author zmh
@@ -13,7 +15,7 @@ public interface KcsjDesignFileManageMapper {
 
     KcsjDesignFileManage getKcsjDesignFileManage(KcsjDesignFileManage kcsjDesignFileManage);
 
-    List<KcsjDesignFileManage> getKcsjDesignFileManageList(KcsjDesignFileManage kcsjDesignFileManage);
+    List<KcsjDesignFileManage> getKcsjDesignFileManageList(KcsjDesignFileManageQueryVo queryVo);
 
     int insertKcsjDesignFileManage(KcsjDesignFileManage kcsjDesignFileManage);
 

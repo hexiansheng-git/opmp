@@ -1,24 +1,19 @@
 package com.hhwy.sd.designFileManage.controller;
 
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManage;
 import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManageVo;
+import com.hhwy.sd.designFileManage.domain.vo.KcsjDesignFileManageQueryVo;
+import com.hhwy.sd.designFileManage.service.IKcsjDesignFileManageService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Arrays;
 import java.util.List;
-import java.io.IOException;
-
-import com.hhwy.utils.tree.TreeUtil;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.sd.designFileManage.service.IKcsjDesignFileManageService;
-import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManage;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
 
 /**
  * @author zmh
@@ -28,7 +23,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 @Validated
 @RestController
 @RequestMapping("/kcsjDesignFileManage")
-public class KcsjDesignFileManageController extends BaseController {
+public class DesignFileManageController extends BaseController {
 
     @Autowired
     private IKcsjDesignFileManageService kcsjDesignFileManageService;
@@ -42,13 +37,13 @@ public class KcsjDesignFileManageController extends BaseController {
 
     /**
      * 列表list
-     * @param kcsjDesignFileManageParam
+     * @param queryVo
      * @return
      */
     @PreAuthorize(hasPermi = "kcsjDesignFileManage:list")
     @GetMapping("/list")
-    public AjaxResult getKcsjDesignFileManageList(@Validated(ValidationGroups.Select.class) KcsjDesignFileManage kcsjDesignFileManageParam) {
-        KcsjDesignFileManageVo kcsjDesignFileManageVo = kcsjDesignFileManageService.getKcsjDesignFileManageList(kcsjDesignFileManageParam);
+    public AjaxResult getKcsjDesignFileManageList(@Validated(ValidationGroups.Select.class) KcsjDesignFileManageQueryVo queryVo) {
+        KcsjDesignFileManageVo kcsjDesignFileManageVo = kcsjDesignFileManageService.getKcsjDesignFileManageList(queryVo);
         return AjaxResult.success(kcsjDesignFileManageVo);
     }
 
@@ -94,13 +89,5 @@ public class KcsjDesignFileManageController extends BaseController {
     public AjaxResult deleteKcsjDesignFileManageByPks(@PathVariable Long[] ids) {
         List<Long> kcsjDesignFileManagePkList = Arrays.asList(ids);
         return toAjax(kcsjDesignFileManageService.deleteKcsjDesignFileManageByPks(kcsjDesignFileManagePkList));
-    }
-
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, KcsjDesignFileManage kcsjDesignFileManageParam)
-        throws IOException {
-        KcsjDesignFileManageVo kcsjDesignFileManageList = kcsjDesignFileManageService.getKcsjDesignFileManageList(kcsjDesignFileManageParam);
-        ExcelUtils<KcsjDesignFileManage> util = new ExcelUtils<>(KcsjDesignFileManage.class);
-        util.exportExcel(response, TreeUtil.treeToList(kcsjDesignFileManageList.getTreeList()), DateUtils.getDate());
     }
 }
