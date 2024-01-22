@@ -138,7 +138,7 @@
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="manageId != null  ">and `manage_id` = #{manageId}</if>
             <if test="manager != null  and manager != ''">and `manager` = #{manager}</if>
-            <if test="reportSupervisingOwnerDateStr != null ">and `report_supervising_owner_date` &gt;=
+            <if test="reportSupervisingOwnerDateStr != null and reportSupervisingOwnerDateStr!='' ">and `report_supervising_owner_date` &gt;=
                 #{reportSupervisingOwnerDateBegin} and `report_supervising_owner_date` &lt;=
                 #{reportSupervisingOwnerDateEnd}
             </if>
@@ -148,10 +148,10 @@
             <if test="contactsInformation != null  and contactsInformation != ''">and `contacts_information` =
                 #{contactsInformation}
             </if>
-            <if test="nextFollowupDateStr != null ">and `next_followup_date` &gt;= #{nextFollowupDateBegin} and
+            <if test="nextFollowupDateStr != null and nextFollowupDateStr!=''">and `next_followup_date` &gt;= #{nextFollowupDateBegin} and
                 `next_followup_date` &lt;= #{nextFollowupDateEnd}
             </if>
-            <if test="actualFeedbackDateStr != null ">and `actual_feedback_date` &gt;= #{actualFeedbackDateBegin} and
+            <if test="actualFeedbackDateStr != null and actualFeedbackDateStr!=''">and `actual_feedback_date` &gt;= #{actualFeedbackDateBegin} and
                 `actual_feedback_date` &lt;= #{actualFeedbackDateEnd}
             </if>
             <if test="feedbackSituation != null  and feedbackSituation != ''">and `feedback_situation` =

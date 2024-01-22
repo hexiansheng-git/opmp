@@ -284,7 +284,6 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
     @JsonProperty
     private String isAdd;
 
-
     public String getIsAdd() {
         return isAdd;
     }
