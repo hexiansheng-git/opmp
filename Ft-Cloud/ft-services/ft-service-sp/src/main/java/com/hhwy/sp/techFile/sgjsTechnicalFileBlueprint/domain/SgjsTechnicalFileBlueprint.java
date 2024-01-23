@@ -16,7 +16,10 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.utils.tree.TreeNode;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author fsd
@@ -63,6 +66,7 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      */
     @JsonProperty
     @Excel(name = "图纸名称")
+    @NotBlank(message = "图纸名称不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String blueprintName;
     /**
      * 字段描述：版本
@@ -122,6 +126,7 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      */
     @JsonProperty
     @Excel(name = "图纸接收人")
+    @NotBlank(message = "图纸接收人不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String receiverName;
     /**
      * 字段描述：是否变更
@@ -134,6 +139,7 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      */
     @JsonProperty
     @Excel(name = "图纸有效性")
+    @NotBlank(message = "图纸有效性不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String blueprintValid;
     /**
      * 字段描述：图纸是否回收
