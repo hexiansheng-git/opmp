@@ -46,6 +46,9 @@
         <result property="ptVar5" column="pt_var5"/>
         <result property="sort" column="sort"/>
         <result property="listIds" column="list_ids"/>
+        <result property="selfCode" column="self_code"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="oldSelfCode" column="old_self_code"/>
     </resultMap>
     <sql id="selectXmslWbsVo">
         select
@@ -90,6 +93,8 @@
          ,`pt_var4`
          ,`pt_var5`
          , sort
+         ,`self_code`
+         ,`parent_code`
         from xmsl_wbs
     </sql>
     <select id="getXmslWbs" resultMap="XmslWbsResultMap">
@@ -135,6 +140,8 @@
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="selfCode != null  and selfCode != ''">and `self_code` = #{selfCode}</if>
+            <if test="parentCode != null  and parentCode != ''">and `parent_code` = #{parentCode}</if>
         </where>
         order by id
     </select>
@@ -186,6 +193,8 @@
         ,`pt_var4`
         ,`pt_var5`
         ,sort
+        , self_code
+        , parent_code
         from xmsl_wbs
         <where>
             del_flag = "0"
@@ -234,6 +243,8 @@
                     #{id}
                 </foreach>
             </if>
+            <if test="selfCode != null  and selfCode != ''">and `self_code` = #{selfCode}</if>
+            <if test="parentCode != null  and parentCode != ''">and `parent_code` = #{parentCode}</if>
         </where>
         order by
         <if test="params != null and params.sortLevel != null">
@@ -301,6 +312,9 @@
         ,`pt_var4`
         ,`pt_var5`
         ,sort
+        ,self_code
+        ,parent_code
+        ,self_code old_self_code
         from ${params.tableName}
         <where>
             del_flag = "0"
@@ -343,6 +357,8 @@
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="selfCode != null  and selfCode != ''">and `self_code` = #{selfCode}</if>
+            <if test="parentCode != null  and parentCode != ''">and `parent_code` = #{parentCode}</if>
         </where>
         order by sort
     </select>
@@ -389,6 +405,8 @@
         ,`pt_var4`
         ,`pt_var5`
         ,sort
+        ,self_code
+        ,parent_code
         from xmsl_wbs
         where id in
         <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
@@ -457,6 +475,8 @@
             <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
             <if test="sort != null  and sort != ''">`sort`,</if>
+            <if test="selfCode != null  and selfCode != ''">`self_code`,</if>
+            <if test="parentCode != null  and parentCode != ''">`parent_code`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -499,6 +519,8 @@
             <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
             <if test="sort != null  and sort != ''">#{sort},</if>
+            <if test="selfCode != null  and selfCode != ''">#{selfCode},</if>
+            <if test="parentCode != null  and parentCode != ''">#{parentCode},</if>
         </trim>
     </insert>
 
@@ -545,7 +567,9 @@
             `pt_var4`,
             `pt_var5`,
             `sort`,
-            `list_ids`
+            `list_ids`,
+            `self_code`,
+            `parent_code`
         </trim>
         values
         <foreach collection="xmslWbsList" item="item" separator=",">
@@ -589,7 +613,9 @@
                 #{item.ptVar4},
                 #{item.ptVar5},
                 #{item.sort},
-                #{item.listIds}
+                #{item.listIds},
+                #{item.selfCode},
+                #{item.parentCode}
             </trim>
         </foreach>
     </insert>
@@ -638,6 +664,8 @@
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
             <if test="sort != null  and  sort != ''">`sort` = #{sort},</if>
+            <if test="selfCode != null  and  selfCode != ''">`self_code` = #{selfCode},</if>
+            <if test="parentCode != null  and  parentCode != ''">`parent_code` = #{parentCode},</if>
         </trim>
         <where>
             <if test="id != null ">and `id` = #{id}</if>
@@ -840,6 +868,16 @@
             <trim prefix="sort  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.sort}
+                </foreach>
+            </trim>
+            <trim prefix="self_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.selfCode}
+                </foreach>
+            </trim>
+            <trim prefix="parent_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.parentCode}
                 </foreach>
             </trim>
         </trim>

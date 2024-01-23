@@ -4,7 +4,6 @@ import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
@@ -20,13 +19,15 @@ import com.hhwy.utils.validation.ValidationUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -145,14 +146,15 @@ public class XmslWbsController extends BaseController {
             excelUtil.exportExcelWithCust(response, new ArrayList<>(2),"模板","项目WBS模板.xls",
                     Arrays.asList(Arrays.asList("从单位工程开始填写；比如第一级:100,第二级:100-001,第三级:100-001-001,第四级:100-001-001-001。确保子级编号在父级编号后面")));
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
 
     @PostMapping("/importData")
-    public AjaxResult exportTemplate(HttpServletRequest request, HttpServletResponse response, MultipartFile file) {
+    public AjaxResult importData(HttpServletRequest request, HttpServletResponse response, Long id,MultipartFile file) {
         try {
-            return AjaxResult.success(xmslWbsService.importData(file));
+            return AjaxResult.success(xmslWbsService.importData(id,file));
         } catch (Exception e) {
             e.printStackTrace();
             return AjaxResult.error("导入失败:"+e.getMessage());

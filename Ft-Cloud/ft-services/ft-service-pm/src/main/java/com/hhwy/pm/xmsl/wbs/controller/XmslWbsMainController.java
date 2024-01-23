@@ -1,21 +1,16 @@
 package com.hhwy.pm.xmsl.wbs.controller;
 
-import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.enums.FlowEnum;
-import com.hhwy.feign.service.FlowServiceApi;
-import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
-import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
+import com.hhwy.pm.xmsl.wbs.push.WbsPushP6;
 import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVo;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.utils.Constant;
@@ -23,19 +18,13 @@ import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
-import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
 /**
  * @author wk
@@ -50,9 +39,7 @@ public class XmslWbsMainController extends BaseController {
     @Autowired
     private IXmslWbsMainService xmslWbsMainService;
     @Autowired
-    private FlowServiceApi flowServiceApi;
-    @Autowired
-    private PmServiceApi pmServiceApi;
+    private WbsPushP6 wbsPushP6;
 
     @CustomLogger(title = "项目设立", name = "项目WBS管理" ,businessType = CustomBusinessType.SELECT)
     @PreAuthorize(hasPermi = "xmslWbsMain:list")
@@ -87,6 +74,7 @@ public class XmslWbsMainController extends BaseController {
         if(wbsMain != null)
             wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>0?1:0));
         XmslWbsMain temp = wbsMain==null?new XmslWbsMain():wbsMain;
+//        temp.setP6ExistPrj(wbsPushP6.isPrjExist()?"1":"0");
         FlowInfoSearchUtil.getFlowInfo(temp,FlowEnum.XMSL_WBS);
         return AjaxResult.success(temp);
     }
@@ -110,8 +98,7 @@ public class XmslWbsMainController extends BaseController {
         }
         //是否有调整记录
         Long count = xmslWbsMainService.getXmslWbsMainCount(new XmslWbsMain());
-        if(wbsMain != null)
-            wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>0?1:0));
+        wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>0?1:0));
         FlowInfoSearchUtil.getFlowInfo(wbsMain,FlowEnum.XMSL_WBS);
         return AjaxResult.success(wbsMain);
     }

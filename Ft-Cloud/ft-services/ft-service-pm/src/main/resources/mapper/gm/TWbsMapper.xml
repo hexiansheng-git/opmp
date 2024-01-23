@@ -124,6 +124,14 @@
         order by create_time desc
     </select>
 
+    <select id="getLatestTWbsByFullCode" resultMap="TWbsResultMap">
+        <include refid="selectTWbsVo"/>
+        <where>
+            del_flag = "0" and `ancestors_name` = #{ancestorsName}
+        </where>
+        order by id desc limit 1
+    </select>
+
     <select id="getTWbsList" resultMap="TWbsResultMap">
         <include refid="selectTWbsVo"/>
         <where>
@@ -179,6 +187,11 @@
         <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
+    </select>
+
+    <select id="getAllChildTWbs" resultMap="TWbsResultMap" parameterType="Long">
+        <include refid="selectTWbsVo"/>
+        where del_flag = 0 and FIND_IN_SET(#{id},ancestors)
     </select>
     
     <select id="getTWbsId" resultMap="TWbsResultMap">
@@ -744,7 +757,7 @@
         update `t_wbs` set del_flag = 1
         where
         <foreach item="id" collection="list" separator="or">
-            FIND_IN_SET(#{id},ancestors);
+            FIND_IN_SET(#{id},ancestors)
         </foreach>
     </update>
 </mapper>

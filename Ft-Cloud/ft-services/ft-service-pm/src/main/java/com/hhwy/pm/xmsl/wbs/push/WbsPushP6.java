@@ -3,10 +3,9 @@ package com.hhwy.pm.xmsl.wbs.push;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.file.FileUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.factory.FlowServiceFallbackFactory;
 import com.hhwy.pm.core.sync.enums.SyncBusinessEnum;
 import com.hhwy.pm.core.sync.service.ISyncLogMasterService;
@@ -19,7 +18,6 @@ import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.HttpClientUtil;
 import com.hhwy.utils.ObjectUtils;
-import lombok.extern.java.Log;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.entity.ContentType;
@@ -49,9 +47,24 @@ public class WbsPushP6 {
     private String wbsPushUpdateUrl;
     @Value("${p6.wbsPushDeleteUrl}")
     private String wbsPushDeleteUrl;
+    @Value("${p6.ip_port}")
+    private String p6Url;
 
     /**
-     * 推送到p6
+     * 推送wbs到p6
+     * @param mainId
+     * @param projectCode
+     */
+    public void push2P6(Long mainId, String projectCode)  {
+        //List<XmslWbs> wbsList = WbsRedisUtils.allWbs(projectCode);
+
+
+
+    }
+
+
+    /**
+     * 推送到p6 (wbs审批结束调用)
      * @param mainId      wbsMainId
      * @param projectCode  项目编号
      * @param list [{ptVar5:标记是否为修改的wbs}]
@@ -75,7 +88,7 @@ public class WbsPushP6 {
                     log.error("WBS名称为空,ID:"+temp.getId()+",mainId:"+temp.getMainId());
                     continue;
                 }
-                if(temp.getStatus()==Constant.NO_INT)
+                if(temp.getStatus() == Constant.NO_INT)
                     continue;
                 WbsInfoVoBean bean = WbsInfoVoBean.parseWbs(temp);
                 if(temp.getLevel() == 1 )
@@ -99,6 +112,8 @@ public class WbsPushP6 {
             push(mainId,projectCode,treeList,updateList);
             //禁用wbs推送到p6,需要判断这些wbs是否已经推送给p6
             pushDelete(mainId,projectCode,invalidIdSet);
+            //TODO 发送消息给张双勤  P6数据已推送，请及时上传作业
+
         }finally {
             long usemills = System.currentTimeMillis()-beginMills;
             log.debug("wbs推送p6，mainID:{},耗时:{}毫秒",mainId,usemills);
@@ -249,4 +264,42 @@ public class WbsPushP6 {
         }
         return stringEntity.toString();
     }
+
+    /**
+     * 判断项目是否存在
+     * @param projectCode
+     * @return
+     */
+    public boolean isPrjExist(){
+        return this.isPrjExist(SecurityUtils.getTenantKey());
+    }
+
+    /**
+     * 判断项目是否存在
+     * @param projectCode
+     * @return
+     */
+    public boolean isPrjExist(String projectCode){
+        long beginMills = System.currentTimeMillis();
+        try{
+            String url = ObjectUtils.concatUrl(p6Url,"projectInfoByProjectId");
+            String result = HttpClientUtil.get(url,ObjectUtils.toMap("projectId",projectCode));
+            if(StringUtils.isBlank(result)){
+                log.info("p6判断项目是否存在接口,prjCode:{},未获取到返回值",projectCode);
+                return false;
+            }
+            System.out.println(result);
+            JSONArray jsonArray = JSONObject.parseArray(result);
+            System.out.println(jsonArray);
+            return CollectionUtils.isNotEmpty(jsonArray);
+        }catch(Exception e){
+            e.printStackTrace();
+            log.error("p6判断项目是否存在接口错误",e);
+            return false;
+        }finally {
+            long usemills = System.currentTimeMillis()-beginMills;
+            log.debug("p6判断项目是否存在接口，prjCode:{},耗时:{}毫秒",projectCode,usemills);
+        }
+    }
+
 }

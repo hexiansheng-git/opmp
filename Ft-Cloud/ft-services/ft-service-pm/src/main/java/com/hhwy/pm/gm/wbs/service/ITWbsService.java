@@ -16,6 +16,8 @@ public interface ITWbsService {
 
     TWbs getTWbs(TWbs tWbs);
 
+    TWbs getTWbsByFullCode(String code);
+
     List<TWbs> getTWbsListByMainId(Long id);
 
     TWbs getTWbsById(Long id);
