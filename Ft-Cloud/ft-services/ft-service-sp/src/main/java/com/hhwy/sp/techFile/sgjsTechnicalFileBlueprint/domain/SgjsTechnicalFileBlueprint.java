@@ -74,7 +74,7 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      * 字段描述：图纸数量
      */
     @JsonProperty
-    @Excel(name = "图纸数量")
+    @Excel(name = "发放图纸数量")
     private Integer blueprintCount;
     /**
      * 字段描述：wbs
@@ -85,7 +85,7 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      * 字段描述：wbs名称
      */
     @JsonProperty
-    @Excel(name = "wbs名称")
+    @Excel(name = "wbs范围")
     private String wbsName;
     /**
      * 字段描述：计划开工日期
@@ -121,13 +121,13 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      * 字段描述：图纸接收人名称
      */
     @JsonProperty
-    @Excel(name = "图纸接收人名称")
+    @Excel(name = "图纸接收人")
     private String receiverName;
     /**
      * 字段描述：是否变更
      */
     @JsonProperty
-    @Excel(name = "是否变更")
+    @Excel(name = "是否变更后图纸")
     private String changeOr;
     /**
      * 字段描述：图纸有效性
@@ -139,26 +139,26 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      * 字段描述：图纸是否回收
      */
     @JsonProperty
-    @Excel(name = "图纸是否回收")
+    @Excel(name = "作废图纸是否回收")
     private String recycleOr;
     /**
      * 字段描述：章有效性
      */
     @JsonProperty
-    @Excel(name = "章有效性")
+    @Excel(name = "有效章/作废章")
     private String signetValid;
     /**
      * 字段描述：作废日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "作废日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "图纸作废日期", dateFormat = "yyyy-MM-dd")
     private Date cancelDate;
     /**
      * 字段描述：附件id
      */
     @JsonProperty
-    @Excel(name = "附件id")
+    @Excel(name = "附件")
     private String fileGroupId;
     /**
      * 字段描述：
