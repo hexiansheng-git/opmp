@@ -90,9 +90,9 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
     /**
      * 字段描述：计划开工日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyyMMdd")
     @JsonProperty
-    @Excel(name = "计划开工日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "计划开工日期", dateFormat = "yyyyMMdd")
     private Date startDatePlan;
     /**
      * 字段描述：发放人
@@ -108,9 +108,9 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
     /**
      * 字段描述：图纸发放日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyyMMdd")
     @JsonProperty
-    @Excel(name = "图纸发放日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "图纸发放日期", dateFormat = "yyyyMMdd")
     private Date sendDate;
     /**
      * 字段描述：图纸接收人
@@ -150,9 +150,9 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
     /**
      * 字段描述：作废日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyyMMdd")
     @JsonProperty
-    @Excel(name = "图纸作废日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "图纸作废日期", dateFormat = "yyyyMMdd")
     private Date cancelDate;
     /**
      * 字段描述：附件id

@@ -93,7 +93,8 @@ public class SgjsTechnicalFileBlueprintController extends BaseController {
     @PostMapping("/remove")
     public AjaxResult deleteSgjsTechnicalFileBlueprintByPks(Long[] ids) {
         List<Long> sgjsTechnicalFileBlueprintPkList = Arrays.asList(ids);
-        return toAjax(sgjsTechnicalFileBlueprintService.deleteWithChildren(sgjsTechnicalFileBlueprintPkList));
+        sgjsTechnicalFileBlueprintService.deleteWithChildren(sgjsTechnicalFileBlueprintPkList);
+        return AjaxResult.success();
     }
 
     @GetMapping("/export")
