@@ -107,12 +107,22 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
     @Transactional
     public AjaxResult saveKcsjDesignDocumentApprovalList(KcsjDesignDocumentApprovalVo kcsjDesignDocumentApprovalVo) {
 
-        List<KcsjDesignDocumentApproval> kcsjDesignDocumentApprovalList = kcsjDesignDocumentApprovalVo.getKcsjDesignDocumentApprovalList();
-        if (kcsjDesignDocumentApprovalList.size()>0) {
+        //处理删除数据
+        List<String> delIdList = kcsjDesignDocumentApprovalVo.getDelIdList();
+        List<Long> delIds = new ArrayList<>();
+        if (kcsjDesignDocumentApprovalVo.getDelIdList().size() > 0) {
+            for (String s : delIdList) {
+                delIds.add(Long.valueOf(s));
+            }
+            String delUser = SecurityUtils.getSysUser().getNickName();
+            kcsjDesignDocumentApprovalMapper.deleteKcsjDesignDocumentApprovalByIdPks(delIds, delUser);
+        }
 
+        List<KcsjDesignDocumentApproval> kcsjDesignDocumentApprovalList = kcsjDesignDocumentApprovalVo.getKcsjDesignDocumentApprovalList();
+        if (kcsjDesignDocumentApprovalList.size() > 0) {
             //处理新增数据
             List<KcsjDesignDocumentApproval> insertKcsjDesignDocumentApprovals = kcsjDesignDocumentApprovalList.stream().filter(p -> StringUtils.isNotEmpty(p.getIsAdd()) && p.getIsAdd().equals("1")).collect(Collectors.toList());
-            if (insertKcsjDesignDocumentApprovals.size() > 0) {
+            if(insertKcsjDesignDocumentApprovals.size()>0){
                 //填充数据记录有关字段
                 for (KcsjDesignDocumentApproval kcsjDesignDocumentApproval : insertKcsjDesignDocumentApprovals) {
                     kcsjDesignDocumentApproval.setId(IdWorker.createId());
@@ -122,28 +132,16 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
                     kcsjDesignDocumentApproval.setDelFlag("0");
                 }
                 kcsjDesignDocumentApprovalMapper.insertKcsjDesignDocumentApprovalList(insertKcsjDesignDocumentApprovals);
-
             }
-
-            //处理更新数据
-            List<KcsjDesignDocumentApproval> updateKcsjDesignDocumentApprovals = kcsjDesignDocumentApprovalList.stream().filter(p -> StringUtils.isEmpty(p.getIsAdd()) || (!p.getIsAdd().equals("1"))).collect(Collectors.toList());
-            if (updateKcsjDesignDocumentApprovals.size() > 0) {
-                for (KcsjDesignDocumentApproval kcsjDesignDocumentApproval : updateKcsjDesignDocumentApprovals) {
-                    kcsjDesignDocumentApproval.setUpdateUser(SecurityUtils.getSysUser().getNickName());
-                    kcsjDesignDocumentApproval.setUpdateTime(DateUtils.getNowDate());
-                }
-                kcsjDesignDocumentApprovalMapper.updateKcsjDesignDocumentApprovalList(updateKcsjDesignDocumentApprovals);
+        }
+        //处理更新数据
+        List<KcsjDesignDocumentApproval> updateKcsjDesignDocumentApprovals = kcsjDesignDocumentApprovalList.stream().filter(p -> StringUtils.isEmpty(p.getIsAdd()) || (!p.getIsAdd().equals("1"))).collect(Collectors.toList());
+        if (updateKcsjDesignDocumentApprovals.size() > 0) {
+            for (KcsjDesignDocumentApproval kcsjDesignDocumentApproval : updateKcsjDesignDocumentApprovals) {
+                kcsjDesignDocumentApproval.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+                kcsjDesignDocumentApproval.setUpdateTime(DateUtils.getNowDate());
             }
-            //处理删除数据
-            List<String> delIdList = kcsjDesignDocumentApprovalVo.getDelIdList();
-            List<Long> delIds = new ArrayList<>();
-            if (kcsjDesignDocumentApprovalVo.getDelIdList().size() > 0) {
-                for (String s : delIdList) {
-                    delIds.add(Long.valueOf(s));
-                }
-                String delUser = SecurityUtils.getSysUser().getNickName();
-                kcsjDesignDocumentApprovalMapper.deleteKcsjDesignDocumentApprovalByIdPks(delIds, delUser);
-            }
+            kcsjDesignDocumentApprovalMapper.updateKcsjDesignDocumentApprovalList(updateKcsjDesignDocumentApprovals);
         }
         return AjaxResult.success();
     }
@@ -184,7 +182,7 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
         DynamicDataSourceContextHolder.push("master");
         //获取所有租户
         List<SysTenant> tenantList = systemServiceApi.tenantList();
-        try{
+        try {
             for (SysTenant tenant : tenantList) {
                 //切换租户
                 String tenantKey = tenant.getTenantKey();
@@ -194,9 +192,9 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
                 //nextFollowupDate 查下次跟进日期大于等于今日，且实际反馈内容和反馈日期不等于空的
                 kcsjDesignDocumentApprovalMapper.selectByFollowUpDate();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new CustomException(e.getMessage());
-        }finally {
+        } finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
         }
