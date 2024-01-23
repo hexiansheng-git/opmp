@@ -60,6 +60,16 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
     @NotBlank(message = "请填写负责人",groups ={ValidationGroups.Save.class})
     @Excel(name = "负责人")
     private String manager;
+
+    /**
+     * 字段描述：负责人用户名
+     */
+    @JsonProperty
+    @Excel(name = "负责人用户名称")
+    private String managerUserName;
+
+
+
     /**
      * 字段描述：报监理业主日期
      */
@@ -289,6 +299,15 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
      */
     @JsonProperty
     private String isAdd;
+
+
+    public String getManagerUserName() {
+        return managerUserName;
+    }
+
+    public void setManagerUserName(String managerUserName) {
+        this.managerUserName = managerUserName;
+    }
 
     public String getIsAdd() {
         return isAdd;

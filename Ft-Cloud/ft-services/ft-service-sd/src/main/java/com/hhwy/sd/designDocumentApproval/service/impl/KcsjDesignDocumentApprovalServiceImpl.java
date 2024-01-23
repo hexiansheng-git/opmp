@@ -129,6 +129,7 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
                     kcsjDesignDocumentApproval.setCreateUserName(SecurityUtils.getSysUser().getNickName());
                     kcsjDesignDocumentApproval.setCreateUser(SecurityUtils.getUserId().toString());
                     kcsjDesignDocumentApproval.setCreateTime(DateUtils.getNowDate());
+                    kcsjDesignDocumentApproval.setPtVar1(kcsjDesignDocumentApproval.getManagerUserName());
                     kcsjDesignDocumentApproval.setDelFlag("0");
                 }
                 kcsjDesignDocumentApprovalMapper.insertKcsjDesignDocumentApprovalList(insertKcsjDesignDocumentApprovals);
