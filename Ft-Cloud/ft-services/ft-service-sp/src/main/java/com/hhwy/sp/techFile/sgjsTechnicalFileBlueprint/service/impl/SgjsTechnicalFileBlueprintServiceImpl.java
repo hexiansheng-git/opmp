@@ -11,6 +11,8 @@ import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileB
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprintParam;
 import com.hhwy.sp.utils.TreeNodeUtil;
 import com.hhwy.utils.tree.TreeUtil;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,6 +63,8 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
         if (CollUtil.isEmpty(sgjsTechnicalFileBlueprintList)) {
             return;
         }
+        //校验数据必填
+        JyDetailsUtil.jyDetails(sgjsTechnicalFileBlueprintList, ValidationGroups.Save.class);
         List<SgjsTechnicalFileBlueprint> save = new ArrayList<>();
         List<SgjsTechnicalFileBlueprint> update = new ArrayList<>();
         List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprints = TreeUtil.treeToListWithoutNewId(sgjsTechnicalFileBlueprintList);
