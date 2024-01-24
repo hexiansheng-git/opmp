@@ -21,4 +21,12 @@ public interface SdServiceApi {
      */
     @GetMapping("/kcsjPlanWeekReport/produceData")
     AjaxResult produceData();
+
+    /**
+     * 勘察设计--技术文件报批
+     *
+     * @return
+     */
+    @GetMapping("/kcsjDesignDocumentApproval/designFileTask")
+    AjaxResult designFile();
 }
