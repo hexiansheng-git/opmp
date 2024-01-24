@@ -11,6 +11,7 @@ import com.hhwy.utils.validation.ValidationGroups;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 /**
@@ -20,6 +21,7 @@ import java.util.Date;
  */
 public class KcsjDesignDocumentApproval extends BaseEntity {
     private static final long serialVersionUID = 1L;
+    private static final String phoneRule="^1[3456789]\\d{9}";
 
     /**
      * 字段描述：主键id
@@ -88,6 +90,7 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
      * 字段描述：联系方式
      */
     @JsonProperty
+    @Pattern(regexp=phoneRule,message = "电话号码格式错误",groups ={ValidationGroups.Save.class})
     @Excel(name = "联系方式")
     private String contactsInformation;
     /**
