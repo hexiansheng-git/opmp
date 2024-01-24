@@ -51,6 +51,10 @@ import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlaningArrangeService;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningBuildPlanService;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningPrjImgService;
+import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.QqchManagementPersonConfig;
+import com.hhwy.pm.qqch.sgch.managementPersonConfig.service.IQqchManagementPersonConfigService;
+import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
+import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.service.IQqchLabourDemandPlanService;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.service.IQqchTaxGoalService;
 import com.hhwy.pm.word.export.domain.FileDto;
@@ -175,6 +179,12 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchOrganizationListService qqchOrganizationListService;
 
+    @Autowired
+    private IQqchManagementPersonConfigService qqchManagementPersonConfigService;
+
+    @Autowired
+    private IQqchLabourDemandPlanService qqchLabourDemandPlanService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -218,6 +228,8 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("qcImplementPlanList",policy) // 质量目标
                     .bind("taxGoalList",policy) // 财务目标
                     .bind("organizationListList",policy) // 项目组织机构及人员配置
+                    .bind("managementPersonConfigList",policy) // 项目组织机构及人员配置
+                    .bind("labourDemandPlanList",policy) // 项目组织机构及人员配置
                     .bind("workPlanBuildPlanList",policy) // 大临设施一览表
                     .bind("workPlanArrangeList",policy) // 施工便道跨越障碍物措施
                     .bind("designTechnologyOptimizeList",policy) // 优化点清单
@@ -711,11 +723,14 @@ public class ExportWordServiceImpl implements ExportWordService {
      * @param projectWordData
      */
     private void initProjectOrganization(ProjectWordData projectWordData) {
-        //TODO 1.1项目组织机构
+        //1.1项目组织机构
         List<QqchOrganizationList> organizationListList = qqchOrganizationListService.getList4Word();
         projectWordData.setOrganizationListList(organizationListList);
         //TODO 1.5.1,1.5.2表格
-
+        List<QqchManagementPersonConfig> managementPersonConfigList = qqchManagementPersonConfigService.getList4Word();
+        projectWordData.setManagementPersonConfigList(managementPersonConfigList);
+        List<QqchLabourDemandPlan> labourDemandPlanList = qqchLabourDemandPlanService.getList4Word();
+        projectWordData.setLabourDemandPlanList(labourDemandPlanList);
         //TODO 1.3上表
 
         /*大临设施-项目总平面图*/

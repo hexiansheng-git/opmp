@@ -18,6 +18,8 @@ public interface IQqchLabourDemandPlanService {
 
     QqchLabourDemandPlanVo getQqchLabourDemandPlanList(QqchLabourDemandPlan qqchLabourDemandPlan);
 
+    List<QqchLabourDemandPlan> getList4Word();
+
     int insertQqchLabourDemandPlan(QqchLabourDemandPlan qqchLabourDemandPlan);
 
 
