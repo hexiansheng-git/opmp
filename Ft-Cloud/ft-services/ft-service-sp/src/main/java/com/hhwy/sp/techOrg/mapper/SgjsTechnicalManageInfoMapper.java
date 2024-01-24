@@ -23,7 +23,7 @@ public interface SgjsTechnicalManageInfoMapper {
 
     int updateSgjsTechnicalManageInfo(SgjsTechnicalManageInfo sgjsTechnicalManageInfo);
 
-    int updateSgjsTechnicalManageInfoList(@Param("sgjsTechnicalManageInfoList") List<SgjsTechnicalManageInfo> sgjsTechnicalManageInfoList);
+    int updateSgjsTechnicalManageInfoList(@Param("list") List<SgjsTechnicalManageInfo> sgjsTechnicalManageInfoList);
 
     int deleteSgjsTechnicalManageInfo(SgjsTechnicalManageInfo sgjsTechnicalManageInfo);
 

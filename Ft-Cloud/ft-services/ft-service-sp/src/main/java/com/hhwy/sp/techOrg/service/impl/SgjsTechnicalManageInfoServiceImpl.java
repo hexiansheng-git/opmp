@@ -74,15 +74,15 @@ public class SgjsTechnicalManageInfoServiceImpl implements ISgjsTechnicalManageI
         int i=0;
         if(!CollectionUtils.isEmpty(addList)){
             for (SgjsTechnicalManageInfo sgjsTechnicalManageInfo : addList) {
-                sgjsTechnicalManageInfo.setId(IdWorker.createId());
+                //sgjsTechnicalManageInfo.setId(IdWorker.createId());
                 sgjsTechnicalManageInfo.setCreateUser(SecurityUtils.getUserName());
                 sgjsTechnicalManageInfo.setCreateTime(DateUtils.getNowDate());
             }
-            i=sgjsTechnicalManageInfoMapper.insertSgjsTechnicalManageInfoList(sgjsTechnicalManageInfoList);
+            i=sgjsTechnicalManageInfoMapper.insertSgjsTechnicalManageInfoList(addList);
         }
 
         //编辑
-        List<SgjsTechnicalManageInfo> updateList = sgjsTechnicalManageInfoList.stream().filter(e -> StringUtils.isEmpty(e.getType()) || e.getType().equals("0")).collect(Collectors.toList());
+        List<SgjsTechnicalManageInfo> updateList = sgjsTechnicalManageInfoList.stream().filter(e -> e.getType().equals("0")).collect(Collectors.toList());
         if(!CollectionUtils.isEmpty(updateList)){
             for (int j = 0; j < updateList.size(); j++) {
                 updateList.get(j).setUpdateUser(SecurityUtils.getUserId().toString());
@@ -90,7 +90,7 @@ public class SgjsTechnicalManageInfoServiceImpl implements ISgjsTechnicalManageI
             }
             i=sgjsTechnicalManageInfoMapper.updateSgjsTechnicalManageInfoList(updateList);
         }
-        //sysDataToGm(sgjsTechnicalManageInfoList);
+        sysDataToGm(sgjsTechnicalManageInfoList);
         return i;
     }
 
