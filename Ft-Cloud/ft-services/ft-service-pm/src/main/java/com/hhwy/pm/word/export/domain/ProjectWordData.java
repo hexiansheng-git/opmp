@@ -20,6 +20,7 @@ import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.QqchManagementPersonConfig;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal;
 import com.hhwy.pm.word.export.domain.vo.BidWinHandoverFileVo;
 import com.hhwy.pm.word.export.domain.vo.ConditionVo;
@@ -296,7 +297,10 @@ public class ProjectWordData {
     private List<QqchOrganizationList> organizationListList;
     private List<QqchManagementPersonConfig> managementPersonConfigList;
     private List<QqchLabourDemandPlan> labourDemandPlanList;
-
+    /**
+     * 施工部署
+     */
+    private List<QqchConst> constList;
     /**
      * 大临设施-图片
      */

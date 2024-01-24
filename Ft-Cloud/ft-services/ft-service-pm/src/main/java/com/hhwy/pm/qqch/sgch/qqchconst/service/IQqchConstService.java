@@ -34,6 +34,8 @@ public interface IQqchConstService {
 
     CompileEntity list(QqchConst qqchConst);
 
+    List<QqchConst> getList4Word();
+
     List<QqchConstStaffPlanResult> selectQqchConst(BigDecimal version);
 
     /**

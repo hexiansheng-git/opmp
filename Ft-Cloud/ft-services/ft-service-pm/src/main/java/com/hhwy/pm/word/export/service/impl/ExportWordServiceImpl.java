@@ -55,6 +55,8 @@ import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.QqchManagementPersonC
 import com.hhwy.pm.qqch.sgch.managementPersonConfig.service.IQqchManagementPersonConfigService;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.service.IQqchLabourDemandPlanService;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
+import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstService;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.service.IQqchTaxGoalService;
 import com.hhwy.pm.word.export.domain.FileDto;
@@ -185,6 +187,9 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchLabourDemandPlanService qqchLabourDemandPlanService;
 
+    @Autowired
+    private IQqchConstService qqchConstService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -230,6 +235,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("organizationListList",policy) // 项目组织机构及人员配置
                     .bind("managementPersonConfigList",policy) // 项目组织机构及人员配置
                     .bind("labourDemandPlanList",policy) // 项目组织机构及人员配置
+                    .bind("constList",policy) // 施工部署
                     .bind("workPlanBuildPlanList",policy) // 大临设施一览表
                     .bind("workPlanArrangeList",policy) // 施工便道跨越障碍物措施
                     .bind("designTechnologyOptimizeList",policy) // 优化点清单
@@ -726,12 +732,16 @@ public class ExportWordServiceImpl implements ExportWordService {
         //1.1项目组织机构
         List<QqchOrganizationList> organizationListList = qqchOrganizationListService.getList4Word();
         projectWordData.setOrganizationListList(organizationListList);
-        //TODO 1.5.1,1.5.2表格
+        //1.5.1,1.5.2表格
         List<QqchManagementPersonConfig> managementPersonConfigList = qqchManagementPersonConfigService.getList4Word();
         projectWordData.setManagementPersonConfigList(managementPersonConfigList);
         List<QqchLabourDemandPlan> labourDemandPlanList = qqchLabourDemandPlanService.getList4Word();
         projectWordData.setLabourDemandPlanList(labourDemandPlanList);
-        //TODO 1.3上表
+        //1.3上表
+        List<QqchConst> constList = qqchConstService.getList4Word();
+        DictUtil.dictValueToLabel(constList, "const_type",QqchConst::getConstType,QqchConst::setConstType);
+        DictUtil.dictValueToLabel(constList, "org_pattern",QqchConst::getOrgPattern,QqchConst::setOrgPattern);
+        projectWordData.setConstList(constList);
 
         /*大临设施-项目总平面图*/
         QqchWorkPlanningPrjImg workPlanningPrjImg = qqchWorkPlanningPrjImgService.getLatestQqchWorkPlanningPrjImg();
