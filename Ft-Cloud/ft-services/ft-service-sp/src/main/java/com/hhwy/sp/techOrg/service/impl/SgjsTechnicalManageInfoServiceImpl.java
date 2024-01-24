@@ -2,10 +2,12 @@ package com.hhwy.sp.techOrg.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageInfo;
+import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageInfoVo;
 import com.hhwy.sp.techOrg.mapper.SgjsTechnicalManageInfoMapper;
 import com.hhwy.sp.techOrg.service.ISgjsTechnicalManageInfoService;
 import com.hhwy.utils.idworker.IdWorker;
@@ -15,8 +17,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -42,7 +47,11 @@ public class SgjsTechnicalManageInfoServiceImpl implements ISgjsTechnicalManageI
     }
 
     public List<SgjsTechnicalManageInfo> getSgjsTechnicalManageInfoList(SgjsTechnicalManageInfo sgjsTechnicalManageInfo) {
-        return sgjsTechnicalManageInfoMapper.getSgjsTechnicalManageInfoList(sgjsTechnicalManageInfo);
+        List<SgjsTechnicalManageInfo> list = sgjsTechnicalManageInfoMapper.getSgjsTechnicalManageInfoList(sgjsTechnicalManageInfo);
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).setType("0");
+        }
+        return list;
     }
 
     @Transactional
@@ -54,18 +63,34 @@ public class SgjsTechnicalManageInfoServiceImpl implements ISgjsTechnicalManageI
     }
 
     @Transactional
-    public int insertSgjsTechnicalManageInfoList(List<SgjsTechnicalManageInfo> sgjsTechnicalManageInfoList) {
-        //删掉之前的再次新增
-        List<String> techIds = sgjsTechnicalManageInfoList.stream().map(e -> e.getTechId()+"").distinct().collect(Collectors.toList());
-        sgjsTechnicalManageInfoMapper.deleteInfoByTechIds(techIds);
-        //删完再新增
-        for (SgjsTechnicalManageInfo sgjsTechnicalManageInfo : sgjsTechnicalManageInfoList) {
-            sgjsTechnicalManageInfo.setId(IdWorker.createId());
-            sgjsTechnicalManageInfo.setCreateUser(SecurityUtils.getUserName());
-            sgjsTechnicalManageInfo.setCreateTime(DateUtils.getNowDate());
+    public int insertSgjsTechnicalManageInfoList(SgjsTechnicalManageInfoVo vo) {
+        List<String> delIdList = vo.getDelIdList();
+        if(!CollectionUtils.isEmpty(delIdList)){
+            sgjsTechnicalManageInfoMapper.deleteInfoByTechIds(delIdList);
         }
-        int i = sgjsTechnicalManageInfoMapper.insertSgjsTechnicalManageInfoList(sgjsTechnicalManageInfoList);
-        sysDataToGm(sgjsTechnicalManageInfoList);
+        List<SgjsTechnicalManageInfo> sgjsTechnicalManageInfoList = vo.getListData();
+        List<SgjsTechnicalManageInfo> addList = sgjsTechnicalManageInfoList.stream().filter(e -> StringUtils.isNotEmpty(e.getType()) && e.getType().equals("1")).collect(Collectors.toList());
+        //新增
+        int i=0;
+        if(!CollectionUtils.isEmpty(addList)){
+            for (SgjsTechnicalManageInfo sgjsTechnicalManageInfo : addList) {
+                sgjsTechnicalManageInfo.setId(IdWorker.createId());
+                sgjsTechnicalManageInfo.setCreateUser(SecurityUtils.getUserName());
+                sgjsTechnicalManageInfo.setCreateTime(DateUtils.getNowDate());
+            }
+            i=sgjsTechnicalManageInfoMapper.insertSgjsTechnicalManageInfoList(sgjsTechnicalManageInfoList);
+        }
+
+        //编辑
+        List<SgjsTechnicalManageInfo> updateList = sgjsTechnicalManageInfoList.stream().filter(e -> StringUtils.isEmpty(e.getType()) || e.getType().equals("0")).collect(Collectors.toList());
+        if(!CollectionUtils.isEmpty(updateList)){
+            for (int j = 0; j < updateList.size(); j++) {
+                updateList.get(j).setUpdateUser(SecurityUtils.getUserId().toString());
+                updateList.get(j).setUpdateTime(DateUtils.getNowDate());
+            }
+            i=sgjsTechnicalManageInfoMapper.updateSgjsTechnicalManageInfoList(updateList);
+        }
+        //sysDataToGm(sgjsTechnicalManageInfoList);
         return i;
     }
 

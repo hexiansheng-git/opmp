@@ -1,8 +1,10 @@
 package com.hhwy.sp.techOrg.service;
 
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageInfo;
+import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageInfoVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lcf
@@ -17,7 +19,7 @@ public interface ISgjsTechnicalManageInfoService {
 
     int insertSgjsTechnicalManageInfo(SgjsTechnicalManageInfo sgjsTechnicalManageInfo);
 
-    int insertSgjsTechnicalManageInfoList(List<SgjsTechnicalManageInfo> sgjsTechnicalManageInfoList);
+    int insertSgjsTechnicalManageInfoList(SgjsTechnicalManageInfoVo vo);
 
     int updateSgjsTechnicalManageInfo(SgjsTechnicalManageInfo sgjsTechnicalManageInfo);
 

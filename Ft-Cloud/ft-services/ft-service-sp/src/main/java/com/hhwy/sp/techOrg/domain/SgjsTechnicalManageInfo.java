@@ -179,6 +179,16 @@ public class SgjsTechnicalManageInfo extends BaseEntity {
 
     private List<Long> techIdList;
 
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public List<Long> getTechIdList() {
         return techIdList;
     }
