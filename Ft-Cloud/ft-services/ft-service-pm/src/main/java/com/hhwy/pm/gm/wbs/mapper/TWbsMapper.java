@@ -14,7 +14,16 @@ public interface TWbsMapper {
 
     TWbs getTWbs(TWbs tWbs);
 
+    /**
+     * 查询最新的wbs
+     * @param ancestorsName  完整标准wbs编号
+     * @return
+     */
+    TWbs getLatestTWbsByFullCode(String ancestorsName);
+
     List<TWbs> getTWbsParentList(@Param("ids")Long[] ids);
+
+    List<TWbs> getAllChildTWbs(@Param("id")Long id);
     
     List<TWbs> getTWbsList(TWbs tWbs);
 

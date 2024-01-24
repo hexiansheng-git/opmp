@@ -27,6 +27,13 @@ public interface XmslWbsHistoryMapper {
 
     int updateXmslWbsHistoryList(@Param("list") List<XmslWbsHistory> xmslWbsHistoryList);
 
+    /**
+     * 更新父级编号
+     * @param xmslWbsHistoryList [{id,code}]
+     * @return
+     */
+    int updateParentCodes(@Param("list") List<XmslWbsHistory> xmslWbsHistoryList);
+
     int deleteXmslWbsHistory(XmslWbsHistory xmslWbsHistory);
 
     int deleteXmslWbsHistoryByPks(@Param("xmslWbsHistoryPkList") List<Long> xmslWbsHistoryPkList);

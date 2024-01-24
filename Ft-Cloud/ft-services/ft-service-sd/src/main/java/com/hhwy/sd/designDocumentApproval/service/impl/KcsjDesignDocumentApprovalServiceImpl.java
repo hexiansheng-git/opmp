@@ -12,6 +12,7 @@ import com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApproval;
 import com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApprovalVo;
 import com.hhwy.sd.designDocumentApproval.mapper.KcsjDesignDocumentApprovalMapper;
 import com.hhwy.sd.designDocumentApproval.service.IKcsjDesignDocumentApprovalService;
+import com.hhwy.system.api.RemoteNotifyService;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +37,8 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
     private KcsjDesignDocumentApprovalMapper kcsjDesignDocumentApprovalMapper;
     @Autowired
     private SystemServiceApi systemServiceApi;
+    @Autowired
+    private RemoteNotifyService remoteNotifyService;
 
 
     public KcsjDesignDocumentApproval getKcsjDesignDocumentApproval(KcsjDesignDocumentApproval kcsjDesignDocumentApproval) {
@@ -129,6 +133,7 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
                     kcsjDesignDocumentApproval.setCreateUserName(SecurityUtils.getSysUser().getNickName());
                     kcsjDesignDocumentApproval.setCreateUser(SecurityUtils.getUserId().toString());
                     kcsjDesignDocumentApproval.setCreateTime(DateUtils.getNowDate());
+                    kcsjDesignDocumentApproval.setPtVar1(kcsjDesignDocumentApproval.getManagerUserName());
                     kcsjDesignDocumentApproval.setDelFlag("0");
                 }
                 kcsjDesignDocumentApprovalMapper.insertKcsjDesignDocumentApprovalList(insertKcsjDesignDocumentApprovals);
@@ -182,19 +187,29 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
         DynamicDataSourceContextHolder.push("master");
         //获取所有租户
         List<SysTenant> tenantList = systemServiceApi.tenantList();
-        try {
+        try{
             for (SysTenant tenant : tenantList) {
                 //切换租户
                 String tenantKey = tenant.getTenantKey();
                 String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
                 DynamicDataSourceContextHolder.push(dataSource);
-                //超过日期后未进行填写实际反馈日期及反馈情况，发送消息提醒负责人进行跟进填写日期后允许删除，显示空白
+                //超过跟踪日期后未进行填写实际反馈日期及反馈情况，发送消息提醒负责人进行跟进填写日期后允许删除，显示空白
                 //nextFollowupDate 查下次跟进日期大于等于今日，且实际反馈内容和反馈日期不等于空的
-                kcsjDesignDocumentApprovalMapper.selectByFollowUpDate();
+                List<KcsjDesignDocumentApproval> list = kcsjDesignDocumentApprovalMapper.selectByFollowUpDate();
+                for (KcsjDesignDocumentApproval approval: list) {
+                    Date actualFeedbackDate = approval.getActualFeedbackDate();//实际反馈日期
+                    String feedbackSituation = approval.getFeedbackSituation();//实际反馈情况
+                    //二者只要有一个空 就发消息
+                    if(null==actualFeedbackDate || StringUtils.isEmpty(feedbackSituation)){
+                        //用户id   system   提示内容
+                        String userName = approval.getPtVar1();
+                        remoteNotifyService.publish(userName,"system","勘察设计--文件报批：您有未填写的内容，请尽快处理！");
+                    }
+                }
             }
-        } catch (Exception e) {
+        }catch (Exception e){
             throw new CustomException(e.getMessage());
-        } finally {
+        }finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
         }

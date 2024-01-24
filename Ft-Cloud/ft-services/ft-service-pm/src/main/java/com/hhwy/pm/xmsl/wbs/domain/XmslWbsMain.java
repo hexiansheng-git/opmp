@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
+import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -19,6 +19,7 @@ import java.util.Date;
  * @date 2023-07-13 18:02:49
  * @remark
  */
+@Data
 public class XmslWbsMain extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -94,6 +95,9 @@ public class XmslWbsMain extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd")
     private Date createTime;
+
+    //p6是否存在当前项目
+    private String p6ExistPrj;
 
     @JsonIgnore
     public Long getId() {

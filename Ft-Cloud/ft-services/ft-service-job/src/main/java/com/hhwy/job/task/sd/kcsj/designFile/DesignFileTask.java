@@ -24,7 +24,7 @@ public class DesignFileTask {
      * 未填写实际情况反馈日期  进行消息提醒  每晚20点执行一次
      */
     public void designFile(){
-
+        sdServiceApi.designFile();
         logger.info("请注意，勘察设计--文件报批发消息发送。。。。。。。。。。。。。。");
 
     }

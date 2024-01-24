@@ -14,7 +14,8 @@ import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.core.system.SystemApiService;
-import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
+import com.hhwy.pm.gm.wbs.domain.TWbs;
+import com.hhwy.pm.gm.wbs.service.ITWbsService;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
@@ -49,6 +50,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author wk
@@ -71,7 +73,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     @Resource
     private IXmslWbsHistoryService wbsHistoryService;
     @Resource
-    private IXmslContractInfoService xmslContractInfoService;
+    private ITWbsService twbsService;
     @Autowired
     private SystemApiService systemApiService;
 
@@ -313,26 +315,29 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     }
 
     @Override
-    public List<XmslWbs> importData(MultipartFile file) throws Exception {
+    public Long importData(Long id,MultipartFile file) throws Exception {
         //读取excel中的数据，替换id
         ZipSecureFile.setMinInflateRatio(-1.0d);  //
-        FtExcelUtil<XmslWbs> excelUtil = new FtExcelUtil<>(XmslWbs.class);
-        List<XmslWbs> list = excelUtil.importExcel(1,file.getInputStream());
+        FtExcelUtil<XmslWbsHistory> excelUtil = new FtExcelUtil<>(XmslWbsHistory.class);
+        List<XmslWbsHistory> list = excelUtil.importExcel(1,file.getInputStream());
         Map<String,XmslWbs> codeMap = new HashMap<>(list.size());
-        List<XmslWbs> resuList = new ArrayList<>();
+        List<XmslWbsHistory> resuList = new ArrayList<>();
         List<SysDictData> nodeTypeDictList = systemApiService.selectDictDataByType("xmsl_wbs_type");
         //序号map
         Map<String,Integer> sortMap = new HashMap<>(list.size());
         for (int i = 0; i < list.size(); i++) {
-            XmslWbs temp = list.get(i);
+            XmslWbsHistory temp = list.get(i);
             if(temp == null || StringUtils.isBlank(temp.getCode()))
                 break;
+            Assert.isTrue(StringUtils.isNotBlank(temp.getStandardCode()),"，关联标准WBS不能为空必须填入标准WBS编码");
             resuList.add(temp);
             String code = temp.getCode().trim();
             String parentCode = "";  //父级编码，用于记录子级的序号
             if(code.indexOf("-") < 0){
                 temp.setLevel(1);
                 temp.setParentId("-1");
+                temp.setParentCode("");
+                temp.setSelfCode(temp.getCode());
                 parentCode = "-1";
             }else{
                 parentCode = StringUtils.substringBeforeLast(code,"-");
@@ -341,6 +346,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                 Assert.notNull(parent, "未找到父级,请确保父级编码写在子级的前面，行号:"+(i+1));
                 temp.setParentId(parent.getId());
                 temp.setLevel(parent.getLevel()+1);
+                temp.setParentCode( parent.getCode());
+                temp.setSelfCode(StringUtils.substringAfterLast(code,"-"));
                 parent.setHaveChildren(Constant.YES_INT);
             }
             //获取序号
@@ -350,13 +357,33 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             temp.setSort(sort);
             temp.setId(UUIDUtils.getShortUuid());
             codeMap.put(temp.getCode(), temp);
-            temp.setPtVar3(temp.getName());
-            temp.setName(ObjectUtils.nvlString(temp.getPartCode())+"-"+ObjectUtils.nvlString(temp.getName()));
             temp.setStatus(ObjectUtils.nvl(temp.getStatus(),1));
             SysDictData tempDict = nodeTypeDictList.get(NumberUtil.min(temp.getLevel(),nodeTypeDictList.size())-1);
             temp.setNodeType(tempDict==null?"":tempDict.getDictValue());
+            //处理标准WBS
+            TWbs twbs = twbsService.getTWbsByFullCode(temp.getStandardCode());
+            if(twbs == null)
+                twbs = twbsService.getTWbsByFullCode(temp.getStandardCode()+"-");
+            Assert.notNull(twbs,"标准WBS录入有误，未找到编号："+temp.getStandardCode());
+            temp.setStandardId(Long.valueOf(twbs.getId()));
+            temp.setStandardCode(twbs.getCode());
+            temp.setStandardName(twbs.getName());
+            temp.setPtVar3(twbs.getName());
+            temp.setName(ObjectUtils.nvlString(temp.getPartCode())+"-"+ObjectUtils.nvlString(temp.getName()));
+            new AddBaseInfoUtil<>().addBaseEntity(temp);
         }
-        return resuList;
+        //调用save接口进行保存
+        XmslWbsDto wbsDto = new XmslWbsDto();
+        wbsDto.setMainId(id);
+        wbsDto.setList(list);
+        wbsDto.setSubmitFlag(0);
+        if(id != null){
+            XmslWbs temp = new XmslWbs();
+            temp.setMainId(id);
+            this.deleteXmslWbs(temp);
+        }
+        this.save(wbsDto);
+        return null;
     }
 
     @Override
@@ -538,19 +565,24 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             submitCheck(dto);
             return ;
         }
-
         List<XmslWbsHistory> addList = new ArrayList<>();
         List<XmslWbsHistory> updateList = new ArrayList<>();
+        List<XmslWbsHistory> updateParentCodeList = new ArrayList<>();
         //前端新增数据的ID都为uid,需要替换为后端生成的id
         Map<String,String> idRepalceMap = new ConcurrentHashMap<>(list.size()/2);
         list.sort((r, r1) -> {return r.getLevel()==r1.getLevel()?0:(r.getLevel() > r1.getLevel() ? 1 : -1);});
+        Map<String,XmslWbsHistory> map = list.stream().collect(Collectors.toMap(r->r.getId(),r->r));
         for (int i = 0; i < list.size(); i++) {
             XmslWbsHistory temp = list.get(i);
+            XmslWbsHistory parent = map.get(temp.getParentId());
+            String pcode = parent == null?"":ObjectUtils.nvlString(parent.getCode());
+            temp.setParentCode(pcode);
             temp.setPtVar2(StringUtils.isBlank(temp.getPtVar2())?"-1":temp.getPtVar2()); //ptVar2 变更状态添加默认值
             temp.setName(ObjectUtils.nvlString(temp.getPartCode())+"-"+ObjectUtils.nvlString(temp.getPtVar3()));
+            temp.setCode((StringUtils.isBlank(pcode)?"":pcode+"-")+ObjectUtils.nvlString(temp.getSelfCode()));
             temp.setMainId(dto.getMainId());
             //若wbs有子级，清除清单编号。20230804 玉涛需求
-            if(temp.getHaveChildren() == Constant.YES_INT){
+            if(Objects.equals(temp.getHaveChildren(), Constant.YES_INT)){
                 temp.setListCode(null);
                 temp.setListIds(null);
             }
@@ -558,14 +590,18 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             if(temp.getId().length() < 21){
                 new AddBaseInfoUtil<>().updateBaseEntity(temp);
                 updateList.add(temp);
+                //若编号已修改，需要更新子级
+                if(!StringUtils.equals(temp.getSelfCode(),temp.getOldSelfCode()) && StringUtils.isNotBlank(temp.getSelfCode()) )
+                    updateParentCodeList.add(temp);
                 continue;
             }
             String id = getSnowId(temp.getId(),idRepalceMap);
             idRepalceMap.put(temp.getId(),id);
             temp.setId(id);
-            String tempPid = idRepalceMap.get(temp.getParentId());
+            String tempPid = idRepalceMap.get(ObjectUtils.nvlString(temp.getParentId()));
             if (StringUtils.isNotBlank(tempPid))
                 temp.setParentId(tempPid);
+            temp.setParentId(ObjectUtils.nvlString(temp.getParentId(),"-1"));
             new AddBaseInfoUtil<>().addBaseEntity(temp);
             temp.setPtVar1("0");
             temp.setName(ObjectUtils.nvlString(temp.getName()));
@@ -577,9 +613,11 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         if(CollectionUtils.isNotEmpty(updateList))
             wbsHistoryService.updateXmslWbsHistoryList(updateList);
         //删除
-        if(StringUtils.isNotBlank(dto.getDelIds())){
+        if(StringUtils.isNotBlank(dto.getDelIds()))
             delById(dto.getMainId(),dto.getDelIds());
-        }
+        //修改父级编码
+        if(CollectionUtils.isNotEmpty(updateParentCodeList))
+            xmslWbsHistoryMapper.updateParentCodes(updateParentCodeList);
         //提交校验
         submitCheck(dto);
     }
@@ -640,8 +678,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             String wrongCodes = this.xmslWbsMapper.countWbsOnlyOne(dto.getMainId());
             Assert.isTrue(StringUtils.isBlank(wrongCodes),"wbs编号为:["+wrongCodes+"]的数据未填写项目部位（桩号）或标准WBS名称");
             //校验重复编码
-//            List<String> repeatCodeList = xmslWbsMapper.repeatWbsCode(dto.getMainId());
-//            Assert.isTrue(CollectionUtils.isEmpty(repeatCodeList),"["+StringUtils.join(repeatCodeList,",")+"]WBS编号重复");
+            List<String> repeatCodeList = xmslWbsMapper.repeatWbsCode(dto.getMainId());
+            Assert.isTrue(CollectionUtils.isEmpty(repeatCodeList),"["+StringUtils.join(repeatCodeList,",")+"]WBS编号重复");
         }
     }
 

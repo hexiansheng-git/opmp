@@ -16,7 +16,10 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.utils.tree.TreeNode;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author fsd
@@ -63,6 +66,7 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      */
     @JsonProperty
     @Excel(name = "图纸名称")
+    @NotBlank(message = "图纸名称不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String blueprintName;
     /**
      * 字段描述：版本
@@ -74,7 +78,7 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      * 字段描述：图纸数量
      */
     @JsonProperty
-    @Excel(name = "图纸数量")
+    @Excel(name = "发放图纸数量")
     private Integer blueprintCount;
     /**
      * 字段描述：wbs
@@ -85,14 +89,14 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      * 字段描述：wbs名称
      */
     @JsonProperty
-    @Excel(name = "wbs名称")
+    @Excel(name = "wbs范围")
     private String wbsName;
     /**
      * 字段描述：计划开工日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划开工日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "计划开工日期", dateFormat = "yyyy年MM月dd日")
     private Date startDatePlan;
     /**
      * 字段描述：发放人
@@ -110,7 +114,7 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "图纸发放日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "图纸发放日期", dateFormat = "yyyy年MM月dd日")
     private Date sendDate;
     /**
      * 字段描述：图纸接收人
@@ -121,44 +125,46 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      * 字段描述：图纸接收人名称
      */
     @JsonProperty
-    @Excel(name = "图纸接收人名称")
+    @Excel(name = "图纸接收人")
+    @NotBlank(message = "图纸接收人不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String receiverName;
     /**
      * 字段描述：是否变更
      */
     @JsonProperty
-    @Excel(name = "是否变更")
+    @Excel(name = "是否变更后图纸")
     private String changeOr;
     /**
      * 字段描述：图纸有效性
      */
     @JsonProperty
     @Excel(name = "图纸有效性")
+    @NotBlank(message = "图纸有效性不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String blueprintValid;
     /**
      * 字段描述：图纸是否回收
      */
     @JsonProperty
-    @Excel(name = "图纸是否回收")
+    @Excel(name = "作废图纸是否回收")
     private String recycleOr;
     /**
      * 字段描述：章有效性
      */
     @JsonProperty
-    @Excel(name = "章有效性")
+    @Excel(name = "有效章/作废章")
     private String signetValid;
     /**
      * 字段描述：作废日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "作废日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "图纸作废日期", dateFormat = "yyyy年MM月dd日")
     private Date cancelDate;
     /**
      * 字段描述：附件id
      */
     @JsonProperty
-    @Excel(name = "附件id")
+    @Excel(name = "附件")
     private String fileGroupId;
     /**
      * 字段描述：

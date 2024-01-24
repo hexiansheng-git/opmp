@@ -1,10 +1,10 @@
 package com.hhwy.pm.gm.wbs.service.impl;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
+import cn.hutool.core.comparator.CompareUtil;
 import cn.hutool.core.convert.Convert;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.gm.wbs.domain.TWbs;
@@ -49,6 +49,21 @@ public class TWbsServiceImpl implements ITWbsService {
         DynamicDataSourceContextHolder.push("master");
         try {
             return tWbsMapper.getTWbs(tWbs);
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+    }
+
+    @Override
+    public TWbs getTWbsByFullCode(String code) {
+        if(StringUtils.isBlank(code))
+            return null;
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        try {
+            return tWbsMapper.getLatestTWbsByFullCode(code);
         }finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
@@ -217,25 +232,34 @@ public class TWbsServiceImpl implements ITWbsService {
             //子级id : 最上级id
             Map<String,String> realIdMap = new HashMap<>();
             Map<String,List<TWbs>> resuMap = new HashMap<>();
-            List<Long> idList = new ArrayList<>();
-            idList.addAll(Arrays.asList(ids));
+            List<Long> idList = new ArrayList<>(Arrays.asList(ids));
+            idList.sort(CompareUtil::compare);
+            Set<String> existIdSet = new HashSet<>();
             //遍历5级查找
-            for (int i = 0; i < 5; i++) {
-                List<TWbs> tempList = tWbsMapper.getTWbsParentList(idList.toArray(new Long[]{}));
-                if(CollectionUtils.isEmpty(tempList))
-                    break;
-                idList.clear();
-                for (int j = 0; j < tempList.size(); j++) {
-                    TWbs temp = tempList.get(j);
+            for (int i = 0; i < idList.size(); i++) {
+                if(existIdSet.contains(idList.get(i)+""))
+                    continue;
+                List<TWbs> wbsList = tWbsMapper.getAllChildTWbs(idList.get(i));
+                List<TWbs> resuList = new ArrayList<>();
+                wbsList = CollectionUtils.isEmpty(wbsList)?new ArrayList<>(2):wbsList;
+                for (int j = 0; j < wbsList.size(); j++) {
+                    TWbs temp = wbsList.get(j);
+                    if(temp.getId().equals(idList.get(i)+""))
+                        continue;
+                    existIdSet.add(temp.getId());
                     temp.setPtVar3(temp.getName());
                     temp.setName(ObjectUtils.nvlString(temp.getCode())+"-"+ObjectUtils.nvlString(temp.getName()));
+                    if(temp.getLevel() != 2)
+                        temp.setParentCode(StringUtils.removeEnd(temp.getAncestorsName().replace(temp.getCode(),""),"-") );
+                    else
+                        temp.setParentCode("");
                     idList.add(Long.valueOf(temp.getId()));
                     String topId = i==0?temp.getParentId():realIdMap.get(temp.getParentId());
-                    idList.add(Long.valueOf(temp.getId()));
-                    realIdMap.put(temp.getId(), topId);
                     //替换掉Id和父级Id，否则前端id会重
-                    ObjectUtils.add2MapList(resuMap,topId,temp);
+                    realIdMap.put(temp.getId(), topId);
+                    resuList.add(temp);
                 }
+                resuMap.put(idList.get(i)+"",resuList);
             }
             return resuMap;
         }finally {
@@ -263,6 +287,9 @@ public class TWbsServiceImpl implements ITWbsService {
             query.setName(name);
             query.setNodeType(nodeType);
             List<TWbs> list = this.lazySearchList(query);
+            list.forEach(w->{
+                w.setParentCode(StringUtils.removeEnd(w.getAncestorsName().replace(w.getCode(),""),"-") );
+            });
             return list;
         }finally {
             DynamicDataSourceContextHolder.poll();

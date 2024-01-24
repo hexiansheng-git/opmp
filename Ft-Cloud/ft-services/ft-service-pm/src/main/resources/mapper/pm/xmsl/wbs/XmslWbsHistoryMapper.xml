@@ -45,10 +45,12 @@
         <result property="ptVar5" column="pt_var5"/>
         <result property="sort" column="sort"/>
         <result property="listCode" column="list_code"/>
+        <result property="selfCode" column="self_code"/>
+        <result property="parentCode" column="parent_code"/>
     </resultMap>
     <sql id="selectXmslWbsHistoryVo">
         select
-                `id`
+             `id`
              ,`main_id`
              ,list_code
              ,`code`
@@ -88,6 +90,8 @@
              ,`pt_var4`
              ,`pt_var5`
              ,sort
+             ,self_code
+             ,parent_code
         from xmsl_wbs_history
     </sql>
     <select id="getXmslWbsHistory" resultMap="XmslWbsHistoryResultMap">
@@ -132,6 +136,8 @@
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="selfCode != null  and selfCode != ''">and `self_code` = #{selfCode}</if>
+            <if test="parentCode != null  and parentCode != ''">and `parent_code` = #{parentCode}</if>
         </where>
         order by create_time desc
     </select>
@@ -184,13 +190,15 @@
                     #{id}
                 </foreach>
             </if>
+            <if test="selfCode != null  and selfCode != ''">and `self_code` = #{selfCode}</if>
+            <if test="parentCode != null  and parentCode != ''">and `parent_code` = #{parentCode}</if>
         </where>
         order by sort
     </select>
 
     <select id="selectIdByParentIds" resultType="Long">
         select id from xmsl_wbs_history where main_id = #{mainId} and del_flag =0 and parent_id in
-        <foreach collection="ids" item="item" index="index" open="(" close=")">
+        <foreach collection="ids" item="item" index="index" open="(" close=")" separator=",">
             #{item}
         </foreach>
     </select>
@@ -238,6 +246,8 @@
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
             <if test="sort != null  and sort != ''">`sort`,</if>
             <if test="listCode != null and listCode != '' ">`list_code`,</if>
+            <if test="selfCode != null and selfCode != '' ">`self_code`,</if>
+            <if test="parentCode != null and parentCode != '' ">`parent_code`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -280,6 +290,8 @@
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
             <if test="sort != null  and sort != ''">#{sort},</if>
             <if test="listCode != null  and listCode != ''">#{listCode},</if>
+            <if test="selfCode != null  and selfCode != ''">#{selfCode},</if>
+            <if test="parentCode != null  and parentCode != ''">#{parentCode},</if>
         </trim>
     </insert>
 
@@ -325,7 +337,9 @@
             `pt_var4`,
             `pt_var5`,
             `sort`,
-            `list_code`
+            `list_code`,
+            `self_code`,
+            `parent_code`
         </trim>
         values
         <foreach collection="xmslWbsHistoryList" item="item" separator=",">
@@ -368,7 +382,9 @@
                 #{item.ptVar4},
                 #{item.ptVar5},
                 #{item.sort},
-                #{item.listCode}
+                #{item.listCode},
+                #{item.selfCode},
+                #{item.parentCode}
             </trim>
         </foreach>
     </insert>
@@ -416,6 +432,8 @@
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
             <if test="sort != null  and  sort != ''">`sort` = #{sort},</if>
             <if test="listCode != null  and  listCode != ''">`list_code` = #{listCode},</if>
+            <if test="selfCode != null  and  selfCode != ''">`self_code` = #{selfCode},</if>
+            <if test="parentCode != null  and  parentCode != ''">`parent_code` = #{parentCode},</if>
         </trim>
         <where>
             <if test="id != null ">and `id` = #{id}</if>
@@ -615,8 +633,33 @@
                     when `id`=#{item.id} then #{item.listCode}
                 </foreach>
             </trim>
+            <trim prefix="self_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.selfCode}
+                </foreach>
+            </trim>
+            <trim prefix="parent_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.parentCode}
+                </foreach>
+            </trim>
         </trim>
         where `id` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="updateParentCodes">
+        update xmsl_wbs_history
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="parent_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `parent_id`=#{item.id} then #{item.code}
+                </foreach>
+            </trim>
+        </trim>
+        where `parent_id` in
         <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>

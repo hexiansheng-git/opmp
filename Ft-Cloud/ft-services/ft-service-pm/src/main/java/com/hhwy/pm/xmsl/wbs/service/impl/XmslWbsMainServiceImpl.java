@@ -7,9 +7,6 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
-import com.hhwy.pm.qqch.review.domain.Review;
-import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
-import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsListRelation;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
@@ -20,7 +17,6 @@ import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVoBean;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsListRelationService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
-import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportService;
 import com.hhwy.utils.*;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -35,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.function.Function;
@@ -192,7 +189,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
     @Transactional
     public void deleteXmslWbsMain(XmslWbsMain xmslWbsMain) {
         XmslWbsMain wbsMain = this.getById(xmslWbsMain.getId());
-        Assert.isTrue(wbsMain.getValid()==Constant.NO_INT,"已生效数据无法删除");
+        Assert.isTrue(Constant.NO_INT.equals(wbsMain.getValid()),"已生效数据无法删除");
         xmslWbsMainMapper.deleteLogic(wbsMain.getId());
         xmslWbsMainMapper.deleteHistoryLogic(wbsMain.getId());
         xmslWbsMainMapper.deleteRelation(wbsMain.getId());
@@ -298,7 +295,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
             //6、更新子级状态
             updateChildStatus(invalidIdSet);
             //7、推送到p6  暂时注释
-//            wbsPushP6.push2P6(main.getId(),tenantKey,allList,invalidIdSet);
+            wbsPushP6.push2P6(main.getId(),tenantKey,allList,invalidIdSet);
         }catch(Exception e){
             e.printStackTrace();
             log.error("wbs加载祖级名称&塞redis失败，mainid:{},消息：{}",main.getId(),e.getMessage());
