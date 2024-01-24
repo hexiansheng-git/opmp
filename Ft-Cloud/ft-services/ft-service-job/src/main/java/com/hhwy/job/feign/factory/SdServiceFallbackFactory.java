@@ -21,6 +21,11 @@ public class SdServiceFallbackFactory implements FallbackFactory<SdServiceApi> {
             public AjaxResult produceData() {
                 return null;
             }
+
+            @Override
+            public AjaxResult designFile() {
+                return null;
+            }
         };
     }
 }
