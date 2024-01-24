@@ -11,6 +11,7 @@ import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalBankSituation
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalTariffPolicy;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchMainTaxItemRate;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
+import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
@@ -287,6 +288,10 @@ public class ProjectWordData {
 
 
     /*---------------------------------------项目组织及施工部署----------------------------------------*/
+    /**
+     * 大临设施-图片
+     */
+    private List<QqchOrganizationList> organizationListList;
     /**
      * 大临设施-图片
      */

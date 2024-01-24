@@ -35,6 +35,8 @@ import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalTariffPolic
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchMainTaxItemRateService;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.service.IQqchMeasureExpEquService;
+import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList;
+import com.hhwy.pm.qqch.preparation.qqchOrganizationList.service.IQqchOrganizationListService;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
 import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcImplementPlanService;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
@@ -170,6 +172,9 @@ public class ExportWordServiceImpl implements ExportWordService {
     @Autowired
     private IQqchLocalBankSituationService qqchLocalBankSituationService;
 
+    @Autowired
+    private IQqchOrganizationListService qqchOrganizationListService;
+
 
     @Override
     public void exportProjectQqch(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -212,6 +217,7 @@ public class ExportWordServiceImpl implements ExportWordService {
                     .bind("projectOperationObjectiveList",policy) // 经营目标
                     .bind("qcImplementPlanList",policy) // 质量目标
                     .bind("taxGoalList",policy) // 财务目标
+                    .bind("organizationListList",policy) // 项目组织机构及人员配置
                     .bind("workPlanBuildPlanList",policy) // 大临设施一览表
                     .bind("workPlanArrangeList",policy) // 施工便道跨越障碍物措施
                     .bind("designTechnologyOptimizeList",policy) // 优化点清单
@@ -706,7 +712,8 @@ public class ExportWordServiceImpl implements ExportWordService {
      */
     private void initProjectOrganization(ProjectWordData projectWordData) {
         //TODO 1.1项目组织机构
-
+        List<QqchOrganizationList> organizationListList = qqchOrganizationListService.getList4Word();
+        projectWordData.setOrganizationListList(organizationListList);
         //TODO 1.5.1,1.5.2表格
 
         //TODO 1.3上表
