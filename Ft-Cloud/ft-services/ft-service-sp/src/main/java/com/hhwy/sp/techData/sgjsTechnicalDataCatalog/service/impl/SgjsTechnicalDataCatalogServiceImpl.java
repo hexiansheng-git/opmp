@@ -9,6 +9,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.techData.sgjsTechnicalData.service.ISgjsTechnicalDataService;
 import com.hhwy.sp.techData.util.TreeCountUtils;
 import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,8 @@ public class SgjsTechnicalDataCatalogServiceImpl implements ISgjsTechnicalDataCa
     @Autowired
     private SgjsTechnicalDataCatalogMapper sgjsTechnicalDataCatalogMapper;
 
+    @Autowired
+    private ISgjsTechnicalDataService sgjsTechnicalDataService;
 
     public SgjsTechnicalDataCatalog getSgjsTechnicalDataCatalog(SgjsTechnicalDataCatalog sgjsTechnicalDataCatalog) {
         return sgjsTechnicalDataCatalogMapper.getSgjsTechnicalDataCatalog(sgjsTechnicalDataCatalog);
@@ -118,6 +121,10 @@ public class SgjsTechnicalDataCatalogServiceImpl implements ISgjsTechnicalDataCa
 
     @Transactional
     public int deleteSgjsTechnicalDataCatalogByPks(List<Long> sgjsTechnicalDataCatalogPkList) {
+        if(CollectionUtils.isEmpty(sgjsTechnicalDataCatalogPkList)) return 0;
+        for (Long id : sgjsTechnicalDataCatalogPkList) {
+            sgjsTechnicalDataService.deleteSgjsTechnicalDataByCatalog(id);
+        }
         return sgjsTechnicalDataCatalogMapper.deleteSgjsTechnicalDataCatalogByPks(sgjsTechnicalDataCatalogPkList);
     }
 }

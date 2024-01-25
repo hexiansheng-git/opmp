@@ -115,9 +115,17 @@ public class SgjsTechnicalDataServiceImpl implements ISgjsTechnicalDataService {
 
     @Transactional
     public int deleteSgjsTechnicalData(SgjsTechnicalData sgjsTechnicalData) {
-        sgjsTechnicalData.setUpdateUser(SecurityUtils.getUserName());
-        sgjsTechnicalData.setUpdateTime(DateUtils.getNowDate());
         return sgjsTechnicalDataMapper.deleteSgjsTechnicalData(sgjsTechnicalData);
+    }
+
+    @Override
+    public int deleteSgjsTechnicalDataByCatalog(Long dataCatalogId) {
+        if(dataCatalogId == null) {
+            return 1;
+        }
+        SgjsTechnicalData sgjsTechnicalData = new SgjsTechnicalData();
+        sgjsTechnicalData.setDataCatalogId(dataCatalogId);
+        return deleteSgjsTechnicalData(sgjsTechnicalData);
     }
 
     @Transactional

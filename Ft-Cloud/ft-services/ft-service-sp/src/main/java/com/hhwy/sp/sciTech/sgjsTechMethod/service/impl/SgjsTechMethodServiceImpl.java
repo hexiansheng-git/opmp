@@ -1,0 +1,135 @@
+package com.hhwy.sp.sciTech.sgjsTechMethod.service.impl;
+
+import java.util.List;
+
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.common.constant.BelongBusiness;
+import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
+import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
+import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
+import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
+import com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate;
+import com.hhwy.sp.common.shjsAuthenticateEvaluate.service.IShjsAuthenticateEvaluateService;
+import org.springframework.stereotype.Service;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.sp.sciTech.sgjsTechMethod.mapper.SgjsTechMethodMapper;
+import com.hhwy.sp.sciTech.sgjsTechMethod.service.ISgjsTechMethodService;
+import com.hhwy.sp.sciTech.sgjsTechMethod.domain.SgjsTechMethod;
+import com.hhwy.utils.idworker.IdWorker;
+
+/**
+ * @author cjh
+ * @date 2024-01-25 10:11:14
+ * @remark
+ */
+@Service
+public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
+
+    @Autowired
+    private SgjsTechMethodMapper sgjsTechMethodMapper;
+
+    /**
+     * 专家服务
+     */
+    @Autowired
+    private ISgjsExpertLibraryService sgjsExpertLibraryService;
+
+    /**
+     * 成果奖项服务
+     */
+    @Autowired
+    private ISgjsAchievementAwardService sgjsAchievementAwardService;
+
+    /**
+     * 鉴定或评价
+     */
+    private IShjsAuthenticateEvaluateService shjsAuthenticateEvaluateService;
+
+
+    public SgjsTechMethod getSgjsTechMethod(SgjsTechMethod sgjsTechMethod) {
+        SgjsTechMethod returnVO = sgjsTechMethodMapper.getSgjsTechMethod(sgjsTechMethod);
+        if(returnVO == null) return returnVO;
+        Long id = returnVO.getId();
+        SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
+        sgjsExpertLibrary.setForeignId(id);
+        returnVO.setSgjsExpertLibraryList(sgjsExpertLibraryService.getSgjsExpertLibraryList(sgjsExpertLibrary));
+        SgjsAchievementAward sgjsAchievementAward = new SgjsAchievementAward();
+        sgjsAchievementAward.setForeignId(id);
+        returnVO.setSgjsAchievementAwardList(sgjsAchievementAwardService.getSgjsAchievementAwardList(sgjsAchievementAward));
+        ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = new ShjsAuthenticateEvaluate();
+        shjsAuthenticateEvaluate.setForeignId(id);
+        returnVO.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate));
+        return returnVO;
+    }
+
+    public List<SgjsTechMethod> getSgjsTechMethodList(SgjsTechMethod sgjsTechMethod) {
+        return sgjsTechMethodMapper.getSgjsTechMethodList(sgjsTechMethod);
+    }
+
+    @Transactional
+    public int insertSgjsTechMethod(SgjsTechMethod sgjsTechMethod) {
+        sgjsTechMethod.setId(IdWorker.createId());
+        sgjsTechMethod.setCreateUser(SecurityUtils.getUserName());
+        sgjsTechMethod.setCreateTime(DateUtils.getNowDate());
+        return sgjsTechMethodMapper.insertSgjsTechMethod(sgjsTechMethod);
+    }
+
+    @Transactional
+    public int insertSgjsTechMethodList(List<SgjsTechMethod> sgjsTechMethodList) {
+        for (SgjsTechMethod sgjsTechMethod : sgjsTechMethodList) {
+            sgjsTechMethod.setId(IdWorker.createId());
+            sgjsTechMethod.setCreateUser(SecurityUtils.getUserName());
+            sgjsTechMethod.setCreateTime(DateUtils.getNowDate());
+        }
+        return sgjsTechMethodMapper.insertSgjsTechMethodList(sgjsTechMethodList);
+    }
+
+    @Transactional
+    public SgjsTechMethod updateSgjsTechMethod(SgjsTechMethod sgjsTechMethod) {
+        Long id = sgjsTechMethod.getId();
+        if (id == null) {
+            id = IdWorker.createId();
+            sgjsTechMethod.setId(id);
+            sgjsTechMethod.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+            sgjsTechMethod.setUpdateTime(DateUtils.getNowDate());
+            sgjsTechMethodMapper.insertSgjsTechMethod(sgjsTechMethod);
+        } else {
+            sgjsTechMethod.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+            sgjsTechMethod.setUpdateTime(DateUtils.getNowDate());
+            sgjsTechMethodMapper.updateSgjsTechMethod(sgjsTechMethod);
+        }
+        // 成果奖项
+        List<SgjsAchievementAward> sgjsAchievementAwardList = sgjsTechMethod.getSgjsAchievementAwardList();
+        sgjsAchievementAwardService.saveAchievementAward(id, BelongBusiness.BELONG_BUSINESS_6, sgjsAchievementAwardList);
+        // 鉴定或评价
+        List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = sgjsTechMethod.getShjsAuthenticateEvaluateList();
+        // 专家
+        List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsTechMethod.getSgjsExpertLibraryList();
+        return sgjsTechMethod;
+    }
+
+    @Transactional
+    public int updateSgjsTechMethodList(List<SgjsTechMethod> sgjsTechMethodList) {
+        for (SgjsTechMethod sgjsTechMethod : sgjsTechMethodList) {
+            sgjsTechMethod.setUpdateUser(SecurityUtils.getUserName());
+            sgjsTechMethod.setUpdateTime(DateUtils.getNowDate());
+        }
+        return sgjsTechMethodMapper.updateSgjsTechMethodList(sgjsTechMethodList);
+    }
+
+    @Transactional
+    public int deleteSgjsTechMethod(SgjsTechMethod sgjsTechMethod) {
+        sgjsTechMethod.setUpdateUser(SecurityUtils.getUserName());
+        sgjsTechMethod.setUpdateTime(DateUtils.getNowDate());
+        return sgjsTechMethodMapper.deleteSgjsTechMethod(sgjsTechMethod);
+    }
+
+    @Transactional
+    public int deleteSgjsTechMethodByPks(List<Long> sgjsTechMethodPkList) {
+        return sgjsTechMethodMapper.deleteSgjsTechMethodByPks(sgjsTechMethodPkList);
+    }
+}

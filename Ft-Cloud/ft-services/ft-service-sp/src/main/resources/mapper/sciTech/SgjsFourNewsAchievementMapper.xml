@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.sp.sciTech.sgjsFourNewsAchievement.mapper.SgjsFourNewsAchievementMapper">
+
+    <resultMap type="com.hhwy.sp.sciTech.sgjsFourNewsAchievement.domain.SgjsFourNewsAchievement"
+               id="SgjsFourNewsAchievementResultMap">
+        <result property="id" column="id"/>
+        <result property="fourNewsName" column="four_news_name"/>
+        <result property="projectName" column="project_name"/>
+        <result property="fourNewsType" column="four_news_type"/>
+        <result property="awardsType" column="awards_type"/>
+        <result property="specialityType" column="speciality_type"/>
+        <result property="specialitySector" column="speciality_sector"/>
+        <result property="leader" column="leader"/>
+        <result property="leaderContact" column="leader_contact"/>
+        <result property="compOrgan" column="comp_organ"/>
+        <result property="collaborateOrgan" column="collaborate_organ"/>
+        <result property="registrant" column="registrant"/>
+        <result property="registrantContact" column="registrant_contact"/>
+        <result property="technicalIntroduction" column="technical_introduction"/>
+        <result property="fileGroupId" column="file_group_id"/>
+        <result property="achievementDescription" column="achievement_description"/>
+        <result property="achievementGroupId" column="achievement_group_id"/>
+        <result property="otherGroupId" column="other_group_id"/>
+        <result property="fourNewApplication" column="four_new_application"/>
+        <result property="remark" column="remark"/>
+        <result property="regionId" column="region_id"/>
+        <result property="regionName" column="region_name"/>
+        <result property="projectId" column="project_id"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="ptVar5" column="pt_var5"/>
+        <result property="taskStatus" column="task_status"/>
+    </resultMap>
+    <sql id="selectSgjsFourNewsAchievementVo">
+        select `id`
+             , `four_news_name`
+             , `project_name`
+             , `four_news_type`
+             , `awards_type`
+             , `speciality_type`
+             , `speciality_sector`
+             , `leader`
+             , `leader_contact`
+             , `comp_organ`
+             , `collaborate_organ`
+             , `registrant`
+             , `registrant_contact`
+             , `technical_introduction`
+             , `file_group_id`
+             , `achievement_description`
+             , `achievement_group_id`
+             , `other_group_id`
+             , `four_new_application`
+             , `remark`
+             , `region_id`
+             , `region_name`
+             , `project_id`
+             , `dept_id`
+             , `create_user`
+             , `create_user_name`
+             , `create_time`
+             , `update_user`
+             , `update_time`
+             , `del_user`
+             , `del_time`
+             , `del_flag`
+             , `pt_var1`
+             , `pt_var2`
+             , `pt_var3`
+             , `pt_var4`
+             , `pt_var5`
+             , `task_status`
+        from sgjs_four_news_achievement
+    </sql>
+    <select id="getSgjsFourNewsAchievement" resultMap="SgjsFourNewsAchievementResultMap">
+        <include refid="selectSgjsFourNewsAchievementVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="fourNewsName != null  and fourNewsName != ''">and `four_news_name` = #{fourNewsName}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="fourNewsType != null  and fourNewsType != ''">and `four_news_type` = #{fourNewsType}</if>
+            <if test="awardsType != null  and awardsType != ''">and `awards_type` = #{awardsType}</if>
+            <if test="specialityType != null  and specialityType != ''">and `speciality_type` = #{specialityType}</if>
+            <if test="specialitySector != null  and specialitySector != ''">and `speciality_sector` =
+                #{specialitySector}
+            </if>
+            <if test="leader != null  and leader != ''">and `leader` = #{leader}</if>
+            <if test="leaderContact != null  and leaderContact != ''">and `leader_contact` = #{leaderContact}</if>
+            <if test="compOrgan != null  and compOrgan != ''">and `comp_organ` = #{compOrgan}</if>
+            <if test="collaborateOrgan != null  and collaborateOrgan != ''">and `collaborate_organ` =
+                #{collaborateOrgan}
+            </if>
+            <if test="registrant != null  and registrant != ''">and `registrant` = #{registrant}</if>
+            <if test="registrantContact != null  and registrantContact != ''">and `registrant_contact` =
+                #{registrantContact}
+            </if>
+            <if test="technicalIntroduction != null  and technicalIntroduction != ''">and `technical_introduction` =
+                #{technicalIntroduction}
+            </if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="achievementDescription != null  and achievementDescription != ''">and `achievement_description` = #{achievementDescription}</if>
+            <if test="achievementGroupId != null  and achievementGroupId != ''">and `achievement_group_id` = #{achievementGroupId}</if>
+            <if test="otherGroupId != null  and otherGroupId != ''">and `other_group_id` = #{otherGroupId}</if>
+            <if test="fourNewApplication != null  and fourNewApplication != ''">and `four_new_application` = #{fourNewApplication}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getSgjsFourNewsAchievementList" resultMap="SgjsFourNewsAchievementResultMap">
+        <include refid="selectSgjsFourNewsAchievementVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="fourNewsName != null  and fourNewsName != ''">and `four_news_name` = #{fourNewsName}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="fourNewsType != null  and fourNewsType != ''">and `four_news_type` = #{fourNewsType}</if>
+            <if test="awardsType != null  and awardsType != ''">and `awards_type` = #{awardsType}</if>
+            <if test="specialityType != null  and specialityType != ''">and `speciality_type` = #{specialityType}</if>
+            <if test="specialitySector != null  and specialitySector != ''">and `speciality_sector` =
+                #{specialitySector}
+            </if>
+            <if test="leader != null  and leader != ''">and `leader` = #{leader}</if>
+            <if test="leaderContact != null  and leaderContact != ''">and `leader_contact` = #{leaderContact}</if>
+            <if test="compOrgan != null  and compOrgan != ''">and `comp_organ` = #{compOrgan}</if>
+            <if test="collaborateOrgan != null  and collaborateOrgan != ''">and `collaborate_organ` =
+                #{collaborateOrgan}
+            </if>
+            <if test="registrant != null  and registrant != ''">and `registrant` = #{registrant}</if>
+            <if test="registrantContact != null  and registrantContact != ''">and `registrant_contact` =
+                #{registrantContact}
+            </if>
+            <if test="technicalIntroduction != null  and technicalIntroduction != ''">and `technical_introduction` =
+                #{technicalIntroduction}
+            </if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="achievementDescription != null  and achievementDescription != ''">and `achievement_description` = #{achievementDescription}</if>
+            <if test="achievementGroupId != null  and achievementGroupId != ''">and `achievement_group_id` = #{achievementGroupId}</if>
+            <if test="otherGroupId != null  and otherGroupId != ''">and `other_group_id` = #{otherGroupId}</if>
+            <if test="fourNewApplication != null  and fourNewApplication != ''">and `four_new_application` = #{fourNewApplication}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertSgjsFourNewsAchievement" useGeneratedKeys="true" keyProperty="id">
+        insert into sgjs_four_news_achievement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="fourNewsName != null  and fourNewsName != ''">`four_news_name`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="fourNewsType != null  and fourNewsType != ''">`four_news_type`,</if>
+            <if test="awardsType != null  and awardsType != ''">`awards_type`,</if>
+            <if test="specialityType != null  and specialityType != ''">`speciality_type`,</if>
+            <if test="specialitySector != null  and specialitySector != ''">`speciality_sector`,</if>
+            <if test="leader != null  and leader != ''">`leader`,</if>
+            <if test="leaderContact != null  and leaderContact != ''">`leader_contact`,</if>
+            <if test="compOrgan != null  and compOrgan != ''">`comp_organ`,</if>
+            <if test="collaborateOrgan != null  and collaborateOrgan != ''">`collaborate_organ`,</if>
+            <if test="registrant != null  and registrant != ''">`registrant`,</if>
+            <if test="registrantContact != null  and registrantContact != ''">`registrant_contact`,</if>
+            <if test="technicalIntroduction != null  and technicalIntroduction != ''">`technical_introduction`,</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+            <if test="achievementDescription != null  and achievementDescription != ''">`achievement_description`,</if>
+            <if test="achievementGroupId != null  and achievementGroupId != ''">`achievement_group_id`,</if>
+            <if test="otherGroupId != null  and otherGroupId != ''">`other_group_id`,</if>
+            <if test="fourNewApplication != null  and fourNewApplication != ''">`four_new_application`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="regionId != null ">`region_id`,</if>
+            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+            <if test="projectId != null ">`project_id`,</if>
+            <if test="deptId != null ">`dept_id`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="fourNewsName != null  and fourNewsName != ''">#{fourNewsName},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="fourNewsType != null  and fourNewsType != ''">#{fourNewsType},</if>
+            <if test="awardsType != null  and awardsType != ''">#{awardsType},</if>
+            <if test="specialityType != null  and specialityType != ''">#{specialityType},</if>
+            <if test="specialitySector != null  and specialitySector != ''">#{specialitySector},</if>
+            <if test="leader != null  and leader != ''">#{leader},</if>
+            <if test="leaderContact != null  and leaderContact != ''">#{leaderContact},</if>
+            <if test="compOrgan != null  and compOrgan != ''">#{compOrgan},</if>
+            <if test="collaborateOrgan != null  and collaborateOrgan != ''">#{collaborateOrgan},</if>
+            <if test="registrant != null  and registrant != ''">#{registrant},</if>
+            <if test="registrantContact != null  and registrantContact != ''">#{registrantContact},</if>
+            <if test="technicalIntroduction != null  and technicalIntroduction != ''">#{technicalIntroduction},</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+            <if test="achievementDescription != null  and achievementDescription != ''">#{achievementDescription},</if>
+            <if test="achievementGroupId != null  and achievementGroupId != ''">#{achievementGroupId},</if>
+            <if test="otherGroupId != null  and otherGroupId != ''">#{otherGroupId},</if>
+            <if test="fourNewApplication != null  and fourNewApplication != ''">#{fourNewApplication},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="regionId != null ">#{regionId},</if>
+            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsFourNewsAchievement -->
+    <insert id="insertSgjsFourNewsAchievementList">
+        insert into sgjs_four_news_achievement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `four_news_name`,
+            `project_name`,
+            `four_news_type`,
+            `awards_type`,
+            `speciality_type`,
+            `speciality_sector`,
+            `leader`,
+            `leader_contact`,
+            `comp_organ`,
+            `collaborate_organ`,
+            `registrant`,
+            `registrant_contact`,
+            `technical_introduction`,
+            `file_group_id`,
+            `achievement_description`,
+            `achievement_group_id`,
+            `other_group_id`,
+            `four_new_application`,
+            `remark`,
+            `region_id`,
+            `region_name`,
+            `project_id`,
+            `dept_id`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+            `task_status`,
+        </trim>
+        values
+        <foreach collection="sgjsFourNewsAchievementList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.fourNewsName},
+                #{item.projectName},
+                #{item.fourNewsType},
+                #{item.awardsType},
+                #{item.specialityType},
+                #{item.specialitySector},
+                #{item.leader},
+                #{item.leaderContact},
+                #{item.compOrgan},
+                #{item.collaborateOrgan},
+                #{item.registrant},
+                #{item.registrantContact},
+                #{item.technicalIntroduction},
+                #{item.fileGroupId},
+                #{item.achievementDescription},
+                #{item.achievementGroupId},
+                #{item.otherGroupId},
+                #{item.fourNewApplication},
+                #{item.remark},
+                #{item.regionId},
+                #{item.regionName},
+                #{item.projectId},
+                #{item.deptId},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+                #{item.taskStatus},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateSgjsFourNewsAchievement">
+        update sgjs_four_news_achievement
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="fourNewsName != null  and  fourNewsName != ''">`four_news_name` = #{fourNewsName},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="fourNewsType != null  and  fourNewsType != ''">`four_news_type` = #{fourNewsType},</if>
+            <if test="awardsType != null  and  awardsType != ''">`awards_type` = #{awardsType},</if>
+            <if test="specialityType != null  and  specialityType != ''">`speciality_type` = #{specialityType},</if>
+            <if test="specialitySector != null  and  specialitySector != ''">`speciality_sector` =
+                #{specialitySector},
+            </if>
+            <if test="leader != null  and  leader != ''">`leader` = #{leader},</if>
+            <if test="leaderContact != null  and  leaderContact != ''">`leader_contact` = #{leaderContact},</if>
+            <if test="compOrgan != null  and  compOrgan != ''">`comp_organ` = #{compOrgan},</if>
+            <if test="collaborateOrgan != null  and  collaborateOrgan != ''">`collaborate_organ` =
+                #{collaborateOrgan},
+            </if>
+            <if test="registrant != null  and  registrant != ''">`registrant` = #{registrant},</if>
+            <if test="registrantContact != null  and  registrantContact != ''">`registrant_contact` =
+                #{registrantContact},
+            </if>
+            <if test="technicalIntroduction != null  and  technicalIntroduction != ''">`technical_introduction` =
+                #{technicalIntroduction},
+            </if>
+            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+            <if test="achievementDescription != null  and  achievementDescription != ''">`achievement_description` = #{achievementDescription},</if>
+            <if test="achievementGroupId != null  and  achievementGroupId != ''">`achievement_group_id` = #{achievementGroupId},</if>
+            <if test="otherGroupId != null  and  otherGroupId != ''">`other_group_id` = #{otherGroupId},</if>
+            <if test="fourNewApplication != null  and  fourNewApplication != ''">`four_new_application` = #{fourNewApplication},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="regionId != null ">`region_id` = #{regionId},</if>
+            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
+            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+        </trim>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateSgjsFourNewsAchievementList">
+        update sgjs_four_news_achievement
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="four_news_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.fourNewsName}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="four_news_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.fourNewsType}
+                </foreach>
+            </trim>
+            <trim prefix="awards_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.awardsType}
+                </foreach>
+            </trim>
+            <trim prefix="speciality_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.specialityType}
+                </foreach>
+            </trim>
+            <trim prefix="speciality_sector  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.specialitySector}
+                </foreach>
+            </trim>
+            <trim prefix="leader  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.leader}
+                </foreach>
+            </trim>
+            <trim prefix="leader_contact  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.leaderContact}
+                </foreach>
+            </trim>
+            <trim prefix="comp_organ  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.compOrgan}
+                </foreach>
+            </trim>
+            <trim prefix="collaborate_organ  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.collaborateOrgan}
+                </foreach>
+            </trim>
+            <trim prefix="registrant  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.registrant}
+                </foreach>
+            </trim>
+            <trim prefix="registrant_contact  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.registrantContact}
+                </foreach>
+            </trim>
+            <trim prefix="technical_introduction  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.technicalIntroduction}
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.fileGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="achievement_description  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.achievementDescription}
+                </foreach>
+            </trim>
+            <trim prefix="achievement_group_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.achievementGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="other_group_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.otherGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="four_new_application  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.fourNewApplication}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="region_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionId}
+                </foreach>
+            </trim>
+            <trim prefix="region_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionName}
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
+                </foreach>
+            </trim>
+            <trim prefix="dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.deptId}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar3}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar4}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar5}
+                </foreach>
+            </trim>
+            <trim prefix="task_status  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.taskStatus}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="deleteSgjsFourNewsAchievement">
+        update `sgjs_four_news_achievement` set del_flag = 1
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="fourNewsName != null  and fourNewsName != ''">and `four_news_name` = #{fourNewsName}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="fourNewsType != null  and fourNewsType != ''">and `four_news_type` = #{fourNewsType}</if>
+            <if test="awardsType != null  and awardsType != ''">and `awards_type` = #{awardsType}</if>
+            <if test="specialityType != null  and specialityType != ''">and `speciality_type` = #{specialityType}</if>
+            <if test="specialitySector != null  and specialitySector != ''">and `speciality_sector` =
+                #{specialitySector}
+            </if>
+            <if test="leader != null  and leader != ''">and `leader` = #{leader}</if>
+            <if test="leaderContact != null  and leaderContact != ''">and `leader_contact` = #{leaderContact}</if>
+            <if test="compOrgan != null  and compOrgan != ''">and `comp_organ` = #{compOrgan}</if>
+            <if test="collaborateOrgan != null  and collaborateOrgan != ''">and `collaborate_organ` =
+                #{collaborateOrgan}
+            </if>
+            <if test="registrant != null  and registrant != ''">and `registrant` = #{registrant}</if>
+            <if test="registrantContact != null  and registrantContact != ''">and `registrant_contact` =
+                #{registrantContact}
+            </if>
+            <if test="technicalIntroduction != null  and technicalIntroduction != ''">and `technical_introduction` =
+                #{technicalIntroduction}
+            </if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="achievementDescription != null  and achievementDescription != ''">and `achievement_description` = #{achievementDescription}</if>
+            <if test="achievementGroupId != null  and achievementGroupId != ''">and `achievement_group_id` = #{achievementGroupId}</if>
+            <if test="otherGroupId != null  and otherGroupId != ''">and `other_group_id` = #{otherGroupId}</if>
+            <if test="fourNewApplication != null  and fourNewApplication != ''">and `four_new_application` = #{fourNewApplication}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
+    </update>
+
+    <update id="deleteSgjsFourNewsAchievementByPks">
+        update `sgjs_four_news_achievement` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="sgjsFourNewsAchievementPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+</mapper>
