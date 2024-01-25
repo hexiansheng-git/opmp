@@ -1,6 +1,5 @@
 package com.hhwy.pm.xmsl.wbs.service;
 
-import com.hhwy.pm.gm.wbs.domain.TWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
@@ -91,7 +90,7 @@ public interface IXmslWbsService {
      * 导入数据
      * @param file
      */
-    List<XmslWbs> importData(MultipartFile file) throws Exception;
+    Long importData(Long id,MultipartFile file) throws Exception;
     
     /**
      * 导出数据

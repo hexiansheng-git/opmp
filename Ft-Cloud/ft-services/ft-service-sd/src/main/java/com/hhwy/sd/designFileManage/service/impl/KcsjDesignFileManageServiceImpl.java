@@ -1,33 +1,29 @@
 package com.hhwy.sd.designFileManage.service.impl;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toCollection;
-
 import cn.hutool.core.date.DateTime;
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManageVo;
-import com.hhwy.utils.date.FtDateUtils;
-import com.hhwy.utils.tree.TreeUtil;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-import org.checkerframework.checker.units.qual.K;
-import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManage;
+import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManageVo;
+import com.hhwy.sd.designFileManage.domain.vo.KcsjDesignFileManageQueryVo;
 import com.hhwy.sd.designFileManage.mapper.KcsjDesignFileManageMapper;
 import com.hhwy.sd.designFileManage.service.IKcsjDesignFileManageService;
-import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManage;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 
 /**
  * @author zmh
@@ -47,15 +43,13 @@ public class KcsjDesignFileManageServiceImpl implements IKcsjDesignFileManageSer
 
     /**
      * 列表list查询
-     * @param kcsjDesignFileManage
+     *
+     * @param queryVo
      * @return
      */
-    public KcsjDesignFileManageVo getKcsjDesignFileManageList(KcsjDesignFileManage kcsjDesignFileManage) {
+    public KcsjDesignFileManageVo getKcsjDesignFileManageList(KcsjDesignFileManageQueryVo queryVo) {
         KcsjDesignFileManageVo kcsjDesignFileManageVo = new KcsjDesignFileManageVo();
-        if(StringUtils.isNotEmpty(kcsjDesignFileManage.getRepleDateStr())){
-            kcsjDesignFileManage.setRepleDate(FtDateUtils.parseDate(kcsjDesignFileManage.getRepleDateStr().replaceAll("(?:年|月|日)", "-")));
-        }
-        List<KcsjDesignFileManage> kcsjDesignFileManageList = kcsjDesignFileManageMapper.getKcsjDesignFileManageList(kcsjDesignFileManage);
+        List<KcsjDesignFileManage> kcsjDesignFileManageList = kcsjDesignFileManageMapper.getKcsjDesignFileManageList(queryVo);
         List<KcsjDesignFileManage> list = new ArrayList<>();
         if(kcsjDesignFileManageList.size()>0){
             kcsjDesignFileManageList.forEach(k->{
@@ -66,7 +60,7 @@ public class KcsjDesignFileManageServiceImpl implements IKcsjDesignFileManageSer
             List<KcsjDesignFileManage> list1 = kcsjDesignFileManageList.stream().filter(d -> StringUtils.isNotEmpty(d.getPid().toString()) && !d.getPid().toString().equals("0")).collect(Collectors.toList());
             if(list1.size()>0){
                 List<String> data=new ArrayList<>();
-                KcsjDesignFileManage designFileManage = new KcsjDesignFileManage();
+                KcsjDesignFileManageQueryVo queryVo1 = new KcsjDesignFileManageQueryVo();
                 for (int i = 0; i < list1.size(); i++) {
                     if(StringUtils.isEmpty(list1.get(i).getPath())){
                         continue;
@@ -78,8 +72,8 @@ public class KcsjDesignFileManageServiceImpl implements IKcsjDesignFileManageSer
                     }else{
                         data.add(list1.get(i).getPath());
                     }
-                    designFileManage.setPaths(data);
-                    List<KcsjDesignFileManage> sgjsPlanMeasureManage2 = kcsjDesignFileManageMapper.getKcsjDesignFileManageList(designFileManage);
+                    queryVo1.setPaths(data);
+                    List<KcsjDesignFileManage> sgjsPlanMeasureManage2 = kcsjDesignFileManageMapper.getKcsjDesignFileManageList(queryVo1);
                     kcsjDesignFileManageList.addAll(sgjsPlanMeasureManage2);
                 }
             }
@@ -103,6 +97,12 @@ public class KcsjDesignFileManageServiceImpl implements IKcsjDesignFileManageSer
         List<KcsjDesignFileManage> treeToList = null;
         if(!CollectionUtils.isEmpty(kcsjDesignFileManageVo.getTreeList())){
             treeToList = TreeUtil.treeToListWithoutId(kcsjDesignFileManageVo.getTreeList());
+
+            /*校验必填项*/
+            if(treeToList.stream().anyMatch(o -> StringUtils.isBlank(o.getDesignFileName()))){
+                throw new RuntimeException("设计文件名称不能为空！");
+            }
+
             for (int i = 0; i < treeToList.size(); i++) {
                 KcsjDesignFileManage kcsjDesignFileManage = treeToList.get(i);
                 kcsjDesignFileManage.setCreateTime(DateTime.now());
@@ -162,9 +162,9 @@ public class KcsjDesignFileManageServiceImpl implements IKcsjDesignFileManageSer
         List<KcsjDesignFileManage> list = new ArrayList<>();
         List<KcsjDesignFileManage> list1 = kcsjDesignFileManageMapper.getIds(ids);
         for (int i = 0; i < list1.size(); i++) {
-            KcsjDesignFileManage kcsjDesignFileManage = new KcsjDesignFileManage();
-            kcsjDesignFileManage.setPid(list1.get(i).getId());
-            List<KcsjDesignFileManage> list2 = kcsjDesignFileManageMapper.getKcsjDesignFileManageList(kcsjDesignFileManage);
+            KcsjDesignFileManageQueryVo queryVo = new KcsjDesignFileManageQueryVo();
+            queryVo.setPid(list1.get(i).getId());
+            List<KcsjDesignFileManage> list2 = kcsjDesignFileManageMapper.getKcsjDesignFileManageList(queryVo);
             if(list2.size()>0){
                 diguiList2(list2,list1.get(i));
             }
@@ -181,9 +181,9 @@ public class KcsjDesignFileManageServiceImpl implements IKcsjDesignFileManageSer
     private void diguiList2(List<KcsjDesignFileManage> list2, KcsjDesignFileManage fileManage) {
         List<KcsjDesignFileManage> list = new ArrayList<>();
         for (int i = 0; i < list2.size(); i++) {
-            KcsjDesignFileManage designFileManage = new KcsjDesignFileManage();
-            designFileManage.setPid(list2.get(i).getId());
-            List<KcsjDesignFileManage> list3 = kcsjDesignFileManageMapper.getKcsjDesignFileManageList(designFileManage);
+            KcsjDesignFileManageQueryVo queryVo = new KcsjDesignFileManageQueryVo();
+            queryVo.setPid(list2.get(i).getId());
+            List<KcsjDesignFileManage> list3 = kcsjDesignFileManageMapper.getKcsjDesignFileManageList(queryVo);
             if(list3.size()>0){
                 diguiList2(list3,list2.get(i));
             }

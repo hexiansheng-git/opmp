@@ -2,6 +2,7 @@ package com.hhwy.sd.designDocumentApproval.domain;
 
 import lombok.Data;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -12,6 +13,7 @@ import java.util.List;
 public class KcsjDesignDocumentApprovalVo {
 
     //页面数据集合
+    @Valid
     private List<KcsjDesignDocumentApproval> kcsjDesignDocumentApprovalList;
 
     //删除id

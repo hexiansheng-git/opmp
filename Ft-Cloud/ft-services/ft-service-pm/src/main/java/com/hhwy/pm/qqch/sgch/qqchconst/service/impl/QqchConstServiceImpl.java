@@ -225,6 +225,23 @@ public class QqchConstServiceImpl implements IQqchConstService {
     }
 
     @Override
+    public List<QqchConst> getList4Word() {
+        BigDecimal version = VersionUtil.getVersion(TN,null);
+        QqchConst query = new QqchConst();
+        query.setVersion(version);
+        List<QqchConst> qqchConstList = this.qqchConstMapper.getQqchConstList(query);
+        qqchConstList = ListTreeUtil.preserveSerialNumber(
+                qqchConstList,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchConst::getChildren,
+                QqchConst::setChildren,
+                QqchConst::getPtVar1,
+                QqchConst::setPtVar1);
+        return qqchConstList;
+    }
+
+    @Override
     public List<QqchConstStaffPlanResult> selectQqchConst(BigDecimal version) {
         return qqchConstMapper.selectQqchConst(version);
     }

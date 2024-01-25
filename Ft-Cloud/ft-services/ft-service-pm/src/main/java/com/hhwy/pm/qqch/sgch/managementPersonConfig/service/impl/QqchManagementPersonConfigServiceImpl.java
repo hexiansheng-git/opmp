@@ -14,7 +14,6 @@ import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList;
-import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationListVo;
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.service.IQqchOrganizationListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.QqchManagementPersonConfig;
@@ -28,7 +27,6 @@ import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import io.seata.common.util.CollectionUtils;
-import jdk.nashorn.internal.runtime.Version;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -187,6 +185,23 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
         qqchManagementPersonConfigVo.setStageIdentity(qqchReviewService.getStage());
         qqchManagementPersonConfigVo.setQqchManagementPersonConfigList(treeList);
         return qqchManagementPersonConfigVo;
+    }
+
+    @Override
+    public List<QqchManagementPersonConfig> getList4Word() {
+        BigDecimal version = VersionUtil.getVersion("qqch_management_person_config", null);
+        QqchManagementPersonConfig query = new QqchManagementPersonConfig();
+        query.setVersion(version);
+        List<QqchManagementPersonConfig> qqchManagementPersonConfigList = qqchManagementPersonConfigMapper.getQqchManagementPersonConfigList(query);
+        qqchManagementPersonConfigList = ListTreeUtil.preserveSerialNumber(
+                qqchManagementPersonConfigList,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchManagementPersonConfig::getChildren,
+                QqchManagementPersonConfig::setChildren,
+                QqchManagementPersonConfig::getPtVar1,
+                QqchManagementPersonConfig::setPtVar1);
+        return qqchManagementPersonConfigList;
     }
 
 

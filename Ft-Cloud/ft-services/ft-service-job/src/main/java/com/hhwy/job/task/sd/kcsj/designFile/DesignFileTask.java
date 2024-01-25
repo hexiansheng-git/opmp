@@ -21,10 +21,11 @@ public class DesignFileTask {
     private Logger logger= LoggerFactory.getLogger(DesignFileTask.class);
 
     /**
-     * 未填写实际情况反馈日期  进预警  每晚20点执行一次
+     * 未填写实际情况反馈日期  进行消息提醒  每晚20点执行一次
      */
     public void designFile(){
-        logger.info("请注意，勘察设计--文件报批，预警啦。。。。。。。。。。。。。。");
-        //sdServiceApi.   TODO
+        sdServiceApi.designFile();
+        logger.info("请注意，勘察设计--文件报批发消息发送。。。。。。。。。。。。。。");
+
     }
 }

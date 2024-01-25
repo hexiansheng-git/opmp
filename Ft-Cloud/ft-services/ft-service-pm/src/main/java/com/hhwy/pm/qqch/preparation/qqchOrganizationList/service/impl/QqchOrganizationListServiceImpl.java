@@ -17,6 +17,7 @@ import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeNodeBase;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
@@ -95,6 +96,23 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
         //查询阶段
         organizationListVo.setStageIdentity(qqchReviewService.getStage());
         return organizationListVo;
+    }
+
+    @Override
+    public List<QqchOrganizationList> getList4Word() {
+        BigDecimal version = VersionUtil.getVersion("qqch_organization_list", null);
+        QqchOrganizationList qqchOrganizationList = new QqchOrganizationList();
+        qqchOrganizationList.setVersion(version);
+        List<QqchOrganizationList> qqchOrganizationListList = qqchOrganizationListMapper.getQqchOrganizationListList(qqchOrganizationList);
+        qqchOrganizationListList = ListTreeUtil.preserveSerialNumber(
+                qqchOrganizationListList,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchOrganizationList::getChildren,
+                QqchOrganizationList::setChildren,
+                QqchOrganizationList::getSerNum,
+                QqchOrganizationList::setSerNum);
+        return qqchOrganizationListList;
     }
 
     @Transactional

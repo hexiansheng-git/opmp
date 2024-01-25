@@ -17,7 +17,6 @@ import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlan
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanVo;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.mapper.QqchLabourDemandPlanMapper;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.service.IQqchLabourDemandPlanService;
-import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlanResult;
 import com.hhwy.pm.qqch.sgch.qqchconst.mapper.QqchConstMapper;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstService;
@@ -26,15 +25,14 @@ import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.date.Getclasspath;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
@@ -191,6 +189,23 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         labourDemandPlanVo.setStageIdentity(qqchReviewService.getStage());
         labourDemandPlanVo.setQqchLabourDemandPlanList(treeList);
         return labourDemandPlanVo;
+    }
+
+    @Override
+    public List<QqchLabourDemandPlan> getList4Word() {
+        BigDecimal version = VersionUtil.getVersion("qqch_labour_demand_plan", null);
+        QqchLabourDemandPlan query = new QqchLabourDemandPlan();
+        query.setVersion(version);
+        List<QqchLabourDemandPlan> qqchLabourDemandPlanList = qqchLabourDemandPlanMapper.getQqchLabourDemandPlanList(query);
+        qqchLabourDemandPlanList = ListTreeUtil.preserveSerialNumber(
+                qqchLabourDemandPlanList,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchLabourDemandPlan::getChildren,
+                QqchLabourDemandPlan::setChildren,
+                QqchLabourDemandPlan::getPtVar1,
+                QqchLabourDemandPlan::setPtVar1);
+        return qqchLabourDemandPlanList;
     }
 
     /**

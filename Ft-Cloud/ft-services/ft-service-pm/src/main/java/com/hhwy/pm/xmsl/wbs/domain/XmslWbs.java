@@ -7,17 +7,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
-import com.hhwy.common.core.web.domain.TreeEntity;
-import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.excel.FtExcel;
-import com.hhwy.utils.tree.TreeNode;
 import com.hhwy.utils.tree.TreeNodeBase;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
@@ -60,7 +54,7 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     @FtExcel(name = "编号")
     @NotBlank(message = "编号不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @ExcelProperty("编号")
-    private String code;
+    protected String code;
     /**
      * 字段描述：父级ID,最顶级为0
      */
@@ -91,7 +85,15 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     @FtExcel(name = "项目部位（桩号）")
     @NotBlank(message = "项目部位不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @ExcelProperty("项目部位（桩号）")
-    private String partCode;
+    protected String partCode;
+
+    /**
+     * 字段描述：标准wbs编码
+     */
+    @JsonProperty
+    @FtExcel(name = "关联标准WBS")
+    protected String standardCode;
+
     /**
      * 字段描述：名称 实际是 桩号-wbs名称
      */
@@ -99,40 +101,35 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     @FtExcel(name = "标准WBS名称")
     @NotBlank(message = "标准WBS名称不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @ExcelProperty("标准WBS名称")
-    private String name;
+    protected String name;
     /**
      * 字段描述：节点类型,字典:xmsl_wbs_type
      */
     @JsonProperty
     @FtExcel(name = "节点类型",dictType = "xmsl_wbs_type")
     @NotBlank(message = "节点类型不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
-    private String nodeType;
+    protected String nodeType;
 
     /**
      * 字段描述：状态,0:停用,1:启用
      */
     @JsonProperty
     @FtExcel(name = "启用/禁用",combo = {"启用","停用"},readConverterExp = "0=停用,1=启用")
-    private Integer status;
+    protected Integer status;
     
     /**
      * 字段描述：清单编码
      */
     @JsonProperty
     @FtExcel(name = "关联清单编号")
-    private String listCode;
+    protected String listCode;
     /**
      * 字段描述：标准wbsId，预留
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     private Long standardId;
-    /**
-     * 字段描述：标准wbs编码
-     */
-    @JsonProperty
-    @FtExcel(name = "关联标准WBS")
-    private String standardCode;
+
     /**
      * 字段描述：标准wbs名称
      */
@@ -243,7 +240,7 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     @JsonProperty
     private String delFlag;
     /**
-     * 字段描述：预留字段1  搜索时用作编号&名称搜索条件
+     * 字段描述：预留字段1  生效状态，0：未生效,1：已生效
      */
     @JsonProperty
     private String ptVar1;
@@ -263,7 +260,7 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     @JsonProperty
     private String ptVar4;
     /**
-     * 字段描述：预留字段5
+     * 字段描述：预留字段5  父级编号
      */
     @JsonProperty
     private String ptVar5;
@@ -275,6 +272,14 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     @JsonProperty
     private String listIds;   //清单ID
     private String wbsId;
+
+    //当前层级编号
+    @NotBlank(message = "编号不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
+    private String selfCode;
+    //旧当前层级编码  不存在于数据库
+    private String oldSelfCode;
+    //父级编号
+    private String parentCode;
 
     @Override
     public String toString() {

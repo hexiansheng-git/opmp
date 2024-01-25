@@ -14,7 +14,8 @@ public interface ISgjsTechnicalFileBlueprintService {
 
     SgjsTechnicalFileBlueprint getSgjsTechnicalFileBlueprint(SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint);
 
-    List<SgjsTechnicalFileBlueprint> getSgjsTechnicalFileBlueprintList(SgjsTechnicalFileBlueprintParam sgjsTechnicalFileBlueprint);
+    List<SgjsTechnicalFileBlueprint> getTreeList(SgjsTechnicalFileBlueprintParam sgjsTechnicalFileBlueprint);
+    List<SgjsTechnicalFileBlueprint> getList(SgjsTechnicalFileBlueprintParam sgjsTechnicalFileBlueprint);
 
     int insertSgjsTechnicalFileBlueprint(SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint);
 

@@ -11,12 +11,16 @@ import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalBankSituation
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalTariffPolicy;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchMainTaxItemRate;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
+import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructionComparison;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
+import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.QqchManagementPersonConfig;
+import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal;
 import com.hhwy.pm.word.export.domain.vo.BidWinHandoverFileVo;
 import com.hhwy.pm.word.export.domain.vo.ConditionVo;
@@ -287,6 +291,16 @@ public class ProjectWordData {
 
 
     /*---------------------------------------项目组织及施工部署----------------------------------------*/
+    /**
+     * 项目组织机构及人员配置
+     */
+    private List<QqchOrganizationList> organizationListList;
+    private List<QqchManagementPersonConfig> managementPersonConfigList;
+    private List<QqchLabourDemandPlan> labourDemandPlanList;
+    /**
+     * 施工部署
+     */
+    private List<QqchConst> constList;
     /**
      * 大临设施-图片
      */

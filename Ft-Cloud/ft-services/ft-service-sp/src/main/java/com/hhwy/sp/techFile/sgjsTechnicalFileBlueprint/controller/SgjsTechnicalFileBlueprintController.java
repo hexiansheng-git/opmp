@@ -1,9 +1,9 @@
 package com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.controller;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.io.IOException;
 
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprint;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprintParam;
 import org.springframework.web.bind.annotation.*;
@@ -46,14 +46,14 @@ public class SgjsTechnicalFileBlueprintController extends BaseController {
     @GetMapping("/listPage")
     public AjaxResult getSgjsTechnicalFileBlueprintList(@Validated(ValidationGroups.Select.class) SgjsTechnicalFileBlueprintParam sgjsTechnicalFileBlueprintParam) {
         startPage();
-        List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList = sgjsTechnicalFileBlueprintService.getSgjsTechnicalFileBlueprintList(sgjsTechnicalFileBlueprintParam);
+        List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList = sgjsTechnicalFileBlueprintService.getList(sgjsTechnicalFileBlueprintParam);
         return getDataTableAjaxResult(sgjsTechnicalFileBlueprintList);
     }
 
     @PreAuthorize(hasPermi = "sgjsTechnicalFileBlueprint:list")
     @GetMapping("/list")
     public AjaxResult getTreeList(@Validated(ValidationGroups.Select.class) SgjsTechnicalFileBlueprintParam sgjsTechnicalFileBlueprintParam) {
-        List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList = sgjsTechnicalFileBlueprintService.getSgjsTechnicalFileBlueprintList(sgjsTechnicalFileBlueprintParam);
+        List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList = sgjsTechnicalFileBlueprintService.getTreeList(sgjsTechnicalFileBlueprintParam);
         return AjaxResult.success(sgjsTechnicalFileBlueprintList);
     }
 
@@ -93,13 +93,32 @@ public class SgjsTechnicalFileBlueprintController extends BaseController {
     @PostMapping("/remove")
     public AjaxResult deleteSgjsTechnicalFileBlueprintByPks(Long[] ids) {
         List<Long> sgjsTechnicalFileBlueprintPkList = Arrays.asList(ids);
-        return toAjax(sgjsTechnicalFileBlueprintService.deleteWithChildren(sgjsTechnicalFileBlueprintPkList));
+        sgjsTechnicalFileBlueprintService.deleteWithChildren(sgjsTechnicalFileBlueprintPkList);
+        return AjaxResult.success();
     }
 
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsTechnicalFileBlueprintParam sgjsTechnicalFileBlueprintParam) throws IOException {
-        List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList = sgjsTechnicalFileBlueprintService.getSgjsTechnicalFileBlueprintList(sgjsTechnicalFileBlueprintParam);
+        List<SgjsTechnicalFileBlueprint> list = sgjsTechnicalFileBlueprintService.getList(sgjsTechnicalFileBlueprintParam);
         ExcelUtils<SgjsTechnicalFileBlueprint> util = new ExcelUtils<>(SgjsTechnicalFileBlueprint.class);
-        util.exportExcel(response, sgjsTechnicalFileBlueprintList, DateUtils.getDate());
+        list.forEach(p ->{
+            String changeOr = p.getChangeOr();
+            String recycleOr = p.getRecycleOr();
+            String blueprintValid = p.getBlueprintValid();
+            String signetValid = p.getSignetValid();
+            if (StrUtil.isNotBlank(changeOr)) {
+                p.setChangeOr(changeOr.equals("1")?"是":"否");
+            }
+            if (StrUtil.isNotBlank(recycleOr)) {
+                p.setRecycleOr(recycleOr.equals("1")?"是":"否");
+            }
+            if (StrUtil.isNotBlank(blueprintValid)) {
+                p.setBlueprintValid(blueprintValid.equals("1")?"是":"否");
+            }
+            if (StrUtil.isNotBlank(signetValid)) {
+                p.setSignetValid(signetValid.equals("1")?"是":"否");
+            }
+        });
+        util.exportExcel(response, list, DateUtils.getDate());
     }
 }

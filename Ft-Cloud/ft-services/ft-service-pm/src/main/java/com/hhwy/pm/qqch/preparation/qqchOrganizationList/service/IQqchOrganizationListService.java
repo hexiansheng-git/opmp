@@ -21,6 +21,8 @@ public interface IQqchOrganizationListService {
 
     QqchOrganizationListVo getQqchOrganizationListVo(BigDecimal version);
 
+    List<QqchOrganizationList> getList4Word();
+
     int insertQqchOrganizationList(QqchOrganizationList qqchOrganizationList);
 
     int insertQqchOrganizationListList(List<QqchOrganizationList> qqchOrganizationListList);

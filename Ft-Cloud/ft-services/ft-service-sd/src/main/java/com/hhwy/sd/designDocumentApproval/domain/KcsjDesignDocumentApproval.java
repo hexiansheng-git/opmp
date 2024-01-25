@@ -7,7 +7,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 /**
@@ -17,6 +21,7 @@ import java.util.Date;
  */
 public class KcsjDesignDocumentApproval extends BaseEntity {
     private static final long serialVersionUID = 1L;
+    private static final String phoneRule="^1[3456789]\\d{9}";
 
     /**
      * 字段描述：主键id
@@ -29,6 +34,7 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
      * 字段描述：设计文件名称
      */
     @JsonProperty
+    @NotBlank(message = "请填写设计文件名称",groups ={ValidationGroups.Save.class})
     @Excel(name = "设计文件名称")
     private String designDocumentName;
     /**
@@ -53,13 +59,25 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
      * 字段描述：负责人
      */
     @JsonProperty
+    @NotBlank(message = "请填写负责人",groups ={ValidationGroups.Save.class})
     @Excel(name = "负责人")
     private String manager;
+
+    /**
+     * 字段描述：负责人用户名
+     */
+    @JsonProperty
+    @Excel(name = "负责人用户名称")
+    private String managerUserName;
+
+
+
     /**
      * 字段描述：报监理业主日期
      */
     @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
+    @NotNull(message = "请填写报监理业主日期",groups ={ValidationGroups.Save.class})
     @Excel(name = "报监理业主日期", dateFormat = "yyyy年MM月dd日")
     private Date reportSupervisingOwnerDate;
     /**
@@ -72,6 +90,7 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
      * 字段描述：联系方式
      */
     @JsonProperty
+    @Pattern(regexp=phoneRule,message = "电话号码格式错误",groups ={ValidationGroups.Save.class})
     @Excel(name = "联系方式")
     private String contactsInformation;
     /**
@@ -284,6 +303,14 @@ public class KcsjDesignDocumentApproval extends BaseEntity {
     @JsonProperty
     private String isAdd;
 
+
+    public String getManagerUserName() {
+        return managerUserName;
+    }
+
+    public void setManagerUserName(String managerUserName) {
+        this.managerUserName = managerUserName;
+    }
 
     public String getIsAdd() {
         return isAdd;

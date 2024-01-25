@@ -3,8 +3,10 @@ package com.hhwy.sp.techOrg.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import java.util.Map;
 
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageInfo;
+import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageInfoVo;
 import com.hhwy.sp.techOrg.service.ISgjsTechnicalManageInfoService;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
@@ -67,8 +69,8 @@ public class SgjsTechnicalManageInfoController extends BaseController{
 
     @PreAuthorize(hasPermi = "sgjsTechnicalManageInfo:batchAdd")
     @PostMapping("/batchAdd")
-    public AjaxResult insertSgjsTechnicalManageInfoList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsTechnicalManageInfo> sgjsTechnicalManageInfoListParam){
-        sgjsTechnicalManageInfoService.insertSgjsTechnicalManageInfoList(sgjsTechnicalManageInfoListParam);
+    public AjaxResult insertSgjsTechnicalManageInfoList(@Validated(ValidationGroups.Save.class) @RequestBody SgjsTechnicalManageInfoVo vo){
+        sgjsTechnicalManageInfoService.insertSgjsTechnicalManageInfoList(vo);
         return AjaxResult.success();
     }
 

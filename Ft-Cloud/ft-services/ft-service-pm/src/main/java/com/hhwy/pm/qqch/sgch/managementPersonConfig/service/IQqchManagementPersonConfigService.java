@@ -20,6 +20,8 @@ public interface IQqchManagementPersonConfigService {
 
     QqchManagementPersonConfigVo getQqchManagementPersonConfigList(QqchManagementPersonConfig qqchManagementPersonConfig);
 
+    List<QqchManagementPersonConfig> getList4Word();
+
     int insertQqchManagementPersonConfig(QqchManagementPersonConfig qqchManagementPersonConfig);
 
 

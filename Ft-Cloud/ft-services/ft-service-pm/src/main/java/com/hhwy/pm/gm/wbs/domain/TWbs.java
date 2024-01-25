@@ -46,6 +46,9 @@ public class TWbs extends BaseEntity {
     @Excel(name = "编号")
     @ExcelProperty("编号")
     private String code;
+
+    //父级编码 不存在与数据库
+    private String parentCode;
     /**
      * 字段描述：父级ID,最顶级为0
      */
