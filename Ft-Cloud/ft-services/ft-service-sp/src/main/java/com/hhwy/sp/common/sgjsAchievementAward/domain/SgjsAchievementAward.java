@@ -39,6 +39,7 @@ public class SgjsAchievementAward extends BaseEntity {
     private Long foreignId;
     /**
      * 字段描述：所属业务
+     * 2.四新成果管理；3.工艺工法管理
      */
     @JsonProperty
     @Excel(name = "所属业务")

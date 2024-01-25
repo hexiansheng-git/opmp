@@ -40,7 +40,7 @@ public class ShjsAuthenticateEvaluate extends BaseEntity {
 
     /**
      * 字段描述：所属业务
-     * 1.科研课题管理
+     * 1.科研课题管理；2.四新成果管理；3.工艺工法管理
      */
     @JsonProperty
     @Excel(name = "所属业务")

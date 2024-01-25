@@ -44,6 +44,8 @@ public class SgjsExpertLibrary extends BaseEntity {
      * 2.科研课题管理-课题立项
      * 3.科研课题管理-大纲审查
      * 4.科研课题管理-课题验收
+     * 5.科技管理-四新成果管理
+     * 6.科技管理-工艺工法管理
      */
     @JsonProperty
     @Excel(name = "所属业务")
