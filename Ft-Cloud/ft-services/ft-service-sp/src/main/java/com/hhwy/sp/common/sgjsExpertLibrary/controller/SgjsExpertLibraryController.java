@@ -20,10 +20,10 @@ import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
 
-/**
- * @author fsd
- * @date 2024-01-25 09:12:10
- * @remark
+/***
+ * 功能描述: 科技管理 - 专家库
+ * 作者: fushudong
+ * 时间: 2024/1/25
  */
 @Validated
 @RestController

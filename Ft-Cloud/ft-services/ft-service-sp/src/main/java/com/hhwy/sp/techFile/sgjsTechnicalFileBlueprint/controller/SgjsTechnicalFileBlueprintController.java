@@ -21,10 +21,10 @@ import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
 
-/**
- * @author fsd
- * @date 2024-01-22 08:54:05
- * @remark
+/***
+ * 功能描述: 技术文件管理 - 施工环节图纸管理
+ * 作者: fushudong
+ * 时间: 2024/1/25
  */
 @Validated
 @RestController

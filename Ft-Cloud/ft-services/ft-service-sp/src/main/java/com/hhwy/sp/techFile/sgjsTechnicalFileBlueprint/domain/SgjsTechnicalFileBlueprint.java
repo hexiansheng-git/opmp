@@ -22,9 +22,11 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 
 /**
+ * 功能描述: 技术文件管理 - 施工环节图纸管理
  * @author fsd
  * @date 2024-01-22 09:56:49
  * @remark sgjs_technical_file_blueprint
+ *
  */
 @Data
 public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBlueprint> {

@@ -1,4 +1,4 @@
-package com.hhwy.sp.common.sgjsExpertLibrary.domain;
+package com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalTopicCost.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
 
@@ -16,13 +16,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * 功能描述: 科技管理 - 专家库
+ * 功能描述: 科技管理 - 一般课题研发管理 - 年费用
+ *
  * @author fsd
- * @date 2024-01-25 10:14:19
- * @remark sgjs_expert_library
+ * @date 2024-01-25 13:25:50
+ * @remark sgjs_technical_normal_topic_cost
  */
-public class SgjsExpertLibrary extends BaseEntity {
+public class SgjsTechnicalNormalTopicCost extends BaseEntity {
     private static final long serialVersionUID = 1L;
+
+    private Long[] ids;
+
+    public Long[] getIds() {
+        return ids;
+    }
+
+    public void setIds(Long[] ids) {
+        this.ids = ids;
+    }
 
     /**
      * 字段描述：主键
@@ -38,67 +49,18 @@ public class SgjsExpertLibrary extends BaseEntity {
     @JsonProperty
     @Excel(name = "外键")
     private Long foreignId;
-
     /**
-     * 字段描述：所属业务
-     * 1.科研课题管理-课题申请
-     * 2.科研课题管理-课题立项
-     * 3.科研课题管理-大纲审查
-     * 4.科研课题管理-课题验收
-     * 5.科技管理-四新成果管理
-     * 6.科技管理-工艺工法管理
+     * 字段描述：年
      */
     @JsonProperty
-    @Excel(name = "所属业务")
-    private String belongBusiness;
+    @Excel(name = "年")
+    private String year;
     /**
-     * 字段描述：编号
+     * 字段描述：研发费用预算（万元）
      */
     @JsonProperty
-    @Excel(name = "编号")
-    private String expertCode;
-    /**
-     * 字段描述：姓名
-     */
-    @JsonProperty
-    @Excel(name = "姓名")
-    private String expertName;
-    /**
-     * 字段描述：单位
-     */
-    @JsonProperty
-    @Excel(name = "单位")
-    private String belongUnit;
-    /**
-     * 字段描述：业务领域
-     */
-    @JsonProperty
-    @Excel(name = "业务领域")
-    private String businessAreas;
-    /**
-     * 字段描述：产品
-     */
-    @JsonProperty
-    @Excel(name = "产品")
-    private String products;
-    /**
-     * 字段描述：专业
-     */
-    @JsonProperty
-    @Excel(name = "专业")
-    private String specialty;
-    /**
-     * 字段描述：建议
-     */
-    @JsonProperty
-    @Excel(name = "建议")
-    private String suggest;
-    /**
-     * 字段描述：备注
-     */
-    @JsonProperty
-    @Excel(name = "备注")
-    private String remark;
+    @Excel(name = "研发费用预算（万元）")
+    private BigDecimal rdCost;
     /**
      * 字段描述：所属区域id
      */
@@ -235,93 +197,23 @@ public class SgjsExpertLibrary extends BaseEntity {
     }
 
     @JsonIgnore
-    public String getBelongBusiness() {
-        return belongBusiness;
+    public String getYear() {
+        return year;
     }
 
     @JsonIgnore
-    public void setBelongBusiness(String belongBusiness) {
-        this.belongBusiness = belongBusiness;
+    public void setYear(String year) {
+        this.year = year;
     }
 
     @JsonIgnore
-    public String getExpertCode() {
-        return expertCode;
+    public BigDecimal getRdCost() {
+        return rdCost;
     }
 
     @JsonIgnore
-    public void setExpertCode(String expertCode) {
-        this.expertCode = expertCode;
-    }
-
-    @JsonIgnore
-    public String getExpertName() {
-        return expertName;
-    }
-
-    @JsonIgnore
-    public void setExpertName(String expertName) {
-        this.expertName = expertName;
-    }
-
-    @JsonIgnore
-    public String getBelongUnit() {
-        return belongUnit;
-    }
-
-    @JsonIgnore
-    public void setBelongUnit(String belongUnit) {
-        this.belongUnit = belongUnit;
-    }
-
-    @JsonIgnore
-    public String getBusinessAreas() {
-        return businessAreas;
-    }
-
-    @JsonIgnore
-    public void setBusinessAreas(String businessAreas) {
-        this.businessAreas = businessAreas;
-    }
-
-    @JsonIgnore
-    public String getProducts() {
-        return products;
-    }
-
-    @JsonIgnore
-    public void setProducts(String products) {
-        this.products = products;
-    }
-
-    @JsonIgnore
-    public String getSpecialty() {
-        return specialty;
-    }
-
-    @JsonIgnore
-    public void setSpecialty(String specialty) {
-        this.specialty = specialty;
-    }
-
-    @JsonIgnore
-    public String getSuggest() {
-        return suggest;
-    }
-
-    @JsonIgnore
-    public void setSuggest(String suggest) {
-        this.suggest = suggest;
-    }
-
-    @JsonIgnore
-    public String getRemark() {
-        return remark;
-    }
-
-    @JsonIgnore
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setRdCost(BigDecimal rdCost) {
+        this.rdCost = rdCost;
     }
 
     @JsonIgnore

@@ -20,10 +20,10 @@ import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.mapper.SgjsTechnicalFileB
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.service.ISgjsTechnicalFileBlueprintService;
 import com.hhwy.utils.idworker.IdWorker;
 
-/**
- * @author fsd
- * @date 2024-01-22 08:54:05
- * @remark
+/***
+ * 功能描述: 技术文件管理 - 施工环节图纸管理
+ * 作者: fushudong
+ * 时间: 2024/1/25
  */
 @Service
 public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFileBlueprintService {

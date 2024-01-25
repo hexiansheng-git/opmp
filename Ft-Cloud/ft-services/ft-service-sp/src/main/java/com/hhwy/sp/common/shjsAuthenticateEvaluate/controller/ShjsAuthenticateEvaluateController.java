@@ -21,9 +21,9 @@ import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
 
 /**
- * @author fsd
- * @date 2024-01-25 10:17:37
- * @remark
+ * 功能描述: 科技管理 - 鉴定或评价
+ * 作者: fushudong
+ * 时间: 2024/1/25
  */
 @Validated
 @RestController
