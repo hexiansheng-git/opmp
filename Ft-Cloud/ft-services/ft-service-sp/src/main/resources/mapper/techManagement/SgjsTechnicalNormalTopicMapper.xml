@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.mapper.SgjsTechnicalNormalTopicMapper">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+    <resultMap type="com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.SgjsTechnicalNormalTopic" id="SgjsTechnicalNormalTopicResultMap">
+                    <result property="id" column="id" />
+                    <result property="topicCode" column="topic_code" />
+                    <result property="topicName" column="topic_name" />
+                    <result property="highCertificate" column="high_certificate" />
+                    <result property="topicKind" column="topic_kind" />
+                    <result property="topicKindName" column="topic_kind_name" />
+                    <result property="ecoTarget" column="eco_target" />
+                    <result property="ecoTargetName" column="eco_target_name" />
+                    <result property="topicState" column="topic_state" />
+                    <result property="achievementKind" column="achievement_kind" />
+                    <result property="startDate" column="start_date" />
+                    <result property="endDate" column="end_date" />
+                    <result property="personList" column="person_list" />
+                    <result property="personNameList" column="person_name_list" />
+                    <result property="fileGroupId" column="file_group_id" />
+                    <result property="remark" column="remark" />
+                    <result property="regionId" column="region_id" />
+                    <result property="regionName" column="region_name" />
+                    <result property="projectId" column="project_id" />
+                    <result property="projectName" column="project_name" />
+                    <result property="deptId" column="dept_id" />
+                    <result property="createUser" column="create_user" />
+                    <result property="createUserName" column="create_user_name" />
+                    <result property="createTime" column="create_time" />
+                    <result property="updateUser" column="update_user" />
+                    <result property="updateTime" column="update_time" />
+                    <result property="delUser" column="del_user" />
+                    <result property="delTime" column="del_time" />
+                    <result property="delFlag" column="del_flag" />
+                    <result property="ptVar1" column="pt_var1" />
+                    <result property="ptVar2" column="pt_var2" />
+                    <result property="ptVar3" column="pt_var3" />
+                    <result property="ptVar4" column="pt_var4" />
+                    <result property="ptVar5" column="pt_var5" />
+            </resultMap>
+    <sql id="selectSgjsTechnicalNormalTopicVo">
+        select
+                                                            `id`
+                                                         ,`topic_code`
+                                                         ,`topic_name`
+                                                         ,`high_certificate`
+                                                         ,`topic_kind`
+                                                         ,`topic_kind_name`
+                                                         ,`eco_target`
+                                                         ,`eco_target_name`
+                                                         ,`topic_state`
+                                                         ,`achievement_kind`
+                                                         ,`start_date`
+                                                         ,`end_date`
+                                                         ,`person_list`
+                                                         ,`person_name_list`
+                                                         ,`file_group_id`
+                                                         ,`remark`
+                                                         ,`region_id`
+                                                         ,`region_name`
+                                                         ,`project_id`
+                                                         ,`project_name`
+                                                         ,`dept_id`
+                                                         ,`create_user`
+                                                         ,`create_user_name`
+                                                         ,`create_time`
+                                                         ,`update_user`
+                                                         ,`update_time`
+                                                         ,`del_user`
+                                                         ,`del_time`
+                                                         ,`del_flag`
+                                                         ,`pt_var1`
+                                                         ,`pt_var2`
+                                                         ,`pt_var3`
+                                                         ,`pt_var4`
+                                                         ,`pt_var5`
+                                    from sgjs_technical_normal_topic
+    </sql>
+    <select id="getSgjsTechnicalNormalTopic" resultMap="SgjsTechnicalNormalTopicResultMap">
+        <include refid="selectSgjsTechnicalNormalTopicVo" />
+        <where>
+            del_flag = "0"
+                            <if test="id != null "> and `id` = #{id}</if>
+                            <if test="topicCode != null  and topicCode != ''"> and `topic_code` = #{topicCode}</if>
+                            <if test="topicName != null  and topicName != ''"> and `topic_name` = #{topicName}</if>
+                            <if test="highCertificate != null  and highCertificate != ''"> and `high_certificate` = #{highCertificate}</if>
+                            <if test="topicKind != null  and topicKind != ''"> and `topic_kind` = #{topicKind}</if>
+                            <if test="topicKindName != null  and topicKindName != ''"> and `topic_kind_name` = #{topicKindName}</if>
+                            <if test="ecoTarget != null  and ecoTarget != ''"> and `eco_target` = #{ecoTarget}</if>
+                            <if test="ecoTargetName != null  and ecoTargetName != ''"> and `eco_target_name` = #{ecoTargetName}</if>
+                            <if test="topicState != null  and topicState != ''"> and `topic_state` = #{topicState}</if>
+                            <if test="achievementKind != null  and achievementKind != ''"> and `achievement_kind` = #{achievementKind}</if>
+                            <if test="startDate != null "> and `start_date` = #{startDate}</if>
+                            <if test="endDate != null "> and `end_date` = #{endDate}</if>
+                            <if test="personList != null  and personList != ''"> and `person_list` = #{personList}</if>
+                            <if test="personNameList != null  and personNameList != ''"> and `person_name_list` = #{personNameList}</if>
+                            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+                            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+                            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+                            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+                            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+                            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+                            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+                            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+                    </where>
+        order by create_time desc
+    </select>
+
+    <select id="getSgjsTechnicalNormalTopicList" resultMap="SgjsTechnicalNormalTopicResultMap">
+        <include refid="selectSgjsTechnicalNormalTopicVo" />
+        <where>
+            del_flag = "0"
+                            <if test="id != null "> and `id` = #{id}</if>
+                            <if test="topicCode != null  and topicCode != ''"> and `topic_code` = #{topicCode}</if>
+                            <if test="topicName != null  and topicName != ''"> and `topic_name` = #{topicName}</if>
+                            <if test="highCertificate != null  and highCertificate != ''"> and `high_certificate` = #{highCertificate}</if>
+                            <if test="topicKind != null  and topicKind != ''"> and `topic_kind` = #{topicKind}</if>
+                            <if test="topicKindName != null  and topicKindName != ''"> and `topic_kind_name` = #{topicKindName}</if>
+                            <if test="ecoTarget != null  and ecoTarget != ''"> and `eco_target` = #{ecoTarget}</if>
+                            <if test="ecoTargetName != null  and ecoTargetName != ''"> and `eco_target_name` = #{ecoTargetName}</if>
+                            <if test="topicState != null  and topicState != ''"> and `topic_state` = #{topicState}</if>
+                            <if test="achievementKind != null  and achievementKind != ''"> and `achievement_kind` = #{achievementKind}</if>
+                            <if test="startDate != null "> and `start_date` = #{startDate}</if>
+                            <if test="endDate != null "> and `end_date` = #{endDate}</if>
+                            <if test="personList != null  and personList != ''"> and `person_list` = #{personList}</if>
+                            <if test="personNameList != null  and personNameList != ''"> and `person_name_list` = #{personNameList}</if>
+                            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+                            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+                            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+                            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+                            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+                            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+                            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+                            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+                    </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertSgjsTechnicalNormalTopic"  useGeneratedKeys="true" keyProperty="id"  >
+        insert into sgjs_technical_normal_topic
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                            <if test="id != null ">`id`,</if>
+                            <if test="topicCode != null  and topicCode != ''">`topic_code`,</if>
+                            <if test="topicName != null  and topicName != ''">`topic_name`,</if>
+                            <if test="highCertificate != null  and highCertificate != ''">`high_certificate`,</if>
+                            <if test="topicKind != null  and topicKind != ''">`topic_kind`,</if>
+                            <if test="topicKindName != null  and topicKindName != ''">`topic_kind_name`,</if>
+                            <if test="ecoTarget != null  and ecoTarget != ''">`eco_target`,</if>
+                            <if test="ecoTargetName != null  and ecoTargetName != ''">`eco_target_name`,</if>
+                            <if test="topicState != null  and topicState != ''">`topic_state`,</if>
+                            <if test="achievementKind != null  and achievementKind != ''">`achievement_kind`,</if>
+                            <if test="startDate != null ">`start_date`,</if>
+                            <if test="endDate != null ">`end_date`,</if>
+                            <if test="personList != null  and personList != ''">`person_list`,</if>
+                            <if test="personNameList != null  and personNameList != ''">`person_name_list`,</if>
+                            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+                            <if test="remark != null  and remark != ''">`remark`,</if>
+                            <if test="regionId != null ">`region_id`,</if>
+                            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+                            <if test="projectId != null ">`project_id`,</if>
+                            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+                            <if test="deptId != null ">`dept_id`,</if>
+                            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+                            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+                            <if test="createTime != null ">`create_time`,</if>
+                            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+                            <if test="updateTime != null ">`update_time`,</if>
+                            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+                            <if test="delTime != null ">`del_time`,</if>
+                            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+                            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+                            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+                    </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                            <if test="id != null ">#{id},</if>
+                            <if test="topicCode != null  and topicCode != ''">#{topicCode},</if>
+                            <if test="topicName != null  and topicName != ''">#{topicName},</if>
+                            <if test="highCertificate != null  and highCertificate != ''">#{highCertificate},</if>
+                            <if test="topicKind != null  and topicKind != ''">#{topicKind},</if>
+                            <if test="topicKindName != null  and topicKindName != ''">#{topicKindName},</if>
+                            <if test="ecoTarget != null  and ecoTarget != ''">#{ecoTarget},</if>
+                            <if test="ecoTargetName != null  and ecoTargetName != ''">#{ecoTargetName},</if>
+                            <if test="topicState != null  and topicState != ''">#{topicState},</if>
+                            <if test="achievementKind != null  and achievementKind != ''">#{achievementKind},</if>
+                            <if test="startDate != null ">#{startDate},</if>
+                            <if test="endDate != null ">#{endDate},</if>
+                            <if test="personList != null  and personList != ''">#{personList},</if>
+                            <if test="personNameList != null  and personNameList != ''">#{personNameList},</if>
+                            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+                            <if test="remark != null  and remark != ''">#{remark},</if>
+                            <if test="regionId != null ">#{regionId},</if>
+                            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+                            <if test="projectId != null ">#{projectId},</if>
+                            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+                            <if test="deptId != null ">#{deptId},</if>
+                            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+                            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+                            <if test="createTime != null ">#{createTime},</if>
+                            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+                            <if test="updateTime != null ">#{updateTime},</if>
+                            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+                            <if test="delTime != null ">#{delTime},</if>
+                            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+                            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+                            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+                    </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsTechnicalNormalTopic -->
+    <insert id="insertSgjsTechnicalNormalTopicList">
+        insert into sgjs_technical_normal_topic
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                                                `id`,
+                                                                `topic_code`,
+                                                                `topic_name`,
+                                                                `high_certificate`,
+                                                                `topic_kind`,
+                                                                `topic_kind_name`,
+                                                                `eco_target`,
+                                                                `eco_target_name`,
+                                                                `topic_state`,
+                                                                `achievement_kind`,
+                                                                `start_date`,
+                                                                `end_date`,
+                                                                `person_list`,
+                                                                `person_name_list`,
+                                                                `file_group_id`,
+                                                                `remark`,
+                                                                `region_id`,
+                                                                `region_name`,
+                                                                `project_id`,
+                                                                `project_name`,
+                                                                `dept_id`,
+                                                                `create_user`,
+                                                                `create_user_name`,
+                                                                `create_time`,
+                                                                `update_user`,
+                                                                `update_time`,
+                                                                `del_user`,
+                                                                `del_time`,
+                                                                                            `pt_var1`,
+                                                                `pt_var2`,
+                                                                `pt_var3`,
+                                                                `pt_var4`,
+                                                                `pt_var5`,
+                                    </trim>
+        values
+        <foreach collection="sgjsTechnicalNormalTopicList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                                                            #{item.id},
+                                                                                #{item.topicCode},
+                                                                                #{item.topicName},
+                                                                                #{item.highCertificate},
+                                                                                #{item.topicKind},
+                                                                                #{item.topicKindName},
+                                                                                #{item.ecoTarget},
+                                                                                #{item.ecoTargetName},
+                                                                                #{item.topicState},
+                                                                                #{item.achievementKind},
+                                                                                #{item.startDate},
+                                                                                #{item.endDate},
+                                                                                #{item.personList},
+                                                                                #{item.personNameList},
+                                                                                #{item.fileGroupId},
+                                                                                #{item.remark},
+                                                                                #{item.regionId},
+                                                                                #{item.regionName},
+                                                                                #{item.projectId},
+                                                                                #{item.projectName},
+                                                                                #{item.deptId},
+                                                                                #{item.createUser},
+                                                                                #{item.createUserName},
+                                                                                #{item.createTime},
+                                                                                #{item.updateUser},
+                                                                                #{item.updateTime},
+                                                                                #{item.delUser},
+                                                                                #{item.delTime},
+                                                                                                                    #{item.ptVar1},
+                                                                                #{item.ptVar2},
+                                                                                #{item.ptVar3},
+                                                                                #{item.ptVar4},
+                                                                                #{item.ptVar5},
+                                                </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateSgjsTechnicalNormalTopic">
+        update sgjs_technical_normal_topic
+        <trim prefix="SET" suffixOverrides=",">
+                            <if test="id != null ">`id` = #{id},</if>
+                            <if test="topicCode != null  and  topicCode != ''">`topic_code` = #{topicCode},</if>
+                            <if test="topicName != null  and  topicName != ''">`topic_name` = #{topicName},</if>
+                            <if test="highCertificate != null  and  highCertificate != ''">`high_certificate` = #{highCertificate},</if>
+                            <if test="topicKind != null  and  topicKind != ''">`topic_kind` = #{topicKind},</if>
+                            <if test="topicKindName != null  and  topicKindName != ''">`topic_kind_name` = #{topicKindName},</if>
+                            <if test="ecoTarget != null  and  ecoTarget != ''">`eco_target` = #{ecoTarget},</if>
+                            <if test="ecoTargetName != null  and  ecoTargetName != ''">`eco_target_name` = #{ecoTargetName},</if>
+                            <if test="topicState != null  and  topicState != ''">`topic_state` = #{topicState},</if>
+                            <if test="achievementKind != null  and  achievementKind != ''">`achievement_kind` = #{achievementKind},</if>
+                            <if test="startDate != null ">`start_date` = #{startDate},</if>
+                            <if test="endDate != null ">`end_date` = #{endDate},</if>
+                            <if test="personList != null  and  personList != ''">`person_list` = #{personList},</if>
+                            <if test="personNameList != null  and  personNameList != ''">`person_name_list` = #{personNameList},</if>
+                            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+                            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+                            <if test="regionId != null ">`region_id` = #{regionId},</if>
+                            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+                            <if test="projectId != null ">`project_id` = #{projectId},</if>
+                            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+                            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+                            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+                            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+                            <if test="createTime != null ">`create_time` = #{createTime},</if>
+                            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+                            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+                            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+                            <if test="delTime != null ">`del_time` = #{delTime},</if>
+                            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+                            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+                            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+                            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+                            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+                            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+                    </trim>
+        <where>
+                                                                        <if test="id != null "> and `id` = #{id}</if>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
+    </update>
+
+            <update id="updateSgjsTechnicalNormalTopicList">
+            update sgjs_technical_normal_topic
+            <trim prefix="set" suffixOverrides=",">
+                                    <trim prefix="id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.id}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="topic_code  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.topicCode}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="topic_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.topicName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="high_certificate  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.highCertificate}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="topic_kind  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.topicKind}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="topic_kind_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.topicKindName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="eco_target  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ecoTarget}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="eco_target_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ecoTargetName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="topic_state  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.topicState}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="achievement_kind  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.achievementKind}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="start_date  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.startDate}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="end_date  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.endDate}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="person_list  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.personList}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="person_name_list  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.personNameList}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="file_group_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.fileGroupId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="remark  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.remark}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="region_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.regionId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="region_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.regionName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="project_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.projectId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="project_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.projectName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="dept_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.deptId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_user_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createUserName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="update_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.updateUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="update_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.updateTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_flag  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delFlag}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var1  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar1}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var2  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar2}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var3  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar3}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var4  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar4}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var5  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar5}
+                        </foreach>
+                    </trim>
+                            </trim>
+            where `id` in
+            <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+                #{item.id}
+            </foreach>
+        </update>
+    
+            <update id="deleteSgjsTechnicalNormalTopic">
+            update `sgjs_technical_normal_topic` set del_flag = 1
+            <where>
+                                    <if test="id != null "> and `id` = #{id}</if>
+                                    <if test="topicCode != null  and topicCode != ''"> and `topic_code` = #{topicCode}</if>
+                                    <if test="topicName != null  and topicName != ''"> and `topic_name` = #{topicName}</if>
+                                    <if test="highCertificate != null  and highCertificate != ''"> and `high_certificate` = #{highCertificate}</if>
+                                    <if test="topicKind != null  and topicKind != ''"> and `topic_kind` = #{topicKind}</if>
+                                    <if test="topicKindName != null  and topicKindName != ''"> and `topic_kind_name` = #{topicKindName}</if>
+                                    <if test="ecoTarget != null  and ecoTarget != ''"> and `eco_target` = #{ecoTarget}</if>
+                                    <if test="ecoTargetName != null  and ecoTargetName != ''"> and `eco_target_name` = #{ecoTargetName}</if>
+                                    <if test="topicState != null  and topicState != ''"> and `topic_state` = #{topicState}</if>
+                                    <if test="achievementKind != null  and achievementKind != ''"> and `achievement_kind` = #{achievementKind}</if>
+                                    <if test="startDate != null "> and `start_date` = #{startDate}</if>
+                                    <if test="endDate != null "> and `end_date` = #{endDate}</if>
+                                    <if test="personList != null  and personList != ''"> and `person_list` = #{personList}</if>
+                                    <if test="personNameList != null  and personNameList != ''"> and `person_name_list` = #{personNameList}</if>
+                                    <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+                                    <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+                                    <if test="regionId != null "> and `region_id` = #{regionId}</if>
+                                    <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+                                    <if test="projectId != null "> and `project_id` = #{projectId}</if>
+                                    <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+                                    <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+                                    <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                                    <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                                    <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                                    <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                                    <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                                    <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                                    <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                                    <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                                    <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                                    <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                                    <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                                    <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+                                    <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+                            </where>
+        </update>
+
+                    <update id="deleteSgjsTechnicalNormalTopicByPks">
+                update `sgjs_technical_normal_topic` set del_flag = 1
+                <where>
+                    `id` in
+                    <foreach item="id" collection="sgjsTechnicalNormalTopicPkList" open="(" separator="," close=")">
+                        #{id}
+                    </foreach>
+                </where>
+            </update>
+            </mapper>

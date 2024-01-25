@@ -1,4 +1,4 @@
-package com.hhwy.sp.common.sgjsExpertLibrary.domain;
+package com.hhwy.sp.common.shjsAuthenticateEvaluate.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
 
@@ -17,10 +17,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author fsd
- * @date 2024-01-25 10:14:19
- * @remark sgjs_expert_library
+ * @date 2024-01-25 10:17:37
+ * @remark shjs_authenticate_evaluate
  */
-public class SgjsExpertLibrary extends BaseEntity {
+public class ShjsAuthenticateEvaluate extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -40,56 +40,36 @@ public class SgjsExpertLibrary extends BaseEntity {
 
     /**
      * 字段描述：所属业务
-     * 1.科研课题管理-课题申请
-     * 2.科研课题管理-课题立项
-     * 3.科研课题管理-大纲审查
-     * 4.科研课题管理-课题验收
+     * 1.科研课题管理
      */
     @JsonProperty
     @Excel(name = "所属业务")
     private String belongBusiness;
     /**
-     * 字段描述：编号
+     * 字段描述：鉴定单位
      */
     @JsonProperty
-    @Excel(name = "编号")
-    private String expertCode;
+    @Excel(name = "鉴定单位")
+    private String authenticateUnit;
     /**
-     * 字段描述：姓名
+     * 字段描述：鉴定日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "姓名")
-    private String expertName;
+    @Excel(name = "鉴定日期", dateFormat = "yyyy-MM-dd")
+    private Date authenticateDate;
     /**
-     * 字段描述：单位
+     * 字段描述：评价结论
      */
     @JsonProperty
-    @Excel(name = "单位")
-    private String belongUnit;
+    @Excel(name = "评价结论")
+    private String evaluateConclusion;
     /**
-     * 字段描述：业务领域
+     * 字段描述：附件id
      */
     @JsonProperty
-    @Excel(name = "业务领域")
-    private String businessAreas;
-    /**
-     * 字段描述：产品
-     */
-    @JsonProperty
-    @Excel(name = "产品")
-    private String products;
-    /**
-     * 字段描述：专业
-     */
-    @JsonProperty
-    @Excel(name = "专业")
-    private String specialty;
-    /**
-     * 字段描述：建议
-     */
-    @JsonProperty
-    @Excel(name = "建议")
-    private String suggest;
+    @Excel(name = "附件id")
+    private String fileGroupId;
     /**
      * 字段描述：备注
      */
@@ -242,73 +222,43 @@ public class SgjsExpertLibrary extends BaseEntity {
     }
 
     @JsonIgnore
-    public String getExpertCode() {
-        return expertCode;
+    public String getAuthenticateUnit() {
+        return authenticateUnit;
     }
 
     @JsonIgnore
-    public void setExpertCode(String expertCode) {
-        this.expertCode = expertCode;
+    public void setAuthenticateUnit(String authenticateUnit) {
+        this.authenticateUnit = authenticateUnit;
     }
 
     @JsonIgnore
-    public String getExpertName() {
-        return expertName;
+    public Date getAuthenticateDate() {
+        return authenticateDate;
     }
 
     @JsonIgnore
-    public void setExpertName(String expertName) {
-        this.expertName = expertName;
+    public void setAuthenticateDate(Date authenticateDate) {
+        this.authenticateDate = authenticateDate;
     }
 
     @JsonIgnore
-    public String getBelongUnit() {
-        return belongUnit;
+    public String getEvaluateConclusion() {
+        return evaluateConclusion;
     }
 
     @JsonIgnore
-    public void setBelongUnit(String belongUnit) {
-        this.belongUnit = belongUnit;
+    public void setEvaluateConclusion(String evaluateConclusion) {
+        this.evaluateConclusion = evaluateConclusion;
     }
 
     @JsonIgnore
-    public String getBusinessAreas() {
-        return businessAreas;
+    public String getFileGroupId() {
+        return fileGroupId;
     }
 
     @JsonIgnore
-    public void setBusinessAreas(String businessAreas) {
-        this.businessAreas = businessAreas;
-    }
-
-    @JsonIgnore
-    public String getProducts() {
-        return products;
-    }
-
-    @JsonIgnore
-    public void setProducts(String products) {
-        this.products = products;
-    }
-
-    @JsonIgnore
-    public String getSpecialty() {
-        return specialty;
-    }
-
-    @JsonIgnore
-    public void setSpecialty(String specialty) {
-        this.specialty = specialty;
-    }
-
-    @JsonIgnore
-    public String getSuggest() {
-        return suggest;
-    }
-
-    @JsonIgnore
-    public void setSuggest(String suggest) {
-        this.suggest = suggest;
+    public void setFileGroupId(String fileGroupId) {
+        this.fileGroupId = fileGroupId;
     }
 
     @JsonIgnore

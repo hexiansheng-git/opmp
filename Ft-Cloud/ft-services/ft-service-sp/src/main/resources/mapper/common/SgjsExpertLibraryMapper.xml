@@ -5,147 +5,153 @@
 <mapper namespace="com.hhwy.sp.common.sgjsExpertLibrary.mapper.SgjsExpertLibraryMapper">
 
     <resultMap type="com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary" id="SgjsExpertLibraryResultMap">
-        <result property="id" column="id"/>
-        <result property="foreignId" column="foreign_id"/>
-        <result property="expertCode" column="expert_code"/>
-        <result property="expertName" column="expert_name"/>
-        <result property="belongUnit" column="belong_unit"/>
-        <result property="bussnessAreas" column="bussness_areas"/>
-        <result property="products" column="products"/>
-        <result property="specialty" column="specialty"/>
-        <result property="suggest" column="suggest"/>
-        <result property="remark" column="remark"/>
-        <result property="regionId" column="region_id"/>
-        <result property="regionName" column="region_name"/>
-        <result property="projectId" column="project_id"/>
-        <result property="projectName" column="project_name"/>
-        <result property="deptId" column="dept_id"/>
-        <result property="createUser" column="create_user"/>
-        <result property="createUserName" column="create_user_name"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateUser" column="update_user"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="delUser" column="del_user"/>
-        <result property="delTime" column="del_time"/>
-        <result property="delFlag" column="del_flag"/>
-        <result property="ptVar1" column="pt_var1"/>
-        <result property="ptVar2" column="pt_var2"/>
-        <result property="ptVar3" column="pt_var3"/>
-        <result property="ptVar4" column="pt_var4"/>
-        <result property="ptVar5" column="pt_var5"/>
+        <result property="id" column="id" />
+        <result property="foreignId" column="foreign_id" />
+        <result property="belongBusiness" column="belong_business" />
+        <result property="expertCode" column="expert_code" />
+        <result property="expertName" column="expert_name" />
+        <result property="belongUnit" column="belong_unit" />
+        <result property="businessAreas" column="business_areas" />
+        <result property="products" column="products" />
+        <result property="specialty" column="specialty" />
+        <result property="suggest" column="suggest" />
+        <result property="remark" column="remark" />
+        <result property="regionId" column="region_id" />
+        <result property="regionName" column="region_name" />
+        <result property="projectId" column="project_id" />
+        <result property="projectName" column="project_name" />
+        <result property="deptId" column="dept_id" />
+        <result property="createUser" column="create_user" />
+        <result property="createUserName" column="create_user_name" />
+        <result property="createTime" column="create_time" />
+        <result property="updateUser" column="update_user" />
+        <result property="updateTime" column="update_time" />
+        <result property="delUser" column="del_user" />
+        <result property="delTime" column="del_time" />
+        <result property="delFlag" column="del_flag" />
+        <result property="ptVar1" column="pt_var1" />
+        <result property="ptVar2" column="pt_var2" />
+        <result property="ptVar3" column="pt_var3" />
+        <result property="ptVar4" column="pt_var4" />
+        <result property="ptVar5" column="pt_var5" />
     </resultMap>
     <sql id="selectSgjsExpertLibraryVo">
-        SELECT `id`
-                , `foreign_id`
-                , `expert_code`
-                , `expert_name`
-                , `belong_unit`
-                , `bussness_areas`
-                , `products`
-                , `specialty`
-                , `suggest`
-                , `remark`
-                , `region_id`
-                , `region_name`
-                , `project_id`
-                , `project_name`
-                , `dept_id`
-                , `create_user`
-                , `create_user_name`
-                , `create_time`
-                , `update_user`
-                , `update_time`
-                , `del_user`
-                , `del_time`
-                , `del_flag`
-                , `pt_var1`
-                , `pt_var2`
-                , `pt_var3`
-                , `pt_var4`
-                , `pt_var5`
-        FROM sgjs_expert_library
+        select
+            `id`
+                ,`foreign_id`
+                ,`belong_business`
+                ,`expert_code`
+                ,`expert_name`
+                ,`belong_unit`
+                ,`business_areas`
+                ,`products`
+                ,`specialty`
+                ,`suggest`
+                ,`remark`
+                ,`region_id`
+                ,`region_name`
+                ,`project_id`
+                ,`project_name`
+                ,`dept_id`
+                ,`create_user`
+                ,`create_user_name`
+                ,`create_time`
+                ,`update_user`
+                ,`update_time`
+                ,`del_user`
+                ,`del_time`
+                ,`del_flag`
+                ,`pt_var1`
+                ,`pt_var2`
+                ,`pt_var3`
+                ,`pt_var4`
+                ,`pt_var5`
+        from sgjs_expert_library
     </sql>
     <select id="getSgjsExpertLibrary" resultMap="SgjsExpertLibraryResultMap">
-        <include refid="selectSgjsExpertLibraryVo"/>
+        <include refid="selectSgjsExpertLibraryVo" />
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
-            <if test="expertCode != null  and expertCode != ''">and `expert_code` = #{expertCode}</if>
-            <if test="expertName != null  and expertName != ''">and `expert_name` = #{expertName}</if>
-            <if test="belongUnit != null  and belongUnit != ''">and `belong_unit` = #{belongUnit}</if>
-            <if test="bussnessAreas != null  and bussnessAreas != ''">and `bussness_areas` = #{bussnessAreas}</if>
-            <if test="products != null  and products != ''">and `products` = #{products}</if>
-            <if test="specialty != null  and specialty != ''">and `specialty` = #{specialty}</if>
-            <if test="suggest != null  and suggest != ''">and `suggest` = #{suggest}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="foreignId != null "> and `foreign_id` = #{foreignId}</if>
+            <if test="belongBusiness != null  and belongBusiness != ''"> and `belong_business` = #{belongBusiness}</if>
+            <if test="expertCode != null  and expertCode != ''"> and `expert_code` = #{expertCode}</if>
+            <if test="expertName != null  and expertName != ''"> and `expert_name` = #{expertName}</if>
+            <if test="belongUnit != null  and belongUnit != ''"> and `belong_unit` = #{belongUnit}</if>
+            <if test="businessAreas != null  and businessAreas != ''"> and `business_areas` = #{businessAreas}</if>
+            <if test="products != null  and products != ''"> and `products` = #{products}</if>
+            <if test="specialty != null  and specialty != ''"> and `specialty` = #{specialty}</if>
+            <if test="suggest != null  and suggest != ''"> and `suggest` = #{suggest}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
         </where>
         order by create_time desc
     </select>
 
     <select id="getSgjsExpertLibraryList" resultMap="SgjsExpertLibraryResultMap">
-        <include refid="selectSgjsExpertLibraryVo"/>
+        <include refid="selectSgjsExpertLibraryVo" />
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
-            <if test="expertCode != null  and expertCode != ''">and `expert_code` = #{expertCode}</if>
-            <if test="expertName != null  and expertName != ''">and `expert_name` = #{expertName}</if>
-            <if test="belongUnit != null  and belongUnit != ''">and `belong_unit` = #{belongUnit}</if>
-            <if test="bussnessAreas != null  and bussnessAreas != ''">and `bussness_areas` = #{bussnessAreas}</if>
-            <if test="products != null  and products != ''">and `products` = #{products}</if>
-            <if test="specialty != null  and specialty != ''">and `specialty` = #{specialty}</if>
-            <if test="suggest != null  and suggest != ''">and `suggest` = #{suggest}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="foreignId != null "> and `foreign_id` = #{foreignId}</if>
+            <if test="belongBusiness != null  and belongBusiness != ''"> and `belong_business` = #{belongBusiness}</if>
+            <if test="expertCode != null  and expertCode != ''"> and `expert_code` = #{expertCode}</if>
+            <if test="expertName != null  and expertName != ''"> and `expert_name` = #{expertName}</if>
+            <if test="belongUnit != null  and belongUnit != ''"> and `belong_unit` = #{belongUnit}</if>
+            <if test="businessAreas != null  and businessAreas != ''"> and `business_areas` = #{businessAreas}</if>
+            <if test="products != null  and products != ''"> and `products` = #{products}</if>
+            <if test="specialty != null  and specialty != ''"> and `specialty` = #{specialty}</if>
+            <if test="suggest != null  and suggest != ''"> and `suggest` = #{suggest}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
         </where>
         order by create_time desc
     </select>
 
-    <insert id="insertSgjsExpertLibrary" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSgjsExpertLibrary"  useGeneratedKeys="true" keyProperty="id"  >
         insert into sgjs_expert_library
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="foreignId != null ">`foreign_id`,</if>
+            <if test="belongBusiness != null  and belongBusiness != ''">`belong_business`,</if>
             <if test="expertCode != null  and expertCode != ''">`expert_code`,</if>
             <if test="expertName != null  and expertName != ''">`expert_name`,</if>
             <if test="belongUnit != null  and belongUnit != ''">`belong_unit`,</if>
-            <if test="bussnessAreas != null  and bussnessAreas != ''">`bussness_areas`,</if>
+            <if test="businessAreas != null  and businessAreas != ''">`business_areas`,</if>
             <if test="products != null  and products != ''">`products`,</if>
             <if test="specialty != null  and specialty != ''">`specialty`,</if>
             <if test="suggest != null  and suggest != ''">`suggest`,</if>
@@ -172,10 +178,11 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
             <if test="foreignId != null ">#{foreignId},</if>
+            <if test="belongBusiness != null  and belongBusiness != ''">#{belongBusiness},</if>
             <if test="expertCode != null  and expertCode != ''">#{expertCode},</if>
             <if test="expertName != null  and expertName != ''">#{expertName},</if>
             <if test="belongUnit != null  and belongUnit != ''">#{belongUnit},</if>
-            <if test="bussnessAreas != null  and bussnessAreas != ''">#{bussnessAreas},</if>
+            <if test="businessAreas != null  and businessAreas != ''">#{businessAreas},</if>
             <if test="products != null  and products != ''">#{products},</if>
             <if test="specialty != null  and specialty != ''">#{specialty},</if>
             <if test="suggest != null  and suggest != ''">#{suggest},</if>
@@ -207,10 +214,11 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `foreign_id`,
+            `belong_business`,
             `expert_code`,
             `expert_name`,
             `belong_unit`,
-            `bussness_areas`,
+            `business_areas`,
             `products`,
             `specialty`,
             `suggest`,
@@ -238,10 +246,11 @@
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
                 #{item.foreignId},
+                #{item.belongBusiness},
                 #{item.expertCode},
                 #{item.expertName},
                 #{item.belongUnit},
-                #{item.bussnessAreas},
+                #{item.businessAreas},
                 #{item.products},
                 #{item.specialty},
                 #{item.suggest},
@@ -272,10 +281,11 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
             <if test="foreignId != null ">`foreign_id` = #{foreignId},</if>
+            <if test="belongBusiness != null  and  belongBusiness != ''">`belong_business` = #{belongBusiness},</if>
             <if test="expertCode != null  and  expertCode != ''">`expert_code` = #{expertCode},</if>
             <if test="expertName != null  and  expertName != ''">`expert_name` = #{expertName},</if>
             <if test="belongUnit != null  and  belongUnit != ''">`belong_unit` = #{belongUnit},</if>
-            <if test="bussnessAreas != null  and  bussnessAreas != ''">`bussness_areas` = #{bussnessAreas},</if>
+            <if test="businessAreas != null  and  businessAreas != ''">`business_areas` = #{businessAreas},</if>
             <if test="products != null  and  products != ''">`products` = #{products},</if>
             <if test="specialty != null  and  specialty != ''">`specialty` = #{specialty},</if>
             <if test="suggest != null  and  suggest != ''">`suggest` = #{suggest},</if>
@@ -300,7 +310,7 @@
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
         </trim>
         <where>
-            <if test="id != null ">and `id` = #{id}</if>
+            <if test="id != null "> and `id` = #{id}</if>
         </where>
     </update>
 
@@ -315,6 +325,11 @@
             <trim prefix="foreign_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.foreignId}
+                </foreach>
+            </trim>
+            <trim prefix="belong_business  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.belongBusiness}
                 </foreach>
             </trim>
             <trim prefix="expert_code  = case" suffix="end,">
@@ -332,9 +347,9 @@
                     when `id`=#{item.id} then #{item.belongUnit}
                 </foreach>
             </trim>
-            <trim prefix="bussness_areas  = case" suffix="end,">
+            <trim prefix="business_areas  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.bussnessAreas}
+                    when `id`=#{item.id} then #{item.businessAreas}
                 </foreach>
             </trim>
             <trim prefix="products  = case" suffix="end,">
@@ -457,34 +472,35 @@
     <update id="deleteSgjsExpertLibrary">
         update `sgjs_expert_library` set del_flag = 1
         <where>
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
-            <if test="expertCode != null  and expertCode != ''">and `expert_code` = #{expertCode}</if>
-            <if test="expertName != null  and expertName != ''">and `expert_name` = #{expertName}</if>
-            <if test="belongUnit != null  and belongUnit != ''">and `belong_unit` = #{belongUnit}</if>
-            <if test="bussnessAreas != null  and bussnessAreas != ''">and `bussness_areas` = #{bussnessAreas}</if>
-            <if test="products != null  and products != ''">and `products` = #{products}</if>
-            <if test="specialty != null  and specialty != ''">and `specialty` = #{specialty}</if>
-            <if test="suggest != null  and suggest != ''">and `suggest` = #{suggest}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="foreignId != null "> and `foreign_id` = #{foreignId}</if>
+            <if test="belongBusiness != null  and belongBusiness != ''"> and `belong_business` = #{belongBusiness}</if>
+            <if test="expertCode != null  and expertCode != ''"> and `expert_code` = #{expertCode}</if>
+            <if test="expertName != null  and expertName != ''"> and `expert_name` = #{expertName}</if>
+            <if test="belongUnit != null  and belongUnit != ''"> and `belong_unit` = #{belongUnit}</if>
+            <if test="businessAreas != null  and businessAreas != ''"> and `business_areas` = #{businessAreas}</if>
+            <if test="products != null  and products != ''"> and `products` = #{products}</if>
+            <if test="specialty != null  and specialty != ''"> and `specialty` = #{specialty}</if>
+            <if test="suggest != null  and suggest != ''"> and `suggest` = #{suggest}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
         </where>
     </update>
 
