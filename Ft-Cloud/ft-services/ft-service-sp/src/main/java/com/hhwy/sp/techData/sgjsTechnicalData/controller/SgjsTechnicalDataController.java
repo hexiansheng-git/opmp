@@ -104,6 +104,7 @@ public class SgjsTechnicalDataController extends BaseController {
         return toAjax(sgjsTechnicalDataService.deleteSgjsTechnicalDataByPks(sgjsTechnicalDataPkList));
     }
 
+    @PreAuthorize(hasPermi = "sgjsTechnicalData:export")
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsTechnicalData sgjsTechnicalDataParam) throws IOException {
         List<SgjsTechnicalData> sgjsTechnicalDataList = sgjsTechnicalDataService.getSgjsTechnicalDataList(sgjsTechnicalDataParam);
