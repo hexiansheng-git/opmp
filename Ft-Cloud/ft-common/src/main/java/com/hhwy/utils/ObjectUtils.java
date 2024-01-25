@@ -1,7 +1,6 @@
 package com.hhwy.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 
@@ -159,7 +158,7 @@ public class ObjectUtils {
      * @return
      */
     public static int nvl(Object obj,Integer defaultVal){
-        if(obj == null)
+        if(ObjectUtils.isBlank(obj))
             return defaultVal;
         int val = defaultVal;
         try{

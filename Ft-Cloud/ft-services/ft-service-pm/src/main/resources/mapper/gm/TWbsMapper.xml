@@ -192,6 +192,7 @@
     <select id="getAllChildTWbs" resultMap="TWbsResultMap" parameterType="Long">
         <include refid="selectTWbsVo"/>
         where del_flag = 0 and FIND_IN_SET(#{id},ancestors)
+        order by id
     </select>
     
     <select id="getTWbsId" resultMap="TWbsResultMap">

@@ -319,7 +319,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         //读取excel中的数据，替换id
         ZipSecureFile.setMinInflateRatio(-1.0d);  //
         FtExcelUtil<XmslWbsHistory> excelUtil = new FtExcelUtil<>(XmslWbsHistory.class);
-        List<XmslWbsHistory> list = excelUtil.importExcel(1,file.getInputStream());
+        List<XmslWbsHistory> list = excelUtil.importExcel(3,file.getInputStream());
         Map<String,XmslWbs> codeMap = new HashMap<>(list.size());
         List<XmslWbsHistory> resuList = new ArrayList<>();
         List<SysDictData> nodeTypeDictList = systemApiService.selectDictDataByType("xmsl_wbs_type");
@@ -378,9 +378,9 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         wbsDto.setList(list);
         wbsDto.setSubmitFlag(0);
         if(id != null){
-            XmslWbs temp = new XmslWbs();
+            XmslWbsHistory temp = new XmslWbsHistory();
             temp.setMainId(id);
-            this.deleteXmslWbs(temp);
+            xmslWbsHistoryMapper.deleteXmslWbsHistory(temp);
         }
         this.save(wbsDto);
         return null;

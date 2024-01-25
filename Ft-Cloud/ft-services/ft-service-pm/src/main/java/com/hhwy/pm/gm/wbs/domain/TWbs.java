@@ -49,6 +49,8 @@ public class TWbs extends BaseEntity {
 
     //父级编码 不存在与数据库
     private String parentCode;
+    //当前编码
+    private String selfCode;
     /**
      * 字段描述：父级ID,最顶级为0
      */

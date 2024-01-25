@@ -49,10 +49,12 @@ public interface ITWbsService {
 
     /**
      * 拷贝数据
+     * @param parentCode 父级wbs编号
+     * @param num 子级序号
      * @param ids
      * @return
      */
-    public Map<String,List<TWbs>> copyChildList(Long[] ids);
+    public Map<String,List<TWbs>> copyChildList(String parentCode,Integer level,Integer rootNum,Integer num,Long[] ids);
 
     /**
      * 获取默认的工程类型

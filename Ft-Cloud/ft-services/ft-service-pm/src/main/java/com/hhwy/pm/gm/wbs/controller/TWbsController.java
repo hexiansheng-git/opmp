@@ -4,20 +4,17 @@ import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.gm.wbs.domain.TWbs;
 import com.hhwy.pm.gm.wbs.service.ITWbsService;
-import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
-import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
-import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
 import org.apache.commons.collections4.SetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.nio.file.WatchService;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -74,7 +71,11 @@ public class TWbsController extends BaseController{
         String ids = ObjectUtils.nvlString(map.get("ids"));
         if(org.apache.commons.lang3.StringUtils.isBlank(ids))
             return AjaxResult.error("参数缺失");
-        Map<String, List<TWbs>> resuMap = tWbsService.copyChildList(Convert.toLongArray(ids));
+        String parentCode = ObjectUtils.nvlString(map.get("parentCode"));
+        Integer num = ObjectUtils.nvl(map.get("num"));
+        Integer rootNum = ObjectUtils.nvl(map.get("rootNum"));
+        Integer level = ObjectUtils.nvl(map.get("level"),1);
+        Map<String, List<TWbs>> resuMap = tWbsService.copyChildList(parentCode,level,rootNum,num,Convert.toLongArray(ids));
         return AjaxResult.success(resuMap);
     }
 

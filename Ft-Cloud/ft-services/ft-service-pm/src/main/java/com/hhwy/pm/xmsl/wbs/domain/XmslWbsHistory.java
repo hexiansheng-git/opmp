@@ -32,13 +32,13 @@ public class XmslWbsHistory extends XmslWbs {
      * 字段描述：编号，单位工程按整百递增，分部分项子分项按三位流水号递增
      */
     @JsonProperty
-    @FtExcel(name = "编号")
+    @FtExcel(name = "*编号")
     @NotBlank(message = "编号不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @ExcelProperty("编号")
     protected String code;
 
     @JsonProperty
-    @FtExcel(name = "项目部位（桩号）")
+    @FtExcel(name = "*项目部位（桩号）")
     @NotBlank(message = "项目部位不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @ExcelProperty("项目部位（桩号）")
     protected String partCode;
@@ -47,7 +47,7 @@ public class XmslWbsHistory extends XmslWbs {
      * 字段描述：标准wbs编码
      */
     @JsonProperty
-    @FtExcel(name = "关联标准WBS")
+    @FtExcel(name = "*关联标准WBS")
     protected String standardCode;
 
     /**

@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 /**
@@ -225,13 +226,27 @@ public class TWbsServiceImpl implements ITWbsService {
     }
 
     @Override
-    public Map<String, List<TWbs>> copyChildList(Long[] ids) {
+        public Map<String, List<TWbs>> copyChildList(String parentCode,Integer level,Integer rootNum,Integer num,Long[] ids) {
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         DynamicDataSourceContextHolder.push("master");
         try {
-            //子级id : 最上级id
-            Map<String,String> realIdMap = new HashMap<>();
-            Map<String,List<TWbs>> resuMap = new HashMap<>();
+            Map<String,String> idRelateMap = new HashMap<>();
+            Map<String,TWbs> wbsMap = new HashMap<>();
+            //id:当前子级生成流水号
+            Map<String,Integer> sortNumMap = new HashMap<>();
+            BiFunction<String,Integer,Integer> getSelfCodeSortNum = (id,start)->{
+                Integer temp = sortNumMap.get(id);
+                if(temp == null){
+                    temp = start==null?0:start;
+                    sortNumMap.put(id,temp);
+                }
+                sortNumMap.put( id,++temp);
+                return temp;
+            };
+            BiFunction<Integer,Boolean,String> buildSelfCode = (sortNum,isRoot)->{ //序号，是否为根级
+                return isRoot?sortNum+"00":String.format("%03d",sortNum);
+            };
+            Map<String,List<TWbs>> resuMap = new LinkedHashMap<>();
             List<Long> idList = new ArrayList<>(Arrays.asList(ids));
             idList.sort(CompareUtil::compare);
             Set<String> existIdSet = new HashSet<>();
@@ -239,25 +254,48 @@ public class TWbsServiceImpl implements ITWbsService {
             for (int i = 0; i < idList.size(); i++) {
                 if(existIdSet.contains(idList.get(i)+""))
                     continue;
+                String id = idList.get(i)+"";
                 List<TWbs> wbsList = tWbsMapper.getAllChildTWbs(idList.get(i));
                 List<TWbs> resuList = new ArrayList<>();
                 wbsList = CollectionUtils.isEmpty(wbsList)?new ArrayList<>(2):wbsList;
                 for (int j = 0; j < wbsList.size(); j++) {
                     TWbs temp = wbsList.get(j);
-                    if(temp.getId().equals(idList.get(i)+""))
-                        continue;
-                    existIdSet.add(temp.getId());
+                    //若直属于idList，则处理父级编码
+                    String selfCode = "";
+                    boolean put2Resu = true;
+                    if(temp.getId().equals(idList.get(i)+"")){
+                        boolean isRoot = StringUtils.isBlank(parentCode);
+                        temp.setParentCode(parentCode);
+                        Integer startNum = isRoot?rootNum:num;
+                        selfCode = buildSelfCode.apply(getSelfCodeSortNum.apply(temp.getParentCode(),startNum),isRoot);
+                        temp.setLevel(level);
+                        put2Resu = false;
+                    }else if(temp.getLevel() != 1){ //非第一级
+                        String newPid = idRelateMap.get(temp.getParentId());
+                        TWbs parent = wbsMap.get(newPid);
+                        temp.setParentCode(parent.getCode());
+                        temp.setParentId(parent.getId());
+                        temp.setLevel(parent.getLevel()+1);
+                        selfCode = buildSelfCode.apply(getSelfCodeSortNum.apply(temp.getParentCode(),null),false);
+                    }
+                    temp.setSelfCode(selfCode);
+                    String pcode = temp.getParentCode();
+                    temp.setCode((StringUtils.isBlank(pcode)?"":pcode+"-")+ObjectUtils.nvlString(temp.getSelfCode()));
                     temp.setPtVar3(temp.getName());
                     temp.setName(ObjectUtils.nvlString(temp.getCode())+"-"+ObjectUtils.nvlString(temp.getName()));
-                    if(temp.getLevel() != 2)
-                        temp.setParentCode(StringUtils.removeEnd(temp.getAncestorsName().replace(temp.getCode(),""),"-") );
-                    else
-                        temp.setParentCode("");
-                    idList.add(Long.valueOf(temp.getId()));
-                    String topId = i==0?temp.getParentId():realIdMap.get(temp.getParentId());
-                    //替换掉Id和父级Id，否则前端id会重
-                    realIdMap.put(temp.getId(), topId);
-                    resuList.add(temp);
+                    //String newId = UUIDUtils.getShortUuid();
+                    String newId = temp.getId();//前端又要求不付写
+                    idRelateMap.put(temp.getId(),newId);
+                    temp.setId(newId);
+                    existIdSet.add(temp.getId());
+                    wbsMap.put(temp.getId(),temp);
+//                    if(temp.getLevel() != 2)
+//                        temp.setParentCode(StringUtils.removeEnd(temp.getAncestorsName().replace(temp.getCode(),""),"-") );
+//                    else
+//                        temp.setParentCode("");
+//                    idList.add(Long.valueOf(temp.getId()));
+                    if(put2Resu)  //被选中的数据不用传给前端
+                        resuList.add(temp);
                 }
                 resuMap.put(idList.get(i)+"",resuList);
             }
