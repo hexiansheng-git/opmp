@@ -1,5 +1,6 @@
 package com.hhwy.sp.common.sgjsAchievementAward.service;
 
+import com.hhwy.sp.common.domain.TechManageCommon;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 
 import java.util.List;
@@ -18,6 +19,8 @@ public interface ISgjsAchievementAwardService {
 
     List<SgjsAchievementAward> getSgjsAchievementAwardList(SgjsAchievementAward sgjsAchievementAward);
 
+    <T extends TechManageCommon> void setLedger(List<T> tList, Function<T,Long> getId, String belongBusiness);
+
     /**
      * 设置成果奖励数据
      * @param t
@@ -25,7 +28,7 @@ public interface ISgjsAchievementAwardService {
      * @param setAward
      * @param <T>
      */
-    <T> void setAward(T t, Function<T,Long> getId, BiConsumer<T,List<SgjsAchievementAward>> setAward);
+    <T> void setAwardList(T t, Function<T,Long> getId, BiConsumer<T,List<SgjsAchievementAward>> setAward);
 
     /**
      * 根据外键获取成果数据集

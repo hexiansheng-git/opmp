@@ -30,11 +30,17 @@ public class SgjsPatentDeclareController extends BaseController {
     @Autowired
     private ISgjsPatentDeclareService sgjsPatentDeclareService;
 
-                                         
+
+    /**
+     * 根据id获取数据
+     * @param id
+     * @param type 1：编辑   2：成果登记
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsPatentDeclare:list")
-    @GetMapping
-    public AjaxResult getSgjsPatentDeclare(@Validated(ValidationGroups.Get.class) SgjsPatentDeclare sgjsPatentDeclareParam) {
-        SgjsPatentDeclare sgjsPatentDeclare = sgjsPatentDeclareService.getSgjsPatentDeclare(sgjsPatentDeclareParam);
+    @GetMapping("getSgjsPatentDeclareById")
+    public AjaxResult getSgjsPatentDeclareById(Long id,String type) {
+        SgjsPatentDeclare sgjsPatentDeclare = sgjsPatentDeclareService.getSgjsPatentDeclareById(id, type);
         return AjaxResult.success(sgjsPatentDeclare);
     }
 

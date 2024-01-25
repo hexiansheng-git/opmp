@@ -2,16 +2,19 @@ package com.hhwy.sp.common.sgjsAchievementAward.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.common.domain.TechManageCommon;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.mapper.SgjsAchievementAwardMapper;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -38,9 +41,45 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
         return sgjsAchievementAwardMapper.getSgjsAchievementAwardList(sgjsAchievementAward);
     }
 
-    public <T> void setAward(T t, Function<T,Long> getId, BiConsumer<T,List<SgjsAchievementAward>> setAward){
+    @Override
+    public <T extends TechManageCommon> void setLedger(List<T> tList,Function<T,Long> getId,String belongBusiness){
+        Map<Long, List<SgjsAchievementAward>> map = this.getMapByBelongBusiness(belongBusiness);
+        for (T t : tList) {
+            Long id = getId.apply(t);
+            List<SgjsAchievementAward> awardList = map.get(id);
+            if(CollectionUtils.isNotEmpty(awardList)){
+                awardList = awardList.stream().sorted(Comparator.comparing(SgjsAchievementAward::getCreateTime)).collect(Collectors.toList());
+                SgjsAchievementAward award = awardList.get(0);
+                t.setApplyAward(award.getApplyAward());
+                t.setAwardGrade(award.getAwardGrade());
+                t.setAwardType(award.getAwardType());
+                t.setGrantUnit(award.getGrantUnit());
+                t.setAwardTime(award.getAwardTime());
+
+                StringBuilder allAward = new StringBuilder();
+                int i = 1;
+                for (SgjsAchievementAward award1 : awardList) {
+                    allAward.append(i)
+                            .append("、")
+                            .append(award1.getApplyAward())
+                            .append("; ")
+                            .append(award.getAwardGrade())
+                            .append("; ")
+                            .append(award.getAwardType())
+                            .append("; ")
+                            .append(award.getGrantUnit())
+                            .append("; ")
+                            .append(award.getAwardTime());
+                    i++;
+                }
+                t.setAllAward(allAward.toString());
+            }
+        }
+    }
+
+    public <T> void setAwardList(T t, Function<T,Long> getId, BiConsumer<T,List<SgjsAchievementAward>> setAwardList){
         List<SgjsAchievementAward> awardList = this.getListByForeignId(getId.apply(t));
-        setAward.accept(t,awardList);
+        setAwardList.accept(t,awardList);
     }
 
     @Override

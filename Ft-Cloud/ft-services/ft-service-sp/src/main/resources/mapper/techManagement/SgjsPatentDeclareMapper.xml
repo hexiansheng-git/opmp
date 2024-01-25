@@ -100,6 +100,10 @@
              , `pt_var5`
         from sgjs_patent_declare
     </sql>
+    <select id="getSgjsPatentDeclareById" resultMap="SgjsPatentDeclareResultMap">
+        <include refid="selectSgjsPatentDeclareVo"/>
+        where del_flag = '0' and id = #{id}
+    </select>
     <select id="getSgjsPatentDeclare" resultMap="SgjsPatentDeclareResultMap">
         <include refid="selectSgjsPatentDeclareVo"/>
         <where>

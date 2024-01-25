@@ -9,11 +9,13 @@ import java.util.List;
 /**
  * @author han
  * @date 2024-01-25 11:01:25
- * @remark 
+ * @remark
  */
 @Repository
 public interface SgjsPatentDeclareMapper {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+    SgjsPatentDeclare getSgjsPatentDeclareById(@Param("id") Long id);
+
     SgjsPatentDeclare getSgjsPatentDeclare(SgjsPatentDeclare sgjsPatentDeclare);
 
     List<SgjsPatentDeclare> getSgjsPatentDeclareList(SgjsPatentDeclare sgjsPatentDeclare);
@@ -24,9 +26,9 @@ public interface SgjsPatentDeclareMapper {
 
     int updateSgjsPatentDeclare(SgjsPatentDeclare sgjsPatentDeclare);
 
-            int updateSgjsPatentDeclareList(@Param("sgjsPatentDeclareList") List<SgjsPatentDeclare> sgjsPatentDeclareList);
-    
+    int updateSgjsPatentDeclareList(@Param("sgjsPatentDeclareList") List<SgjsPatentDeclare> sgjsPatentDeclareList);
+
     int deleteSgjsPatentDeclare(SgjsPatentDeclare sgjsPatentDeclare);
 
-            int deleteSgjsPatentDeclareByPks(@Param("sgjsPatentDeclarePkList") List<Long> sgjsPatentDeclarePkList);
-    }
+    int deleteSgjsPatentDeclareByPks(@Param("sgjsPatentDeclarePkList") List<Long> sgjsPatentDeclarePkList);
+}

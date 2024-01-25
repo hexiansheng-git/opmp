@@ -2,6 +2,7 @@ package com.hhwy.sp.techManagement.sgjsPatentDeclare.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.SgjsPatentDeclare;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.mapper.SgjsPatentDeclareMapper;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.service.ISgjsPatentDeclareService;
@@ -23,6 +24,22 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
     @Autowired
     private SgjsPatentDeclareMapper sgjsPatentDeclareMapper;
 
+    @Autowired
+    private ISgjsAchievementAwardService sgjsAchievementAwardService;
+
+
+    @Override
+    public SgjsPatentDeclare getSgjsPatentDeclareById(Long id, String type) {
+        SgjsPatentDeclare declare = sgjsPatentDeclareMapper.getSgjsPatentDeclareById(id);
+        if("1".equals(type)){
+            //TODO 设置专家数据
+        }
+        if("2".equals(type)){
+            //设置成果数据
+            sgjsAchievementAwardService.setAwardList(declare,SgjsPatentDeclare::getId,SgjsPatentDeclare::setAwardList);
+        }
+        return declare;
+    }
 
     public SgjsPatentDeclare getSgjsPatentDeclare(SgjsPatentDeclare sgjsPatentDeclare) {
         return sgjsPatentDeclareMapper.getSgjsPatentDeclare(sgjsPatentDeclare);

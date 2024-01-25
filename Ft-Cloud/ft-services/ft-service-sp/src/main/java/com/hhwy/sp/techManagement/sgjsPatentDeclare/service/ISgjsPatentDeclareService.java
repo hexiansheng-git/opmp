@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface ISgjsPatentDeclareService {
 
+    SgjsPatentDeclare getSgjsPatentDeclareById(Long id, String type);
+
     SgjsPatentDeclare getSgjsPatentDeclare(SgjsPatentDeclare sgjsPatentDeclare);
 
     List<SgjsPatentDeclare> getSgjsPatentDeclareList(SgjsPatentDeclare sgjsPatentDeclare);

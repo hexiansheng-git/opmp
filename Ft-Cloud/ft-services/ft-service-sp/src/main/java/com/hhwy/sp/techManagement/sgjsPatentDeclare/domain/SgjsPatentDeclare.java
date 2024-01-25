@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.sp.common.domain.TechManageCommon;
+import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -20,7 +22,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SgjsPatentDeclare extends BaseEntity {
+public class SgjsPatentDeclare extends TechManageCommon {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -303,4 +305,6 @@ public class SgjsPatentDeclare extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    private List<SgjsAchievementAward> awardList;
 }
