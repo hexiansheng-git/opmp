@@ -2,6 +2,7 @@ package com.hhwy.sp.common.sgjsAchievementAward.mapper;
 
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * @date 2024-01-25 09:45:38
  * @remark
  */
+@Repository
 public interface SgjsAchievementAwardMapper {
 
     SgjsAchievementAward getSgjsAchievementAward(SgjsAchievementAward sgjsAchievementAward);
