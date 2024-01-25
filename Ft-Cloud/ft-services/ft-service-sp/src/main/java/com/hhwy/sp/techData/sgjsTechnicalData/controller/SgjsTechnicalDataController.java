@@ -26,7 +26,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 /**
  * @author cjh
  * @date 2024-01-22 09:26:47
- * @remark
+ * @remark 技术文件管理-技术资料管理
  */
 @Validated
 @RestController
@@ -104,6 +104,7 @@ public class SgjsTechnicalDataController extends BaseController {
         return toAjax(sgjsTechnicalDataService.deleteSgjsTechnicalDataByPks(sgjsTechnicalDataPkList));
     }
 
+    @PreAuthorize(hasPermi = "sgjsTechnicalData:export")
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsTechnicalData sgjsTechnicalDataParam) throws IOException {
         List<SgjsTechnicalData> sgjsTechnicalDataList = sgjsTechnicalDataService.getSgjsTechnicalDataList(sgjsTechnicalDataParam);

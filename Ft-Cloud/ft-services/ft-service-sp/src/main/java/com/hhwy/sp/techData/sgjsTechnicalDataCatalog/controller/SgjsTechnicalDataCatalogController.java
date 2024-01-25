@@ -25,7 +25,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 /**
  * @author cjh
  * @date 2024-01-22 09:26:41
- * @remark
+ * @remark 技术文件管理-技术资料管理-目录
  */
 @Validated
 @RestController

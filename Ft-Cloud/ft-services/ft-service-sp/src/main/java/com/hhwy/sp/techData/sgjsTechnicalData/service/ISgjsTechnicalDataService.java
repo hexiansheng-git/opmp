@@ -25,5 +25,7 @@ public interface ISgjsTechnicalDataService {
 
     int deleteSgjsTechnicalData(SgjsTechnicalData sgjsTechnicalData);
 
+    int deleteSgjsTechnicalDataByCatalog(Long dataCatalogId);
+
     int deleteSgjsTechnicalDataByPks(List<Long> sgjsTechnicalDataPkList);
 }
