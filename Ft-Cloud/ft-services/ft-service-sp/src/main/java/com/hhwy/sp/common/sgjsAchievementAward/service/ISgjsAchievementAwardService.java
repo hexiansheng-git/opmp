@@ -4,6 +4,8 @@ import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * @author han
@@ -15,6 +17,15 @@ public interface ISgjsAchievementAwardService {
     SgjsAchievementAward getSgjsAchievementAward(SgjsAchievementAward sgjsAchievementAward);
 
     List<SgjsAchievementAward> getSgjsAchievementAwardList(SgjsAchievementAward sgjsAchievementAward);
+
+    /**
+     * 设置成果奖励数据
+     * @param t
+     * @param getId
+     * @param setAward
+     * @param <T>
+     */
+    <T> void setAward(T t, Function<T,Long> getId, BiConsumer<T,List<SgjsAchievementAward>> setAward);
 
     /**
      * 根据外键获取成果数据集

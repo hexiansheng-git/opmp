@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -34,6 +36,11 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
 
     public List<SgjsAchievementAward> getSgjsAchievementAwardList(SgjsAchievementAward sgjsAchievementAward) {
         return sgjsAchievementAwardMapper.getSgjsAchievementAwardList(sgjsAchievementAward);
+    }
+
+    public <T> void setAward(T t, Function<T,Long> getId, BiConsumer<T,List<SgjsAchievementAward>> setAward){
+        List<SgjsAchievementAward> awardList = this.getListByForeignId(getId.apply(t));
+        setAward.accept(t,awardList);
     }
 
     @Override
