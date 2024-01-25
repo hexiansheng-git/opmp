@@ -66,7 +66,7 @@ public class SgjsFourNewsAchievementController extends BaseController {
     @PreAuthorize(hasPermi = "sgjsFourNewsAchievement:update")
     @PostMapping("/update")
     public AjaxResult updateSgjsFourNewsAchievement(@Validated(ValidationGroups.Update.class) @RequestBody SgjsFourNewsAchievement sgjsFourNewsAchievementParam) {
-        return toAjax(sgjsFourNewsAchievementService.updateSgjsFourNewsAchievement(sgjsFourNewsAchievementParam));
+        return AjaxResult.success(sgjsFourNewsAchievementService.updateSgjsFourNewsAchievement(sgjsFourNewsAchievementParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsFourNewsAchievement:update")

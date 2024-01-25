@@ -66,7 +66,7 @@ public class SgjsTechMethodController extends BaseController {
     @PreAuthorize(hasPermi = "sgjsTechMethod:update")
     @PostMapping("/update")
     public AjaxResult updateSgjsTechMethod(@Validated(ValidationGroups.Update.class) @RequestBody SgjsTechMethod sgjsTechMethodParam) {
-        return toAjax(sgjsTechMethodService.updateSgjsTechMethod(sgjsTechMethodParam));
+        return AjaxResult.success(sgjsTechMethodService.updateSgjsTechMethod(sgjsTechMethodParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsTechMethod:update")
