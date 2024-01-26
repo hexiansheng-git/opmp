@@ -26,4 +26,6 @@ public interface IShjsAuthenticateEvaluateService {
     int deleteShjsAuthenticateEvaluate(ShjsAuthenticateEvaluate shjsAuthenticateEvaluate);
 
     int deleteShjsAuthenticateEvaluateByPks(List<Long> shjsAuthenticateEvaluatePkList);
+
+    int saveShjsAuthenticateEvaluateList(Long foreignId, String belongBusiness, List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList);
 }

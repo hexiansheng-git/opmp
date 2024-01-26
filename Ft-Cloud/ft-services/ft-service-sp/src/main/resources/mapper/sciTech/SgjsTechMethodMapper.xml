@@ -23,6 +23,9 @@
         <result property="achievementDescription" column="achievement_description"/>
         <result property="achievementGroupId" column="achievement_group_id"/>
         <result property="otherGroupId" column="other_group_id"/>
+        <result property="isPass" column="is_pass"/>
+        <result property="registrantContact" column="registrant_contact"/>
+        <result property="registrant" column="registrant"/>
         <result property="remark" column="remark"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
@@ -62,6 +65,9 @@
              , `achievement_description`
              , `achievement_group_id`
              , `other_group_id`
+             , `is_pass`
+             , `registrant_contact`
+             , `registrant`
              , `remark`
              , `region_id`
              , `region_name`
@@ -114,6 +120,9 @@
             <if test="achievementDescription != null  and achievementDescription != ''">and `achievement_description` = #{achievementDescription}</if>
             <if test="achievementGroupId != null  and achievementGroupId != ''">and `achievement_group_id` = #{achievementGroupId}</if>
             <if test="otherGroupId != null  and otherGroupId != ''">and `other_group_id` = #{otherGroupId}</if>
+            <if test="isPass != null  and isPass != ''">and `is_pass` = #{isPass}</if>
+            <if test="registrantContact != null  and registrantContact != ''">and `registrant_contact` = #{registrantContact}</if>
+            <if test="registrant != null  and registrant != ''">and `registrant` = #{registrant}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -168,6 +177,9 @@
             <if test="achievementDescription != null  and achievementDescription != ''">and `achievement_description` = #{achievementDescription}</if>
             <if test="achievementGroupId != null  and achievementGroupId != ''">and `achievement_group_id` = #{achievementGroupId}</if>
             <if test="otherGroupId != null  and otherGroupId != ''">and `other_group_id` = #{otherGroupId}</if>
+            <if test="isPass != null  and isPass != ''">and `is_pass` = #{isPass}</if>
+            <if test="registrantContact != null  and registrantContact != ''">and `registrant_contact` = #{registrantContact}</if>
+            <if test="registrant != null  and registrant != ''">and `registrant` = #{registrant}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -212,6 +224,9 @@
             <if test="achievementDescription != null  and achievementDescription != ''">`achievement_description`,</if>
             <if test="achievementGroupId != null  and achievementGroupId != ''">`achievement_group_id`,</if>
             <if test="otherGroupId != null  and otherGroupId != ''">`other_group_id`,</if>
+            <if test="isPass != null  and isPass != ''">`is_pass`,</if>
+            <if test="registrantContact != null  and registrantContact != ''">`registrant_contact`,</if>
+            <if test="registrant != null  and registrant != ''">`registrant`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -251,6 +266,9 @@
             <if test="achievementDescription != null  and achievementDescription != ''">#{achievementDescription},</if>
             <if test="achievementGroupId != null  and achievementGroupId != ''">#{achievementGroupId},</if>
             <if test="otherGroupId != null  and otherGroupId != ''">#{otherGroupId},</if>
+            <if test="isPass != null  and isPass != ''">#{isPass},</if>
+            <if test="registrantContact != null  and registrantContact != ''">#{registrantContact},</if>
+            <if test="registrant != null  and registrant != ''">#{registrant},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -295,6 +313,9 @@
             `achievement_description`,
             `achievement_group_id`,
             `other_group_id`,
+            `is_pass`,
+            `registrant_contact`,
+            `registrant`,
             `remark`,
             `region_id`,
             `region_name`,
@@ -335,6 +356,9 @@
                 #{item.achievementDescription},
                 #{item.achievementGroupId},
                 #{item.otherGroupId},
+                #{item.isPass},
+                #{item.registrantContact},
+                #{item.registrant},
                 #{item.remark},
                 #{item.regionId},
                 #{item.regionName},
@@ -386,6 +410,9 @@
             <if test="achievementDescription != null  and  achievementDescription != ''">`achievement_description` = #{achievementDescription},</if>
             <if test="achievementGroupId != null  and  achievementGroupId != ''">`achievement_group_id` = #{achievementGroupId},</if>
             <if test="otherGroupId != null  and  otherGroupId != ''">`other_group_id` = #{otherGroupId},</if>
+            <if test="isPass != null  and  isPass != ''">`is_pass` = #{isPass},</if>
+            <if test="registrantContact != null  and  registrantContact != ''">`registrant_contact` = #{registrantContact},</if>
+            <if test="registrant != null  and  registrant != ''">`registrant` = #{registrant},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -502,6 +529,21 @@
             <trim prefix="other_group_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.otherGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="is_pass  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.isPass}
+                </foreach>
+            </trim>
+            <trim prefix="registrant_contact  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.registrantContact}
+                </foreach>
+            </trim>
+            <trim prefix="registrant  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.registrant}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">
@@ -636,6 +678,9 @@
             <if test="achievementDescription != null  and achievementDescription != ''">and `achievement_description` = #{achievementDescription}</if>
             <if test="achievementGroupId != null  and achievementGroupId != ''">and `achievement_group_id` = #{achievementGroupId}</if>
             <if test="otherGroupId != null  and otherGroupId != ''">and `other_group_id` = #{otherGroupId}</if>
+            <if test="isPass != null  and isPass != ''">and `is_pass` = #{isPass}</if>
+            <if test="registrantContact != null  and registrantContact != ''">and `registrant_contact` = #{registrantContact}</if>
+            <if test="registrant != null  and registrant != ''">and `registrant` = #{registrant}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>

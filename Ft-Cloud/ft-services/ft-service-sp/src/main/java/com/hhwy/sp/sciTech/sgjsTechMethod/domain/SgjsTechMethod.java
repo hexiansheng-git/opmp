@@ -108,6 +108,18 @@ public class SgjsTechMethod extends BaseEntity {
     @Excel(name = "等级")
     private String level;
     /**
+     * 字段描述：登记人
+     */
+    @JsonProperty
+    @Excel(name = "登记人")
+    private String registrant;
+    /**
+     * 字段描述：登记人联系方式
+     */
+    @JsonProperty
+    @Excel(name = "登记人联系方式")
+    private String registrantContact;
+    /**
      * 字段描述：工艺工法简介
      */
     @JsonProperty
@@ -254,6 +266,11 @@ public class SgjsTechMethod extends BaseEntity {
      * 其他附件组id
      */
     private String otherGroupId;
+
+    /**
+     * 是否通过
+     */
+    private String isPass;
 
     /**
      * 专家数据集合

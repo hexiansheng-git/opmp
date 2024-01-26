@@ -25,6 +25,7 @@
         <result property="achievementGroupId" column="achievement_group_id"/>
         <result property="otherGroupId" column="other_group_id"/>
         <result property="fourNewApplication" column="four_new_application"/>
+        <result property="isPass" column="is_pass"/>
         <result property="remark" column="remark"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
@@ -65,6 +66,7 @@
              , `achievement_group_id`
              , `other_group_id`
              , `four_new_application`
+             , `is_pass`
              , `remark`
              , `region_id`
              , `region_name`
@@ -117,6 +119,7 @@
             <if test="achievementGroupId != null  and achievementGroupId != ''">and `achievement_group_id` = #{achievementGroupId}</if>
             <if test="otherGroupId != null  and otherGroupId != ''">and `other_group_id` = #{otherGroupId}</if>
             <if test="fourNewApplication != null  and fourNewApplication != ''">and `four_new_application` = #{fourNewApplication}</if>
+            <if test="isPass != null  and isPass != ''">and `is_pass` = #{isPass}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -171,6 +174,7 @@
             <if test="achievementGroupId != null  and achievementGroupId != ''">and `achievement_group_id` = #{achievementGroupId}</if>
             <if test="otherGroupId != null  and otherGroupId != ''">and `other_group_id` = #{otherGroupId}</if>
             <if test="fourNewApplication != null  and fourNewApplication != ''">and `four_new_application` = #{fourNewApplication}</if>
+            <if test="isPass != null  and isPass != ''">and `is_pass` = #{isPass}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -216,6 +220,7 @@
             <if test="achievementGroupId != null  and achievementGroupId != ''">`achievement_group_id`,</if>
             <if test="otherGroupId != null  and otherGroupId != ''">`other_group_id`,</if>
             <if test="fourNewApplication != null  and fourNewApplication != ''">`four_new_application`,</if>
+            <if test="isPass != null  and isPass != ''">`is_pass`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -256,6 +261,7 @@
             <if test="achievementGroupId != null  and achievementGroupId != ''">#{achievementGroupId},</if>
             <if test="otherGroupId != null  and otherGroupId != ''">#{otherGroupId},</if>
             <if test="fourNewApplication != null  and fourNewApplication != ''">#{fourNewApplication},</if>
+            <if test="isPass != null  and isPass != ''">#{isPass},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -301,6 +307,7 @@
             `achievement_group_id`,
             `other_group_id`,
             `four_new_application`,
+            `is_pass`,
             `remark`,
             `region_id`,
             `region_name`,
@@ -342,6 +349,7 @@
                 #{item.achievementGroupId},
                 #{item.otherGroupId},
                 #{item.fourNewApplication},
+                #{item.isPass},
                 #{item.remark},
                 #{item.regionId},
                 #{item.regionName},
@@ -394,6 +402,7 @@
             <if test="achievementGroupId != null  and  achievementGroupId != ''">`achievement_group_id` = #{achievementGroupId},</if>
             <if test="otherGroupId != null  and  otherGroupId != ''">`other_group_id` = #{otherGroupId},</if>
             <if test="fourNewApplication != null  and  fourNewApplication != ''">`four_new_application` = #{fourNewApplication},</if>
+            <if test="isPass != null  and  isPass != ''">`is_pass` = #{isPass},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -515,6 +524,11 @@
             <trim prefix="four_new_application  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.fourNewApplication}
+                </foreach>
+            </trim>
+            <trim prefix="is_pass  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.isPass}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">
@@ -649,6 +663,7 @@
             <if test="achievementGroupId != null  and achievementGroupId != ''">and `achievement_group_id` = #{achievementGroupId}</if>
             <if test="otherGroupId != null  and otherGroupId != ''">and `other_group_id` = #{otherGroupId}</if>
             <if test="fourNewApplication != null  and fourNewApplication != ''">and `four_new_application` = #{fourNewApplication}</if>
+            <if test="isPass != null  and isPass != ''">and `is_pass` = #{isPass}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
