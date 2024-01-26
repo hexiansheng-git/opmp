@@ -10,9 +10,6 @@ import com.hhwy.pm.qqch.sgch.sche.mapper.QqchScheDiffMapper;
 import com.hhwy.pm.qqch.sgch.sche.service.IQqchScheDiffService;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -97,7 +94,7 @@ public class QqchScheDiffServiceImpl implements IQqchScheDiffService {
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void saveList(List<QqchScheDiff> dealSaveDto) {
-        if (CollectionUtils.isEmpty(dealSaveDto)) return;
+        if (CollectionUtils.isEmpty(dealSaveDto) || !(dealSaveDto.get(0) instanceof QqchScheDiff) ) return;
         this.checkData(dealSaveDto);
         for (QqchScheDiff qqchScheDiff : dealSaveDto) {
             qqchScheDiff.setId(IdWorker.createId());

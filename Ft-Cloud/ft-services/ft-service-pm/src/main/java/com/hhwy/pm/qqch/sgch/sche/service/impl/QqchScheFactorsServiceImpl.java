@@ -90,7 +90,7 @@ public class QqchScheFactorsServiceImpl implements IQqchScheFactorsService {
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void saveList(List<QqchScheFactors> dealSaveDto) {
-        if (CollectionUtils.isEmpty(dealSaveDto)) return;
+        if (CollectionUtils.isEmpty(dealSaveDto) || !(dealSaveDto.get(0) instanceof QqchScheFactors) ) return;
         this.checkData(dealSaveDto);
         for (QqchScheFactors qqchScheFactors : dealSaveDto) {
             qqchScheFactors.setId(IdWorker.createId());
