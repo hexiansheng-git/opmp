@@ -77,6 +77,12 @@
 
         <dependency>
             <groupId>com.hhwy</groupId>
+            <artifactId>ft-api-flowable</artifactId>
+            <version>LATEST</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hhwy</groupId>
             <artifactId>ft-common-tenant</artifactId>
         </dependency>
 

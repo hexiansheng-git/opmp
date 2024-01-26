@@ -44,7 +44,7 @@ public class SgjsPaperPublish extends BaseEntity {
     @Excel(name = "论文名称")
     private Long paperName;
     /**
-     * 字段描述：申报等级
+     * 字段描述：申报等级  字典：declare_grade
      */
     @JsonProperty
     @Excel(name = "申报等级")

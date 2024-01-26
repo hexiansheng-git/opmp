@@ -2,10 +2,16 @@ package com.hhwy.sp.techManagement.sgjsPatentDeclare.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.common.constant.BelongBusiness;
+import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
+import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
+import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.SgjsPatentDeclare;
+import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.vo.PatentDeclareQueryVo;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.mapper.SgjsPatentDeclareMapper;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.service.ISgjsPatentDeclareService;
+import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,12 +33,19 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
     @Autowired
     private ISgjsAchievementAwardService sgjsAchievementAwardService;
 
+    @Autowired
+    private ISgjsExpertLibraryService sgjsExpertLibraryService;
+
 
     @Override
     public SgjsPatentDeclare getSgjsPatentDeclareById(Long id, String type) {
+        CommonAssert.notNull(id,"id不能为空！");
         SgjsPatentDeclare declare = sgjsPatentDeclareMapper.getSgjsPatentDeclareById(id);
+        //TODO 设置专家数据
+        List<SgjsExpertLibrary> libraryList = sgjsExpertLibraryService.getListByForeignId(id);
+        declare.setLibraryList(libraryList);
         if("1".equals(type)){
-            //TODO 设置专家数据
+
         }
         if("2".equals(type)){
             //设置成果数据
@@ -45,13 +58,14 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
         return sgjsPatentDeclareMapper.getSgjsPatentDeclare(sgjsPatentDeclare);
     }
 
-    public List<SgjsPatentDeclare> getSgjsPatentDeclareList(SgjsPatentDeclare sgjsPatentDeclare) {
-        return sgjsPatentDeclareMapper.getSgjsPatentDeclareList(sgjsPatentDeclare);
+    public List<SgjsPatentDeclare> getSgjsPatentDeclareList(PatentDeclareQueryVo queryVo) {
+        List<SgjsPatentDeclare> patentDeclareList = sgjsPatentDeclareMapper.getSgjsPatentDeclareList(queryVo);
+        sgjsAchievementAwardService.setLedger(patentDeclareList,SgjsPatentDeclare::getId, BelongBusiness.BELONG_BUSINESS_7);
+        return patentDeclareList;
     }
 
     @Transactional
     public int insertSgjsPatentDeclare(SgjsPatentDeclare sgjsPatentDeclare) {
-        sgjsPatentDeclare.setId(IdWorker.createId());
         sgjsPatentDeclare.setCreateUser(SecurityUtils.getUserName());
         sgjsPatentDeclare.setCreateTime(DateUtils.getNowDate());
         return sgjsPatentDeclareMapper.insertSgjsPatentDeclare(sgjsPatentDeclare);
@@ -84,14 +98,57 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
     }
 
     @Transactional
-    public int deleteSgjsPatentDeclare(SgjsPatentDeclare sgjsPatentDeclare) {
-        sgjsPatentDeclare.setUpdateUser(SecurityUtils.getUserName());
-        sgjsPatentDeclare.setUpdateTime(DateUtils.getNowDate());
-        return sgjsPatentDeclareMapper.deleteSgjsPatentDeclare(sgjsPatentDeclare);
+    public void deleteSgjsPatentDeclareById(Long id) {
+        CommonAssert.notNull(id,"id不能为空");
+        sgjsPatentDeclareMapper.deleteSgjsPatentDeclareById(id);
+
+        //TODO 删除专家数据
+
+        //删除成果奖励数据
+        sgjsAchievementAwardService.deleteSgjsAchievementAwardByForeignId(id);
     }
 
     @Transactional
     public int deleteSgjsPatentDeclareByPks(List<Long> sgjsPatentDeclarePkList) {
         return sgjsPatentDeclareMapper.deleteSgjsPatentDeclareByPks(sgjsPatentDeclarePkList);
+    }
+
+    /**
+     * 保存
+     * @param patentDeclare
+     * @return
+     */
+    @Override
+    @Transactional
+    public void save(SgjsPatentDeclare patentDeclare) {
+        String saveType = patentDeclare.getSaveType();
+        CommonAssert.notBlank(saveType,"保存类型不能为空");
+
+        Long id;
+        if("1".equals(saveType)){
+            //新增
+            id = IdWorker.createId();
+            patentDeclare.setId(id);
+            this.insertSgjsPatentDeclare(patentDeclare);
+        }else if("2".equals(saveType)){
+            //修改
+            id = patentDeclare.getId();
+            this.updateSgjsPatentDeclare(patentDeclare);
+        }else {
+            throw new RuntimeException("保存类型错误");
+        }
+
+        //保存专家数据
+        List<SgjsExpertLibrary> libraryList = patentDeclare.getLibraryList();
+        sgjsExpertLibraryService.saveSgjsExpertLibraryList(id,BelongBusiness.BELONG_BUSINESS_7,libraryList);
+
+        //保存成果登记数据
+        List<SgjsAchievementAward> awardList = patentDeclare.getAwardList();
+        sgjsAchievementAwardService.saveAchievementAward(id,BelongBusiness.BELONG_BUSINESS_7,awardList);
+    }
+
+    @Override
+    public void submit(SgjsPatentDeclare patentDeclare) {
+
     }
 }

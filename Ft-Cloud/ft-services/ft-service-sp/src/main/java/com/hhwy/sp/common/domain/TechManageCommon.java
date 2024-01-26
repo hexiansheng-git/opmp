@@ -2,27 +2,13 @@ package com.hhwy.sp.common.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class TechManageCommon extends BaseEntity {
-
-    /**
-     * 字段描述：外键
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonProperty
-    private Long foreignId;
-    /**
-     * 字段描述：所属业务
-     */
-    @JsonProperty
-    private String belongBusiness;
+public class TechManageCommon extends CommonBaseEntity {
     /**
      * 字段描述：申报奖项
      */

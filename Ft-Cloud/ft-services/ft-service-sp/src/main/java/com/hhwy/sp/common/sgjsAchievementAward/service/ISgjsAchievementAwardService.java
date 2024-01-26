@@ -63,4 +63,10 @@ public interface ISgjsAchievementAwardService {
     int deleteSgjsAchievementAward(SgjsAchievementAward sgjsAchievementAward);
 
     int deleteSgjsAchievementAwardByPks(List<Long> sgjsAchievementAwardPkList);
+
+    /**
+     * 根据外键删除成果奖励数据
+     * @param foreignId
+     */
+    void deleteSgjsAchievementAwardByForeignId(Long foreignId);
 }

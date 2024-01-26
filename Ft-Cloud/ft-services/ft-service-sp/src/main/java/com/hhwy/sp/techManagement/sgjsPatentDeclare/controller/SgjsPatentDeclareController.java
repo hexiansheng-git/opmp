@@ -5,7 +5,10 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.SgjsPatentDeclare;
+import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.vo.PatentDeclareQueryVo;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.service.ISgjsPatentDeclareService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +23,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2024-01-25 11:01:25
- * @remark
+ * @remark 专利申报管理
  */
 @Validated
 @RestController
@@ -41,15 +44,44 @@ public class SgjsPatentDeclareController extends BaseController {
     @GetMapping("getSgjsPatentDeclareById")
     public AjaxResult getSgjsPatentDeclareById(Long id,String type) {
         SgjsPatentDeclare sgjsPatentDeclare = sgjsPatentDeclareService.getSgjsPatentDeclareById(id, type);
+        FlowInfoSearchUtil.getFlowInfo(sgjsPatentDeclare, FlowEnum.SGJS_PATENT_DECLARE);
         return AjaxResult.success(sgjsPatentDeclare);
     }
 
+    /**
+     * 专利申报管理台账
+     * @param queryVo
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsPatentDeclare:list")
     @GetMapping("/list")
-    public AjaxResult getSgjsPatentDeclareList(@Validated(ValidationGroups.Select.class) SgjsPatentDeclare sgjsPatentDeclareParam) {
+    public AjaxResult getSgjsPatentDeclareList(@Validated(ValidationGroups.Select.class) PatentDeclareQueryVo queryVo) {
         startPage();
-        List<SgjsPatentDeclare> sgjsPatentDeclareList = sgjsPatentDeclareService.getSgjsPatentDeclareList(sgjsPatentDeclareParam);
+        List<SgjsPatentDeclare> sgjsPatentDeclareList = sgjsPatentDeclareService.getSgjsPatentDeclareList(queryVo);
+        FlowInfoSearchUtil.getFlowInfo(sgjsPatentDeclareList, FlowEnum.SGJS_PATENT_DECLARE);
         return getDataTableAjaxResult(sgjsPatentDeclareList);
+    }
+
+    /**
+     * 保存
+     * @param patentDeclare
+     * @return
+     */
+    @PostMapping("save")
+    public AjaxResult save(@RequestBody SgjsPatentDeclare patentDeclare){
+        sgjsPatentDeclareService.save(patentDeclare);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 提交
+     * @param patentDeclare
+     * @return
+     */
+    @PostMapping("submit")
+    public AjaxResult submit(@RequestBody SgjsPatentDeclare patentDeclare){
+        sgjsPatentDeclareService.submit(patentDeclare);
+        return AjaxResult.success();
     }
 
     @PreAuthorize(hasPermi = "sgjsPatentDeclare:add")
@@ -78,10 +110,16 @@ public class SgjsPatentDeclareController extends BaseController {
         return toAjax(sgjsPatentDeclareService.updateSgjsPatentDeclareList(sgjsPatentDeclareListParam));
     }
 
+    /**
+     * 根据id删除数据
+     * @param id
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsPatentDeclare:remove")
-    @PostMapping("/delete")
-    public AjaxResult deleteSgjsPatentDeclare(@Validated(ValidationGroups.Delete.class) @RequestBody SgjsPatentDeclare sgjsPatentDeclareParam) {
-        return toAjax(sgjsPatentDeclareService.deleteSgjsPatentDeclare(sgjsPatentDeclareParam));
+    @PostMapping("/deleteById/{id}")
+    public AjaxResult deleteSgjsPatentDeclareById(@PathVariable Long id) {
+        sgjsPatentDeclareService.deleteSgjsPatentDeclareById(id);
+        return AjaxResult.success();
     }
 
     @PreAuthorize(hasPermi = "sgjsPatentDeclare:remove")
@@ -92,8 +130,8 @@ public class SgjsPatentDeclareController extends BaseController {
     }
 
     @GetMapping("/export")
-    public void export(HttpServletResponse response, SgjsPatentDeclare sgjsPatentDeclareParam) throws IOException {
-        List<SgjsPatentDeclare> sgjsPatentDeclareList = sgjsPatentDeclareService.getSgjsPatentDeclareList(sgjsPatentDeclareParam);
+    public void export(HttpServletResponse response, PatentDeclareQueryVo queryVo) throws IOException {
+        List<SgjsPatentDeclare> sgjsPatentDeclareList = sgjsPatentDeclareService.getSgjsPatentDeclareList(queryVo);
         ExcelUtils<SgjsPatentDeclare> util = new ExcelUtils<>(SgjsPatentDeclare.class);
         util.exportExcel(response, sgjsPatentDeclareList, DateUtils.getDate());
     }

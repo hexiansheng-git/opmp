@@ -1,6 +1,7 @@
 package com.hhwy.sp.techManagement.sgjsPatentDeclare.service;
 
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.SgjsPatentDeclare;
+import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.vo.PatentDeclareQueryVo;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface ISgjsPatentDeclareService {
 
     SgjsPatentDeclare getSgjsPatentDeclare(SgjsPatentDeclare sgjsPatentDeclare);
 
-    List<SgjsPatentDeclare> getSgjsPatentDeclareList(SgjsPatentDeclare sgjsPatentDeclare);
+    List<SgjsPatentDeclare> getSgjsPatentDeclareList(PatentDeclareQueryVo queryVo);
 
     int insertSgjsPatentDeclare(SgjsPatentDeclare sgjsPatentDeclare);
 
@@ -25,7 +26,16 @@ public interface ISgjsPatentDeclareService {
 
     int updateSgjsPatentDeclareList(List<SgjsPatentDeclare> sgjsPatentDeclareList);
 
-    int deleteSgjsPatentDeclare(SgjsPatentDeclare sgjsPatentDeclare);
+    void deleteSgjsPatentDeclareById(Long id);
 
     int deleteSgjsPatentDeclareByPks(List<Long> sgjsPatentDeclarePkList);
+
+    /**
+     * 保存
+     * @param patentDeclare
+     * @return
+     */
+    void save(SgjsPatentDeclare patentDeclare);
+
+    void submit(SgjsPatentDeclare patentDeclare);
 }
