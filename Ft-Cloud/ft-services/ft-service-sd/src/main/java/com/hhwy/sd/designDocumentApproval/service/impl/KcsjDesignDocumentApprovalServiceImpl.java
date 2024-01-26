@@ -203,6 +203,9 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
                     if(null==actualFeedbackDate || StringUtils.isEmpty(feedbackSituation)){
                         //用户id   system   提示内容
                         String userName = approval.getPtVar1();
+                        if(StringUtils.isEmpty(userName)){
+                            continue;
+                        }
                         remoteNotifyService.publish(userName,"system","勘察设计--文件报批：您有未填写的内容，请尽快处理！");
                     }
                 }

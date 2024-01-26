@@ -620,6 +620,6 @@
 
 
     <select id="selectByFollowUpDate" resultMap="KcsjDesignDocumentApprovalResultMap">
-        select * from kcsj_design_document_approval where del_flag='0' and next_followup_date >= now() ;
+        select * from kcsj_design_document_approval where del_flag='0' and next_followup_date >= CURDATE() ;
     </select>
 </mapper>
