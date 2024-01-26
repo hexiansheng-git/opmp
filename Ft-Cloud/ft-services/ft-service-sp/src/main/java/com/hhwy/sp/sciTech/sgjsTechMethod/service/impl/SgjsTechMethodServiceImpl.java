@@ -47,6 +47,7 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
     /**
      * 鉴定或评价
      */
+    @Autowired
     private IShjsAuthenticateEvaluateService shjsAuthenticateEvaluateService;
 
 
@@ -54,12 +55,15 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         SgjsTechMethod returnVO = sgjsTechMethodMapper.getSgjsTechMethod(sgjsTechMethod);
         if(returnVO == null) return returnVO;
         Long id = returnVO.getId();
+        // 专家库
         SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
         sgjsExpertLibrary.setForeignId(id);
         returnVO.setSgjsExpertLibraryList(sgjsExpertLibraryService.getSgjsExpertLibraryList(sgjsExpertLibrary));
+        // 成果奖项
         SgjsAchievementAward sgjsAchievementAward = new SgjsAchievementAward();
         sgjsAchievementAward.setForeignId(id);
         returnVO.setSgjsAchievementAwardList(sgjsAchievementAwardService.getSgjsAchievementAwardList(sgjsAchievementAward));
+        // 鉴定或评价
         ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = new ShjsAuthenticateEvaluate();
         shjsAuthenticateEvaluate.setForeignId(id);
         returnVO.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate));
@@ -107,8 +111,10 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         sgjsAchievementAwardService.saveAchievementAward(id, BelongBusiness.BELONG_BUSINESS_6, sgjsAchievementAwardList);
         // 鉴定或评价
         List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = sgjsTechMethod.getShjsAuthenticateEvaluateList();
+        shjsAuthenticateEvaluateService.saveShjsAuthenticateEvaluateList(id, BelongBusiness.BELONG_BUSINESS_6,shjsAuthenticateEvaluateList);
         // 专家
         List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsTechMethod.getSgjsExpertLibraryList();
+        sgjsExpertLibraryService.saveSgjsExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_6,sgjsExpertLibraryList);
         return sgjsTechMethod;
     }
 

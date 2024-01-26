@@ -157,8 +157,6 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
 
     @Transactional
     public int deleteSgjsAchievementAward(SgjsAchievementAward sgjsAchievementAward) {
-        sgjsAchievementAward.setUpdateUser(SecurityUtils.getUserName());
-        sgjsAchievementAward.setUpdateTime(DateUtils.getNowDate());
         return sgjsAchievementAwardMapper.deleteSgjsAchievementAward(sgjsAchievementAward);
     }
 

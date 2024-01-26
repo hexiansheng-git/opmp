@@ -116,7 +116,7 @@ public class SgjsTechnicalFileBlueprintController extends BaseController {
                 p.setBlueprintValid(blueprintValid.equals("1")?"是":"否");
             }
             if (StrUtil.isNotBlank(signetValid)) {
-                p.setSignetValid(signetValid.equals("1")?"是":"否");
+                p.setSignetValid(signetValid.equals("1")?"有效章":"作废章");
             }
         });
         util.exportExcel(response, list, DateUtils.getDate());

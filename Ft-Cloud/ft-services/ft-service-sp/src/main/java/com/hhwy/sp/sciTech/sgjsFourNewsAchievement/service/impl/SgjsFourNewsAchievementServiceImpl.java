@@ -47,6 +47,7 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
     /**
      * 鉴定或评价
      */
+    @Autowired
     private IShjsAuthenticateEvaluateService shjsAuthenticateEvaluateService;
 
 
@@ -54,12 +55,15 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         SgjsFourNewsAchievement returnVO = sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievement(sgjsFourNewsAchievement);
         if(returnVO == null) return returnVO;
         Long id = returnVO.getId();
+        // 专家库
         SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
         sgjsExpertLibrary.setForeignId(id);
         returnVO.setSgjsExpertLibraryList(sgjsExpertLibraryService.getSgjsExpertLibraryList(sgjsExpertLibrary));
+        // 成果奖项
         SgjsAchievementAward sgjsAchievementAward = new SgjsAchievementAward();
         sgjsAchievementAward.setForeignId(id);
         returnVO.setSgjsAchievementAwardList(sgjsAchievementAwardService.getSgjsAchievementAwardList(sgjsAchievementAward));
+        // 鉴定或评价
         ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = new ShjsAuthenticateEvaluate();
         shjsAuthenticateEvaluate.setForeignId(id);
         returnVO.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate));
@@ -107,8 +111,10 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         sgjsAchievementAwardService.saveAchievementAward(id, BelongBusiness.BELONG_BUSINESS_5, sgjsAchievementAwardList);
         // 鉴定或评价
         List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = sgjsFourNewsAchievement.getShjsAuthenticateEvaluateList();
+        shjsAuthenticateEvaluateService.saveShjsAuthenticateEvaluateList(id, BelongBusiness.BELONG_BUSINESS_5,shjsAuthenticateEvaluateList);
         // 专家
         List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsFourNewsAchievement.getSgjsExpertLibraryList();
+        sgjsExpertLibraryService.saveSgjsExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_5,sgjsExpertLibraryList);
         return sgjsFourNewsAchievement;
     }
 

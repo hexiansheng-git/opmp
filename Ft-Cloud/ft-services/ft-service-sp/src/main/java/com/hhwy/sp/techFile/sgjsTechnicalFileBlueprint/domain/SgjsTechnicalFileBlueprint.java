@@ -109,7 +109,7 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      * 字段描述：发放人名称
      */
     @JsonProperty
-    @Excel(name = "发放人名称")
+    @Excel(name = "图纸发放人")
     private String senderName;
     /**
      * 字段描述：图纸发放日期
@@ -166,7 +166,6 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      * 字段描述：附件id
      */
     @JsonProperty
-    @Excel(name = "附件")
     private String fileGroupId;
     /**
      * 字段描述：
