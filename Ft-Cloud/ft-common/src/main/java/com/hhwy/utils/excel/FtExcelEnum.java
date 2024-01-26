@@ -26,7 +26,8 @@ public enum FtExcelEnum {
     QQCH_CONTRACT_PAYINFO("importContractPayinfo.xlsx", "主合同信息-项目支付信息.xlsx", "com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo"),
     QQCH_CONTRACT_GENERAL("importXmslContractGeneral.xlsx", "合同信息-通用条件.xlsx", "com.hhwy.pm.xmsl.contractInfo.domain.XmslContractGeneral"),
     QQCH_CONTRACT_SPECIAL("importXmslContractSpecial.xlsx", "合同信息-专用条件.xlsx", "com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSpecial"),
-    WZCH_TOTAL_DEMAND_DETIAL("importEquPlanDemand.xlsx", "总需详情.xlsx", "com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail");
+    WZCH_TOTAL_DEMAND_DETIAL("importEquPlanDemand.xlsx", "总需详情.xlsx", "com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail"),
+    SGJS_TECHNICAL_NORMAL_TOPIC("importSgjsTechnicalNormalTopic.xlsx", "一般课题研发管理.xlsx", "com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalTopicCost.domain.SgjsTechnicalNormalTopicCostDTO");
 
 
     private final String templateName;

@@ -70,8 +70,6 @@ public class SgjsTechnicalNormalTopicCostServiceImpl implements ISgjsTechnicalNo
 
     @Transactional
     public int deleteSgjsTechnicalNormalTopicCost(SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost) {
-        sgjsTechnicalNormalTopicCost.setUpdateUser(SecurityUtils.getUserName());
-        sgjsTechnicalNormalTopicCost.setUpdateTime(DateUtils.getNowDate());
         return sgjsTechnicalNormalTopicCostMapper.deleteSgjsTechnicalNormalTopicCost(sgjsTechnicalNormalTopicCost);
     }
 
