@@ -141,7 +141,7 @@ public class XmslWbsController extends BaseController {
     public void exportTemplate(HttpServletResponse request, HttpServletResponse response) {
         FtExcelUtil<XmslWbs> excelUtil = new FtExcelUtil<>(XmslWbs.class);
         try {
-            excelUtil.exportWithTemplate (response,new ArrayList<>(),1,"xmslwbs_template.xls","项目WBS");
+            excelUtil.exportWithTemplate4FileName(response,new ArrayList<>(),1,"xmslwbs_template.xls","项目WBS","项目WBS模板.xls");
 //            excelUtil.exportExcelWithCust(response, new ArrayList<>(2),"模板","项目WBS模板.xls",
 //                    Arrays.asList(Arrays.asList("从单位工程开始填写；比如第一级:100,第二级:100-001,第三级:100-001-001,第四级:100-001-001-001。确保子级编号在父级编号后面")));
         } catch (Exception e) {

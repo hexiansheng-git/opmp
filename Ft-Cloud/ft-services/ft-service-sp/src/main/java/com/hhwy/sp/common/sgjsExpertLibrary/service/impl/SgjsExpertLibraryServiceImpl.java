@@ -1,7 +1,5 @@
 package com.hhwy.sp.common.sgjsExpertLibrary.service.impl;
 
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
@@ -12,7 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.sp.common.sgjsExpertLibrary.mapper.SgjsExpertLibraryMapper;
 import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
+import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /***
  * 功能描述: 科技管理 - 专家库
@@ -32,6 +37,14 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
 
     public List<SgjsExpertLibrary> getSgjsExpertLibraryList(SgjsExpertLibrary sgjsExpertLibrary) {
         return sgjsExpertLibraryMapper.getSgjsExpertLibraryList(sgjsExpertLibrary);
+    }
+
+    @Override
+    public List<SgjsExpertLibrary> getListByForeignId(Long foreignId) {
+        CommonAssert.notNull(foreignId,"外键不能为空！");
+        SgjsExpertLibrary query = new SgjsExpertLibrary();
+        query.setForeignId(foreignId);
+        return sgjsExpertLibraryMapper.getSgjsExpertLibraryList(query);
     }
 
     @Transactional
@@ -88,17 +101,17 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
         sgjsExpertLibrary.setForeignId(foreignId);
         sgjsExpertLibraryMapper.deleteSgjsExpertLibrary(sgjsExpertLibrary);
 
-        if(CollectionUtils.isNotEmpty(sgjsExpertLibraryList)) {
-            for(SgjsExpertLibrary sgjsExpertLibrary1 : sgjsExpertLibraryList) {
-                sgjsExpertLibrary1.setId(IdWorker.createId());
-                sgjsExpertLibrary1.setForeignId(foreignId);
-                sgjsExpertLibrary1.setBelongBusiness(belongBusiness);
-                sgjsExpertLibrary1.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                sgjsExpertLibrary1.setCreateUserName(SecurityUtils.getUserName());
-                sgjsExpertLibrary1.setCreateTime(DateUtils.getNowDate());
-            }
-            return sgjsExpertLibraryMapper.insertSgjsExpertLibraryList(sgjsExpertLibraryList);
+        if(CollectionUtils.isEmpty(sgjsExpertLibraryList)){
+            return 0;
         }
-        return 0;
+        for(SgjsExpertLibrary sgjsExpertLibrary1 : sgjsExpertLibraryList) {
+            sgjsExpertLibrary1.setId(IdWorker.createId());
+            sgjsExpertLibrary1.setForeignId(foreignId);
+            sgjsExpertLibrary1.setBelongBusiness(belongBusiness);
+            sgjsExpertLibrary1.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            sgjsExpertLibrary1.setCreateUserName(SecurityUtils.getUserName());
+            sgjsExpertLibrary1.setCreateTime(DateUtils.getNowDate());
+        }
+        return sgjsExpertLibraryMapper.insertSgjsExpertLibraryList(sgjsExpertLibraryList);
     }
 }

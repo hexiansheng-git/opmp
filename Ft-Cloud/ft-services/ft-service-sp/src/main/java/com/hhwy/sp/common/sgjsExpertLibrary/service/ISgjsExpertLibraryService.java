@@ -15,6 +15,8 @@ public interface ISgjsExpertLibraryService {
 
     List<SgjsExpertLibrary> getSgjsExpertLibraryList(SgjsExpertLibrary sgjsExpertLibrary);
 
+    List<SgjsExpertLibrary> getListByForeignId(Long foreignId);
+
     int insertSgjsExpertLibrary(SgjsExpertLibrary sgjsExpertLibrary);
 
     int insertSgjsExpertLibraryList(List<SgjsExpertLibrary> sgjsExpertLibraryList);

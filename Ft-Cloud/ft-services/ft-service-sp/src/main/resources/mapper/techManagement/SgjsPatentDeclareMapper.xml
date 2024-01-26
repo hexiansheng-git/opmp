@@ -29,6 +29,7 @@
         <result property="authorizationDate" column="authorization_date"/>
         <result property="patentee" column="patentee"/>
         <result property="patentState" column="patent_state"/>
+        <result property="currentState" column="current_state"/>
         <result property="achievementDescription" column="achievement_description"/>
         <result property="achievementFile" column="achievement_file"/>
         <result property="achievementOtherFile" column="achievement_other_file"/>
@@ -76,6 +77,7 @@
              , `authorization_date`
              , `patentee`
              , `patent_state`
+             , `current_state`
              , `achievement_description`
              , `achievement_file`
              , `achievement_other_file`
@@ -108,75 +110,9 @@
         <include refid="selectSgjsPatentDeclareVo"/>
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
             <if test="patentName != null  and patentName != ''">and `patent_name` = #{patentName}</if>
-            <if test="unitId != null ">and `unit_id` = #{unitId}</if>
-            <if test="unitName != null  and unitName != ''">and `unit_name` = #{unitName}</if>
-            <if test="patentType != null  and patentType != ''">and `patent_type` = #{patentType}</if>
-            <if test="professionAreas != null  and professionAreas != ''">and `profession_areas` = #{professionAreas}
-            </if>
-            <if test="professionPlate != null  and professionPlate != ''">and `profession_plate` = #{professionPlate}
-            </if>
-            <if test="principalConsumator != null  and principalConsumator != ''">and `principal_consumator` =
-                #{principalConsumator}
-            </if>
-            <if test="principalConsumatorContactWay != null  and principalConsumatorContactWay != ''">and
-                `principal_consumator_contact_way` = #{principalConsumatorContactWay}
-            </if>
-            <if test="completeUnit != null  and completeUnit != ''">and `complete_unit` = #{completeUnit}</if>
-            <if test="applicationProof != null  and applicationProof != ''">and `application_proof` =
-                #{applicationProof}
-            </if>
-            <if test="efficiencyAnalyse != null  and efficiencyAnalyse != ''">and `efficiency_analyse` =
-                #{efficiencyAnalyse}
-            </if>
-            <if test="intellectualProperty != null  and intellectualProperty != ''">and `intellectual_property` =
-                #{intellectualProperty}
-            </if>
-            <if test="registrant != null  and registrant != ''">and `registrant` = #{registrant}</if>
-            <if test="registrantContactWay != null  and registrantContactWay != ''">and `registrant_contact_way` =
-                #{registrantContactWay}
-            </if>
-            <if test="patentIntroduction != null  and patentIntroduction != ''">and `patent_introduction` =
-                #{patentIntroduction}
-            </if>
-            <if test="patentDisclosure != null  and patentDisclosure != ''">and `patent_disclosure` =
-                #{patentDisclosure}
-            </if>
-            <if test="patentOtherFile != null  and patentOtherFile != ''">and `patent_other_file` = #{patentOtherFile}
-            </if>
             <if test="patentNumber != null  and patentNumber != ''">and `patent_number` = #{patentNumber}</if>
-            <if test="applicationDate != null ">and `application_date` = #{applicationDate}</if>
-            <if test="authorizationDate != null ">and `authorization_date` = #{authorizationDate}</if>
-            <if test="patentee != null  and patentee != ''">and `patentee` = #{patentee}</if>
-            <if test="patentState != null  and patentState != ''">and `patent_state` = #{patentState}</if>
-            <if test="achievementDescription != null  and achievementDescription != ''">and `achievement_description` =
-                #{achievementDescription}
-            </if>
-            <if test="achievementFile != null  and achievementFile != ''">and `achievement_file` = #{achievementFile}
-            </if>
-            <if test="achievementOtherFile != null  and achievementOtherFile != ''">and `achievement_other_file` =
-                #{achievementOtherFile}
-            </if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="currentState != null  and currentState != ''">and `current_state` = #{currentState}</if>
         </where>
         order by create_time desc
     </select>
@@ -185,75 +121,9 @@
         <include refid="selectSgjsPatentDeclareVo"/>
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
             <if test="patentName != null  and patentName != ''">and `patent_name` = #{patentName}</if>
-            <if test="unitId != null ">and `unit_id` = #{unitId}</if>
-            <if test="unitName != null  and unitName != ''">and `unit_name` = #{unitName}</if>
-            <if test="patentType != null  and patentType != ''">and `patent_type` = #{patentType}</if>
-            <if test="professionAreas != null  and professionAreas != ''">and `profession_areas` = #{professionAreas}
-            </if>
-            <if test="professionPlate != null  and professionPlate != ''">and `profession_plate` = #{professionPlate}
-            </if>
-            <if test="principalConsumator != null  and principalConsumator != ''">and `principal_consumator` =
-                #{principalConsumator}
-            </if>
-            <if test="principalConsumatorContactWay != null  and principalConsumatorContactWay != ''">and
-                `principal_consumator_contact_way` = #{principalConsumatorContactWay}
-            </if>
-            <if test="completeUnit != null  and completeUnit != ''">and `complete_unit` = #{completeUnit}</if>
-            <if test="applicationProof != null  and applicationProof != ''">and `application_proof` =
-                #{applicationProof}
-            </if>
-            <if test="efficiencyAnalyse != null  and efficiencyAnalyse != ''">and `efficiency_analyse` =
-                #{efficiencyAnalyse}
-            </if>
-            <if test="intellectualProperty != null  and intellectualProperty != ''">and `intellectual_property` =
-                #{intellectualProperty}
-            </if>
-            <if test="registrant != null  and registrant != ''">and `registrant` = #{registrant}</if>
-            <if test="registrantContactWay != null  and registrantContactWay != ''">and `registrant_contact_way` =
-                #{registrantContactWay}
-            </if>
-            <if test="patentIntroduction != null  and patentIntroduction != ''">and `patent_introduction` =
-                #{patentIntroduction}
-            </if>
-            <if test="patentDisclosure != null  and patentDisclosure != ''">and `patent_disclosure` =
-                #{patentDisclosure}
-            </if>
-            <if test="patentOtherFile != null  and patentOtherFile != ''">and `patent_other_file` = #{patentOtherFile}
-            </if>
             <if test="patentNumber != null  and patentNumber != ''">and `patent_number` = #{patentNumber}</if>
-            <if test="applicationDate != null ">and `application_date` = #{applicationDate}</if>
-            <if test="authorizationDate != null ">and `authorization_date` = #{authorizationDate}</if>
-            <if test="patentee != null  and patentee != ''">and `patentee` = #{patentee}</if>
-            <if test="patentState != null  and patentState != ''">and `patent_state` = #{patentState}</if>
-            <if test="achievementDescription != null  and achievementDescription != ''">and `achievement_description` =
-                #{achievementDescription}
-            </if>
-            <if test="achievementFile != null  and achievementFile != ''">and `achievement_file` = #{achievementFile}
-            </if>
-            <if test="achievementOtherFile != null  and achievementOtherFile != ''">and `achievement_other_file` =
-                #{achievementOtherFile}
-            </if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="currentState != null  and currentState != ''">and `current_state` = #{currentState}</if>
         </where>
         order by create_time desc
     </select>
@@ -286,6 +156,7 @@
             <if test="authorizationDate != null ">`authorization_date`,</if>
             <if test="patentee != null  and patentee != ''">`patentee`,</if>
             <if test="patentState != null  and patentState != ''">`patent_state`,</if>
+            <if test="currentState != null  and currentState != ''">`current_state`,</if>
             <if test="achievementDescription != null  and achievementDescription != ''">`achievement_description`,</if>
             <if test="achievementFile != null  and achievementFile != ''">`achievement_file`,</if>
             <if test="achievementOtherFile != null  and achievementOtherFile != ''">`achievement_other_file`,</if>
@@ -335,6 +206,7 @@
             <if test="authorizationDate != null ">#{authorizationDate},</if>
             <if test="patentee != null  and patentee != ''">#{patentee},</if>
             <if test="patentState != null  and patentState != ''">#{patentState},</if>
+            <if test="currentState != null  and currentState != ''">#{currentState},</if>
             <if test="achievementDescription != null  and achievementDescription != ''">#{achievementDescription},</if>
             <if test="achievementFile != null  and achievementFile != ''">#{achievementFile},</if>
             <if test="achievementOtherFile != null  and achievementOtherFile != ''">#{achievementOtherFile},</if>
@@ -387,6 +259,7 @@
             `authorization_date`,
             `patentee`,
             `patent_state`,
+            `current_state`,
             `achievement_description`,
             `achievement_file`,
             `achievement_other_file`,
@@ -435,6 +308,7 @@
                 #{item.authorizationDate},
                 #{item.patentee},
                 #{item.patentState},
+                #{item.currentState},
                 #{item.achievementDescription},
                 #{item.achievementFile},
                 #{item.achievementOtherFile},
@@ -503,6 +377,7 @@
             <if test="authorizationDate != null ">`authorization_date` = #{authorizationDate},</if>
             <if test="patentee != null  and  patentee != ''">`patentee` = #{patentee},</if>
             <if test="patentState != null  and  patentState != ''">`patent_state` = #{patentState},</if>
+            <if test="currentState != null  and  currentState != ''">`current_state` = #{currentState},</if>
             <if test="achievementDescription != null  and  achievementDescription != ''">`achievement_description` =
                 #{achievementDescription},
             </if>
@@ -651,6 +526,11 @@
             <trim prefix="patent_state  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.patentState}
+                </foreach>
+            </trim>
+            <trim prefix="current_state  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.currentState}
                 </foreach>
             </trim>
             <trim prefix="achievement_description  = case" suffix="end,">
@@ -853,5 +733,9 @@
                 #{id}
             </foreach>
         </where>
+    </update>
+
+    <update id="deleteSgjsPatentDeclareById">
+        update `sgjs_patent_declare` set del_flag = 1 where id = #{id}
     </update>
 </mapper>

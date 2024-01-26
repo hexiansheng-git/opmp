@@ -1,6 +1,7 @@
 package com.hhwy.sp.techManagement.sgjsPatentDeclare.mapper;
 
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.SgjsPatentDeclare;
+import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.vo.PatentDeclareQueryVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +19,7 @@ public interface SgjsPatentDeclareMapper {
 
     SgjsPatentDeclare getSgjsPatentDeclare(SgjsPatentDeclare sgjsPatentDeclare);
 
-    List<SgjsPatentDeclare> getSgjsPatentDeclareList(SgjsPatentDeclare sgjsPatentDeclare);
+    List<SgjsPatentDeclare> getSgjsPatentDeclareList(PatentDeclareQueryVo queryVo);
 
     int insertSgjsPatentDeclare(SgjsPatentDeclare sgjsPatentDeclare);
 
@@ -31,4 +32,6 @@ public interface SgjsPatentDeclareMapper {
     int deleteSgjsPatentDeclare(SgjsPatentDeclare sgjsPatentDeclare);
 
     int deleteSgjsPatentDeclareByPks(@Param("sgjsPatentDeclarePkList") List<Long> sgjsPatentDeclarePkList);
+
+    void deleteSgjsPatentDeclareById(@Param("id") Long id);
 }

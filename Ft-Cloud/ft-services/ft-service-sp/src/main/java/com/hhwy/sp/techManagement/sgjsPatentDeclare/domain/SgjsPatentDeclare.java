@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.sp.common.domain.TechManageCommon;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
+import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,11 @@ import java.util.List;
 @AllArgsConstructor
 public class SgjsPatentDeclare extends TechManageCommon {
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 保存类型  1：新增；2：修改
+     */
+    private String saveType;
 
     /**
      * 字段描述：主键
@@ -52,19 +58,19 @@ public class SgjsPatentDeclare extends TechManageCommon {
     @Excel(name = "单位名称")
     private String unitName;
     /**
-     * 字段描述：专利类型
+     * 字段描述：专利类型   字典：patent_type
      */
     @JsonProperty
     @Excel(name = "专利类型")
     private String patentType;
     /**
-     * 字段描述：专业领域
+     * 字段描述：专业领域  字典：profession_areas
      */
     @JsonProperty
     @Excel(name = "专业领域")
     private String professionAreas;
     /**
-     * 字段描述：专业板块
+     * 字段描述：专业板块  字典：profession_plate
      */
     @JsonProperty
     @Excel(name = "专业板块")
@@ -162,11 +168,17 @@ public class SgjsPatentDeclare extends TechManageCommon {
     @Excel(name = "专利权人")
     private String patentee;
     /**
-     * 字段描述：状态
+     * 字段描述：状态  字典：patent_state
      */
     @JsonProperty
     @Excel(name = "状态")
     private String patentState;
+    /**
+     * 字段描述：当前状态
+     */
+    @JsonProperty
+    @Excel(name = "当前状态")
+    private String currentState;
     /**
      * 字段描述：成果描述
      */
@@ -307,4 +319,6 @@ public class SgjsPatentDeclare extends TechManageCommon {
     private String ptVar5;
 
     private List<SgjsAchievementAward> awardList;
+
+    private List<SgjsExpertLibrary> libraryList;
 }

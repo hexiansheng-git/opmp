@@ -59,22 +59,25 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
                 StringBuilder allAward = new StringBuilder();
                 int i = 1;
                 for (SgjsAchievementAward award1 : awardList) {
-                    allAward.append(i)
-                            .append("、")
-                            .append(award1.getApplyAward())
-                            .append("; ")
-                            .append(award.getAwardGrade())
-                            .append("; ")
-                            .append(award.getAwardType())
-                            .append("; ")
-                            .append(award.getGrantUnit())
-                            .append("; ")
-                            .append(award.getAwardTime());
+                    allAward.append(i).append("、");
+                    this.append(allAward,award1.getApplyAward());
+                    this.append(allAward,award1.getAwardGrade());
+                    this.append(allAward,award1.getAwardType());
+                    this.append(allAward,award1.getGrantUnit());
+                    this.append(allAward,award1.getAwardTime());
+                    allAward.append("\n");
                     i++;
                 }
                 t.setAllAward(allAward.toString());
             }
         }
+    }
+
+    private void append(StringBuilder source,Object append){
+        if(append == null){
+            return;
+        }
+        source.append(append).append("; ");
     }
 
     public <T> void setAwardList(T t, Function<T,Long> getId, BiConsumer<T,List<SgjsAchievementAward>> setAwardList){
@@ -108,18 +111,20 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
         SgjsAchievementAward delParam = new SgjsAchievementAward();
         delParam.setForeignId(foreignId);
         sgjsAchievementAwardMapper.deleteSgjsAchievementAward(delParam);
-        if(CollectionUtils.isNotEmpty(awardList)) {
-            //插入数据
-            for (SgjsAchievementAward award : awardList) {
-                award.setId(IdWorker.createId());
-                award.setForeignId(foreignId);
-                award.setBelongBusiness(belongBusiness);
-                award.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                award.setCreateUserName(SecurityUtils.getUserName());
-                award.setCreateTime(DateUtils.getNowDate());
-            }
-            sgjsAchievementAwardMapper.insertSgjsAchievementAwardList(awardList);
+
+        if(CollectionUtils.isEmpty(awardList)){
+            return;
         }
+        //插入数据
+        for (SgjsAchievementAward award : awardList) {
+            award.setId(IdWorker.createId());
+            award.setForeignId(foreignId);
+            award.setBelongBusiness(belongBusiness);
+            award.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            award.setCreateUserName(SecurityUtils.getUserName());
+            award.setCreateTime(DateUtils.getNowDate());
+        }
+        sgjsAchievementAwardMapper.insertSgjsAchievementAwardList(awardList);
     }
 
     @Transactional
@@ -164,5 +169,13 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
     @Transactional
     public int deleteSgjsAchievementAwardByPks(List<Long> sgjsAchievementAwardPkList) {
         return sgjsAchievementAwardMapper.deleteSgjsAchievementAwardByPks(sgjsAchievementAwardPkList);
+    }
+
+    @Override
+    public void deleteSgjsAchievementAwardByForeignId(Long foreignId) {
+        CommonAssert.notNull(foreignId,"外键不能为空！");
+        SgjsAchievementAward delParam = new SgjsAchievementAward();
+        delParam.setForeignId(foreignId);
+        sgjsAchievementAwardMapper.deleteSgjsAchievementAward(delParam);
     }
 }

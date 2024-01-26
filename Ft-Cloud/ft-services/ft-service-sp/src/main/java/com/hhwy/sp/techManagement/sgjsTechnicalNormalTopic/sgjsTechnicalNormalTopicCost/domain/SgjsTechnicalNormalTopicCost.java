@@ -14,6 +14,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.SgjsTechnicalNormalTopic;
+import lombok.Data;
 
 /**
  * 功能描述: 科技管理 - 一般课题研发管理 - 年费用
@@ -22,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @date 2024-01-25 13:25:50
  * @remark sgjs_technical_normal_topic_cost
  */
+@Data
 public class SgjsTechnicalNormalTopicCost extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -54,7 +57,7 @@ public class SgjsTechnicalNormalTopicCost extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "年")
-    private String year;
+    private Integer year;
     /**
      * 字段描述：研发费用预算（万元）
      */
@@ -175,224 +178,4 @@ public class SgjsTechnicalNormalTopicCost extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
-
-    @JsonIgnore
-    public Long getId() {
-        return id;
-    }
-
-    @JsonIgnore
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @JsonIgnore
-    public Long getForeignId() {
-        return foreignId;
-    }
-
-    @JsonIgnore
-    public void setForeignId(Long foreignId) {
-        this.foreignId = foreignId;
-    }
-
-    @JsonIgnore
-    public String getYear() {
-        return year;
-    }
-
-    @JsonIgnore
-    public void setYear(String year) {
-        this.year = year;
-    }
-
-    @JsonIgnore
-    public BigDecimal getRdCost() {
-        return rdCost;
-    }
-
-    @JsonIgnore
-    public void setRdCost(BigDecimal rdCost) {
-        this.rdCost = rdCost;
-    }
-
-    @JsonIgnore
-    public Long getRegionId() {
-        return regionId;
-    }
-
-    @JsonIgnore
-    public void setRegionId(Long regionId) {
-        this.regionId = regionId;
-    }
-
-    @JsonIgnore
-    public String getRegionName() {
-        return regionName;
-    }
-
-    @JsonIgnore
-    public void setRegionName(String regionName) {
-        this.regionName = regionName;
-    }
-
-    @JsonIgnore
-    public Long getProjectId() {
-        return projectId;
-    }
-
-    @JsonIgnore
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
-    }
-
-    @JsonIgnore
-    public String getProjectName() {
-        return projectName;
-    }
-
-    @JsonIgnore
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    @JsonIgnore
-    public Long getDeptId() {
-        return deptId;
-    }
-
-    @JsonIgnore
-    public void setDeptId(Long deptId) {
-        this.deptId = deptId;
-    }
-
-    @JsonIgnore
-    public String getCreateUser() {
-        return createUser;
-    }
-
-    @JsonIgnore
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
-
-    @JsonIgnore
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    @JsonIgnore
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    @JsonIgnore
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    @JsonIgnore
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @JsonIgnore
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    @JsonIgnore
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    @JsonIgnore
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    @JsonIgnore
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @JsonIgnore
-    public String getDelUser() {
-        return delUser;
-    }
-
-    @JsonIgnore
-    public void setDelUser(String delUser) {
-        this.delUser = delUser;
-    }
-
-    @JsonIgnore
-    public Date getDelTime() {
-        return delTime;
-    }
-
-    @JsonIgnore
-    public void setDelTime(Date delTime) {
-        this.delTime = delTime;
-    }
-
-    @JsonIgnore
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    @JsonIgnore
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    @JsonIgnore
-    public String getPtVar1() {
-        return ptVar1;
-    }
-
-    @JsonIgnore
-    public void setPtVar1(String ptVar1) {
-        this.ptVar1 = ptVar1;
-    }
-
-    @JsonIgnore
-    public String getPtVar2() {
-        return ptVar2;
-    }
-
-    @JsonIgnore
-    public void setPtVar2(String ptVar2) {
-        this.ptVar2 = ptVar2;
-    }
-
-    @JsonIgnore
-    public String getPtVar3() {
-        return ptVar3;
-    }
-
-    @JsonIgnore
-    public void setPtVar3(String ptVar3) {
-        this.ptVar3 = ptVar3;
-    }
-
-    @JsonIgnore
-    public String getPtVar4() {
-        return ptVar4;
-    }
-
-    @JsonIgnore
-    public void setPtVar4(String ptVar4) {
-        this.ptVar4 = ptVar4;
-    }
-
-    @JsonIgnore
-    public String getPtVar5() {
-        return ptVar5;
-    }
-
-    @JsonIgnore
-    public void setPtVar5(String ptVar5) {
-        this.ptVar5 = ptVar5;
-    }
 }

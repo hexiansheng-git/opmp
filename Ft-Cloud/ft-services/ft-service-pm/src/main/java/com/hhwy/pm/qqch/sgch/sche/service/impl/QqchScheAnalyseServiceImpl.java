@@ -92,7 +92,7 @@ public class QqchScheAnalyseServiceImpl implements IQqchScheAnalyseService {
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     @Override
     public void saveList(List<QqchScheAnalyse> dealSaveDto) {
-        if (CollectionUtils.isEmpty(dealSaveDto)) return;
+        if (CollectionUtils.isEmpty(dealSaveDto) || !(dealSaveDto.get(0) instanceof QqchScheAnalyse) ) return;
         this.checkData(dealSaveDto);
         this.qqchScheAnalyseMapper.insertQqchScheAnalyseList(dealSaveDto);
     }

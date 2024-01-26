@@ -11,6 +11,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.utils.HttpHeadersUtils;
+import com.hhwy.pm.utils.RestTemplateUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectInfoWithOther;
@@ -20,6 +21,9 @@ import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +33,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -184,5 +189,35 @@ public class XmslProjectBasicInfoController extends BaseController{
         return  AjaxResult.error("数据源为空");
     }
 
+    /**
+     * 获取区域中心
+     * @return
+     */
+    @GetMapping("getHaiWai")
+    public AjaxResult getHaiWai(){
+        String url = gmUrl + "/system/selfSysDept/getHaiWai";
+        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
+        HttpEntity<MultiValueMap<String,Object>> httpEntity = new HttpEntity<>(headers);
+        return RestTemplateUtils.get(url, httpEntity, AjaxResult.class);
+    }
 
+    /**
+     * 获取区域下的项目
+     * @param regionId 区域中心id
+     * @param type 1：海外事业部   2：区域中心
+     * @return
+     */
+    @GetMapping("getPrjByRegionId")
+    public AjaxResult getPrjByRegionId(Long regionId,String type){
+        String url = gmUrl + "/gm/projectBasicInfo/getAllProject";
+        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
+        HttpEntity<MultiValueMap<String,Object>> httpEntity = new HttpEntity<>(headers);
+        AjaxResult result = RestTemplateUtils.get(url, httpEntity, AjaxResult.class);
+        List<XmslProjectBasicInfo> prjList = JSONObject.parseArray(JSONObject.toJSONString(result.get("data")), XmslProjectBasicInfo.class);
+        if("2".equals(type)){
+            prjList = prjList.stream().filter(o -> regionId.equals(o.getRegionId())).collect(Collectors.toList());
+        }
+        return AjaxResult.success(prjList);
+    }
 }
+
