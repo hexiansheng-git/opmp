@@ -16,6 +16,7 @@ import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.mapper.QqchLabourDemandPlanMap
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.stereotype.Service;
@@ -103,26 +104,37 @@ public class QqchMeasureExpPersonServiceImpl implements IQqchMeasureExpPersonSer
     public List<QqchMeasureExpPerson> getQqchMeasureExpPersonListByVersionCode(QqchMeasureExpPerson qqchMeasureExpPerson) {
         String dataType = qqchMeasureExpPerson.getDataType();
         List<QqchMeasureExpPerson> qqchMeasureExpPersonList = this.getQqchMeasureExpPersonList(qqchMeasureExpPerson);
-        if (CollectionUtils.isEmpty(qqchMeasureExpPersonList)) {
-            String dictType = PmConstant.ONE.equals(dataType) ? "teamCode" : "exp_teamCode";
+        //20240126 改为实时获取
+        String dictType = PmConstant.ONE.equals(dataType) ? "teamCode" : "exp_teamCode";
 
-            LinkedHashMap<String, String> eamCode = DictUtil.getDictDataName(dictType);
-            ArrayList<QqchMeasureExpPerson> objects = new ArrayList<>();
-            ArrayList<String> teamNameSet = new ArrayList<>(eamCode.values());
-            Map<String, QqchLabourDemandPlan> teamMap = this.getTeamInfo(teamNameSet);
-            eamCode.forEach((teamCode, teamName) -> {
-                QqchMeasureExpPerson person = new QqchMeasureExpPerson();
-                person.setDataType(qqchMeasureExpPerson.getDataType());
-                person.setPositionCode(teamCode);
-                person.setPositionName(teamName);
+        LinkedHashMap<String, String> eamCode = DictUtil.getDictDataName(dictType);
+        ArrayList<QqchMeasureExpPerson> objects = new ArrayList<>();
+        ArrayList<String> teamNameSet = new ArrayList<>(eamCode.values());
+        Map<String, QqchLabourDemandPlan> teamMap = this.getTeamInfo(teamNameSet);
+        eamCode.forEach((teamCode, teamName) -> {
+            QqchMeasureExpPerson person = new QqchMeasureExpPerson();
+            person.setDataType(qqchMeasureExpPerson.getDataType());
+            person.setPositionCode(teamCode);
+            person.setPositionName(teamName);
 
-                QqchLabourDemandPlan qqchLabourDemandPlan = teamMap.get(teamName) == null ? new QqchLabourDemandPlan() : teamMap.get(teamName);
-                person.setCnNum(qqchLabourDemandPlan.getChinaNum());
-                person.setLocalNum(qqchLabourDemandPlan.getOutNum());
-                person.setPlanInDate(qqchLabourDemandPlan.getEntryDate());
-                objects.add(person);
-            });
+            QqchLabourDemandPlan qqchLabourDemandPlan = teamMap.get(teamName) == null ? new QqchLabourDemandPlan() : teamMap.get(teamName);
+            person.setCnNum(qqchLabourDemandPlan.getChinaNum());
+            person.setLocalNum(qqchLabourDemandPlan.getOutNum());
+            person.setPlanInDate(qqchLabourDemandPlan.getEntryDate());
+            objects.add(person);
+        });
+        if(CollectionUtils.isEmpty(qqchMeasureExpPersonList))
             return objects;
+        //将从1.5.2获取到的中方、属地化数量、计划进场日期覆盖
+        Map<String,QqchMeasureExpPerson> latestPersonMap = objects.stream().collect(Collectors.toMap(r->r.getPositionName(),r->r));
+        for (int i = 0; i < qqchMeasureExpPersonList.size(); i++) {
+            QqchMeasureExpPerson temp = qqchMeasureExpPersonList.get(i);
+            QqchMeasureExpPerson latestPerson = latestPersonMap.get(temp.getPositionName());
+            if(latestPerson == null)
+                continue;
+            temp.setCnNum(latestPerson.getCnNum());
+            temp.setLocalNum(latestPerson.getLocalNum());
+            temp.setPlanInDate(latestPerson.getPlanInDate());
         }
         return qqchMeasureExpPersonList;
     }
@@ -130,7 +142,7 @@ public class QqchMeasureExpPersonServiceImpl implements IQqchMeasureExpPersonSer
     private Map<String, QqchLabourDemandPlan> getTeamInfo(List<String> teamNameSet) {
         QqchLabourDemandPlan where = new QqchLabourDemandPlan();
         where.setJobNames(teamNameSet);
-        where.setValid("1");
+//        where.setValid("1");
         where.setPid(0L);
         where.setVersion(VersionUtil.getVersion("qqch_labour_demand_plan", null));
         List<QqchLabourDemandPlan> qqchLabourDemandPlanList = labourDemandPlanMapper.getQqchLabourDemandPlanList(where);
@@ -144,9 +156,8 @@ public class QqchMeasureExpPersonServiceImpl implements IQqchMeasureExpPersonSer
                 r.setJobName(k);
                 r.setChinaNum(BigDecimalUtils.sum(db.getChinaNum(), r.getChinaNum()));
                 r.setOutNum(BigDecimalUtils.sum(db.getOutNum(), r.getOutNum()));
-                r.setEntryDate(db.getEntryDate());
+                r.setEntryDate(FtDateUtils.min(db.getEntryDate(),r.getEntryDate()));
             }
-
             res.put(k, r);
         }
 

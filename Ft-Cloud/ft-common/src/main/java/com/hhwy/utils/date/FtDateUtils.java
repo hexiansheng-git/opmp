@@ -327,6 +327,16 @@ public class FtDateUtils extends DateUtils {
         return calendar.getTime();
     }
 
+    public static Date min(Date... dates){
+        if(dates == null || dates.length < 1) return null;
+        Date min = dates[0];
+        for (int i = 1; i < dates.length; i++) {
+            if(dates[i] != null && dates[i].compareTo(min) == -1)
+                min = dates[i];
+        }
+        return min ;
+    }
+
     public static void main(String[] args) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     }
