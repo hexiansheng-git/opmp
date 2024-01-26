@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @author lcf
  * @date 2024-01-19
  */
-@Component("designFileTask")
+@Component("DesignFileTask")
 public class DesignFileTask {
 
     @Autowired
