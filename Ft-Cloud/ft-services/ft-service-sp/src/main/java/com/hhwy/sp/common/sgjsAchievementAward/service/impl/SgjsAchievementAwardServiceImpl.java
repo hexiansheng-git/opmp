@@ -108,17 +108,18 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
         SgjsAchievementAward delParam = new SgjsAchievementAward();
         delParam.setForeignId(foreignId);
         sgjsAchievementAwardMapper.deleteSgjsAchievementAward(delParam);
-
-        //插入数据
-        for (SgjsAchievementAward award : awardList) {
-            award.setId(IdWorker.createId());
-            award.setForeignId(foreignId);
-            award.setBelongBusiness(belongBusiness);
-            award.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            award.setCreateUserName(SecurityUtils.getUserName());
-            award.setCreateTime(DateUtils.getNowDate());
+        if(CollectionUtils.isNotEmpty(awardList)) {
+            //插入数据
+            for (SgjsAchievementAward award : awardList) {
+                award.setId(IdWorker.createId());
+                award.setForeignId(foreignId);
+                award.setBelongBusiness(belongBusiness);
+                award.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                award.setCreateUserName(SecurityUtils.getUserName());
+                award.setCreateTime(DateUtils.getNowDate());
+            }
+            sgjsAchievementAwardMapper.insertSgjsAchievementAwardList(awardList);
         }
-        sgjsAchievementAwardMapper.insertSgjsAchievementAwardList(awardList);
     }
 
     @Transactional

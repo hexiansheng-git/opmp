@@ -6,6 +6,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.utils.common.CommonAssert;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,14 +88,17 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
         sgjsExpertLibrary.setForeignId(foreignId);
         sgjsExpertLibraryMapper.deleteSgjsExpertLibrary(sgjsExpertLibrary);
 
-        for(SgjsExpertLibrary sgjsExpertLibrary1 : sgjsExpertLibraryList) {
-            sgjsExpertLibrary1.setId(IdWorker.createId());
-            sgjsExpertLibrary1.setForeignId(foreignId);
-            sgjsExpertLibrary1.setBelongBusiness(belongBusiness);
-            sgjsExpertLibrary1.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            sgjsExpertLibrary1.setCreateUserName(SecurityUtils.getUserName());
-            sgjsExpertLibrary1.setCreateTime(DateUtils.getNowDate());
+        if(CollectionUtils.isNotEmpty(sgjsExpertLibraryList)) {
+            for(SgjsExpertLibrary sgjsExpertLibrary1 : sgjsExpertLibraryList) {
+                sgjsExpertLibrary1.setId(IdWorker.createId());
+                sgjsExpertLibrary1.setForeignId(foreignId);
+                sgjsExpertLibrary1.setBelongBusiness(belongBusiness);
+                sgjsExpertLibrary1.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                sgjsExpertLibrary1.setCreateUserName(SecurityUtils.getUserName());
+                sgjsExpertLibrary1.setCreateTime(DateUtils.getNowDate());
+            }
+            return sgjsExpertLibraryMapper.insertSgjsExpertLibraryList(sgjsExpertLibraryList);
         }
-        return sgjsExpertLibraryMapper.insertSgjsExpertLibraryList(sgjsExpertLibraryList);
+        return 0;
     }
 }

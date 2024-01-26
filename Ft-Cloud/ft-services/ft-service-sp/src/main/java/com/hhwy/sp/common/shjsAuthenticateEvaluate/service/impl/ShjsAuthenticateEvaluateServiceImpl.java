@@ -86,15 +86,17 @@ public class ShjsAuthenticateEvaluateServiceImpl implements IShjsAuthenticateEva
         ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = new ShjsAuthenticateEvaluate();
         shjsAuthenticateEvaluate.setForeignId(foreignId);
         shjsAuthenticateEvaluateMapper.deleteShjsAuthenticateEvaluate(shjsAuthenticateEvaluate);
-        for(ShjsAuthenticateEvaluate shjsAuthenticateEvaluate1 : shjsAuthenticateEvaluateList) {
-            shjsAuthenticateEvaluate1.setId(IdWorker.createId());
-            shjsAuthenticateEvaluate1.setForeignId(foreignId);
-            shjsAuthenticateEvaluate1.setBelongBusiness(belongBusiness);
-            shjsAuthenticateEvaluate1.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            shjsAuthenticateEvaluate1.setCreateUserName(SecurityUtils.getUserName());
-            shjsAuthenticateEvaluate1.setCreateTime(DateUtils.getNowDate());
+        if(CollectionUtils.isNotEmpty(shjsAuthenticateEvaluateList)) {
+            for(ShjsAuthenticateEvaluate shjsAuthenticateEvaluate1 : shjsAuthenticateEvaluateList) {
+                shjsAuthenticateEvaluate1.setId(IdWorker.createId());
+                shjsAuthenticateEvaluate1.setForeignId(foreignId);
+                shjsAuthenticateEvaluate1.setBelongBusiness(belongBusiness);
+                shjsAuthenticateEvaluate1.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                shjsAuthenticateEvaluate1.setCreateUserName(SecurityUtils.getUserName());
+                shjsAuthenticateEvaluate1.setCreateTime(DateUtils.getNowDate());
+            }
+            return shjsAuthenticateEvaluateMapper.insertShjsAuthenticateEvaluateList(shjsAuthenticateEvaluateList);
         }
-        shjsAuthenticateEvaluateMapper.insertShjsAuthenticateEvaluateList(shjsAuthenticateEvaluateList);
         return 0;
     }
 }

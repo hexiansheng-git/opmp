@@ -71,7 +71,25 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
     }
 
     public List<SgjsTechMethod> getSgjsTechMethodList(SgjsTechMethod sgjsTechMethod) {
-        return sgjsTechMethodMapper.getSgjsTechMethodList(sgjsTechMethod);
+        List<SgjsTechMethod> sgjsTechMethodList = sgjsTechMethodMapper.getSgjsTechMethodList(sgjsTechMethod);
+        // 专家库
+        SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
+        sgjsExpertLibrary.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_6);
+        List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsExpertLibraryService.getSgjsExpertLibraryList(sgjsExpertLibrary);
+        // 成果奖项
+        SgjsAchievementAward sgjsAchievementAward = new SgjsAchievementAward();
+        sgjsAchievementAward.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_6);
+        List<SgjsAchievementAward> sgjsAchievementAwardList = sgjsAchievementAwardService.getSgjsAchievementAwardList(sgjsAchievementAward);
+        // 鉴定或评价
+        ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = new ShjsAuthenticateEvaluate();
+        shjsAuthenticateEvaluate.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_6);
+        List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate);
+        if (CollectionUtils.isNotEmpty(sgjsTechMethodList)) {
+            for (SgjsTechMethod sgjsTechMethod1: sgjsTechMethodList) {
+
+            }
+        }
+        return sgjsTechMethodList;
     }
 
     @Transactional
