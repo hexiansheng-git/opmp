@@ -26,4 +26,6 @@ public interface ISgjsExpertLibraryService {
     int deleteSgjsExpertLibrary(SgjsExpertLibrary sgjsExpertLibrary);
 
     int deleteSgjsExpertLibraryByPks(List<Long> sgjsExpertLibraryPkList);
+
+    int saveSgjsExpertLibraryList(Long foreignId, String belongBusiness, List<SgjsExpertLibrary> sgjsExpertLibraryList);
 }

@@ -261,6 +261,11 @@ public class SgjsFourNewsAchievement extends BaseEntity {
     private String fourNewApplication;
 
     /**
+     * 是否通过
+     */
+    private String isPass;
+
+    /**
      * 专家数据集合
      */
     private List<SgjsExpertLibrary> sgjsExpertLibraryList;
