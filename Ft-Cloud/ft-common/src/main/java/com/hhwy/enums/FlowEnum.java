@@ -88,7 +88,10 @@ public enum FlowEnum {
         // 四新成果管理
         SGJS_FOUR_NEWS_ACHIEVEMENT("sgjs_four_news_achievement", "process_sgjs_four_news_achievement"),
         // 工艺工法管理
-        SGJS_TECH_METHOD("sgjs_tech_method", "process_sgjs_tech_method");
+        SGJS_TECH_METHOD("sgjs_tech_method", "process_sgjs_tech_method"),
+
+        //科技管理 - 科研课题管理
+        SGJS_TECH_SCIENCE_TOPIC("sgsj_technical_science_topic", "process_sgsj_technical_science_topic");
 
         public String getTableName() {
             return this.tableName;

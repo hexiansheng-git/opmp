@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -91,6 +92,12 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
         SgjsAchievementAward query = new SgjsAchievementAward();
         query.setForeignId(foreignId);
         return sgjsAchievementAwardMapper.getSgjsAchievementAwardList(query);
+    }
+
+    @Override
+    public List<SgjsAchievementAward> getListByForeignIds(Long[] foreignIds) {
+        CommonAssert.notNull(foreignIds,"外键不能为空！");
+        return sgjsAchievementAwardMapper.getListByForeignList(Arrays.asList(foreignIds));
     }
 
     @Override

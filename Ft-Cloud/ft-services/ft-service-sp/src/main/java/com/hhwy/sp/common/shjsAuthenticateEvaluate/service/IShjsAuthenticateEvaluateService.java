@@ -2,6 +2,7 @@ package com.hhwy.sp.common.shjsAuthenticateEvaluate.service;
 
 import java.util.List;
 
+import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate;
 
 /**
@@ -28,4 +29,6 @@ public interface IShjsAuthenticateEvaluateService {
     int deleteShjsAuthenticateEvaluateByPks(List<Long> shjsAuthenticateEvaluatePkList);
 
     int saveShjsAuthenticateEvaluateList(Long foreignId, String belongBusiness, List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList);
+
+    List<ShjsAuthenticateEvaluate> getListByForeignIds(Long[] ids);
 }

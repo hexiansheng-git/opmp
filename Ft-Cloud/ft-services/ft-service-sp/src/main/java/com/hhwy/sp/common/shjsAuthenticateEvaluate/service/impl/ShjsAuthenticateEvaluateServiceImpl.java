@@ -1,5 +1,6 @@
 package com.hhwy.sp.common.shjsAuthenticateEvaluate.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
@@ -98,5 +99,11 @@ public class ShjsAuthenticateEvaluateServiceImpl implements IShjsAuthenticateEva
             return shjsAuthenticateEvaluateMapper.insertShjsAuthenticateEvaluateList(shjsAuthenticateEvaluateList);
         }
         return 0;
+    }
+
+    @Override
+    public List<ShjsAuthenticateEvaluate> getListByForeignIds(Long[] foreignIds) {
+        CommonAssert.notNull(foreignIds,"外键不能为空！");
+        return shjsAuthenticateEvaluateMapper.getListByForeignList(Arrays.asList(foreignIds));
     }
 }

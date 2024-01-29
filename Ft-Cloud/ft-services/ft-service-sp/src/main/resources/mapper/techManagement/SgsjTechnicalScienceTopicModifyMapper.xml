@@ -2,17 +2,19 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.sp.common.shjsAuthenticateEvaluate.mapper.ShjsAuthenticateEvaluateMapper">
+<mapper namespace="com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.mapper.SgsjTechnicalScienceTopicModifyMapper">
 
-    <resultMap type="com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate"
-               id="ShjsAuthenticateEvaluateResultMap">
+    <resultMap type="com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.domain.SgsjTechnicalScienceTopicModify"
+               id="SgsjTechnicalScienceTopicModifyResultMap">
         <result property="id" column="id"/>
-        <result property="foreignId" column="foreign_id"/>
-        <result property="belongBusiness" column="belong_business"/>
-        <result property="authenticateUnit" column="authenticate_unit"/>
-        <result property="authenticateDate" column="authenticate_date"/>
-        <result property="evaluateConclusion" column="evaluate_conclusion"/>
-        <result property="fileGroupId" column="file_group_id"/>
+        <result property="topicNode" column="topic_node"/>
+        <result property="modifyContent" column="modify_content"/>
+        <result property="beforeModify" column="before_modify"/>
+        <result property="afterModify" column="after_modify"/>
+        <result property="taskNode" column="task_node"/>
+        <result property="modifyPerson" column="modify_person"/>
+        <result property="modifyPersionName" column="modify_persion_name"/>
+        <result property="modifyDatetime" column="modify_datetime"/>
         <result property="remark" column="remark"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
@@ -33,14 +35,16 @@
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
     </resultMap>
-    <sql id="selectShjsAuthenticateEvaluateVo">
+    <sql id="selectSgsjTechnicalScienceTopicModifyVo">
         SELECT `id`
-                , `foreign_id`
-                , `belong_business`
-                , `authenticate_unit`
-                , `authenticate_date`
-                , `evaluate_conclusion`
-                , `file_group_id`
+                , `topic_node`
+                , `modify_content`
+                , `before_modify`
+                , `after_modify`
+                , `task_node`
+                , `modify_person`
+                , `modify_persion_name`
+                , `modify_datetime`
                 , `remark`
                 , `region_id`
                 , `region_name`
@@ -60,23 +64,23 @@
                 , `pt_var3`
                 , `pt_var4`
                 , `pt_var5`
-        FROM shjs_authenticate_evaluate
+        FROM sgsj_technical_science_topic_modify
     </sql>
-    <select id="getShjsAuthenticateEvaluate" resultMap="ShjsAuthenticateEvaluateResultMap">
-        <include refid="selectShjsAuthenticateEvaluateVo"/>
+    <select id="getSgsjTechnicalScienceTopicModify" resultMap="SgsjTechnicalScienceTopicModifyResultMap">
+        <include refid="selectSgsjTechnicalScienceTopicModifyVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
-            <if test="belongBusiness != null  and belongBusiness != ''">and `belong_business` = #{belongBusiness}</if>
-            <if test="authenticateUnit != null  and authenticateUnit != ''">and `authenticate_unit` =
-                #{authenticateUnit}
+            <if test="topicNode != null  and topicNode != ''">and `topic_node` = #{topicNode}</if>
+            <if test="modifyContent != null  and modifyContent != ''">and `modify_content` = #{modifyContent}</if>
+            <if test="beforeModify != null  and beforeModify != ''">and `before_modify` = #{beforeModify}</if>
+            <if test="afterModify != null  and afterModify != ''">and `after_modify` = #{afterModify}</if>
+            <if test="taskNode != null  and taskNode != ''">and `task_node` = #{taskNode}</if>
+            <if test="modifyPerson != null  and modifyPerson != ''">and `modify_person` = #{modifyPerson}</if>
+            <if test="modifyPersionName != null  and modifyPersionName != ''">and `modify_persion_name` =
+                #{modifyPersionName}
             </if>
-            <if test="authenticateDate != null ">and `authenticate_date` = #{authenticateDate}</if>
-            <if test="evaluateConclusion != null  and evaluateConclusion != ''">and `evaluate_conclusion` =
-                #{evaluateConclusion}
-            </if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="modifyDatetime != null ">and `modify_datetime` = #{modifyDatetime}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -100,21 +104,21 @@
         order by create_time desc
     </select>
 
-    <select id="getShjsAuthenticateEvaluateList" resultMap="ShjsAuthenticateEvaluateResultMap">
-        <include refid="selectShjsAuthenticateEvaluateVo"/>
+    <select id="getSgsjTechnicalScienceTopicModifyList" resultMap="SgsjTechnicalScienceTopicModifyResultMap">
+        <include refid="selectSgsjTechnicalScienceTopicModifyVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
-            <if test="belongBusiness != null  and belongBusiness != ''">and `belong_business` = #{belongBusiness}</if>
-            <if test="authenticateUnit != null  and authenticateUnit != ''">and `authenticate_unit` =
-                #{authenticateUnit}
+            <if test="topicNode != null  and topicNode != ''">and `topic_node` = #{topicNode}</if>
+            <if test="modifyContent != null  and modifyContent != ''">and `modify_content` = #{modifyContent}</if>
+            <if test="beforeModify != null  and beforeModify != ''">and `before_modify` = #{beforeModify}</if>
+            <if test="afterModify != null  and afterModify != ''">and `after_modify` = #{afterModify}</if>
+            <if test="taskNode != null  and taskNode != ''">and `task_node` = #{taskNode}</if>
+            <if test="modifyPerson != null  and modifyPerson != ''">and `modify_person` = #{modifyPerson}</if>
+            <if test="modifyPersionName != null  and modifyPersionName != ''">and `modify_persion_name` =
+                #{modifyPersionName}
             </if>
-            <if test="authenticateDate != null ">and `authenticate_date` = #{authenticateDate}</if>
-            <if test="evaluateConclusion != null  and evaluateConclusion != ''">and `evaluate_conclusion` =
-                #{evaluateConclusion}
-            </if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="modifyDatetime != null ">and `modify_datetime` = #{modifyDatetime}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -138,16 +142,18 @@
         order by create_time desc
     </select>
 
-    <insert id="insertShjsAuthenticateEvaluate" useGeneratedKeys="true" keyProperty="id">
-        insert into shjs_authenticate_evaluate
+    <insert id="insertSgsjTechnicalScienceTopicModify" useGeneratedKeys="true" keyProperty="id">
+        insert into sgsj_technical_science_topic_modify
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="foreignId != null ">`foreign_id`,</if>
-            <if test="belongBusiness != null  and belongBusiness != ''">`belong_business`,</if>
-            <if test="authenticateUnit != null  and authenticateUnit != ''">`authenticate_unit`,</if>
-            <if test="authenticateDate != null ">`authenticate_date`,</if>
-            <if test="evaluateConclusion != null  and evaluateConclusion != ''">`evaluate_conclusion`,</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+            <if test="topicNode != null  and topicNode != ''">`topic_node`,</if>
+            <if test="modifyContent != null  and modifyContent != ''">`modify_content`,</if>
+            <if test="beforeModify != null  and beforeModify != ''">`before_modify`,</if>
+            <if test="afterModify != null  and afterModify != ''">`after_modify`,</if>
+            <if test="taskNode != null  and taskNode != ''">`task_node`,</if>
+            <if test="modifyPerson != null  and modifyPerson != ''">`modify_person`,</if>
+            <if test="modifyPersionName != null  and modifyPersionName != ''">`modify_persion_name`,</if>
+            <if test="modifyDatetime != null ">`modify_datetime`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -170,12 +176,14 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="foreignId != null ">#{foreignId},</if>
-            <if test="belongBusiness != null  and belongBusiness != ''">#{belongBusiness},</if>
-            <if test="authenticateUnit != null  and authenticateUnit != ''">#{authenticateUnit},</if>
-            <if test="authenticateDate != null ">#{authenticateDate},</if>
-            <if test="evaluateConclusion != null  and evaluateConclusion != ''">#{evaluateConclusion},</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+            <if test="topicNode != null  and topicNode != ''">#{topicNode},</if>
+            <if test="modifyContent != null  and modifyContent != ''">#{modifyContent},</if>
+            <if test="beforeModify != null  and beforeModify != ''">#{beforeModify},</if>
+            <if test="afterModify != null  and afterModify != ''">#{afterModify},</if>
+            <if test="taskNode != null  and taskNode != ''">#{taskNode},</if>
+            <if test="modifyPerson != null  and modifyPerson != ''">#{modifyPerson},</if>
+            <if test="modifyPersionName != null  and modifyPersionName != ''">#{modifyPersionName},</if>
+            <if test="modifyDatetime != null ">#{modifyDatetime},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -198,17 +206,19 @@
         </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertShjsAuthenticateEvaluate -->
-    <insert id="insertShjsAuthenticateEvaluateList">
-        insert into shjs_authenticate_evaluate
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgsjTechnicalScienceTopicModify -->
+    <insert id="insertSgsjTechnicalScienceTopicModifyList">
+        insert into sgsj_technical_science_topic_modify
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
-            `foreign_id`,
-            `belong_business`,
-            `authenticate_unit`,
-            `authenticate_date`,
-            `evaluate_conclusion`,
-            `file_group_id`,
+            `topic_node`,
+            `modify_content`,
+            `before_modify`,
+            `after_modify`,
+            `task_node`,
+            `modify_person`,
+            `modify_persion_name`,
+            `modify_datetime`,
             `remark`,
             `region_id`,
             `region_name`,
@@ -229,15 +239,17 @@
             `pt_var5`,
         </trim>
         values
-        <foreach collection="shjsAuthenticateEvaluateList" item="item" separator=",">
+        <foreach collection="sgsjTechnicalScienceTopicModifyList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
-                #{item.foreignId},
-                #{item.belongBusiness},
-                #{item.authenticateUnit},
-                #{item.authenticateDate},
-                #{item.evaluateConclusion},
-                #{item.fileGroupId},
+                #{item.topicNode},
+                #{item.modifyContent},
+                #{item.beforeModify},
+                #{item.afterModify},
+                #{item.taskNode},
+                #{item.modifyPerson},
+                #{item.modifyPersionName},
+                #{item.modifyDatetime},
                 #{item.remark},
                 #{item.regionId},
                 #{item.regionName},
@@ -260,20 +272,20 @@
         </foreach>
     </insert>
 
-    <update id="updateShjsAuthenticateEvaluate">
-        update shjs_authenticate_evaluate
+    <update id="updateSgsjTechnicalScienceTopicModify">
+        update sgsj_technical_science_topic_modify
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
-            <if test="foreignId != null ">`foreign_id` = #{foreignId},</if>
-            <if test="belongBusiness != null  and  belongBusiness != ''">`belong_business` = #{belongBusiness},</if>
-            <if test="authenticateUnit != null  and  authenticateUnit != ''">`authenticate_unit` =
-                #{authenticateUnit},
+            <if test="topicNode != null  and  topicNode != ''">`topic_node` = #{topicNode},</if>
+            <if test="modifyContent != null  and  modifyContent != ''">`modify_content` = #{modifyContent},</if>
+            <if test="beforeModify != null  and  beforeModify != ''">`before_modify` = #{beforeModify},</if>
+            <if test="afterModify != null  and  afterModify != ''">`after_modify` = #{afterModify},</if>
+            <if test="taskNode != null  and  taskNode != ''">`task_node` = #{taskNode},</if>
+            <if test="modifyPerson != null  and  modifyPerson != ''">`modify_person` = #{modifyPerson},</if>
+            <if test="modifyPersionName != null  and  modifyPersionName != ''">`modify_persion_name` =
+                #{modifyPersionName},
             </if>
-            <if test="authenticateDate != null ">`authenticate_date` = #{authenticateDate},</if>
-            <if test="evaluateConclusion != null  and  evaluateConclusion != ''">`evaluate_conclusion` =
-                #{evaluateConclusion},
-            </if>
-            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+            <if test="modifyDatetime != null ">`modify_datetime` = #{modifyDatetime},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -299,42 +311,52 @@
         </where>
     </update>
 
-    <update id="updateShjsAuthenticateEvaluateList">
-        update shjs_authenticate_evaluate
+    <update id="updateSgsjTechnicalScienceTopicModifyList">
+        update sgsj_technical_science_topic_modify
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.id}
                 </foreach>
             </trim>
-            <trim prefix="foreign_id  = case" suffix="end,">
+            <trim prefix="topic_node  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.foreignId}
+                    when `id`=#{item.id} then #{item.topicNode}
                 </foreach>
             </trim>
-            <trim prefix="belong_business  = case" suffix="end,">
+            <trim prefix="modify_content  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.belongBusiness}
+                    when `id`=#{item.id} then #{item.modifyContent}
                 </foreach>
             </trim>
-            <trim prefix="authenticate_unit  = case" suffix="end,">
+            <trim prefix="before_modify  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.authenticateUnit}
+                    when `id`=#{item.id} then #{item.beforeModify}
                 </foreach>
             </trim>
-            <trim prefix="authenticate_date  = case" suffix="end,">
+            <trim prefix="after_modify  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.authenticateDate}
+                    when `id`=#{item.id} then #{item.afterModify}
                 </foreach>
             </trim>
-            <trim prefix="evaluate_conclusion  = case" suffix="end,">
+            <trim prefix="task_node  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.evaluateConclusion}
+                    when `id`=#{item.id} then #{item.taskNode}
                 </foreach>
             </trim>
-            <trim prefix="file_group_id  = case" suffix="end,">
+            <trim prefix="modify_person  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.fileGroupId}
+                    when `id`=#{item.id} then #{item.modifyPerson}
+                </foreach>
+            </trim>
+            <trim prefix="modify_persion_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.modifyPersionName}
+                </foreach>
+            </trim>
+            <trim prefix="modify_datetime  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.modifyDatetime}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">
@@ -439,20 +461,20 @@
         </foreach>
     </update>
 
-    <update id="deleteShjsAuthenticateEvaluate">
-        update `shjs_authenticate_evaluate` set del_flag = 1
+    <update id="deleteSgsjTechnicalScienceTopicModify">
+        update `sgsj_technical_science_topic_modify` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
-            <if test="belongBusiness != null  and belongBusiness != ''">and `belong_business` = #{belongBusiness}</if>
-            <if test="authenticateUnit != null  and authenticateUnit != ''">and `authenticate_unit` =
-                #{authenticateUnit}
+            <if test="topicNode != null  and topicNode != ''">and `topic_node` = #{topicNode}</if>
+            <if test="modifyContent != null  and modifyContent != ''">and `modify_content` = #{modifyContent}</if>
+            <if test="beforeModify != null  and beforeModify != ''">and `before_modify` = #{beforeModify}</if>
+            <if test="afterModify != null  and afterModify != ''">and `after_modify` = #{afterModify}</if>
+            <if test="taskNode != null  and taskNode != ''">and `task_node` = #{taskNode}</if>
+            <if test="modifyPerson != null  and modifyPerson != ''">and `modify_person` = #{modifyPerson}</if>
+            <if test="modifyPersionName != null  and modifyPersionName != ''">and `modify_persion_name` =
+                #{modifyPersionName}
             </if>
-            <if test="authenticateDate != null ">and `authenticate_date` = #{authenticateDate}</if>
-            <if test="evaluateConclusion != null  and evaluateConclusion != ''">and `evaluate_conclusion` =
-                #{evaluateConclusion}
-            </if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="modifyDatetime != null ">and `modify_datetime` = #{modifyDatetime}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -475,21 +497,13 @@
         </where>
     </update>
 
-    <update id="deleteShjsAuthenticateEvaluateByPks">
-        update `shjs_authenticate_evaluate` set del_flag = 1
+    <update id="deleteSgsjTechnicalScienceTopicModifyByPks">
+        update `sgsj_technical_science_topic_modify` set del_flag = 1
         <where>
             `id` in
-            <foreach item="id" collection="shjsAuthenticateEvaluatePkList" open="(" separator="," close=")">
+            <foreach item="id" collection="sgsjTechnicalScienceTopicModifyPkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>
     </update>
-
-    <select id="getListByForeignList" resultMap="ShjsAuthenticateEvaluateResultMap">
-        <include refid="selectShjsAuthenticateEvaluateVo"/>
-        where  del_flag = 0 and foreign_id in
-        <foreach item="foreignId" collection="foreignIds" open="(" separator="," close=")">
-            #{foreignId}
-        </foreach>
-    </select>
 </mapper>

@@ -27,4 +27,6 @@ public interface ShjsAuthenticateEvaluateMapper {
     int deleteShjsAuthenticateEvaluate(ShjsAuthenticateEvaluate shjsAuthenticateEvaluate);
 
     int deleteShjsAuthenticateEvaluateByPks(@Param("shjsAuthenticateEvaluatePkList") List<Long> shjsAuthenticateEvaluatePkList);
+
+    List<ShjsAuthenticateEvaluate> getListByForeignList(@Param("foreignIds") List<Long> foreignIds);
 }
