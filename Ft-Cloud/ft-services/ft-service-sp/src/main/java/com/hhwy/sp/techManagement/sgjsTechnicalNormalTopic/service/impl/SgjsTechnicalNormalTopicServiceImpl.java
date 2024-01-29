@@ -1,22 +1,33 @@
 package com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.service.impl;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.handler.HandleHelper;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.SgjsTechnicalNormalTopicDTO;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalTopicCost.domain.SgjsTechnicalNormalTopicCost;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalTopicCost.domain.SgjsTechnicalNormalTopicCostDTO;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalTopicCost.service.ISgjsTechnicalNormalTopicCostService;
+import com.hhwy.utils.excelUtil.ExcelHeadStyle;
+import com.hhwy.utils.excelUtil.HeadVo;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +36,8 @@ import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.mapper.SgjsTechnicalN
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.service.ISgjsTechnicalNormalTopicService;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.SgjsTechnicalNormalTopic;
 import com.hhwy.utils.idworker.IdWorker;
+
+import javax.servlet.http.HttpServletResponse;
 
 /***
  * 功能描述: 科技管理 - 一般课题研发管理
@@ -165,5 +178,199 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
     @Transactional
     public int deleteSgjsTechnicalNormalTopicByPks(List<Long> sgjsTechnicalNormalTopicPkList) {
         return sgjsTechnicalNormalTopicMapper.deleteSgjsTechnicalNormalTopicByPks(sgjsTechnicalNormalTopicPkList);
+    }
+
+    @Override
+    public void export(HttpServletResponse response, SgjsTechnicalNormalTopic sgjsTechnicalNormalTopicParam) throws Exception {
+        List<SgjsTechnicalNormalTopic> resultList = sgjsTechnicalNormalTopicMapper.getSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopicParam);
+        if (CollUtil.isEmpty(resultList)) return;
+        //子表查询
+        SgjsTechnicalNormalTopicCost param = new SgjsTechnicalNormalTopicCost();
+        param.setIds(resultList.stream().map(SgjsTechnicalNormalTopic::getId).toArray(Long[]::new));
+        List<SgjsTechnicalNormalTopicCost> chidrenList = sgjsTechnicalNormalTopicCostService.getSgjsTechnicalNormalTopicCostList(param);
+        if (CollUtil.isEmpty(chidrenList)) {
+            ExcelUtils<SgjsTechnicalNormalTopic> util = new ExcelUtils<>(SgjsTechnicalNormalTopic.class);
+            util.exportExcel(response, resultList, DateUtils.getDate());
+        }
+        Map<Long, List<SgjsTechnicalNormalTopicCost>> collect = chidrenList.stream().collect(Collectors.groupingBy(SgjsTechnicalNormalTopicCost::getForeignId));
+        for (SgjsTechnicalNormalTopic obj : resultList) {
+            Class<?> aClass = SgjsTechnicalNormalTopic.class;
+
+//            Class<? extends SgjsTechnicalNormalTopic> aClass = obj.getClass();
+            List<SgjsTechnicalNormalTopicCost> childList = collect.get(obj.getId());
+            for (SgjsTechnicalNormalTopicCost cost : childList) {
+                //新增对象属性
+                Field field = aClass.getDeclaredField("id");
+                field.setAccessible(true);
+                Object obj1 = aClass.newInstance();
+                field.set(obj1, 1L);
+//                Field newField = new Field(SgjsTechnicalNormalTopic.class, cost.getYear() + "年", String.class);
+//                Field newField = aClass.getDeclaredField(cost.getYear() + "年");
+                Field newField = aClass.getDeclaredField("value");
+                //设置属性值
+                newField.set(obj, cost.getRdCost());
+
+//                Annotation annotation = newField.getAnnotation(Excel.class);
+                //为属性设置注解
+                Excel excelAnnotation = getExcelAnnotation();
+                Annotation[] annotations = newField.getAnnotations();
+                Annotation[] newAnnotations = Arrays.copyOf(annotations, annotations.length + 1);
+                newAnnotations[annotations.length] = excelAnnotation;
+
+                Field annotationsField = Field.class.getDeclaredField("annotations");
+                annotationsField.setAccessible(true);
+                annotationsField.set(newField, newAnnotations);
+            }
+        }
+        ExcelUtils<SgjsTechnicalNormalTopic> util = new ExcelUtils<>(SgjsTechnicalNormalTopic.class);
+        util.exportExcel(response, resultList, DateUtils.getDate());
+    }
+
+    private Excel getExcelAnnotation() {
+
+        return new Excel(){
+            @Override
+            public int sort() {
+                return 0;
+            }
+
+            @Override
+            public String name() {
+                return null;
+            }
+
+            @Override
+            public String dateFormat() {
+                return null;
+            }
+
+            @Override
+            public String readConverterExp() {
+                return null;
+            }
+
+            @Override
+            public String dictType() {
+                return null;
+            }
+
+            @Override
+            public String resolveMethod() {
+                return null;
+            }
+
+            @Override
+            public String resolveMethodForExport() {
+                return null;
+            }
+
+            @Override
+            public String resolveMethodForImport() {
+                return null;
+            }
+
+            @Override
+            public String separator() {
+                return null;
+            }
+
+            @Override
+            public int scale() {
+                return 0;
+            }
+
+            @Override
+            public int roundingMode() {
+                return 0;
+            }
+
+            @Override
+            public ColumnType cellType() {
+                return null;
+            }
+
+            @Override
+            public double height() {
+                return 0;
+            }
+
+            @Override
+            public double width() {
+                return 0;
+            }
+
+            @Override
+            public String suffix() {
+                return null;
+            }
+
+            @Override
+            public String defaultValue() {
+                return null;
+            }
+
+            @Override
+            public String prompt() {
+                return null;
+            }
+
+            @Override
+            public String[] combo() {
+                return new String[0];
+            }
+
+            @Override
+            public boolean isExport() {
+                return false;
+            }
+
+            @Override
+            public String targetAttr() {
+                return null;
+            }
+
+            @Override
+            public boolean isStatistics() {
+                return false;
+            }
+
+            @Override
+            public Align align() {
+                return null;
+            }
+
+            @Override
+            public Type type() {
+                return null;
+            }
+            @Override
+            public Class<? extends Annotation> annotationType() {
+                return Excel.class;
+            }
+        };
+    }
+
+    public List<List<String>> getTitle(List<SgjsTechnicalNormalTopicCost> chidrenList){
+        List<List<String>> title = new ArrayList<>();
+        Field[] declaredFields = SgjsTechnicalNormalTopicDTO.class.getDeclaredFields();
+        for (Field field : declaredFields) {
+            field.setAccessible(true);
+            ExcelProperty annotation = field.getAnnotation(ExcelProperty.class);
+            String[] value = annotation.value();
+            title.add(Arrays.asList(value));
+        }
+        if (CollUtil.isEmpty(chidrenList)) {
+            return title;
+        }
+        Set<Integer> collect = chidrenList.stream().map(SgjsTechnicalNormalTopicCost::getYear).collect(Collectors.toSet());
+        if (CollUtil.isEmpty(title)) {
+            return title;
+        }
+        collect.forEach(p ->{
+            List<String> objects = new ArrayList<>();
+            objects.add(p + "年");
+            title.add(objects);
+        });
+        return title;
     }
 }

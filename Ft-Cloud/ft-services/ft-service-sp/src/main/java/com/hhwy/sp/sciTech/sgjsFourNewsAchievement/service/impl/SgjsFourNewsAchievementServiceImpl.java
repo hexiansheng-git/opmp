@@ -1,6 +1,7 @@
 package com.hhwy.sp.sciTech.sgjsFourNewsAchievement.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
@@ -71,7 +72,37 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
     }
 
     public List<SgjsFourNewsAchievement> getSgjsFourNewsAchievementList(SgjsFourNewsAchievement sgjsFourNewsAchievement) {
-        return sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievementList(sgjsFourNewsAchievement);
+        List<SgjsFourNewsAchievement> sgjsFourNewsAchievementList = sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievementList(sgjsFourNewsAchievement);
+        // 专家库
+        SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
+        sgjsExpertLibrary.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_5);
+        List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsExpertLibraryService.getSgjsExpertLibraryList(sgjsExpertLibrary);
+        // 成果奖项
+        SgjsAchievementAward sgjsAchievementAward = new SgjsAchievementAward();
+        sgjsAchievementAward.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_5);
+        List<SgjsAchievementAward> sgjsAchievementAwardList = sgjsAchievementAwardService.getSgjsAchievementAwardList(sgjsAchievementAward);
+        // 鉴定或评价
+        ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = new ShjsAuthenticateEvaluate();
+        shjsAuthenticateEvaluate.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_5);
+        List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate);
+        if(CollectionUtils.isNotEmpty(sgjsFourNewsAchievementList)) {
+            for (SgjsFourNewsAchievement sgjsFourNewsAchievement1: sgjsFourNewsAchievementList) {
+                Long id = sgjsFourNewsAchievement1.getId();
+                if(CollectionUtils.isNotEmpty(sgjsExpertLibraryList)) {
+                    List<SgjsExpertLibrary> sgjsExpertLibraries = sgjsExpertLibraryList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
+                    sgjsFourNewsAchievement1.setSgjsExpertLibraryList(sgjsExpertLibraries);
+                }
+                if(CollectionUtils.isNotEmpty(sgjsAchievementAwardList)) {
+                    List<SgjsAchievementAward> sgjsAchievementAwards = sgjsAchievementAwardList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
+                    sgjsFourNewsAchievement1.setSgjsAchievementAwardList(sgjsAchievementAwards);
+                }
+                if(CollectionUtils.isNotEmpty(shjsAuthenticateEvaluateList)) {
+                    List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluates = shjsAuthenticateEvaluateList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
+                    sgjsFourNewsAchievement1.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluates);
+                }
+            }
+        }
+        return sgjsFourNewsAchievementList;
     }
 
     @Transactional

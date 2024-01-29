@@ -98,4 +98,9 @@ public class SgjsTechnicalNormalTopicController extends BaseController {
         ExcelUtils<SgjsTechnicalNormalTopic> util = new ExcelUtils<>(SgjsTechnicalNormalTopic.class);
         util.exportExcel(response, sgjsTechnicalNormalTopicList, DateUtils.getDate());
     }
+
+    @GetMapping("/export1")
+    public void export1(HttpServletResponse response, SgjsTechnicalNormalTopic sgjsTechnicalNormalTopicParam) throws Exception {
+        sgjsTechnicalNormalTopicService.export(response, sgjsTechnicalNormalTopicParam);
+    }
 }

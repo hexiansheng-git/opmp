@@ -1,8 +1,12 @@
 package com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.SgjsTechnicalNormalTopic;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author fsd
@@ -26,4 +30,6 @@ public interface ISgjsTechnicalNormalTopicService {
     int deleteSgjsTechnicalNormalTopic(SgjsTechnicalNormalTopic sgjsTechnicalNormalTopic);
 
     int deleteSgjsTechnicalNormalTopicByPks(List<Long> sgjsTechnicalNormalTopicPkList);
+
+    void export(HttpServletResponse response, SgjsTechnicalNormalTopic sgjsTechnicalNormalTopicParam) throws Exception;
 }
