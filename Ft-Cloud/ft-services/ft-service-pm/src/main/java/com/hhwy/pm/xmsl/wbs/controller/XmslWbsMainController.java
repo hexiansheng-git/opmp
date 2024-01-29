@@ -2,6 +2,7 @@ package com.hhwy.pm.xmsl.wbs.controller;
 
 import cn.hutool.core.lang.Assert;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -19,6 +20,7 @@ import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +42,8 @@ public class XmslWbsMainController extends BaseController {
     private IXmslWbsMainService xmslWbsMainService;
     @Autowired
     private WbsPushP6 wbsPushP6;
+    @Value("${spring.profiles.active}")
+    private String profileActive; 
 
     @CustomLogger(title = "项目设立", name = "项目WBS管理" ,businessType = CustomBusinessType.SELECT)
     @PreAuthorize(hasPermi = "xmslWbsMain:list")
@@ -74,7 +78,11 @@ public class XmslWbsMainController extends BaseController {
         if(wbsMain != null)
             wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>0?1:0));
         XmslWbsMain temp = wbsMain==null?new XmslWbsMain():wbsMain;
-//        temp.setP6ExistPrj(wbsPushP6.isPrjExist()?"1":"0");
+        if(StringUtils.equals(profileActive,"pro") || StringUtils.equals(profileActive,"dev")){
+            temp.setP6ExistPrj(wbsPushP6.isPrjExist()?"1":"0");
+        }else{ //测试环境和p6环境不通
+            temp.setP6ExistPrj("1");
+        }
         FlowInfoSearchUtil.getFlowInfo(temp,FlowEnum.XMSL_WBS);
         return AjaxResult.success(temp);
     }
