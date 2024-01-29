@@ -83,8 +83,12 @@ public enum FlowEnum {
         /*********************施工技术管理****************************/
         /*********************科技管理****************************/
         //专利申报管理
-        SGJS_PATENT_DECLARE("sgjs_patent_declare","process_sgjs_patent_declare");
+        SGJS_PATENT_DECLARE("sgjs_patent_declare","process_sgjs_patent_declare"),
 
+        // 四新成果管理
+        SGJS_FOUR_NEWS_ACHIEVEMENT("sgjs_four_news_achievement", "process_sgjs_four_news_achievement"),
+        // 工艺工法管理
+        SGJS_TECH_METHOD("sgjs_tech_method", "process_sgjs_tech_method");
 
         public String getTableName() {
             return this.tableName;
