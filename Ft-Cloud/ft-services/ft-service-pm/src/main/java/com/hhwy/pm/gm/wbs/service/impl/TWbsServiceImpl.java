@@ -149,7 +149,6 @@ public class TWbsServiceImpl implements ITWbsService {
             DynamicDataSourceContextHolder.push(oldDataSource);
         }
         
-        
     }
 
     @Override
@@ -254,7 +253,6 @@ public class TWbsServiceImpl implements ITWbsService {
             for (int i = 0; i < idList.size(); i++) {
                 if(existIdSet.contains(idList.get(i)+""))
                     continue;
-                String id = idList.get(i)+"";
                 List<TWbs> wbsList = tWbsMapper.getAllChildTWbs(idList.get(i));
                 List<TWbs> resuList = new ArrayList<>();
                 wbsList = CollectionUtils.isEmpty(wbsList)?new ArrayList<>(2):wbsList;

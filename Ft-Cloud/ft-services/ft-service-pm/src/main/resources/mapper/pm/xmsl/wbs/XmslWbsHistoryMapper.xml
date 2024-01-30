@@ -190,6 +190,12 @@
                     #{id}
                 </foreach>
             </if>
+            <if test="params != null  and params.ids != null ">
+                and `id` in
+                <foreach item="id" collection="params.ids" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
             <if test="selfCode != null  and selfCode != ''">and `self_code` = #{selfCode}</if>
             <if test="parentCode != null  and parentCode != ''">and `parent_code` = #{parentCode}</if>
         </where>

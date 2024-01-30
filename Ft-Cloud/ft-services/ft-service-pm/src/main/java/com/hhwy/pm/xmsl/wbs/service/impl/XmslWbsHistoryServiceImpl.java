@@ -46,6 +46,16 @@ public class XmslWbsHistoryServiceImpl implements IXmslWbsHistoryService {
         return  xmslWbsHistoryMapper.getXmslWbsHistoryList(wbsHistory);
     }
 
+    @Override
+    public List<XmslWbsHistory> getListByIds(Collection<Long> collection, Long mainId) {
+        if(mainId == null || CollectionUtils.isEmpty(collection))
+            return new ArrayList<>(2);
+        XmslWbsHistory wbsHistory = new XmslWbsHistory();
+        wbsHistory.setParams(ObjectUtils.toMap("ids", collection));
+        wbsHistory.setMainId(mainId);
+        return  xmslWbsHistoryMapper.getXmslWbsHistoryList(wbsHistory);
+    }
+
     @Transactional
     public int insertXmslWbsHistory(XmslWbsHistory xmslWbsHistory) {
         xmslWbsHistory.setId(IdWorker.createId()+"");

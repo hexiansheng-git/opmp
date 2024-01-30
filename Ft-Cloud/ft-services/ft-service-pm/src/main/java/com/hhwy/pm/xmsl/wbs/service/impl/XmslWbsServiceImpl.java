@@ -46,9 +46,11 @@ import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -273,33 +275,82 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
 //        return wbsList;
 //    }
     @Override
-    public Map<String,List<XmslWbsHistory>> copyChildList(Long[] ids,Long mainId){
-        List<XmslWbsHistory> historyList = wbsHistoryService.getListByParentIds(Arrays.asList(ids),mainId);
+    public Map<String,List<XmslWbsHistory>> copyChildList(String parentCode,Integer level,Integer rootNum,Integer num,Long[] ids,Long mainId){
         //子级id : 最上级id
         Map<String,String> realIdMap = new HashMap<>();
         Map<String,List<XmslWbsHistory>> resuMap = new HashMap<>();
+        Map<String,XmslWbsHistory> wbsMap = new HashMap<>();
         List<Long> idList = new ArrayList<>();
         idList.addAll(Arrays.asList(ids));
+        Set<Long> idSet = new HashSet<>(idList);
+        //id:当前子级生成流水号
+        Map<String,Integer> sortNumMap = new HashMap<>();
+        BiFunction<String,Integer,Integer> getSelfCodeSortNum = (id, start)->{
+            Integer temp = sortNumMap.get(id);
+            if(temp == null){
+                temp = start==null?0:start;
+                sortNumMap.put(id,temp);
+            }
+            sortNumMap.put( id,++temp);
+            return temp;
+        };
+        BiFunction<Integer,Boolean,String> buildSelfCode = (sortNum,isRoot)->{ //序号，是否为根级
+            return isRoot?sortNum+"00":String.format("%03d",sortNum);
+        };
         //旧Id : 新的UUID
-        Map<String,String> newIdMap = new HashMap<>();
+        Map<String,String> idRelateMap = new HashMap<>();
+        List<XmslWbsHistory> tempList = wbsHistoryService.getListByIds(idList,mainId);
         //遍历5级查找
         for (int i = 0; i < 5; i++) {
-            List<XmslWbsHistory> tempList = wbsHistoryService.getListByParentIds(idList,mainId);
+            if(i != 0)
+                tempList.addAll(wbsHistoryService.getListByParentIds(idList,mainId));
             if(CollectionUtils.isEmpty(tempList))
                 break;
             idList.clear();
             for (int j = 0; j < tempList.size(); j++) {
                 XmslWbsHistory temp = tempList.get(j);
-                String topId = i==0?temp.getParentId():realIdMap.get(temp.getParentId());
+                String topId = idSet.contains(Long.valueOf(temp.getId()))?temp.getId():realIdMap.get(temp.getParentId());
+                //若直属于idList，则处理父级编码
+                String selfCode = "";
+                if(idSet.contains(Long.valueOf(temp.getId()))){
+                    boolean isRoot = StringUtils.isBlank(parentCode);
+                    temp.setParentCode(parentCode);
+                    Integer startNum = isRoot?rootNum:num;
+                    selfCode = buildSelfCode.apply(getSelfCodeSortNum.apply(temp.getParentCode(),startNum),isRoot);
+                    temp.setLevel(level);
+                }else if(temp.getLevel() != 1){ //非第一级
+                    String newPid = idRelateMap.get(temp.getParentId());
+                    XmslWbsHistory parent = wbsMap.get(newPid);
+                    temp.setParentCode(parent.getCode());
+                    temp.setParentId(parent.getId());
+                    temp.setLevel(parent.getLevel()+1);
+                    selfCode = buildSelfCode.apply(getSelfCodeSortNum.apply(temp.getParentCode(),null),false);
+                }
+                temp.setSelfCode(selfCode);
+                String pcode = temp.getParentCode();
+                if(StringUtils.isBlank(topId))
+                    System.out.println(1);
                 idList.add(Long.valueOf(temp.getId()));
+                temp.setCode((StringUtils.isBlank(pcode)?"":pcode+"-")+ObjectUtils.nvlString(temp.getSelfCode()));
+                temp.setPtVar3(temp.getName());
+                temp.setName(ObjectUtils.nvlString(temp.getCode())+"-"+ObjectUtils.nvlString(temp.getName()));
+                if(!idSet.contains(Long.valueOf(temp.getId())))
+                    ObjectUtils.add2MapList(resuMap,topId,temp);
                 realIdMap.put(temp.getId(), topId);
                 //替换掉Id和父级Id，否则前端id会重
-                ObjectUtils.add2MapList(resuMap,topId,temp);
+//                realIdMap.put(temp.getId(), newId);
                 String newId = UUIDUtils.getShortUuid();
-                newIdMap.put(temp.getId(), newId);
+                idRelateMap.put(temp.getId(),newId);
                 temp.setId(newId);
-                temp.setParentId(i==0?temp.getParentId():ObjectUtils.nvlString(newIdMap.get(temp.getParentId())));
+                temp.setParentId(i==0?temp.getParentId():ObjectUtils.nvlString(idRelateMap.get(temp.getParentId())));
+                wbsMap.put(temp.getId(),temp);
             }
+            tempList.clear();
+        }
+        //填充不存在的id，给前端返回空数组
+        for (int i = 0; i < ids.length; i++) {
+            if(!resuMap.containsKey(ids[i]+""))
+                resuMap.put(ids[i]+"",new ArrayList<>(1));
         }
         return resuMap;
     }
