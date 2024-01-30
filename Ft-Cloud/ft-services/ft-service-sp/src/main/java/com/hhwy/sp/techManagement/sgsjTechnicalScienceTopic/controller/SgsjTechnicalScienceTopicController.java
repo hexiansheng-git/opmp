@@ -56,6 +56,13 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
         return AjaxResult.success(sgsjTechnicalScienceTopicList);
     }
 
+    @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopic:list")
+    @GetMapping("/detail")
+    public AjaxResult detail(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {
+        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicList = sgsjTechnicalScienceTopicService.getDetail(sgsjTechnicalScienceTopicParam);
+        return AjaxResult.success(sgsjTechnicalScienceTopicList);
+    }
+
     @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopic:add")
     @PostMapping("/add")
     public AjaxResult insertSgsjTechnicalScienceTopic(@Validated(ValidationGroups.Save.class) @RequestBody SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {

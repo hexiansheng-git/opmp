@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
+import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate;
 import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
@@ -30,6 +31,9 @@ public class SgsjTechnicalScienceTopic extends CommonBaseEntity {
 
     //成果奖项
     private List<SgjsAchievementAward> awardList;
+
+    //知识库
+    private List<SgjsExpertLibrary> libraryList;
 
     /**
      * 字段描述：

@@ -1,5 +1,6 @@
 package com.hhwy.sp.common.sgjsAchievementAward.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sp.common.domain.TechManageCommon;
@@ -144,6 +145,7 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
 
     @Transactional
     public int insertSgjsAchievementAwardList(List<SgjsAchievementAward> sgjsAchievementAwardList) {
+        if (CollUtil.isEmpty(sgjsAchievementAwardList)) return 0;
         for (SgjsAchievementAward sgjsAchievementAward : sgjsAchievementAwardList) {
             sgjsAchievementAward.setId(IdWorker.createId());
             sgjsAchievementAward.setCreateUser(SecurityUtils.getUserName());

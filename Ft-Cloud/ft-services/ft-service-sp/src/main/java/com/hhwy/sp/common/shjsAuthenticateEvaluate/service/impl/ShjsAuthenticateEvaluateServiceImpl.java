@@ -3,6 +3,7 @@ package com.hhwy.sp.common.shjsAuthenticateEvaluate.service.impl;
 import java.util.Arrays;
 import java.util.List;
 
+import cn.hutool.core.collection.CollUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -46,6 +47,7 @@ public class ShjsAuthenticateEvaluateServiceImpl implements IShjsAuthenticateEva
 
     @Transactional
     public int insertShjsAuthenticateEvaluateList(List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList) {
+        if (CollUtil.isEmpty(shjsAuthenticateEvaluateList)) return 0;
         for (ShjsAuthenticateEvaluate shjsAuthenticateEvaluate : shjsAuthenticateEvaluateList) {
             shjsAuthenticateEvaluate.setId(IdWorker.createId());
             shjsAuthenticateEvaluate.setCreateUser(SecurityUtils.getUserName());

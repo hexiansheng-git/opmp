@@ -41,9 +41,8 @@ public class SgsjTechnicalScienceTopicModifyController extends BaseController {
     @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopicModify:list")
     @GetMapping("/list")
     public AjaxResult getSgsjTechnicalScienceTopicModifyList(@Validated(ValidationGroups.Select.class) SgsjTechnicalScienceTopicModify sgsjTechnicalScienceTopicModifyParam) {
-        startPage();
         List<SgsjTechnicalScienceTopicModify> sgsjTechnicalScienceTopicModifyList = sgsjTechnicalScienceTopicModifyService.getSgsjTechnicalScienceTopicModifyList(sgsjTechnicalScienceTopicModifyParam);
-        return getDataTableAjaxResult(sgsjTechnicalScienceTopicModifyList);
+        return AjaxResult.success(sgsjTechnicalScienceTopicModifyList);
     }
 
     @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopicModify:add")

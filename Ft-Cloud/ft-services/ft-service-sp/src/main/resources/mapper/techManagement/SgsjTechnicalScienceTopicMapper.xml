@@ -172,8 +172,8 @@
             <if test="applyState != null  and applyState != ''">and `apply_state` = #{applyState}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="handlePerson != null  and handlePerson != ''">and `handle_person` = #{handlePerson}</if>
-            <if test="topicCode != null  and topicCode != ''">and `topic_code` = #{topicCode}</if>
-            <if test="topicName != null  and topicName != ''">and `topic_name` = #{topicName}</if>
+            <if test="topicCode != null  and topicCode != ''">and `topic_code` like concat('%', #{topicCode}, '%') </if>
+            <if test="topicName != null  and topicName != ''">and `topic_name` like concat('%', #{topicName}, '%') </if>
             <if test="topicCurentNode != null  and topicCurentNode != ''">and `topic_curent_node` = #{topicCurentNode}
             </if>
             <if test="startEndDate != null  and startEndDate != ''">and `start_end_date` = #{startEndDate}</if>
