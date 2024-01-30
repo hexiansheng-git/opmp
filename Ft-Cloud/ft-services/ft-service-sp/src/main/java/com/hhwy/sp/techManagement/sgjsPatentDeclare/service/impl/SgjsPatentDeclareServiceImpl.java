@@ -13,6 +13,7 @@ import com.hhwy.sp.techManagement.sgjsPatentDeclare.mapper.SgjsPatentDeclareMapp
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.service.ISgjsPatentDeclareService;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -129,10 +130,12 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
             //新增
             id = IdWorker.createId();
             patentDeclare.setId(id);
+            checkPatentNumberSingle(id,patentDeclare.getPatentNumber());
             this.insertSgjsPatentDeclare(patentDeclare);
         }else if("2".equals(saveType)){
             //修改
             id = patentDeclare.getId();
+            checkPatentNumberSingle(id,patentDeclare.getPatentNumber());
             this.updateSgjsPatentDeclare(patentDeclare);
         }else {
             throw new RuntimeException("保存类型错误");
@@ -145,6 +148,21 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
         //保存成果登记数据
         List<SgjsAchievementAward> awardList = patentDeclare.getAwardList();
         sgjsAchievementAwardService.saveAchievementAward(id,BelongBusiness.BELONG_BUSINESS_7,awardList);
+    }
+
+    /**
+     * 校验专利号唯一
+     * @param id 数据id
+     * @param patentNumber 专利号
+     */
+    private void checkPatentNumberSingle(Long id, String patentNumber){
+        if(StringUtils.isBlank(patentNumber)){
+            return;
+        }
+        int count = sgjsPatentDeclareMapper.getCountByPatentNumberExpectId(id, patentNumber);
+        if(count > 0){
+            throw new RuntimeException("专利号已存在，请重新编辑！");
+        }
     }
 
     @Override

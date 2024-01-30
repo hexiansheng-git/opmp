@@ -1,6 +1,7 @@
 package com.hhwy.sp.techManagement.sgjsPaperPublish.service;
 
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.SgjsPaperPublish;
+import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishQueryVo;
 
 import java.util.List;
 
@@ -11,9 +12,11 @@ import java.util.List;
  */
 public interface ISgjsPaperPublishService {
 
+    SgjsPaperPublish getSgjsPaperPublishById(Long id, String type);
+
     SgjsPaperPublish getSgjsPaperPublish(SgjsPaperPublish sgjsPaperPublish);
 
-    List<SgjsPaperPublish> getSgjsPaperPublishList(SgjsPaperPublish sgjsPaperPublish);
+    List<SgjsPaperPublish> getSgjsPaperPublishList(PaperPublishQueryVo queryVo);
 
     int insertSgjsPaperPublish(SgjsPaperPublish sgjsPaperPublish);
 
@@ -26,4 +29,8 @@ public interface ISgjsPaperPublishService {
     int deleteSgjsPaperPublish(SgjsPaperPublish sgjsPaperPublish);
 
     int deleteSgjsPaperPublishByPks(List<Long> sgjsPaperPublishPkList);
+
+    void save(SgjsPaperPublish paperPublish);
+
+    void deleteSgjsPaperPublishById(Long id);
 }

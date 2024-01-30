@@ -5,12 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.sp.common.domain.TechManageCommon;
+import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
+import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -20,9 +23,13 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SgjsPaperPublish extends BaseEntity {
+public class SgjsPaperPublish extends TechManageCommon {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 保存类型  1：新增；2：修改
+//     */
+    private String saveType;
     /**
      * 字段描述：主键
      */
@@ -39,10 +46,9 @@ public class SgjsPaperPublish extends BaseEntity {
     /**
      * 字段描述：论文名称
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "论文名称")
-    private Long paperName;
+    private String paperName;
     /**
      * 字段描述：申报等级  字典：declare_grade
      */
@@ -141,6 +147,12 @@ public class SgjsPaperPublish extends BaseEntity {
     @JsonProperty
     @Excel(name = "成果-其他附件")
     private String achievementOtherFile;
+    /**
+     * 字段描述：当前状态
+     */
+    @JsonProperty
+    @Excel(name = "当前状态")
+    private String currentState;
     /**
      * 字段描述：备注
      */
@@ -261,4 +273,8 @@ public class SgjsPaperPublish extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    private List<SgjsAchievementAward> awardList;
+
+    private List<SgjsExpertLibrary> libraryList;
 }

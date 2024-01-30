@@ -127,6 +127,9 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getCountByPatentNumberExpectId" resultType="java.lang.Integer">
+        select count(1) from sgjs_patent_declare where patent_number = #{patentNumber} and id != #{id}
+    </select>
 
     <insert id="insertSgjsPatentDeclare" useGeneratedKeys="true" keyProperty="id">
         insert into sgjs_patent_declare

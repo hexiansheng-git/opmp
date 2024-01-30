@@ -1,6 +1,7 @@
 package com.hhwy.sp.techManagement.sgjsPaperPublish.mapper;
 
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.SgjsPaperPublish;
+import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishQueryVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -13,10 +14,12 @@ import java.util.List;
  */
 @Repository
 public interface SgjsPaperPublishMapper {
+
+    SgjsPaperPublish getSgjsPaperPublishById(@Param("id") Long id);
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
     SgjsPaperPublish getSgjsPaperPublish(SgjsPaperPublish sgjsPaperPublish);
 
-    List<SgjsPaperPublish> getSgjsPaperPublishList(SgjsPaperPublish sgjsPaperPublish);
+    List<SgjsPaperPublish> getSgjsPaperPublishList(PaperPublishQueryVo queryVo);
 
     int insertSgjsPaperPublish(SgjsPaperPublish sgjsPaperPublish);
 
@@ -24,9 +27,11 @@ public interface SgjsPaperPublishMapper {
 
     int updateSgjsPaperPublish(SgjsPaperPublish sgjsPaperPublish);
 
-            int updateSgjsPaperPublishList(@Param("sgjsPaperPublishList") List<SgjsPaperPublish> sgjsPaperPublishList);
+    int updateSgjsPaperPublishList(@Param("sgjsPaperPublishList") List<SgjsPaperPublish> sgjsPaperPublishList);
     
     int deleteSgjsPaperPublish(SgjsPaperPublish sgjsPaperPublish);
 
-            int deleteSgjsPaperPublishByPks(@Param("sgjsPaperPublishPkList") List<Long> sgjsPaperPublishPkList);
-    }
+    int deleteSgjsPaperPublishByPks(@Param("sgjsPaperPublishPkList") List<Long> sgjsPaperPublishPkList);
+
+    void deleteSgjsPaperPublishById(@Param("id") Long id);
+}

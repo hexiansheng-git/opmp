@@ -84,6 +84,8 @@ public enum FlowEnum {
         /*********************科技管理****************************/
         //专利申报管理
         SGJS_PATENT_DECLARE("sgjs_patent_declare","process_sgjs_patent_declare"),
+        //论文发表管理
+        SGJS_PAPER_PUBLISH("sgjs_paper_publish","process_sgjs_paper_publish"),
 
         // 四新成果管理
         SGJS_FOUR_NEWS_ACHIEVEMENT("sgjs_four_news_achievement", "process_sgjs_four_news_achievement"),

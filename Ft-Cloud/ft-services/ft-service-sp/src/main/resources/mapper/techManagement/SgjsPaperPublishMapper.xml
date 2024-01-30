@@ -25,6 +25,7 @@
         <result property="achievementDescription" column="achievement_description"/>
         <result property="achievementFile" column="achievement_file"/>
         <result property="achievementOtherFile" column="achievement_other_file"/>
+        <result property="currentState" column="current_state"/>
         <result property="remark" column="remark"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
@@ -86,13 +87,17 @@
              , `pt_var5`
         from sgjs_paper_publish
     </sql>
+    <select id="getSgjsPaperPublishById" resultMap="SgjsPaperPublishResultMap">
+        <include refid="selectSgjsPaperPublishVo"/>
+        where del_flag = '0' and id = #{id}
+    </select>
     <select id="getSgjsPaperPublish" resultMap="SgjsPaperPublishResultMap">
         <include refid="selectSgjsPaperPublishVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="paperCode != null  and paperCode != ''">and `paper_code` = #{paperCode}</if>
-            <if test="paperName != null ">and `paper_name` = #{paperName}</if>
+            <if test="paperName != null  and paperName != ''">and `paper_name` = #{paperName}</if>
             <if test="declareGrade != null  and declareGrade != ''">and `declare_grade` = #{declareGrade}</if>
             <if test="professionType != null  and professionType != ''">and `profession_type` = #{professionType}</if>
             <if test="professionPlate != null  and professionPlate != ''">and `profession_plate` = #{professionPlate}
@@ -126,6 +131,7 @@
             <if test="achievementOtherFile != null  and achievementOtherFile != ''">and `achievement_other_file` =
                 #{achievementOtherFile}
             </if>
+            <if test="currentState != null  and currentState != ''">and `current_state` = #{currentState}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -153,61 +159,9 @@
         <include refid="selectSgjsPaperPublishVo"/>
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
             <if test="paperCode != null  and paperCode != ''">and `paper_code` = #{paperCode}</if>
-            <if test="paperName != null ">and `paper_name` = #{paperName}</if>
-            <if test="declareGrade != null  and declareGrade != ''">and `declare_grade` = #{declareGrade}</if>
-            <if test="professionType != null  and professionType != ''">and `profession_type` = #{professionType}</if>
-            <if test="professionPlate != null  and professionPlate != ''">and `profession_plate` = #{professionPlate}
-            </if>
-            <if test="principalConsumator != null  and principalConsumator != ''">and `principal_consumator` =
-                #{principalConsumator}
-            </if>
-            <if test="principalConsumatorContactWay != null  and principalConsumatorContactWay != ''">and
-                `principal_consumator_contact_way` = #{principalConsumatorContactWay}
-            </if>
-            <if test="participationUnit != null  and participationUnit != ''">and `participation_unit` =
-                #{participationUnit}
-            </if>
-            <if test="registrant != null  and registrant != ''">and `registrant` = #{registrant}</if>
-            <if test="registrantContactWay != null  and registrantContactWay != ''">and `registrant_contact_way` =
-                #{registrantContactWay}
-            </if>
-            <if test="paperIntroduction != null  and paperIntroduction != ''">and `paper_introduction` =
-                #{paperIntroduction}
-            </if>
-            <if test="paperFile != null  and paperFile != ''">and `paper_file` = #{paperFile}</if>
-            <if test="periodicalGrade != null  and periodicalGrade != ''">and `periodical_grade` = #{periodicalGrade}
-            </if>
-            <if test="periodicalName != null ">and `periodical_name` = #{periodicalName}</if>
-            <if test="publishDate != null ">and `publish_date` = #{publishDate}</if>
-            <if test="achievementDescription != null  and achievementDescription != ''">and `achievement_description` =
-                #{achievementDescription}
-            </if>
-            <if test="achievementFile != null  and achievementFile != ''">and `achievement_file` = #{achievementFile}
-            </if>
-            <if test="achievementOtherFile != null  and achievementOtherFile != ''">and `achievement_other_file` =
-                #{achievementOtherFile}
-            </if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="paperName != null and paperName != ''">and `paper_name` = #{paperName}</if>
+            <if test="currentState != null  and currentState != ''">and `current_state` = #{currentState}</if>
         </where>
         order by create_time desc
     </select>
@@ -217,7 +171,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="paperCode != null  and paperCode != ''">`paper_code`,</if>
-            <if test="paperName != null ">`paper_name`,</if>
+            <if test="paperName != null  and paperName != ''">`paper_name`,</if>
             <if test="declareGrade != null  and declareGrade != ''">`declare_grade`,</if>
             <if test="professionType != null  and professionType != ''">`profession_type`,</if>
             <if test="professionPlate != null  and professionPlate != ''">`profession_plate`,</if>
@@ -236,6 +190,7 @@
             <if test="achievementDescription != null  and achievementDescription != ''">`achievement_description`,</if>
             <if test="achievementFile != null  and achievementFile != ''">`achievement_file`,</if>
             <if test="achievementOtherFile != null  and achievementOtherFile != ''">`achievement_other_file`,</if>
+            <if test="currentState != null  and currentState != ''">`current_state`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -259,7 +214,7 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
             <if test="paperCode != null  and paperCode != ''">#{paperCode},</if>
-            <if test="paperName != null ">#{paperName},</if>
+            <if test="paperName != null  and paperName != ''">#{paperName},</if>
             <if test="declareGrade != null  and declareGrade != ''">#{declareGrade},</if>
             <if test="professionType != null  and professionType != ''">#{professionType},</if>
             <if test="professionPlate != null  and professionPlate != ''">#{professionPlate},</if>
@@ -278,6 +233,7 @@
             <if test="achievementDescription != null  and achievementDescription != ''">#{achievementDescription},</if>
             <if test="achievementFile != null  and achievementFile != ''">#{achievementFile},</if>
             <if test="achievementOtherFile != null  and achievementOtherFile != ''">#{achievementOtherFile},</if>
+            <if test="currentState != null  and currentState != ''">#{currentState},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -323,6 +279,7 @@
             `achievement_description`,
             `achievement_file`,
             `achievement_other_file`,
+            `current_state`,
             `remark`,
             `region_id`,
             `region_name`,
@@ -364,6 +321,7 @@
                 #{item.achievementDescription},
                 #{item.achievementFile},
                 #{item.achievementOtherFile},
+                #{item.currentState},
                 #{item.remark},
                 #{item.regionId},
                 #{item.regionName},
@@ -391,7 +349,7 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
             <if test="paperCode != null  and  paperCode != ''">`paper_code` = #{paperCode},</if>
-            <if test="paperName != null ">`paper_name` = #{paperName},</if>
+            <if test="paperName != null  and paperName != ''">`paper_name` = #{paperName},</if>
             <if test="declareGrade != null  and  declareGrade != ''">`declare_grade` = #{declareGrade},</if>
             <if test="professionType != null  and  professionType != ''">`profession_type` = #{professionType},</if>
             <if test="professionPlate != null  and  professionPlate != ''">`profession_plate` = #{professionPlate},</if>
@@ -422,6 +380,7 @@
             <if test="achievementOtherFile != null  and  achievementOtherFile != ''">`achievement_other_file` =
                 #{achievementOtherFile},
             </if>
+            <if test="currentState != null  and  currentState != ''">`current_state` = #{currentState},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -545,6 +504,11 @@
                     when `id`=#{item.id} then #{item.achievementOtherFile}
                 </foreach>
             </trim>
+            <trim prefix="current_state  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.currentState}
+                </foreach>
+            </trim>
             <trim prefix="remark  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.remark}
@@ -652,7 +616,7 @@
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="paperCode != null  and paperCode != ''">and `paper_code` = #{paperCode}</if>
-            <if test="paperName != null ">and `paper_name` = #{paperName}</if>
+            <if test="paperName != null  and paperName != ''">and `paper_name` = #{paperName}</if>
             <if test="declareGrade != null  and declareGrade != ''">and `declare_grade` = #{declareGrade}</if>
             <if test="professionType != null  and professionType != ''">and `profession_type` = #{professionType}</if>
             <if test="professionPlate != null  and professionPlate != ''">and `profession_plate` = #{professionPlate}
@@ -716,5 +680,8 @@
                 #{id}
             </foreach>
         </where>
+    </update>
+    <update id="deleteSgjsPaperPublishById">
+        update `sgjs_paper_publish` set del_flag = 1 where id = #{id}
     </update>
 </mapper>

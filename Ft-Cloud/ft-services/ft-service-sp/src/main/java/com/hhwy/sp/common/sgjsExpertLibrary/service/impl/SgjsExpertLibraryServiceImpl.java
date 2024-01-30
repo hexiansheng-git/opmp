@@ -3,11 +3,6 @@ package com.hhwy.sp.common.sgjsExpertLibrary.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
-import com.hhwy.utils.common.CommonAssert;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.sp.common.sgjsExpertLibrary.mapper.SgjsExpertLibraryMapper;
 import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
 import com.hhwy.utils.common.CommonAssert;
@@ -92,6 +87,14 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
     @Transactional
     public int deleteSgjsExpertLibraryByPks(List<Long> sgjsExpertLibraryPkList) {
         return sgjsExpertLibraryMapper.deleteSgjsExpertLibraryByPks(sgjsExpertLibraryPkList);
+    }
+
+    @Override
+    public void deleteSgjsExpertLibraryByForeignId(Long foreignId) {
+        CommonAssert.notNull(foreignId,"外键不能为空！");
+        SgjsExpertLibrary delParam = new SgjsExpertLibrary();
+        delParam.setForeignId(foreignId);
+        sgjsExpertLibraryMapper.deleteSgjsExpertLibrary(delParam);
     }
 
     @Override
