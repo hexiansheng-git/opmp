@@ -5,6 +5,7 @@ import com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchInternalAdjustDetail;
 import com.hhwy.pm.qqch.wzch.internaladjust.dto.WzchInternalAdjustDTO;
 import com.hhwy.utils.common.CommonBaseEntity;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -116,4 +117,11 @@ public interface IWzchInternalAdjustService {
      * @param dtoList
      */
     void setAdjustProjectIds(List<WzchInternalAdjustDetail> dtoList);
+
+    /**
+     * 校验导入数据
+     * @param version 版本号
+     * @param dtoList  
+     */
+    void checkImport(BigDecimal version,List<WzchInternalAdjustDetail> dtoList);
 }

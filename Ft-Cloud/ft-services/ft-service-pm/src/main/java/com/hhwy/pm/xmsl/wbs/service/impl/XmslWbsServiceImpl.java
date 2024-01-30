@@ -51,6 +51,7 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.LongAccumulator;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -625,6 +626,14 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         for (int i = 0; i < list.size(); i++) {
             XmslWbsHistory temp = list.get(i);
             XmslWbsHistory parent = map.get(temp.getParentId());
+            if(parent == null && temp.getParentId().length()<21){
+                List<XmslWbsHistory> historyList = wbsHistoryService.getListByIds(Arrays.asList(Long.valueOf(temp.getParentId())),dto.getMainId());
+                if(CollectionUtils.isEmpty(historyList)){
+                    logger.error("项目wbs保存，前端传入的parentId[{}]未在库中找到",temp.getParentId());
+                }else{
+                    parent = historyList.get(0);
+                }
+            }
             String pcode = parent == null?"":ObjectUtils.nvlString(parent.getCode());
             temp.setParentCode(pcode);
             temp.setPtVar2(StringUtils.isBlank(temp.getPtVar2())?"-1":temp.getPtVar2()); //ptVar2 变更状态添加默认值

@@ -208,6 +208,7 @@ public class WzchInternalAdjustController extends BaseController {
             for (int i = 0; i < dtoList.size(); i++) {
                 dtoList.get(i).setId(IdWorker.createId());
             }
+            
             wzchInternalAdjustService.setAdjustProjectIds(dtoList);
             wzchCommonService.importDealDict(dtoList, this.getDictMap());
             wzchCommonService.setDicValue(dtoList, this.getDictNameMap());
