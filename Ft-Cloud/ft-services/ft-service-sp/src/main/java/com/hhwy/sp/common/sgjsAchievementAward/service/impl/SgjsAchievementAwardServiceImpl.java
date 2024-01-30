@@ -1,5 +1,6 @@
 package com.hhwy.sp.common.sgjsAchievementAward.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sp.common.domain.TechManageCommon;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +96,12 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
     }
 
     @Override
+    public List<SgjsAchievementAward> getListByForeignIds(Long[] foreignIds) {
+        CommonAssert.notNull(foreignIds,"外键不能为空！");
+        return sgjsAchievementAwardMapper.getListByForeignList(Arrays.asList(foreignIds));
+    }
+
+    @Override
     public Map<Long, List<SgjsAchievementAward>> getMapByBelongBusiness(String belongBusiness) {
         CommonAssert.notBlank(belongBusiness,"所属业务不能为空！");
         SgjsAchievementAward query = new SgjsAchievementAward();
@@ -137,6 +145,7 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
 
     @Transactional
     public int insertSgjsAchievementAwardList(List<SgjsAchievementAward> sgjsAchievementAwardList) {
+        if (CollUtil.isEmpty(sgjsAchievementAwardList)) return 0;
         for (SgjsAchievementAward sgjsAchievementAward : sgjsAchievementAwardList) {
             sgjsAchievementAward.setId(IdWorker.createId());
             sgjsAchievementAward.setCreateUser(SecurityUtils.getUserName());

@@ -151,9 +151,12 @@ public class XmslWbsController extends BaseController {
     }
 
     @PostMapping("/importData")
-    public AjaxResult importData(HttpServletRequest request, HttpServletResponse response, Long id,MultipartFile file) {
-        try {
-            return AjaxResult.success(xmslWbsService.importData(id,file));
+    public AjaxResult importData(HttpServletRequest request, HttpServletResponse response, String id,MultipartFile file) {
+        try {                                                                                    
+            Long idLong = null;
+            if(StringUtils.isNotBlank(id) && !StringUtils.equals(id,"null"))
+                idLong = Long.valueOf(id);    
+            return AjaxResult.success(xmslWbsService.importData(idLong,file));
         } catch (Exception e) {
             e.printStackTrace();
             return AjaxResult.error("导入失败:"+e.getMessage());

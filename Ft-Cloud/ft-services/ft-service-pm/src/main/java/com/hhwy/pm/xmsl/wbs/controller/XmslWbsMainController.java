@@ -83,6 +83,7 @@ public class XmslWbsMainController extends BaseController {
         }else{ //测试环境和p6环境不通
             temp.setP6ExistPrj("1");
         }
+        temp.setVersion(ObjectUtils.nvl(temp.getVersion(),1));
         FlowInfoSearchUtil.getFlowInfo(temp,FlowEnum.XMSL_WBS);
         return AjaxResult.success(temp);
     }

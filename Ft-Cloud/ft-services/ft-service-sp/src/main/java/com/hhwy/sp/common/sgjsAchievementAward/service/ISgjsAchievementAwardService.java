@@ -38,6 +38,13 @@ public interface ISgjsAchievementAwardService {
     List<SgjsAchievementAward> getListByForeignId(Long foreignId);
 
     /**
+     * 根据外键集合获取成果数据集
+     * @param foreignId
+     * @return
+     */
+    List<SgjsAchievementAward> getListByForeignIds(Long[] foreignIds);
+
+    /**
      * 根据所属业务获取成果数据集
      * @param belongBusiness
      * @return

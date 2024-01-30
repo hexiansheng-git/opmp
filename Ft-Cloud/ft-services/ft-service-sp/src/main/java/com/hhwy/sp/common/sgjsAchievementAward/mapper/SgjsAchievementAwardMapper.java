@@ -29,4 +29,6 @@ public interface SgjsAchievementAwardMapper {
     int deleteSgjsAchievementAward(SgjsAchievementAward sgjsAchievementAward);
 
     int deleteSgjsAchievementAwardByPks(@Param("sgjsAchievementAwardPkList") List<Long> sgjsAchievementAwardPkList);
+
+    List<SgjsAchievementAward> getListByForeignList(@Param("foreignIds") List<Long> foreignIds);
 }

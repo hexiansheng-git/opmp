@@ -57,6 +57,7 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
 
     @Transactional
     public int insertSgjsExpertLibraryList(List<SgjsExpertLibrary> sgjsExpertLibraryList) {
+        if (CollectionUtils.isEmpty(sgjsExpertLibraryList)) return 0;
         for (SgjsExpertLibrary sgjsExpertLibrary : sgjsExpertLibraryList) {
             sgjsExpertLibrary.setId(IdWorker.createId());
             sgjsExpertLibrary.setCreateUser(SecurityUtils.getUserName());
