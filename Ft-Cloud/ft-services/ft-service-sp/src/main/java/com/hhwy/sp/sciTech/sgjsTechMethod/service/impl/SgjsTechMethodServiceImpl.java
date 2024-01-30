@@ -1,10 +1,13 @@
 package com.hhwy.sp.sciTech.sgjsTechMethod.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.constant.BelongBusiness;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
@@ -67,6 +70,7 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = new ShjsAuthenticateEvaluate();
         shjsAuthenticateEvaluate.setForeignId(id);
         returnVO.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate));
+        FlowInfoSearchUtil.getFlowInfo(returnVO, FlowEnum.SGJS_TECH_METHOD);
         return returnVO;
     }
 
@@ -86,8 +90,21 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate);
         if (CollectionUtils.isNotEmpty(sgjsTechMethodList)) {
             for (SgjsTechMethod sgjsTechMethod1: sgjsTechMethodList) {
-
+                Long id = sgjsTechMethod1.getId();
+                if(CollectionUtils.isNotEmpty(sgjsExpertLibraryList)) {
+                    List<SgjsExpertLibrary> sgjsExpertLibraries = sgjsExpertLibraryList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
+                    sgjsTechMethod1.setSgjsExpertLibraryList(sgjsExpertLibraries);
+                }
+                if(CollectionUtils.isNotEmpty(sgjsAchievementAwardList)) {
+                    List<SgjsAchievementAward> sgjsAchievementAwards = sgjsAchievementAwardList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
+                    sgjsTechMethod1.setSgjsAchievementAwardList(sgjsAchievementAwards);
+                }
+                if(CollectionUtils.isNotEmpty(shjsAuthenticateEvaluateList)) {
+                    List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluates = shjsAuthenticateEvaluateList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
+                    sgjsTechMethod1.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluates);
+                }
             }
+            FlowInfoSearchUtil.getFlowInfo(sgjsTechMethodList, FlowEnum.SGJS_TECH_METHOD);
         }
         return sgjsTechMethodList;
     }
@@ -147,13 +164,22 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
 
     @Transactional
     public int deleteSgjsTechMethod(SgjsTechMethod sgjsTechMethod) {
-        sgjsTechMethod.setUpdateUser(SecurityUtils.getUserName());
-        sgjsTechMethod.setUpdateTime(DateUtils.getNowDate());
         return sgjsTechMethodMapper.deleteSgjsTechMethod(sgjsTechMethod);
     }
 
     @Transactional
     public int deleteSgjsTechMethodByPks(List<Long> sgjsTechMethodPkList) {
         return sgjsTechMethodMapper.deleteSgjsTechMethodByPks(sgjsTechMethodPkList);
+    }
+
+    @Override
+    public void updateTaskStatus(Long id) {
+        SgjsTechMethod sgjsTechMethod = new SgjsTechMethod();
+        sgjsTechMethod.setId(id);
+        SgjsTechMethod existVo = sgjsTechMethodMapper.getSgjsTechMethod(sgjsTechMethod);
+        if(existVo != null) {
+            sgjsTechMethod.setTaskStatus("5");
+            sgjsTechMethodMapper.updateSgjsTechMethod(sgjsTechMethod);
+        }
     }
 }

@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.constant.BelongBusiness;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
@@ -68,6 +70,7 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = new ShjsAuthenticateEvaluate();
         shjsAuthenticateEvaluate.setForeignId(id);
         returnVO.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate));
+        FlowInfoSearchUtil.getFlowInfo(returnVO, FlowEnum.SGJS_FOUR_NEWS_ACHIEVEMENT);
         return returnVO;
     }
 
@@ -101,6 +104,7 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
                     sgjsFourNewsAchievement1.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluates);
                 }
             }
+            FlowInfoSearchUtil.getFlowInfo(sgjsFourNewsAchievementList,FlowEnum.SGJS_FOUR_NEWS_ACHIEVEMENT);
         }
         return sgjsFourNewsAchievementList;
     }
@@ -160,13 +164,22 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
 
     @Transactional
     public int deleteSgjsFourNewsAchievement(SgjsFourNewsAchievement sgjsFourNewsAchievement) {
-        sgjsFourNewsAchievement.setUpdateUser(SecurityUtils.getUserName());
-        sgjsFourNewsAchievement.setUpdateTime(DateUtils.getNowDate());
         return sgjsFourNewsAchievementMapper.deleteSgjsFourNewsAchievement(sgjsFourNewsAchievement);
     }
 
     @Transactional
     public int deleteSgjsFourNewsAchievementByPks(List<Long> sgjsFourNewsAchievementPkList) {
         return sgjsFourNewsAchievementMapper.deleteSgjsFourNewsAchievementByPks(sgjsFourNewsAchievementPkList);
+    }
+
+    @Override
+    public void updateTaskStatus(Long id) {
+        SgjsFourNewsAchievement sgjsFourNewsAchievement = new SgjsFourNewsAchievement();
+        sgjsFourNewsAchievement.setId(id);
+        SgjsFourNewsAchievement existVo = sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievement(sgjsFourNewsAchievement);
+        if(existVo != null) {
+            sgjsFourNewsAchievement.setTaskStatus("5");
+            sgjsFourNewsAchievementMapper.updateSgjsFourNewsAchievement(sgjsFourNewsAchievement);
+        }
     }
 }

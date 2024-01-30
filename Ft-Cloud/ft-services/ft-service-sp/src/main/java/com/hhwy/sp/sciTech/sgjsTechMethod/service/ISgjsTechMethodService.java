@@ -26,4 +26,6 @@ public interface ISgjsTechMethodService {
     int deleteSgjsTechMethod(SgjsTechMethod sgjsTechMethod);
 
     int deleteSgjsTechMethodByPks(List<Long> sgjsTechMethodPkList);
+
+    void updateTaskStatus(Long id);
 }

@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate;
+import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 
 /**
@@ -25,7 +26,7 @@ import lombok.Data;
  * @remark sgjs_tech_method
  */
 @Data
-public class SgjsTechMethod extends BaseEntity {
+public class SgjsTechMethod extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**

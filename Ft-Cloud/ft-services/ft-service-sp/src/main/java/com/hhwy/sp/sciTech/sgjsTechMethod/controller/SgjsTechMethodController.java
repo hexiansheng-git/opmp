@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -93,5 +94,18 @@ public class SgjsTechMethodController extends BaseController {
         List<SgjsTechMethod> sgjsTechMethodList = sgjsTechMethodService.getSgjsTechMethodList(sgjsTechMethodParam);
         ExcelUtils<SgjsTechMethod> util = new ExcelUtils<>(SgjsTechMethod.class);
         util.exportExcel(response, sgjsTechMethodList, DateUtils.getDate());
+    }
+
+    /**
+     *
+     * 更新流程数据
+     * @param id 主键
+     * @return  监听器
+     */
+    @RequestMapping(value ="/listener",method = RequestMethod.POST)
+    @Transactional
+    public AjaxResult updateTaskStatus(@RequestParam ("id") Long id) {
+        sgjsTechMethodService.updateTaskStatus(id);
+        return AjaxResult.success();
     }
 }
