@@ -32,6 +32,7 @@ import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
+import nonapi.io.github.classgraph.json.Id;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -328,8 +329,6 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                 }
                 temp.setSelfCode(selfCode);
                 String pcode = temp.getParentCode();
-                if(StringUtils.isBlank(topId))
-                    System.out.println(1);
                 idList.add(Long.valueOf(temp.getId()));
                 temp.setCode((StringUtils.isBlank(pcode)?"":pcode+"-")+ObjectUtils.nvlString(temp.getSelfCode()));
                 temp.setPtVar3(temp.getName());
@@ -338,11 +337,11 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                     ObjectUtils.add2MapList(resuMap,topId,temp);
                 realIdMap.put(temp.getId(), topId);
                 //替换掉Id和父级Id，否则前端id会重
-//                realIdMap.put(temp.getId(), newId);
-                String newId = UUIDUtils.getShortUuid();
+//                String newId = UUIDUtils.getShortUuid();
+                String newId = temp.getId();
                 idRelateMap.put(temp.getId(),newId);
                 temp.setId(newId);
-                temp.setParentId(i==0?temp.getParentId():ObjectUtils.nvlString(idRelateMap.get(temp.getParentId())));
+//                temp.setParentId(i==0?temp.getParentId():ObjectUtils.nvlString(idRelateMap.get(temp.getParentId())));
                 wbsMap.put(temp.getId(),temp);
             }
             tempList.clear();
