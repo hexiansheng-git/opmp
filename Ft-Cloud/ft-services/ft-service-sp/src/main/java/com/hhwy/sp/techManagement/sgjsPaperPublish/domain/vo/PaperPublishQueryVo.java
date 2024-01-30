@@ -2,6 +2,8 @@ package com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author han
  * @date 2024-01-25 11:01:37
@@ -23,4 +25,6 @@ public class PaperPublishQueryVo {
      * 字段描述：当前状态
      */
     private String currentState;
+
+    private List<Long> ids;
 }

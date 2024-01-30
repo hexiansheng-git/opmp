@@ -1,7 +1,6 @@
 package com.hhwy.sp.techManagement.sgjsPatentDeclare.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -10,7 +9,9 @@ import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.SgjsPatentDeclare;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.vo.PatentDeclareQueryVo;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.service.ISgjsPatentDeclareService;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -129,10 +130,17 @@ public class SgjsPatentDeclareController extends BaseController {
         return toAjax(sgjsPatentDeclareService.deleteSgjsPatentDeclareByPks(sgjsPatentDeclarePkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, PatentDeclareQueryVo queryVo) throws IOException {
-        List<SgjsPatentDeclare> sgjsPatentDeclareList = sgjsPatentDeclareService.getSgjsPatentDeclareList(queryVo);
-        ExcelUtils<SgjsPatentDeclare> util = new ExcelUtils<>(SgjsPatentDeclare.class);
+    @PostMapping("/export")
+    public void export(HttpServletResponse response,@RequestBody PatentDeclareQueryVo queryVo) throws IOException {
+        List<Long> ids = queryVo.getIds();
+        List<SgjsPatentDeclare> sgjsPatentDeclareList;
+        if(CollectionUtils.isEmpty(ids)){
+            sgjsPatentDeclareList = sgjsPatentDeclareService.getListByIds(ids);
+        }else {
+            sgjsPatentDeclareList = sgjsPatentDeclareService.getSgjsPatentDeclareList(queryVo);
+        }
+
+        FtExcelUtil<SgjsPatentDeclare> util = new FtExcelUtil<>(SgjsPatentDeclare.class);
         util.exportExcel(response, sgjsPatentDeclareList, DateUtils.getDate());
     }
 }

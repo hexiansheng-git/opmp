@@ -169,4 +169,11 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
     public void submit(SgjsPatentDeclare patentDeclare) {
 
     }
+
+    @Override
+    public List<SgjsPatentDeclare> getListByIds(List<Long> ids) {
+        List<SgjsPatentDeclare> patentDeclareList = sgjsPatentDeclareMapper.getListByIds(ids);
+        sgjsAchievementAwardService.setLedger(patentDeclareList,SgjsPatentDeclare::getId, BelongBusiness.BELONG_BUSINESS_7);
+        return patentDeclareList;
+    }
 }

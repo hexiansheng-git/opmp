@@ -36,4 +36,6 @@ public interface SgjsPatentDeclareMapper {
     void deleteSgjsPatentDeclareById(@Param("id") Long id);
 
     int getCountByPatentNumberExpectId(@Param("id") Long id,@Param("patentNumber") String patentNumber);
+
+    List<SgjsPatentDeclare> getListByIds(@Param("ids") List<Long> ids);
 }

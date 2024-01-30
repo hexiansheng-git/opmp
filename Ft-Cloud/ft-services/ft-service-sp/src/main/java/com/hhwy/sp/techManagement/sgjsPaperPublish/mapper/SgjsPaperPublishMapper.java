@@ -34,4 +34,6 @@ public interface SgjsPaperPublishMapper {
     int deleteSgjsPaperPublishByPks(@Param("sgjsPaperPublishPkList") List<Long> sgjsPaperPublishPkList);
 
     void deleteSgjsPaperPublishById(@Param("id") Long id);
+
+    List<SgjsPaperPublish> getListByIds(@Param("ids") List<Long> ids);
 }

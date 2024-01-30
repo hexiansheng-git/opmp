@@ -1,16 +1,20 @@
 package com.hhwy.sp.techManagement.sgjsPaperPublish.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
+import com.hhwy.sp.common.constant.BelongBusiness;
+import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.SgjsPaperPublish;
+import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishExportVo;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishQueryVo;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.service.ISgjsPaperPublishService;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +36,9 @@ public class SgjsPaperPublishController extends BaseController {
 
     @Autowired
     private ISgjsPaperPublishService sgjsPaperPublishService;
+
+    @Autowired
+    private ISgjsAchievementAwardService sgjsAchievementAwardService;
 
     /**
      * 论文发表管理详情数据
@@ -64,6 +71,7 @@ public class SgjsPaperPublishController extends BaseController {
     public AjaxResult getSgjsPaperPublishList(@Validated(ValidationGroups.Select.class) PaperPublishQueryVo queryVo) {
         startPage();
         List<SgjsPaperPublish> sgjsPaperPublishList = sgjsPaperPublishService.getSgjsPaperPublishList(queryVo);
+        sgjsAchievementAwardService.setLedger(sgjsPaperPublishList, SgjsPaperPublish::getId, BelongBusiness.BELONG_BUSINESS_8);
         FlowInfoSearchUtil.getFlowInfo(sgjsPaperPublishList, FlowEnum.SGJS_PAPER_PUBLISH);
         return getDataTableAjaxResult(sgjsPaperPublishList);
     }
@@ -130,10 +138,17 @@ public class SgjsPaperPublishController extends BaseController {
         return toAjax(sgjsPaperPublishService.deleteSgjsPaperPublishByPks(sgjsPaperPublishPkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, PaperPublishQueryVo queryVo) throws IOException {
-        List<SgjsPaperPublish> sgjsPaperPublishList = sgjsPaperPublishService.getSgjsPaperPublishList(queryVo);
-        ExcelUtils<SgjsPaperPublish> util = new ExcelUtils<>(SgjsPaperPublish.class);
-        util.exportExcel(response, sgjsPaperPublishList, DateUtils.getDate());
+    @PostMapping("/export")
+    public void export(HttpServletResponse response,@RequestBody PaperPublishQueryVo queryVo) throws IOException {
+        List<Long> ids = queryVo.getIds();
+        List<SgjsPaperPublish> sgjsPaperPublishList;
+        if(CollectionUtils.isEmpty(ids)){
+            sgjsPaperPublishList = sgjsPaperPublishService.getSgjsPaperPublishList(queryVo);
+        }else {
+            sgjsPaperPublishList = sgjsPaperPublishService.getListByIds(ids);
+        }
+        List<PaperPublishExportVo> exportVoList = sgjsPaperPublishService.getExportVoList(sgjsPaperPublishList);
+        FtExcelUtil<PaperPublishExportVo> util = new FtExcelUtil<>(PaperPublishExportVo.class);
+        util.exportExcel(response, exportVoList, DateUtils.getDate());
     }
 }

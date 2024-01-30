@@ -8,15 +8,18 @@ import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardServ
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.SgjsPaperPublish;
+import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishExportVo;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishQueryVo;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.mapper.SgjsPaperPublishMapper;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.service.ISgjsPaperPublishService;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,9 +61,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
     }
 
     public List<SgjsPaperPublish> getSgjsPaperPublishList(PaperPublishQueryVo queryVo) {
-        List<SgjsPaperPublish> paperPublishList = sgjsPaperPublishMapper.getSgjsPaperPublishList(queryVo);
-        sgjsAchievementAwardService.setLedger(paperPublishList, SgjsPaperPublish::getId, BelongBusiness.BELONG_BUSINESS_8);
-        return paperPublishList;
+        return sgjsPaperPublishMapper.getSgjsPaperPublishList(queryVo);
     }
 
     @Transactional
@@ -145,5 +146,22 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         sgjsExpertLibraryService.deleteSgjsExpertLibraryByForeignId(id);
         //删除成果奖励数据
         sgjsAchievementAwardService.deleteSgjsAchievementAwardByForeignId(id);
+    }
+
+    @Override
+    public List<SgjsPaperPublish> getListByIds(List<Long> ids) {
+        return sgjsPaperPublishMapper.getListByIds(ids);
+    }
+
+    @Override
+    public List<PaperPublishExportVo> getExportVoList(List<SgjsPaperPublish> sgjsPaperPublishList) {
+        List<PaperPublishExportVo> exportVoList = new ArrayList<>();
+        for (SgjsPaperPublish paperPublish : sgjsPaperPublishList) {
+            PaperPublishExportVo exportVo = new PaperPublishExportVo();
+            BeanUtils.copyProperties(paperPublish,exportVo);
+            exportVoList.add(exportVo);
+        }
+        sgjsAchievementAwardService.setAllAwards(exportVoList,PaperPublishExportVo::getId,PaperPublishExportVo::setAllAward,BelongBusiness.BELONG_BUSINESS_8);
+        return exportVoList;
     }
 }

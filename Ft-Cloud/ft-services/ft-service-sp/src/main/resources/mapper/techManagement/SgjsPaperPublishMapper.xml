@@ -121,7 +121,7 @@
             <if test="paperFile != null  and paperFile != ''">and `paper_file` = #{paperFile}</if>
             <if test="periodicalGrade != null  and periodicalGrade != ''">and `periodical_grade` = #{periodicalGrade}
             </if>
-            <if test="periodicalName != null ">and `periodical_name` = #{periodicalName}</if>
+            <if test="periodicalName != null and periodicalName != ''">and `periodical_name` = #{periodicalName}</if>
             <if test="publishDate != null ">and `publish_date` = #{publishDate}</if>
             <if test="achievementDescription != null  and achievementDescription != ''">and `achievement_description` =
                 #{achievementDescription}
@@ -165,6 +165,19 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getListByIds" resultMap="SgjsPaperPublishResultMap">
+        <include refid="selectSgjsPaperPublishVo"/>
+        <where>
+            del_flag = "0"
+            <if test="ids != null and ids.size() > 0">
+                and `id` in
+                <foreach item="id" collection="ids" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+        order by create_time desc
+    </select>
 
     <insert id="insertSgjsPaperPublish" useGeneratedKeys="true" keyProperty="id">
         insert into sgjs_paper_publish
@@ -185,7 +198,7 @@
             <if test="paperIntroduction != null  and paperIntroduction != ''">`paper_introduction`,</if>
             <if test="paperFile != null  and paperFile != ''">`paper_file`,</if>
             <if test="periodicalGrade != null  and periodicalGrade != ''">`periodical_grade`,</if>
-            <if test="periodicalName != null ">`periodical_name`,</if>
+            <if test="periodicalName != null and periodicalName != ''">`periodical_name`,</if>
             <if test="publishDate != null ">`publish_date`,</if>
             <if test="achievementDescription != null  and achievementDescription != ''">`achievement_description`,</if>
             <if test="achievementFile != null  and achievementFile != ''">`achievement_file`,</if>
@@ -228,7 +241,7 @@
             <if test="paperIntroduction != null  and paperIntroduction != ''">#{paperIntroduction},</if>
             <if test="paperFile != null  and paperFile != ''">#{paperFile},</if>
             <if test="periodicalGrade != null  and periodicalGrade != ''">#{periodicalGrade},</if>
-            <if test="periodicalName != null ">#{periodicalName},</if>
+            <if test="periodicalName != null and periodicalName != ''">#{periodicalName},</if>
             <if test="publishDate != null ">#{publishDate},</if>
             <if test="achievementDescription != null  and achievementDescription != ''">#{achievementDescription},</if>
             <if test="achievementFile != null  and achievementFile != ''">#{achievementFile},</if>
@@ -371,7 +384,7 @@
             </if>
             <if test="paperFile != null  and  paperFile != ''">`paper_file` = #{paperFile},</if>
             <if test="periodicalGrade != null  and  periodicalGrade != ''">`periodical_grade` = #{periodicalGrade},</if>
-            <if test="periodicalName != null ">`periodical_name` = #{periodicalName},</if>
+            <if test="periodicalName != null and periodicalName != ''">`periodical_name` = #{periodicalName},</if>
             <if test="publishDate != null ">`publish_date` = #{publishDate},</if>
             <if test="achievementDescription != null  and  achievementDescription != ''">`achievement_description` =
                 #{achievementDescription},
@@ -640,7 +653,7 @@
             <if test="paperFile != null  and paperFile != ''">and `paper_file` = #{paperFile}</if>
             <if test="periodicalGrade != null  and periodicalGrade != ''">and `periodical_grade` = #{periodicalGrade}
             </if>
-            <if test="periodicalName != null ">and `periodical_name` = #{periodicalName}</if>
+            <if test="periodicalName != null and periodicalName != ''">and `periodical_name` = #{periodicalName}</if>
             <if test="publishDate != null ">and `publish_date` = #{publishDate}</if>
             <if test="achievementDescription != null  and achievementDescription != ''">and `achievement_description` =
                 #{achievementDescription}
