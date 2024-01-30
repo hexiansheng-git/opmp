@@ -44,11 +44,6 @@ public class SgsjTechnicalScienceTopicModifyServiceImpl implements ISgsjTechnica
 
     @Transactional
     public int insertSgsjTechnicalScienceTopicModifyList(List<SgsjTechnicalScienceTopicModify> sgsjTechnicalScienceTopicModifyList) {
-        for (SgsjTechnicalScienceTopicModify sgsjTechnicalScienceTopicModify : sgsjTechnicalScienceTopicModifyList) {
-            sgsjTechnicalScienceTopicModify.setId(IdWorker.createId());
-            sgsjTechnicalScienceTopicModify.setCreateUser(SecurityUtils.getUserName());
-            sgsjTechnicalScienceTopicModify.setCreateTime(DateUtils.getNowDate());
-        }
         return sgsjTechnicalScienceTopicModifyMapper.insertSgsjTechnicalScienceTopicModifyList(sgsjTechnicalScienceTopicModifyList);
     }
 

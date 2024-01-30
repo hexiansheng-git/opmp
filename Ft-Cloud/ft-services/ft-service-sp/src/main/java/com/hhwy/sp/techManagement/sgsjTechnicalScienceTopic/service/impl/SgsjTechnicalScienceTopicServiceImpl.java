@@ -1,37 +1,30 @@
 package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.impl;
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.nacos.api.config.filter.IFilterConfig;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.enums.FlowEnum;
-import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
 import com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate;
 import com.hhwy.sp.common.shjsAuthenticateEvaluate.service.IShjsAuthenticateEvaluateService;
-import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.domain.SgsjTechnicalScienceTopicModify;
-import com.hhwy.system.api.domain.SysUser;
-import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
-import io.seata.common.util.StringUtils;
-import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.mapper.SgsjTechnicalScienceTopicMapper;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.ISgsjTechnicalScienceTopicService;
-import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
+import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.domain.SgsjTechnicalScienceTopicModify;
+import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.service.ISgsjTechnicalScienceTopicModifyService;
+import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 功能描述: 科技管理 - 科研课题研发管理
@@ -52,6 +45,8 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     private IShjsAuthenticateEvaluateService shjsAuthenticateEvaluateService;
     @Autowired
     private ISgjsExpertLibraryService sgjsExpertLibraryService;
+    @Autowired
+    private ISgsjTechnicalScienceTopicModifyService technicalScienceTopicModifyService;
 
 
     public SgsjTechnicalScienceTopic getSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
@@ -118,12 +113,12 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             p.setTopicNode(sgsjTechnicalScienceTopic.getTopicCurentNode());
             p.setModifyDatetime(DateUtils.getNowDate());
             p.setModifyPerson(String.valueOf(sysUser.getUserId()));
-            p.setModifyPersionName(sysUser.getUserName());
+            p.setModifyPersionName(sysUser.getNickName());
             p.setId(IdWorker.createId());
             p.setCreateUser(sysUser.getUserName());
             p.setCreateTime(DateUtils.getNowDate());
-
         });
+        technicalScienceTopicModifyService.insertSgsjTechnicalScienceTopicModifyList(modifyList);
         return 1;
     }
 
@@ -348,7 +343,6 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             objects.add(differData);
         }
         return objects;
-
     }
 
     private boolean compareStr(String s1, String s2){
