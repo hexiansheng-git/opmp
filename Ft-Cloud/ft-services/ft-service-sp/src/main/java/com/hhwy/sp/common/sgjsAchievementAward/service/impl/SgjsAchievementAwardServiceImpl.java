@@ -143,7 +143,6 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
         SgjsAchievementAward delParam = new SgjsAchievementAward();
         delParam.setForeignId(foreignId);
         sgjsAchievementAwardMapper.deleteSgjsAchievementAward(delParam);
-
         if(CollectionUtils.isEmpty(awardList)){
             return;
         }
@@ -169,7 +168,6 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
 
     @Transactional
     public int insertSgjsAchievementAwardList(List<SgjsAchievementAward> sgjsAchievementAwardList) {
-        if (CollUtil.isEmpty(sgjsAchievementAwardList)) return 0;
         for (SgjsAchievementAward sgjsAchievementAward : sgjsAchievementAwardList) {
             sgjsAchievementAward.setId(IdWorker.createId());
             sgjsAchievementAward.setCreateUser(SecurityUtils.getUserName());

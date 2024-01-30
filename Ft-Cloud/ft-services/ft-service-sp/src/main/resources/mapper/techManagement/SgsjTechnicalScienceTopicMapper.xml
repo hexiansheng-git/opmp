@@ -425,7 +425,6 @@
     <update id="updateSgsjTechnicalScienceTopic">
         update sgsj_technical_science_topic
         <trim prefix="SET" suffixOverrides=",">
-            <if test="id != null ">`id` = #{id},</if>
             <if test="applyState != null  and  applyState != ''">`apply_state` = #{applyState},</if>
             <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
             <if test="handlePerson != null  and  handlePerson != ''">`handle_person` = #{handlePerson},</if>

@@ -32,8 +32,14 @@ public class SgsjTechnicalScienceTopic extends CommonBaseEntity {
     //成果奖项
     private List<SgjsAchievementAward> awardList;
 
-    //知识库
-    private List<SgjsExpertLibrary> libraryList;
+    //知识库课题申请
+    private List<SgjsExpertLibrary> listApply;
+    //知识库课题立项
+    private List<SgjsExpertLibrary> listTopic;
+    //知识库大纲审查
+    private List<SgjsExpertLibrary> listOutline;
+    //知识库课题验收
+    private List<SgjsExpertLibrary> listAcceptance;
 
     /**
      * 字段描述：

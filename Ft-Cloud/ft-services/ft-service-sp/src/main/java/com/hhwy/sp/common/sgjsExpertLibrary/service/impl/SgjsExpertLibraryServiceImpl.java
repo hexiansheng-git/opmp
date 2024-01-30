@@ -2,6 +2,7 @@ package com.hhwy.sp.common.sgjsExpertLibrary.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.sgjsExpertLibrary.mapper.SgjsExpertLibraryMapper;
 import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
@@ -42,6 +43,28 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
         return sgjsExpertLibraryMapper.getSgjsExpertLibraryList(query);
     }
 
+    public void saveExpertLibrary(Long foreignId, String belongBusiness, List<SgjsExpertLibrary> saveList) {
+        CommonAssert.notNull(foreignId,"外键不能为空！");
+        CommonAssert.notBlank(belongBusiness,"所属业务不能为空！");
+        //根据外键删除数据
+        SgjsExpertLibrary delParam = new SgjsExpertLibrary();
+        delParam.setForeignId(foreignId);
+        sgjsExpertLibraryMapper.deleteSgjsExpertLibrary(delParam);
+        if(CollectionUtils.isEmpty(saveList)){
+            return;
+        }
+        //插入数据
+        for (SgjsExpertLibrary library : saveList) {
+            library.setId(IdWorker.createId());
+            library.setForeignId(foreignId);
+            library.setBelongBusiness(belongBusiness);
+            library.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            library.setCreateUserName(SecurityUtils.getUserName());
+            library.setCreateTime(DateUtils.getNowDate());
+        }
+        sgjsExpertLibraryMapper.insertSgjsExpertLibraryList(saveList);
+    }
+
     @Transactional
     public int insertSgjsExpertLibrary(SgjsExpertLibrary sgjsExpertLibrary) {
         sgjsExpertLibrary.setId(IdWorker.createId());
@@ -52,7 +75,6 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
 
     @Transactional
     public int insertSgjsExpertLibraryList(List<SgjsExpertLibrary> sgjsExpertLibraryList) {
-        if (CollectionUtils.isEmpty(sgjsExpertLibraryList)) return 0;
         for (SgjsExpertLibrary sgjsExpertLibrary : sgjsExpertLibraryList) {
             sgjsExpertLibrary.setId(IdWorker.createId());
             sgjsExpertLibrary.setCreateUser(SecurityUtils.getUserName());

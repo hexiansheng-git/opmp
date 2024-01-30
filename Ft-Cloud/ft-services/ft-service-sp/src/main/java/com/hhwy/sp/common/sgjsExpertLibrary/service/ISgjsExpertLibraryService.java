@@ -17,6 +17,14 @@ public interface ISgjsExpertLibraryService {
 
     List<SgjsExpertLibrary> getListByForeignId(Long foreignId);
 
+    /**
+     * 保存专家库数据集
+     * @param foreignId 外键id
+     * @param belongBusiness 所属功能
+     * @param saveList 成果数据集
+     */
+    void saveExpertLibrary(Long foreignId, String belongBusiness, List<SgjsExpertLibrary> saveList);
+
     int insertSgjsExpertLibrary(SgjsExpertLibrary sgjsExpertLibrary);
 
     int insertSgjsExpertLibraryList(List<SgjsExpertLibrary> sgjsExpertLibraryList);
