@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
@@ -173,12 +174,22 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
     }
 
     @Override
-    public void updateTaskStatus(Long id) {
+    public void updateTaskStatus(Long id, String isPass) {
         SgjsTechMethod sgjsTechMethod = new SgjsTechMethod();
         sgjsTechMethod.setId(id);
         SgjsTechMethod existVo = sgjsTechMethodMapper.getSgjsTechMethod(sgjsTechMethod);
         if(existVo != null) {
             sgjsTechMethod.setTaskStatus("5");
+            if(StringUtils.isNotEmpty(isPass)) {
+                if("1".equals(isPass)) {
+                    sgjsTechMethod.setDataCurrentState("3");
+                }
+                if("0".equals(isPass)) {
+                    sgjsTechMethod.setDataCurrentState("4");
+                }
+            } else {
+                sgjsTechMethod.setDataCurrentState("2");
+            }
             sgjsTechMethodMapper.updateSgjsTechMethod(sgjsTechMethod);
         }
     }

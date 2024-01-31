@@ -252,6 +252,12 @@ public class SgjsTechMethod extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "流程状态（5已完成）")
     private String taskStatus;
+    /**
+     * 字段描述：当前状态
+     */
+    @JsonProperty
+    @Excel(name = "当前状态")
+    private String dataCurrentState;
 
     /**
      * 成果描述
@@ -272,6 +278,11 @@ public class SgjsTechMethod extends CommonBaseEntity {
      * 是否通过
      */
     private String isPass;
+
+    /**
+     * 专家建议
+     */
+    private String expertAdvice;
 
     /**
      * 专家数据集合

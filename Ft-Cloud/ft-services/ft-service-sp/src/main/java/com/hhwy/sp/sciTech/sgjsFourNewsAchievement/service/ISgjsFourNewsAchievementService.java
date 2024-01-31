@@ -27,5 +27,5 @@ public interface ISgjsFourNewsAchievementService {
 
     int deleteSgjsFourNewsAchievementByPks(List<Long> sgjsFourNewsAchievementPkList);
 
-    void updateTaskStatus(Long id);
+    void updateTaskStatus(Long id, String isPass);
 }

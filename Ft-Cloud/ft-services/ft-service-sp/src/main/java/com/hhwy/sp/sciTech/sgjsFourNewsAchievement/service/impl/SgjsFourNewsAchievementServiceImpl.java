@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
@@ -173,12 +174,22 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
     }
 
     @Override
-    public void updateTaskStatus(Long id) {
+    public void updateTaskStatus(Long id, String isPass) {
         SgjsFourNewsAchievement sgjsFourNewsAchievement = new SgjsFourNewsAchievement();
         sgjsFourNewsAchievement.setId(id);
         SgjsFourNewsAchievement existVo = sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievement(sgjsFourNewsAchievement);
         if(existVo != null) {
             sgjsFourNewsAchievement.setTaskStatus("5");
+            if(StringUtils.isNotEmpty(isPass)) {
+                if("1".equals(isPass)) {
+                    sgjsFourNewsAchievement.setDataCurrentState("3");
+                }
+                if("0".equals(isPass)) {
+                    sgjsFourNewsAchievement.setDataCurrentState("4");
+                }
+            } else {
+                sgjsFourNewsAchievement.setDataCurrentState("2");
+            }
             sgjsFourNewsAchievementMapper.updateSgjsFourNewsAchievement(sgjsFourNewsAchievement);
         }
     }

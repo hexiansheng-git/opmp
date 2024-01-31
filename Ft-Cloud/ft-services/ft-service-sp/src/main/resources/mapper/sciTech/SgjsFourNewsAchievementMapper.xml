@@ -45,6 +45,8 @@
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
         <result property="taskStatus" column="task_status"/>
+        <result property="dataCurrentState" column="data_current_state"/>
+        <result property="expertAdvice" column="expert_advice"/>
     </resultMap>
     <sql id="selectSgjsFourNewsAchievementVo">
         select `id`
@@ -86,6 +88,8 @@
              , `pt_var4`
              , `pt_var5`
              , `task_status`
+             , `data_current_state`
+             , `expert_advice`
         from sgjs_four_news_achievement
     </sql>
     <select id="getSgjsFourNewsAchievement" resultMap="SgjsFourNewsAchievementResultMap">
@@ -139,6 +143,8 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="dataCurrentState != null  and dataCurrentState != ''">and `data_current_state` = #{dataCurrentState}</if>
+            <if test="expertAdvice != null  and expertAdvice != ''">and `expert_advice` = #{expertAdvice}</if>
         </where>
         order by create_time desc
     </select>
@@ -194,6 +200,8 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="dataCurrentState != null  and dataCurrentState != ''">and `data_current_state` = #{dataCurrentState}</if>
+            <if test="expertAdvice != null  and expertAdvice != ''">and `expert_advice` = #{expertAdvice}</if>
         </where>
         order by create_time desc
     </select>
@@ -240,6 +248,8 @@
             <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
             <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+            <if test="dataCurrentState != null  and dataCurrentState != ''">`data_current_state`,</if>
+            <if test="expertAdvice != null  and expertAdvice != ''">`expert_advice`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -281,6 +291,8 @@
             <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
             <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+            <if test="dataCurrentState != null  and dataCurrentState != ''">#{dataCurrentState},</if>
+            <if test="expertAdvice != null  and expertAdvice != ''">#{expertAdvice},</if>
         </trim>
     </insert>
 
@@ -326,6 +338,8 @@
             `pt_var4`,
             `pt_var5`,
             `task_status`,
+            `data_current_state`,
+            `expert_advice`,
         </trim>
         values
         <foreach collection="sgjsFourNewsAchievementList" item="item" separator=",">
@@ -368,6 +382,8 @@
                 #{item.ptVar4},
                 #{item.ptVar5},
                 #{item.taskStatus},
+                #{item.dataCurrentState},
+                #{item.expertAdvice},
             </trim>
         </foreach>
     </insert>
@@ -422,6 +438,8 @@
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
             <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+            <if test="dataCurrentState != null  and  dataCurrentState != ''">`data_current_state` = #{dataCurrentState},</if>
+            <if test="expertAdvice != null  and  expertAdvice != ''">`expert_advice` = #{expertAdvice},</if>
         </trim>
         <where>
             <if test="id != null ">and `id` = #{id}</if>
@@ -626,6 +644,16 @@
                     when `id`=#{item.id} then #{item.taskStatus}
                 </foreach>
             </trim>
+            <trim prefix="data_current_state  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.dataCurrentState}
+                </foreach>
+            </trim>
+            <trim prefix="expert_advice  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.expertAdvice}
+                </foreach>
+            </trim>
         </trim>
         where `id` in
         <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
@@ -683,6 +711,8 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="dataCurrentState != null  and dataCurrentState != ''">and `data_current_state` = #{dataCurrentState}</if>
+            <if test="expertAdvice != null  and expertAdvice != ''">and `expert_advice` = #{expertAdvice}</if>
         </where>
     </update>
 

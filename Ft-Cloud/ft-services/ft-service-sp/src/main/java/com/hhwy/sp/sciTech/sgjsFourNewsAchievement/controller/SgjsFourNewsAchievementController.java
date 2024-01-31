@@ -104,8 +104,8 @@ public class SgjsFourNewsAchievementController extends BaseController {
      */
     @RequestMapping(value ="/listener",method = RequestMethod.POST)
     @Transactional
-    public AjaxResult updateTaskStatus(@RequestParam ("id") Long id) {
-        sgjsFourNewsAchievementService.updateTaskStatus(id);
+    public AjaxResult updateTaskStatus(@RequestParam ("id") Long id, @RequestParam ("isPass") String isPass) {
+        sgjsFourNewsAchievementService.updateTaskStatus(id, isPass);
         return AjaxResult.success();
     }
 }

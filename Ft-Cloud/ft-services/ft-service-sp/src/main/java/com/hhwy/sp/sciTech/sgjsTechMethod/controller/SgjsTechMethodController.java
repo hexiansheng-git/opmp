@@ -104,8 +104,8 @@ public class SgjsTechMethodController extends BaseController {
      */
     @RequestMapping(value ="/listener",method = RequestMethod.POST)
     @Transactional
-    public AjaxResult updateTaskStatus(@RequestParam ("id") Long id) {
-        sgjsTechMethodService.updateTaskStatus(id);
+    public AjaxResult updateTaskStatus(@RequestParam ("id") Long id, @RequestParam ("isPass") String isPass) {
+        sgjsTechMethodService.updateTaskStatus(id, isPass);
         return AjaxResult.success();
     }
 }
