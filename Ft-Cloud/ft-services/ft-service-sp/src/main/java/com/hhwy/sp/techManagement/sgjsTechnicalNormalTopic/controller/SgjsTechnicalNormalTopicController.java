@@ -1,29 +1,26 @@
 package com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-
-import cn.hutool.core.bean.BeanUtil;
-import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalTopicCost.domain.SgjsTechnicalNormalTopicCost;
-import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalTopicCost.domain.SgjsTechnicalNormalTopicCostDTO;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
-
+import cn.hutool.core.collection.CollUtil;
+import com.alibaba.excel.EasyExcel;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.service.ISgjsTechnicalNormalTopicService;
-import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.SgjsTechnicalNormalTopic;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.EasyExcelListener;
+import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.SgjsTechnicalNormalTopic;
+import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.service.ISgjsTechnicalNormalTopicService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /***
  * 功能描述: 科技管理 - 一般课题研发管理
@@ -92,15 +89,28 @@ public class SgjsTechnicalNormalTopicController extends BaseController {
         return toAjax(sgjsTechnicalNormalTopicService.deleteSgjsTechnicalNormalTopicByPks(sgjsTechnicalNormalTopicPkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, SgjsTechnicalNormalTopic sgjsTechnicalNormalTopicParam) throws IOException {
+    @GetMapping("/export1")
+    public void export1(HttpServletResponse response, SgjsTechnicalNormalTopic sgjsTechnicalNormalTopicParam) throws IOException {
         List<SgjsTechnicalNormalTopic> sgjsTechnicalNormalTopicList = sgjsTechnicalNormalTopicService.getSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopicParam);
         ExcelUtils<SgjsTechnicalNormalTopic> util = new ExcelUtils<>(SgjsTechnicalNormalTopic.class);
         util.exportExcel(response, sgjsTechnicalNormalTopicList, DateUtils.getDate());
     }
 
-    @GetMapping("/export1")
-    public void export1(HttpServletResponse response, SgjsTechnicalNormalTopic sgjsTechnicalNormalTopicParam) throws Exception {
+    //导出
+    @GetMapping("/export")
+    public void export(HttpServletResponse response, SgjsTechnicalNormalTopic sgjsTechnicalNormalTopicParam) throws Exception {
         sgjsTechnicalNormalTopicService.export(response, sgjsTechnicalNormalTopicParam);
+    }
+
+    //导入
+    @PostMapping("/import")
+    public AjaxResult importExcel(MultipartFile file) throws IOException {
+        EasyExcelListener listener = new EasyExcelListener();
+        EasyExcel.read(file.getInputStream(), listener).sheet(0).doRead();
+        List<Map<Integer, String>> headList = listener.getHeadList();
+        if (CollUtil.isEmpty(headList)) return AjaxResult.error("表头为空");
+        List<Map<Integer, String>> dataList = listener.getDataList();
+        if (CollUtil.isEmpty(dataList)) return AjaxResult.error("数据为空");
+        return sgjsTechnicalNormalTopicService.importData(headList, dataList);
     }
 }

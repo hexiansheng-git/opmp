@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.SgjsTechnicalNormalTopic;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,4 +33,6 @@ public interface ISgjsTechnicalNormalTopicService {
     int deleteSgjsTechnicalNormalTopicByPks(List<Long> sgjsTechnicalNormalTopicPkList);
 
     void export(HttpServletResponse response, SgjsTechnicalNormalTopic sgjsTechnicalNormalTopicParam) throws Exception;
+
+    AjaxResult importData(List<Map<Integer, String>> headList, List<Map<Integer, String>> dataList);
 }
