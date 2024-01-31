@@ -11,19 +11,19 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author hhwy
  */
-@FeignClient(name = "ft-service-pm")
+@FeignClient(name = "ft-service-sp")
 public interface SpServiceApi {
 
     /**
      * 修改四新成果管理
      */
     @RequestMapping(value = "/sgjsFourNewsAchievement/listener", method = RequestMethod.POST)
-    AjaxResult updateFourNewsAchievement(@RequestParam("id") Long id);
+    AjaxResult updateFourNewsAchievement(@RequestParam("id") Long id, @RequestParam("isPass") String isPass);
 
     /**
      * 修改工艺工法管理
      */
     @RequestMapping(value = "/sgjsTechMethod/listener", method = RequestMethod.POST)
-    AjaxResult updateSgjsTechMethod(@RequestParam("id") Long id);
+    AjaxResult updateSgjsTechMethod(@RequestParam("id") Long id, @RequestParam("isPass") String isPass);
 
 }

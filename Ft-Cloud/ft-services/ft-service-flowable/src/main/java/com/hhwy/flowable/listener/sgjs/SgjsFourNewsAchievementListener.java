@@ -21,9 +21,10 @@ public class SgjsFourNewsAchievementListener  implements TaskListener, Execution
         String businessKey = processInstance.getBusinessKey();
 
         Map<String, Object> variables = delegateTask.getVariables();
+        String isPass = variables.get("isPass") == null ? "" : (String)variables.get("isPass");
         String s = JSONObject.toJSONString(variables);
         SpServiceApi bean = SpringUtils.getBean(SpServiceApi.class);
-        bean.updateFourNewsAchievement(Long.valueOf(businessKey));
+        bean.updateFourNewsAchievement(Long.valueOf(businessKey), isPass);
     }
 
     @Override
@@ -34,8 +35,9 @@ public class SgjsFourNewsAchievementListener  implements TaskListener, Execution
         String businessKey = processInstance.getBusinessKey();
 
         Map<String, Object> variables = delegateTask.getVariables();
+        String isPass = variables.get("isPass") == null ? "" : (String)variables.get("isPass");
         String s = JSONObject.toJSONString(variables);
         SpServiceApi bean = SpringUtils.getBean(SpServiceApi.class);
-        bean.updateFourNewsAchievement(Long.valueOf(businessKey));
+        bean.updateFourNewsAchievement(Long.valueOf(businessKey), isPass);
     }
 }

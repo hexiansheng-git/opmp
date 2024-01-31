@@ -21,9 +21,10 @@ public class SgjsTechMethodListener implements TaskListener, ExecutionListener {
         String businessKey = processInstance.getBusinessKey();
 
         Map<String, Object> variables = delegateTask.getVariables();
+        String isPass = variables.get("isPass") == null ? "" : (String)variables.get("isPass");
         String s = JSONObject.toJSONString(variables);
         SpServiceApi bean = SpringUtils.getBean(SpServiceApi.class);
-        bean.updateSgjsTechMethod(Long.valueOf(businessKey));
+        bean.updateSgjsTechMethod(Long.valueOf(businessKey), isPass);
     }
 
     @Override
@@ -34,8 +35,9 @@ public class SgjsTechMethodListener implements TaskListener, ExecutionListener {
         String businessKey = processInstance.getBusinessKey();
 
         Map<String, Object> variables = delegateTask.getVariables();
+        String isPass = variables.get("isPass") == null ? "" : (String)variables.get("isPass");
         String s = JSONObject.toJSONString(variables);
         SpServiceApi bean = SpringUtils.getBean(SpServiceApi.class);
-        bean.updateSgjsTechMethod(Long.valueOf(businessKey));
+        bean.updateSgjsTechMethod(Long.valueOf(businessKey), isPass);
     }
 }
