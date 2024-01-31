@@ -1,13 +1,20 @@
 package com.hhwy.sp.techManagement.sgjsPaperPublish.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.sp.common.FlowInfoSearchUtil;
+import com.hhwy.sp.common.constant.BelongBusiness;
+import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.SgjsPaperPublish;
+import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishExportVo;
+import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishQueryVo;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.service.ISgjsPaperPublishService;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +37,22 @@ public class SgjsPaperPublishController extends BaseController {
     @Autowired
     private ISgjsPaperPublishService sgjsPaperPublishService;
 
+    @Autowired
+    private ISgjsAchievementAwardService sgjsAchievementAwardService;
+
+    /**
+     * 论文发表管理详情数据
+     * @param id
+     * @param type
+     * @return
+     */
+    @PreAuthorize(hasPermi = "sgjsPaperPublish:list")
+    @GetMapping("getSgjsPaperPublishById")
+    public AjaxResult getSgjsPaperPublishById(Long id,String type) {
+        SgjsPaperPublish sgjsPaperPublish = sgjsPaperPublishService.getSgjsPaperPublishById(id,type);
+        FlowInfoSearchUtil.getFlowInfo(sgjsPaperPublish, FlowEnum.SGJS_PAPER_PUBLISH);
+        return AjaxResult.success(sgjsPaperPublish);
+    }
 
     @PreAuthorize(hasPermi = "sgjsPaperPublish:list")
     @GetMapping
@@ -38,12 +61,30 @@ public class SgjsPaperPublishController extends BaseController {
         return AjaxResult.success(sgjsPaperPublish);
     }
 
+    /**
+     * 论文发表管理数据列表
+     * @param queryVo
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsPaperPublish:list")
     @GetMapping("/list")
-    public AjaxResult getSgjsPaperPublishList(@Validated(ValidationGroups.Select.class) SgjsPaperPublish sgjsPaperPublishParam) {
+    public AjaxResult getSgjsPaperPublishList(@Validated(ValidationGroups.Select.class) PaperPublishQueryVo queryVo) {
         startPage();
-        List<SgjsPaperPublish> sgjsPaperPublishList = sgjsPaperPublishService.getSgjsPaperPublishList(sgjsPaperPublishParam);
+        List<SgjsPaperPublish> sgjsPaperPublishList = sgjsPaperPublishService.getSgjsPaperPublishList(queryVo);
+        sgjsAchievementAwardService.setLedger(sgjsPaperPublishList, SgjsPaperPublish::getId, BelongBusiness.BELONG_BUSINESS_8);
+        FlowInfoSearchUtil.getFlowInfo(sgjsPaperPublishList, FlowEnum.SGJS_PAPER_PUBLISH);
         return getDataTableAjaxResult(sgjsPaperPublishList);
+    }
+
+    /**
+     * 保存
+     * @param paperPublish
+     * @return
+     */
+    @PostMapping("save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody SgjsPaperPublish paperPublish){
+        sgjsPaperPublishService.save(paperPublish);
+        return AjaxResult.success();
     }
 
     @PreAuthorize(hasPermi = "sgjsPaperPublish:add")
@@ -72,6 +113,18 @@ public class SgjsPaperPublishController extends BaseController {
         return toAjax(sgjsPaperPublishService.updateSgjsPaperPublishList(sgjsPaperPublishListParam));
     }
 
+    /**
+     * 根据id删除数据
+     * @param id
+     * @return
+     */
+    @PreAuthorize(hasPermi = "sgjsPatentDeclare:remove")
+    @PostMapping("/deleteById/{id}")
+    public AjaxResult deleteSgjsPaperPublishById(@PathVariable Long id) {
+        sgjsPaperPublishService.deleteSgjsPaperPublishById(id);
+        return AjaxResult.success();
+    }
+
     @PreAuthorize(hasPermi = "sgjsPaperPublish:remove")
     @PostMapping("/delete")
     public AjaxResult deleteSgjsPaperPublish(@Validated(ValidationGroups.Delete.class) @RequestBody SgjsPaperPublish sgjsPaperPublishParam) {
@@ -85,10 +138,17 @@ public class SgjsPaperPublishController extends BaseController {
         return toAjax(sgjsPaperPublishService.deleteSgjsPaperPublishByPks(sgjsPaperPublishPkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, SgjsPaperPublish sgjsPaperPublishParam) throws IOException {
-        List<SgjsPaperPublish> sgjsPaperPublishList = sgjsPaperPublishService.getSgjsPaperPublishList(sgjsPaperPublishParam);
-        ExcelUtils<SgjsPaperPublish> util = new ExcelUtils<>(SgjsPaperPublish.class);
-        util.exportExcel(response, sgjsPaperPublishList, DateUtils.getDate());
+    @PostMapping("/export")
+    public void export(HttpServletResponse response,@RequestBody PaperPublishQueryVo queryVo) throws IOException {
+        List<Long> ids = queryVo.getIds();
+        List<SgjsPaperPublish> sgjsPaperPublishList;
+        if(CollectionUtils.isEmpty(ids)){
+            sgjsPaperPublishList = sgjsPaperPublishService.getSgjsPaperPublishList(queryVo);
+        }else {
+            sgjsPaperPublishList = sgjsPaperPublishService.getListByIds(ids);
+        }
+        List<PaperPublishExportVo> exportVoList = sgjsPaperPublishService.getExportVoList(sgjsPaperPublishList);
+        FtExcelUtil<PaperPublishExportVo> util = new FtExcelUtil<>(PaperPublishExportVo.class);
+        util.exportExcel(response, exportVoList, DateUtils.getDate());
     }
 }

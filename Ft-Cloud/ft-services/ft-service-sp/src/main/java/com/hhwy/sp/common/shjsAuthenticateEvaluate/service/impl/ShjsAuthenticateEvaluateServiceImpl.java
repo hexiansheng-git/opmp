@@ -7,6 +7,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.utils.common.CommonAssert;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
@@ -35,6 +36,29 @@ public class ShjsAuthenticateEvaluateServiceImpl implements IShjsAuthenticateEva
 
     public List<ShjsAuthenticateEvaluate> getShjsAuthenticateEvaluateList(ShjsAuthenticateEvaluate shjsAuthenticateEvaluate) {
         return shjsAuthenticateEvaluateMapper.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate);
+    }
+
+    public void saveEvaluate(Long foreignId, String belongBusiness, List<ShjsAuthenticateEvaluate> saveList) {
+        CommonAssert.notNull(foreignId,"外键不能为空！");
+        CommonAssert.notBlank(belongBusiness,"所属业务不能为空！");
+        //根据外键删除数据
+        ShjsAuthenticateEvaluate delParam = new ShjsAuthenticateEvaluate();
+        delParam.setForeignId(foreignId);
+        shjsAuthenticateEvaluateMapper.deleteShjsAuthenticateEvaluate(delParam);
+
+        if(CollectionUtils.isEmpty(saveList)){
+            return;
+        }
+        //插入数据
+        for (ShjsAuthenticateEvaluate evaluate : saveList) {
+            evaluate.setId(IdWorker.createId());
+            evaluate.setForeignId(foreignId);
+            evaluate.setBelongBusiness(belongBusiness);
+            evaluate.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            evaluate.setCreateUserName(SecurityUtils.getUserName());
+            evaluate.setCreateTime(DateUtils.getNowDate());
+        }
+        shjsAuthenticateEvaluateMapper.insertShjsAuthenticateEvaluateList(saveList);
     }
 
     @Transactional

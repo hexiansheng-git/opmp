@@ -16,6 +16,14 @@ public interface IShjsAuthenticateEvaluateService {
 
     List<ShjsAuthenticateEvaluate> getShjsAuthenticateEvaluateList(ShjsAuthenticateEvaluate shjsAuthenticateEvaluate);
 
+    /**
+     * 保存评价数据集
+     * @param foreignId 外键id
+     * @param belongBusiness 所属功能
+     * @param saveList 成果数据集
+     */
+    void saveEvaluate(Long foreignId, String belongBusiness, List<ShjsAuthenticateEvaluate> saveList);
+
     int insertShjsAuthenticateEvaluate(ShjsAuthenticateEvaluate shjsAuthenticateEvaluate);
 
     int insertShjsAuthenticateEvaluateList(List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList);

@@ -19,6 +19,8 @@ public interface ISgjsAchievementAwardService {
 
     List<SgjsAchievementAward> getSgjsAchievementAwardList(SgjsAchievementAward sgjsAchievementAward);
 
+    <T> void setAllAwards(List<T> tList,Function<T,Long> getId,BiConsumer<T,String> setAllAward,String belongBusiness);
+
     <T extends TechManageCommon> void setLedger(List<T> tList, Function<T,Long> getId, String belongBusiness);
 
     /**

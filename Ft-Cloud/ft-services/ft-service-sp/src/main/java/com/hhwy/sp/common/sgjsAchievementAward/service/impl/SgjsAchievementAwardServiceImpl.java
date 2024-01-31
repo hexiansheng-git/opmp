@@ -43,6 +43,30 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
         return sgjsAchievementAwardMapper.getSgjsAchievementAwardList(sgjsAchievementAward);
     }
 
+    public <T> void setAllAwards(List<T> tList,Function<T,Long> getId,BiConsumer<T,String> setAllAward,String belongBusiness){
+        Map<Long, List<SgjsAchievementAward>> map = this.getMapByBelongBusiness(belongBusiness);
+        for (T t : tList) {
+            Long id = getId.apply(t);
+            List<SgjsAchievementAward> awardList = map.get(id);
+            if(CollectionUtils.isNotEmpty(awardList)){
+                awardList = awardList.stream().sorted(Comparator.comparing(SgjsAchievementAward::getCreateTime)).collect(Collectors.toList());
+                StringBuilder allAward = new StringBuilder();
+                int i = 1;
+                for (SgjsAchievementAward award1 : awardList) {
+                    allAward.append(i).append("、");
+                    this.append(allAward,award1.getApplyAward());
+                    this.append(allAward,award1.getAwardGrade());
+                    this.append(allAward,award1.getAwardType());
+                    this.append(allAward,award1.getGrantUnit());
+                    this.append(allAward,award1.getAwardTime());
+                    allAward.append("\n");
+                    i++;
+                }
+                setAllAward.accept(t,allAward.toString());
+            }
+        }
+    }
+
     @Override
     public <T extends TechManageCommon> void setLedger(List<T> tList,Function<T,Long> getId,String belongBusiness){
         Map<Long, List<SgjsAchievementAward>> map = this.getMapByBelongBusiness(belongBusiness);
@@ -119,7 +143,6 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
         SgjsAchievementAward delParam = new SgjsAchievementAward();
         delParam.setForeignId(foreignId);
         sgjsAchievementAwardMapper.deleteSgjsAchievementAward(delParam);
-
         if(CollectionUtils.isEmpty(awardList)){
             return;
         }
@@ -145,7 +168,6 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
 
     @Transactional
     public int insertSgjsAchievementAwardList(List<SgjsAchievementAward> sgjsAchievementAwardList) {
-        if (CollUtil.isEmpty(sgjsAchievementAwardList)) return 0;
         for (SgjsAchievementAward sgjsAchievementAward : sgjsAchievementAwardList) {
             sgjsAchievementAward.setId(IdWorker.createId());
             sgjsAchievementAward.setCreateUser(SecurityUtils.getUserName());

@@ -20,7 +20,8 @@ public enum WarnItem {
     EVALUATION("前期策划总结评价-评价", "evaluation", "名国家总项目部 (片区公司) 在项目报送前期策划总结后7天内进行评价，未完成进行预警"),
     PERSON_CONTROL_PLAN_ONE("人员管控策划", "person_control_plan_one", "证件到期前1个月，进行预警"),
     PERSON_CONTROL_PLAN_TWO("人员管控策划", "person_control_plan_two", "证件到期前2个月，进行预警"),
-    PERSON_CONTROL_PLAN_THREE("人员管控策划", "person_control_plan_three", "证件到期前3个月，进行预警");
+    PERSON_CONTROL_PLAN_THREE("人员管控策划", "person_control_plan_three", "证件到期前3个月，进行预警"),
+    WBS_P6_WARN("P6推送预警", "wbs_p6_warn", "P6数据已推送，请及时上传作业");
 
     public String getWarnItem() {
         return warnItem;

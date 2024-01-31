@@ -28,4 +28,6 @@ public interface ISgsjTechnicalScienceTopicService {
     int deleteSgsjTechnicalScienceTopicByPks(List<Long> sgsjTechnicalScienceTopicPkList);
 
     SgsjTechnicalScienceTopic getDetail(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
+
+    void applyAdd(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
 }

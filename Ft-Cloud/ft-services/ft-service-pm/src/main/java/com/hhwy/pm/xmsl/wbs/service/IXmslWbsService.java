@@ -75,10 +75,15 @@ public interface IXmslWbsService {
 
     /**
      * 获取wbs的所有子级，替换掉其id,父id
-     * @param ids
+     * @param parentCode  黏贴的父级编码
+     * @param level      黏贴的层级
+     * @param rootNum   父级数量
+     * @param num        父级下的子级数量
+     * @param ids        
+     * @param mainId
      * @return
      */
-    Map<String,List<XmslWbsHistory>> copyChildList(Long[] ids,Long mainId);
+    Map<String,List<XmslWbsHistory>> copyChildList(String parentCode,Integer level,Integer rootNum,Integer num,Long[] ids,Long mainId);
 
     /**
      * 获取wbs简要信息

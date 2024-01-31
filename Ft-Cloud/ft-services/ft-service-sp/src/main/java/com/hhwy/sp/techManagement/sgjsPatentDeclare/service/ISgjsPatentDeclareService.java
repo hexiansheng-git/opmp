@@ -38,4 +38,6 @@ public interface ISgjsPatentDeclareService {
     void save(SgjsPatentDeclare patentDeclare);
 
     void submit(SgjsPatentDeclare patentDeclare);
+
+    List<SgjsPatentDeclare> getListByIds(List<Long> ids);
 }

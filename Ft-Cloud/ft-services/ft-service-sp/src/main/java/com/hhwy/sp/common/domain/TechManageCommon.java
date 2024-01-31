@@ -3,6 +3,7 @@ package com.hhwy.sp.common.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
 
 import java.util.Date;
@@ -36,5 +37,6 @@ public class TechManageCommon extends CommonBaseEntity {
     @JsonProperty
     private Date awardTime;
 
+    @FtExcel(name = "成果奖项")
     private String allAward;
 }

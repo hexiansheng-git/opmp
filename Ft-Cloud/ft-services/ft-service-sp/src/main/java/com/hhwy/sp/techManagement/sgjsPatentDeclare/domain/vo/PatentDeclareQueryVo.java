@@ -2,6 +2,8 @@ package com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author han
  * @date 2024-01-25 11:01:25
@@ -24,4 +26,6 @@ public class PatentDeclareQueryVo {
      * 字段描述：当前状态（未发起，审批中，申请通过，申请不通过）
      */
     private String currentState;
+
+    private List<Long> ids;
 }

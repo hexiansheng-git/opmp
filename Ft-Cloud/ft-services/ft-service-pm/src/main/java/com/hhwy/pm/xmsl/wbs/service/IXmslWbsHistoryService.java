@@ -20,6 +20,8 @@ public interface IXmslWbsHistoryService {
 
     List<XmslWbsHistory> getListByParentIds(Collection<Long> collection,Long mainId);
 
+    List<XmslWbsHistory> getListByIds(Collection<Long> collection,Long mainId);
+
     int insertXmslWbsHistory(XmslWbsHistory xmslWbsHistory);
 
     int insertXmslWbsHistoryList(List<XmslWbsHistory> xmslWbsHistoryList);

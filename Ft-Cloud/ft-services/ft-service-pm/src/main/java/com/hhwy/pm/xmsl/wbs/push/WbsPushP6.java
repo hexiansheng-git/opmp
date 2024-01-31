@@ -6,15 +6,22 @@ import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.file.FileUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.WarnItem;
+import com.hhwy.constant.WarnScopeType;
 import com.hhwy.feign.factory.FlowServiceFallbackFactory;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.core.sync.enums.SyncBusinessEnum;
 import com.hhwy.pm.core.sync.service.ISyncLogMasterService;
+import com.hhwy.pm.core.system.SystemApiService;
+import com.hhwy.pm.warn.WarnService;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVo;
 import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVoBean;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
+import com.hhwy.system.api.domain.SysDictData;
+import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.HttpClientUtil;
 import com.hhwy.utils.ObjectUtils;
@@ -31,6 +38,7 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class WbsPushP6 {
@@ -41,6 +49,13 @@ public class WbsPushP6 {
     private IXmslWbsService wbsService;
     @Autowired
     private ISyncLogMasterService syncLogMasterService;
+    @Autowired
+    private WarnService warnService;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
+    @Autowired
+    private SystemApiService systemApiService;
+    
     @Value("${p6.wbsPushUrl}")
     private String wbsPushUrl;
     @Value("${p6.wbsPushUpdateUrl}")
@@ -112,8 +127,19 @@ public class WbsPushP6 {
             push(mainId,projectCode,treeList,updateList);
             //禁用wbs推送到p6,需要判断这些wbs是否已经推送给p6
             pushDelete(mainId,projectCode,invalidIdSet);
-            //TODO 发送消息给张双勤  P6数据已推送，请及时上传作业
-
+            //发送消息给张双勤  P6数据已推送，请及时上传作业
+            List<SysDictData> dictDataList = systemApiService.selectDictDataByType("wbs_push_p6_warning");
+            if(CollectionUtils.isNotEmpty(dictDataList) && StringUtils.isNotBlank(dictDataList.get(0).getDictValue())){
+                String username = dictDataList.get(0).getDictValue();
+                List<SysUser> userList = systemServiceApi.selectUserInfoByUserNameAndTenant(ObjectUtils.toMap(
+                        "userNames",username,
+                        "tenantKey",SecurityUtils.getTenantKey()));
+                if(CollectionUtils.isEmpty(userList)){
+                    log.warn("未在租户{}下找到p6预警的用户{}信息",SecurityUtils.getTenantKey(),username);
+                }else{
+                    warnService.addWarn(WarnItem.WBS_P6_WARN,WarnItem.WBS_P6_WARN.getWarnRule(), WarnScopeType.USER, "",userList.get(0).getUserId()+"",SecurityUtils.getTenantKey());
+                }
+            }
         }finally {
             long usemills = System.currentTimeMillis()-beginMills;
             log.debug("wbs推送p6，mainID:{},耗时:{}毫秒",mainId,usemills);

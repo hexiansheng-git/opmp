@@ -1,37 +1,31 @@
 package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.impl;
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.nacos.api.config.filter.IFilterConfig;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.enums.FlowEnum;
-import com.hhwy.sp.common.FlowInfoSearchUtil;
+import com.hhwy.sp.common.constant.BelongBusiness;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
 import com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate;
 import com.hhwy.sp.common.shjsAuthenticateEvaluate.service.IShjsAuthenticateEvaluateService;
-import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.domain.SgsjTechnicalScienceTopicModify;
-import com.hhwy.system.api.domain.SysUser;
-import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
-import io.seata.common.util.StringUtils;
-import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.mapper.SgsjTechnicalScienceTopicMapper;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.ISgsjTechnicalScienceTopicService;
-import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
+import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.domain.SgsjTechnicalScienceTopicModify;
+import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.service.ISgsjTechnicalScienceTopicModifyService;
+import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 功能描述: 科技管理 - 科研课题研发管理
@@ -52,6 +46,8 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     private IShjsAuthenticateEvaluateService shjsAuthenticateEvaluateService;
     @Autowired
     private ISgjsExpertLibraryService sgjsExpertLibraryService;
+    @Autowired
+    private ISgsjTechnicalScienceTopicModifyService technicalScienceTopicModifyService;
 
 
     public SgsjTechnicalScienceTopic getSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
@@ -87,18 +83,28 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         return resultList;
     }
 
+    /***
+     * 功能描述: 课题立项里的保存
+     */
     @Transactional
     public int insertSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
-        if (sgsjTechnicalScienceTopic == null) {
-            return 1;
-        }
+        Assert.isTrue(sgsjTechnicalScienceTopic != null, "参数异常");
+        Assert.isTrue(sgsjTechnicalScienceTopic.getId() != null, "参数异常");
         //保存子表
-        List<SgjsExpertLibrary> libraryList = sgsjTechnicalScienceTopic.getLibraryList();
+        Long id = sgsjTechnicalScienceTopic.getId();
+        //专家库
+        List<SgjsExpertLibrary> listAcceptance = sgsjTechnicalScienceTopic.getListAcceptance();
+        List<SgjsExpertLibrary> listOutline = sgsjTechnicalScienceTopic.getListOutline();
+        List<SgjsExpertLibrary> listTopic = sgsjTechnicalScienceTopic.getListTopic();
+        sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_4, listAcceptance);
+        sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_3, listOutline);
+        sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_2, listTopic);
+        //成果
         List<SgjsAchievementAward> awardList = sgsjTechnicalScienceTopic.getAwardList();
+        sgjsAchievementAwardService.saveAchievementAward(id, BelongBusiness.BELONG_BUSINESS_9, awardList);
+        //鉴定或评价
         List<ShjsAuthenticateEvaluate> evaluateList = sgsjTechnicalScienceTopic.getEvaluateList();
-        sgjsExpertLibraryService.insertSgjsExpertLibraryList(libraryList);
-        sgjsAchievementAwardService.insertSgjsAchievementAwardList(awardList);
-        shjsAuthenticateEvaluateService.insertShjsAuthenticateEvaluateList(evaluateList);
+        shjsAuthenticateEvaluateService.saveEvaluate(id, BelongBusiness.BELONG_BUSINESS_9, evaluateList);
         //保存主表
         sgsjTechnicalScienceTopic.setId(IdWorker.createId());
         sgsjTechnicalScienceTopic.setCreateUser(SecurityUtils.getUserName());
@@ -118,13 +124,38 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             p.setTopicNode(sgsjTechnicalScienceTopic.getTopicCurentNode());
             p.setModifyDatetime(DateUtils.getNowDate());
             p.setModifyPerson(String.valueOf(sysUser.getUserId()));
-            p.setModifyPersionName(sysUser.getUserName());
+            p.setModifyPersionName(sysUser.getNickName());
             p.setId(IdWorker.createId());
             p.setCreateUser(sysUser.getUserName());
             p.setCreateTime(DateUtils.getNowDate());
-
         });
+        technicalScienceTopicModifyService.insertSgsjTechnicalScienceTopicModifyList(modifyList);
         return 1;
+    }
+
+    /***
+     * 功能描述: 课题申请里的保存
+     */
+    @Transactional
+    public void applyAdd(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
+        if (sgsjTechnicalScienceTopic == null) {
+            return;
+        }
+        //保存
+        if (sgsjTechnicalScienceTopic.getId() == null){
+            //保存主表
+            sgsjTechnicalScienceTopic.setId(IdWorker.createId());
+            sgsjTechnicalScienceTopic.setCreateUser(SecurityUtils.getUserName());
+            sgsjTechnicalScienceTopic.setCreateTime(DateUtils.getNowDate());
+            sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
+        }else {
+            //修改
+            sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
+        }
+        //保存子表
+        Long id = sgsjTechnicalScienceTopic.getId();
+        List<SgjsExpertLibrary> libraryList = sgsjTechnicalScienceTopic.getListApply();
+        sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_1, libraryList);
     }
 
     @Transactional
@@ -178,7 +209,14 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         //成果
         resultBean.setAwardList(sgjsAchievementAwardService.getListByForeignId(id));
         //知识库
-        resultBean.setLibraryList(sgjsExpertLibraryService.getListByForeignId(id));
+        List<SgjsExpertLibrary> listByForeignId = sgjsExpertLibraryService.getListByForeignId(id);
+        if (CollUtil.isNotEmpty(listByForeignId)) {
+            Map<String, List<SgjsExpertLibrary>> collect = listByForeignId.stream().collect(Collectors.groupingBy(SgjsExpertLibrary::getBelongBusiness));
+            resultBean.setListTopic(collect.get(BelongBusiness.BELONG_BUSINESS_2));
+            resultBean.setListAcceptance(collect.get(BelongBusiness.BELONG_BUSINESS_4));
+            resultBean.setListOutline(collect.get(BelongBusiness.BELONG_BUSINESS_3));
+            resultBean.setListApply(collect.get(BelongBusiness.BELONG_BUSINESS_1));
+        }
         return resultBean;
     }
 
@@ -348,7 +386,6 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             objects.add(differData);
         }
         return objects;
-
     }
 
     private boolean compareStr(String s1, String s2){

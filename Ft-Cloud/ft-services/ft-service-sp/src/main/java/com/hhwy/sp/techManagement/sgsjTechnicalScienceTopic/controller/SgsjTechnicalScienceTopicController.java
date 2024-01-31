@@ -63,8 +63,17 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
         return AjaxResult.success(sgsjTechnicalScienceTopicList);
     }
 
+    //课题申请里的保存
     @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopic:add")
-    @PostMapping("/add")
+    @PostMapping("/applyAdd")
+    public AjaxResult applyAdd(@Validated(ValidationGroups.Save.class) @RequestBody SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {
+        sgsjTechnicalScienceTopicService.applyAdd(sgsjTechnicalScienceTopicParam);
+        return AjaxResult.success(sgsjTechnicalScienceTopicParam);
+    }
+
+    //课题立项里的保存
+    @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopic:add")
+    @PostMapping("/lxAdd")
     public AjaxResult insertSgsjTechnicalScienceTopic(@Validated(ValidationGroups.Save.class) @RequestBody SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {
         sgsjTechnicalScienceTopicService.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopicParam);
         return AjaxResult.success(sgsjTechnicalScienceTopicParam);

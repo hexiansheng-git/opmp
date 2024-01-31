@@ -12,4 +12,5 @@ public class BelongBusiness {
     public static final String BELONG_BUSINESS_6 = "6"; //6.科技管理-工艺工法管理
     public static final String BELONG_BUSINESS_7 = "7"; //7.科技管理-专利申报管理
     public static final String BELONG_BUSINESS_8 = "8"; //8.科技管理-论文发表管理
+    public static final String BELONG_BUSINESS_9 = "9"; //9.科研课题管理
 }

@@ -473,4 +473,18 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
         // 返回主键
         return dto.getId();
     }
+
+    @Override
+    public void checkImport(BigDecimal version, List<WzchInternalAdjustDetail> dtoList) {
+        Assert.notNull(version, "版本号不能为空");
+        WzchSource wzchSource = wzchSourceService.selectWzchSourceByVersion(version);
+        //来源策划明细
+        List<WzchSourceDetail> list = wzchSourceDetailService.selectInnerAdjustList(wzchSource.getId());
+        Map<String,WzchSourceDetail> sourceMap = list.stream().collect(Collectors.toMap(r->r.getMaterialCode(), r->r));
+        for (int i = 0; i < dtoList.size(); i++) {
+            WzchInternalAdjustDetail temp = dtoList.get(i);
+            Assert.isTrue(sourceMap.containsKey(temp.getMaterialCode()),"物资编码["+temp.getMaterialCode()+"]不存在于来源策划中！");
+            
+        }
+    }
 }

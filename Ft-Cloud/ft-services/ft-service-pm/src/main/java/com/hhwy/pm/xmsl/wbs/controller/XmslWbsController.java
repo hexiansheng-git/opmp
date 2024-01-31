@@ -92,7 +92,11 @@ public class XmslWbsController extends BaseController {
         String ids = ObjectUtils.nvlString(map.get("ids"));
         if(StringUtils.isBlank(ids))
             return AjaxResult.error("参数缺失");
-        Map<String,List<XmslWbsHistory>> resuMap = xmslWbsService.copyChildList(Convert.toLongArray(ids)
+        String parentCode = ObjectUtils.nvlString(map.get("parentCode"));
+        Integer num = ObjectUtils.nvl(map.get("num"));
+        Integer rootNum = ObjectUtils.nvl(map.get("rootNum"));
+        Integer level = ObjectUtils.nvl(map.get("level"),1);
+        Map<String,List<XmslWbsHistory>> resuMap = xmslWbsService.copyChildList(parentCode,level,rootNum,num,Convert.toLongArray(ids)
                 ,ObjectUtils.nvlLong(map.get("mainId")));
         return AjaxResult.success(resuMap);
     }
