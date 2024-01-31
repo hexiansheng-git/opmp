@@ -49,6 +49,11 @@ public class SgsjTechnicalScienceTopic extends CommonBaseEntity {
     private Long id;
     /**
      * 字段描述：申请状态
+     * 字典: data_current_state
+     * 1	未发起
+     * 2	审批中
+     * 3	申请通过
+     * 4	申请不通过
      */
     @JsonProperty
     @Excel(name = "申请状态")
