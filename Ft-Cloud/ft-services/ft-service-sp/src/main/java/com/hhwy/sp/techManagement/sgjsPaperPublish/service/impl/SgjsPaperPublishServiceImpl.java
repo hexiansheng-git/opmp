@@ -111,7 +111,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
 
     @Override
     @Transactional
-    public void save(SgjsPaperPublish paperPublish) {
+    public Long save(SgjsPaperPublish paperPublish) {
         String saveType = paperPublish.getSaveType();
         CommonAssert.notBlank(saveType,"保存类型不能为空");
 
@@ -136,6 +136,8 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         //保存成果登记数据
         List<SgjsAchievementAward> awardList = paperPublish.getAwardList();
         sgjsAchievementAwardService.saveAchievementAward(id,BelongBusiness.BELONG_BUSINESS_8,awardList);
+
+        return id;
     }
 
     @Override

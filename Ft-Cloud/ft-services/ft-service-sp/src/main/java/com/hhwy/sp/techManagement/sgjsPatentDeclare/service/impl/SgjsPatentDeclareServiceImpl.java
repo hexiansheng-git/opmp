@@ -116,12 +116,13 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
 
     /**
      * 保存
+     *
      * @param patentDeclare
      * @return
      */
     @Override
     @Transactional
-    public void save(SgjsPatentDeclare patentDeclare) {
+    public Long save(SgjsPatentDeclare patentDeclare) {
         String saveType = patentDeclare.getSaveType();
         CommonAssert.notBlank(saveType,"保存类型不能为空");
 
@@ -148,6 +149,8 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
         //保存成果登记数据
         List<SgjsAchievementAward> awardList = patentDeclare.getAwardList();
         sgjsAchievementAwardService.saveAchievementAward(id,BelongBusiness.BELONG_BUSINESS_7,awardList);
+
+        return id;
     }
 
     /**
