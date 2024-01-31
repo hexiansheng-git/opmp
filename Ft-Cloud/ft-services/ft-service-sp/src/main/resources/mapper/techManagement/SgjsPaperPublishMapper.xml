@@ -159,8 +159,8 @@
         <include refid="selectSgjsPaperPublishVo"/>
         <where>
             del_flag = "0"
-            <if test="paperCode != null  and paperCode != ''">and `paper_code` = #{paperCode}</if>
-            <if test="paperName != null and paperName != ''">and `paper_name` = #{paperName}</if>
+            <if test="paperCode != null  and paperCode != ''">and `paper_code` like concat('%' , #{paperCode} , '%')</if>
+            <if test="paperName != null and paperName != ''">and `paper_name` like concat('%' , #{paperName} , '%')</if>
             <if test="currentState != null  and currentState != ''">and `current_state` = #{currentState}</if>
         </where>
         order by create_time desc

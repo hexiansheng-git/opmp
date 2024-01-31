@@ -32,10 +32,11 @@ public interface ISgjsPatentDeclareService {
 
     /**
      * 保存
+     *
      * @param patentDeclare
      * @return
      */
-    void save(SgjsPatentDeclare patentDeclare);
+    Long save(SgjsPatentDeclare patentDeclare);
 
     void submit(SgjsPatentDeclare patentDeclare);
 

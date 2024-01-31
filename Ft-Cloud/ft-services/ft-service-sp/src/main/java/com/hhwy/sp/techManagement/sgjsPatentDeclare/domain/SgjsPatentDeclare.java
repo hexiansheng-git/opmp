@@ -31,6 +31,11 @@ public class SgjsPatentDeclare extends TechManageCommon {
      */
     private String saveType;
 
+
+    /**
+     * 提交标识  0：否  1：是
+     */
+    private String isSubmit;
     /**
      * 字段描述：主键
      */

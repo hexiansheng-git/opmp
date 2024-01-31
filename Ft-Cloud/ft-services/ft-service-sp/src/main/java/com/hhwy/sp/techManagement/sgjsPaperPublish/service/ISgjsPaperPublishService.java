@@ -31,7 +31,7 @@ public interface ISgjsPaperPublishService {
 
     int deleteSgjsPaperPublishByPks(List<Long> sgjsPaperPublishPkList);
 
-    void save(SgjsPaperPublish paperPublish);
+    Long save(SgjsPaperPublish paperPublish);
 
     void deleteSgjsPaperPublishById(Long id);
 

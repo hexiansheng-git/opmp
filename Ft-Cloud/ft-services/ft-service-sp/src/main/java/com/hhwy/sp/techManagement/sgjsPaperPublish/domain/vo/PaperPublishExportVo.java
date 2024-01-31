@@ -46,7 +46,7 @@ public class PaperPublishExportVo {
      * 字段描述：专业类别
      */
     @JsonProperty
-    @FtExcel(name = "专业类别",dictType = "profession_type")
+    @FtExcel(name = "专业类别",dictType = "profession_areas")
     private String professionType;
     /**
      * 字段描述：专业板块

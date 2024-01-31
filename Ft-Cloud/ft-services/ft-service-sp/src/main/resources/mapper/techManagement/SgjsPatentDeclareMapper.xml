@@ -121,8 +121,8 @@
         <include refid="selectSgjsPatentDeclareVo"/>
         <where>
             del_flag = "0"
-            <if test="patentName != null  and patentName != ''">and `patent_name` = #{patentName}</if>
-            <if test="patentNumber != null  and patentNumber != ''">and `patent_number` = #{patentNumber}</if>
+            <if test="patentName != null  and patentName != ''">and `patent_name` like concat('%' , #{patentName} , '%')</if>
+            <if test="patentNumber != null  and patentNumber != ''">and `patent_number` like concat('%' , #{patentNumber} , '%')</if>
             <if test="currentState != null  and currentState != ''">and `current_state` = #{currentState}</if>
         </where>
         order by create_time desc

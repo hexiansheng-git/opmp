@@ -70,8 +70,8 @@ public class SgjsPatentDeclareController extends BaseController {
      */
     @PostMapping("save")
     public AjaxResult save(@RequestBody SgjsPatentDeclare patentDeclare){
-        sgjsPatentDeclareService.save(patentDeclare);
-        return AjaxResult.success();
+        Long id = sgjsPatentDeclareService.save(patentDeclare);
+        return AjaxResult.success(id);
     }
 
     /**
