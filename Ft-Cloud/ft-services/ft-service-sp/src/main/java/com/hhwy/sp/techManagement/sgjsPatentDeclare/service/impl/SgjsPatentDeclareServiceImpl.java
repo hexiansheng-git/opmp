@@ -126,6 +126,11 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
         String saveType = patentDeclare.getSaveType();
         CommonAssert.notBlank(saveType,"保存类型不能为空");
 
+        String isSubmit = patentDeclare.getIsSubmit();
+        if("1".equals(isSubmit)){
+            patentDeclare.setCurrentState("2");
+        }
+
         Long id;
         if("1".equals(saveType)){
             //新增

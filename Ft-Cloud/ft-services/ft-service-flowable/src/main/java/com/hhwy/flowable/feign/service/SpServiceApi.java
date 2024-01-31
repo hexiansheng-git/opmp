@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author hhwy
  */
-@FeignClient(name = "ft-service-pm")
+@FeignClient(name = "ft-service-sp")
 public interface SpServiceApi {
 
     /**
