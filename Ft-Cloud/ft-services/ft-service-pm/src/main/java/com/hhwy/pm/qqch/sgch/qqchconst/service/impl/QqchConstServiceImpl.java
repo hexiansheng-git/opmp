@@ -354,4 +354,12 @@ public class QqchConstServiceImpl implements IQqchConstService {
             qqchConst.setTotalOutputValueProportion(totalOutputValueProportion);
         }
     }
+
+    /**
+     * 8.10.2弹窗
+     */
+    @Override
+    public List<Map<String, String>> getConstDescList(String constName, String constDesc) {
+        return qqchConstMapper.getConstDescList(constName, constDesc);
+    }
 }

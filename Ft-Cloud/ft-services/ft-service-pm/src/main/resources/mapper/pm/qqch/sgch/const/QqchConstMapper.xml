@@ -646,4 +646,21 @@
                 AND p.del_flag = '0'
                 and const_type = '4'
     </select>
+
+    <select id="getConstDescList" resultType="map">
+        SELECT
+            IFNULL(const_name,'') AS constName,
+            IFNULL(const_desc,'') AS constDesc
+        FROM
+            qqch_const
+        WHERE
+            del_flag = '0'
+        AND const_type = '4'
+        <if test="constName != null and constName != ''">
+            AND const_name LIKE concat('%', #{constName}, '%')
+        </if>
+        <if test="constDesc != null and constDesc != ''">
+            AND const_desc LIKE concat('%', #{constDesc}, '%')
+        </if>
+    </select>
 </mapper>

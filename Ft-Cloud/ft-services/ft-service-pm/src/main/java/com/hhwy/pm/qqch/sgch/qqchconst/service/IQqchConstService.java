@@ -6,6 +6,7 @@ import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlanResult;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mls
@@ -50,4 +51,5 @@ public interface IQqchConstService {
      */
     List<QqchConst> popUpWindows(QqchConst qqchConst);
 
+    List<Map<String, String>> getConstDescList(String constName, String constDesc);
 }

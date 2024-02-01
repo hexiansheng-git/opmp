@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mls
@@ -119,6 +120,18 @@ public class QqchConstController extends BaseController {
         ExcelUtils<QqchConst> util = new ExcelUtils<>(QqchConst.class);
         util.exportExcel(response, qqchConstList, DateUtils.getDate());
     }
+
+    /**
+     * 8.10.2弹窗
+     */
+    @GetMapping("/getConstDescList")
+    public AjaxResult getConstDescList(@RequestParam(value = "constName", required = false)String constName,
+                                       @RequestParam(value = "constDesc",required = false)String constDesc) {
+        List<Map<String, String>> list = qqchConstService.getConstDescList(constName, constDesc);
+        return AjaxResult.success(list);
+    }
+
+
 
     /**
      * 4.2弹窗

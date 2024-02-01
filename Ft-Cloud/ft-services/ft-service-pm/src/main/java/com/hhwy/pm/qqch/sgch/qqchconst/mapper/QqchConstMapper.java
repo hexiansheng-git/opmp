@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mls
@@ -31,4 +32,6 @@ public interface QqchConstMapper {
     int deleteQqchConstByPks(@Param("qqchConstPkList") List<Long> qqchConstPkList);
 
     List<QqchConstStaffPlanResult> selectQqchConst(BigDecimal version);
+
+    List<Map<String, String>> getConstDescList(@Param("constName")String constName, @Param("constDesc")String constDesc);
 }
