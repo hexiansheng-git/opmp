@@ -38,7 +38,9 @@ public interface ISgjsPatentDeclareService {
      */
     Long save(SgjsPatentDeclare patentDeclare);
 
-    void submit(SgjsPatentDeclare patentDeclare);
-
     List<SgjsPatentDeclare> getListByIds(List<Long> ids);
+
+    void updatePatentDeclareProcess(Long id, String pass);
+
+    void submitPatentDeclareProcess(Long id);
 }

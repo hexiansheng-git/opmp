@@ -151,4 +151,16 @@ public class SgjsPaperPublishController extends BaseController {
         FtExcelUtil<PaperPublishExportVo> util = new FtExcelUtil<>(PaperPublishExportVo.class);
         util.exportExcel(response, exportVoList, DateUtils.getDate());
     }
+
+    @PostMapping("listener")
+    public AjaxResult updatePaperPublishProcess(@RequestParam("id") Long id,@RequestParam("pass") String pass){
+        sgjsPaperPublishService.updatePaperPublishProcess(id,pass);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("submit")
+    public AjaxResult submitPaperPublishProcess(@RequestParam("id") Long id){
+        sgjsPaperPublishService.submitPaperPublishProcess(id);
+        return AjaxResult.success();
+    }
 }

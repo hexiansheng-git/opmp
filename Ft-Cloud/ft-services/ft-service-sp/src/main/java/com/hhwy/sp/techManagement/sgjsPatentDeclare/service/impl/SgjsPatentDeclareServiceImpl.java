@@ -3,6 +3,7 @@ package com.hhwy.sp.techManagement.sgjsPatentDeclare.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sp.common.constant.BelongBusiness;
+import com.hhwy.sp.common.constant.DataCurrentState;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
@@ -126,10 +127,10 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
         String saveType = patentDeclare.getSaveType();
         CommonAssert.notBlank(saveType,"保存类型不能为空");
 
-        String isSubmit = patentDeclare.getIsSubmit();
-        if("1".equals(isSubmit)){
-            patentDeclare.setCurrentState("2");
-        }
+//        String isSubmit = patentDeclare.getIsSubmit();
+//        if("1".equals(isSubmit)){
+//            patentDeclare.setCurrentState(DataCurrentState.APPLYING);
+//        }
 
         Long id;
         if("1".equals(saveType)){
@@ -174,14 +175,34 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
     }
 
     @Override
-    public void submit(SgjsPatentDeclare patentDeclare) {
-
-    }
-
-    @Override
     public List<SgjsPatentDeclare> getListByIds(List<Long> ids) {
         List<SgjsPatentDeclare> patentDeclareList = sgjsPatentDeclareMapper.getListByIds(ids);
         sgjsAchievementAwardService.setLedger(patentDeclareList,SgjsPatentDeclare::getId, BelongBusiness.BELONG_BUSINESS_7);
         return patentDeclareList;
+    }
+
+    @Override
+    public void updatePatentDeclareProcess(Long id, String pass) {
+        if(StringUtils.isBlank(pass)){
+            return;
+        }
+        SgjsPatentDeclare patentDeclare = sgjsPatentDeclareMapper.getSgjsPatentDeclareById(id);
+        if(patentDeclare != null){
+            if("1".equals(pass)){
+                patentDeclare.setCurrentState(DataCurrentState.PASS);
+            }else {
+                patentDeclare.setCurrentState(DataCurrentState.NO_PASS);
+            }
+            sgjsPatentDeclareMapper.updateSgjsPatentDeclare(patentDeclare);
+        }
+    }
+
+    @Override
+    public void submitPatentDeclareProcess(Long id) {
+        SgjsPatentDeclare patentDeclare = sgjsPatentDeclareMapper.getSgjsPatentDeclareById(id);
+        if(patentDeclare != null){
+            patentDeclare.setCurrentState(DataCurrentState.APPLYING);
+            sgjsPatentDeclareMapper.updateSgjsPatentDeclare(patentDeclare);
+        }
     }
 }

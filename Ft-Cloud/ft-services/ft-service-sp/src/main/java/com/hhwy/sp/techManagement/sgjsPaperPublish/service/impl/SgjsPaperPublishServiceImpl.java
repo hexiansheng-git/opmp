@@ -3,6 +3,7 @@ package com.hhwy.sp.techManagement.sgjsPaperPublish.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sp.common.constant.BelongBusiness;
+import com.hhwy.sp.common.constant.DataCurrentState;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
@@ -14,6 +15,7 @@ import com.hhwy.sp.techManagement.sgjsPaperPublish.mapper.SgjsPaperPublishMapper
 import com.hhwy.sp.techManagement.sgjsPaperPublish.service.ISgjsPaperPublishService;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -117,7 +119,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
 
         String isSubmit = paperPublish.getIsSubmit();
         if("1".equals(isSubmit)){
-            paperPublish.setCurrentState("2");
+            paperPublish.setCurrentState(DataCurrentState.APPLYING);
         }
 
         Long id;
@@ -170,5 +172,30 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         }
         sgjsAchievementAwardService.setAllAwards(exportVoList,PaperPublishExportVo::getId,PaperPublishExportVo::setAllAward,BelongBusiness.BELONG_BUSINESS_8);
         return exportVoList;
+    }
+
+    @Override
+    public void updatePaperPublishProcess(Long id, String pass) {
+        if(StringUtils.isBlank(pass)){
+            return;
+        }
+        SgjsPaperPublish paperPublish = sgjsPaperPublishMapper.getSgjsPaperPublishById(id);
+        if(paperPublish != null){
+            if("1".equals(pass)){
+                paperPublish.setCurrentState(DataCurrentState.PASS);
+            }else {
+                paperPublish.setCurrentState(DataCurrentState.NO_PASS);
+            }
+            sgjsPaperPublishMapper.updateSgjsPaperPublish(paperPublish);
+        }
+    }
+
+    @Override
+    public void submitPaperPublishProcess(Long id) {
+        SgjsPaperPublish paperPublish = sgjsPaperPublishMapper.getSgjsPaperPublishById(id);
+        if(paperPublish != null){
+            paperPublish.setCurrentState(DataCurrentState.APPLYING);
+            sgjsPaperPublishMapper.updateSgjsPaperPublish(paperPublish);
+        }
     }
 }

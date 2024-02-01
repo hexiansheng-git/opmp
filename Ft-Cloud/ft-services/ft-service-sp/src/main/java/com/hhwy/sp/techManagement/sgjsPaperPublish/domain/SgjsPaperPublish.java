@@ -28,7 +28,7 @@ public class SgjsPaperPublish extends TechManageCommon {
 
     /**
      * 保存类型  1：新增；2：修改
-//     */
+     */
     private String saveType;
     /**
      * 提交标识  0：否  1：是

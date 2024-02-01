@@ -38,4 +38,8 @@ public interface ISgjsPaperPublishService {
     List<SgjsPaperPublish> getListByIds(List<Long> ids);
 
     List<PaperPublishExportVo> getExportVoList(List<SgjsPaperPublish> sgjsPaperPublishList);
+
+    void updatePaperPublishProcess(Long id, String pass);
+
+    void submitPaperPublishProcess(Long id);
 }

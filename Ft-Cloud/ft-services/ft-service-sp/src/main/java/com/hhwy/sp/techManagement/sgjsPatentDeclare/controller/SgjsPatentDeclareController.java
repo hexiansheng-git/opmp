@@ -74,17 +74,6 @@ public class SgjsPatentDeclareController extends BaseController {
         return AjaxResult.success(id);
     }
 
-    /**
-     * 提交
-     * @param patentDeclare
-     * @return
-     */
-    @PostMapping("submit")
-    public AjaxResult submit(@RequestBody SgjsPatentDeclare patentDeclare){
-        sgjsPatentDeclareService.submit(patentDeclare);
-        return AjaxResult.success();
-    }
-
     @PreAuthorize(hasPermi = "sgjsPatentDeclare:add")
     @PostMapping("/add")
     public AjaxResult insertSgjsPatentDeclare(@Validated(ValidationGroups.Save.class) @RequestBody SgjsPatentDeclare sgjsPatentDeclareParam) {
@@ -142,5 +131,17 @@ public class SgjsPatentDeclareController extends BaseController {
 
         FtExcelUtil<SgjsPatentDeclare> util = new FtExcelUtil<>(SgjsPatentDeclare.class);
         util.exportExcel(response, sgjsPatentDeclareList, DateUtils.getDate());
+    }
+
+    @PostMapping("listener")
+    public AjaxResult updatePatentDeclareProcess(@RequestParam("id") Long id,@RequestParam("pass") String pass){
+        sgjsPatentDeclareService.updatePatentDeclareProcess(id,pass);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("submit")
+    public AjaxResult submitPatentDeclareProcess(@RequestParam("id") Long id){
+        sgjsPatentDeclareService.submitPatentDeclareProcess(id);
+        return AjaxResult.success();
     }
 }
