@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.hhwy.sp.techData.sgjsTechnicalData.domain.SgjsTechnicalData4Update;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -108,7 +109,8 @@ public class SgjsTechnicalDataController extends BaseController {
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsTechnicalData sgjsTechnicalDataParam) throws IOException {
         List<SgjsTechnicalData> sgjsTechnicalDataList = sgjsTechnicalDataService.getSgjsTechnicalDataList(sgjsTechnicalDataParam);
-        ExcelUtils<SgjsTechnicalData> util = new ExcelUtils<>(SgjsTechnicalData.class);
+//        ExcelUtils<SgjsTechnicalData> util = new ExcelUtils<>(SgjsTechnicalData.class);
+        FtExcelUtil<SgjsTechnicalData> util = new FtExcelUtil<>(SgjsTechnicalData.class);
         util.exportExcel(response, TreeUtil.treeToList(sgjsTechnicalDataList), DateUtils.getDate());
     }
 }
