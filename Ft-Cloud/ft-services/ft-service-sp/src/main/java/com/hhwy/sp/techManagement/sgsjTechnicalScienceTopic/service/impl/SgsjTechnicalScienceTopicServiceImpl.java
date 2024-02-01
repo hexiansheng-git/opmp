@@ -198,7 +198,26 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     }
 
     /***
-     * 功能描述: 明细
+     * 功能描述: 申请明细
+     */
+    @Override
+    public SgsjTechnicalScienceTopic applyDetail(SgsjTechnicalScienceTopic param) {
+        SgsjTechnicalScienceTopic resultBean = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param);
+        Assert.isTrue(resultBean != null, "课题不存在,请检查参数是否正确");
+        Long id = resultBean.getId();
+        //知识库
+        List<SgjsExpertLibrary> listByForeignId = sgjsExpertLibraryService.getListByForeignId(id);
+        if (CollUtil.isNotEmpty(listByForeignId)) {
+            Map<String, List<SgjsExpertLibrary>> collect = listByForeignId.stream().collect(Collectors.groupingBy(SgjsExpertLibrary::getBelongBusiness));
+            resultBean.setListApply(collect.get(BelongBusiness.BELONG_BUSINESS_1));
+        }
+        //获取流程信息
+        FlowInfoSearchUtil.getFlowInfo(resultBean, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
+        return resultBean;
+    }
+
+    /***
+     * 功能描述: 立项明细
      */
     @Override
     public SgsjTechnicalScienceTopic getDetail(SgsjTechnicalScienceTopic param) {
@@ -214,20 +233,11 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         if (CollUtil.isNotEmpty(listByForeignId)) {
             Map<String, List<SgjsExpertLibrary>> collect = listByForeignId.stream().collect(Collectors.groupingBy(SgjsExpertLibrary::getBelongBusiness));
             resultBean.setListTopic(collect.get(BelongBusiness.BELONG_BUSINESS_2));
-            resultBean.setListAcceptance(collect.get(BelongBusiness.BELONG_BUSINESS_4));
             resultBean.setListOutline(collect.get(BelongBusiness.BELONG_BUSINESS_3));
-            resultBean.setListApply(collect.get(BelongBusiness.BELONG_BUSINESS_1));
+            resultBean.setListAcceptance(collect.get(BelongBusiness.BELONG_BUSINESS_4));
         }
-        //获取流程信息，根据状态判断当前处于哪个流程（流程1：申请  流程2：立项）
-        String applyState = resultBean.getApplyState();
-        String taskStatus = resultBean.getTaskStatus();
-        if (applyState.equals("2")){
-            FlowInfoSearchUtil.getFlowInfo(resultBean, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
-        }else {
-            if (!taskStatus.equals("0")){
-                FlowInfoSearchUtil.getFlowInfo(resultBean, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
-            }
-        }
+        //获取流程信息
+        FlowInfoSearchUtil.getFlowInfo(resultBean, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
         return resultBean;
     }
 

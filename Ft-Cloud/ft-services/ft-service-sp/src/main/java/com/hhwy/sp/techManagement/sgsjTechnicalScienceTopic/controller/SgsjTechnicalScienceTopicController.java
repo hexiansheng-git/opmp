@@ -55,10 +55,18 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
         List<SgsjTechnicalScienceTopic> sgsjTechnicalScienceTopicList = sgsjTechnicalScienceTopicService.getSgsjTechnicalScienceTopicList(sgsjTechnicalScienceTopicParam);
         return AjaxResult.success(sgsjTechnicalScienceTopicList);
     }
-
+    //课题申请明细
     @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopic:list")
-    @GetMapping("/detail")
-    public AjaxResult detail(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {
+    @GetMapping("/applyDetail")
+    public AjaxResult applyDetail(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {
+        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicList = sgsjTechnicalScienceTopicService.applyDetail(sgsjTechnicalScienceTopicParam);
+        return AjaxResult.success(sgsjTechnicalScienceTopicList);
+    }
+
+    //立项明细
+    @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopic:list")
+    @GetMapping("/lxDetail")
+    public AjaxResult lxDetail(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {
         SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicList = sgsjTechnicalScienceTopicService.getDetail(sgsjTechnicalScienceTopicParam);
         return AjaxResult.success(sgsjTechnicalScienceTopicList);
     }

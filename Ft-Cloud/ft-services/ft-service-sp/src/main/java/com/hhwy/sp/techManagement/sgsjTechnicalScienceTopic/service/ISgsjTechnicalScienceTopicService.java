@@ -30,4 +30,6 @@ public interface ISgsjTechnicalScienceTopicService {
     SgsjTechnicalScienceTopic getDetail(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
 
     void applyAdd(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
+
+    SgsjTechnicalScienceTopic applyDetail(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
 }
