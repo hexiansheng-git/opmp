@@ -167,6 +167,7 @@ public class QqchMeasureExpPersonServiceImpl implements IQqchMeasureExpPersonSer
     }
 
     @Override
+    @Transactional
     public void saveList(QqchMeasureExpDTO expVO) {
         //删除旧数据
         QqchMeasureExpPerson delParam = new QqchMeasureExpPerson();

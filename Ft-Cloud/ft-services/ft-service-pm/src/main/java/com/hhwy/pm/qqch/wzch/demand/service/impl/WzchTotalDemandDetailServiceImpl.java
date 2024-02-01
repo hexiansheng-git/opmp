@@ -573,7 +573,9 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         List<List<Object>> data = getData(request.getWzchTotalDemandDetailList(), years, request.getViewType(), rangeMap, leaderFlag);
 
         Map<Integer,String> dictNameMap = new HashMap<>();
-        dictNameMap.put(9,"total_demand_category_name");
+        dictNameMap.put(4,"material_standard");          //执行标准
+        dictNameMap.put(9,"total_demand_category_name"); //类型
+        dictNameMap.put(10,"sys_yes_no");                //是否优先进场
         EasyExeclUtil.export(response, heads, data, "物资总需详情.xlsx", "物资总需详情",
                 new DictHandler(dictNameMap));
 
@@ -1043,12 +1045,13 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         }
         int dataFlag = 0;
         for (Map<String, String> param : list) {
-
             if (dataFlag <= 1 || dataFlag > list.size() - 1) {
                 dataFlag++;
                 continue;
             }
             WzchTotalDemandDetail detail = fillWzchTotalDemandDetailBaseInfo(yearList, param, tSysDictDataList, mSysDictDataList);
+            if(StringUtils.isBlank(detail.getMaterialCode()))
+                continue;
             List<WzchTotalDemandTimeCount> timeCountList = new ArrayList<>();
 
             Map<String, String> dataMap = list.get(dataFlag);

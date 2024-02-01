@@ -9,6 +9,8 @@ import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand;
 import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandDetail;
 import com.hhwy.pm.qqch.wzch.demand.service.IWzchTotalDemandDetailService;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandValidVO;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -87,8 +89,8 @@ public class WzchTotalDemandDetailController extends BaseController {
      * 导入物资总需用详情列表
      */
     /*@PreAuthorize(hasPermi ="wzch:demandDetail:import")*/
-//    @CustomLogger(title = "物资总需用详情列表-导入",businessType = CustomBusinessType.IMPORT)
     @PostMapping("/import")
+    @CustomLogger(title = "前期策划-前期策划编制-物资策划-6.1物资总需用", name = "6.1.1物资总需台账" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file,@RequestParam(value = "viewType",required = true) String viewType) {
         try {
             List<WzchTotalDemandDetail> list = wzchTotalDemandDetailService.importData(file, viewType);
