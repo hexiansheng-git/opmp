@@ -1049,7 +1049,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
                 dataFlag++;
                 continue;
             }
-            WzchTotalDemandDetail detail = fillWzchTotalDemandDetailBaseInfo(yearList, param, tSysDictDataList, mSysDictDataList);
+            WzchTotalDemandDetail detail = fillWzchTotalDemandDetailBaseInfo(yearList, param, tSysDictDataList, mSysDictDataList,head0Size);
             if(StringUtils.isBlank(detail.getMaterialCode()))
                 continue;
             List<WzchTotalDemandTimeCount> timeCountList = new ArrayList<>();
@@ -1139,7 +1139,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
                     param.put(param.size() + "", null);
                 }
             }
-            WzchTotalDemandDetail detail = fillWzchTotalDemandDetailBaseInfo(yearList, param, tSysDictDataList, mSysDictDataList);
+            WzchTotalDemandDetail detail = fillWzchTotalDemandDetailBaseInfo(yearList, param, tSysDictDataList, mSysDictDataList,head0Size);
             List<WzchTotalDemandTimeCount> timeCountList = new ArrayList<>();
             for (int i = 0; i < yearList.size(); i++) {
                 WzchTotalDemandTimeCount wzchTotalDemandTimeCount = new WzchTotalDemandTimeCount();
@@ -1155,7 +1155,8 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
     }
 
 
-    private WzchTotalDemandDetail fillWzchTotalDemandDetailBaseInfo(List<String> yearList, Map<String, String> param, List<SysDictData> tSysDictDataList, List<SysDictData> mSysDictDataList) {
+    private WzchTotalDemandDetail fillWzchTotalDemandDetailBaseInfo(List<String> yearList, Map<String, String> param, List<SysDictData> tSysDictDataList
+            , List<SysDictData> mSysDictDataList,int head0Size) {
         WzchTotalDemandDetail detail = new WzchTotalDemandDetail();
         detail.setMaterialCode(param.get(0));
         detail.setMaterialName(param.get(1));
@@ -1181,8 +1182,8 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         }
 
         detail.setFirstEnterFlag(YesOrNoEnum.parseValue(param.get(10)));
-        detail.setContStandard(param.get(param.size() - 2));
-        detail.setResourceSurvey(param.get(param.size() - 1));
+        detail.setContStandard(param.get(head0Size - 2));
+        detail.setResourceSurvey(param.get(head0Size - 1));    
         detail.setViewYearList(yearList);
         return detail;
     }
