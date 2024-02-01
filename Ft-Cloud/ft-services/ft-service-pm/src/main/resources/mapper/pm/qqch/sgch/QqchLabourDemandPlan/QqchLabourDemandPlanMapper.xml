@@ -8,6 +8,7 @@
                id="QqchLabourDemandPlanResultMap">
         <result property="id" column="id"/>
         <result property="pid" column="pid"/>
+        <result property="pname" column="pname"/>
         <result property="outId" column="out_id"/>
         <result property="jobName" column="job_name"/>
         <result property="workTeam" column="work_team"/>
@@ -212,6 +213,25 @@
         order by create_time desc
     </select>
 
+    <select id="getChildInfoList" resultMap="QqchLabourDemandPlanResultMap">
+        SELECT p.job_name pname,c.`id`, c.`out_id`, c.`job_name`, c.`pid`, c.`work_team`, c.`china_num`, c.`out_num`, c.`total`, c.`out_proportion`
+        , c.`entry_date`, c.`exit_date`, c.`file_group_id`, c.`remark`, c.`region_id`, c.`region_name`, c.`project_id`, c.`project_name`
+        , c.`dept_id`, c.`create_user`, c.`create_user_name`, c.`create_time`, c.`update_user`, c.`update_time`, c.`del_user`,
+        c.`del_time`, c.`del_flag`, c.`pt_var1`, c.`pt_var2`, c.`pt_var3`, c.`pt_var4`, c.`pt_var5`, c.`task_status`, c.`version`,
+        c.`valid`, c.`occupation_code`, c.`work_content`, c.`site_days`
+        from qqch_labour_demand_plan p
+        left join qqch_labour_demand_plan c on c.pid = p.id and c.del_flag = 0
+        where p.del_flag = 0 
+        <if test="version != null ">and p.`version` = #{version}</if>
+        <if test="valid != null  and valid != ''">and p.`valid` = #{valid}</if>
+        <if test="jobNames!=null and jobNames.size>0">
+            and p.job_name in
+            <foreach item="jobName" collection="jobNames" open="(" separator="," close=")">
+                #{jobName}
+            </foreach>
+        </if>
+    </select>
+    
     <insert id="insertQqchLabourDemandPlan" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_labour_demand_plan
         <trim prefix="(" suffix=")" suffixOverrides=",">

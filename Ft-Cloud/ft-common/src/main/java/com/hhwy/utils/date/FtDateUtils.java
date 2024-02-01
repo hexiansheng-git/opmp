@@ -331,7 +331,7 @@ public class FtDateUtils extends DateUtils {
         if(dates == null || dates.length < 1) return null;
         Date min = dates[0];
         for (int i = 1; i < dates.length; i++) {
-            if(dates[i] != null && dates[i].compareTo(min) == -1)
+            if(dates[i] != null && min != null && dates[i].compareTo(min) == -1)
                 min = dates[i];
         }
         return min ;

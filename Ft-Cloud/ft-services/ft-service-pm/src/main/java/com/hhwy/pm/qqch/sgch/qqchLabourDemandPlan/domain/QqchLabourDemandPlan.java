@@ -252,7 +252,8 @@ public class QqchLabourDemandPlan extends TreeNode<QqchLabourDemandPlan> {
     @JsonProperty
     @Excel(name = "是否有效 1-有效 0-失效")
     private String valid;
-
+    
+    private String pname; //父级名称
     private String startTime;
     private String endTime;
     private List<String> jobNames;

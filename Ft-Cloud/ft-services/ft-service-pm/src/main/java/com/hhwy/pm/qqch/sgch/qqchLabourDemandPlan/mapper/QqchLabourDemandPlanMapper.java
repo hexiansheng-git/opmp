@@ -18,6 +18,8 @@ public interface QqchLabourDemandPlanMapper {
 
     List<QqchLabourDemandPlan> getQqchLabourDemandPlanList(QqchLabourDemandPlan qqchLabourDemandPlan);
 
+    List<QqchLabourDemandPlan> getChildInfoList(QqchLabourDemandPlan qqchLabourDemandPlan);
+
     int insertQqchLabourDemandPlan(QqchLabourDemandPlan qqchLabourDemandPlan);
 
     int insertQqchLabourDemandPlanList(@Param("qqchLabourDemandPlanList") List<QqchLabourDemandPlan> qqchLabourDemandPlanList);
