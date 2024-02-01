@@ -4,6 +4,8 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.constant.BelongBusiness;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
@@ -79,7 +81,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
                 bean.setEvaluateList(evaluateMap.get(bean.getId()));
             }
         }
-//        FlowInfoSearchUtil.getFlowInfo(resultList, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
+        FlowInfoSearchUtil.getFlowInfo(resultList, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
         return resultList;
     }
 

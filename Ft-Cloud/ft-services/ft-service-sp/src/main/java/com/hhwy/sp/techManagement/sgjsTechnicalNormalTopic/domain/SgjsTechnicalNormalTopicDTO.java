@@ -56,25 +56,8 @@ public class SgjsTechnicalNormalTopicDTO {
      * 字段描述：高新资质
      */
     @JsonProperty
-    private String highCertificate;
     @ExcelProperty(value = "高新资质", order = 5)
-    private String highCertificateName;
-
-    public String getHighCertificateName() {
-        LinkedHashMap<String, String> dictData = DictUtil.getDictData("high_certificate");
-        if (CollUtil.isEmpty(dictData)) return "";
-        return dictData.get(highCertificate);
-    }
-
-    public void setHighCertificateName(String highCertificateName) {
-        LinkedHashMap<String, String> dictData = DictUtil.getDictData("high_certificate");
-        if (CollUtil.isEmpty(dictData)){
-            this.highCertificateName = highCertificateName;
-            return;
-        }
-        this.highCertificateName = dictData.get(highCertificate);
-    }
-
+    private String highCertificate;
     /**
      * 字段描述：课题类别编号
      */
@@ -105,45 +88,12 @@ public class SgjsTechnicalNormalTopicDTO {
     @JsonProperty
     @ExcelProperty(value = "课题状态", order = 8)
     private String topicState;
-    private String topicStateName;
-
-    public String getTopicStateName() {
-        LinkedHashMap<String, String> dictData = DictUtil.getDictData("topic_state");
-        if (CollUtil.isEmpty(dictData)) return "";
-        return dictData.get(topicState);
-    }
-
-    public void setTopicStateName(String topicStateName) {
-        LinkedHashMap<String, String> dictData = DictUtil.getDictData("topic_state");
-        if (CollUtil.isEmpty(dictData)) {
-            this.topicStateName = topicStateName;
-            return;
-        }
-        this.topicStateName =dictData.get(topicState);
-    }
-
     /**
      * 字段描述：项目成果形式
      */
     @JsonProperty
+    @ExcelProperty(value = "项目成果形式", order = 8)
     private String achievementKind;
-    @ExcelProperty(value = "项目成果形式", order = 9)
-    private String achievementKindName;
-
-    public String getAchievementKindName() {
-        LinkedHashMap<String, String> dictData = DictUtil.getDictData("achievement_kind");
-        if (CollUtil.isEmpty(dictData)) return "";
-        return dictData.get(achievementKind);
-    }
-
-    public void setAchievementKindName(String achievementKindName) {
-        LinkedHashMap<String, String> dictData = DictUtil.getDictData("achievement_kind");
-        if (CollUtil.isEmpty(dictData)) {
-            this.achievementKindName = achievementKindName;
-            return;
-        }
-        this.achievementKindName = dictData.get(achievementKind);
-    }
 
     /**
      * 字段描述：研发起始时间
