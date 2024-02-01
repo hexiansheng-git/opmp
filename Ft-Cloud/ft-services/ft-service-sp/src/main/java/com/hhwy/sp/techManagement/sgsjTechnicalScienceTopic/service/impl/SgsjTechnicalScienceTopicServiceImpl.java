@@ -81,7 +81,6 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
                 bean.setEvaluateList(evaluateMap.get(bean.getId()));
             }
         }
-        FlowInfoSearchUtil.getFlowInfo(resultList, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
         return resultList;
     }
 
@@ -218,6 +217,16 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             resultBean.setListAcceptance(collect.get(BelongBusiness.BELONG_BUSINESS_4));
             resultBean.setListOutline(collect.get(BelongBusiness.BELONG_BUSINESS_3));
             resultBean.setListApply(collect.get(BelongBusiness.BELONG_BUSINESS_1));
+        }
+        //获取流程信息，根据状态判断当前处于哪个流程（流程1：申请  流程2：立项）
+        String applyState = resultBean.getApplyState();
+        String taskStatus = resultBean.getTaskStatus();
+        if (applyState.equals("2")){
+            FlowInfoSearchUtil.getFlowInfo(resultBean, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
+        }else {
+            if (!taskStatus.equals("0")){
+                FlowInfoSearchUtil.getFlowInfo(resultBean, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
+            }
         }
         return resultBean;
     }
