@@ -1,5 +1,6 @@
 package com.hhwy.sd.designFileManage.controller;
 
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -7,11 +8,15 @@ import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManage;
 import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManageVo;
 import com.hhwy.sd.designFileManage.domain.vo.KcsjDesignFileManageQueryVo;
 import com.hhwy.sd.designFileManage.service.IKcsjDesignFileManageService;
+import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -89,5 +94,14 @@ public class DesignFileManageController extends BaseController {
     public AjaxResult deleteKcsjDesignFileManageByPks(@PathVariable Long[] ids) {
         List<Long> kcsjDesignFileManagePkList = Arrays.asList(ids);
         return toAjax(kcsjDesignFileManageService.deleteKcsjDesignFileManageByPks(kcsjDesignFileManagePkList));
+    }
+
+    @GetMapping("/export")
+    public void export(HttpServletResponse response, KcsjDesignFileManageQueryVo kcsjDesignFileManageParam) throws IOException {
+        KcsjDesignFileManageVo kcsjDesignFileManageList = kcsjDesignFileManageService.getKcsjDesignFileManageList(kcsjDesignFileManageParam);
+//        ExcelUtils<SgjsTechnicalData> util = new ExcelUtils<>(SgjsTechnicalData.class);
+        List<KcsjDesignFileManage> treeList = kcsjDesignFileManageList.getTreeList();
+        FtExcelUtil<KcsjDesignFileManage> util = new FtExcelUtil<>(KcsjDesignFileManage.class);
+        util.exportExcel(response, TreeUtil.treeToList(treeList), DateUtils.getDate());
     }
 }
