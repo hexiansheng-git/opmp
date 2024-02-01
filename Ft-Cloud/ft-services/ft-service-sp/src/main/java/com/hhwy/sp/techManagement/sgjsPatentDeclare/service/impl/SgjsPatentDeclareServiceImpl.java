@@ -104,7 +104,8 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
         CommonAssert.notNull(id,"id不能为空");
         sgjsPatentDeclareMapper.deleteSgjsPatentDeclareById(id);
 
-        //TODO 删除专家数据
+        //删除专家数据
+        sgjsExpertLibraryService.deleteSgjsExpertLibraryByForeignId(id);
 
         //删除成果奖励数据
         sgjsAchievementAwardService.deleteSgjsAchievementAwardByForeignId(id);
