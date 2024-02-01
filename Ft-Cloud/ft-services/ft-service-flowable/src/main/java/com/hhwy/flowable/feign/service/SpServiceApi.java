@@ -26,4 +26,9 @@ public interface SpServiceApi {
     @RequestMapping(value = "/sgjsTechMethod/listener", method = RequestMethod.POST)
     AjaxResult updateSgjsTechMethod(@RequestParam("id") Long id, @RequestParam("isPass") String isPass);
 
+    /**
+     * 科技管理 - 科研课题管理
+     */
+    @RequestMapping(value = "/sgsjTechnicalScienceTopic/listener", method = RequestMethod.POST)
+    void updateTaskStatus(@RequestParam("id") Long id);
 }

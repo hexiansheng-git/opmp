@@ -117,4 +117,18 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
         ExcelUtils<SgsjTechnicalScienceTopic> util = new ExcelUtils<>(SgsjTechnicalScienceTopic.class);
         util.exportExcel(response, sgsjTechnicalScienceTopicList, DateUtils.getDate());
     }
+
+    /***
+     * 功能描述: 流程结束监听
+     * @param id  业务id
+     * 作者: fushudong
+     * 时间: 2024/2/1
+     */
+    @RequestMapping("/listener")
+    public void updateTaskStatus(@RequestParam("id") Long id){
+        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
+        sgsjTechnicalScienceTopic.setId(id);
+        sgsjTechnicalScienceTopic.setTaskStatus("5");
+        sgsjTechnicalScienceTopicService.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
+    }
 }
