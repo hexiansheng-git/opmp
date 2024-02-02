@@ -131,6 +131,7 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
     @Transactional
     public SgjsFourNewsAchievement updateSgjsFourNewsAchievement(SgjsFourNewsAchievement sgjsFourNewsAchievement) {
         Long id = sgjsFourNewsAchievement.getId();
+        sgjsFourNewsAchievement.setDataCurrentState(null);
         if(id == null) {
             id = IdWorker.createId();
             sgjsFourNewsAchievement.setId(id);

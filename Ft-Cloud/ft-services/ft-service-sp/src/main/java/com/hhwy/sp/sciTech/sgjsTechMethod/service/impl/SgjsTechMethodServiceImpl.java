@@ -131,6 +131,7 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
     @Transactional
     public SgjsTechMethod updateSgjsTechMethod(SgjsTechMethod sgjsTechMethod) {
         Long id = sgjsTechMethod.getId();
+        sgjsTechMethod.setDataCurrentState(null);
         if (id == null) {
             id = IdWorker.createId();
             sgjsTechMethod.setId(id);
