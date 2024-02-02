@@ -38,4 +38,6 @@ public interface SgjsPatentDeclareMapper {
     int getCountByPatentNumberExpectId(@Param("id") Long id,@Param("patentNumber") String patentNumber);
 
     List<SgjsPatentDeclare> getListByIds(@Param("ids") List<Long> ids);
+
+    void updatePatentDeclareProcess(@Param("id") Long id,@Param("currentState") String currentState,@Param("taskStatus") String taskStatus);
 }

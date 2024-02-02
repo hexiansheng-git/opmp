@@ -393,7 +393,6 @@
             <if test="authorizationDate != null ">`authorization_date` = #{authorizationDate},</if>
             <if test="patentee != null  and  patentee != ''">`patentee` = #{patentee},</if>
             <if test="patentState != null  and  patentState != ''">`patent_state` = #{patentState},</if>
-            <if test="currentState != null  and  currentState != ''">`current_state` = #{currentState},</if>
             <if test="achievementDescription != null  and  achievementDescription != ''">`achievement_description` =
                 #{achievementDescription},
             </if>
@@ -416,7 +415,6 @@
             <if test="delTime != null ">`del_time` = #{delTime},</if>
             <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
             <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
-            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
             <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
@@ -753,5 +751,9 @@
 
     <update id="deleteSgjsPatentDeclareById">
         update `sgjs_patent_declare` set del_flag = 1 where id = #{id}
+    </update>
+    <update id="updatePatentDeclareProcess">
+        update `sgjs_patent_declare` set current_state = #{currentState} , pt_var2 = #{taskStatus}
+        where id = #{id}
     </update>
 </mapper>
