@@ -6,6 +6,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
+import com.hhwy.sp.common.constant.BelongBusiness;
+import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.SgjsPatentDeclare;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.vo.PatentDeclareQueryVo;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.service.ISgjsPatentDeclareService;
@@ -34,6 +36,9 @@ public class SgjsPatentDeclareController extends BaseController {
     @Autowired
     private ISgjsPatentDeclareService sgjsPatentDeclareService;
 
+    @Autowired
+    private ISgjsAchievementAwardService sgjsAchievementAwardService;
+
 
     /**
      * 根据id获取数据
@@ -59,6 +64,7 @@ public class SgjsPatentDeclareController extends BaseController {
     public AjaxResult getSgjsPatentDeclareList(@Validated(ValidationGroups.Select.class) PatentDeclareQueryVo queryVo) {
         startPage();
         List<SgjsPatentDeclare> sgjsPatentDeclareList = sgjsPatentDeclareService.getSgjsPatentDeclareList(queryVo);
+        sgjsAchievementAwardService.setLedger(sgjsPatentDeclareList,SgjsPatentDeclare::getId, BelongBusiness.BELONG_BUSINESS_7, SgjsPatentDeclare::setAllAwardName,SgjsPatentDeclare::setAwardList);
         FlowInfoSearchUtil.getFlowInfo(sgjsPatentDeclareList, FlowEnum.SGJS_PATENT_DECLARE);
         return getDataTableAjaxResult(sgjsPatentDeclareList);
     }
@@ -128,7 +134,7 @@ public class SgjsPatentDeclareController extends BaseController {
         }else {
             sgjsPatentDeclareList = sgjsPatentDeclareService.getSgjsPatentDeclareList(queryVo);
         }
-
+        sgjsAchievementAwardService.setAllAwards(sgjsPatentDeclareList,SgjsPatentDeclare::getId,SgjsPatentDeclare::setAllAward, BelongBusiness.BELONG_BUSINESS_7);
         FtExcelUtil<SgjsPatentDeclare> util = new FtExcelUtil<>(SgjsPatentDeclare.class);
         util.exportExcel(response, sgjsPatentDeclareList, DateUtils.getDate());
     }

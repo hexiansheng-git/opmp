@@ -11,7 +11,7 @@ import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.task.service.delegate.DelegateTask;
 import org.springframework.util.Assert;
 
-/**
+/*
  * 前期策划工作小组审批流程监听器
  */
 public class SgjsPatentDeclareSubmitListener implements TaskListener, ExecutionListener {

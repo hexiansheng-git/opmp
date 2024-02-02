@@ -61,9 +61,7 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
     }
 
     public List<SgjsPatentDeclare> getSgjsPatentDeclareList(PatentDeclareQueryVo queryVo) {
-        List<SgjsPatentDeclare> patentDeclareList = sgjsPatentDeclareMapper.getSgjsPatentDeclareList(queryVo);
-        sgjsAchievementAwardService.setLedger(patentDeclareList,SgjsPatentDeclare::getId, BelongBusiness.BELONG_BUSINESS_7);
-        return patentDeclareList;
+        return sgjsPatentDeclareMapper.getSgjsPatentDeclareList(queryVo);
     }
 
     @Transactional
@@ -177,9 +175,7 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
 
     @Override
     public List<SgjsPatentDeclare> getListByIds(List<Long> ids) {
-        List<SgjsPatentDeclare> patentDeclareList = sgjsPatentDeclareMapper.getListByIds(ids);
-        sgjsAchievementAwardService.setLedger(patentDeclareList,SgjsPatentDeclare::getId, BelongBusiness.BELONG_BUSINESS_7);
-        return patentDeclareList;
+        return sgjsPatentDeclareMapper.getListByIds(ids);
     }
 
     @Override
@@ -187,25 +183,17 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
         if(StringUtils.isBlank(pass)){
             return;
         }
-        SgjsPatentDeclare patentDeclare = sgjsPatentDeclareMapper.getSgjsPatentDeclareById(id);
-        if(patentDeclare != null){
-            if("1".equals(pass)){
-                patentDeclare.setCurrentState(DataCurrentState.PASS);
-            }else {
-                patentDeclare.setCurrentState(DataCurrentState.NO_PASS);
-            }
-            patentDeclare.setPtVar2("5");
-            sgjsPatentDeclareMapper.updateSgjsPatentDeclare(patentDeclare);
+        String currentState;
+        if("1".equals(pass)){
+            currentState = DataCurrentState.PASS;
+        }else {
+            currentState = DataCurrentState.NO_PASS;
         }
+        sgjsPatentDeclareMapper.updatePatentDeclareProcess(id,currentState,"5");
     }
 
     @Override
     public void submitPatentDeclareProcess(Long id) {
-        SgjsPatentDeclare patentDeclare = sgjsPatentDeclareMapper.getSgjsPatentDeclareById(id);
-        if(patentDeclare != null){
-            patentDeclare.setPtVar2("1");
-            patentDeclare.setCurrentState(DataCurrentState.APPLYING);
-            sgjsPatentDeclareMapper.updateSgjsPatentDeclare(patentDeclare);
-        }
+        sgjsPatentDeclareMapper.updatePatentDeclareProcess(id,DataCurrentState.APPLYING,"1");
     }
 }
