@@ -71,7 +71,7 @@ public class SgjsPaperPublishController extends BaseController {
     public AjaxResult getSgjsPaperPublishList(@Validated(ValidationGroups.Select.class) PaperPublishQueryVo queryVo) {
         startPage();
         List<SgjsPaperPublish> sgjsPaperPublishList = sgjsPaperPublishService.getSgjsPaperPublishList(queryVo);
-        sgjsAchievementAwardService.setLedger(sgjsPaperPublishList, SgjsPaperPublish::getId, BelongBusiness.BELONG_BUSINESS_8);
+        sgjsAchievementAwardService.setLedger(sgjsPaperPublishList, SgjsPaperPublish::getId, BelongBusiness.BELONG_BUSINESS_8,SgjsPaperPublish::setAllAwardName,SgjsPaperPublish::setAwardList);
         FlowInfoSearchUtil.getFlowInfo(sgjsPaperPublishList, FlowEnum.SGJS_PAPER_PUBLISH);
         return getDataTableAjaxResult(sgjsPaperPublishList);
     }

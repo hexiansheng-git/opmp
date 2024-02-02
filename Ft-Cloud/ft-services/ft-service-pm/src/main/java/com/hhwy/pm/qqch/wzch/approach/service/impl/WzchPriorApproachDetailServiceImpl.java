@@ -242,7 +242,7 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
         }
         List<String> yesrs = yesrList.stream().distinct().sorted().collect(Collectors.toList());
         List<List<String>> head = head(yesrs);
-        System.out.println(JSONObject.toJSONString(head));
+//        System.out.println(JSONObject.toJSONString(head));
         List<List<Object>> data = getData(wzchPriorApproachDetailList, yesrs);
      //  System.out.println(JSONObject.toJSONString(data));
         EasyExeclUtil.export(response,head,data,"优先进场物资台账详情.xlsx","优先进场物资台账详情");
@@ -335,7 +335,6 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
         List<SysDictData> mSysDictDataList = dictTypeService.selectDictDataByType("material_standard");
         int dataFlag = 0;
         for (Map<String,String> param : list) {
-
             if(dataFlag<=1 || dataFlag>list.size()-1 ){
                 dataFlag++;
                 continue;

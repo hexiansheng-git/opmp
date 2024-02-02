@@ -75,9 +75,9 @@ public class WzchSourceDetailController extends BaseController {
 //    @PreAuthorize(hasPermi ="wzch:sourceDetail:import")
 //    @CustomLogger(title = "来源策划物资详情列表-导入",businessType = CustomBusinessType.IMPORT)
     @PostMapping("/import")
-    public AjaxResult importData(MultipartFile file) {
+    public AjaxResult importData(MultipartFile file,BigDecimal version) {
         try{
-            List<WzchSourceDetail> list =  wzchSourceDetailService.importData(file);
+            List<WzchSourceDetail> list =  wzchSourceDetailService.importData(file,version);
             return new AjaxResult(200,"导入成功",list);
         }catch(IllegalArgumentException e){
             e.printStackTrace();

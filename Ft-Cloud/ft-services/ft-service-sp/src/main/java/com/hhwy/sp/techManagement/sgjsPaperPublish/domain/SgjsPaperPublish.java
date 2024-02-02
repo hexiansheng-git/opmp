@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.utils.excel.FtExcel;
-import com.hhwy.sp.common.domain.TechManageCommon;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
+import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.excel.FtExcel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SgjsPaperPublish extends TechManageCommon {
+public class SgjsPaperPublish extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -275,6 +275,11 @@ public class SgjsPaperPublish extends TechManageCommon {
     @JsonProperty
     @FtExcel(name = "预留字段5")
     private String ptVar5;
+
+    /**
+     * 字段描述：全部奖项名称
+     */
+    private String allAwardName;
 
     private List<SgjsAchievementAward> awardList;
 

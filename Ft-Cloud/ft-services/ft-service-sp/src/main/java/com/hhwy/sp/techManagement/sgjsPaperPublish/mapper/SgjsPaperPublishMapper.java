@@ -36,4 +36,6 @@ public interface SgjsPaperPublishMapper {
     void deleteSgjsPaperPublishById(@Param("id") Long id);
 
     List<SgjsPaperPublish> getListByIds(@Param("ids") List<Long> ids);
+
+    void updatePaperPublishProcess(@Param("id") Long id,@Param("currentState") String currentState,@Param("taskStatus") String taskStatus);
 }

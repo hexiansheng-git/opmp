@@ -179,23 +179,17 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         if(StringUtils.isBlank(pass)){
             return;
         }
-        SgjsPaperPublish paperPublish = sgjsPaperPublishMapper.getSgjsPaperPublishById(id);
-        if(paperPublish != null){
-            if("1".equals(pass)){
-                paperPublish.setCurrentState(DataCurrentState.PASS);
-            }else {
-                paperPublish.setCurrentState(DataCurrentState.NO_PASS);
-            }
-            sgjsPaperPublishMapper.updateSgjsPaperPublish(paperPublish);
+        String currentState;
+        if("1".equals(pass)){
+            currentState = DataCurrentState.PASS;
+        }else {
+            currentState = DataCurrentState.NO_PASS;
         }
+        sgjsPaperPublishMapper.updatePaperPublishProcess(id,currentState,"5");
     }
 
     @Override
     public void submitPaperPublishProcess(Long id) {
-        SgjsPaperPublish paperPublish = sgjsPaperPublishMapper.getSgjsPaperPublishById(id);
-        if(paperPublish != null){
-            paperPublish.setCurrentState(DataCurrentState.APPLYING);
-            sgjsPaperPublishMapper.updateSgjsPaperPublish(paperPublish);
-        }
+        sgjsPaperPublishMapper.updatePaperPublishProcess(id,DataCurrentState.APPLYING,"1");
     }
 }

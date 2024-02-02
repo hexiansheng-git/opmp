@@ -168,8 +168,7 @@ public class WzchAllotMaterialController extends BaseController {
         String url = WSPlatform + "/basic-api/pms/wzch/allotMaterial/adjustMtlListForPm";
         AjaxResult ajaxResult;
         String tenantKey = SecurityUtils.getTenantKey();
-        //TODO 物设
-        tenantKey = "PJ2022016704";
+//        tenantKey = "PJ2022016704";
         Map map = ObjectUtils.toMap("projectCode",tenantKey,"materialCode",ObjectUtils.nvlString(dto.getMaterialCode()));
         try {
             String resp = HttpUtil.post(url, JSON.toJSONString(map), 3000);

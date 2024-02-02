@@ -107,5 +107,5 @@ public interface IWzchSourceDetailService {
      * @param file
      * @return
      */
-    List<WzchSourceDetail> importData(MultipartFile file) throws IOException;
+    List<WzchSourceDetail> importData(MultipartFile file,BigDecimal version) throws IOException;
 }
