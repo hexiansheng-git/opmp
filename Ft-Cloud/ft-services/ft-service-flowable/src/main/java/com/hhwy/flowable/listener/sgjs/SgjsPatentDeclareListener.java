@@ -22,10 +22,15 @@ public class SgjsPatentDeclareListener extends BaseExecutionListener {
         String businessKey = processInstance.getBusinessKey();
 
         Map<String, Object> variables = delegateExecution.getVariables();
-        Object passObj = variables.get("pass");
+        Object expertAdviceObj = variables.get("expertAdvice");
         String pass = "";
-        if(passObj != null){
-            pass =  passObj.toString();
+        if(expertAdviceObj != null  && "1".equals(expertAdviceObj.toString())){
+            pass = "1";
+        }else {
+            Object passObj = variables.get("pass");
+            if(passObj != null){
+                pass =  passObj.toString();
+            }
         }
         SpServiceApi bean = SpringUtils.getBean(SpServiceApi.class);
         AjaxResult result = bean.updatePatentDeclareProcess(Long.valueOf(businessKey),pass);
