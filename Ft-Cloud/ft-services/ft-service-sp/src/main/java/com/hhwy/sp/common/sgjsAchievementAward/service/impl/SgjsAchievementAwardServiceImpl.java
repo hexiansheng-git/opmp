@@ -45,6 +45,7 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
             List<SgjsAchievementAward> awardList = map.get(id);
             if(CollectionUtils.isNotEmpty(awardList)){
                 awardList = awardList.stream().sorted(Comparator.comparing(SgjsAchievementAward::getCreateTime)).collect(Collectors.toList());
+                DictUtil.dictValueToLabel(awardList,"award_type",SgjsAchievementAward::getAwardType,SgjsAchievementAward::setAwardType);
                 StringBuilder allAward = new StringBuilder();
                 int i = 1;
                 for (SgjsAchievementAward award1 : awardList) {
@@ -109,7 +110,7 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
         SgjsAchievementAward query = new SgjsAchievementAward();
         query.setBelongBusiness(belongBusiness);
         List<SgjsAchievementAward> awardList = sgjsAchievementAwardMapper.getSgjsAchievementAwardList(query);
-        DictUtil.dictValueToLabel(awardList,"award_type",SgjsAchievementAward::getAwardType,SgjsAchievementAward::setAwardType);
+//        DictUtil.dictValueToLabel(awardList,"award_type",SgjsAchievementAward::getAwardType,SgjsAchievementAward::setAwardType);
         return awardList.stream().collect(Collectors.groupingBy(SgjsAchievementAward::getForeignId));
     }
 
