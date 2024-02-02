@@ -715,6 +715,11 @@
         </foreach>
     </update>
 
+    <delete id="deleteById">
+        update `sgsj_technical_science_topic` set del_flag = 1
+        where `id` = #{id}
+    </delete>
+
     <update id="deleteSgsjTechnicalScienceTopic">
         update `sgsj_technical_science_topic` set del_flag = 1
         <where>

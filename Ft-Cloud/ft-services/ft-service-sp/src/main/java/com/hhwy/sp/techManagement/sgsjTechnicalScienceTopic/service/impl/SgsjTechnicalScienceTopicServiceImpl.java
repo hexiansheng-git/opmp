@@ -197,6 +197,18 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         return sgsjTechnicalScienceTopicMapper.deleteSgsjTechnicalScienceTopicByPks(sgsjTechnicalScienceTopicPkList);
     }
 
+    @Transactional
+    @Override
+    public void deleteById(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {
+        sgsjTechnicalScienceTopicMapper.deleteById(sgsjTechnicalScienceTopicParam);
+        Long id = sgsjTechnicalScienceTopicParam.getId();
+        sgjsExpertLibraryService.deleteSgjsExpertLibraryByForeignId(id);
+        sgjsAchievementAwardService.deleteSgjsAchievementAwardByForeignId(id);
+        ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = new ShjsAuthenticateEvaluate();
+        shjsAuthenticateEvaluate.setForeignId(id);
+        shjsAuthenticateEvaluateService.deleteShjsAuthenticateEvaluate(shjsAuthenticateEvaluate);
+    }
+
     /***
      * 功能描述: 申请明细
      */

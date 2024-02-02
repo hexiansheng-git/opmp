@@ -27,4 +27,6 @@ public interface SgsjTechnicalScienceTopicMapper {
     int deleteSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic);
 
     int deleteSgsjTechnicalScienceTopicByPks(@Param("sgsjTechnicalScienceTopicPkList") List<Long> sgsjTechnicalScienceTopicPkList);
+
+    int deleteById(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic);
 }

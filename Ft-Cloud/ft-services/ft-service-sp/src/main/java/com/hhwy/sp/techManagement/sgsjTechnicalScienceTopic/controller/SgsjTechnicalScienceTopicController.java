@@ -113,6 +113,13 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
     }
 
     @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopic:remove")
+    @PostMapping("/deleteById")
+    public AjaxResult deleteById(@Validated(ValidationGroups.Delete.class) @RequestBody SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {
+        sgsjTechnicalScienceTopicService.deleteById(sgsjTechnicalScienceTopicParam);
+        return AjaxResult.success();
+    }
+
+    @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopic:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteSgsjTechnicalScienceTopicByPks(@PathVariable Long[] ids) {
         List<Long> sgsjTechnicalScienceTopicPkList = Arrays.asList(ids);
