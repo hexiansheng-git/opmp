@@ -265,12 +265,12 @@ public class SgjsPatentDeclare extends TechManageCommon {
     @JsonProperty
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：完成单位id
      */
     @JsonProperty
     private String ptVar1;
     /**
-     * 字段描述：预留字段2
+     * 字段描述：流程状态
      */
     @JsonProperty
     private String ptVar2;

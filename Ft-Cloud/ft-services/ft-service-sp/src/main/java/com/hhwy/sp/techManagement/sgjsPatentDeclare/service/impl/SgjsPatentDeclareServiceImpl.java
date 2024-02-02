@@ -194,6 +194,7 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
             }else {
                 patentDeclare.setCurrentState(DataCurrentState.NO_PASS);
             }
+            patentDeclare.setPtVar2("5");
             sgjsPatentDeclareMapper.updateSgjsPatentDeclare(patentDeclare);
         }
     }
@@ -202,6 +203,7 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
     public void submitPatentDeclareProcess(Long id) {
         SgjsPatentDeclare patentDeclare = sgjsPatentDeclareMapper.getSgjsPatentDeclareById(id);
         if(patentDeclare != null){
+            patentDeclare.setPtVar2("1");
             patentDeclare.setCurrentState(DataCurrentState.APPLYING);
             sgjsPatentDeclareMapper.updateSgjsPatentDeclare(patentDeclare);
         }
