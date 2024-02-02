@@ -9,6 +9,7 @@ import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
@@ -374,7 +375,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
 //        }
     }
 
-    @Override
+    @Override            
     @Transactional()
     public void sync(BigDecimal version) {
         //3 -SP、清理当前版本数据
@@ -508,7 +509,6 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
                 continue;
             }
             yesrList.addAll( countList.stream().map(WzchSourceApproachYearCount::getYear).collect(Collectors.toList()));
-
         }
         List<String> yesrs = yesrList.stream().distinct().sorted().collect(Collectors.toList());
         List<List<String>> head = head(yesrs);
@@ -685,10 +685,9 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
     }
 
     @Override
-    public List<WzchSourceDetail> importData(MultipartFile file) throws IOException {
-        if(file==null){
+    public List<WzchSourceDetail> importData(MultipartFile file,BigDecimal version) throws IOException {
+        if(file==null)
             throw new BaseException("请传入需要导入的文件");
-        }
         List<WzchSourceDetail> sourceDetails = new ArrayList<>();
         InputStream inputStream = file.getInputStream();
         List<Map<String,String>> list = EasyExcel.read(inputStream).headRowNumber(0).sheet().doReadSync();
@@ -720,7 +719,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             head1List.add(entry.getValue());
         }
         //截取二级头部
-        List<String> head1s = subList(head1List, 9, head1List.size());
+//        List<String> head1s = subList(head1List, 9, head1List.size());
         Map<String,Map<String,Object>> headBig = new TreeMap<>();
         //给年分配二级头部
         int subStart = 0;
@@ -732,7 +731,12 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             subStart=subEnd;
             headBig.put(year,map);
         }
-
+        //获取对应总需台账的物资，用于校验
+        BigDecimal totalVersion = VersionUtil.getVersion("wzch_total_demand", version);
+        List<WzchTotalDemandDetail> totalDetailList = wzchTotalDemandDetailService.selectWzchTotalDemandDetailList(new WzchTotalDemandDetail(totalVersion));
+        Map<String,WzchTotalDemandDetail> totalMaterCodeMap = totalDetailList.stream().collect(
+                Collectors.toMap(r->r.getMaterialCode(), r->r,(v1,v2)->v1));
+        
         List<SysDictData> tSysDictDataList = systemApiService.selectDictDataByType("total_demand_category_name");
         List<SysDictData> mSysDictDataList = systemApiService.selectDictDataByType("material_standard");
         int dataFlag = 0;
@@ -749,6 +753,12 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
                 errMsg.append("物资编码["+detail.getMaterialCode()+"]不存在;");
                 continue;
             }
+            //校验总需计划中是否存在  
+            Assert.isTrue(totalMaterCodeMap.containsKey(detail.getMaterialCode()),"物资编码["+detail.getMaterialCode()+"]不存在于总需计划中，无法导入");
+            WzchTotalDemandDetail tempDetail = totalMaterCodeMap.get(detail.getMaterialCode());
+            Assert.isTrue(tempDetail.getMaterialStandard().equals(detail.getMaterialStandard()),
+                    "物资编码["+detail.getMaterialCode()+"]所选执行标准与物资总需计划不符");
+            
             List<WzchSourceApproachYearCount> yearCountList = new ArrayList<>();
 
             Map<String, String> dataMap = list.get(dataFlag);
@@ -803,7 +813,6 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         }else{
             detail.setMaterialStandard(param.get(4));
         }
-        detail.setUnit(param.get(5));
         detail.setTotalDemandAmount(param.get(6)==null?new BigDecimal(0):new BigDecimal(param.get(6)));
         detail.setSelfDemandAmount(param.get(7)==null?new BigDecimal(0):new BigDecimal(param.get(7)));
 
@@ -814,6 +823,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             detail.setCategoryName(param.get(8));
         }
         detail.setYearList(yearList);
+        wzchCommonService.setWzchtMaterialInfo(detail);
         return detail;
     }
 

@@ -185,6 +185,10 @@ public class WzchTotalDemandDetail extends BaseEntity {
      */
     private Integer orderNo;
 
+    public WzchTotalDemandDetail(BigDecimal version) {
+        this.version = version;
+    }
+    
     public WzchTotalDemandDetail(String valid,Long projectId) {
         this.valid = valid;
         this.projectId = projectId;
