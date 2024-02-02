@@ -180,8 +180,8 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         sgjsFourNewsAchievement.setId(id);
         SgjsFourNewsAchievement existVo = sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievement(sgjsFourNewsAchievement);
         if(existVo != null) {
-            sgjsFourNewsAchievement.setTaskStatus("5");
             if(StringUtils.isNotEmpty(isPass)) {
+                sgjsFourNewsAchievement.setTaskStatus("5");
                 if("1".equals(isPass)) {
                     sgjsFourNewsAchievement.setDataCurrentState("3");
                 }
@@ -189,6 +189,7 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
                     sgjsFourNewsAchievement.setDataCurrentState("4");
                 }
             } else {
+                sgjsFourNewsAchievement.setTaskStatus("2");
                 sgjsFourNewsAchievement.setDataCurrentState("2");
             }
             sgjsFourNewsAchievementMapper.updateSgjsFourNewsAchievement(sgjsFourNewsAchievement);

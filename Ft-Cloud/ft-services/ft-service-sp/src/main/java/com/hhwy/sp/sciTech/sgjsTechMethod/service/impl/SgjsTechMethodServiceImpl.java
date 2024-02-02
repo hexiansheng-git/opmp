@@ -180,8 +180,8 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         sgjsTechMethod.setId(id);
         SgjsTechMethod existVo = sgjsTechMethodMapper.getSgjsTechMethod(sgjsTechMethod);
         if(existVo != null) {
-            sgjsTechMethod.setTaskStatus("5");
             if(StringUtils.isNotEmpty(isPass)) {
+                sgjsTechMethod.setTaskStatus("5");
                 if("1".equals(isPass)) {
                     sgjsTechMethod.setDataCurrentState("3");
                 }
@@ -190,6 +190,7 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
                 }
             } else {
                 sgjsTechMethod.setDataCurrentState("2");
+                sgjsTechMethod.setTaskStatus("2");
             }
             sgjsTechMethodMapper.updateSgjsTechMethod(sgjsTechMethod);
         }
