@@ -6,7 +6,6 @@ import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.mapper.SgjsAchievementAwardMapper;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
 import com.hhwy.utils.common.CommonAssert;
-import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +108,7 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
         SgjsAchievementAward query = new SgjsAchievementAward();
         query.setBelongBusiness(belongBusiness);
         List<SgjsAchievementAward> awardList = sgjsAchievementAwardMapper.getSgjsAchievementAwardList(query);
-        DictUtil.dictValueToLabel(awardList,"award_type",SgjsAchievementAward::getAwardType,SgjsAchievementAward::setAwardType);
+//        DictUtil.dictValueToLabel(awardList,"award_type",SgjsAchievementAward::getAwardType,SgjsAchievementAward::setAwardType);
         return awardList.stream().collect(Collectors.groupingBy(SgjsAchievementAward::getForeignId));
     }
 
