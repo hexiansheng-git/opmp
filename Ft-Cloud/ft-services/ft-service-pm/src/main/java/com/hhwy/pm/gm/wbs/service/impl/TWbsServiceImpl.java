@@ -264,7 +264,7 @@ public class TWbsServiceImpl implements ITWbsService {
                     if(temp.getId().equals(idList.get(i)+"")){
                         boolean isRoot = StringUtils.isBlank(parentCode);
                         temp.setParentCode(parentCode);
-                        Integer startNum = isRoot?rootNum:num;
+                        Integer startNum = ObjectUtils.nvl(rootNum,0);
                         selfCode = buildSelfCode.apply(getSelfCodeSortNum.apply(temp.getParentCode(),startNum),isRoot);
                         temp.setLevel(level);
                         put2Resu = false;
