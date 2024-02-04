@@ -109,7 +109,9 @@ public class CompileAspectImpl {
             if(StringUtils.isBlank(menuId)){
                 menuId = compileEntity.getModuleIdentity();
             }
-            moduleConfirmCaseService.addConfirmRecord(menuId, compileEntity.getStageIdentity());
+            if(StringUtils.isNotBlank(menuId)){
+                moduleConfirmCaseService.addConfirmRecord(menuId, compileEntity.getStageIdentity());
+            }
             redisUtils.setEx(reqId, reqId, 60000);
         }
     }

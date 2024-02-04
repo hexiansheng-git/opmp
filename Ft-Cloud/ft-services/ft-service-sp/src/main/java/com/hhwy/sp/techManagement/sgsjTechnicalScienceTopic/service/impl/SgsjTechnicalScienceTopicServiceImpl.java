@@ -2,9 +2,14 @@ package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.constant.BelongBusiness;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
@@ -51,6 +56,8 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     @Autowired
     private ISgsjTechnicalScienceTopicModifyService technicalScienceTopicModifyService;
 
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
     public SgsjTechnicalScienceTopic getSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
         return sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
@@ -445,5 +452,21 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             return false;
         }
         return b1.equals(b2);
+    }
+
+    //发送知会消息
+    @Override
+    public void messagePublic() {
+        // todo 暂未确定角色
+        String[] roles = {"area_handler", "regionDutyPerson"};
+        AjaxResult ajaxResult = systemServiceApi.selectByRoleKeyList(roles);
+        Assert.isTrue(ajaxResult.get("code").equals("200"), "获取用户列表失败");
+        String s = JSON.toJSONString(ajaxResult);
+        List<SysUser> sysUsers = JSON.parseArray(s, SysUser.class);
+        String clientIds = sysUsers.stream().map(SysUser::getUserName).collect(Collectors.joining(","));
+        String topic = "system";
+        // todo 暂未确定
+        String message = "";
+        systemServiceApi.batchPublish(clientIds, topic, message);
     }
 }

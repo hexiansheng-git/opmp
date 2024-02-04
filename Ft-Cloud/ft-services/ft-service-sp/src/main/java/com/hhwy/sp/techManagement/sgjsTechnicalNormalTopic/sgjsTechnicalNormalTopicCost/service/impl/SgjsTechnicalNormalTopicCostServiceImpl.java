@@ -2,6 +2,7 @@ package com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalT
 
 import java.util.List;
 
+import cn.hutool.core.collection.CollUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -43,13 +44,13 @@ public class SgjsTechnicalNormalTopicCostServiceImpl implements ISgjsTechnicalNo
     }
 
     @Transactional
-    public int insertSgjsTechnicalNormalTopicCostList(List<SgjsTechnicalNormalTopicCost> sgjsTechnicalNormalTopicCostList) {
-//        for (SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost : sgjsTechnicalNormalTopicCostList) {
-//            sgjsTechnicalNormalTopicCost.setId(IdWorker.createId());
-//            sgjsTechnicalNormalTopicCost.setCreateUser(SecurityUtils.getUserName());
-//            sgjsTechnicalNormalTopicCost.setCreateTime(DateUtils.getNowDate());
-//        }
-        return sgjsTechnicalNormalTopicCostMapper.insertSgjsTechnicalNormalTopicCostList(sgjsTechnicalNormalTopicCostList);
+    public void insertSgjsTechnicalNormalTopicCostList(List<SgjsTechnicalNormalTopicCost> sgjsTechnicalNormalTopicCostList) {
+        for (SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost : sgjsTechnicalNormalTopicCostList) {
+            sgjsTechnicalNormalTopicCost.setId(IdWorker.createId());
+            sgjsTechnicalNormalTopicCost.setCreateUser(SecurityUtils.getUserName());
+            sgjsTechnicalNormalTopicCost.setCreateTime(DateUtils.getNowDate());
+        }
+        sgjsTechnicalNormalTopicCostMapper.insertSgjsTechnicalNormalTopicCostList(sgjsTechnicalNormalTopicCostList);
     }
 
     @Transactional

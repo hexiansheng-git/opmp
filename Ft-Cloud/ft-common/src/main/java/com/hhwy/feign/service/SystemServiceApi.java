@@ -123,4 +123,39 @@ public interface SystemServiceApi {
 
     @GetMapping("/country/info/getCountryInfoList")
     List<CountryInfo> getCountryInfoList();
+
+    /***
+     * 功能描述: 发送消息给某人
+     * @param clientId
+     * @param topic 监听主体，默认"system"
+     * @param message 消息体
+     */
+    @GetMapping("/notify/publish/{clientId}")
+    R publish(@PathVariable("clientId")String clientId, @RequestParam("topic")String topic, @RequestParam("message")String message);
+
+    /***
+     * 功能描述: 发送消息给某些人
+     * @param clientIds 被通知的用户集，逗号分割
+     * @param topic 监听主体，默认"system"
+     * @param message 消息体
+     */
+    @GetMapping("/notify/batchPublish")
+    R batchPublish(@RequestParam("clientIds")String clientIds, @RequestParam("topic")String topic, @RequestParam("message")String message);
+
+    /***
+     * 功能描述: 发送消息给所有人
+     * @param topic 监听主体，默认"system"
+     * @param message 消息体
+     */
+    @GetMapping("/notify/boradcast")
+    R broadcast(@RequestParam("topic")String topic, @RequestParam("message")String message);
+
+    /**
+     * 功能描述: 获取给定角色下的所有用户
+     * @param roleKeyList 角色集  role key
+     * 作者: fsd
+     * 时间: 2024/2/4
+     */
+    @GetMapping("selectByRoleKeyList")
+    AjaxResult selectByRoleKeyList(String[] roleKeyList);
 }

@@ -51,6 +51,7 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
     }
 
     public List<SgjsTechnicalNormalTopic> getSgjsTechnicalNormalTopicList(SgjsTechnicalNormalTopic sgjsTechnicalNormalTopic) {
+        //主表查询
         List<SgjsTechnicalNormalTopic> resultList = sgjsTechnicalNormalTopicMapper.getSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopic);
         if (CollUtil.isEmpty(resultList)) return resultList;
         //子表查询
@@ -58,50 +59,17 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
         param.setIds(resultList.stream().map(SgjsTechnicalNormalTopic::getId).toArray(Long[]::new));
         List<SgjsTechnicalNormalTopicCost> chidrenList = sgjsTechnicalNormalTopicCostService.getSgjsTechnicalNormalTopicCostList(param);
         if (CollUtil.isEmpty(chidrenList)) return resultList;
-        //子表数据拼到主表，同时需要处理行列转换导致的列数不同问题，因为每个课题的研发预算年的数量可能不同
-        int[] range = getInts(chidrenList);
+        //合并
         Map<Long, List<SgjsTechnicalNormalTopicCost>> childMap = chidrenList.stream()
                 .collect(Collectors.groupingBy(SgjsTechnicalNormalTopicCost::getForeignId));
         Map<Long, SgjsTechnicalNormalTopic> mainMap = resultList.stream()
                 .collect(Collectors.toMap(SgjsTechnicalNormalTopic::getId, value -> value));
-        //遍历主表数据，将年份，预算数据填入，并对未包含全部年份的主表数据填充缺失年份和预算，预算默认0
         for (Map.Entry<Long, SgjsTechnicalNormalTopic> next : mainMap.entrySet()) {
-            Long key = next.getKey();
+            Long id = next.getKey();
             SgjsTechnicalNormalTopic value = next.getValue();
-            List<SgjsTechnicalNormalTopicCost> sgjsTechnicalNormalTopicCosts = childMap.get(key);
-            List<SgjsTechnicalNormalTopicCost> objects = new ArrayList<>();
-            if (CollUtil.isNotEmpty(sgjsTechnicalNormalTopicCosts) && sgjsTechnicalNormalTopicCosts.size() == range.length) {
-                //当前主表数有年份及预算数据,并且包含了全部年份
-                sgjsTechnicalNormalTopicCosts.forEach(p -> {
-                    objects.add(p);
-                });
-                value.setChildList(objects);
-                continue;
-            }
-            Map<String, BigDecimal> map = new HashMap<>();
-            if (CollUtil.isEmpty(sgjsTechnicalNormalTopicCosts)) {
-                //当前主表数没有年份及预算数据
-                for (int i = 0; i < range.length; i++) {
-                    SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost = new SgjsTechnicalNormalTopicCost();
-                    sgjsTechnicalNormalTopicCost.setYear(range[i]);
-                    sgjsTechnicalNormalTopicCost.setRdCost(BigDecimal.ZERO);
-                    objects.add(sgjsTechnicalNormalTopicCost);
-                }
-                value.setChildList(objects);
-                continue;
-            }
-            //当前主表有年份及预算数据,但部分缺失
-            Set<Integer> collect = sgjsTechnicalNormalTopicCosts.stream().map(SgjsTechnicalNormalTopicCost::getYear).collect(Collectors.toSet());
-            objects.addAll(sgjsTechnicalNormalTopicCosts);
-            for (int i = 0; i < range.length; i++) {
-                if (!collect.contains(range[i])) {
-                    SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost = new SgjsTechnicalNormalTopicCost();
-                    sgjsTechnicalNormalTopicCost.setYear(range[i]);
-                    sgjsTechnicalNormalTopicCost.setRdCost(BigDecimal.ZERO);
-                    objects.add(sgjsTechnicalNormalTopicCost);
-                }
-            }
-            value.setChildList(objects);
+            List<SgjsTechnicalNormalTopicCost> sgjsTechnicalNormalTopicCosts = childMap.get(id);
+            sgjsTechnicalNormalTopicCosts.sort(Comparator.comparing(SgjsTechnicalNormalTopicCost::getYear));
+            value.setChildList(sgjsTechnicalNormalTopicCosts);
         }
         return new ArrayList<>(mainMap.values());
     }
@@ -127,14 +95,15 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
         return sgjsTechnicalNormalTopicMapper.insertSgjsTechnicalNormalTopic(sgjsTechnicalNormalTopic);
     }
 
+    //保存
     @Transactional
-    public int insertSgjsTechnicalNormalTopicList(List<SgjsTechnicalNormalTopic> sgjsTechnicalNormalTopicList) {
+    public void insertSgjsTechnicalNormalTopicList(List<SgjsTechnicalNormalTopic> sgjsTechnicalNormalTopicList) {
+        SgjsTechnicalNormalTopic param = new SgjsTechnicalNormalTopic();
+        sgjsTechnicalNormalTopicMapper.deleteSgjsTechnicalNormalTopic(param);
+        SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost = new SgjsTechnicalNormalTopicCost();
+        sgjsTechnicalNormalTopicCostService.deleteSgjsTechnicalNormalTopicCost(sgjsTechnicalNormalTopicCost);
         if (CollUtil.isEmpty(sgjsTechnicalNormalTopicList)) {
-            SgjsTechnicalNormalTopic sgjsTechnicalNormalTopic = new SgjsTechnicalNormalTopic();
-            sgjsTechnicalNormalTopicMapper.deleteSgjsTechnicalNormalTopic(sgjsTechnicalNormalTopic);
-            SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost = new SgjsTechnicalNormalTopicCost();
-            sgjsTechnicalNormalTopicCostService.deleteSgjsTechnicalNormalTopicCost(sgjsTechnicalNormalTopicCost);
-            return 1;
+            return;
         }
         List<SgjsTechnicalNormalTopicCost> childSave = new ArrayList<>();
         for (SgjsTechnicalNormalTopic sgjsTechnicalNormalTopic : sgjsTechnicalNormalTopicList) {
@@ -147,7 +116,7 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
             childSave.addAll(childList);
         }
         sgjsTechnicalNormalTopicMapper.insertSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopicList);
-        return sgjsTechnicalNormalTopicCostService.insertSgjsTechnicalNormalTopicCostList(childSave);
+        sgjsTechnicalNormalTopicCostService.insertSgjsTechnicalNormalTopicCostList(childSave);
     }
 
     @Transactional

@@ -17,7 +17,7 @@ public interface ISgjsTechnicalNormalTopicCostService {
 
     int insertSgjsTechnicalNormalTopicCost(SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost);
 
-    int insertSgjsTechnicalNormalTopicCostList(List<SgjsTechnicalNormalTopicCost> sgjsTechnicalNormalTopicCostList);
+    void insertSgjsTechnicalNormalTopicCostList(List<SgjsTechnicalNormalTopicCost> sgjsTechnicalNormalTopicCostList);
 
     int updateSgjsTechnicalNormalTopicCost(SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost);
 
