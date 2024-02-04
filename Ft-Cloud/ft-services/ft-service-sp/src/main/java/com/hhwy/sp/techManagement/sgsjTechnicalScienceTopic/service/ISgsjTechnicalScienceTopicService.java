@@ -34,4 +34,7 @@ public interface ISgsjTechnicalScienceTopicService {
     SgsjTechnicalScienceTopic applyDetail(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
 
     void deleteById(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
+
+    void messagePublic();
+
 }

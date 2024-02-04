@@ -123,6 +123,26 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             public List<CountryInfo> getCountryInfoList() {
                 return null;
             }
+
+            @Override
+            public R publish(String clientId, String topic, String message) {
+                return R.fail("请求失败：", throwable.getMessage());
+            }
+
+            @Override
+            public R batchPublish(String clientIds, String topic, String message) {
+                return R.fail("请求失败：", throwable.getMessage());
+            }
+
+            @Override
+            public R broadcast(String topic, String message) {
+                return R.fail("请求失败：", throwable.getMessage());
+            }
+
+            @Override
+            public AjaxResult selectByRoleKeyList(String[] roleKeyList) {
+                return AjaxResult.error("请求失败:",throwable.getMessage());
+            }
         };
     }
 }
