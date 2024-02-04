@@ -6,9 +6,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.sd.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
+import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author fushudong
@@ -16,8 +20,11 @@ import java.util.Date;
  * @remark kcsj_outline_review
  */
 @Data
-public class KcsjOutlineReview extends BaseEntity {
+public class KcsjOutlineReview extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
+
+    //专家库
+    List<SgjsExpertLibrary> childList;
 
     /**
      * 字段描述：
@@ -35,7 +42,14 @@ public class KcsjOutlineReview extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "大纲版本")
-    private String version;
+    private BigDecimal version;
+
+    /**
+     * 字段描述：是否有效 0,1  备用，暂不维护该字段
+     */
+    @JsonProperty
+    @Excel(name = "是否有效")
+    private String valid;
     /**
      * 字段描述：当前状态
      */

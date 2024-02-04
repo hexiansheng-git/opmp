@@ -41,11 +41,20 @@ public class KcsjOutlineReviewController extends BaseController {
         return AjaxResult.success(kcsjOutlineReview);
     }
 
+    //历史记录，台账
     @PreAuthorize(hasPermi = "kcsjOutlineReview:list")
     @GetMapping("/list")
     public AjaxResult getKcsjOutlineReviewList(@Validated(ValidationGroups.Select.class) KcsjOutlineReview kcsjOutlineReviewParam) {
         List<KcsjOutlineReview> kcsjOutlineReviewList = kcsjOutlineReviewService.getKcsjOutlineReviewList(kcsjOutlineReviewParam);
         return AjaxResult.success(kcsjOutlineReviewList);
+    }
+
+    //详情，编辑
+    @PreAuthorize(hasPermi = "kcsjOutlineReview:list")
+    @GetMapping("/detail")
+    public AjaxResult detail(@Validated(ValidationGroups.Select.class) KcsjOutlineReview kcsjOutlineReviewParam) {
+        KcsjOutlineReview kcsjOutlineReview = kcsjOutlineReviewService.getDetail(kcsjOutlineReviewParam);
+        return AjaxResult.success(kcsjOutlineReview);
     }
 
     @PreAuthorize(hasPermi = "kcsjOutlineReview:add")

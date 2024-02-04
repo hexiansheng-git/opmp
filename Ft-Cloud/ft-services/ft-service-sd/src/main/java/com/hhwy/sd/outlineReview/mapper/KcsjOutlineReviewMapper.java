@@ -27,4 +27,6 @@ public interface KcsjOutlineReviewMapper {
     int deleteKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview);
 
     int deleteKcsjOutlineReviewByPks(@Param("kcsjOutlineReviewPkList") List<Integer> kcsjOutlineReviewPkList);
+
+    KcsjOutlineReview getMaxVersionData();
 }

@@ -4,10 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhwy.sd.outlineReview.mapper.KcsjOutlineReviewMapper">
 
-    <resultMap type="com.hhwy.sd.outlineReview.domain.KcsjOutlineReview" id="KcsjOutlineReviewResultMap">
+    <resultMap type="com.hhwy.sd.outlineReview.domain.KcsjOutlineReview"
+               id="KcsjOutlineReviewResultMap">
         <result property="id" column="id"/>
         <result property="outlineName" column="outline_name"/>
         <result property="version" column="version"/>
+        <result property="valid" column="valid"/>
         <result property="taskStatus" column="task_status"/>
         <result property="submitPlanDate" column="submit_plan_date"/>
         <result property="reviewPlanDate" column="review_plan_date"/>
@@ -43,6 +45,7 @@
         SELECT `id`
                 , `outline_name`
                 , `version`
+                , `valid`
                 , `task_status`
                 , `submit_plan_date`
                 , `review_plan_date`
@@ -81,7 +84,8 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="outlineName != null  and outlineName != ''">and `outline_name` = #{outlineName}</if>
-            <if test="version != null  and version != ''">and `version` = #{version}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="submitPlanDate != null ">and `submit_plan_date` = #{submitPlanDate}</if>
             <if test="reviewPlanDate != null ">and `review_plan_date` = #{reviewPlanDate}</if>
@@ -116,7 +120,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by create_time desc
+        order by version desc
     </select>
 
     <select id="getKcsjOutlineReviewList" resultMap="KcsjOutlineReviewResultMap">
@@ -127,7 +131,8 @@
             <if test="outlineName != null  and outlineName != ''">
                 and `outline_name` like concat('%', #{outlineName}, '%')
             </if>
-            <if test="version != null  and version != ''">and `version` = #{version}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="submitPlanDate != null ">and `submit_plan_date` = #{submitPlanDate}</if>
             <if test="reviewPlanDate != null ">and `review_plan_date` = #{reviewPlanDate}</if>
@@ -162,7 +167,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by create_time desc
+        order by version desc
     </select>
 
     <insert id="insertKcsjOutlineReview" useGeneratedKeys="true" keyProperty="id">
@@ -170,7 +175,8 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="outlineName != null  and outlineName != ''">`outline_name`,</if>
-            <if test="version != null  and version != ''">`version`,</if>
+            <if test="version != null ">`version`,</if>
+            <if test="valid != null  and valid != ''">`valid`,</if>
             <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
             <if test="submitPlanDate != null ">`submit_plan_date`,</if>
             <if test="reviewPlanDate != null ">`review_plan_date`,</if>
@@ -205,7 +211,8 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
             <if test="outlineName != null  and outlineName != ''">#{outlineName},</if>
-            <if test="version != null  and version != ''">#{version},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="valid != null  and valid != ''">#{valid},</if>
             <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
             <if test="submitPlanDate != null ">#{submitPlanDate},</if>
             <if test="reviewPlanDate != null ">#{reviewPlanDate},</if>
@@ -246,6 +253,7 @@
             `id`,
             `outline_name`,
             `version`,
+            `valid`,
             `task_status`,
             `submit_plan_date`,
             `review_plan_date`,
@@ -282,6 +290,7 @@
                 #{item.id},
                 #{item.outlineName},
                 #{item.version},
+                #{item.valid},
                 #{item.taskStatus},
                 #{item.submitPlanDate},
                 #{item.reviewPlanDate},
@@ -320,7 +329,8 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
             <if test="outlineName != null  and  outlineName != ''">`outline_name` = #{outlineName},</if>
-            <if test="version != null  and  version != ''">`version` = #{version},</if>
+            <if test="version != null ">`version` = #{version},</if>
+            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
             <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
             <if test="submitPlanDate != null ">`submit_plan_date` = #{submitPlanDate},</if>
             <if test="reviewPlanDate != null ">`review_plan_date` = #{reviewPlanDate},</if>
@@ -376,6 +386,11 @@
             <trim prefix="version  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.version}
+                </foreach>
+            </trim>
+            <trim prefix="valid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.valid}
                 </foreach>
             </trim>
             <trim prefix="task_status  = case" suffix="end,">
@@ -540,7 +555,8 @@
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="outlineName != null  and outlineName != ''">and `outline_name` = #{outlineName}</if>
-            <if test="version != null  and version != ''">and `version` = #{version}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="submitPlanDate != null ">and `submit_plan_date` = #{submitPlanDate}</if>
             <if test="reviewPlanDate != null ">and `review_plan_date` = #{reviewPlanDate}</if>
@@ -586,4 +602,10 @@
             </foreach>
         </where>
     </update>
+
+    <select id="getMaxVersionData" resultMap="KcsjOutlineReviewResultMap">
+        <include refid="selectKcsjOutlineReviewVo"/>
+        WHERE `del_flag` = '0'
+        ORDER BY VERSION DESC LIMIT 1
+    </select>
 </mapper>

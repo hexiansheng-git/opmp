@@ -15,7 +15,7 @@ public interface IKcsjOutlineReviewService {
 
     List<KcsjOutlineReview> getKcsjOutlineReviewList(KcsjOutlineReview kcsjOutlineReview);
 
-    int insertKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview);
+    void insertKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview);
 
     int insertKcsjOutlineReviewList(List<KcsjOutlineReview> kcsjOutlineReviewList);
 
@@ -26,4 +26,6 @@ public interface IKcsjOutlineReviewService {
     int deleteKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview);
 
     int deleteKcsjOutlineReviewByPks(List<Integer> kcsjOutlineReviewPkList);
+
+    KcsjOutlineReview getDetail(KcsjOutlineReview kcsjOutlineReviewParam);
 }

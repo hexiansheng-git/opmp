@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.sp.common.sgjsExpertLibrary.mapper.SgjsExpertLibraryMapper">
+<mapper namespace="com.hhwy.sd.common.sgjsExpertLibrary.mapper.SgjsExpertLibraryMapper">
 
     <resultMap type="com.hhwy.sd.common.sgjsExpertLibrary.domain.SgjsExpertLibrary" id="SgjsExpertLibraryResultMap">
         <result property="id" column="id" />

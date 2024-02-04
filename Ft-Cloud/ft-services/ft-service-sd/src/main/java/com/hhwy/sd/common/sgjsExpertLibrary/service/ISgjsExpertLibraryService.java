@@ -24,7 +24,7 @@ public interface ISgjsExpertLibraryService {
      * @param belongBusiness 所属功能
      * @param saveList 成果数据集
      */
-    void saveExpertLibrary(Long foreignId, String belongBusiness, List<SgjsExpertLibrary> saveList);
+    void saveExpertLibraryList(Long foreignId, String belongBusiness, List<SgjsExpertLibrary> saveList);
 
     int insertSgjsExpertLibrary(SgjsExpertLibrary sgjsExpertLibrary);
 
@@ -39,6 +39,4 @@ public interface ISgjsExpertLibraryService {
     int deleteSgjsExpertLibraryByPks(List<Long> sgjsExpertLibraryPkList);
 
     void deleteSgjsExpertLibraryByForeignId(Long foreignId);
-
-    int saveSgjsExpertLibraryList(Long foreignId, String belongBusiness, List<SgjsExpertLibrary> sgjsExpertLibraryList);
 }

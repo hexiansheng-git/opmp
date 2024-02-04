@@ -42,28 +42,6 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
         return sgjsExpertLibraryMapper.getSgjsExpertLibraryList(query);
     }
 
-    public void saveExpertLibrary(Long foreignId, String belongBusiness, List<SgjsExpertLibrary> saveList) {
-        CommonAssert.notNull(foreignId,"外键不能为空！");
-        CommonAssert.notBlank(belongBusiness,"所属业务不能为空！");
-        //根据外键删除数据
-        SgjsExpertLibrary delParam = new SgjsExpertLibrary();
-        delParam.setForeignId(foreignId);
-        sgjsExpertLibraryMapper.deleteSgjsExpertLibrary(delParam);
-        if(CollectionUtils.isEmpty(saveList)){
-            return;
-        }
-        //插入数据
-        for (SgjsExpertLibrary library : saveList) {
-            library.setId(IdWorker.createId());
-            library.setForeignId(foreignId);
-            library.setBelongBusiness(belongBusiness);
-            library.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            library.setCreateUserName(SecurityUtils.getUserName());
-            library.setCreateTime(DateUtils.getNowDate());
-        }
-        sgjsExpertLibraryMapper.insertSgjsExpertLibraryList(saveList);
-    }
-
     @Transactional
     public int insertSgjsExpertLibrary(SgjsExpertLibrary sgjsExpertLibrary) {
         sgjsExpertLibrary.setId(IdWorker.createId());
@@ -118,25 +96,31 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
         sgjsExpertLibraryMapper.deleteSgjsExpertLibrary(delParam);
     }
 
-    @Override
-    public int saveSgjsExpertLibraryList(Long foreignId, String belongBusiness, List<SgjsExpertLibrary> sgjsExpertLibraryList) {
-        CommonAssert.notNull(foreignId,"外键不能为空！");
-        CommonAssert.notBlank(belongBusiness,"所属业务不能为空！");
-        SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
-        sgjsExpertLibrary.setForeignId(foreignId);
-        sgjsExpertLibraryMapper.deleteSgjsExpertLibrary(sgjsExpertLibrary);
-
-        if(CollectionUtils.isEmpty(sgjsExpertLibraryList)){
-            return 0;
+    /**
+     * 保存专家库数据集
+     * @param foreignId 外键id
+     * @param belongBusiness 所属功能
+     * @param saveList 成果数据集
+     */
+    public void saveExpertLibraryList(Long foreignId, String belongBusiness, List<SgjsExpertLibrary> saveList) {
+        CommonAssert.notNull(foreignId, "外键不能为空！");
+        CommonAssert.notBlank(belongBusiness, "所属业务不能为空！");
+        //根据外键删除数据
+        SgjsExpertLibrary delParam = new SgjsExpertLibrary();
+        delParam.setForeignId(foreignId);
+        sgjsExpertLibraryMapper.deleteSgjsExpertLibrary(delParam);
+        if (CollectionUtils.isEmpty(saveList)) {
+            return;
         }
-        for(SgjsExpertLibrary sgjsExpertLibrary1 : sgjsExpertLibraryList) {
-            sgjsExpertLibrary1.setId(IdWorker.createId());
-            sgjsExpertLibrary1.setForeignId(foreignId);
-            sgjsExpertLibrary1.setBelongBusiness(belongBusiness);
-            sgjsExpertLibrary1.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            sgjsExpertLibrary1.setCreateUserName(SecurityUtils.getUserName());
-            sgjsExpertLibrary1.setCreateTime(DateUtils.getNowDate());
+        //插入数据
+        for (SgjsExpertLibrary library : saveList) {
+            library.setId(IdWorker.createId());
+            library.setForeignId(foreignId);
+            library.setBelongBusiness(belongBusiness);
+            library.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            library.setCreateUserName(SecurityUtils.getUserName());
+            library.setCreateTime(DateUtils.getNowDate());
         }
-        return sgjsExpertLibraryMapper.insertSgjsExpertLibraryList(sgjsExpertLibraryList);
+        sgjsExpertLibraryMapper.insertSgjsExpertLibraryList(saveList);
     }
 }
