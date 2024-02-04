@@ -156,6 +156,6 @@ public interface SystemServiceApi {
      * 作者: fsd
      * 时间: 2024/2/4
      */
-    @GetMapping("selectByRoleKeyList")
-    AjaxResult selectByRoleKeyList(String[] roleKeyList);
+    @PostMapping("/tWarn/selectByRoleKeyList")
+    AjaxResult selectByRoleKeyList(@RequestBody String[] roleKeyList);
 }

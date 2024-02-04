@@ -153,7 +153,7 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
      * 时间: 2024/2/1
      */
     @RequestMapping("/messagePublic")
-    public void messagePublic(){
-        sgsjTechnicalScienceTopicService.messagePublic();
+    public AjaxResult messagePublic(){
+        return sgsjTechnicalScienceTopicService.messagePublic();
     }
 }

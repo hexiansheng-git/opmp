@@ -45,6 +45,11 @@ public class SgjsTechnicalNormalTopicCostServiceImpl implements ISgjsTechnicalNo
 
     @Transactional
     public void insertSgjsTechnicalNormalTopicCostList(List<SgjsTechnicalNormalTopicCost> sgjsTechnicalNormalTopicCostList) {
+        SgjsTechnicalNormalTopicCost param = new SgjsTechnicalNormalTopicCost();
+        sgjsTechnicalNormalTopicCostMapper.deleteSgjsTechnicalNormalTopicCost(param);
+        if (CollUtil.isEmpty(sgjsTechnicalNormalTopicCostList)) {
+            return;
+        }
         for (SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost : sgjsTechnicalNormalTopicCostList) {
             sgjsTechnicalNormalTopicCost.setId(IdWorker.createId());
             sgjsTechnicalNormalTopicCost.setCreateUser(SecurityUtils.getUserName());
