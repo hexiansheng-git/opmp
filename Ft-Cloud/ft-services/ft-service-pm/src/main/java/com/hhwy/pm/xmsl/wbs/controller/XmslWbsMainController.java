@@ -79,7 +79,7 @@ public class XmslWbsMainController extends BaseController {
             wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>0?1:0));
         XmslWbsMain temp = wbsMain==null?new XmslWbsMain():wbsMain;
         if(StringUtils.equals(profileActive,"pro") || StringUtils.equals(profileActive,"dev")){
-            temp.setP6ExistPrj(wbsPushP6.isPrjExist()?"1":"0");
+//            temp.setP6ExistPrj(wbsPushP6.isPrjExist()?"1":"0");
         }else{ //测试环境和p6环境不通
             temp.setP6ExistPrj("1");
         }
