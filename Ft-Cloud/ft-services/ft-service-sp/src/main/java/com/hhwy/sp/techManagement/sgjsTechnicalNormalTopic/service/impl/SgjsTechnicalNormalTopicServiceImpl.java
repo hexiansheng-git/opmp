@@ -95,14 +95,15 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
         return sgjsTechnicalNormalTopicMapper.insertSgjsTechnicalNormalTopic(sgjsTechnicalNormalTopic);
     }
 
+    //保存
     @Transactional
-    public int insertSgjsTechnicalNormalTopicList(List<SgjsTechnicalNormalTopic> sgjsTechnicalNormalTopicList) {
+    public void insertSgjsTechnicalNormalTopicList(List<SgjsTechnicalNormalTopic> sgjsTechnicalNormalTopicList) {
+        SgjsTechnicalNormalTopic param = new SgjsTechnicalNormalTopic();
+        sgjsTechnicalNormalTopicMapper.deleteSgjsTechnicalNormalTopic(param);
+        SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost = new SgjsTechnicalNormalTopicCost();
+        sgjsTechnicalNormalTopicCostService.deleteSgjsTechnicalNormalTopicCost(sgjsTechnicalNormalTopicCost);
         if (CollUtil.isEmpty(sgjsTechnicalNormalTopicList)) {
-            SgjsTechnicalNormalTopic sgjsTechnicalNormalTopic = new SgjsTechnicalNormalTopic();
-            sgjsTechnicalNormalTopicMapper.deleteSgjsTechnicalNormalTopic(sgjsTechnicalNormalTopic);
-            SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost = new SgjsTechnicalNormalTopicCost();
-            sgjsTechnicalNormalTopicCostService.deleteSgjsTechnicalNormalTopicCost(sgjsTechnicalNormalTopicCost);
-            return 1;
+            return;
         }
         List<SgjsTechnicalNormalTopicCost> childSave = new ArrayList<>();
         for (SgjsTechnicalNormalTopic sgjsTechnicalNormalTopic : sgjsTechnicalNormalTopicList) {
@@ -115,7 +116,7 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
             childSave.addAll(childList);
         }
         sgjsTechnicalNormalTopicMapper.insertSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopicList);
-        return sgjsTechnicalNormalTopicCostService.insertSgjsTechnicalNormalTopicCostList(childSave);
+        sgjsTechnicalNormalTopicCostService.insertSgjsTechnicalNormalTopicCostList(childSave);
     }
 
     @Transactional
