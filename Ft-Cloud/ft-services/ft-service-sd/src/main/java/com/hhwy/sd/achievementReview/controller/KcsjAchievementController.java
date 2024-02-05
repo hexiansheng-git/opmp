@@ -1,19 +1,25 @@
 package com.hhwy.sd.achievementReview.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sd.achievementReview.domain.KcsjAchievement;
+import com.hhwy.sd.achievementReview.domain.vo.AchievementQueryVo;
+import com.hhwy.sd.achievementReview.domain.vo.AchievementVo;
 import com.hhwy.sd.achievementReview.service.IKcsjAchievementService;
+import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,12 +44,29 @@ public class KcsjAchievementController extends BaseController {
         return AjaxResult.success(kcsjAchievement);
     }
 
+    /**
+     * 台账
+     * @param queryVo
+     * @return
+     */
     @PreAuthorize(hasPermi = "kcsjAchievement:list")
     @GetMapping("/list")
-    public AjaxResult getKcsjAchievementList(@Validated(ValidationGroups.Select.class) KcsjAchievement kcsjAchievementParam) {
+    public AjaxResult getKcsjAchievementList(AchievementQueryVo queryVo) {
         startPage();
-        List<KcsjAchievement> kcsjAchievementList = kcsjAchievementService.getKcsjAchievementList(kcsjAchievementParam);
+        List<KcsjAchievement> kcsjAchievementList = kcsjAchievementService.getKcsjAchievementList(queryVo);
         return getDataTableAjaxResult(kcsjAchievementList);
+    }
+
+    /**
+     * 保存
+     * @param achievementVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "kcsjAchievement:save")
+    @PostMapping("/save")
+    public AjaxResult save(@RequestBody AchievementVo achievementVo){
+        kcsjAchievementService.save(achievementVo);
+        return AjaxResult.success();
     }
 
     @PreAuthorize(hasPermi = "kcsjAchievement:add")
@@ -85,10 +108,44 @@ public class KcsjAchievementController extends BaseController {
         return toAjax(kcsjAchievementService.deleteKcsjAchievementByPks(kcsjAchievementPkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, KcsjAchievement kcsjAchievementParam) throws IOException {
-        List<KcsjAchievement> kcsjAchievementList = kcsjAchievementService.getKcsjAchievementList(kcsjAchievementParam);
-        ExcelUtils<KcsjAchievement> util = new ExcelUtils<>(KcsjAchievement.class);
+    /**
+     * 导入
+     * @param file
+     * @return
+     */
+    @PreAuthorize(hasPermi = "kcsjDisclosureRecord:import")
+    @PostMapping("/importData")
+    public AjaxResult importData(@RequestPart("file") MultipartFile file){
+        FtExcelUtil<KcsjAchievement> util = new FtExcelUtil<>(KcsjAchievement.class);
+        try {
+            InputStream inputStream = file.getInputStream();
+            List<KcsjAchievement> achievementList = util.importExcel(inputStream);
+            achievementList.stream().forEach(o -> {
+                o.setId(IdWorker.createId());
+                o.setIsAdd("1");
+            });
+            return AjaxResult.success(achievementList);
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败！");
+        }
+    }
+
+    /**
+     * 导出
+     * @param response
+     * @param queryVo
+     * @throws IOException
+     */
+    @PostMapping("/export")
+    public void export(HttpServletResponse response,@RequestBody AchievementQueryVo queryVo) throws IOException {
+        List<Long> ids = queryVo.getIds();
+        List<KcsjAchievement> kcsjAchievementList;
+        if(CollectionUtils.isEmpty(ids)){
+            kcsjAchievementList = kcsjAchievementService.getKcsjAchievementList(queryVo);
+        }else {
+            kcsjAchievementList = kcsjAchievementService.getListByIds(ids);
+        }
+        FtExcelUtil<KcsjAchievement> util = new FtExcelUtil<>(KcsjAchievement.class);
         util.exportExcel(response, kcsjAchievementList, DateUtils.getDate());
     }
 }

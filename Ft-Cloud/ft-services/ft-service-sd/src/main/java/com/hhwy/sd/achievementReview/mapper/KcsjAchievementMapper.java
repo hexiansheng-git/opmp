@@ -1,6 +1,7 @@
 package com.hhwy.sd.achievementReview.mapper;
 
 import com.hhwy.sd.achievementReview.domain.KcsjAchievement;
+import com.hhwy.sd.achievementReview.domain.vo.AchievementQueryVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +17,7 @@ public interface KcsjAchievementMapper {
 
     KcsjAchievement getKcsjAchievement(KcsjAchievement kcsjAchievement);
 
-    List<KcsjAchievement> getKcsjAchievementList(KcsjAchievement kcsjAchievement);
+    List<KcsjAchievement> getKcsjAchievementList(AchievementQueryVo queryVo);
 
     int insertKcsjAchievement(KcsjAchievement kcsjAchievement);
 
@@ -29,4 +30,6 @@ public interface KcsjAchievementMapper {
     int deleteKcsjAchievement(KcsjAchievement kcsjAchievement);
 
     int deleteKcsjAchievementByPks(@Param("kcsjAchievementPkList") List<Long> kcsjAchievementPkList);
+
+    List<KcsjAchievement> getListByIds(@Param("ids") List<Long> ids);
 }

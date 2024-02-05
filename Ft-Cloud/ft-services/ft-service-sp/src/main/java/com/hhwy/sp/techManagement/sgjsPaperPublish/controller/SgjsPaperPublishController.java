@@ -81,6 +81,7 @@ public class SgjsPaperPublishController extends BaseController {
      * @param paperPublish
      * @return
      */
+    @PreAuthorize(hasPermi = "sgjsPaperPublish:save")
     @PostMapping("save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody SgjsPaperPublish paperPublish){
         Long id = sgjsPaperPublishService.save(paperPublish);

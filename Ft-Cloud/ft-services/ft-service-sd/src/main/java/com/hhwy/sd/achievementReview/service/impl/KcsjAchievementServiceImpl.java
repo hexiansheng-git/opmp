@@ -3,14 +3,21 @@ package com.hhwy.sd.achievementReview.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sd.achievementReview.domain.KcsjAchievement;
+import com.hhwy.sd.achievementReview.domain.vo.AchievementQueryVo;
+import com.hhwy.sd.achievementReview.domain.vo.AchievementVo;
 import com.hhwy.sd.achievementReview.mapper.KcsjAchievementMapper;
 import com.hhwy.sd.achievementReview.service.IKcsjAchievementService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -28,8 +35,8 @@ public class KcsjAchievementServiceImpl implements IKcsjAchievementService {
         return kcsjAchievementMapper.getKcsjAchievement(kcsjAchievement);
     }
 
-    public List<KcsjAchievement> getKcsjAchievementList(KcsjAchievement kcsjAchievement) {
-        return kcsjAchievementMapper.getKcsjAchievementList(kcsjAchievement);
+    public List<KcsjAchievement> getKcsjAchievementList(AchievementQueryVo queryVo) {
+        return kcsjAchievementMapper.getKcsjAchievementList(queryVo);
     }
 
     @Transactional
@@ -76,5 +83,44 @@ public class KcsjAchievementServiceImpl implements IKcsjAchievementService {
     @Transactional
     public int deleteKcsjAchievementByPks(List<Long> kcsjAchievementPkList) {
         return kcsjAchievementMapper.deleteKcsjAchievementByPks(kcsjAchievementPkList);
+    }
+
+    @Override
+    @Transactional
+    public void save(AchievementVo achievementVo) {
+        List<KcsjAchievement> achievementList = achievementVo.getAchievementList();
+        List<Long> delIdList = achievementVo.getDelIdList();
+        Set<Long> delIdSet = new HashSet<>(delIdList);
+        achievementList = achievementList.stream().filter(o -> !delIdSet.contains(o.getId())).collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(achievementList) && CollectionUtils.isEmpty(delIdList)){
+            return;
+        }
+        List<KcsjAchievement> addList = new ArrayList<>();
+        List<KcsjAchievement> updateList = new ArrayList<>();
+
+        for (KcsjAchievement achievement : achievementList) {
+            if("1".equals(achievement.getIsAdd())) {
+                addList.add(achievement);
+            } else {
+                achievement.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+                achievement.setUpdateTime(DateUtils.getNowDate());
+                updateList.add(achievement);
+            }
+        }
+        if(CollectionUtils.isNotEmpty(addList)) {
+            this.insertKcsjAchievementList(addList);
+        }
+        if(CollectionUtils.isNotEmpty(updateList)) {
+            kcsjAchievementMapper.updateKcsjAchievementList(updateList);
+        }
+
+        if(CollectionUtils.isNotEmpty(delIdList)){
+            kcsjAchievementMapper.deleteKcsjAchievementByPks(delIdList);
+        }
+    }
+
+    @Override
+    public List<KcsjAchievement> getListByIds(List<Long> ids) {
+        return kcsjAchievementMapper.getListByIds(ids);
     }
 }

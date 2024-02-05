@@ -133,45 +133,25 @@
         <include refid="selectKcsjAchievementVo"/>
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
-            <if test="achievementName != null  and achievementName != ''">and `achievement_name` = #{achievementName}
-            </if>
-            <if test="version != null  and version != ''">and `version` = #{version}</if>
+            <if test="achievementName != null  and achievementName != ''">and `achievement_name` like concat('%' , #{achievementName} , '%')</if>
             <if test="reviewGrade != null  and reviewGrade != ''">and `review_grade` = #{reviewGrade}</if>
-            <if test="achievementStatus != null  and achievementStatus != ''">and `achievement_status` =
-                #{achievementStatus}
+            <if test="planReviewDateStart != null and planReviewDateStart != ''">and `plan_review_date` &gt;= #{planReviewDateStart}</if>
+            <if test="planReviewDateEnd != null and planReviewDateEnd != ''">and `plan_review_date` &lt;= #{planReviewDateEnd}</if>
+            <if test="actualReviewDateStart != null and actualReviewDateStart != ''">and `actual_review_date` &gt;= #{actualReviewDateStart}</if>
+            <if test="actualReviewDateEnd != null and actualReviewDateEnd != ''">and `actual_review_date` &lt;= #{actualReviewDateEnd}</if>
+        </where>
+        order by create_time desc
+    </select>
+    <select id="getListByIds" resultMap="KcsjAchievementResultMap">
+        <include refid="selectKcsjAchievementVo"/>
+        <where>
+            del_flag = "0"
+            <if test="ids != null and ids.size() > 0">
+                and `id` in
+                <foreach item="id" collection="ids" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
             </if>
-            <if test="planSubmitDate != null ">and `plan_submit_date` = #{planSubmitDate}</if>
-            <if test="actualSubmitDate != null ">and `actual_submit_date` = #{actualSubmitDate}</if>
-            <if test="formExamine != null  and formExamine != ''">and `form_examine` = #{formExamine}</if>
-            <if test="planReviewDate != null ">and `plan_review_date` = #{planReviewDate}</if>
-            <if test="actualReviewDate != null ">and `actual_review_date` = #{actualReviewDate}</if>
-            <if test="principal != null  and principal != ''">and `principal` = #{principal}</if>
-            <if test="principalId != null  and principalId != ''">and `principal_id` = #{principalId}</if>
-            <if test="reviewExpert != null  and reviewExpert != ''">and `review_expert` = #{reviewExpert}</if>
-            <if test="reviewOpinion != null  and reviewOpinion != ''">and `review_opinion` = #{reviewOpinion}</if>
-            <if test="reviewResult != null  and reviewResult != ''">and `review_result` = #{reviewResult}</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
         order by create_time desc
     </select>
