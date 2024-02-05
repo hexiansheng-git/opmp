@@ -2,6 +2,7 @@ package com.hhwy.sp.sciTech.sgjsTechMethod.service;
 
 import java.util.List;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.sciTech.sgjsTechMethod.domain.SgjsTechMethod;
 
 /**
@@ -28,4 +29,6 @@ public interface ISgjsTechMethodService {
     int deleteSgjsTechMethodByPks(List<Long> sgjsTechMethodPkList);
 
     void updateTaskStatus(Long id, String isPass);
+
+    AjaxResult messagePublic();
 }

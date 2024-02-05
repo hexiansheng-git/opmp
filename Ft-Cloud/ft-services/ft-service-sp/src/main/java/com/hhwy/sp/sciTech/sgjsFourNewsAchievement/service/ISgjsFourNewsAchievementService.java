@@ -2,6 +2,7 @@ package com.hhwy.sp.sciTech.sgjsFourNewsAchievement.service;
 
 import java.util.List;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.sciTech.sgjsFourNewsAchievement.domain.SgjsFourNewsAchievement;
 
 /**
@@ -28,4 +29,6 @@ public interface ISgjsFourNewsAchievementService {
     int deleteSgjsFourNewsAchievementByPks(List<Long> sgjsFourNewsAchievementPkList);
 
     void updateTaskStatus(Long id, String isPass);
+
+    AjaxResult messagePublic();
 }

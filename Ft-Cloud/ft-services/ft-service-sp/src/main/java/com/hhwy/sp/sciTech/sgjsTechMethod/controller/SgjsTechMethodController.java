@@ -108,4 +108,14 @@ public class SgjsTechMethodController extends BaseController {
         sgjsTechMethodService.updateTaskStatus(id, isPass);
         return AjaxResult.success();
     }
+
+    /***
+     * 功能描述: 消息发布
+     * 作者: fushudong
+     * 时间: 2024/2/1
+     */
+    @RequestMapping("/messagePublic")
+    public AjaxResult messagePublic(){
+        return sgjsTechMethodService.messagePublic();
+    }
 }
