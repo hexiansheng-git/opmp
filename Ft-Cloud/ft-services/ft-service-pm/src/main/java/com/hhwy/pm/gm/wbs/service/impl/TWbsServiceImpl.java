@@ -236,10 +236,11 @@ public class TWbsServiceImpl implements ITWbsService {
             BiFunction<String,Integer,Integer> getSelfCodeSortNum = (id,start)->{
                 Integer temp = sortNumMap.get(id);
                 if(temp == null){
-                    temp = start==null?0:start;
+                    temp = start==null?1:start;
                     sortNumMap.put(id,temp);
+                }else{
+                    sortNumMap.put( id,++temp);    
                 }
-                sortNumMap.put( id,++temp);
                 return temp;
             };
             BiFunction<Integer,Boolean,String> buildSelfCode = (sortNum,isRoot)->{ //序号，是否为根级
@@ -264,7 +265,7 @@ public class TWbsServiceImpl implements ITWbsService {
                     if(temp.getId().equals(idList.get(i)+"")){
                         boolean isRoot = StringUtils.isBlank(parentCode);
                         temp.setParentCode(parentCode);
-                        Integer startNum = isRoot?rootNum:num;
+                        Integer startNum = ObjectUtils.nvl(isRoot?rootNum:num,0);
                         selfCode = buildSelfCode.apply(getSelfCodeSortNum.apply(temp.getParentCode(),startNum),isRoot);
                         temp.setLevel(level);
                         put2Resu = false;

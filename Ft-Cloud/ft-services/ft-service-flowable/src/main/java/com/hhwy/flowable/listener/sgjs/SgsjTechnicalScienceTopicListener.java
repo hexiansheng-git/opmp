@@ -12,7 +12,7 @@ import org.flowable.task.service.delegate.DelegateTask;
 import java.util.Map;
 
 /**
- * 功能：科技管理 - 科研课题立项
+ * 功能：科技管理 - 科研课题立项 流程状态修改
  * 作者: fushudong
  * 时间: 2024/02/01
  */

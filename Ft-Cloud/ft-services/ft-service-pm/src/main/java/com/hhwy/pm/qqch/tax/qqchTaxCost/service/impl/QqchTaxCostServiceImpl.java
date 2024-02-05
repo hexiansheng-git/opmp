@@ -13,6 +13,7 @@ import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCost;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCostDetail;
@@ -20,8 +21,8 @@ import com.hhwy.pm.qqch.tax.qqchTaxCost.mapper.QqchTaxCostMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.service.IQqchTaxCostDetailService;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.service.IQqchTaxCostService;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.vo.TaxCostVO;
-import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.vo.TaxInVO;
+import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.IQqchTaxStageService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
@@ -67,6 +68,8 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
     @Resource
     private IQqchTaxStageService qqchTaxStageService;
+    @Resource
+    private IQqchModuleConfirmCaseService moduleConfirmCaseService;
     private final static String TN = "qqch_tax_cost";
 
     public QqchTaxCost getQqchTaxCost(QqchTaxCost qqchTaxCost) {
@@ -225,7 +228,12 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
         // 费用数据入库
         ArrayList<QqchTaxCost> qqchTaxCosts = CompileEntity.dealSaveDtoWithoutTree(dto, allList);
+        qqchTaxCosts.get(0).setModuleIdentity(dto.getModuleIdentity());
         List<QqchTaxCostDetail> allDetails = bean.saveCostList(qqchTaxCosts);
+//        String submitFlag = dto.getSubmitFlag();
+//        if("1".equals(submitFlag)){
+//            moduleConfirmCaseService.addConfirmRecord(dto.getModuleIdentity(), dto.getStageIdentity());
+//        }
         // 新增年份数据
         this.detailService.save(CompileEntity.dealSaveDtoWithoutTree(dto, allDetails));
 
@@ -341,7 +349,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public List<QqchTaxCostDetail> saveCostList(List<QqchTaxCost> list) {
-        if (CollectionUtils.isEmpty(list)) return new ArrayList<>();
+        if (CollectionUtils.isEmpty(list) || !(list.get(0) instanceof QqchTaxCost)) return new ArrayList<>();
         List<QqchTaxCostDetail> allDetails = new ArrayList<>();
         for (QqchTaxCost item : list) {
             List<QqchTaxCostDetail> detailList = item.getDetailList();

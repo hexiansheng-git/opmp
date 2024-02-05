@@ -2,9 +2,13 @@ package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
+import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.constant.BelongBusiness;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
@@ -51,6 +55,8 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     @Autowired
     private ISgsjTechnicalScienceTopicModifyService technicalScienceTopicModifyService;
 
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
     public SgsjTechnicalScienceTopic getSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
         return sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
@@ -445,5 +451,28 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             return false;
         }
         return b1.equals(b2);
+    }
+
+    //知会消息发布
+    @Override
+    public AjaxResult messagePublic() {
+        // todo 指定角色暂不确定
+        String[] roles = {"area_handler", "regionDutyPerson", "common"};
+        AjaxResult ajaxResult = systemServiceApi.selectByRoleKeyList(roles);
+        Integer code = (Integer) ajaxResult.get("code");
+        Assert.isTrue(code.equals(200), "获取用户列表失败");
+        String s = JSON.toJSONString(ajaxResult.get("data"));
+        List<SysUser> sysUsers = JSON.parseArray(s, SysUser.class);
+        String clientIds = sysUsers.stream().map(SysUser::getUserName).collect(Collectors.joining(","));
+        String topic = "system";
+        // todo 消息体内容暂不确定
+        String message = "";
+        R r = systemServiceApi.batchPublish(clientIds, topic, message);
+        if (r.getCode() == 200) {
+            return AjaxResult.success("消息发布成功");
+        }else {
+            return AjaxResult.error("消息发布失败");
+        }
+
     }
 }

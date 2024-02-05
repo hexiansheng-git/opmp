@@ -2,6 +2,7 @@ package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service;
 
 import java.util.List;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
 
 /**
@@ -34,4 +35,7 @@ public interface ISgsjTechnicalScienceTopicService {
     SgsjTechnicalScienceTopic applyDetail(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
 
     void deleteById(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
+
+    AjaxResult messagePublic();
+
 }

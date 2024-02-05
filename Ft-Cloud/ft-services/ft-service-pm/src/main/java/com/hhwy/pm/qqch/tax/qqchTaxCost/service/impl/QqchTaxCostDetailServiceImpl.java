@@ -85,7 +85,7 @@ public class QqchTaxCostDetailServiceImpl implements IQqchTaxCostDetailService {
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void save(List<QqchTaxCostDetail> list) {
-        if (CollectionUtils.isEmpty(list)) return;
+        if (CollectionUtils.isEmpty(list) || !(list.get(0) instanceof QqchTaxCostDetail)) return;
         this.qqchTaxCostDetailMapper.insertQqchTaxCostDetailList(list);
     }
 }

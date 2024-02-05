@@ -96,7 +96,13 @@ public enum FlowEnum {
         SGJS_TECH_SCIENCE_TOPIC("sgsj_technical_science_topic", "process_sgsj_technical_science_topic"),
 
         //科技管理 - 科研课题管理 - 课题立项
-        SGJS_TECH_SCIENCE_TOPIC_LX("sgsj_technical_science_topic", "process_sgsj_technical_science_topic_lx");
+        SGJS_TECH_SCIENCE_TOPIC_LX("sgsj_technical_science_topic", "process_sgsj_technical_science_topic_lx"),
+
+
+
+        /*********************勘察设计管理****************************/
+        //勘察设计大纲评审
+        KCSJ_PATENT_DECLARE("kcsj_outline_review","process_kcsj_outline_review");
 
         public String getTableName() {
             return this.tableName;
