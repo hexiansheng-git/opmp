@@ -229,4 +229,9 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         }
 
     }
+
+    @Override
+    public List<SgjsFourNewsAchievement> getSgjsFourNewsAchievementList4Ids(List<Long> ids) {
+        return sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievementList4Ids(ids);
+    }
 }

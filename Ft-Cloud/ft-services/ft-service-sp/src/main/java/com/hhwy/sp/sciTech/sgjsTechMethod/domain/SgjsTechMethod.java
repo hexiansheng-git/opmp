@@ -299,4 +299,7 @@ public class SgjsTechMethod extends CommonBaseEntity {
      */
     private List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList;
 
+    @JsonProperty
+    private String ids;
+
 }

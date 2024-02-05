@@ -292,4 +292,7 @@ public class SgjsFourNewsAchievement extends CommonBaseEntity {
      */
     private List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList;
 
+    @JsonProperty
+    private String ids;
+
 }

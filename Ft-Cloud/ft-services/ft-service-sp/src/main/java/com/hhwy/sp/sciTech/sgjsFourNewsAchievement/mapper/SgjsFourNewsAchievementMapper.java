@@ -27,4 +27,6 @@ public interface SgjsFourNewsAchievementMapper {
     int deleteSgjsFourNewsAchievement(SgjsFourNewsAchievement sgjsFourNewsAchievement);
 
     int deleteSgjsFourNewsAchievementByPks(@Param("sgjsFourNewsAchievementPkList") List<Long> sgjsFourNewsAchievementPkList);
+
+    List<SgjsFourNewsAchievement> getSgjsFourNewsAchievementList4Ids(@Param("ids") List<Long> ids);
 }

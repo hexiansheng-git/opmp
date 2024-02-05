@@ -227,4 +227,9 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         }
 
     }
+
+    @Override
+    public List<SgjsTechMethod> getSgjsTechMethodList4ids(List<Long> ids) {
+        return sgjsTechMethodMapper.getSgjsTechMethodList4ids(ids);
+    }
 }

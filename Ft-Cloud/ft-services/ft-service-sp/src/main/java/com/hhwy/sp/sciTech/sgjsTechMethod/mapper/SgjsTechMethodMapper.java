@@ -27,4 +27,6 @@ public interface SgjsTechMethodMapper {
     int deleteSgjsTechMethod(SgjsTechMethod sgjsTechMethod);
 
     int deleteSgjsTechMethodByPks(@Param("sgjsTechMethodPkList") List<Long> sgjsTechMethodPkList);
+
+    List<SgjsTechMethod> getSgjsTechMethodList4ids(@Param("ids") List<Long> ids);
 }

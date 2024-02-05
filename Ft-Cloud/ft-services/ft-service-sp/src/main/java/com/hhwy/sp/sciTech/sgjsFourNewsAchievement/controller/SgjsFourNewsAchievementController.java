@@ -1,9 +1,12 @@
 package com.hhwy.sp.sciTech.sgjsFourNewsAchievement.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import com.hhwy.common.core.utils.StringUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -91,7 +94,20 @@ public class SgjsFourNewsAchievementController extends BaseController {
 
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsFourNewsAchievement sgjsFourNewsAchievementParam) throws IOException {
-        List<SgjsFourNewsAchievement> sgjsFourNewsAchievementList = sgjsFourNewsAchievementService.getSgjsFourNewsAchievementList(sgjsFourNewsAchievementParam);
+        String ids = sgjsFourNewsAchievementParam.getIds();
+        List<Long> ids4L = new ArrayList<>();
+        if(StringUtils.isNotEmpty(ids)) {
+            String[] split = ids.split(",");
+            for (String s: split) {
+                ids4L.add(Long.parseLong(s));
+            }
+        }
+        List<SgjsFourNewsAchievement> sgjsFourNewsAchievementList = null;
+        if(CollectionUtils.isNotEmpty(ids4L)) {
+            sgjsFourNewsAchievementList = sgjsFourNewsAchievementService.getSgjsFourNewsAchievementList4Ids(ids4L);
+        } else {
+            sgjsFourNewsAchievementList = sgjsFourNewsAchievementService.getSgjsFourNewsAchievementList(sgjsFourNewsAchievementParam);
+        }
         ExcelUtils<SgjsFourNewsAchievement> util = new ExcelUtils<>(SgjsFourNewsAchievement.class);
         util.exportExcel(response, sgjsFourNewsAchievementList, DateUtils.getDate());
     }

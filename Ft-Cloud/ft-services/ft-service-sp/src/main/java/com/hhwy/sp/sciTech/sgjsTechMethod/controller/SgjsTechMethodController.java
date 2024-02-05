@@ -1,9 +1,12 @@
 package com.hhwy.sp.sciTech.sgjsTechMethod.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import com.hhwy.common.core.utils.StringUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -91,7 +94,20 @@ public class SgjsTechMethodController extends BaseController {
 
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsTechMethod sgjsTechMethodParam) throws IOException {
-        List<SgjsTechMethod> sgjsTechMethodList = sgjsTechMethodService.getSgjsTechMethodList(sgjsTechMethodParam);
+        String ids = sgjsTechMethodParam.getIds();
+        List<Long> ids4L = new ArrayList<>();
+        if(StringUtils.isNotEmpty(ids)) {
+            String[] split = ids.split(",");
+            for (String s: split) {
+                ids4L.add(Long.parseLong(s));
+            }
+        }
+        List<SgjsTechMethod> sgjsTechMethodList = null;
+        if(CollectionUtils.isNotEmpty(ids4L)) {
+            sgjsTechMethodList = sgjsTechMethodService.getSgjsTechMethodList4ids(ids4L);
+        } else {
+            sgjsTechMethodList = sgjsTechMethodService.getSgjsTechMethodList(sgjsTechMethodParam);
+        }
         ExcelUtils<SgjsTechMethod> util = new ExcelUtils<>(SgjsTechMethod.class);
         util.exportExcel(response, sgjsTechMethodList, DateUtils.getDate());
     }

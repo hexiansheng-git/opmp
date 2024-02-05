@@ -210,6 +210,15 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getSgjsTechMethodList4ids" resultMap="SgjsTechMethodResultMap">
+        <include refid="selectSgjsTechMethodVo"/>
+        <where>
+            `id` in
+            <foreach item="id" collection="ids" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </select>
 
     <insert id="insertSgjsTechMethod" useGeneratedKeys="true" keyProperty="id">
         insert into sgjs_tech_method

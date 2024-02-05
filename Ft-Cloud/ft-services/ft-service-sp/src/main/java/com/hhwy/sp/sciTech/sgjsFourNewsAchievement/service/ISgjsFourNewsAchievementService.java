@@ -31,4 +31,6 @@ public interface ISgjsFourNewsAchievementService {
     void updateTaskStatus(Long id, String isPass);
 
     AjaxResult messagePublic();
+
+    List<SgjsFourNewsAchievement> getSgjsFourNewsAchievementList4Ids(List<Long> ids);
 }
