@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.security.OAuthFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -54,10 +55,10 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
     @Override
     public KcsjOutlineReview getDetail(KcsjOutlineReview param) {
         KcsjOutlineReview result;
-        if (BeanUtil.isEmpty(param)) {
+        if (param != null && param.getId() == null) {
             //参数为空，默认获取最新有效版本，最高版本 = 有效版本
             result = kcsjOutlineReviewMapper.getMaxVersionData();
-        }else {
+        } else {
             //参数不为空，获取指定版本数据
             result = kcsjOutlineReviewMapper.getKcsjOutlineReview(param);
         }
@@ -68,10 +69,22 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         return result;
     }
 
+    //调整
+    @Override
+    public KcsjOutlineReview adjust(KcsjOutlineReview param) {
+        Assert.isTrue(param.getId()!=null, "参数不能为空");
+        KcsjOutlineReview result = kcsjOutlineReviewMapper.getKcsjOutlineReview(param);
+        if (BeanUtil.isEmpty(result)) return result;
+        List<SgjsExpertLibrary> listByForeignId = sgjsExpertLibraryService.getListByForeignId(result.getId());
+        result.setChildList(listByForeignId);
+        return result;
+    }
+
     //保存
     @Transactional
     public void insertKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview) {
-        kcsjOutlineReview.setId(IdWorker.createId());
+        Long id = IdWorker.createId();
+        kcsjOutlineReview.setId(id);
         kcsjOutlineReview.setCreateUser(SecurityUtils.getUserName());
         kcsjOutlineReview.setCreateTime(DateUtils.getNowDate());
         kcsjOutlineReview.setTaskStatus("0");
@@ -85,7 +98,7 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         kcsjOutlineReviewMapper.insertKcsjOutlineReview(kcsjOutlineReview);
         List<SgjsExpertLibrary> childList = kcsjOutlineReview.getChildList();
         if (CollUtil.isEmpty(childList)) return;
-        sgjsExpertLibraryService.saveExpertLibraryList(result.getId(), BelongBusiness.BELONG_BUSINESS_1, childList);
+        sgjsExpertLibraryService.saveExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_1, childList);
     }
 
     @Transactional
@@ -116,8 +129,6 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
 
     @Transactional
     public int deleteKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview) {
-        kcsjOutlineReview.setUpdateUser(SecurityUtils.getUserName());
-        kcsjOutlineReview.setUpdateTime(DateUtils.getNowDate());
         return kcsjOutlineReviewMapper.deleteKcsjOutlineReview(kcsjOutlineReview);
     }
 

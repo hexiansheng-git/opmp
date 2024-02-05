@@ -28,4 +28,6 @@ public interface IKcsjOutlineReviewService {
     int deleteKcsjOutlineReviewByPks(List<Integer> kcsjOutlineReviewPkList);
 
     KcsjOutlineReview getDetail(KcsjOutlineReview kcsjOutlineReviewParam);
+
+    KcsjOutlineReview adjust(KcsjOutlineReview kcsjOutlineReviewParam);
 }
