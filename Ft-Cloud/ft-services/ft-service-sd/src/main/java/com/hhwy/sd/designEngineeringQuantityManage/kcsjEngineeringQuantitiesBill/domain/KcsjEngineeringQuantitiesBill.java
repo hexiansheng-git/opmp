@@ -221,9 +221,24 @@ public class KcsjEngineeringQuantitiesBill extends BaseEntity {
     @JsonProperty
     private Date submissionDateEnd;
 
+    /**
+     * 字段描述：是否有效  0否;1是
+     */
+    @JsonProperty
+    private String valid;
+
     private List<KcsjEngineeringQuantitiesBillDetail> detailsList;
 
     private List<Long> delIdList;
+
+
+    public String getValid() {
+        return valid;
+    }
+
+    public void setValid(String valid) {
+        this.valid = valid;
+    }
 
     public String getSubmissionDateStr() {
         return submissionDateStr;

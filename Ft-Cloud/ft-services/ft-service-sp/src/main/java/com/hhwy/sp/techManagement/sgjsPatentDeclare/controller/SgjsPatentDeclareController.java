@@ -75,6 +75,7 @@ public class SgjsPatentDeclareController extends BaseController {
      * @return
      */
     @PostMapping("save")
+    @PreAuthorize(hasPermi = "sgjsPatentDeclare:save")
     public AjaxResult save(@RequestBody SgjsPatentDeclare patentDeclare){
         Long id = sgjsPatentDeclareService.save(patentDeclare);
         return AjaxResult.success(id);

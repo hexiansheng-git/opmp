@@ -8,23 +8,24 @@ import java.util.List;
 /**
  * @author wll
  * @date 2024-02-04 14:04:56
- * @remark 
+ * @remark
  */
 public interface IKcsjEngineeringQuantitiesBillService {
     //详情
     KcsjEngineeringQuantitiesBill getKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill);
+
     //列表
     List<KcsjEngineeringQuantitiesBill> getKcsjEngineeringQuantitiesBillList(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill);
+
     //新增
     AjaxResult insertKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill);
 
     int insertKcsjEngineeringQuantitiesBillList(List<KcsjEngineeringQuantitiesBill> kcsjEngineeringQuantitiesBillList);
 
-    int updateKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill);
+    AjaxResult updateKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill);
 
-            int updateKcsjEngineeringQuantitiesBillList(List<KcsjEngineeringQuantitiesBill> kcsjEngineeringQuantitiesBillList);
-    
-    int deleteKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill);
+    int updateKcsjEngineeringQuantitiesBillList(List<KcsjEngineeringQuantitiesBill> kcsjEngineeringQuantitiesBillList);
 
-            int deleteKcsjEngineeringQuantitiesBillByPks(List<Long> kcsjEngineeringQuantitiesBillPkList);
-    }
+
+    int deleteKcsjEngineeringQuantitiesBillByPks(List<Long> kcsjEngineeringQuantitiesBillPkList);
+}

@@ -8,11 +8,12 @@ import java.util.List;
 /**
  * @author wll
  * @date 2024-02-04 14:05:09
- * @remark 
+ * @remark
  */
 public interface KcsjEngineeringQuantitiesBillDetailMapper {
-                                                                                                                                                                                                                                                                                                                                                                                                    
+
     KcsjEngineeringQuantitiesBillDetail getKcsjEngineeringQuantitiesBillDetail(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail);
+
     //根据主表查询子表
     List<KcsjEngineeringQuantitiesBillDetail> getKcsjEngineeringQuantitiesBillDetailList(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail);
 
@@ -22,9 +23,14 @@ public interface KcsjEngineeringQuantitiesBillDetailMapper {
 
     int updateKcsjEngineeringQuantitiesBillDetail(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail);
 
-            int updateKcsjEngineeringQuantitiesBillDetailList(@Param("kcsjEngineeringQuantitiesBillDetailList") List<KcsjEngineeringQuantitiesBillDetail> kcsjEngineeringQuantitiesBillDetailList);
-    
+    int updateKcsjEngineeringQuantitiesBillDetailList(@Param("list") List<KcsjEngineeringQuantitiesBillDetail> list);
+
     int deleteKcsjEngineeringQuantitiesBillDetail(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail);
 
-            int deleteKcsjEngineeringQuantitiesBillDetailByPks(@Param("kcsjEngineeringQuantitiesBillDetailPkList") List<Long> kcsjEngineeringQuantitiesBillDetailPkList);
-    }
+    int deleteKcsjEngineeringQuantitiesBillDetailByPks(@Param("kcsjEngineeringQuantitiesBillDetailPkList") List<Long> kcsjEngineeringQuantitiesBillDetailPkList);
+
+    void deleteInfoData(List<KcsjEngineeringQuantitiesBillDetail> list);
+
+    int deleteKcsjEngineeringQuantitiesBillDetailByMainId(@Param("kcsjEngineeringQuantitiesBillPkList") List<Long> kcsjEngineeringQuantitiesBillPkList,@Param("delUser") String delUser);
+
+}

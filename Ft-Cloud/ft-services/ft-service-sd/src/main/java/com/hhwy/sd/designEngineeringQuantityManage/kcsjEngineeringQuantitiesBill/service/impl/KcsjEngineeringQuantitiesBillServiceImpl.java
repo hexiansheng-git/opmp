@@ -20,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author wll
@@ -83,92 +84,91 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
     @Transactional
     public AjaxResult insertKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill) {
 
-
+        //将其它版本设置为无效
+        KcsjEngineeringQuantitiesBill bill=new KcsjEngineeringQuantitiesBill();
+        bill.setListLocation(kcsjEngineeringQuantitiesBill.getListLocation());
+        bill.setValid("0");
+        bill.setId(kcsjEngineeringQuantitiesBill.getId());
+        kcsjEngineeringQuantitiesBillMapper.updateKcsjEngineeringQuantitiesBill(bill);
         //新增主表数据
         kcsjEngineeringQuantitiesBill.setId(IdWorker.createId());
         kcsjEngineeringQuantitiesBill.setCreateUser(SecurityUtils.getUserId().toString());
         kcsjEngineeringQuantitiesBill.setCreateUserName(SecurityUtils.getSysUser().getNickName());
         kcsjEngineeringQuantitiesBill.setCreateTime(DateUtils.getNowDate());
+        kcsjEngineeringQuantitiesBill.setValid("1");
+        kcsjEngineeringQuantitiesBill.setDelFlag("0");
         kcsjEngineeringQuantitiesBillMapper.insertKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
 
         if (!CollectionUtils.isEmpty(kcsjEngineeringQuantitiesBill.getDetailsList())) {
-            List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
             //子表数据处理
-            handleInsertList(kcsjEngineeringQuantitiesBill, detailsList, kcsjEngineeringQuantitiesBill.getId());
+            handleInsertList(kcsjEngineeringQuantitiesBill, kcsjEngineeringQuantitiesBill.getId());
         }
         return AjaxResult.success();
     }
 
-    private void handleInsertList(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill, List<KcsjEngineeringQuantitiesBillDetail> insertList, Long mainId) {
-
-
+    private void handleInsertList(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill, Long mainId) {
         //处理子表数据
         //获取上一个版本的数据信息  处理V3.0字符串，获取V2.0版本信息  先查主表再查子表
-        //处理版本数据
-        BigDecimal value = new BigDecimal(0.0);
+        //获取当前主表数据版本
         String version = kcsjEngineeringQuantitiesBill.getVersion();
-        String substring = version.substring(1, 2);
+        int indexStart = version.lastIndexOf("V");
+        int indexEnd = version.lastIndexOf(".");
+        String substring = version.substring(indexStart+1,indexEnd);
         int v = Integer.parseInt(substring);
-        v++;
-        if (v > 2) {
-            String lastVersion = String.valueOf(v);
-            String listLocation = kcsjEngineeringQuantitiesBill.getListLocation();
-            KcsjEngineeringQuantitiesBill bill = new KcsjEngineeringQuantitiesBill();
-            bill.setVersion(lastVersion);
-            bill.setListLocation(listLocation);
-            //根据版本和清单所属部位查询主表
-            KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill1 = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBill(bill);
-            List<KcsjEngineeringQuantitiesBillDetail> detailsListNew = new ArrayList<>();
-            Map<String, BigDecimal> map = new HashMap<>();
-            List<KcsjEngineeringQuantitiesBillDetail> list = kcsjEngineeringQuantitiesBill.getDetailsList();
-            KcsjEngineeringQuantitiesBillDetail detail = new KcsjEngineeringQuantitiesBillDetail();
-            if (!Objects.isNull(kcsjEngineeringQuantitiesBill1)) {
-
-                detail.setMainId(kcsjEngineeringQuantitiesBill1.getId());
-                //根据查询出的主表查询子表
-                list = kcsjEngineeringQuantitiesBillDetailMapper.getKcsjEngineeringQuantitiesBillDetailList(detail);
-
-                //设置新增数据的上一个版本的工程量字段
-                list.stream().forEach(temp -> {
-                    map.put(temp.getListCode(), temp.getWorkload());
-                });
+        String lastVersion = String.valueOf(--v);
+        String listLocation = kcsjEngineeringQuantitiesBill.getListLocation();
+        KcsjEngineeringQuantitiesBill bill = new KcsjEngineeringQuantitiesBill();
+        bill.setVersion("V"+lastVersion+".0");
+        bill.setListLocation(listLocation);
+        //根据版本和清单所属部位查询主表，获取上一个版本数据
+        KcsjEngineeringQuantitiesBill oldBill = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBill(bill);
+        Map<String, BigDecimal> map = new HashMap<>();
+        List<KcsjEngineeringQuantitiesBillDetail> list = null;
+        KcsjEngineeringQuantitiesBillDetail detail = new KcsjEngineeringQuantitiesBillDetail();
+        if (!Objects.isNull(oldBill)) {
+            detail.setMainId(oldBill.getId());
+            //根据查询出的主表查询子表
+            list = kcsjEngineeringQuantitiesBillDetailMapper.getKcsjEngineeringQuantitiesBillDetailList(detail);
+            //将查询到的子表数据存入map,key为清单编码，value为工作量
+            list.stream().forEach(temp -> {
+                map.put(temp.getListCode(), temp.getWorkload());
+            });
+        }
+        //新增数据子表数据
+        List<KcsjEngineeringQuantitiesBillDetail> detailsListNew = kcsjEngineeringQuantitiesBill.getDetailsList();
+        List<KcsjEngineeringQuantitiesBillDetail> details=new ArrayList<>();
+        //遍历子表，去map中获取上一个版本的数据，设置给子表的上一个版本工程量字段
+        for (KcsjEngineeringQuantitiesBillDetail temp : detailsListNew) {
+            //上一版本清单工程量
+            BigDecimal oldQuanlity = map.get(temp.getListCode());
+            oldQuanlity = oldQuanlity == null ? BigDecimal.ZERO : oldQuanlity;
+            temp.setMainId(mainId);
+            temp.setId(IdWorker.createId());
+            temp.setCreateUserName(SecurityUtils.getSysUser().getNickName());
+            temp.setCreateUser(SecurityUtils.getUserId().toString());
+            temp.setCreateTime(DateUtils.getNowDate());
+            temp.setDelFlag("0");
+            temp.setDataSource("0");
+            temp.setPreviousQuantity(oldQuanlity);
+            BigDecimal workload = temp.getWorkload();
+            details.add(temp);
+            if (workload!=null){
+                temp.setQuantityDifference(workload.subtract(oldQuanlity));
             }
-            List<KcsjEngineeringQuantitiesBillDetail> newInsertList = new ArrayList<>();
-            for (KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail : detailsListNew) {
-                Set<Map.Entry<String, BigDecimal>> entries = map.entrySet();
-                for (Map.Entry<String, BigDecimal> entry : entries) {
-                    if (kcsjEngineeringQuantitiesBillDetail.getListCode().equals(entry.getKey())) {
-                        if (v > 2) {
-                            value = entry.getValue();
-                        }
-                        kcsjEngineeringQuantitiesBillDetail.setMainId(mainId);
-                        kcsjEngineeringQuantitiesBillDetail.setId(IdWorker.createId());
-                        kcsjEngineeringQuantitiesBillDetail.setCreateUserName(SecurityUtils.getSysUser().getNickName());
-                        kcsjEngineeringQuantitiesBillDetail.setCreateUser(SecurityUtils.getUserId().toString());
-                        kcsjEngineeringQuantitiesBillDetail.setCreateTime(DateUtils.getNowDate());
-                        kcsjEngineeringQuantitiesBillDetail.setDelFlag("0");
-                        kcsjEngineeringQuantitiesBillDetail.setDataSource("0");
-                        kcsjEngineeringQuantitiesBillDetail.setPreviousQuantity(value);
-                        BigDecimal previousQuantity = kcsjEngineeringQuantitiesBillDetail.getPreviousQuantity();
-                        BigDecimal workload = kcsjEngineeringQuantitiesBillDetail.getWorkload();
-                        kcsjEngineeringQuantitiesBillDetail.setQuantityDifference(workload.subtract(previousQuantity));
-                        newInsertList.add(kcsjEngineeringQuantitiesBillDetail);
-                        handleChildren(newInsertList, detail, detail.getId(), mainId, value);
-                    }
-                }
-            }
-
-            kcsjEngineeringQuantitiesBillDetailMapper.insertKcsjEngineeringQuantitiesBillDetailList(newInsertList);
+            handleInsertChildren(details, temp, temp.getId(), mainId, map);
+            kcsjEngineeringQuantitiesBillDetailMapper.insertKcsjEngineeringQuantitiesBillDetailList(details);
         }
 
 
     }
 
     //将子节点递归加入集合
-    private void handleChildren(List<KcsjEngineeringQuantitiesBillDetail> newList, KcsjEngineeringQuantitiesBillDetail detail, Long pId, Long mainId, BigDecimal v) {
+    private void handleInsertChildren(List<KcsjEngineeringQuantitiesBillDetail> newList, KcsjEngineeringQuantitiesBillDetail detail, Long pId, Long mainId, Map<String, BigDecimal> oldMap) {
         List<KcsjEngineeringQuantitiesBillDetail> children = detail.getChildren();
         if (null != children) {
             for (KcsjEngineeringQuantitiesBillDetail child : children) {
+                BigDecimal oldQuanlity = oldMap.get(child.getListCode());
+                oldQuanlity = oldQuanlity == null ? BigDecimal.ZERO : oldQuanlity;
                 child.setMainId(mainId);
                 child.setPid(pId);
                 child.setId(IdWorker.createId());
@@ -177,9 +177,84 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
                 child.setCreateTime(DateUtils.getNowDate());
                 child.setDelFlag("0");
                 child.setDataSource("0");
-                child.setPreviousQuantity(v);
+                child.setPreviousQuantity(oldQuanlity);
+                if (child.getWorkload()!=null){
+                    child.setQuantityDifference(child.getWorkload().subtract(oldQuanlity));
+                }
                 newList.add(child);
-                handleChildren(newList, child, child.getId(), mainId, v);
+                handleInsertChildren(newList, child, child.getId(), mainId, oldMap);
+            }
+        }
+    }
+
+
+    @Transactional
+    public AjaxResult updateKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill) {
+        //修改主表数据
+        kcsjEngineeringQuantitiesBill.setUpdateUser(SecurityUtils.getUserId().toString());
+        kcsjEngineeringQuantitiesBill.setUpdateTime(DateUtils.getNowDate());
+        kcsjEngineeringQuantitiesBillMapper.updateKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
+        //处理子表删除的数据
+        List<Long> delIdList = kcsjEngineeringQuantitiesBill.getDelIdList();
+        if (delIdList.size() > 0) {
+            detailService.deleteByIds(delIdList);
+        }
+        //处理子表新增的数据
+        List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
+        List<KcsjEngineeringQuantitiesBillDetail> addList = new ArrayList<>();
+        addList = detailsList.stream().filter(d -> StringUtils.isNotEmpty(d.getIsAdd())&&d.getIsAdd().equals("1")).collect(Collectors.toList());
+        KcsjEngineeringQuantitiesBill bill=new KcsjEngineeringQuantitiesBill();
+        bill.setDetailsList(addList);
+        if (addList.size() > 0) {
+            handleInsertList(bill, kcsjEngineeringQuantitiesBill.getId());
+        }
+        //修改子表数据
+        List<KcsjEngineeringQuantitiesBillDetail> updateList = new ArrayList<>();
+        updateList = detailsList.stream().filter(d -> StringUtils.isEmpty(d.getIsAdd())||(!d.getIsAdd().equals("1"))).collect(Collectors.toList());
+        if (updateList.size() > 0) {
+            handleUpdate(updateList);
+        }
+        return AjaxResult.success(kcsjEngineeringQuantitiesBillDetailMapper.updateKcsjEngineeringQuantitiesBillDetailList(updateList));
+
+    }
+
+
+    private void handleUpdate(List<KcsjEngineeringQuantitiesBillDetail> updateList) {
+
+        //批量编辑
+        if (!CollectionUtils.isEmpty(updateList)) {
+            List<KcsjEngineeringQuantitiesBillDetail> newUpdateList = new ArrayList<>();
+            for (int i = 0; i < updateList.size(); i++) {
+                KcsjEngineeringQuantitiesBillDetail detail = updateList.get(i);
+
+                detail.setUpdateUser(SecurityUtils.getUserId() + "");
+                detail.setUpdateTime(DateUtils.getNowDate());
+                detail.setDelFlag("0");
+                if (detail.getWorkload()!=null&&detail.getPreviousQuantity()!=null){
+                    detail.setQuantityDifference(detail.getWorkload().subtract(detail.getPreviousQuantity()));
+                }
+                newUpdateList.add(detail);
+                //处理子节点，将当前数据的子节点加入集合
+                handleUpdateChildren(newUpdateList, detail);
+            }
+            kcsjEngineeringQuantitiesBillDetailMapper.updateKcsjEngineeringQuantitiesBillDetailList(newUpdateList);
+        }
+    }
+
+    private void handleUpdateChildren(List<KcsjEngineeringQuantitiesBillDetail> newUpdateList, KcsjEngineeringQuantitiesBillDetail detail) {
+
+        List<KcsjEngineeringQuantitiesBillDetail> children = detail.getChildren();
+        if (children!=null){
+            for (KcsjEngineeringQuantitiesBillDetail child : children) {
+                child.setUpdateUser(SecurityUtils.getUserId().toString());
+                child.setUpdateTime(DateUtils.getNowDate());
+                if (child.getWorkload()!=null&&child.getPreviousQuantity()!=null){
+                    child.setQuantityDifference(child.getWorkload().subtract(child.getPreviousQuantity()));
+                }
+                if (child.getChildren()!=null){
+                    handleUpdateChildren(child.getChildren(),child);
+                }
+                newUpdateList.add(child);
             }
         }
     }
@@ -193,13 +268,6 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
             kcsjEngineeringQuantitiesBill.setCreateTime(DateUtils.getNowDate());
         }
         return kcsjEngineeringQuantitiesBillMapper.insertKcsjEngineeringQuantitiesBillList(kcsjEngineeringQuantitiesBillList);
-    }
-
-    @Transactional
-    public int updateKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill) {
-        kcsjEngineeringQuantitiesBill.setUpdateUser(SecurityUtils.getUserName());
-        kcsjEngineeringQuantitiesBill.setUpdateTime(DateUtils.getNowDate());
-        return kcsjEngineeringQuantitiesBillMapper.updateKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
     }
 
     @Transactional
@@ -220,6 +288,12 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
 
     @Transactional
     public int deleteKcsjEngineeringQuantitiesBillByPks(List<Long> kcsjEngineeringQuantitiesBillPkList) {
-        return kcsjEngineeringQuantitiesBillMapper.deleteKcsjEngineeringQuantitiesBillByPks(kcsjEngineeringQuantitiesBillPkList);
+        //删除主表数据
+        kcsjEngineeringQuantitiesBillMapper.deleteKcsjEngineeringQuantitiesBillByPks(kcsjEngineeringQuantitiesBillPkList,SecurityUtils.getUserId().toString());
+        //删除子表数据
+        return kcsjEngineeringQuantitiesBillDetailMapper.deleteKcsjEngineeringQuantitiesBillDetailByMainId(kcsjEngineeringQuantitiesBillPkList,SecurityUtils.getUserId().toString());
+
     }
+
+
 }
