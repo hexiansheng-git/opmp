@@ -1,10 +1,13 @@
 package com.hhwy.sd.designOptimize.kcsjDesignOptimize.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.utils.excel.FtExcelUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -91,8 +94,21 @@ public class KcsjDesignOptimizeController extends BaseController {
 
     @GetMapping("/export")
     public void export(HttpServletResponse response, KcsjDesignOptimize kcsjDesignOptimizeParam) throws IOException {
-        List<KcsjDesignOptimize> kcsjDesignOptimizeList = kcsjDesignOptimizeService.getKcsjDesignOptimizeList(kcsjDesignOptimizeParam);
-//        ExcelUtils<KcsjDesignOptimize> util = new ExcelUtils<>(KcsjDesignOptimize.class);
+        String ids = kcsjDesignOptimizeParam.getIds();
+        List<Long> ids4L = new ArrayList<>();
+        if(StringUtils.isNotEmpty(ids)) {
+            String[] split = ids.split(",");
+            for (String s: split) {
+                ids4L.add(Long.parseLong(s));
+            }
+        }
+        List<KcsjDesignOptimize> kcsjDesignOptimizeList = null;
+        if(CollectionUtils.isNotEmpty(ids4L)) {
+            kcsjDesignOptimizeList = kcsjDesignOptimizeService.getKcsjDesignOptimizeList4Ids(ids4L);
+        } else {
+            kcsjDesignOptimizeList = kcsjDesignOptimizeService.getKcsjDesignOptimizeList(kcsjDesignOptimizeParam);
+        }
+
         FtExcelUtil<KcsjDesignOptimize> util = new FtExcelUtil<>(KcsjDesignOptimize.class);
         util.exportExcel(response, kcsjDesignOptimizeList, DateUtils.getDate());
     }

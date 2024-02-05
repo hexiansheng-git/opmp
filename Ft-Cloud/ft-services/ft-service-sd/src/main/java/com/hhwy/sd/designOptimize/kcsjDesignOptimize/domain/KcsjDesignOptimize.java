@@ -188,4 +188,7 @@ public class KcsjDesignOptimize extends BaseEntity {
 
     private List<KcsjDesignOptimizeItem> kcsjDesignOptimizeItemList;
 
+    @JsonProperty
+    private String ids;
+
 }

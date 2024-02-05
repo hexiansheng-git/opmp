@@ -112,4 +112,9 @@ public class KcsjDesignOptimizeServiceImpl implements IKcsjDesignOptimizeService
     public int deleteKcsjDesignOptimizeByPks(List<Long> kcsjDesignOptimizePkList) {
         return kcsjDesignOptimizeMapper.deleteKcsjDesignOptimizeByPks(kcsjDesignOptimizePkList);
     }
+
+    @Override
+    public List<KcsjDesignOptimize> getKcsjDesignOptimizeList4Ids(List<Long> ids) {
+        return kcsjDesignOptimizeMapper.getKcsjDesignOptimizeList4Ids(ids);
+    }
 }

@@ -26,4 +26,6 @@ public interface IKcsjDesignOptimizeService {
     int deleteKcsjDesignOptimize(KcsjDesignOptimize kcsjDesignOptimize);
 
     int deleteKcsjDesignOptimizeByPks(List<Long> kcsjDesignOptimizePkList);
+
+    List<KcsjDesignOptimize> getKcsjDesignOptimizeList4Ids(List<Long> ids);
 }

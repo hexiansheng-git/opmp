@@ -29,4 +29,6 @@ public interface KcsjDesignOptimizeMapper {
     int deleteKcsjDesignOptimizeByPks(@Param("kcsjDesignOptimizePkList") List<Long> kcsjDesignOptimizePkList);
 
     int deleteKcsjDesignOptimizeById(@Param("id") Long id);
+
+    List<KcsjDesignOptimize> getKcsjDesignOptimizeList4Ids(List<Long> ids);
 }

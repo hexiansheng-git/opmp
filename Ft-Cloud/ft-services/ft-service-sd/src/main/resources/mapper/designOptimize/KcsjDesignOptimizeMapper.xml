@@ -130,6 +130,15 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getKcsjDesignOptimizeList4Ids" resultMap="KcsjDesignOptimizeResultMap">
+        <include refid="selectKcsjDesignOptimizeVo"/>
+        <where>
+            `id` in
+            <foreach item="id" collection="ids" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </select>
 
     <insert id="insertKcsjDesignOptimize" useGeneratedKeys="true" keyProperty="id">
         insert into kcsj_design_optimize
