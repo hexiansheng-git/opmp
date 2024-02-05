@@ -2,6 +2,7 @@ package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.mapper;
 
 import java.util.List;
 
+import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO;
 import org.apache.ibatis.annotations.Param;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
 
@@ -29,4 +30,6 @@ public interface SgsjTechnicalScienceTopicMapper {
     int deleteSgsjTechnicalScienceTopicByPks(@Param("sgsjTechnicalScienceTopicPkList") List<Long> sgsjTechnicalScienceTopicPkList);
 
     int deleteById(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic);
+
+    List<SgsjTechnicalScienceTopicDTO> getExportList(SgsjTechnicalScienceTopic param);
 }

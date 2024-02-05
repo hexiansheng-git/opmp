@@ -128,9 +128,7 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
 
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) throws IOException {
-        List<SgsjTechnicalScienceTopic> sgsjTechnicalScienceTopicList = sgsjTechnicalScienceTopicService.getSgsjTechnicalScienceTopicList(sgsjTechnicalScienceTopicParam);
-        ExcelUtils<SgsjTechnicalScienceTopic> util = new ExcelUtils<>(SgsjTechnicalScienceTopic.class);
-        util.exportExcel(response, sgsjTechnicalScienceTopicList, DateUtils.getDate());
+        sgsjTechnicalScienceTopicService.export(sgsjTechnicalScienceTopicParam);
     }
 
     /***

@@ -38,4 +38,5 @@ public interface ISgsjTechnicalScienceTopicService {
 
     AjaxResult messagePublic();
 
+    void export(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
 }

@@ -795,4 +795,13 @@
             </foreach>
         </where>
     </update>
+
+    <select id="getExportList" resultType="com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO">
+        SELECT
+            *
+        FROM
+            sgsj_technical_science_topic a
+                LEFT JOIN sgjs_achievement_award b ON a.id = b.foreign_id
+                LEFT JOIN shjs_authenticate_evaluate c ON a.id = c.foreign_id
+    </select>
 </mapper>

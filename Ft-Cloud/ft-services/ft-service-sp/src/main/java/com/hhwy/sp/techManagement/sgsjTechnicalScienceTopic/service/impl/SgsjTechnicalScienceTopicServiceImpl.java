@@ -1,7 +1,9 @@
 package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
@@ -18,10 +20,12 @@ import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
 import com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate;
 import com.hhwy.sp.common.shjsAuthenticateEvaluate.service.IShjsAuthenticateEvaluateService;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
+import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.mapper.SgsjTechnicalScienceTopicMapper;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.ISgsjTechnicalScienceTopicService;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.domain.SgsjTechnicalScienceTopicModify;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.service.ISgsjTechnicalScienceTopicModifyService;
+import com.hhwy.sp.utils.easyExcel.CustomMergeStrategy;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +36,7 @@ import org.springframework.util.Assert;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 功能描述: 科技管理 - 科研课题研发管理
@@ -474,5 +479,43 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             return AjaxResult.error("消息发布失败");
         }
 
+    }
+
+    //导出
+    @Override
+    public void export(SgsjTechnicalScienceTopic param) {
+        List<SgsjTechnicalScienceTopicDTO> data = new ArrayList<>();
+        List<SgsjTechnicalScienceTopic> resultList = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopicList(param);
+        if (CollUtil.isEmpty(resultList)) return;
+        Map<Long, SgsjTechnicalScienceTopic> resultMap = resultList.stream().collect(Collectors.toMap(SgsjTechnicalScienceTopic::getId, value -> value));
+        Long[] ids = resultList.stream().map(SgsjTechnicalScienceTopic::getId).toArray(Long[]::new);
+        List<SgjsAchievementAward> awardList = sgjsAchievementAwardService.getListByForeignIds(ids);
+        List<ShjsAuthenticateEvaluate> evaluateList = shjsAuthenticateEvaluateService.getListByForeignIds(ids);
+        for (SgjsAchievementAward sgjsAchievementAward : awardList) {
+            Long foreignId = sgjsAchievementAward.getForeignId();
+            SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = resultMap.get(foreignId);
+            SgsjTechnicalScienceTopicDTO dto = new SgsjTechnicalScienceTopicDTO();
+            BeanUtil.copyProperties(sgsjTechnicalScienceTopic, dto);
+            dto.setApplyAward(sgjsAchievementAward.getApplyAward());
+            dto.setAwardGrade(sgjsAchievementAward.getAwardGrade());
+            dto.setAwardType(sgjsAchievementAward.getAwardType());
+            dto.setGrantUnit(sgjsAchievementAward.getGrantUnit());
+            dto.setChildId(sgjsAchievementAward.getId());
+            dto.setMainId(sgsjTechnicalScienceTopic.getId());
+            data.add(dto);
+        }
+        Map<Long, List<SgsjTechnicalScienceTopicDTO>> dataMap = data.stream().collect(Collectors.groupingBy(SgsjTechnicalScienceTopicDTO::getMainId));
+        for (ShjsAuthenticateEvaluate authenticateEvaluate : evaluateList) {
+            Long foreignId = authenticateEvaluate.getForeignId();
+            List<SgsjTechnicalScienceTopicDTO> sgsjTechnicalScienceTopicDTOS = dataMap.get(foreignId);
+            sgsjTechnicalScienceTopicDTOS.get(0).setAuthenticateUnit(authenticateEvaluate.getAuthenticateUnit());
+            sgsjTechnicalScienceTopicDTOS.get(0).setAuthenticateDate(authenticateEvaluate.getAuthenticateDate());
+            sgsjTechnicalScienceTopicDTOS.get(0).setEvaluateConclusion(authenticateEvaluate.getEvaluateConclusion());
+        }
+
+        EasyExcel.write("D:\\exprot.xlsx").sheet("导出测试")
+                .head(SgsjTechnicalScienceTopicDTO.class)
+                .registerWriteHandler(new CustomMergeStrategy())
+                .doWrite(new ArrayList<>(dataMap.values()));
     }
 }
