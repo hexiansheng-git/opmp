@@ -451,7 +451,7 @@
     </update>
 
     <update id="deleteKcsjDesignOptimizeByPks">
-        update `kcsj_design_optimize` set del_flag = 1
+        delete from `kcsj_design_optimize`
         <where>
             `id` in
             <foreach item="id" collection="kcsjDesignOptimizePkList" open="(" separator="," close=")">
