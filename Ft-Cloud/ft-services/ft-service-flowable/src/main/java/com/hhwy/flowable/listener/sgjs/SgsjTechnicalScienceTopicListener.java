@@ -23,6 +23,7 @@ public class SgsjTechnicalScienceTopicListener implements TaskListener {
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(delegateTask.getProcessInstanceId()).singleResult();
         String businessKey = processInstance.getBusinessKey();
         SpServiceApi bean = SpringUtils.getBean(SpServiceApi.class);
+        System.out.println("科技管理 - 科研课题立项 流程状态修改");
         bean.updateTaskStatus(Long.valueOf(businessKey));
     }
 }

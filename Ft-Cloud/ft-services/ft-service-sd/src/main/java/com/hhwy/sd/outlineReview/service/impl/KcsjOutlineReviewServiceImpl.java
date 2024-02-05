@@ -111,6 +111,7 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         return kcsjOutlineReviewMapper.insertKcsjOutlineReviewList(kcsjOutlineReviewList);
     }
 
+    //修改
     @Transactional
     public int updateKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview) {
         kcsjOutlineReview.setUpdateUser(SecurityUtils.getUserName());

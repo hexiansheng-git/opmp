@@ -110,4 +110,18 @@ public class KcsjOutlineReviewController extends BaseController {
         ExcelUtils<KcsjOutlineReview> util = new ExcelUtils<>(KcsjOutlineReview.class);
         util.exportExcel(response, kcsjOutlineReviewList, DateUtils.getDate());
     }
+
+    /***
+     * 功能描述: 流程结束监听
+     * @param id  业务id
+     * 作者: fushudong
+     * 时间: 2024/2/1
+     */
+    @RequestMapping("/listener")
+    public void updateTaskStatus(@RequestParam("id") Long id){
+        KcsjOutlineReview kcsjOutlineReview = new KcsjOutlineReview();
+        kcsjOutlineReview.setId(id);
+        kcsjOutlineReview.setTaskStatus("5");
+        kcsjOutlineReviewService.updateKcsjOutlineReview(kcsjOutlineReview);
+    }
 }
