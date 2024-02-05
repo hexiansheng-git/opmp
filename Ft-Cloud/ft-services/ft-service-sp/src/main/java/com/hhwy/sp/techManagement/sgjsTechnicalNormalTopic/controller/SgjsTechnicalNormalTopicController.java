@@ -97,12 +97,14 @@ public class SgjsTechnicalNormalTopicController extends BaseController {
     }
 
     //导出
+    @PreAuthorize(hasPermi = "sgjsTechnicalNormalTopic:list")
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsTechnicalNormalTopic sgjsTechnicalNormalTopicParam) throws Exception {
         sgjsTechnicalNormalTopicService.export(response, sgjsTechnicalNormalTopicParam);
     }
 
     //导入
+    @PreAuthorize(hasPermi = "sgjsTechnicalNormalTopic:add")
     @PostMapping("/import")
     public AjaxResult importExcel(MultipartFile file) throws IOException {
         EasyExcelListener listener = new EasyExcelListener();

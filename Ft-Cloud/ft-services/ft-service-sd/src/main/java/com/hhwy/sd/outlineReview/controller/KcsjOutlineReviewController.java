@@ -57,6 +57,14 @@ public class KcsjOutlineReviewController extends BaseController {
         return AjaxResult.success(kcsjOutlineReview);
     }
 
+    //调整
+    @PreAuthorize(hasPermi = "kcsjOutlineReview:list")
+    @GetMapping("/adjust")
+    public AjaxResult adjust(@Validated(ValidationGroups.Select.class) KcsjOutlineReview kcsjOutlineReviewParam) {
+        KcsjOutlineReview kcsjOutlineReview = kcsjOutlineReviewService.adjust(kcsjOutlineReviewParam);
+        return AjaxResult.success(kcsjOutlineReview);
+    }
+
     @PreAuthorize(hasPermi = "kcsjOutlineReview:add")
     @PostMapping("/add")
     public AjaxResult insertKcsjOutlineReview(@Validated(ValidationGroups.Save.class) @RequestBody KcsjOutlineReview kcsjOutlineReviewParam) {
@@ -101,5 +109,19 @@ public class KcsjOutlineReviewController extends BaseController {
         List<KcsjOutlineReview> kcsjOutlineReviewList = kcsjOutlineReviewService.getKcsjOutlineReviewList(kcsjOutlineReviewParam);
         ExcelUtils<KcsjOutlineReview> util = new ExcelUtils<>(KcsjOutlineReview.class);
         util.exportExcel(response, kcsjOutlineReviewList, DateUtils.getDate());
+    }
+
+    /***
+     * 功能描述: 流程结束监听
+     * @param id  业务id
+     * 作者: fushudong
+     * 时间: 2024/2/1
+     */
+    @RequestMapping("/listener")
+    public void updateTaskStatus(@RequestParam("id") Long id){
+        KcsjOutlineReview kcsjOutlineReview = new KcsjOutlineReview();
+        kcsjOutlineReview.setId(id);
+        kcsjOutlineReview.setTaskStatus("5");
+        kcsjOutlineReviewService.updateKcsjOutlineReview(kcsjOutlineReview);
     }
 }

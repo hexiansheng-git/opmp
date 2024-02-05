@@ -260,7 +260,6 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
      * 功能描述: 导出功能
      * @param headList 表头
      * @param dataList 数据
-     * @return
      */
     @Transactional
     public AjaxResult importData(List<Map<Integer, String>> headList, List<Map<Integer, String>> dataList) {
