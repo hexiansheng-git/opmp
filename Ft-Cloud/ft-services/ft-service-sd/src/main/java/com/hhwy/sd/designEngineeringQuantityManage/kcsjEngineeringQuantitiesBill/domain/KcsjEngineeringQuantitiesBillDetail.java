@@ -10,6 +10,7 @@ import com.hhwy.utils.tree.TreeNode;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author wll
@@ -18,6 +19,7 @@ import java.util.Date;
  */
 public class KcsjEngineeringQuantitiesBillDetail extends TreeNode<KcsjEngineeringQuantitiesBillDetail> {
     private static final long serialVersionUID = 1L;
+
 
     /**
      * 字段描述：主键id
@@ -215,6 +217,26 @@ public class KcsjEngineeringQuantitiesBillDetail extends TreeNode<KcsjEngineerin
     @JsonProperty
     @Excel(name = "数据来源  0新增1同步")
     private String dataSource;
+    private List<Long> delIdList;
+
+    private String isAdd;
+
+
+    public List<Long> getDelIdList() {
+        return delIdList;
+    }
+
+    public void setDelIdList(List<Long> delIdList) {
+        this.delIdList = delIdList;
+    }
+
+    public String getIsAdd() {
+        return isAdd;
+    }
+
+    public void setIsAdd(String isAdd) {
+        this.isAdd = isAdd;
+    }
 
     @JsonIgnore
     public Long getId() {

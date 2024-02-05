@@ -8,10 +8,10 @@ import java.util.List;
 /**
  * @author wll
  * @date 2024-02-04 14:04:56
- * @remark 
+ * @remark
  */
 public interface KcsjEngineeringQuantitiesBillMapper {
-                                                                                                                                                                                                                                                                                                                                                                                                                
+
     KcsjEngineeringQuantitiesBill getKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill);
 
     //列表查询
@@ -23,9 +23,10 @@ public interface KcsjEngineeringQuantitiesBillMapper {
 
     int updateKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill);
 
-            int updateKcsjEngineeringQuantitiesBillList(@Param("kcsjEngineeringQuantitiesBillList") List<KcsjEngineeringQuantitiesBill> kcsjEngineeringQuantitiesBillList);
-    
+    int updateKcsjEngineeringQuantitiesBillList(@Param("kcsjEngineeringQuantitiesBillList") List<KcsjEngineeringQuantitiesBill> kcsjEngineeringQuantitiesBillList);
+
     int deleteKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill);
 
-            int deleteKcsjEngineeringQuantitiesBillByPks(@Param("kcsjEngineeringQuantitiesBillPkList") List<Long> kcsjEngineeringQuantitiesBillPkList);
-    }
+    int deleteKcsjEngineeringQuantitiesBillByPks(@Param("kcsjEngineeringQuantitiesBillPkList") List<Long> kcsjEngineeringQuantitiesBillPkList,@Param("delUser") String delUser);
+
+}

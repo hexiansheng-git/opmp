@@ -7,10 +7,10 @@ import java.util.List;
 /**
  * @author wll
  * @date 2024-02-04 14:05:09
- * @remark 
+ * @remark
  */
 public interface IKcsjEngineeringQuantitiesBillDetailService {
-                                                                                                                                                                                                                                                                                                                                                                                                    
+
     KcsjEngineeringQuantitiesBillDetail getKcsjEngineeringQuantitiesBillDetail(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail);
 
     List<KcsjEngineeringQuantitiesBillDetail> getKcsjEngineeringQuantitiesBillDetailList(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail);
@@ -21,9 +21,11 @@ public interface IKcsjEngineeringQuantitiesBillDetailService {
 
     int updateKcsjEngineeringQuantitiesBillDetail(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail);
 
-            int updateKcsjEngineeringQuantitiesBillDetailList(List<KcsjEngineeringQuantitiesBillDetail> kcsjEngineeringQuantitiesBillDetailList);
-    
+    int updateKcsjEngineeringQuantitiesBillDetailList(List<KcsjEngineeringQuantitiesBillDetail> kcsjEngineeringQuantitiesBillDetailList);
+
     int deleteKcsjEngineeringQuantitiesBillDetail(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail);
 
-            int deleteKcsjEngineeringQuantitiesBillDetailByPks(List<Long> kcsjEngineeringQuantitiesBillDetailPkList);
-    }
+    int deleteKcsjEngineeringQuantitiesBillDetailByPks(List<Long> kcsjEngineeringQuantitiesBillDetailPkList);
+
+    void deleteByIds(List<Long> kcsjEngineeringQuantitiesBillDetailPkList);
+}

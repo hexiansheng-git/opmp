@@ -34,6 +34,7 @@
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
         <result property="dataSource" column="data_source"/>
+        <result property="valid" column="valid"/>
     </resultMap>
     <sql id="selectKcsjEngineeringQuantitiesBillVo">
         select
@@ -65,6 +66,8 @@
                                                          ,`pt_var4`
                                                          ,`pt_var5`
                                                          ,`data_source`
+                                                         ,`valid`
+
                                     from kcsj_engineering_quantities_bill
     </sql>
     <select id="getKcsjEngineeringQuantitiesBill" resultMap="KcsjEngineeringQuantitiesBillResultMap">
@@ -72,7 +75,7 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="version != null  and version != ''">and `version` like concat('%', #{version},'%')</if>
+            <if test="version != null  and version != ''">and `version` = #{version}</if>
             <if test="listLocation != null  and listLocation != ''">and `list_location` = #{listLocation}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="fileName != null  and fileName != ''">and `file_name` = #{fileName}</if>
@@ -101,6 +104,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
         </where>
         order by create_time desc
     </select>
@@ -142,6 +146,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
         </where>
         order by create_time desc
     </select>
@@ -177,6 +182,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
             <if test="dataSource != null  and dataSource != ''">`data_source`,</if>
+            <if test="valid != null  and valid != ''">`valid`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -207,6 +213,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
             <if test="dataSource != null  and dataSource != ''">#{dataSource},</if>
+            <if test="valid != null  and valid != ''">#{valid},</if>
         </trim>
     </insert>
 
@@ -235,12 +242,14 @@
             `update_time`,
             `del_user`,
             `del_time`,
+            `del_flag`,
             `pt_var1`,
             `pt_var2`,
             `pt_var3`,
             `pt_var4`,
             `pt_var5`,
             `data_source`,
+            `valid`,
         </trim>
         values
         <foreach collection="kcsjEngineeringQuantitiesBillList" item="item" separator=",">
@@ -266,12 +275,14 @@
                 #{item.updateTime},
                 #{item.delUser},
                 #{item.delTime},
+                #{item.delFlag},
                 #{item.ptVar1},
                 #{item.ptVar2},
                 #{item.ptVar3},
                 #{item.ptVar4},
                 #{item.ptVar5},
                 #{item.dataSource},
+                #{item.valid},
             </trim>
         </foreach>
     </insert>
@@ -309,9 +320,10 @@
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
             <if test="dataSource != null  and  dataSource != ''">`data_source` = #{dataSource},</if>
+            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
         </trim>
         <where>
-            <if test="id != null ">and `id` = #{id}</if>
+            <if test=" id!= null ">and `id` = #{id}</if>
         </where>
     </update>
 
@@ -458,6 +470,11 @@
                     when `id`=#{item.id} then #{item.dataSource}
                 </foreach>
             </trim>
+            <trim prefix="valid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.valid}
+                </foreach>
+            </trim>
         </trim>
         where `id` in
         <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
@@ -498,11 +515,12 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
         </where>
     </update>
 
     <update id="deleteKcsjEngineeringQuantitiesBillByPks">
-        update `kcsj_engineering_quantities_bill` set del_flag = 1
+        update `kcsj_engineering_quantities_bill` set del_flag = 1,del_time=now(),del_user=#{delUser}
         <where>
             `id` in
             <foreach item="id" collection="kcsjEngineeringQuantitiesBillPkList" open="(" separator="," close=")">
@@ -510,4 +528,7 @@
             </foreach>
         </where>
     </update>
+
+
+
 </mapper>

@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author wll
  * @date 2024-02-04 14:05:09
- * @remark 
+ * @remark
  */
 @Service
 public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngineeringQuantitiesBillDetailService {
@@ -23,7 +23,7 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
     @Autowired
     private KcsjEngineeringQuantitiesBillDetailMapper kcsjEngineeringQuantitiesBillDetailMapper;
 
-                                                                                                                                                                                                                                                                                                                                                                                                    
+
     public KcsjEngineeringQuantitiesBillDetail getKcsjEngineeringQuantitiesBillDetail(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail) {
         return kcsjEngineeringQuantitiesBillDetailMapper.getKcsjEngineeringQuantitiesBillDetail(kcsjEngineeringQuantitiesBillDetail);
     }
@@ -44,8 +44,10 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
     public int insertKcsjEngineeringQuantitiesBillDetailList(List<KcsjEngineeringQuantitiesBillDetail> kcsjEngineeringQuantitiesBillDetailList) {
         for (KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail : kcsjEngineeringQuantitiesBillDetailList) {
             kcsjEngineeringQuantitiesBillDetail.setId(IdWorker.createId());
-            kcsjEngineeringQuantitiesBillDetail.setCreateUser(SecurityUtils.getUserName());
+            kcsjEngineeringQuantitiesBillDetail.setCreateUserName(SecurityUtils.getSysUser().getNickName());
+            kcsjEngineeringQuantitiesBillDetail.setCreateUser(SecurityUtils.getUserId().toString());
             kcsjEngineeringQuantitiesBillDetail.setCreateTime(DateUtils.getNowDate());
+            kcsjEngineeringQuantitiesBillDetail.setDelFlag("0");
         }
         return kcsjEngineeringQuantitiesBillDetailMapper.insertKcsjEngineeringQuantitiesBillDetailList(kcsjEngineeringQuantitiesBillDetailList);
     }
@@ -57,15 +59,15 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
         return kcsjEngineeringQuantitiesBillDetailMapper.updateKcsjEngineeringQuantitiesBillDetail(kcsjEngineeringQuantitiesBillDetail);
     }
 
-            @Transactional
-        public int updateKcsjEngineeringQuantitiesBillDetailList(List<KcsjEngineeringQuantitiesBillDetail> kcsjEngineeringQuantitiesBillDetailList) {
-            for (KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail : kcsjEngineeringQuantitiesBillDetailList) {
-                kcsjEngineeringQuantitiesBillDetail.setUpdateUser(SecurityUtils.getUserName());
-                kcsjEngineeringQuantitiesBillDetail.setUpdateTime(DateUtils.getNowDate());
-            }
-            return kcsjEngineeringQuantitiesBillDetailMapper.updateKcsjEngineeringQuantitiesBillDetailList(kcsjEngineeringQuantitiesBillDetailList);
+    @Transactional
+    public int updateKcsjEngineeringQuantitiesBillDetailList(List<KcsjEngineeringQuantitiesBillDetail> kcsjEngineeringQuantitiesBillDetailList) {
+        for (KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail : kcsjEngineeringQuantitiesBillDetailList) {
+            kcsjEngineeringQuantitiesBillDetail.setUpdateUser(SecurityUtils.getUserName());
+            kcsjEngineeringQuantitiesBillDetail.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return kcsjEngineeringQuantitiesBillDetailMapper.updateKcsjEngineeringQuantitiesBillDetailList(kcsjEngineeringQuantitiesBillDetailList);
+    }
+
     @Transactional
     public int deleteKcsjEngineeringQuantitiesBillDetail(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail) {
         kcsjEngineeringQuantitiesBillDetail.setUpdateUser(SecurityUtils.getUserName());
@@ -73,8 +75,15 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
         return kcsjEngineeringQuantitiesBillDetailMapper.deleteKcsjEngineeringQuantitiesBillDetail(kcsjEngineeringQuantitiesBillDetail);
     }
 
-            @Transactional
-        public int deleteKcsjEngineeringQuantitiesBillDetailByPks(List<Long> kcsjEngineeringQuantitiesBillDetailPkList) {
-            return kcsjEngineeringQuantitiesBillDetailMapper.deleteKcsjEngineeringQuantitiesBillDetailByPks(kcsjEngineeringQuantitiesBillDetailPkList);
-        }
+    @Transactional
+    public int deleteKcsjEngineeringQuantitiesBillDetailByPks(List<Long> kcsjEngineeringQuantitiesBillDetailPkList) {
+        return kcsjEngineeringQuantitiesBillDetailMapper.deleteKcsjEngineeringQuantitiesBillDetailByPks(kcsjEngineeringQuantitiesBillDetailPkList);
     }
+
+    @Override
+    public void deleteByIds(List<Long> kcsjEngineeringQuantitiesBillDetailPkList) {
+
+    }
+
+
+}
