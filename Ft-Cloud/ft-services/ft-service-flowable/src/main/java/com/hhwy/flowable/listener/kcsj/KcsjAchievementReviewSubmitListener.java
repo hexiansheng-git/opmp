@@ -19,7 +19,7 @@ public class KcsjAchievementReviewSubmitListener implements TaskListener {
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(delegateTask.getProcessInstanceId()).singleResult();
         String businessKey = processInstance.getBusinessKey();
         SdServiceApi bean = SpringUtils.getBean(SdServiceApi.class);
-        AjaxResult result = bean.submit(Long.valueOf(businessKey));
+        AjaxResult result = bean.submitKcsjAchievementReviewProcess(Long.valueOf(businessKey));
         Assert.isTrue(AjaxResult.isSuccess(result),result.get(AjaxResult.MSG_TAG)==null?"":result.get(AjaxResult.MSG_TAG).toString());
     }
 }
