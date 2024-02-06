@@ -26,5 +26,15 @@ public interface IKcsjAchievementReviewService {
 
     int deleteKcsjAchievementReview(KcsjAchievementReview kcsjAchievementReview);
 
+    void deleteById(Long id);
+
     int deleteKcsjAchievementReviewByPks(List<Long> kcsjAchievementReviewPkList);
+
+    KcsjAchievementReview getKcsjAchievementReviewById(Long id);
+
+    Long save(KcsjAchievementReview review);
+
+    void updateKcsjAchievementReviewProcess(Long id);
+
+    void submit(Long id);
 }

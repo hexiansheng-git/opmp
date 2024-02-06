@@ -139,6 +139,10 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getKcsjAchievementReviewById" resultMap="KcsjAchievementReviewResultMap">
+        <include refid="selectKcsjAchievementReviewVo"/>
+        where del_flag = '0' and id = #{id}
+    </select>
 
     <insert id="insertKcsjAchievementReview" useGeneratedKeys="true" keyProperty="id">
         insert into kcsj_achievement_review
@@ -440,7 +444,6 @@
             <if test="reviewOpinion != null  and reviewOpinion != ''">and `review_opinion` = #{reviewOpinion}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -468,5 +471,10 @@
                 #{id}
             </foreach>
         </where>
+    </update>
+
+    <update id="deleteById">
+        update `kcsj_achievement_review` set del_flag = 1
+        where id = #{id}
     </update>
 </mapper>

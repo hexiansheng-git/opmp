@@ -117,10 +117,10 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         String saveType = paperPublish.getSaveType();
         CommonAssert.notBlank(saveType,"保存类型不能为空");
 
-        String isSubmit = paperPublish.getIsSubmit();
-        if("1".equals(isSubmit)){
-            paperPublish.setCurrentState(DataCurrentState.APPLYING);
-        }
+//        String isSubmit = paperPublish.getIsSubmit();
+//        if("1".equals(isSubmit)){
+//            paperPublish.setCurrentState(DataCurrentState.APPLYING);
+//        }
 
         Long id;
         if("1".equals(saveType)){

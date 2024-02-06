@@ -32,4 +32,10 @@ public interface KcsjAchievementMapper {
     int deleteKcsjAchievementByPks(@Param("kcsjAchievementPkList") List<Long> kcsjAchievementPkList);
 
     List<KcsjAchievement> getListByIds(@Param("ids") List<Long> ids);
+
+    List<KcsjAchievement> getListByForeignId(@Param("foreignId") Long foreignId);
+
+    void cleanForeignIdByForeignId(@Param("foreignId") Long foreignId);
+
+    void relevancy(@Param("ids") List<Long> ids,@Param("foreignId") Long foreignId);
 }

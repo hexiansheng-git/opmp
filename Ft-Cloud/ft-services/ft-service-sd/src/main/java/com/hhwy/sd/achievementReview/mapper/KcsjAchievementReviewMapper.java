@@ -29,4 +29,8 @@ public interface KcsjAchievementReviewMapper {
     int deleteKcsjAchievementReview(KcsjAchievementReview kcsjAchievementReview);
 
     int deleteKcsjAchievementReviewByPks(@Param("kcsjAchievementReviewPkList") List<Long> kcsjAchievementReviewPkList);
+
+    KcsjAchievementReview getKcsjAchievementReviewById(@Param("id") Long id);
+
+    void deleteById(@Param("id") Long id);
 }

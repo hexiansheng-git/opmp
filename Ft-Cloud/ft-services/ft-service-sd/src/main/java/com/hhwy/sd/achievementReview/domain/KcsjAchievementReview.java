@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -23,6 +24,10 @@ import java.util.Date;
 public class KcsjAchievementReview extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 保存类型  1：新增；2：修改
+     */
+    private String saveType;
     /**
      * 字段描述：主键
      */
@@ -199,4 +204,6 @@ public class KcsjAchievementReview extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    private List<KcsjAchievement> achievementList;
 }

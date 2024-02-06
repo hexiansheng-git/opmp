@@ -155,6 +155,11 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getListByForeignId" resultMap="KcsjAchievementResultMap">
+        <include refid="selectKcsjAchievementVo"/>
+        where del_flag = '0' and foreign_id = #{foreignId}
+        order by create_time desc
+    </select>
 
     <insert id="insertKcsjAchievement" useGeneratedKeys="true" keyProperty="id">
         insert into kcsj_achievement
@@ -573,6 +578,19 @@
         <where>
             `id` in
             <foreach item="id" collection="kcsjAchievementPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+    <update id="cleanForeignIdByForeignId">
+        update `kcsj_achievement` set foreign_id = null
+        where foreign_id = #{foreignId}
+    </update>
+    <update id="relevancy">
+        update `kcsj_achievement` set foreign_id = #{foreignId}
+        <where>
+            `id` in
+            <foreach item="id" collection="ids" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>

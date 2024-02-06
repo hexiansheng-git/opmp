@@ -38,12 +38,40 @@ public class KcsjAchievementReviewController extends BaseController {
         return AjaxResult.success(kcsjAchievementReview);
     }
 
+    /**
+     * 台账
+     * @param kcsjAchievementReviewParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "kcsjAchievementReview:list")
     @GetMapping("/list")
     public AjaxResult getKcsjAchievementReviewList(@Validated(ValidationGroups.Select.class) KcsjAchievementReview kcsjAchievementReviewParam) {
         startPage();
         List<KcsjAchievementReview> kcsjAchievementReviewList = kcsjAchievementReviewService.getKcsjAchievementReviewList(kcsjAchievementReviewParam);
         return getDataTableAjaxResult(kcsjAchievementReviewList);
+    }
+
+    /**
+     * 详情
+     * @param id
+     * @return
+     */
+    @GetMapping("getById")
+    public AjaxResult getKcsjAchievementReviewById(Long id){
+        KcsjAchievementReview kcsjAchievementReview = kcsjAchievementReviewService.getKcsjAchievementReviewById(id);
+        return AjaxResult.success(kcsjAchievementReview);
+    }
+
+    /**
+     * 保存
+     * @param review
+     * @return
+     */
+    @PreAuthorize(hasPermi = "kcsjAchievementReview:save")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody KcsjAchievementReview review){
+        Long id = kcsjAchievementReviewService.save(review);
+        return AjaxResult.success(id);
     }
 
     @PreAuthorize(hasPermi = "kcsjAchievementReview:add")
@@ -78,6 +106,12 @@ public class KcsjAchievementReviewController extends BaseController {
         return toAjax(kcsjAchievementReviewService.deleteKcsjAchievementReview(kcsjAchievementReviewParam));
     }
 
+    @PostMapping("/deleteById/{id}")
+    public AjaxResult deleteById(@PathVariable("id") Long id) {
+        kcsjAchievementReviewService.deleteById(id);
+        return AjaxResult.success();
+    }
+
     @PreAuthorize(hasPermi = "kcsjAchievementReview:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteKcsjAchievementReviewByPks(@PathVariable Long[] ids) {
@@ -90,5 +124,27 @@ public class KcsjAchievementReviewController extends BaseController {
         List<KcsjAchievementReview> kcsjAchievementReviewList = kcsjAchievementReviewService.getKcsjAchievementReviewList(kcsjAchievementReviewParam);
         ExcelUtils<KcsjAchievementReview> util = new ExcelUtils<>(KcsjAchievementReview.class);
         util.exportExcel(response, kcsjAchievementReviewList, DateUtils.getDate());
+    }
+
+    /**
+     * 提交监听器
+     * @param id
+     * @return
+     */
+    @PostMapping("submit")
+    public AjaxResult submitKcsjAchievementReviewProcess(Long id){
+        kcsjAchievementReviewService.submit(id);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 结束监听器
+     * @param id
+     * @return
+     */
+    @PostMapping("listener")
+    public AjaxResult updateKcsjAchievementReviewProcess(Long id){
+        kcsjAchievementReviewService.updateKcsjAchievementReviewProcess(id);
+        return AjaxResult.success();
     }
 }
