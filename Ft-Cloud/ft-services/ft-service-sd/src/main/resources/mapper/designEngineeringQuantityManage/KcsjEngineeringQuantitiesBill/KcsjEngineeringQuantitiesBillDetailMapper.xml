@@ -15,7 +15,6 @@
         <result property="workItemList" column="work_item_list"/>
         <result property="unit" column="unit"/>
         <result property="previousQuantity" column="previous_quantity"/>
-        <result property="previousId" column="previous_id"/>
         <result property="workload" column="workload"/>
         <result property="quantityDifference" column="quantity_difference"/>
         <result property="serialNumber" column="serial_number"/>
@@ -49,7 +48,6 @@
                                                          ,`work_item_list`
                                                          ,`unit`
                                                          ,`previous_quantity`
-                                                         ,`previous_id`
                                                          ,`workload`
                                                          ,`quantity_difference`
                                                          ,`serial_number`
@@ -87,7 +85,6 @@
             <if test="workItemList != null  and workItemList != ''">and `work_item_list` = #{workItemList}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
             <if test="previousQuantity != null ">and `previous_quantity` = #{previousQuantity}</if>
-            <if test="previousId != null ">and `previous_id` = #{previousId}</if>
             <if test="workload != null  and workload != ''">and `workload` = #{workload}</if>
             <if test="quantityDifference != null ">and `quantity_difference` = #{quantityDifference}</if>
             <if test="serialNumber != null  and serialNumber != ''">and `serial_number` = #{serialNumber}</if>
@@ -126,7 +123,7 @@
             <if test="workItemList != null  and workItemList != ''">and `work_item_list` = #{workItemList}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
             <if test="previousQuantity != null ">and `previous_quantity` = #{previousQuantity}</if>
-            <if test="previousId != null ">and `previous_id` = #{previousId}</if>
+
             <if test="workload != null  and workload != ''">and `workload` = #{workload}</if>
             <if test="quantityDifference != null ">and `quantity_difference` = #{quantityDifference}</if>
             <if test="serialNumber != null  and serialNumber != ''">and `serial_number` = #{serialNumber}</if>
@@ -194,7 +191,7 @@
             <if test="workItemList != null  and workItemList != ''">`work_item_list`,</if>
             <if test="unit != null  and unit != ''">`unit`,</if>
             <if test="previousQuantity != null ">`previous_quantity`,</if>
-            <if test="previousId != null ">`previous_id`,</if>
+
             <if test="workload != null  and workload != ''">`workload`,</if>
             <if test="quantityDifference != null ">`quantity_difference`,</if>
             <if test="serialNumber != null  and serialNumber != ''">`serial_number`,</if>
@@ -227,7 +224,7 @@
             <if test="workItemList != null  and workItemList != ''">#{workItemList},</if>
             <if test="unit != null  and unit != ''">#{unit},</if>
             <if test="previousQuantity != null ">#{previousQuantity},</if>
-            <if test="previousId != null ">#{previousId},</if>
+
             <if test="workload != null  and workload != ''">#{workload},</if>
             <if test="quantityDifference != null ">#{quantityDifference},</if>
             <if test="serialNumber != null  and serialNumber != ''">#{serialNumber},</if>
@@ -265,7 +262,6 @@
             `work_item_list`,
             `unit`,
             `previous_quantity`,
-            `previous_id`,
             `workload`,
             `quantity_difference`,
             `serial_number`,
@@ -300,7 +296,7 @@
                 #{item.workItemList},
                 #{item.unit},
                 #{item.previousQuantity},
-                #{item.previousId},
+
                 #{item.workload},
                 #{item.quantityDifference},
                 #{item.serialNumber},
@@ -338,7 +334,6 @@
             <if test="workItemList != null  and  workItemList != ''">`work_item_list` = #{workItemList},</if>
             <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
             <if test="previousQuantity != null ">`previous_quantity` = #{previousQuantity},</if>
-            <if test="previousId != null ">`previous_id` = #{previousId},</if>
             <if test="workload != null  and  workload != ''">`workload` = #{workload},</if>
             <if test="quantityDifference != null ">`quantity_difference` = #{quantityDifference},</if>
             <if test="serialNumber != null  and  serialNumber != ''">`serial_number` = #{serialNumber},</if>
@@ -404,11 +399,6 @@
             <trim prefix="previous_quantity  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.previousQuantity}
-                </foreach>
-            </trim>
-            <trim prefix="previous_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.previousId}
                 </foreach>
             </trim>
             <trim prefix="workload  = case" suffix="end,">
@@ -543,7 +533,6 @@
             <if test="workItemList != null  and workItemList != ''">and `work_item_list` = #{workItemList}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
             <if test="previousQuantity != null ">and `previous_quantity` = #{previousQuantity}</if>
-            <if test="previousId != null ">and `previous_id` = #{previousId}</if>
             <if test="workload != null  and workload != ''">and `workload` = #{workload}</if>
             <if test="quantityDifference != null ">and `quantity_difference` = #{quantityDifference}</if>
             <if test="serialNumber != null  and serialNumber != ''">and `serial_number` = #{serialNumber}</if>
@@ -617,11 +606,6 @@
             <trim prefix="previous_quantity  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.previousQuantity}
-                </foreach>
-            </trim>
-            <trim prefix="previous_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.previousId}
                 </foreach>
             </trim>
             <trim prefix="workload  = case" suffix="end,">
