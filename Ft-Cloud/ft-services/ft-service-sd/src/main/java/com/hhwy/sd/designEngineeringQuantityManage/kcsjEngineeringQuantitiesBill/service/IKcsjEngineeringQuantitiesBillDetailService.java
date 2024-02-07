@@ -28,4 +28,6 @@ public interface IKcsjEngineeringQuantitiesBillDetailService {
     int deleteKcsjEngineeringQuantitiesBillDetailByPks(List<Long> kcsjEngineeringQuantitiesBillDetailPkList);
 
     void deleteByIds(List<Long> kcsjEngineeringQuantitiesBillDetailPkList);
+
+    List<KcsjEngineeringQuantitiesBillDetail> getDetailList(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetailParam);
 }

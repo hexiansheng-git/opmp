@@ -84,7 +84,7 @@
             <if test="submissionPerson != null  and submissionPerson != ''">and `submission_person` =
                 #{submissionPerson}
             </if>
-           <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -119,9 +119,11 @@
                 concat('%',#{listLocation},'%')
             </if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
-            <if test="fileName != null  and fileName != ''">and `file_name` like concat('%',#{fileName},'%') </if>
+            <if test="fileName != null  and fileName != ''">and `file_name` like concat('%',#{fileName},'%')</if>
             <if test="submissionDate != null ">and `submission_date` = #{submissionDate}</if>
-            <if test="submissionDateStr != null and submissionDateStr != ''"> and `submission_date` &gt;= #{submissionDateBegin} and `submission_date` &lt;= #{submissionDateEnd}</if>
+            <if test="submissionDateStr != null and submissionDateStr != ''">and `submission_date` &gt;=
+                #{submissionDateBegin} and `submission_date` &lt;= #{submissionDateEnd}
+            </if>
             <if test="submissionPersionId != null ">and `submission_persion_id` = #{submissionPersionId}</if>
             <if test="submissionPerson != null  and submissionPerson != ''">and `submission_person` =
                 #{submissionPerson}
@@ -151,6 +153,15 @@
         order by create_time desc
     </select>
 
+    <select id="getKcsjEngineeringQuantitiesBillPks" resultMap="KcsjEngineeringQuantitiesBillResultMap">
+        <include refid="selectKcsjEngineeringQuantitiesBillVo"/>
+        where `id` in
+        <foreach collection="kcsjEngineeringQuantitiesBillPkList" index="index" item="id" separator="," open="("
+                 close=")">
+            #{id}
+        </foreach>
+    </select>
+
     <insert id="insertKcsjEngineeringQuantitiesBill" useGeneratedKeys="true" keyProperty="id">
         insert into kcsj_engineering_quantities_bill
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -162,7 +173,7 @@
             <if test="submissionDate != null ">`submission_date`,</if>
             <if test="submissionPersionId != null ">`submission_persion_id`,</if>
             <if test="submissionPerson != null  and submissionPerson != ''">`submission_person`,</if>
-             <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -300,7 +311,7 @@
             <if test="submissionPerson != null  and  submissionPerson != ''">`submission_person` =
                 #{submissionPerson},
             </if>
-             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
@@ -322,9 +333,7 @@
             <if test="dataSource != null  and  dataSource != ''">`data_source` = #{dataSource},</if>
             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
         </trim>
-        <where>
-            <if test=" id!= null ">and `id` = #{id}</if>
-        </where>
+        where id = #{id}
     </update>
 
     <update id="updateKcsjEngineeringQuantitiesBillList">
@@ -527,6 +536,13 @@
                 #{id}
             </foreach>
         </where>
+    </update>
+    <update id="updateNewVersion">
+
+   UPDATE kcsj_engineering_quantities_bill
+SET valid = "1"
+WHERE create_time = (select create_time  from (SELECT MAX(create_time) FROM kcsj_engineering_quantities_bill) temp)
+and  list_location=#{listLocation};
     </update>
 
 

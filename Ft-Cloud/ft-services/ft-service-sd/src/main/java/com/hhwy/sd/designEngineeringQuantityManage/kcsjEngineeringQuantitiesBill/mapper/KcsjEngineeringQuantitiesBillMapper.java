@@ -29,4 +29,8 @@ public interface KcsjEngineeringQuantitiesBillMapper {
 
     int deleteKcsjEngineeringQuantitiesBillByPks(@Param("kcsjEngineeringQuantitiesBillPkList") List<Long> kcsjEngineeringQuantitiesBillPkList,@Param("delUser") String delUser);
 
+    //根据id获取数据集合
+    List<KcsjEngineeringQuantitiesBill> getKcsjEngineeringQuantitiesBillPks(@Param("kcsjEngineeringQuantitiesBillPkList") List<Long> kcsjEngineeringQuantitiesBillPkList);
+
+    void updateNewVersion(String listLocation);
 }

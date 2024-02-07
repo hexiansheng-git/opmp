@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.utils.tree.TreeNode;
 
 import java.math.BigDecimal;
@@ -19,203 +19,203 @@ import java.util.List;
  */
 public class KcsjEngineeringQuantitiesBillDetail extends TreeNode<KcsjEngineeringQuantitiesBillDetail> {
     private static final long serialVersionUID = 1L;
-
+    /**
+     * 字段描述：序号
+     */
+    @JsonProperty
+    @FtExcel(name = "序号",serialNumFlag = true)
+    private String serialNumber;
 
     /**
      * 字段描述：主键id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主键id ")
+//    @FtExcel(name = "主键id ")
     private Long id;
     /**
      * 字段描述：主表id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主表id")
+//    @FtExcel(name = "主表id")
     private Long mainId;
     /**
      * 字段描述：父级id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "父级id")
+//    @FtExcel(name = "父级id")
     private Long pid;
     /**
      * 字段描述：清单编码
      */
     @JsonProperty
-    @Excel(name = "清单编码")
+    @FtExcel(name = "清单编码")
     private String listCode;
     /**
      * 字段描述：工作项清单
      */
     @JsonProperty
-    @Excel(name = "工作项清单")
+    @FtExcel(name = "工作项清单")
     private String workItemList;
     /**
      * 字段描述：单位
      */
     @JsonProperty
-    @Excel(name = "单位")
+    @FtExcel(name = "单位")
     private String unit;
     /**
      * 字段描述：上一个版本工程量
      */
     @JsonProperty
-    @Excel(name = "上一个版本工程量")
+//    @FtExcel(name = "上一个版本工程量")
     private BigDecimal previousQuantity;
     /**
      * 字段描述：上一个版本id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "上一个版本id")
+//    @FtExcel(name = "上一个版本id")
     private Long previousId;
     /**
      * 字段描述：工程量
      */
     @JsonProperty
-    @Excel(name = "工程量")
+    @FtExcel(name = "工程量")
     private BigDecimal workload;
     /**
      * 字段描述：工程量差
      */
     @JsonProperty
-    @Excel(name = "工程量差")
+//    @FtExcel(name = "工程量差")
     private BigDecimal quantityDifference;
-    /**
-     * 字段描述：序号
-     */
-    @JsonProperty
-    @Excel(name = "序号")
-    private String serialNumber;
+
     /**
      * 字段描述：备注
      */
     @JsonProperty
-    @Excel(name = "备注")
+    @FtExcel(name = "备注")
     private String remark;
     /**
      * 字段描述：所属区域id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "所属区域id")
+//    @FtExcel(name = "所属区域id")
     private Long regionId;
     /**
      * 字段描述：所属区域名称
      */
     @JsonProperty
-    @Excel(name = "所属区域名称")
+//    @FtExcel(name = "所属区域名称")
     private String regionName;
     /**
      * 字段描述：项目id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "项目id")
+//    @FtExcel(name = "项目id")
     private Long projectId;
     /**
      * 字段描述：项目名称
      */
     @JsonProperty
-    @Excel(name = "项目名称")
+//    @FtExcel(name = "项目名称")
     private String projectName;
     /**
      * 字段描述：部门id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "部门id")
+//    @FtExcel(name = "部门id")
     private Long deptId;
     /**
      * 字段描述：数据创建者id
      */
     @JsonProperty
-    @Excel(name = "数据创建者id")
+//    @FtExcel(name = "数据创建者id")
     private String createUser;
     /**
      * 字段描述：数据创建者名称
      */
     @JsonProperty
-    @Excel(name = "数据创建者名称")
+//    @FtExcel(name = "数据创建者名称")
     private String createUserName;
     /**
      * 字段描述：数据创建系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+//    @FtExcel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     /**
      * 字段描述：数据修改者id
      */
     @JsonProperty
-    @Excel(name = "数据修改者id")
+//    @FtExcel(name = "数据修改者id")
     private String updateUser;
     /**
      * 字段描述：数据修改系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+//    @FtExcel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     /**
      * 字段描述：数据删除者
      */
     @JsonProperty
-    @Excel(name = "数据删除者")
+//    @FtExcel(name = "数据删除者")
     private String delUser;
     /**
      * 字段描述：数据删除系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+//    @FtExcel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date delTime;
     /**
      * 字段描述：删除标识：0未删除；1已删除
      */
     @JsonProperty
-    @Excel(name = "删除标识：0未删除；1已删除")
+//    @FtExcel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
      * 字段描述：预留字段1
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
+//    @FtExcel(name = "预留字段1")
     private String ptVar1;
     /**
      * 字段描述：预留字段2
      */
     @JsonProperty
-    @Excel(name = "预留字段2")
+//    @FtExcel(name = "预留字段2")
     private String ptVar2;
     /**
      * 字段描述：预留字段3
      */
     @JsonProperty
-    @Excel(name = "预留字段3")
+//    @FtExcel(name = "预留字段3")
     private String ptVar3;
     /**
      * 字段描述：预留字段4
      */
     @JsonProperty
-    @Excel(name = "预留字段4")
+//    @FtExcel(name = "预留字段4")
     private String ptVar4;
     /**
      * 字段描述：预留字段5
      */
     @JsonProperty
-    @Excel(name = "预留字段5")
+//    @FtExcel(name = "预留字段5")
     private String ptVar5;
     /**
      * 字段描述：数据来源  0新增1同步
      */
     @JsonProperty
-    @Excel(name = "数据来源  0新增1同步")
+//    @FtExcel(name = "数据来源  0新增1同步")
     private String dataSource;
     private List<Long> delIdList;
 

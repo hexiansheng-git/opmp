@@ -6,11 +6,13 @@ import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.mapper.KcsjEngineeringQuantitiesBillDetailMapper;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.service.IKcsjEngineeringQuantitiesBillDetailService;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * @author wll
@@ -28,7 +30,14 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
         return kcsjEngineeringQuantitiesBillDetailMapper.getKcsjEngineeringQuantitiesBillDetail(kcsjEngineeringQuantitiesBillDetail);
     }
 
+    public List<KcsjEngineeringQuantitiesBillDetail> getDetailList(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail) {
+        List<Long> delIdList = kcsjEngineeringQuantitiesBillDetail.getDelIdList();
+        List<KcsjEngineeringQuantitiesBillDetail> details = getIds(delIdList);
+        return details;
+    }
+
     public List<KcsjEngineeringQuantitiesBillDetail> getKcsjEngineeringQuantitiesBillDetailList(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail) {
+
         return kcsjEngineeringQuantitiesBillDetailMapper.getKcsjEngineeringQuantitiesBillDetailList(kcsjEngineeringQuantitiesBillDetail);
     }
 
@@ -80,10 +89,61 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
         return kcsjEngineeringQuantitiesBillDetailMapper.deleteKcsjEngineeringQuantitiesBillDetailByPks(kcsjEngineeringQuantitiesBillDetailPkList);
     }
 
-    @Override
-    public void deleteByIds(List<Long> kcsjEngineeringQuantitiesBillDetailPkList) {
+    @Transactional
+    public void deleteByIds(List<Long> delIdList) {
+        List<KcsjEngineeringQuantitiesBillDetail> list = new ArrayList<>();
+        //获取所有父子级数据
+        List<KcsjEngineeringQuantitiesBillDetail> ids = getIds(delIdList);
+        for (int i = 0; i < ids.size(); i++) {
+            KcsjEngineeringQuantitiesBillDetail detail = new KcsjEngineeringQuantitiesBillDetail();
+            detail.setId(ids.get(i).getId());
+            detail.setUpdateUser(SecurityUtils.getUserId() + "");
+            detail.setUpdateTime(DateUtils.getNowDate());
+            detail.setDelFlag("1");
+            list.add(detail);
+        }
+        //删除
+        if (!CollectionUtils.isEmpty(list)) {
+            kcsjEngineeringQuantitiesBillDetailMapper.deleteInfoData(list);
+        }
+
+    }
+    private List<KcsjEngineeringQuantitiesBillDetail> getIds(List<Long> delIdList) {
+
+        //查询出所有数据
+        KcsjEngineeringQuantitiesBillDetail detail = new KcsjEngineeringQuantitiesBillDetail();
+        List<KcsjEngineeringQuantitiesBillDetail> manageList = kcsjEngineeringQuantitiesBillDetailMapper.getKcsjEngineeringQuantitiesBillDetailList(detail);
+        Map<String, KcsjEngineeringQuantitiesBillDetail> map = new HashMap<>();
+        //将所有数据放进集合，id为key,对象为value
+        manageList.stream().forEach(temp -> {
+            map.put(temp.getId() + "", temp);
+        });
+        //该集合存放所有父子级数据
+        //查询所有符合条件的数据
+        List<KcsjEngineeringQuantitiesBillDetail> list = kcsjEngineeringQuantitiesBillDetailMapper.getIds(delIdList);
+        List<KcsjEngineeringQuantitiesBillDetail> total = new ArrayList<>(list);
+        for (KcsjEngineeringQuantitiesBillDetail experProgressManage : list) {
+            findTotal(map, total, experProgressManage);
+        }
+        if (total.size() > 0) {
+            total = TreeUtil.treeToListWithoutId(total);
+            //total = total.stream().distinct().sorted(Comparator.comparing(KcsjEngineeringQuantitiesBillDetail::getSerialNumber)).collect(Collectors.toList());
+        }
+        return total;
 
     }
 
+
+    public void findTotal(Map<String, KcsjEngineeringQuantitiesBillDetail> map, List<KcsjEngineeringQuantitiesBillDetail> total, KcsjEngineeringQuantitiesBillDetail detail) {
+        //查找以当前数据的id为pid的数据
+        Set<Map.Entry<String, KcsjEngineeringQuantitiesBillDetail>> entries = map.entrySet();
+        for (Map.Entry<String, KcsjEngineeringQuantitiesBillDetail> entry : entries) {
+            if (entry.getValue().getPid()!=null &&entry.getValue().getPid().equals(detail.getId())){
+                KcsjEngineeringQuantitiesBillDetail billDetail = map.get(entry.getKey());
+                total.add(billDetail);
+                findTotal(map,total,billDetail);
+            }
+        }
+    }
 
 }

@@ -33,4 +33,5 @@ public interface KcsjEngineeringQuantitiesBillDetailMapper {
 
     int deleteKcsjEngineeringQuantitiesBillDetailByMainId(@Param("kcsjEngineeringQuantitiesBillPkList") List<Long> kcsjEngineeringQuantitiesBillPkList,@Param("delUser") String delUser);
 
+    List<KcsjEngineeringQuantitiesBillDetail> getIds(@Param("ids") List<Long> ids);
 }

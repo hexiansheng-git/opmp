@@ -153,6 +153,22 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getIds" resultMap="KcsjEngineeringQuantitiesBillDetailResultMap">
+        <include refid="selectKcsjEngineeringQuantitiesBillDetailVo"/>
+        <where>
+            del_flag = "0"
+            <if test="ids != null and ids.size() > 0">
+                and `id` in
+                <foreach item="id" collection="ids" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+        order by create_time desc
+
+
+    </select>
+
 
     <insert id="insertKcsjEngineeringQuantitiesBillDetail" useGeneratedKeys="true" keyProperty="id">
         insert into kcsj_engineering_quantities_bill_detail
