@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * @author wll
  * @date 2024-02-04 14:05:09
- * @remark
+ * @remark  勘察设计-设计工程量管理-工程量清单
  */
 @Validated
 @RestController
@@ -115,14 +115,16 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
         try {
             InputStream inputStream = file.getInputStream();
             List<KcsjEngineeringQuantitiesBillDetail> recordList = util.importTreeExcel(inputStream);
-            List<KcsjEngineeringQuantitiesBillDetail> total=new ArrayList<>();
-            if (recordList.size()>0){
+//            List<KcsjEngineeringQuantitiesBillDetail> total=new ArrayList<>();
+
+            /*if (recordList.size()>0){
                 finaTotal(recordList,total);
-            }
+            }*/
             /*total.stream().forEach(o -> {
                 o.setIsAdd("1");
             });*/
-            return AjaxResult.success(total);
+
+            return AjaxResult.success(recordList);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");
         }

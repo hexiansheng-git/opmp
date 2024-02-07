@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author wll
  * @date 2024-02-04 14:04:56
- * @remark
+ * @remark 勘察设计-设计工程量管理-工程量清单
  */
 public interface IKcsjEngineeringQuantitiesBillService {
     //详情
