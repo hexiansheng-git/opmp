@@ -98,6 +98,15 @@ public enum MyDownTemplateEnum {
             map.put("trainWay", trainWay);
             return map;
         }
+    },
+    importKcsjAchievement("importKcsjAchievement.xlsx", "成果台账") {
+        @Override
+        public Map<String, List> pullLists() {
+            Map<String, List> map = new HashMap<>();
+            List<String> achievementReviewGrade = handleDict("achievement_review_grade");
+            map.put("achievement_review_grade", achievementReviewGrade);
+            return map;
+        }
     }
     ;
 

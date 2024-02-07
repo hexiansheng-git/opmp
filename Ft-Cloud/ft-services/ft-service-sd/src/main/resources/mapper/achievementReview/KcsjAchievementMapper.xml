@@ -133,6 +133,7 @@
         <include refid="selectKcsjAchievementVo"/>
         <where>
             del_flag = "0"
+            <if test="achievementStatus != null  and achievementStatus != ''">and `achievement_status` = #{achievementStatus}</if>
             <if test="achievementName != null  and achievementName != ''">and `achievement_name` like concat('%' , #{achievementName} , '%')</if>
             <if test="reviewGrade != null  and reviewGrade != ''">and `review_grade` = #{reviewGrade}</if>
             <if test="planReviewDateStart != null and planReviewDateStart != ''">and `plan_review_date` &gt;= #{planReviewDateStart}</if>
