@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.utils.tree.TreeNode;
 
@@ -24,6 +25,7 @@ public class KcsjEngineeringQuantitiesBillDetail extends TreeNode<KcsjEngineerin
      */
     @JsonProperty
     @FtExcel(name = "序号",serialNumFlag = true)
+    @Excel(name = "序号")
     private String serialNumber;
 
     /**
@@ -51,6 +53,7 @@ public class KcsjEngineeringQuantitiesBillDetail extends TreeNode<KcsjEngineerin
      * 字段描述：清单编码
      */
     @JsonProperty
+    @Excel(name = "清单编码")
     @FtExcel(name = "清单编码")
     private String listCode;
     /**
@@ -58,12 +61,14 @@ public class KcsjEngineeringQuantitiesBillDetail extends TreeNode<KcsjEngineerin
      */
     @JsonProperty
     @FtExcel(name = "工作项清单")
+    @Excel(name = "工作项清单")
     private String workItemList;
     /**
      * 字段描述：单位
      */
     @JsonProperty
     @FtExcel(name = "单位")
+    @Excel(name = "单位")
     private String unit;
     /**
      * 字段描述：上一个版本工程量
@@ -83,6 +88,7 @@ public class KcsjEngineeringQuantitiesBillDetail extends TreeNode<KcsjEngineerin
      */
     @JsonProperty
     @FtExcel(name = "工程量")
+    @Excel(name = "工程量")
     private BigDecimal workload;
     /**
      * 字段描述：工程量差
@@ -96,6 +102,7 @@ public class KcsjEngineeringQuantitiesBillDetail extends TreeNode<KcsjEngineerin
      */
     @JsonProperty
     @FtExcel(name = "备注")
+    @Excel(name = "备注")
     private String remark;
     /**
      * 字段描述：所属区域id

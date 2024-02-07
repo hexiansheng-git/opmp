@@ -95,7 +95,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
             bill.setListLocation(kcsjEngineeringQuantitiesBill.getListLocation());
             bill.setValid("0");
             //bill.setId(kcsjEngineeringQuantitiesBill.getId());
-            kcsjEngineeringQuantitiesBillMapper.updateKcsjEngineeringQuantitiesBill(bill);
+            kcsjEngineeringQuantitiesBillMapper.updateValid(bill);
         }
 
         //新增主表数据
@@ -346,6 +346,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         //获取删除的数据集合
         List<KcsjEngineeringQuantitiesBill> list = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBillPks(kcsjEngineeringQuantitiesBillPkList);
         List<String> listLocation = list.stream().map(e -> e.getListLocation()).collect(Collectors.toList());
+
         //删除主表数据
         kcsjEngineeringQuantitiesBillMapper.deleteKcsjEngineeringQuantitiesBillByPks(kcsjEngineeringQuantitiesBillPkList, SecurityUtils.getUserId().toString());
 
@@ -353,6 +354,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         for (String s : listLocation) {
             kcsjEngineeringQuantitiesBillMapper.updateNewVersion(s);
         }
+
         //删除子表数据
         return kcsjEngineeringQuantitiesBillDetailMapper.deleteKcsjEngineeringQuantitiesBillDetailByMainId(kcsjEngineeringQuantitiesBillPkList, SecurityUtils.getUserId().toString());
 

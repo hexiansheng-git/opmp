@@ -151,8 +151,22 @@
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
         </where>
-        order by create_time desc
+        order by create_time asc
     </select>
+
+
+    <select id="getKcsjEngineeringQuantitiesBillDetailListByMainId" resultMap="KcsjEngineeringQuantitiesBillDetailResultMap">
+        <include refid="selectKcsjEngineeringQuantitiesBillDetailVo"/>
+        <where>
+            del_flag = "0"
+            and `main_id` = #{kcsjEngineeringQuantitiesBillDetail.id}
+        </where>
+        order by create_time asc
+    </select>
+
+
+
+
     <select id="getIds" resultMap="KcsjEngineeringQuantitiesBillDetailResultMap">
         <include refid="selectKcsjEngineeringQuantitiesBillDetailVo"/>
         <where>

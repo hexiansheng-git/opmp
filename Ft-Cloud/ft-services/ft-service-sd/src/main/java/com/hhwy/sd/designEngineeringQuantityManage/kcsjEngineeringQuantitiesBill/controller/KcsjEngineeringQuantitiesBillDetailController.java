@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author wll
@@ -95,10 +96,11 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
         if (kcsjEngineeringQuantitiesBillDetailParam.getDelIdList().size()>0){
              data = kcsjEngineeringQuantitiesBillDetailService.getDetailList(kcsjEngineeringQuantitiesBillDetailParam);
         }else {
-            data = kcsjEngineeringQuantitiesBillDetailService.getKcsjEngineeringQuantitiesBillDetailList(kcsjEngineeringQuantitiesBillDetailParam);
+            data = kcsjEngineeringQuantitiesBillDetailService.getKcsjEngineeringQuantitiesBillDetailListByMainId(kcsjEngineeringQuantitiesBillDetailParam);
         }
         ExcelUtils<KcsjEngineeringQuantitiesBillDetail> util = new ExcelUtils<>(KcsjEngineeringQuantitiesBillDetail.class);
-        util.exportExcel(response, data, DateUtils.getDate());
+        List<KcsjEngineeringQuantitiesBillDetail> collect = data.stream().distinct().collect(Collectors.toList());
+        util.exportExcel(response, collect, DateUtils.getDate());
     }
 
     /**
@@ -117,10 +119,10 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
             if (recordList.size()>0){
                 finaTotal(recordList,total);
             }
-            total.stream().forEach(o -> {
+            /*total.stream().forEach(o -> {
                 o.setIsAdd("1");
-            });
-            return AjaxResult.success(recordList);
+            });*/
+            return AjaxResult.success(total);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");
         }
@@ -129,12 +131,11 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
 
     private void finaTotal(List<KcsjEngineeringQuantitiesBillDetail> recordList,List<KcsjEngineeringQuantitiesBillDetail> total){
         for (KcsjEngineeringQuantitiesBillDetail detail : recordList) {
-            recordList.add(detail);
+            total.add(detail);
             if (detail.getChildren().size()>0){
                 finaTotal(detail.getChildren(),total);
             }
         }
-
     }
 
 

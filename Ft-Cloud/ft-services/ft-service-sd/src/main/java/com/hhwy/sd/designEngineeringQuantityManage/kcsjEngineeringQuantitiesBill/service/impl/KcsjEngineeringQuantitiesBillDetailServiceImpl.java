@@ -41,6 +41,13 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
         return kcsjEngineeringQuantitiesBillDetailMapper.getKcsjEngineeringQuantitiesBillDetailList(kcsjEngineeringQuantitiesBillDetail);
     }
 
+
+
+    public List<KcsjEngineeringQuantitiesBillDetail> getKcsjEngineeringQuantitiesBillDetailListByMainId(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail) {
+
+        return kcsjEngineeringQuantitiesBillDetailMapper.getKcsjEngineeringQuantitiesBillDetailListByMainId(kcsjEngineeringQuantitiesBillDetail);
+    }
+
     @Transactional
     public int insertKcsjEngineeringQuantitiesBillDetail(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail) {
         kcsjEngineeringQuantitiesBillDetail.setId(IdWorker.createId());
@@ -145,5 +152,7 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
             }
         }
     }
+
+
 
 }

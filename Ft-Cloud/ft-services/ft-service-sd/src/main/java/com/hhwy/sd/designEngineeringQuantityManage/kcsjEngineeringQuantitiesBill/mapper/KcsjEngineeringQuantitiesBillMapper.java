@@ -33,4 +33,6 @@ public interface KcsjEngineeringQuantitiesBillMapper {
     List<KcsjEngineeringQuantitiesBill> getKcsjEngineeringQuantitiesBillPks(@Param("kcsjEngineeringQuantitiesBillPkList") List<Long> kcsjEngineeringQuantitiesBillPkList);
 
     void updateNewVersion(String listLocation);
+
+    void updateValid(KcsjEngineeringQuantitiesBill bill);
 }
