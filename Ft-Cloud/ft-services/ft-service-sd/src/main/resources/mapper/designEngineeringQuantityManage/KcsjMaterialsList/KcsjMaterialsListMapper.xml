@@ -111,10 +111,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             del_flag = "0"
                             <if test="id != null "> and `id` = #{id}</if>
                             <if test="version != null  and version != ''"> and `version` = #{version}</if>
-                            <if test="listName != null  and listName != ''"> and `list_name` = #{listName}</if>
+                            <if test="listName != null  and listName != ''"> and `list_name` like concat('%',#{listName},'%') </if>
                             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
-                            <if test="fileName != null  and fileName != ''"> and `file_name` = #{fileName}</if>
-                            <if test="submissionDate != null "> and `submission_date` = #{submissionDate}</if>
+                            <if test="fileName != null  and fileName != ''"> and `file_name` like concat('%',#{fileName},'%') </if>
+                            <if test="submitDateStr != null "> and `submission_date` &gt;= #{submitDateBegin} and  `submission_date` &lt;= #{submitDateEnd} </if>
                             <if test="submissionPerson != null  and submissionPerson != ''"> and `submission_person` = #{submissionPerson}</if>
                             <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
                             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>

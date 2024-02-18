@@ -13,7 +13,7 @@ import java.util.Date;
 
 /**
  * @author wll
- * @date 2024-02-18 15:02:49
+ * @date 2024-02-18 15:18:27
  * @remark 勘察设计-设计工程量管理-主材清单明细
  */
 public class KcsjMaterialsListDetail extends BaseEntity {
@@ -52,11 +52,23 @@ public class KcsjMaterialsListDetail extends BaseEntity {
     @Excel(name = "单位")
     private String unit;
     /**
+     * 字段描述：上一个版本设计量
+     */
+    @JsonProperty
+    @Excel(name = "上一个版本设计量")
+    private BigDecimal previousQuantity;
+    /**
      * 字段描述：设计量
      */
     @JsonProperty
     @Excel(name = "设计量")
     private BigDecimal designQuantity;
+    /**
+     * 字段描述：设计量差
+     */
+    @JsonProperty
+    @Excel(name = "设计量差")
+    private BigDecimal quantityDifference;
     /**
      * 字段描述：局损耗定额
      */
@@ -247,6 +259,16 @@ public class KcsjMaterialsListDetail extends BaseEntity {
     }
 
     @JsonIgnore
+    public BigDecimal getPreviousQuantity() {
+        return previousQuantity;
+    }
+
+    @JsonIgnore
+    public void setPreviousQuantity(BigDecimal previousQuantity) {
+        this.previousQuantity = previousQuantity;
+    }
+
+    @JsonIgnore
     public BigDecimal getDesignQuantity() {
         return designQuantity;
     }
@@ -254,6 +276,16 @@ public class KcsjMaterialsListDetail extends BaseEntity {
     @JsonIgnore
     public void setDesignQuantity(BigDecimal designQuantity) {
         this.designQuantity = designQuantity;
+    }
+
+    @JsonIgnore
+    public BigDecimal getQuantityDifference() {
+        return quantityDifference;
+    }
+
+    @JsonIgnore
+    public void setQuantityDifference(BigDecimal quantityDifference) {
+        this.quantityDifference = quantityDifference;
     }
 
     @JsonIgnore

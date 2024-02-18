@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author wll
  * @date 2024-02-18 15:02:49
- * @remark 勘察设计-设计工程量管理-主材清单
+ * @remark 勘察设计-设计工程量管理-主材清单明细
  */
 @Service
 public class KcsjMaterialsListDetailServiceImpl implements IKcsjMaterialsListDetailService {

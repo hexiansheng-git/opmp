@@ -57,6 +57,7 @@ public class KcsjMaterialsList extends BaseEntity {
     @JsonProperty
     @Excel(name = "提交日期", dateFormat = "yyyy-MM-dd")
     private Date submissionDate;
+
     /**
      * 字段描述：提交人
      */
@@ -205,9 +206,14 @@ public class KcsjMaterialsList extends BaseEntity {
 
     //清单明细
     private List<KcsjMaterialsListDetail> detailList;
+    //提交日期搜索字符串
+    private String submitDateStr;
+    //提交日期-开始
+    private Date submitDateBegin;
+    //提交日期-结束
+    private Date submitDateEnd;
 
 
-    
     @JsonIgnore
     public Long getId() {
         return id;
@@ -506,7 +512,29 @@ public class KcsjMaterialsList extends BaseEntity {
         this.detailList = detailList;
     }
 
+    public String getSubmitDateStr() {
+        return submitDateStr;
+    }
 
+    public void setSubmitDateStr(String submitDateStr) {
+        this.submitDateStr = submitDateStr;
+    }
+
+    public Date getSubmitDateBegin() {
+        return submitDateBegin;
+    }
+
+    public void setSubmitDateBegin(Date submitDateBegin) {
+        this.submitDateBegin = submitDateBegin;
+    }
+
+    public Date getSubmitDateEnd() {
+        return submitDateEnd;
+    }
+
+    public void setSubmitDateEnd(Date submitDateEnd) {
+        this.submitDateEnd = submitDateEnd;
+    }
 
 
 }

@@ -10,9 +10,9 @@ import java.util.List;
  * @remark 勘察设计-设计工程量管理-主材清单
  */
 public interface IKcsjMaterialsListService {
-
+    //详情
     KcsjMaterialsList getKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList);
-
+    //列表页
     List<KcsjMaterialsList> getKcsjMaterialsListList(KcsjMaterialsList kcsjMaterialsList);
 
     int insertKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList);

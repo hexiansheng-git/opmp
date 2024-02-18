@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author wll
  * @date 2024-02-18 15:02:49
- * @remark 勘察设计-设计工程量管理-主材清单
+ * @remark 勘察设计-设计工程量管理-主材清单明细
  */
 public interface KcsjMaterialsListDetailMapper {
 
@@ -27,4 +27,7 @@ public interface KcsjMaterialsListDetailMapper {
     int deleteKcsjMaterialsListDetail(KcsjMaterialsListDetail kcsjMaterialsListDetail);
 
     int deleteKcsjMaterialsListDetailByPks(@Param("kcsjMaterialsListDetailPkList") List<Long> kcsjMaterialsListDetailPkList);
+
+    //根据主表Id查询子表数据
+    List<KcsjMaterialsListDetail> getKcsjMaterialsListDetailListByMainId(@Param("id") Long id);
 }
