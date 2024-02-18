@@ -212,7 +212,7 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         String[] roles = {"area_handler", "regionDutyPerson", "common"};
         AjaxResult ajaxResult = systemServiceApi.selectByRoleKeyList(roles);
         Integer code = (Integer) ajaxResult.get("code");
-        Assert.isTrue(code.equals(200), "获取用户列表失败");
+        Assert.isTrue(!code.equals(200), "获取用户列表失败");
         String s = JSON.toJSONString(ajaxResult.get("data"));
         List<SysUser> sysUsers = JSON.parseArray(s, SysUser.class);
         String clientIds = sysUsers.stream().map(SysUser::getUserName).collect(Collectors.joining(","));
