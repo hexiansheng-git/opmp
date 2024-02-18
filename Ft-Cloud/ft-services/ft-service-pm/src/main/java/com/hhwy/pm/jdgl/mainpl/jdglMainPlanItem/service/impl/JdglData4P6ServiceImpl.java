@@ -185,7 +185,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
 //        List<ActivityConstField> workInfos = workResult.getBody();
 
-        if (!CollectionUtils.isEmpty(wbsInfos) && !CollectionUtils.isEmpty(workInfos)) {
+        if (!CollectionUtils.isEmpty(wbsInfos)) {
             for (WbsInfo wbsInfo : wbsInfos) {
                 JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
                 Long id = IdWorker.createId();
@@ -236,64 +236,66 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 returnList.add(jdglMainPlanItem);
             }
             List<JdglMainPlanItem> workMainPlanItemList = new ArrayList<>();
-            for (ActivityConstField activityInfo : workInfos) {
-                JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
-                String p6Id = activityInfo.getId();
-                Long id = IdWorker.createId();
-                jdglMainPlanItem.setId(id);
+            if(!CollectionUtils.isEmpty(workInfos)) {
+                for (ActivityConstField activityInfo : workInfos) {
+                    JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
+                    String p6Id = activityInfo.getId();
+                    Long id = IdWorker.createId();
+                    jdglMainPlanItem.setId(id);
 //                jdglMainPlanItem.setPid();
-                jdglMainPlanItem.setMainPlanId(mainPlanId);
-                jdglMainPlanItem.setItemCode(p6Id);
-                jdglMainPlanItem.setItemName(activityInfo.getName());
-                jdglMainPlanItem.setPlannedDuration(activityInfo.getPlannedDuration());
-                jdglMainPlanItem.setTotalFloat(activityInfo.getTotalFloat());
+                    jdglMainPlanItem.setMainPlanId(mainPlanId);
+                    jdglMainPlanItem.setItemCode(p6Id);
+                    jdglMainPlanItem.setItemName(activityInfo.getName());
+                    jdglMainPlanItem.setPlannedDuration(activityInfo.getPlannedDuration());
+                    jdglMainPlanItem.setTotalFloat(activityInfo.getTotalFloat());
 //                jdglMainPlanItem.setExecuterId();
-                jdglMainPlanItem.setExecuter(activityInfo.getExecuter());
-                if(CollectionUtils.isNotEmpty(jdglMainPlanItemList)) {
-                    JdglMainPlanItem jdglMainPlanItem1 = jdglMainPlanItemList.stream().filter(vo -> p6Id.equals(vo.getItemCode())).findFirst().orElse(null);
-                    if(jdglMainPlanItem1 != null) {
-                        jdglMainPlanItem.setExecuterId(jdglMainPlanItem1.getExecuterId());
-                        jdglMainPlanItem.setExecuter(jdglMainPlanItem1.getExecuter());
+                    jdglMainPlanItem.setExecuter(activityInfo.getExecuter());
+                    if(CollectionUtils.isNotEmpty(jdglMainPlanItemList)) {
+                        JdglMainPlanItem jdglMainPlanItem1 = jdglMainPlanItemList.stream().filter(vo -> p6Id.equals(vo.getItemCode())).findFirst().orElse(null);
+                        if(jdglMainPlanItem1 != null) {
+                            jdglMainPlanItem.setExecuterId(jdglMainPlanItem1.getExecuterId());
+                            jdglMainPlanItem.setExecuter(jdglMainPlanItem1.getExecuter());
+                        }
                     }
-                }
-                jdglMainPlanItem.setStartDate(activityInfo.getStartDate());
-                jdglMainPlanItem.setFinishDate(activityInfo.getFinishDate());
-                jdglMainPlanItem.setIsCritical(activityInfo.getIsCritical() != null && activityInfo.getIsCritical() ? "1" : "0");
-                jdglMainPlanItem.setIsLongestPath(activityInfo.getIsLongestPath() != null && activityInfo.getIsLongestPath() ? "1" : "0");
-                jdglMainPlanItem.setWbsCode(activityInfo.getWbsCode());
+                    jdglMainPlanItem.setStartDate(activityInfo.getStartDate());
+                    jdglMainPlanItem.setFinishDate(activityInfo.getFinishDate());
+                    jdglMainPlanItem.setIsCritical(activityInfo.getIsCritical() != null && activityInfo.getIsCritical() ? "1" : "0");
+                    jdglMainPlanItem.setIsLongestPath(activityInfo.getIsLongestPath() != null && activityInfo.getIsLongestPath() ? "1" : "0");
+                    jdglMainPlanItem.setWbsCode(activityInfo.getWbsCode());
 //                jdglMainPlanItem.setWbsObjectId();
-                jdglMainPlanItem.setWbsParentObjectId(activityInfo.getWbsObjectId());
+                    jdglMainPlanItem.setWbsParentObjectId(activityInfo.getWbsObjectId());
 //                jdglMainPlanItem.setWbsPcode();
-                jdglMainPlanItem.setWbsName(activityInfo.getWbsName());
+                    jdglMainPlanItem.setWbsName(activityInfo.getWbsName());
 //                jdglMainPlanItem.setProjectId();
 //                jdglMainPlanItem.setProjectCode(activityInfo.getProjectId());
 //                jdglMainPlanItem.setProjectName();
-                jdglMainPlanItem.setFreeFloat(activityInfo.getFreeFloat());
-                jdglMainPlanItem.setRemainingDuration(activityInfo.getRemainingDuration());
-                jdglMainPlanItem.setActualStartDate(activityInfo.getActualStartDate());
-                jdglMainPlanItem.setActualFinishDate(activityInfo.getActualFinishDate());
-                jdglMainPlanItem.setUnit(activityInfo.getUnit());
-                jdglMainPlanItem.setQuantity(activityInfo.getQuantity());
-                jdglMainPlanItem.setSchedulePercentComplete(activityInfo.getSchedulePercentComplete());
-                jdglMainPlanItem.setExpectedFinishDate(activityInfo.getExpectedFinishDate());
-                jdglMainPlanItem.setFinishDateVariance(activityInfo.getFinishDateVariance());
-                jdglMainPlanItem.setLagReason(activityInfo.getLagReason());
-                jdglMainPlanItem.setCorrectionTarget(activityInfo.getCorrectionTarget());
-                jdglMainPlanItem.setConcreteMeasure(activityInfo.getConcreteMeasure());
-                jdglMainPlanItem.setCorrectionCompDate(activityInfo.getCorrectionCompDate());
+                    jdglMainPlanItem.setFreeFloat(activityInfo.getFreeFloat());
+                    jdglMainPlanItem.setRemainingDuration(activityInfo.getRemainingDuration());
+                    jdglMainPlanItem.setActualStartDate(activityInfo.getActualStartDate());
+                    jdglMainPlanItem.setActualFinishDate(activityInfo.getActualFinishDate());
+                    jdglMainPlanItem.setUnit(activityInfo.getUnit());
+                    jdglMainPlanItem.setQuantity(activityInfo.getQuantity());
+                    jdglMainPlanItem.setSchedulePercentComplete(activityInfo.getSchedulePercentComplete());
+                    jdglMainPlanItem.setExpectedFinishDate(activityInfo.getExpectedFinishDate());
+                    jdglMainPlanItem.setFinishDateVariance(activityInfo.getFinishDateVariance());
+                    jdglMainPlanItem.setLagReason(activityInfo.getLagReason());
+                    jdglMainPlanItem.setCorrectionTarget(activityInfo.getCorrectionTarget());
+                    jdglMainPlanItem.setConcreteMeasure(activityInfo.getConcreteMeasure());
+                    jdglMainPlanItem.setCorrectionCompDate(activityInfo.getCorrectionCompDate());
 //                jdglMainPlanItem.setPredecessorActivityCode();
 //                jdglMainPlanItem.setPredecessorActivityName();
 //                jdglMainPlanItem.setAncestors();
-                jdglMainPlanItem.setItemType("item");
-                jdglMainPlanItem.setBaselineStartDate(activityInfo.getBaselineStartDate());
-                jdglMainPlanItem.setBaselineFinishDate(activityInfo.getBaselineFinishDate());
-                jdglMainPlanItem.setLeaf("1");
+                    jdglMainPlanItem.setItemType("item");
+                    jdglMainPlanItem.setBaselineStartDate(activityInfo.getBaselineStartDate());
+                    jdglMainPlanItem.setBaselineFinishDate(activityInfo.getBaselineFinishDate());
+                    jdglMainPlanItem.setLeaf("1");
 //                jdglMainPlanItem.setUpdateTime(activityInfo.getLastUpdateDate());
-                jdglMainPlanItem.setRemainingEarlyStartDate(activityInfo.getRemainingEarlyStartDate());
-                jdglMainPlanItem.setRemainingEarlyFinishDate(activityInfo.getRemainingEarlyFinishDate());
-                jdglMainPlanItem.setTaskType(activityInfo.getType());
-                returnList.add(jdglMainPlanItem);
-                workMainPlanItemList.add(jdglMainPlanItem);
+                    jdglMainPlanItem.setRemainingEarlyStartDate(activityInfo.getRemainingEarlyStartDate());
+                    jdglMainPlanItem.setRemainingEarlyFinishDate(activityInfo.getRemainingEarlyFinishDate());
+                    jdglMainPlanItem.setTaskType(activityInfo.getType());
+                    returnList.add(jdglMainPlanItem);
+                    workMainPlanItemList.add(jdglMainPlanItem);
+                }
             }
 
             // 处理作业逻辑关系数据
