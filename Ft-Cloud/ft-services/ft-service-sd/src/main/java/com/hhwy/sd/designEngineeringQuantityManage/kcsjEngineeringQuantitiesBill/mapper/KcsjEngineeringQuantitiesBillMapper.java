@@ -32,7 +32,9 @@ public interface KcsjEngineeringQuantitiesBillMapper {
     //根据id获取数据集合
     List<KcsjEngineeringQuantitiesBill> getKcsjEngineeringQuantitiesBillPks(@Param("kcsjEngineeringQuantitiesBillPkList") List<Long> kcsjEngineeringQuantitiesBillPkList);
 
-    void updateNewVersion(String listLocation);
+    //删除最新版数据后将剩余版本数据最早创建的数据设置为有效
+
+    void updateNewVersion(@Param("list") List<String>  list);
 
     void updateValid(KcsjEngineeringQuantitiesBill bill);
 }

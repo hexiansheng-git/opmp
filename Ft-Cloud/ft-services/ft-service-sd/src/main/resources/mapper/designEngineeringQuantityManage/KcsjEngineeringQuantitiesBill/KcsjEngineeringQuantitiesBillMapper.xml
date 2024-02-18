@@ -522,19 +522,29 @@
             </foreach>
         </where>
     </update>
+
+
     <update id="updateNewVersion">
-
-   UPDATE kcsj_engineering_quantities_bill
-    SET valid = "1"
-    WHERE list_location=#{listLocation} and del_flag="0" and create_time = (select create_time  from (SELECT MAX(create_time) create_time FROM kcsj_engineering_quantities_bill where del_flag="0") temp);
-
+        UPDATE kcsj_engineering_quantities_bill
+        SET valid = "1"
+        WHERE
+        list_location in
+        <foreach item="listLocation" collection="list" open="(" separator="," close=")">
+            #{listLocation}
+        </foreach>
+        and del_flag="0" and create_time = (select create_time from (SELECT MAX(create_time) create_time FROM
+        kcsj_engineering_quantities_bill where del_flag="0") temp);
     </update>
+
+
 
     <update id="updateValid">
         update kcsj_engineering_quantities_bill
         set valid = #{valid}
         where list_location=#{listLocation}
     </update>
+
+
 
 
 </mapper>
