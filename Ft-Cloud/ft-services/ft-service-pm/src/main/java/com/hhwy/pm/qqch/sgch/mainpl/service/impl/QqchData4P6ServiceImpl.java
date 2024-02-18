@@ -106,7 +106,7 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
 
         List<WbsInfo> wbsInfos = wbsResult.getBody();
         List<ActivityConstField> workInfos = workResult.getBody();
-        if(!CollectionUtils.isEmpty(wbsInfos) && !CollectionUtils.isEmpty(workInfos)) {
+        if(!CollectionUtils.isEmpty(wbsInfos)) {
             for (WbsInfo wbsInfo : wbsInfos) {
                 QqchMainPlanItem qqchMainPlanItem = new QqchMainPlanItem();
                 Long id = IdWorker.createId();
@@ -157,68 +157,70 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
                 qqchMainPlanItem.setRemainingEarlyFinishDate(wbsInfo.getSummaryRemainingFinishDate());
                 returnList.add(qqchMainPlanItem);
             }
-            for (ActivityConstField activityInfo : workInfos) {
-                QqchMainPlanItem qqchMainPlanItem = new QqchMainPlanItem();
-                String p6Id = activityInfo.getId();
-                Long id = IdWorker.createId();
-                qqchMainPlanItem.setId(id);
-                if(!CollectionUtils.isEmpty(relInfos)) {
-                    for (QqchMainPlanItemPre qqchMainPlanItemPre : relInfos) {
+            if(!CollectionUtils.isEmpty(workInfos)) {
+                for (ActivityConstField activityInfo : workInfos) {
+                    QqchMainPlanItem qqchMainPlanItem = new QqchMainPlanItem();
+                    String p6Id = activityInfo.getId();
+                    Long id = IdWorker.createId();
+                    qqchMainPlanItem.setId(id);
+                    if(!CollectionUtils.isEmpty(relInfos)) {
+                        for (QqchMainPlanItemPre qqchMainPlanItemPre : relInfos) {
 //                        qqchMainPlanItemPre.setMainPlanId(mainPlanId);
-                        if(p6Id.equals(qqchMainPlanItemPre.getItemCode())){
-                            qqchMainPlanItemPre.setItemId(id);
-                        }
-                        if(p6Id.equals(qqchMainPlanItemPre.getPredecessorItemCode())) {
-                            qqchMainPlanItemPre.setPredecessorItemId(id);
+                            if(p6Id.equals(qqchMainPlanItemPre.getItemCode())){
+                                qqchMainPlanItemPre.setItemId(id);
+                            }
+                            if(p6Id.equals(qqchMainPlanItemPre.getPredecessorItemCode())) {
+                                qqchMainPlanItemPre.setPredecessorItemId(id);
+                            }
                         }
                     }
-                }
 //                qqchMainPlanItem.setPid();
 //                qqchMainPlanItem.setMainPlanId(mainPlanId);
-                qqchMainPlanItem.setVersion(version);
-                qqchMainPlanItem.setItemCode(p6Id);
-                qqchMainPlanItem.setItemName(activityInfo.getName());
-                qqchMainPlanItem.setPlannedDuration(activityInfo.getPlannedDuration());
-                qqchMainPlanItem.setTotalFloat(activityInfo.getTotalFloat());
+                    qqchMainPlanItem.setVersion(version);
+                    qqchMainPlanItem.setItemCode(p6Id);
+                    qqchMainPlanItem.setItemName(activityInfo.getName());
+                    qqchMainPlanItem.setPlannedDuration(activityInfo.getPlannedDuration());
+                    qqchMainPlanItem.setTotalFloat(activityInfo.getTotalFloat());
 //                qqchMainPlanItem.setExecuterId();
-                qqchMainPlanItem.setExecuter(activityInfo.getExecuter());
-                qqchMainPlanItem.setStartDate(activityInfo.getStartDate());
-                qqchMainPlanItem.setFinishDate(activityInfo.getFinishDate());
-                qqchMainPlanItem.setIsCritical(activityInfo.getIsCritical() != null && activityInfo.getIsCritical() ?"1":"0");
-                qqchMainPlanItem.setIsLongestPath(activityInfo.getIsLongestPath() != null && activityInfo.getIsLongestPath() ?"1":"0");
-                qqchMainPlanItem.setWbsCode(activityInfo.getWbsCode());
+                    qqchMainPlanItem.setExecuter(activityInfo.getExecuter());
+                    qqchMainPlanItem.setStartDate(activityInfo.getStartDate());
+                    qqchMainPlanItem.setFinishDate(activityInfo.getFinishDate());
+                    qqchMainPlanItem.setIsCritical(activityInfo.getIsCritical() != null && activityInfo.getIsCritical() ?"1":"0");
+                    qqchMainPlanItem.setIsLongestPath(activityInfo.getIsLongestPath() != null && activityInfo.getIsLongestPath() ?"1":"0");
+                    qqchMainPlanItem.setWbsCode(activityInfo.getWbsCode());
 //                qqchMainPlanItem.setWbsObjectId();
-                qqchMainPlanItem.setWbsParentObjectId(activityInfo.getWbsObjectId());
+                    qqchMainPlanItem.setWbsParentObjectId(activityInfo.getWbsObjectId());
 //                qqchMainPlanItem.setWbsPcode();
-                qqchMainPlanItem.setWbsName(activityInfo.getWbsName());
+                    qqchMainPlanItem.setWbsName(activityInfo.getWbsName());
 //                qqchMainPlanItem.setProjectId();
 //                qqchMainPlanItem.setProjectCode(activityInfo.getProjectId());
 //                qqchMainPlanItem.setProjectName();
-                qqchMainPlanItem.setFreeFloat(activityInfo.getFreeFloat());
-                qqchMainPlanItem.setRemainingDuration(activityInfo.getRemainingDuration());
-                qqchMainPlanItem.setActualStartDate(activityInfo.getActualStartDate());
-                qqchMainPlanItem.setActualFinishDate(activityInfo.getActualFinishDate());
-                qqchMainPlanItem.setUnit(activityInfo.getUnit());
-                qqchMainPlanItem.setQuantity(activityInfo.getQuantity());
-                qqchMainPlanItem.setSchedulePercentComplete(activityInfo.getSchedulePercentComplete());
-                qqchMainPlanItem.setExpectedFinishDate(activityInfo.getExpectedFinishDate());
-                qqchMainPlanItem.setFinishDateVariance(activityInfo.getFinishDateVariance());
-                qqchMainPlanItem.setLagReason(activityInfo.getLagReason());
-                qqchMainPlanItem.setCorrectionTarget(activityInfo.getCorrectionTarget());
-                qqchMainPlanItem.setConcreteMeasure(activityInfo.getConcreteMeasure());
-                qqchMainPlanItem.setCorrectionCompDate(activityInfo.getCorrectionCompDate());
+                    qqchMainPlanItem.setFreeFloat(activityInfo.getFreeFloat());
+                    qqchMainPlanItem.setRemainingDuration(activityInfo.getRemainingDuration());
+                    qqchMainPlanItem.setActualStartDate(activityInfo.getActualStartDate());
+                    qqchMainPlanItem.setActualFinishDate(activityInfo.getActualFinishDate());
+                    qqchMainPlanItem.setUnit(activityInfo.getUnit());
+                    qqchMainPlanItem.setQuantity(activityInfo.getQuantity());
+                    qqchMainPlanItem.setSchedulePercentComplete(activityInfo.getSchedulePercentComplete());
+                    qqchMainPlanItem.setExpectedFinishDate(activityInfo.getExpectedFinishDate());
+                    qqchMainPlanItem.setFinishDateVariance(activityInfo.getFinishDateVariance());
+                    qqchMainPlanItem.setLagReason(activityInfo.getLagReason());
+                    qqchMainPlanItem.setCorrectionTarget(activityInfo.getCorrectionTarget());
+                    qqchMainPlanItem.setConcreteMeasure(activityInfo.getConcreteMeasure());
+                    qqchMainPlanItem.setCorrectionCompDate(activityInfo.getCorrectionCompDate());
 //                qqchMainPlanItem.setPredecessorActivityCode();
 //                qqchMainPlanItem.setPredecessorActivityName();
 //                qqchMainPlanItem.setAncestors();
-                qqchMainPlanItem.setItemType("item");
-                qqchMainPlanItem.setBaselineStartDate(activityInfo.getBaselineStartDate());
-                qqchMainPlanItem.setBaselineFinishDate(activityInfo.getBaselineFinishDate());
-                qqchMainPlanItem.setLeaf("1");
+                    qqchMainPlanItem.setItemType("item");
+                    qqchMainPlanItem.setBaselineStartDate(activityInfo.getBaselineStartDate());
+                    qqchMainPlanItem.setBaselineFinishDate(activityInfo.getBaselineFinishDate());
+                    qqchMainPlanItem.setLeaf("1");
 //                qqchMainPlanItem.setUpdateTime(activityInfo.getLastUpdateDate());
-                qqchMainPlanItem.setRemainingEarlyStartDate(activityInfo.getRemainingEarlyStartDate());
-                qqchMainPlanItem.setRemainingEarlyFinishDate(activityInfo.getRemainingEarlyFinishDate());
-                qqchMainPlanItem.setTaskType(activityInfo.getType());
-                returnList.add(qqchMainPlanItem);
+                    qqchMainPlanItem.setRemainingEarlyStartDate(activityInfo.getRemainingEarlyStartDate());
+                    qqchMainPlanItem.setRemainingEarlyFinishDate(activityInfo.getRemainingEarlyFinishDate());
+                    qqchMainPlanItem.setTaskType(activityInfo.getType());
+                    returnList.add(qqchMainPlanItem);
+                }
             }
 
             if(!CollectionUtils.isEmpty(returnList)) {

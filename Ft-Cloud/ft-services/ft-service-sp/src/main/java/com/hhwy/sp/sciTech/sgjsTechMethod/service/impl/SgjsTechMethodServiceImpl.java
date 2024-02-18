@@ -207,18 +207,17 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
 
     //知会消息发布
     @Override
-    public AjaxResult messagePublic() {
+    public AjaxResult messagePublic(String message) {
         // todo 指定角色暂不确定
         String[] roles = {"area_handler", "regionDutyPerson", "common"};
         AjaxResult ajaxResult = systemServiceApi.selectByRoleKeyList(roles);
         Integer code = (Integer) ajaxResult.get("code");
-        Assert.isTrue(!code.equals(200), "获取用户列表失败");
+        Assert.isTrue(code == 200, "获取用户列表失败");
         String s = JSON.toJSONString(ajaxResult.get("data"));
         List<SysUser> sysUsers = JSON.parseArray(s, SysUser.class);
         String clientIds = sysUsers.stream().map(SysUser::getUserName).collect(Collectors.joining(","));
         String topic = "system";
         // todo 消息体内容暂不确定
-        String message = "";
         R r = systemServiceApi.batchPublish(clientIds, topic, message);
         if (r.getCode() == 200) {
             return AjaxResult.success("消息发布成功");

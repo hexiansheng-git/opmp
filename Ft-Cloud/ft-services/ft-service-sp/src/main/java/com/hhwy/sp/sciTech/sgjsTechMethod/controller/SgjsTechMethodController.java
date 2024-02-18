@@ -131,7 +131,7 @@ public class SgjsTechMethodController extends BaseController {
      * 时间: 2024/2/1
      */
     @RequestMapping("/messagePublic")
-    public AjaxResult messagePublic(){
-        return sgjsTechMethodService.messagePublic();
+    public AjaxResult messagePublic(String message){
+        return sgjsTechMethodService.messagePublic(message);
     }
 }
