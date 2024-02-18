@@ -12,7 +12,6 @@
         <result property="fileGroupId" column="file_group_id"/>
         <result property="fileName" column="file_name"/>
         <result property="submissionDate" column="submission_date"/>
-        <result property="submissionPersionId" column="submission_persion_id"/>
         <result property="submissionPerson" column="submission_person"/>
         <result property="remark" column="remark"/>
         <result property="regionId" column="region_id"/>
@@ -44,7 +43,6 @@
                                                          ,`file_group_id`
                                                          ,`file_name`
                                                          ,`submission_date`
-                                                         ,`submission_persion_id`
                                                          ,`submission_person`
                                                          ,`remark`
                                                          ,`region_id`
@@ -80,7 +78,6 @@
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="fileName != null  and fileName != ''">and `file_name` = #{fileName}</if>
             <if test="submissionDate != null ">and `submission_date` = #{submissionDate}</if>
-            <if test="submissionPersionId != null ">and `submission_persion_id` = #{submissionPersionId}</if>
             <if test="submissionPerson != null  and submissionPerson != ''">and `submission_person` =
                 #{submissionPerson}
             </if>
@@ -124,7 +121,6 @@
             <if test="submissionDateStr != null and submissionDateStr != ''">and `submission_date` &gt;=
                 #{submissionDateBegin} and `submission_date` &lt;= #{submissionDateEnd}
             </if>
-            <if test="submissionPersionId != null ">and `submission_persion_id` = #{submissionPersionId}</if>
             <if test="submissionPerson != null  and submissionPerson != ''">and `submission_person` =
                 #{submissionPerson}
             </if>
@@ -171,7 +167,6 @@
             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
             <if test="fileName != null  and fileName != ''">`file_name`,</if>
             <if test="submissionDate != null ">`submission_date`,</if>
-            <if test="submissionPersionId != null ">`submission_persion_id`,</if>
             <if test="submissionPerson != null  and submissionPerson != ''">`submission_person`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
@@ -202,7 +197,6 @@
             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="fileName != null  and fileName != ''">#{fileName},</if>
             <if test="submissionDate != null ">#{submissionDate},</if>
-            <if test="submissionPersionId != null ">#{submissionPersionId},</if>
             <if test="submissionPerson != null  and submissionPerson != ''">#{submissionPerson},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="regionId != null ">#{regionId},</if>
@@ -238,7 +232,6 @@
             `file_group_id`,
             `file_name`,
             `submission_date`,
-            `submission_persion_id`,
             `submission_person`,
             `remark`,
             `region_id`,
@@ -271,7 +264,6 @@
                 #{item.fileGroupId},
                 #{item.fileName},
                 #{item.submissionDate},
-                #{item.submissionPersionId},
                 #{item.submissionPerson},
                 #{item.remark},
                 #{item.regionId},
@@ -307,7 +299,6 @@
             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
             <if test="fileName != null  and  fileName != ''">`file_name` = #{fileName},</if>
             <if test="submissionDate != null ">`submission_date` = #{submissionDate},</if>
-            <if test="submissionPersionId != null ">`submission_persion_id` = #{submissionPersionId},</if>
             <if test="submissionPerson != null  and  submissionPerson != ''">`submission_person` =
                 #{submissionPerson},
             </if>
@@ -367,11 +358,6 @@
             <trim prefix="submission_date  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.submissionDate}
-                </foreach>
-            </trim>
-            <trim prefix="submission_persion_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.submissionPersionId}
                 </foreach>
             </trim>
             <trim prefix="submission_person  = case" suffix="end,">
@@ -500,7 +486,6 @@
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="fileName != null  and fileName != ''">and `file_name` = #{fileName}</if>
             <if test="submissionDate != null ">and `submission_date` = #{submissionDate}</if>
-            <if test="submissionPersionId != null ">and `submission_persion_id` = #{submissionPersionId}</if>
             <if test="submissionPerson != null  and submissionPerson != ''">and `submission_person` =
                 #{submissionPerson}
             </if>

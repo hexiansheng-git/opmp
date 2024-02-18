@@ -19,6 +19,7 @@ import java.util.Date;
  * @date 2024-01-19 17:39:21
  * @remark kcsj_design_document_approval
  */
+
 public class KcsjDesignDocumentApproval extends BaseEntity {
     private static final long serialVersionUID = 1L;
     private static final String phoneRule="^1[3456789]\\d{9}";

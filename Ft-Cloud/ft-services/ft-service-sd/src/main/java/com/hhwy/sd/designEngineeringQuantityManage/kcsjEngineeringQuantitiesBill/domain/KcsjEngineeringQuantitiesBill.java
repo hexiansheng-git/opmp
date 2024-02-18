@@ -7,7 +7,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +19,7 @@ import java.util.List;
  * @date 2024-02-04 14:04:56
  * @remark kcsj_engineering_quantities_bill
  */
+@Valid
 public class KcsjEngineeringQuantitiesBill extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -37,6 +41,7 @@ public class KcsjEngineeringQuantitiesBill extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "清单所属部位")
+    @NotBlank(message = "请填写清单所属部位",groups ={ValidationGroups.Save.class})
     private String listLocation;
     /**
      * 字段描述：清单附件
@@ -57,13 +62,7 @@ public class KcsjEngineeringQuantitiesBill extends BaseEntity {
     @JsonProperty
     @Excel(name = "提交日期", dateFormat = "yyyy年MM月dd日")
     private Date submissionDate;
-    /**
-     * 字段描述：提交人id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonProperty
-    @Excel(name = "提交人id")
-    private Long submissionPersionId;
+
     /**
      * 字段描述：提交人
      */
@@ -338,16 +337,6 @@ public class KcsjEngineeringQuantitiesBill extends BaseEntity {
     @JsonIgnore
     public void setSubmissionDate(Date submissionDate) {
         this.submissionDate = submissionDate;
-    }
-
-    @JsonIgnore
-    public Long getSubmissionPersionId() {
-        return submissionPersionId;
-    }
-
-    @JsonIgnore
-    public void setSubmissionPersionId(Long submissionPersionId) {
-        this.submissionPersionId = submissionPersionId;
     }
 
     @JsonIgnore
