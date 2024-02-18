@@ -308,9 +308,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         kcsjEngineeringQuantitiesBillMapper.deleteKcsjEngineeringQuantitiesBillByPks(kcsjEngineeringQuantitiesBillPkList, SecurityUtils.getUserId().toString());
 
         //修改最新版数据
-        for (String s : listLocation) {
-            kcsjEngineeringQuantitiesBillMapper.updateNewVersion(s);
-        }
+        kcsjEngineeringQuantitiesBillMapper.updateNewVersion(listLocation);
 
         //删除子表数据
         return kcsjEngineeringQuantitiesBillDetailMapper.deleteKcsjEngineeringQuantitiesBillDetailByMainId(kcsjEngineeringQuantitiesBillPkList, SecurityUtils.getUserId().toString());
