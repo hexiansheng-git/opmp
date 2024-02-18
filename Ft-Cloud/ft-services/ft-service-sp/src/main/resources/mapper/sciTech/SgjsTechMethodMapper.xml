@@ -158,7 +158,7 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="techMethodCode != null  and techMethodCode != ''">and `tech_method_code` = #{techMethodCode}</if>
-            <if test="techMethodName != null  and techMethodName != ''">and `tech_method_name` = #{techMethodName}</if>
+            <if test="techMethodName != null  and techMethodName != ''">and `tech_method_name` like concat('%',#{techMethodName},'%')</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
             <if test="specialityType != null  and specialityType != ''">and `speciality_type` = #{specialityType}</if>
             <if test="specialitySector != null  and specialitySector != ''">and `speciality_sector` =

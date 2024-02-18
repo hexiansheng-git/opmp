@@ -154,7 +154,7 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="fourNewsName != null  and fourNewsName != ''">and `four_news_name` = #{fourNewsName}</if>
+            <if test="fourNewsName != null  and fourNewsName != ''">and `four_news_name` like concat('%',#{fourNewsName},'%')</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
             <if test="fourNewsType != null  and fourNewsType != ''">and `four_news_type` = #{fourNewsType}</if>
             <if test="awardsType != null  and awardsType != ''">and `awards_type` = #{awardsType}</if>
