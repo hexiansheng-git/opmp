@@ -18,6 +18,7 @@ import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate;
 import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
 
 /**
@@ -34,217 +35,217 @@ public class SgjsFourNewsAchievement extends CommonBaseEntity {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    // @Excel(name = "主键id")
+    // @FtExcel(name = "主键id")
     private Long id;
     /**
      * 字段描述：四新名称
      */
     @JsonProperty
-    @Excel(name = "四新名称")
+    @FtExcel(name = "四新名称")
     private String fourNewsName;
     /**
      * 字段描述：项目名称
      */
     @JsonProperty
-    @Excel(name = "项目名称")
+    @FtExcel(name = "项目名称")
     private String projectName;
     /**
      * 字段描述：四新类型
      */
     @JsonProperty
-    @Excel(name = "四新类型")
+    @FtExcel(name = "四新类型", dictType = "four_news_type")
     private String fourNewsType;
     /**
      * 字段描述：获奖类型
      */
     @JsonProperty
-    @Excel(name = "获奖类型")
+    @FtExcel(name = "获奖类型", dictType = "awards_type")
     private String awardsType;
     /**
      * 字段描述：专业类型
      */
     @JsonProperty
-    @Excel(name = "专业类型")
+    @FtExcel(name = "专业类型", dictType = "speciality_type")
     private String specialityType;
     /**
      * 字段描述：专业板块
      */
     @JsonProperty
-    @Excel(name = "专业板块")
+    @FtExcel(name = "专业板块", dictType = "speciality_sector")
     private String specialitySector;
     /**
      * 字段描述：主要完成人
      */
     @JsonProperty
-    @Excel(name = "主要完成人")
+    @FtExcel(name = "主要完成人")
     private String leader;
     /**
      * 字段描述：主要完成人联系方式
      */
     @JsonProperty
-    @Excel(name = "主要完成人联系方式")
+    @FtExcel(name = "主要完成人联系方式")
     private String leaderContact;
     /**
      * 字段描述：完成单位
      */
     @JsonProperty
-    @Excel(name = "完成单位")
+    @FtExcel(name = "完成单位")
     private String compOrgan;
     /**
      * 字段描述：协作单位
      */
     @JsonProperty
-    @Excel(name = "协作单位")
+    @FtExcel(name = "协作单位")
     private String collaborateOrgan;
     /**
      * 字段描述：登记人
      */
     @JsonProperty
-    @Excel(name = "登记人")
+    @FtExcel(name = "登记人")
     private String registrant;
     /**
      * 字段描述：登记人联系方式
      */
     @JsonProperty
-    @Excel(name = "登记人联系方式")
+    @FtExcel(name = "登记人联系方式")
     private String registrantContact;
     /**
      * 字段描述：技术简介
      */
     @JsonProperty
-    @Excel(name = "技术简介")
+    @FtExcel(name = "技术简介")
     private String technicalIntroduction;
     /**
      * 字段描述：附件组id
      */
     @JsonProperty
-    // @Excel(name = "附件组id")
+    // @FtExcel(name = "附件组id")
     private String fileGroupId;
     /**
      * 字段描述：备注/描述
      */
     @JsonProperty
-    // @Excel(name = "备注/描述")
+    // @FtExcel(name = "备注/描述")
     private String remark;
     /**
      * 字段描述：所属区域id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    // @Excel(name = "所属区域id")
+    // @FtExcel(name = "所属区域id")
     private Long regionId;
     /**
      * 字段描述：所属区域名称
      */
     @JsonProperty
-    // @Excel(name = "所属区域名称")
+    // @FtExcel(name = "所属区域名称")
     private String regionName;
     /**
      * 字段描述：项目id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    // @Excel(name = "项目id")
+    // @FtExcel(name = "项目id")
     private Long projectId;
     /**
      * 字段描述：部门id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    // @Excel(name = "部门id")
+    // @FtExcel(name = "部门id")
     private Long deptId;
     /**
      * 字段描述：数据创建者id
      */
     @JsonProperty
-    // @Excel(name = "数据创建者id")
+    // @FtExcel(name = "数据创建者id")
     private String createUser;
     /**
      * 字段描述：数据创建者名称
      */
     @JsonProperty
-    // @Excel(name = "数据创建者名称")
+    // @FtExcel(name = "数据创建者名称")
     private String createUserName;
     /**
      * 字段描述：数据创建系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    // @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    // @FtExcel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     /**
      * 字段描述：数据修改者id
      */
     @JsonProperty
-    // @Excel(name = "数据修改者id")
+    // @FtExcel(name = "数据修改者id")
     private String updateUser;
     /**
      * 字段描述：数据修改系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    // @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    // @FtExcel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     /**
      * 字段描述：数据删除者
      */
     @JsonProperty
-    // @Excel(name = "数据删除者")
+    // @FtExcel(name = "数据删除者")
     private String delUser;
     /**
      * 字段描述：数据删除系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    // @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    // @FtExcel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date delTime;
     /**
      * 字段描述：删除标识：0未删除；1已删除
      */
     @JsonProperty
-    // @Excel(name = "删除标识：0未删除；1已删除")
+    // @FtExcel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
      * 字段描述：预留字段1
      */
     @JsonProperty
-    // @Excel(name = "预留字段1")
+    // @FtExcel(name = "预留字段1")
     private String ptVar1;
     /**
      * 字段描述：预留字段2
      */
     @JsonProperty
-    // @Excel(name = "预留字段2")
+    // @FtExcel(name = "预留字段2")
     private String ptVar2;
     /**
      * 字段描述：预留字段3
      */
     @JsonProperty
-    // @Excel(name = "预留字段3")
+    // @FtExcel(name = "预留字段3")
     private String ptVar3;
     /**
      * 字段描述：预留字段4
      */
     @JsonProperty
-    // @Excel(name = "预留字段4")
+    // @FtExcel(name = "预留字段4")
     private String ptVar4;
     /**
      * 字段描述：预留字段5
      */
     @JsonProperty
-    // @Excel(name = "预留字段5")
+    // @FtExcel(name = "预留字段5")
     private String ptVar5;
     /**
      * 字段描述：流程状态（5已完成）
      */
     @JsonProperty
-    // @Excel(name = "流程状态（5已完成）")
+    // @FtExcel(name = "流程状态（5已完成）")
     private String taskStatus;
     /**
      * 字段描述：当前状态
      */
     @JsonProperty
-    // @Excel(name = "当前状态")
+    // @FtExcel(name = "当前状态")
     private String dataCurrentState;
 
     /**
@@ -291,6 +292,56 @@ public class SgjsFourNewsAchievement extends CommonBaseEntity {
      * 鉴定或评价数据集合
      */
     private List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList;
+
+    /**
+     * 字段描述：鉴定单位
+     */
+    @JsonProperty
+    @FtExcel(name = "鉴定单位")
+    private String authenticateUnit;
+    /**
+     * 字段描述：鉴定日期
+     */
+    @JsonProperty
+    @FtExcel(name = "鉴定日期")
+    private String authenticateDate;
+    /**
+     * 字段描述：评价结论
+     */
+    @JsonProperty
+    @FtExcel(name = "评价结论")
+    private String evaluateConclusion;
+
+    /**
+     * 字段描述：申报奖项
+     */
+    @JsonProperty
+    @FtExcel(name = "申报奖项")
+    private String applyAward;
+    /**
+     * 字段描述：奖项等级
+     */
+    @JsonProperty
+    @FtExcel(name = "奖项等级")
+    private String awardGrade;
+    /**
+     * 字段描述：奖项类别
+     */
+    @JsonProperty
+    @FtExcel(name = "奖项类别")
+    private String awardType;
+    /**
+     * 字段描述：授予单位
+     */
+    @JsonProperty
+    @FtExcel(name = "授予单位")
+    private String grantUnit;
+    /**
+     * 字段描述：奖项时间
+     */
+    @JsonProperty
+    @FtExcel(name = "奖项时间")
+    private String awardTime;
 
     @JsonProperty
     private String ids;

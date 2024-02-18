@@ -1,11 +1,14 @@
 package com.hhwy.sp.sciTech.sgjsFourNewsAchievement.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.io.IOException;
 
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
+import com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate;
+import com.hhwy.utils.dict.DictUtil;
+import com.hhwy.utils.excel.FtExcelUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -108,7 +111,69 @@ public class SgjsFourNewsAchievementController extends BaseController {
         } else {
             sgjsFourNewsAchievementList = sgjsFourNewsAchievementService.getSgjsFourNewsAchievementList(sgjsFourNewsAchievementParam);
         }
-        ExcelUtils<SgjsFourNewsAchievement> util = new ExcelUtils<>(SgjsFourNewsAchievement.class);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        // 评价结论字典
+        LinkedHashMap<String, String> evaluateConclusionDict = DictUtil.getDictDataName("evaluate_conclusion");
+        // 奖项类别
+        LinkedHashMap<String, String> awardTypeDict = DictUtil.getDictDataName("award_type");
+
+        if(CollectionUtils.isNotEmpty(sgjsFourNewsAchievementList)) {
+            for (SgjsFourNewsAchievement sgjsFourNewsAchievement: sgjsFourNewsAchievementList) {
+                // 成果奖项
+                List<SgjsAchievementAward> sgjsAchievementAwardList = sgjsFourNewsAchievement.getSgjsAchievementAwardList();
+                // 鉴定或评价
+                List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = sgjsFourNewsAchievement.getShjsAuthenticateEvaluateList();
+                if(CollectionUtils.isNotEmpty(sgjsAchievementAwardList)) {
+                    StringBuilder applyAwardStr = new StringBuilder();
+                    StringBuilder awardGradeStr = new StringBuilder();
+                    StringBuilder awardTypeStr = new StringBuilder();
+                    StringBuilder grantUnitStr = new StringBuilder();
+                    StringBuilder awardTimeStr = new StringBuilder();
+                    for (int i = 0; i < sgjsAchievementAwardList.size(); i++) {
+                        String applyAward = sgjsAchievementAwardList.get(i).getApplyAward();
+                        String awardGrade = sgjsAchievementAwardList.get(i).getAwardGrade();
+                        String awardType = sgjsAchievementAwardList.get(i).getAwardType();
+                        String grantUnit = sgjsAchievementAwardList.get(i).getGrantUnit();
+                        Date awardTime = sgjsAchievementAwardList.get(i).getAwardTime();
+                        String flag = "";
+                        if(0 < i) {
+                            flag = ",";
+                        }
+                        applyAwardStr.append(flag).append(applyAward);
+                        awardGradeStr.append(flag).append(awardGrade);
+                        awardTypeStr.append(flag).append(awardTypeDict.get(awardType));
+                        grantUnitStr.append(flag).append(grantUnit);
+                        awardTimeStr.append(flag).append(sdf.format(awardTime));
+                    }
+                    sgjsFourNewsAchievement.setApplyAward(applyAwardStr.toString());
+                    sgjsFourNewsAchievement.setAwardGrade(awardGradeStr.toString());
+                    sgjsFourNewsAchievement.setAwardType(awardTypeStr.toString());
+                    sgjsFourNewsAchievement.setGrantUnit(grantUnitStr.toString());
+                    sgjsFourNewsAchievement.setAwardTime(awardTimeStr.toString());
+                }
+                StringBuilder authenticateUnitStr = new StringBuilder();
+                StringBuilder authenticateDateStr = new StringBuilder();
+                StringBuilder evaluateConclusionStr = new StringBuilder();
+                if(CollectionUtils.isNotEmpty(shjsAuthenticateEvaluateList)) {
+                    for (int i = 0; i < shjsAuthenticateEvaluateList.size(); i++) {
+                        String authenticateUnit = shjsAuthenticateEvaluateList.get(0).getAuthenticateUnit();
+                        Date authenticateDate = shjsAuthenticateEvaluateList.get(0).getAuthenticateDate();
+                        String evaluateConclusion = shjsAuthenticateEvaluateList.get(0).getEvaluateConclusion();
+                        String flag = "";
+                        if(0 < i) {
+                            flag = ",";
+                        }
+                        authenticateUnitStr.append(flag).append(authenticateUnit);
+                        authenticateDateStr.append(flag).append(sdf.format(authenticateDate));
+                        evaluateConclusionStr.append(flag).append(evaluateConclusionDict.get(evaluateConclusion));
+                    }
+                    sgjsFourNewsAchievement.setAuthenticateUnit(authenticateUnitStr.toString());
+                    sgjsFourNewsAchievement.setAuthenticateDate(authenticateDateStr.toString());
+                    sgjsFourNewsAchievement.setEvaluateConclusion(evaluateConclusionStr.toString());
+                }
+            }
+        }
+        FtExcelUtil<SgjsFourNewsAchievement> util = new FtExcelUtil<>(SgjsFourNewsAchievement.class);
         util.exportExcel(response, sgjsFourNewsAchievementList, DateUtils.getDate());
     }
 
