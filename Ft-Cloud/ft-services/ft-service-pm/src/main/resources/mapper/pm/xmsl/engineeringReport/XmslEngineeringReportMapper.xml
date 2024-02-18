@@ -167,7 +167,7 @@
             <if test="wbsUnit != null  and wbsUnit != ''">and `wbs_unit` = #{wbsUnit}</if>
             <if test="level != null ">and `level` = #{level}</if>
             <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
-            <if test="listName != null  and listName != ''">and `list_name` = #{listName}</if>
+            <if test="listName != null  and listName != ''">and `list_name` like concat('%',#{listName},'%') </if>
             <if test="unitCode != null  and unitCode != ''">and `unit_code` = #{unitCode}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
             <if test="designQuanlity != null ">and `design_quanlity` = #{designQuanlity}</if>

@@ -254,12 +254,25 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         if (report.getParams().get("pids") == null || "".equals(report.getParams().get("pids"))) {
             report.setParentId(ObjectUtils.nvlLong(report.getParentId(), -1L));
         }
-        List<XmslEngineeringReport> xmslEngineeringReportList = xmslEngineeringReportMapper.getXmslEngineeringReportList(report);
-        // 当parentIdb为空的时候 才转树
-        if (report.getParentId() == null){
+        boolean hasCondition = StringUtils.isNotBlank(report.getListCode()) || StringUtils.isNotBlank(report.getListName());
+        List<XmslEngineeringReport> xmslEngineeringReportList = null;
+        //带条件的搜索 查询出所有满足条件的树形数据
+        if(hasCondition ){
+            List<XmslEngineeringReport> list = xmslEngineeringReportMapper.getId(report);
+            Set<String> resuIdSet = new ConcurrentHashSet<>();
+            list.parallelStream().forEach(r->{
+                resuIdSet.add(r.getId()+"");
+                if(StringUtils.isBlank(r.getAncestors()))
+                    return;
+                resuIdSet.addAll(Arrays.asList(Convert.toStrArray(r.getAncestors())));
+            });
+            XmslEngineeringReport query = new XmslEngineeringReport();
+            query.setParams(ObjectUtils.toMap("ids", resuIdSet));
+            xmslEngineeringReportList = xmslEngineeringReportMapper.getXmslEngineeringReportList(query);
             xmslEngineeringReportList = TreeUtil.build(xmslEngineeringReportList, -1L);
+        }else{
+            xmslEngineeringReportList = xmslEngineeringReportMapper.getXmslEngineeringReportList(report);
         }
-        
         return xmslEngineeringReportList;
     }
 
