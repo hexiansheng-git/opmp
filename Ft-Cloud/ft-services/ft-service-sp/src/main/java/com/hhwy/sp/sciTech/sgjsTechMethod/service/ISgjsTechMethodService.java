@@ -30,7 +30,7 @@ public interface ISgjsTechMethodService {
 
     void updateTaskStatus(Long id, String isPass);
 
-    AjaxResult messagePublic();
+    AjaxResult messagePublic(String message);
 
     List<SgjsTechMethod> getSgjsTechMethodList4ids(List<Long> ids);
 }

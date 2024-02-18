@@ -131,7 +131,7 @@ public class SgjsFourNewsAchievementController extends BaseController {
      * 时间: 2024/2/1
      */
     @RequestMapping("/messagePublic")
-    public AjaxResult messagePublic(){
-        return sgjsFourNewsAchievementService.messagePublic();
+    public AjaxResult messagePublic(String message){
+        return sgjsFourNewsAchievementService.messagePublic(message);
     }
 }
