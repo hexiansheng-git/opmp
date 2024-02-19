@@ -141,7 +141,11 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
                 BigDecimal oldDemands = map.get(kcsjMaterialsListDetail.getMaterialName());
                 oldDemands = oldDemands == null ? BigDecimal.ZERO : oldDemands;
                 kcsjMaterialsListDetail.setPreviousQuantity(oldDemands);
-                kcsjMaterialsListDetail.setQuantityDifference(kcsjMaterialsListDetail.getDesignQuantity().subtract(oldDemands));
+                BigDecimal designQuantity = kcsjMaterialsListDetail.getDesignQuantity();
+                if (designQuantity!=null){
+                    kcsjMaterialsListDetail.setQuantityDifference(designQuantity.subtract(oldDemands));
+                }
+
             }
             kcsjMaterialsList.setDetailList(detailList);
             detailService.insertKcsjMaterialsListDetailList(detailList);
@@ -211,7 +215,7 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
         List<KcsjMaterialsList> list = kcsjMaterialsListMapper.getKcsjMaterialsListList(kcsjMaterialsList);
         List<String> listName = list.stream().map(e -> e.getListName()).collect(Collectors.toList());
         //删除主表数据
-        kcsjMaterialsListMapper.deleteKcsjMaterialsListByPks(ids);
+        kcsjMaterialsListMapper.deleteKcsjMaterialsListByPks(ids,SecurityUtils.getUserId().toString());
         //让其它版本的最新版变为有效
         kcsjMaterialsListMapper.updateNewVersion(listName);
         //删除子表数据

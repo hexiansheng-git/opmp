@@ -26,7 +26,7 @@ public interface KcsjMaterialsListMapper {
 
     int deleteKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList);
 
-    int deleteKcsjMaterialsListByPks(@Param("kcsjMaterialsListPkList") List<Long> kcsjMaterialsListPkList);
+    int deleteKcsjMaterialsListByPks(@Param("kcsjMaterialsListPkList") List<Long> kcsjMaterialsListPkList,@Param("delUser") String delUser);
 
     //无效其它版本
     void updateValid(KcsjMaterialsList materialsList);
