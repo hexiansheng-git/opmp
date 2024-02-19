@@ -90,6 +90,13 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
         return toAjax(kcsjEngineeringQuantitiesBillDetailService.deleteKcsjEngineeringQuantitiesBillDetailByPks(kcsjEngineeringQuantitiesBillDetailPkList));
     }
 
+    /**
+     * 导出
+     * @param response
+     * @param kcsjEngineeringQuantitiesBillDetailParam
+     * @throws IOException
+     */
+    @PreAuthorize(hasPermi = "kcsjEngineeringQuantitiesBillDetail:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response, @RequestBody KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetailParam) throws IOException {
         List<KcsjEngineeringQuantitiesBillDetail> data=new ArrayList<>();
@@ -115,30 +122,12 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
         try {
             InputStream inputStream = file.getInputStream();
             List<KcsjEngineeringQuantitiesBillDetail> recordList = util.importTreeExcel(inputStream);
-//            List<KcsjEngineeringQuantitiesBillDetail> total=new ArrayList<>();
-
-            /*if (recordList.size()>0){
-                finaTotal(recordList,total);
-            }*/
-            /*total.stream().forEach(o -> {
-                o.setIsAdd("1");
-            });*/
-
             return AjaxResult.success(recordList);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");
         }
     }
 
-
-    private void finaTotal(List<KcsjEngineeringQuantitiesBillDetail> recordList,List<KcsjEngineeringQuantitiesBillDetail> total){
-        for (KcsjEngineeringQuantitiesBillDetail detail : recordList) {
-            total.add(detail);
-            if (detail.getChildren().size()>0){
-                finaTotal(detail.getChildren(),total);
-            }
-        }
-    }
 
 
 }

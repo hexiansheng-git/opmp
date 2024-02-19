@@ -36,7 +36,7 @@ public class KcsjEngineeringQuantitiesBillController extends BaseController {
      * @param kcsjEngineeringQuantitiesBillParam
      * @return
      */
-    @PreAuthorize(hasPermi = "kcsjEngineeringQuantitiesBill:list")
+    @PreAuthorize(hasPermi = "kcsjEngineeringQuantitiesBill:select")
     @GetMapping
     public AjaxResult getKcsjEngineeringQuantitiesBill(@Validated(ValidationGroups.Get.class) KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBillParam) {
         KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill = kcsjEngineeringQuantitiesBillService.getKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBillParam);
