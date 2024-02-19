@@ -117,9 +117,9 @@ public class WzchTotalDemandDetailController extends BaseController {
     public AjaxResult save( @Validated(ValidationGroups.Save.class) @RequestBody WzchTotalDemand wzchTotalDemand) {
         try{
             return AjaxResult.success("操作成功",String.valueOf(wzchTotalDemandDetailService.save(wzchTotalDemand)));
-        }catch (BaseException b){
+        }catch (RuntimeException b){
             b.printStackTrace();
-            throw new BaseException(b.getDefaultMessage());
+            throw new BaseException(b.getMessage());
         }catch (Exception e) {
             e.printStackTrace();
             throw new BaseException("保存异常");

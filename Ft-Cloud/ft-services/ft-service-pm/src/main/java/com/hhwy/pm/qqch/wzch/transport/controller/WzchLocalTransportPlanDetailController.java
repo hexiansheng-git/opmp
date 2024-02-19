@@ -61,9 +61,9 @@ public class WzchLocalTransportPlanDetailController extends BaseController {
         try{
             wzchLocalTransportPlanDetailService.save(wzchLocalTransportPlan);
             return new AjaxResult(200,"保存成功",wzchLocalTransportPlan.getId());
-        }catch (BaseException b){
+        }catch (RuntimeException b){
             b.printStackTrace();
-            throw new BaseException("保存失败");
+            throw new BaseException(b.getMessage());
         }catch (Exception b){
             b.printStackTrace();
             throw new BaseException("保存异常");
