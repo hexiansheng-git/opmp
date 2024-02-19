@@ -30,4 +30,9 @@ public interface KcsjMaterialsListDetailMapper {
 
     //根据主表Id查询子表数据
     List<KcsjMaterialsListDetail> getKcsjMaterialsListDetailListByMainId(@Param("id") Long id);
+
+    //根据主表数据删除子表
+    int deleteKcsjMaterialsListDetailByMainId(@Param("ids") List<Long> ids,@Param("delUser") String delUser);
+
+
 }

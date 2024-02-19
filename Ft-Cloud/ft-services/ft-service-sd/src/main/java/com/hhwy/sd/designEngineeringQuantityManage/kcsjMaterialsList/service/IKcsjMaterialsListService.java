@@ -14,7 +14,7 @@ public interface IKcsjMaterialsListService {
     KcsjMaterialsList getKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList);
     //列表页
     List<KcsjMaterialsList> getKcsjMaterialsListList(KcsjMaterialsList kcsjMaterialsList);
-
+    //新增
     int insertKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList);
 
     int insertKcsjMaterialsListList(List<KcsjMaterialsList> kcsjMaterialsListList);
@@ -24,6 +24,6 @@ public interface IKcsjMaterialsListService {
     int updateKcsjMaterialsListList(List<KcsjMaterialsList> kcsjMaterialsListList);
 
     int deleteKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList);
-
+    //批量删除
     int deleteKcsjMaterialsListByPks(List<Long> kcsjMaterialsListPkList);
 }

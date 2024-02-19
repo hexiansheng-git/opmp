@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -40,12 +41,27 @@ public class KcsjMaterialsListDetailServiceImpl implements IKcsjMaterialsListDet
         return kcsjMaterialsListDetailMapper.insertKcsjMaterialsListDetail(kcsjMaterialsListDetail);
     }
 
+    /**
+     * 批量新增
+     * @param kcsjMaterialsListDetailList
+     * @return
+     */
     @Transactional
     public int insertKcsjMaterialsListDetailList(List<KcsjMaterialsListDetail> kcsjMaterialsListDetailList) {
         for (KcsjMaterialsListDetail kcsjMaterialsListDetail : kcsjMaterialsListDetailList) {
             kcsjMaterialsListDetail.setId(IdWorker.createId());
-            kcsjMaterialsListDetail.setCreateUser(SecurityUtils.getUserName());
+            kcsjMaterialsListDetail.setCreateUser(SecurityUtils.getUserId().toString());
+            kcsjMaterialsListDetail.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             kcsjMaterialsListDetail.setCreateTime(DateUtils.getNowDate());
+            kcsjMaterialsListDetail.setDelFlag("0");
+            //处理 需用量=设计量*项目控制损耗定额
+            BigDecimal projectLossQuota = kcsjMaterialsListDetail.getProjectLossQuota();
+            BigDecimal designQuantity = kcsjMaterialsListDetail.getDesignQuantity();
+
+            if(projectLossQuota!=null&&designQuantity!=null){
+                kcsjMaterialsListDetail.setDemand(designQuantity.multiply(projectLossQuota));
+            }
+
         }
         return kcsjMaterialsListDetailMapper.insertKcsjMaterialsListDetailList(kcsjMaterialsListDetailList);
     }

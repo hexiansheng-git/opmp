@@ -71,6 +71,9 @@
                                                          ,`data_source`
                                     from kcsj_materials_list_detail
     </sql>
+
+
+
     <select id="getKcsjMaterialsListDetail" resultMap="KcsjMaterialsListDetailResultMap">
         <include refid="selectKcsjMaterialsListDetailVo"/>
         <where>
@@ -251,6 +254,7 @@
             `update_user`,
             `update_time`,
             `del_user`,
+            `del_flag`,
             `del_time`,
             `pt_var1`,
             `pt_var2`,
@@ -284,6 +288,7 @@
                 #{item.updateUser},
                 #{item.updateTime},
                 #{item.delUser},
+                #{item.delFlag},
                 #{item.delTime},
                 #{item.ptVar1},
                 #{item.ptVar2},
@@ -494,6 +499,16 @@
         <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
+    </update>
+
+    <update id="deleteKcsjMaterialsListDetailByMainId">
+    update `kcsj_materials_list_detail` set del_flag = 1,del_user=#{delUser},del_time=now()
+        <where>
+            `main_id` in
+            <foreach item="mainId" collection="ids" open="(" separator="," close=")">
+                #{mainId}
+            </foreach>
+        </where>
     </update>
 
     <update id="deleteKcsjMaterialsListDetail">

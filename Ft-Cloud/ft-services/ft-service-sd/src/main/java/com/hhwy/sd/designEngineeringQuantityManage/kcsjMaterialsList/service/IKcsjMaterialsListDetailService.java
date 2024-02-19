@@ -17,6 +17,7 @@ public interface IKcsjMaterialsListDetailService {
 
     int insertKcsjMaterialsListDetail(KcsjMaterialsListDetail kcsjMaterialsListDetail);
 
+    //批量新增
     int insertKcsjMaterialsListDetailList(List<KcsjMaterialsListDetail> kcsjMaterialsListDetailList);
 
     int updateKcsjMaterialsListDetail(KcsjMaterialsListDetail kcsjMaterialsListDetail);
