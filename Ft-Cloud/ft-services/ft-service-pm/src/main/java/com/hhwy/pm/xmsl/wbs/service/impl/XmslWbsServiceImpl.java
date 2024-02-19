@@ -637,7 +637,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             String pcode = parent == null?"":ObjectUtils.nvlString(parent.getCode());
             temp.setParentCode(pcode);
             temp.setPtVar2(StringUtils.isBlank(temp.getPtVar2())?"-1":temp.getPtVar2()); //ptVar2 变更状态添加默认值
-            temp.setName(ObjectUtils.nvlString(temp.getPartCode())+"-"+ObjectUtils.nvlString(temp.getPtVar3()));
+            temp.setName(ObjectUtils.nvlString(temp.getPartCode())+ObjectUtils.nvlString(temp.getPtVar3()));
             temp.setCode((StringUtils.isBlank(pcode)?"":pcode+"-")+ObjectUtils.nvlString(temp.getSelfCode()));
             temp.setMainId(dto.getMainId());
             //若wbs有子级，清除清单编号。20230804 玉涛需求
