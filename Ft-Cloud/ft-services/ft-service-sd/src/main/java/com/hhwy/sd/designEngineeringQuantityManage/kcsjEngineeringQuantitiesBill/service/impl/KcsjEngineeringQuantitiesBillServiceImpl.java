@@ -299,19 +299,19 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
     }
 
     @Transactional
-    public int deleteKcsjEngineeringQuantitiesBillByPks(List<Long> kcsjEngineeringQuantitiesBillPkList) {
+    public int deleteKcsjEngineeringQuantitiesBillByPks(List<Long> ids) {
         //获取删除的数据集合
-        List<KcsjEngineeringQuantitiesBill> list = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBillPks(kcsjEngineeringQuantitiesBillPkList);
+        List<KcsjEngineeringQuantitiesBill> list = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBillPks(ids);
         List<String> listLocation = list.stream().map(e -> e.getListLocation()).collect(Collectors.toList());
 
         //删除主表数据
-        kcsjEngineeringQuantitiesBillMapper.deleteKcsjEngineeringQuantitiesBillByPks(kcsjEngineeringQuantitiesBillPkList, SecurityUtils.getUserId().toString());
+        kcsjEngineeringQuantitiesBillMapper.deleteKcsjEngineeringQuantitiesBillByPks(ids, SecurityUtils.getUserId().toString());
 
         //修改最新版数据
         kcsjEngineeringQuantitiesBillMapper.updateNewVersion(listLocation);
 
         //删除子表数据
-        return kcsjEngineeringQuantitiesBillDetailMapper.deleteKcsjEngineeringQuantitiesBillDetailByMainId(kcsjEngineeringQuantitiesBillPkList, SecurityUtils.getUserId().toString());
+        return kcsjEngineeringQuantitiesBillDetailMapper.deleteKcsjEngineeringQuantitiesBillDetailByMainId(ids, SecurityUtils.getUserId().toString());
 
     }
 

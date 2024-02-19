@@ -18,7 +18,8 @@ import java.util.List;
  */
 public class KcsjMaterialsList extends BaseEntity {
     private static final long serialVersionUID = 1L;
-
+    //删除Id的集合
+    private List<Long> delIdList;
     /**
      * 字段描述：主键id
      */
@@ -53,9 +54,9 @@ public class KcsjMaterialsList extends BaseEntity {
     /**
      * 字段描述：提交日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "提交日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "提交日期", dateFormat = "yyyy年MM月dd日")
     private Date submissionDate;
 
     /**
@@ -354,6 +355,14 @@ public class KcsjMaterialsList extends BaseEntity {
         this.engineeringType = engineeringType;
     }
 
+    public List<Long> getDelIdList() {
+        return delIdList;
+    }
+
+    public void setDelIdList(List<Long> delIdList) {
+        this.delIdList = delIdList;
+    }
+
     @JsonIgnore
     public Long getDeptId() {
         return deptId;
@@ -535,6 +544,9 @@ public class KcsjMaterialsList extends BaseEntity {
     public void setSubmitDateEnd(Date submitDateEnd) {
         this.submitDateEnd = submitDateEnd;
     }
+
+
+
 
 
 }

@@ -58,6 +58,11 @@ public class KcsjMaterialsListController extends BaseController {
         return getDataTableAjaxResult(kcsjMaterialsListList);
     }
 
+    /**
+     * 新增
+     * @param kcsjMaterialsListParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "kcsjMaterialsList:add")
     @PostMapping("/add")
     public AjaxResult insertKcsjMaterialsList(@Validated(ValidationGroups.Save.class) @RequestBody KcsjMaterialsList kcsjMaterialsListParam) {
@@ -72,6 +77,11 @@ public class KcsjMaterialsListController extends BaseController {
         return AjaxResult.success(kcsjMaterialsListListParam);
     }
 
+    /**
+     * 修改
+     * @param kcsjMaterialsListParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "kcsjMaterialsList:update")
     @PostMapping("/update")
     public AjaxResult updateKcsjMaterialsList(@Validated(ValidationGroups.Update.class) @RequestBody KcsjMaterialsList kcsjMaterialsListParam) {
@@ -84,18 +94,33 @@ public class KcsjMaterialsListController extends BaseController {
         return toAjax(kcsjMaterialsListService.updateKcsjMaterialsListList(kcsjMaterialsListListParam));
     }
 
+
     @PreAuthorize(hasPermi = "kcsjMaterialsList:remove")
     @PostMapping("/delete")
     public AjaxResult deleteKcsjMaterialsList(@Validated(ValidationGroups.Delete.class) @RequestBody KcsjMaterialsList kcsjMaterialsListParam) {
         return toAjax(kcsjMaterialsListService.deleteKcsjMaterialsList(kcsjMaterialsListParam));
     }
 
-    @PreAuthorize(hasPermi = "kcsjMaterialsList:remove")
+
+
     @PostMapping("/{ids}")
     public AjaxResult deleteKcsjMaterialsListByPks(@PathVariable Long[] ids) {
         List<Long> kcsjMaterialsListPkList = Arrays.asList(ids);
         return toAjax(kcsjMaterialsListService.deleteKcsjMaterialsListByPks(kcsjMaterialsListPkList));
     }
+
+    /**
+     * 批量删除
+     * @param kcsjMaterialsList
+     * @return
+     */
+    @PreAuthorize(hasPermi = "kcsjMaterialsList:remove")
+    @PostMapping("/delByIds")
+    public AjaxResult deleteKcsjEngineeringQuantitiesBillByPks(@RequestBody KcsjMaterialsList kcsjMaterialsList) {
+        return AjaxResult.success(kcsjMaterialsListService.deleteKcsjMaterialsListByPks(kcsjMaterialsList.getDelIdList()));
+    }
+
+
 
     @GetMapping("/export")
     public void export(HttpServletResponse response, KcsjMaterialsList kcsjMaterialsListParam) throws IOException {
