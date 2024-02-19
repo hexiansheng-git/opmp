@@ -554,7 +554,6 @@
             <if test="id != null ">`id` = #{id},</if>
             <if test="mainPlanId != null ">`main_plan_id` = #{mainPlanId},</if>
             <if test="pid != null ">`pid` = #{pid},</if>
-            <if test="sort != null ">`sort` = #{sort},</if>
             <if test="itemCode != null  and  itemCode != ''">`item_code` = #{itemCode},</if>
             <if test="itemName != null  and  itemName != ''">`item_name` = #{itemName},</if>
             <if test="plannedDuration != null ">`planned_duration` = #{plannedDuration},</if>
@@ -634,11 +633,6 @@
             <trim prefix="pid  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.pid}
-                </foreach>
-            </trim>
-            <trim prefix="sort  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.sort}
                 </foreach>
             </trim>
             <trim prefix="item_code  = case" suffix="end,">
