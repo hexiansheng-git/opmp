@@ -27,6 +27,7 @@ import com.hhwy.pm.qqch.wzch.enums.YesOrNoEnum;
 import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
 import com.hhwy.pm.qqch.wzch.source.service.IWzchSourceService;
 import com.hhwy.system.api.domain.SysDictData;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.utils.exception.CustomBusinessException;
@@ -514,7 +515,7 @@ public class WzchTotalDemandServiceImpl implements IWzchTotalDemandService
     public WzchTotalDemandDetailVO detail(WzchTotalDemandDetailVO vo) {
         BigDecimal version = VersionUtil.getVersion("wzch_total_demand_detail", vo.getVersion());
         boolean isMatchVersion = BigDecimalUtils.equals(version,vo.getVersion());
-        vo.setVersion(version);
+        vo.setVersion(ObjectUtils.nvlBigDecimal(vo.getVersion(),version));
         vo.setStageIdentity(qqchReviewService.getStage());
 
         WzchTotalDemand totalDemand = this.selectByVersion(version);
