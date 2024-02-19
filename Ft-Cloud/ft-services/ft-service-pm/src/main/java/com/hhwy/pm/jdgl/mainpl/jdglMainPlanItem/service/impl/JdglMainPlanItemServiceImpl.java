@@ -169,24 +169,26 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                 list4Query = list4Query.stream().filter(vo -> vo.getStartDate() != null && startDate.compareTo(vo.getStartDate()) == 0).collect(Collectors.toList());
             }
             if(CollectionUtils.isNotEmpty(list4Query)) {
-                // 根据作业名称过滤数据
-                List<JdglMainPlanItem> list4Filter = new ArrayList<>();
-                if(CollectionUtils.isNotEmpty(list4Query)) {
-                    for (JdglMainPlanItem item4ItemName : list4Query) {
-                        String ancestors = item4ItemName.getAncestors();
-                        // 获取过滤后的作业节点数据
-                        List<JdglMainPlanItem> list4Item = jdglMainPlanItemList.stream().filter(vo -> JdglMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType())
-                                && vo.getAncestors().contains(ancestors)).collect(Collectors.toList());
-                        if(CollectionUtils.isNotEmpty(list4Item)) {
-                            for (JdglMainPlanItem item4item : list4Item) {
-                                // 根据作业获取所有祖籍数据
-                                List<JdglMainPlanItem> collect = jdglMainPlanItemList.stream().filter(vo -> item4item.getAncestors().contains(vo.getAncestors())).collect(Collectors.toList());
-                                if(CollectionUtils.isNotEmpty(collect)) list4Filter.addAll(collect);
+                if (list4Query.size() != jdglMainPlanItemList.size()) {
+                    // 根据作业名称过滤数据
+                    List<JdglMainPlanItem> list4Filter = new ArrayList<>();
+                    if(CollectionUtils.isNotEmpty(list4Query)) {
+                        for (JdglMainPlanItem item4ItemName : list4Query) {
+                            String ancestors = item4ItemName.getAncestors();
+                            // 获取过滤后的作业节点数据
+                            List<JdglMainPlanItem> list4Item = jdglMainPlanItemList.stream().filter(vo -> JdglMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType())
+                                    && vo.getAncestors().contains(ancestors)).collect(Collectors.toList());
+                            if(CollectionUtils.isNotEmpty(list4Item)) {
+                                for (JdglMainPlanItem item4item : list4Item) {
+                                    // 根据作业获取所有祖籍数据
+                                    List<JdglMainPlanItem> collect = jdglMainPlanItemList.stream().filter(vo -> item4item.getAncestors().contains(vo.getAncestors())).collect(Collectors.toList());
+                                    if(CollectionUtils.isNotEmpty(collect)) list4Filter.addAll(collect);
+                                }
                             }
                         }
                     }
+                    jdglMainPlanItemList = list4Filter.stream().distinct().collect(Collectors.toList());
                 }
-                jdglMainPlanItemList = list4Filter.stream().distinct().collect(Collectors.toList());
             } else {
                 return new ArrayList<>();
             }
