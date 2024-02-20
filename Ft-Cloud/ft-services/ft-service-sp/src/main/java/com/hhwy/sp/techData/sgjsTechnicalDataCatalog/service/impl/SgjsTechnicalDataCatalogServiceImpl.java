@@ -51,9 +51,7 @@ public class SgjsTechnicalDataCatalogServiceImpl implements ISgjsTechnicalDataCa
         if(CollectionUtils.isNotEmpty(sgjsTechnicalDataCatalogList) && queryMap.size() > 0) {
             TreeCountUtils<SgjsTechnicalDataCatalog> treeCountUtils = new TreeCountUtils<>();
             List<SgjsTechnicalDataCatalog> sgjsTechnicalDataCatalogs = treeCountUtils.queryTree(sgjsTechnicalDataCatalogList, queryMap, pid);
-            if(CollectionUtils.isNotEmpty(sgjsTechnicalDataCatalogs)) {
-                return TreeUtil.build(sgjsTechnicalDataCatalogs, pid);
-            }
+            return TreeUtil.build(sgjsTechnicalDataCatalogs, pid);
         }
         return TreeUtil.build(sgjsTechnicalDataCatalogList, pid);
     }
