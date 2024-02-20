@@ -131,22 +131,38 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
         sgsjTechnicalScienceTopicService.export(sgsjTechnicalScienceTopicParam);
     }
 
-    /***
-     * 功能描述: 流程结束监听
+    /**
+     * 功能描述: 申请流程结束监听
      * @param id  业务id
      * 作者: fushudong
      * 时间: 2024/2/1
      */
-    @RequestMapping("/listener")
+    @RequestMapping("/appplyListener")
+    public void appplyListener(@RequestParam("id") Long id){
+        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
+        sgsjTechnicalScienceTopic.setId(id);
+        //走第三分支(有专家建议)，流程结束 最终状态为"通过"
+        sgsjTechnicalScienceTopic.setApplyState("3");
+        sgsjTechnicalScienceTopicService.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
+    }
+
+    /**
+     * 功能描述: 立项流程结束监听
+     * @param id  业务id
+     * 作者: fushudong
+     * 时间: 2024/2/1
+     */
+    @RequestMapping("/lxListener")
     public void updateTaskStatus(@RequestParam("id") Long id){
         SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
         sgsjTechnicalScienceTopic.setId(id);
+        //流程结束
         sgsjTechnicalScienceTopic.setTaskStatus("5");
         sgsjTechnicalScienceTopicService.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
     }
 
     /***
-     * 功能描述: 消息发布
+     * 功能描述: 消息发布监听
      * 作者: fushudong
      * 时间: 2024/2/1
      */

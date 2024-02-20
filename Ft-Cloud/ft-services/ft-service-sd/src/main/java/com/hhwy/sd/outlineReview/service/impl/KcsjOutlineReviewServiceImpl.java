@@ -82,7 +82,7 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
 
     //保存
     @Transactional
-    public void insertKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview) {
+    public Long insertKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview) {
         Long id = IdWorker.createId();
         kcsjOutlineReview.setId(id);
         kcsjOutlineReview.setCreateUser(SecurityUtils.getUserName());
@@ -97,8 +97,9 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         }
         kcsjOutlineReviewMapper.insertKcsjOutlineReview(kcsjOutlineReview);
         List<SgjsExpertLibrary> childList = kcsjOutlineReview.getChildList();
-        if (CollUtil.isEmpty(childList)) return;
+        if (CollUtil.isEmpty(childList)) return id;
         sgjsExpertLibraryService.saveExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_1, childList);
+        return id;
     }
 
     @Transactional
@@ -113,10 +114,14 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
 
     //修改
     @Transactional
-    public int updateKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview) {
+    public void updateKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview) {
         kcsjOutlineReview.setUpdateUser(SecurityUtils.getUserName());
         kcsjOutlineReview.setUpdateTime(DateUtils.getNowDate());
-        return kcsjOutlineReviewMapper.updateKcsjOutlineReview(kcsjOutlineReview);
+        int i = kcsjOutlineReviewMapper.updateKcsjOutlineReview(kcsjOutlineReview);
+        Assert.isTrue( i > 0, "未找到数据");
+        List<SgjsExpertLibrary> childList = kcsjOutlineReview.getChildList();
+        if (CollUtil.isEmpty(childList)) return;
+        sgjsExpertLibraryService.saveExpertLibraryList(kcsjOutlineReview.getId(), BelongBusiness.BELONG_BUSINESS_1, childList);
     }
 
     @Transactional

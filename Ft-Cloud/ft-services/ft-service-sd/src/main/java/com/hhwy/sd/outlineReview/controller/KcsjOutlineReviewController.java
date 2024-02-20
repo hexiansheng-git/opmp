@@ -68,8 +68,8 @@ public class KcsjOutlineReviewController extends BaseController {
     @PreAuthorize(hasPermi = "kcsjOutlineReview:add")
     @PostMapping("/add")
     public AjaxResult insertKcsjOutlineReview(@Validated(ValidationGroups.Save.class) @RequestBody KcsjOutlineReview kcsjOutlineReviewParam) {
-        kcsjOutlineReviewService.insertKcsjOutlineReview(kcsjOutlineReviewParam);
-        return AjaxResult.success(kcsjOutlineReviewParam);
+        Long id = kcsjOutlineReviewService.insertKcsjOutlineReview(kcsjOutlineReviewParam);
+        return AjaxResult.success(id);
     }
 
     @PreAuthorize(hasPermi = "kcsjOutlineReview:add")
@@ -82,7 +82,8 @@ public class KcsjOutlineReviewController extends BaseController {
     @PreAuthorize(hasPermi = "kcsjOutlineReview:update")
     @PostMapping("/update")
     public AjaxResult updateKcsjOutlineReview(@Validated(ValidationGroups.Update.class) @RequestBody KcsjOutlineReview kcsjOutlineReviewParam) {
-        return toAjax(kcsjOutlineReviewService.updateKcsjOutlineReview(kcsjOutlineReviewParam));
+        kcsjOutlineReviewService.updateKcsjOutlineReview(kcsjOutlineReviewParam);
+        return AjaxResult.success(kcsjOutlineReviewParam.getId());
     }
 
     @PreAuthorize(hasPermi = "kcsjOutlineReview:update")

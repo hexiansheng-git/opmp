@@ -15,11 +15,11 @@ public interface IKcsjOutlineReviewService {
 
     List<KcsjOutlineReview> getKcsjOutlineReviewList(KcsjOutlineReview kcsjOutlineReview);
 
-    void insertKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview);
+    Long insertKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview);
 
     int insertKcsjOutlineReviewList(List<KcsjOutlineReview> kcsjOutlineReviewList);
 
-    int updateKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview);
+    void updateKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview);
 
     int updateKcsjOutlineReviewList(List<KcsjOutlineReview> kcsjOutlineReviewList);
 

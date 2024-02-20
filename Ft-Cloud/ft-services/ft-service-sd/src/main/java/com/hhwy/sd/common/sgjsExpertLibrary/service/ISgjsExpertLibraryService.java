@@ -22,7 +22,7 @@ public interface ISgjsExpertLibraryService {
      * 保存专家库数据集
      * @param foreignId 外键id
      * @param belongBusiness 所属功能
-     * @param saveList 成果数据集
+     * @param saveList 数据集
      */
     void saveExpertLibraryList(Long foreignId, String belongBusiness, List<SgjsExpertLibrary> saveList);
 
