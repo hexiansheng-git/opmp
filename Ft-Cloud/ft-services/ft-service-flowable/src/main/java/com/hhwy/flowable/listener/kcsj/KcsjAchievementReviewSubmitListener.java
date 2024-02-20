@@ -10,7 +10,7 @@ import org.flowable.task.service.delegate.DelegateTask;
 import org.springframework.util.Assert;
 
 /**
- * 前期策划工作小组审批流程监听器
+ * 勘察设计成果评审提交审批流程监听器
  */
 public class KcsjAchievementReviewSubmitListener implements TaskListener {
     @Override
