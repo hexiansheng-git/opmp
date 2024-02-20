@@ -7,12 +7,10 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
-import com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringControl.domain.QqchFirstArticleEngineeringControl;
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.domain.QqchQualityRiskControlMeasures;
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.domain.vo.QqchQualityRiskControlMeasuresVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.mapper.QqchQualityRiskControlMeasuresMapper;
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.service.IQqchQualityRiskControlMeasuresService;
-import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskList.domain.QqchQualityRiskList;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
@@ -128,9 +126,6 @@ public class QqchQualityRiskControlMeasuresServiceImpl implements IQqchQualityRi
         List<QqchQualityRiskControlMeasures> qqchQualityRiskControlMeasuresList = vo.getQqchQualityRiskControlMeasuresList();
         this.insertQqchQualityRiskControlMeasuresList(qqchQualityRiskControlMeasuresList, version);
 
-        if (CollectionUtils.isEmpty(qqchQualityRiskControlMeasuresList)) {
-            return;
-        }
         //处理确认状态是确认
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             //插入确认记录
@@ -138,6 +133,9 @@ public class QqchQualityRiskControlMeasuresServiceImpl implements IQqchQualityRi
             String stageIdentity = vo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
             //推送总部版知识库
+            if (CollectionUtils.isEmpty(qqchQualityRiskControlMeasuresList)) {
+                return;
+            }
             pushData(qqchQualityRiskControlMeasuresList);
         }
     }
