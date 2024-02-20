@@ -367,20 +367,20 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
 
                 // 第一阶段的菜单id
                 List<String> firstList = qqchWorkPlanDetailList.stream()
-                        .filter(i->"1".equals(i.getIsFirst()))
+                        .filter(i->"1".equals(i.getIsFirst()) && StringUtils.equals(i.getPtVar1(),"1"))
                         .map(QqchWorkPlanDetail::getItemId)
                         .filter(Objects::nonNull)
                         .distinct().collect(toList());
 
                 // 第2阶段的菜单id
                 List<String> secondList = qqchWorkPlanDetailList.stream()
-                        .filter(i->"1".equals(i.getIsSecond()))
+                        .filter(i->"1".equals(i.getIsSecond()) && StringUtils.equals(i.getPtVar1(),"1") ) 
                         .map(QqchWorkPlanDetail::getItemId)
                         .filter(Objects::nonNull).distinct().collect(toList());
 
                 // 第3阶段的菜单id
                 List<String> thirdList = qqchWorkPlanDetailList.stream()
-                        .filter(i->"1".equals(i.getIsThird()))
+                        .filter(i->"1".equals(i.getIsThird()) && StringUtils.equals(i.getPtVar1(),"1") )
                         .map(QqchWorkPlanDetail::getItemId)
                         .filter(Objects::nonNull)
                         .distinct().collect(toList());
