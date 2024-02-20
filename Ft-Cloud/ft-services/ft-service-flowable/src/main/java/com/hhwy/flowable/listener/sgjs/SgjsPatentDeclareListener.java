@@ -24,7 +24,7 @@ public class SgjsPatentDeclareListener extends BaseExecutionListener {
         Map<String, Object> variables = delegateExecution.getVariables();
         Object expertAdviceObj = variables.get("expertAdvice");
         String pass = "";
-        if(expertAdviceObj != null  && "1".equals(expertAdviceObj.toString())){
+        if(expertAdviceObj != null && "1".equals(expertAdviceObj.toString())){
             pass = "1";
         }else {
             Object passObj = variables.get("pass");
