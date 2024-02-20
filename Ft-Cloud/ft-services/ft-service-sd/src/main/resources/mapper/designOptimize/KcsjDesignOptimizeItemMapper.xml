@@ -29,6 +29,7 @@
         <result property="itemCode" column="item_code"/>
         <result property="itemName" column="item_name"/>
         <result property="unit" column="unit"/>
+        <result property="remark" column="remark"/>
         <result property="beforeOptimizeQty" column="before_optimize_qty"/>
         <result property="afterOptimizeQty" column="after_optimize_qty"/>
         <result property="estimatePrice" column="estimate_price"/>
@@ -58,6 +59,7 @@
              , `item_code`
              , `item_name`
              , `unit`
+             , `remark`
              , `before_optimize_qty`
              , `after_optimize_qty`
              , `estimate_price`
@@ -94,6 +96,7 @@
             <if test="itemCode != null  and itemCode != ''">and `item_code` = #{itemCode}</if>
             <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="beforeOptimizeQty != null ">and `before_optimize_qty` = #{beforeOptimizeQty}</if>
             <if test="afterOptimizeQty != null ">and `after_optimize_qty` = #{afterOptimizeQty}</if>
             <if test="estimatePrice != null ">and `estimate_price` = #{estimatePrice}</if>
@@ -129,6 +132,7 @@
             <if test="itemCode != null  and itemCode != ''">and `item_code` = #{itemCode}</if>
             <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="beforeOptimizeQty != null ">and `before_optimize_qty` = #{beforeOptimizeQty}</if>
             <if test="afterOptimizeQty != null ">and `after_optimize_qty` = #{afterOptimizeQty}</if>
             <if test="estimatePrice != null ">and `estimate_price` = #{estimatePrice}</if>
@@ -163,6 +167,7 @@
             <if test="itemCode != null  and itemCode != ''">`item_code`,</if>
             <if test="itemName != null  and itemName != ''">`item_name`,</if>
             <if test="unit != null  and unit != ''">`unit`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="beforeOptimizeQty != null ">`before_optimize_qty`,</if>
             <if test="afterOptimizeQty != null ">`after_optimize_qty`,</if>
             <if test="estimatePrice != null ">`estimate_price`,</if>
@@ -192,6 +197,7 @@
             <if test="itemCode != null  and itemCode != ''">#{itemCode},</if>
             <if test="itemName != null  and itemName != ''">#{itemName},</if>
             <if test="unit != null  and unit != ''">#{unit},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="beforeOptimizeQty != null ">#{beforeOptimizeQty},</if>
             <if test="afterOptimizeQty != null ">#{afterOptimizeQty},</if>
             <if test="estimatePrice != null ">#{estimatePrice},</if>
@@ -225,6 +231,7 @@
             `item_code`,
             `item_name`,
             `unit`,
+            `remark`,
             `before_optimize_qty`,
             `after_optimize_qty`,
             `estimate_price`,
@@ -255,6 +262,7 @@
                 #{item.itemCode},
                 #{item.itemName},
                 #{item.unit},
+                #{item.remark},
                 #{item.beforeOptimizeQty},
                 #{item.afterOptimizeQty},
                 #{item.estimatePrice},
@@ -289,6 +297,7 @@
             <if test="itemCode != null  and  itemCode != ''">`item_code` = #{itemCode},</if>
             <if test="itemName != null  and  itemName != ''">`item_name` = #{itemName},</if>
             <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="beforeOptimizeQty != null ">`before_optimize_qty` = #{beforeOptimizeQty},</if>
             <if test="afterOptimizeQty != null ">`after_optimize_qty` = #{afterOptimizeQty},</if>
             <if test="estimatePrice != null ">`estimate_price` = #{estimatePrice},</if>
@@ -417,6 +426,11 @@
                     when `id`=#{item.id} then #{item.unit}
                 </foreach>
             </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
             <trim prefix="before_optimize_qty  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.beforeOptimizeQty}
@@ -470,6 +484,7 @@
             <if test="itemCode != null  and itemCode != ''">and `item_code` = #{itemCode}</if>
             <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="beforeOptimizeQty != null ">and `before_optimize_qty` = #{beforeOptimizeQty}</if>
             <if test="afterOptimizeQty != null ">and `after_optimize_qty` = #{afterOptimizeQty}</if>
             <if test="estimatePrice != null ">and `estimate_price` = #{estimatePrice}</if>

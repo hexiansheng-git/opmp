@@ -50,9 +50,7 @@ public class SgjsTechnicalDataServiceImpl implements ISgjsTechnicalDataService {
         if(CollectionUtils.isNotEmpty(sgjsTechnicalDataList) && queryMap.size() > 0) {
             TreeCountUtils<SgjsTechnicalData> treeCountUtils = new TreeCountUtils<>();
             List<SgjsTechnicalData> sgjsTechnicalData1 = treeCountUtils.queryTree(sgjsTechnicalDataList, queryMap, pid);
-            if(CollectionUtils.isNotEmpty(sgjsTechnicalData1)) {
-                return TreeUtil.build(sgjsTechnicalData1, pid);
-            }
+            return TreeUtil.build(sgjsTechnicalData1, pid);
         }
         return TreeUtil.build(sgjsTechnicalDataList, pid);
     }

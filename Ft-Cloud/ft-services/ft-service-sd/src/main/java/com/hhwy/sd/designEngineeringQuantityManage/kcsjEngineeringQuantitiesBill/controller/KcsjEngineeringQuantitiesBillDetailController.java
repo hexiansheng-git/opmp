@@ -93,12 +93,13 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
     /**
      * 导出
      * @param response
-     * @param kcsjEngineeringQuantitiesBillDetailParam
+     * @param list
      * @throws IOException
      */
     @PreAuthorize(hasPermi = "kcsjEngineeringQuantitiesBillDetail:export")
     @PostMapping("/export")
-    public void export(HttpServletResponse response, @RequestBody KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetailParam) throws IOException {
+    public void export(HttpServletResponse response,
+                       @RequestBody KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetailParam) throws IOException {
         List<KcsjEngineeringQuantitiesBillDetail> data=new ArrayList<>();
         if (kcsjEngineeringQuantitiesBillDetailParam.getDelIdList().size()>0){
              data = kcsjEngineeringQuantitiesBillDetailService.getDetailList(kcsjEngineeringQuantitiesBillDetailParam);
@@ -108,6 +109,18 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
         ExcelUtils<KcsjEngineeringQuantitiesBillDetail> util = new ExcelUtils<>(KcsjEngineeringQuantitiesBillDetail.class);
         List<KcsjEngineeringQuantitiesBillDetail> collect = data.stream().distinct().collect(Collectors.toList());
         util.exportExcel(response, collect, DateUtils.getDate());
+        /*List<KcsjEngineeringQuantitiesBillDetail> treeList=new ArrayList<>();
+        treeList = ListTreeUtil.formatList(
+                list,
+                KcsjEngineeringQuantitiesBillDetail::getIsAdd,
+                KcsjEngineeringQuantitiesBillDetail::getId,
+                KcsjEngineeringQuantitiesBillDetail::setId,
+                KcsjEngineeringQuantitiesBillDetail::setPid,
+                KcsjEngineeringQuantitiesBillDetail::getChildren,
+                KcsjEngineeringQuantitiesBillDetail::setChildren);
+        ExcelUtils<KcsjEngineeringQuantitiesBillDetail> util = new ExcelUtils<>(KcsjEngineeringQuantitiesBillDetail.class);
+        util.exportExcel(response, treeList, DateUtils.getDate());*/
+
     }
 
     /**
@@ -127,7 +140,4 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
             throw new RuntimeException("导入失败！");
         }
     }
-
-
-
 }

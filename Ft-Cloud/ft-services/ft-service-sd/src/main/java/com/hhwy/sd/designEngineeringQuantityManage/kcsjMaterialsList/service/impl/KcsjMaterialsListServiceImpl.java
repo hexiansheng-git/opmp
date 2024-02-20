@@ -1,5 +1,6 @@
 package com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.service.impl;
 
+import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -83,6 +84,18 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
     @Transactional
     public int insertKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList) {
 
+        //校验 项目控制损耗定额不能大于局损耗定额
+        List<KcsjMaterialsListDetail> detailList = kcsjMaterialsList.getDetailList();
+        for (KcsjMaterialsListDetail kcsjMaterialsListDetail : detailList) {
+            BigDecimal projectLossQuota = kcsjMaterialsListDetail.getProjectLossQuota();
+            BigDecimal localLossQuota = kcsjMaterialsListDetail.getLocalLossQuota();
+            if (projectLossQuota!=null&& localLossQuota!=null){
+                int i = projectLossQuota.compareTo(localLossQuota);
+                if (i>0){
+                    throw new BaseException("项目控制损耗定额不能大于局损耗定额");
+                }
+            }
+        }
         //设置主表新增数据
         kcsjMaterialsList.setId(IdWorker.createId());
         kcsjMaterialsList.setCreateUser(SecurityUtils.getUserId().toString());

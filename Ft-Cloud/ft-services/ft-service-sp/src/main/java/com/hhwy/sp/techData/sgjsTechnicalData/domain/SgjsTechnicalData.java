@@ -58,7 +58,7 @@ public class SgjsTechnicalData extends TreeNode<SgjsTechnicalData> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "资料形成日期", dateFormat = "yyyy年MM月dd")
+    @FtExcel(name = "资料形成日期", dateFormat = "yyyy年MM月dd日")
     private Date dataAddDate;
     /**
      * 字段描述：提交单位
