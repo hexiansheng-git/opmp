@@ -61,11 +61,11 @@ public class QqchScheServiceImpl implements IQqchScheService {
     @Override
     public void save(QqchScheDTO dto) {
         // 保存说明
-        diffDescService.save(CompileEntity.dealSaveDto(dto, dto.getDiffDesc()));
+        diffDescService.save(CompileEntity.dealSaveDtoWithoutIdentity(dto, dto.getDiffDesc()));
         // 保差异化计算方法
-        diffService.saveList(CompileEntity.dealSaveDto(dto, dto.getDiffList()));
+        diffService.saveList(CompileEntity.dealSaveDtoWithoutIdentity(dto, dto.getDiffList()));
         // 保存进度分析要素
-        analyseService.saveList(CompileEntity.dealSaveDto(dto, dto.getAnalyseList()));
+        analyseService.saveList(CompileEntity.dealSaveDtoWithoutIdentity(dto, dto.getAnalyseList()));
         // 保存进度影响要素
         List<List<QqchScheFactors>> factorsVOList = dto.getScheFactorsVO() != null ? dto.getScheFactorsVO().getFactorsVOList() : new ArrayList<>();
 
@@ -82,9 +82,9 @@ public class QqchScheServiceImpl implements IQqchScheService {
                 rowNum++;
             }
 
-            factorsService.saveList(CompileEntity.dealSaveDto(dto,iFactorList));
+            factorsService.saveList(CompileEntity.dealSaveDtoWithoutIdentity(dto,iFactorList));
         } else {
-            factorsService.saveList(CompileEntity.dealSaveDto(dto,iFactorList));
+            factorsService.saveList(CompileEntity.dealSaveDtoWithoutIdentity(dto,iFactorList));
         }
         // 保存纠偏措施
         corrService.saveList(CompileEntity.dealSaveDto(dto,dto.getCorrList()));

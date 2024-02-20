@@ -84,7 +84,7 @@ public class WzchImportExportPlanDetailController extends BaseController {
         try {
             Long id = wzchImportExportPlanDetailService.save(wzchImportExportPlan);
             return new AjaxResult(200, "保存成功",id);
-        }catch (BaseException b){
+        }catch (RuntimeException b){
             b.printStackTrace();
             throw new BaseException("保存失败");
         }catch (Exception e){
