@@ -133,11 +133,11 @@ public class WbsPushP6 {
                 String username = dictDataList.get(0).getDictValue();
                 List<SysUser> userList = systemServiceApi.selectUserInfoByUserNameAndTenant(ObjectUtils.toMap(
                         "userNames",username,
-                        "tenantKey",SecurityUtils.getTenantKey()));
+                        "tenantKey",projectCode));
                 if(CollectionUtils.isEmpty(userList)){
-                    log.warn("未在租户{}下找到p6预警的用户{}信息",SecurityUtils.getTenantKey(),username);
+                    log.warn("未在租户{}下找到p6预警的用户{}信息",projectCode,username);
                 }else{
-                    warnService.addWarn(WarnItem.WBS_P6_WARN,WarnItem.WBS_P6_WARN.getWarnRule(), WarnScopeType.USER, "",userList.get(0).getUserId()+"",SecurityUtils.getTenantKey());
+                    warnService.addWarn(WarnItem.WBS_P6_WARN,WarnItem.WBS_P6_WARN.getWarnRule(), WarnScopeType.USER, "",userList.get(0).getUserId()+"",projectCode);
                 }
             }
         }finally {
