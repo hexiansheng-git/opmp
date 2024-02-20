@@ -118,7 +118,8 @@
             <if test="listName != null  and listName != ''">and `list_name` like concat('%',#{listName},'%')</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="fileName != null  and fileName != ''">and `file_name` like concat('%',#{fileName},'%')</if>
-            <if test="submitDateStr != null and submitDateStr !='' ">and `submission_date` &gt;= #{submitDateBegin} and `submission_date` &lt;=
+            <if test="submitDateStr != null and submitDateStr !='' ">and `submission_date` &gt;= #{submitDateBegin} and
+                `submission_date` &lt;=
                 #{submitDateEnd}
             </if>
             <if test="submissionPerson != null  and submissionPerson != ''">and `submission_person` =
@@ -538,14 +539,8 @@
         UPDATE `kcsj_materials_list`
         SET valid = "1"
         WHERE
-        list_name in
-        <foreach item="listName" collection="list" open="(" separator="," close=")">
-            #{listName}
-        </foreach>
-        and del_flag="0" and create_time = (select create_time from (SELECT MAX(create_time) create_time FROM
-        kcsj_materials_list where del_flag="0" and  list_name in
-        <foreach item="listName" collection="list" open="(" separator="," close=")">
-            #{listName}
-        </foreach>  ) temp);
+        del_flag="0" and create_time in (select create_time from (SELECT MAX(create_time) create_time FROM
+        kcsj_materials_list where del_flag="0"
+        group by list_name ) temp);
     </update>
 </mapper>
