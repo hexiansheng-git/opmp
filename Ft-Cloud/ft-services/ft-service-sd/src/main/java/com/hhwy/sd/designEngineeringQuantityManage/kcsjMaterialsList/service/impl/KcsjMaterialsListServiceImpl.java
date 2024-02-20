@@ -128,7 +128,6 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
             if (!Objects.isNull(oldMaterial)) {
                 //获取上一个版本的主表数据明细
                 List<KcsjMaterialsListDetail> details = detailMapper.getKcsjMaterialsListDetailListByMainId(oldMaterial.getId());
-
                 if (details.size() > 0) {
                     details.stream().forEach(temp -> {
                         map.put(temp.getMaterialName(), temp.getDesignQuantity());
@@ -145,11 +144,10 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
                 if (designQuantity!=null){
                     kcsjMaterialsListDetail.setQuantityDifference(designQuantity.subtract(oldDemands));
                 }
-
             }
             kcsjMaterialsList.setDetailList(detailList);
+            //插入子表数据
             detailService.insertKcsjMaterialsListDetailList(detailList);
-
         }
     }
 
@@ -198,7 +196,6 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
     public int deleteKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList) {
         kcsjMaterialsList.setUpdateUser(SecurityUtils.getUserName());
         kcsjMaterialsList.setUpdateTime(DateUtils.getNowDate());
-
         return kcsjMaterialsListMapper.deleteKcsjMaterialsList(kcsjMaterialsList);
     }
 
