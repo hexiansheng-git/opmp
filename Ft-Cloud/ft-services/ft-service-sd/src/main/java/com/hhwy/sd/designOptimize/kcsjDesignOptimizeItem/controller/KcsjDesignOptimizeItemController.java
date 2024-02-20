@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.tree.ListTreeUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +22,7 @@ import com.hhwy.sd.designOptimize.kcsjDesignOptimizeItem.domain.KcsjDesignOptimi
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author cjh
@@ -92,7 +96,17 @@ public class KcsjDesignOptimizeItemController extends BaseController {
     @GetMapping("/export")
     public void export(HttpServletResponse response, KcsjDesignOptimizeItem kcsjDesignOptimizeItemParam) throws IOException {
         List<KcsjDesignOptimizeItem> kcsjDesignOptimizeItemList = kcsjDesignOptimizeItemService.getKcsjDesignOptimizeItemList(kcsjDesignOptimizeItemParam);
-        ExcelUtils<KcsjDesignOptimizeItem> util = new ExcelUtils<>(KcsjDesignOptimizeItem.class);
-        util.exportExcel(response, kcsjDesignOptimizeItemList, DateUtils.getDate());
+        FtExcelUtil<KcsjDesignOptimizeItem> util = new FtExcelUtil<>(KcsjDesignOptimizeItem.class);
+        util.exportExcel(response, kcsjDesignOptimizeItemList, "sheet1");
+    }
+
+    @PostMapping("/import")
+    public AjaxResult importData(@RequestParam("optimizeId") Long optimizeId,@RequestPart("file") MultipartFile file) throws Exception {
+        FtExcelUtil<KcsjDesignOptimizeItem> excelUtil = new FtExcelUtil<>(KcsjDesignOptimizeItem.class);
+        List<KcsjDesignOptimizeItem> list = excelUtil.importExcel("sheet1", file.getInputStream());
+        if(CollectionUtils.isNotEmpty(list)) {
+            kcsjDesignOptimizeItemService.updateKcsjDesignOptimizeItemList(optimizeId, list);
+        }
+        return AjaxResult.success(list);
     }
 }

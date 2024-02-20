@@ -6,6 +6,9 @@ import java.util.List;
 import java.io.IOException;
 
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.domain.base.system.currency.CurrencyInfo;
+import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.utils.AjaxResultUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +40,8 @@ public class KcsjDesignOptimizeController extends BaseController {
     @Autowired
     private IKcsjDesignOptimizeService kcsjDesignOptimizeService;
 
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
     @PreAuthorize(hasPermi = "kcsjDesignOptimize:list")
     @GetMapping
@@ -107,6 +112,18 @@ public class KcsjDesignOptimizeController extends BaseController {
             kcsjDesignOptimizeList = kcsjDesignOptimizeService.getKcsjDesignOptimizeList4Ids(ids4L);
         } else {
             kcsjDesignOptimizeList = kcsjDesignOptimizeService.getKcsjDesignOptimizeList(kcsjDesignOptimizeParam);
+        }
+        if(CollectionUtils.isNotEmpty(kcsjDesignOptimizeList)) {
+            List<CurrencyInfo> currencyInfoList = AjaxResultUtil.getDataList(systemServiceApi.selectCurrencyList(new CurrencyInfo()), CurrencyInfo.class);
+
+            for (KcsjDesignOptimize kcsjDesignOptimize: kcsjDesignOptimizeList) {
+                String currencyCode = kcsjDesignOptimize.getCurrencyCode();
+//                String currencyName = kcsjDesignOptimize.getCurrencyName();
+                if (CollectionUtils.isNotEmpty(currencyInfoList)) {
+                    CurrencyInfo currencyInfo = currencyInfoList.stream().filter(vo -> StringUtils.isNotEmpty(currencyCode) && currencyCode.equals(vo.getCurrencyCode())).findFirst().orElse(null);
+                    if(currencyInfo != null)kcsjDesignOptimize.setCurrencyName(currencyInfo.getCurrencyName());
+                }
+            }
         }
 
         FtExcelUtil<KcsjDesignOptimize> util = new FtExcelUtil<>(KcsjDesignOptimize.class);
