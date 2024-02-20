@@ -10,19 +10,19 @@ import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.task.service.delegate.DelegateTask;
 
 /**
- * 功能：科技管理 - 科研课题立项  知会消息发布
+ * 功能：科技管理 - 科研课题申请 流程状态修改
  * 作者: fushudong
  * 时间: 2024/02/01
  */
-public class SgsjTechnicalScienceTopicMessageListener implements TaskListener, ExecutionListener {
+public class SgsjTechnicalScienceTopicApplyListener implements TaskListener, ExecutionListener {
     @Override
     public void notify(DelegateTask delegateTask) {
         RuntimeService runtimeService = SpringUtils.getBean(RuntimeService.class);
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(delegateTask.getProcessInstanceId()).singleResult();
         String businessKey = processInstance.getBusinessKey();
         SpServiceApi bean = SpringUtils.getBean(SpServiceApi.class);
-        System.out.println("科技管理 - 科研课题立项  知会消息发布");
-        bean.messagePublic();
+        System.out.println("科技管理 - 科研课题立项 流程状态修改");
+        bean.appplyListener(Long.valueOf(businessKey));
     }
 
     @Override
@@ -31,7 +31,7 @@ public class SgsjTechnicalScienceTopicMessageListener implements TaskListener, E
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(delegateExecution.getProcessInstanceId()).singleResult();
         String businessKey = processInstance.getBusinessKey();
         SpServiceApi bean = SpringUtils.getBean(SpServiceApi.class);
-        System.out.println("科技管理 - 科研课题立项  知会消息发布");
-        bean.messagePublic();
+        System.out.println("科技管理 - 科研课题立项 流程状态修改");
+        bean.appplyListener(Long.valueOf(businessKey));
     }
 }

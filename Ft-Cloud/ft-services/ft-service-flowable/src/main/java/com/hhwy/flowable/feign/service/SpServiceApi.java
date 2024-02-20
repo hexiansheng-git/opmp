@@ -47,10 +47,16 @@ public interface SpServiceApi {
 
     @PostMapping("/sgjsPaperPublish/submit")
     AjaxResult submitPaperPublishProcess(@RequestParam("id") Long id);
+
+    /**
+     * 科技管理 - 科研课题管理 申请流程状态修改
+     */
+    @RequestMapping(value = "/sgsjTechnicalScienceTopic/appplyListener")
+    void appplyListener(@RequestParam("id") Long id);
     /**
      * 科技管理 - 科研课题管理 立项流程状态修改
      */
-    @RequestMapping(value = "/sgsjTechnicalScienceTopic/listener")
+    @RequestMapping(value = "/sgsjTechnicalScienceTopic/lxListener")
     void updateTaskStatus(@RequestParam("id") Long id);
 
     /**
