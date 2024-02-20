@@ -102,7 +102,9 @@ public enum FlowEnum {
 
         /*********************勘察设计管理****************************/
         //勘察设计大纲评审
-        KCSJ_PATENT_DECLARE("kcsj_outline_review","process_kcsj_outline_review");
+        KCSJ_PATENT_DECLARE("kcsj_outline_review","process_kcsj_outline_review"),
+        /*勘察设计成果评审*/
+        KCSJ_ACHIEVEMENT_REVIEW("kcsj_achievement_review","process_kcsj_achievement_review");
 
         public String getTableName() {
             return this.tableName;

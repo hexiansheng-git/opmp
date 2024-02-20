@@ -5,8 +5,10 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.enums.FlowEnum;
 import com.hhwy.sd.achievementReview.domain.KcsjAchievementReview;
 import com.hhwy.sd.achievementReview.service.IKcsjAchievementReviewService;
+import com.hhwy.sd.common.FlowInfoSearchUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -48,6 +50,7 @@ public class KcsjAchievementReviewController extends BaseController {
     public AjaxResult getKcsjAchievementReviewList(@Validated(ValidationGroups.Select.class) KcsjAchievementReview kcsjAchievementReviewParam) {
         startPage();
         List<KcsjAchievementReview> kcsjAchievementReviewList = kcsjAchievementReviewService.getKcsjAchievementReviewList(kcsjAchievementReviewParam);
+        FlowInfoSearchUtil.getFlowInfo(kcsjAchievementReviewList, FlowEnum.KCSJ_ACHIEVEMENT_REVIEW);
         return getDataTableAjaxResult(kcsjAchievementReviewList);
     }
 
@@ -59,6 +62,7 @@ public class KcsjAchievementReviewController extends BaseController {
     @GetMapping("getById")
     public AjaxResult getKcsjAchievementReviewById(Long id){
         KcsjAchievementReview kcsjAchievementReview = kcsjAchievementReviewService.getKcsjAchievementReviewById(id);
+        FlowInfoSearchUtil.getFlowInfo(kcsjAchievementReview, FlowEnum.KCSJ_ACHIEVEMENT_REVIEW);
         return AjaxResult.success(kcsjAchievementReview);
     }
 

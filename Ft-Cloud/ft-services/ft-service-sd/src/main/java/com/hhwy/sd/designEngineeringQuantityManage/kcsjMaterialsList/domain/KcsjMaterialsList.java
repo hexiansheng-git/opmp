@@ -211,6 +211,7 @@ public class KcsjMaterialsList extends BaseEntity {
 
 
     //清单明细
+    @Valid
     private List<KcsjMaterialsListDetail> detailList;
     //提交日期搜索字符串
     private String submitDateStr;

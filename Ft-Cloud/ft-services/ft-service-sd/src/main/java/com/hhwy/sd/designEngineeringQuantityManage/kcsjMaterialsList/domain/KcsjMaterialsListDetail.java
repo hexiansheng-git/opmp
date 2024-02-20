@@ -9,7 +9,6 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -19,7 +18,7 @@ import java.util.Date;
  * @date 2024-02-18 15:18:27
  * @remark 勘察设计-设计工程量管理-主材清单明细
  */
-@Valid
+
 public class KcsjMaterialsListDetail extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
