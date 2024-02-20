@@ -519,7 +519,7 @@
     </update>
 
     <update id="deleteKcsjMaterialsListByPks">
-        update `kcsj_materials_list` set del_flag = 1
+        update `kcsj_materials_list` set del_flag = 1,del_user=#{delUser},del_time=now()
         <where>
             `id` in
             <foreach item="id" collection="kcsjMaterialsListPkList" open="(" separator="," close=")">

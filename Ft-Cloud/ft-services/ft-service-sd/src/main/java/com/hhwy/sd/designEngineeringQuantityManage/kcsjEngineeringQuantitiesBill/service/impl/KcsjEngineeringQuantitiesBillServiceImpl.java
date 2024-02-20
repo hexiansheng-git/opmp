@@ -54,6 +54,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         KcsjEngineeringQuantitiesBillDetail detail = new KcsjEngineeringQuantitiesBillDetail();
         detail.setMainId(id);
         List<KcsjEngineeringQuantitiesBillDetail> detailList = kcsjEngineeringQuantitiesBillDetailMapper.getKcsjEngineeringQuantitiesBillDetailList(detail);
+        //把数据打散成普通集合，去掉子父级关系
         List<KcsjEngineeringQuantitiesBillDetail> treeList = ListTreeUtil.formatTree(
                 detailList,
                 o -> o.getPid() == null,
@@ -94,10 +95,8 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
             KcsjEngineeringQuantitiesBill bill = new KcsjEngineeringQuantitiesBill();
             bill.setListLocation(kcsjEngineeringQuantitiesBill.getListLocation());
             bill.setValid("0");
-            //bill.setId(kcsjEngineeringQuantitiesBill.getId());
             kcsjEngineeringQuantitiesBillMapper.updateValid(bill);
         }
-
         //新增主表数据
         kcsjEngineeringQuantitiesBill.setId(IdWorker.createId());
         kcsjEngineeringQuantitiesBill.setCreateUser(SecurityUtils.getUserId().toString());
@@ -106,7 +105,6 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         kcsjEngineeringQuantitiesBill.setValid("1");
         kcsjEngineeringQuantitiesBill.setDelFlag("0");
         kcsjEngineeringQuantitiesBillMapper.insertKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
-
         List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
         if (!CollectionUtils.isEmpty(detailsList)) {
             //子表数据处理
@@ -123,8 +121,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
     }
 
     private void handleInsertList(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill, Long mainId) {
-        //处理子表数据 获取上一个版本的数据信息  处理V3.0字符串，获取V2.0版本信息  先查主表再查子表
-
+        //处理子表数据 获取上一个版本的数据信息  例如：处理V3.0字符串，获取V2.0版本信息  先查主表再查子表
         //获取当前主表数据版本
         String version = kcsjEngineeringQuantitiesBill.getVersion();
         int indexStart = version.lastIndexOf("V");
@@ -152,7 +149,6 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         }
         //新增数据子表数据
         List<KcsjEngineeringQuantitiesBillDetail> detailsListNew = kcsjEngineeringQuantitiesBill.getDetailsList();
-
         List<KcsjEngineeringQuantitiesBillDetail> details = new ArrayList<>();
         //遍历子表，去map中获取上一个版本的数据，设置给子表的上一个版本工程量字段
         for (KcsjEngineeringQuantitiesBillDetail temp : detailsListNew) {

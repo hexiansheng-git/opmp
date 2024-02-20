@@ -98,7 +98,7 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
 
     @Transactional
     public void deleteByIds(List<Long> delIdList) {
-        List<KcsjEngineeringQuantitiesBillDetail> list = new ArrayList<>();
+        List<Long> list = new ArrayList<>();
         //获取所有父子级数据
         List<KcsjEngineeringQuantitiesBillDetail> ids = getIds(delIdList);
         for (int i = 0; i < ids.size(); i++) {
@@ -107,11 +107,11 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
             detail.setUpdateUser(SecurityUtils.getUserId() + "");
             detail.setUpdateTime(DateUtils.getNowDate());
             detail.setDelFlag("1");
-            list.add(detail);
+            list.add(detail.getId());
         }
         //删除
         if (!CollectionUtils.isEmpty(list)) {
-            kcsjEngineeringQuantitiesBillDetailMapper.deleteInfoData(list);
+            kcsjEngineeringQuantitiesBillDetailMapper.deleteInfoData(list,SecurityUtils.getUserId().toString());
         }
 
     }

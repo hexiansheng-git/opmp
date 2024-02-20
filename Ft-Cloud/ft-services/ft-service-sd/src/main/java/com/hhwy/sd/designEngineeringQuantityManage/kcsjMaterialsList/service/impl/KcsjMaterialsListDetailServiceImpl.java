@@ -48,6 +48,7 @@ public class KcsjMaterialsListDetailServiceImpl implements IKcsjMaterialsListDet
      */
     @Transactional
     public int insertKcsjMaterialsListDetailList(List<KcsjMaterialsListDetail> kcsjMaterialsListDetailList) {
+        //设置公共字段
         for (KcsjMaterialsListDetail kcsjMaterialsListDetail : kcsjMaterialsListDetailList) {
             kcsjMaterialsListDetail.setId(IdWorker.createId());
             kcsjMaterialsListDetail.setCreateUser(SecurityUtils.getUserId().toString());

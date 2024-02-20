@@ -14,6 +14,8 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
 import com.hhwy.pm.qqch.wzch.importplan.domain.WzchImportExportPlan;
 import com.hhwy.pm.qqch.wzch.importplan.domain.WzchImportExportPlanDetail;
@@ -28,6 +30,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,6 +60,8 @@ public class WzchImportExportPlanDetailServiceImpl implements IWzchImportExportP
     private SystemApiService dictTypeService;
     @Resource
     private WzchCommonService wzchCommonService;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     /**
      * 查询进出口策划详情
@@ -199,6 +204,13 @@ public class WzchImportExportPlanDetailServiceImpl implements IWzchImportExportP
             wzchImportExportPlanDetailList.get(i).setPlanId(wzchImportExportPlan.getId());
         }
         wzchImportExportPlanDetailMapper.batchInsert(wzchImportExportPlanDetailList);
+        //处理确认状态是确认
+        if(ButtonMark.CONFIRM.equals(wzchImportExportPlan.getButtonMark())){
+            //插入确认记录
+            String menuId = wzchImportExportPlan.getMenuId();
+            String stageIdentity = wzchImportExportPlan.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
         return wzchImportExportPlan.getId();
     }
 

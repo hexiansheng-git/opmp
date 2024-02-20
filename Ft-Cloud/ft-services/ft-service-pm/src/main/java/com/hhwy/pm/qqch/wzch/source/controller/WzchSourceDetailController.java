@@ -98,9 +98,9 @@ public class WzchSourceDetailController extends BaseController {
         try{
             Long id = wzchSourceDetailService.save(wzchSource);
             return new AjaxResult(200,"保存成功",id);
-        }catch (BaseException b){
+        }catch (RuntimeException b){
             b.printStackTrace();
-            throw new BaseException(b.getDefaultMessage());
+            throw new BaseException(b.getMessage());
         }catch (Exception e){
             e.printStackTrace();
             throw new BaseException("保存异常");

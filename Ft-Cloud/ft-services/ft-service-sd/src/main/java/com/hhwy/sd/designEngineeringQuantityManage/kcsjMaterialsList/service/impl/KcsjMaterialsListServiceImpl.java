@@ -128,7 +128,6 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
             if (!Objects.isNull(oldMaterial)) {
                 //获取上一个版本的主表数据明细
                 List<KcsjMaterialsListDetail> details = detailMapper.getKcsjMaterialsListDetailListByMainId(oldMaterial.getId());
-
                 if (details.size() > 0) {
                     details.stream().forEach(temp -> {
                         map.put(temp.getMaterialName(), temp.getDesignQuantity());
@@ -141,11 +140,14 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
                 BigDecimal oldDemands = map.get(kcsjMaterialsListDetail.getMaterialName());
                 oldDemands = oldDemands == null ? BigDecimal.ZERO : oldDemands;
                 kcsjMaterialsListDetail.setPreviousQuantity(oldDemands);
-                kcsjMaterialsListDetail.setQuantityDifference(kcsjMaterialsListDetail.getDesignQuantity().subtract(oldDemands));
+                BigDecimal designQuantity = kcsjMaterialsListDetail.getDesignQuantity();
+                if (designQuantity!=null){
+                    kcsjMaterialsListDetail.setQuantityDifference(designQuantity.subtract(oldDemands));
+                }
             }
             kcsjMaterialsList.setDetailList(detailList);
+            //插入子表数据
             detailService.insertKcsjMaterialsListDetailList(detailList);
-
         }
     }
 
@@ -194,7 +196,6 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
     public int deleteKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList) {
         kcsjMaterialsList.setUpdateUser(SecurityUtils.getUserName());
         kcsjMaterialsList.setUpdateTime(DateUtils.getNowDate());
-
         return kcsjMaterialsListMapper.deleteKcsjMaterialsList(kcsjMaterialsList);
     }
 
@@ -211,7 +212,7 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
         List<KcsjMaterialsList> list = kcsjMaterialsListMapper.getKcsjMaterialsListList(kcsjMaterialsList);
         List<String> listName = list.stream().map(e -> e.getListName()).collect(Collectors.toList());
         //删除主表数据
-        kcsjMaterialsListMapper.deleteKcsjMaterialsListByPks(ids);
+        kcsjMaterialsListMapper.deleteKcsjMaterialsListByPks(ids,SecurityUtils.getUserId().toString());
         //让其它版本的最新版变为有效
         kcsjMaterialsListMapper.updateNewVersion(listName);
         //删除子表数据

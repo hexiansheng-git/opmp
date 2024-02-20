@@ -10,6 +10,8 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
@@ -36,6 +38,7 @@ import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hhwy.common.core.text.Convert;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +73,8 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
     private IWzchSourceDetailService wzchSourceDetailService;
     @Resource
     private WzchInternalAdjustDetailMapper wzchInternalAdjustDetailMapper;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
 
     private final static String ONE = "1";
@@ -470,6 +475,14 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
         }
         // 新增详情
         this.detailService.insertOrUpdateBatch(detailList, dto.getId());
+
+        //处理确认状态是确认
+        if(ButtonMark.CONFIRM.equals(dto.getButtonMark())){
+            //插入确认记录
+            String menuId = dto.getMenuId();
+            String stageIdentity = dto.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
         // 返回主键
         return dto.getId();
     }

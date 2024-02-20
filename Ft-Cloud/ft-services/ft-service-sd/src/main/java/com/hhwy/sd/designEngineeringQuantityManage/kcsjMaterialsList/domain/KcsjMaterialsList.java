@@ -7,7 +7,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +19,7 @@ import java.util.List;
  * @date 2024-02-18 14:39:34
  * @remark 勘察设计-设计工程量管理-主材清单
  */
+@Valid
 public class KcsjMaterialsList extends BaseEntity {
     private static final long serialVersionUID = 1L;
     //删除Id的集合
@@ -38,6 +42,7 @@ public class KcsjMaterialsList extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "清单名称")
+    @NotBlank(message = "请填写清单名称",groups ={ValidationGroups.Save.class})
     private String listName;
     /**
      * 字段描述：清单附件

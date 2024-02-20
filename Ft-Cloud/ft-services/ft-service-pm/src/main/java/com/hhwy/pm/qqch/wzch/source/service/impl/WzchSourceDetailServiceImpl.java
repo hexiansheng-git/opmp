@@ -324,7 +324,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
 
     }
 
-    private void  fillWzchSource(WzchSource wzchSource) {
+    private void fillWzchSource(WzchSource wzchSource) {
         if(StringUtils.isBlank(wzchSource.getSourceCode())){
             String code = genCodeService.getSetCode(CodeEnum.EQU_SOURCE);
             code += genCodeService.fillString(1, 2);
