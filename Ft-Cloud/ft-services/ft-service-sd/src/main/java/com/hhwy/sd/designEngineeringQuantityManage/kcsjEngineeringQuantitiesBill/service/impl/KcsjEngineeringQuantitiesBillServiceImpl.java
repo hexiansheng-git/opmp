@@ -54,7 +54,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         KcsjEngineeringQuantitiesBillDetail detail = new KcsjEngineeringQuantitiesBillDetail();
         detail.setMainId(id);
         List<KcsjEngineeringQuantitiesBillDetail> detailList = kcsjEngineeringQuantitiesBillDetailMapper.getKcsjEngineeringQuantitiesBillDetailList(detail);
-        //把数据打散成普通集合，去掉子父级关系
+        //把数据构建成树形
         List<KcsjEngineeringQuantitiesBillDetail> treeList = ListTreeUtil.formatTree(
                 detailList,
                 o -> o.getPid() == null,
