@@ -215,7 +215,8 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                 // 如果已经有实际开始时间，则取实际开始时间，否则取尚需最早开始;
                 Date start_date = jdglMainPlanItem1.getActualStartDate() != null
                         ? jdglMainPlanItem1.getActualStartDate() : jdglMainPlanItem1.getRemainingEarlyStartDate();
-                jdglMainPlanItem1.setStart_date(start_date);
+                jdglMainPlanItem1.setStart_date(null == start_date ?
+                        DateUtils.parseDate("0000-00-00") : start_date);
 
                 // 如果已经有实际完成时间，则取实际完成时间，否则取尚需最早完成;
                 Date end_date = jdglMainPlanItem1.getActualFinishDate() != null
