@@ -64,14 +64,14 @@ public class KcsjAchievement extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "计划提交日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "计划提交日期", dateFormat = "yyyy年MM月dd日")
     private Date planSubmitDate;
     /**
      * 字段描述：实际提交日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "实际提交日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "实际提交日期", dateFormat = "yyyy年MM月dd日")
     private Date actualSubmitDate;
     /**
      * 字段描述：形式审查
@@ -84,14 +84,14 @@ public class KcsjAchievement extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "计划评审日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "计划评审日期", dateFormat = "yyyy年MM月dd日")
     private Date planReviewDate;
     /**
      * 字段描述：实际评审日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "实际评审日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "实际评审日期", dateFormat = "yyyy年MM月dd日")
     private Date actualReviewDate;
     /**
      * 字段描述：负责人

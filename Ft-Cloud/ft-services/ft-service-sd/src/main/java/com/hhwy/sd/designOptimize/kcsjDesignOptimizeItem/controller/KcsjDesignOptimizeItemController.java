@@ -23,7 +23,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 /**
  * @author cjh
  * @date 2024-02-04 13:31:49
- * @remark
+ * @remark 设计优化管理
  */
 @Validated
 @RestController
