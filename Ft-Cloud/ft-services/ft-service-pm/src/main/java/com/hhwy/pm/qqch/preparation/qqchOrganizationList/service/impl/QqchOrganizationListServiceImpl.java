@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.preparation.qqchOrganizationList.mapper.QqchOrganization
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.service.IQqchOrganizationListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -64,12 +65,12 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
 
     /**
      * 获取变更程序策划
-     * @param version
+     * @param sourceVersion
      * @return
      */
-    public QqchOrganizationListVo getQqchOrganizationListVo(BigDecimal version) {
-        version = VersionUtil.getVersion("qqch_organization_list", version);
-        version = version == null ? new BigDecimal("1.0") : version;
+    public QqchOrganizationListVo getQqchOrganizationListVo(BigDecimal sourceVersion) {
+        BigDecimal version = VersionUtil.getVersion("qqch_organization_list", sourceVersion);
+        version = version == null ? new BigDecimal("1.0") : ObjectUtils.nvlBigDecimal(sourceVersion,version);
         QqchOrganizationList qqchOrganizationList = new QqchOrganizationList();
         qqchOrganizationList.setVersion(version);
         List<QqchOrganizationList> qqchOrganizationListList = qqchOrganizationListMapper.getQqchOrganizationListList(qqchOrganizationList);
