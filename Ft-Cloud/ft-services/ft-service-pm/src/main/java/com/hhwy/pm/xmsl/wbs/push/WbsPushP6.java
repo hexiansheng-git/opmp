@@ -203,7 +203,6 @@ public class WbsPushP6 {
         }catch(Exception e){
             e.printStackTrace();
             log.error("wbs推送新增p6失败，mainID:{},消息:{}",mainId,e.getMessage());
-            throw e;
         }finally {
             long usemills = System.currentTimeMillis()-begin;
             log.debug("wbs推送新增p6，mainID:{},耗时:{}毫秒",mainId,usemills);
@@ -271,7 +270,6 @@ public class WbsPushP6 {
         }catch(Exception e){
             e.printStackTrace();
             log.error("wbs推送删除p6失败，mainID:{},消息:{}",mainId,e.getMessage());
-            throw e;
         }finally {
             long usemills = System.currentTimeMillis()-begin;
             log.debug("wbs推送删除p6，mainID:{},耗时:{}毫秒",mainId,usemills);
