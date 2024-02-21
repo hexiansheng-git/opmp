@@ -89,19 +89,19 @@ public class SgjsTechMethod extends CommonBaseEntity {
      * 字段描述：知识产权
      */
     @JsonProperty
-    @FtExcel(name = "知识产权")
+    @FtExcel(name = "知识产权", dictType = "common_yes")
     private String intellectualProperty;
     /**
      * 字段描述：应用证明
      */
     @JsonProperty
-    @FtExcel(name = "应用证明")
+    @FtExcel(name = "应用证明", dictType = "common_yes")
     private String applicationProof;
     /**
      * 字段描述：效益分析
      */
     @JsonProperty
-    @FtExcel(name = "效益分析")
+    @FtExcel(name = "效益分析", dictType = "common_yes")
     private String benefitAnalysis;
     /**
      * 字段描述：等级
