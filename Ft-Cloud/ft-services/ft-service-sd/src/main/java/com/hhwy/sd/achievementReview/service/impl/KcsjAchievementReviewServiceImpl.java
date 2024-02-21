@@ -113,7 +113,7 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
 
         review.setTaskStatus(null);
         Long id;
-        if("1".equals(saveType)){
+        if("1".equals(saveType) && review.getId() == null){
             //新增
             id = IdWorker.createId();
             review.setId(id);

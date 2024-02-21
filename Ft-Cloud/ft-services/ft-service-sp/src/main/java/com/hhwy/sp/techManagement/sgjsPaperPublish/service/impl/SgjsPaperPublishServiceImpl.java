@@ -123,7 +123,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
 //        }
 
         Long id;
-        if("1".equals(saveType)){
+        if("1".equals(saveType) && paperPublish.getId() == null){
             //新增
             id = IdWorker.createId();
             paperPublish.setId(id);
