@@ -159,6 +159,7 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
 
         for (KcsjAchievement achievement : achievementList) {
             achievement.setForeignId(id);
+            achievement.setAchievementStatus(null);
         }
         kcsjAchievementMapper.updateKcsjAchievementList(achievementList);
     }
