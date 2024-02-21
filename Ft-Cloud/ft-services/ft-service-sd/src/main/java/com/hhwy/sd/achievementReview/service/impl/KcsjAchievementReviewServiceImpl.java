@@ -111,6 +111,7 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
         List<KcsjAchievement> achievementList = review.getAchievementList();
         this.setData(achievementList,review);
 
+        review.setTaskStatus(null);
         Long id;
         if("1".equals(saveType)){
             //新增
