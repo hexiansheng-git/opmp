@@ -119,6 +119,7 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
         }else if("2".equals(saveType)){
             //修改
             id = review.getId();
+            review.setTaskStatus(null);
             this.updateKcsjAchievementReview(review);
         }else {
             throw new RuntimeException("保存类型错误");
