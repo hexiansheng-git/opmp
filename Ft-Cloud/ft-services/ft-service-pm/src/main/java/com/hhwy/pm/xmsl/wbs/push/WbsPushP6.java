@@ -133,11 +133,11 @@ public class WbsPushP6 {
                 String username = dictDataList.get(0).getDictValue();
                 List<SysUser> userList = systemServiceApi.selectUserInfoByUserNameAndTenant(ObjectUtils.toMap(
                         "userNames",username,
-                        "tenantKey",SecurityUtils.getTenantKey()));
+                        "tenantKey",projectCode));
                 if(CollectionUtils.isEmpty(userList)){
-                    log.warn("未在租户{}下找到p6预警的用户{}信息",SecurityUtils.getTenantKey(),username);
+                    log.warn("未在租户{}下找到p6预警的用户{}信息",projectCode,username);
                 }else{
-                    warnService.addWarn(WarnItem.WBS_P6_WARN,WarnItem.WBS_P6_WARN.getWarnRule(), WarnScopeType.USER, "",userList.get(0).getUserId()+"",SecurityUtils.getTenantKey());
+                    warnService.addWarn(WarnItem.WBS_P6_WARN,WarnItem.WBS_P6_WARN.getWarnRule(), WarnScopeType.USER, "",userList.get(0).getUserId()+"",projectCode);
                 }
             }
         }finally {
@@ -203,7 +203,6 @@ public class WbsPushP6 {
         }catch(Exception e){
             e.printStackTrace();
             log.error("wbs推送新增p6失败，mainID:{},消息:{}",mainId,e.getMessage());
-            throw e;
         }finally {
             long usemills = System.currentTimeMillis()-begin;
             log.debug("wbs推送新增p6，mainID:{},耗时:{}毫秒",mainId,usemills);
@@ -271,7 +270,6 @@ public class WbsPushP6 {
         }catch(Exception e){
             e.printStackTrace();
             log.error("wbs推送删除p6失败，mainID:{},消息:{}",mainId,e.getMessage());
-            throw e;
         }finally {
             long usemills = System.currentTimeMillis()-begin;
             log.debug("wbs推送删除p6，mainID:{},耗时:{}毫秒",mainId,usemills);

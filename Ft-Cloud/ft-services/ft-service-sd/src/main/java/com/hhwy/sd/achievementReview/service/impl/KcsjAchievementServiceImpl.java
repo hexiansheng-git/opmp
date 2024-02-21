@@ -2,6 +2,7 @@ package com.hhwy.sd.achievementReview.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sd.achievementReview.constant.AchievementReviewStatus;
 import com.hhwy.sd.achievementReview.domain.KcsjAchievement;
 import com.hhwy.sd.achievementReview.domain.vo.AchievementQueryVo;
 import com.hhwy.sd.achievementReview.domain.vo.AchievementVo;
@@ -9,6 +10,7 @@ import com.hhwy.sd.achievementReview.mapper.KcsjAchievementMapper;
 import com.hhwy.sd.achievementReview.service.IKcsjAchievementService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,6 +101,9 @@ public class KcsjAchievementServiceImpl implements IKcsjAchievementService {
         List<KcsjAchievement> updateList = new ArrayList<>();
 
         for (KcsjAchievement achievement : achievementList) {
+            if(StringUtils.isBlank(achievement.getAchievementStatus())){
+                achievement.setAchievementStatus(AchievementReviewStatus.NOT_REVIEWED);
+            }
             if("1".equals(achievement.getIsAdd())) {
                 addList.add(achievement);
             } else {

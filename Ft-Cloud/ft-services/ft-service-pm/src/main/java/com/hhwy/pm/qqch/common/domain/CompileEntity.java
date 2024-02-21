@@ -221,10 +221,11 @@ public class CompileEntity<T> extends TreeNode<T> {
         }
     }
 
-    public static <T> T dealSaveDtoWithoutIdentity(CompileEntity param, T dto) {
+    //不触发添加确认记录，使用该方法
+    public static <T> T dealSaveDtoWithoutSubmitFlag(CompileEntity param, T dto) {
         CompileEntity<T> tCompileDTO = new CompileEntity<>();
         tCompileDTO.setVersion(param.getVersion());
-        tCompileDTO.setSubmitFlag(param.getSubmitFlag());
+        tCompileDTO.setSubmitFlag("0");  //
 //        tCompileDTO.setMenuId(param.getMenuId());
 //        tCompileDTO.setModuleIdentity(param.getModuleIdentity());
         tCompileDTO.setReqId(param.getReqId());

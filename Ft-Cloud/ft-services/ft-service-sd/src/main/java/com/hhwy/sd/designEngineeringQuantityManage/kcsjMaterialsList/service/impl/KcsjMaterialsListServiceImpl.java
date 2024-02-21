@@ -49,6 +49,13 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
         kcsjMaterialsList = kcsjMaterialsListMapper.getKcsjMaterialsList(kcsjMaterialsList);
         //查询子表数据
         List<KcsjMaterialsListDetail> detailList = detailMapper.getKcsjMaterialsListDetailListByMainId(kcsjMaterialsList.getId());
+        //设置优化前设计量
+        for (KcsjMaterialsListDetail detail : detailList) {
+            BigDecimal designQuantity = detail.getDesignQuantity();
+            if (designQuantity!=null){
+                detail.setPreviousQuantity(designQuantity);
+            }
+        }
         //组装返回值
         if (detailList.size() > 0) {
             kcsjMaterialsList.setDetailList(detailList);
@@ -182,6 +189,19 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
      */
     @Transactional
     public int updateKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList) {
+
+        //校验 项目控制损耗定额不能大于局损耗定额
+        List<KcsjMaterialsListDetail> detailList = kcsjMaterialsList.getDetailList();
+        for (KcsjMaterialsListDetail kcsjMaterialsListDetail : detailList) {
+            BigDecimal projectLossQuota = kcsjMaterialsListDetail.getProjectLossQuota();
+            BigDecimal localLossQuota = kcsjMaterialsListDetail.getLocalLossQuota();
+            if (projectLossQuota!=null&& localLossQuota!=null){
+                int i = projectLossQuota.compareTo(localLossQuota);
+                if (i>0){
+                    throw new BaseException("项目控制损耗定额不能大于局损耗定额");
+                }
+            }
+        }
         kcsjMaterialsList.setUpdateUser(SecurityUtils.getUserName());
         kcsjMaterialsList.setUpdateTime(DateUtils.getNowDate());
         //删除子表数据

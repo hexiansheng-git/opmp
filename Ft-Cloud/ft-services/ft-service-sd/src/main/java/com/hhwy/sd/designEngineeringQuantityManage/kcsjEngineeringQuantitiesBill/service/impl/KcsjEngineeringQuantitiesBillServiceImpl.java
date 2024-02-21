@@ -54,6 +54,13 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         KcsjEngineeringQuantitiesBillDetail detail = new KcsjEngineeringQuantitiesBillDetail();
         detail.setMainId(id);
         List<KcsjEngineeringQuantitiesBillDetail> detailList = kcsjEngineeringQuantitiesBillDetailMapper.getKcsjEngineeringQuantitiesBillDetailList(detail);
+        //处理数据
+        for (KcsjEngineeringQuantitiesBillDetail billDetail : detailList) {
+            BigDecimal workload = billDetail.getWorkload();
+            if (workload!=null){
+                billDetail.setPreviousQuantity(workload);
+            }
+        }
         //把数据构建成树形
         List<KcsjEngineeringQuantitiesBillDetail> treeList = ListTreeUtil.formatTree(
                 detailList,

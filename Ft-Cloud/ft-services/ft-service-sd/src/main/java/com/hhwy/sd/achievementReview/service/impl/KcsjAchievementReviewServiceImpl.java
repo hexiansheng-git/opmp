@@ -3,6 +3,7 @@ package com.hhwy.sd.achievementReview.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sd.achievementReview.constant.AchievementReviewStatus;
 import com.hhwy.sd.achievementReview.domain.KcsjAchievement;
 import com.hhwy.sd.achievementReview.domain.KcsjAchievementReview;
 import com.hhwy.sd.achievementReview.mapper.KcsjAchievementMapper;
@@ -110,6 +111,7 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
         List<KcsjAchievement> achievementList = review.getAchievementList();
         this.setData(achievementList,review);
 
+        review.setTaskStatus(null);
         Long id;
         if("1".equals(saveType)){
             //新增
@@ -119,6 +121,7 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
         }else if("2".equals(saveType)){
             //修改
             id = review.getId();
+            review.setTaskStatus(null);
             this.updateKcsjAchievementReview(review);
         }else {
             throw new RuntimeException("保存类型错误");
@@ -156,6 +159,7 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
 
         for (KcsjAchievement achievement : achievementList) {
             achievement.setForeignId(id);
+            achievement.setAchievementStatus(null);
         }
         kcsjAchievementMapper.updateKcsjAchievementList(achievementList);
     }
@@ -173,6 +177,7 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
 
         for (KcsjAchievement achievement : achievementList) {
             achievement.setReviewExpert(review.getReviewExpert());
+            achievement.setAchievementStatus(AchievementReviewStatus.REVIEWED);
         }
         kcsjAchievementMapper.updateKcsjAchievementList(achievementList);
     }
@@ -182,5 +187,15 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
         KcsjAchievementReview review = kcsjAchievementReviewMapper.getKcsjAchievementReviewById(id);
         review.setTaskStatus("1");
         kcsjAchievementReviewMapper.updateKcsjAchievementReview(review);
+
+        List<KcsjAchievement> achievementList = kcsjAchievementMapper.getListByForeignId(id);
+        if(CollectionUtils.isEmpty(achievementList)){
+            return;
+        }
+
+        for (KcsjAchievement achievement : achievementList) {
+            achievement.setAchievementStatus(AchievementReviewStatus.UNDER_REVIEW);
+        }
+        kcsjAchievementMapper.updateKcsjAchievementList(achievementList);
     }
 }
