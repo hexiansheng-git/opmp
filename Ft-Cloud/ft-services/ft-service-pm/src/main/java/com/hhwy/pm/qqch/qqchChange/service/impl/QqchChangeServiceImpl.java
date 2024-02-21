@@ -371,7 +371,7 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         //1 获取
         QqchChangeDetail qqchChangeDetail = new QqchChangeDetail();
         qqchChangeDetail.setMainId(businessId);
-        qqchChangeDetail.setEditorFirst(SecurityUtils.getUserId());
+        qqchChangeDetail.setPtVar2(SecurityUtils.getUserName()); //编制人userName
         qqchChangeDetail.setPtVar1("1");
         Integer count = this.qqchChangeMapper.countEditQqchChangeDetail(qqchChangeDetail);
         if(count < 1)
@@ -420,7 +420,7 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
             return menuTreeList;
         QqchChangeDetail query = new QqchChangeDetail();
         query.setMainId(mainId);
-        query.setEditorFirst(SecurityUtils.getUserId());
+        query.setPtVar2(SecurityUtils.getUserName()); //编制人userName
         List<QqchChangeDetail> list = detailService.getQqchChangeDetailList(query);
         if(CollectionUtils.isEmpty(list))
             return new ArrayList<>();
