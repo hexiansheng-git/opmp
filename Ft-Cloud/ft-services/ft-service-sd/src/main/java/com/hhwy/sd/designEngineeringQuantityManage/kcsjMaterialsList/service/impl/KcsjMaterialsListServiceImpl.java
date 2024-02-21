@@ -49,6 +49,13 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
         kcsjMaterialsList = kcsjMaterialsListMapper.getKcsjMaterialsList(kcsjMaterialsList);
         //查询子表数据
         List<KcsjMaterialsListDetail> detailList = detailMapper.getKcsjMaterialsListDetailListByMainId(kcsjMaterialsList.getId());
+        //设置优化前设计量
+        for (KcsjMaterialsListDetail detail : detailList) {
+            BigDecimal designQuantity = detail.getDesignQuantity();
+            if (designQuantity!=null){
+                detail.setPreviousQuantity(designQuantity);
+            }
+        }
         //组装返回值
         if (detailList.size() > 0) {
             kcsjMaterialsList.setDetailList(detailList);
