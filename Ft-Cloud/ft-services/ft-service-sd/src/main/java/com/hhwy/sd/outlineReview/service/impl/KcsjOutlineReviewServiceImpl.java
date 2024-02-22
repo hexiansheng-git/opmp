@@ -72,9 +72,16 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
     //调整
     @Override
     public KcsjOutlineReview adjust(KcsjOutlineReview param) {
-        Assert.isTrue(param.getId()!=null, "参数不能为空");
-        KcsjOutlineReview result = kcsjOutlineReviewMapper.getKcsjOutlineReview(param);
+//        Assert.isTrue(param.getId()!=null, "参数不能为空");
+        KcsjOutlineReview result = kcsjOutlineReviewMapper.getMaxVersionData();
         if (BeanUtil.isEmpty(result)) return result;
+        String taskStatus = result.getTaskStatus();
+        if (taskStatus.equals("5")){
+            //创建新的数据
+            result.setVersion(result.getVersion().add(BigDecimal.ONE));
+            result.setTaskStatus("0");
+        }
+        //返回当前版本
         List<SgjsExpertLibrary> listByForeignId = sgjsExpertLibraryService.getListByForeignId(result.getId());
         result.setChildList(listByForeignId);
         return result;
