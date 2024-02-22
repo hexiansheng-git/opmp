@@ -35,7 +35,7 @@ public class WbsInfoVoBean {
 
     public static WbsInfoVoBean parseWbs(XmslWbs wbs){
         WbsInfoVoBean vo = new WbsInfoVoBean();
-        vo.setWbsCode(wbs.getCode());
+        vo.setWbsCode(wbs.getSelfCode());
         vo.setWbsName(wbs.getName());
         vo.setObjectId(wbs.getPtVar4());
         vo.setChildren(new ArrayList<>(10));
