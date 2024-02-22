@@ -55,6 +55,13 @@ public interface XmslWbsMapper {
      */
     List<String> repeatWbsCode(@Param("mainId")Long mainId);
 
+    /**
+     * 校验重复名称(同一父级下的wbs名称不能重复)
+     * @param mainId 
+     * @return
+     */
+    List<String> repeatWbsName(@Param("mainId")Long mainId);
+
     int insertXmslWbs(XmslWbs xmslWbs);
 
     int insertXmslWbsList(@Param("xmslWbsList") List<XmslWbs> xmslWbsList);

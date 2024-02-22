@@ -315,8 +315,6 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
     private void compareVersionFlag(XmslWbs wbs,Map<String,XmslWbs> lastWbsMap,List<XmslWbs> updateList){
         if(MapUtils.isEmpty(lastWbsMap))
             return ;
-        if( wbs.getCode().equals("0-1")  )
-            System.out.println(1);
         XmslWbs oldWbs = lastWbsMap.get(wbs.getCode());
         //版本修改状态，1:原数据修改,2:新增数据，3：禁用（仅生效数据）
         String flag = null;
