@@ -66,7 +66,7 @@ public class KcsjMaterialsListDetail extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "设计量")
-    @NotNull(message = "请填写设计量",groups ={ValidationGroups.Save.class})
+    @NotNull(message = "请填写设计量",groups ={ValidationGroups.Save.class,ValidationGroups.Update.class})
     private BigDecimal designQuantity;
     /**
      * 字段描述：设计量差
