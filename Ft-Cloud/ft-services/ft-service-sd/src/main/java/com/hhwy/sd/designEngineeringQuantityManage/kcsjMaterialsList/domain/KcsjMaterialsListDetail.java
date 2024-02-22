@@ -79,7 +79,6 @@ public class KcsjMaterialsListDetail extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "局损耗定额")
-
     private BigDecimal localLossQuota;
     /**
      * 字段描述：项目控制损耗定额
