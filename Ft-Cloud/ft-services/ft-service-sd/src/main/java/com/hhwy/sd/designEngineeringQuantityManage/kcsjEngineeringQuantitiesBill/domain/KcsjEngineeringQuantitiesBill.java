@@ -41,7 +41,7 @@ public class KcsjEngineeringQuantitiesBill extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "清单所属部位")
-    @NotBlank(message = "请填写清单所属部位",groups ={ValidationGroups.Save.class})
+    @NotBlank(message = "请填写所属部位",groups ={ValidationGroups.Save.class})
     private String listLocation;
     /**
      * 字段描述：清单附件

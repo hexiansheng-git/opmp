@@ -61,7 +61,7 @@ public class SgjsTechnicalNormalTopicController extends BaseController {
     @PreAuthorize(hasPermi = "sgjsTechnicalNormalTopic:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertSgjsTechnicalNormalTopicList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsTechnicalNormalTopic> sgjsTechnicalNormalTopicListParam) {
-        JyDetailsUtil.jyDetails(sgjsTechnicalNormalTopicListParam, SgjsTechnicalNormalTopic.class);
+        JyDetailsUtil.jyDetails(sgjsTechnicalNormalTopicListParam, ValidationGroups.Save.class);
         sgjsTechnicalNormalTopicService.insertSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopicListParam);
         return AjaxResult.success(sgjsTechnicalNormalTopicListParam);
     }
