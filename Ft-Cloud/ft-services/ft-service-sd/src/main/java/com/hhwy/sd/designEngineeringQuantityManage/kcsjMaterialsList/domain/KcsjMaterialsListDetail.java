@@ -9,7 +9,6 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;

@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author wll
  * @date 2024-02-04 14:05:09
- * @remark 勘察设计-设计工程量管理-工程量清单
+ * @remark 勘察设计-设计工程量管理-工程量清单明细
  */
 public class KcsjEngineeringQuantitiesBillDetail extends TreeNode<KcsjEngineeringQuantitiesBillDetail> {
     private static final long serialVersionUID = 1L;
