@@ -1,6 +1,7 @@
 package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
@@ -27,6 +28,7 @@ import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScience
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.service.ISgsjTechnicalScienceTopicModifyService;
 import com.hhwy.sp.utils.easyExcel.CustomMergeStrategy;
 import com.hhwy.system.api.domain.SysUser;
+import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -119,6 +121,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         shjsAuthenticateEvaluateService.saveEvaluate(id, BelongBusiness.BELONG_BUSINESS_9, evaluateList);
         //保存主表
         sgsjTechnicalScienceTopic.setId(IdWorker.createId());
+        sgsjTechnicalScienceTopic.setPtVar2(String.valueOf(IdWorker.createId()));
         sgsjTechnicalScienceTopic.setCreateUser(SecurityUtils.getUserName());
         sgsjTechnicalScienceTopic.setCreateTime(DateUtils.getNowDate());
         sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
@@ -157,6 +160,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         if (sgsjTechnicalScienceTopic.getId() == null){
             //保存主表
             sgsjTechnicalScienceTopic.setId(IdWorker.createId());
+            sgsjTechnicalScienceTopic.setPtVar1(String.valueOf(IdWorker.createId()));
             sgsjTechnicalScienceTopic.setCreateUser(SecurityUtils.getUserName());
             sgsjTechnicalScienceTopic.setCreateTime(DateUtils.getNowDate());
             sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
@@ -235,7 +239,10 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             resultBean.setListApply(collect.get(BelongBusiness.BELONG_BUSINESS_1));
         }
         //获取流程信息
-        FlowInfoSearchUtil.getFlowInfo(resultBean, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
+        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
+        sgsjTechnicalScienceTopic.setId(Long.valueOf(resultBean.getPtVar1()));
+        FlowInfoSearchUtil.getFlowInfo(sgsjTechnicalScienceTopic, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
+        BeanUtil.copyProperties(sgsjTechnicalScienceTopic, resultBean, CopyOptions.create(CommonBaseEntity.class, true));
         return resultBean;
     }
 
@@ -260,7 +267,10 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             resultBean.setListAcceptance(collect.get(BelongBusiness.BELONG_BUSINESS_4));
         }
         //获取流程信息
-        FlowInfoSearchUtil.getFlowInfo(resultBean, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
+        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
+        sgsjTechnicalScienceTopic.setId(Long.valueOf(resultBean.getPtVar1()));
+        FlowInfoSearchUtil.getFlowInfo(sgsjTechnicalScienceTopic, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
+        BeanUtil.copyProperties(sgsjTechnicalScienceTopic, resultBean, CopyOptions.create(CommonBaseEntity.class, true));
         return resultBean;
     }
 

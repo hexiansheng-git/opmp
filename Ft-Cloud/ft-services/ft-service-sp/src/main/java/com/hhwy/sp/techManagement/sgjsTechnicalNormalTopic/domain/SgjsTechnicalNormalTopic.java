@@ -25,6 +25,8 @@ import lombok.Data;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * 功能描述: 科技管理 - 一般课题研发管理
@@ -161,7 +163,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "研发起始日期", dateFormat = "yyyy年MM月dd日", sort = 10)
-    @NotBlank(message = "研发起始日期不能为空！",groups = ValidationGroups.Save.class)
+    @NotNull(message = "研发起始日期不能为空！",groups = ValidationGroups.Save.class)
     private Date startDate;
     /**
      * 字段描述：研发完成时间
@@ -169,7 +171,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "研发完成日期", dateFormat = "yyyy年MM月dd日", sort = 11)
-    @NotBlank(message = "研发完成日期不能为空！",groups = ValidationGroups.Save.class)
+    @NotNull(message = "研发完成日期不能为空！",groups = ValidationGroups.Save.class)
     private Date endDate;
     /**
      * 字段描述：研发人员名单
