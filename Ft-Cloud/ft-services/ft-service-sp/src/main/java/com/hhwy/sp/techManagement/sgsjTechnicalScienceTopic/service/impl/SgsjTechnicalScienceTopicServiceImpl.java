@@ -101,7 +101,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
      * 功能描述: 课题立项里的保存
      */
     @Transactional
-    public int insertSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
+    public SgsjTechnicalScienceTopic insertSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
         Assert.isTrue(sgsjTechnicalScienceTopic != null, "请求参数缺失");
         Assert.isTrue(sgsjTechnicalScienceTopic.getId() != null, "id不能为空");
         //保存子表
@@ -126,8 +126,12 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         param.setId(sgsjTechnicalScienceTopic.getId());
         SgsjTechnicalScienceTopic oldData = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param);
         List<SgsjTechnicalScienceTopicModify> modifyList = compareToObj(oldData, sgsjTechnicalScienceTopic);
+        //返回结果获取
+        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic1 = new SgsjTechnicalScienceTopic();
+        sgsjTechnicalScienceTopic1.setId(id);
+        SgsjTechnicalScienceTopic result = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic1);
         if (CollUtil.isEmpty(modifyList)) {
-            return 1;
+            return result;
         }
         SysUser sysUser = SecurityUtils.getSysUser();
         modifyList.forEach(p ->{
@@ -141,7 +145,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             p.setCreateTime(DateUtils.getNowDate());
         });
         technicalScienceTopicModifyService.insertSgsjTechnicalScienceTopicModifyList(modifyList);
-        return 1;
+        return result;
     }
 
     /***

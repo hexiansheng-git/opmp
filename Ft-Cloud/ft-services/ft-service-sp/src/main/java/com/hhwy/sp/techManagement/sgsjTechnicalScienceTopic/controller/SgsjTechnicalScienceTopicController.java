@@ -83,8 +83,8 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
     @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopic:add")
     @PostMapping("/lxAdd")
     public AjaxResult insertSgsjTechnicalScienceTopic(@Validated(ValidationGroups.Save.class) @RequestBody SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {
-        sgsjTechnicalScienceTopicService.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopicParam);
-        return AjaxResult.success(sgsjTechnicalScienceTopicParam);
+        SgsjTechnicalScienceTopic result = sgsjTechnicalScienceTopicService.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopicParam);
+        return AjaxResult.success(result);
     }
 
     @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopic:add")
