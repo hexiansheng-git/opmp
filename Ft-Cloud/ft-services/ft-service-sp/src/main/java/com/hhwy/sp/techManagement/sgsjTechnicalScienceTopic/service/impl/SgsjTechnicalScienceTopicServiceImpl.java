@@ -94,6 +94,13 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
                 bean.setEvaluateList(evaluateMap.get(bean.getId()));
             }
         }
+        //获取流程信息  立项流程
+        resultList.forEach(p -> {
+            p.setPtVar3(String.valueOf(p.getId()));
+            p.setId(Long.valueOf(p.getPtVar2()));
+        });
+        FlowInfoSearchUtil.getFlowInfo(resultList, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
+        resultList.forEach(p -> p.setId(Long.valueOf(p.getPtVar3())));
         return resultList;
     }
 
