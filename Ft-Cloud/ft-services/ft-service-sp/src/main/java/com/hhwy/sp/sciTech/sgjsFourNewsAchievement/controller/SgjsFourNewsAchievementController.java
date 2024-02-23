@@ -139,11 +139,11 @@ public class SgjsFourNewsAchievementController extends BaseController {
                         if(0 < i) {
                             flag = ",";
                         }
-                        applyAwardStr.append(flag).append(applyAward);
-                        awardGradeStr.append(flag).append(awardGrade);
-                        awardTypeStr.append(flag).append(awardTypeDict.get(awardType));
-                        grantUnitStr.append(flag).append(grantUnit);
-                        awardTimeStr.append(flag).append(sdf.format(awardTime));
+                        if(null != applyAward)applyAwardStr.append(flag).append(applyAward);
+                        if(null != awardGrade)awardGradeStr.append(flag).append(awardGrade);
+                        if(null != awardTypeDict.get(awardType))awardTypeStr.append(flag).append(awardTypeDict.get(awardType));
+                        if(null != grantUnit)grantUnitStr.append(flag).append(grantUnit);
+                        if(null != awardTime)awardTimeStr.append(flag).append(sdf.format(awardTime));
                     }
                     sgjsFourNewsAchievement.setApplyAward(applyAwardStr.toString());
                     sgjsFourNewsAchievement.setAwardGrade(awardGradeStr.toString());
@@ -163,9 +163,9 @@ public class SgjsFourNewsAchievementController extends BaseController {
                         if(0 < i) {
                             flag = ",";
                         }
-                        authenticateUnitStr.append(flag).append(authenticateUnit);
-                        authenticateDateStr.append(flag).append(sdf.format(authenticateDate));
-                        evaluateConclusionStr.append(flag).append(evaluateConclusionDict.get(evaluateConclusion));
+                        if(null != authenticateUnit)authenticateUnitStr.append(flag).append(authenticateUnit);
+                        if(null != authenticateDate)authenticateDateStr.append(flag).append(sdf.format(authenticateDate));
+                        if(null != evaluateConclusionDict.get(evaluateConclusion))evaluateConclusionStr.append(flag).append(evaluateConclusionDict.get(evaluateConclusion));
                     }
                     sgjsFourNewsAchievement.setAuthenticateUnit(authenticateUnitStr.toString());
                     sgjsFourNewsAchievement.setAuthenticateDate(authenticateDateStr.toString());
