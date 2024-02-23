@@ -54,12 +54,11 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         KcsjEngineeringQuantitiesBillDetail detail = new KcsjEngineeringQuantitiesBillDetail();
         detail.setMainId(id);
         List<KcsjEngineeringQuantitiesBillDetail> detailList = kcsjEngineeringQuantitiesBillDetailMapper.getKcsjEngineeringQuantitiesBillDetailList(detail);
-        //处理数据
+        //设置优化前工程量字段
         for (KcsjEngineeringQuantitiesBillDetail billDetail : detailList) {
             BigDecimal workload = billDetail.getWorkload();
-            if (workload!=null){
-                billDetail.setPreviousQuantity(workload);
-            }
+            workload=workload==null?BigDecimal.ZERO:workload;
+            billDetail.setPreviousQuantity(workload);
         }
         //把数据构建成树形
         List<KcsjEngineeringQuantitiesBillDetail> treeList = ListTreeUtil.formatTree(
@@ -115,6 +114,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
         if (!CollectionUtils.isEmpty(detailsList)) {
             //子表数据处理
+            //把树形数据拆分成普通列表
             detailsList = ListTreeUtil.formatList(
                     detailsList,
                     KcsjEngineeringQuantitiesBillDetail::setId,
@@ -178,8 +178,6 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         kcsjEngineeringQuantitiesBillDetailMapper.insertKcsjEngineeringQuantitiesBillDetailList(details);
     }
 
-    //将子节点递归加入集合
-
 
     @Transactional
     public AjaxResult updateKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill) {
@@ -195,6 +193,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         }
         //处理子表新增的数据
         List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
+        //将树形拆成普通列表
         detailsList = ListTreeUtil.formatList(
                 detailsList,
                 KcsjEngineeringQuantitiesBillDetail::getIsAdd,
@@ -220,20 +219,6 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         }
         return AjaxResult.success();
     }
-
-    private void findTotalInsert(List<KcsjEngineeringQuantitiesBillDetail> detailsList, List<KcsjEngineeringQuantitiesBillDetail> addList) {
-
-        for (KcsjEngineeringQuantitiesBillDetail detail : detailsList) {
-            List<KcsjEngineeringQuantitiesBillDetail> children = detail.getChildren();
-            if ("1".equals(detail.getIsAdd())) {
-                addList.add(detail);
-                if (children.size() > 0) {
-                    findTotalInsert(children, addList);
-                }
-            }
-        }
-    }
-
 
     private void handleUpdate(List<KcsjEngineeringQuantitiesBillDetail> updateList) {
 
@@ -294,28 +279,22 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         return kcsjEngineeringQuantitiesBillMapper.updateKcsjEngineeringQuantitiesBillList(kcsjEngineeringQuantitiesBillList);
     }
 
-    @Transactional
-    public int deleteKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill) {
-        kcsjEngineeringQuantitiesBill.setUpdateUser(SecurityUtils.getUserName());
-        kcsjEngineeringQuantitiesBill.setUpdateTime(DateUtils.getNowDate());
-        return kcsjEngineeringQuantitiesBillMapper.deleteKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
-    }
-
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
     @Transactional
     public int deleteKcsjEngineeringQuantitiesBillByPks(List<Long> ids) {
         //获取删除的数据集合
         List<KcsjEngineeringQuantitiesBill> list = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBillPks(ids);
         List<String> listLocation = list.stream().map(e -> e.getListLocation()).collect(Collectors.toList());
-
         //删除主表数据
         kcsjEngineeringQuantitiesBillMapper.deleteKcsjEngineeringQuantitiesBillByPks(ids, SecurityUtils.getUserId().toString());
-
         //修改最新版数据
         kcsjEngineeringQuantitiesBillMapper.updateNewVersion(listLocation);
-
         //删除子表数据
         return kcsjEngineeringQuantitiesBillDetailMapper.deleteKcsjEngineeringQuantitiesBillDetailByMainId(ids, SecurityUtils.getUserId().toString());
-
     }
 
 

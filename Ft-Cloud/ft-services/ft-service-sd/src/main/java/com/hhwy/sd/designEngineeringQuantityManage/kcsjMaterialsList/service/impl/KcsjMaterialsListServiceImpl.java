@@ -52,9 +52,8 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
         //设置优化前设计量
         for (KcsjMaterialsListDetail detail : detailList) {
             BigDecimal designQuantity = detail.getDesignQuantity();
-            if (designQuantity!=null){
-                detail.setPreviousQuantity(designQuantity);
-            }
+            designQuantity = designQuantity == null ? BigDecimal.ZERO : designQuantity;
+            detail.setPreviousQuantity(designQuantity);
         }
         //组装返回值
         if (detailList.size() > 0) {
@@ -96,9 +95,9 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
         for (KcsjMaterialsListDetail kcsjMaterialsListDetail : detailList) {
             BigDecimal projectLossQuota = kcsjMaterialsListDetail.getProjectLossQuota();
             BigDecimal localLossQuota = kcsjMaterialsListDetail.getLocalLossQuota();
-            if (projectLossQuota!=null&& localLossQuota!=null){
+            if (projectLossQuota != null && localLossQuota != null) {
                 int i = projectLossQuota.compareTo(localLossQuota);
-                if (i>0){
+                if (i > 0) {
                     throw new BaseException("项目控制损耗定额不能大于局损耗定额");
                 }
             }
@@ -120,7 +119,7 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
             kcsjMaterialsListMapper.updateValid(materialsList);
         }
         //新增子表数据
-        if (kcsjMaterialsList.getDetailList()!=null&&kcsjMaterialsList.getDetailList().size()>0){
+        if (kcsjMaterialsList.getDetailList() != null && kcsjMaterialsList.getDetailList().size() > 0) {
             handleInsertDetails(kcsjMaterialsList);
         }
         //新增主表数据
@@ -130,7 +129,7 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
     private void handleInsertDetails(KcsjMaterialsList kcsjMaterialsList) {
         //新增子表数据
         List<KcsjMaterialsListDetail> detailList = kcsjMaterialsList.getDetailList();
-        if (detailList != null&&detailList.size() > 0) {
+        if (detailList != null && detailList.size() > 0) {
             //获取上一个版本设计量
             KcsjMaterialsList old = new KcsjMaterialsList();
             String version = kcsjMaterialsList.getVersion();
@@ -161,7 +160,7 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
                 oldDemands = oldDemands == null ? BigDecimal.ZERO : oldDemands;
                 kcsjMaterialsListDetail.setPreviousQuantity(oldDemands);
                 BigDecimal designQuantity = kcsjMaterialsListDetail.getDesignQuantity();
-                if (designQuantity!=null){
+                if (designQuantity != null) {
                     kcsjMaterialsListDetail.setQuantityDifference(designQuantity.subtract(oldDemands));
                 }
             }
@@ -184,6 +183,7 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
 
     /**
      * 修改数据
+     *
      * @param kcsjMaterialsList
      * @return
      */
@@ -195,9 +195,9 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
         for (KcsjMaterialsListDetail kcsjMaterialsListDetail : detailList) {
             BigDecimal projectLossQuota = kcsjMaterialsListDetail.getProjectLossQuota();
             BigDecimal localLossQuota = kcsjMaterialsListDetail.getLocalLossQuota();
-            if (projectLossQuota!=null&& localLossQuota!=null){
+            if (projectLossQuota != null && localLossQuota != null) {
                 int i = projectLossQuota.compareTo(localLossQuota);
-                if (i>0){
+                if (i > 0) {
                     throw new BaseException("项目控制损耗定额不能大于局损耗定额");
                 }
             }
@@ -206,13 +206,13 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
         kcsjMaterialsList.setUpdateTime(DateUtils.getNowDate());
         //删除子表数据
         Long id = kcsjMaterialsList.getId();
-        List<Long> list=new ArrayList<>();
+        List<Long> list = new ArrayList<>();
         list.add(id);
-        detailMapper.deleteKcsjMaterialsListDetailByMainId(list,SecurityUtils.getUserId().toString());
+        detailMapper.deleteKcsjMaterialsListDetailByMainId(list, SecurityUtils.getUserId().toString());
         //重新插入子表数据
         handleInsertDetails(kcsjMaterialsList);
         //修改主表数据
-        return  kcsjMaterialsListMapper.updateKcsjMaterialsList(kcsjMaterialsList);
+        return kcsjMaterialsListMapper.updateKcsjMaterialsList(kcsjMaterialsList);
     }
 
     @Transactional
@@ -234,21 +234,22 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
 
     /**
      * 删除数据
+     *
      * @param ids
      * @return
      */
     @Transactional
     public int deleteKcsjMaterialsListByPks(List<Long> ids) {
         //获取要删除的数据集合
-        KcsjMaterialsList kcsjMaterialsList=new KcsjMaterialsList();
+        KcsjMaterialsList kcsjMaterialsList = new KcsjMaterialsList();
         kcsjMaterialsList.setDelIdList(ids);
         List<KcsjMaterialsList> list = kcsjMaterialsListMapper.getKcsjMaterialsListList(kcsjMaterialsList);
         List<String> listName = list.stream().map(e -> e.getListName()).collect(Collectors.toList());
         //删除主表数据
-        kcsjMaterialsListMapper.deleteKcsjMaterialsListByPks(ids,SecurityUtils.getUserId().toString());
+        kcsjMaterialsListMapper.deleteKcsjMaterialsListByPks(ids, SecurityUtils.getUserId().toString());
         //让其它版本的最新版变为有效
         kcsjMaterialsListMapper.updateNewVersion(listName);
         //删除子表数据
-        return detailMapper.deleteKcsjMaterialsListDetailByMainId(ids,SecurityUtils.getUserId().toString());
+        return detailMapper.deleteKcsjMaterialsListDetailByMainId(ids, SecurityUtils.getUserId().toString());
     }
 }

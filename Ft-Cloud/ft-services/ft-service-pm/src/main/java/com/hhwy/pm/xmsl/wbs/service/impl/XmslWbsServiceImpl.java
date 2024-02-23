@@ -739,6 +739,9 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             //校验重复编码
             List<String> repeatCodeList = xmslWbsMapper.repeatWbsCode(dto.getMainId());
             Assert.isTrue(CollectionUtils.isEmpty(repeatCodeList),"["+StringUtils.join(repeatCodeList,",")+"]WBS编号重复");
+            //同一父级下不允许有重复的wbs名称(来自p6的校验)
+            List<String> repeatNameList = xmslWbsMapper.repeatWbsName(dto.getMainId());
+            Assert.isTrue(CollectionUtils.isEmpty(repeatNameList),"["+StringUtils.join(repeatNameList,",")+"]WBS名称重复,同一父级下不能有相同的WBS名称");
         }
     }
 

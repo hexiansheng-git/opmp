@@ -9,7 +9,6 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -67,7 +66,7 @@ public class KcsjMaterialsListDetail extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "设计量")
-    @NotNull(message = "请填写设计量",groups ={ValidationGroups.Save.class})
+    @NotNull(message = "请填写设计量",groups ={ValidationGroups.Save.class,ValidationGroups.Update.class})
     private BigDecimal designQuantity;
     /**
      * 字段描述：设计量差
@@ -80,7 +79,6 @@ public class KcsjMaterialsListDetail extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "局损耗定额")
-
     private BigDecimal localLossQuota;
     /**
      * 字段描述：项目控制损耗定额

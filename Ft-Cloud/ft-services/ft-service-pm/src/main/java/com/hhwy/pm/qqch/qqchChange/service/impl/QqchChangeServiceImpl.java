@@ -420,6 +420,7 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
             return menuTreeList;
         QqchChangeDetail query = new QqchChangeDetail();
         query.setMainId(mainId);
+        query.setIsFirst(1);
         query.setPtVar2(SecurityUtils.getUserName()); //编制人userName
         List<QqchChangeDetail> list = detailService.getQqchChangeDetailList(query);
         if(CollectionUtils.isEmpty(list))

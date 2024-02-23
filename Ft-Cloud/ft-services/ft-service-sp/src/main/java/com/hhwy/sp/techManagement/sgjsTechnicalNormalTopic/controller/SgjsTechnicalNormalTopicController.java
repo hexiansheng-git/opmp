@@ -10,6 +10,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.EasyExcelListener;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.SgjsTechnicalNormalTopic;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.service.ISgjsTechnicalNormalTopicService;
+import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -60,6 +61,7 @@ public class SgjsTechnicalNormalTopicController extends BaseController {
     @PreAuthorize(hasPermi = "sgjsTechnicalNormalTopic:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertSgjsTechnicalNormalTopicList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsTechnicalNormalTopic> sgjsTechnicalNormalTopicListParam) {
+        JyDetailsUtil.jyDetails(sgjsTechnicalNormalTopicListParam, ValidationGroups.Save.class);
         sgjsTechnicalNormalTopicService.insertSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopicListParam);
         return AjaxResult.success(sgjsTechnicalNormalTopicListParam);
     }

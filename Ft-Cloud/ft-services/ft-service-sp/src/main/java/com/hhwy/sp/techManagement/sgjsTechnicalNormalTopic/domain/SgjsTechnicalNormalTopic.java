@@ -20,9 +20,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalTopicCost.domain.SgjsTechnicalNormalTopicCost;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalTopicCost.domain.SgjsTechnicalNormalTopicCostDTO;
 import com.hhwy.utils.dict.DictUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * 功能描述: 科技管理 - 一般课题研发管理
@@ -46,12 +50,14 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "课题编号", sort = 3)
+    @NotBlank(message = "课题编号不能为空！",groups = ValidationGroups.Save.class)
     private String topicCode;
     /**
      * 字段描述：课题名称
      */
     @JsonProperty
     @Excel(name = "课题名称", sort = 4)
+    @NotBlank(message = "课题名称不能为空！",groups = ValidationGroups.Save.class)
     private String topicName;
     /**
      * 字段描述：高新资质
@@ -86,6 +92,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "课题类别", sort = 6)
+    @NotBlank(message = "课题类别不能为空！",groups = ValidationGroups.Save.class)
     private String topicKindName;
 
     /**
@@ -98,6 +105,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "项目技术经济目标", sort = 7)
+    @NotBlank(message = "项目技术经济目标不能为空！",groups = ValidationGroups.Save.class)
     private String ecoTargetName;
 
     /**
@@ -105,6 +113,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "课题状态", sort = 8)
+    @NotBlank(message = "课题状态不能为空！",groups = ValidationGroups.Save.class)
     private String topicState;
     private String topicStateName;
 
@@ -127,6 +136,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
      * 字段描述：项目成果形式
      */
     @JsonProperty
+    @NotBlank(message = "项目成果形式不能为空！",groups = ValidationGroups.Save.class)
     private String achievementKind;
 
     @Excel(name = "项目成果形式", sort = 9)
@@ -153,6 +163,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "研发起始日期", dateFormat = "yyyy年MM月dd日", sort = 10)
+    @NotNull(message = "研发起始日期不能为空！",groups = ValidationGroups.Save.class)
     private Date startDate;
     /**
      * 字段描述：研发完成时间
@@ -160,6 +171,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "研发完成日期", dateFormat = "yyyy年MM月dd日", sort = 11)
+    @NotNull(message = "研发完成日期不能为空！",groups = ValidationGroups.Save.class)
     private Date endDate;
     /**
      * 字段描述：研发人员名单
@@ -171,6 +183,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "研发人员名单")
+    @NotBlank(message = "研发人员名单不能为空！",groups = ValidationGroups.Save.class)
     private String personNameList;
     /**
      * 字段描述：附件id

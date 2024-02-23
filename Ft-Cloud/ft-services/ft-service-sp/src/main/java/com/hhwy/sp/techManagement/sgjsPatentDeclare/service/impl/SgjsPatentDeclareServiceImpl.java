@@ -132,7 +132,7 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
 //        }
 
         Long id;
-        if("1".equals(saveType)){
+        if("1".equals(saveType) && patentDeclare.getId() == null){
             //新增
             id = IdWorker.createId();
             patentDeclare.setId(id);
