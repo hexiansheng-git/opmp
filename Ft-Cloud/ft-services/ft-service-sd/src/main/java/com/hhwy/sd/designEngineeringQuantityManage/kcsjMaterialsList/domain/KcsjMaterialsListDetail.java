@@ -90,7 +90,7 @@ public class KcsjMaterialsListDetail extends BaseEntity {
      * 字段描述：需用量（设计量*项目控制损耗定额）
      */
     @JsonProperty
-    @Excel(name = "需用量（设计量*项目控制损耗定额）")
+    @Excel(name = "需用量=(设计量*(项目控制损耗定额+1))")
     private BigDecimal demand;
     /**
      * 字段描述：所属区域id
