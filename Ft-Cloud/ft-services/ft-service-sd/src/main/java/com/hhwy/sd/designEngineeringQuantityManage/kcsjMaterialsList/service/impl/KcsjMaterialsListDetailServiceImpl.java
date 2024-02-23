@@ -54,7 +54,7 @@ public class KcsjMaterialsListDetailServiceImpl implements IKcsjMaterialsListDet
             kcsjMaterialsListDetail.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             kcsjMaterialsListDetail.setCreateTime(DateUtils.getNowDate());
             kcsjMaterialsListDetail.setDelFlag("0");
-            
+
         }
         return kcsjMaterialsListDetailMapper.insertKcsjMaterialsListDetailList(kcsjMaterialsListDetailList);
     }
