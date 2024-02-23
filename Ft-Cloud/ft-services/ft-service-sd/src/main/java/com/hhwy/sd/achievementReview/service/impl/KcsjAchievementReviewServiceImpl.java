@@ -157,11 +157,8 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
             return;
         }
 
-        for (KcsjAchievement achievement : achievementList) {
-            achievement.setForeignId(id);
-            achievement.setAchievementStatus(null);
-        }
-        kcsjAchievementMapper.updateKcsjAchievementList(achievementList);
+        List<Long> ids = achievementList.stream().map(KcsjAchievement::getId).collect(Collectors.toList());
+        kcsjAchievementMapper.relevancy(ids,id);
     }
 
     @Override
@@ -170,16 +167,8 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
         review.setTaskStatus("4");
         kcsjAchievementReviewMapper.updateKcsjAchievementReview(review);
 
-        List<KcsjAchievement> achievementList = kcsjAchievementMapper.getListByForeignId(id);
-        if(CollectionUtils.isEmpty(achievementList)){
-            return;
-        }
-
-        for (KcsjAchievement achievement : achievementList) {
-            achievement.setReviewExpert(review.getReviewExpert());
-            achievement.setAchievementStatus(AchievementReviewStatus.REVIEWED);
-        }
-        kcsjAchievementMapper.updateKcsjAchievementList(achievementList);
+        kcsjAchievementMapper.updateReviewExpertByForeignId(id,review.getReviewExpert());
+        kcsjAchievementMapper.updateAchievementStatusByForeignId(id,AchievementReviewStatus.REVIEWED);
     }
 
     @Override
@@ -188,14 +177,6 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
         review.setTaskStatus("1");
         kcsjAchievementReviewMapper.updateKcsjAchievementReview(review);
 
-        List<KcsjAchievement> achievementList = kcsjAchievementMapper.getListByForeignId(id);
-        if(CollectionUtils.isEmpty(achievementList)){
-            return;
-        }
-
-        for (KcsjAchievement achievement : achievementList) {
-            achievement.setAchievementStatus(AchievementReviewStatus.UNDER_REVIEW);
-        }
-        kcsjAchievementMapper.updateKcsjAchievementList(achievementList);
+        kcsjAchievementMapper.updateAchievementStatusByForeignId(id,AchievementReviewStatus.UNDER_REVIEW);
     }
 }

@@ -332,9 +332,6 @@
             <if test="achievementName != null  and  achievementName != ''">`achievement_name` = #{achievementName},</if>
             <if test="version != null  and  version != ''">`version` = #{version},</if>
             <if test="reviewGrade != null  and  reviewGrade != ''">`review_grade` = #{reviewGrade},</if>
-            <if test="achievementStatus != null  and  achievementStatus != ''">`achievement_status` =
-                #{achievementStatus},
-            </if>
             <if test="planSubmitDate != null ">`plan_submit_date` = #{planSubmitDate},</if>
             <if test="actualSubmitDate != null ">`actual_submit_date` = #{actualSubmitDate},</if>
             <if test="formExamine != null  and  formExamine != ''">`form_examine` = #{formExamine},</if>
@@ -397,11 +394,6 @@
             <trim prefix="review_grade  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.reviewGrade}
-                </foreach>
-            </trim>
-            <trim prefix="achievement_status  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.achievementStatus}
                 </foreach>
             </trim>
             <trim prefix="plan_submit_date  = case" suffix="end,">
@@ -595,5 +587,11 @@
                 #{id}
             </foreach>
         </where>
+    </update>
+    <update id="updateAchievementStatusByForeignId">
+        update `kcsj_achievement` set achievement_status = #{achievementStatus} where foreign_id = #{foreignId}
+    </update>
+    <update id="updateReviewExpertByForeignId">
+        update `kcsj_achievement` set review_expert = #{reviewExpert} where foreign_id = #{foreignId}
     </update>
 </mapper>

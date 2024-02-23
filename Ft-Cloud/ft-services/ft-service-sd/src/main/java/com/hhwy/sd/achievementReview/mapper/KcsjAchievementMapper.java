@@ -38,4 +38,8 @@ public interface KcsjAchievementMapper {
     void cleanForeignIdByForeignId(@Param("foreignId") Long foreignId);
 
     void relevancy(@Param("ids") List<Long> ids,@Param("foreignId") Long foreignId);
+
+    void updateAchievementStatusByForeignId(@Param("foreignId") Long foreignId,@Param("achievementStatus") String achievementStatus);
+
+    void updateReviewExpertByForeignId(@Param("foreignId") Long foreignId,@Param("reviewExpert") String reviewExpert);
 }
