@@ -224,7 +224,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         shjsAuthenticateEvaluateService.deleteShjsAuthenticateEvaluate(shjsAuthenticateEvaluate);
     }
 
-    /***
+    /**
      * 功能描述: 申请明细
      */
     @Override
@@ -239,10 +239,12 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             resultBean.setListApply(collect.get(BelongBusiness.BELONG_BUSINESS_1));
         }
         //获取流程信息
-        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
-        sgsjTechnicalScienceTopic.setId(Long.valueOf(resultBean.getPtVar1()));
-        FlowInfoSearchUtil.getFlowInfo(sgsjTechnicalScienceTopic, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
-        BeanUtil.copyProperties(sgsjTechnicalScienceTopic, resultBean, CopyOptions.create(CommonBaseEntity.class, true));
+        if (StrUtil.isNotBlank(resultBean.getPtVar1())) {
+            SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
+            sgsjTechnicalScienceTopic.setId(Long.valueOf(resultBean.getPtVar1()));
+            FlowInfoSearchUtil.getFlowInfo(sgsjTechnicalScienceTopic, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
+            BeanUtil.copyProperties(sgsjTechnicalScienceTopic, resultBean, CopyOptions.create(CommonBaseEntity.class, true));
+        }
         return resultBean;
     }
 
@@ -267,10 +269,12 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             resultBean.setListAcceptance(collect.get(BelongBusiness.BELONG_BUSINESS_4));
         }
         //获取流程信息
-        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
-        sgsjTechnicalScienceTopic.setId(Long.valueOf(resultBean.getPtVar1()));
-        FlowInfoSearchUtil.getFlowInfo(sgsjTechnicalScienceTopic, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
-        BeanUtil.copyProperties(sgsjTechnicalScienceTopic, resultBean, CopyOptions.create(CommonBaseEntity.class, true));
+        if (StrUtil.isNotBlank(resultBean.getPtVar2())) {
+            SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
+            sgsjTechnicalScienceTopic.setId(Long.valueOf(resultBean.getPtVar1()));
+            FlowInfoSearchUtil.getFlowInfo(sgsjTechnicalScienceTopic, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
+            BeanUtil.copyProperties(sgsjTechnicalScienceTopic, resultBean, CopyOptions.create(CommonBaseEntity.class, true));
+        }
         return resultBean;
     }
 
