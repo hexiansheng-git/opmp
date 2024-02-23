@@ -30,5 +30,5 @@ public interface KcsjDesignOptimizeMapper {
 
     int deleteKcsjDesignOptimizeById(@Param("id") Long id);
 
-    List<KcsjDesignOptimize> getKcsjDesignOptimizeList4Ids(List<Long> ids);
+    List<KcsjDesignOptimize> getKcsjDesignOptimizeList4Ids(@Param("ids") List<Long> ids);
 }
