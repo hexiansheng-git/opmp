@@ -8,6 +8,7 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.sd.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -37,7 +38,7 @@ public class KcsjOutlineReview extends CommonBaseEntity {
      */
     @JsonProperty
     @Excel(name = "大纲名称")
-    @NotBlank(message = "大纲名称不能为空")
+    @NotBlank(message = "大纲名称不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private String outlineName;
     /**
      * 字段描述：大纲版本
@@ -83,7 +84,7 @@ public class KcsjOutlineReview extends CommonBaseEntity {
      */
     @JsonProperty
     @Excel(name = "项目总工")
-    @NotBlank(message = "项目总工不能为空")
+    @NotBlank(message = "项目总工不能为空", groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private String leadEngineerName;
     /**
      * 字段描述：发起人id
