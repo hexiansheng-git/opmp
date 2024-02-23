@@ -121,7 +121,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         shjsAuthenticateEvaluateService.saveEvaluate(id, BelongBusiness.BELONG_BUSINESS_9, evaluateList);
         //保存主表
         sgsjTechnicalScienceTopic.setId(IdWorker.createId());
-        sgsjTechnicalScienceTopic.setPtVar2(String.valueOf(IdWorker.createId()));
+//        sgsjTechnicalScienceTopic.setPtVar2(String.valueOf(IdWorker.createId()));
         sgsjTechnicalScienceTopic.setCreateUser(SecurityUtils.getUserName());
         sgsjTechnicalScienceTopic.setCreateTime(DateUtils.getNowDate());
         sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
@@ -161,6 +161,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             //保存主表
             sgsjTechnicalScienceTopic.setId(IdWorker.createId());
             sgsjTechnicalScienceTopic.setPtVar1(String.valueOf(IdWorker.createId()));
+            sgsjTechnicalScienceTopic.setPtVar2(String.valueOf(IdWorker.createId()));
             sgsjTechnicalScienceTopic.setCreateUser(SecurityUtils.getUserName());
             sgsjTechnicalScienceTopic.setCreateTime(DateUtils.getNowDate());
             sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
@@ -248,7 +249,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         return resultBean;
     }
 
-    /***
+    /**
      * 功能描述: 立项明细
      */
     @Override
@@ -271,7 +272,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         //获取流程信息
         if (StrUtil.isNotBlank(resultBean.getPtVar2())) {
             SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
-            sgsjTechnicalScienceTopic.setId(Long.valueOf(resultBean.getPtVar1()));
+            sgsjTechnicalScienceTopic.setId(Long.valueOf(resultBean.getPtVar2()));
             FlowInfoSearchUtil.getFlowInfo(sgsjTechnicalScienceTopic, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
             BeanUtil.copyProperties(sgsjTechnicalScienceTopic, resultBean, CopyOptions.create(CommonBaseEntity.class, true));
         }

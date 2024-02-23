@@ -140,7 +140,7 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
     @RequestMapping("/appplyListener")
     public void appplyListener(@RequestParam("id") Long id){
         SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
-        sgsjTechnicalScienceTopic.setId(id);
+        sgsjTechnicalScienceTopic.setPtVar1(String.valueOf(id));
         //走第三分支(有专家建议)，流程结束 最终状态为"通过"
         sgsjTechnicalScienceTopic.setApplyState("3");
         sgsjTechnicalScienceTopicService.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
@@ -155,13 +155,13 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
     @RequestMapping("/lxListener")
     public void updateTaskStatus(@RequestParam("id") Long id){
         SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
-        sgsjTechnicalScienceTopic.setId(id);
+        sgsjTechnicalScienceTopic.setPtVar2(String.valueOf(id));
         //流程结束
         sgsjTechnicalScienceTopic.setTaskStatus("5");
         sgsjTechnicalScienceTopicService.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
     }
 
-    /***
+    /**
      * 功能描述: 消息发布监听
      * 作者: fushudong
      * 时间: 2024/2/1
