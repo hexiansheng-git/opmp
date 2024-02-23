@@ -145,6 +145,9 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         List<QqchConstructionReviewPlan> updateList = new ArrayList<>();
         List<QqchConstructionReviewPlan> list = qqchConstructionReviewPlanVo.getList();
         list.stream().forEach(plan -> {
+            plan.setUpdateUser(SecurityUtils.getUserName());
+            plan.setUpdateTime(DateUtils.getNowDate());
+            updateList.add(plan);
             List<QqchConstructionReviewPlan> children = plan.getChildren();
             if(!CollectionUtils.isEmpty(children)){
                 children.stream().forEach(child -> {
