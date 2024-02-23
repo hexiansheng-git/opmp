@@ -156,12 +156,12 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
             for (KcsjMaterialsListDetail kcsjMaterialsListDetail : detailList) {
                 //设置上一版设计量和设计量差值
                 kcsjMaterialsListDetail.setMainId(kcsjMaterialsList.getId());
-                BigDecimal oldDemands = map.get(kcsjMaterialsListDetail.getMaterialName());
-                oldDemands = oldDemands == null ? BigDecimal.ZERO : oldDemands;
-                kcsjMaterialsListDetail.setPreviousQuantity(oldDemands);
+                BigDecimal oldDesign = map.get(kcsjMaterialsListDetail.getMaterialName());
+                oldDesign = oldDesign == null ? BigDecimal.ZERO : oldDesign;
+                kcsjMaterialsListDetail.setPreviousQuantity(oldDesign);
                 BigDecimal designQuantity = kcsjMaterialsListDetail.getDesignQuantity();
                 if (designQuantity != null) {
-                    kcsjMaterialsListDetail.setQuantityDifference(designQuantity.subtract(oldDemands));
+                    kcsjMaterialsListDetail.setQuantityDifference(designQuantity.subtract(oldDesign));
                 }
             }
             kcsjMaterialsList.setDetailList(detailList);
