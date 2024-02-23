@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 功能描述: 科技管理 - 鉴定或评价
  * @author fsd
  * @date 2024-01-25 10:17:37
- * @remark shjs_authenticate_evaluate
+ * @remark sgjs_authenticate_evaluate
  */
 public class ShjsAuthenticateEvaluate extends BaseEntity {
     private static final long serialVersionUID = 1L;
