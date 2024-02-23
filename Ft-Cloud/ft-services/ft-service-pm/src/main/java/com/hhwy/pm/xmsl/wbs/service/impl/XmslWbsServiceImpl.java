@@ -637,7 +637,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             String pcode = parent == null?"":ObjectUtils.nvlString(parent.getCode());
             temp.setParentCode(pcode);
             temp.setPtVar2(StringUtils.isBlank(temp.getPtVar2())?"-1":temp.getPtVar2()); //ptVar2 变更状态添加默认值
-            String stardName = ObjectUtils.nvlString(temp.getPtVar3();
+            String stardName = ObjectUtils.nvlString(temp.getPtVar3());
             if(ObjectUtils.isBlank(stardName) )
                 stardName = temp.getStandardName();
             temp.setName(ObjectUtils.nvlString(temp.getPartCode())+ObjectUtils.nvlString(stardName));
