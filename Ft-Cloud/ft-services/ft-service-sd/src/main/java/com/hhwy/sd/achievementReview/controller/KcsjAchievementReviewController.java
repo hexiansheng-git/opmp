@@ -110,6 +110,7 @@ public class KcsjAchievementReviewController extends BaseController {
         return toAjax(kcsjAchievementReviewService.deleteKcsjAchievementReview(kcsjAchievementReviewParam));
     }
 
+    @PreAuthorize(hasPermi = "kcsjAchievementReview:remove")
     @PostMapping("/deleteById/{id}")
     public AjaxResult deleteById(@PathVariable("id") Long id) {
         kcsjAchievementReviewService.deleteById(id);
