@@ -191,4 +191,7 @@ public class KcsjDesignOptimize extends BaseEntity {
     @JsonProperty
     private String ids;
 
+    @JsonProperty
+    private String fileGroupId;
+
 }

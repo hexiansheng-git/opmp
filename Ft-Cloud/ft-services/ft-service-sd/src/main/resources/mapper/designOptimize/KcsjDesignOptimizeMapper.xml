@@ -14,6 +14,7 @@
         <result property="regionName" column="region_name"/>
         <result property="projectId" column="project_id"/>
         <result property="projectName" column="project_name"/>
+        <result property="fileGroupId" column="file_group_id"/>
         <result property="deptId" column="dept_id"/>
         <result property="createUser" column="create_user"/>
         <result property="createUserName" column="create_user_name"/>
@@ -41,6 +42,7 @@
              , `region_name`
              , `project_id`
              , `project_name`
+             , `file_group_id`
              , `dept_id`
              , `create_user`
              , `create_user_name`
@@ -76,6 +78,7 @@
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
@@ -110,6 +113,7 @@
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
@@ -151,6 +155,7 @@
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
             <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
             <if test="deptId != null ">`dept_id`,</if>
             <if test="createUser != null  and createUser != ''">`create_user`,</if>
             <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
@@ -178,6 +183,7 @@
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>
             <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="deptId != null ">#{deptId},</if>
             <if test="createUser != null  and createUser != ''">#{createUser},</if>
             <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
@@ -210,6 +216,7 @@
             `region_name`,
             `project_id`,
             `project_name`,
+            `file_group_id`,
             `dept_id`,
             `create_user`,
             `create_user_name`,
@@ -238,6 +245,7 @@
                 #{item.regionName},
                 #{item.projectId},
                 #{item.projectName},
+                #{item.fileGroupId},
                 #{item.deptId},
                 #{item.createUser},
                 #{item.createUserName},
@@ -269,6 +277,7 @@
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
             <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
             <if test="deptId != null ">`dept_id` = #{deptId},</if>
             <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
             <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
@@ -333,6 +342,11 @@
             <trim prefix="project_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.fileGroupId}
                 </foreach>
             </trim>
             <trim prefix="dept_id  = case" suffix="end,">
@@ -439,6 +453,7 @@
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
