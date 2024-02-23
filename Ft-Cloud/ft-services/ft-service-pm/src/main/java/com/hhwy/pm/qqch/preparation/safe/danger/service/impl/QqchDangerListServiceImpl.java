@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.safe.danger.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -12,6 +13,7 @@ import com.hhwy.pm.qqch.preparation.safe.danger.mapper.QqchDangerListMapper;
 import com.hhwy.pm.qqch.preparation.safe.danger.service.IQqchDangerListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,7 +138,9 @@ public class QqchDangerListServiceImpl implements IQqchDangerListService {
 
                 if (!CollectionUtils.isEmpty(dbList)) {
                     for (QqchDangerList db : dbList) {
-                        if (db.getSchemeCode().equals(qqchDangerList.getSchemeCode())) {
+                        String dbCode = db==null?"":db.getSchemeCode();
+                        String scheCode = qqchDangerList==null?"":qqchDangerList.getSchemeCode();
+                        if (StringUtils.equals(dbCode, scheCode)) {
                             qqchDangerList.setDecisionCondition(db.getDecisionCondition());
                         }
                     }

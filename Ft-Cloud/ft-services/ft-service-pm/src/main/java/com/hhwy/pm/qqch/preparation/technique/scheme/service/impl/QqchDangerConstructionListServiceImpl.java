@@ -17,6 +17,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionLi
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstructionListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -51,10 +52,10 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
     @Autowired
     private IQqchDangerListService qqchDangerListService;
 
-    public QqchDangerConstructionListVo getQqchDangerConstructionListList(BigDecimal version) {
+    public QqchDangerConstructionListVo getQqchDangerConstructionListList(BigDecimal sourceVersion) {
         QqchDangerConstructionListVo vo = new QqchDangerConstructionListVo();
-        version = VersionUtil.getVersion("qqch_danger_construction_list", version);
-        vo.setVersion(version);
+        BigDecimal version = VersionUtil.getVersion("qqch_danger_construction_list", sourceVersion);
+        vo.setVersion(ObjectUtils.nvlBigDecimal(sourceVersion,version));
 
         QqchDangerConstructionList qryParam = new QqchDangerConstructionList();
         qryParam.setVersion(version);
