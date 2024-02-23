@@ -10,6 +10,7 @@ import com.hhwy.sd.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,7 @@ public class KcsjOutlineReview extends CommonBaseEntity {
      */
     @JsonProperty
     @Excel(name = "大纲名称")
+    @NotBlank(message = "大纲名称不能为空")
     private String outlineName;
     /**
      * 字段描述：大纲版本
@@ -81,6 +83,7 @@ public class KcsjOutlineReview extends CommonBaseEntity {
      */
     @JsonProperty
     @Excel(name = "项目总工")
+    @NotBlank(message = "项目总工不能为空")
     private String leadEngineerName;
     /**
      * 字段描述：发起人id
