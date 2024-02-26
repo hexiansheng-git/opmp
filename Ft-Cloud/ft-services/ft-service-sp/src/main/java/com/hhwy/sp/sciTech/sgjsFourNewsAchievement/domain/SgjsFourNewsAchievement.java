@@ -83,7 +83,7 @@ public class SgjsFourNewsAchievement extends CommonBaseEntity {
      * 字段描述：主要完成人联系方式
      */
     @JsonProperty
-    @FtExcel(name = "主要完成人联系方式")
+//    @FtExcel(name = "主要完成人联系方式")
     private String leaderContact;
     /**
      * 字段描述：完成单位

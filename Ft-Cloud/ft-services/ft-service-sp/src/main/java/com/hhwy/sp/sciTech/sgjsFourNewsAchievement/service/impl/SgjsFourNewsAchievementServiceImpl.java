@@ -231,6 +231,37 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
 
     @Override
     public List<SgjsFourNewsAchievement> getSgjsFourNewsAchievementList4Ids(List<Long> ids) {
-        return sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievementList4Ids(ids);
+        List<SgjsFourNewsAchievement> sgjsFourNewsAchievementList4Ids = sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievementList4Ids(ids);
+        // 专家库
+        SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
+        sgjsExpertLibrary.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_5);
+        List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsExpertLibraryService.getSgjsExpertLibraryList(sgjsExpertLibrary);
+        // 成果奖项
+        SgjsAchievementAward sgjsAchievementAward = new SgjsAchievementAward();
+        sgjsAchievementAward.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_5);
+        List<SgjsAchievementAward> sgjsAchievementAwardList = sgjsAchievementAwardService.getSgjsAchievementAwardList(sgjsAchievementAward);
+        // 鉴定或评价
+        ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = new ShjsAuthenticateEvaluate();
+        shjsAuthenticateEvaluate.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_5);
+        List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate);
+        if(CollectionUtils.isNotEmpty(sgjsFourNewsAchievementList4Ids)) {
+            for (SgjsFourNewsAchievement sgjsFourNewsAchievement1: sgjsFourNewsAchievementList4Ids) {
+                Long id = sgjsFourNewsAchievement1.getId();
+                if(CollectionUtils.isNotEmpty(sgjsExpertLibraryList)) {
+                    List<SgjsExpertLibrary> sgjsExpertLibraries = sgjsExpertLibraryList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
+                    sgjsFourNewsAchievement1.setSgjsExpertLibraryList(sgjsExpertLibraries);
+                }
+                if(CollectionUtils.isNotEmpty(sgjsAchievementAwardList)) {
+                    List<SgjsAchievementAward> sgjsAchievementAwards = sgjsAchievementAwardList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
+                    sgjsFourNewsAchievement1.setSgjsAchievementAwardList(sgjsAchievementAwards);
+                }
+                if(CollectionUtils.isNotEmpty(shjsAuthenticateEvaluateList)) {
+                    List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluates = shjsAuthenticateEvaluateList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
+                    sgjsFourNewsAchievement1.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluates);
+                }
+            }
+            FlowInfoSearchUtil.getFlowInfo(sgjsFourNewsAchievementList4Ids,FlowEnum.SGJS_FOUR_NEWS_ACHIEVEMENT);
+        }
+        return sgjsFourNewsAchievementList4Ids;
     }
 }

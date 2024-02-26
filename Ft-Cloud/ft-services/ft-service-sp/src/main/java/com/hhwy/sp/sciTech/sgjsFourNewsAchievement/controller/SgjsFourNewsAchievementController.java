@@ -111,7 +111,7 @@ public class SgjsFourNewsAchievementController extends BaseController {
         } else {
             sgjsFourNewsAchievementList = sgjsFourNewsAchievementService.getSgjsFourNewsAchievementList(sgjsFourNewsAchievementParam);
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
         // 评价结论字典
         LinkedHashMap<String, String> evaluateConclusionDict = DictUtil.getDictDataName("evaluate_conclusion");
         // 奖项类别
@@ -156,9 +156,9 @@ public class SgjsFourNewsAchievementController extends BaseController {
                 StringBuilder evaluateConclusionStr = new StringBuilder();
                 if(CollectionUtils.isNotEmpty(shjsAuthenticateEvaluateList)) {
                     for (int i = 0; i < shjsAuthenticateEvaluateList.size(); i++) {
-                        String authenticateUnit = shjsAuthenticateEvaluateList.get(0).getAuthenticateUnit();
-                        Date authenticateDate = shjsAuthenticateEvaluateList.get(0).getAuthenticateDate();
-                        String evaluateConclusion = shjsAuthenticateEvaluateList.get(0).getEvaluateConclusion();
+                        String authenticateUnit = shjsAuthenticateEvaluateList.get(i).getAuthenticateUnit();
+                        Date authenticateDate = shjsAuthenticateEvaluateList.get(i).getAuthenticateDate();
+                        String evaluateConclusion = shjsAuthenticateEvaluateList.get(i).getEvaluateConclusion();
                         String flag = "";
                         if(0 < i) {
                             flag = ",";
