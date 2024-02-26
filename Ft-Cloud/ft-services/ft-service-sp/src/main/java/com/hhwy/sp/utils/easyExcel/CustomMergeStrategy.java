@@ -1,15 +1,21 @@
 package com.hhwy.sp.utils.easyExcel;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.cell.CellUtil;
+import com.alibaba.excel.enums.CellDataTypeEnum;
 import com.alibaba.excel.metadata.Head;
+import com.alibaba.excel.metadata.data.RichTextStringData;
 import com.alibaba.excel.metadata.data.WriteCellData;
 import com.alibaba.excel.write.handler.CellWriteHandler;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteTableHolder;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,17 +34,27 @@ public class CustomMergeStrategy implements CellWriteHandler {
         int rowIndexPrev = rowIndex - 1;
         Row rowPrev = sheet.getRow(rowIndexPrev);
         Cell cellPrev = rowPrev.getCell(cell.getColumnIndex());
-        String cellValue = cell.getStringCellValue();
-        String cellValuePrev = cellPrev.getStringCellValue();
-        if (!cellValue.equals(cellValuePrev))return;
+        CellDataTypeEnum type = cellDataList.get(0).getType();
+        CellType cellType = cell.getCellType();
+        if (cellType.equals(CellType.BLANK)) return;
+        if (type.equals(CellDataTypeEnum.DATE)) {
+            Date dateCellValue = cell.getDateCellValue();
+            Date dateCellValue1 = cellPrev.getDateCellValue();
+            if (dateCellValue.compareTo(dateCellValue1)!=0)return;
+        }else {
+            String cellValue = cell.getStringCellValue();
+            String cellValuePrev = cellPrev.getStringCellValue();
+            if (!cellValue.equals(cellValuePrev))return;
+        }
         List<CellRangeAddress> mergedRegions = sheet.getMergedRegions();
         boolean merged = false;
         for (int i = 0; i < mergedRegions.size(); i++) {
             CellRangeAddress cellAddresses = mergedRegions.get(i);
-            if (cellAddresses.isInRange(rowIndex, cell.getColumnIndex())) {
+            if (cellAddresses.isInRange(rowIndex-1, cell.getColumnIndex())) {
                 sheet.removeMergedRegion(i);
                 cellAddresses.setLastRow(rowIndex);
                 sheet.addMergedRegion(cellAddresses);
+                merged = true;
                 break;
             }
         }

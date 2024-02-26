@@ -4,6 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
+import com.alibaba.excel.EasyExcel;
+import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO;
+import com.hhwy.sp.utils.easyExcel.CustomMergeStrategy;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -128,7 +133,13 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
 
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) throws IOException {
-        sgsjTechnicalScienceTopicService.export(sgsjTechnicalScienceTopicParam);
+        List<SgsjTechnicalScienceTopicDTO> exportData = sgsjTechnicalScienceTopicService.export(sgsjTechnicalScienceTopicParam);
+        if (CollUtil.isNotEmpty(exportData)){
+            EasyExcel.write(response.getOutputStream()).sheet(DateUtil.today())
+                    .head(SgsjTechnicalScienceTopicDTO.class)
+                    .registerWriteHandler(new CustomMergeStrategy())
+                    .doWrite(exportData);
+        }
     }
 
     /**

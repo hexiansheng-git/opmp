@@ -3,6 +3,7 @@ package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSON;
@@ -500,44 +501,57 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         }else {
             return AjaxResult.error("消息发布失败");
         }
-
     }
 
     //导出
     @Override
-    public void export(SgsjTechnicalScienceTopic param) {
-        List<SgsjTechnicalScienceTopicDTO> data = new ArrayList<>();
+    public List<SgsjTechnicalScienceTopicDTO> export(SgsjTechnicalScienceTopic param) {
+        List<SgsjTechnicalScienceTopicDTO> exportData = new ArrayList<>();
+        //主表
         List<SgsjTechnicalScienceTopic> resultList = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopicList(param);
-        if (CollUtil.isEmpty(resultList)) return;
-        Map<Long, SgsjTechnicalScienceTopic> resultMap = resultList.stream().collect(Collectors.toMap(SgsjTechnicalScienceTopic::getId, value -> value));
+        if (CollUtil.isEmpty(resultList)) return new ArrayList<>();
         Long[] ids = resultList.stream().map(SgsjTechnicalScienceTopic::getId).toArray(Long[]::new);
+        //成果
         List<SgjsAchievementAward> awardList = sgjsAchievementAwardService.getListByForeignIds(ids);
+        Map<Long, List<SgjsAchievementAward>> awardMap = awardList.stream().collect(Collectors.groupingBy(SgjsAchievementAward::getForeignId));
+        //鉴定、评价
         List<ShjsAuthenticateEvaluate> evaluateList = shjsAuthenticateEvaluateService.getListByForeignIds(ids);
-        for (SgjsAchievementAward sgjsAchievementAward : awardList) {
-            Long foreignId = sgjsAchievementAward.getForeignId();
-            SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = resultMap.get(foreignId);
-            SgsjTechnicalScienceTopicDTO dto = new SgsjTechnicalScienceTopicDTO();
-            BeanUtil.copyProperties(sgsjTechnicalScienceTopic, dto);
-            dto.setApplyAward(sgjsAchievementAward.getApplyAward());
-            dto.setAwardGrade(sgjsAchievementAward.getAwardGrade());
-            dto.setAwardType(sgjsAchievementAward.getAwardType());
-            dto.setGrantUnit(sgjsAchievementAward.getGrantUnit());
-            dto.setChildId(sgjsAchievementAward.getId());
-            dto.setMainId(sgsjTechnicalScienceTopic.getId());
-            data.add(dto);
+        Map<Long, List<ShjsAuthenticateEvaluate>> evaluateMap = evaluateList.stream().collect(Collectors.groupingBy(ShjsAuthenticateEvaluate::getForeignId));
+        if (CollUtil.isEmpty(awardList) && CollUtil.isEmpty(evaluateList)) {
+            exportData = BeanUtil.copyToList(resultList, SgsjTechnicalScienceTopicDTO.class);
+            resultList.clear();
         }
-        Map<Long, List<SgsjTechnicalScienceTopicDTO>> dataMap = data.stream().collect(Collectors.groupingBy(SgsjTechnicalScienceTopicDTO::getMainId));
-        for (ShjsAuthenticateEvaluate authenticateEvaluate : evaluateList) {
-            Long foreignId = authenticateEvaluate.getForeignId();
-            List<SgsjTechnicalScienceTopicDTO> sgsjTechnicalScienceTopicDTOS = dataMap.get(foreignId);
-            sgsjTechnicalScienceTopicDTOS.get(0).setAuthenticateUnit(authenticateEvaluate.getAuthenticateUnit());
-            sgsjTechnicalScienceTopicDTOS.get(0).setAuthenticateDate(authenticateEvaluate.getAuthenticateDate());
-            sgsjTechnicalScienceTopicDTOS.get(0).setEvaluateConclusion(authenticateEvaluate.getEvaluateConclusion());
+        for (SgsjTechnicalScienceTopic main : resultList) {
+            List<SgjsAchievementAward> sgjsAchievementAwards = awardMap.get(main.getId());
+            List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluates = evaluateMap.get(main.getId());
+            int loopCount = 1;
+            if (CollUtil.isNotEmpty(sgjsAchievementAwards) && CollUtil.isNotEmpty(shjsAuthenticateEvaluates)){
+                loopCount = Math.max(sgjsAchievementAwards.size(), shjsAuthenticateEvaluates.size());
+            }else if (CollUtil.isNotEmpty(shjsAuthenticateEvaluates)){
+                loopCount = shjsAuthenticateEvaluates.size();
+            }else if (CollUtil.isNotEmpty(sgjsAchievementAwards)) {
+                loopCount = sgjsAchievementAwards.size();
+            }
+            for (int i = 0; i < loopCount; i++) {
+                SgsjTechnicalScienceTopicDTO dto = new SgsjTechnicalScienceTopicDTO();
+                BeanUtil.copyProperties(main, dto);
+                if (CollUtil.isNotEmpty(sgjsAchievementAwards) && sgjsAchievementAwards.size() > i) {
+                    SgjsAchievementAward aAchievementAward = sgjsAchievementAwards.get(i);
+                    dto.setApplyAward(aAchievementAward.getApplyAward());
+                    dto.setAwardGrade(aAchievementAward.getAwardGrade());
+                    dto.setAwardType(aAchievementAward.getAwardType());
+                    dto.setGrantUnit(aAchievementAward.getGrantUnit());
+                    dto.setAwardTime(aAchievementAward.getAwardTime());
+                }
+                if (CollUtil.isNotEmpty(shjsAuthenticateEvaluates) && shjsAuthenticateEvaluates.size() > i) {
+                    ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = shjsAuthenticateEvaluates.get(i);
+                    dto.setAuthenticateUnit(shjsAuthenticateEvaluate.getAuthenticateUnit());
+                    dto.setAuthenticateDate(shjsAuthenticateEvaluate.getAuthenticateDate());
+                    dto.setEvaluateConclusion(shjsAuthenticateEvaluate.getEvaluateConclusion());
+                }
+                exportData.add(dto);
+            }
         }
-
-        EasyExcel.write("D:\\exprot.xlsx").sheet("导出测试")
-                .head(SgsjTechnicalScienceTopicDTO.class)
-                .registerWriteHandler(new CustomMergeStrategy())
-                .doWrite(new ArrayList<>(dataMap.values()));
+        return exportData;
     }
 }
