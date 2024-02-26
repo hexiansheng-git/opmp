@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
-import com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate;
+import com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain.SgjsAuthenticateEvaluate;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,7 +121,7 @@ public class SgjsFourNewsAchievementController extends BaseController {
                 // 成果奖项
                 List<SgjsAchievementAward> sgjsAchievementAwardList = sgjsFourNewsAchievement.getSgjsAchievementAwardList();
                 // 鉴定或评价
-                List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = sgjsFourNewsAchievement.getShjsAuthenticateEvaluateList();
+                List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = sgjsFourNewsAchievement.getShjsAuthenticateEvaluateList();
                 if(CollectionUtils.isNotEmpty(sgjsAchievementAwardList)) {
                     StringBuilder applyAwardStr = new StringBuilder();
                     StringBuilder awardGradeStr = new StringBuilder();

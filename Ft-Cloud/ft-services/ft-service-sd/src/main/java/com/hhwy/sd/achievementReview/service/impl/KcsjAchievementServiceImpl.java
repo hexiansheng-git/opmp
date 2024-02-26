@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -93,6 +90,7 @@ public class KcsjAchievementServiceImpl implements IKcsjAchievementService {
         List<KcsjAchievement> achievementList = achievementVo.getAchievementList();
         List<Long> delIdList = achievementVo.getDelIdList();
         Set<Long> delIdSet = new HashSet<>(delIdList);
+        this.checkData(achievementList,delIdSet);
         achievementList = achievementList.stream().filter(o -> !delIdSet.contains(o.getId())).collect(Collectors.toList());
         if(CollectionUtils.isEmpty(achievementList) && CollectionUtils.isEmpty(delIdList)){
             return;
@@ -121,6 +119,49 @@ public class KcsjAchievementServiceImpl implements IKcsjAchievementService {
 
         if(CollectionUtils.isNotEmpty(delIdList)){
             kcsjAchievementMapper.deleteKcsjAchievementByPks(delIdList);
+        }
+    }
+
+    public void checkData(List<KcsjAchievement> achievementList,Set<Long> delIdSet){
+        achievementList = achievementList.stream().filter(o -> StringUtils.isNotBlank(o.getAchievementName()) && StringUtils.isNotBlank(o.getVersion())).collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(achievementList)){
+            return;
+        }
+        Set<String> codeSet1 = new HashSet<>();
+        for (KcsjAchievement achievement : achievementList) {
+            String achievementName = achievement.getAchievementName();
+            String version = achievement.getVersion();
+            String achievementNameVersion = achievementName + version;
+            if(codeSet1.contains(achievementNameVersion)){
+                throw new RuntimeException(String.format("勘察设计成果名称 + 版本 [%s]重复", achievementNameVersion));
+            }else {
+                codeSet1.add(achievementName);
+            }
+        }
+
+        List<KcsjAchievement> allList = kcsjAchievementMapper.getKcsjAchievementList(new AchievementQueryVo());
+        allList = allList.stream().filter(o -> !delIdSet.contains(o.getId())).filter(o -> StringUtils.isNotBlank(o.getAchievementName()) && StringUtils.isNotBlank(o.getVersion())).collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(allList)){
+            return;
+        }
+        Map<Long, String> idCodeMap = allList.stream().collect(Collectors.toMap(KcsjAchievement::getId, achievement -> achievement.getAchievementName()+achievement.getVersion()));
+        Set<String> codeSet2 = allList.stream().map(achievement -> achievement.getAchievementName()+achievement.getVersion()).collect(Collectors.toSet());
+
+        for(KcsjAchievement achievement : achievementList) {
+            String isAdd = achievement.getIsAdd();
+            String achievementName = achievement.getAchievementName();
+            String version = achievement.getVersion();
+            String achievementNameVersion = achievementName + version;
+            if ("1".equals(isAdd)) {
+                if (codeSet2.contains(achievementNameVersion)) {
+                    throw new RuntimeException(String.format("勘察设计成果名称 + 版本 [%s]重复", achievementNameVersion));
+                }
+            } else {
+                String oldCode = idCodeMap.get(achievement.getId());
+                if (codeSet2.contains(achievementNameVersion) && !oldCode.equals(achievementNameVersion)) {
+                    throw new RuntimeException(String.format("勘察设计成果名称 + 版本 [%s]重复", achievementNameVersion));
+                }
+            }
         }
     }
 

@@ -93,16 +93,16 @@ public class SgjsPatentDeclare extends CommonBaseEntity {
     /**
      * 字段描述：申请日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @FtExcel(name = "申请日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "申请日期", dateFormat = "yyyy年MM月dd日")
     private Date applicationDate;
     /**
      * 字段描述：授权日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @FtExcel(name = "授权日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "授权日期", dateFormat = "yyyy年MM月dd日")
     private Date authorizationDate;
     /**
      * 字段描述：主要完成人

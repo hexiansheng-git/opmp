@@ -1,22 +1,17 @@
 package com.hhwy.sp.sciTech.sgjsFourNewsAchievement.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
 import java.util.Date;
-import java.math.BigDecimal;
 
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
-import com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate;
+import com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain.SgjsAuthenticateEvaluate;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
@@ -291,7 +286,7 @@ public class SgjsFourNewsAchievement extends CommonBaseEntity {
     /**
      * 鉴定或评价数据集合
      */
-    private List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList;
+    private List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluateList;
 
     /**
      * 字段描述：鉴定单位

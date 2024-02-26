@@ -5,10 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
-import com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate;
+import com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain.SgjsAuthenticateEvaluate;
 import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 
@@ -27,7 +26,7 @@ public class SgsjTechnicalScienceTopic extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     //鉴定或评价
-    private List<ShjsAuthenticateEvaluate> evaluateList;
+    private List<SgjsAuthenticateEvaluate> evaluateList;
 
     //成果奖项
     private List<SgjsAchievementAward> awardList;
@@ -84,6 +83,11 @@ public class SgsjTechnicalScienceTopic extends CommonBaseEntity {
     private String topicName;
     /**
      * 字段描述：课题进度
+     * 1.课题立项
+     * 2.大纲审查
+     * 3.签订合同
+     * 4.中期检查
+     * 5.课题验收
      */
     @JsonProperty
     @Excel(name = "课题进度")

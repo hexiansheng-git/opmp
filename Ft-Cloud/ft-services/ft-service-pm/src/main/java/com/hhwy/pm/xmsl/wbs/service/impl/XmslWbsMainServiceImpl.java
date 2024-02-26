@@ -235,6 +235,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                 DynamicDataSourceContextHolder.push(oldDataSource);
             }
         });
+        
     }
     //异步处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容
     @Override
@@ -294,7 +295,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
             wbsService.initWbs2Redis(tenantKey);
             //6、更新子级状态
             updateChildStatus(invalidIdSet);
-            //7、推送到p6  暂时注释
+            //7、推送到p6  
             wbsPushP6.push2P6(main.getId(),tenantKey,allList,invalidIdSet);
         }catch(Exception e){
             e.printStackTrace();

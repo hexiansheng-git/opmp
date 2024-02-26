@@ -1,6 +1,8 @@
 package com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.service;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBillDetail;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,4 +34,6 @@ public interface IKcsjEngineeringQuantitiesBillDetailService {
     List<KcsjEngineeringQuantitiesBillDetail> getDetailList(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetailParam);
 
     List<KcsjEngineeringQuantitiesBillDetail> getKcsjEngineeringQuantitiesBillDetailListByMainId(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetailParam);
+
+    AjaxResult importData(MultipartFile file);
 }

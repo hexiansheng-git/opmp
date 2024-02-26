@@ -164,4 +164,14 @@ public class SgjsPaperPublishController extends BaseController {
         sgjsPaperPublishService.submitPaperPublishProcess(id);
         return AjaxResult.success();
     }
+
+    /***
+     * 功能描述: 消息发布
+     * 作者: fushudong
+     * 时间: 2024/2/1
+     */
+    @RequestMapping("/messagePublic")
+    public AjaxResult messagePublic(String message){
+        return sgjsPaperPublishService.messagePublic(message);
+    }
 }

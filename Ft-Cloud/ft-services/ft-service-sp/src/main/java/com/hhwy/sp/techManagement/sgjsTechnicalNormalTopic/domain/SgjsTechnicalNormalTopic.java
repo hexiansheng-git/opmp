@@ -61,6 +61,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
     private String topicName;
     /**
      * 字段描述：高新资质
+     * dict:high_certificate
      */
     @JsonProperty
     private String highCertificate;
@@ -84,6 +85,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
 
     /**
      * 字段描述：课题类别编号
+     * dict:topic_kind
      */
     @JsonProperty
     private String topicKind;
@@ -97,6 +99,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
 
     /**
      * 字段描述：项目技术经济目标编号
+     * dict:eco_target
      */
     @JsonProperty
     private String ecoTarget;
@@ -110,6 +113,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
 
     /**
      * 字段描述：课题状态
+     * dict:topic_state
      */
     @JsonProperty
     @Excel(name = "课题状态", sort = 8)
@@ -134,6 +138,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
 
     /**
      * 字段描述：项目成果形式
+     * dict:achievement_kind
      */
     @JsonProperty
     @NotBlank(message = "项目成果形式不能为空！",groups = ValidationGroups.Save.class)

@@ -157,8 +157,11 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
             return;
         }
 
-        List<Long> ids = achievementList.stream().map(KcsjAchievement::getId).collect(Collectors.toList());
-        kcsjAchievementMapper.relevancy(ids,id);
+        for (KcsjAchievement achievement : achievementList) {
+            achievement.setForeignId(id);
+            achievement.setAchievementStatus(null);
+        }
+        kcsjAchievementMapper.updateKcsjAchievementList(achievementList);
     }
 
     @Override

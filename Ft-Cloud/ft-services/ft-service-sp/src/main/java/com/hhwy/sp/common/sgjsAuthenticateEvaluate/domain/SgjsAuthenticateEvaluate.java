@@ -1,128 +1,73 @@
-package com.hhwy.sd.outlineReview.domain;
+package com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain;
 
+import com.hhwy.common.core.web.domain.BaseEntity;
+
+import java.util.Date;
+
+import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
-import com.hhwy.sd.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
-import com.hhwy.utils.common.CommonBaseEntity;
-import com.hhwy.utils.validation.ValidationGroups;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-
 /**
- * @author fushudong
- * @date 2024-02-04 15:29:15
- * @remark kcsj_outline_review
+ * 功能描述: 科技管理 - 鉴定或评价
+ * @author fsd
+ * @date 2024-01-25 10:17:37
+ * @remark sgjs_authenticate_evaluate
  */
 @Data
-public class KcsjOutlineReview extends CommonBaseEntity {
+public class SgjsAuthenticateEvaluate extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    //专家库
-    List<SgjsExpertLibrary> childList;
-
     /**
-     * 字段描述：
+     * 字段描述：主键
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
+    @Excel(name = "主键")
     private Long id;
     /**
-     * 字段描述：大纲名称
+     * 字段描述：外键
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "大纲名称")
-    @NotBlank(message = "大纲名称不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
-    private String outlineName;
-    /**
-     * 字段描述：大纲版本
-     */
-    @JsonProperty
-    @Excel(name = "大纲版本")
-    private BigDecimal version;
+    @Excel(name = "外键")
+    private Long foreignId;
 
     /**
-     * 字段描述：是否有效 0,1  备用，暂不维护该字段
+     * 字段描述：所属业务
+     * 1.科研课题管理；2.四新成果管理；3.工艺工法管理
      */
     @JsonProperty
-    @Excel(name = "是否有效")
-    private String valid;
+    @Excel(name = "所属业务")
+    private String belongBusiness;
     /**
-     * 字段描述：当前状态
+     * 字段描述：鉴定单位
      */
     @JsonProperty
-    @Excel(name = "当前状态")
-    private String taskStatus;
+    @Excel(name = "鉴定单位")
+    private String authenticateUnit;
     /**
-     * 字段描述：计划提交日期
+     * 字段描述：鉴定日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划提交日期", dateFormat = "yyyy-MM-dd")
-    private Date submitPlanDate;
+    @Excel(name = "鉴定日期", dateFormat = "yyyy-MM-dd")
+    private Date authenticateDate;
     /**
-     * 字段描述：计划评审日期
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @Excel(name = "计划评审日期", dateFormat = "yyyy-MM-dd")
-    private Date reviewPlanDate;
-    /**
-     * 字段描述：项目总工di
+     * 字段描述：评价结论
      */
     @JsonProperty
-    @Excel(name = "项目总工di")
-    private String leadEngineer;
+    @Excel(name = "评价结论")
+    private String evaluateConclusion;
     /**
-     * 字段描述：项目总工
+     * 字段描述：附件id
      */
     @JsonProperty
-    @Excel(name = "项目总工")
-    @NotBlank(message = "项目总工不能为空", groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
-    private String leadEngineerName;
-    /**
-     * 字段描述：发起人id
-     */
-    @JsonProperty
-    @Excel(name = "发起人id")
-    private String startPerson;
-    /**
-     * 字段描述：发起人
-     */
-    @JsonProperty
-    @Excel(name = "发起人")
-    private String startPersonName;
-    /**
-     * 字段描述：发起日期
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @Excel(name = "发起日期", dateFormat = "yyyy-MM-dd")
-    private Date startDate;
-    /**
-     * 字段描述：大纲修回日期
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @Excel(name = "大纲修回日期", dateFormat = "yyyy-MM-dd")
-    private Date remodifyDate;
-    /**
-     * 字段描述：大纲简述
-     */
-    @JsonProperty
-    @Excel(name = "大纲简述")
-    private String outlineSummary;
-    /**
-     * 字段描述：附件
-     */
-    @JsonProperty
-    @Excel(name = "附件")
+    @Excel(name = "附件id")
     private String fileGroupId;
     /**
      * 字段描述：备注
@@ -244,4 +189,5 @@ public class KcsjOutlineReview extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
 }

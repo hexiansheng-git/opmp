@@ -3,9 +3,14 @@ package com.hhwy.sd.outlineReview.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
+import com.alibaba.fastjson.JSON;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sd.outlineReview.domain.KcsjOutlineReview;
 import com.hhwy.sd.outlineReview.service.IKcsjOutlineReviewService;
+import com.hhwy.system.api.domain.SysUser;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +37,8 @@ public class KcsjOutlineReviewController extends BaseController {
 
     @Autowired
     private IKcsjOutlineReviewService kcsjOutlineReviewService;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
 
     @PreAuthorize(hasPermi = "kcsjOutlineReview:list")
@@ -124,5 +131,18 @@ public class KcsjOutlineReviewController extends BaseController {
         kcsjOutlineReview.setId(id);
         kcsjOutlineReview.setTaskStatus("5");
         kcsjOutlineReviewService.updateKcsjOutlineReview(kcsjOutlineReview);
+    }
+
+    //获取项目总工下得所有用户
+    @RequestMapping("/getUserInfoByRole")
+    public AjaxResult getUserInfoByRole(){
+        String[] roleKey = {"lead_engineer"};
+        AjaxResult ajaxResult = systemServiceApi.selectByRoleKeyList(roleKey);
+        Integer code = (Integer) ajaxResult.get("code");
+        Assert.isTrue(code.equals(200), "获取用户列表失败");
+        String s = JSON.toJSONString(ajaxResult.get("data"));
+        List<SysUser> sysUsers = JSON.parseArray(s, SysUser.class);
+        String clientIds = sysUsers.stream().map(SysUser::getNickName).collect(Collectors.joining(","));
+        return AjaxResult.success(clientIds);
     }
 }

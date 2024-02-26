@@ -7,7 +7,6 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBillDetail;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.service.IKcsjEngineeringQuantitiesBillDetailService;
-import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -16,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * @author wll
  * @date 2024-02-04 14:05:09
- * @remark  勘察设计-设计工程量管理-工程量清单
+ * @remark 勘察设计-设计工程量管理-工程量清单
  */
 @Validated
 @RestController
@@ -92,6 +90,7 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
 
     /**
      * 导出
+     *
      * @param response
      * @param list
      * @throws IOException
@@ -100,10 +99,10 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
     @PostMapping("/export")
     public void export(HttpServletResponse response,
                        @RequestBody KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetailParam) throws IOException {
-        List<KcsjEngineeringQuantitiesBillDetail> data=new ArrayList<>();
-        if (kcsjEngineeringQuantitiesBillDetailParam.getDelIdList().size()>0){
-             data = kcsjEngineeringQuantitiesBillDetailService.getDetailList(kcsjEngineeringQuantitiesBillDetailParam);
-        }else {
+        List<KcsjEngineeringQuantitiesBillDetail> data = new ArrayList<>();
+        if (kcsjEngineeringQuantitiesBillDetailParam.getDelIdList().size() > 0) {
+            data = kcsjEngineeringQuantitiesBillDetailService.getDetailList(kcsjEngineeringQuantitiesBillDetailParam);
+        } else {
             data = kcsjEngineeringQuantitiesBillDetailService.getKcsjEngineeringQuantitiesBillDetailListByMainId(kcsjEngineeringQuantitiesBillDetailParam);
         }
         ExcelUtils<KcsjEngineeringQuantitiesBillDetail> util = new ExcelUtils<>(KcsjEngineeringQuantitiesBillDetail.class);
@@ -125,19 +124,14 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
 
     /**
      * 导入
+     *
      * @param file
      * @return
      */
     @PreAuthorize(hasPermi = "kcsjEngineeringQuantitiesBillDetail:import")
     @PostMapping("/importData")
-    public AjaxResult importData(@RequestPart("file") MultipartFile file){
-        FtExcelUtil<KcsjEngineeringQuantitiesBillDetail> util = new FtExcelUtil<>(KcsjEngineeringQuantitiesBillDetail.class);
-        try {
-            InputStream inputStream = file.getInputStream();
-            List<KcsjEngineeringQuantitiesBillDetail> recordList = util.importTreeExcel(inputStream);
-            return AjaxResult.success(recordList);
-        } catch (Exception e) {
-            throw new RuntimeException("导入失败！");
-        }
+    public AjaxResult importData(@RequestPart("file") MultipartFile file) {
+       return kcsjEngineeringQuantitiesBillDetailService.importData(file);
     }
+
 }

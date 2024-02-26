@@ -306,11 +306,11 @@
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="pt_var4 = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `code`=#{item.wbsCode} then #{item.objectId}
+                    when `self_code`=#{item.wbsCode} and `name`=#{item.wbsName} then #{item.objectId}
                 </foreach>
             </trim>
         </trim>
-        where `code` in
+        where `self_code` in
         <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.wbsCode}
         </foreach>

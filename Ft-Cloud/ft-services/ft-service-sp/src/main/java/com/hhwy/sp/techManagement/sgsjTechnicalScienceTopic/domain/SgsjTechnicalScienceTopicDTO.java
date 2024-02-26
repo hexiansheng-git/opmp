@@ -1,11 +1,16 @@
 package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
+import com.alibaba.excel.converters.bigdecimal.BigDecimalStringConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.sp.utils.easyExcel.DateToStringConvert;
+import com.hhwy.sp.utils.easyExcel.ExcelDict;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -16,7 +21,8 @@ import java.util.Date;
  * @remark sgsj_technical_science_topic
  */
 @Data
-public class SgsjTechnicalScienceTopicDTO {
+@ColumnWidth(value = 15)
+public class SgsjTechnicalScienceTopicDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     
     /**
@@ -56,8 +62,9 @@ public class SgsjTechnicalScienceTopicDTO {
      * 字段描述：研发预算（万元）
      */
     @JsonProperty
-    @Excel(name = "研发预算（万元）")
+    @ExcelProperty(value = "研发预算（万元）", converter = BigDecimalStringConverter.class)
     private BigDecimal rdCost;
+
     /**
      * 字段描述：协作单位
      */
@@ -72,7 +79,8 @@ public class SgsjTechnicalScienceTopicDTO {
     private String togetherUnitOther;
 
     @JsonProperty
-    @Excel(name = "申请状态")
+    @ExcelProperty(value = "申请状态")
+    @ExcelDict(dictType = "data_current_state")
     private String applyState;
 
     /**
@@ -80,38 +88,39 @@ public class SgsjTechnicalScienceTopicDTO {
      */
     @JsonProperty
     @ExcelProperty(value = "课题进度")
+    @ExcelDict(dictType = "")
     private String topicCurentNode;
     /**
      * 字段描述：当前状态
      */
     @JsonProperty
-    @Excel(name = "当前状态")
+    @ExcelProperty(value = "当前状态")
     private String taskStatus;
     /**
      * 字段描述：当前经办人
      */
     @JsonProperty
-    @Excel(name = "当前经办人")
+    @ExcelProperty(value = "当前经办人")
     private String handlePerson;
 
     /**
      * 字段描述：鉴定单位
      */
     @JsonProperty
-    @Excel(name = "鉴定单位")
+    @ExcelProperty(value = "鉴定单位")
     private String authenticateUnit;
     /**
      * 字段描述：鉴定日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "鉴定日期", dateFormat = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy年MM月dd日")
+    @ExcelProperty(value = "鉴定日期")
     private Date authenticateDate;
     /**
      * 字段描述：评价结论
      */
     @JsonProperty
-    @Excel(name = "评价结论")
+    @ExcelProperty(value = "评价结论")
     private String evaluateConclusion;
 
 
@@ -119,39 +128,32 @@ public class SgsjTechnicalScienceTopicDTO {
      * 字段描述：申报奖项
      */
     @JsonProperty
-    @Excel(name = "申报奖项")
+    @ExcelProperty(value = "申报奖项")
     private String applyAward;
     /**
      * 字段描述：奖项等级
      */
     @JsonProperty
-    @Excel(name = "奖项等级")
+    @ExcelProperty(value = "奖项等级")
     private String awardGrade;
     /**
      * 字段描述：奖项类别
      */
     @JsonProperty
-    @Excel(name = "奖项类别")
+    @ExcelProperty(value = "奖项类别")
     private String awardType;
     /**
      * 字段描述：授予单位
      */
     @JsonProperty
-    @Excel(name = "授予单位")
+    @ExcelProperty(value = "授予单位")
     private String grantUnit;
     /**
      * 字段描述：奖项时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "奖项时间", dateFormat = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy年MM月dd日")
+    @ExcelProperty(value = "奖项时间", converter = DateToStringConvert.class)
     private Date awardTime;
-
-
-    private Long childId;
-    private Long mainId;
-
-
-
 
 }

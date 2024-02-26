@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
+import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO;
 
 /**
  * @author fsd
@@ -38,5 +39,5 @@ public interface ISgsjTechnicalScienceTopicService {
 
     AjaxResult messagePublic();
 
-    void export(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
+    List<SgsjTechnicalScienceTopicDTO> export(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
 }

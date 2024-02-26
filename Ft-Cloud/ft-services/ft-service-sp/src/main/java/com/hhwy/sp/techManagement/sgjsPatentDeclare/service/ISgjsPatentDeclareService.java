@@ -1,5 +1,6 @@
 package com.hhwy.sp.techManagement.sgjsPatentDeclare.service;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.SgjsPatentDeclare;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.vo.PatentDeclareQueryVo;
 
@@ -37,6 +38,8 @@ public interface ISgjsPatentDeclareService {
      * @return
      */
     Long save(SgjsPatentDeclare patentDeclare);
+
+    AjaxResult messagePublic(String message);
 
     List<SgjsPatentDeclare> getListByIds(List<Long> ids);
 

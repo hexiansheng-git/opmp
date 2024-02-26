@@ -1,17 +1,25 @@
 package com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.service.impl;
 
+import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBillDetail;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.mapper.KcsjEngineeringQuantitiesBillDetailMapper;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.service.IKcsjEngineeringQuantitiesBillDetailService;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -154,5 +162,44 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
     }
 
 
+    @Override
+    public AjaxResult importData(MultipartFile file) {
 
+        FtExcelUtil<KcsjEngineeringQuantitiesBillDetail> util = new FtExcelUtil<>(KcsjEngineeringQuantitiesBillDetail.class);
+        List<KcsjEngineeringQuantitiesBillDetail> recordList=new ArrayList<>();
+        try {
+            InputStream inputStream = file.getInputStream();
+            recordList = util.importTreeExcel(inputStream);
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败");
+        }
+        //数据校验
+        List<KcsjEngineeringQuantitiesBillDetail> records = new ArrayList<>();
+        for (KcsjEngineeringQuantitiesBillDetail detail : recordList) {
+            KcsjEngineeringQuantitiesBillDetail newDetail=new KcsjEngineeringQuantitiesBillDetail();
+            BeanUtils.copyProperties(detail,newDetail);
+            records.add(newDetail);
+        }
+        records = ListTreeUtil.formatList(
+                records,
+                KcsjEngineeringQuantitiesBillDetail::getIsAdd,
+                KcsjEngineeringQuantitiesBillDetail::getId,
+                KcsjEngineeringQuantitiesBillDetail::setId,
+                KcsjEngineeringQuantitiesBillDetail::setPid,
+                KcsjEngineeringQuantitiesBillDetail::getChildren,
+                KcsjEngineeringQuantitiesBillDetail::setChildren);
+        for (KcsjEngineeringQuantitiesBillDetail detail : records) {
+            detail.setIsAdd("1");
+            if (StringUtils.isEmpty(detail.getSerialNumber())){
+                throw new BaseException("序号不能为空");
+            }
+        }
+        records = ListTreeUtil.formatTree(
+                records,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                KcsjEngineeringQuantitiesBillDetail::getChildren,
+                KcsjEngineeringQuantitiesBillDetail::setChildren);
+        return AjaxResult.success(records);
+    }
 }
