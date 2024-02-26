@@ -1,7 +1,11 @@
 package com.hhwy.sp.techManagement.sgjsPaperPublish.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.common.constant.BelongBusiness;
 import com.hhwy.sp.common.constant.DataCurrentState;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
@@ -13,6 +17,7 @@ import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishExportV
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishQueryVo;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.mapper.SgjsPaperPublishMapper;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.service.ISgjsPaperPublishService;
+import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.lang3.StringUtils;
@@ -20,9 +25,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -40,6 +47,9 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
 
     @Autowired
     private ISgjsExpertLibraryService sgjsExpertLibraryService;
+
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
 
     @Override
@@ -145,6 +155,26 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         sgjsAchievementAwardService.saveAchievementAward(id,BelongBusiness.BELONG_BUSINESS_8,awardList);
 
         return id;
+    }
+
+    @Override
+    public AjaxResult messagePublic(String message) {
+        // todo 指定角色暂不确定
+        String[] roles = {"area_handler", "regionDutyPerson", "common"};
+        AjaxResult ajaxResult = systemServiceApi.selectByRoleKeyList(roles);
+        Integer code = (Integer) ajaxResult.get("code");
+        Assert.isTrue(code == 200, "获取用户列表失败");
+        String s = JSON.toJSONString(ajaxResult.get("data"));
+        List<SysUser> sysUsers = JSON.parseArray(s, SysUser.class);
+        String clientIds = sysUsers.stream().map(SysUser::getUserName).collect(Collectors.joining(","));
+        String topic = "system";
+        // todo 消息体内容暂不确定
+        R r = systemServiceApi.batchPublish(clientIds, topic, message);
+        if (r.getCode() == 200) {
+            return AjaxResult.success("消息发布成功");
+        }else {
+            return AjaxResult.error("消息发布失败");
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.hhwy.sp.techManagement.sgjsPaperPublish.service;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.SgjsPaperPublish;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishExportVo;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishQueryVo;
@@ -38,6 +39,8 @@ public interface ISgjsPaperPublishService {
     List<SgjsPaperPublish> getListByIds(List<Long> ids);
 
     List<PaperPublishExportVo> getExportVoList(List<SgjsPaperPublish> sgjsPaperPublishList);
+
+    AjaxResult messagePublic(String message);
 
     void updatePaperPublishProcess(Long id, String pass);
 
