@@ -240,9 +240,9 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         sgjsAchievementAward.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_5);
         List<SgjsAchievementAward> sgjsAchievementAwardList = sgjsAchievementAwardService.getSgjsAchievementAwardList(sgjsAchievementAward);
         // 鉴定或评价
-        ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = new ShjsAuthenticateEvaluate();
+        SgjsAuthenticateEvaluate shjsAuthenticateEvaluate = new SgjsAuthenticateEvaluate();
         shjsAuthenticateEvaluate.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_5);
-        List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate);
+        List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate);
         if(CollectionUtils.isNotEmpty(sgjsFourNewsAchievementList4Ids)) {
             for (SgjsFourNewsAchievement sgjsFourNewsAchievement1: sgjsFourNewsAchievementList4Ids) {
                 Long id = sgjsFourNewsAchievement1.getId();
@@ -255,7 +255,7 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
                     sgjsFourNewsAchievement1.setSgjsAchievementAwardList(sgjsAchievementAwards);
                 }
                 if(CollectionUtils.isNotEmpty(shjsAuthenticateEvaluateList)) {
-                    List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluates = shjsAuthenticateEvaluateList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
+                    List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluates = shjsAuthenticateEvaluateList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
                     sgjsFourNewsAchievement1.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluates);
                 }
             }

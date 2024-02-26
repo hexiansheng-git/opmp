@@ -238,9 +238,9 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         sgjsAchievementAward.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_6);
         List<SgjsAchievementAward> sgjsAchievementAwardList = sgjsAchievementAwardService.getSgjsAchievementAwardList(sgjsAchievementAward);
         // 鉴定或评价
-        ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = new ShjsAuthenticateEvaluate();
+        SgjsAuthenticateEvaluate shjsAuthenticateEvaluate = new SgjsAuthenticateEvaluate();
         shjsAuthenticateEvaluate.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_6);
-        List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate);
+        List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate);
         if (CollectionUtils.isNotEmpty(sgjsTechMethodList4ids)) {
             for (SgjsTechMethod sgjsTechMethod1: sgjsTechMethodList4ids) {
                 Long id = sgjsTechMethod1.getId();
@@ -253,7 +253,7 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
                     sgjsTechMethod1.setSgjsAchievementAwardList(sgjsAchievementAwards);
                 }
                 if(CollectionUtils.isNotEmpty(shjsAuthenticateEvaluateList)) {
-                    List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluates = shjsAuthenticateEvaluateList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
+                    List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluates = shjsAuthenticateEvaluateList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
                     sgjsTechMethod1.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluates);
                 }
             }
