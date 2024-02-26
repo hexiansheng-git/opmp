@@ -47,6 +47,8 @@ public class KcsjOutlineReview extends CommonBaseEntity {
     @Excel(name = "大纲版本")
     private BigDecimal version;
 
+    private String versionStr;
+
     /**
      * 字段描述：是否有效 0,1  备用，暂不维护该字段
      */
