@@ -208,7 +208,7 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
     @Override
     public AjaxResult messagePublic(String message) {
         // todo 指定角色暂不确定
-        String[] roles = {"area_handler", "regionDutyPerson", "common"};
+        String[] roles = {"regional_center", "overseas_business_unit"};
         AjaxResult ajaxResult = systemServiceApi.selectByRoleKeyList(roles);
         Integer code = (Integer) ajaxResult.get("code");
         Assert.isTrue(code == 200, "获取用户列表失败");
