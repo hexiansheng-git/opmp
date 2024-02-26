@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -18,8 +17,8 @@ import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
-import com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate;
-import com.hhwy.sp.common.shjsAuthenticateEvaluate.service.IShjsAuthenticateEvaluateService;
+import com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain.SgjsAuthenticateEvaluate;
+import com.hhwy.sp.common.sgjsAuthenticateEvaluate.service.ISgjsAuthenticateEvaluateService;
 import com.hhwy.system.api.domain.SysUser;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
@@ -58,7 +57,7 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
      * 鉴定或评价
      */
     @Autowired
-    private IShjsAuthenticateEvaluateService shjsAuthenticateEvaluateService;
+    private ISgjsAuthenticateEvaluateService shjsAuthenticateEvaluateService;
 
     @Autowired
     private SystemServiceApi systemServiceApi;
@@ -76,7 +75,7 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         sgjsAchievementAward.setForeignId(id);
         returnVO.setSgjsAchievementAwardList(sgjsAchievementAwardService.getSgjsAchievementAwardList(sgjsAchievementAward));
         // 鉴定或评价
-        ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = new ShjsAuthenticateEvaluate();
+        SgjsAuthenticateEvaluate shjsAuthenticateEvaluate = new SgjsAuthenticateEvaluate();
         shjsAuthenticateEvaluate.setForeignId(id);
         returnVO.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate));
         FlowInfoSearchUtil.getFlowInfo(returnVO, FlowEnum.SGJS_TECH_METHOD);
@@ -94,9 +93,9 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         sgjsAchievementAward.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_6);
         List<SgjsAchievementAward> sgjsAchievementAwardList = sgjsAchievementAwardService.getSgjsAchievementAwardList(sgjsAchievementAward);
         // 鉴定或评价
-        ShjsAuthenticateEvaluate shjsAuthenticateEvaluate = new ShjsAuthenticateEvaluate();
+        SgjsAuthenticateEvaluate shjsAuthenticateEvaluate = new SgjsAuthenticateEvaluate();
         shjsAuthenticateEvaluate.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_6);
-        List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate);
+        List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate);
         if (CollectionUtils.isNotEmpty(sgjsTechMethodList)) {
             for (SgjsTechMethod sgjsTechMethod1: sgjsTechMethodList) {
                 Long id = sgjsTechMethod1.getId();
@@ -109,7 +108,7 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
                     sgjsTechMethod1.setSgjsAchievementAwardList(sgjsAchievementAwards);
                 }
                 if(CollectionUtils.isNotEmpty(shjsAuthenticateEvaluateList)) {
-                    List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluates = shjsAuthenticateEvaluateList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
+                    List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluates = shjsAuthenticateEvaluateList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
                     sgjsTechMethod1.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluates);
                 }
             }
@@ -155,7 +154,7 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         List<SgjsAchievementAward> sgjsAchievementAwardList = sgjsTechMethod.getSgjsAchievementAwardList();
         sgjsAchievementAwardService.saveAchievementAward(id, BelongBusiness.BELONG_BUSINESS_6, sgjsAchievementAwardList);
         // 鉴定或评价
-        List<ShjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = sgjsTechMethod.getShjsAuthenticateEvaluateList();
+        List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = sgjsTechMethod.getShjsAuthenticateEvaluateList();
         shjsAuthenticateEvaluateService.saveShjsAuthenticateEvaluateList(id, BelongBusiness.BELONG_BUSINESS_6,shjsAuthenticateEvaluateList);
         // 专家
         List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsTechMethod.getSgjsExpertLibraryList();

@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.sp.common.shjsAuthenticateEvaluate.mapper.ShjsAuthenticateEvaluateMapper">
+<mapper namespace="com.hhwy.sp.common.sgjsAuthenticateEvaluate.mapper.SgjsAuthenticateEvaluateMapper">
 
-    <resultMap type="com.hhwy.sp.common.shjsAuthenticateEvaluate.domain.ShjsAuthenticateEvaluate"
-               id="ShjsAuthenticateEvaluateResultMap">
+    <resultMap type="com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain.SgjsAuthenticateEvaluate"
+               id="SgjsAuthenticateEvaluateResultMap">
         <result property="id" column="id"/>
         <result property="foreignId" column="foreign_id"/>
         <result property="belongBusiness" column="belong_business"/>
@@ -33,7 +33,7 @@
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
     </resultMap>
-    <sql id="selectShjsAuthenticateEvaluateVo">
+    <sql id="selectSgjsAuthenticateEvaluateVo">
         SELECT `id`
                 , `foreign_id`
                 , `belong_business`
@@ -62,8 +62,8 @@
                 , `pt_var5`
         FROM sgjs_authenticate_evaluate
     </sql>
-    <select id="getShjsAuthenticateEvaluate" resultMap="ShjsAuthenticateEvaluateResultMap">
-        <include refid="selectShjsAuthenticateEvaluateVo"/>
+    <select id="getShjsAuthenticateEvaluate" resultMap="SgjsAuthenticateEvaluateResultMap">
+        <include refid="selectSgjsAuthenticateEvaluateVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
@@ -100,8 +100,8 @@
         order by create_time desc
     </select>
 
-    <select id="getShjsAuthenticateEvaluateList" resultMap="ShjsAuthenticateEvaluateResultMap">
-        <include refid="selectShjsAuthenticateEvaluateVo"/>
+    <select id="getShjsAuthenticateEvaluateList" resultMap="SgjsAuthenticateEvaluateResultMap">
+        <include refid="selectSgjsAuthenticateEvaluateVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
@@ -485,8 +485,8 @@
         </where>
     </update>
 
-    <select id="getListByForeignList" resultMap="ShjsAuthenticateEvaluateResultMap">
-        <include refid="selectShjsAuthenticateEvaluateVo"/>
+    <select id="getListByForeignList" resultMap="SgjsAuthenticateEvaluateResultMap">
+        <include refid="selectSgjsAuthenticateEvaluateVo"/>
         where  del_flag = 0 and foreign_id in
         <foreach item="foreignId" collection="foreignIds" open="(" separator="," close=")">
             #{foreignId}

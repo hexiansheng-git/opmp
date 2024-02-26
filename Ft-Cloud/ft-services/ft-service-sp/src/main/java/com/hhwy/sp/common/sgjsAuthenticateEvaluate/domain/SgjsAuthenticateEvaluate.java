@@ -1,18 +1,14 @@
-package com.hhwy.sp.common.shjsAuthenticateEvaluate.domain;
+package com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
 
 import java.util.Date;
-import java.math.BigDecimal;
 
 import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.List;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -23,7 +19,7 @@ import lombok.Data;
  * @remark sgjs_authenticate_evaluate
  */
 @Data
-public class ShjsAuthenticateEvaluate extends BaseEntity {
+public class SgjsAuthenticateEvaluate extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
