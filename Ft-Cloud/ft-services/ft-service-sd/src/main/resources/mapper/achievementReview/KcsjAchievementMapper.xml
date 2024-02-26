@@ -141,7 +141,7 @@
             <if test="actualReviewDateStart != null and actualReviewDateStart != ''">and `actual_review_date` &gt;= #{actualReviewDateStart}</if>
             <if test="actualReviewDateEnd != null and actualReviewDateEnd != ''">and `actual_review_date` &lt;= #{actualReviewDateEnd}</if>
         </where>
-        order by create_time desc
+        order by create_time desc , id desc
     </select>
     <select id="getListByIds" resultMap="KcsjAchievementResultMap">
         <include refid="selectKcsjAchievementVo"/>
