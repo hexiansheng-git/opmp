@@ -248,6 +248,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
             sgsjTechnicalScienceTopic.setId(Long.valueOf(resultBean.getPtVar1()));
             FlowInfoSearchUtil.getFlowInfo(sgsjTechnicalScienceTopic, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
+            sgsjTechnicalScienceTopic.setId(null);
             BeanUtil.copyProperties(sgsjTechnicalScienceTopic, resultBean, CopyOptions.create(CommonBaseEntity.class, true));
         }
         return resultBean;
@@ -278,6 +279,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
             sgsjTechnicalScienceTopic.setId(Long.valueOf(resultBean.getPtVar2()));
             FlowInfoSearchUtil.getFlowInfo(sgsjTechnicalScienceTopic, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
+            sgsjTechnicalScienceTopic.setId(null);
             BeanUtil.copyProperties(sgsjTechnicalScienceTopic, resultBean, CopyOptions.create(CommonBaseEntity.class, true));
         }
         return resultBean;

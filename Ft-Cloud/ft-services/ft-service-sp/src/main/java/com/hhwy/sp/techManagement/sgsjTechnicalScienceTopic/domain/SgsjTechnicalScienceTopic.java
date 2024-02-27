@@ -83,6 +83,7 @@ public class SgsjTechnicalScienceTopic extends CommonBaseEntity {
     private String topicName;
     /**
      * 字段描述：课题进度
+     * 字典：topic_curent_node
      * 1.课题立项
      * 2.大纲审查
      * 3.签订合同

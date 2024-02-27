@@ -1,11 +1,13 @@
 package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.alibaba.excel.converters.bigdecimal.BigDecimalStringConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.sp.utils.easyExcel.DateToStringConvert;
+import com.hhwy.sp.utils.easyExcel.DictConvert;
 import com.hhwy.sp.utils.easyExcel.ExcelDict;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,7 +23,7 @@ import java.util.Date;
  * @remark sgsj_technical_science_topic
  */
 @Data
-@ColumnWidth(value = 15)
+@ColumnWidth(value = 20)
 public class SgsjTechnicalScienceTopicDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -79,7 +81,7 @@ public class SgsjTechnicalScienceTopicDTO implements Serializable {
     private String togetherUnitOther;
 
     @JsonProperty
-    @ExcelProperty(value = "申请状态")
+    @ExcelProperty(value = "申请状态", converter = DictConvert.class)
     @ExcelDict(dictType = "data_current_state")
     private String applyState;
 
@@ -87,8 +89,8 @@ public class SgsjTechnicalScienceTopicDTO implements Serializable {
      * 字段描述：课题进度
      */
     @JsonProperty
-    @ExcelProperty(value = "课题进度")
-    @ExcelDict(dictType = "")
+    @ExcelProperty(value = "课题进度", converter = DictConvert.class)
+    @ExcelDict(dictType = "topic_curent_node")
     private String topicCurentNode;
     /**
      * 字段描述：当前状态
@@ -96,6 +98,22 @@ public class SgsjTechnicalScienceTopicDTO implements Serializable {
     @JsonProperty
     @ExcelProperty(value = "当前状态")
     private String taskStatus;
+
+    public String getTaskStatus() {
+        return taskStatus;
+    }
+    public void setTaskStatus(String taskStatus) {
+        if (StrUtil.isBlank(taskStatus)) return;
+        if (taskStatus.equals("0")){
+            taskStatus = "未发起";
+        }else if (taskStatus.equals("5")){
+            taskStatus = "审核完成";
+        }else {
+            taskStatus = "审批中";
+        }
+        this.taskStatus = taskStatus;
+    }
+
     /**
      * 字段描述：当前经办人
      */
@@ -114,13 +132,14 @@ public class SgsjTechnicalScienceTopicDTO implements Serializable {
      */
     @JsonProperty
     @DateTimeFormat(pattern = "yyyy年MM月dd日")
-    @ExcelProperty(value = "鉴定日期")
+    @ExcelProperty(value = "鉴定日期", converter = DateToStringConvert.class)
     private Date authenticateDate;
     /**
      * 字段描述：评价结论
      */
     @JsonProperty
-    @ExcelProperty(value = "评价结论")
+    @ExcelProperty(value = "评价结论", converter = DictConvert.class)
+    @ExcelDict(dictType = "evaluate_conclusion")
     private String evaluateConclusion;
 
 
@@ -140,7 +159,8 @@ public class SgsjTechnicalScienceTopicDTO implements Serializable {
      * 字段描述：奖项类别
      */
     @JsonProperty
-    @ExcelProperty(value = "奖项类别")
+    @ExcelProperty(value = "奖项类别", converter = DictConvert.class)
+    @ExcelDict(dictType = "award_type")
     private String awardType;
     /**
      * 字段描述：授予单位
