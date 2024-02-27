@@ -294,7 +294,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         }
         qqchLabourDemandPlan.setPid(0l);
         List<QqchLabourDemandPlan> qqchLabourDemandPlanList = qqchLabourDemandPlanMapper.getQqchLabourDemandPlanList(qqchLabourDemandPlan);
-        List<String> strings = qqchLabourDemandPlanList.stream().map(QqchLabourDemandPlan::getJobName).collect(Collectors.toList());
+        List<String> strings = qqchLabourDemandPlanList.stream().map(QqchLabourDemandPlan::getJobName).distinct().collect(Collectors.toList());
         return strings;
     }
 
