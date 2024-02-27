@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -106,7 +107,7 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
             data = kcsjEngineeringQuantitiesBillDetailService.getKcsjEngineeringQuantitiesBillDetailListByMainId(kcsjEngineeringQuantitiesBillDetailParam);
         }
         ExcelUtils<KcsjEngineeringQuantitiesBillDetail> util = new ExcelUtils<>(KcsjEngineeringQuantitiesBillDetail.class);
-        List<KcsjEngineeringQuantitiesBillDetail> collect = data.stream().distinct().collect(Collectors.toList());
+        List<KcsjEngineeringQuantitiesBillDetail> collect = data.stream().sorted(Comparator.comparing(KcsjEngineeringQuantitiesBillDetail::getSerialNumber)).distinct().collect(Collectors.toList());
         util.exportExcel(response, collect, DateUtils.getDate());
         /*List<KcsjEngineeringQuantitiesBillDetail> treeList=new ArrayList<>();
         treeList = ListTreeUtil.formatList(
