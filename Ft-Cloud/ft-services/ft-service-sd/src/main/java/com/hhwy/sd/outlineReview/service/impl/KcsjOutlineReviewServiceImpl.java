@@ -30,9 +30,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 功能描述: 勘察设计 - 勘察设计大纲评审
  * @author fushudong
  * @date 2024-02-04 15:29:15
- * @remark
  */
 @Service
 public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {

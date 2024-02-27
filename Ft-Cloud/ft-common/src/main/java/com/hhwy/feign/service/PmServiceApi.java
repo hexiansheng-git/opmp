@@ -53,6 +53,9 @@ public interface PmServiceApi {
     @GetMapping("/projectBasicInfo/getPrjInfo")
     Map<String,Object> getPrjInfo();
 
+    @GetMapping("/projectBasicInfo/projectInfo")
+    AjaxResult projectInfo();
+
 
     /**
      * 3.7.1 测量管理计划

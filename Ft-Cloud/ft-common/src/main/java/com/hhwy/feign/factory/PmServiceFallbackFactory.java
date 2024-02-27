@@ -52,6 +52,11 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             }
 
             @Override
+            public AjaxResult projectInfo() {
+                return AjaxResult.error("请求失败:", throwable.getMessage());
+            }
+
+            @Override
             public AjaxResult qqchMeasureExpPlanList() {
                 return AjaxResult.error("请求失败:", throwable.getMessage());
             }
