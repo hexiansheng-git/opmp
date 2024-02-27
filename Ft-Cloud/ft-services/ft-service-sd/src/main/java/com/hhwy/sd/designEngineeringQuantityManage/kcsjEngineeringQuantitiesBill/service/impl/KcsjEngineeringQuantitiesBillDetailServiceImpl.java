@@ -195,6 +195,7 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
                 throw new BaseException("序号不能为空");
             }
         }
+        //构建树形返回数据
         records = ListTreeUtil.formatTree(
                 records,
                 o -> o.getPid() == null,
