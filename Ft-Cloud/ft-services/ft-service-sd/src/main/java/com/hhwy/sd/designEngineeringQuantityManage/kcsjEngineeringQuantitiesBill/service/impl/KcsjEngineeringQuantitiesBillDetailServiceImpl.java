@@ -196,12 +196,16 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
             }
         }
         //构建树形返回数据
-        records = ListTreeUtil.formatTree(
-                records,
-                o -> o.getPid() == null,
-                (r, n) -> r.getId().equals(n.getPid()),
-                KcsjEngineeringQuantitiesBillDetail::getChildren,
-                KcsjEngineeringQuantitiesBillDetail::setChildren);
+
+            records = ListTreeUtil.formatTree(
+                    records,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    KcsjEngineeringQuantitiesBillDetail::getChildren,
+                    KcsjEngineeringQuantitiesBillDetail::setChildren);
+            if (records.size()==0){
+                throw new BaseException("请检查数据层级序号是否正确");
+            }
 
         return AjaxResult.success(records);
     }
