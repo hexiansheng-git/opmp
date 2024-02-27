@@ -92,7 +92,7 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
      * 导出
      *
      * @param response
-     * @param list
+     * @param kcsjEngineeringQuantitiesBillDetailParam
      * @throws IOException
      */
     @PreAuthorize(hasPermi = "kcsjEngineeringQuantitiesBillDetail:export")

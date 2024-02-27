@@ -36,4 +36,5 @@ public interface IKcsjEngineeringQuantitiesBillDetailService {
     List<KcsjEngineeringQuantitiesBillDetail> getKcsjEngineeringQuantitiesBillDetailListByMainId(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetailParam);
 
     AjaxResult importData(MultipartFile file);
+
 }
