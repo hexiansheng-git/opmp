@@ -75,6 +75,7 @@ public class KcsjEngineeringQuantitiesBillDetail extends TreeNode<KcsjEngineerin
      */
     @JsonProperty
 //    @FtExcel(name = "上一个版本工程量")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal previousQuantity;
     /**
      * 字段描述：上一个版本id
@@ -87,6 +88,7 @@ public class KcsjEngineeringQuantitiesBillDetail extends TreeNode<KcsjEngineerin
      * 字段描述：工程量
      */
     @JsonProperty
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @FtExcel(name = "工程量")
     @Excel(name = "工程量")
     private BigDecimal workload;
@@ -95,6 +97,7 @@ public class KcsjEngineeringQuantitiesBillDetail extends TreeNode<KcsjEngineerin
      */
     @JsonProperty
 //    @FtExcel(name = "工程量差")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal quantityDifference;
 
     /**

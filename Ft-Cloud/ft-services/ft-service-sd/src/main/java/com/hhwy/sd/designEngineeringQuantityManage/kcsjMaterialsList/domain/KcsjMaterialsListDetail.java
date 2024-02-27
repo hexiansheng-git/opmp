@@ -60,12 +60,14 @@ public class KcsjMaterialsListDetail extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "上一个版本设计量")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal previousQuantity;
     /**
      * 字段描述：设计量
      */
     @JsonProperty
     @Excel(name = "设计量")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @NotNull(message = "请填写设计量",groups ={ValidationGroups.Save.class,ValidationGroups.Update.class})
     private BigDecimal designQuantity;
     /**
@@ -73,23 +75,27 @@ public class KcsjMaterialsListDetail extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "设计量差")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal quantityDifference;
     /**
      * 字段描述：局损耗定额
      */
     @JsonProperty
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Excel(name = "局损耗定额")
     private BigDecimal localLossQuota;
     /**
      * 字段描述：项目控制损耗定额
      */
     @JsonProperty
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Excel(name = "项目控制损耗定额")
     private BigDecimal projectLossQuota;
     /**
      * 字段描述：需用量（设计量*项目控制损耗定额）
      */
     @JsonProperty
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @Excel(name = "需用量=(设计量*(项目控制损耗定额+1))")
     private BigDecimal demand;
     /**
