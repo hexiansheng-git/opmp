@@ -230,7 +230,6 @@ public class KcsjEngineeringQuantitiesBill extends BaseEntity {
 
     private List<Long> delIdList;
 
-
     public String getValid() {
         return valid;
     }

@@ -2,6 +2,9 @@ package com.hhwy.sd.outlineReview.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
@@ -13,6 +16,7 @@ import com.hhwy.sd.outlineReview.domain.KcsjOutlineReview;
 import com.hhwy.sd.outlineReview.mapper.KcsjOutlineReviewMapper;
 import com.hhwy.sd.outlineReview.service.IKcsjOutlineReviewService;
 import com.hhwy.utils.Constant;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import io.swagger.v3.oas.annotations.security.OAuthFlow;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +51,7 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
     public List<KcsjOutlineReview> getKcsjOutlineReviewList(KcsjOutlineReview kcsjOutlineReview) {
         List<KcsjOutlineReview> resultList = kcsjOutlineReviewMapper.getKcsjOutlineReviewList(kcsjOutlineReview);
         if (CollUtil.isEmpty(resultList)) return Collections.emptyList();
+        resultList.forEach(p -> p.setVersionStr("V" + p.getVersion()));
         FlowInfoSearchUtil.getFlowInfo(resultList, FlowEnum.KCSJ_PATENT_DECLARE);
         return resultList;
     }
@@ -65,6 +70,7 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         if (BeanUtil.isEmpty(result)) return result;
         List<SgjsExpertLibrary> listByForeignId = sgjsExpertLibraryService.getListByForeignId(result.getId());
         result.setChildList(listByForeignId);
+        result.setVersionStr("V" + result.getVersion());
         FlowInfoSearchUtil.getFlowInfo(result, FlowEnum.KCSJ_PATENT_DECLARE);
         return result;
     }
@@ -84,25 +90,30 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         //返回当前版本
         List<SgjsExpertLibrary> listByForeignId = sgjsExpertLibraryService.getListByForeignId(result.getId());
         result.setChildList(listByForeignId);
+        result.setVersionStr("V" + result.getVersion());
         return result;
     }
 
     //保存
     @Transactional
     public Long insertKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview) {
-        Long id = IdWorker.createId();
-        kcsjOutlineReview.setId(id);
-        kcsjOutlineReview.setCreateUser(SecurityUtils.getUserName());
-        kcsjOutlineReview.setCreateTime(DateUtils.getNowDate());
-        kcsjOutlineReview.setTaskStatus("0");
-        KcsjOutlineReview result = kcsjOutlineReviewMapper.getMaxVersionData();
-        if ( result == null ){
+        Long id = kcsjOutlineReview.getId();
+        if (ObjectUtil.isEmpty(id)) {
+            id = IdWorker.createId();
+            kcsjOutlineReview.setId(id);
+            kcsjOutlineReview.setCreateUser(SecurityUtils.getUserName());
+            kcsjOutlineReview.setCreateTime(DateUtils.getNowDate());
+            kcsjOutlineReview.setTaskStatus("0");
             kcsjOutlineReview.setVersion(BigDecimal.ONE);
+            kcsjOutlineReviewMapper.insertKcsjOutlineReview(kcsjOutlineReview);
         }else {
-            BigDecimal version = result.getVersion();
-            kcsjOutlineReview.setVersion(version.add(BigDecimal.ONE));
+            String versionStr = kcsjOutlineReview.getVersionStr();
+            String sub = StrUtil.sub(versionStr, 0, 1);
+            kcsjOutlineReview.setVersion(new BigDecimal(sub));
+            kcsjOutlineReview.setUpdateUser(SecurityUtils.getUserName());
+            kcsjOutlineReview.setUpdateTime(DateUtils.getNowDate());
+            kcsjOutlineReviewMapper.updateKcsjOutlineReview(kcsjOutlineReview);
         }
-        kcsjOutlineReviewMapper.insertKcsjOutlineReview(kcsjOutlineReview);
         List<SgjsExpertLibrary> childList = kcsjOutlineReview.getChildList();
         if (CollUtil.isEmpty(childList)) return id;
         sgjsExpertLibraryService.saveExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_1, childList);

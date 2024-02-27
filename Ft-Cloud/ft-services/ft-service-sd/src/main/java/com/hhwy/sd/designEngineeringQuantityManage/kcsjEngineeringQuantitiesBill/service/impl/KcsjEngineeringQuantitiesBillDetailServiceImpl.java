@@ -50,7 +50,6 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
     }
 
 
-
     public List<KcsjEngineeringQuantitiesBillDetail> getKcsjEngineeringQuantitiesBillDetailListByMainId(KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail) {
 
         return kcsjEngineeringQuantitiesBillDetailMapper.getKcsjEngineeringQuantitiesBillDetailListByMainId(kcsjEngineeringQuantitiesBillDetail);
@@ -119,10 +118,11 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
         }
         //删除
         if (!CollectionUtils.isEmpty(list)) {
-            kcsjEngineeringQuantitiesBillDetailMapper.deleteInfoData(list,SecurityUtils.getUserId().toString());
+            kcsjEngineeringQuantitiesBillDetailMapper.deleteInfoData(list, SecurityUtils.getUserId().toString());
         }
 
     }
+
     private List<KcsjEngineeringQuantitiesBillDetail> getIds(List<Long> delIdList) {
 
         //查询出所有数据
@@ -153,10 +153,10 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
         //查找以当前数据的id为pid的数据
         Set<Map.Entry<String, KcsjEngineeringQuantitiesBillDetail>> entries = map.entrySet();
         for (Map.Entry<String, KcsjEngineeringQuantitiesBillDetail> entry : entries) {
-            if (entry.getValue().getPid()!=null &&entry.getValue().getPid().equals(detail.getId())){
+            if (entry.getValue().getPid() != null && entry.getValue().getPid().equals(detail.getId())) {
                 KcsjEngineeringQuantitiesBillDetail billDetail = map.get(entry.getKey());
                 total.add(billDetail);
-                findTotal(map,total,billDetail);
+                findTotal(map, total, billDetail);
             }
         }
     }
@@ -166,7 +166,7 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
     public AjaxResult importData(MultipartFile file) {
 
         FtExcelUtil<KcsjEngineeringQuantitiesBillDetail> util = new FtExcelUtil<>(KcsjEngineeringQuantitiesBillDetail.class);
-        List<KcsjEngineeringQuantitiesBillDetail> recordList=new ArrayList<>();
+        List<KcsjEngineeringQuantitiesBillDetail> recordList = new ArrayList<>();
         try {
             InputStream inputStream = file.getInputStream();
             recordList = util.importTreeExcel(inputStream);
@@ -176,8 +176,8 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
         //数据校验
         List<KcsjEngineeringQuantitiesBillDetail> records = new ArrayList<>();
         for (KcsjEngineeringQuantitiesBillDetail detail : recordList) {
-            KcsjEngineeringQuantitiesBillDetail newDetail=new KcsjEngineeringQuantitiesBillDetail();
-            BeanUtils.copyProperties(detail,newDetail);
+            KcsjEngineeringQuantitiesBillDetail newDetail = new KcsjEngineeringQuantitiesBillDetail();
+            BeanUtils.copyProperties(detail, newDetail);
             records.add(newDetail);
         }
         records = ListTreeUtil.formatList(
@@ -188,18 +188,24 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
                 KcsjEngineeringQuantitiesBillDetail::setPid,
                 KcsjEngineeringQuantitiesBillDetail::getChildren,
                 KcsjEngineeringQuantitiesBillDetail::setChildren);
+        //删除原数据
         for (KcsjEngineeringQuantitiesBillDetail detail : records) {
             detail.setIsAdd("1");
-            if (StringUtils.isEmpty(detail.getSerialNumber())){
+            if (StringUtils.isEmpty(detail.getSerialNumber())) {
                 throw new BaseException("序号不能为空");
             }
         }
+        //构建树形返回数据
         records = ListTreeUtil.formatTree(
                 records,
                 o -> o.getPid() == null,
                 (r, n) -> r.getId().equals(n.getPid()),
                 KcsjEngineeringQuantitiesBillDetail::getChildren,
                 KcsjEngineeringQuantitiesBillDetail::setChildren);
+        if (records.size() == 0) {
+            throw new BaseException("请检查数据层级序号是否正确");
+        }
         return AjaxResult.success(records);
     }
+
 }
