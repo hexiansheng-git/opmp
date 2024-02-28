@@ -161,7 +161,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
     public AjaxResult messagePublic(String message) {
         // todo 指定角色暂不确定
         String[] roles = {"area_handler", "regionDutyPerson", "common"};
-        AjaxResult ajaxResult = systemServiceApi.selectByRoleKeyList(roles);
+        AjaxResult ajaxResult = systemServiceApi.selectByRoleAndTenant(roles, SecurityUtils.getTenantKey());
         Integer code = (Integer) ajaxResult.get("code");
         Assert.isTrue(code == 200, "获取用户列表失败");
         String s = JSON.toJSONString(ajaxResult.get("data"));

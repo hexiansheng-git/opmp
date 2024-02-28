@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sd.common.ProjectBasicInfo;
@@ -144,7 +145,7 @@ public class KcsjOutlineReviewController extends BaseController {
     @RequestMapping("/getUserInfoByRole")
     public AjaxResult getUserInfoByRole(){
         String[] roleKey = {"lead_engineer"};
-        AjaxResult ajaxResult = systemServiceApi.selectByRoleKeyList(roleKey);
+        AjaxResult ajaxResult = systemServiceApi.selectByRoleAndTenant(roleKey, SecurityUtils.getTenantKey());
         Integer code = (Integer) ajaxResult.get("code");
         Assert.isTrue(code.equals(200), "获取用户列表失败");
         String s = JSON.toJSONString(ajaxResult.get("data"));

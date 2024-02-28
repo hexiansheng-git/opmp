@@ -11,6 +11,7 @@ import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.domain.base.system.warn.TWarnRecord;
 import com.hhwy.system.warn.service.ITWarnService;
 import com.hhwy.utils.validation.ValidationGroups;
+import com.sun.javafx.collections.MappingChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -124,5 +125,16 @@ public class TWarnController extends BaseController {
     @PostMapping("selectByRoleKeyList")
     public AjaxResult selectByRoleKeyList(@RequestBody String[] roleKeyList){
         return AjaxResult.success(tWarnService.selectByRoleKeyList(roleKeyList));
+    }
+
+    /**
+     * 根据角色和租户获取用户列表
+     * @param roleKeyList 角色列表
+     * @param tenantKey 租户
+     * @return 用户列表
+     */
+    @PostMapping("selectByRoleAndTenant")
+    public AjaxResult selectByRoleAndTenant(@RequestParam String[] roleKeyList, @RequestParam(value = "tenantKey", required = false) String tenantKey){
+        return AjaxResult.success(tWarnService.selectByRoleKeyList(roleKeyList, tenantKey));
     }
 }

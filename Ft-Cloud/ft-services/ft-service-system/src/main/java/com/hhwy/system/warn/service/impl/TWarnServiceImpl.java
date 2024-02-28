@@ -1,6 +1,7 @@
 package com.hhwy.system.warn.service.impl;
 
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.HtmlToText;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -256,5 +257,12 @@ public class TWarnServiceImpl implements ITWarnService {
 
     public List<SysUser> selectByRoleKeyList(String[] roleKeyList){
         return myUserMapper.selectByRoleKeyList(roleKeyList,"master");
+    }
+
+    @Override
+    public List<SysUser> selectByRoleKeyList(String[] roleKeyList, String tenantKey) {
+        if (StrUtil.isBlank(tenantKey))
+            tenantKey = "master";
+        return myUserMapper.selectByRoleKeyList(roleKeyList,tenantKey);
     }
 }

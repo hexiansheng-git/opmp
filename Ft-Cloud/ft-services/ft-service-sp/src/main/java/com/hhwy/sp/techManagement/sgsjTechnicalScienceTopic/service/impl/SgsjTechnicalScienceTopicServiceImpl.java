@@ -484,7 +484,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     public AjaxResult messagePublic() {
         // todo 指定角色暂不确定
         String[] roles = {"area_handler", "regionDutyPerson", "common"};
-        AjaxResult ajaxResult = systemServiceApi.selectByRoleKeyList(roles);
+        AjaxResult ajaxResult = systemServiceApi.selectByRoleAndTenant(roles, SecurityUtils.getTenantKey());
         Integer code = (Integer) ajaxResult.get("code");
         Assert.isTrue(code.equals(200), "获取用户列表失败");
         String s = JSON.toJSONString(ajaxResult.get("data"));

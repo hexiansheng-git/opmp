@@ -42,4 +42,6 @@ public interface ITWarnService {
     void pushTWarn(TWarn tWarn);
 
     List<SysUser> selectByRoleKeyList(String[] roleKeyList);
+
+    List<SysUser> selectByRoleKeyList(String[] roleKeyList, String tenantKey);
 }
