@@ -3,10 +3,15 @@ package com.hhwy.sd.outlineReview.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.sd.common.ProjectBasicInfo;
 import com.hhwy.sd.outlineReview.domain.KcsjOutlineReview;
 import com.hhwy.sd.outlineReview.service.IKcsjOutlineReviewService;
 import com.hhwy.system.api.domain.SysUser;
@@ -26,9 +31,9 @@ import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
 
 /**
+ * 功能描述: 勘察设计 - 勘察设计大纲评审
  * @author fushudong
  * @date 2024-02-04 15:29:15
- * @remark
  */
 @Validated
 @RestController
@@ -39,6 +44,8 @@ public class KcsjOutlineReviewController extends BaseController {
     private IKcsjOutlineReviewService kcsjOutlineReviewService;
     @Autowired
     private SystemServiceApi systemServiceApi;
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
 
     @PreAuthorize(hasPermi = "kcsjOutlineReview:list")
@@ -144,5 +151,19 @@ public class KcsjOutlineReviewController extends BaseController {
         List<SysUser> sysUsers = JSON.parseArray(s, SysUser.class);
         String clientIds = sysUsers.stream().map(SysUser::getNickName).collect(Collectors.joining(","));
         return AjaxResult.success(clientIds);
+    }
+
+    //获取项目等级（项目分类） 供流程审批使用   1，2，3，4 分别代表1级2级3级4级
+    @RequestMapping("/getProjectLevel")
+    public AjaxResult getProjectLevel(){
+        AjaxResult ajaxResult = pmServiceApi.projectInfo();
+        Object code = ajaxResult.get("code");
+        Assert.isTrue(code.equals(200), "获取项目信息失败");
+        String jsonString = JSON.toJSONString(ajaxResult.getData());
+        ProjectBasicInfo projectBasicInfo = JSON.parseObject(jsonString, ProjectBasicInfo.class);
+        if (ObjectUtil.isEmpty(projectBasicInfo)) return AjaxResult.success("");
+        String projectCategory = projectBasicInfo.getProjectCategory();
+        if (StrUtil.isBlank(projectCategory)) return AjaxResult.success("");
+        return AjaxResult.success(projectCategory);
     }
 }

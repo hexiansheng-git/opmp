@@ -40,6 +40,7 @@ public class CustomMergeStrategy implements CellWriteHandler {
         if (type.equals(CellDataTypeEnum.DATE)) {
             Date dateCellValue = cell.getDateCellValue();
             Date dateCellValue1 = cellPrev.getDateCellValue();
+            if (dateCellValue == null || dateCellValue1 == null)return;
             if (dateCellValue.compareTo(dateCellValue1)!=0)return;
         }else {
             String cellValue = cell.getStringCellValue();

@@ -3,6 +3,7 @@ package com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBil
 import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBillDetail;
@@ -19,8 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author wll
@@ -162,6 +166,31 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
     }
 
 
+    /**
+     * 导出数据
+     * @param response
+     * @param kcsjEngineeringQuantitiesBillDetailParam
+     * @throws IOException
+     */
+    @Override
+    public void exportData(HttpServletResponse response, KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetailParam) throws IOException {
+
+        List<KcsjEngineeringQuantitiesBillDetail> data = new ArrayList<>();
+        if (kcsjEngineeringQuantitiesBillDetailParam.getDelIdList().size() > 0) {
+            data = getDetailList(kcsjEngineeringQuantitiesBillDetailParam);
+        } else {
+            data = getKcsjEngineeringQuantitiesBillDetailListByMainId(kcsjEngineeringQuantitiesBillDetailParam);
+        }
+        ExcelUtils<KcsjEngineeringQuantitiesBillDetail> util = new ExcelUtils<>(KcsjEngineeringQuantitiesBillDetail.class);
+        List<KcsjEngineeringQuantitiesBillDetail> collect = data.stream().sorted(Comparator.comparing(KcsjEngineeringQuantitiesBillDetail::getSerialNumber)).distinct().collect(Collectors.toList());
+        util.exportExcel(response, collect, DateUtils.getDate());
+    }
+
+    /**
+     * 导入数据
+     * @param file
+     * @return
+     */
     @Override
     public AjaxResult importData(MultipartFile file) {
 
@@ -207,5 +236,6 @@ public class KcsjEngineeringQuantitiesBillDetailServiceImpl implements IKcsjEngi
         }
         return AjaxResult.success(records);
     }
+    
 
 }

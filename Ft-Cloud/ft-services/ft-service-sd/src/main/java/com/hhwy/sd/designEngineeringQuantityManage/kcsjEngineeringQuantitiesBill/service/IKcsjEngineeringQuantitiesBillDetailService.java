@@ -4,6 +4,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBillDetail;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -37,4 +39,5 @@ public interface IKcsjEngineeringQuantitiesBillDetailService {
 
     AjaxResult importData(MultipartFile file);
 
+    void exportData(HttpServletResponse response, KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetailParam) throws IOException;
 }

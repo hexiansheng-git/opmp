@@ -30,9 +30,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * 功能描述: 勘察设计 - 勘察设计大纲评审
  * @author fushudong
  * @date 2024-02-04 15:29:15
- * @remark
  */
 @Service
 public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
@@ -59,11 +59,12 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
     //详情，编辑
     @Override
     public KcsjOutlineReview getDetail(KcsjOutlineReview param) {
-        KcsjOutlineReview result;
-        if (param != null && param.getId() == null) {
-            //参数为空，默认获取最新有效版本，最高版本 = 有效版本
-            result = kcsjOutlineReviewMapper.getMaxVersionData();
-        } else {
+        //参数为空，默认获取最新有效版本，最高版本 = 有效版本
+        KcsjOutlineReview result = kcsjOutlineReviewMapper.getMaxVersionData();
+        FlowInfoSearchUtil.getFlowInfo(result, FlowEnum.KCSJ_PATENT_DECLARE);
+        //保存高版本状态，用户控制前端调整按钮显隐
+        String maxVersionTaskStatus = result.getTaskStatus();
+        if (param != null && param.getId() != null) {
             //参数不为空，获取指定版本数据
             result = kcsjOutlineReviewMapper.getKcsjOutlineReview(param);
         }
@@ -71,6 +72,7 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         List<SgjsExpertLibrary> listByForeignId = sgjsExpertLibraryService.getListByForeignId(result.getId());
         result.setChildList(listByForeignId);
         result.setVersionStr("V" + result.getVersion());
+        result.setPtVar1(maxVersionTaskStatus);
         FlowInfoSearchUtil.getFlowInfo(result, FlowEnum.KCSJ_PATENT_DECLARE);
         return result;
     }
@@ -86,10 +88,12 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
             //创建新的数据
             result.setVersion(result.getVersion().add(BigDecimal.ONE));
             result.setTaskStatus("0");
+            result.setId(null);
+            result.setRemodifyDate(null);
         }
         //返回当前版本
-        List<SgjsExpertLibrary> listByForeignId = sgjsExpertLibraryService.getListByForeignId(result.getId());
-        result.setChildList(listByForeignId);
+//        List<SgjsExpertLibrary> listByForeignId = sgjsExpertLibraryService.getListByForeignId(result.getId());
+//        result.setChildList(listByForeignId);
         result.setVersionStr("V" + result.getVersion());
         return result;
     }
@@ -104,11 +108,16 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
             kcsjOutlineReview.setCreateUser(SecurityUtils.getUserName());
             kcsjOutlineReview.setCreateTime(DateUtils.getNowDate());
             kcsjOutlineReview.setTaskStatus("0");
-            kcsjOutlineReview.setVersion(BigDecimal.ONE);
+            if (StrUtil.isBlank(kcsjOutlineReview.getVersionStr())){
+                kcsjOutlineReview.setVersion(BigDecimal.ONE);
+            }else {
+                String versionStr = kcsjOutlineReview.getVersionStr();
+                kcsjOutlineReview.setVersion(new BigDecimal(StrUtil.sub(versionStr, 1, 2)));
+            }
             kcsjOutlineReviewMapper.insertKcsjOutlineReview(kcsjOutlineReview);
         }else {
             String versionStr = kcsjOutlineReview.getVersionStr();
-            String sub = StrUtil.sub(versionStr, 0, 1);
+            String sub = StrUtil.sub(versionStr, 1, 2);
             kcsjOutlineReview.setVersion(new BigDecimal(sub));
             kcsjOutlineReview.setUpdateUser(SecurityUtils.getUserName());
             kcsjOutlineReview.setUpdateTime(DateUtils.getNowDate());
