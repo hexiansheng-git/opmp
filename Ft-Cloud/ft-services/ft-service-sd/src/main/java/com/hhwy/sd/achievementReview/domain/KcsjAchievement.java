@@ -74,10 +74,10 @@ public class KcsjAchievement extends BaseEntity {
     @FtExcel(name = "实际提交日期", dateFormat = "yyyy年MM月dd日")
     private Date actualSubmitDate;
     /**
-     * 字段描述：形式审查
+     * 字段描述：形式审查  字典：form_examine
      */
     @JsonProperty
-    @FtExcel(name = "形式审查")
+    @FtExcel(name = "形式审查",dictType = "form_examine")
     private String formExamine;
     /**
      * 字段描述：计划评审日期
