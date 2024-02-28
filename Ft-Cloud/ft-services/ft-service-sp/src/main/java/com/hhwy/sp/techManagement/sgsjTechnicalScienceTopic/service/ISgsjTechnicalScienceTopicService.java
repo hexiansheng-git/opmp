@@ -37,7 +37,9 @@ public interface ISgsjTechnicalScienceTopicService {
 
     void deleteById(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
 
-    AjaxResult messagePublic();
+    AjaxResult messagePublic(String message);
 
     List<SgsjTechnicalScienceTopicDTO> export(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
+
+    String getRoleName();
 }

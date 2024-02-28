@@ -178,7 +178,18 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
      * 时间: 2024/2/1
      */
     @RequestMapping("/messagePublic")
-    public AjaxResult messagePublic(){
-        return sgsjTechnicalScienceTopicService.messagePublic();
+    public AjaxResult messagePublic(String message){
+        return sgsjTechnicalScienceTopicService.messagePublic(message);
+    }
+
+    /**
+     * 功能描述: 获取消息发送的角色对象
+     * 作者: fushudong
+     * 时间: 2024/2/1
+     */
+    @RequestMapping("/getRoleName")
+    public AjaxResult getRoleName(){
+        String roleName = sgsjTechnicalScienceTopicService.getRoleName();
+        return AjaxResult.success(roleName);
     }
 }

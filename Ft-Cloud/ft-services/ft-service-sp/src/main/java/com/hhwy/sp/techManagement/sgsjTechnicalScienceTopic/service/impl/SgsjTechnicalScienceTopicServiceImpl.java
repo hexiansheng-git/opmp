@@ -3,6 +3,7 @@ package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.domain.R;
@@ -29,6 +30,7 @@ import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -479,26 +481,37 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         return b1.equals(b2);
     }
 
+    @Value("${kygl.mesPublish.roleKey}")
+    private String roleKeyArr;
+    @Value("${kygl.mesPublish.roleName}")
+    private String roleNameArr;
+
     //知会消息发布
     @Override
-    public AjaxResult messagePublic() {
-        // todo 指定角色暂不确定
-        String[] roles = {"area_handler", "regionDutyPerson", "common"};
+    public AjaxResult messagePublic(String message) {
+        Assert.isTrue(StrUtil.isNotBlank(message), "message参数不能为空");
+        Assert.isTrue(StrUtil.isNotBlank(roleKeyArr), "未配置消息发布角色");
+        String[] roles = StrUtil.splitToArray(roleKeyArr, ",");
         AjaxResult ajaxResult = systemServiceApi.selectByRoleAndTenant(roles, SecurityUtils.getTenantKey());
         Integer code = (Integer) ajaxResult.get("code");
         Assert.isTrue(code.equals(200), "获取用户列表失败");
-        String s = JSON.toJSONString(ajaxResult.get("data"));
-        List<SysUser> sysUsers = JSON.parseArray(s, SysUser.class);
+        String userInfoStr = JSON.toJSONString(ajaxResult.get("data"));
+        Assert.isTrue(StrUtil.isNotBlank(userInfoStr), "角色未绑定用户");
+        List<SysUser> sysUsers = JSON.parseArray(userInfoStr, SysUser.class);
         String clientIds = sysUsers.stream().map(SysUser::getUserName).collect(Collectors.joining(","));
         String topic = "system";
-        // todo 消息体内容暂不确定
-        String message = "";
         R r = systemServiceApi.batchPublish(clientIds, topic, message);
         if (r.getCode() == 200) {
             return AjaxResult.success("消息发布成功");
         }else {
             return AjaxResult.error("消息发布失败");
         }
+    }
+
+    //获取消息发布角色名称
+    @Override
+    public String getRoleName() {
+        return roleNameArr;
     }
 
     //导出
