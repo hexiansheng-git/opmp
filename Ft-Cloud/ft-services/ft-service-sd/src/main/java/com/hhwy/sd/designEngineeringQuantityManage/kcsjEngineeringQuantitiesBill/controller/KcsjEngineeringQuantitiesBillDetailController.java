@@ -1,7 +1,5 @@
 package com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.controller;
 
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -15,11 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author wll
@@ -100,27 +95,8 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
     @PostMapping("/export")
     public void export(HttpServletResponse response,
                        @RequestBody KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetailParam) throws IOException {
-        List<KcsjEngineeringQuantitiesBillDetail> data = new ArrayList<>();
-        if (kcsjEngineeringQuantitiesBillDetailParam.getDelIdList().size() > 0) {
-            data = kcsjEngineeringQuantitiesBillDetailService.getDetailList(kcsjEngineeringQuantitiesBillDetailParam);
-        } else {
-            data = kcsjEngineeringQuantitiesBillDetailService.getKcsjEngineeringQuantitiesBillDetailListByMainId(kcsjEngineeringQuantitiesBillDetailParam);
-        }
-        ExcelUtils<KcsjEngineeringQuantitiesBillDetail> util = new ExcelUtils<>(KcsjEngineeringQuantitiesBillDetail.class);
-        List<KcsjEngineeringQuantitiesBillDetail> collect = data.stream().sorted(Comparator.comparing(KcsjEngineeringQuantitiesBillDetail::getSerialNumber)).distinct().collect(Collectors.toList());
-        util.exportExcel(response, collect, DateUtils.getDate());
-        /*List<KcsjEngineeringQuantitiesBillDetail> treeList=new ArrayList<>();
-        treeList = ListTreeUtil.formatList(
-                list,
-                KcsjEngineeringQuantitiesBillDetail::getIsAdd,
-                KcsjEngineeringQuantitiesBillDetail::getId,
-                KcsjEngineeringQuantitiesBillDetail::setId,
-                KcsjEngineeringQuantitiesBillDetail::setPid,
-                KcsjEngineeringQuantitiesBillDetail::getChildren,
-                KcsjEngineeringQuantitiesBillDetail::setChildren);
-        ExcelUtils<KcsjEngineeringQuantitiesBillDetail> util = new ExcelUtils<>(KcsjEngineeringQuantitiesBillDetail.class);
-        util.exportExcel(response, treeList, DateUtils.getDate());*/
 
+        kcsjEngineeringQuantitiesBillDetailService.exportData(response,kcsjEngineeringQuantitiesBillDetailParam);
     }
 
     /**
@@ -134,5 +110,6 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
     public AjaxResult importData(@RequestPart("file") MultipartFile file) {
        return kcsjEngineeringQuantitiesBillDetailService.importData(file);
     }
+
 
 }
