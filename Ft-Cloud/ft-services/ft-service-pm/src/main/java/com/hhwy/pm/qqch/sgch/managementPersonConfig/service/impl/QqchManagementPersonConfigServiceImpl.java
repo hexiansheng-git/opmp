@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.sgch.managementPersonConfig.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
@@ -9,6 +10,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.common.util.TreeNodeUtil;
 import com.hhwy.pm.ehr.service.IEhrService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -25,6 +27,7 @@ import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
+import com.hhwy.utils.tree.TreeNode;
 import com.hhwy.utils.tree.TreeUtil;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,13 +177,24 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
      * @return
      */
     public QqchManagementPersonConfigVo getQqchManagementPersonConfigList(QqchManagementPersonConfig qqchManagementPersonConfig) {
-
         QqchManagementPersonConfigVo qqchManagementPersonConfigVo = new QqchManagementPersonConfigVo();
         BigDecimal version = qqchManagementPersonConfig.getVersion();
         version = VersionUtil.getVersion("qqch_management_person_config", version);
         qqchManagementPersonConfig.setVersion(version);
         List<QqchManagementPersonConfig> qqchManagementPersonConfigList = qqchManagementPersonConfigMapper.getQqchManagementPersonConfigList(qqchManagementPersonConfig);
-        List<QqchManagementPersonConfig> treeList = TreeUtil.build(qqchManagementPersonConfigList, null);
+        List<QqchManagementPersonConfig> resultList = new ArrayList<>();
+        resultList = qqchManagementPersonConfigList;
+        if (CollUtil.isNotEmpty(qqchManagementPersonConfigList)) {
+            String name = qqchManagementPersonConfig.getName();
+            String post = qqchManagementPersonConfig.getPost();
+            if (StrUtil.isNotBlank(name) || StrUtil.isNotBlank(post)) {
+                QqchManagementPersonConfig param = new QqchManagementPersonConfig();
+                param.setVersion(version);
+                List<QqchManagementPersonConfig> allList = qqchManagementPersonConfigMapper.getQqchManagementPersonConfigList(param);
+                resultList = TreeNodeUtil.getAncestral(allList, qqchManagementPersonConfigList);
+            }
+        }
+        List<QqchManagementPersonConfig> treeList = TreeUtil.build(resultList, null);
         qqchManagementPersonConfigVo.setVersion(version);
         qqchManagementPersonConfigVo.setStageIdentity(qqchReviewService.getStage());
         qqchManagementPersonConfigVo.setQqchManagementPersonConfigList(treeList);
