@@ -29,6 +29,7 @@ public class TreeNodeUtil {
         currentNode.forEach(System.out::println);
         for (T t : currentNode) {
             if (StrUtil.isBlank(t.getPtVar5())) {
+                if (t.getPid() == null) result.add(t);
                 continue;
             }
             Set<String> pidList = new HashSet<>(CollUtil.toList(t.getPtVar5().split(",")));
