@@ -48,6 +48,7 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
         CommonAssert.notBlank(belongBusiness,"所属业务不能为空！");
         //根据外键删除数据
         SgjsExpertLibrary delParam = new SgjsExpertLibrary();
+        delParam.setBelongBusiness(belongBusiness);
         delParam.setForeignId(foreignId);
         sgjsExpertLibraryMapper.deleteSgjsExpertLibrary(delParam);
         if(CollectionUtils.isEmpty(saveList)){

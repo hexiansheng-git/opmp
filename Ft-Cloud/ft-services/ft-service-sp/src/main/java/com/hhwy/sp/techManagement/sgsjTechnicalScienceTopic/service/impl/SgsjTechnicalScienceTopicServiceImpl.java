@@ -97,10 +97,20 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         //获取流程信息  立项流程
         resultList.forEach(p -> {
             p.setPtVar3(String.valueOf(p.getId()));
-            p.setId(Long.valueOf(p.getPtVar2()));
+            if (StrUtil.isBlank(p.getTopicCurentNode())) {
+                //申请
+                p.setId(Long.valueOf(p.getPtVar1()));
+                FlowInfoSearchUtil.getFlowInfo(p, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
+            } else {
+                //立项
+                p.setId(Long.valueOf(p.getPtVar2()));
+                FlowInfoSearchUtil.getFlowInfo(p, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
+            }
         });
-        FlowInfoSearchUtil.getFlowInfo(resultList, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
-        resultList.forEach(p -> p.setId(Long.valueOf(p.getPtVar3())));
+        resultList.forEach(p -> {
+            p.setId(Long.valueOf(p.getPtVar3()));
+            p.setPtVar3(null);
+        });
         return resultList;
     }
 
@@ -134,17 +144,15 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         //鉴定或评价
         List<SgjsAuthenticateEvaluate> evaluateList = sgsjTechnicalScienceTopic.getEvaluateList();
         shjsAuthenticateEvaluateService.saveEvaluate(id, BelongBusiness.BELONG_BUSINESS_9, evaluateList);
-        //保存主表
-        sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
         //返回结果获取
         SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic1 = new SgsjTechnicalScienceTopic();
         sgsjTechnicalScienceTopic1.setId(id);
         SgsjTechnicalScienceTopic result = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic1);
 
-        //判断当前记录是否在流程中，如果已发起审批，则需要保存修改记录
+        //判断当前记录是否在流程中，如果已发起审批，则需要保存修改记录你
         SgsjTechnicalScienceTopic parm = new SgsjTechnicalScienceTopic();
         parm.setId(Long.valueOf(result.getPtVar2()));
-        FlowInfoSearchUtil.getFlowInfo(parm, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
+        FlowInfoSearchUtil.getFlowInfo(parm, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
         String taskStatus = parm.getTaskStatus();
         if (!taskStatus.equals("0") && !taskStatus.equals("4")){
             //获取老的记录
@@ -169,6 +177,8 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             });
             technicalScienceTopicModifyService.insertSgsjTechnicalScienceTopicModifyList(modifyList);
         }
+        //保存主表
+        sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
         return result;
     }
 
@@ -298,7 +308,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         if (StrUtil.isNotBlank(resultBean.getPtVar2())) {
             SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
             sgsjTechnicalScienceTopic.setId(Long.valueOf(resultBean.getPtVar2()));
-            FlowInfoSearchUtil.getFlowInfo(sgsjTechnicalScienceTopic, FlowEnum.SGJS_TECH_SCIENCE_TOPIC_LX);
+            FlowInfoSearchUtil.getFlowInfo(sgsjTechnicalScienceTopic, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
             sgsjTechnicalScienceTopic.setId(null);
             BeanUtil.copyProperties(sgsjTechnicalScienceTopic, resultBean, CopyOptions.create(CommonBaseEntity.class, true));
         }
