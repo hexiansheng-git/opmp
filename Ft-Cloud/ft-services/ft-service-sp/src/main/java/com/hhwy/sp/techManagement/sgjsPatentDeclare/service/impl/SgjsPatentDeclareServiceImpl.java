@@ -148,7 +148,7 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
             patentDeclare.setId(id);
             checkPatentNumberSingle(id,patentDeclare.getPatentNumber());
             this.insertSgjsPatentDeclare(patentDeclare);
-        }else if("2".equals(saveType)){
+        }else if("2".equals(saveType) || patentDeclare.getId() != null){
             //修改
             id = patentDeclare.getId();
             checkPatentNumberSingle(id,patentDeclare.getPatentNumber());
