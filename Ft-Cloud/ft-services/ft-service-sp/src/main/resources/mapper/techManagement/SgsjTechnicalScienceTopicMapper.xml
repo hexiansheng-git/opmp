@@ -493,12 +493,14 @@
     <update id="updateTaskStatus">
         update sgsj_technical_science_topic
         <trim prefix="SET" suffixOverrides=",">
+            <if test="applyState != null  and  applyState != ''">`apply_state` = #{applyState},</if>
             <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
             <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
             <if test="updateTime != null ">`update_time` = #{updateTime},</if>
         </trim>
         <where>
             <if test="ptVar2 != null ">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar1 != null ">and `pt_var1` = #{ptVar1}</if>
         </where>
     </update>
 

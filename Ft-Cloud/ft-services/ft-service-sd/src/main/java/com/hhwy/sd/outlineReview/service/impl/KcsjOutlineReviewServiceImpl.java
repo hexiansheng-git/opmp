@@ -52,7 +52,6 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
     public List<KcsjOutlineReview> getKcsjOutlineReviewList(KcsjOutlineReview kcsjOutlineReview) {
         List<KcsjOutlineReview> resultList = kcsjOutlineReviewMapper.getKcsjOutlineReviewList(kcsjOutlineReview);
         if (CollUtil.isEmpty(resultList)) return Collections.emptyList();
-        resultList.forEach(p -> p.setVersionStr("V" + p.getVersion()));
         FlowInfoSearchUtil.getFlowInfo(resultList, FlowEnum.KCSJ_PATENT_DECLARE);
         return resultList;
     }
@@ -63,8 +62,7 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         //参数为空，默认获取最新有效版本，最高版本 = 有效版本
         KcsjOutlineReview result = kcsjOutlineReviewMapper.getMaxVersionData();
         if (result == null) return new KcsjOutlineReview();
-        FlowInfoSearchUtil.getFlowInfo(result, FlowEnum.KCSJ_PATENT_DECLARE);
-        String maxVersionTaskStatus = result.getTaskStatus();
+        Long maxVersionId = result.getId();
         if (param != null && param.getId() != null) {
             //参数不为空，获取指定版本数据
             result = kcsjOutlineReviewMapper.getKcsjOutlineReview(param);
@@ -72,11 +70,14 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         if (BeanUtil.isEmpty(result)) return result;
         List<SgjsExpertLibrary> listByForeignId = sgjsExpertLibraryService.getListByForeignId(result.getId());
         result.setChildList(listByForeignId);
-        result.setVersionStr("V" + result.getVersion());
         FlowInfoSearchUtil.getFlowInfo(result, FlowEnum.KCSJ_PATENT_DECLARE);
         //-----------给ptVar1和ptVar2赋值，以下逻辑用于给前端判断按钮显隐------------------
-        //调整按钮显隐， 逻辑：最高版本数据是已审批完成即显示，否则不显示
-        result.setPtVar1(maxVersionTaskStatus);
+        //调整按钮显隐， 逻辑：当前请求数据如果是最高版本，并且流程结束即显示，否则不显示
+        if (maxVersionId.equals(result.getId()) && result.getTaskStatus().equals("4")){
+            result.setPtVar1("4");
+        }else {
+            result.setPtVar1("0");
+        }
         //历史记录按钮显隐，逻辑：所有数据中，只要有一条已审批完成即显示，否则不显示
         List<KcsjOutlineReview> kcsjOutlineReviewList = kcsjOutlineReviewMapper.getKcsjOutlineReviewList(new KcsjOutlineReview());
         List<KcsjOutlineReview> collect = kcsjOutlineReviewList.stream()
@@ -88,6 +89,7 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
     //调整
     @Override
     public KcsjOutlineReview adjust(KcsjOutlineReview param) {
+
 //        Assert.isTrue(param.getId()!=null, "参数不能为空");
         KcsjOutlineReview result = kcsjOutlineReviewMapper.getMaxVersionData();
         if (BeanUtil.isEmpty(result)) return result;
@@ -95,11 +97,11 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         if (taskStatus.equals("5")){
             //创建新的数据
             result.setVersion(result.getVersion().add(BigDecimal.ONE));
+            result.setPtVar4("V" + result.getVersion());
             result.setTaskStatus("0");
             result.setId(null);
             result.setRemodifyDate(null);
         }
-        result.setVersionStr("V" + result.getVersion());
         //历史记录按钮显隐，逻辑：所有数据中，只要有一条已审批完成即显示，否则不显示
         List<KcsjOutlineReview> kcsjOutlineReviewList = kcsjOutlineReviewMapper.getKcsjOutlineReviewList(new KcsjOutlineReview());
         List<KcsjOutlineReview> collect = kcsjOutlineReviewList.stream()
@@ -118,17 +120,17 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
             kcsjOutlineReview.setCreateUser(SecurityUtils.getUserName());
             kcsjOutlineReview.setCreateTime(DateUtils.getNowDate());
             kcsjOutlineReview.setTaskStatus("0");
-            if (StrUtil.isBlank(kcsjOutlineReview.getVersionStr())){
+            if (StrUtil.isBlank(kcsjOutlineReview.getPtVar4())){
                 kcsjOutlineReview.setVersion(BigDecimal.ONE);
+                kcsjOutlineReview.setPtVar4("V1.0");
             }else {
-                String versionStr = kcsjOutlineReview.getVersionStr();
+                String versionStr = kcsjOutlineReview.getPtVar4();
                 kcsjOutlineReview.setVersion(new BigDecimal(StrUtil.sub(versionStr, 1, 2)));
             }
             kcsjOutlineReviewMapper.insertKcsjOutlineReview(kcsjOutlineReview);
         }else {
-            String versionStr = kcsjOutlineReview.getVersionStr();
-            String sub = StrUtil.sub(versionStr, 1, 2);
-            kcsjOutlineReview.setVersion(new BigDecimal(sub));
+            String versionStr = kcsjOutlineReview.getPtVar4();
+            kcsjOutlineReview.setVersion(new BigDecimal( StrUtil.sub(versionStr, 1, 2)));
             kcsjOutlineReview.setUpdateUser(SecurityUtils.getUserName());
             kcsjOutlineReview.setUpdateTime(DateUtils.getNowDate());
             kcsjOutlineReviewMapper.updateKcsjOutlineReview(kcsjOutlineReview);

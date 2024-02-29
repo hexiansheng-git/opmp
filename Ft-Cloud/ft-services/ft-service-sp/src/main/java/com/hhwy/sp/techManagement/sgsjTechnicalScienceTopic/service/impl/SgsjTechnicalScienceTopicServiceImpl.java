@@ -6,6 +6,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.nacos.api.config.filter.IFilterConfig;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -110,6 +111,14 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     public SgsjTechnicalScienceTopic insertSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
         Assert.isTrue(sgsjTechnicalScienceTopic != null, "请求参数缺失");
         Assert.isTrue(sgsjTechnicalScienceTopic.getId() != null, "id不能为空");
+        //判断课题编号是否重复
+        String topicCode = sgsjTechnicalScienceTopic.getTopicCode();
+        SgsjTechnicalScienceTopic param1 = new SgsjTechnicalScienceTopic();
+        param1.setTopicCode(topicCode);
+        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic2 = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param1);
+        if (sgsjTechnicalScienceTopic2 != null) {
+            Assert.isTrue(sgsjTechnicalScienceTopic.getId().equals(sgsjTechnicalScienceTopic2.getId()), "编号不能重复");
+        }
         //保存子表
         Long id = sgsjTechnicalScienceTopic.getId();
         //专家库
