@@ -380,7 +380,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             XmslWbsHistory temp = list.get(i);
             if(temp == null || StringUtils.isBlank(temp.getCode()))
                 break;
-            Assert.isTrue(StringUtils.isNotBlank(temp.getStandardCode()),"，关联标准WBS不能为空必须填入标准WBS编码");
+            Assert.isTrue(StringUtils.isNotBlank(temp.getStandardCode()),"，关联标准WBS编号不能为空,必须填入标准WBS编码");
             resuList.add(temp);
             String code = temp.getCode().trim();
             String parentCode = "";  //父级编码，用于记录子级的序号
