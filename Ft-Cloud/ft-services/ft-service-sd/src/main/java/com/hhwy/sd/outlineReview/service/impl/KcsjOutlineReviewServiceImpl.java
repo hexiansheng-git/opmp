@@ -61,7 +61,10 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
     public KcsjOutlineReview getDetail(KcsjOutlineReview param) {
         //参数为空，默认获取最新有效版本，最高版本 = 有效版本
         KcsjOutlineReview result = kcsjOutlineReviewMapper.getMaxVersionData();
-        if (result == null) return new KcsjOutlineReview();
+        KcsjOutlineReview kcsjOutlineReview = new KcsjOutlineReview();
+        kcsjOutlineReview.setVersion(BigDecimal.ONE);
+        kcsjOutlineReview.setPtVar4("V1.0");
+        if (result == null) return kcsjOutlineReview;
         Long maxVersionId = result.getId();
         if (param != null && param.getId() != null) {
             //参数不为空，获取指定版本数据

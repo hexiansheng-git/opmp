@@ -88,13 +88,13 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
      * dict:topic_kind
      */
     @JsonProperty
+    @NotBlank(message = "课题类别不能为空！",groups = ValidationGroups.Save.class)
     private String topicKind;
     /**
      * 字段描述：课题类别
      */
     @JsonProperty
     @Excel(name = "课题类别", sort = 6)
-    @NotBlank(message = "课题类别不能为空！",groups = ValidationGroups.Save.class)
     private String topicKindName;
 
     /**
@@ -102,13 +102,13 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
      * dict:eco_target
      */
     @JsonProperty
+    @NotBlank(message = "项目技术经济目标不能为空！",groups = ValidationGroups.Save.class)
     private String ecoTarget;
     /**
      * 字段描述：项目技术经济目标
      */
     @JsonProperty
     @Excel(name = "项目技术经济目标", sort = 7)
-    @NotBlank(message = "项目技术经济目标不能为空！",groups = ValidationGroups.Save.class)
     private String ecoTargetName;
 
     /**
@@ -352,9 +352,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
         return topicKindName;
     }
 
-    public void setTopicKindName(String topicKindName) {
-        this.topicKindName = topicKindName;
-    }
+
 
     public String getEcoTarget() {
         return ecoTarget;
@@ -366,10 +364,6 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
 
     public String getEcoTargetName() {
         return ecoTargetName;
-    }
-
-    public void setEcoTargetName(String ecoTargetName) {
-        this.ecoTargetName = ecoTargetName;
     }
 
     public String getTopicState() {
@@ -600,5 +594,13 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
     @Override
     public void setPtVar5(String ptVar5) {
         this.ptVar5 = ptVar5;
+    }
+
+    public void setTopicKindName(String topicKindName) {
+        this.topicKindName = topicKindName;
+    }
+
+    public void setEcoTargetName(String ecoTargetName) {
+        this.ecoTargetName = ecoTargetName;
     }
 }

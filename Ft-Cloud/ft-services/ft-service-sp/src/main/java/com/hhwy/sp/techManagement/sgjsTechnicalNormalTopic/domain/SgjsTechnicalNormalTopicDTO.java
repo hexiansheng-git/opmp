@@ -2,6 +2,7 @@ package com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain;
 
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -9,6 +10,8 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalTopicCost.domain.SgjsTechnicalNormalTopicCost;
+import com.hhwy.sp.utils.easyExcel.DictConvert;
+import com.hhwy.sp.utils.easyExcel.ExcelDict;
 import com.hhwy.utils.dict.DictUtil;
 import lombok.Data;
 
@@ -23,6 +26,7 @@ import java.util.List;
  * @remark sgjs_technical_normal_topic
  */
 @Data
+@ColumnWidth(value = 20)
 public class SgjsTechnicalNormalTopicDTO {
     private static final long serialVersionUID = 1L;
 
@@ -60,27 +64,20 @@ public class SgjsTechnicalNormalTopicDTO {
     private String highCertificate;
     /**
      * 字段描述：课题类别编号
+     * dict:topic_kind
      */
     @JsonProperty
+    @ExcelProperty(value = "课题类别", order = 6, converter = DictConvert.class)
+    @ExcelDict(dictType = "topic_kind")
     private String topicKind;
-    /**
-     * 字段描述：课题类别
-     */
-    @JsonProperty
-    @ExcelProperty(value = "课题类别", order = 6)
-    private String topicKindName;
 
     /**
      * 字段描述：项目技术经济目标编号
      */
     @JsonProperty
-    private String ecoTarget;
-    /**
-     * 字段描述：项目技术经济目标
-     */
-    @JsonProperty
     @ExcelProperty(value = "项目技术经济目标", order = 7)
-    private String ecoTargetName;
+    @ExcelDict(dictType = "eco_target")
+    private String ecoTarget;
 
     /**
      * 字段描述：课题状态
@@ -92,7 +89,7 @@ public class SgjsTechnicalNormalTopicDTO {
      * 字段描述：项目成果形式
      */
     @JsonProperty
-    @ExcelProperty(value = "项目成果形式", order = 8)
+    @ExcelProperty(value = "项目成果形式", order = 9)
     private String achievementKind;
 
     /**
