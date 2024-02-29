@@ -33,6 +33,8 @@ public class SgsjTechnicalScienceTopicModify extends BaseEntity {
     @JsonProperty
     @Excel(name = "课题节点")
     private String topicNode;
+
+    private Long foreignId;
     /**
      * 字段描述：修改处
      */

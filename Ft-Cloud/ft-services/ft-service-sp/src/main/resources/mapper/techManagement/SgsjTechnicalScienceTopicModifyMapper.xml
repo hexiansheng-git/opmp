@@ -8,6 +8,7 @@
                id="SgsjTechnicalScienceTopicModifyResultMap">
         <result property="id" column="id"/>
         <result property="topicNode" column="topic_node"/>
+        <result property="foreignId" column="foreign_id"/>
         <result property="modifyContent" column="modify_content"/>
         <result property="beforeModify" column="before_modify"/>
         <result property="afterModify" column="after_modify"/>
@@ -38,6 +39,7 @@
     <sql id="selectSgsjTechnicalScienceTopicModifyVo">
         SELECT `id`
                 , `topic_node`
+                , `foreign_id`
                 , `modify_content`
                 , `before_modify`
                 , `after_modify`
@@ -72,6 +74,7 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="topicNode != null  and topicNode != ''">and `topic_node` = #{topicNode}</if>
+            <if test="foreignId != null  and foreignId != ''">and `foreign_id` = #{foreignId}</if>
             <if test="modifyContent != null  and modifyContent != ''">and `modify_content` = #{modifyContent}</if>
             <if test="beforeModify != null  and beforeModify != ''">and `before_modify` = #{beforeModify}</if>
             <if test="afterModify != null  and afterModify != ''">and `after_modify` = #{afterModify}</if>
@@ -110,6 +113,7 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="topicNode != null  and topicNode != ''">and `topic_node` = #{topicNode}</if>
+            <if test="foreignId != null  and foreignId != ''">and `foreign_id` = #{foreignId}</if>
             <if test="modifyContent != null  and modifyContent != ''">and `modify_content` = #{modifyContent}</if>
             <if test="beforeModify != null  and beforeModify != ''">and `before_modify` = #{beforeModify}</if>
             <if test="afterModify != null  and afterModify != ''">and `after_modify` = #{afterModify}</if>
@@ -147,6 +151,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="topicNode != null  and topicNode != ''">`topic_node`,</if>
+            <if test="foreignId != null  and foreignId != ''">`foreign_id`,</if>
             <if test="modifyContent != null  and modifyContent != ''">`modify_content`,</if>
             <if test="beforeModify != null  and beforeModify != ''">`before_modify`,</if>
             <if test="afterModify != null  and afterModify != ''">`after_modify`,</if>
@@ -212,6 +217,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `topic_node`,
+            `foreign_id`,
             `modify_content`,
             `before_modify`,
             `after_modify`,
@@ -277,6 +283,7 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
             <if test="topicNode != null  and  topicNode != ''">`topic_node` = #{topicNode},</if>
+            <if test="foreignId != null  and  foreignId != ''">`foreign_id` = #{foreignId},</if>
             <if test="modifyContent != null  and  modifyContent != ''">`modify_content` = #{modifyContent},</if>
             <if test="beforeModify != null  and  beforeModify != ''">`before_modify` = #{beforeModify},</if>
             <if test="afterModify != null  and  afterModify != ''">`after_modify` = #{afterModify},</if>
@@ -466,6 +473,7 @@
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="topicNode != null  and topicNode != ''">and `topic_node` = #{topicNode}</if>
+            <if test="foreignId != null  and foreignId != ''">and `foreign_id` = #{foreignId}</if>
             <if test="modifyContent != null  and modifyContent != ''">and `modify_content` = #{modifyContent}</if>
             <if test="beforeModify != null  and beforeModify != ''">and `before_modify` = #{beforeModify}</if>
             <if test="afterModify != null  and afterModify != ''">and `after_modify` = #{afterModify}</if>

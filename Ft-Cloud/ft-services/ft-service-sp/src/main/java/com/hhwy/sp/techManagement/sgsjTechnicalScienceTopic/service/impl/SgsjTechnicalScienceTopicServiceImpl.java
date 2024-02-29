@@ -123,11 +123,13 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         Assert.isTrue(sgsjTechnicalScienceTopic.getId() != null, "id不能为空");
         //判断课题编号是否重复
         String topicCode = sgsjTechnicalScienceTopic.getTopicCode();
-        SgsjTechnicalScienceTopic param1 = new SgsjTechnicalScienceTopic();
-        param1.setTopicCode(topicCode);
-        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic2 = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param1);
-        if (sgsjTechnicalScienceTopic2 != null) {
-            Assert.isTrue(sgsjTechnicalScienceTopic.getId().equals(sgsjTechnicalScienceTopic2.getId()), "编号不能重复");
+        if (StrUtil.isNotBlank(topicCode)) {
+            SgsjTechnicalScienceTopic param1 = new SgsjTechnicalScienceTopic();
+            param1.setTopicCode(topicCode);
+            SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic2 = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param1);
+            if (sgsjTechnicalScienceTopic2 != null) {
+                Assert.isTrue(sgsjTechnicalScienceTopic.getId().equals(sgsjTechnicalScienceTopic2.getId()), "编号不能重复");
+            }
         }
         //保存子表
         Long id = sgsjTechnicalScienceTopic.getId();
@@ -174,6 +176,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
                 p.setId(IdWorker.createId());
                 p.setCreateUser(sysUser.getUserName());
                 p.setCreateTime(DateUtils.getNowDate());
+                p.setForeignId(sgsjTechnicalScienceTopic.getId());
             });
             technicalScienceTopicModifyService.insertSgsjTechnicalScienceTopicModifyList(modifyList);
         }
