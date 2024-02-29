@@ -119,7 +119,7 @@ public class KcsjAchievement extends BaseEntity {
      * 字段描述：评审结果
      */
     @JsonProperty
-    @FtExcel(name = "评审结果")
+    @FtExcel(name = "评审结果",dictType = "review_result")
     private String reviewResult;
     /**
      * 字段描述：附件组id
