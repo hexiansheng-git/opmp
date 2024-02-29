@@ -32,4 +32,6 @@ public interface SgsjTechnicalScienceTopicMapper {
     int deleteById(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic);
 
     List<SgsjTechnicalScienceTopicDTO> getExportList(SgsjTechnicalScienceTopic param);
+
+    int updateTaskStatus(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic);
 }

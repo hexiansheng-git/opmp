@@ -195,7 +195,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     public int updateSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
         sgsjTechnicalScienceTopic.setUpdateUser(SecurityUtils.getUserName());
         sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
-        return sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
+        return sgsjTechnicalScienceTopicMapper.updateTaskStatus(sgsjTechnicalScienceTopic);
     }
 
     @Transactional

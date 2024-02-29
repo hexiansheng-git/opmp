@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 功能描述: 勘察设计 - 勘察设计大纲评审
@@ -61,8 +62,8 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
     public KcsjOutlineReview getDetail(KcsjOutlineReview param) {
         //参数为空，默认获取最新有效版本，最高版本 = 有效版本
         KcsjOutlineReview result = kcsjOutlineReviewMapper.getMaxVersionData();
+        if (result == null) return new KcsjOutlineReview();
         FlowInfoSearchUtil.getFlowInfo(result, FlowEnum.KCSJ_PATENT_DECLARE);
-        //保存高版本状态，用户控制前端调整按钮显隐
         String maxVersionTaskStatus = result.getTaskStatus();
         if (param != null && param.getId() != null) {
             //参数不为空，获取指定版本数据
@@ -72,8 +73,15 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         List<SgjsExpertLibrary> listByForeignId = sgjsExpertLibraryService.getListByForeignId(result.getId());
         result.setChildList(listByForeignId);
         result.setVersionStr("V" + result.getVersion());
-        result.setPtVar1(maxVersionTaskStatus);
         FlowInfoSearchUtil.getFlowInfo(result, FlowEnum.KCSJ_PATENT_DECLARE);
+        //-----------给ptVar1和ptVar2赋值，以下逻辑用于给前端判断按钮显隐------------------
+        //调整按钮显隐， 逻辑：最高版本数据是已审批完成即显示，否则不显示
+        result.setPtVar1(maxVersionTaskStatus);
+        //历史记录按钮显隐，逻辑：所有数据中，只要有一条已审批完成即显示，否则不显示
+        List<KcsjOutlineReview> kcsjOutlineReviewList = kcsjOutlineReviewMapper.getKcsjOutlineReviewList(new KcsjOutlineReview());
+        List<KcsjOutlineReview> collect = kcsjOutlineReviewList.stream()
+                .filter(p -> StrUtil.isNotBlank(p.getTaskStatus()) && p.getTaskStatus().equals("5")).collect(Collectors.toList());
+        result.setPtVar2(CollUtil.isEmpty(collect)?"0":"4");
         return result;
     }
 
@@ -91,10 +99,12 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
             result.setId(null);
             result.setRemodifyDate(null);
         }
-        //返回当前版本
-//        List<SgjsExpertLibrary> listByForeignId = sgjsExpertLibraryService.getListByForeignId(result.getId());
-//        result.setChildList(listByForeignId);
         result.setVersionStr("V" + result.getVersion());
+        //历史记录按钮显隐，逻辑：所有数据中，只要有一条已审批完成即显示，否则不显示
+        List<KcsjOutlineReview> kcsjOutlineReviewList = kcsjOutlineReviewMapper.getKcsjOutlineReviewList(new KcsjOutlineReview());
+        List<KcsjOutlineReview> collect = kcsjOutlineReviewList.stream()
+                .filter(p -> StrUtil.isNotBlank(p.getTaskStatus()) && p.getTaskStatus().equals("5")).collect(Collectors.toList());
+        result.setPtVar2(CollUtil.isEmpty(collect)?"0":"4");
         return result;
     }
 
