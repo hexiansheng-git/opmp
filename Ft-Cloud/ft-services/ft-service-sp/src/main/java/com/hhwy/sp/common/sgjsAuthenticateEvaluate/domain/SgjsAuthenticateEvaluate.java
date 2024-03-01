@@ -53,9 +53,9 @@ public class SgjsAuthenticateEvaluate extends BaseEntity {
     /**
      * 字段描述：鉴定日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "鉴定日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "鉴定日期", dateFormat = "yyyy年MM月dd日")
     private Date authenticateDate;
     /**
      * 字段描述：评价结论
