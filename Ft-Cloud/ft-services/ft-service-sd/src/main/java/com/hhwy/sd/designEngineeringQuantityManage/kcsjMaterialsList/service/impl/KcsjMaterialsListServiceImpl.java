@@ -4,6 +4,7 @@ import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.FileUploadUtil;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.domain.KcsjMaterialsList;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.domain.KcsjMaterialsListDetail;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.mapper.KcsjMaterialsListDetailMapper;
@@ -37,6 +38,8 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
     @Autowired
     private IKcsjMaterialsListDetailService detailService;
 
+    @Autowired
+    private FileUploadUtil fileUploadUtil;
 
     /**
      * 详情
@@ -109,6 +112,10 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
         kcsjMaterialsList.setCreateTime(DateUtils.getNowDate());
         kcsjMaterialsList.setValid("1");
         kcsjMaterialsList.setDelFlag("0");
+        if (kcsjMaterialsList.getFileGroupId()!=null){
+            kcsjMaterialsList.setFileGroupId(fileUploadUtil.copyFile(kcsjMaterialsList.getFileGroupId()));
+        }
+
 
         //无效主表其它版本数据
         if (!kcsjMaterialsList.getVersion().equals("V1.0")) {
@@ -201,6 +208,9 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
                     throw new BaseException("项目控制损耗定额不能大于局损耗定额");
                 }
             }
+        }
+        if (kcsjMaterialsList.getFileGroupId()!=null){
+            kcsjMaterialsList.setFileGroupId(fileUploadUtil.copyFile(kcsjMaterialsList.getFileGroupId()));
         }
         kcsjMaterialsList.setUpdateUser(SecurityUtils.getUserName());
         kcsjMaterialsList.setUpdateTime(DateUtils.getNowDate());

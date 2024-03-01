@@ -4,6 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.FileUploadUtil;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBill;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBillDetail;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.mapper.KcsjEngineeringQuantitiesBillDetailMapper;
@@ -38,6 +39,9 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
 
     @Autowired
     private IKcsjEngineeringQuantitiesBillDetailService detailService;
+
+    @Autowired
+    private FileUploadUtil fileUploadUtil;
 
     /**
      * 详情
@@ -110,6 +114,9 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         kcsjEngineeringQuantitiesBill.setCreateTime(DateUtils.getNowDate());
         kcsjEngineeringQuantitiesBill.setValid("1");
         kcsjEngineeringQuantitiesBill.setDelFlag("0");
+        if (kcsjEngineeringQuantitiesBill.getFileGroupId()!=null){
+            kcsjEngineeringQuantitiesBill.setFileGroupId(fileUploadUtil.copyFile(kcsjEngineeringQuantitiesBill.getFileGroupId()));
+        }
         kcsjEngineeringQuantitiesBillMapper.insertKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
         List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
         if (!CollectionUtils.isEmpty(detailsList)) {
@@ -185,6 +192,9 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         //修改主表数据
         kcsjEngineeringQuantitiesBill.setUpdateUser(SecurityUtils.getUserId().toString());
         kcsjEngineeringQuantitiesBill.setUpdateTime(DateUtils.getNowDate());
+        if (kcsjEngineeringQuantitiesBill.getFileGroupId()!=null){
+            kcsjEngineeringQuantitiesBill.setFileGroupId(fileUploadUtil.copyFile(kcsjEngineeringQuantitiesBill.getFileGroupId()));
+        }
         kcsjEngineeringQuantitiesBillMapper.updateKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
         //处理子表删除的数据
         List<Long> delIdList = kcsjEngineeringQuantitiesBill.getDelIdList();
