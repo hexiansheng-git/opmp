@@ -326,137 +326,88 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     //修改记录判断
     private List<SgsjTechnicalScienceTopicModify> compareToObj(SgsjTechnicalScienceTopic oldData, SgsjTechnicalScienceTopic newData) {
         List<SgsjTechnicalScienceTopicModify> objects = new ArrayList<>();
-//        if (!compareStr(oldData.getApplyState(), newData.getApplyState())) {
-//            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
-//            differData.setModifyContent("申请状态");
-//            differData.setAfterModify(StrUtil.isBlank(oldData.getApplyState())?"":oldData.getApplyState());
-//            differData.setBeforeModify(StrUtil.isBlank(newData.getApplyState())?"":newData.getApplyState());
-//            objects.add(differData);
-//        }
-//        if (!compareStr(oldData.getTaskStatus(), newData.getTaskStatus())){
-//            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
-//            differData.setModifyContent("当前状态");
-//            differData.setAfterModify(StrUtil.isBlank(oldData.getTaskStatus())?"":oldData.getTaskStatus());
-//            differData.setBeforeModify(StrUtil.isBlank(newData.getTaskStatus())?"":newData.getTaskStatus());
-//            objects.add(differData);
-//        }
-//        if (!compareStr(oldData.getHandlePerson(), newData.getHandlePerson())) {
-//            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
-//            differData.setModifyContent("当前经办人");
-//            differData.setAfterModify(StrUtil.isBlank(oldData.getHandlePerson())?"":oldData.getHandlePerson());
-//            differData.setBeforeModify(StrUtil.isBlank(newData.getHandlePerson())?"":newData.getHandlePerson());
-//            objects.add(differData);
-//        }
-//        if (!compareStr(oldData.getTopicCode(), newData.getTopicCode())) {
-//            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
-//            differData.setModifyContent("课题编号");
-//            differData.setAfterModify(StrUtil.isBlank(oldData.getTopicCode())?"":oldData.getTopicCode());
-//            differData.setBeforeModify(StrUtil.isBlank(newData.getTopicCode())?"":newData.getTopicCode());
-//            objects.add(differData);
-//        }
         if (!compareStr(oldData.getTopicName(), newData.getTopicName())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("课题名称");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getTopicName())?"":oldData.getTopicName());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getTopicName())?"":newData.getTopicName());
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getTopicName())?"":oldData.getTopicName());
+            differData.setAfterModify(StrUtil.isBlank(newData.getTopicName())?"":newData.getTopicName());
             objects.add(differData);
         }
-//        if (!compareStr(oldData.getTopicCurentNode(), newData.getTopicCurentNode())) {
-//            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
-//            differData.setModifyContent("课题进度");
-//            differData.setAfterModify(StrUtil.isBlank(oldData.getTopicCurentNode())?"":oldData.getTopicCurentNode());
-//            differData.setBeforeModify(StrUtil.isBlank(newData.getTopicCurentNode())?"":newData.getTopicCurentNode());
-//            objects.add(differData);
-//        }
         if (!compareStr(oldData.getStartEndDate(), newData.getStartEndDate())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("课题研发日期");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getStartEndDate())?"":oldData.getStartEndDate());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getStartEndDate())?"":newData.getStartEndDate());
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getStartEndDate())?"":oldData.getStartEndDate());
+            differData.setAfterModify(StrUtil.isBlank(newData.getStartEndDate())?"":newData.getStartEndDate());
             objects.add(differData);
         }
-//        if (!compareStr(oldData.getDutyPerson(), newData.getDutyPerson())) {
-//            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
-//            differData.setModifyContent("课题负责人id");
-//            differData.setAfterModify(StrUtil.isBlank(oldData.getDutyPerson())?"":oldData.getDutyPerson());
-//            differData.setBeforeModify(StrUtil.isBlank(newData.getDutyPerson())?"":newData.getDutyPerson());
-//            objects.add(differData);
-//        }
         if (!compareStr(oldData.getDutyPersonName(), newData.getDutyPersonName())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("课题负责人");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getDutyPersonName())?"":oldData.getDutyPersonName());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getDutyPersonName())?"":newData.getDutyPersonName());
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getDutyPersonName())?"":oldData.getDutyPersonName());
+            differData.setAfterModify(StrUtil.isBlank(newData.getDutyPersonName())?"":newData.getDutyPersonName());
             objects.add(differData);
         }
         if (!compareStr(oldData.getTogetherUnit(), newData.getTogetherUnit())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("协作单位");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getTogetherUnit())?"":oldData.getTogetherUnit());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getTogetherUnit())?"":newData.getTogetherUnit());
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getTogetherUnit())?"":oldData.getTogetherUnit());
+            differData.setAfterModify(StrUtil.isBlank(newData.getTogetherUnit())?"":newData.getTogetherUnit());
             objects.add(differData);
         }
         if (!compareStr(oldData.getTogetherUnitOther(), newData.getTogetherUnitOther())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("其他协作单位");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getTogetherUnitOther())?"":oldData.getTogetherUnitOther());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getTogetherUnitOther())?"":newData.getTogetherUnitOther());
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getTogetherUnitOther())?"":oldData.getTogetherUnitOther());
+            differData.setAfterModify(StrUtil.isBlank(newData.getTogetherUnitOther())?"":newData.getTogetherUnitOther());
             objects.add(differData);
         }
         if (!compareBigDecimal(oldData.getRdCost(), newData.getRdCost())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("研发预算（万元）");
-            differData.setAfterModify(oldData.getRdCost() == null ? null : String.valueOf(oldData.getRdCost()));
-            differData.setBeforeModify(newData.getRdCost() == null ? null : String.valueOf(newData.getRdCost()));
+            differData.setBeforeModify(oldData.getRdCost() == null ? null : String.valueOf(oldData.getRdCost()));
+            differData.setAfterModify(newData.getRdCost() == null ? null : String.valueOf(newData.getRdCost()));
             objects.add(differData);
         }
         if (!compareBigDecimal(oldData.getAlreadyPayCost(), newData.getAlreadyPayCost())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("已拨付经费（万元）");
-            differData.setAfterModify(oldData.getAlreadyPayCost() == null ? null : String.valueOf(oldData.getAlreadyPayCost()));
-            differData.setBeforeModify(newData.getAlreadyPayCost() == null ? null : String.valueOf(newData.getAlreadyPayCost()));
+            differData.setBeforeModify(oldData.getAlreadyPayCost() == null ? null : String.valueOf(oldData.getAlreadyPayCost()));
+            differData.setAfterModify(newData.getAlreadyPayCost() == null ? null : String.valueOf(newData.getAlreadyPayCost()));
             objects.add(differData);
         }
         if (!compareBigDecimal(oldData.getLeftCost(), newData.getLeftCost())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("剩余经费（万元）");
-            differData.setAfterModify(oldData.getLeftCost() == null ? null : String.valueOf(oldData.getLeftCost()));
-            differData.setBeforeModify(newData.getLeftCost() == null ? null : String.valueOf(newData.getLeftCost()));
+            differData.setBeforeModify(oldData.getLeftCost() == null ? null : String.valueOf(oldData.getLeftCost()));
+            differData.setAfterModify(newData.getLeftCost() == null ? null : String.valueOf(newData.getLeftCost()));
             objects.add(differData);
         }
-//        if (!compareStr(oldData.getWriteInPerson(), newData.getWriteInPerson())) {
-//            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
-//            differData.setModifyContent("登记人id");
-//            differData.setAfterModify(StrUtil.isBlank(oldData.getWriteInPerson())?"":oldData.getWriteInPerson());
-//            differData.setBeforeModify(StrUtil.isBlank(newData.getWriteInPerson())?"":newData.getWriteInPerson());
-//            objects.add(differData);
-//        }
         if (!compareStr(oldData.getWriteInPersonName(), newData.getWriteInPersonName())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("登记人");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getWriteInPersonName())?"":oldData.getWriteInPersonName());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getWriteInPersonName())?"":newData.getWriteInPersonName());
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getWriteInPersonName())?"":oldData.getWriteInPersonName());
+            differData.setAfterModify(StrUtil.isBlank(newData.getWriteInPersonName())?"":newData.getWriteInPersonName());
             objects.add(differData);
         }
         if (!compareStr(oldData.getWriteInPersonPhoneNum(), newData.getWriteInPersonPhoneNum())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("登记人联系方式");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getWriteInPersonPhoneNum())?"":oldData.getWriteInPersonPhoneNum());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getWriteInPersonPhoneNum())?"":newData.getWriteInPersonPhoneNum());
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getWriteInPersonPhoneNum())?"":oldData.getWriteInPersonPhoneNum());
+            differData.setAfterModify(StrUtil.isBlank(newData.getWriteInPersonPhoneNum())?"":newData.getWriteInPersonPhoneNum());
             objects.add(differData);
         }
         if (!compareStr(oldData.getTopicSummary(), newData.getTopicSummary())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("课题简介");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getTopicSummary())?"":oldData.getTopicSummary());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getTopicSummary())?"":newData.getTopicSummary());
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getTopicSummary())?"":oldData.getTopicSummary());
+            differData.setAfterModify(StrUtil.isBlank(newData.getTopicSummary())?"":newData.getTopicSummary());
             objects.add(differData);
         }
         if (!compareStr(oldData.getTopicFileGroupId(), newData.getTopicFileGroupId())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("课题附件");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getTopicFileGroupId())?"":oldData.getTopicFileGroupId());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getTopicFileGroupId())?"":newData.getTopicFileGroupId());
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getTopicFileGroupId())?"":oldData.getTopicFileGroupId());
+            differData.setAfterModify(StrUtil.isBlank(newData.getTopicFileGroupId())?"":newData.getTopicFileGroupId());
             objects.add(differData);
         }
         if (!compareStr(oldData.getContractFileGroupId(), newData.getContractFileGroupId())) {
@@ -469,22 +420,22 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         if (!compareStr(oldData.getInspectFileGroupId(), newData.getInspectFileGroupId())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("检查附件");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getInspectFileGroupId())?"":oldData.getInspectFileGroupId());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getInspectFileGroupId())?"":newData.getInspectFileGroupId());
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getInspectFileGroupId())?"":oldData.getInspectFileGroupId());
+            differData.setAfterModify(StrUtil.isBlank(newData.getInspectFileGroupId())?"":newData.getInspectFileGroupId());
             objects.add(differData);
         }
         if (!compareStr(oldData.getAcceptanceFileGroupId(), newData.getAcceptanceFileGroupId())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("验收附件");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getAcceptanceFileGroupId())?"":oldData.getTopicFileGroupId());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getAcceptanceFileGroupId())?"":newData.getAcceptanceFileGroupId());
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getAcceptanceFileGroupId())?"":oldData.getTopicFileGroupId());
+            differData.setAfterModify(StrUtil.isBlank(newData.getAcceptanceFileGroupId())?"":newData.getAcceptanceFileGroupId());
             objects.add(differData);
         }
         if (!compareStr(oldData.getTopicFileGroupId(), newData.getTopicFileGroupId())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("课题附件");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getTopicFileGroupId())?"":oldData.getTopicFileGroupId());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getTopicFileGroupId())?"":newData.getTopicFileGroupId());
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getTopicFileGroupId())?"":oldData.getTopicFileGroupId());
+            differData.setAfterModify(StrUtil.isBlank(newData.getTopicFileGroupId())?"":newData.getTopicFileGroupId());
             objects.add(differData);
         }
         return objects;
