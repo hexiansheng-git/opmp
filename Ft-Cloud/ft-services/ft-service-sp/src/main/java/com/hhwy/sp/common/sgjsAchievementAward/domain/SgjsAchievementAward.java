@@ -71,9 +71,9 @@ public class SgjsAchievementAward extends BaseEntity {
     /**
      * 字段描述：奖项时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @Excel(name = "奖项时间", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "奖项时间", dateFormat = "yyyy年MM月dd日")
     private Date awardTime;
     /**
      * 字段描述：证书附件

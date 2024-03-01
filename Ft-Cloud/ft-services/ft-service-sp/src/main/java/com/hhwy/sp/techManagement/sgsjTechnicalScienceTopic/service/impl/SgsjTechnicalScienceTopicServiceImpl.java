@@ -160,13 +160,15 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         parm.setId(Long.valueOf(result.getPtVar2()));
         FlowInfoSearchUtil.getFlowInfo(parm, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
         String taskStatus = parm.getTaskStatus();
+        //如果流程已发起，需要处理修改记录信息
         if (!taskStatus.equals("0") && !taskStatus.equals("4")){
             //获取老的记录
             SgsjTechnicalScienceTopic param = new SgsjTechnicalScienceTopic();
             param.setId(sgsjTechnicalScienceTopic.getId());
             SgsjTechnicalScienceTopic oldData = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param);
             //对比记录
-            List<SgsjTechnicalScienceTopicModify> modifyList = compareToObj(oldData, sgsjTechnicalScienceTopic);
+            String topicCurentNode = sgsjTechnicalScienceTopic.getTopicCurentNode();
+            List<SgsjTechnicalScienceTopicModify> modifyList = compareToObj(oldData, sgsjTechnicalScienceTopic, topicCurentNode);
             if (CollUtil.isNotEmpty(modifyList)) {
                 SysUser sysUser = SecurityUtils.getSysUser();
                 modifyList.forEach(p ->{
@@ -323,7 +325,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
 
 
     //修改记录判断
-    private List<SgsjTechnicalScienceTopicModify> compareToObj(SgsjTechnicalScienceTopic oldData, SgsjTechnicalScienceTopic newData) {
+    private List<SgsjTechnicalScienceTopicModify> compareToObj(SgsjTechnicalScienceTopic oldData, SgsjTechnicalScienceTopic newData, String topicCurentNode) {
         List<SgsjTechnicalScienceTopicModify> objects = new ArrayList<>();
         if (!compareStr(oldData.getTopicName(), newData.getTopicName())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
@@ -402,33 +404,41 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             differData.setAfterModify(StrUtil.isBlank(newData.getTopicSummary())?"":newData.getTopicSummary());
             objects.add(differData);
         }
-        if (!compareStr(oldData.getTopicFileGroupId(), newData.getTopicFileGroupId())) {
-            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
-            differData.setModifyContent("课题附件");
-            differData.setBeforeModify(StrUtil.isBlank(oldData.getTopicFileGroupId())?"":oldData.getTopicFileGroupId());
-            differData.setAfterModify(StrUtil.isBlank(newData.getTopicFileGroupId())?"":newData.getTopicFileGroupId());
-            objects.add(differData);
+        if (StrUtil.isNotBlank(topicCurentNode) && topicCurentNode.equals("2")) {
+            if (!compareStr(oldData.getOutlineFileGroupId(), newData.getOutlineFileGroupId())) {
+                SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
+                differData.setModifyContent("大纲附件");
+                differData.setBeforeModify(StrUtil.isBlank(oldData.getOutlineFileGroupId()) ? "" : oldData.getOutlineFileGroupId());
+                differData.setAfterModify(StrUtil.isBlank(newData.getOutlineFileGroupId()) ? "" : newData.getOutlineFileGroupId());
+                objects.add(differData);
+            }
         }
-        if (!compareStr(oldData.getContractFileGroupId(), newData.getContractFileGroupId())) {
-            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
-            differData.setModifyContent("合同附件");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getContractFileGroupId())?"":oldData.getContractFileGroupId());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getContractFileGroupId())?"":newData.getContractFileGroupId());
-            objects.add(differData);
+        if (StrUtil.isNotBlank(topicCurentNode) && topicCurentNode.equals("3")) {
+            if (!compareStr(oldData.getContractFileGroupId(), newData.getContractFileGroupId())) {
+                SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
+                differData.setModifyContent("合同附件");
+                differData.setAfterModify(StrUtil.isBlank(oldData.getContractFileGroupId())?"":oldData.getContractFileGroupId());
+                differData.setBeforeModify(StrUtil.isBlank(newData.getContractFileGroupId())?"":newData.getContractFileGroupId());
+                objects.add(differData);
+            }
         }
-        if (!compareStr(oldData.getInspectFileGroupId(), newData.getInspectFileGroupId())) {
-            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
-            differData.setModifyContent("检查附件");
-            differData.setBeforeModify(StrUtil.isBlank(oldData.getInspectFileGroupId())?"":oldData.getInspectFileGroupId());
-            differData.setAfterModify(StrUtil.isBlank(newData.getInspectFileGroupId())?"":newData.getInspectFileGroupId());
-            objects.add(differData);
+        if (StrUtil.isNotBlank(topicCurentNode) && topicCurentNode.equals("4")) {
+            if (!compareStr(oldData.getInspectFileGroupId(), newData.getInspectFileGroupId())) {
+                SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
+                differData.setModifyContent("检查附件");
+                differData.setBeforeModify(StrUtil.isBlank(oldData.getInspectFileGroupId()) ? "" : oldData.getInspectFileGroupId());
+                differData.setAfterModify(StrUtil.isBlank(newData.getInspectFileGroupId()) ? "" : newData.getInspectFileGroupId());
+                objects.add(differData);
+            }
         }
-        if (!compareStr(oldData.getAcceptanceFileGroupId(), newData.getAcceptanceFileGroupId())) {
-            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
-            differData.setModifyContent("验收附件");
-            differData.setBeforeModify(StrUtil.isBlank(oldData.getAcceptanceFileGroupId())?"":oldData.getTopicFileGroupId());
-            differData.setAfterModify(StrUtil.isBlank(newData.getAcceptanceFileGroupId())?"":newData.getAcceptanceFileGroupId());
-            objects.add(differData);
+        if (StrUtil.isNotBlank(topicCurentNode) && topicCurentNode.equals("5")) {
+            if (!compareStr(oldData.getAcceptanceFileGroupId(), newData.getAcceptanceFileGroupId())) {
+                SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
+                differData.setModifyContent("验收附件");
+                differData.setBeforeModify(StrUtil.isBlank(oldData.getAcceptanceFileGroupId()) ? "" : oldData.getTopicFileGroupId());
+                differData.setAfterModify(StrUtil.isBlank(newData.getAcceptanceFileGroupId()) ? "" : newData.getAcceptanceFileGroupId());
+                objects.add(differData);
+            }
         }
         if (!compareStr(oldData.getTopicFileGroupId(), newData.getTopicFileGroupId())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();

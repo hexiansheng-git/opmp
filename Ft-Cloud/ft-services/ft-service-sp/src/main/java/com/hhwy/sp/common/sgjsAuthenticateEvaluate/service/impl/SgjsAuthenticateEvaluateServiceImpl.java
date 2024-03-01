@@ -42,6 +42,7 @@ public class SgjsAuthenticateEvaluateServiceImpl implements ISgjsAuthenticateEva
         //根据外键删除数据
         SgjsAuthenticateEvaluate delParam = new SgjsAuthenticateEvaluate();
         delParam.setForeignId(foreignId);
+        delParam.setBelongBusiness(belongBusiness);
         shjsAuthenticateEvaluateMapper.deleteShjsAuthenticateEvaluate(delParam);
 
         if(CollectionUtils.isEmpty(saveList)){

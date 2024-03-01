@@ -121,6 +121,7 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
         //根据外键删除数据
         SgjsAchievementAward delParam = new SgjsAchievementAward();
         delParam.setForeignId(foreignId);
+        delParam.setBelongBusiness(belongBusiness);
         sgjsAchievementAwardMapper.deleteSgjsAchievementAward(delParam);
         if(CollectionUtils.isEmpty(awardList)){
             return;
