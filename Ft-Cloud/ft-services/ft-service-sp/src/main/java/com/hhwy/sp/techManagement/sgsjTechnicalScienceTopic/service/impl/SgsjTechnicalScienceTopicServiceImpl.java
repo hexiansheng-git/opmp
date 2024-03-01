@@ -167,22 +167,21 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             SgsjTechnicalScienceTopic oldData = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param);
             //对比记录
             List<SgsjTechnicalScienceTopicModify> modifyList = compareToObj(oldData, sgsjTechnicalScienceTopic);
-            if (CollUtil.isEmpty(modifyList)) {
-                return result;
+            if (CollUtil.isNotEmpty(modifyList)) {
+                SysUser sysUser = SecurityUtils.getSysUser();
+                modifyList.forEach(p ->{
+                    p.setTaskNode(parm.getProcessTaskName());
+                    p.setTopicNode(sgsjTechnicalScienceTopic.getTopicCurentNode());
+                    p.setModifyDatetime(DateUtils.getNowDate());
+                    p.setModifyPerson(String.valueOf(sysUser.getUserId()));
+                    p.setModifyPersionName(sysUser.getNickName());
+                    p.setId(IdWorker.createId());
+                    p.setCreateUser(sysUser.getUserName());
+                    p.setCreateTime(DateUtils.getNowDate());
+                    p.setForeignId(sgsjTechnicalScienceTopic.getId());
+                });
+                technicalScienceTopicModifyService.insertSgsjTechnicalScienceTopicModifyList(modifyList);
             }
-            SysUser sysUser = SecurityUtils.getSysUser();
-            modifyList.forEach(p ->{
-                p.setTaskNode(parm.getProcessTaskName());
-                p.setTopicNode(sgsjTechnicalScienceTopic.getTopicCurentNode());
-                p.setModifyDatetime(DateUtils.getNowDate());
-                p.setModifyPerson(String.valueOf(sysUser.getUserId()));
-                p.setModifyPersionName(sysUser.getNickName());
-                p.setId(IdWorker.createId());
-                p.setCreateUser(sysUser.getUserName());
-                p.setCreateTime(DateUtils.getNowDate());
-                p.setForeignId(sgsjTechnicalScienceTopic.getId());
-            });
-            technicalScienceTopicModifyService.insertSgsjTechnicalScienceTopicModifyList(modifyList);
         }
         //保存主表
         sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
