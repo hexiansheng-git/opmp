@@ -101,12 +101,9 @@ public class KcsjDesignOptimizeItemController extends BaseController {
     }
 
     @PostMapping("/import")
-    public AjaxResult importData(@RequestParam("optimizeId") Long optimizeId,@RequestPart("file") MultipartFile file) throws Exception {
+    public AjaxResult importData(@RequestPart("file") MultipartFile file) throws Exception {
         FtExcelUtil<KcsjDesignOptimizeItem> excelUtil = new FtExcelUtil<>(KcsjDesignOptimizeItem.class);
         List<KcsjDesignOptimizeItem> list = excelUtil.importExcel("sheet1", file.getInputStream());
-        if(CollectionUtils.isNotEmpty(list)) {
-            kcsjDesignOptimizeItemService.updateKcsjDesignOptimizeItemList(optimizeId, list);
-        }
         return AjaxResult.success(list);
     }
 }
