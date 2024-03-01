@@ -22,7 +22,7 @@ import java.util.Map;
  * 2024/3/1
  */
 @Component
-public class FileUploadUtil {
+public class FileUploadUtils {
 
     @Value("${fileService.fileCopyUrl}")
     private String fileCopyUrl;
