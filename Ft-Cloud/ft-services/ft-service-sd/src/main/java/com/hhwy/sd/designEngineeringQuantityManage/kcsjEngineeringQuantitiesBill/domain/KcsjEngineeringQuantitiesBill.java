@@ -197,7 +197,7 @@ public class KcsjEngineeringQuantitiesBill extends BaseEntity {
     @Excel(name = "数据来源  0新增1同步")
     private String dataSource;
 
-    //是否是编辑  1编辑；0调整
+    //是否是编辑  1编辑&调整
     private String isEdit;
 
     public String getIsEdit() {
