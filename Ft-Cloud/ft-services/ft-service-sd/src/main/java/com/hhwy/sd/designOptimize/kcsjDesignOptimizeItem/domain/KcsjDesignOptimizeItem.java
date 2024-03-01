@@ -31,128 +31,128 @@ public class KcsjDesignOptimizeItem extends BaseEntity {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @FtExcel(name = "主键")
+    //@FtExcel(name = "主键")
     private Long id;
     /**
      * 字段描述：所属区域id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @FtExcel(name = "所属区域id")
+    //@FtExcel(name = "所属区域id")
     private Long regionId;
     /**
      * 字段描述：所属区域名称
      */
     @JsonProperty
-    @FtExcel(name = "所属区域名称")
+    //@FtExcel(name = "所属区域名称")
     private String regionName;
     /**
      * 字段描述：项目id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @FtExcel(name = "项目id")
+    //@FtExcel(name = "项目id")
     private Long projectId;
     /**
      * 字段描述：项目名称
      */
     @JsonProperty
-    @FtExcel(name = "项目名称")
+    //@FtExcel(name = "项目名称")
     private String projectName;
     /**
      * 字段描述：部门id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @FtExcel(name = "部门id")
+    //@FtExcel(name = "部门id")
     private Long deptId;
     /**
      * 字段描述：数据创建者id
      */
     @JsonProperty
-    @FtExcel(name = "数据创建者id")
+    //@FtExcel(name = "数据创建者id")
     private String createUser;
     /**
      * 字段描述：数据创建者名称
      */
     @JsonProperty
-    @FtExcel(name = "数据创建者名称")
+    //@FtExcel(name = "数据创建者名称")
     private String createUserName;
     /**
      * 字段描述：数据创建系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @FtExcel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    //@FtExcel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     /**
      * 字段描述：数据修改者id
      */
     @JsonProperty
-    @FtExcel(name = "数据修改者id")
+    //@FtExcel(name = "数据修改者id")
     private String updateUser;
     /**
      * 字段描述：数据修改系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @FtExcel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    //@FtExcel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     /**
      * 字段描述：数据删除者
      */
     @JsonProperty
-    @FtExcel(name = "数据删除者")
+    //@FtExcel(name = "数据删除者")
     private String delUser;
     /**
      * 字段描述：数据删除系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @FtExcel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    //@FtExcel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date delTime;
     /**
      * 字段描述：删除标识：0未删除；1已删除
      */
     @JsonProperty
-    @FtExcel(name = "删除标识：0未删除；1已删除")
+    //@FtExcel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
      * 字段描述：预留字段1
      */
     @JsonProperty
-    @FtExcel(name = "预留字段1")
+    //@FtExcel(name = "预留字段1")
     private String ptVar1;
     /**
      * 字段描述：预留字段2
      */
     @JsonProperty
-    @FtExcel(name = "预留字段2")
+    //@FtExcel(name = "预留字段2")
     private String ptVar2;
     /**
      * 字段描述：预留字段3
      */
     @JsonProperty
-    @FtExcel(name = "预留字段3")
+    //@FtExcel(name = "预留字段3")
     private String ptVar3;
     /**
      * 字段描述：预留字段4
      */
     @JsonProperty
-    @FtExcel(name = "预留字段4")
+    //@FtExcel(name = "预留字段4")
     private String ptVar4;
     /**
      * 字段描述：预留字段5
      */
     @JsonProperty
-    @FtExcel(name = "预留字段5")
+    //@FtExcel(name = "预留字段5")
     private String ptVar5;
     /**
      * 字段描述：设计优化主表id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @FtExcel(name = "设计优化主表id")
+    //@FtExcel(name = "设计优化主表id")
     private Long optimizeId;
     /**
      * 字段描述：主材/清单编码
