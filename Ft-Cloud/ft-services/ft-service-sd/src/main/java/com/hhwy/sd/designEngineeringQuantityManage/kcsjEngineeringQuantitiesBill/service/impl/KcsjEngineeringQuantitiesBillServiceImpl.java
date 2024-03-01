@@ -4,6 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.FileUploadUtils;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBill;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBillDetail;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.mapper.KcsjEngineeringQuantitiesBillDetailMapper;
@@ -39,6 +40,9 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
     @Autowired
     private IKcsjEngineeringQuantitiesBillDetailService detailService;
 
+    @Autowired
+    private FileUploadUtils fileUploadUtil;
+
     /**
      * 详情
      *
@@ -48,6 +52,10 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
     public KcsjEngineeringQuantitiesBill getKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill) {
         //查询主表数据
         KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill1 = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
+
+        if (StringUtils.isNotEmpty(kcsjEngineeringQuantitiesBill.getFileGroupId())){
+            kcsjEngineeringQuantitiesBill1.setFileGroupId(fileUploadUtil.copyFile(kcsjEngineeringQuantitiesBill.getFileGroupId()));
+        }
         //获取主表Id
         Long id = kcsjEngineeringQuantitiesBill.getId();
         //查询子表数据
@@ -110,6 +118,8 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         kcsjEngineeringQuantitiesBill.setCreateTime(DateUtils.getNowDate());
         kcsjEngineeringQuantitiesBill.setValid("1");
         kcsjEngineeringQuantitiesBill.setDelFlag("0");
+
+
         kcsjEngineeringQuantitiesBillMapper.insertKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
         List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
         if (!CollectionUtils.isEmpty(detailsList)) {
@@ -185,6 +195,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         //修改主表数据
         kcsjEngineeringQuantitiesBill.setUpdateUser(SecurityUtils.getUserId().toString());
         kcsjEngineeringQuantitiesBill.setUpdateTime(DateUtils.getNowDate());
+
         kcsjEngineeringQuantitiesBillMapper.updateKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
         //处理子表删除的数据
         List<Long> delIdList = kcsjEngineeringQuantitiesBill.getDelIdList();

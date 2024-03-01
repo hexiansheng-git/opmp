@@ -20,6 +20,11 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+* 功能描述: easyExcel导出字典翻译
+* 作者: fushudong
+* 时间: 2024/2/29
+*/
 public class DictConvert implements Converter<String> {
 
     private static final SystemApiService systemApiService = SpringUtil.getBean(SystemApiService.class);

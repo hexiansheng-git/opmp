@@ -29,7 +29,7 @@ public class FtSpApplication {
     public static void main(String[] args) throws UnknownHostException {
         Logger logger = LoggerFactory.getLogger(FtSpApplication.class);
         ConfigurableApplicationContext application = SpringApplication.run(FtSpApplication.class, args);
-        System.out.println("(♥◠‿◠)ﾉﾞ  施工技术SD模块启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
+        System.out.println("(♥◠‿◠)ﾉﾞ  施工技术SP模块启动成功   ლ(´ڡ`ლ)ﾞ  \n" +
                 " .-------.       ____     __        \n" +
                 " |  _ _   \\      \\   \\   /  /    \n" +
                 " | ( ' )  |       \\  _. /  '       \n" +
@@ -39,7 +39,7 @@ public class FtSpApplication {
                 " |  | \\ `'   /|   `-'  /           \n" +
                 " |  |  \\    /  \\      /           \n" +
                 " ''-'   `'-'    `-..-'               \n" +
-                "(♥◠‿◠)ﾉﾞ  施工技术SD模块启动成功   ლ(´ڡ`ლ)ﾞ");
+                "(♥◠‿◠)ﾉﾞ  施工技术SP模块启动成功   ლ(´ڡ`ლ)ﾞ");
         Environment env = application.getEnvironment();
         String ip = InetAddress.getLocalHost().getHostAddress();
         String port = env.getProperty("server.port");

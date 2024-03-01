@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.sd.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -48,8 +47,6 @@ public class KcsjOutlineReview extends CommonBaseEntity {
     @Excel(name = "大纲版本")
     private BigDecimal version;
 
-    private String versionStr;
-
     /**
      * 字段描述：是否有效 0,1  备用，暂不维护该字段
      */
@@ -67,14 +64,14 @@ public class KcsjOutlineReview extends CommonBaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划提交日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "计划提交日期", dateFormat = "yyyy年MM月dd日")
     private Date submitPlanDate;
     /**
      * 字段描述：计划评审日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划评审日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "计划评审日期", dateFormat = "yyyy年MM月dd日")
     private Date reviewPlanDate;
     /**
      * 字段描述：项目总工di
@@ -106,14 +103,14 @@ public class KcsjOutlineReview extends CommonBaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "发起日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "发起日期", dateFormat = "yyyy年MM月dd日")
     private Date startDate;
     /**
      * 字段描述：大纲修回日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "大纲修回日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "大纲修回日期", dateFormat = "yyyy年MM月dd日")
     private Date remodifyDate;
     /**
      * 字段描述：大纲简述

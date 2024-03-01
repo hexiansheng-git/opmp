@@ -138,7 +138,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
             id = IdWorker.createId();
             paperPublish.setId(id);
             this.insertSgjsPaperPublish(paperPublish);
-        }else if("2".equals(saveType)){
+        }else if("2".equals(saveType) || paperPublish.getId() != null){
             //修改
             id = paperPublish.getId();
             this.updateSgjsPaperPublish(paperPublish);

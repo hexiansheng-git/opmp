@@ -152,7 +152,7 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
     public void appplyListener(@RequestParam("id") Long id){
         SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
         sgsjTechnicalScienceTopic.setPtVar1(String.valueOf(id));
-        //走第三分支(有专家建议)，流程结束 最终状态为"通过"
+        //走第三分支(修改后通过)，流程结束 最终状态为"通过"
         sgsjTechnicalScienceTopic.setApplyState("3");
         sgsjTechnicalScienceTopicService.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
     }

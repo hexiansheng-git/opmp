@@ -4,6 +4,7 @@ import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.domain.FileUploadUtil;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.domain.KcsjMaterialsList;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.domain.KcsjMaterialsListDetail;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.mapper.KcsjMaterialsListDetailMapper;
@@ -37,6 +38,8 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
     @Autowired
     private IKcsjMaterialsListDetailService detailService;
 
+    @Autowired
+    private FileUploadUtil fileUploadUtil;
 
     /**
      * 详情
@@ -47,6 +50,10 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
     public KcsjMaterialsList getKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList) {
         //查询主表数据
         kcsjMaterialsList = kcsjMaterialsListMapper.getKcsjMaterialsList(kcsjMaterialsList);
+        String fileGroupId = kcsjMaterialsList.getFileGroupId();
+        if (StringUtils.isNotEmpty(fileGroupId)){
+            kcsjMaterialsList.setFileGroupId(fileUploadUtil.copyFile(fileGroupId));
+        }
         //查询子表数据
         List<KcsjMaterialsListDetail> detailList = detailMapper.getKcsjMaterialsListDetailListByMainId(kcsjMaterialsList.getId());
         //设置优化前设计量
@@ -202,6 +209,7 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
                 }
             }
         }
+
         kcsjMaterialsList.setUpdateUser(SecurityUtils.getUserName());
         kcsjMaterialsList.setUpdateTime(DateUtils.getNowDate());
         //删除子表数据
