@@ -108,10 +108,6 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
             result.setTaskStatus("0");
             result.setId(null);
             result.setRemodifyDate(null);
-            String fileGroupId = result.getFileGroupId();
-            if (StringUtils.isNotEmpty(fileGroupId)){
-                result.setFileGroupId(fileUploadUtil.copyFile(fileGroupId));
-            }
         }
         //历史记录按钮显隐，逻辑：所有数据中，只要有一条已审批完成即显示，否则不显示
         List<KcsjOutlineReview> kcsjOutlineReviewList = kcsjOutlineReviewMapper.getKcsjOutlineReviewList(new KcsjOutlineReview());
