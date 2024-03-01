@@ -6,12 +6,14 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.sd.common.FlowInfoSearchUtil;
 import com.hhwy.sd.common.constant.BelongBusiness;
 import com.hhwy.sd.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sd.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
+import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.domain.FileUploadUtil;
 import com.hhwy.sd.outlineReview.domain.KcsjOutlineReview;
 import com.hhwy.sd.outlineReview.mapper.KcsjOutlineReviewMapper;
 import com.hhwy.sd.outlineReview.service.IKcsjOutlineReviewService;
@@ -89,6 +91,8 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         return result;
     }
 
+    @Autowired
+    private FileUploadUtil fileUploadUtil;
     //调整
     @Override
     public KcsjOutlineReview adjust(KcsjOutlineReview param) {
@@ -104,6 +108,10 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
             result.setTaskStatus("0");
             result.setId(null);
             result.setRemodifyDate(null);
+            String fileGroupId = result.getFileGroupId();
+            if (StringUtils.isNotEmpty(fileGroupId)){
+                result.setFileGroupId(fileUploadUtil.copyFile(fileGroupId));
+            }
         }
         //历史记录按钮显隐，逻辑：所有数据中，只要有一条已审批完成即显示，否则不显示
         List<KcsjOutlineReview> kcsjOutlineReviewList = kcsjOutlineReviewMapper.getKcsjOutlineReviewList(new KcsjOutlineReview());
