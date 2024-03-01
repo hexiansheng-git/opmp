@@ -52,10 +52,12 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
     public KcsjEngineeringQuantitiesBill getKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill) {
         //查询主表数据
         KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill1 = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
-
-        if (StringUtils.isNotEmpty(kcsjEngineeringQuantitiesBill.getFileGroupId())){
-            kcsjEngineeringQuantitiesBill1.setFileGroupId(fileUploadUtil.copyFile(kcsjEngineeringQuantitiesBill.getFileGroupId()));
+        if ("1".equals(kcsjEngineeringQuantitiesBill.getIsEdit())){
+            if (StringUtils.isNotEmpty(kcsjEngineeringQuantitiesBill.getFileGroupId())){
+                kcsjEngineeringQuantitiesBill1.setFileGroupId(fileUploadUtil.copyFile(kcsjEngineeringQuantitiesBill.getFileGroupId()));
+            }
         }
+
         //获取主表Id
         Long id = kcsjEngineeringQuantitiesBill.getId();
         //查询子表数据

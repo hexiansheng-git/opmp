@@ -22,6 +22,16 @@ import java.util.List;
 @Valid
 public class KcsjMaterialsList extends BaseEntity {
     private static final long serialVersionUID = 1L;
+    //是否是编辑  1编辑；0调整
+    private String isEdit;
+
+    public String getIsEdit() {
+        return isEdit;
+    }
+
+    public void setIsEdit(String isEdit) {
+        this.isEdit = isEdit;
+    }
     //删除Id的集合
     private List<Long> delIdList;
     /**
