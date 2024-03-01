@@ -50,6 +50,10 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
     public KcsjMaterialsList getKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList) {
         //查询主表数据
         kcsjMaterialsList = kcsjMaterialsListMapper.getKcsjMaterialsList(kcsjMaterialsList);
+        String fileGroupId = kcsjMaterialsList.getFileGroupId();
+        if (StringUtils.isNotEmpty(fileGroupId)){
+            kcsjMaterialsList.setFileGroupId(fileUploadUtil.copyFile(fileGroupId));
+        }
         //查询子表数据
         List<KcsjMaterialsListDetail> detailList = detailMapper.getKcsjMaterialsListDetailListByMainId(kcsjMaterialsList.getId());
         //设置优化前设计量
@@ -112,10 +116,6 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
         kcsjMaterialsList.setCreateTime(DateUtils.getNowDate());
         kcsjMaterialsList.setValid("1");
         kcsjMaterialsList.setDelFlag("0");
-        if (kcsjMaterialsList.getFileGroupId()!=null){
-            kcsjMaterialsList.setFileGroupId(fileUploadUtil.copyFile(kcsjMaterialsList.getFileGroupId()));
-        }
-
 
         //无效主表其它版本数据
         if (!kcsjMaterialsList.getVersion().equals("V1.0")) {
@@ -209,9 +209,7 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
                 }
             }
         }
-        if (kcsjMaterialsList.getFileGroupId()!=null){
-            kcsjMaterialsList.setFileGroupId(fileUploadUtil.copyFile(kcsjMaterialsList.getFileGroupId()));
-        }
+
         kcsjMaterialsList.setUpdateUser(SecurityUtils.getUserName());
         kcsjMaterialsList.setUpdateTime(DateUtils.getNowDate());
         //删除子表数据

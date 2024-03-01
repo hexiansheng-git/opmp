@@ -52,6 +52,10 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
     public KcsjEngineeringQuantitiesBill getKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill) {
         //查询主表数据
         KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill1 = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
+
+        if (StringUtils.isNotEmpty(kcsjEngineeringQuantitiesBill.getFileGroupId())){
+            kcsjEngineeringQuantitiesBill1.setFileGroupId(fileUploadUtil.copyFile(kcsjEngineeringQuantitiesBill.getFileGroupId()));
+        }
         //获取主表Id
         Long id = kcsjEngineeringQuantitiesBill.getId();
         //查询子表数据
@@ -114,9 +118,8 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         kcsjEngineeringQuantitiesBill.setCreateTime(DateUtils.getNowDate());
         kcsjEngineeringQuantitiesBill.setValid("1");
         kcsjEngineeringQuantitiesBill.setDelFlag("0");
-        if (kcsjEngineeringQuantitiesBill.getFileGroupId()!=null){
-            kcsjEngineeringQuantitiesBill.setFileGroupId(fileUploadUtil.copyFile(kcsjEngineeringQuantitiesBill.getFileGroupId()));
-        }
+
+
         kcsjEngineeringQuantitiesBillMapper.insertKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
         List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
         if (!CollectionUtils.isEmpty(detailsList)) {
@@ -192,9 +195,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         //修改主表数据
         kcsjEngineeringQuantitiesBill.setUpdateUser(SecurityUtils.getUserId().toString());
         kcsjEngineeringQuantitiesBill.setUpdateTime(DateUtils.getNowDate());
-        if (kcsjEngineeringQuantitiesBill.getFileGroupId()!=null){
-            kcsjEngineeringQuantitiesBill.setFileGroupId(fileUploadUtil.copyFile(kcsjEngineeringQuantitiesBill.getFileGroupId()));
-        }
+
         kcsjEngineeringQuantitiesBillMapper.updateKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
         //处理子表删除的数据
         List<Long> delIdList = kcsjEngineeringQuantitiesBill.getDelIdList();
