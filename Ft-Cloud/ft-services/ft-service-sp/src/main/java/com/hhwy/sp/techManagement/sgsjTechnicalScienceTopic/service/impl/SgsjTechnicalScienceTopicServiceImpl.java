@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.api.config.filter.IFilterConfig;
@@ -137,9 +138,12 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         List<SgjsExpertLibrary> listAcceptance = sgsjTechnicalScienceTopic.getListAcceptance();
         List<SgjsExpertLibrary> listOutline = sgsjTechnicalScienceTopic.getListOutline();
         List<SgjsExpertLibrary> listTopic = sgsjTechnicalScienceTopic.getListTopic();
-        sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_4, listAcceptance);
-        sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_3, listOutline);
-        sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_2, listTopic);
+        if (CollUtil.isNotEmpty(listAcceptance))
+            sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_4, listAcceptance);
+        if (CollUtil.isNotEmpty(listOutline))
+            sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_3, listOutline);
+        if (CollUtil.isNotEmpty(listTopic))
+            sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_2, listTopic);
         //成果
         List<SgjsAchievementAward> awardList = sgsjTechnicalScienceTopic.getAwardList();
         sgjsAchievementAwardService.saveAchievementAward(id, BelongBusiness.BELONG_BUSINESS_9, awardList);
@@ -168,7 +172,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             }
             SysUser sysUser = SecurityUtils.getSysUser();
             modifyList.forEach(p ->{
-                p.setTaskNode(sgsjTechnicalScienceTopic.getTaskStatus());
+                p.setTaskNode(parm.getProcessTaskName());
                 p.setTopicNode(sgsjTechnicalScienceTopic.getTopicCurentNode());
                 p.setModifyDatetime(DateUtils.getNowDate());
                 p.setModifyPerson(String.valueOf(sysUser.getUserId()));
@@ -371,13 +375,13 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             differData.setBeforeModify(StrUtil.isBlank(newData.getStartEndDate())?"":newData.getStartEndDate());
             objects.add(differData);
         }
-        if (!compareStr(oldData.getDutyPerson(), newData.getDutyPerson())) {
-            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
-            differData.setModifyContent("课题负责人id");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getDutyPerson())?"":oldData.getDutyPerson());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getDutyPerson())?"":newData.getDutyPerson());
-            objects.add(differData);
-        }
+//        if (!compareStr(oldData.getDutyPerson(), newData.getDutyPerson())) {
+//            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
+//            differData.setModifyContent("课题负责人id");
+//            differData.setAfterModify(StrUtil.isBlank(oldData.getDutyPerson())?"":oldData.getDutyPerson());
+//            differData.setBeforeModify(StrUtil.isBlank(newData.getDutyPerson())?"":newData.getDutyPerson());
+//            objects.add(differData);
+//        }
         if (!compareStr(oldData.getDutyPersonName(), newData.getDutyPersonName())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("课题负责人");
@@ -420,13 +424,13 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             differData.setBeforeModify(newData.getLeftCost() == null ? null : String.valueOf(newData.getLeftCost()));
             objects.add(differData);
         }
-        if (!compareStr(oldData.getWriteInPerson(), newData.getWriteInPerson())) {
-            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
-            differData.setModifyContent("登记人id");
-            differData.setAfterModify(StrUtil.isBlank(oldData.getWriteInPerson())?"":oldData.getWriteInPerson());
-            differData.setBeforeModify(StrUtil.isBlank(newData.getWriteInPerson())?"":newData.getWriteInPerson());
-            objects.add(differData);
-        }
+//        if (!compareStr(oldData.getWriteInPerson(), newData.getWriteInPerson())) {
+//            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
+//            differData.setModifyContent("登记人id");
+//            differData.setAfterModify(StrUtil.isBlank(oldData.getWriteInPerson())?"":oldData.getWriteInPerson());
+//            differData.setBeforeModify(StrUtil.isBlank(newData.getWriteInPerson())?"":newData.getWriteInPerson());
+//            objects.add(differData);
+//        }
         if (!compareStr(oldData.getWriteInPersonName(), newData.getWriteInPersonName())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("登记人");
@@ -509,7 +513,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         if ( b1 == null && b2 != null){
             return false;
         }
-        return b1.equals(b2);
+        return NumberUtil.equals(b1, b2);
     }
 
     @Value("${kygl.mesPublish.roleKey}")

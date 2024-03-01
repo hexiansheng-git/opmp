@@ -249,6 +249,7 @@
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
                 #{item.topicNode},
+                #{item.foreignId},
                 #{item.modifyContent},
                 #{item.beforeModify},
                 #{item.afterModify},

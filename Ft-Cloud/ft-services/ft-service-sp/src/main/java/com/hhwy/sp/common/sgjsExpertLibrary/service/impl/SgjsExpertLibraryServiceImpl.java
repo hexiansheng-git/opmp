@@ -62,7 +62,6 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
             library.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             library.setCreateUserName(SecurityUtils.getUserName());
             library.setCreateTime(DateUtils.getNowDate());
-            library.setDelFlag("0");
         }
         sgjsExpertLibraryMapper.insertSgjsExpertLibraryList(saveList);
     }
