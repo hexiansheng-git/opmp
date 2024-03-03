@@ -5,6 +5,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.nacos.api.config.filter.IFilterConfig;
@@ -559,5 +560,64 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             }
         }
         return exportData;
+    }
+
+    //导出专家意见
+    @Override
+    public Map<String, Object> getExpertSuggest(SgsjTechnicalScienceTopic param) {
+        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
+        sgsjTechnicalScienceTopic.setId(param.getId());
+        SgsjTechnicalScienceTopic topicInfo = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
+        Assert.isTrue(ObjectUtil.isNotEmpty(topicInfo), "无此课题");
+        SgjsExpertLibrary expertParam = new SgjsExpertLibrary();
+        expertParam.setForeignId(param.getId());
+        //根据课题节点判断导出业务类型
+        if (StrUtil.isBlank(param.getTopicCurentNode())) {
+            expertParam.setBelongBusiness("1");
+        }else if (param.getTopicCurentNode().equals("1")) {
+            expertParam.setBelongBusiness("2");
+        }else if (param.getTopicCurentNode().equals("2")) {
+            expertParam.setBelongBusiness("3");
+        }else if (param.getTopicCurentNode().equals("5")) {
+            expertParam.setBelongBusiness("4");
+        }
+        List<SgjsExpertLibrary> expertList = sgjsExpertLibraryService.getSgjsExpertLibraryList(expertParam);
+        Assert.isTrue(CollUtil.isNotEmpty(expertList), "该课题当前阶段无专家意见");
+        return getStringObjectMap(topicInfo, expertList);
+    }
+
+    //导出word拼数据
+    private static Map<String, Object> getStringObjectMap(SgsjTechnicalScienceTopic topicInfo, List<SgjsExpertLibrary> expertList) {
+        Map<String, Object> resultMap = new HashMap<>();
+        //主表数据
+        resultMap.put("topicCode", StrUtil.isBlank(topicInfo.getTopicCode())?"-":topicInfo.getTopicCode());
+        resultMap.put("topicName", StrUtil.isBlank(topicInfo.getTopicName())?"-":topicInfo.getTopicName());
+        resultMap.put("startEndDate", StrUtil.isBlank(topicInfo.getStartEndDate())?"-":topicInfo.getStartEndDate());
+        resultMap.put("dutyPersonName", StrUtil.isBlank(topicInfo.getDutyPersonName())?"-":topicInfo.getDutyPersonName());
+        resultMap.put("togetherUnit", StrUtil.isBlank(topicInfo.getTogetherUnit())?"-":topicInfo.getTogetherUnit());
+        resultMap.put("togetherUnitOther", StrUtil.isBlank(topicInfo.getTogetherUnitOther())?"-":topicInfo.getTogetherUnitOther());
+        resultMap.put("rdCost", topicInfo.getRdCost()==null?BigDecimal.ZERO:topicInfo.getRdCost());
+        resultMap.put("alreadyPayCost", topicInfo.getAlreadyPayCost()==null?BigDecimal.ZERO:topicInfo.getAlreadyPayCost());
+        resultMap.put("leftCost", topicInfo.getLeftCost()==null?BigDecimal.ZERO:topicInfo.getLeftCost());
+        resultMap.put("writeInPersonName", StrUtil.isBlank(topicInfo.getWriteInPersonName())?"-":topicInfo.getWriteInPersonName());
+        resultMap.put("writeInPersonPhoneNum", StrUtil.isBlank(topicInfo.getWriteInPersonPhoneNum())?"-":topicInfo.getWriteInPersonPhoneNum());
+        resultMap.put("topicSummary", StrUtil.isBlank(topicInfo.getTopicSummary())?"-":topicInfo.getTopicSummary());
+        resultMap.put("projectName", StrUtil.isBlank(topicInfo.getProjectName())?"-":topicInfo.getProjectName());
+        //专家意见
+        List<Map<String, Object>> list = new ArrayList<>();
+        resultMap.put("expertGroupSuggest", expertList.get(0).getPtVar1());
+        for (int i = 0; i < expertList.size(); i++) {
+            Map<String, Object> map = new HashMap<>();
+            SgjsExpertLibrary sgjsExpertLibrary = expertList.get(i);
+            map.put("serialNumber", i+1);
+            map.put("expertName", StrUtil.isBlank(sgjsExpertLibrary.getExpertName())?"-":sgjsExpertLibrary.getExpertName());
+            map.put("belongUnit", StrUtil.isBlank(sgjsExpertLibrary.getBelongUnit())?"-":sgjsExpertLibrary.getBelongUnit());
+            map.put("businessAreas", StrUtil.isBlank(sgjsExpertLibrary.getBusinessAreas())?"-":sgjsExpertLibrary.getBusinessAreas());
+            map.put("suggest", StrUtil.isBlank(sgjsExpertLibrary.getSuggest())?"-":sgjsExpertLibrary.getSuggest());
+            map.put("remark", StrUtil.isBlank(sgjsExpertLibrary.getRemark())?"-":sgjsExpertLibrary.getRemark());
+            list.add(map);
+        }
+        resultMap.put("list", list);
+        return resultMap;
     }
 }

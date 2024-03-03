@@ -3,12 +3,17 @@ package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import java.util.Map;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO;
 import com.hhwy.sp.utils.easyExcel.CustomMergeStrategy;
+import com.hhwy.utils.word.WordUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -191,5 +196,37 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
     public AjaxResult getRoleName(){
         String roleName = sgsjTechnicalScienceTopicService.getRoleName();
         return AjaxResult.success(roleName);
+    }
+
+    /**
+     * 功能描述: 导出专家意见
+     * 作者: fushudong
+     * 时间: 2024/2/1
+     */
+    @RequestMapping("/exportExpertSuggest")
+    public void exportExpertSuggest(HttpServletResponse response, SgsjTechnicalScienceTopic param) throws Exception{
+//        Assert.isTrue(StrUtil.isNotBlank(param.getTopicCurentNode()), "课题进度不能为空");
+        Assert.isTrue(ObjectUtil.isNotNull(param.getId()), "id不能为空");
+        Map<String, Object> map = sgsjTechnicalScienceTopicService.getExpertSuggest(param);
+        String templatePath = "0302-科研课题申请专家意见导出表.docx";
+        String exportFileName = "科研课题申请专家意见";
+        String topicCurentNode = param.getTopicCurentNode();
+        if (StrUtil.isNotBlank(topicCurentNode)) {
+            switch (topicCurentNode) {
+                case "1":
+                    templatePath = "0303-科研课题立项专家意见导出表.docx";
+                    exportFileName = "科研课题立项专家意见";
+                    break;
+                case "2":
+                    templatePath = "0304-科研课题大纲审查专家意见导出表.docx";
+                    exportFileName = "科研课题大纲审查专家意见";
+                    break;
+                case "5":
+                    templatePath = "0305-科研课题验收专家意见导出表.docx";
+                    exportFileName = "科研课题验收专家意见";
+                    break;
+            }
+        }
+        WordUtil.responeDocxFile(response, map, "template/"+templatePath, exportFileName);
     }
 }
