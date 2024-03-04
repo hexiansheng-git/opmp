@@ -198,7 +198,7 @@ public class XmslContractListController extends BaseController {
     public AjaxResult handlerAncestor() {
         if(!SecurityUtils.getSysUser().isAdmin())
             return AjaxResult.error("ERROR");
-        xmslContractListService.handlerAncestors();
+        xmslContractListService.handlerAncestors1();
         return AjaxResult.success();
     }
 

@@ -48,17 +48,17 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
      * @return
      */
     public KcsjMaterialsList getKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList) {
+        String isEdit = kcsjMaterialsList.getIsEdit();
         //查询主表数据
         kcsjMaterialsList = kcsjMaterialsListMapper.getKcsjMaterialsList(kcsjMaterialsList);
-        if ("1".equals(kcsjMaterialsList.getIsEdit())){
+
+        if (StringUtils.isNotEmpty(isEdit)&&("1".equals(isEdit))){
+            kcsjMaterialsList.setIsEdit(isEdit);
             if (StringUtils.isNotEmpty(kcsjMaterialsList.getFileGroupId())){
                 kcsjMaterialsList.setFileGroupId(fileUploadUtil.copyFile(kcsjMaterialsList.getFileGroupId()));
             }
         }
-        String fileGroupId = kcsjMaterialsList.getFileGroupId();
-        if (StringUtils.isNotEmpty(fileGroupId)){
-            kcsjMaterialsList.setFileGroupId(fileUploadUtil.copyFile(fileGroupId));
-        }
+
         //查询子表数据
         List<KcsjMaterialsListDetail> detailList = detailMapper.getKcsjMaterialsListDetailListByMainId(kcsjMaterialsList.getId());
         //设置优化前设计量
