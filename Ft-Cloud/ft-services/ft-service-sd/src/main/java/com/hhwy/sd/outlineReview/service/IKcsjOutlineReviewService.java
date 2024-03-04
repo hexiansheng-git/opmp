@@ -3,6 +3,7 @@ package com.hhwy.sd.outlineReview.service;
 import com.hhwy.sd.outlineReview.domain.KcsjOutlineReview;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 功能描述: 勘察设计 - 勘察设计大纲评审
@@ -30,4 +31,6 @@ public interface IKcsjOutlineReviewService {
     KcsjOutlineReview getDetail(KcsjOutlineReview kcsjOutlineReviewParam);
 
     KcsjOutlineReview adjust(KcsjOutlineReview kcsjOutlineReviewParam);
+
+    Map<String, Object> getExpertSuggest(KcsjOutlineReview param);
 }

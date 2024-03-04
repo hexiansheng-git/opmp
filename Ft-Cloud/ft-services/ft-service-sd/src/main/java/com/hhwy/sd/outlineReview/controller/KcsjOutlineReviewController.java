@@ -16,6 +16,7 @@ import com.hhwy.sd.common.ProjectBasicInfo;
 import com.hhwy.sd.outlineReview.domain.KcsjOutlineReview;
 import com.hhwy.sd.outlineReview.service.IKcsjOutlineReviewService;
 import com.hhwy.system.api.domain.SysUser;
+import com.hhwy.utils.word.WordUtil;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
@@ -166,5 +167,19 @@ public class KcsjOutlineReviewController extends BaseController {
         String projectCategory = projectBasicInfo.getProjectCategory();
         if (StrUtil.isBlank(projectCategory)) return AjaxResult.success("");
         return AjaxResult.success(projectCategory);
+    }
+
+    /**
+     * 功能描述: 导出专家意见
+     * 作者: fushudong
+     * 时间: 2024/2/1
+     */
+    @RequestMapping("/exportExpertSuggest")
+    public void exportExpertSuggest(HttpServletResponse response, KcsjOutlineReview param) throws Exception{
+        Assert.isTrue(ObjectUtil.isNotNull(param.getId()), "id不能为空");
+        Map<String, Object> map = kcsjOutlineReviewService.getExpertSuggest(param);
+        String templatePath = "03-勘察设计大纲评审专家意见导出表.docx";
+        String exportFileName = "勘察设计大纲评审专家意见";
+        WordUtil.responeDocxFile(response, map, "template/"+templatePath, exportFileName);
     }
 }

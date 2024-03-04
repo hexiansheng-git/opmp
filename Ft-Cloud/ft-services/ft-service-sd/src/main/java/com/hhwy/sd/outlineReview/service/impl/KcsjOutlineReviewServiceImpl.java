@@ -2,6 +2,9 @@ package com.hhwy.sd.outlineReview.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.hash.Hash;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -27,9 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -187,5 +188,41 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
     @Transactional
     public int deleteKcsjOutlineReviewByPks(List<Integer> kcsjOutlineReviewPkList) {
         return kcsjOutlineReviewMapper.deleteKcsjOutlineReviewByPks(kcsjOutlineReviewPkList);
+    }
+
+    //导出专家意见
+    @Override
+    public Map<String, Object> getExpertSuggest(KcsjOutlineReview param) {
+        KcsjOutlineReview kcsjOutlineReview = kcsjOutlineReviewMapper.getKcsjOutlineReview(param);
+        List<SgjsExpertLibrary> expertList = sgjsExpertLibraryService.getListByForeignId(param.getId());
+        Assert.isTrue(ObjectUtil.isNotEmpty(kcsjOutlineReview), "id不存在");
+        Assert.isTrue(CollUtil.isNotEmpty(expertList), "该大纲无专家意见");
+        Map<String, Object>  resultMap = new HashMap<>();
+        //大纲
+        resultMap.put("outlineName", StrUtil.isBlank(kcsjOutlineReview.getOutlineName())?"-":kcsjOutlineReview.getOutlineName());
+        resultMap.put("projectName", StrUtil.isBlank(kcsjOutlineReview.getProjectName())?"-":kcsjOutlineReview.getProjectName());
+        resultMap.put("version", StrUtil.isBlank(kcsjOutlineReview.getPtVar4())?"-":kcsjOutlineReview.getPtVar4());
+        resultMap.put("leadEngineerName", StrUtil.isBlank(kcsjOutlineReview.getLeadEngineerName())?"-":kcsjOutlineReview.getLeadEngineerName());
+        resultMap.put("submitPlanDate", kcsjOutlineReview.getSubmitPlanDate()==null?"-": DateUtil.format(kcsjOutlineReview.getSubmitPlanDate(), DatePattern.CHINESE_DATE_PATTERN));
+        resultMap.put("reviewPlanDate", kcsjOutlineReview.getReviewPlanDate()==null?"-": DateUtil.format(kcsjOutlineReview.getReviewPlanDate(), DatePattern.CHINESE_DATE_PATTERN));
+        resultMap.put("startPersonName", StrUtil.isBlank(kcsjOutlineReview.getStartPersonName())?"-":kcsjOutlineReview.getStartPersonName());
+        resultMap.put("startDate", kcsjOutlineReview.getStartDate()==null?"-": DateUtil.format(kcsjOutlineReview.getStartDate(), DatePattern.CHINESE_DATE_PATTERN));
+        resultMap.put("outlineSummary", StrUtil.isBlank(kcsjOutlineReview.getOutlineSummary())?"-":kcsjOutlineReview.getOutlineSummary());
+        resultMap.put("expertGroupSuggest", StrUtil.isBlank(expertList.get(0).getPtVar1())?"-":expertList.get(0).getPtVar1());
+        //专家意见
+        List<Map> list = new ArrayList<>();
+        for (int i = 0; i < expertList.size(); i++) {
+            SgjsExpertLibrary sgjsExpertLibrary = expertList.get(i);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("serialNumber", i+1);
+            map.put("expertName", StrUtil.isBlank(sgjsExpertLibrary.getExpertName())?"-":sgjsExpertLibrary.getExpertName());
+            map.put("belongUnit", StrUtil.isBlank(sgjsExpertLibrary.getBelongUnit())?"-":sgjsExpertLibrary.getBelongUnit());
+            map.put("businessAreas", StrUtil.isBlank(sgjsExpertLibrary.getBusinessAreas())?"-":sgjsExpertLibrary.getBusinessAreas());
+            map.put("suggest", StrUtil.isBlank(sgjsExpertLibrary.getSuggest())?"-":sgjsExpertLibrary.getSuggest());
+            map.put("remark", StrUtil.isBlank(sgjsExpertLibrary.getRemark())?"-":sgjsExpertLibrary.getRemark());
+            list.add(map);
+        }
+        resultMap.put("list", list);
+        return resultMap;
     }
 }
