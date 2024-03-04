@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.excel.FtExcel;
+import com.hhwy.utils.tree.TreeNode;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +27,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class XmslContractList extends BaseEntity {
+public class XmslContractList extends TreeNode<XmslContractList> {
     private static final long serialVersionUID = 1L;
 
 

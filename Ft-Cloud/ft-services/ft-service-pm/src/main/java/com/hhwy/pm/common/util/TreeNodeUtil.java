@@ -24,10 +24,8 @@ public class TreeNodeUtil {
      */
     public static <T extends TreeNode<T>> List<T> getAncestral(List<T> allList, List<T> currentNode) {
         List<T> result = new ArrayList<>();
-        currentNode.forEach(System.out::println);
-        setAncestral(allList, currentNode, new ArrayList<>());
-        currentNode.forEach(System.out::println);
-        for (T t : currentNode) {
+        List<T> ts = setAncestral(allList, currentNode);
+        for (T t : ts) {
             if (StrUtil.isBlank(t.getPtVar5())) {
                 if (t.getPid() == null) result.add(t);
                 continue;
@@ -39,25 +37,40 @@ public class TreeNodeUtil {
         return result.stream().distinct().collect(Collectors.toList());
     }
 
-    /***
-     * 功能描述: 维护祖籍id ，赋予ptVar5祖籍id
-     * @param allList 待处理集合
-     * @param ids 每次递归的变量
+    /**
+     * 功能描述: 赋予ptVar5祖籍id
+     * @param allList 全量数据
+     * @param nodeList 待处理集合
      */
-    public static <T extends TreeNode<T>> void setAncestral(List<T> allList, List<T> currentNode, List<String> ids) {
-        for (T p : currentNode) {
-            List<T> currentParent = allList.stream().filter(o -> o.getId().equals(p.getPid())).collect(Collectors.toList());
-            if (CollectionUtil.isEmpty(currentParent)) {
-                continue;
-            }
-            ids.addAll(currentParent.stream().map(v -> v.getId() + "").collect(Collectors.toList()));
-            setAncestral(allList, currentParent, ids);
+    public static <T extends TreeNode<T>> List<T> setAncestral(List<T> allList, List<T> nodeList) {
+        List<T> resultList = new ArrayList<>();
+        for (T p : nodeList) {
+            ArrayList<String> ids = new ArrayList<>();
+            setIds(allList, p, ids);
             if (CollectionUtil.isEmpty(ids)) {
                 continue;
             }
-            String ancestral = ids.stream().collect(Collectors.joining(","));
+            List<String> reverse = CollUtil.reverse(ids);
+            String ancestral = String.join(",", reverse);
             p.setPtVar5(ancestral + "," + p.getId());
+            resultList.add(p);
         }
+        return resultList;
+    }
+
+    /**
+     * 功能描述: 为currentNode找到祖籍
+     * @param allList 全量数据
+     * @param currentNode 待处理对象
+     * @param ids 每次递归的变量,祖籍集合
+     */
+    public static <T extends TreeNode<T>> void setIds(List<T> allList, T currentNode, List<String> ids) {
+        Optional<T> first = allList.stream().filter(o -> o.getId().equals(currentNode.getPid())).findFirst();
+        if (!first.isPresent()) {
+            return;
+        }
+        ids.add(first.get().getId()+"");
+        setIds(allList, first.get(), ids);
     }
 
     /**
