@@ -50,14 +50,17 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
      * @return
      */
     public KcsjEngineeringQuantitiesBill getKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill) {
+        String isEdit = kcsjEngineeringQuantitiesBill.getIsEdit();
         //查询主表数据
         kcsjEngineeringQuantitiesBill = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
+        if (StringUtils.isNotEmpty(isEdit)){
+            kcsjEngineeringQuantitiesBill.setIsEdit(isEdit);
+        }
         if ("1".equals(kcsjEngineeringQuantitiesBill.getIsEdit())){
             if (StringUtils.isNotEmpty(kcsjEngineeringQuantitiesBill.getFileGroupId())){
                 kcsjEngineeringQuantitiesBill.setFileGroupId(fileUploadUtil.copyFile(kcsjEngineeringQuantitiesBill.getFileGroupId()));
             }
         }
-
         //获取主表Id
         Long id = kcsjEngineeringQuantitiesBill.getId();
         //查询子表数据
