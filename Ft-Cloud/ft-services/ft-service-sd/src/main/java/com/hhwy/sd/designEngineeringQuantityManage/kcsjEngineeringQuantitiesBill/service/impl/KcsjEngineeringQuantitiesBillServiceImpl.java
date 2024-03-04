@@ -51,10 +51,10 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
      */
     public KcsjEngineeringQuantitiesBill getKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill) {
         //查询主表数据
-        KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill1 = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
+        kcsjEngineeringQuantitiesBill = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
         if ("1".equals(kcsjEngineeringQuantitiesBill.getIsEdit())){
-            if (StringUtils.isNotEmpty(kcsjEngineeringQuantitiesBill1.getFileGroupId())){
-                kcsjEngineeringQuantitiesBill1.setFileGroupId(fileUploadUtil.copyFile(kcsjEngineeringQuantitiesBill.getFileGroupId()));
+            if (StringUtils.isNotEmpty(kcsjEngineeringQuantitiesBill.getFileGroupId())){
+                kcsjEngineeringQuantitiesBill.setFileGroupId(fileUploadUtil.copyFile(kcsjEngineeringQuantitiesBill.getFileGroupId()));
             }
         }
 
@@ -77,8 +77,8 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
                 (r, n) -> r.getId().equals(n.getPid()),
                 KcsjEngineeringQuantitiesBillDetail::getChildren,
                 KcsjEngineeringQuantitiesBillDetail::setChildren);
-        kcsjEngineeringQuantitiesBill1.setDetailsList(treeList);
-        return kcsjEngineeringQuantitiesBill1;
+        kcsjEngineeringQuantitiesBill.setDetailsList(treeList);
+        return kcsjEngineeringQuantitiesBill;
     }
 
     /**
