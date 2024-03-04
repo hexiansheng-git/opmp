@@ -13,7 +13,6 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.FileDto;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO;
-import com.hhwy.sp.utils.FileUtils;
 import com.hhwy.sp.utils.easyExcel.CustomMergeStrategy;
 import com.hhwy.utils.word.WordUtil;
 import io.seata.common.util.CollectionUtils;
