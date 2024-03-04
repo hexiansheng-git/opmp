@@ -425,8 +425,8 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             if (!compareStr(oldData.getContractFileGroupId(), newData.getContractFileGroupId())) {
                 SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
                 differData.setModifyContent("合同附件");
-                differData.setAfterModify(StrUtil.isBlank(oldData.getContractFileGroupId())?"":oldData.getContractFileGroupId());
-                differData.setBeforeModify(StrUtil.isBlank(newData.getContractFileGroupId())?"":newData.getContractFileGroupId());
+                differData.setBeforeModify(StrUtil.isBlank(oldData.getContractFileGroupId())?"":oldData.getContractFileGroupId());
+                differData.setAfterModify(StrUtil.isBlank(newData.getContractFileGroupId())?"":newData.getContractFileGroupId());
                 objects.add(differData);
             }
         }
