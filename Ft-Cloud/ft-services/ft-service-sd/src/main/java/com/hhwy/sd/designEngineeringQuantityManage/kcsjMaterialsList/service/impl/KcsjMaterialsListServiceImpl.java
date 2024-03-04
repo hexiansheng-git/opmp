@@ -50,6 +50,11 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
     public KcsjMaterialsList getKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList) {
         //查询主表数据
         kcsjMaterialsList = kcsjMaterialsListMapper.getKcsjMaterialsList(kcsjMaterialsList);
+        if ("1".equals(kcsjMaterialsList.getIsEdit())){
+            if (StringUtils.isNotEmpty(kcsjMaterialsList.getFileGroupId())){
+                kcsjMaterialsList.setFileGroupId(fileUploadUtil.copyFile(kcsjMaterialsList.getFileGroupId()));
+            }
+        }
         String fileGroupId = kcsjMaterialsList.getFileGroupId();
         if (StringUtils.isNotEmpty(fileGroupId)){
             kcsjMaterialsList.setFileGroupId(fileUploadUtil.copyFile(fileGroupId));

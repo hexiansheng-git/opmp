@@ -1,6 +1,7 @@
 package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
@@ -42,4 +43,6 @@ public interface ISgsjTechnicalScienceTopicService {
     List<SgsjTechnicalScienceTopicDTO> export(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
 
     String getRoleName();
+
+    Map<String, Object> getExpertSuggest(SgsjTechnicalScienceTopic param);
 }
