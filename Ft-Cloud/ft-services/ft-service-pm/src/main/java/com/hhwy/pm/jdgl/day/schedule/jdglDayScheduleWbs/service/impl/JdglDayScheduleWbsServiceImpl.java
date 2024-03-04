@@ -621,8 +621,10 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
                     jdglDayScheduleWbs.setUnit(jdglMainPlanItem.getUnit());
 
                     if(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType())) {
-                        jdglDayScheduleWbs.setEditerId(jdglMainPlanItem.getExecuterId());
-                        jdglDayScheduleWbs.setEditer(jdglMainPlanItem.getExecuter());
+//                        jdglDayScheduleWbs.setEditerId(jdglMainPlanItem.getExecuterId());
+//                        jdglDayScheduleWbs.setEditer(jdglMainPlanItem.getExecuter());
+                        jdglDayScheduleWbs.setEditer(SecurityUtils.getSysUser().getNickName());
+                        jdglDayScheduleWbs.setEditerId(SecurityUtils.getUserName()+"");
                         jdglDayScheduleWbs.setEditerDate(DateUtils.getNowDate());
                     }
                     // 从redis中获取wbs数据
