@@ -22,7 +22,7 @@ import java.util.List;
 @Valid
 public class KcsjMaterialsList extends BaseEntity {
     private static final long serialVersionUID = 1L;
-    //是否是编辑  1编辑&调整
+    //是否是编辑  1调整
     private String isEdit;
 
     public String getIsEdit() {
