@@ -328,6 +328,13 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     //修改记录判断
     private List<SgsjTechnicalScienceTopicModify> compareToObj(SgsjTechnicalScienceTopic oldData, SgsjTechnicalScienceTopic newData, String topicCurentNode) {
         List<SgsjTechnicalScienceTopicModify> objects = new ArrayList<>();
+        if (!compareStr(oldData.getTopicCode(), newData.getTopicCode())) {
+            SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
+            differData.setModifyContent("课题编号");
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getTopicCode())?"":oldData.getTopicCode());
+            differData.setAfterModify(StrUtil.isBlank(newData.getTopicCode())?"":newData.getTopicCode());
+            objects.add(differData);
+        }
         if (!compareStr(oldData.getTopicName(), newData.getTopicName())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("课题名称");
