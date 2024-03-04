@@ -1,9 +1,8 @@
 package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.controller;
 
-import java.util.Arrays;
-import java.util.List;
+import java.io.File;
+import java.util.*;
 import java.io.IOException;
-import java.util.Map;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
@@ -11,9 +10,13 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.fastjson.JSONObject;
+import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.FileDto;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO;
+import com.hhwy.sp.utils.FileUtils;
 import com.hhwy.sp.utils.easyExcel.CustomMergeStrategy;
 import com.hhwy.utils.word.WordUtil;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +32,7 @@ import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnical
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import org.springframework.web.client.RestTemplate;
 
 /***
  * 功能描述: 科技管理 - 科研课题研发管理
@@ -228,5 +232,37 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
             }
         }
         WordUtil.responeDocxFile(response, map, "template/"+templatePath, exportFileName);
+    }
+
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    //获取文件名称测试
+    @RequestMapping("/getFileName")
+    public void getFileName(){
+        String fileUrl = "http://10.0.1.118/fileservice/fileext/";
+        String fileGroupId = "45045c5b6e29ac96a811fc969fb47784";
+        String url = fileUrl + "list/" + fileGroupId;
+        String jsonString = restTemplate.getForObject(url, String.class);
+        List<FileDto> fileDtoList = JSONObject.parseArray(jsonString, FileDto.class);
+        if(CollectionUtils.isEmpty(fileDtoList)){
+            return;
+        }
+        Set<String> objects = new HashSet<>();
+        for (FileDto fileDto : fileDtoList) {
+            String fileName = fileDto.getFileName();
+            String extension = fileDto.getExtension();
+        }
+
+//        FileUtils fileUtils = new FileUtils();
+//        ArrayList<String> objects = new ArrayList<>();
+//        objects.add("1111");
+//        List<File> fileByGroupIds = fileUtils.getFileByGroupIds(objects);
+//        for (File fileByGroupId : fileByGroupIds) {
+//            String name = fileByGroupId.getName();
+//            System.out.printf("name");
+//        }
+
     }
 }
