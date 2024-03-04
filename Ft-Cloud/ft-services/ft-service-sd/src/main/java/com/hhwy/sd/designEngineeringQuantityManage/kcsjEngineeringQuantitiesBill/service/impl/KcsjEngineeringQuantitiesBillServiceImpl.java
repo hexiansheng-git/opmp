@@ -53,14 +53,14 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         String isEdit = kcsjEngineeringQuantitiesBill.getIsEdit();
         //查询主表数据
         kcsjEngineeringQuantitiesBill = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
-        if (StringUtils.isNotEmpty(isEdit)){
+        if (StringUtils.isNotEmpty(isEdit) && ("1".equals(isEdit))) {
             kcsjEngineeringQuantitiesBill.setIsEdit(isEdit);
-        }
-        if ("1".equals(kcsjEngineeringQuantitiesBill.getIsEdit())){
-            if (StringUtils.isNotEmpty(kcsjEngineeringQuantitiesBill.getFileGroupId())){
+            if (StringUtils.isNotEmpty(kcsjEngineeringQuantitiesBill.getFileGroupId())) {
                 kcsjEngineeringQuantitiesBill.setFileGroupId(fileUploadUtil.copyFile(kcsjEngineeringQuantitiesBill.getFileGroupId()));
             }
         }
+
+
         //获取主表Id
         Long id = kcsjEngineeringQuantitiesBill.getId();
         //查询子表数据
@@ -70,7 +70,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         //设置优化前工程量字段
         for (KcsjEngineeringQuantitiesBillDetail billDetail : detailList) {
             BigDecimal workload = billDetail.getWorkload();
-            workload=workload==null?BigDecimal.ZERO:workload;
+            workload = workload == null ? BigDecimal.ZERO : workload;
             billDetail.setPreviousQuantity(workload);
         }
         //把数据构建成树形
@@ -297,6 +297,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
 
     /**
      * 批量删除
+     *
      * @param ids
      * @return
      */
