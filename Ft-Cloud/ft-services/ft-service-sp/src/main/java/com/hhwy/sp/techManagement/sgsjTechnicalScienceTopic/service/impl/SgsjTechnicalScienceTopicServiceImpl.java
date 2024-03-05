@@ -447,10 +447,11 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             differData.setAfterModify(StrUtil.isBlank(newData.getTopicSummary())?"":newData.getTopicSummary());
             objects.add(differData);
         }
+        String currentNodeFlag = newData.getPtVar3();
         SgsjTechnicalScienceTopicModify sgsjTechnicalScienceTopicModify = new SgsjTechnicalScienceTopicModify();
         sgsjTechnicalScienceTopicModify.setForeignId(oldData.getId());
         if (StrUtil.isNotBlank(topicCurentNode) && topicCurentNode.equals("2")
-                || (topicCurentNode.equals("3") && StrUtil.isBlank(processTaskName) &&  processTaskName.equals("海外事业部门"))) {
+                || (StrUtil.isNotBlank(currentNodeFlag) && currentNodeFlag.equals("3"))) {
             sgsjTechnicalScienceTopicModify.setModifyContent("大纲附件");
             SgsjTechnicalScienceTopicModify result = technicalScienceTopicModifyService.getMaxCreateTimeDataByModifyContent(sgsjTechnicalScienceTopicModify);
             String oldName = result == null?"": result.getAfterModify();
@@ -464,7 +465,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             }
         }
         if (StrUtil.isNotBlank(topicCurentNode) && topicCurentNode.equals("3")
-                || (topicCurentNode.equals("4") && StrUtil.isBlank(processTaskName) &&  processTaskName.equals("海外事业部门"))) {
+                || (StrUtil.isNotBlank(currentNodeFlag) && currentNodeFlag.equals("4"))) {
             sgsjTechnicalScienceTopicModify.setModifyContent("合同附件");
             SgsjTechnicalScienceTopicModify result = technicalScienceTopicModifyService.getMaxCreateTimeDataByModifyContent(sgsjTechnicalScienceTopicModify);
             String oldName = result == null?"": result.getAfterModify();
@@ -478,7 +479,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             }
         }
         if (StrUtil.isNotBlank(topicCurentNode) && topicCurentNode.equals("4")
-                || (topicCurentNode.equals("5") && StrUtil.isBlank(processTaskName) && processTaskName.equals("海外事业部门"))) {
+                || (StrUtil.isNotBlank(currentNodeFlag) && currentNodeFlag.equals("5"))) {
             sgsjTechnicalScienceTopicModify.setModifyContent("检查附件");
             SgsjTechnicalScienceTopicModify result = technicalScienceTopicModifyService.getMaxCreateTimeDataByModifyContent(sgsjTechnicalScienceTopicModify);
             String oldName = result == null?"": result.getAfterModify();
@@ -699,8 +700,6 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
 
     @Value("${file.url}")
     private String fileUrl;
-    @Value("${fileService.fileUrl}")
-    private String fileUrl1;
 
     //获取文件名
     private String getFileName(String fileGroupId) {
