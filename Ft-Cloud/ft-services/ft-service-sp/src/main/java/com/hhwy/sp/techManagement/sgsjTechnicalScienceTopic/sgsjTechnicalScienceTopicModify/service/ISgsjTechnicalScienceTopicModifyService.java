@@ -27,4 +27,6 @@ public interface ISgsjTechnicalScienceTopicModifyService {
     int deleteSgsjTechnicalScienceTopicModify(SgsjTechnicalScienceTopicModify sgsjTechnicalScienceTopicModify);
 
     int deleteSgsjTechnicalScienceTopicModifyByPks(List<Long> sgsjTechnicalScienceTopicModifyPkList);
+
+    SgsjTechnicalScienceTopicModify getMaxCreateTimeDataByModifyContent(SgsjTechnicalScienceTopicModify sgsjTechnicalScienceTopicModify);
 }

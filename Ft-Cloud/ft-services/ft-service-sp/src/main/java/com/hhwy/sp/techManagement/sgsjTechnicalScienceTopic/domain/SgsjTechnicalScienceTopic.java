@@ -311,6 +311,8 @@ public class SgsjTechnicalScienceTopic extends CommonBaseEntity {
     private String ptVar4;
     /**
      * 字段描述：预留字段5
+     *
+     * 存放申请时用到得附件名称
      */
     @JsonProperty
     @Excel(name = "预留字段5")
