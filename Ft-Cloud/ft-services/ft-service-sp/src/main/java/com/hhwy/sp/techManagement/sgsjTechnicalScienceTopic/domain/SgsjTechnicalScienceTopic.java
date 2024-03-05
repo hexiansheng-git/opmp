@@ -305,6 +305,7 @@ public class SgsjTechnicalScienceTopic extends CommonBaseEntity {
     private String ptVar3;
     /**
      * 字段描述：预留字段4
+     * 自关联：存放申请的id
      */
     @JsonProperty
     @Excel(name = "预留字段4")
@@ -317,5 +318,7 @@ public class SgsjTechnicalScienceTopic extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    private Long[] ids;
 
 }

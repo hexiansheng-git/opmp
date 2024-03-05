@@ -16,6 +16,7 @@ public interface SgsjTechnicalScienceTopicMapper {
     SgsjTechnicalScienceTopic getSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic);
 
     List<SgsjTechnicalScienceTopic> getSgsjTechnicalScienceTopicList(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic);
+    List<SgsjTechnicalScienceTopic> getSgsjTechnicalScienceTopicListNew(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic);
 
     int insertSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic);
 
