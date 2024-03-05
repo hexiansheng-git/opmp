@@ -143,7 +143,7 @@ public class SgjsPaperPublishController extends BaseController {
     public void export(HttpServletResponse response,@RequestBody PaperPublishQueryVo queryVo) throws IOException {
         List<Long> ids = queryVo.getIds();
         List<SgjsPaperPublish> sgjsPaperPublishList;
-        if(CollectionUtils.isNotEmpty(ids)){
+        if(CollectionUtils.isEmpty(ids)){
             sgjsPaperPublishList = sgjsPaperPublishService.getSgjsPaperPublishList(queryVo);
         }else {
             sgjsPaperPublishList = sgjsPaperPublishService.getListByIds(ids);
