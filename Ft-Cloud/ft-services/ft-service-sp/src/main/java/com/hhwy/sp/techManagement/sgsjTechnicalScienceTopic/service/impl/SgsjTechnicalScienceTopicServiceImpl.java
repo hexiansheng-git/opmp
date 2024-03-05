@@ -697,15 +697,17 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("${fileService.fileUrl}")
+    @Value("${file.url}")
     private String fileUrl;
+    @Value("${fileService.fileUrl}")
+    private String fileUrl1;
 
     //获取文件名
     private String getFileName(String fileGroupId) {
         if (StrUtil.isBlank(fileGroupId)) return "";
 //        String fileUrl = "http://10.0.1.118/fileservice/fileext/";
 //        String fileGroupId = "45045c5b6e29ac96a811fc969fb47784";
-        String url = fileUrl + "list/" + fileGroupId;
+        String url = fileUrl + "/fileext/list/" + fileGroupId;
         String jsonString = restTemplate.getForObject(url, String.class);
         List<FileDto> fileDtoList = JSONObject.parseArray(jsonString, FileDto.class);
         if (CollectionUtils.isEmpty(fileDtoList)) {
