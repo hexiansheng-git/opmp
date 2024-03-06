@@ -123,9 +123,8 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         kcsjEngineeringQuantitiesBill.setCreateTime(DateUtils.getNowDate());
         kcsjEngineeringQuantitiesBill.setValid("1");
         kcsjEngineeringQuantitiesBill.setDelFlag("0");
-
-
         kcsjEngineeringQuantitiesBillMapper.insertKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
+        //新增子表
         List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
         if (!CollectionUtils.isEmpty(detailsList)) {
             //子表数据处理
@@ -137,6 +136,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
                     KcsjEngineeringQuantitiesBillDetail::getChildren,
                     KcsjEngineeringQuantitiesBillDetail::setChildren);
             kcsjEngineeringQuantitiesBill.setDetailsList(detailsList);
+            //处理子表上一个版本工程量字段、计算优化量差字段
             handleInsertList(kcsjEngineeringQuantitiesBill, kcsjEngineeringQuantitiesBill.getId());
         }
         return AjaxResult.success();
