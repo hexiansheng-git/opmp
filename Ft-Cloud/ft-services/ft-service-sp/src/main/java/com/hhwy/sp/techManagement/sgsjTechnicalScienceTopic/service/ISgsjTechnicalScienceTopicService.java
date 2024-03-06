@@ -18,7 +18,7 @@ public interface ISgsjTechnicalScienceTopicService {
 
     List<SgsjTechnicalScienceTopic> getSgsjTechnicalScienceTopicList(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic);
 
-    SgsjTechnicalScienceTopic insertSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic);
+    int insertSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic);
 
     int insertSgsjTechnicalScienceTopicList(List<SgsjTechnicalScienceTopic> sgsjTechnicalScienceTopicList);
 
@@ -45,4 +45,8 @@ public interface ISgsjTechnicalScienceTopicService {
     String getRoleName();
 
     Map<String, Object> getExpertSuggest(SgsjTechnicalScienceTopic param);
+
+    SgsjTechnicalScienceTopic lxAdd(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
+
+    void addLxData(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic);
 }

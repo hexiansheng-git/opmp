@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.FileDto;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO;
 import com.hhwy.sp.utils.easyExcel.CustomMergeStrategy;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.word.WordUtil;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -96,7 +97,7 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
     @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopic:add")
     @PostMapping("/lxAdd")
     public AjaxResult insertSgsjTechnicalScienceTopic(@Validated(ValidationGroups.Save.class) @RequestBody SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {
-        SgsjTechnicalScienceTopic result = sgsjTechnicalScienceTopicService.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopicParam);
+        SgsjTechnicalScienceTopic result = sgsjTechnicalScienceTopicService.lxAdd(sgsjTechnicalScienceTopicParam);
         return AjaxResult.success(result);
     }
 
@@ -163,6 +164,9 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
         //走第三分支(修改后通过)，流程结束 最终状态为"通过"
         sgsjTechnicalScienceTopic.setApplyState("3");
         sgsjTechnicalScienceTopicService.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
+        //3代表流程结束，需要创建一条新数据给立项用
+        SgsjTechnicalScienceTopic applyData = sgsjTechnicalScienceTopicService.getSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
+        sgsjTechnicalScienceTopicService.addLxData(applyData);
     }
 
     /**

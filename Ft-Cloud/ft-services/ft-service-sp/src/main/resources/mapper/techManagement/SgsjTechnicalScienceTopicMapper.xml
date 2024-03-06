@@ -96,6 +96,7 @@
                 , `pt_var5`
         FROM sgsj_technical_science_topic
     </sql>
+
     <select id="getSgsjTechnicalScienceTopic" resultMap="SgsjTechnicalScienceTopicResultMap">
         <include refid="selectSgsjTechnicalScienceTopicVo"/>
         <where>
@@ -172,7 +173,8 @@
         <include refid="selectSgsjTechnicalScienceTopicVo"/>
         <where>
             del_flag = "0"
-            and ((topic_code is null and `apply_state` in  ('1', '2')) || (topic_code is not null))
+            <!-- 在申请阶段 topic_curent_node 为空，申请完成后会生成一条新的数据并赋值：0，该条件用于过滤申请完成的数据 -->
+            and ((topic_curent_node is null and `apply_state` in  ('1', '2')) || (topic_curent_node is not null))
             <if test="ids != null ">
                 and `id` in
                 <foreach collection="ids" item="id" separator="," open="(" close=")">

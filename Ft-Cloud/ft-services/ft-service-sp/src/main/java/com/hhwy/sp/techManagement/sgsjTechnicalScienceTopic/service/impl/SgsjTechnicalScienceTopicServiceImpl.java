@@ -16,6 +16,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.sp.common.FileUploadUtil;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.constant.BelongBusiness;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
@@ -73,6 +74,65 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
 
     @Autowired
     private SystemServiceApi systemServiceApi;
+    @Autowired
+    private FileUploadUtil fileUploadUtil;
+
+    @Transactional
+    public int insertSgsjTechnicalScienceTopicList(List<SgsjTechnicalScienceTopic> sgsjTechnicalScienceTopicList) {
+        for (SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic : sgsjTechnicalScienceTopicList) {
+            sgsjTechnicalScienceTopic.setId(IdWorker.createId());
+            sgsjTechnicalScienceTopic.setCreateUser(SecurityUtils.getUserName());
+            sgsjTechnicalScienceTopic.setCreateTime(DateUtils.getNowDate());
+        }
+        return sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopicList(sgsjTechnicalScienceTopicList);
+    }
+
+    @Transactional
+    public int insertSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
+        sgsjTechnicalScienceTopic.setCreateUser(SecurityUtils.getUserName());
+        sgsjTechnicalScienceTopic.setCreateTime(DateUtils.getNowDate());
+        return sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
+    }
+
+    @Transactional
+    public int updateSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
+        sgsjTechnicalScienceTopic.setUpdateUser(SecurityUtils.getUserName());
+        sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
+        return sgsjTechnicalScienceTopicMapper.updateTaskStatus(sgsjTechnicalScienceTopic);
+    }
+
+    @Transactional
+    public int updateSgsjTechnicalScienceTopicList(List<SgsjTechnicalScienceTopic> sgsjTechnicalScienceTopicList) {
+        for (SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic : sgsjTechnicalScienceTopicList) {
+            sgsjTechnicalScienceTopic.setUpdateUser(SecurityUtils.getUserName());
+            sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
+        }
+        return sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopicList(sgsjTechnicalScienceTopicList);
+    }
+
+    @Transactional
+    public int deleteSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
+        sgsjTechnicalScienceTopic.setUpdateUser(SecurityUtils.getUserName());
+        sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
+        return sgsjTechnicalScienceTopicMapper.deleteSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
+    }
+
+    @Transactional
+    public int deleteSgsjTechnicalScienceTopicByPks(List<Long> sgsjTechnicalScienceTopicPkList) {
+        return sgsjTechnicalScienceTopicMapper.deleteSgsjTechnicalScienceTopicByPks(sgsjTechnicalScienceTopicPkList);
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {
+        sgsjTechnicalScienceTopicMapper.deleteById(sgsjTechnicalScienceTopicParam);
+        Long id = sgsjTechnicalScienceTopicParam.getId();
+        sgjsExpertLibraryService.deleteSgjsExpertLibraryByForeignId(id);
+        sgjsAchievementAwardService.deleteSgjsAchievementAwardByForeignId(id);
+        SgjsAuthenticateEvaluate shjsAuthenticateEvaluate = new SgjsAuthenticateEvaluate();
+        shjsAuthenticateEvaluate.setForeignId(id);
+        shjsAuthenticateEvaluateService.deleteShjsAuthenticateEvaluate(shjsAuthenticateEvaluate);
+    }
 
     public SgsjTechnicalScienceTopic getSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
         return sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
@@ -144,7 +204,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
      * 功能描述: 课题立项里的保存
      */
     @Transactional
-    public SgsjTechnicalScienceTopic insertSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
+    public SgsjTechnicalScienceTopic lxAdd(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
         Assert.isTrue(sgsjTechnicalScienceTopic != null, "请求参数缺失");
         Assert.isTrue(sgsjTechnicalScienceTopic.getId() != null, "id不能为空");
         //判断课题编号是否重复
@@ -157,44 +217,26 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
                 Assert.isTrue(sgsjTechnicalScienceTopic.getId().equals(sgsjTechnicalScienceTopic2.getId()), "编号不能重复");
             }
         }
-        //查询是否已存在立项数据
-        SgsjTechnicalScienceTopic param1 = new SgsjTechnicalScienceTopic();
-        param1.setPtVar4(String.valueOf(sgsjTechnicalScienceTopic.getId()));
-        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic2 = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param1);
-        //返回结果
-        SgsjTechnicalScienceTopic result = null;
-                //判断是保存还是修改
         Long id = sgsjTechnicalScienceTopic.getId();
-        if (sgsjTechnicalScienceTopic2 != null) {
-            //如果不为空，执行update
-            //返回结果获取
-            SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic1 = new SgsjTechnicalScienceTopic();
-            sgsjTechnicalScienceTopic1.setId(id);
-            result = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic1);
-            //判断当前记录是否在流程中，如果已发起审批，则需要保存修改记录你
-            SgsjTechnicalScienceTopic parm = new SgsjTechnicalScienceTopic();
-            parm.setId(Long.valueOf(result.getPtVar2()));
-            FlowInfoSearchUtil.getFlowInfo(parm, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
-            String taskStatus = parm.getTaskStatus();
-            if (!taskStatus.equals("0") && !taskStatus.equals("4")){
-                //如果流程已发起，需要处理修改记录信息
-                handleModifyRecord(sgsjTechnicalScienceTopic, parm);
-//            ExecutorService executorService = Executors.newSingleThreadExecutor();
-//            executorService.execute(() -> handleModifyRecord(sgsjTechnicalScienceTopic, parm));
-            }
-            sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
-        }else {
-            //查询结果为空，需要insert一条数据
-            //赋予新的id
-            Long id1 = IdWorker.createId();
-            sgsjTechnicalScienceTopic.setId(id1);
-            sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
-            SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic1 = new SgsjTechnicalScienceTopic();
-            sgsjTechnicalScienceTopic1.setId(id1);
-            result = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic1);
-        }
         //保存子表
         handleChilderData(sgsjTechnicalScienceTopic, id);
+        //返回结果获取
+        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic1 = new SgsjTechnicalScienceTopic();
+        sgsjTechnicalScienceTopic1.setId(id);
+        SgsjTechnicalScienceTopic result = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic1);
+        //判断当前记录是否在流程中，如果已发起审批，则需要保存修改记录你
+        SgsjTechnicalScienceTopic parm = new SgsjTechnicalScienceTopic();
+        parm.setId(Long.valueOf(result.getPtVar2()));
+        FlowInfoSearchUtil.getFlowInfo(parm, FlowEnum.SGJS_TECH_SCIENCE_TOPIC);
+        String taskStatus = parm.getTaskStatus();
+        if (!taskStatus.equals("0") && !taskStatus.equals("4")){
+            //如果流程已发起，需要处理修改记录信息
+            handleModifyRecord(sgsjTechnicalScienceTopic, parm);
+//            ExecutorService executorService = Executors.newSingleThreadExecutor();
+//            executorService.execute(() -> handleModifyRecord(sgsjTechnicalScienceTopic, parm));
+        }
+        //保存主表
+        sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
         return result;
     }
 
@@ -260,7 +302,6 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             //保存主表
             sgsjTechnicalScienceTopic.setId(IdWorker.createId());
             sgsjTechnicalScienceTopic.setPtVar1(String.valueOf(IdWorker.createId()));
-            sgsjTechnicalScienceTopic.setPtVar2(String.valueOf(IdWorker.createId()));
             sgsjTechnicalScienceTopic.setCreateUser(SecurityUtils.getUserName());
             sgsjTechnicalScienceTopic.setCreateTime(DateUtils.getNowDate());
             sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
@@ -270,8 +311,10 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             String applyState = sgsjTechnicalScienceTopic.getApplyState();
             if (StrUtil.isNotBlank(applyState) && (StrUtil.equalsAny(applyState, "3", "4"))) {
                 //3，4代表流程结束，需要创建一条新数据给立项用
-                sgsjTechnicalScienceTopic.setId(IdWorker.createId());
-                sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
+                SgsjTechnicalScienceTopic param = new SgsjTechnicalScienceTopic();
+                param.setId(sgsjTechnicalScienceTopic.getId());
+                SgsjTechnicalScienceTopic lxData = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param);
+                this.addLxData(lxData);
             }
         }
         //保存子表
@@ -280,54 +323,20 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_1, libraryList);
     }
 
-    @Transactional
-    public int insertSgsjTechnicalScienceTopicList(List<SgsjTechnicalScienceTopic> sgsjTechnicalScienceTopicList) {
-        for (SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic : sgsjTechnicalScienceTopicList) {
-            sgsjTechnicalScienceTopic.setId(IdWorker.createId());
-            sgsjTechnicalScienceTopic.setCreateUser(SecurityUtils.getUserName());
-            sgsjTechnicalScienceTopic.setCreateTime(DateUtils.getNowDate());
-        }
-        return sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopicList(sgsjTechnicalScienceTopicList);
-    }
-
-    @Transactional
-    public int updateSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
-        sgsjTechnicalScienceTopic.setUpdateUser(SecurityUtils.getUserName());
-        sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
-        return sgsjTechnicalScienceTopicMapper.updateTaskStatus(sgsjTechnicalScienceTopic);
-    }
-
-    @Transactional
-    public int updateSgsjTechnicalScienceTopicList(List<SgsjTechnicalScienceTopic> sgsjTechnicalScienceTopicList) {
-        for (SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic : sgsjTechnicalScienceTopicList) {
-            sgsjTechnicalScienceTopic.setUpdateUser(SecurityUtils.getUserName());
-            sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
-        }
-        return sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopicList(sgsjTechnicalScienceTopicList);
-    }
-
-    @Transactional
-    public int deleteSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
-        sgsjTechnicalScienceTopic.setUpdateUser(SecurityUtils.getUserName());
-        sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
-        return sgsjTechnicalScienceTopicMapper.deleteSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
-    }
-
-    @Transactional
-    public int deleteSgsjTechnicalScienceTopicByPks(List<Long> sgsjTechnicalScienceTopicPkList) {
-        return sgsjTechnicalScienceTopicMapper.deleteSgsjTechnicalScienceTopicByPks(sgsjTechnicalScienceTopicPkList);
-    }
-
-    @Transactional
-    @Override
-    public void deleteById(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {
-        sgsjTechnicalScienceTopicMapper.deleteById(sgsjTechnicalScienceTopicParam);
-        Long id = sgsjTechnicalScienceTopicParam.getId();
-        sgjsExpertLibraryService.deleteSgjsExpertLibraryByForeignId(id);
-        sgjsAchievementAwardService.deleteSgjsAchievementAwardByForeignId(id);
-        SgjsAuthenticateEvaluate shjsAuthenticateEvaluate = new SgjsAuthenticateEvaluate();
-        shjsAuthenticateEvaluate.setForeignId(id);
-        shjsAuthenticateEvaluateService.deleteShjsAuthenticateEvaluate(shjsAuthenticateEvaluate);
+    /**
+    * 功能描述: 申请完成后新增一条立项数据
+    * @param: sgsjTechnicalScienceTopic 保存参数
+    * 作者: fsd
+    * 时间: 2024/3/6
+    */
+    public void addLxData(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
+        String fileGroupId = fileUploadUtil.copyFile(sgsjTechnicalScienceTopic.getTopicFileGroupId());
+        sgsjTechnicalScienceTopic.setTopicFileGroupId(fileGroupId);
+        sgsjTechnicalScienceTopic.setTopicCurentNode("0");
+        sgsjTechnicalScienceTopic.setPtVar4(String.valueOf(sgsjTechnicalScienceTopic.getId()));
+        sgsjTechnicalScienceTopic.setId(IdWorker.createId());
+        sgsjTechnicalScienceTopic.setPtVar2(String.valueOf(IdWorker.createId()));
+        sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
     }
 
     /**
