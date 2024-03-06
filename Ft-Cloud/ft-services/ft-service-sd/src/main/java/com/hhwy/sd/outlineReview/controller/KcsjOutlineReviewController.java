@@ -13,10 +13,10 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sd.common.ProjectBasicInfo;
+import com.hhwy.sd.common.WordUtil;
 import com.hhwy.sd.outlineReview.domain.KcsjOutlineReview;
 import com.hhwy.sd.outlineReview.service.IKcsjOutlineReviewService;
 import com.hhwy.system.api.domain.SysUser;
-import com.hhwy.utils.word.WordUtil;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
