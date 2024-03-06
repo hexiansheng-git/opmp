@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.sbch.plan.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -32,6 +33,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -119,8 +122,7 @@ public class SbchTotalDemandPlanDetailController extends BaseController {
      */
     @PostMapping("/export")
     @CustomLogger(title = "前期策划-前期策划编制-设备策划-设备总需计划", name = "7.1设备总需计划", businessType = CustomBusinessType.EXPORT)
-    public void export(HttpServletResponse response) throws IOException {
-        SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail = new SbchTotalDemandPlanDetail();
+    public void export(HttpServletResponse response, SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail) throws IOException {
         List<SbchTotalDemandPlanDetail> list = totalDemandPlanDetailService.selectSbchTotalDemandPlanDetailLeaderList(sbchTotalDemandPlanDetail);
         List<SbchTotalDemandPlanDetailExportVo> exportList = BeanUtil.copyToList(list, SbchTotalDemandPlanDetailExportVo.class);
         FtExcelUtil<SbchTotalDemandPlanDetailExportVo> util = new FtExcelUtil<>(SbchTotalDemandPlanDetailExportVo.class);

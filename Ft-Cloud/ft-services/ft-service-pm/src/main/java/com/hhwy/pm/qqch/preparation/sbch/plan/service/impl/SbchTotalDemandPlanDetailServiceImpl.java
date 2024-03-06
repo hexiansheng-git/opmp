@@ -1,6 +1,8 @@
 package com.hhwy.pm.qqch.preparation.sbch.plan.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -90,11 +92,9 @@ public class SbchTotalDemandPlanDetailServiceImpl implements ISbchTotalDemandPla
         list.forEach(p -> {
             p.setId(IdWorker.createId());
             p.setPlanId(planId);
-//            p.setPtVar1(p.getMaterialType());
+            p.setPtVar1(StrUtil.isBlank(p.getMaterialType())?p.getPtVar3():p.getMaterialType());
             p.setIsSpecial("0");
-//            if (StrUtil.isBlank(p.getPtVar2()) || StrUtil.isBlank(p.getPtVar3())) {
-//                RedisService.getCacheObject(PmsConstant.CATEGORYREDISKEY);
-//            }
+            p.setMaterialType(null);
         });
         sbchTotalDemandPlanDetailMapper.deleteSbchTotalDemandPlanDetailByPlanId(planId, SecurityUtils.getUserId(), DateUtils.getNowDate());
         sbchTotalDemandPlanDetailMapper.batchInsert(list);
@@ -104,11 +104,17 @@ public class SbchTotalDemandPlanDetailServiceImpl implements ISbchTotalDemandPla
     @Override
     @SelfEmpty(clazz = SbchTotalDemandPlanDetail.class)
     public List<SbchTotalDemandPlanDetail> selectSbchTotalDemandPlanDetailLeaderList(SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail) {
+        BigDecimal version = sbchTotalDemandPlanDetail.getVersion();
+        version = VersionUtil.getVersion("sbch_total_demand_plan", version);
+        SbchTotalDemandPlan sbchTotalDemandPlan = new SbchTotalDemandPlan();
+        sbchTotalDemandPlan.setVersion(version);
+        List<SbchTotalDemandPlan> sbchTotalDemandPlans = sbchTotalDemandPlanMapper.selectSbchTotalDemandPlanList(sbchTotalDemandPlan);
+        if (CollUtil.isEmpty(sbchTotalDemandPlans)) new ArrayList<>();
         ArrayList<SbchTotalDemandPlanDetail> returnList = new ArrayList<>();
         if(ObjectNullUtil.isEmpty(sbchTotalDemandPlanDetail.getMaterialCodeList())){
             sbchTotalDemandPlanDetail.setMaterialCodeList(null);
         }
-        String projectType = sbchTotalDemandPlanDetail.getProjectType();
+        sbchTotalDemandPlanDetail.setPlanId(sbchTotalDemandPlans.get(0).getId());
         List<SbchTotalDemandPlanDetail> sbchTotalDemandPlanDetails = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailLeaderList(sbchTotalDemandPlanDetail);
         if(!ObjectNullUtil.isEmpty(sbchTotalDemandPlanDetails)){
             Map<String, String> busAndMaterialMap = new HashMap<>();

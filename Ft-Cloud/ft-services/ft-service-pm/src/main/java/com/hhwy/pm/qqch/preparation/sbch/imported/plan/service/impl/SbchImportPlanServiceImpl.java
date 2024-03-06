@@ -193,7 +193,7 @@ public class SbchImportPlanServiceImpl implements ISbchImportPlanService {
                 JyDetailsUtil.jyDetails(detailList, ValidationGroups.Save.class);
             }
             for (SbchImportPlanDetail sbchImportPlanDetail : detailList) {
-                BeanUtils.copyProperties(sbchImportPlan,sbchImportPlanDetail);
+                BeanUtils.copyProperties(sbchImportPlan,sbchImportPlanDetail, "ptVar1");
                 sbchImportPlanDetail.setPlanId(sbchImportPlan.getId());
                 EntityUtils.setCreateInfo(sbchImportPlanDetail);
                 sbchImportPlanDetail.setId(IdWorker.createId());
