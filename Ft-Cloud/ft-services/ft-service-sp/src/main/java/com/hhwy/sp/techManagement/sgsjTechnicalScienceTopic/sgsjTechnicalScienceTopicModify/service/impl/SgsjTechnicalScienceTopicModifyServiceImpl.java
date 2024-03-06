@@ -40,36 +40,13 @@ public class SgsjTechnicalScienceTopicModifyServiceImpl implements ISgsjTechnica
 
     public List<SgsjTechnicalScienceTopicModify> getSgsjTechnicalScienceTopicModifyList(SgsjTechnicalScienceTopicModify sgsjTechnicalScienceTopicModify) {
         List<SgsjTechnicalScienceTopicModify> list = sgsjTechnicalScienceTopicModifyMapper.getSgsjTechnicalScienceTopicModifyList(sgsjTechnicalScienceTopicModify);
-        for (SgsjTechnicalScienceTopicModify bean : list) {
-            if (StrUtil.isNotBlank(bean.getModifyContent()) && bean.getModifyContent().contains("附件")) {
-                bean.setBeforeModify(getFileName(bean.getBeforeModify()));
-                bean.setAfterModify(getFileName(bean.getAfterModify()));
-            }
-        }
+//        for (SgsjTechnicalScienceTopicModify bean : list) {
+//            if (StrUtil.isNotBlank(bean.getModifyContent()) && bean.getModifyContent().contains("附件")) {
+//                bean.setBeforeModify(getFileName(bean.getBeforeModify()));
+//                bean.setAfterModify(getFileName(bean.getAfterModify()));
+//            }
+//        }
         return list;
-    }
-
-    @Autowired
-    private RestTemplate restTemplate;
-
-    //获取文件名
-    private String getFileName(String fileGroupId) {
-        if (StrUtil.isBlank(fileGroupId)) return "";
-        String fileUrl = "http://10.0.1.118/fileservice/fileext/";
-//        String fileGroupId = "45045c5b6e29ac96a811fc969fb47784";
-        String url = fileUrl + "list/" + fileGroupId;
-        String jsonString = restTemplate.getForObject(url, String.class);
-        List<FileDto> fileDtoList = JSONObject.parseArray(jsonString, FileDto.class);
-        if (CollectionUtils.isEmpty(fileDtoList)) {
-            return "";
-        }
-        Set<String> objects = new HashSet<>();
-        for (FileDto fileDto : fileDtoList) {
-            String fileName = fileDto.getFileName();
-            String extension = fileDto.getExtension();
-            objects.add(fileName + extension);
-        }
-        return String.join("|", objects);
     }
 
     @Transactional
@@ -111,5 +88,10 @@ public class SgsjTechnicalScienceTopicModifyServiceImpl implements ISgsjTechnica
     @Transactional
     public int deleteSgsjTechnicalScienceTopicModifyByPks(List<Long> sgsjTechnicalScienceTopicModifyPkList) {
         return sgsjTechnicalScienceTopicModifyMapper.deleteSgsjTechnicalScienceTopicModifyByPks(sgsjTechnicalScienceTopicModifyPkList);
+    }
+
+    @Override
+    public SgsjTechnicalScienceTopicModify getMaxCreateTimeDataByModifyContent(SgsjTechnicalScienceTopicModify sgsjTechnicalScienceTopicModify) {
+        return sgsjTechnicalScienceTopicModifyMapper.getMaxCreateTimeDataByModifyContent(sgsjTechnicalScienceTopicModify);
     }
 }

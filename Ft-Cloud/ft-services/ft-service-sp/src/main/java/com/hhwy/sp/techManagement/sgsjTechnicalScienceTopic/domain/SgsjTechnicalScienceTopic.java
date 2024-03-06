@@ -286,13 +286,14 @@ public class SgsjTechnicalScienceTopic extends CommonBaseEntity {
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：申请的流程业务id
+     *
      */
     @JsonProperty
     @Excel(name = "预留字段1")
     private String ptVar1;
     /**
-     * 字段描述：预留字段2
+     * 字段描述：立项的流程业务id
      */
     @JsonProperty
     @Excel(name = "预留字段2")
@@ -305,15 +306,20 @@ public class SgsjTechnicalScienceTopic extends CommonBaseEntity {
     private String ptVar3;
     /**
      * 字段描述：预留字段4
+     * 自关联：存放申请的id，查看详情用
      */
     @JsonProperty
     @Excel(name = "预留字段4")
     private String ptVar4;
     /**
      * 字段描述：预留字段5
+     *
+     * 存放申请时用到得附件名称
      */
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    private Long[] ids;
 
 }

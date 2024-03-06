@@ -130,7 +130,7 @@ public class SgjsPatentDeclareController extends BaseController {
     public void export(HttpServletResponse response,@RequestBody PatentDeclareQueryVo queryVo) throws IOException {
         List<Long> ids = queryVo.getIds();
         List<SgjsPatentDeclare> sgjsPatentDeclareList;
-        if(CollectionUtils.isEmpty(ids)){
+        if(CollectionUtils.isNotEmpty(ids)){
             sgjsPatentDeclareList = sgjsPatentDeclareService.getListByIds(ids);
         }else {
             sgjsPatentDeclareList = sgjsPatentDeclareService.getSgjsPatentDeclareList(queryVo);
