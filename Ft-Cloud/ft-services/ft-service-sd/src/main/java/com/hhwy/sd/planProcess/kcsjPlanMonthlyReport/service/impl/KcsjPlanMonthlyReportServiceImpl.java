@@ -12,6 +12,7 @@ import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.mapper.KcsjPlanMonthlyRepor
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.service.IKcsjPlanMonthlyReportService;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,6 +72,9 @@ public class KcsjPlanMonthlyReportServiceImpl implements IKcsjPlanMonthlyReportS
 
     @Transactional
     public int updateKcsjPlanMonthlyReportList(List<KcsjPlanMonthlyReport> kcsjPlanMonthlyReportList) {
+        if(CollectionUtils.isEmpty(kcsjPlanMonthlyReportList)){
+            return 0;
+        }
         for (KcsjPlanMonthlyReport kcsjPlanMonthlyReport : kcsjPlanMonthlyReportList) {
             kcsjPlanMonthlyReport.setUpdateUser(SecurityUtils.getUserName());
             kcsjPlanMonthlyReport.setUpdateTime(DateUtils.getNowDate());
