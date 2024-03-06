@@ -3,8 +3,6 @@ package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
-import com.alibaba.excel.converters.bigdecimal.BigDecimalStringConverter;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.sp.utils.easyExcel.DateToStringConvert;
 import com.hhwy.sp.utils.easyExcel.DictConvert;
@@ -13,7 +11,6 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -64,8 +61,8 @@ public class SgsjTechnicalScienceTopicDTO implements Serializable {
      * 字段描述：研发预算（万元）
      */
     @JsonProperty
-    @ExcelProperty(value = "研发预算（万元）", converter = BigDecimalStringConverter.class)
-    private BigDecimal rdCost;
+    @ExcelProperty(value = "研发预算（万元）")
+    private String rdCost;
 
     /**
      * 字段描述：协作单位
