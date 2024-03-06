@@ -445,25 +445,25 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             differData.setAfterModify(StrUtil.isBlank(newData.getTogetherUnitOther())?"":newData.getTogetherUnitOther());
             objects.add(differData);
         }
-        if (!compareBigDecimal(oldData.getRdCost(), newData.getRdCost())) {
+        if (!compareStr(oldData.getRdCost(), newData.getRdCost())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("研发预算（万元）");
-            differData.setBeforeModify(oldData.getRdCost() == null ? null : String.valueOf(oldData.getRdCost()));
-            differData.setAfterModify(newData.getRdCost() == null ? null : String.valueOf(newData.getRdCost()));
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getRdCost()) ? null : oldData.getRdCost());
+            differData.setAfterModify(StrUtil.isBlank(newData.getRdCost()) ? null : newData.getRdCost());
             objects.add(differData);
         }
-        if (!compareBigDecimal(oldData.getAlreadyPayCost(), newData.getAlreadyPayCost())) {
+        if (!compareStr(oldData.getAlreadyPayCost(), newData.getAlreadyPayCost())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("已拨付经费（万元）");
-            differData.setBeforeModify(oldData.getAlreadyPayCost() == null ? null : String.valueOf(oldData.getAlreadyPayCost()));
-            differData.setAfterModify(newData.getAlreadyPayCost() == null ? null : String.valueOf(newData.getAlreadyPayCost()));
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getAlreadyPayCost()) ? null : oldData.getAlreadyPayCost());
+            differData.setAfterModify(StrUtil.isBlank(newData.getAlreadyPayCost()) ? null : newData.getAlreadyPayCost());
             objects.add(differData);
         }
-        if (!compareBigDecimal(oldData.getLeftCost(), newData.getLeftCost())) {
+        if (!compareStr(oldData.getLeftCost(), newData.getLeftCost())) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
             differData.setModifyContent("剩余经费（万元）");
-            differData.setBeforeModify(oldData.getLeftCost() == null ? null : String.valueOf(oldData.getLeftCost()));
-            differData.setAfterModify(newData.getLeftCost() == null ? null : String.valueOf(newData.getLeftCost()));
+            differData.setBeforeModify(StrUtil.isBlank(oldData.getLeftCost()) ? null : oldData.getLeftCost());
+            differData.setAfterModify(StrUtil.isBlank(newData.getLeftCost()) ? null : newData.getLeftCost());
             objects.add(differData);
         }
         if (!compareStr(oldData.getWriteInPersonName(), newData.getWriteInPersonName())) {
@@ -574,19 +574,6 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             return false;
         }
         return s1.equals(s2);
-    }
-
-    private boolean compareBigDecimal(BigDecimal b1, BigDecimal b2){
-        if ( b1 == null && b2 == null){
-            return true;
-        }
-        if ( b1 != null && b2 == null){
-            return false;
-        }
-        if ( b1 == null && b2 != null){
-            return false;
-        }
-        return NumberUtil.equals(b1, b2);
     }
 
     @Value("${kygl.mesPublish.roleKey}")
@@ -708,9 +695,9 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         resultMap.put("dutyPersonName", StrUtil.isBlank(topicInfo.getDutyPersonName())?"-":topicInfo.getDutyPersonName());
         resultMap.put("togetherUnit", StrUtil.isBlank(topicInfo.getTogetherUnit())?"-":topicInfo.getTogetherUnit());
         resultMap.put("togetherUnitOther", StrUtil.isBlank(topicInfo.getTogetherUnitOther())?"-":topicInfo.getTogetherUnitOther());
-        resultMap.put("rdCost", topicInfo.getRdCost()==null?BigDecimal.ZERO:topicInfo.getRdCost());
-        resultMap.put("alreadyPayCost", topicInfo.getAlreadyPayCost()==null?BigDecimal.ZERO:topicInfo.getAlreadyPayCost());
-        resultMap.put("leftCost", topicInfo.getLeftCost()==null?BigDecimal.ZERO:topicInfo.getLeftCost());
+        resultMap.put("rdCost", StrUtil.isBlank(topicInfo.getRdCost())?"-":topicInfo.getRdCost());
+        resultMap.put("alreadyPayCost", StrUtil.isBlank(topicInfo.getAlreadyPayCost())?"-":topicInfo.getAlreadyPayCost());
+        resultMap.put("leftCost", StrUtil.isBlank(topicInfo.getLeftCost())?"-":topicInfo.getLeftCost());
         resultMap.put("writeInPersonName", StrUtil.isBlank(topicInfo.getWriteInPersonName())?"-":topicInfo.getWriteInPersonName());
         resultMap.put("writeInPersonPhoneNum", StrUtil.isBlank(topicInfo.getWriteInPersonPhoneNum())?"-":topicInfo.getWriteInPersonPhoneNum());
         resultMap.put("topicSummary", StrUtil.isBlank(topicInfo.getTopicSummary())?"-":topicInfo.getTopicSummary());
