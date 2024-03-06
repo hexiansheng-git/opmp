@@ -547,13 +547,11 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             }
         }
         sgsjTechnicalScienceTopicModify.setModifyContent("课题附件");
+        //查询是否有修改记录
         SgsjTechnicalScienceTopicModify result = technicalScienceTopicModifyService.getMaxCreateTimeDataByModifyContent(sgsjTechnicalScienceTopicModify);
-        String oldName = result == null?"": result.getAfterModify();
-        if (topicCurentNode.equals("1") && StrUtil.isBlank(oldName)) {
-            //课题进度为1，并且没有修改记录，则需要查询申请时得附件
-//            oldName = getFileName(oldData.getTopicFileGroupId());
-            oldName = oldData.getPtVar5();
-        }
+        String oldName = result == null?"" : result.getAfterModify();
+        //没有修改记录，则需要查询申请时的附件
+        oldName = StrUtil.isBlank(oldName) ? oldData.getPtVar5() : oldName;
         String newName = getFileName(newData.getTopicFileGroupId());
         if (!compareStr(oldName, newName)) {
             SgsjTechnicalScienceTopicModify differData = new SgsjTechnicalScienceTopicModify();
