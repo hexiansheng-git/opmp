@@ -272,7 +272,9 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             SysUser sysUser = SecurityUtils.getSysUser();
             modifyList.forEach(p ->{
                 p.setTaskNode(parm.getProcessTaskName());
-                p.setTopicNode(sgsjTechnicalScienceTopic.getTopicCurentNode());
+                String nextNode = sgsjTechnicalScienceTopic.getPtVar3();
+                String topicCurentNode = sgsjTechnicalScienceTopic.getTopicCurentNode();
+                p.setTopicNode(StrUtil.isBlank(nextNode)?topicCurentNode:Integer.parseInt(topicCurentNode) - 1 + "");
                 p.setModifyDatetime(DateUtils.getNowDate());
                 p.setModifyPerson(String.valueOf(sysUser.getUserId()));
                 p.setModifyPersionName(sysUser.getNickName());
