@@ -27,4 +27,7 @@ public interface KcsjPlanCommunicationRecordsMapper {
     int deleteKcsjPlanCommunicationRecords(KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords);
 
     int deleteKcsjPlanCommunicationRecordsByPks(@Param("kcsjPlanCommunicationRecordsPkList") List<Long> kcsjPlanCommunicationRecordsPkList,@Param("delUser") String delUser);
+
+    List<KcsjPlanCommunicationRecords> getKcsjPlanCommunicationRecordsListByIds(@Param("list") List<Long> kcsjPlanCommunicationRecordsPkList);
+
 }
