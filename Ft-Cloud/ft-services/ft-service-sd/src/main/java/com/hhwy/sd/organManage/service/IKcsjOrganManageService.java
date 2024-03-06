@@ -1,6 +1,7 @@
 package com.hhwy.sd.organManage.service;
 
 import com.hhwy.sd.organManage.domain.KcsjOrganManage;
+import com.hhwy.sd.organManage.domain.KcsjOrganManage4Update;
 
 import java.util.Date;
 import java.util.List;
@@ -31,4 +32,12 @@ public interface IKcsjOrganManageService {
     int deleteKcsjOrganManageByPks(List<Long> kcsjOrganManagePkList);
 
     void sync();
+
+    /**
+     * lcf
+     *
+     * @param kcsjOrganManage4Update
+     * @return
+     */
+    int newUpdateKcsjOrganManageList(KcsjOrganManage4Update kcsjOrganManage4Update);
 }

@@ -1,22 +1,26 @@
 package com.hhwy.sd.organManage.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.sd.organManage.domain.KcsjOrganManage;
+import com.hhwy.domain.SysSyncInfoLog;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sd.organManage.domain.KcsjOrganManageDetail;
 import com.hhwy.sd.organManage.domain.KcsjOrganManageDetail4Update;
 import com.hhwy.sd.organManage.mapper.KcsjOrganManageDetailMapper;
 import com.hhwy.sd.organManage.service.IKcsjOrganManageDetailService;
 import com.hhwy.sd.organManage.service.IKcsjOrganManageService;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author cjh
@@ -31,6 +35,14 @@ public class KcsjOrganManageDetailServiceImpl implements IKcsjOrganManageDetailS
 
     @Autowired
     private IKcsjOrganManageService kcsjOrganManageService;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
+    @Autowired
+    private PmServiceApi pmServiceApi;
+
+    private Logger logger= LoggerFactory.getLogger(KcsjOrganManageDetailServiceImpl.class);
 
     public KcsjOrganManageDetail getKcsjOrganManageDetail(KcsjOrganManageDetail kcsjOrganManageDetail) {
         return kcsjOrganManageDetailMapper.getKcsjOrganManageDetail(kcsjOrganManageDetail);
@@ -115,8 +127,36 @@ public class KcsjOrganManageDetailServiceImpl implements IKcsjOrganManageDetailS
         }
 
         kcsjOrganManageService.updateKcsjOrganManage(organManageId, enterDate, leaveDate);
-
+        syncDataToGm(kcsjOrganManageDetail4Update);
         return i;
+    }
+
+    /**
+     * 总部版同步
+     *
+     * @param kcsjOrganManageDetail4Update
+     */
+    private void syncDataToGm(KcsjOrganManageDetail4Update kcsjOrganManageDetail4Update) {
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try{
+            rocketMQTemplate.convertAndSend("kcsj_organ_manage_detail:tenantSuccess", JSONObject.toJSONString(kcsjOrganManageDetail4Update));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("kcsj_organ_manage_detail");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(JSONObject.toJSONString(kcsjOrganManageDetail4Update));
+            logger.error("kcsj_organ_manage_detail同步失败【{}】,时间：【{}】",JSONObject.toJSONString(kcsjOrganManageDetail4Update),System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
+        }
     }
 
     public int deleteKcsjOrganManageDetailByOrganManageId(Long organManageId) {
