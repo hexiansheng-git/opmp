@@ -128,19 +128,19 @@ public class SgsjTechnicalScienceTopic extends CommonBaseEntity {
      */
     @JsonProperty
     @Excel(name = "研发预算（万元）")
-    private BigDecimal rdCost;
+    private String rdCost;
     /**
      * 字段描述：已拨付经费（万元）
      */
     @JsonProperty
     @Excel(name = "已拨付经费（万元）")
-    private BigDecimal alreadyPayCost;
+    private String alreadyPayCost;
     /**
      * 字段描述：剩余经费（万元）
      */
     @JsonProperty
     @Excel(name = "剩余经费（万元）")
-    private BigDecimal leftCost;
+    private String leftCost;
     /**
      * 字段描述：登记人id
      */
