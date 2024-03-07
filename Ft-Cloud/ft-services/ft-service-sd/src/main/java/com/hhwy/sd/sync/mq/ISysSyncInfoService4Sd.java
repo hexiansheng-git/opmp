@@ -1,5 +1,6 @@
 package com.hhwy.sd.sync.mq;
 
+import com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApproval;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.domain.KcsjPlanCommunicationRecords;
 
 import java.util.List;
@@ -16,6 +17,9 @@ public interface ISysSyncInfoService4Sd  {
      */
     public void pushKcsjPlanCommunicationRecords(List<KcsjPlanCommunicationRecords> list);
 
-
+    /**
+     * 推送设计文件报批
+     */
+    public void pushKcsjDesignDocumentApproval(List<KcsjDesignDocumentApproval> list);
 
 }
