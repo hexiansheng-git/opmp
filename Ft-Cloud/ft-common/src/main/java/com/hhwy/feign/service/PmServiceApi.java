@@ -2,6 +2,7 @@ package com.hhwy.feign.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.SysSyncInfoLog;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.feign.factory.PmServiceFallbackFactory;
 import com.hhwy.feign.service.domain.CommonQqchMeasureExpRange;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.dto.DesignDisclosurePlanDto;
@@ -52,6 +53,9 @@ public interface PmServiceApi {
 
     @GetMapping("/projectBasicInfo/getPrjInfo")
     Map<String,Object> getPrjInfo();
+
+    @GetMapping("/projectBasicInfo/getProjectDto")
+    ProjectDto getProjectDto();
 
     @GetMapping("/projectBasicInfo/projectInfo")
     AjaxResult projectInfo();

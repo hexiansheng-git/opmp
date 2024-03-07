@@ -9,6 +9,7 @@ import com.hhwy.sd.disclosureRecord.domain.vo.DisclosureRecordQueryVo;
 import com.hhwy.sd.disclosureRecord.domain.vo.DisclosureRecordVo;
 import com.hhwy.sd.disclosureRecord.mapper.KcsjDisclosureRecordMapper;
 import com.hhwy.sd.disclosureRecord.service.IKcsjDisclosureRecordService;
+import com.hhwy.sd.sync.mq.ISysSyncInfoService4Sd;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class KcsjDisclosureRecordServiceImpl implements IKcsjDisclosureRecordSer
     
     @Autowired
     private PmServiceApi pmServiceApi;
+
+    @Autowired
+    private ISysSyncInfoService4Sd sysSyncInfoService4Sd;
 
 
     public KcsjDisclosureRecord getKcsjDisclosureRecord(KcsjDisclosureRecord kcsjDisclosureRecord) {
@@ -84,6 +88,8 @@ public class KcsjDisclosureRecordServiceImpl implements IKcsjDisclosureRecordSer
         if(CollectionUtils.isNotEmpty(delIdList)){
             kcsjDisclosureRecordMapper.deleteKcsjDisclosureRecordByPks(delIdList);
         }
+
+        this.pushData();
     }
 
     @Transactional
@@ -159,5 +165,12 @@ public class KcsjDisclosureRecordServiceImpl implements IKcsjDisclosureRecordSer
 
         //入库
         kcsjDisclosureRecordMapper.insertKcsjDisclosureRecordList(recordList);
+
+        this.pushData();
+    }
+
+    private void pushData() {
+        List<KcsjDisclosureRecord> list = kcsjDisclosureRecordMapper.getKcsjDisclosureRecordList(new DisclosureRecordQueryVo());
+        sysSyncInfoService4Sd.pushDisclosureRecord(list);
     }
 }

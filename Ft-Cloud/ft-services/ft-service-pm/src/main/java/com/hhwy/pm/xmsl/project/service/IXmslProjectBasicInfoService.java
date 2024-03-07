@@ -1,5 +1,6 @@
 package com.hhwy.pm.xmsl.project.service;
 
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectInfoWithOther;
@@ -67,4 +68,5 @@ public interface IXmslProjectBasicInfoService {
 
     Map<String, Object> getPrjInfo();
 
+    ProjectDto getProjectDto();
 }

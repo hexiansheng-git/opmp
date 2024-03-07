@@ -1,9 +1,14 @@
 package com.hhwy.sd.sync.mq;
 
+import com.hhwy.sd.achievementReview.domain.KcsjAchievementReview;
+import com.hhwy.sd.achievementReview.domain.vo.AchievementPushVo;
+import com.hhwy.sd.designOptimize.kcsjDesignOptimize.domain.KcsjDesignOptimize;
+import com.hhwy.sd.disclosureRecord.domain.KcsjDisclosureRecord;
 import com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApproval;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBill;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.domain.KcsjMaterialsList;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.domain.KcsjPlanCommunicationRecords;
+import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.KcsjPlanMonthlyReport;
 
 import java.util.List;
 
@@ -24,7 +29,19 @@ public interface ISysSyncInfoService4Sd  {
      */
     public void pushKcsjDesignDocumentApproval(List<KcsjDesignDocumentApproval> list);
 
+    void pushPlanMonthlyReport(List<KcsjPlanMonthlyReport> list);
 
+    void pushAchievement(AchievementPushVo pushVo);
+
+    void pushAchievementReview(KcsjAchievementReview review);
+
+    void pushAchievementReview4Delete(Long id);
+
+    void pushDisclosureRecord(List<KcsjDisclosureRecord> list);
+
+    void pushDesignOptimize(KcsjDesignOptimize optimize);
+
+    void pushDesignOptimize4Delete(List<Long> ids);
     /**
      * 推送工程量清单
      */

@@ -10,6 +10,7 @@ import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.KcsjPlanMonthlyRepor
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.vo.PlanMonthlyReportQueryVo;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.mapper.KcsjPlanMonthlyReportMapper;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.service.IKcsjPlanMonthlyReportService;
+import com.hhwy.sd.sync.mq.ISysSyncInfoService4Sd;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +36,9 @@ public class KcsjPlanMonthlyReportServiceImpl implements IKcsjPlanMonthlyReportS
 
     @Autowired
     private SystemServiceApi systemServiceApi;
+
+    @Autowired
+    private ISysSyncInfoService4Sd sysSyncInfoService4Sd;
 
 
     public KcsjPlanMonthlyReport getKcsjPlanMonthlyReport(KcsjPlanMonthlyReport kcsjPlanMonthlyReport) {
@@ -79,6 +84,9 @@ public class KcsjPlanMonthlyReportServiceImpl implements IKcsjPlanMonthlyReportS
             kcsjPlanMonthlyReport.setUpdateUser(SecurityUtils.getUserName());
             kcsjPlanMonthlyReport.setUpdateTime(DateUtils.getNowDate());
         }
+
+        sysSyncInfoService4Sd.pushPlanMonthlyReport(kcsjPlanMonthlyReportList);
+
         return kcsjPlanMonthlyReportMapper.updateKcsjPlanMonthlyReportList(kcsjPlanMonthlyReportList);
     }
 
@@ -121,6 +129,8 @@ public class KcsjPlanMonthlyReportServiceImpl implements IKcsjPlanMonthlyReportS
                 report.setCreateUserName("定时生成");
                 report.setCreateTime(nowDate);
                 kcsjPlanMonthlyReportMapper.insertKcsjPlanMonthlyReport(report);
+
+                sysSyncInfoService4Sd.pushPlanMonthlyReport(Collections.singletonList(report));
             }
         }catch (Exception e){
             throw new CustomException(e.getMessage());

@@ -9,6 +9,7 @@ import com.hhwy.sd.achievementReview.domain.KcsjAchievementReview;
 import com.hhwy.sd.achievementReview.mapper.KcsjAchievementMapper;
 import com.hhwy.sd.achievementReview.mapper.KcsjAchievementReviewMapper;
 import com.hhwy.sd.achievementReview.service.IKcsjAchievementReviewService;
+import com.hhwy.sd.sync.mq.ISysSyncInfoService4Sd;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
 
     @Autowired
     private KcsjAchievementMapper kcsjAchievementMapper;
+
+    @Autowired
+    private ISysSyncInfoService4Sd sysSyncInfoService4Sd;
 
 
     public KcsjAchievementReview getKcsjAchievementReview(KcsjAchievementReview kcsjAchievementReview) {
@@ -85,6 +89,8 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
     public void deleteById(Long id) {
         kcsjAchievementMapper.cleanForeignIdByForeignId(id);
         kcsjAchievementReviewMapper.deleteById(id);
+
+        sysSyncInfoService4Sd.pushAchievementReview4Delete(id);
     }
 
     @Transactional
@@ -172,6 +178,10 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
 
         kcsjAchievementMapper.updateReviewExpertByForeignId(id,review.getReviewExpert());
         kcsjAchievementMapper.updateAchievementStatusByForeignId(id,AchievementReviewStatus.REVIEWED);
+
+        review.setProcessStatus("end");
+        review.setAchievementList(kcsjAchievementMapper.getListByForeignId(id));
+        sysSyncInfoService4Sd.pushAchievementReview(review);
     }
 
     @Override
@@ -181,5 +191,9 @@ public class KcsjAchievementReviewServiceImpl implements IKcsjAchievementReviewS
         kcsjAchievementReviewMapper.updateKcsjAchievementReview(review);
 
         kcsjAchievementMapper.updateAchievementStatusByForeignId(id,AchievementReviewStatus.UNDER_REVIEW);
+
+        review.setProcessStatus("submit");
+        review.setAchievementList(kcsjAchievementMapper.getListByForeignId(id));
+        sysSyncInfoService4Sd.pushAchievementReview(review);
     }
 }

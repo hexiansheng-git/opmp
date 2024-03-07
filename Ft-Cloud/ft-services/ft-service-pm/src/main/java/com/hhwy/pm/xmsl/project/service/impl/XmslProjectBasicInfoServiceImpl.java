@@ -3,6 +3,7 @@ package com.hhwy.pm.xmsl.project.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.domain.base.system.country.CountryInfo;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
@@ -386,6 +387,16 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         /*业务领域及产品*/
         map.put("businessAreasAndProductsLabel",xmslProjectBasicInfo.getBusinessAreasAndProductsLabel());
         return map;
+    }
+
+    @Override
+    public ProjectDto getProjectDto() {
+        XmslProjectBasicInfo xmslProjectBasicInfo = xmslProjectBasicInfoMapper.getProjectBasicInfo(new XmslProjectBasicInfo());
+        ProjectDto projectDto = new ProjectDto();
+        if(xmslProjectBasicInfo != null){
+            BeanUtils.copyProperties(xmslProjectBasicInfo,projectDto);
+        }
+        return projectDto;
     }
 
 }
