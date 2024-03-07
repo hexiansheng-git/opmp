@@ -196,9 +196,9 @@
             <if test="togetherUnitOther != null  and togetherUnitOther != ''">and `together_unit_other` =
                 #{togetherUnitOther}
             </if>
-            <if test="rdCost != null ">and `rd_cost` = #{rdCost}</if>
-            <if test="alreadyPayCost != null ">and `already_pay_cost` = #{alreadyPayCost}</if>
-            <if test="leftCost != null ">and `left_cost` = #{leftCost}</if>
+            <if test="rdCost != null  and rdCost != ''">and `rd_cost` = #{rdCost}</if>
+            <if test="alreadyPayCost != null  and alreadyPayCost != ''">and `already_pay_cost` = #{alreadyPayCost}</if>
+            <if test="leftCost != null  and leftCost != ''">and `left_cost` = #{leftCost}</if>
             <if test="writeInPerson != null  and writeInPerson != ''">and `write_in_person` = #{writeInPerson}</if>
             <if test="writeInPersonName != null  and writeInPersonName != ''">and `write_in_person_name` =
                 #{writeInPersonName}

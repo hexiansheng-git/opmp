@@ -1,26 +1,22 @@
 package com.hhwy.sd.organManage.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sd.organManage.domain.KcsjOrganManage;
 import com.hhwy.sd.organManage.domain.KcsjOrganManage4Update;
 import com.hhwy.sd.organManage.service.IKcsjOrganManageService;
-import org.apache.commons.collections4.CollectionUtils;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author cjh
@@ -80,15 +76,7 @@ public class KcsjOrganManageController extends BaseController {
     @PreAuthorize(hasPermi = "kcsjOrganManage:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateKcsjOrganManageList(@Validated(ValidationGroups.Update.class) @RequestBody KcsjOrganManage4Update kcsjOrganManage4Update) {
-        List<KcsjOrganManage> treeList = kcsjOrganManage4Update.getTreeList();
-        List<Long> delIdList = kcsjOrganManage4Update.getDelIdList();
-        int i = 0;
-        if(CollectionUtils.isNotEmpty(treeList)) {
-            i += kcsjOrganManageService.updateKcsjOrganManageList(treeList);
-        }
-        if(CollectionUtils.isNotEmpty(delIdList)) {
-            i += kcsjOrganManageService.deleteKcsjOrganManageByPks(delIdList);
-        }
+        int i = kcsjOrganManageService.newUpdateKcsjOrganManageList(kcsjOrganManage4Update);
         return toAjax(i);
     }
 

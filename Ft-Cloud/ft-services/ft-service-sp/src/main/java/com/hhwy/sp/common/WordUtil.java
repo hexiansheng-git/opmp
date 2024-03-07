@@ -1,10 +1,9 @@
-package com.hhwy.utils.word;
+package com.hhwy.sp.common;
 
 import cn.afterturn.easypoi.word.WordExportUtil;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.Map;
 

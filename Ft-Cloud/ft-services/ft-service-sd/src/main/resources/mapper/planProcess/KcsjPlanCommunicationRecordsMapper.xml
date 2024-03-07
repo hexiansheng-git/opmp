@@ -128,6 +128,21 @@
         order by create_time desc
     </select>
 
+
+    <select id="getKcsjPlanCommunicationRecordsListByIds"
+            resultType="com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.domain.KcsjPlanCommunicationRecords">
+
+            <include refid="selectKcsjPlanCommunicationRecordsVo"/>
+            <where>
+                del_flag = "0"
+                and `id` in
+                <foreach item="id" collection="list" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </where>
+
+    </select>
+
     <insert id="insertKcsjPlanCommunicationRecords" useGeneratedKeys="true" keyProperty="id">
         insert into kcsj_plan_communication_records
         <trim prefix="(" suffix=")" suffixOverrides=",">

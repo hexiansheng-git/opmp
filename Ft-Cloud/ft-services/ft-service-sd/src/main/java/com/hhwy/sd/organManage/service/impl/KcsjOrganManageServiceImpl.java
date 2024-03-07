@@ -1,6 +1,7 @@
 package com.hhwy.sd.organManage.service.impl;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -8,14 +9,19 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sd.organManage.domain.KcsjOrganManage;
+import com.hhwy.sd.organManage.domain.KcsjOrganManage4Update;
 import com.hhwy.sd.organManage.mapper.KcsjOrganManageMapper;
 import com.hhwy.sd.organManage.service.IKcsjOrganManageDetailService;
 import com.hhwy.sd.organManage.service.IKcsjOrganManageService;
 import com.hhwy.sd.organManage.util.TreeCountUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.tree.TreeUtil;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +43,12 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
     private PmServiceApi pmServiceApi;
 
     @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
+    @Autowired
     private IKcsjOrganManageDetailService kcsjOrganManageDetailService;
+
+    private Logger logger= LoggerFactory.getLogger(KcsjOrganManageServiceImpl.class);
 
     public KcsjOrganManage getKcsjOrganManage(KcsjOrganManage kcsjOrganManage) {
         return kcsjOrganManageMapper.getKcsjOrganManage(kcsjOrganManage);
@@ -223,6 +234,47 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
             deleteKcsjOrganManage4All();
             insertKcsjOrganManageList(list);
         }
+    }
+
+    @Override
+    public int newUpdateKcsjOrganManageList(KcsjOrganManage4Update kcsjOrganManage4Update) {
+        //业务处理
+        List<KcsjOrganManage> treeList = kcsjOrganManage4Update.getTreeList();
+        List<Long> delIdList = kcsjOrganManage4Update.getDelIdList();
+        int i = 0;
+        if(CollectionUtils.isNotEmpty(treeList)) {
+            i =updateKcsjOrganManageList(treeList);
+        }
+        if(CollectionUtils.isNotEmpty(delIdList)) {
+            i = deleteKcsjOrganManageByPks(delIdList);
+        }
+        //总部版同步
+        syncDataToGm(kcsjOrganManage4Update);
+        return i;
+    }
+
+    private void syncDataToGm(KcsjOrganManage4Update kcsjOrganManage4Update){
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try{
+            rocketMQTemplate.convertAndSend("kcsj_organ_manage:tenantSuccess", JSONObject.toJSONString(kcsjOrganManage4Update));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("kcsj_organ_manage");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(JSONObject.toJSONString(kcsjOrganManage4Update));
+            logger.error("kcsj_organ_manage同步失败【{}】,时间：【{}】",JSONObject.toJSONString(kcsjOrganManage4Update),System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
+        }
+
     }
 
     private void deleteKcsjOrganManage4All() {

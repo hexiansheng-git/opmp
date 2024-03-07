@@ -6,6 +6,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.domain.KcsjPlanCommunicationRecords;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.mapper.KcsjPlanCommunicationRecordsMapper;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.service.IKcsjPlanCommunicationRecordsService;
+import com.hhwy.sd.sync.mq.ISysSyncInfoService4Sd;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
     @Autowired
     private KcsjPlanCommunicationRecordsMapper kcsjPlanCommunicationRecordsMapper;
 
+    @Autowired
+    private  ISysSyncInfoService4Sd sysSyncInfoService4Sd;
 
     public KcsjPlanCommunicationRecords getKcsjPlanCommunicationRecords(KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords) {
         return kcsjPlanCommunicationRecordsMapper.getKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecords);
@@ -105,6 +108,8 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
             kcsjPlanCommunicationRecordsMapper.updateKcsjPlanCommunicationRecordsList(updateList);
         }
 
+        //同步数据到总部
+        sysSyncInfoService4Sd.pushKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecordsList);
         return AjaxResult.success();
 
     }
@@ -133,10 +138,21 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
         return kcsjPlanCommunicationRecordsMapper.deleteKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecords);
     }
 
+    /**
+     * 批量删除
+     * @param kcsjPlanCommunicationRecordsPkList
+     * @return
+     */
     @Transactional
     public int deleteKcsjPlanCommunicationRecordsByPks(List<Long> kcsjPlanCommunicationRecordsPkList) {
 
         String delUser = SecurityUtils.getSysUser().getNickName();
-        return kcsjPlanCommunicationRecordsMapper.deleteKcsjPlanCommunicationRecordsByPks(kcsjPlanCommunicationRecordsPkList, delUser);
+        int i= kcsjPlanCommunicationRecordsMapper.deleteKcsjPlanCommunicationRecordsByPks(kcsjPlanCommunicationRecordsPkList, delUser);
+        if (kcsjPlanCommunicationRecordsPkList.size()>0){
+            //推送数据到总部
+           List<KcsjPlanCommunicationRecords> list= kcsjPlanCommunicationRecordsMapper.getKcsjPlanCommunicationRecordsListByIds(kcsjPlanCommunicationRecordsPkList);
+           sysSyncInfoService4Sd.pushKcsjPlanCommunicationRecords(list);
+        }
+        return i;
     }
 }
