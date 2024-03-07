@@ -1,6 +1,8 @@
 package com.hhwy.sd.sync.mq;
 
 import com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApproval;
+import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBill;
+import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.domain.KcsjMaterialsList;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.domain.KcsjPlanCommunicationRecords;
 
 import java.util.List;
@@ -22,4 +24,15 @@ public interface ISysSyncInfoService4Sd  {
      */
     public void pushKcsjDesignDocumentApproval(List<KcsjDesignDocumentApproval> list);
 
+
+    /**
+     * 推送工程量清单
+     */
+    public void pushKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill);
+
+    /**
+     * 推送主材清单
+     * @param kcsjMaterialsList
+     */
+    public void pushKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList);
 }

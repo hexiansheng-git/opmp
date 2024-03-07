@@ -11,6 +11,7 @@ import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.mapper.KcsjEngineeringQuantitiesBillMapper;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.service.IKcsjEngineeringQuantitiesBillDetailService;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.service.IKcsjEngineeringQuantitiesBillService;
+import com.hhwy.sd.sync.mq.ISysSyncInfoService4Sd;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
@@ -42,6 +43,8 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
 
     @Autowired
     private FileUploadUtils fileUploadUtil;
+    @Autowired
+    private ISysSyncInfoService4Sd sysSyncInfoService4Sd;
 
     /**
      * 详情
@@ -139,6 +142,11 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
             //处理子表上一个版本工程量字段、计算优化量差字段
             handleInsertList(kcsjEngineeringQuantitiesBill, kcsjEngineeringQuantitiesBill.getId());
         }
+        //推送数据到mq
+        if (kcsjEngineeringQuantitiesBill!=null){
+            sysSyncInfoService4Sd.pushKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
+        }
+
         return AjaxResult.success();
     }
 
@@ -190,6 +198,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
                 temp.setQuantityDifference(workload.subtract(oldQuanlity));
             }
         }
+
         kcsjEngineeringQuantitiesBillDetailMapper.insertKcsjEngineeringQuantitiesBillDetailList(details);
     }
 
@@ -232,6 +241,11 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         }
         if (!CollectionUtils.isEmpty(updateList)) {
             kcsjEngineeringQuantitiesBillDetailMapper.updateKcsjEngineeringQuantitiesBillDetailList(updateList);
+        }
+
+        //推送数据到mq
+        if (kcsjEngineeringQuantitiesBill!=null){
+            sysSyncInfoService4Sd.pushKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
         }
         return AjaxResult.success();
     }
@@ -311,6 +325,14 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         //修改最新版数据
         kcsjEngineeringQuantitiesBillMapper.updateNewVersion(listLocation);
         //删除子表数据
+
+        //推送删除的数据id集合到mq
+        if (ids!=null){
+            KcsjEngineeringQuantitiesBill bill=new KcsjEngineeringQuantitiesBill();
+            bill.setDelIdList(ids);
+            sysSyncInfoService4Sd.pushKcsjEngineeringQuantitiesBill(bill);
+        }
+
         return kcsjEngineeringQuantitiesBillDetailMapper.deleteKcsjEngineeringQuantitiesBillDetailByMainId(ids, SecurityUtils.getUserId().toString());
     }
 

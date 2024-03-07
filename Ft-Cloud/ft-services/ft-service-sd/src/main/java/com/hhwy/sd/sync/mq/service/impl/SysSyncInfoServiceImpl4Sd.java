@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApproval;
+import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBill;
+import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.domain.KcsjMaterialsList;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.domain.KcsjPlanCommunicationRecords;
 import com.hhwy.sd.sync.mq.ISysSyncInfoService4Sd;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -67,6 +69,48 @@ public class SysSyncInfoServiceImpl4Sd implements ISysSyncInfoService4Sd {
             e.printStackTrace();
             throw e;
         }
+    }
 
+    /**
+     * 推送工程量清单数据
+     * @param kcsjEngineeringQuantitiesBill
+     */
+    @Override
+    public void pushKcsjEngineeringQuantitiesBill(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill) {
+        try{
+
+            Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+            kcsjEngineeringQuantitiesBill.setPtVar2(SecurityUtils.getTenantKey());
+            if(prjInfo.get("regionId") != null)kcsjEngineeringQuantitiesBill.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
+            kcsjEngineeringQuantitiesBill.setRegionName((String) prjInfo.get("regionName"));
+            JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(kcsjEngineeringQuantitiesBill));
+            rocketMQTemplate.convertAndSend("kcsj_engineering_quantities_bill:tenantSuccess", JSONObject.toJSONString(json));
+        }catch(Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+
+
+    /**
+     * 推送主材清单数据
+     * @param kcsjMaterialsList
+     */
+    @Override
+    public void pushKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList) {
+        try{
+
+            Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+            kcsjMaterialsList.setPtVar2(SecurityUtils.getTenantKey());
+            if(prjInfo.get("regionId") != null)kcsjMaterialsList.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
+            kcsjMaterialsList.setRegionName((String) prjInfo.get("regionName"));
+            JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(kcsjMaterialsList));
+            rocketMQTemplate.convertAndSend("kcsj_materials_list:tenantSuccess", JSONObject.toJSONString(json));
+        }catch(Exception e){
+            e.printStackTrace();
+            throw e;
+        }
     }
 }
