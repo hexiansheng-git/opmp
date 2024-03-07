@@ -41,5 +41,7 @@ public interface KcsjDesignDocumentApprovalMapper {
     List<KcsjDesignDocumentApproval> selectByFollowUpDate();
 
 
+    //查询全部数据
+    List<KcsjDesignDocumentApproval> getAll();
 
 }

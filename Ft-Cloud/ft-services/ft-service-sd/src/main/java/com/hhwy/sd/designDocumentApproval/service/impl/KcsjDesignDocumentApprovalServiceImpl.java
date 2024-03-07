@@ -12,6 +12,7 @@ import com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApproval;
 import com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApprovalVo;
 import com.hhwy.sd.designDocumentApproval.mapper.KcsjDesignDocumentApprovalMapper;
 import com.hhwy.sd.designDocumentApproval.service.IKcsjDesignDocumentApprovalService;
+import com.hhwy.sd.sync.mq.ISysSyncInfoService4Sd;
 import com.hhwy.system.api.RemoteNotifyService;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.date.FtDateUtils;
@@ -39,6 +40,8 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
     private SystemServiceApi systemServiceApi;
     @Autowired
     private RemoteNotifyService remoteNotifyService;
+    @Autowired
+    private ISysSyncInfoService4Sd sysSyncInfoService4Sd;
 
 
     public KcsjDesignDocumentApproval getKcsjDesignDocumentApproval(KcsjDesignDocumentApproval kcsjDesignDocumentApproval) {
@@ -147,6 +150,12 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
                 kcsjDesignDocumentApproval.setUpdateTime(DateUtils.getNowDate());
             }
             kcsjDesignDocumentApprovalMapper.updateKcsjDesignDocumentApprovalList(updateKcsjDesignDocumentApprovals);
+        }
+        //查询全部数据
+        List<KcsjDesignDocumentApproval> all=kcsjDesignDocumentApprovalMapper.getAll();
+        //推送到总部
+        if (all!=null){
+            sysSyncInfoService4Sd.pushKcsjDesignDocumentApproval(all);
         }
         return AjaxResult.success();
     }
