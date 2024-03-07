@@ -30,4 +30,6 @@ public interface KcsjPlanCommunicationRecordsMapper {
 
     List<KcsjPlanCommunicationRecords> getKcsjPlanCommunicationRecordsListByIds(@Param("list") List<Long> kcsjPlanCommunicationRecordsPkList);
 
+    List<KcsjPlanCommunicationRecords> getAll();
+
 }
