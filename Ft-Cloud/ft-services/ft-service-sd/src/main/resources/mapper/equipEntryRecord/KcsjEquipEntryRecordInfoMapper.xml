@@ -27,6 +27,11 @@
     <result property="equipName" column="equip_name"/>
     <result property="equipSpec" column="equip_spec"/>
     <result property="equipUnit" column="equip_unit"/>
+    <result property="regionId" column="region_id"/>
+    <result property="regionName" column="region_name"/>
+    <result property="projectId" column="project_id"/>
+    <result property="projectName" column="project_name"/>
+    <result property="deptId" column="dept_id"/>
   </resultMap>
   <sql id="selectKcsjEquipEntryRecordInfoVo">
     select `id`
@@ -50,6 +55,11 @@
          , `equip_name`
          , `equip_spec`
          , `equip_unit`
+         , `region_id`
+         , `region_name`
+         , `project_id`
+         , `project_name`
+         , `dept_id`
     from kcsj_equip_entry_record_info
   </sql>
   <select id="getKcsjEquipEntryRecordInfo" resultMap="KcsjEquipEntryRecordInfoResultMap">
@@ -81,6 +91,11 @@
       <if test="equipName != null  and equipName != ''">and `equip_name` = #{equipName}</if>
       <if test="equipSpec != null  and equipSpec != ''">and `equip_spec` = #{equipSpec}</if>
       <if test="equipUnit != null  and equipUnit != ''">and `equip_unit` = #{equipUnit}</if>
+      <if test="regionId != null ">and `region_id` = #{regionId}</if>
+      <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+      <if test="projectId != null ">and `project_id` = #{projectId}</if>
+      <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+      <if test="deptId != null ">and `dept_id` = #{deptId}</if>
     </where>
     order by create_time desc
   </select>
@@ -113,6 +128,11 @@
       <if test="equipName != null  and equipName != ''">and `equip_name` like concat('%',#{equipName},'%')</if>
       <if test="equipSpec != null  and equipSpec != ''">and `equip_spec` = #{equipSpec}</if>
       <if test="equipUnit != null  and equipUnit != ''">and `equip_unit` = #{equipUnit}</if>
+      <if test="regionId != null ">and `region_id` = #{regionId}</if>
+      <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+      <if test="projectId != null ">and `project_id` = #{projectId}</if>
+      <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+      <if test="deptId != null ">and `dept_id` = #{deptId}</if>
       <if test="null!=ids and ids.size()>0">
         and id in
         <foreach collection="ids" open="(" separator="," close=")" item="pid">
@@ -153,6 +173,11 @@
       <if test="equipName != null  and equipName != ''">`equip_name`,</if>
       <if test="equipSpec != null  and equipSpec != ''">`equip_spec`,</if>
       <if test="equipUnit != null  and equipUnit != ''">`equip_unit`,</if>
+      <if test="regionId != null ">`region_id`,</if>
+      <if test="regionName != null  and regionName != ''">`region_name`,</if>
+      <if test="projectId != null ">`project_id`,</if>
+      <if test="projectName != null  and projectName != ''">`project_name`,</if>
+      <if test="deptId != null ">`dept_id`,</if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null ">#{id},</if>
@@ -176,6 +201,11 @@
       <if test="equipName != null  and equipName != ''">#{equipName},</if>
       <if test="equipSpec != null  and equipSpec != ''">#{equipSpec},</if>
       <if test="equipUnit != null  and equipUnit != ''">#{equipUnit},</if>
+      <if test="regionId != null ">#{regionId},</if>
+      <if test="regionName != null  and regionName != ''">#{regionName},</if>
+      <if test="projectId != null ">#{projectId},</if>
+      <if test="projectName != null  and projectName != ''">#{projectName},</if>
+      <if test="deptId != null ">#{deptId},</if>
     </trim>
   </insert>
 
@@ -203,6 +233,11 @@
       `equip_name`,
       `equip_spec`,
       `equip_unit`,
+      `region_id`,
+      `region_name`,
+      `project_id`,
+      `project_name`,
+      `dept_id`,
     </trim>
     values
     <foreach collection="kcsjEquipEntryRecordInfoList" item="item" separator=",">
@@ -227,6 +262,11 @@
         #{item.equipName},
         #{item.equipSpec},
         #{item.equipUnit},
+        #{item.regionId},
+        #{item.regionName},
+        #{item.projectId},
+        #{item.projectName},
+        #{item.deptId},
       </trim>
     </foreach>
   </insert>
@@ -258,6 +298,11 @@
       <if test="equipName != null  and  equipName != ''">`equip_name` = #{equipName},</if>
       <if test="equipSpec != null  and  equipSpec != ''">`equip_spec` = #{equipSpec},</if>
       <if test="equipUnit != null  and  equipUnit != ''">`equip_unit` = #{equipUnit},</if>
+      <if test="regionId != null ">`region_id` = #{regionId},</if>
+      <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+      <if test="projectId != null ">`project_id` = #{projectId},</if>
+      <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+      <if test="deptId != null ">`dept_id` = #{deptId},</if>
     </trim>
     <where>
       <if test="id != null ">and `id` = #{id}</if>
@@ -372,6 +417,31 @@
           when `id`=#{item.id} then #{item.equipUnit}
         </foreach>
       </trim>
+      <trim prefix="region_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.regionId}
+        </foreach>
+      </trim>
+      <trim prefix="region_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.regionName}
+        </foreach>
+      </trim>
+      <trim prefix="project_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.projectId}
+        </foreach>
+      </trim>
+      <trim prefix="project_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.projectName}
+        </foreach>
+      </trim>
+      <trim prefix="dept_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.deptId}
+        </foreach>
+      </trim>
     </trim>
     where `id` in
     <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
@@ -407,6 +477,11 @@
       <if test="equipName != null  and equipName != ''">and `equip_name` = #{equipName}</if>
       <if test="equipSpec != null  and equipSpec != ''">and `equip_spec` = #{equipSpec}</if>
       <if test="equipUnit != null  and equipUnit != ''">and `equip_unit` = #{equipUnit}</if>
+      <if test="regionId != null ">and `region_id` = #{regionId}</if>
+      <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+      <if test="projectId != null ">and `project_id` = #{projectId}</if>
+      <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+      <if test="deptId != null ">and `dept_id` = #{deptId}</if>
     </where>
   </update>
 

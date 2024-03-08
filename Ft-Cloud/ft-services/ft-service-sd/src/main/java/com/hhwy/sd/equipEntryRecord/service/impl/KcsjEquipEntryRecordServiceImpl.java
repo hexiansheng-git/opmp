@@ -106,9 +106,10 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
     @Transactional
     public int insertKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord) {
         ProjectDto projectDto = pmServiceApi.getProjectDto();
-        kcsjEquipEntryRecord.setPtVar3(String.valueOf(projectDto.getProjectId()));
-        kcsjEquipEntryRecord.setPtVar4(String.valueOf(projectDto.getRegionId()));
-        kcsjEquipEntryRecord.setPtVar5(String.valueOf(projectDto.getRegionName()));
+        kcsjEquipEntryRecord.setProjectId(projectDto.getProjectId());
+        kcsjEquipEntryRecord.setProjectName(projectDto.getProjectName());
+        kcsjEquipEntryRecord.setRegionId(projectDto.getRegionId());
+        kcsjEquipEntryRecord.setRegionName(projectDto.getRegionName());
         kcsjEquipEntryRecord.setId(IdWorker.createId());
         kcsjEquipEntryRecord.setCreateUser(SecurityUtils.getUserName());
         kcsjEquipEntryRecord.setCreateTime(DateUtils.getNowDate());
@@ -126,11 +127,12 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
         if(!CollectionUtils.isEmpty(kcsjEquipEntryRecordVo.getDelInfoList())){
             deleteInfoIds(kcsjEquipEntryRecordVo.getDelInfoList());
         }
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
 
         List<KcsjEquipEntryRecord> treeToList = null;
         if (!CollectionUtils.isEmpty(kcsjEquipEntryRecordVo.getTreeList())) {
             //设备数据处理
-            inFoAdd(kcsjEquipEntryRecordVo.getTreeList());
+            inFoAdd(kcsjEquipEntryRecordVo.getTreeList(), projectDto);
             //数据处理
             treeToList = TreeUtil.treeToListWithoutId(kcsjEquipEntryRecordVo.getTreeList());
             for (int i = 0; i < treeToList.size(); i++) {
@@ -141,10 +143,10 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                 kcsjEquipEntryRecord.setUpdateTime(DateTime.now());
                 kcsjEquipEntryRecord.setUpdateUser(SecurityUtils.getUserId() + "");
                 kcsjEquipEntryRecord.setDelFlag("0");
-                ProjectDto projectDto = pmServiceApi.getProjectDto();
-                kcsjEquipEntryRecord.setPtVar3(String.valueOf(projectDto.getProjectId()));
-                kcsjEquipEntryRecord.setPtVar4(String.valueOf(projectDto.getRegionId()));
-                kcsjEquipEntryRecord.setPtVar5(String.valueOf(projectDto.getRegionName()));
+                kcsjEquipEntryRecord.setProjectId(projectDto.getProjectId());
+                kcsjEquipEntryRecord.setProjectName(projectDto.getProjectName());
+                kcsjEquipEntryRecord.setRegionId(projectDto.getRegionId());
+                kcsjEquipEntryRecord.setRegionName(projectDto.getRegionName());
             }
             List<KcsjEquipEntryRecord> insertList = treeToList.stream().filter(e -> StringUtils.isNotEmpty(e.getIsAdd()) && e.getIsAdd().equals("1")).collect(Collectors.toList());
             if(!CollectionUtils.isEmpty(insertList)){
@@ -203,7 +205,7 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
      * 设备数据处理
      * @param list
      */
-    private void inFoAdd(List<KcsjEquipEntryRecord> list){
+    private void inFoAdd(List<KcsjEquipEntryRecord> list, ProjectDto projectDto){
         for (int i = 0; i < list.size(); i++) {
             if(!CollectionUtils.isEmpty(list.get(i).getChildren())){
                List<KcsjEquipEntryRecord> children = list.get(i).getChildren();
@@ -216,6 +218,10 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                     kcsjEquipEntryRecordInfo.setCreateTime(DateTime.now());
                     kcsjEquipEntryRecordInfo.setCreateUser(SecurityUtils.getUserId() + "");
                     kcsjEquipEntryRecordInfo.setCreateUserName(SecurityUtils.getUserName() + "");
+                    kcsjEquipEntryRecordInfo.setProjectId(projectDto.getProjectId());
+                    kcsjEquipEntryRecordInfo.setProjectName(projectDto.getProjectName());
+                    kcsjEquipEntryRecordInfo.setRegionId(projectDto.getRegionId());
+                    kcsjEquipEntryRecordInfo.setRegionName(projectDto.getRegionName());
                     kcsjEquipEntryRecordInfoMapper.insertKcsjEquipEntryRecordInfo(kcsjEquipEntryRecordInfo);
                 }else{
                     List<KcsjEquipEntryRecordInfo> recordInfos = kcsjEquipEntryRecordInfoList1.stream().filter(e -> StringUtils.isNotEmpty(e.getPid().toString()) && e.getPid().toString().equals("0")).collect(Collectors.toList());
@@ -243,6 +249,10 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                                 insertList.get(add).setCreateUser(SecurityUtils.getUserId() + "");
                                 insertList.get(add).setCreateUserName(SecurityUtils.getUserName() + "");
                                 insertList.get(add).setDelFlag("0");
+                                insertList.get(add).setProjectId(projectDto.getProjectId());
+                                insertList.get(add).setProjectName(projectDto.getProjectName());
+                                insertList.get(add).setRegionId(projectDto.getRegionId());
+                                insertList.get(add).setRegionName(projectDto.getRegionName());
                             }
                             kcsjEquipEntryRecordInfoMapper.insertKcsjEquipEntryRecordInfoList(insertList);
                         }
@@ -404,7 +414,7 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
             }
         }
         kcsjEquipEntryRecordVo.setTreeList(treeToListNew);
-        doSendGm();
+//        doSendGm();
         return kcsjEquipEntryRecordVo;
     }
     private void digui(List<LinkedHashMap<String, Object>> list, List<KcsjEquipEntryRecord> treeToList) {
