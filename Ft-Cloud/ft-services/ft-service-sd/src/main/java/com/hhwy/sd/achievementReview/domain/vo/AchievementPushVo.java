@@ -19,7 +19,5 @@ public class AchievementPushVo {
 
     private List<Long> delIdList;
 
-    private List<KcsjAchievement> addList;
-
-    private List<KcsjAchievement> updateList;
+    private List<KcsjAchievement> achievementList;
 }

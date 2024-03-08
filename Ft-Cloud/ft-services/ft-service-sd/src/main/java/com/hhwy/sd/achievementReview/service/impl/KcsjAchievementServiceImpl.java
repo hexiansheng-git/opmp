@@ -127,8 +127,7 @@ public class KcsjAchievementServiceImpl implements IKcsjAchievementService {
         }
 
         AchievementPushVo pushVo = new AchievementPushVo();
-        pushVo.setAddList(addList);
-        pushVo.setUpdateList(updateList);
+        pushVo.setAchievementList(achievementVo.getAchievementList());
         pushVo.setDelIdList(delIdList);
         sysSyncInfoService4Sd.pushAchievement(pushVo);
     }

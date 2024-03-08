@@ -1,11 +1,12 @@
 package com.hhwy.sd.disclosureRecord.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -63,6 +64,7 @@ public class KcsjDisclosureRecord extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
+    @JSONField(format = "yyyy-MM-dd")
     @FtExcel(name = "实际交底日期", dateFormat = "yyyy年MM月dd日")
     @NotBlank(message = "实际交底日期不能为空",groups = ValidationGroups.Save.class)
     private Date actualDisclosureDate;
@@ -135,6 +137,7 @@ public class KcsjDisclosureRecord extends BaseEntity {
      * 字段描述：数据创建系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
     private Date createTime;
     /**
@@ -146,6 +149,7 @@ public class KcsjDisclosureRecord extends BaseEntity {
      * 字段描述：数据修改系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
     private Date updateTime;
     /**
@@ -158,6 +162,7 @@ public class KcsjDisclosureRecord extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date delTime;
     /**
      * 字段描述：删除标识：0未删除；1已删除

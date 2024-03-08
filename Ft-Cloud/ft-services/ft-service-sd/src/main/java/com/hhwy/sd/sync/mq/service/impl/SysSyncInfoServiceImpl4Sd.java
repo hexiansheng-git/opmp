@@ -7,11 +7,11 @@ import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sd.achievementReview.domain.KcsjAchievement;
 import com.hhwy.sd.achievementReview.domain.KcsjAchievementReview;
 import com.hhwy.sd.achievementReview.domain.vo.AchievementPushVo;
-import com.hhwy.sd.designOptimize.kcsjDesignOptimize.domain.KcsjDesignOptimize;
-import com.hhwy.sd.disclosureRecord.domain.KcsjDisclosureRecord;
 import com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApproval;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBill;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.domain.KcsjMaterialsList;
+import com.hhwy.sd.designOptimize.kcsjDesignOptimize.domain.KcsjDesignOptimize;
+import com.hhwy.sd.disclosureRecord.domain.KcsjDisclosureRecord;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.domain.KcsjPlanCommunicationRecords;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.KcsjPlanMonthlyReport;
 import com.hhwy.sd.sync.mq.ISysSyncInfoService4Sd;
@@ -85,16 +85,8 @@ public class SysSyncInfoServiceImpl4Sd implements ISysSyncInfoService4Sd {
     public void pushAchievement(AchievementPushVo pushVo){
         try{
             ProjectDto projectDto = pmServiceApi.getProjectDto();
-            List<KcsjAchievement> addList = pushVo.getAddList();
-            List<KcsjAchievement> updateList = pushVo.getUpdateList();
-            for (KcsjAchievement temp : addList) {
-                temp.setProjectName(projectDto.getProjectName());
-                temp.setProjectId(projectDto.getProjectId());
-                temp.setRegionId(projectDto.getRegionId());
-                temp.setRegionName(projectDto.getRegionName());
-                temp.setPtVar5(projectDto.getProjectCode());
-            }
-            for (KcsjAchievement temp : updateList) {
+            List<KcsjAchievement> achievementList = pushVo.getAchievementList();
+            for (KcsjAchievement temp : achievementList) {
                 temp.setProjectName(projectDto.getProjectName());
                 temp.setProjectId(projectDto.getProjectId());
                 temp.setRegionId(projectDto.getRegionId());
@@ -118,6 +110,14 @@ public class SysSyncInfoServiceImpl4Sd implements ISysSyncInfoService4Sd {
             review.setRegionName(projectDto.getRegionName());
             review.setPtVar5(projectDto.getProjectCode());
             JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(review));
+            List<KcsjAchievement> achievementList = review.getAchievementList();
+            for (KcsjAchievement achievement : achievementList) {
+                achievement.setProjectName(projectDto.getProjectName());
+                achievement.setProjectId(projectDto.getProjectId());
+                achievement.setRegionId(projectDto.getRegionId());
+                achievement.setRegionName(projectDto.getRegionName());
+                achievement.setPtVar5(projectDto.getProjectCode());
+            }
             rocketMQTemplate.convertAndSend("kcsj_achievement_review:tenantSuccess", JSONObject.toJSONString(json));
         }catch(Exception e){
             e.printStackTrace();
