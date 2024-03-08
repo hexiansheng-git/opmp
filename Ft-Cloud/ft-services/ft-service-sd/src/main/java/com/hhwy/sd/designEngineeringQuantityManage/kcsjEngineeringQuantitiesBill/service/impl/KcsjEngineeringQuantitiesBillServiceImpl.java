@@ -129,6 +129,8 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         kcsjEngineeringQuantitiesBillMapper.insertKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
         //新增子表
         List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
+        List<KcsjEngineeringQuantitiesBill> buildTreeList=new ArrayList<>();
+
         if (!CollectionUtils.isEmpty(detailsList)) {
             //子表数据处理
             //把树形数据拆分成普通列表
