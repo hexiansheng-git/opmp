@@ -217,7 +217,9 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
         syncDataToGm(kcsjGroupManageMainVo);
     }
 
-    private void syncDataToGm(KcsjGroupManageMainVo kcsjGroupManageMainVo) {
+    @Override
+    @Transactional
+    public void syncDataToGm(KcsjGroupManageMainVo kcsjGroupManageMainVo) {
         long beginMills = System.currentTimeMillis();
         Integer status = 1;
         String errMsg = "";

@@ -32,4 +32,6 @@ public interface IKcsjGroupManageMainService {
     KcsjGroupManageMainVo getKcsjGroupManageMainVo(KcsjGroupManageMain kcsjGroupManageMain);
 
     void save(KcsjGroupManageMainVo kcsjGroupManageMainVo);
+
+    void syncDataToGm(KcsjGroupManageMainVo kcsjGroupManageMainVo);
 }

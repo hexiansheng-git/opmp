@@ -40,4 +40,11 @@ public interface IKcsjOrganManageService {
      * @return
      */
     int newUpdateKcsjOrganManageList(KcsjOrganManage4Update kcsjOrganManage4Update);
+
+    /**
+     * 数据同步总部
+     *
+     * @param kcsjOrganManage4Update
+     */
+    void syncDataToGm(KcsjOrganManage4Update kcsjOrganManage4Update);
 }

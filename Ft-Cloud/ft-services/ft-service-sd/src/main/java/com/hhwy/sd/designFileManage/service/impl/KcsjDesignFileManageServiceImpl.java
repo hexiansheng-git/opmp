@@ -162,8 +162,11 @@ public class KcsjDesignFileManageServiceImpl implements IKcsjDesignFileManageSer
         long beginMills = System.currentTimeMillis();
         Integer status = 1;
         String errMsg = "";
+        Map<String,Object> map=new HashMap<>();
+        map.put("delIdList",kcsjDesignFileManageVo.getDelIdList());
+        map.put("treeList",kcsjDesignFileManageVo.getTreeList());
         try{
-            rocketMQTemplate.convertAndSend("kcsj_design_file_manage:tenantSuccess", JSONObject.toJSONString(kcsjDesignFileManageVo));
+            rocketMQTemplate.convertAndSend("kcsj_design_file_manage:tenantSuccess1", JSONObject.toJSONString(map));
         }catch (Exception e){
             e.printStackTrace();
             status = 0;
