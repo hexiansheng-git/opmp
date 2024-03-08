@@ -1,10 +1,13 @@
 package com.hhwy.sd.designFileManage.service.impl;
 
 import cn.hutool.core.date.DateTime;
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.SysSyncInfoLog;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManage;
 import com.hhwy.sd.designFileManage.domain.KcsjDesignFileManageVo;
 import com.hhwy.sd.designFileManage.domain.vo.KcsjDesignFileManageQueryVo;
@@ -14,6 +17,9 @@ import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +41,14 @@ public class KcsjDesignFileManageServiceImpl implements IKcsjDesignFileManageSer
 
     @Autowired
     private KcsjDesignFileManageMapper kcsjDesignFileManageMapper;
+
+    @Autowired
+    private PmServiceApi pmServiceApi;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
+    private Logger logger= LoggerFactory.getLogger(KcsjDesignFileManageServiceImpl.class);
 
 
     public KcsjDesignFileManage getKcsjDesignFileManage(KcsjDesignFileManage kcsjDesignFileManage) {
@@ -134,8 +148,39 @@ public class KcsjDesignFileManageServiceImpl implements IKcsjDesignFileManageSer
         if(!CollectionUtils.isEmpty(kcsjDesignFileManageVo.getDelIdList())){
             deleteByIds(kcsjDesignFileManageVo.getDelIdList());
         }
+        //数据同步总部
+        syncDataToGm(kcsjDesignFileManageVo);
         return AjaxResult.success();
     }
+
+    /**
+     * 数据同步总部
+     *
+     * @param kcsjDesignFileManageVo
+     */
+    private void syncDataToGm(KcsjDesignFileManageVo kcsjDesignFileManageVo) {
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try{
+            rocketMQTemplate.convertAndSend("kcsj_design_file_manage:tenantSuccess", JSONObject.toJSONString(kcsjDesignFileManageVo));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("kcsj_design_file_manage");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(JSONObject.toJSONString(kcsjDesignFileManageVo));
+            logger.error("kcsj_design_file_manage同步失败【{}】,时间：【{}】",JSONObject.toJSONString(kcsjDesignFileManageVo),System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
+        }
+    }
+
     /**
      * 批量删除
      *

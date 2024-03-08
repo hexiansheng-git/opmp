@@ -1,7 +1,10 @@
 package com.hhwy.sd.groupManage.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.SysSyncInfoLog;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sd.groupManage.domain.KcsjGroupManageApproachStaff;
 import com.hhwy.sd.groupManage.domain.KcsjGroupManageContract;
 import com.hhwy.sd.groupManage.domain.KcsjGroupManageDetail;
@@ -20,6 +23,9 @@ import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import io.seata.common.util.CollectionUtils;
 import io.seata.common.util.StringUtils;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,6 +63,14 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
 
     @Autowired
     private KcsjGroupManageApproachStaffMapper staffMapper;
+
+    @Autowired
+    private PmServiceApi pmServiceApi;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
+    private Logger logger= LoggerFactory.getLogger(KcsjGroupManageMainServiceImpl.class);
 
 
     public KcsjGroupManageMain getKcsjGroupManageMain(KcsjGroupManageMain kcsjGroupManageMain) {
@@ -198,6 +212,32 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
         this.deleteAllData(subpackageType);
         /*插入所有数据*/
         this.addAllData(kcsjGroupManageMainVo);
+
+        //数据同步总部
+        syncDataToGm(kcsjGroupManageMainVo);
+    }
+
+    private void syncDataToGm(KcsjGroupManageMainVo kcsjGroupManageMainVo) {
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try{
+            rocketMQTemplate.convertAndSend("kcsj_group_manage_contract:tenantSuccess", JSONObject.toJSONString(kcsjGroupManageMainVo));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("kcsj_group_manage_contract");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(JSONObject.toJSONString(kcsjGroupManageMainVo));
+            logger.error("kcsj_group_manage_contract同步失败【{}】,时间：【{}】",JSONObject.toJSONString(kcsjGroupManageMainVo),System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
+        }
     }
 
     /**
