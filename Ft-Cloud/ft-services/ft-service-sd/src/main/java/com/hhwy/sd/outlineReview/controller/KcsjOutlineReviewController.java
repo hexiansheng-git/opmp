@@ -133,10 +133,22 @@ public class KcsjOutlineReviewController extends BaseController {
      */
     @RequestMapping("/listener")
     public void updateTaskStatus(@RequestParam("id") Long id){
+        //维护valid
         KcsjOutlineReview kcsjOutlineReview = new KcsjOutlineReview();
-        kcsjOutlineReview.setId(id);
-        kcsjOutlineReview.setTaskStatus("5");
-        kcsjOutlineReviewService.updateKcsjOutlineReview(kcsjOutlineReview);
+        kcsjOutlineReview.setValid("1");
+        KcsjOutlineReview kcsjOutlineReviewz = kcsjOutlineReviewService.getKcsjOutlineReview(kcsjOutlineReview);
+        if (null != kcsjOutlineReviewz){
+            KcsjOutlineReview param = new KcsjOutlineReview();
+            param.setId(kcsjOutlineReviewz.getId());
+            param.setValid("0");
+            kcsjOutlineReviewService.update(param);
+        }
+        //维护流程状态
+        KcsjOutlineReview kcsjOutlineReviews = new KcsjOutlineReview();
+        kcsjOutlineReviews.setId(id);
+        kcsjOutlineReviews.setTaskStatus("5");
+        kcsjOutlineReviews.setValid("1");
+        kcsjOutlineReviewService.updateKcsjOutlineReview(kcsjOutlineReviews);
     }
 
     //获取项目总工下得所有用户

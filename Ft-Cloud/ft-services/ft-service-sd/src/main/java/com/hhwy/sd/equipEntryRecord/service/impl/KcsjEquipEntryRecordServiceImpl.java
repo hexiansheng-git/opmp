@@ -7,6 +7,7 @@ import cn.hutool.core.date.DateTime;
 import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.excel.Util;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecordInfo;
@@ -26,6 +27,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +55,8 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
     private KcsjEquipEntryRecordInfoServiceImpl kcsjEquipEntryRecordInfoService;
     @Autowired
     private PmServiceApi pmServiceApi;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
 //    public KcsjEquipEntryRecord getKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord) {
 //        return kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecord(kcsjEquipEntryRecord);
@@ -100,10 +105,16 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
 
     @Transactional
     public int insertKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord) {
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        kcsjEquipEntryRecord.setPtVar3(String.valueOf(projectDto.getProjectId()));
+        kcsjEquipEntryRecord.setPtVar4(String.valueOf(projectDto.getRegionId()));
+        kcsjEquipEntryRecord.setPtVar5(String.valueOf(projectDto.getRegionName()));
         kcsjEquipEntryRecord.setId(IdWorker.createId());
         kcsjEquipEntryRecord.setCreateUser(SecurityUtils.getUserName());
         kcsjEquipEntryRecord.setCreateTime(DateUtils.getNowDate());
-        return kcsjEquipEntryRecordMapper.insertKcsjEquipEntryRecord(kcsjEquipEntryRecord);
+        int i = kcsjEquipEntryRecordMapper.insertKcsjEquipEntryRecord(kcsjEquipEntryRecord);
+        doSendGm();
+        return i;
     }
 
     @Transactional
@@ -130,6 +141,10 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                 kcsjEquipEntryRecord.setUpdateTime(DateTime.now());
                 kcsjEquipEntryRecord.setUpdateUser(SecurityUtils.getUserId() + "");
                 kcsjEquipEntryRecord.setDelFlag("0");
+                ProjectDto projectDto = pmServiceApi.getProjectDto();
+                kcsjEquipEntryRecord.setPtVar3(String.valueOf(projectDto.getProjectId()));
+                kcsjEquipEntryRecord.setPtVar4(String.valueOf(projectDto.getRegionId()));
+                kcsjEquipEntryRecord.setPtVar5(String.valueOf(projectDto.getRegionName()));
             }
             List<KcsjEquipEntryRecord> insertList = treeToList.stream().filter(e -> StringUtils.isNotEmpty(e.getIsAdd()) && e.getIsAdd().equals("1")).collect(Collectors.toList());
             if(!CollectionUtils.isEmpty(insertList)){
@@ -161,6 +176,7 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                 kcsjEquipEntryRecordMapper.updateKcsjEquipEntryRecordList(updateList);
             }
         }
+        doSendGm();
         return AjaxResult.success();
     }
 
@@ -388,6 +404,7 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
             }
         }
         kcsjEquipEntryRecordVo.setTreeList(treeToListNew);
+        doSendGm();
         return kcsjEquipEntryRecordVo;
     }
     private void digui(List<LinkedHashMap<String, Object>> list, List<KcsjEquipEntryRecord> treeToList) {
@@ -430,4 +447,15 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
             treeToList.add(kcsjEquipEntryRecord);
         }
     }
+
+    //数据推送总部版
+    public void doSendGm(){
+        KcsjEquipEntryRecord kcsjEquipEntryRecord = new KcsjEquipEntryRecord();
+        List<KcsjEquipEntryRecord> kcsjEquipEntryRecordList = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(kcsjEquipEntryRecord);
+        rocketMQTemplate.convertAndSend("kcsj_equip_entry_record:tenantSuccess", kcsjEquipEntryRecordList);
+        KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo = new KcsjEquipEntryRecordInfo();
+        List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoMapper.getKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfo);
+        rocketMQTemplate.convertAndSend("kcsj_equip_entry_record_info:tenantSuccess", kcsjEquipEntryRecordInfoList);
+    }
+
 }

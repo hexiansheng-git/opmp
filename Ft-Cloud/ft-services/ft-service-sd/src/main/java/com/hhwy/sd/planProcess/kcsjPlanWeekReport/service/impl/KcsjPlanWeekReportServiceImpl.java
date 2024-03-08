@@ -7,10 +7,14 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sd.organManage.util.StatisticsUtils;
+import com.hhwy.sd.planProcess.kcsjPlanProcess.domain.KcsjPlanProcess;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.exception.CustomBusinessException;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +38,11 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
     @Autowired
     private SystemServiceApi systemServiceApi;
 
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private PmServiceApi pmServiceApi;
+
 
     public KcsjPlanWeekReport getKcsjPlanWeekReport(KcsjPlanWeekReport kcsjPlanWeekReport) {
         return kcsjPlanWeekReportMapper.getKcsjPlanWeekReport(kcsjPlanWeekReport);
@@ -48,6 +57,11 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
         kcsjPlanWeekReport.setId(IdWorker.createId());
 //        kcsjPlanWeekReport.setCreateUser(SecurityUtils.getUserName());
         kcsjPlanWeekReport.setCreateTime(DateUtils.getNowDate());
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        kcsjPlanWeekReport.setProjectId(projectDto.getProjectId());
+        kcsjPlanWeekReport.setProjectName(projectDto.getProjectName());
+        kcsjPlanWeekReport.setRegionId(projectDto.getRegionId());
+        kcsjPlanWeekReport.setRegionName(projectDto.getRegionName());
         return kcsjPlanWeekReportMapper.insertKcsjPlanWeekReport(kcsjPlanWeekReport);
     }
 
@@ -77,7 +91,9 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
             kcsjPlanWeekReport.setUpdateUser(SecurityUtils.getUserName());
             kcsjPlanWeekReport.setUpdateTime(DateUtils.getNowDate());
         }
-        return kcsjPlanWeekReportMapper.updateKcsjPlanWeekReportList(kcsjPlanWeekReportList);
+        int i = kcsjPlanWeekReportMapper.updateKcsjPlanWeekReportList(kcsjPlanWeekReportList);
+        doSendGm();
+        return i;
     }
 
     @Transactional
@@ -119,7 +135,7 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
                 }
             }
         }
-
+        doSendGm();
         return i;
 
     }
@@ -136,5 +152,12 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
         kcsjPlanWeekReport.setStartDate(dateRange4Week.get("start"));
         kcsjPlanWeekReport.setEndDate(dateRange4Week.get("end"));
         return insertKcsjPlanWeekReport(kcsjPlanWeekReport);
+    }
+
+    //数据推送总部版
+    public void doSendGm(){
+        KcsjPlanWeekReport planWeekReport = new KcsjPlanWeekReport();
+        List<KcsjPlanWeekReport> kcsjPlanWeekReportList = kcsjPlanWeekReportMapper.getKcsjPlanWeekReportList(planWeekReport);
+        rocketMQTemplate.convertAndSend("kcsj_plan_week_report:tenantSuccess", kcsjPlanWeekReportList);
     }
 }

@@ -48,7 +48,7 @@ public class KcsjOutlineReview extends CommonBaseEntity {
     private BigDecimal version;
 
     /**
-     * 字段描述：是否有效 0,1  备用，暂不维护该字段
+     * 字段描述：是否有效 0,1
      */
     @JsonProperty
     @Excel(name = "是否有效")
