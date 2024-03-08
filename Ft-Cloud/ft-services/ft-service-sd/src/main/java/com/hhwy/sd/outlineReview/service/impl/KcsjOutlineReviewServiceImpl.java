@@ -255,12 +255,15 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
 
     //数据推送总部版
     public void doSendGm() {
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        String projectCode = projectDto.getProjectCode();
         //全量推送，（已发起审批的）
         KcsjOutlineReview kcsjOutlineReview = new KcsjOutlineReview();
         List<KcsjOutlineReview> kcsjOutlineReviewList = kcsjOutlineReviewMapper.getKcsjOutlineReviewList(kcsjOutlineReview);
         FlowInfoSearchUtil.getFlowInfo(kcsjOutlineReviewList, FlowEnum.KCSJ_PATENT_DECLARE);
         List<KcsjOutlineReview> collect = kcsjOutlineReviewList.stream()
                 .filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
+        collect.forEach(p -> p.setPtVar5(projectCode));
         rocketMQTemplate.convertAndSend("kcsj_outline_review:tenantSuccess", collect);
     }
 }

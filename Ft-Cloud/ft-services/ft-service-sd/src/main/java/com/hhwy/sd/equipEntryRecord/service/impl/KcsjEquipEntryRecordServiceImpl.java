@@ -460,11 +460,15 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
 
     //数据推送总部版
     public void doSendGm(){
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        String projectCode = projectDto.getProjectCode();
         KcsjEquipEntryRecord kcsjEquipEntryRecord = new KcsjEquipEntryRecord();
         List<KcsjEquipEntryRecord> kcsjEquipEntryRecordList = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(kcsjEquipEntryRecord);
+        kcsjEquipEntryRecordList.forEach(p -> p.setPtVar5(projectCode));
         rocketMQTemplate.convertAndSend("kcsj_equip_entry_record:tenantSuccess", kcsjEquipEntryRecordList);
         KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo = new KcsjEquipEntryRecordInfo();
         List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoMapper.getKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfo);
+        kcsjEquipEntryRecordInfoList.forEach(p -> p.setPtVar5(projectCode));
         rocketMQTemplate.convertAndSend("kcsj_equip_entry_record_info:tenantSuccess", kcsjEquipEntryRecordInfoList);
     }
 

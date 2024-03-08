@@ -231,8 +231,11 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
 
     //数据推送总部版
     public void doSendGm(){
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        String projectCode = projectDto.getProjectCode();
         KcsjPlanProcess planProcess = new KcsjPlanProcess();
         List<KcsjPlanProcess> kcsjEquipEntryRecordList = kcsjPlanProcessMapper.getKcsjPlanProcessList(planProcess);
+        kcsjEquipEntryRecordList.forEach(p -> p.setPtVar5(projectCode));
         rocketMQTemplate.convertAndSend("kcsj_plan_process:tenantSuccess", kcsjEquipEntryRecordList);
     }
 }
