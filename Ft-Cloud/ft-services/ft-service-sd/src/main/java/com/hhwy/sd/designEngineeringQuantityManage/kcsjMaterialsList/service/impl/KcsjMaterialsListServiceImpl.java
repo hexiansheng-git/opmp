@@ -212,6 +212,8 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
     @Transactional
     public int updateKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList) {
 
+
+
         //校验 项目控制损耗定额不能大于局损耗定额
         List<KcsjMaterialsListDetail> detailList = kcsjMaterialsList.getDetailList();
         for (KcsjMaterialsListDetail kcsjMaterialsListDetail : detailList) {
@@ -225,8 +227,15 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
             }
         }
 
+
         kcsjMaterialsList.setUpdateUser(SecurityUtils.getUserName());
         kcsjMaterialsList.setUpdateTime(DateUtils.getNowDate());
+
+        //推送数据到mq
+        if (kcsjMaterialsList!=null){
+            sysSyncInfoService4Sd.pushKcsjMaterialsList(kcsjMaterialsList);
+        }
+
         //删除子表数据
         Long id = kcsjMaterialsList.getId();
         List<Long> list = new ArrayList<>();
@@ -234,10 +243,7 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
         detailMapper.deleteKcsjMaterialsListDetailByMainId(list, SecurityUtils.getUserId().toString());
         //重新插入子表数据
         handleInsertDetails(kcsjMaterialsList);
-        //推送数据到mq
-        if (kcsjMaterialsList!=null){
-            sysSyncInfoService4Sd.pushKcsjMaterialsList(kcsjMaterialsList);
-        }
+
         //修改主表数据
         return kcsjMaterialsListMapper.updateKcsjMaterialsList(kcsjMaterialsList);
     }

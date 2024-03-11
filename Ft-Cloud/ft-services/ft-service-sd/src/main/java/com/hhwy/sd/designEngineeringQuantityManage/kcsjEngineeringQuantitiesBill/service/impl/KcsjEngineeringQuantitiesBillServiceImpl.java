@@ -212,6 +212,11 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         kcsjEngineeringQuantitiesBill.setUpdateUser(SecurityUtils.getUserId().toString());
         kcsjEngineeringQuantitiesBill.setUpdateTime(DateUtils.getNowDate());
 
+        //推送数据到mq
+        if (kcsjEngineeringQuantitiesBill!=null){
+            sysSyncInfoService4Sd.pushKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
+        }
+
         kcsjEngineeringQuantitiesBillMapper.updateKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
         //处理子表删除的数据
         List<Long> delIdList = kcsjEngineeringQuantitiesBill.getDelIdList();
@@ -220,6 +225,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         }
         //处理子表新增的数据
         List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
+        kcsjEngineeringQuantitiesBill.setDetailsList(detailsList);
         //将树形拆成普通列表
         detailsList = ListTreeUtil.formatList(
                 detailsList,
@@ -245,10 +251,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
             kcsjEngineeringQuantitiesBillDetailMapper.updateKcsjEngineeringQuantitiesBillDetailList(updateList);
         }
 
-        //推送数据到mq
-        if (kcsjEngineeringQuantitiesBill!=null){
-            sysSyncInfoService4Sd.pushKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
-        }
+
         return AjaxResult.success();
     }
 
