@@ -1,11 +1,11 @@
 package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service;
 
-import java.util.List;
-import java.util.Map;
-
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author fsd
@@ -38,7 +38,7 @@ public interface ISgsjTechnicalScienceTopicService {
 
     void deleteById(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
 
-    AjaxResult messagePublic(String message);
+    AjaxResult messagePublic(String title, String message);
 
     List<SgsjTechnicalScienceTopicDTO> export(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
 

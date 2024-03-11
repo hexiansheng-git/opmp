@@ -227,10 +227,8 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
             }
         }
 
-
         kcsjMaterialsList.setUpdateUser(SecurityUtils.getUserName());
         kcsjMaterialsList.setUpdateTime(DateUtils.getNowDate());
-
         //推送数据到mq
         if (kcsjMaterialsList!=null){
             sysSyncInfoService4Sd.pushKcsjMaterialsList(kcsjMaterialsList);

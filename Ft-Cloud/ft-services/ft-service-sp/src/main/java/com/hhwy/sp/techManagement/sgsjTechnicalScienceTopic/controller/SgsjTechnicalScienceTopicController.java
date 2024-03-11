@@ -185,8 +185,8 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
      * 时间: 2024/2/1
      */
     @RequestMapping("/messagePublic")
-    public AjaxResult messagePublic(String message){
-        return sgsjTechnicalScienceTopicService.messagePublic(message);
+    public AjaxResult messagePublic(String title, String message){
+        return sgsjTechnicalScienceTopicService.messagePublic(title, message);
     }
 
     /**

@@ -3,13 +3,10 @@ package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.nacos.api.config.filter.IFilterConfig;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -21,10 +18,10 @@ import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.constant.BelongBusiness;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
-import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
-import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
 import com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain.SgjsAuthenticateEvaluate;
 import com.hhwy.sp.common.sgjsAuthenticateEvaluate.service.ISgjsAuthenticateEvaluateService;
+import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
+import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.FileDto;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO;
@@ -32,6 +29,8 @@ import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.mapper.SgsjTechnical
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.ISgsjTechnicalScienceTopicService;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.domain.SgsjTechnicalScienceTopicModify;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.service.ISgsjTechnicalScienceTopicModifyService;
+import com.hhwy.system.api.RemoteNoticeService;
+import com.hhwy.system.api.domain.SysNotice;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.idworker.IdWorker;
@@ -43,11 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 /**
@@ -76,6 +71,8 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     private SystemServiceApi systemServiceApi;
     @Autowired
     private FileUploadUtil fileUploadUtil;
+    @Autowired
+    private RemoteNoticeService remoteNoticeService;
 
     @Transactional
     public int insertSgsjTechnicalScienceTopicList(List<SgsjTechnicalScienceTopic> sgsjTechnicalScienceTopicList) {
@@ -581,9 +578,15 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     @Value("${kygl.mesPublish.roleName}")
     private String roleNameArr;
 
+    /**
+     *
+     * @param title 功能名称
+     * @param message 消息内容
+     * @return
+     */
     //知会消息发布
     @Override
-    public AjaxResult messagePublic(String message) {
+    public AjaxResult messagePublic(String title, String message) {
         Assert.isTrue(StrUtil.isNotBlank(message), "message参数不能为空");
         Assert.isTrue(StrUtil.isNotBlank(roleKeyArr), "未配置消息发布角色");
         String[] roles = StrUtil.splitToArray(roleKeyArr, ",");
@@ -594,8 +597,14 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         Assert.isTrue(StrUtil.isNotBlank(userInfoStr), "角色未绑定用户");
         List<SysUser> sysUsers = JSON.parseArray(userInfoStr, SysUser.class);
         String clientIds = sysUsers.stream().map(SysUser::getUserName).collect(Collectors.joining(","));
-        String topic = "system";
-        R r = systemServiceApi.batchPublish(clientIds, topic, message);
+        SysNotice sysNotice = new SysNotice();
+        sysNotice.setNoticeTitle(title);
+        sysNotice.setNoticeType("1");
+        sysNotice.setNoticeScopeType("3");
+        sysNotice.setNoticeScope(clientIds);
+        sysNotice.setStatus("0");
+        sysNotice.setNoticeContent(message);
+        R r = remoteNoticeService.addForFeign(sysNotice);
         if (r.getCode() == 200) {
             return AjaxResult.success("消息发布成功");
         }else {
