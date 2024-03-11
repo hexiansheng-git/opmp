@@ -56,12 +56,12 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         String isEdit = kcsjEngineeringQuantitiesBill.getIsEdit();
         //查询主表数据
         kcsjEngineeringQuantitiesBill = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
-        if (StringUtils.isNotEmpty(isEdit) && ("1".equals(isEdit))) {
+        /*if (StringUtils.isNotEmpty(isEdit) && ("1".equals(isEdit))) {
             kcsjEngineeringQuantitiesBill.setIsEdit(isEdit);
             if (StringUtils.isNotEmpty(kcsjEngineeringQuantitiesBill.getFileGroupId())) {
                 kcsjEngineeringQuantitiesBill.setFileGroupId(fileUploadUtil.copyFile(kcsjEngineeringQuantitiesBill.getFileGroupId()));
             }
-        }
+        }*/
 
 
         //获取主表Id
@@ -129,7 +129,6 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         kcsjEngineeringQuantitiesBillMapper.insertKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
         //新增子表
         List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
-        List<KcsjEngineeringQuantitiesBill> buildTreeList=new ArrayList<>();
 
         if (!CollectionUtils.isEmpty(detailsList)) {
             //子表数据处理
@@ -211,12 +210,6 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         //修改主表数据
         kcsjEngineeringQuantitiesBill.setUpdateUser(SecurityUtils.getUserId().toString());
         kcsjEngineeringQuantitiesBill.setUpdateTime(DateUtils.getNowDate());
-
-        //推送数据到mq
-        if (kcsjEngineeringQuantitiesBill!=null){
-            sysSyncInfoService4Sd.pushKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
-        }
-
         kcsjEngineeringQuantitiesBillMapper.updateKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
         //处理子表删除的数据
         List<Long> delIdList = kcsjEngineeringQuantitiesBill.getDelIdList();
@@ -226,6 +219,10 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         //处理子表新增的数据
         List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
         kcsjEngineeringQuantitiesBill.setDetailsList(detailsList);
+        //推送数据到mq
+        if (kcsjEngineeringQuantitiesBill!=null){
+            sysSyncInfoService4Sd.pushKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
+        }
         //将树形拆成普通列表
         detailsList = ListTreeUtil.formatList(
                 detailsList,
@@ -250,7 +247,6 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         if (!CollectionUtils.isEmpty(updateList)) {
             kcsjEngineeringQuantitiesBillDetailMapper.updateKcsjEngineeringQuantitiesBillDetailList(updateList);
         }
-
 
         return AjaxResult.success();
     }
