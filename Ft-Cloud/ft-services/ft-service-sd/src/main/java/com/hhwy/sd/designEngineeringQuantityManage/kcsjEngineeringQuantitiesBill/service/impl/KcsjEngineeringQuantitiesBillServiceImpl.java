@@ -56,12 +56,12 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         String isEdit = kcsjEngineeringQuantitiesBill.getIsEdit();
         //查询主表数据
         kcsjEngineeringQuantitiesBill = kcsjEngineeringQuantitiesBillMapper.getKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
-        /*if (StringUtils.isNotEmpty(isEdit) && ("1".equals(isEdit))) {
+        if (StringUtils.isNotEmpty(isEdit) && ("1".equals(isEdit))) {
             kcsjEngineeringQuantitiesBill.setIsEdit(isEdit);
             if (StringUtils.isNotEmpty(kcsjEngineeringQuantitiesBill.getFileGroupId())) {
                 kcsjEngineeringQuantitiesBill.setFileGroupId(fileUploadUtil.copyFile(kcsjEngineeringQuantitiesBill.getFileGroupId()));
             }
-        }*/
+        }
 
 
         //获取主表Id
