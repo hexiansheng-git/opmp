@@ -160,7 +160,10 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
         String projectCode = projectDto.getProjectCode();
         KcsjPlanWeekReport planWeekReport = new KcsjPlanWeekReport();
         List<KcsjPlanWeekReport> kcsjPlanWeekReportList = kcsjPlanWeekReportMapper.getKcsjPlanWeekReportList(planWeekReport);
-        kcsjPlanWeekReportList.forEach(p ->p.setPtVar5(projectCode));
+        kcsjPlanWeekReportList.forEach(p ->{
+            p.setPtVar5(projectCode);
+            p.setProjectId(projectDto.getProjectId());
+        });
         rocketMQTemplate.convertAndSend("kcsj_plan_week_report:tenantSuccess", kcsjPlanWeekReportList);
     }
 }
