@@ -213,28 +213,32 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         kcsjEngineeringQuantitiesBillMapper.updateKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
         //处理子表删除的数据
         List<Long> delIdList = kcsjEngineeringQuantitiesBill.getDelIdList();
-        if (delIdList.size() > 0) {
+        if (delIdList!=null&&delIdList.size()>0) {
             detailService.deleteByIds(delIdList);
         }
         //处理子表新增的数据
         List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
+
+        //将树形拆成普通列表
+        detailsList = ListTreeUtil.formatList(
+                detailsList,
+                KcsjEngineeringQuantitiesBillDetail::setId,
+                KcsjEngineeringQuantitiesBillDetail::setPid,
+                KcsjEngineeringQuantitiesBillDetail::getChildren,
+                KcsjEngineeringQuantitiesBillDetail::setChildren);
+        for (KcsjEngineeringQuantitiesBillDetail detail : detailsList) {
+            detail.setMainId(kcsjEngineeringQuantitiesBill.getId());
+            detail.setDelFlag("0");
+        }
         kcsjEngineeringQuantitiesBill.setDetailsList(detailsList);
         //推送数据到mq
         if (kcsjEngineeringQuantitiesBill!=null){
             sysSyncInfoService4Sd.pushKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
         }
-        //将树形拆成普通列表
-        detailsList = ListTreeUtil.formatList(
-                detailsList,
-                KcsjEngineeringQuantitiesBillDetail::getIsAdd,
-                KcsjEngineeringQuantitiesBillDetail::getId,
-                KcsjEngineeringQuantitiesBillDetail::setId,
-                KcsjEngineeringQuantitiesBillDetail::setPid,
-                KcsjEngineeringQuantitiesBillDetail::getChildren,
-                KcsjEngineeringQuantitiesBillDetail::setChildren);
         List<KcsjEngineeringQuantitiesBillDetail> addList = new ArrayList<>();
         addList = detailsList.stream().filter(d -> StringUtils.isNotEmpty(d.getIsAdd()) && d.getIsAdd().equals("1")).collect(Collectors.toList());
         kcsjEngineeringQuantitiesBill.setDetailsList(addList);
+
         if (addList.size() > 0) {
             handleInsertList(kcsjEngineeringQuantitiesBill, kcsjEngineeringQuantitiesBill.getId());
         }
