@@ -239,6 +239,7 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
     public int newUpdateKcsjOrganManageList(KcsjOrganManage4Update kcsjOrganManage4Update) {
         //业务处理
         List<KcsjOrganManage> treeList = kcsjOrganManage4Update.getTreeList();
+        List<KcsjOrganManage> list = TreeUtil.treeToListWithoutId(treeList);
         List<Long> delIdList = kcsjOrganManage4Update.getDelIdList();
         int i = 0;
         if(CollectionUtils.isNotEmpty(treeList)) {
@@ -248,20 +249,21 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
             i = deleteKcsjOrganManageByPks(delIdList);
         }
         //总部版同步
-        syncDataToGm(kcsjOrganManage4Update);
+        syncDataToGm(list,delIdList);
         return i;
     }
 
+
     @Override
-    public void syncDataToGm(KcsjOrganManage4Update kcsjOrganManage4Update){
+    public void syncDataToGm(List<KcsjOrganManage> treeList, List<Long> delIdList){
         long beginMills = System.currentTimeMillis();
         Integer status = 1;
         String errMsg = "";
         Map<String,Object> map=new HashMap<>();
-        map.put("delIdList",kcsjOrganManage4Update.getDelIdList());
-        map.put("treeList",kcsjOrganManage4Update.getTreeList());
+        map.put("delIdList",delIdList);
+        map.put("treeList",treeList);
         try{
-            rocketMQTemplate.convertAndSend("kcsj_organ_manage:tenantSuccess1", JSONObject.toJSONString(new HashMap<>()));
+            rocketMQTemplate.convertAndSend("kcsj_organ_manage:tenantSuccess1", JSONObject.toJSONString(map));
         }catch (Exception e){
             e.printStackTrace();
             status = 0;
@@ -274,8 +276,8 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
             log.setBusinessName("kcsj_organ_manage");
             log.setStatus(status);
             log.setFailMsg(errMsg);
-            log.setPtVar1(JSONObject.toJSONString(kcsjOrganManage4Update));
-            logger.error("kcsj_organ_manage同步失败【{}】,时间：【{}】",JSONObject.toJSONString(kcsjOrganManage4Update),System.currentTimeMillis()-beginMills);
+            log.setPtVar1(JSONObject.toJSONString(map));
+            logger.error("kcsj_organ_manage同步失败【{}】,时间：【{}】",JSONObject.toJSONString(map),System.currentTimeMillis()-beginMills);
             pmServiceApi.insertSyncLog(log);
         }
 

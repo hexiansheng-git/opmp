@@ -149,23 +149,27 @@ public class KcsjDesignFileManageServiceImpl implements IKcsjDesignFileManageSer
             deleteByIds(kcsjDesignFileManageVo.getDelIdList());
         }
         //数据同步总部
-        syncDataToGm(kcsjDesignFileManageVo);
+        syncDataToGm(treeToList,kcsjDesignFileManageVo.getDelIdList());
         return AjaxResult.success();
     }
+
 
     /**
      * 数据同步总部
      *
-     * @param kcsjDesignFileManageVo
+     * @param treeToList
      */
-    private void syncDataToGm(KcsjDesignFileManageVo kcsjDesignFileManageVo) {
+    @Override
+    public void syncDataToGm(List<KcsjDesignFileManage> treeToList, List<String> delIdList) {
         long beginMills = System.currentTimeMillis();
         Integer status = 1;
         String errMsg = "";
         Map<String,Object> map=new HashMap<>();
-        map.put("delIdList",kcsjDesignFileManageVo.getDelIdList());
-        map.put("treeList",kcsjDesignFileManageVo.getTreeList());
+        map.put("delIdList",delIdList);
+        logger.info("快现原形【{}】",JSONObject.toJSONString(treeToList));
+        map.put("treeList",treeToList);
         try{
+            logger.info("送过去的是个什么鬼【{}】",JSONObject.toJSONString(map));
             rocketMQTemplate.convertAndSend("kcsj_design_file_manage:tenantSuccess1", JSONObject.toJSONString(map));
         }catch (Exception e){
             e.printStackTrace();
@@ -178,8 +182,8 @@ public class KcsjDesignFileManageServiceImpl implements IKcsjDesignFileManageSer
             log.setBusinessName("kcsj_design_file_manage");
             log.setStatus(status);
             log.setFailMsg(errMsg);
-            log.setPtVar1(JSONObject.toJSONString(kcsjDesignFileManageVo));
-            logger.error("kcsj_design_file_manage同步失败【{}】,时间：【{}】",JSONObject.toJSONString(kcsjDesignFileManageVo),System.currentTimeMillis()-beginMills);
+            log.setPtVar1(JSONObject.toJSONString(map));
+            logger.error("kcsj_design_file_manage同步失败【{}】,时间：【{}】",JSONObject.toJSONString(map),System.currentTimeMillis()-beginMills);
             pmServiceApi.insertSyncLog(log);
         }
     }

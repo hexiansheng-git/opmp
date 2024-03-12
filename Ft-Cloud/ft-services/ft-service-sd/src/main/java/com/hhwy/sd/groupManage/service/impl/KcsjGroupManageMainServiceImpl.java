@@ -21,16 +21,19 @@ import com.hhwy.sd.groupManage.service.IKcsjGroupManageMainService;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
+import com.hhwy.utils.tree.TreeUtil;
 import io.seata.common.util.CollectionUtils;
 import io.seata.common.util.StringUtils;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -205,16 +208,35 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
     @Override
     @Transactional
     public void save(KcsjGroupManageMainVo kcsjGroupManageMainVo) {
+        List<KcsjGroupManageContract> contractList = kcsjGroupManageMainVo.getContractList();
+        for (int i = 0; i < contractList.size(); i++) {
+            List<KcsjGroupManageDetail> detailList = contractList.get(i).getDetailList();
+            for (int j = 0; j < detailList.size(); j++) {
+                List<KcsjGroupManageDetail> children = detailList.get(j).getChildren();
+                detailList.get(j).setRst(children);
+                digui(children);
+            }
+        }
         String subpackageType = kcsjGroupManageMainVo.getSubpackageType();
         CommonAssert.notBlank(subpackageType,"分包类型不能为空！");
-
         /*删除所有数据*/
         this.deleteAllData(subpackageType);
         /*插入所有数据*/
         this.addAllData(kcsjGroupManageMainVo);
-
         //数据同步总部
+        logger.info("收到顶顶顶顶【{}】",JSONObject.toJSONString(kcsjGroupManageMainVo));
         syncDataToGm(kcsjGroupManageMainVo);
+    }
+
+    void digui(List<KcsjGroupManageDetail> rst){
+        for (KcsjGroupManageDetail detail:rst) {
+            List<KcsjGroupManageDetail> children = detail.getChildren();
+            if(CollectionUtils.isNotEmpty(children)){
+                detail.setRst(children);
+                digui(children);
+            }
+
+        }
     }
 
     @Override
@@ -224,6 +246,7 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
         Integer status = 1;
         String errMsg = "";
         try{
+            logger.info("作妖了又【{}】",JSONObject.toJSONString(kcsjGroupManageMainVo));
             rocketMQTemplate.convertAndSend("kcsj_group_manage_contract:tenantSuccess", JSONObject.toJSONString(kcsjGroupManageMainVo));
         }catch (Exception e){
             e.printStackTrace();
