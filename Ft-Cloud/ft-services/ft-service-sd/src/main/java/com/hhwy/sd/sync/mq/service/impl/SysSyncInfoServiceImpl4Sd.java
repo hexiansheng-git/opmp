@@ -50,6 +50,8 @@ public class SysSyncInfoServiceImpl4Sd implements ISysSyncInfoService4Sd {
                 temp.setPtVar2(SecurityUtils.getTenantKey());
                 if(prjInfo.get("regionId") != null)temp.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
                 temp.setRegionName((String) prjInfo.get("regionName"));
+                if(prjInfo.get("projectId") != null)temp.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+                temp.setProjectName((String) prjInfo.get("projectName"));
                 JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(list.get(i)));
                 finalList.add(json);
             }
@@ -182,6 +184,11 @@ public class SysSyncInfoServiceImpl4Sd implements ISysSyncInfoService4Sd {
             throw e;
         }
     }
+
+    /**
+     * 推送设计文件报批
+     * @param list
+     */
     @Override
     public void pushKcsjDesignDocumentApproval(List<KcsjDesignDocumentApproval> list) {
         try{
@@ -192,6 +199,8 @@ public class SysSyncInfoServiceImpl4Sd implements ISysSyncInfoService4Sd {
                 temp.setPtVar2(SecurityUtils.getTenantKey());
                 if(prjInfo.get("regionId") != null)temp.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
                 temp.setRegionName((String) prjInfo.get("regionName"));
+                if(prjInfo.get("projectId") != null)temp.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+                temp.setProjectName((String) prjInfo.get("projectName"));
                 JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(list.get(i)));
                 finalList.add(json);
             }
