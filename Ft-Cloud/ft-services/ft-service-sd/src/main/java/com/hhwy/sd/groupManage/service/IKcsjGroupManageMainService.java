@@ -1,5 +1,6 @@
 package com.hhwy.sd.groupManage.service;
 
+import com.hhwy.sd.groupManage.domain.KcsjGroupManageDetail;
 import com.hhwy.sd.groupManage.domain.KcsjGroupManageMain;
 import com.hhwy.sd.groupManage.domain.vo.KcsjGroupManageMainVo;
 

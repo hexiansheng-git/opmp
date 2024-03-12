@@ -244,6 +244,8 @@ public class KcsjGroupManageDetail extends BaseEntity {
     private String ptVar5;
 
     private List<KcsjGroupManageDetail> children;
+    //new 为了保留children的值
+    private List<KcsjGroupManageDetail> rst;
 
     private List<KcsjGroupManageApproachStaff> staffList;
 }
