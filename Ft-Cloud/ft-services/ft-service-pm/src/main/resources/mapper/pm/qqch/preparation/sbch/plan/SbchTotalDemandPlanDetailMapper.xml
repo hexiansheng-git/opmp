@@ -274,7 +274,6 @@
             </if>
         </where>
         group by detail.id
-        # order by detail.`id` desc
     </select>
 
     <select id="selectSbchTotalDemandPlanDetailById" parameterType="Long" resultMap="SbchTotalDemandPlanDetailResult">
@@ -870,8 +869,6 @@
                 </foreach>
             </if>
         </where>
-        ${params.dataScope}
-        # order by detail.`id` desc
     </select>
 
 </mapper>
