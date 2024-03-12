@@ -201,6 +201,9 @@
         replace INTO `data_share_ws`.wzch_scene_manage_detail
             select *,#{prjCode} FROM wzch_scene_manage_detail where scene_manage_id =  (SELECT id FROM wzch_scene_manage WHERE del_flag = '0' order by version desc LIMIT 1);
 
+        replace INTO `data_share_ws`.wzch_internal_adjust SELECT *,#{prjCode} FROM wzch_internal_adjust WHERE del_flag = '0' order by version desc LIMIT 1;
+        replace INTO `data_share_ws`.wzch_internal_adjust_detail
+            select *,#{prjCode} FROM wzch_internal_adjust_detail where internal_adjust_id =  (SELECT id FROM wzch_internal_adjust WHERE del_flag = '0' order by version desc LIMIT 1);
     </select>
 
     <update id="deleteByOneVersion">
