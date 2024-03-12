@@ -588,6 +588,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     @Override
     public AjaxResult messagePublic(String title, String message) {
         Assert.isTrue(StrUtil.isNotBlank(message), "message参数不能为空");
+        Assert.isTrue(StrUtil.isNotBlank(title), "title参数不能为空");
         Assert.isTrue(StrUtil.isNotBlank(roleKeyArr), "未配置消息发布角色");
         String[] roles = StrUtil.splitToArray(roleKeyArr, ",");
         AjaxResult ajaxResult = systemServiceApi.selectByRoleAndTenant(roles, SecurityUtils.getTenantKey());
