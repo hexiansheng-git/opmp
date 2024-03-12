@@ -29,4 +29,6 @@ public interface IKcsjDesignFileManageService {
     int deleteKcsjDesignFileManage(KcsjDesignFileManage kcsjDesignFileManage);
 
     int deleteKcsjDesignFileManageByPks(List<Long> kcsjDesignFileManagePkList);
+
+    void syncDataToGm(List<KcsjDesignFileManage> treeToList, List<String> delIdList);
 }

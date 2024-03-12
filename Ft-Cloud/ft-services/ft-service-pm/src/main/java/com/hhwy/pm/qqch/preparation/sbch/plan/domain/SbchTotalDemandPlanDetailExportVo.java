@@ -140,7 +140,7 @@ public class SbchTotalDemandPlanDetailExportVo {
     /**
      * 是否特种设备（0：否，1：是）
      */
-    @FtExcel(name = "是否特种设备", readConverterExp = "0=：否，1：是")
+    @FtExcel(name = "是否特种设备", readConverterExp = "0=否,1=是")
     @NotBlank(message = "是否特种设备不能为空", groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private String isSpecial;
 

@@ -44,7 +44,8 @@ public interface IKcsjOrganManageService {
     /**
      * 数据同步总部
      *
-     * @param kcsjOrganManage4Update
+     * @param treeList
+     * @param delIdList
      */
-    void syncDataToGm(KcsjOrganManage4Update kcsjOrganManage4Update);
+    void syncDataToGm(List<KcsjOrganManage> treeList, List<Long> delIdList);
 }
