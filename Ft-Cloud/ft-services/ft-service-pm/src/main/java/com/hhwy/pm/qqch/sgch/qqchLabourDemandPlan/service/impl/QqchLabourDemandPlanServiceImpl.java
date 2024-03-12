@@ -459,7 +459,14 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             qqchLabourDemandPlan.setChinaNum(list.stream().filter(p -> null != p.getChinaNum()).map(p -> p.getChinaNum()).reduce(BigDecimal.ZERO, BigDecimal::add));
             qqchLabourDemandPlan.setOutNum(list.stream().filter(p -> null != p.getOutNum()).map(p -> p.getOutNum()).reduce(BigDecimal.ZERO, BigDecimal::add));
             qqchLabourDemandPlan.setTotal(list.stream().filter(p -> null != p.getTotal()).map(p -> p.getTotal()).reduce(BigDecimal.ZERO, BigDecimal::add));
-            qqchLabourDemandPlan.setOutProportion(list.stream().filter(p -> null != p.getOutProportion()).map(p -> p.getOutProportion()).reduce(BigDecimal.ZERO, BigDecimal::add));
+            qqchLabourDemandPlan.setOutProportion(BigDecimal.ONE);
+            if (qqchLabourDemandPlan.getTotal() != null && qqchLabourDemandPlan.getTotal().compareTo(BigDecimal.ONE) != 0){
+                BigDecimal outNum = qqchLabourDemandPlan.getOutNum();
+                BigDecimal multiply = outNum.multiply(new BigDecimal("100"));
+                BigDecimal total = qqchLabourDemandPlan.getTotal();
+                BigDecimal rate = NumberUtil.div(multiply, total);
+                qqchLabourDemandPlan.setOutProportion(rate);
+            }
             arrayList.add(qqchLabourDemandPlan);
         }
         return arrayList;

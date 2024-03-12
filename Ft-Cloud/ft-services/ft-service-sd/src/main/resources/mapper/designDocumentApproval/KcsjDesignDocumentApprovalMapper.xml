@@ -622,4 +622,8 @@
     <select id="selectByFollowUpDate" resultMap="KcsjDesignDocumentApprovalResultMap">
         select * from kcsj_design_document_approval where del_flag='0' and next_followup_date >= CURDATE() ;
     </select>
+
+    <select id="getAll" resultMap="KcsjDesignDocumentApprovalResultMap">
+    select * from kcsj_design_document_approval where del_flag='0'
+    </select>
 </mapper>

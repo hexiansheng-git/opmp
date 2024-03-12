@@ -24,6 +24,9 @@ import java.util.List;
 public class KcsjAchievementReview extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
+    /*流程状态  submit： 提交   end： 结束*/
+    private String processStatus;
+
     /**
      * 保存类型  1：新增；2：修改
      */

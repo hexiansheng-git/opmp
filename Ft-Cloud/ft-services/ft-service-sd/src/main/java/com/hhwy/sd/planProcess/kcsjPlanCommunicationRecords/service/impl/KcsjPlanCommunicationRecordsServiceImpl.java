@@ -109,7 +109,11 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
         }
 
         //同步数据到总部
-        sysSyncInfoService4Sd.pushKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecordsList);
+        List<KcsjPlanCommunicationRecords> all=kcsjPlanCommunicationRecordsMapper.getAll();
+        if (all!=null){
+            sysSyncInfoService4Sd.pushKcsjPlanCommunicationRecords(all);
+        }
+
         return AjaxResult.success();
 
     }
@@ -147,12 +151,17 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
     public int deleteKcsjPlanCommunicationRecordsByPks(List<Long> kcsjPlanCommunicationRecordsPkList) {
 
         String delUser = SecurityUtils.getSysUser().getNickName();
-        int i= kcsjPlanCommunicationRecordsMapper.deleteKcsjPlanCommunicationRecordsByPks(kcsjPlanCommunicationRecordsPkList, delUser);
+         int i= kcsjPlanCommunicationRecordsMapper.deleteKcsjPlanCommunicationRecordsByPks(kcsjPlanCommunicationRecordsPkList, delUser);
+
         if (kcsjPlanCommunicationRecordsPkList.size()>0){
             //推送数据到总部
-           List<KcsjPlanCommunicationRecords> list= kcsjPlanCommunicationRecordsMapper.getKcsjPlanCommunicationRecordsListByIds(kcsjPlanCommunicationRecordsPkList);
-           sysSyncInfoService4Sd.pushKcsjPlanCommunicationRecords(list);
+            List<KcsjPlanCommunicationRecords> all=kcsjPlanCommunicationRecordsMapper.getAll();
+            if (all!=null) {
+                sysSyncInfoService4Sd.pushKcsjPlanCommunicationRecords(all);
+            }
         }
         return i;
     }
+
+
 }

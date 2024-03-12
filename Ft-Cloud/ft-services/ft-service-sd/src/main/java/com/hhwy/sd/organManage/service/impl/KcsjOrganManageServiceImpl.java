@@ -1,8 +1,5 @@
 package com.hhwy.sd.organManage.service.impl;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
@@ -18,20 +15,22 @@ import com.hhwy.sd.organManage.service.IKcsjOrganManageDetailService;
 import com.hhwy.sd.organManage.service.IKcsjOrganManageService;
 import com.hhwy.sd.organManage.util.TreeCountUtils;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.utils.idworker.IdWorker;
+
+import java.util.*;
 
 /**
  * @author cjh
  * @date 2023-12-14 11:31:44
- * @remark
+ * @remark 勘察设计管理-勘察设计组织管理
  */
 @Service
 public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
@@ -253,16 +252,21 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
         return i;
     }
 
-    private void syncDataToGm(KcsjOrganManage4Update kcsjOrganManage4Update){
+    @Override
+    public void syncDataToGm(KcsjOrganManage4Update kcsjOrganManage4Update){
         long beginMills = System.currentTimeMillis();
         Integer status = 1;
         String errMsg = "";
+        Map<String,Object> map=new HashMap<>();
+        map.put("delIdList",kcsjOrganManage4Update.getDelIdList());
+        map.put("treeList",kcsjOrganManage4Update.getTreeList());
         try{
-            rocketMQTemplate.convertAndSend("kcsj_organ_manage:tenantSuccess", JSONObject.toJSONString(kcsjOrganManage4Update));
+            rocketMQTemplate.convertAndSend("kcsj_organ_manage:tenantSuccess1", JSONObject.toJSONString(new HashMap<>()));
         }catch (Exception e){
             e.printStackTrace();
             status = 0;
             errMsg = e.getMessage();
+            logger.error("报错了【{}】",e.getMessage());
             throw e;
         }finally {
             //3、更新syncInfo

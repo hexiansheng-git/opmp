@@ -2,6 +2,7 @@ package com.hhwy.feign.factory;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.SysSyncInfoLog;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.domain.CommonQqchMeasureExpRange;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.dto.DesignDisclosurePlanDto;
@@ -48,6 +49,11 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             }
             @Override
             public Map<String, Object> getPrjInfo() {
+                return null;
+            }
+
+            @Override
+            public ProjectDto getProjectDto() {
                 return null;
             }
 

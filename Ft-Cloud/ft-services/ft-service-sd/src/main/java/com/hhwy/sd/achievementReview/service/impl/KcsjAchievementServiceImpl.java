@@ -4,10 +4,12 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sd.achievementReview.constant.AchievementReviewStatus;
 import com.hhwy.sd.achievementReview.domain.KcsjAchievement;
+import com.hhwy.sd.achievementReview.domain.vo.AchievementPushVo;
 import com.hhwy.sd.achievementReview.domain.vo.AchievementQueryVo;
 import com.hhwy.sd.achievementReview.domain.vo.AchievementVo;
 import com.hhwy.sd.achievementReview.mapper.KcsjAchievementMapper;
 import com.hhwy.sd.achievementReview.service.IKcsjAchievementService;
+import com.hhwy.sd.sync.mq.ISysSyncInfoService4Sd;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +30,9 @@ public class KcsjAchievementServiceImpl implements IKcsjAchievementService {
 
     @Autowired
     private KcsjAchievementMapper kcsjAchievementMapper;
+
+    @Autowired
+    private ISysSyncInfoService4Sd sysSyncInfoService4Sd;
 
 
     public KcsjAchievement getKcsjAchievement(KcsjAchievement kcsjAchievement) {
@@ -120,6 +125,11 @@ public class KcsjAchievementServiceImpl implements IKcsjAchievementService {
         if(CollectionUtils.isNotEmpty(delIdList)){
             kcsjAchievementMapper.deleteKcsjAchievementByPks(delIdList);
         }
+
+        AchievementPushVo pushVo = new AchievementPushVo();
+        pushVo.setAchievementList(achievementVo.getAchievementList());
+        pushVo.setDelIdList(delIdList);
+        sysSyncInfoService4Sd.pushAchievement(pushVo);
     }
 
     public void checkData(List<KcsjAchievement> achievementList,Set<Long> delIdSet){

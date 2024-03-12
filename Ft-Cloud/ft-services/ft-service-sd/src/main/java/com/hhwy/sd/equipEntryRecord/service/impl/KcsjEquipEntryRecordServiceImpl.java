@@ -7,6 +7,7 @@ import cn.hutool.core.date.DateTime;
 import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.excel.Util;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecordInfo;
@@ -26,6 +27,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +55,8 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
     private KcsjEquipEntryRecordInfoServiceImpl kcsjEquipEntryRecordInfoService;
     @Autowired
     private PmServiceApi pmServiceApi;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
 //    public KcsjEquipEntryRecord getKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord) {
 //        return kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecord(kcsjEquipEntryRecord);
@@ -100,10 +105,17 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
 
     @Transactional
     public int insertKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord) {
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        kcsjEquipEntryRecord.setProjectId(projectDto.getProjectId());
+        kcsjEquipEntryRecord.setProjectName(projectDto.getProjectName());
+        kcsjEquipEntryRecord.setRegionId(projectDto.getRegionId());
+        kcsjEquipEntryRecord.setRegionName(projectDto.getRegionName());
         kcsjEquipEntryRecord.setId(IdWorker.createId());
         kcsjEquipEntryRecord.setCreateUser(SecurityUtils.getUserName());
         kcsjEquipEntryRecord.setCreateTime(DateUtils.getNowDate());
-        return kcsjEquipEntryRecordMapper.insertKcsjEquipEntryRecord(kcsjEquipEntryRecord);
+        int i = kcsjEquipEntryRecordMapper.insertKcsjEquipEntryRecord(kcsjEquipEntryRecord);
+        doSendGm();
+        return i;
     }
 
     @Transactional
@@ -115,11 +127,12 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
         if(!CollectionUtils.isEmpty(kcsjEquipEntryRecordVo.getDelInfoList())){
             deleteInfoIds(kcsjEquipEntryRecordVo.getDelInfoList());
         }
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
 
         List<KcsjEquipEntryRecord> treeToList = null;
         if (!CollectionUtils.isEmpty(kcsjEquipEntryRecordVo.getTreeList())) {
             //设备数据处理
-            inFoAdd(kcsjEquipEntryRecordVo.getTreeList());
+            inFoAdd(kcsjEquipEntryRecordVo.getTreeList(), projectDto);
             //数据处理
             treeToList = TreeUtil.treeToListWithoutId(kcsjEquipEntryRecordVo.getTreeList());
             for (int i = 0; i < treeToList.size(); i++) {
@@ -130,6 +143,10 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                 kcsjEquipEntryRecord.setUpdateTime(DateTime.now());
                 kcsjEquipEntryRecord.setUpdateUser(SecurityUtils.getUserId() + "");
                 kcsjEquipEntryRecord.setDelFlag("0");
+                kcsjEquipEntryRecord.setProjectId(projectDto.getProjectId());
+                kcsjEquipEntryRecord.setProjectName(projectDto.getProjectName());
+                kcsjEquipEntryRecord.setRegionId(projectDto.getRegionId());
+                kcsjEquipEntryRecord.setRegionName(projectDto.getRegionName());
             }
             List<KcsjEquipEntryRecord> insertList = treeToList.stream().filter(e -> StringUtils.isNotEmpty(e.getIsAdd()) && e.getIsAdd().equals("1")).collect(Collectors.toList());
             if(!CollectionUtils.isEmpty(insertList)){
@@ -161,6 +178,7 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                 kcsjEquipEntryRecordMapper.updateKcsjEquipEntryRecordList(updateList);
             }
         }
+        doSendGm();
         return AjaxResult.success();
     }
 
@@ -187,7 +205,7 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
      * 设备数据处理
      * @param list
      */
-    private void inFoAdd(List<KcsjEquipEntryRecord> list){
+    private void inFoAdd(List<KcsjEquipEntryRecord> list, ProjectDto projectDto){
         for (int i = 0; i < list.size(); i++) {
             if(!CollectionUtils.isEmpty(list.get(i).getChildren())){
                List<KcsjEquipEntryRecord> children = list.get(i).getChildren();
@@ -200,6 +218,10 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                     kcsjEquipEntryRecordInfo.setCreateTime(DateTime.now());
                     kcsjEquipEntryRecordInfo.setCreateUser(SecurityUtils.getUserId() + "");
                     kcsjEquipEntryRecordInfo.setCreateUserName(SecurityUtils.getUserName() + "");
+                    kcsjEquipEntryRecordInfo.setProjectId(projectDto.getProjectId());
+                    kcsjEquipEntryRecordInfo.setProjectName(projectDto.getProjectName());
+                    kcsjEquipEntryRecordInfo.setRegionId(projectDto.getRegionId());
+                    kcsjEquipEntryRecordInfo.setRegionName(projectDto.getRegionName());
                     kcsjEquipEntryRecordInfoMapper.insertKcsjEquipEntryRecordInfo(kcsjEquipEntryRecordInfo);
                 }else{
                     List<KcsjEquipEntryRecordInfo> recordInfos = kcsjEquipEntryRecordInfoList1.stream().filter(e -> StringUtils.isNotEmpty(e.getPid().toString()) && e.getPid().toString().equals("0")).collect(Collectors.toList());
@@ -227,6 +249,10 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                                 insertList.get(add).setCreateUser(SecurityUtils.getUserId() + "");
                                 insertList.get(add).setCreateUserName(SecurityUtils.getUserName() + "");
                                 insertList.get(add).setDelFlag("0");
+                                insertList.get(add).setProjectId(projectDto.getProjectId());
+                                insertList.get(add).setProjectName(projectDto.getProjectName());
+                                insertList.get(add).setRegionId(projectDto.getRegionId());
+                                insertList.get(add).setRegionName(projectDto.getRegionName());
                             }
                             kcsjEquipEntryRecordInfoMapper.insertKcsjEquipEntryRecordInfoList(insertList);
                         }
@@ -388,6 +414,7 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
             }
         }
         kcsjEquipEntryRecordVo.setTreeList(treeToListNew);
+//        doSendGm();
         return kcsjEquipEntryRecordVo;
     }
     private void digui(List<LinkedHashMap<String, Object>> list, List<KcsjEquipEntryRecord> treeToList) {
@@ -430,4 +457,19 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
             treeToList.add(kcsjEquipEntryRecord);
         }
     }
+
+    //数据推送总部版
+    public void doSendGm(){
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        String projectCode = projectDto.getProjectCode();
+        KcsjEquipEntryRecord kcsjEquipEntryRecord = new KcsjEquipEntryRecord();
+        List<KcsjEquipEntryRecord> kcsjEquipEntryRecordList = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(kcsjEquipEntryRecord);
+        kcsjEquipEntryRecordList.forEach(p -> p.setPtVar5(projectCode));
+        rocketMQTemplate.convertAndSend("kcsj_equip_entry_record:tenantSuccess", kcsjEquipEntryRecordList);
+        KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo = new KcsjEquipEntryRecordInfo();
+        List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoMapper.getKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfo);
+        kcsjEquipEntryRecordInfoList.forEach(p -> p.setPtVar5(projectCode));
+        rocketMQTemplate.convertAndSend("kcsj_equip_entry_record_info:tenantSuccess", kcsjEquipEntryRecordInfoList);
+    }
+
 }

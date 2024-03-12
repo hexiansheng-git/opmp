@@ -1,22 +1,17 @@
 package com.hhwy.sd.designOptimize.kcsjDesignOptimize.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.util.Date;
-import java.math.BigDecimal;
-
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.sd.designOptimize.kcsjDesignOptimizeItem.domain.KcsjDesignOptimizeItem;
 import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author cjh
@@ -27,6 +22,7 @@ import lombok.Data;
 public class KcsjDesignOptimize extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
+    private String addOrUpdate;
     /**
      * 字段描述：主键
      */

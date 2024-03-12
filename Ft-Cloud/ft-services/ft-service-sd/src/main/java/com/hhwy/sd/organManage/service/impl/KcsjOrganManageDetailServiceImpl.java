@@ -127,6 +127,7 @@ public class KcsjOrganManageDetailServiceImpl implements IKcsjOrganManageDetailS
         }
 
         kcsjOrganManageService.updateKcsjOrganManage(organManageId, enterDate, leaveDate);
+        //数据同步总部
         syncDataToGm(kcsjOrganManageDetail4Update);
         return i;
     }

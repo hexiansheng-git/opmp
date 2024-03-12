@@ -327,7 +327,6 @@
     <update id="updateKcsjOutlineReview">
         update kcsj_outline_review
         <trim prefix="SET" suffixOverrides=",">
-            <if test="id != null ">`id` = #{id},</if>
             <if test="outlineName != null  and  outlineName != ''">`outline_name` = #{outlineName},</if>
             <if test="version != null ">`version` = #{version},</if>
             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>

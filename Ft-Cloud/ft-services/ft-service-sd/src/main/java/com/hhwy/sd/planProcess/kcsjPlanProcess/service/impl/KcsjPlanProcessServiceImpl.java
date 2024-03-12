@@ -14,11 +14,13 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sd.organManage.util.StatisticsUtils;
 import com.hhwy.sd.organManage.util.TreeCountUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.tree.TreeUtil;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,9 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
 
     @Autowired
     private PmServiceApi pmServiceApi;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
 
     public KcsjPlanProcess getKcsjPlanProcess(KcsjPlanProcess kcsjPlanProcess) {
@@ -100,6 +105,11 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
             if("1".equals(kcsjPlanProcess.getIsAdd())) {
                 kcsjPlanProcess.setCreateUser(SecurityUtils.getSysUser().getNickName());
                 kcsjPlanProcess.setCreateTime(DateUtils.getNowDate());
+                ProjectDto projectDto = pmServiceApi.getProjectDto();
+                kcsjPlanProcess.setProjectId(projectDto.getProjectId());
+                kcsjPlanProcess.setProjectName(projectDto.getProjectName());
+                kcsjPlanProcess.setRegionId(projectDto.getRegionId());
+                kcsjPlanProcess.setRegionName(projectDto.getRegionName());
                 addList.add(kcsjPlanProcess);
             } else {
                 kcsjPlanProcess.setUpdateUser(SecurityUtils.getSysUser().getNickName());
@@ -114,6 +124,7 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
         if(CollectionUtils.isNotEmpty(updateList)) {
             i += kcsjPlanProcessMapper.updateKcsjPlanProcessList(updateList);
         }
+        doSendGm();
         return i;
     }
 
@@ -146,7 +157,9 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
         if(CollectionUtils.isEmpty(collect)) {
             return 0;
         }
-        return kcsjPlanProcessMapper.deleteKcsjPlanProcessByPks(collect);
+        int i = kcsjPlanProcessMapper.deleteKcsjPlanProcessByPks(collect);
+        doSendGm();
+        return i;
     }
 
     /**
@@ -209,9 +222,20 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
             kcsjPlanProcessList.add(kcsjPlanProcess);
         }
         updateKcsjPlanProcessList(TreeUtil.build(kcsjPlanProcessList, null));
+        doSendGm();
     }
 
     public void deleteAllKcsjPlanProcess() {
         kcsjPlanProcessMapper.deleteAllKcsjPlanProcess();
+    }
+
+    //数据推送总部版
+    public void doSendGm(){
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        String projectCode = projectDto.getProjectCode();
+        KcsjPlanProcess planProcess = new KcsjPlanProcess();
+        List<KcsjPlanProcess> kcsjEquipEntryRecordList = kcsjPlanProcessMapper.getKcsjPlanProcessList(planProcess);
+        kcsjEquipEntryRecordList.forEach(p -> p.setPtVar5(projectCode));
+        rocketMQTemplate.convertAndSend("kcsj_plan_process:tenantSuccess", kcsjEquipEntryRecordList);
     }
 }

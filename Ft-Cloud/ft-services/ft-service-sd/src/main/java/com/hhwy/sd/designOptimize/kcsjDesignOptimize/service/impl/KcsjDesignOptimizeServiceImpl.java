@@ -1,20 +1,20 @@
 package com.hhwy.sd.designOptimize.kcsjDesignOptimize.service.impl;
 
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.sd.designOptimize.kcsjDesignOptimizeItem.domain.KcsjDesignOptimizeItem;
-import com.hhwy.sd.designOptimize.kcsjDesignOptimizeItem.service.IKcsjDesignOptimizeItemService;
-import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.sd.designOptimize.kcsjDesignOptimize.domain.KcsjDesignOptimize;
 import com.hhwy.sd.designOptimize.kcsjDesignOptimize.mapper.KcsjDesignOptimizeMapper;
 import com.hhwy.sd.designOptimize.kcsjDesignOptimize.service.IKcsjDesignOptimizeService;
-import com.hhwy.sd.designOptimize.kcsjDesignOptimize.domain.KcsjDesignOptimize;
+import com.hhwy.sd.designOptimize.kcsjDesignOptimizeItem.domain.KcsjDesignOptimizeItem;
+import com.hhwy.sd.designOptimize.kcsjDesignOptimizeItem.service.IKcsjDesignOptimizeItemService;
+import com.hhwy.sd.sync.mq.ISysSyncInfoService4Sd;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author cjh
@@ -29,6 +29,9 @@ public class KcsjDesignOptimizeServiceImpl implements IKcsjDesignOptimizeService
 
     @Autowired
     private IKcsjDesignOptimizeItemService kcsjDesignOptimizeItemService;
+
+    @Autowired
+    private ISysSyncInfoService4Sd sysSyncInfoService4Sd;
 
     public KcsjDesignOptimize getKcsjDesignOptimize(KcsjDesignOptimize kcsjDesignOptimize) {
         KcsjDesignOptimize kcsjDesignOptimize1 = kcsjDesignOptimizeMapper.getKcsjDesignOptimize(kcsjDesignOptimize);
@@ -72,10 +75,12 @@ public class KcsjDesignOptimizeServiceImpl implements IKcsjDesignOptimizeService
         if(id == null) {
             id = IdWorker.createId();
             kcsjDesignOptimize.setId(id);
+            kcsjDesignOptimize.setAddOrUpdate("add");
             kcsjDesignOptimize.setCreateUser(SecurityUtils.getSysUser().getNickName());
             kcsjDesignOptimize.setCreateTime(DateUtils.getNowDate());
             i = kcsjDesignOptimizeMapper.insertKcsjDesignOptimize(kcsjDesignOptimize);
         } else {
+            kcsjDesignOptimize.setAddOrUpdate("update");
             kcsjDesignOptimize.setUpdateUser(SecurityUtils.getSysUser().getNickName());
             kcsjDesignOptimize.setUpdateTime(DateUtils.getNowDate());
             i = kcsjDesignOptimizeMapper.updateKcsjDesignOptimize(kcsjDesignOptimize);
@@ -84,7 +89,19 @@ public class KcsjDesignOptimizeServiceImpl implements IKcsjDesignOptimizeService
         if(CollectionUtils.isNotEmpty(kcsjDesignOptimizeItemList)) {
             kcsjDesignOptimizeItemService.updateKcsjDesignOptimizeItemList(id, kcsjDesignOptimizeItemList);
         }
+
+        this.pushData(kcsjDesignOptimize);
         return i;
+    }
+
+    public void pushData(KcsjDesignOptimize kcsjDesignOptimize){
+        Long id = kcsjDesignOptimize.getId();
+        KcsjDesignOptimizeItem item = new KcsjDesignOptimizeItem();
+        item.setOptimizeId(id);
+        List<KcsjDesignOptimizeItem> itemList = kcsjDesignOptimizeItemService.getKcsjDesignOptimizeItemList(item);
+        kcsjDesignOptimize.setKcsjDesignOptimizeItemList(itemList);
+
+        sysSyncInfoService4Sd.pushDesignOptimize(kcsjDesignOptimize);
     }
 
     @Transactional
@@ -110,7 +127,10 @@ public class KcsjDesignOptimizeServiceImpl implements IKcsjDesignOptimizeService
 
     @Transactional
     public int deleteKcsjDesignOptimizeByPks(List<Long> kcsjDesignOptimizePkList) {
-        return kcsjDesignOptimizeMapper.deleteKcsjDesignOptimizeByPks(kcsjDesignOptimizePkList);
+        int i = kcsjDesignOptimizeMapper.deleteKcsjDesignOptimizeByPks(kcsjDesignOptimizePkList);
+
+        sysSyncInfoService4Sd.pushDesignOptimize4Delete(kcsjDesignOptimizePkList);
+        return i;
     }
 
     @Override

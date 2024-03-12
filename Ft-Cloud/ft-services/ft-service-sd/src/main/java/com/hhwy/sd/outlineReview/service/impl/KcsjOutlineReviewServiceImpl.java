@@ -11,7 +11,9 @@ import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sd.common.FlowInfoSearchUtil;
 import com.hhwy.sd.common.constant.BelongBusiness;
 import com.hhwy.sd.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
@@ -24,6 +26,7 @@ import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import io.swagger.v3.oas.annotations.security.OAuthFlow;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +48,10 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
     private KcsjOutlineReviewMapper kcsjOutlineReviewMapper;
     @Autowired
     private ISgjsExpertLibraryService sgjsExpertLibraryService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
 
     public KcsjOutlineReview getKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview) {
@@ -128,11 +135,16 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
     public Long insertKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview) {
         Long id = kcsjOutlineReview.getId();
         if (ObjectUtil.isEmpty(id)) {
+            ProjectDto projectDto = pmServiceApi.getProjectDto();
             id = IdWorker.createId();
             kcsjOutlineReview.setId(id);
             kcsjOutlineReview.setCreateUser(SecurityUtils.getUserName());
             kcsjOutlineReview.setCreateTime(DateUtils.getNowDate());
             kcsjOutlineReview.setTaskStatus("0");
+            kcsjOutlineReview.setValid("0");
+            kcsjOutlineReview.setRegionId(projectDto.getRegionId());
+            kcsjOutlineReview.setRegionName(projectDto.getRegionName());
+            kcsjOutlineReview.setProjectId(projectDto.getProjectId());
             if (StrUtil.isBlank(kcsjOutlineReview.getPtVar4())){
                 kcsjOutlineReview.setVersion(BigDecimal.ONE);
                 kcsjOutlineReview.setPtVar4("V1.0");
@@ -148,6 +160,7 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
             kcsjOutlineReview.setUpdateTime(DateUtils.getNowDate());
             kcsjOutlineReviewMapper.updateKcsjOutlineReview(kcsjOutlineReview);
         }
+        doSendGm();
         List<SgjsExpertLibrary> childList = kcsjOutlineReview.getChildList();
         if (CollUtil.isEmpty(childList)) return id;
         sgjsExpertLibraryService.saveExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_1, childList);
@@ -171,9 +184,18 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         kcsjOutlineReview.setUpdateTime(DateUtils.getNowDate());
         int i = kcsjOutlineReviewMapper.updateKcsjOutlineReview(kcsjOutlineReview);
         Assert.isTrue( i > 0, "未找到数据");
+        doSendGm();
         List<SgjsExpertLibrary> childList = kcsjOutlineReview.getChildList();
         if (CollUtil.isEmpty(childList)) return;
         sgjsExpertLibraryService.saveExpertLibraryList(kcsjOutlineReview.getId(), BelongBusiness.BELONG_BUSINESS_1, childList);
+    }
+
+    //修改
+    @Transactional
+    public void update(KcsjOutlineReview kcsjOutlineReview) {
+        kcsjOutlineReview.setUpdateUser(SecurityUtils.getUserName());
+        kcsjOutlineReview.setUpdateTime(DateUtils.getNowDate());
+        kcsjOutlineReviewMapper.updateKcsjOutlineReview(kcsjOutlineReview);
     }
 
     @Transactional
@@ -229,5 +251,19 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         }
         resultMap.put("list", list);
         return resultMap;
+    }
+
+    //数据推送总部版
+    public void doSendGm() {
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        String projectCode = projectDto.getProjectCode();
+        //全量推送，（已发起审批的）
+        KcsjOutlineReview kcsjOutlineReview = new KcsjOutlineReview();
+        List<KcsjOutlineReview> kcsjOutlineReviewList = kcsjOutlineReviewMapper.getKcsjOutlineReviewList(kcsjOutlineReview);
+        FlowInfoSearchUtil.getFlowInfo(kcsjOutlineReviewList, FlowEnum.KCSJ_PATENT_DECLARE);
+        List<KcsjOutlineReview> collect = kcsjOutlineReviewList.stream()
+                .filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
+        collect.forEach(p -> p.setPtVar5(projectCode));
+        rocketMQTemplate.convertAndSend("kcsj_outline_review:tenantSuccess", collect);
     }
 }

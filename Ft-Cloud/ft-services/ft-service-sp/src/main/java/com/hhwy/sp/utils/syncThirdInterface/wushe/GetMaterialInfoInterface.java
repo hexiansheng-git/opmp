@@ -52,7 +52,6 @@ public class GetMaterialInfoInterface {
     public AjaxResult syncMaterialInfo(@RequestBody Map<String,Object> map){
         Map<String,String> headerMap=new HashMap();
         headerMap.put("apikey",apikey);
-        headerMap.put("authToken",authToken);
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("prjCode",map.get("prjCode"));
         jsonObject.put("pageSize","");

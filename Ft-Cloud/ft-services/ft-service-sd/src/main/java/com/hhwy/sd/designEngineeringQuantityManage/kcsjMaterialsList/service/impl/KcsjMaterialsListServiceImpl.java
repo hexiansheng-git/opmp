@@ -11,6 +11,7 @@ import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.mapper.Kcsj
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.mapper.KcsjMaterialsListMapper;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.service.IKcsjMaterialsListDetailService;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjMaterialsList.service.IKcsjMaterialsListService;
+import com.hhwy.sd.sync.mq.ISysSyncInfoService4Sd;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
 
     @Autowired
     private FileUploadUtil fileUploadUtil;
+
+    @Autowired
+    private ISysSyncInfoService4Sd sysSyncInfoService4Sd;
 
     /**
      * 详情
@@ -134,6 +138,12 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
         if (kcsjMaterialsList.getDetailList() != null && kcsjMaterialsList.getDetailList().size() > 0) {
             handleInsertDetails(kcsjMaterialsList);
         }
+
+        //推送数据到mq
+        if (kcsjMaterialsList!=null){
+            sysSyncInfoService4Sd.pushKcsjMaterialsList(kcsjMaterialsList);
+        }
+
         //新增主表数据
         return kcsjMaterialsListMapper.insertKcsjMaterialsList(kcsjMaterialsList);
     }
@@ -202,6 +212,8 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
     @Transactional
     public int updateKcsjMaterialsList(KcsjMaterialsList kcsjMaterialsList) {
 
+
+
         //校验 项目控制损耗定额不能大于局损耗定额
         List<KcsjMaterialsListDetail> detailList = kcsjMaterialsList.getDetailList();
         for (KcsjMaterialsListDetail kcsjMaterialsListDetail : detailList) {
@@ -217,6 +229,11 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
 
         kcsjMaterialsList.setUpdateUser(SecurityUtils.getUserName());
         kcsjMaterialsList.setUpdateTime(DateUtils.getNowDate());
+        //推送数据到mq
+        if (kcsjMaterialsList!=null){
+            sysSyncInfoService4Sd.pushKcsjMaterialsList(kcsjMaterialsList);
+        }
+
         //删除子表数据
         Long id = kcsjMaterialsList.getId();
         List<Long> list = new ArrayList<>();
@@ -224,6 +241,7 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
         detailMapper.deleteKcsjMaterialsListDetailByMainId(list, SecurityUtils.getUserId().toString());
         //重新插入子表数据
         handleInsertDetails(kcsjMaterialsList);
+
         //修改主表数据
         return kcsjMaterialsListMapper.updateKcsjMaterialsList(kcsjMaterialsList);
     }
@@ -262,6 +280,12 @@ public class KcsjMaterialsListServiceImpl implements IKcsjMaterialsListService {
         kcsjMaterialsListMapper.deleteKcsjMaterialsListByPks(ids, SecurityUtils.getUserId().toString());
         //让其它版本的最新版变为有效
         kcsjMaterialsListMapper.updateNewVersion(listName);
+        //推送数据到总部
+        if (ids!=null){
+            KcsjMaterialsList kcsjMaterialsList1=new KcsjMaterialsList();
+            kcsjMaterialsList1.setDelIdList(ids);
+            sysSyncInfoService4Sd.pushKcsjMaterialsList(kcsjMaterialsList1);
+        }
         //删除子表数据
         return detailMapper.deleteKcsjMaterialsListDetailByMainId(ids, SecurityUtils.getUserId().toString());
     }

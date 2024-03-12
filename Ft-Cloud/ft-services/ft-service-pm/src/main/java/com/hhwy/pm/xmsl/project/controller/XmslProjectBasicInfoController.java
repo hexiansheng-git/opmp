@@ -10,6 +10,7 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.pm.utils.HttpHeadersUtils;
 import com.hhwy.pm.utils.RestTemplateUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
@@ -87,6 +88,11 @@ public class XmslProjectBasicInfoController extends BaseController{
     @GetMapping("getPrjInfo")
     public Map<String,Object> getPrjInfo(){
         return projectBasicInfoService.getPrjInfo();
+    }
+
+    @GetMapping("getProjectDto")
+    public ProjectDto getProjectDto() {
+        return projectBasicInfoService.getProjectDto();
     }
     /**
      * 获取项目基本信息（附带其他信息）

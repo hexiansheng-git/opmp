@@ -205,6 +205,8 @@
       `serial_number`,
       `pt_var4`,
       `pt_var5`,
+      `project_id`,
+      `project_name`
     </trim>
     values
     <foreach collection="kcsjDesignFileManageList" item="item" separator=",">
@@ -233,6 +235,8 @@
         #{item.serialNumber},
         #{item.ptVar4},
         #{item.ptVar5},
+        #{item.projectId},
+        #{item.projectName}
       </trim>
     </foreach>
   </insert>

@@ -1,19 +1,15 @@
 package com.hhwy.sd.designFileManage.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-import com.hhwy.utils.excel.FtExcel;
-import com.hhwy.utils.tree.TreeNode;
-import com.hhwy.utils.tree.TreeUtil;
-import java.util.Date;
-import java.math.BigDecimal;
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.utils.excel.FtExcel;
+import com.hhwy.utils.tree.TreeNode;
 import lombok.Data;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zmh
@@ -196,4 +192,8 @@ public class KcsjDesignFileManage extends TreeNode<KcsjDesignFileManage> {
     @JsonProperty
 //    @FtExcel(name = "预留字段5")
     private String ptVar5;
+    //项目id
+    private Long projectId;
+    //项目名称
+    private String projectName;
 }

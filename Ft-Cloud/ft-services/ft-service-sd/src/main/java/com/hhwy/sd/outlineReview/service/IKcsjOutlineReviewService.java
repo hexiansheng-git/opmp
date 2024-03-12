@@ -33,4 +33,6 @@ public interface IKcsjOutlineReviewService {
     KcsjOutlineReview adjust(KcsjOutlineReview kcsjOutlineReviewParam);
 
     Map<String, Object> getExpertSuggest(KcsjOutlineReview param);
+
+    void update(KcsjOutlineReview param);
 }
