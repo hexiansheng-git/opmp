@@ -141,7 +141,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
                     KcsjEngineeringQuantitiesBillDetail::setChildren);
             kcsjEngineeringQuantitiesBill.setDetailsList(detailsList);
             //处理子表上一个版本工程量字段、计算优化量差字段
-            handleInsertList(kcsjEngineeringQuantitiesBill, kcsjEngineeringQuantitiesBill.getId());
+            handleInsertList(kcsjEngineeringQuantitiesBill, kcsjEngineeringQuantitiesBill.getId(),kcsjEngineeringQuantitiesBill.getDetailsList());
         }
         //推送数据到mq
         if (kcsjEngineeringQuantitiesBill!=null){
@@ -151,7 +151,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         return AjaxResult.success();
     }
 
-    private void handleInsertList(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill, Long mainId) {
+    private void handleInsertList(KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBill, Long mainId,List<KcsjEngineeringQuantitiesBillDetail> insertList) {
         //处理子表数据 获取上一个版本的数据信息  例如：处理V3.0字符串，获取V2.0版本信息  先查主表再查子表
         //获取当前主表数据版本
         String version = kcsjEngineeringQuantitiesBill.getVersion();
@@ -179,7 +179,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
             });
         }
         //新增数据子表数据
-        List<KcsjEngineeringQuantitiesBillDetail> detailsListNew = kcsjEngineeringQuantitiesBill.getDetailsList();
+        List<KcsjEngineeringQuantitiesBillDetail> detailsListNew = insertList;
         List<KcsjEngineeringQuantitiesBillDetail> details = new ArrayList<>();
         //遍历子表，去map中获取上一个版本的数据，设置给子表的上一个版本工程量字段
         for (KcsjEngineeringQuantitiesBillDetail temp : detailsListNew) {
@@ -219,29 +219,23 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         //处理子表新增的数据
         List<KcsjEngineeringQuantitiesBillDetail> detailsList = kcsjEngineeringQuantitiesBill.getDetailsList();
 
+        List<KcsjEngineeringQuantitiesBillDetail> newList=new ArrayList<>();
         //将树形拆成普通列表
-        detailsList = ListTreeUtil.formatList(
+        newList = ListTreeUtil.formatList(
                 detailsList,
                 KcsjEngineeringQuantitiesBillDetail::setId,
                 KcsjEngineeringQuantitiesBillDetail::setPid,
                 KcsjEngineeringQuantitiesBillDetail::getChildren,
                 KcsjEngineeringQuantitiesBillDetail::setChildren);
-        for (KcsjEngineeringQuantitiesBillDetail detail : detailsList) {
-            detail.setMainId(kcsjEngineeringQuantitiesBill.getId());
-            detail.setDelFlag("0");
-        }
-        kcsjEngineeringQuantitiesBill.setDetailsList(detailsList);
-        //推送数据到mq
-        if (kcsjEngineeringQuantitiesBill!=null){
-            sysSyncInfoService4Sd.pushKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
-        }
-        List<KcsjEngineeringQuantitiesBillDetail> addList = new ArrayList<>();
-        addList = detailsList.stream().filter(d -> StringUtils.isNotEmpty(d.getIsAdd()) && d.getIsAdd().equals("1")).collect(Collectors.toList());
-        kcsjEngineeringQuantitiesBill.setDetailsList(addList);
 
+        kcsjEngineeringQuantitiesBill.setDetailsList(newList);
+
+        List<KcsjEngineeringQuantitiesBillDetail> addList = new ArrayList<>();
+        addList = newList.stream().filter(d -> StringUtils.isNotEmpty(d.getIsAdd()) && d.getIsAdd().equals("1")).collect(Collectors.toList());
         if (addList.size() > 0) {
-            handleInsertList(kcsjEngineeringQuantitiesBill, kcsjEngineeringQuantitiesBill.getId());
+            handleInsertList(kcsjEngineeringQuantitiesBill, kcsjEngineeringQuantitiesBill.getId(),addList);
         }
+
         //修改子表数据
         List<KcsjEngineeringQuantitiesBillDetail> updateList = new ArrayList<>();
         updateList = detailsList.stream().filter(d -> StringUtils.isEmpty(d.getIsAdd()) || (!d.getIsAdd().equals("1"))).collect(Collectors.toList());
@@ -251,8 +245,12 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
         if (!CollectionUtils.isEmpty(updateList)) {
             kcsjEngineeringQuantitiesBillDetailMapper.updateKcsjEngineeringQuantitiesBillDetailList(updateList);
         }
-
+        //推送到总部版
+        if (kcsjEngineeringQuantitiesBill!=null){
+            sysSyncInfoService4Sd.pushKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
+        }
         return AjaxResult.success();
+
     }
 
     private void handleUpdate(List<KcsjEngineeringQuantitiesBillDetail> updateList) {

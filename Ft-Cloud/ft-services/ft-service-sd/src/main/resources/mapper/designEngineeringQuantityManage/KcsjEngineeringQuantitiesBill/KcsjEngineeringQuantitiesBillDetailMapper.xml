@@ -156,7 +156,7 @@
         <include refid="selectKcsjEngineeringQuantitiesBillDetailVo"/>
         <where>
             del_flag = "0"
-            and `main_id` = #{kcsjEngineeringQuantitiesBillDetail.id}
+            and `main_id` = #{mainId}
         </where>
         order by create_time asc
     </select>

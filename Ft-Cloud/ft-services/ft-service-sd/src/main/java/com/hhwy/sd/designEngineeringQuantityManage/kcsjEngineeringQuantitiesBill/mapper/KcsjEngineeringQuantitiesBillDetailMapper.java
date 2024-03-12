@@ -35,5 +35,5 @@ public interface KcsjEngineeringQuantitiesBillDetailMapper {
 
     List<KcsjEngineeringQuantitiesBillDetail> getIds(@Param("ids") List<Long> ids);
 
-    List<KcsjEngineeringQuantitiesBillDetail> getKcsjEngineeringQuantitiesBillDetailListByMainId(@Param("kcsjEngineeringQuantitiesBillDetail") KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetail);
+    List<KcsjEngineeringQuantitiesBillDetail> getKcsjEngineeringQuantitiesBillDetailListByMainId(@Param("mainId") Long mainId);
 }
