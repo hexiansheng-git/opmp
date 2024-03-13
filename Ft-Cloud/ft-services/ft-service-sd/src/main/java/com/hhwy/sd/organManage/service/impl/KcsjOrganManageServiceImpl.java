@@ -242,14 +242,14 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
         List<KcsjOrganManage> list = TreeUtil.treeToListWithoutId(treeList);
         List<Long> delIdList = kcsjOrganManage4Update.getDelIdList();
         int i = 0;
-        if(CollectionUtils.isNotEmpty(treeList)) {
-            i =updateKcsjOrganManageList(treeList);
+        if(CollectionUtils.isNotEmpty(list)) {
+            i =updateKcsjOrganManageList(list);
         }
         if(CollectionUtils.isNotEmpty(delIdList)) {
             i = deleteKcsjOrganManageByPks(delIdList);
         }
         //总部版同步
-        syncDataToGm(list,delIdList);
+        //syncDataToGm(list,delIdList);
         return i;
     }
 
