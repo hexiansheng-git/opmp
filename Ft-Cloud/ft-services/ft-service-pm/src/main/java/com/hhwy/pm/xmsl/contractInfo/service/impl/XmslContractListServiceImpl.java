@@ -182,7 +182,6 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         }
         if (updateList.size() > 0) {
             xmslContractListMapper.updateXmslContractListList(updateList);
-            xmslContractListMapper.updateXmslContractListList(updateList);
         }
         //维护祖籍id
         this.handlerAncestors();
@@ -302,8 +301,10 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
     public void handlerAncestors() {
         long begin = System.currentTimeMillis();
         List<XmslContractList> list = this.xmslContractListMapper.getXmslContractList(new XmslContractList());
+        if (CollUtil.isEmpty(list)) return;
         List<XmslContractList> xmslContractLists = TreeNodeUtil.setAncestral(list, list);
         xmslContractLists.forEach(p -> p.setAncestors(p.getPtVar5()));
+        if (CollUtil.isEmpty(xmslContractLists)) return;
         xmslContractListMapper.updateXmslContractListList1(xmslContractLists);
         long usemills = System.currentTimeMillis()-begin;
         logger.info("合同清单同步祖级名称ID，耗时:{}毫秒",usemills);
