@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.wzch.revolverent.service.impl;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
@@ -304,7 +305,8 @@ public class WzchRevolveRentServiceImpl implements IWzchRevolveRentService {
         // 是否生效 新增不能生效
         dto.setValid("0");
         dto.setRentCode(genCodeService.getSetCode(CodeEnum.WRR));
-        dto.setTitle("");
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        dto.setTitle(tenantName+"-"+"周转材租赁策划");
         // 设置新增信息
         if(dto.getId()==null){
             new AddBaseInfoUtil<>().addBaseEntity(dto);
@@ -334,16 +336,18 @@ public class WzchRevolveRentServiceImpl implements IWzchRevolveRentService {
         wzchRevolveRent.setLimitPriceDesc(StringUtils.equals("null",wzchRevolveRent.getLimitPriceDesc())?"":wzchRevolveRent.getLimitPriceDesc());
         List<WzchRevolveRent> masterList = this.wzchRevolveRentMapper.selectWzchRevolveRentList(wzchRevolveRent);
         boolean isNew = CollectionUtils.isEmpty(masterList);
-
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
         if(isNew){
             wzchRevolveRent.setId(IdWorker.createId());
             wzchRevolveRent.setRentCode(genCodeService.getSetCode(CodeEnum.WRR));
             wzchRevolveRent.setTitle("");
             new AddBaseInfoUtil().addBaseEntity(wzchRevolveRent);
+            wzchRevolveRent.setTitle(tenantName+"-"+"周转材租赁策划");
             this.wzchRevolveRentMapper.insertWzchRevolveRent(wzchRevolveRent);
         }else{
             masterList.get(0).setLimitPriceDesc(wzchRevolveRent.getLimitPriceDesc());
             wzchRevolveRent.setId(masterList.get(0).getId());
+            masterList.get(0).setTitle(tenantName+"-"+"周转材租赁策划");
             wzchRevolveRentMapper.updateWzchRevolveRent(masterList.get(0));
         }
         //1、从来源策划中获取来源为当地采购的数据

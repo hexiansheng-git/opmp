@@ -170,6 +170,8 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
         if (wzchPriorApproach.getDeptId() == null) {
             wzchPriorApproach.setDeptId(SecurityUtils.getSysUser().getDeptId());
         }
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        wzchPriorApproach.setTitle(tenantName+"-"+"优先进场物资");
         //处理主表
         if(wzchPriorApproach.getId() == null){
             wzchPriorApproach.setId(IdWorker.createId());

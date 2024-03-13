@@ -156,7 +156,8 @@ public class WzchImportExportSurveyServiceImpl implements IWzchImportExportSurve
     @Transactional
     public Long save(WzchImportExportSurvey wzchImportExportSurvey) {
         checkWzchImportExportSurvey(wzchImportExportSurvey);
-
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        wzchImportExportSurvey.setTitle(tenantName+"-"+"进出口调查");
         if(wzchImportExportSurvey.getId()==null){
             wzchImportExportSurvey.setId(IdWorker.createId());
             fillWzchImportExportSurvey(wzchImportExportSurvey);

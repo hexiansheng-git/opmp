@@ -132,6 +132,8 @@ public class WzchLocalTransportPlanDetailServiceImpl implements IWzchLocalTransp
     @Transactional
     public boolean save(WzchLocalTransportPlan wzchLocalTransportPlan){
         fillWzchLocalTransportPlan(wzchLocalTransportPlan);
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        wzchLocalTransportPlan.setTitle(tenantName+"-"+"当地运输方案策划");
         if(wzchLocalTransportPlan.getId() == null){
             wzchLocalTransportPlan.setId(IdWorker.createId());
             new AddBaseInfoUtil<>().addBaseEntity(wzchLocalTransportPlan);

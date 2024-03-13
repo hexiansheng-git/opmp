@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.wzch.fund.service.impl;
 
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
@@ -290,12 +291,13 @@ public class WzchFundServiceImpl implements IWzchFundService {
         dto.setVersionCode(new BigDecimal("1.0"));
         // 是否生效 新增不能生效
         dto.setValid("0");
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        dto.setTitle(tenantName+"-"+"资金策划");
         // 设置新增信息
         EntityUtils.setCreateUpdateInfo(dto);
         if(dto.getId()==null) {
             dto.setId(IdWorker.createId());
             new AddBaseInfoUtil<>().addBaseEntity(dto);
-            dto.setTitle("");
             dto.setFundCode(genCodeService.getSetCode(CodeEnum.WF));
             int i = this.wzchFundMapper.insertWzchFund(dto);
             // 新增条数不为 1, 失败

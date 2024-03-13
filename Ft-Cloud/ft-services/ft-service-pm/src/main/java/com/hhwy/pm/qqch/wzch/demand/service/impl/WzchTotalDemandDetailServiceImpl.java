@@ -180,7 +180,8 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         fillWzchTotalDemand(wzchTotalDemand);
         fillWzchTotalDemandDetail(wzchTotalDemand);
 
-
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        wzchTotalDemand.setTitle(tenantName+"-"+"物资总需用策划");
         WzchTotalDemand demand = wzchTotalDemandService.selectWzchTotalDemandById(wzchTotalDemand.getId());
         if (demand != null) {
             wzchTotalDemandService.updateWzchTotalDemand(wzchTotalDemand);
@@ -243,7 +244,6 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         //2、获取施工策划  
         QqchTotalDemand queryDemand = new QqchTotalDemand();
         queryDemand.setVersion(version);
-
         List<QqchTotalDemand> totalDemandList = qqchTotalDemandService.getQqchTotalDemandListSource(queryDemand);
         if(CollectionUtils.isEmpty(totalDemandList))
             return ;
@@ -291,6 +291,8 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         String code = genCodeService.getSetCode(CodeEnum.EQU_TOTAL_DEMAND);
         code += genCodeService.fillString(1, 2);
         totalDemand.setDemandCode(code);
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        totalDemand.setTitle(tenantName+"-"+"物资总需用策划");
         this.wzchTotalDemandService.insertWzchTotalDemand(totalDemand);
         this.wzchTotalDemandDetailMapper.batchInsert(addList);
         this.wzchTotalDemandTimeCountService.batchInsert(addTimeList);

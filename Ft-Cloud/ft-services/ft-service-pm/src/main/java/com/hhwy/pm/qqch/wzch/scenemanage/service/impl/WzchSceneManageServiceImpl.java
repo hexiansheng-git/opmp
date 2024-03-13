@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.wzch.scenemanage.service.impl;
 
 import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -148,7 +149,8 @@ public class WzchSceneManageServiceImpl implements WzchSceneManageService {
         // 获取前端传入的物资明细
         List<WzchSceneManageDetail> detailList = dto.getDetailList();
         JyDetailsUtil.jyDetails(detailList, ValidationGroups.Save.class);
-        dto.setTitle(ObjectUtils.nvlString(dto.getTitle()));
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        dto.setTitle(tenantName+"-"+"现场管理策划");
         if(dto.getId()==null){
             dto.setId(IdWorker.createId());
             new AddBaseInfoUtil<>().addBaseEntity(dto);

@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.wzch.priorpurchase.service.impl;
 
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
@@ -233,7 +234,8 @@ public class WzchPriorPurchaseServiceImpl implements IWzchPriorPurchaseService {
         // 设置创建信息
         EntityUtils.setCreateUpdateInfo(wzchPriorPurchaseDTO);
 
-        wzchPriorPurchaseDTO.setTitle("");
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        wzchPriorPurchaseDTO.setTitle(tenantName+"-"+"优先进场物资设备采购策划");
         // 新增
         if(wzchPriorPurchaseDTO.getId() == null){
             wzchPriorPurchaseDTO.setId(IdWorker.createId());
@@ -374,11 +376,12 @@ public class WzchPriorPurchaseServiceImpl implements IWzchPriorPurchaseService {
         dto.setVersion(version);
         List<WzchPriorPurchase> mainList = this.wzchPriorPurchaseMapper.selectWzchPriorPurchaseList(new WzchPriorPurchase(version));
         boolean isNew = CollectionUtils.isEmpty(mainList);
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        dto.setTitle(tenantName+"-"+"优先进场物资设备采购策划");
         if(isNew){
             dto.setId(IdWorker.createId());
             new AddBaseInfoUtil<>().addBaseEntity(dto);
             dto.setPriorPurchaseCode(genCodeService.getSetCode(CodeEnum.WPP));
-            dto.setTitle("");
             wzchPriorPurchaseMapper.insertWzchPriorPurchase(dto);    
         }else{
             BeanUtils.copyProperties(mainList.get(0), dto);

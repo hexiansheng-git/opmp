@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
@@ -150,6 +151,8 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
             adjust.setVersion(temp.getVersion());
             adjust.setLimitPriceDesc(temp.getLimitPriceDesc());
         }
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        adjust.setTitle(tenantName+"-"+"内部调剂材料策划");
         if(adjust.getId() == null){
             adjust.setId(IdWorker.createId());
             new AddBaseInfoUtil<>().addBaseEntity(adjust);
@@ -454,8 +457,9 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
         // 获取前端传入的物资明细
         List<WzchInternalAdjustDetail> detailList = dto.getDetailList();
         JyDetailsUtil.jyDetails(detailList, ValidationGroups.Save.class);
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        dto.setTitle(tenantName+"-"+"内部调剂材料策划");
         if(dto.getId() == null){
-            dto.setTitle("");
             // 设置单据编码
             dto.setAdjustCode("");
             // 设置版本号码

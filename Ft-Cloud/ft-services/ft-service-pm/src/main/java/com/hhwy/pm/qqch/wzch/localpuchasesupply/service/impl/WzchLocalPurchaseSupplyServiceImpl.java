@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.wzch.localpuchasesupply.service.impl;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
@@ -368,7 +369,8 @@ public class WzchLocalPurchaseSupplyServiceImpl implements IWzchLocalPurchaseSup
         // 获取前端传入的物资明细
         List<WzchLocalPurchaseSupplyDetailDTO> detailList = dto.getDetailList();
         JyDetailsUtil.jyDetails(detailList, ValidationGroups.Save.class);
-        dto.setTitle("");
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        dto.setTitle(tenantName+"-"+"属地化采购供应策划");
         // 设置版本号码
         dto.setVersionCode(new BigDecimal("1.0"));
         // 设置新增信息
@@ -401,16 +403,18 @@ public class WzchLocalPurchaseSupplyServiceImpl implements IWzchLocalPurchaseSup
         purchaseSupply.setLimitPriceDesc(StringUtils.equals("null",purchaseSupply.getLimitPriceDesc())?"":purchaseSupply.getLimitPriceDesc());
         List<WzchLocalPurchaseSupply> masterList = this.localPurchaseSupplyMapper.selectWzchPurchaseSupplyList(purchaseSupply);
         boolean isNew = CollectionUtils.isEmpty(masterList);
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
         if(isNew){
             purchaseSupply.setId(IdWorker.createId());
             new AddBaseInfoUtil().addBaseEntity(purchaseSupply);
             purchaseSupply.setSupplyCode(genCodeService.getSetCode(CodeEnum.WLPS));
             purchaseSupply.setValid("0");
-            purchaseSupply.setTitle("");
+            purchaseSupply.setTitle(tenantName+"-"+"属地化采购供应策划");
             this.localPurchaseSupplyMapper.insertWzchPurchaseSupply(purchaseSupply);
         }else{
             masterList.get(0).setLimitPriceDesc(purchaseSupply.getLimitPriceDesc());
             purchaseSupply.setId(masterList.get(0).getId());
+            masterList.get(0).setTitle(tenantName+"-"+"属地化采购供应策划");
             localPurchaseSupplyMapper.updateWzchPurchaseSupply(masterList.get(0));
         }
         //1、从来源策划中获取来源为当地采购的数据

@@ -189,6 +189,8 @@ public class WzchSpecialMaterialPlanDetailServiceImpl implements IWzchSpecialMat
     public Long save(WzchSpecialMaterialPlan wzchSpecialMaterialPlan) {
         fillWzchLocalTransportPlan(wzchSpecialMaterialPlan);
 //        WzchSpecialMaterialPlan plan = wzchSpecialMaterialPlanService.selectWzchSpecialMaterialPlanById(wzchSpecialMaterialPlan.getId());
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        wzchSpecialMaterialPlan.setTitle(tenantName+"-"+"专项物资发运策划");
         if(wzchSpecialMaterialPlan.getId()==null){
             wzchSpecialMaterialPlan.setId(IdWorker.createId());
             new AddBaseInfoUtil<>().addBaseEntity(wzchSpecialMaterialPlan);

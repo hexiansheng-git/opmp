@@ -187,6 +187,8 @@ public class WzchImportExportPlanDetailServiceImpl implements IWzchImportExportP
             throw new BaseException("入参缺失");
         }
         fillwzchImportExportPlan(wzchImportExportPlan);
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        wzchImportExportPlan.setTitle(tenantName+"-"+"进出口策划");
         if(wzchImportExportPlan.getId() == null){
             wzchImportExportPlan.setId(IdWorker.createId());
             new AddBaseInfoUtil<>().addBaseEntity(wzchImportExportPlan);

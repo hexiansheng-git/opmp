@@ -154,6 +154,8 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
         String code = genCodeService.getCode(CodeEnum.EQU_TOTAL_DEMAND);
         code += genCodeService.fillString(1, 2);
         main.setApproachCode(code);
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        main.setTitle(tenantName+"-"+"优先进场物资");
         this.wzchPriorApproachMapper.insertWzchPriorApproach(main);
         wzchPriorApproachDetailService.batchInsert(addList);
         wzchPriorApproachYearCountService.batchInsert(addDetailList);

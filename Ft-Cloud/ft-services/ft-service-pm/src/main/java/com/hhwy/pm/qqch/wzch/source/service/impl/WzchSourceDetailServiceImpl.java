@@ -173,17 +173,17 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         fillWzchSource(wzchSource);
         fillWzchSourceDetail(wzchSource);
         WzchSource source = wzchSourceService.selectWzchSourceById(wzchSource.getId());
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        wzchSource.setTitle(tenantName+"-"+"来源策划");
         if(source==null) {
             wzchSource.setId(IdWorker.createId());
             wzchSource.setPrjCode(SecurityUtils.getTenantKey());
-            wzchSource.setTitle(wzchSource.getVersion()+"");
             wzchSource.setValid("0");
 //            List list = wzchSourceService.selectWzchSourceList(new WzchSource());
 //            if(CollectionUtils.isNotEmpty(list))
 //                throw new RuntimeException("已存在物资来源数据，无法新增。请勿点击过快");
             wzchSourceService.insertWzchSource(wzchSource);
         }else{
-            wzchSource.setTitle(wzchSource.getVersion()+"");
             wzchSourceService.updateWzchSource(wzchSource);
         }
         wzchSourceDetailMapper.deleteWzchSourceDetailBySourdeId(wzchSource.getId());
@@ -424,6 +424,8 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         String code = genCodeService.getSetCode(CodeEnum.EQU_SOURCE);
         code += genCodeService.fillString(1, 2);
         wzchSource.setSourceCode(code);
+        String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
+        wzchSource.setTitle(tenantName+"-"+"来源策划");
         wzchSourceService.insertWzchSource(wzchSource);
         //3、插入来源策划、明细、年份明细
         if(CollectionUtils.isNotEmpty(detailList))
