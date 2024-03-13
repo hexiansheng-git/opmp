@@ -223,6 +223,8 @@ public class SysSyncInfoServiceImpl4Sd implements ISysSyncInfoService4Sd {
             kcsjEngineeringQuantitiesBill.setPtVar2(SecurityUtils.getTenantKey());
             if(prjInfo.get("regionId") != null)kcsjEngineeringQuantitiesBill.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
             kcsjEngineeringQuantitiesBill.setRegionName((String) prjInfo.get("regionName"));
+            if(prjInfo.get("projectId") != null)kcsjEngineeringQuantitiesBill.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+            kcsjEngineeringQuantitiesBill.setProjectName((String) prjInfo.get("projectName"));
             JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(kcsjEngineeringQuantitiesBill));
             rocketMQTemplate.convertAndSend("kcsj_engineering_quantities_bill:tenantSuccess", JSONObject.toJSONString(json));
         }catch(Exception e){
@@ -246,6 +248,8 @@ public class SysSyncInfoServiceImpl4Sd implements ISysSyncInfoService4Sd {
             kcsjMaterialsList.setPtVar2(SecurityUtils.getTenantKey());
             if(prjInfo.get("regionId") != null)kcsjMaterialsList.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
             kcsjMaterialsList.setRegionName((String) prjInfo.get("regionName"));
+            if(prjInfo.get("projectId") != null)kcsjMaterialsList.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+            kcsjMaterialsList.setProjectName((String) prjInfo.get("projectName"));
             JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(kcsjMaterialsList));
             rocketMQTemplate.convertAndSend("kcsj_materials_list:tenantSuccess", JSONObject.toJSONString(json));
         }catch(Exception e){
