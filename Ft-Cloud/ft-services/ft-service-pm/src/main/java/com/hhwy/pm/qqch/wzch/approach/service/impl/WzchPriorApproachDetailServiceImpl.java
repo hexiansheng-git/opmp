@@ -621,7 +621,7 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
             }
             if(wzchPriorApproachDetail.getEarliestReqTime()!=null && wzchPriorApproachDetail.getPresentTime()!=null){
                 if( wzchPriorApproachDetail.getPresentTime().after(wzchPriorApproachDetail.getEarliestReqTime())){
-                    throw new BaseException("第【"+wzchPriorApproachDetail.getOrderNo()+"】行最早需要日期不得早于要求到场日期");
+                    throw new RuntimeException("第【"+wzchPriorApproachDetail.getOrderNo()+"】行最早需要日期不得早于要求到场日期");
                 }
             }
             if(Optional.ofNullable(wzchPriorApproachDetail.getPriorApproachNum()).orElse(new BigDecimal(0)).compareTo(Optional.ofNullable(wzchPriorApproachDetail.getSelfDemandAmount()).orElse(new BigDecimal(0)))==1){

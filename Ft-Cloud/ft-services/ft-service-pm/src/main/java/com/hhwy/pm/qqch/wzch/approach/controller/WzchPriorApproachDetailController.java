@@ -97,6 +97,9 @@ public class WzchPriorApproachDetailController extends BaseController {
         try {
             wzchPriorApproachDetailService.save(wzchPriorApproach);
             return new AjaxResult(200, "保存成功");
+        }catch (BaseException b){
+            b.printStackTrace();
+            throw new BaseException(b.getDefaultMessage());
         }catch (RuntimeException b){
             b.printStackTrace();
             throw new BaseException(b.getMessage());
