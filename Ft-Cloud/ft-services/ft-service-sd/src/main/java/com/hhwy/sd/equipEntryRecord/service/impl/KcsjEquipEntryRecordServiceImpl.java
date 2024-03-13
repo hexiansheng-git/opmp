@@ -155,12 +155,12 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                     KcsjEquipEntryRecord kcsjEquipEntryRecord = new KcsjEquipEntryRecord();
                     kcsjEquipEntryRecord.setTeamName(i.getTeamName());
                     if(StringUtils.isEmpty(i.getTeamName())){
-                        throw new RuntimeException("班组名称不可为空！");
+                        throw new RuntimeException("单位名称不可为空！");
                     }
                     if("0".equals(i.getPid().toString())){
                         List<KcsjEquipEntryRecord> equipEntryRecords = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(kcsjEquipEntryRecord);
                         if(equipEntryRecords.size()>0){
-                            throw new RuntimeException("班组名称不可重复！");
+                            throw new RuntimeException("单位名称不可重复！");
                         }
                     }
                     kcsjEquipEntryRecord.setEquipCode(i.getEquipCode());
