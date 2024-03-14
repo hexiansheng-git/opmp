@@ -45,4 +45,7 @@ public interface SgjsExperProgressManageMapper {
     void deleteAll();
 
     void deleteInfoData(List<SgjsExperProgressManage> list);
+
+    //查询所有
+    List<SgjsExperProgressManage> getAll();
 }

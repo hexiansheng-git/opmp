@@ -7,6 +7,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.DictType;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.sp.techTrain.domain.SgjsTechnicalTraining;
 import com.hhwy.sp.techTrain.mapper.SgjsTechnicalTrainingMapper;
 import com.hhwy.sp.techTrain.service.ISgjsTechnicalTrainingService;
@@ -38,6 +39,9 @@ public class SgjsTechnicalTrainingServiceImpl implements ISgjsTechnicalTrainingS
 
     @Autowired
     private PmServiceApi pmServiceApi;
+
+    @Autowired
+    private ISysSyncInfoService4Sp sysSyncInfoService4Sp;
 
 
     public SgjsTechnicalTraining getSgjsTechnicalTraining(SgjsTechnicalTraining sgjsTechnicalTraining) {
@@ -117,6 +121,10 @@ public class SgjsTechnicalTrainingServiceImpl implements ISgjsTechnicalTrainingS
         //用工具填充创建人，创建时间等字段
         sgjsTechnicalTraining = (SgjsTechnicalTraining) new AddBaseInfoUtil<SgjsTechnicalTraining>().addBaseEntity(sgjsTechnicalTraining);
 
+        //推送数据到总部
+        if(sgjsTechnicalTraining!=null){
+            sysSyncInfoService4Sp.pushSgjsTechnicalTraining(sgjsTechnicalTraining);
+        }
         return AjaxResult.success(sgjsTechnicalTrainingMapper.insertSgjsTechnicalTraining(sgjsTechnicalTraining));
     }
 
@@ -134,6 +142,10 @@ public class SgjsTechnicalTrainingServiceImpl implements ISgjsTechnicalTrainingS
     @Transactional
     public int updateSgjsTechnicalTraining(SgjsTechnicalTraining sgjsTechnicalTraining) {
         sgjsTechnicalTraining = (SgjsTechnicalTraining) new AddBaseInfoUtil<SgjsTechnicalTraining>().updateBaseEntity(sgjsTechnicalTraining);
+        //向总部版推送数据
+        if (sgjsTechnicalTraining!=null){
+            sysSyncInfoService4Sp.pushSgjsTechnicalTraining(sgjsTechnicalTraining);
+        }
         return sgjsTechnicalTrainingMapper.updateSgjsTechnicalTraining(sgjsTechnicalTraining);
     }
 
@@ -156,11 +168,21 @@ public class SgjsTechnicalTrainingServiceImpl implements ISgjsTechnicalTrainingS
         return sgjsTechnicalTrainingMapper.deleteSgjsTechnicalTraining(sgjsTechnicalTraining);
     }
 
+    /**
+     * 删除数据
+     * @param sgjsTechnicalTrainingPkList
+     * @return
+     */
     @Transactional
     public int deleteSgjsTechnicalTrainingByPks(List<Long> sgjsTechnicalTrainingPkList) {
 
         //设置数据删除人
         String delUser = SecurityUtils.getSysUser().getNickName();
+        if (sgjsTechnicalTrainingPkList!=null&&!sgjsTechnicalTrainingPkList.isEmpty()){
+            SgjsTechnicalTraining sgjsTechnicalTraining=new SgjsTechnicalTraining();
+            sgjsTechnicalTraining.setIds(sgjsTechnicalTrainingPkList);
+            sysSyncInfoService4Sp.pushSgjsTechnicalTraining(sgjsTechnicalTraining);
+        }
         return sgjsTechnicalTrainingMapper.deleteSgjsTechnicalTrainingByPks(sgjsTechnicalTrainingPkList, delUser);
     }
 

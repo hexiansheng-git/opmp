@@ -111,6 +111,12 @@ public class SgjsTechnicalTrainingController extends BaseController {
 
     }
 
+    /**
+     * 导出
+     * @param response
+     * @param sgjsTechnicalTrainingParam
+     * @throws IOException
+     */
     @PreAuthorize(hasPermi = "sgjsTechnicalTraining:report")
     @PostMapping("/export")
     public void export(HttpServletResponse response, @RequestBody SgjsTechnicalTraining sgjsTechnicalTrainingParam) throws IOException {

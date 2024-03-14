@@ -85,7 +85,6 @@ public class SgjsExperProgressManageController extends BaseController {
             treeList = sgjsExperProgressManageVo.getTreeList();
             if (CollectionUtils.isNotEmpty(treeList)) {
                 treeList = TreeUtil.treeToListWithLevel(treeList);
-                //treeList = TreeUtil.treeToList(treeList);
             }
         } else {
             List<String> idsStr = new ArrayList<>();
@@ -94,7 +93,6 @@ public class SgjsExperProgressManageController extends BaseController {
             }
             List<SgjsExperProgressManage> list = sgjsExperProgressManageService.getIds(idsStr);
             if (CollectionUtils.isNotEmpty(list)) {
-                //treeList=TreeUtil.treeToListWithLevel(list);
                 treeList = list;
             }
         }
@@ -114,6 +112,11 @@ public class SgjsExperProgressManageController extends BaseController {
     }
 
 
+    /**
+     * 详情
+     * @param sgjsExperProgressManageParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsExperProgressManage:list")
     @GetMapping
     public AjaxResult getSgjsExperProgressManage(@Validated(ValidationGroups.Get.class) SgjsExperProgressManage sgjsExperProgressManageParam) {

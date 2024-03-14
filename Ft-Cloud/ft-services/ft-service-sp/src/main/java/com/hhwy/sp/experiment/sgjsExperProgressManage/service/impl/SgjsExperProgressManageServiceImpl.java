@@ -12,9 +12,11 @@ import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressMa
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManageVo;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.mapper.SgjsExperProgressManageMapper;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.service.ISgjsExperProgressManageService;
+import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,9 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
 
     @Autowired
     private PmServiceApi pmServiceApi;
+
+    @Autowired
+    private ISysSyncInfoService4Sp sysSyncInfoService4Sp;
 
 
     public SgjsExperProgressManage getSgjsExperProgressManage(SgjsExperProgressManage sgjsExperProgressManage) {
@@ -207,7 +212,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
 
 
     /**
-     * 批量新增
+     * 批量保存
      *
      * @param sgjsExperProgressManageVo
      * @return
@@ -230,7 +235,26 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             //处理更新的数据
             handleUpdate(treeToList);
         }
+
+        //推送数据到总部  先查询所有数据
+        pushData();
         return AjaxResult.success();
+    }
+
+    //推送数据到总部版
+    private void pushData() {
+        SgjsExperProgressManageVo vo=new SgjsExperProgressManageVo();
+        List<SgjsExperProgressManage> list=sgjsExperProgressManageMapper.getAll();
+        list= ListTreeUtil.formatTree(
+                list,
+                o -> o.getPid() == 0,
+                (r, n) -> r.getId().equals(n.getPid()),
+                SgjsExperProgressManage::getChildren,
+                SgjsExperProgressManage::setChildren);
+        vo.setTreeList(list);
+        if (list!=null&&!list.isEmpty()){
+            sysSyncInfoService4Sp.pushSgjsExperProgressManage(vo);
+        }
     }
 
 
@@ -255,6 +279,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         if (!CollectionUtils.isEmpty(list)) {
             sgjsExperProgressManageMapper.deleteInfoData(list);
         }
+
     }
 
 
@@ -295,24 +320,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         return total;
 
 
-        /*List<SgjsExperProgressManage> list = new ArrayList<>();
-        List<SgjsExperProgressManage> list1 = sgjsExperProgressManageMapper.getIds(ids);
-        for (int i = 0; i < list1.size(); i++) {
-
-            //找到孩子节点
-            SgjsExperProgressManage sgjsExperProgressManage = new SgjsExperProgressManage();
-            sgjsExperProgressManage.setPid(list1.get(i).getId());
-            List<SgjsExperProgressManage> list2 = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(sgjsExperProgressManage);
-            if (list2.size() > 0) {
-                diguiList2(list2, list1.get(i));
-            }
-            list.add(list1.get(i));
-        }
-        if (list.size() > 0) {
-            list = TreeUtil.treeToListWithoutId(list);
-            list = list.stream().distinct().sorted(Comparator.comparing(SgjsExperProgressManage::getSerialNumber)).collect(Collectors.toList());
-        }
-        return list;*/
     }
 
     public void findTotal(Map<String, SgjsExperProgressManage> map, List<SgjsExperProgressManage> total, SgjsExperProgressManage experProgressManage) {
@@ -328,20 +335,6 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
     }
 
 
-
-    /*private void diguiList2(List<SgjsExperProgressManage> list2, SgjsExperProgressManage manage) {
-        List<SgjsExperProgressManage> list = new ArrayList<>();
-        for (int i = 0; i < list2.size(); i++) {
-            SgjsExperProgressManage planMeasureManage = new SgjsExperProgressManage();
-            planMeasureManage.setPid(list2.get(i).getId());
-            List<SgjsExperProgressManage> list3 = sgjsExperProgressManageMapper.getSgjsExperProgressManageList(planMeasureManage);
-            if (list3.size() > 0) {
-                diguiList2(list3, list2.get(i));
-            }
-            list.add(list2.get(i));
-        }
-        manage.setChildren(list);
-    }*/
 
 
 
