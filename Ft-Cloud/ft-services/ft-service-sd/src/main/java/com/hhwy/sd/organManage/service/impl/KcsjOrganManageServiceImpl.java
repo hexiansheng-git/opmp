@@ -249,7 +249,7 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
             i = deleteKcsjOrganManageByPks(delIdList);
         }
         //总部版同步
-        //syncDataToGm(list,delIdList);
+        syncDataToGm(list,delIdList);
         return i;
     }
 
