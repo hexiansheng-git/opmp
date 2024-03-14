@@ -11,7 +11,7 @@ public interface DataShareDevicePlanMapper {
 
     void dataPush(@Param("prjCode") String prjCode);
 
-    void deleteByOneVersion();
+    void deleteByOneVersion(@Param("prjCode") String prjCode);
 
     void updateValidFlag();
 }

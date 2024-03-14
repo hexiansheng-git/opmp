@@ -21,7 +21,7 @@ public class DataShareDevicePlanService {
     @Transactional
     public void eachStagePush(String tenantKey){
         //清空目标数据库版本为1.0的数据
-//        dataShareDevicePlanMapper.deleteByOneVersion();
+        dataShareDevicePlanMapper.deleteByOneVersion(tenantKey);
         //新增数据
         dataShareDevicePlanMapper.dataPush(tenantKey);
     }

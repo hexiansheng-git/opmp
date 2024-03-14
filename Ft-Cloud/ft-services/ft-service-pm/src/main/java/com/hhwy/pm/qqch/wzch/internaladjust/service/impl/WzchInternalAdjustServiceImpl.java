@@ -459,13 +459,14 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
         JyDetailsUtil.jyDetails(detailList, ValidationGroups.Save.class);
         String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
         dto.setTitle(tenantName+"-"+"内部调剂材料策划");
+        dto.setVersionCodeStr(dto.getVersion()+"");
+        dto.setVersionCode(new BigDecimal(dto.getVersionCodeStr()));
+        dto.setVersionNo(dto.getVersion());
         if(dto.getId() == null){
-            // 设置单据编码
-            dto.setAdjustCode("");
-            // 设置版本号码
-            dto.setVersionCode(new BigDecimal("1.0"));
-            // 是否生效 新增不能生效
-            dto.setValid("0");
+            String code = genCodeService.getCode(CodeEnum.EQU_SPECIALCONTROLPLAN);
+            code += genCodeService.fillString(1, 2);
+            dto.setAdjustCode(code);
+            dto.setVersionCode(new BigDecimal("1.0"));dto.setValid("0");
             // 设置新增信息
             EntityUtils.setCreateUpdateInfo(dto);
             dto.setId(IdWorker.createId());

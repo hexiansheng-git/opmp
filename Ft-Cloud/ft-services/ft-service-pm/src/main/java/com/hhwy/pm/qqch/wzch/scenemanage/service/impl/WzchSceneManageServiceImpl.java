@@ -145,29 +145,27 @@ public class WzchSceneManageServiceImpl implements WzchSceneManageService {
     @Override
     @Transactional
     public long insert(WzchSceneManageDTO dto) {
-        
-        // 获取前端传入的物资明细
+        if(dto.getVersion() == null) dto.setVersion(new BigDecimal("1"));
+        dto.setVersionCode(Double.parseDouble(dto.getVersion().toString()));
+        dto.setVersionCodeStr(dto.getVersion()+"");
         List<WzchSceneManageDetail> detailList = dto.getDetailList();
         JyDetailsUtil.jyDetails(detailList, ValidationGroups.Save.class);
         String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
-        dto.setTitle(tenantName+"-"+"现场管理策划");
+        dto.setTitle("现场管理策划"+"-"+tenantName+"-");
+        dto.setCreateUserName(SecurityUtils.getSysUser().getNickName());
         if(dto.getId()==null){
             dto.setId(IdWorker.createId());
             new AddBaseInfoUtil<>().addBaseEntity(dto);
-            // 设置单据编码
-            dto.setValid("0");
+            dto.setValid("0"); 
             dto.setSceneCode(genCodeService.getSetCode(CodeEnum.WF));
             int i = this.wzchSceneManageMapper.insert(dto);
-            // 新增条数不为 1, 失败
             if (i != 1) throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "新增失败");
         }else{
             new AddBaseInfoUtil<>().updateBaseEntity(dto);
             wzchSceneManageMapper.update(dto);
         }
-        // 新增详情
         this.detailService.insertOrUpdateBatch(detailList, dto.getId());
         if (ButtonMark.CONFIRM.equals(dto.getButtonMark())) {
-            // 插入确认状态
             String menuId = dto.getMenuId();
             String stageIdentity = dto.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);

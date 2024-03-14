@@ -295,7 +295,63 @@
 
         UPDATE `data_share_ws`.sbch_total_demand_plan SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0;
         UPDATE `data_share_ws`.sbch_total_demand_plan_detail SET del_flag = '1' WHERE del_flag = '0' and plan_id in (SELECT id FROM sbch_total_demand_plan WHERE del_flag = '0' AND version = 1.0);
-</update>
+        
+        
+        UPDATE `data_share_ws`.wzch_fund SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};
+        UPDATE `data_share_ws`.wzch_fund_detail SET del_flag = '1' WHERE del_flag = '0' and fund_id in (SELECT id FROM `data_share_ws`.wzch_fund WHERE version = 1.0 and project_code = #{prjCode});
+        
+        UPDATE `data_share_ws`.wzch_import_export_plan SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};
+        UPDATE `data_share_ws`.wzch_import_export_plan_detail SET del_flag = '1' WHERE del_flag = '0' and plan_id in (SELECT id FROM `data_share_ws`.wzch_import_export_plan WHERE  version = 1.0 and project_code = #{prjCode});
+        
+        UPDATE `data_share_ws`.wzch_import_export_survey SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};
+        UPDATE `data_share_ws`.wzch_import_export_survey_country SET del_flag = '1' WHERE del_flag = '0' and survey_id in (SELECT id FROM `data_share_ws`.wzch_import_export_survey WHERE version = 1.0 and project_code = #{prjCode});
+        UPDATE `data_share_ws`.wzch_import_export_survey_customs SET del_flag = '1' WHERE del_flag = '0' and survey_id in (SELECT id FROM `data_share_ws`.wzch_import_export_survey WHERE version = 1.0 and project_code = #{prjCode});
+        
+        UPDATE `data_share_ws`.wzch_internal_adjust SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};
+        UPDATE `data_share_ws`.wzch_internal_adjust_detail SET del_flag = '1' WHERE del_flag = '0' and internal_adjust_id in (SELECT id FROM `data_share_ws`.wzch_internal_adjust WHERE version = 1.0 and project_code = #{prjCode});
+        
+        UPDATE `data_share_ws`.wzch_local_purchase_supply SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};
+        UPDATE `data_share_ws`.wzch_local_purchase_supply_batch_detail SET del_flag = '1' WHERE del_flag = '0' and purchase_supply_id in (SELECT id FROM `data_share_ws`.wzch_local_purchase_supply WHERE version = 1.0 and project_code = #{prjCode});
+        UPDATE `data_share_ws`.wzch_local_purchase_supply_detail SET del_flag = '1' WHERE del_flag = '0' and purchase_supply_id in (SELECT id FROM `data_share_ws`.wzch_local_purchase_supply WHERE version = 1.0 and project_code = #{prjCode});
+        
+        UPDATE `data_share_ws`.wzch_local_transport_plan SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};
+        UPDATE `data_share_ws`.wzch_local_transport_plan_detail SET del_flag = '1' WHERE del_flag = '0' and plan_id in (SELECT id FROM `data_share_ws`.wzch_local_transport_plan WHERE version = 1.0 and project_code = #{prjCode});
+        
+        UPDATE `data_share_ws`.wzch_prior_approach SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};
+        UPDATE `data_share_ws`.wzch_prior_approach_detail SET del_flag = '1' WHERE del_flag = '0' and prior_approach_id in (SELECT id FROM `data_share_ws`.wzch_prior_approach WHERE  version = 1.0 and project_code = #{prjCode});
+        UPDATE `data_share_ws`.wzch_prior_approach_year_count SET del_flag = '1' WHERE del_flag = '0' and detail_id in (
+            SELECT id FROM `data_share_ws`.wzch_prior_approach_detail  WHERE prior_approach_id in (SELECT id FROM `data_share_ws`.wzch_prior_approach WHERE version = 1.0 and project_code = #{prjCode}));
+        
+        UPDATE `data_share_ws`.wzch_prior_purchase SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};
+        UPDATE `data_share_ws`.wzch_prior_purchase_detail SET del_flag = '1' WHERE del_flag = '0' and prior_purchase_id in (SELECT id FROM `data_share_ws`.wzch_prior_purchase WHERE version = 1.0 and project_code = #{prjCode});
+        
+        UPDATE `data_share_ws`.wzch_purchase_supply SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};
+        UPDATE `data_share_ws`.wzch_purchase_supply_batch_detail SET del_flag = '1' WHERE del_flag = '0' and purchase_supply_id in (SELECT id FROM `data_share_ws`.wzch_purchase_supply WHERE version = 1.0 and project_code = #{prjCode});
+        UPDATE `data_share_ws`.wzch_purchase_supply_detail SET del_flag = '1' WHERE del_flag = '0' and purchase_supply_id in (SELECT id FROM `data_share_ws`.wzch_purchase_supply WHERE version = 1.0 and project_code = #{prjCode});
+        
+        UPDATE `data_share_ws`.wzch_revolve_rent SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};
+        UPDATE `data_share_ws`.wzch_revolve_rent_detail SET del_flag = '1' WHERE del_flag = '0' and revolve_rent_id in (SELECT id FROM `data_share_ws`.wzch_revolve_rent WHERE version = 1.0 and project_code = #{prjCode});
+        
+        UPDATE `data_share_ws`.wzch_scene_manage SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};
+        UPDATE `data_share_ws`.wzch_scene_manage_detail SET del_flag = '1' WHERE del_flag = '0' and scene_manage_id in (SELECT id FROM `data_share_ws`.wzch_scene_manage WHERE version = 1.0 and project_code = #{prjCode});
+        
+        UPDATE `data_share_ws`.wzch_source SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};
+        UPDATE `data_share_ws`.wzch_source_detail SET del_flag = '1' WHERE del_flag = '0' and source_id in (SELECT id FROM `data_share_ws`.wzch_source WHERE version = 1.0 and project_code = #{prjCode});
+        UPDATE `data_share_ws`.wzch_source_approach_year_count SET del_flag = '1' WHERE del_flag = '0' and detail_id in (
+            SELECT id FROM `data_share_ws`.wzch_source_detail  WHERE source_id in (SELECT id FROM `data_share_ws`.wzch_source WHERE version = 1.0 and project_code = #{prjCode}));
+        
+        UPDATE `data_share_ws`.wzch_special_material_plan SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};	
+        UPDATE `data_share_ws`.wzch_special_material_plan_detail SET del_flag = '1' WHERE del_flag = '0' and plan_id in (SELECT id FROM `data_share_ws`.wzch_special_material_plan WHERE version = 1.0 and project_code = #{prjCode});
+        UPDATE `data_share_ws`.wzch_special_material_request_detail SET del_flag = '1' WHERE del_flag = '0' and plan_id in (SELECT id FROM `data_share_ws`.wzch_special_material_plan WHERE version = 1.0 and project_code = #{prjCode});
+        
+        UPDATE `data_share_ws`.wzch_special_project SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};
+        UPDATE `data_share_ws`.wzch_special_project_detail SET del_flag = '1' WHERE del_flag = '0' and special_project_id in (SELECT id FROM `data_share_ws`.wzch_special_project WHERE version = 1.0 and project_code = #{prjCode});
+        
+        UPDATE `data_share_ws`.wzch_total_demand SET del_flag = '1' WHERE del_flag = '0' AND version = 1.0 and project_code = #{prjCode};
+        UPDATE `data_share_ws`.wzch_total_demand_detail SET del_flag = '1' WHERE del_flag = '0' and total_demand_id in (SELECT id FROM `data_share_ws`.wzch_total_demand WHERE  version = 1.0 and project_code = #{prjCode});
+        UPDATE `data_share_ws`.wzch_total_demand_time_count SET del_flag = '1' WHERE del_flag = '0' and total_demand_detail_id in (
+            SELECT id FROM `data_share_ws`.wzch_total_demand_detail  WHERE total_demand_id in (SELECT id FROM `data_share_ws`.wzch_total_demand WHERE version = 1.0 and project_code = #{prjCode}) );
+    </update>      
 
 
     <update id="updateValidFlag">

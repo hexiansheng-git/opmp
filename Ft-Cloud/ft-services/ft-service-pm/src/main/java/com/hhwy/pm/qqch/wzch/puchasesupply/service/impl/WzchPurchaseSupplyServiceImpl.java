@@ -349,6 +349,7 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
         dto.setValid("0");
         dto.setPrjCode(SecurityUtils.getTenantKey());
         // 设置新增信息
+        dto.setCreateUserName(SecurityUtils.getSysUser().getNickName());
         EntityUtils.setCreateUpdateInfo(dto);
         if(dto.getId()==null){
             dto.setId(IdWorker.createId());
