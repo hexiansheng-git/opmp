@@ -51,10 +51,10 @@ public class KcsjOrganManage extends TreeNode<KcsjOrganManage> {
     @Excel(name = "岗位")
     private String postName;
     /**
-     * 字段描述：专业
+     * 字段描述：专业组
      */
     @JsonProperty
-    @Excel(name = "专业")
+    @Excel(name = "专业组")
     private String speciality;
     /**
      * 字段描述：岗位职责

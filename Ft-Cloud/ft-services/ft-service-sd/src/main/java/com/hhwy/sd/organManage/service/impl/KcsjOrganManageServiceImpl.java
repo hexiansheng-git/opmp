@@ -203,9 +203,9 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
             KcsjOrganManage info=new KcsjOrganManage();
             String surveyDesignGroup = ObjectUtils.toString(object.get("surveyDesignGroup"));
             String groupRole = ObjectUtils.toString(object.get("groupRole"));
-            if(StringUtils.isNotEmpty(surveyDesignGroup)) info.setPostName(surveyDesignGroup);
-            if(StringUtils.isNotEmpty(groupRole)) info.setPostName(groupRole);
-            info.setPostJob(ObjectUtils.toString(object.get("postDuty")));
+            if(StringUtils.isNotEmpty(surveyDesignGroup)) info.setSpeciality(surveyDesignGroup);//专业组
+            if(StringUtils.isNotEmpty(groupRole)) info.setPostName(groupRole);//岗位
+            info.setPostJob(ObjectUtils.toString(object.get("postDuty")));//岗位职责
             int num = 0;
             try {
                 String staffEstablish = ObjectUtils.toString(object.get("staffEstablish"));

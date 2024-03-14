@@ -1,11 +1,17 @@
 package com.hhwy.sp.sgjsMeasure.sgjsSpecialMeasure.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.SysSyncInfoLog;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.sgjsMeasure.sgjsSpecialMeasure.domain.SgjsSpecialMeasure;
 import com.hhwy.sp.sgjsMeasure.sgjsSpecialMeasure.mapper.SgjsSpecialMeasureMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsSpecialMeasure.service.ISgjsSpecialMeasureService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +30,14 @@ public class SgjsSpecialMeasureServiceImpl implements ISgjsSpecialMeasureService
 
     @Autowired
     private SgjsSpecialMeasureMapper sgjsSpecialMeasureMapper;
+
+    @Autowired
+    private PmServiceApi pmServiceApi;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
+    private Logger logger= LoggerFactory.getLogger(SgjsSpecialMeasureServiceImpl.class);
 
 
     public SgjsSpecialMeasure getSgjsSpecialMeasure(SgjsSpecialMeasure sgjsSpecialMeasure) {
@@ -55,7 +69,33 @@ public class SgjsSpecialMeasureServiceImpl implements ISgjsSpecialMeasureService
             sgjsSpecialMeasure.setCreateUser(SecurityUtils.getUserName());
             sgjsSpecialMeasure.setCreateTime(DateUtils.getNowDate());
         }
-        return sgjsSpecialMeasureMapper.insertSgjsSpecialMeasureList(sgjsSpecialMeasureList);
+        int i = sgjsSpecialMeasureMapper.insertSgjsSpecialMeasureList(sgjsSpecialMeasureList);
+        syncDataToGm(sgjsSpecialMeasureList);
+        return i;
+    }
+
+    private void syncDataToGm(List<SgjsSpecialMeasure> sgjsSpecialMeasureList) {
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try{
+            rocketMQTemplate.convertAndSend("sgjs_special_measure:tenantSuccess1", JSONObject.toJSONString(sgjsSpecialMeasureList));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            logger.error("报错了【{}】",e.getMessage());
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("sgjs_special_measure");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(JSONObject.toJSONString(sgjsSpecialMeasureList));
+            logger.error("sgjs_special_measure同步失败【{}】,时间：【{}】",JSONObject.toJSONString(sgjsSpecialMeasureList),System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
+        }
     }
 
     @Transactional

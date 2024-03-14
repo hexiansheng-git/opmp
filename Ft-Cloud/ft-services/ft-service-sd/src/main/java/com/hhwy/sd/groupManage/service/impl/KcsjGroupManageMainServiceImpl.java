@@ -85,9 +85,10 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
      * @param subpackageType
      * @return
      */
-    public KcsjGroupManageMain getBySubpackageType(String subpackageType){
+    public KcsjGroupManageMain getBySubpackageType(String subpackageType,Long projectId){
         KcsjGroupManageMain query = new KcsjGroupManageMain();
         query.setSubpackageType(subpackageType);
+        query.setProjectId(projectId);
         return kcsjGroupManageMainMapper.getKcsjGroupManageMain(query);
     }
 
@@ -150,12 +151,13 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
     @Override
     public KcsjGroupManageMainVo getKcsjGroupManageMainVo(KcsjGroupManageMain kcsjGroupManageMain) {
         String subpackageType = kcsjGroupManageMain.getSubpackageType();
+        Long projectId = kcsjGroupManageMain.getProjectId();
         CommonAssert.notBlank(subpackageType,"分包类型不能为空！");
 
         KcsjGroupManageMainVo groupManageMainVo = new KcsjGroupManageMainVo();
 
         /*根据分包类型查询主表*/
-        KcsjGroupManageMain groupManageMain = this.getBySubpackageType(subpackageType);
+        KcsjGroupManageMain groupManageMain = this.getBySubpackageType(subpackageType,projectId);
         if(groupManageMain == null){
             groupManageMainVo.setSubpackageType(subpackageType);
             groupManageMainVo.setContractList(new ArrayList<>());
@@ -225,10 +227,13 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
         this.addAllData(kcsjGroupManageMainVo);
         //数据同步总部
         logger.info("收到顶顶顶顶【{}】",JSONObject.toJSONString(kcsjGroupManageMainVo));
-        syncDataToGm(kcsjGroupManageMainVo);
+       // syncDataToGm(kcsjGroupManageMainVo);
     }
 
     void digui(List<KcsjGroupManageDetail> rst){
+        if(CollectionUtils.isEmpty(rst)){
+            return;
+        }
         for (KcsjGroupManageDetail detail:rst) {
             List<KcsjGroupManageDetail> children = detail.getChildren();
             if(CollectionUtils.isNotEmpty(children)){
@@ -272,7 +277,7 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
      */
     @Transactional
     public void deleteAllData(String subpackageType){
-        KcsjGroupManageMain groupManageMain = this.getBySubpackageType(subpackageType);
+        KcsjGroupManageMain groupManageMain = this.getBySubpackageType(subpackageType,null);
         if(groupManageMain != null){
             Long id = groupManageMain.getId();
             this.deleteById(id);
@@ -289,13 +294,15 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
     @Transactional
     public void addAllData(KcsjGroupManageMainVo kcsjGroupManageMainVo){
         String businessModel = kcsjGroupManageMainVo.getBusinessModel();
+        Long projectId = kcsjGroupManageMainVo.getProjectId();
+        String projectName = kcsjGroupManageMainVo.getProjectName();
         List<KcsjGroupManageContract> contractList = kcsjGroupManageMainVo.getContractList();
         if(StringUtils.isBlank(businessModel) && CollectionUtils.isEmpty(contractList)){
             return;
         }
         String subpackageType = kcsjGroupManageMainVo.getSubpackageType();
         /*插入主表数据*/
-        long mainId = this.addMain(subpackageType, businessModel, kcsjGroupManageMainVo.getFileGroupId());
+        long mainId = this.addMain(subpackageType, businessModel, kcsjGroupManageMainVo.getFileGroupId(),projectId,projectName);
         /*插入子表数据*/
         this.addContractList(mainId,subpackageType,contractList);
     }
@@ -308,13 +315,15 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
      * @return
      */
     @Transactional
-    public long addMain(String subpackageType,String businessModel,String fileGroupId){
+    public long addMain(String subpackageType,String businessModel,String fileGroupId,Long projectId,String projectName){
         KcsjGroupManageMain groupManageMain = new KcsjGroupManageMain();
         long id = IdWorker.createId();
         groupManageMain.setId(id);
         groupManageMain.setSubpackageType(subpackageType);
         groupManageMain.setBusinessModel(businessModel);
         groupManageMain.setFileGroupId(fileGroupId);
+        groupManageMain.setProjectId(projectId);
+        groupManageMain.setProjectName(projectName);
         this.insertKcsjGroupManageMain(groupManageMain);
         return id;
     }

@@ -1,13 +1,18 @@
 package com.hhwy.sp.experiment.sgjsExperimentTotalPlan.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.domain.SgjsExperimentTotalPlan;
 import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.mapper.SgjsExperimentTotalPlanMapper;
 import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.service.ISgjsExperimentTotalPlanService;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +33,10 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
     private SgjsExperimentTotalPlanMapper sgjsExperimentTotalPlanMapper;
     @Autowired
     private PmServiceApi pmServiceApi;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
+    private Logger logger= LoggerFactory.getLogger(SgjsExperimentTotalPlanServiceImpl.class);
 
 
     public SgjsExperimentTotalPlan getSgjsExperimentTotalPlan(SgjsExperimentTotalPlan sgjsExperimentTotalPlan) {
@@ -43,7 +52,39 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
         sgjsExperimentTotalPlan.setId(IdWorker.createId());
         sgjsExperimentTotalPlan.setCreateUser(SecurityUtils.getUserName());
         sgjsExperimentTotalPlan.setCreateTime(DateUtils.getNowDate());
-        return sgjsExperimentTotalPlanMapper.insertSgjsExperimentTotalPlan(sgjsExperimentTotalPlan);
+        int i = sgjsExperimentTotalPlanMapper.insertSgjsExperimentTotalPlan(sgjsExperimentTotalPlan);
+        //总部版同步数据
+        //syncDataToGm(sgjsExperimentTotalPlan);
+        return i;
+    }
+
+    /**
+     * 总部版同步
+     *
+     * @param sgjsExperimentTotalPlan
+     */
+    private void syncDataToGm(SgjsExperimentTotalPlan sgjsExperimentTotalPlan) {
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try{
+            rocketMQTemplate.convertAndSend("sgjs_experiment_total_plan:tenantSuccess1", JSONObject.toJSONString(sgjsExperimentTotalPlan));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            logger.error("报错了【{}】",e.getMessage());
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("sgjs_experiment_total_plan");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(JSONObject.toJSONString(sgjsExperimentTotalPlan));
+            logger.error("sgjs_experiment_total_plan同步失败【{}】,时间：【{}】",JSONObject.toJSONString(sgjsExperimentTotalPlan),System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
+        }
     }
 
     @Transactional

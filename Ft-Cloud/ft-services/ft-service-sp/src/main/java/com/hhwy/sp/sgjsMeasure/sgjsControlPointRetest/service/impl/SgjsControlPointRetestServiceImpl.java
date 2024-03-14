@@ -1,11 +1,17 @@
 package com.hhwy.sp.sgjsMeasure.sgjsControlPointRetest.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.SysSyncInfoLog;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.sgjsMeasure.sgjsControlPointRetest.domain.SgjsControlPointRetest;
 import com.hhwy.sp.sgjsMeasure.sgjsControlPointRetest.mapper.SgjsControlPointRetestMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsControlPointRetest.service.ISgjsControlPointRetestService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +30,13 @@ public class SgjsControlPointRetestServiceImpl implements ISgjsControlPointRetes
 
     @Autowired
     private SgjsControlPointRetestMapper sgjsControlPointRetestMapper;
+    @Autowired
+    private PmServiceApi pmServiceApi;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
+    private Logger logger= LoggerFactory.getLogger(SgjsControlPointRetestServiceImpl.class);
 
 
     public SgjsControlPointRetest getSgjsControlPointRetest(SgjsControlPointRetest sgjsControlPointRetest) {
@@ -55,7 +68,33 @@ public class SgjsControlPointRetestServiceImpl implements ISgjsControlPointRetes
             sgjsControlPointRetest.setCreateUser(SecurityUtils.getUserName());
             sgjsControlPointRetest.setCreateTime(DateUtils.getNowDate());
         }
-        return sgjsControlPointRetestMapper.insertSgjsControlPointRetestList(sgjsControlPointRetestList);
+        int i = sgjsControlPointRetestMapper.insertSgjsControlPointRetestList(sgjsControlPointRetestList);
+        syncDataToGm(sgjsControlPointRetestList);
+        return i;
+    }
+
+    private void syncDataToGm(List<SgjsControlPointRetest> sgjsControlPointRetestList) {
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try{
+            rocketMQTemplate.convertAndSend("sgjs_control_point_retest:tenantSuccess1", JSONObject.toJSONString(sgjsControlPointRetestList));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            logger.error("报错了【{}】",e.getMessage());
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("sgjs_control_point_retest");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(JSONObject.toJSONString(sgjsControlPointRetestList));
+            logger.error("sgjs_control_point_retest同步失败【{}】,时间：【{}】",JSONObject.toJSONString(sgjsControlPointRetestList),System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
+        }
     }
 
     @Transactional

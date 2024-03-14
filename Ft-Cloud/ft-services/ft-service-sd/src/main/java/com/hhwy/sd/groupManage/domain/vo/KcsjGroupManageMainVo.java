@@ -31,4 +31,8 @@ public class KcsjGroupManageMainVo {
     private String fileGroupId;
 
     private List<KcsjGroupManageContract> contractList;
+
+    private Long projectId;
+
+    private String projectName;
 }
