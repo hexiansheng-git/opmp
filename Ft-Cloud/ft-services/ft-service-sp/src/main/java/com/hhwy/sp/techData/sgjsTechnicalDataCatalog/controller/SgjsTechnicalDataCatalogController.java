@@ -4,7 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.nacos.common.utils.CollectionUtils;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.techData.sgjsTechnicalData.domain.SgjsTechnicalData;
 import com.hhwy.sp.techData.sgjsTechnicalDataCatalog.domain.SgjsTechnicalDataCatalog4Update;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -39,6 +42,14 @@ public class SgjsTechnicalDataCatalogController extends BaseController {
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
 
+    @Autowired
+    private PmServiceApi pmServiceApi;
+    private static ProjectDto projectInfo;
+
+    private ProjectDto getProjectDto(){
+        if (projectInfo != null) return projectInfo;
+        return pmServiceApi.getProjectDto();
+    }
 
     @PreAuthorize(hasPermi = "sgjsTechnicalDataCatalog:list")
     @GetMapping
@@ -95,6 +106,12 @@ public class SgjsTechnicalDataCatalogController extends BaseController {
     public void doSendGm(){
         SgjsTechnicalDataCatalog sgjsTechnicalDataCatalog = new SgjsTechnicalDataCatalog();
         List<SgjsTechnicalDataCatalog> sgjsTechnicalDataList = sgjsTechnicalDataCatalogService.getList(sgjsTechnicalDataCatalog);
+        if (CollUtil.isEmpty(sgjsTechnicalDataList)) {
+            //集合为空，推送一个项目编号
+            Long projectId = getProjectDto().getProjectId();
+            sgjsTechnicalDataCatalog.setProjectId(projectId);
+            sgjsTechnicalDataList.add(sgjsTechnicalDataCatalog);
+        }
         rocketMQTemplate.convertAndSend("sgjs_technical_data_catalog:tenantSuccess", sgjsTechnicalDataList);
     }
 

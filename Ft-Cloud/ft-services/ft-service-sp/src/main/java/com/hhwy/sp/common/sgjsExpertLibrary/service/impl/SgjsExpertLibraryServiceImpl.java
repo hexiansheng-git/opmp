@@ -2,6 +2,8 @@ package com.hhwy.sp.common.sgjsExpertLibrary.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.sgjsExpertLibrary.mapper.SgjsExpertLibraryMapper;
@@ -25,6 +27,8 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
 
     @Autowired
     private SgjsExpertLibraryMapper sgjsExpertLibraryMapper;
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
 
     public SgjsExpertLibrary getSgjsExpertLibrary(SgjsExpertLibrary sgjsExpertLibrary) {
@@ -54,6 +58,7 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
         if(CollectionUtils.isEmpty(saveList)){
             return;
         }
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
         //插入数据
         for (SgjsExpertLibrary library : saveList) {
             library.setId(IdWorker.createId());
@@ -62,6 +67,10 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
             library.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             library.setCreateUserName(SecurityUtils.getUserName());
             library.setCreateTime(DateUtils.getNowDate());
+            library.setRegionId(projectDto.getRegionId());
+            library.setRegionName(projectDto.getRegionName());
+            library.setProjectId(projectDto.getProjectId());
+            library.setProjectName(projectDto.getProjectName());
         }
         sgjsExpertLibraryMapper.insertSgjsExpertLibraryList(saveList);
     }
@@ -122,15 +131,16 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
 
     @Override
     public int saveSgjsExpertLibraryList(Long foreignId, String belongBusiness, List<SgjsExpertLibrary> sgjsExpertLibraryList) {
+
         CommonAssert.notNull(foreignId,"外键不能为空！");
         CommonAssert.notBlank(belongBusiness,"所属业务不能为空！");
         SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
         sgjsExpertLibrary.setForeignId(foreignId);
         sgjsExpertLibraryMapper.deleteSgjsExpertLibrary(sgjsExpertLibrary);
-
         if(CollectionUtils.isEmpty(sgjsExpertLibraryList)){
             return 0;
         }
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
         for(SgjsExpertLibrary sgjsExpertLibrary1 : sgjsExpertLibraryList) {
             sgjsExpertLibrary1.setId(IdWorker.createId());
             sgjsExpertLibrary1.setForeignId(foreignId);
@@ -138,6 +148,10 @@ public class SgjsExpertLibraryServiceImpl implements ISgjsExpertLibraryService {
             sgjsExpertLibrary1.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             sgjsExpertLibrary1.setCreateUserName(SecurityUtils.getUserName());
             sgjsExpertLibrary1.setCreateTime(DateUtils.getNowDate());
+            sgjsExpertLibrary1.setRegionId(projectDto.getRegionId());
+            sgjsExpertLibrary1.setRegionName(projectDto.getRegionName());
+            sgjsExpertLibrary1.setProjectId(projectDto.getProjectId());
+            sgjsExpertLibrary1.setProjectName(projectDto.getProjectName());
         }
         return sgjsExpertLibraryMapper.insertSgjsExpertLibraryList(sgjsExpertLibraryList);
     }

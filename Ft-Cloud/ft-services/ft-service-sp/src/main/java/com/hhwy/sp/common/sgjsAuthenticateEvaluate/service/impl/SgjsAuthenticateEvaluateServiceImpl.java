@@ -6,6 +6,8 @@ import java.util.List;
 import cn.hutool.core.collection.CollUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.utils.common.CommonAssert;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
@@ -26,6 +28,8 @@ public class SgjsAuthenticateEvaluateServiceImpl implements ISgjsAuthenticateEva
 
     @Autowired
     private SgjsAuthenticateEvaluateMapper shjsAuthenticateEvaluateMapper;
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
 
     public SgjsAuthenticateEvaluate getShjsAuthenticateEvaluate(SgjsAuthenticateEvaluate shjsAuthenticateEvaluate) {
@@ -48,6 +52,7 @@ public class SgjsAuthenticateEvaluateServiceImpl implements ISgjsAuthenticateEva
         if(CollectionUtils.isEmpty(saveList)){
             return;
         }
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
         //插入数据
         for (SgjsAuthenticateEvaluate evaluate : saveList) {
             evaluate.setId(IdWorker.createId());
@@ -56,6 +61,10 @@ public class SgjsAuthenticateEvaluateServiceImpl implements ISgjsAuthenticateEva
             evaluate.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             evaluate.setCreateUserName(SecurityUtils.getUserName());
             evaluate.setCreateTime(DateUtils.getNowDate());
+            evaluate.setProjectId(projectDto.getProjectId());
+            evaluate.setProjectName(projectDto.getProjectName());
+            evaluate.setRegionId(projectDto.getRegionId());
+            evaluate.setRegionName(projectDto.getRegionName());
         }
         shjsAuthenticateEvaluateMapper.insertShjsAuthenticateEvaluateList(saveList);
     }
@@ -113,6 +122,7 @@ public class SgjsAuthenticateEvaluateServiceImpl implements ISgjsAuthenticateEva
         shjsAuthenticateEvaluate.setForeignId(foreignId);
         shjsAuthenticateEvaluateMapper.deleteShjsAuthenticateEvaluate(shjsAuthenticateEvaluate);
         if(CollectionUtils.isNotEmpty(shjsAuthenticateEvaluateList)) {
+            ProjectDto projectDto = pmServiceApi.getProjectDto();
             for(SgjsAuthenticateEvaluate shjsAuthenticateEvaluate1 : shjsAuthenticateEvaluateList) {
                 shjsAuthenticateEvaluate1.setId(IdWorker.createId());
                 shjsAuthenticateEvaluate1.setForeignId(foreignId);
@@ -120,6 +130,10 @@ public class SgjsAuthenticateEvaluateServiceImpl implements ISgjsAuthenticateEva
                 shjsAuthenticateEvaluate1.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 shjsAuthenticateEvaluate1.setCreateUserName(SecurityUtils.getUserName());
                 shjsAuthenticateEvaluate1.setCreateTime(DateUtils.getNowDate());
+                shjsAuthenticateEvaluate1.setProjectId(projectDto.getProjectId());
+                shjsAuthenticateEvaluate1.setProjectName(projectDto.getProjectName());
+                shjsAuthenticateEvaluate1.setRegionId(projectDto.getRegionId());
+                shjsAuthenticateEvaluate1.setRegionName(projectDto.getRegionName());
             }
             return shjsAuthenticateEvaluateMapper.insertShjsAuthenticateEvaluateList(shjsAuthenticateEvaluateList);
         }

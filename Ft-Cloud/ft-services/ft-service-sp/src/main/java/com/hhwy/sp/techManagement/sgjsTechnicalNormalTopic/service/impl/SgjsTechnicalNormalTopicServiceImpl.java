@@ -55,10 +55,15 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
     private RocketMQTemplate rocketMQTemplate;
     @Autowired
     private PmServiceApi pmServiceApi;
+    private static ProjectDto projectInfo;
 
     //向总部推送数据用
     private static ThreadPoolExecutor executorService = new ThreadPoolExecutor(0, 2, 10, TimeUnit.MINUTES, new ArrayBlockingQueue<>(5));
 
+    private ProjectDto getProjectDto(){
+        if (projectInfo != null) return projectInfo;
+        return pmServiceApi.getProjectDto();
+    }
 
     public SgjsTechnicalNormalTopic getSgjsTechnicalNormalTopic(SgjsTechnicalNormalTopic sgjsTechnicalNormalTopic) {
         return sgjsTechnicalNormalTopicMapper.getSgjsTechnicalNormalTopic(sgjsTechnicalNormalTopic);
@@ -119,7 +124,7 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
         if (CollUtil.isEmpty(sgjsTechnicalNormalTopicList)) {
             return;
         }
-        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        ProjectDto projectDto = getProjectDto();
         List<SgjsTechnicalNormalTopicCost> childSave = new ArrayList<>();
         for (SgjsTechnicalNormalTopic sgjsTechnicalNormalTopic : sgjsTechnicalNormalTopicList) {
             Long id = IdWorker.createId();
@@ -278,13 +283,13 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
     }
 
     /***
-     * 功能描述: 导出功能
+     * 功能描述: 导入功能
      * @param headList 表头
      * @param dataList 数据
      */
     @Transactional
     public AjaxResult importData(List<Map<Integer, String>> headList, List<Map<Integer, String>> dataList) {
-        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        ProjectDto projectDto = getProjectDto();
         List<SgjsTechnicalNormalTopic> mainList = new ArrayList<>();
         List<SgjsTechnicalNormalTopicCost> childList = new ArrayList<>();
         for (Map<Integer, String> integerStringMap : dataList) {
@@ -357,7 +362,15 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
         //主表
         SgjsTechnicalNormalTopic sgjsTechnicalNormalTopic = new SgjsTechnicalNormalTopic();
         List<SgjsTechnicalNormalTopic> sgjsTechnicalNormalTopicList = sgjsTechnicalNormalTopicMapper.getSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopic);
-        if (CollUtil.isEmpty(sgjsTechnicalNormalTopicList)) return;
+        if (CollUtil.isEmpty(sgjsTechnicalNormalTopicList)) {
+            List<SgjsTechnicalNormalTopic> objects = new ArrayList<>();
+            SgjsTechnicalNormalTopic param = new SgjsTechnicalNormalTopic();
+            ProjectDto projectDto = getProjectDto();
+            param.setProjectId(projectDto.getProjectId());
+            objects.add(param);
+            rocketMQTemplate.convertAndSend("sgjs_technical_normal_topic:tenantSuccess", objects);
+            return;
+        }
         //子表
         SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost = new SgjsTechnicalNormalTopicCost();
         List<SgjsTechnicalNormalTopicCost> sgjsTechnicalNormalTopicCostList = sgjsTechnicalNormalTopicCostService.getSgjsTechnicalNormalTopicCostList(sgjsTechnicalNormalTopicCost);

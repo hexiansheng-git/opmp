@@ -40,10 +40,15 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
     private RocketMQTemplate rocketMQTemplate;
     @Autowired
     private PmServiceApi pmServiceApi;
+    private static ProjectDto projectInfo;
 
     //向总部推送数据用
     private static ThreadPoolExecutor executorService = new ThreadPoolExecutor(0, 2, 10, TimeUnit.MINUTES, new ArrayBlockingQueue<>(5));
 
+    private ProjectDto getProjectDto(){
+        if (projectInfo != null) return projectInfo;
+        return pmServiceApi.getProjectDto();
+    }
 
     public SgjsTechnicalFileBlueprint getSgjsTechnicalFileBlueprint(SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint) {
         return sgjsTechnicalFileBlueprintMapper.getSgjsTechnicalFileBlueprint(sgjsTechnicalFileBlueprint);
@@ -141,6 +146,13 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
     public void doSendGm(){
         SgjsTechnicalFileBlueprintParam sgjsTechnicalFileBlueprintParam = new SgjsTechnicalFileBlueprintParam();
         List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList = sgjsTechnicalFileBlueprintMapper.getSgjsTechnicalFileBlueprintList(sgjsTechnicalFileBlueprintParam);
+        if (CollUtil.isEmpty(sgjsTechnicalFileBlueprintList)) {
+            //集合为空，推送一个项目编号
+            SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint = new SgjsTechnicalFileBlueprint();
+            Long projectId = getProjectDto().getProjectId();
+            sgjsTechnicalFileBlueprint.setProjectId(projectId);
+            sgjsTechnicalFileBlueprintList.add(sgjsTechnicalFileBlueprint);
+        }
         rocketMQTemplate.convertAndSend("sgjs_technical_file_blueprint:tenantSuccess", sgjsTechnicalFileBlueprintList);
     }
 }

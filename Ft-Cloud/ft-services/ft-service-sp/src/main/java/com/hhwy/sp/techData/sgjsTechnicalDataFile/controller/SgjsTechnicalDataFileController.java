@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import cn.hutool.core.collection.CollUtil;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.techData.sgjsTechnicalDataCatalog.domain.SgjsTechnicalDataCatalog;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +39,15 @@ public class SgjsTechnicalDataFileController extends BaseController {
     private ISgjsTechnicalDataFileService sgjsTechnicalDataFileService;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
+
+    @Autowired
+    private PmServiceApi pmServiceApi;
+    private static ProjectDto projectInfo;
+
+    private ProjectDto getProjectDto(){
+        if (projectInfo != null) return projectInfo;
+        return pmServiceApi.getProjectDto();
+    }
 
     @GetMapping
     public AjaxResult getSgjsTechnicalDataFile(@Validated(ValidationGroups.Get.class) SgjsTechnicalDataFile sgjsTechnicalDataFileParam) {
@@ -76,6 +88,12 @@ public class SgjsTechnicalDataFileController extends BaseController {
     public void doSendGm(){
         SgjsTechnicalDataFile sgjsTechnicalDataFile = new SgjsTechnicalDataFile();
         List<SgjsTechnicalDataFile> sgjsTechnicalDataFileList = sgjsTechnicalDataFileService.getSgjsTechnicalDataFileList(sgjsTechnicalDataFile);
+        if (CollUtil.isEmpty(sgjsTechnicalDataFileList)) {
+            //集合为空，推送一个项目编号
+            Long projectId = getProjectDto().getProjectId();
+            sgjsTechnicalDataFile.setProjectId(projectId);
+            sgjsTechnicalDataFileList.add(sgjsTechnicalDataFile);
+        }
         rocketMQTemplate.convertAndSend("sgjs_technical_data_file:tenantSuccess", sgjsTechnicalDataFileList);
     }
 

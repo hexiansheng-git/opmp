@@ -2,6 +2,8 @@ package com.hhwy.sp.common.sgjsAchievementAward.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.mapper.SgjsAchievementAwardMapper;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
@@ -28,7 +30,8 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
 
     @Autowired
     private SgjsAchievementAwardMapper sgjsAchievementAwardMapper;
-
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
     public SgjsAchievementAward getSgjsAchievementAward(SgjsAchievementAward sgjsAchievementAward) {
         return sgjsAchievementAwardMapper.getSgjsAchievementAward(sgjsAchievementAward);
@@ -126,6 +129,7 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
         if(CollectionUtils.isEmpty(awardList)){
             return;
         }
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
         //插入数据
         for (SgjsAchievementAward award : awardList) {
             award.setId(IdWorker.createId());
@@ -134,6 +138,10 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
             award.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             award.setCreateUserName(SecurityUtils.getUserName());
             award.setCreateTime(DateUtils.getNowDate());
+            award.setProjectId(projectDto.getProjectId());
+            award.setProjectName(projectDto.getProjectName());
+            award.setRegionId(projectDto.getRegionId());
+            award.setRegionName(projectDto.getRegionName());
         }
         sgjsAchievementAwardMapper.insertSgjsAchievementAwardList(awardList);
     }

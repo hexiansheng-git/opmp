@@ -1,5 +1,6 @@
 package com.hhwy.sp.sciTech.sgjsFourNewsAchievement.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -80,8 +81,15 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
     @Autowired
     private PmServiceApi pmServiceApi;
 
+    private static ProjectDto projectInfo;
+
     //向总部推送数据用
     private static ThreadPoolExecutor executorService = new ThreadPoolExecutor(0, 2, 10, TimeUnit.MINUTES, new ArrayBlockingQueue<>(5));
+
+    private ProjectDto getProjectDto(){
+        if (projectInfo != null) return projectInfo;
+        return pmServiceApi.getProjectDto();
+    }
 
     public SgjsFourNewsAchievement getSgjsFourNewsAchievement(SgjsFourNewsAchievement sgjsFourNewsAchievement) {
         SgjsFourNewsAchievement returnVO = sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievement(sgjsFourNewsAchievement);
@@ -161,7 +169,7 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         Long id = sgjsFourNewsAchievement.getId();
         sgjsFourNewsAchievement.setDataCurrentState(null);
         if(id == null) {
-            ProjectDto projectDto = pmServiceApi.getProjectDto();
+            ProjectDto projectDto =  getProjectDto();
             id = IdWorker.createId();
             sgjsFourNewsAchievement.setId(id);
             sgjsFourNewsAchievement.setCreateUser(SecurityUtils.getSysUser().getNickName());
@@ -296,12 +304,21 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         //主表
         SgjsFourNewsAchievement sgjsFourNewsAchievement = new SgjsFourNewsAchievement();
         List<SgjsFourNewsAchievement> sgjsFourNewsAchievementList = sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievementList(sgjsFourNewsAchievement);
-        if (CollUtil.isEmpty(sgjsFourNewsAchievementList)) return;
+        if (CollUtil.isEmpty(sgjsFourNewsAchievementList)) {
+            //推送空数据
+            sendEmpty();
+            return;
+        }
         //获取流程信息
         FlowInfoSearchUtil.getFlowInfo(sgjsFourNewsAchievementList,FlowEnum.SGJS_FOUR_NEWS_ACHIEVEMENT);
         //（已发起审批的）
         List<SgjsFourNewsAchievement> collect = sgjsFourNewsAchievementList.stream()
                 .filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
+        if (CollUtil.isEmpty(collect)) {
+            //推送空数据
+            sendEmpty();
+            return;
+        }
         //专家
         SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
         List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsExpertLibraryService.getSgjsExpertLibraryList(sgjsExpertLibrary);
@@ -320,5 +337,15 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
             if (CollUtil.isNotEmpty(collect3.get(p.getId()))) p.setSgjsAchievementAwardList(collect3.get(p.getId()));
         });
         rocketMQTemplate.convertAndSend("sgjs_four_news_achievement:tenantSuccess", collect);
+    }
+
+    //推送空数据
+    private void sendEmpty() {
+        List<SgjsFourNewsAchievement> objects = new ArrayList<>();
+        ProjectDto projectDto = getProjectDto();
+        SgjsFourNewsAchievement param = new SgjsFourNewsAchievement();
+        param.setProjectId(projectDto.getProjectId());
+        objects.add(param);
+        rocketMQTemplate.convertAndSend("sgjs_four_news_achievement:tenantSuccess", objects);
     }
 }
