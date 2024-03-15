@@ -109,7 +109,8 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
         if (CollUtil.isNotEmpty(update)){
             sgjsTechnicalFileBlueprintMapper.updateSgjsTechnicalFileBlueprintList(update);
         }
-        executorService.execute(this::doSendGm);
+//        executorService.execute(this::doSendGm);
+        doSendGm();
     }
 
     @Transactional

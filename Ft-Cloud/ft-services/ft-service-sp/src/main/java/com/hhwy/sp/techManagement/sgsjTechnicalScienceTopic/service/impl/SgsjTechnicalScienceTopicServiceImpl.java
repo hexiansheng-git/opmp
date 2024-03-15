@@ -123,7 +123,8 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         sgsjTechnicalScienceTopic.setUpdateUser(SecurityUtils.getUserName());
         sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
         int i = sgsjTechnicalScienceTopicMapper.updateTaskStatus(sgsjTechnicalScienceTopic);
-        executorService.execute(this::doSendGm);
+//        executorService.execute(this::doSendGm);
+        doSendGm();
         return i;
     }
 
@@ -263,7 +264,8 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         }
         //保存主表
         sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
-        executorService.execute(this::doSendGm);
+//        executorService.execute(this::doSendGm);
+        doSendGm();
         return result;
     }
 
@@ -354,7 +356,8 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         Long id = sgsjTechnicalScienceTopic.getId();
         List<SgjsExpertLibrary> libraryList = sgsjTechnicalScienceTopic.getListApply();
         sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_1, libraryList);
-        executorService.execute(this::doSendGm);
+//        executorService.execute(this::doSendGm);
+        doSendGm();
     }
 
     /**
@@ -371,7 +374,8 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         sgsjTechnicalScienceTopic.setId(IdWorker.createId());
         sgsjTechnicalScienceTopic.setPtVar2(String.valueOf(IdWorker.createId()));
         sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
-        executorService.execute(this::doSendGm);
+//        executorService.execute(this::doSendGm);
+        doSendGm();
     }
 
     /**

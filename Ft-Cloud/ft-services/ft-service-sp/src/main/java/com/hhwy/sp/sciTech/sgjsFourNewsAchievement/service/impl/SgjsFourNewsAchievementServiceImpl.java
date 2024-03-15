@@ -193,7 +193,8 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         // 专家
         List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsFourNewsAchievement.getSgjsExpertLibraryList();
         sgjsExpertLibraryService.saveSgjsExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_5,sgjsExpertLibraryList);
-        executorService.execute(this::doSendGm);
+//        executorService.execute(this::doSendGm);
+        doSendGm();
         return sgjsFourNewsAchievement;
     }
 
@@ -236,7 +237,8 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
             }
             sgjsFourNewsAchievementMapper.updateSgjsFourNewsAchievement(sgjsFourNewsAchievement);
         }
-        executorService.execute(this::doSendGm);
+//        executorService.execute(this::doSendGm);
+        doSendGm();
     }
 
 

@@ -167,7 +167,8 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         if (CollUtil.isNotEmpty(childList)) {
             sgjsExpertLibraryService.saveExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_1, childList);
         }
-        executorService.execute(this::doSendGm);
+//        executorService.execute(this::doSendGm);
+        doSendGm();
         return id;
     }
 
@@ -192,7 +193,8 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         if (CollUtil.isNotEmpty(childList)) {
             sgjsExpertLibraryService.saveExpertLibraryList(kcsjOutlineReview.getId(), BelongBusiness.BELONG_BUSINESS_1, childList);
         }
-        executorService.execute(this::doSendGm);
+//        executorService.execute(this::doSendGm);
+        doSendGm();
     }
 
     //修改

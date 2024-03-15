@@ -142,7 +142,8 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
         sgjsTechnicalNormalTopicMapper.insertSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopicList);
         sgjsTechnicalNormalTopicCostService.insertSgjsTechnicalNormalTopicCostList(childSave);
         //数据推送总部版
-        executorService.execute(this::doSendGm);
+//        executorService.execute(this::doSendGm);
+        doSendGm();
     }
 
     @Transactional
@@ -353,7 +354,8 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
         //保存子表
         sgjsTechnicalNormalTopicCostService.insertSgjsTechnicalNormalTopicCostList(childList);
         //数据推送总部版
-        executorService.execute(this::doSendGm);
+//        executorService.execute(this::doSendGm);
+        doSendGm();
         return AjaxResult.success();
     }
 
