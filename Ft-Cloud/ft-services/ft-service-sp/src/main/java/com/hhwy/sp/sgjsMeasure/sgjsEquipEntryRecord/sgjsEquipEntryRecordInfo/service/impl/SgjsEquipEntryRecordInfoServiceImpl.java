@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.SysSyncInfoLog;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.mapper.SgjsEquipEntryRecordMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
@@ -14,6 +16,7 @@ import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDeta
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.service.ISgjsEquipEntryRecordInfoDetailService;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -45,6 +45,10 @@ public class SgjsEquipEntryRecordInfoServiceImpl implements ISgjsEquipEntryRecor
     private ISgjsEquipEntryRecordInfoDetailService sgjsEquipEntryRecordInfoDetailService;
     @Autowired
     private SgjsEquipEntryRecordInfoDetailMapper detailMapper;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
 
     public SgjsEquipEntryRecordInfo getSgjsEquipEntryRecordInfo(SgjsEquipEntryRecordInfo sgjsEquipEntryRecordInfo) {
@@ -181,7 +185,34 @@ public class SgjsEquipEntryRecordInfoServiceImpl implements ISgjsEquipEntryRecor
         if(!CollectionUtils.isEmpty(list)){
             sgjsEquipEntryRecordInfoDetailService.insertSgjsEquipEntryRecordInfoDetailList(list);
         }
+        //总部版同步
+        syncDataToGm(map);
         return 1;
+    }
+
+    private void syncDataToGm(Map<String, Object> map) {
+        map.put("type","2");
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try{
+            rocketMQTemplate.convertAndSend("sgjs_equip_entry_record:tenantSuccess1", JSONObject.toJSONString(map));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            logger.error("报错了【{}】",e.getMessage());
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("sgjs_equip_entry_record");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(JSONObject.toJSONString(map));
+            logger.error("sgjs_equip_entry_record同步失败【{}】,时间：【{}】",JSONObject.toJSONString(map),System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
+        }
     }
 
     /**

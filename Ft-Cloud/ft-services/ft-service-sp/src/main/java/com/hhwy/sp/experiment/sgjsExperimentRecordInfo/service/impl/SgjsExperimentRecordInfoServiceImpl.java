@@ -3,6 +3,8 @@ package com.hhwy.sp.experiment.sgjsExperimentRecordInfo.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.SysSyncInfoLog;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.mapper.SgjsExperimentRecordMapper;
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfo.domain.SgjsExperimentRecordInfo;
@@ -12,6 +14,7 @@ import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.domain.SgjsExperime
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.service.ISgjsExperimentRecordInfoDetailService;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +39,12 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
     private SgjsExperimentRecordInfoMapper sgjsExperimentRecordInfoMapper;
     @Autowired
     private SgjsExperimentRecordMapper sgjsExperimentRecordMapper;
-
     @Autowired
     private ISgjsExperimentRecordInfoDetailService detailService;
+    @Autowired
+    private PmServiceApi pmServiceApi;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     private Logger logger= LoggerFactory.getLogger(SgjsExperimentRecordInfoServiceImpl.class);
 
@@ -152,7 +158,39 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
         if(!CollectionUtils.isEmpty(list)){
             detailService.insertSgjsExperimentRecordInfoDetailList(list);
         }
+        //同步总部版数据
+        syncDataToGm(map);
         return 0;
+    }
+
+    /**
+     * 同步总部版
+     *
+     * @param map
+     */
+    private void syncDataToGm(Map<String, Object> map) {
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        map.put("type","2");
+        try{
+            rocketMQTemplate.convertAndSend("sgjs_experiment_record:tenantSuccess1", JSONObject.toJSONString(map));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            logger.error("报错了【{}】",e.getMessage());
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("sgjs_experiment_record");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(JSONObject.toJSONString(map));
+            logger.error("sgjs_experiment_record同步失败【{}】,时间：【{}】",JSONObject.toJSONString(map),System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
+        }
     }
 
     /**

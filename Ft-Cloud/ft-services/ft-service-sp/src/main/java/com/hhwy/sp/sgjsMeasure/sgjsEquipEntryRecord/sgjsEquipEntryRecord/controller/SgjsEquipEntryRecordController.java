@@ -33,9 +33,6 @@ public class SgjsEquipEntryRecordController extends BaseController{
 
     @Autowired
     private ISgjsEquipEntryRecordService sgjsEquipEntryRecordService;
-    @Autowired
-    private PmServiceApi pmServiceApi;
-
 
 
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:list")

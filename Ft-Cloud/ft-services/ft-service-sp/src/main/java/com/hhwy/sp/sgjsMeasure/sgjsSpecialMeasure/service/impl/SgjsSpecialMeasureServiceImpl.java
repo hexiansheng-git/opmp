@@ -70,6 +70,7 @@ public class SgjsSpecialMeasureServiceImpl implements ISgjsSpecialMeasureService
             sgjsSpecialMeasure.setCreateTime(DateUtils.getNowDate());
         }
         int i = sgjsSpecialMeasureMapper.insertSgjsSpecialMeasureList(sgjsSpecialMeasureList);
+        //同步
         syncDataToGm(sgjsSpecialMeasureList);
         return i;
     }

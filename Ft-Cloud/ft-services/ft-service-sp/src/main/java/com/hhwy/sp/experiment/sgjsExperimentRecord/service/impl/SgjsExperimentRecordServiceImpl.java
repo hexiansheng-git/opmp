@@ -6,6 +6,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.mapper.SgjsExperimentRecordMapper;
@@ -18,12 +19,16 @@ import com.hhwy.sp.utils.syncThirdInterface.wushe.GetMaterialInfoInterface;
 import com.hhwy.sp.utils.syncThirdInterface.wushe.vo.GetMaterialInfoVo;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -45,7 +50,12 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
     @Autowired
     private PmServiceApi pmServiceApi;
     @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+    @Autowired
     private GetMaterialInfoInterface materialInfoInterface;
+
+
+    private Logger logger= LoggerFactory.getLogger(SgjsExperimentRecordServiceImpl.class);
 
 
     public SgjsExperimentRecord getSgjsExperimentRecord(SgjsExperimentRecord sgjsExperimentRecord) {
@@ -152,16 +162,19 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
             info.setPtVar5(ObjectUtils.toString(object.get("id")));
             list.add(info);
         }
+
+        List<SgjsExperimentRecord> insertList =new ArrayList<>();
+
         //查询库中已有所有数据
         List<SgjsExperimentRecord> recordList = sgjsExperimentRecordMapper.getSgjsExperimentRecordList(new SgjsExperimentRecord());
         if(CollectionUtils.isEmpty(recordList)){ //库里没有同步的数据 直接插入
             if(!CollectionUtils.isEmpty(list)){
+                insertList.addAll(list);
                 sgjsExperimentRecordMapper.insertSgjsExperimentRecordList(list);
             }
             return AjaxResult.success(list);
         }
         //库里有的 不做入库操作    没有的做入库操作  只同步库里没有的
-        List<SgjsExperimentRecord> insertList =new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             String syncId = list.get(i).getPtVar5();
             if(StringUtils.isNotEmpty(syncId)){
@@ -175,7 +188,45 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
             sgjsExperimentRecordMapper.insertSgjsExperimentRecordList(insertList);
             return AjaxResult.success(list);
         }
+        //数据同步总部
+        if(!CollectionUtils.isEmpty(insertList)) {
+            logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(insertList));
+            syncDataToGm(insertList);
+        }
         return AjaxResult.success("未同步到新数据！");
+    }
+
+    /**
+     * 从前期策划来的数据直接同步总部版
+     *
+     * @param insertList
+     */
+    private void syncDataToGm(List<SgjsExperimentRecord> insertList) {
+        Map<String,Object> map=new HashMap<>();
+        map.put("type","1");
+        map.put("data",insertList);
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try{
+            rocketMQTemplate.convertAndSend("sgjs_experiment_record:tenantSuccess1", JSONObject.toJSONString(map));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            logger.error("报错了【{}】",e.getMessage());
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("sgjs_experiment_record");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(JSONObject.toJSONString(map));
+            logger.error("sgjs_experiment_record同步失败【{}】,时间：【{}】",JSONObject.toJSONString(map),System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
+        }
+
     }
 
     @Override

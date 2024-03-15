@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.mapper.SgjsEquipEntryRecordMapper;
@@ -16,6 +17,7 @@ import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDeta
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +44,8 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
     private SgjsEquipEntryRecordInfoDetailMapper detailMapper;
     @Autowired
     private PmServiceApi pmServiceApi;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     private Logger logger= LoggerFactory.getLogger(SgjsEquipEntryRecordServiceImpl.class);
 
@@ -166,16 +168,17 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             dataList.add(info);
         }
         //查询库中已有所有数据
+        List<SgjsEquipEntryRecord> insertList =new ArrayList<>();
         List<SgjsEquipEntryRecord> recordList = sgjsEquipEntryRecordMapper.getSgjsEquipEntryRecordList(new SgjsEquipEntryRecord());
         if(CollectionUtils.isEmpty(recordList)){
             if(!CollectionUtils.isEmpty(dataList)){
                 sgjsEquipEntryRecordMapper.insertSgjsEquipEntryRecordList(dataList);
+                insertList.addAll(dataList);
             }
             return AjaxResult.success(dataList);
         }
 
         //库里有的 不做入库操作    没有的做入库操作  只同步库里没有的
-        List<SgjsEquipEntryRecord> insertList =new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             String syncId = list.get(i).getPtVar5();
             if(StringUtils.isNotEmpty(syncId)){
@@ -190,7 +193,39 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             sgjsEquipEntryRecordMapper.insertSgjsEquipEntryRecordList(insertList);
             return AjaxResult.success(list);
         }
+        //同步总部版
+        if(!CollectionUtils.isEmpty(insertList)){
+            logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(insertList));
+            syncDataToGm(insertList);
+        }
         return AjaxResult.success("暂未同步到新数据！");
+    }
+
+    private void syncDataToGm(List<SgjsEquipEntryRecord> insertList) {
+        Map<String,Object> map=new HashMap<>();
+        map.put("type","1");
+        map.put("data",insertList);
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try{
+            rocketMQTemplate.convertAndSend("sgjs_equip_entry_record:tenantSuccess1", JSONObject.toJSONString(map));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            logger.error("报错了【{}】",e.getMessage());
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("sgjs_equip_entry_record");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(JSONObject.toJSONString(map));
+            logger.error("sgjs_equip_entry_record同步失败【{}】,时间：【{}】",JSONObject.toJSONString(map),System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
+        }
     }
 
     @Override
