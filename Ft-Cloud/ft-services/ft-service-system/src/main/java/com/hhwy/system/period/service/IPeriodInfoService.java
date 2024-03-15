@@ -5,8 +5,10 @@ import com.hhwy.domain.base.system.period.PeriodInfo;
 import com.hhwy.domain.base.system.period.vo.PeriodCurrencyInfoVo;
 import com.hhwy.domain.base.system.periodCurrency.PeriodCurrency;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * infoService接口
@@ -133,4 +135,6 @@ public interface IPeriodInfoService {
      * @return
      */
     void dataSync(List<PeriodInfo> list);
+
+    Map<String, BigDecimal> selectAllPeriodByYear(String year);
 }

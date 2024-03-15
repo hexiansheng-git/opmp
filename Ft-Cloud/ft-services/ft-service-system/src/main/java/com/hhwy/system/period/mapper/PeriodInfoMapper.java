@@ -6,7 +6,6 @@ import com.hhwy.domain.base.system.period.vo.PeriodCurrencyInfoVo;
 import com.hhwy.domain.base.system.periodCurrency.PeriodCurrency;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -136,4 +135,6 @@ public interface PeriodInfoMapper {
     int batchInsert(@Param(value = "dataList") List<PeriodInfo> list);
 
     void deleteAll();
+
+    List<PeriodCurrency> selectAllPeriodByYear(@Param("year") String year);
 }

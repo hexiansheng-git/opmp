@@ -93,6 +93,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
                 return AjaxResult.error("请求失败:",throwable.getMessage());
             }
 
+            @Override
+            public AjaxResult selectAllPeriodByYear(String year) {
+                return null;
+            }
+
             /**
              * 根据日期和币种查询汇率
              *

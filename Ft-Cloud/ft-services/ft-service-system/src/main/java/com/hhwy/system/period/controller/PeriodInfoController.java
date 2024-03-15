@@ -19,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.*;
 
 
@@ -173,6 +174,12 @@ public class PeriodInfoController extends BaseController {
     public AjaxResult selectPeriodInfoByDate(@RequestBody PeriodInfo periodInfo){
         PeriodInfo periodInfoByDate = periodInfoService.selectPeriodInfoByDate(periodInfo);
         return AjaxResult.success(periodInfoByDate);
+    }
+
+    @GetMapping( "/selectAllPeriodByYear")
+    public AjaxResult selectAllPeriodByYear(String year){
+        Map<String, BigDecimal> resMap = periodInfoService.selectAllPeriodByYear(year);
+        return AjaxResult.success(resMap);
     }
 
     /**

@@ -91,7 +91,8 @@ public interface SystemServiceApi {
     @PostMapping("/period/info/selectPeriodByYear")
     AjaxResult selectPeriodByYear(@RequestBody PeriodInfo periodInfo);
 
-
+    @GetMapping( "/period/info/selectAllPeriodByYear")
+    AjaxResult selectAllPeriodByYear(@RequestParam("year") String year);
     /**
      * 根据日期和币种查询汇率
      *

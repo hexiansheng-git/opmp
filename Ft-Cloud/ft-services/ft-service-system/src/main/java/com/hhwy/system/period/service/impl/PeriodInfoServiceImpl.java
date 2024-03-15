@@ -18,11 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * infoService业务层处理
@@ -268,5 +267,19 @@ public class PeriodInfoServiceImpl implements IPeriodInfoService {
     public void dataSync(List<PeriodInfo> list) {
 //        periodInfoMapper.deleteAll();
         periodInfoMapper.batchInsert(list);
+    }
+
+    @Override
+    public Map<String, BigDecimal> selectAllPeriodByYear(String year) {
+        List<PeriodCurrency> list = periodInfoMapper.selectAllPeriodByYear(year);
+        Map<String, BigDecimal> resMap = new HashMap<>();
+        List<PeriodCurrency> resList = new ArrayList<>();
+        Map<String, List<PeriodCurrency>> map = list.stream().filter(o -> StringUtils.isNotBlank(o.getCurrencyCode()) && o.getRate() != null).collect(Collectors.groupingBy(PeriodCurrency::getCurrencyCode));
+        for (Map.Entry<String, List<PeriodCurrency>> entry : map.entrySet()) {
+            List<PeriodCurrency> currencyList = entry.getValue();
+            PeriodCurrency currency = currencyList.stream().max(Comparator.comparing(PeriodCurrency::getPeriodCode)).get();
+            resMap.put(currency.getCurrencyCode(), currency.getRate());
+        }
+        return resMap;
     }
 }

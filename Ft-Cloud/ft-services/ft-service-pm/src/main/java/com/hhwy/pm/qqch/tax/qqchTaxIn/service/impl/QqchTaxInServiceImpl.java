@@ -383,15 +383,38 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
      * @return
      */
     public List<TaxInVO.CurrencyVO> getCurrencyInfo(String currencyCodes) {
+
+        Date nowDate = DateUtils.getNowDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(nowDate);
+        int year = calendar.get(Calendar.YEAR);
+        AjaxResult ajaxResult = systemServiceApi.selectAllPeriodByYear(String.valueOf(year));
+        Integer code = (Integer) ajaxResult.get("code");
+        if(code == 500){
+            throw new RuntimeException("获取实时汇率失败！");
+        }
+        Map<String, BigDecimal> dataMap = (Map<String, BigDecimal>) ajaxResult.get("data");
         XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
         xmslContractPayinfo.setCurrencyCodes(StringUtils.isEmpty(currencyCodes) ? null : currencyCodes.split(","));
-        List<XmslContractPayinfo> payInfo = contractPayinfoService.getPayInfo(xmslContractPayinfo);
-        payInfo = payInfo.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        List<TaxInVO.CurrencyVO> res = payInfo.stream().map(item -> {
+        List<XmslContractPayinfo> payInfoList = contractPayinfoService.getPayInfo(xmslContractPayinfo);
+        payInfoList = payInfoList.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        List<TaxInVO.CurrencyVO> res = payInfoList.stream().map(item -> {
             TaxInVO.CurrencyVO currencyVO = new TaxInVO.CurrencyVO();
-            currencyVO.setCurrency(item.getCurrencyCode());
             currencyVO.setCurrencyName(item.getCurrencyName());
-            currencyVO.setRate(getRate(item.getObversionRate()));
+            currencyVO.setCurrency(item.getCurrencyCode());
+            if("USD".equals(item.getCurrencyCode())){
+                currencyVO.setRate(BigDecimal.ONE);
+            }else {
+                String rateType = item.getRateType();
+                if("1".equals(rateType)){
+                    currencyVO.setRate(getRate(item.getObversionRate()));
+                }else {
+                    if(dataMap.containsKey(item.getCurrencyCode())){
+                        BigDecimal rate = dataMap.get(item.getCurrencyCode());
+                        currencyVO.setRate(rate);
+                    }
+                }
+            }
             return currencyVO;
         }).collect(Collectors.toList());
         // 假数据
