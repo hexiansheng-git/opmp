@@ -277,11 +277,16 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
                 .filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
         collect.forEach(p -> p.setPtVar5(projectCode));
         if (CollUtil.isEmpty(collect)) return;
-        rocketMQTemplate.convertAndSend("kcsj_outline_review:tenantSuccess", collect);
         //专家数据
         SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
         sgjsExpertLibrary.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_1);
         List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsExpertLibraryService.getSgjsExpertLibraryList(sgjsExpertLibrary);
-        rocketMQTemplate.convertAndSend("kcsj_outline_review_expert:tenantSuccess", sgjsExpertLibraryList);
+        Map<Long, List<SgjsExpertLibrary>> expertMap = sgjsExpertLibraryList.stream().collect(Collectors.groupingBy(SgjsExpertLibrary::getForeignId));
+        collect.forEach(p -> {
+            if (CollUtil.isNotEmpty(expertMap.get(p.getId()))) {
+                p.setChildList(expertMap.get(p.getId()));
+            }
+        });
+        rocketMQTemplate.convertAndSend("kcsj_outline_review:tenantSuccess", collect);
     }
 }
