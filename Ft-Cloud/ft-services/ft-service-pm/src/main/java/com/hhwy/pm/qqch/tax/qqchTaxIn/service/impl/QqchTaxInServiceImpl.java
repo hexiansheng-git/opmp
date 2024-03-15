@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.tax.qqchTaxIn.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -393,7 +394,9 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         if(code == 500){
             throw new RuntimeException("获取实时汇率失败！");
         }
-        Map<String, BigDecimal> dataMap = (Map<String, BigDecimal>) ajaxResult.get("data");
+        String dataStr = JSONObject.toJSONString(ajaxResult.get("data"));
+        Object parse = JSONObject.parse(dataStr, Map.class.getModifiers());
+        Map<String, Double> dataMap = (Map<String, Double>) parse;
         XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
         xmslContractPayinfo.setCurrencyCodes(StringUtils.isEmpty(currencyCodes) ? null : currencyCodes.split(","));
         List<XmslContractPayinfo> payInfoList = contractPayinfoService.getPayInfo(xmslContractPayinfo);
@@ -410,7 +413,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
                     currencyVO.setRate(getRate(item.getObversionRate()));
                 }else {
                     if(dataMap.containsKey(item.getCurrencyCode())){
-                        BigDecimal rate = dataMap.get(item.getCurrencyCode());
+                        BigDecimal rate = BigDecimal.valueOf(dataMap.get(item.getCurrencyCode()));
                         currencyVO.setRate(rate);
                     }
                 }
