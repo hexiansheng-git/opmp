@@ -8,6 +8,7 @@ import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.hhwy.sp.techData.sgjsTechnicalData.domain.SgjsTechnicalData4Update;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.tree.TreeUtil;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +37,8 @@ public class SgjsTechnicalDataController extends BaseController {
 
     @Autowired
     private ISgjsTechnicalDataService sgjsTechnicalDataService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
 
     @PreAuthorize(hasPermi = "sgjsTechnicalData:list")
@@ -88,8 +91,15 @@ public class SgjsTechnicalDataController extends BaseController {
         if(CollectionUtils.isNotEmpty(delIdList)) {
             sgjsTechnicalDataService.deleteSgjsTechnicalDataByPks(delIdList);
         }
-
+        doSendGm();
         return AjaxResult.success(i);
+    }
+
+    //数据推送总部版
+    public void doSendGm(){
+        SgjsTechnicalData sgjsTechnicalData = new SgjsTechnicalData();
+        List<SgjsTechnicalData> sgjsTechnicalDataList = sgjsTechnicalDataService.getList(sgjsTechnicalData);
+        rocketMQTemplate.convertAndSend("sgjs_technical_data:tenantSuccess", sgjsTechnicalDataList);
     }
 
     @PreAuthorize(hasPermi = "sgjsTechnicalData:remove")

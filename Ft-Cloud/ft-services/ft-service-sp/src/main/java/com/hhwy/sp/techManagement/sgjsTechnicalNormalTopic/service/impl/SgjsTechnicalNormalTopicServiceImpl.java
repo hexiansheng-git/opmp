@@ -14,6 +14,8 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.SgjsTechnicalNormalTopic;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.SgjsTechnicalNormalTopicDTO;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.mapper.SgjsTechnicalNormalTopicMapper;
@@ -22,6 +24,7 @@ import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalTo
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalTopicCost.service.ISgjsTechnicalNormalTopicCostService;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +33,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /***
@@ -44,6 +50,14 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
     private SgjsTechnicalNormalTopicMapper sgjsTechnicalNormalTopicMapper;
     @Autowired
     private ISgjsTechnicalNormalTopicCostService sgjsTechnicalNormalTopicCostService;
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private PmServiceApi pmServiceApi;
+
+    //向总部推送数据用
+    private static ThreadPoolExecutor executorService = new ThreadPoolExecutor(0, 2, 10, TimeUnit.MINUTES, new ArrayBlockingQueue<>(5));
 
 
     public SgjsTechnicalNormalTopic getSgjsTechnicalNormalTopic(SgjsTechnicalNormalTopic sgjsTechnicalNormalTopic) {
@@ -105,18 +119,25 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
         if (CollUtil.isEmpty(sgjsTechnicalNormalTopicList)) {
             return;
         }
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
         List<SgjsTechnicalNormalTopicCost> childSave = new ArrayList<>();
         for (SgjsTechnicalNormalTopic sgjsTechnicalNormalTopic : sgjsTechnicalNormalTopicList) {
             Long id = IdWorker.createId();
             sgjsTechnicalNormalTopic.setId(id);
             sgjsTechnicalNormalTopic.setCreateUser(SecurityUtils.getUserName());
             sgjsTechnicalNormalTopic.setCreateTime(DateUtils.getNowDate());
+            sgjsTechnicalNormalTopic.setRegionId(projectDto.getRegionId());
+            sgjsTechnicalNormalTopic.setRegionName(projectDto.getRegionName());
+            sgjsTechnicalNormalTopic.setProjectId(projectDto.getProjectId());
+            sgjsTechnicalNormalTopic.setPtVar5(projectDto.getProjectCode());
             List<SgjsTechnicalNormalTopicCost> childList = sgjsTechnicalNormalTopic.getChildList();
             childList.forEach(p -> p.setForeignId(id));
             childSave.addAll(childList);
         }
         sgjsTechnicalNormalTopicMapper.insertSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopicList);
         sgjsTechnicalNormalTopicCostService.insertSgjsTechnicalNormalTopicCostList(childSave);
+        //数据推送总部版
+        executorService.execute(this::doSendGm);
     }
 
     @Transactional
@@ -263,12 +284,17 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
      */
     @Transactional
     public AjaxResult importData(List<Map<Integer, String>> headList, List<Map<Integer, String>> dataList) {
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
         List<SgjsTechnicalNormalTopic> mainList = new ArrayList<>();
         List<SgjsTechnicalNormalTopicCost> childList = new ArrayList<>();
         for (Map<Integer, String> integerStringMap : dataList) {
             SgjsTechnicalNormalTopic bean = new SgjsTechnicalNormalTopic();
             Long id = IdWorker.createId();
             bean.setId(id);
+            bean.setRegionId(projectDto.getRegionId());
+            bean.setRegionName(projectDto.getRegionName());
+            bean.setProjectId(projectDto.getProjectId());
+            bean.setPtVar5(projectDto.getProjectCode());
             bean.setRegionName(integerStringMap.get(0));
             bean.setProjectName(integerStringMap.get(1));
             String topicCode = integerStringMap.get(2);
@@ -321,6 +347,26 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
         sgjsTechnicalNormalTopicMapper.insertSgjsTechnicalNormalTopicList(mainList);
         //保存子表
         sgjsTechnicalNormalTopicCostService.insertSgjsTechnicalNormalTopicCostList(childList);
+        //数据推送总部版
+        executorService.execute(this::doSendGm);
         return AjaxResult.success();
+    }
+
+    //数据推送总部版
+    public void doSendGm(){
+        //主表
+        SgjsTechnicalNormalTopic sgjsTechnicalNormalTopic = new SgjsTechnicalNormalTopic();
+        List<SgjsTechnicalNormalTopic> sgjsTechnicalNormalTopicList = sgjsTechnicalNormalTopicMapper.getSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopic);
+        if (CollUtil.isEmpty(sgjsTechnicalNormalTopicList)) return;
+        //子表
+        SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost = new SgjsTechnicalNormalTopicCost();
+        List<SgjsTechnicalNormalTopicCost> sgjsTechnicalNormalTopicCostList = sgjsTechnicalNormalTopicCostService.getSgjsTechnicalNormalTopicCostList(sgjsTechnicalNormalTopicCost);
+        Map<Long, List<SgjsTechnicalNormalTopicCost>> childrenMap = sgjsTechnicalNormalTopicCostList.stream().collect(Collectors.groupingBy(SgjsTechnicalNormalTopicCost::getForeignId));
+        sgjsTechnicalNormalTopicList.forEach(p -> {
+            if (CollUtil.isNotEmpty(childrenMap.get(p.getId()))) {
+                p.setChildList(childrenMap.get(p.getId()));
+            }
+        });
+        rocketMQTemplate.convertAndSend("sgjs_technical_normal_topic:tenantSuccess", sgjsTechnicalNormalTopicList);
     }
 }

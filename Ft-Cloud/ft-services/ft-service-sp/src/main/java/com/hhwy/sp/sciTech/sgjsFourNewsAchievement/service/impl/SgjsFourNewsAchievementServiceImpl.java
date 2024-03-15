@@ -1,15 +1,22 @@
 package com.hhwy.sp.sciTech.sgjsFourNewsAchievement.service.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.constant.BelongBusiness;
@@ -19,7 +26,11 @@ import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
 import com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain.SgjsAuthenticateEvaluate;
 import com.hhwy.sp.common.sgjsAuthenticateEvaluate.service.ISgjsAuthenticateEvaluateService;
+import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
+import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.domain.SgsjTechnicalScienceTopicModify;
 import com.hhwy.system.api.domain.SysUser;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +40,7 @@ import com.hhwy.sp.sciTech.sgjsFourNewsAchievement.service.ISgjsFourNewsAchievem
 import com.hhwy.sp.sciTech.sgjsFourNewsAchievement.domain.SgjsFourNewsAchievement;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.util.Assert;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @author cjh
@@ -63,6 +75,13 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
     @Autowired
     private SystemServiceApi systemServiceApi;
 
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private PmServiceApi pmServiceApi;
+
+    //向总部推送数据用
+    private static ThreadPoolExecutor executorService = new ThreadPoolExecutor(0, 2, 10, TimeUnit.MINUTES, new ArrayBlockingQueue<>(5));
 
     public SgjsFourNewsAchievement getSgjsFourNewsAchievement(SgjsFourNewsAchievement sgjsFourNewsAchievement) {
         SgjsFourNewsAchievement returnVO = sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievement(sgjsFourNewsAchievement);
@@ -142,10 +161,15 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         Long id = sgjsFourNewsAchievement.getId();
         sgjsFourNewsAchievement.setDataCurrentState(null);
         if(id == null) {
+            ProjectDto projectDto = pmServiceApi.getProjectDto();
             id = IdWorker.createId();
             sgjsFourNewsAchievement.setId(id);
             sgjsFourNewsAchievement.setCreateUser(SecurityUtils.getSysUser().getNickName());
             sgjsFourNewsAchievement.setCreateTime(DateUtils.getNowDate());
+            sgjsFourNewsAchievement.setRegionId(projectDto.getRegionId());
+            sgjsFourNewsAchievement.setRegionName(projectDto.getRegionName());
+            sgjsFourNewsAchievement.setProjectId(projectDto.getProjectId());
+            sgjsFourNewsAchievement.setPtVar5(projectDto.getProjectCode());
             sgjsFourNewsAchievementMapper.insertSgjsFourNewsAchievement(sgjsFourNewsAchievement);
         } else {
             sgjsFourNewsAchievement.setUpdateUser(SecurityUtils.getSysUser().getNickName());
@@ -161,6 +185,7 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         // 专家
         List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsFourNewsAchievement.getSgjsExpertLibraryList();
         sgjsExpertLibraryService.saveSgjsExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_5,sgjsExpertLibraryList);
+        executorService.execute(this::doSendGm);
         return sgjsFourNewsAchievement;
     }
 
@@ -203,6 +228,7 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
             }
             sgjsFourNewsAchievementMapper.updateSgjsFourNewsAchievement(sgjsFourNewsAchievement);
         }
+        executorService.execute(this::doSendGm);
     }
 
 
@@ -262,5 +288,37 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
             FlowInfoSearchUtil.getFlowInfo(sgjsFourNewsAchievementList4Ids,FlowEnum.SGJS_FOUR_NEWS_ACHIEVEMENT);
         }
         return sgjsFourNewsAchievementList4Ids;
+    }
+
+    //数据推送总部版
+    public void doSendGm(){
+        //全量推送，（已发起审批的）
+        //主表
+        SgjsFourNewsAchievement sgjsFourNewsAchievement = new SgjsFourNewsAchievement();
+        List<SgjsFourNewsAchievement> sgjsFourNewsAchievementList = sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievementList(sgjsFourNewsAchievement);
+        if (CollUtil.isEmpty(sgjsFourNewsAchievementList)) return;
+        //获取流程信息
+        FlowInfoSearchUtil.getFlowInfo(sgjsFourNewsAchievementList,FlowEnum.SGJS_FOUR_NEWS_ACHIEVEMENT);
+        //（已发起审批的）
+        List<SgjsFourNewsAchievement> collect = sgjsFourNewsAchievementList.stream()
+                .filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
+        //专家
+        SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
+        List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsExpertLibraryService.getSgjsExpertLibraryList(sgjsExpertLibrary);
+        Map<Long, List<SgjsExpertLibrary>> collect1 = sgjsExpertLibraryList.stream().collect(Collectors.groupingBy(SgjsExpertLibrary::getForeignId));
+        //鉴定或评价
+        SgjsAuthenticateEvaluate sgjsAuthenticateEvaluate = new SgjsAuthenticateEvaluate();
+        List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(sgjsAuthenticateEvaluate);
+        Map<Long, List<SgjsAuthenticateEvaluate>> collect2 = shjsAuthenticateEvaluateList.stream().collect(Collectors.groupingBy(SgjsAuthenticateEvaluate::getForeignId));
+        //成果奖项
+        SgjsAchievementAward sgjsAchievementAward = new SgjsAchievementAward();
+        List<SgjsAchievementAward> sgjsAchievementAwardList = sgjsAchievementAwardService.getSgjsAchievementAwardList(sgjsAchievementAward);
+        Map<Long, List<SgjsAchievementAward>> collect3 = sgjsAchievementAwardList.stream().collect(Collectors.groupingBy(SgjsAchievementAward::getForeignId));
+        collect.forEach(p -> {
+            if (CollUtil.isNotEmpty(collect1.get(p.getId()))) p.setSgjsExpertLibraryList(collect1.get(p.getId()));
+            if (CollUtil.isNotEmpty(collect2.get(p.getId()))) p.setShjsAuthenticateEvaluateList(collect2.get(p.getId()));
+            if (CollUtil.isNotEmpty(collect3.get(p.getId()))) p.setSgjsAchievementAwardList(collect3.get(p.getId()));
+        });
+        rocketMQTemplate.convertAndSend("sgjs_four_news_achievement:tenantSuccess", collect);
     }
 }

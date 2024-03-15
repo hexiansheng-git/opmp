@@ -6,8 +6,11 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.techData.util.TreeCountUtils;
 import com.hhwy.utils.tree.TreeUtil;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +30,15 @@ public class SgjsTechnicalDataServiceImpl implements ISgjsTechnicalDataService {
 
     @Autowired
     private SgjsTechnicalDataMapper sgjsTechnicalDataMapper;
-
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
     public SgjsTechnicalData getSgjsTechnicalData(SgjsTechnicalData sgjsTechnicalData) {
         return sgjsTechnicalDataMapper.getSgjsTechnicalData(sgjsTechnicalData);
+    }
+
+    public List<SgjsTechnicalData> getList(SgjsTechnicalData sgjsTechnicalData) {
+        return sgjsTechnicalDataMapper.getSgjsTechnicalDataList(sgjsTechnicalData);
     }
 
     public List<SgjsTechnicalData> getSgjsTechnicalDataList(SgjsTechnicalData sgjsTechnicalData) {
@@ -87,13 +95,17 @@ public class SgjsTechnicalDataServiceImpl implements ISgjsTechnicalDataService {
         }
         List<SgjsTechnicalData> addList = new ArrayList<>();
         List<SgjsTechnicalData> updateList = new ArrayList<>();
-
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
         List<SgjsTechnicalData> sgjsTechnicalData1 = TreeUtil.treeToListWithoutId(sgjsTechnicalDataList);
         for (SgjsTechnicalData sgjsTechnicalData : sgjsTechnicalData1) {
             if("1".equals(sgjsTechnicalData.getIsAdd())) {
                 sgjsTechnicalData.setDataCatalogId(dataCatalogId);
                 sgjsTechnicalData.setCreateUser(SecurityUtils.getSysUser().getNickName());
                 sgjsTechnicalData.setCreateTime(DateUtils.getNowDate());
+                sgjsTechnicalData.setRegionId(projectDto.getRegionId());
+                sgjsTechnicalData.setRegionName(projectDto.getRegionName());
+                sgjsTechnicalData.setProjectId(projectDto.getProjectId());
+                sgjsTechnicalData.setPtVar5(projectDto.getProjectCode());
                 addList.add(sgjsTechnicalData);
             } else {
                 sgjsTechnicalData.setUpdateUser(SecurityUtils.getSysUser().getNickName());

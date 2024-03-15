@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import com.hhwy.sp.techData.sgjsTechnicalDataCatalog.domain.SgjsTechnicalDataCatalog;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +34,8 @@ public class SgjsTechnicalDataFileController extends BaseController {
 
     @Autowired
     private ISgjsTechnicalDataFileService sgjsTechnicalDataFileService;
-
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     @GetMapping
     public AjaxResult getSgjsTechnicalDataFile(@Validated(ValidationGroups.Get.class) SgjsTechnicalDataFile sgjsTechnicalDataFileParam) {
@@ -64,7 +67,16 @@ public class SgjsTechnicalDataFileController extends BaseController {
 
     @PostMapping("/update")
     public AjaxResult updateSgjsTechnicalDataFile(@Validated(ValidationGroups.Update.class) @RequestBody SgjsTechnicalDataFile sgjsTechnicalDataFileParam) {
-        return toAjax(sgjsTechnicalDataFileService.updateSgjsTechnicalDataFile(sgjsTechnicalDataFileParam));
+        int i = sgjsTechnicalDataFileService.updateSgjsTechnicalDataFile(sgjsTechnicalDataFileParam);
+        doSendGm();
+        return toAjax(i);
+    }
+
+    //数据推送总部版
+    public void doSendGm(){
+        SgjsTechnicalDataFile sgjsTechnicalDataFile = new SgjsTechnicalDataFile();
+        List<SgjsTechnicalDataFile> sgjsTechnicalDataFileList = sgjsTechnicalDataFileService.getSgjsTechnicalDataFileList(sgjsTechnicalDataFile);
+        rocketMQTemplate.convertAndSend("sgjs_technical_data_file:tenantSuccess", sgjsTechnicalDataFileList);
     }
 
     @PreAuthorize(hasPermi = "sgjsTechnicalDataFile:update")

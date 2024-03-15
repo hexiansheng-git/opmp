@@ -5,6 +5,9 @@ import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,10 @@ public class SgjsTechnicalDataFileServiceImpl implements ISgjsTechnicalDataFileS
 
     @Autowired
     private SgjsTechnicalDataFileMapper sgjsTechnicalDataFileMapper;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
 
     public SgjsTechnicalDataFile getSgjsTechnicalDataFile(SgjsTechnicalDataFile sgjsTechnicalDataFile) {
@@ -36,9 +43,14 @@ public class SgjsTechnicalDataFileServiceImpl implements ISgjsTechnicalDataFileS
 
     @Transactional
     public int insertSgjsTechnicalDataFile(SgjsTechnicalDataFile sgjsTechnicalDataFile) {
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
         sgjsTechnicalDataFile.setId(IdWorker.createId());
         sgjsTechnicalDataFile.setCreateUser(SecurityUtils.getUserName());
         sgjsTechnicalDataFile.setCreateTime(DateUtils.getNowDate());
+        sgjsTechnicalDataFile.setRegionId(projectDto.getRegionId());
+        sgjsTechnicalDataFile.setRegionName(projectDto.getRegionName());
+        sgjsTechnicalDataFile.setProjectId(projectDto.getProjectId());
+        sgjsTechnicalDataFile.setPtVar5(projectDto.getProjectCode());
         return sgjsTechnicalDataFileMapper.insertSgjsTechnicalDataFile(sgjsTechnicalDataFile);
     }
 

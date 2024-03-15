@@ -55,7 +55,7 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
     private PmServiceApi pmServiceApi;
 
     //向总部推送数据用
-    private static ThreadPoolExecutor executorService = new ThreadPoolExecutor(1, 2, 5, TimeUnit.MINUTES, new ArrayBlockingQueue<>(5));
+    private static ThreadPoolExecutor executorService = new ThreadPoolExecutor(0, 2, 10, TimeUnit.MINUTES, new ArrayBlockingQueue<>(5));
 
     public KcsjOutlineReview getKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview) {
         return kcsjOutlineReviewMapper.getKcsjOutlineReview(kcsjOutlineReview);
@@ -275,8 +275,8 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         //（已发起审批的）
         List<KcsjOutlineReview> collect = kcsjOutlineReviewList.stream()
                 .filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
-        collect.forEach(p -> p.setPtVar5(projectCode));
         if (CollUtil.isEmpty(collect)) return;
+        collect.forEach(p -> p.setPtVar5(projectCode));
         //专家数据
         SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
         sgjsExpertLibrary.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_1);

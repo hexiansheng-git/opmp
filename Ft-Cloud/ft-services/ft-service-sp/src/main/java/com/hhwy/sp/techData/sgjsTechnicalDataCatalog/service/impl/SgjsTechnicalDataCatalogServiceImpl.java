@@ -9,9 +9,12 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.techData.sgjsTechnicalData.service.ISgjsTechnicalDataService;
 import com.hhwy.sp.techData.util.TreeCountUtils;
 import com.hhwy.utils.tree.TreeUtil;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +37,15 @@ public class SgjsTechnicalDataCatalogServiceImpl implements ISgjsTechnicalDataCa
 
     @Autowired
     private ISgjsTechnicalDataService sgjsTechnicalDataService;
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
     public SgjsTechnicalDataCatalog getSgjsTechnicalDataCatalog(SgjsTechnicalDataCatalog sgjsTechnicalDataCatalog) {
         return sgjsTechnicalDataCatalogMapper.getSgjsTechnicalDataCatalog(sgjsTechnicalDataCatalog);
+    }
+
+    public List<SgjsTechnicalDataCatalog> getList(SgjsTechnicalDataCatalog sgjsTechnicalDataCatalog) {
+        return sgjsTechnicalDataCatalogMapper.getSgjsTechnicalDataCatalogList(sgjsTechnicalDataCatalog);
     }
 
     public List<SgjsTechnicalDataCatalog> getSgjsTechnicalDataCatalogList(SgjsTechnicalDataCatalog sgjsTechnicalDataCatalog) {
@@ -86,6 +95,7 @@ public class SgjsTechnicalDataCatalogServiceImpl implements ISgjsTechnicalDataCa
         if(CollectionUtils.isEmpty(sgjsTechnicalDataCatalogList)) {
             return 1;
         }
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
         List<SgjsTechnicalDataCatalog> addList = new ArrayList<>();
         List<SgjsTechnicalDataCatalog> updateList = new ArrayList<>();
         List<SgjsTechnicalDataCatalog> sgjsTechnicalDataCatalogs = TreeUtil.treeToListWithoutId(sgjsTechnicalDataCatalogList);
@@ -93,6 +103,10 @@ public class SgjsTechnicalDataCatalogServiceImpl implements ISgjsTechnicalDataCa
             if("1".equals(sgjsTechnicalDataCatalog.getIsAdd())) {
                 sgjsTechnicalDataCatalog.setCreateUser(SecurityUtils.getSysUser().getNickName());
                 sgjsTechnicalDataCatalog.setCreateTime(DateUtils.getNowDate());
+                sgjsTechnicalDataCatalog.setRegionId(projectDto.getRegionId());
+                sgjsTechnicalDataCatalog.setRegionName(projectDto.getRegionName());
+                sgjsTechnicalDataCatalog.setProjectId(projectDto.getProjectId());
+                sgjsTechnicalDataCatalog.setPtVar5(projectDto.getProjectCode());
                 addList.add(sgjsTechnicalDataCatalog);
             } else {
                 sgjsTechnicalDataCatalog.setUpdateUser(SecurityUtils.getSysUser().getNickName());

@@ -5,13 +5,16 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.common.FileUploadUtil;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
@@ -22,6 +25,8 @@ import com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain.SgjsAuthenticateEvalua
 import com.hhwy.sp.common.sgjsAuthenticateEvaluate.service.ISgjsAuthenticateEvaluateService;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
+import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.SgjsTechnicalNormalTopic;
+import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalTopicCost.domain.SgjsTechnicalNormalTopicCost;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.FileDto;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO;
@@ -35,6 +40,7 @@ import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.idworker.IdWorker;
 import io.seata.common.util.CollectionUtils;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -43,6 +49,9 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -66,13 +75,24 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     private ISgjsExpertLibraryService sgjsExpertLibraryService;
     @Autowired
     private ISgsjTechnicalScienceTopicModifyService technicalScienceTopicModifyService;
-
     @Autowired
     private SystemServiceApi systemServiceApi;
     @Autowired
     private FileUploadUtil fileUploadUtil;
     @Autowired
     private RemoteNoticeService remoteNoticeService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Value("${file.url}")
+    private String fileUrl;
+    @Autowired
+    private PmServiceApi pmServiceApi;
+
+    //向总部推送数据用
+    private static ThreadPoolExecutor executorService = new ThreadPoolExecutor(0, 2, 10, TimeUnit.MINUTES, new ArrayBlockingQueue<>(5));
+
 
     @Transactional
     public int insertSgsjTechnicalScienceTopicList(List<SgsjTechnicalScienceTopic> sgsjTechnicalScienceTopicList) {
@@ -95,7 +115,9 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     public int updateSgsjTechnicalScienceTopic(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic) {
         sgsjTechnicalScienceTopic.setUpdateUser(SecurityUtils.getUserName());
         sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
-        return sgsjTechnicalScienceTopicMapper.updateTaskStatus(sgsjTechnicalScienceTopic);
+        int i = sgsjTechnicalScienceTopicMapper.updateTaskStatus(sgsjTechnicalScienceTopic);
+        executorService.execute(this::doSendGm);
+        return i;
     }
 
     @Transactional
@@ -165,7 +187,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
     }
 
     //获取流程信息
-    private static List<SgsjTechnicalScienceTopic> tableListFlowableInfo(List<SgsjTechnicalScienceTopic> resultList) {
+    private List<SgsjTechnicalScienceTopic> tableListFlowableInfo(List<SgsjTechnicalScienceTopic> resultList) {
         List<SgsjTechnicalScienceTopic> applyList = new ArrayList<>();
         List<SgsjTechnicalScienceTopic> lxList = new ArrayList<>();
         List<SgsjTechnicalScienceTopic> allList = new ArrayList<>();
@@ -234,6 +256,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         }
         //保存主表
         sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
+        executorService.execute(this::doSendGm);
         return result;
     }
 
@@ -296,6 +319,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             String fileName = getFileName(sgsjTechnicalScienceTopic.getTopicFileGroupId());
             sgsjTechnicalScienceTopic.setPtVar5(fileName);
         }
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
         //保存
         if (sgsjTechnicalScienceTopic.getId() == null){
             //保存主表
@@ -303,6 +327,9 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             sgsjTechnicalScienceTopic.setPtVar1(String.valueOf(IdWorker.createId()));
             sgsjTechnicalScienceTopic.setCreateUser(SecurityUtils.getUserName());
             sgsjTechnicalScienceTopic.setCreateTime(DateUtils.getNowDate());
+            sgsjTechnicalScienceTopic.setRegionId(projectDto.getRegionId());
+            sgsjTechnicalScienceTopic.setRegionName(projectDto.getRegionName());
+            sgsjTechnicalScienceTopic.setProjectId(projectDto.getProjectId());
             sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
         }else {
             //修改
@@ -320,6 +347,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         Long id = sgsjTechnicalScienceTopic.getId();
         List<SgjsExpertLibrary> libraryList = sgsjTechnicalScienceTopic.getListApply();
         sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_1, libraryList);
+        executorService.execute(this::doSendGm);
     }
 
     /**
@@ -336,6 +364,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         sgsjTechnicalScienceTopic.setId(IdWorker.createId());
         sgsjTechnicalScienceTopic.setPtVar2(String.valueOf(IdWorker.createId()));
         sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
+        executorService.execute(this::doSendGm);
     }
 
     /**
@@ -730,12 +759,6 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         return resultMap;
     }
 
-    @Autowired
-    private RestTemplate restTemplate;
-
-    @Value("${file.url}")
-    private String fileUrl;
-
     //获取文件名
     private String getFileName(String fileGroupId) {
         if (StrUtil.isBlank(fileGroupId)) return "";
@@ -754,5 +777,46 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             objects.add(fileName + extension);
         }
         return String.join(" | ", objects);
+    }
+
+    //数据推送总部版
+    public void doSendGm(){
+        //全量推送，（已发起审批的）
+        //主表
+        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic = new SgsjTechnicalScienceTopic();
+        List<SgsjTechnicalScienceTopic> sgsjTechnicalScienceTopicList = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopicList(sgsjTechnicalScienceTopic);
+        if (CollUtil.isEmpty(sgsjTechnicalScienceTopicList)) return;
+        //获取流程信息
+        List<SgsjTechnicalScienceTopic> sgsjTechnicalScienceTopics = this.tableListFlowableInfo(sgsjTechnicalScienceTopicList);
+        //（已发起审批的）
+        List<SgsjTechnicalScienceTopic> collect = sgsjTechnicalScienceTopics.stream()
+                .filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
+        //专家
+        SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
+        List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsExpertLibraryService.getSgjsExpertLibraryList(sgjsExpertLibrary);
+        Map<Long, List<SgjsExpertLibrary>> collect1 = sgjsExpertLibraryList.stream().collect(Collectors.groupingBy(SgjsExpertLibrary::getForeignId));
+        //鉴定或评价
+        SgjsAuthenticateEvaluate sgjsAuthenticateEvaluate = new SgjsAuthenticateEvaluate();
+        List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(sgjsAuthenticateEvaluate);
+        Map<Long, List<SgjsAuthenticateEvaluate>> collect2 = shjsAuthenticateEvaluateList.stream().collect(Collectors.groupingBy(SgjsAuthenticateEvaluate::getForeignId));
+        //成果奖项
+        SgjsAchievementAward sgjsAchievementAward = new SgjsAchievementAward();
+        List<SgjsAchievementAward> sgjsAchievementAwardList = sgjsAchievementAwardService.getSgjsAchievementAwardList(sgjsAchievementAward);
+        Map<Long, List<SgjsAchievementAward>> collect3 = sgjsAchievementAwardList.stream().collect(Collectors.groupingBy(SgjsAchievementAward::getForeignId));
+        //修改记录
+        SgsjTechnicalScienceTopicModify sgsjTechnicalScienceTopicModify = new SgsjTechnicalScienceTopicModify();
+        List<SgsjTechnicalScienceTopicModify> sgsjTechnicalScienceTopicModifyList = technicalScienceTopicModifyService.getSgsjTechnicalScienceTopicModifyList(sgsjTechnicalScienceTopicModify);
+        Map<Long, List<SgsjTechnicalScienceTopicModify>> collect4 = sgsjTechnicalScienceTopicModifyList.stream().collect(Collectors.groupingBy(SgsjTechnicalScienceTopicModify::getForeignId));
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        collect.forEach(p -> {
+            if (CollUtil.isNotEmpty(collect1.get(p.getId()))) p.setListApply(collect1.get(p.getId()));
+            if (CollUtil.isNotEmpty(collect2.get(p.getId()))) p.setEvaluateList(collect2.get(p.getId()));
+            if (CollUtil.isNotEmpty(collect3.get(p.getId()))) p.setAwardList(collect3.get(p.getId()));
+            if (CollUtil.isNotEmpty(collect4.get(p.getId()))) p.setListModify(collect4.get(p.getId()));
+            p.setRegionId(projectDto.getRegionId());
+            p.setRegionName(projectDto.getRegionName());
+            p.setProjectId(projectDto.getProjectId());
+        });
+        rocketMQTemplate.convertAndSend("sgsj_technical_science_topic:tenantSuccess", collect);
     }
 }

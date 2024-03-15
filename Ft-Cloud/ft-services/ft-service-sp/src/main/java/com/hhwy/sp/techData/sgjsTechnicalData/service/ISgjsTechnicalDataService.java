@@ -28,4 +28,6 @@ public interface ISgjsTechnicalDataService {
     int deleteSgjsTechnicalDataByCatalog(Long dataCatalogId);
 
     int deleteSgjsTechnicalDataByPks(List<Long> sgjsTechnicalDataPkList);
+
+    List<SgjsTechnicalData> getList(SgjsTechnicalData sgjsTechnicalData);
 }

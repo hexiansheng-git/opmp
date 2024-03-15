@@ -8,6 +8,7 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain.SgjsAuthenticateEvaluate;
+import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.domain.SgsjTechnicalScienceTopicModify;
 import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 
@@ -39,6 +40,9 @@ public class SgsjTechnicalScienceTopic extends CommonBaseEntity {
     private List<SgjsExpertLibrary> listOutline;
     //知识库课题验收
     private List<SgjsExpertLibrary> listAcceptance;
+
+    //修改记录
+    private List<SgsjTechnicalScienceTopicModify> listModify;
 
     /**
      * 字段描述：

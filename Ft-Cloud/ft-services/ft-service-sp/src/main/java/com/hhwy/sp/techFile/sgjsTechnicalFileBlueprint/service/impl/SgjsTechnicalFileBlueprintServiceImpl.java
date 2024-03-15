@@ -2,17 +2,23 @@ package com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprint;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprintParam;
 import com.hhwy.sp.utils.TreeNodeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +36,13 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
 
     @Autowired
     private SgjsTechnicalFileBlueprintMapper sgjsTechnicalFileBlueprintMapper;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private PmServiceApi pmServiceApi;
+
+    //向总部推送数据用
+    private static ThreadPoolExecutor executorService = new ThreadPoolExecutor(0, 2, 10, TimeUnit.MINUTES, new ArrayBlockingQueue<>(5));
 
 
     public SgjsTechnicalFileBlueprint getSgjsTechnicalFileBlueprint(SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint) {
@@ -68,6 +81,7 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
         List<SgjsTechnicalFileBlueprint> save = new ArrayList<>();
         List<SgjsTechnicalFileBlueprint> update = new ArrayList<>();
         List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprints = TreeUtil.treeToListWithoutNewId(sgjsTechnicalFileBlueprintList);
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
         for (SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint : sgjsTechnicalFileBlueprints) {
             String isAdd = sgjsTechnicalFileBlueprint.getIsAdd();
             if (StrUtil.isBlank(isAdd)) {
@@ -76,6 +90,10 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
                 update.add(sgjsTechnicalFileBlueprint);
                 continue;
             }
+            sgjsTechnicalFileBlueprint.setRegionId(projectDto.getRegionId());
+            sgjsTechnicalFileBlueprint.setRegionName(projectDto.getRegionName());
+            sgjsTechnicalFileBlueprint.setProjectId(projectDto.getProjectId());
+            sgjsTechnicalFileBlueprint.setPtVar5(projectDto.getProjectCode());
             sgjsTechnicalFileBlueprint.setCreateUser(SecurityUtils.getUserName());
             sgjsTechnicalFileBlueprint.setCreateTime(DateUtils.getNowDate());
             save.add(sgjsTechnicalFileBlueprint);
@@ -86,7 +104,7 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
         if (CollUtil.isNotEmpty(update)){
             sgjsTechnicalFileBlueprintMapper.updateSgjsTechnicalFileBlueprintList(update);
         }
-        //维护ancestors
+        executorService.execute(this::doSendGm);
     }
 
     @Transactional
@@ -117,5 +135,12 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
 
     public int deleteWithChildren(List<Long> sgjsTechnicalFileBlueprintPkList) {
         return sgjsTechnicalFileBlueprintMapper.deleteWithChildren(sgjsTechnicalFileBlueprintPkList);
+    }
+
+    //数据推送总部版
+    public void doSendGm(){
+        SgjsTechnicalFileBlueprintParam sgjsTechnicalFileBlueprintParam = new SgjsTechnicalFileBlueprintParam();
+        List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList = sgjsTechnicalFileBlueprintMapper.getSgjsTechnicalFileBlueprintList(sgjsTechnicalFileBlueprintParam);
+        rocketMQTemplate.convertAndSend("sgjs_technical_file_blueprint:tenantSuccess", sgjsTechnicalFileBlueprintList);
     }
 }

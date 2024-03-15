@@ -5,7 +5,9 @@ import java.util.List;
 import java.io.IOException;
 
 import com.alibaba.nacos.common.utils.CollectionUtils;
+import com.hhwy.sp.techData.sgjsTechnicalData.domain.SgjsTechnicalData;
 import com.hhwy.sp.techData.sgjsTechnicalDataCatalog.domain.SgjsTechnicalDataCatalog4Update;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +36,8 @@ public class SgjsTechnicalDataCatalogController extends BaseController {
 
     @Autowired
     private ISgjsTechnicalDataCatalogService sgjsTechnicalDataCatalogService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
 
     @PreAuthorize(hasPermi = "sgjsTechnicalDataCatalog:list")
@@ -83,7 +87,15 @@ public class SgjsTechnicalDataCatalogController extends BaseController {
         if(CollectionUtils.isNotEmpty(delIdList)) {
             i += sgjsTechnicalDataCatalogService.deleteSgjsTechnicalDataCatalogByPks(delIdList);
         }
+        doSendGm();
         return AjaxResult.success(i);
+    }
+
+    //数据推送总部版
+    public void doSendGm(){
+        SgjsTechnicalDataCatalog sgjsTechnicalDataCatalog = new SgjsTechnicalDataCatalog();
+        List<SgjsTechnicalDataCatalog> sgjsTechnicalDataList = sgjsTechnicalDataCatalogService.getList(sgjsTechnicalDataCatalog);
+        rocketMQTemplate.convertAndSend("sgjs_technical_data_catalog:tenantSuccess", sgjsTechnicalDataList);
     }
 
     @PreAuthorize(hasPermi = "sgjsTechnicalDataCatalog:remove")
