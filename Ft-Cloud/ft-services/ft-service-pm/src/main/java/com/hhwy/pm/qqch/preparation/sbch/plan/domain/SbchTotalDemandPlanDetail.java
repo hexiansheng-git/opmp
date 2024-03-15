@@ -215,4 +215,6 @@ public class SbchTotalDemandPlanDetail extends CommonBaseEntity {
     private BigDecimal version;
 
     private Long[] ids;
+    
+    private Integer thirdCountryBuyNum;
 }

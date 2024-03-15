@@ -8,6 +8,7 @@
         <result property="id" column="id"/>
         <result property="planId" column="plan_id"/>
         <result property="materialType" column="material_type"/>
+        <result property="thirdCountryBuyNum" column="third_country_buy_num"/>
         <result property="materialCode" column="material_code"/>
         <result property="materialName" column="material_name"/>
         <result property="materialSpec" column="material_spec"/>
@@ -45,7 +46,7 @@
     </resultMap>
 
     <sql id="selectSbchTotalDemandPlanDetailVo">
-        select `id`
+        select third_country_buy_num,`id`
              , `plan_id`
              , `material_type`
              , `material_code`
@@ -98,6 +99,7 @@
                unit                                            as materialUnit,
                MIN(entry_date)                                 as planEntryTime,
                MAX(exit_date)                                  as planExitTime,
+               IFNULL(sum(third_country_buy_num), 0)                as thirdCountryBuyNum,
                IFNULL(sum(count), 0)                           as totalNum,
                IFNULL(sum(allocate_num), 0)                    as allocateNum,
                IFNULL(sum(country_buy_num), 0)                 as countryBuyNum,
@@ -110,7 +112,8 @@
                      CASE equ_sourse WHEN '2' THEN SUM(num) END as country_buy_num,
                      CASE equ_sourse WHEN '3' THEN SUM(num) END as local_buy_num,
                      CASE equ_sourse WHEN '4' THEN SUM(num) END as local_lease_num,
-                     CASE equ_sourse WHEN '5' THEN SUM(num) END as company_self_num
+                     CASE equ_sourse WHEN '5' THEN SUM(num) END as company_self_num,
+                     CASE equ_sourse WHEN '6' THEN SUM(num) END as third_country_buy_num
               from (select *
                     from (select '' as equ_type,
                                  equ_code,
@@ -395,7 +398,8 @@
         `project_name`,
         `region_id`,
         `region_name`,
-        `dept_id`
+        `dept_id`,
+        third_country_buy_num
         )values
         <foreach collection="dataList" separator="," item="item" index="index">
             (
@@ -429,7 +433,7 @@
             #{item.projectName},
             #{item.regionId},
             #{item.regionName},
-            #{item.deptId} )
+            #{item.deptId} ,#{item.thirdCountryBuyNum} )
         </foreach>
     </insert>
 
@@ -771,7 +775,7 @@
         `plan_exit_time`, `is_special`, detail.`create_user`,detail.`create_user_name`, detail.`create_time`,
         detail.`update_user`, detail.`update_user_name`, detail.`update_time`,
         detail.`del_user`, detail.`del_time`, detail.`del_flag`, detail.`remark`, detail.`pt_var1`,detail.`pt_var2`,
-        detail.`pt_var3`,
+        detail.`pt_var3`,detail.third_country_buy_num,
         detail.`project_id`,detail.`project_name`, detail.`region_id`, detail.`region_name`, detail.`dept_id`
         from `sbch_total_demand_plan_detail` detail
         <where>
