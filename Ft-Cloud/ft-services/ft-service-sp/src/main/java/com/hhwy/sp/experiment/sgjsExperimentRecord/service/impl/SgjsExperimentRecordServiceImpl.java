@@ -144,6 +144,7 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
         JSONObject data = JSONObject.parseObject(JSONObject.toJSONString(result.get("data")));
         JSONArray array = JSONObject.parseArray(JSONObject.toJSONString(data.get("experimentList")));
         List<SgjsExperimentRecord> list=new ArrayList<>();
+        Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
         for (int i = 0; i < array.size(); i++) {
             JSONObject object = JSONObject.parseObject(JSONObject.toJSONString(array.get(i)));
             SgjsExperimentRecord info=new SgjsExperimentRecord();
@@ -151,13 +152,15 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
             info.setMaterialName(ObjectUtils.toString(object.get("equName")));
             info.setCategoryName(ObjectUtils.toString(object.get("equTypeName")));
             info.setMaterialSpec(ObjectUtils.toString(object.get("spec")));
-            info.setSource(ObjectUtils.toString(object.get("source")));
+            if(null!=object.get("source"))info.setSource(ObjectUtils.toString(object.get("source")));
             info.setNum(Integer.parseInt(object.get("reqNum").toString()));
             info.setEntryDate(ObjectUtils.toDate(object.get("reqInDate")));
             info.setCreateTime(DateUtils.getNowDate());
             info.setCreateUser(SecurityUtils.getUserId()+"");
             info.setId(IdWorker.createId());
-            info.setProjectId(ObjectUtils.toLong(object.get("projectId")));
+            //info.setProjectId(ObjectUtils.toLong(object.get("projectId")));
+            if(prjInfo.get("projectId") != null)info.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+            info.setProjectName((String) prjInfo.get("projectName"));
             //同步数据id
             info.setPtVar5(ObjectUtils.toString(object.get("id")));
             list.add(info);

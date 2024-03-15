@@ -144,6 +144,8 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
         if(!result.get("code").toString().equals("200")){
             AjaxResult.error("同步异常");
         }
+        Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+
         JSONObject data = JSONObject.parseObject(JSONObject.toJSONString(result.get("data")));
         List<LinkedHashMap> map=(List<LinkedHashMap>)data.get("measureList");
         if(CollectionUtils.isEmpty(map)){
@@ -163,8 +165,10 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             info.setCreateTime(DateUtils.getNowDate());
             info.setCreateUser(SecurityUtils.getUserId()+"");
             info.setId(IdWorker.createId());
-            info.setProjectId(ObjectUtils.toLong(object.get("projectId")));
+            //info.setProjectId(ObjectUtils.toLong(object.get("projectId")));
             info.setPtVar5(ObjectUtils.toString(object.get("id")));
+            if(prjInfo.get("projectId") != null)info.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+            info.setProjectName((String) prjInfo.get("projectName"));
             dataList.add(info);
         }
         //查询库中已有所有数据

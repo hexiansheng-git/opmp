@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +55,7 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
         sgjsExperimentTotalPlan.setCreateTime(DateUtils.getNowDate());
         int i = sgjsExperimentTotalPlanMapper.insertSgjsExperimentTotalPlan(sgjsExperimentTotalPlan);
         //总部版同步数据
-        //syncDataToGm(sgjsExperimentTotalPlan);
+        syncDataToGm(sgjsExperimentTotalPlan,"1");
         return i;
     }
 
@@ -63,12 +64,15 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
      *
      * @param sgjsExperimentTotalPlan
      */
-    private void syncDataToGm(SgjsExperimentTotalPlan sgjsExperimentTotalPlan) {
+    private void syncDataToGm(SgjsExperimentTotalPlan sgjsExperimentTotalPlan,String type) {
         long beginMills = System.currentTimeMillis();
         Integer status = 1;
         String errMsg = "";
+        Map<String,Object> map=new HashMap<>();
+        map.put("type",type);
+        map.put("data",sgjsExperimentTotalPlan);
         try{
-            rocketMQTemplate.convertAndSend("sgjs_experiment_total_plan:tenantSuccess1", JSONObject.toJSONString(sgjsExperimentTotalPlan));
+            rocketMQTemplate.convertAndSend("sgjs_experiment_total_plan:tenantSuccess1", JSONObject.toJSONString(map));
         }catch (Exception e){
             e.printStackTrace();
             status = 0;
@@ -82,7 +86,7 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
             log.setStatus(status);
             log.setFailMsg(errMsg);
             log.setPtVar1(JSONObject.toJSONString(sgjsExperimentTotalPlan));
-            logger.error("sgjs_experiment_total_plan同步失败【{}】,时间：【{}】",JSONObject.toJSONString(sgjsExperimentTotalPlan),System.currentTimeMillis()-beginMills);
+            logger.error("sgjs_experiment_total_plan同步失败【{}】,时间：【{}】",JSONObject.toJSONString(map),System.currentTimeMillis()-beginMills);
             pmServiceApi.insertSyncLog(log);
         }
     }
@@ -100,7 +104,10 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
     @Transactional
     public int updateSgjsExperimentTotalPlan(SgjsExperimentTotalPlan sgjsExperimentTotalPlan) {
         sgjsExperimentTotalPlan.setPtVar2(SecurityUtils.getUserId()+"");
-        return sgjsExperimentTotalPlanMapper.updateSgjsExperimentTotalPlan(sgjsExperimentTotalPlan);
+        int i = sgjsExperimentTotalPlanMapper.updateSgjsExperimentTotalPlan(sgjsExperimentTotalPlan);
+        //同步总部版
+        syncDataToGm(sgjsExperimentTotalPlan,"2");
+        return i;
     }
 
     @Transactional
