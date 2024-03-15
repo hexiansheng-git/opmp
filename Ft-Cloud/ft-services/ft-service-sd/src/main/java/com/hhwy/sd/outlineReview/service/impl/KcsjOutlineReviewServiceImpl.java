@@ -34,6 +34,7 @@ import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 /**
@@ -53,6 +54,8 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
     @Autowired
     private PmServiceApi pmServiceApi;
 
+    //向总部推送数据用
+    private static ThreadPoolExecutor executorService = new ThreadPoolExecutor(1, 2, 5, TimeUnit.MINUTES, new ArrayBlockingQueue<>(5));
 
     public KcsjOutlineReview getKcsjOutlineReview(KcsjOutlineReview kcsjOutlineReview) {
         return kcsjOutlineReviewMapper.getKcsjOutlineReview(kcsjOutlineReview);
@@ -160,10 +163,11 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
             kcsjOutlineReview.setUpdateTime(DateUtils.getNowDate());
             kcsjOutlineReviewMapper.updateKcsjOutlineReview(kcsjOutlineReview);
         }
-        doSendGm();
         List<SgjsExpertLibrary> childList = kcsjOutlineReview.getChildList();
-        if (CollUtil.isEmpty(childList)) return id;
-        sgjsExpertLibraryService.saveExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_1, childList);
+        if (CollUtil.isNotEmpty(childList)) {
+            sgjsExpertLibraryService.saveExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_1, childList);
+        }
+        executorService.execute(this::doSendGm);
         return id;
     }
 
@@ -184,10 +188,11 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
         kcsjOutlineReview.setUpdateTime(DateUtils.getNowDate());
         int i = kcsjOutlineReviewMapper.updateKcsjOutlineReview(kcsjOutlineReview);
         Assert.isTrue( i > 0, "未找到数据");
-        doSendGm();
         List<SgjsExpertLibrary> childList = kcsjOutlineReview.getChildList();
-        if (CollUtil.isEmpty(childList)) return;
-        sgjsExpertLibraryService.saveExpertLibraryList(kcsjOutlineReview.getId(), BelongBusiness.BELONG_BUSINESS_1, childList);
+        if (CollUtil.isNotEmpty(childList)) {
+            sgjsExpertLibraryService.saveExpertLibraryList(kcsjOutlineReview.getId(), BelongBusiness.BELONG_BUSINESS_1, childList);
+        }
+        executorService.execute(this::doSendGm);
     }
 
     //修改
@@ -255,15 +260,28 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
 
     //数据推送总部版
     public void doSendGm() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         ProjectDto projectDto = pmServiceApi.getProjectDto();
         String projectCode = projectDto.getProjectCode();
         //全量推送，（已发起审批的）
         KcsjOutlineReview kcsjOutlineReview = new KcsjOutlineReview();
         List<KcsjOutlineReview> kcsjOutlineReviewList = kcsjOutlineReviewMapper.getKcsjOutlineReviewList(kcsjOutlineReview);
+        if (CollUtil.isEmpty(kcsjOutlineReviewList)) return;
         FlowInfoSearchUtil.getFlowInfo(kcsjOutlineReviewList, FlowEnum.KCSJ_PATENT_DECLARE);
+        //（已发起审批的）
         List<KcsjOutlineReview> collect = kcsjOutlineReviewList.stream()
                 .filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
         collect.forEach(p -> p.setPtVar5(projectCode));
+        if (CollUtil.isEmpty(collect)) return;
         rocketMQTemplate.convertAndSend("kcsj_outline_review:tenantSuccess", collect);
+        //专家数据
+        SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
+        sgjsExpertLibrary.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_1);
+        List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsExpertLibraryService.getSgjsExpertLibraryList(sgjsExpertLibrary);
+        rocketMQTemplate.convertAndSend("kcsj_outline_review_expert:tenantSuccess", sgjsExpertLibraryList);
     }
 }
