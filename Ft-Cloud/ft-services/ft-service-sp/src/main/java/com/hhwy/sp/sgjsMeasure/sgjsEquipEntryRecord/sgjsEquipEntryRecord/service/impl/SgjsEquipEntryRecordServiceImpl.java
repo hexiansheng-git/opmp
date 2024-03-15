@@ -177,7 +177,11 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
         if(CollectionUtils.isEmpty(recordList)){
             if(!CollectionUtils.isEmpty(dataList)){
                 sgjsEquipEntryRecordMapper.insertSgjsEquipEntryRecordList(dataList);
-                insertList.addAll(dataList);
+            }
+            //同步总部版
+            if(!CollectionUtils.isEmpty(insertList)){
+                logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(insertList));
+                syncDataToGm(insertList);
             }
             return AjaxResult.success(dataList);
         }

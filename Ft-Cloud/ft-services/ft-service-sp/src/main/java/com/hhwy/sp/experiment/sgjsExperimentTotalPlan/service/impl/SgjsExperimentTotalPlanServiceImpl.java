@@ -72,6 +72,7 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
         map.put("type",type);
         map.put("data",sgjsExperimentTotalPlan);
         try{
+            logger.info("数据源头【{}】",JSONObject.toJSONString(map));
             rocketMQTemplate.convertAndSend("sgjs_experiment_total_plan:tenantSuccess1", JSONObject.toJSONString(map));
         }catch (Exception e){
             e.printStackTrace();

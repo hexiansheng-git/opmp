@@ -172,8 +172,12 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
         List<SgjsExperimentRecord> recordList = sgjsExperimentRecordMapper.getSgjsExperimentRecordList(new SgjsExperimentRecord());
         if(CollectionUtils.isEmpty(recordList)){ //库里没有同步的数据 直接插入
             if(!CollectionUtils.isEmpty(list)){
-                insertList.addAll(list);
                 sgjsExperimentRecordMapper.insertSgjsExperimentRecordList(list);
+            }
+            //数据同步总部
+            if(!CollectionUtils.isEmpty(insertList)) {
+                logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(insertList));
+                syncDataToGm(insertList);
             }
             return AjaxResult.success(list);
         }
