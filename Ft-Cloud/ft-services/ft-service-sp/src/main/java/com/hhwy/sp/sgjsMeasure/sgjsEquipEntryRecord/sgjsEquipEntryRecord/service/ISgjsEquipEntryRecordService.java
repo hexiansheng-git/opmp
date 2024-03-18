@@ -1,9 +1,11 @@
 package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecord;
+import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
 
 /**
  * @author lcf   测量管理--测试设备进场记录
@@ -42,4 +44,12 @@ public interface ISgjsEquipEntryRecordService {
      * @return
      */
     List<SgjsEquipEntryRecord> selectList(SgjsEquipEntryRecord sgjsEquipEntryRecord);
+
+    /**
+     * 手动同步物设进场设备记录
+     *
+     * @param map
+     * @return
+     */
+    List<SgjsEquipEntryRecordInfo> getDatatByOther(Map<String, Object> map);
 }

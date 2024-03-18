@@ -216,6 +216,7 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
         Integer status = 1;
         String errMsg = "";
         try{
+            logger.info("数据源头【{}】",JSONObject.toJSONString(map));
             rocketMQTemplate.convertAndSend("sgjs_experiment_record:tenantSuccess1", JSONObject.toJSONString(map));
         }catch (Exception e){
             e.printStackTrace();
@@ -251,22 +252,22 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
         for (int i = 0; i < dataList.size(); i++) {
             SgjsExperimentRecordInfo info=new SgjsExperimentRecordInfo();
             GetMaterialInfoVo vo = dataList.get(i);
-            info.setManageCode(ObjectUtils.toString(vo.getManageCode()));//设备管理编码
-            info.setCategoryName(ObjectUtils.toString(vo.getCategoryName()));
-            info.setCategoryCode(ObjectUtils.toString(vo.getCategoryCode()));
-            info.setMaterialName(ObjectUtils.toString(vo.getMaterialName()));
-            info.setManufacturer(ObjectUtils.toString(vo.getCountryFactory()));
-            info.setPower(ObjectUtils.toString(vo.getMEnginePower()));
-            info.setBottomNo(ObjectUtils.toString(vo.getChassisNo()));
-            info.setProductDate(ObjectUtils.toDate(vo.getMProduceDate()));
-            info.setSizeMsg(ObjectUtils.toString(vo.getSizeMsg()));
-            info.setWeight(ObjectUtils.toString(vo.getTheWeight()));
-            info.setOriginalValue(ObjectUtils.toDecimal(vo.getOriginalValue()));
-            info.setAcceptDate(ObjectUtils.toDate(vo.getCheckDate()));
-            info.setEntryDate(ObjectUtils.toDate(vo.getCheckDate()));
-            info.setExitDate(ObjectUtils.toDate(vo.getExitDate()));
-            info.setSource(ObjectUtils.toString(vo.getSource()));
-            info.setPtVar5(ObjectUtils.toString(vo.getId()));
+//            info.setManageCode(ObjectUtils.toString(vo.getManageCode()));//设备管理编码
+//            info.setCategoryName(ObjectUtils.toString(vo.getCategoryName()));
+//            info.setCategoryCode(ObjectUtils.toString(vo.getCategoryCode()));
+//            info.setMaterialName(ObjectUtils.toString(vo.getMaterialName()));
+//            info.setManufacturer(ObjectUtils.toString(vo.getCountryFactory()));
+//            info.setPower(ObjectUtils.toString(vo.getMEnginePower()));
+//            info.setBottomNo(ObjectUtils.toString(vo.getChassisNo()));
+//            info.setProductDate(ObjectUtils.toDate(vo.getMProduceDate()));
+//            info.setSizeMsg(ObjectUtils.toString(vo.getSizeMsg()));
+//            info.setWeight(ObjectUtils.toString(vo.getTheWeight()));
+//            info.setOriginalValue(ObjectUtils.toDecimal(vo.getOriginalValue()));
+//            info.setAcceptDate(ObjectUtils.toDate(vo.getCheckDate()));
+//            info.setEntryDate(ObjectUtils.toDate(vo.getCheckDate()));
+//            info.setExitDate(ObjectUtils.toDate(vo.getExitDate()));
+//            info.setSource(ObjectUtils.toString(vo.getSource()));
+//            info.setPtVar5(ObjectUtils.toString(vo.getId()));
             list.add(info);
         }
         return result;

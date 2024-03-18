@@ -1,5 +1,6 @@
 package com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -14,6 +15,8 @@ import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.dom
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.mapper.SgjsEquipEntryRecordInfoMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.domain.SgjsEquipEntryRecordInfoDetail;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfoDetail.mapper.SgjsEquipEntryRecordInfoDetailMapper;
+import com.hhwy.sp.utils.syncThirdInterface.wushe.GetMaterialInfoInterface;
+import com.hhwy.sp.utils.syncThirdInterface.wushe.vo.GetMaterialInfoVo;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
@@ -46,6 +49,8 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
     private PmServiceApi pmServiceApi;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private GetMaterialInfoInterface getMaterialInfoInterface;
 
     private Logger logger= LoggerFactory.getLogger(SgjsEquipEntryRecordServiceImpl.class);
 
@@ -142,6 +147,7 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
         AjaxResult result = pmServiceApi.qqchMeasureExpEquList();
         List<SgjsEquipEntryRecord> list=new ArrayList<>();
         if(!result.get("code").toString().equals("200")){
+            logger.error("同步异常");
             AjaxResult.error("同步异常");
         }
         Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
@@ -149,6 +155,7 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
         JSONObject data = JSONObject.parseObject(JSONObject.toJSONString(result.get("data")));
         List<LinkedHashMap> map=(List<LinkedHashMap>)data.get("measureList");
         if(CollectionUtils.isEmpty(map)){
+            logger.error("同步转换异常");
             return AjaxResult.error("同步转换异常");
         }
         List<SgjsEquipEntryRecord> dataList=new ArrayList<>();
@@ -239,6 +246,37 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
     @Override
     public List<SgjsEquipEntryRecord> selectList(SgjsEquipEntryRecord sgjsEquipEntryRecord) {
         return sgjsEquipEntryRecordMapper.getSgjsEquipEntryRecordList(sgjsEquipEntryRecord);
+    }
+
+    @Override
+    public List<SgjsEquipEntryRecordInfo> getDatatByOther(Map<String, Object> map) {
+
+        AjaxResult result = getMaterialInfoInterface.syncMaterialInfo(map);
+        String code = result.get("code").toString();
+        List<SgjsEquipEntryRecordInfo> list=new ArrayList<>();
+        if(!code.equals("200")){
+            logger.error("物设接口返回异常【{}】",JSONObject.toJSONString(result));
+            return list;
+        }
+        List<GetMaterialInfoVo> data = JSONArray.parseArray(result.get("data").toString(), GetMaterialInfoVo.class);
+        for (GetMaterialInfoVo vo:data) {
+            SgjsEquipEntryRecordInfo info=new SgjsEquipEntryRecordInfo();
+            info.setManageCode(vo.getManagementcode());
+            String type = vo.getType();
+            if(type.equals("0")){//0：自有
+
+            }
+            if(type.equals("1")){//1协作单位
+
+            }
+            if(type.equals("2")){//2租赁
+
+            }
+            info.setMaterialName(vo.getName());
+            info.setPower(vo.getMainNo());//主机功率
+            list.add(info);
+        }
+        return list;
     }
 
 }

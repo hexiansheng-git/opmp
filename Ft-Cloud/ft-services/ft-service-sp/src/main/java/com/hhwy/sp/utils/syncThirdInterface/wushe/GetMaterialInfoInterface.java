@@ -31,34 +31,29 @@ public class GetMaterialInfoInterface {
     private String url;
     @Value("${baishanyun.wushe.apikey}")
     private String apikey;
-    @Value("${baishanyun.wushe.authToken}")
-    private String authToken;
 
 
     /**
      * 同步物设信息
+     * curl -X POST -H 'Accept: text/html,text/plain,application/xhtml+xml,application/xml,application/json' -H 'Content-Type: application/json'
+     * -H 'apikey: pJWDnryyVsmDiiPeEI5Bfv0B4Lm3nOoI' -d '{ "projectCode": "123", "params": { "manageCodes": [ "dfgdfg", "dfgdfg" ] } }'
+     * 'http://esb.cfhec.net/env-101/hhwy-wsxt/wsxt/xg/fms/xcsb/chooseEqu/getEquipList'
      *
      * @param map
      * @return
-     */
-    /**
-     *
-     * curl -X POST -H 'authToken: bMdnHQzByb' -H 'Accept: text/html,text/plain,application/xhtml+xml,application/xml,application/json' -H 'apikey: pJWDnryyVsmDiiPeEI5Bfv0B4Lm3nOoI'
-     * -H 'Content-Type: application/json' -d '{ "equCode": "", "type": "0", "prjCode": "PJ2021012102" }'
-     * 'http://esb.cfhec.net/env-101/hhwy-wsxt/wsxt/bsy/fms/xcsb/chooseEqu/getEquipList'
-     *
-     *
      */
     public AjaxResult syncMaterialInfo(@RequestBody Map<String,Object> map){
         Map<String,String> headerMap=new HashMap();
         headerMap.put("apikey",apikey);
         JSONObject jsonObject=new JSONObject();
-        jsonObject.put("prjCode",map.get("prjCode"));
-        jsonObject.put("pageSize","");
-        jsonObject.put("pageNum","");
+        jsonObject.put("projectCode",map.get("projectCode"));
+        JSONObject params=new JSONObject();
+        params.put("manageCodes",map.get("manageCodes"));
+        jsonObject.put("params",params);
         String rst = HttpUtils.sendPost(url, jsonObject.toJSONString(), headerMap);
         logger.info("获取物设系统【设备进场记录】接口返回结果信息【{}】",rst);
         if(StringUtils.isBlank(rst)){
+            logger.error("物设接口空了。。。。。。。。。。。。。。");
             return AjaxResult.error("接口返回结果为空");
         }
         try {
