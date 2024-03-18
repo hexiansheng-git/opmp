@@ -1,49 +1,34 @@
 package com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.service.impl;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toCollection;
-
 import cn.hutool.core.date.DateTime;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.exception.BaseException;
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.domain.base.system.country.CountryInfo;
-import com.hhwy.feign.service.PmServiceApi;
-import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
-import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
-import com.hhwy.utils.Constant;
-import com.hhwy.utils.date.FtDateUtils;
-import com.hhwy.utils.tree.TreeUtil;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
-import java.util.Map;
-import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.mapper.SgjsPlanMeasureManageMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.service.ISgjsPlanMeasureManageService;
-import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
+import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
+import com.hhwy.utils.Constant;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
+import com.hhwy.utils.tree.TreeUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StreamUtils;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 
 /**
  * @author zmh
@@ -59,6 +44,8 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
     @Autowired
     private PmServiceApi pmServiceApi;
 
+    @Autowired
+    private ISysSyncInfoService4Sp sysSyncInfoService4Sp;
 
     public SgjsPlanMeasureManage getSgjsPlanMeasureManage(
         SgjsPlanMeasureManage sgjsPlanMeasureManage) {
@@ -268,6 +255,8 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         if(!CollectionUtils.isEmpty(sgjsPlanMeasureManageVo.getDelIdList())){
             deleteByIds(sgjsPlanMeasureManageVo.getDelIdList());
         }
+        //推送最新数据
+        pushData();
         return AjaxResult.success();
     }
 
@@ -291,8 +280,26 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
         if(!CollectionUtils.isEmpty(list)){
             sgjsPlanMeasureManageMapper.deleteInfoData(list);
         }
+        //推送最新数据
+        pushData();
     }
 
+
+    //推送数据到总部版
+    private void pushData() {
+        SgjsPlanMeasureManageVo vo=new SgjsPlanMeasureManageVo();
+        List<SgjsPlanMeasureManage> list=sgjsPlanMeasureManageMapper.getAll();
+        list= ListTreeUtil.formatTree(
+                list,
+                o -> o.getPid() == 0,
+                (r, n) -> r.getId().equals(n.getPid()),
+                SgjsPlanMeasureManage::getChildren,
+                SgjsPlanMeasureManage::setChildren);
+        vo.setTreeList(list);
+        if (list!=null&&!list.isEmpty()){
+            sysSyncInfoService4Sp.pushSgjsPlanMeasureManage(vo);
+        }
+    }
     @Transactional
     public int updateSgjsPlanMeasureManage(SgjsPlanMeasureManage sgjsPlanMeasureManage) {
         sgjsPlanMeasureManage.setUpdateUser(SecurityUtils.getUserName());

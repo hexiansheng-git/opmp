@@ -6,6 +6,8 @@ import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManage;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManageVo;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
 import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.sp.techTrain.domain.SgjsTechnicalTraining;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -66,7 +68,7 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
                     sgjsExperProgressManage.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
                 sgjsExperProgressManage.setRegionName((String) prjInfo.get("regionName"));
                 if (prjInfo.get("projectId") != null)
-                    sgjsExperProgressManage.setRegionName((String) prjInfo.get("regionName"));
+                    sgjsExperProgressManage.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
                 sgjsExperProgressManage.setProjectName((String) prjInfo.get("projectName"));
                 JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(sgjsExperProgressManage));
                 finalList.add(json);
@@ -89,11 +91,37 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
                 sgjsTechnicalTraining.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
             sgjsTechnicalTraining.setRegionName((String) prjInfo.get("regionName"));
             if (prjInfo.get("projectId") != null)
-                sgjsTechnicalTraining.setRegionName((String) prjInfo.get("regionName"));
+                sgjsTechnicalTraining.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
             sgjsTechnicalTraining.setProjectName((String) prjInfo.get("projectName"));
             JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(sgjsTechnicalTraining));
 
             rocketMQTemplate.convertAndSend("sgjs_technical_training:tenantSuccess", JSONObject.toJSONString(json));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    @Override
+    public void pushSgjsPlanMeasureManage(SgjsPlanMeasureManageVo vo) {
+        try {
+            List<SgjsPlanMeasureManage> treeList = vo.getTreeList();
+            List<JSONObject> finalList = new ArrayList<>();
+            for (SgjsPlanMeasureManage sgjsPlanMeasureManage : treeList) {
+                Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+                sgjsPlanMeasureManage.setPtVar2(SecurityUtils.getTenantKey());
+                if (prjInfo.get("regionId") != null)
+                    sgjsPlanMeasureManage.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
+                sgjsPlanMeasureManage.setRegionName((String) prjInfo.get("regionName"));
+                if (prjInfo.get("projectId") != null)
+                    sgjsPlanMeasureManage.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+                sgjsPlanMeasureManage.setProjectName((String) prjInfo.get("projectName"));
+                JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(sgjsPlanMeasureManage));
+                finalList.add(json);
+            }
+
+            rocketMQTemplate.convertAndSend("sgjs_plan_measure_manage:tenantSuccess", JSONObject.toJSONString(finalList));
         } catch (Exception e) {
             e.printStackTrace();
             throw e;

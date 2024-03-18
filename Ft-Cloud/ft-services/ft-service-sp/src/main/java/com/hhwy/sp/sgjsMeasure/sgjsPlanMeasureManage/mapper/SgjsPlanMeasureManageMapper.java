@@ -1,8 +1,9 @@
 package com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.mapper;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author zmh
@@ -35,4 +36,8 @@ public interface SgjsPlanMeasureManageMapper {
 
     // 同步覆盖，数据全部删除
     void delAll(SgjsPlanMeasureManage sgjsPlanMeasureManage);
+
+    //获取该项目的全部数据
+    List<SgjsPlanMeasureManage> getAll();
+
 }

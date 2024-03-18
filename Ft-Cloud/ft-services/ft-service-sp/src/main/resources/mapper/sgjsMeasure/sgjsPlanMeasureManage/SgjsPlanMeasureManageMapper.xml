@@ -496,4 +496,11 @@
     update sgjs_plan_measure_manage set del_flag = '1', update_user = #{updateUser}, update_time = #{updateTime}
   </update>
 
+  <select id="getAll" resultMap="SgjsPlanMeasureManageResultMap">
+    <include refid="selectSgjsPlanMeasureManageVo"/>
+    <where>
+      del_flag = "0"
+    </where>
+  </select>
+
 </mapper>

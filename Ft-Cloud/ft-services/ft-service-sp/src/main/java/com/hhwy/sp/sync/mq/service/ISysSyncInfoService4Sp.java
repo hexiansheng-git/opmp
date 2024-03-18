@@ -2,6 +2,7 @@ package com.hhwy.sp.sync.mq.service;
 
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManageVo;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
+import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
 import com.hhwy.sp.techTrain.domain.SgjsTechnicalTraining;
 
 import java.util.List;
@@ -31,5 +32,9 @@ public interface ISysSyncInfoService4Sp {
      */
     public void pushSgjsTechnicalTraining(SgjsTechnicalTraining sgjsTechnicalTraining);
 
-
+    /**
+     * 推送测量计划进度管理
+     * @param vo
+     */
+    public void pushSgjsPlanMeasureManage(SgjsPlanMeasureManageVo vo);
 }
