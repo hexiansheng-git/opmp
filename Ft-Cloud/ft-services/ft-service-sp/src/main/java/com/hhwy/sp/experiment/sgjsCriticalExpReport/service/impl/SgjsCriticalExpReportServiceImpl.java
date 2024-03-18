@@ -8,6 +8,7 @@ import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportQ
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportVo;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.mapper.SgjsCriticalExpReportMapper;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.service.ISgjsCriticalExpReportService;
+import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class SgjsCriticalExpReportServiceImpl implements ISgjsCriticalExpReportS
     @Autowired
     private SgjsCriticalExpReportMapper sgjsCriticalExpReportMapper;
 
+    @Autowired
+    private ISysSyncInfoService4Sp sysSyncInfoService4Sp;
 
     public SgjsCriticalExpReport getSgjsCriticalExpReport(SgjsCriticalExpReport sgjsCriticalExpReport) {
         return sgjsCriticalExpReportMapper.getSgjsCriticalExpReport(sgjsCriticalExpReport);
@@ -123,6 +126,8 @@ public class SgjsCriticalExpReportServiceImpl implements ISgjsCriticalExpReportS
         if(CollectionUtils.isNotEmpty(delIdList)){
             sgjsCriticalExpReportMapper.deleteSgjsCriticalExpReportByPks(delIdList);
         }
+        //推送最新数据
+        pushData();
     }
 
     public void checkData(List<SgjsCriticalExpReport> reportList,Set<Long> delIdSet){
@@ -160,6 +165,17 @@ public class SgjsCriticalExpReportServiceImpl implements ISgjsCriticalExpReportS
                     throw new RuntimeException(String.format("报告编码[%s]已存在", report.getExpReportCode()));
                 }
             }
+        }
+    }
+
+
+    //推送数据到总部版
+    private void pushData() {
+        CriticalExpReportVo vo = new CriticalExpReportVo();
+        List<SgjsCriticalExpReport> list = sgjsCriticalExpReportMapper.getAll();
+        vo.setReportList(list);
+        if (list != null && !list.isEmpty()) {
+            sysSyncInfoService4Sp.pushSgjsCriticalExpReport(vo);
         }
     }
 }

@@ -32,4 +32,7 @@ public interface SgjsCriticalExpReportMapper {
     int deleteSgjsCriticalExpReport(SgjsCriticalExpReport sgjsCriticalExpReport);
 
     int deleteSgjsCriticalExpReportByPks(@Param("idList") List<Long> idList);
+
+    //获取最新数据
+    List<SgjsCriticalExpReport> getAll();
 }

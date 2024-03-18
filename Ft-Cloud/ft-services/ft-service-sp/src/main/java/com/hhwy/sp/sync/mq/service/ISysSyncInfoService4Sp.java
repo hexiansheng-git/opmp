@@ -1,5 +1,6 @@
 package com.hhwy.sp.sync.mq.service;
 
+import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportVo;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManageVo;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
@@ -37,4 +38,10 @@ public interface ISysSyncInfoService4Sp {
      * @param vo
      */
     public void pushSgjsPlanMeasureManage(SgjsPlanMeasureManageVo vo);
+
+    /**
+     * 推送关键试验报告
+     * @param vo
+     */
+    public void pushSgjsCriticalExpReport(CriticalExpReportVo vo);
 }

@@ -214,7 +214,7 @@ public class SgjsCriticalExpReport extends BaseEntity {
     @JsonProperty
     private String ptVar4;
     /**
-     * 字段描述：预留字段5
+     * 字段描述：预留字段5;推送数据时赋值为项目编码
      */
     @JsonProperty
     private String ptVar5;
