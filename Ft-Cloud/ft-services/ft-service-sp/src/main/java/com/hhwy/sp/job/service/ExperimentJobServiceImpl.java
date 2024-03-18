@@ -1,18 +1,23 @@
 package com.hhwy.sp.job.service;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.domain.SysSyncInfoLog;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.service.ISgjsExperimentRecordService;
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfo.domain.SgjsExperimentRecordInfo;
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfo.service.ISgjsExperimentRecordInfoService;
+import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
 import com.hhwy.sp.utils.syncThirdInterface.wushe.GetMaterialInfoInterface;
 import com.hhwy.sp.utils.syncThirdInterface.wushe.vo.GetMaterialInfoVo;
 import com.hhwy.system.api.domain.SysTenant;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +43,10 @@ public class ExperimentJobServiceImpl {
 
     @Autowired
     private SystemServiceApi systemServiceApi;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private PmServiceApi pmServiceApi;
     @Autowired
     private GetMaterialInfoInterface materialInfoInterface;
     @Autowired
@@ -118,6 +127,37 @@ public class ExperimentJobServiceImpl {
         }
         if(!CollectionUtils.isEmpty(list)){
             iSgjsExperimentRecordInfoService.insertSgjsExperimentRecordInfoList(list);
+            //同步总部
+            syncDataToGm(list);
+        }
+    }
+
+    /**
+     * 总部版同步
+     *
+     * @param list
+     */
+    private void syncDataToGm(List<SgjsExperimentRecordInfo> list) {
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try{
+            rocketMQTemplate.convertAndSend("sgjs_job_experiment_record_info:tenantSuccess1", JSONObject.toJSONString(list));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            logger.error("报错了【{}】",e.getMessage());
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("sgjs_job_experiment_record_info");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(JSONObject.toJSONString(list));
+            logger.error("sgjs_job_experiment_record_info同步失败【{}】,时间：【{}】",JSONObject.toJSONString(list),System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
         }
     }
 }
