@@ -10,16 +10,19 @@ import java.util.stream.Collectors;
 
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSON;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
+import com.hhwy.sp.common.FlowInfoSearchUtilNonReqest;
 import com.hhwy.sp.common.constant.BelongBusiness;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
@@ -30,6 +33,7 @@ import com.hhwy.sp.common.sgjsAuthenticateEvaluate.service.ISgjsAuthenticateEval
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.sgsjTechnicalScienceTopicModify.domain.SgsjTechnicalScienceTopicModify;
 import com.hhwy.system.api.domain.SysUser;
+import com.hhwy.utils.ThreadPoolUtil;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -83,17 +87,14 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
 
     private static ProjectDto projectInfo;
 
-    //向总部推送数据用
-    private static ThreadPoolExecutor executorService = new ThreadPoolExecutor(0, 2, 10, TimeUnit.MINUTES, new ArrayBlockingQueue<>(5));
-
-    private ProjectDto getProjectDto(){
+    private ProjectDto getProjectDto() {
         if (projectInfo != null) return projectInfo;
         return pmServiceApi.getProjectDto();
     }
 
     public SgjsFourNewsAchievement getSgjsFourNewsAchievement(SgjsFourNewsAchievement sgjsFourNewsAchievement) {
         SgjsFourNewsAchievement returnVO = sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievement(sgjsFourNewsAchievement);
-        if(returnVO == null) return returnVO;
+        if (returnVO == null) return returnVO;
         Long id = returnVO.getId();
         // 专家库
         SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
@@ -125,23 +126,23 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         SgjsAuthenticateEvaluate shjsAuthenticateEvaluate = new SgjsAuthenticateEvaluate();
         shjsAuthenticateEvaluate.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_5);
         List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate);
-        if(CollectionUtils.isNotEmpty(sgjsFourNewsAchievementList)) {
-            for (SgjsFourNewsAchievement sgjsFourNewsAchievement1: sgjsFourNewsAchievementList) {
+        if (CollectionUtils.isNotEmpty(sgjsFourNewsAchievementList)) {
+            for (SgjsFourNewsAchievement sgjsFourNewsAchievement1 : sgjsFourNewsAchievementList) {
                 Long id = sgjsFourNewsAchievement1.getId();
-                if(CollectionUtils.isNotEmpty(sgjsExpertLibraryList)) {
+                if (CollectionUtils.isNotEmpty(sgjsExpertLibraryList)) {
                     List<SgjsExpertLibrary> sgjsExpertLibraries = sgjsExpertLibraryList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
                     sgjsFourNewsAchievement1.setSgjsExpertLibraryList(sgjsExpertLibraries);
                 }
-                if(CollectionUtils.isNotEmpty(sgjsAchievementAwardList)) {
+                if (CollectionUtils.isNotEmpty(sgjsAchievementAwardList)) {
                     List<SgjsAchievementAward> sgjsAchievementAwards = sgjsAchievementAwardList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
                     sgjsFourNewsAchievement1.setSgjsAchievementAwardList(sgjsAchievementAwards);
                 }
-                if(CollectionUtils.isNotEmpty(shjsAuthenticateEvaluateList)) {
+                if (CollectionUtils.isNotEmpty(shjsAuthenticateEvaluateList)) {
                     List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluates = shjsAuthenticateEvaluateList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
                     sgjsFourNewsAchievement1.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluates);
                 }
             }
-            FlowInfoSearchUtil.getFlowInfo(sgjsFourNewsAchievementList,FlowEnum.SGJS_FOUR_NEWS_ACHIEVEMENT);
+            FlowInfoSearchUtil.getFlowInfo(sgjsFourNewsAchievementList, FlowEnum.SGJS_FOUR_NEWS_ACHIEVEMENT);
         }
         return sgjsFourNewsAchievementList;
     }
@@ -168,8 +169,8 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
     public SgjsFourNewsAchievement updateSgjsFourNewsAchievement(SgjsFourNewsAchievement sgjsFourNewsAchievement) {
         Long id = sgjsFourNewsAchievement.getId();
         sgjsFourNewsAchievement.setDataCurrentState(null);
-        if(id == null) {
-            ProjectDto projectDto =  getProjectDto();
+        if (id == null) {
+            ProjectDto projectDto = getProjectDto();
             id = IdWorker.createId();
             sgjsFourNewsAchievement.setId(id);
             sgjsFourNewsAchievement.setCreateUser(SecurityUtils.getSysUser().getNickName());
@@ -189,12 +190,13 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         sgjsAchievementAwardService.saveAchievementAward(id, BelongBusiness.BELONG_BUSINESS_5, sgjsAchievementAwardList);
         // 鉴定或评价
         List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = sgjsFourNewsAchievement.getShjsAuthenticateEvaluateList();
-        shjsAuthenticateEvaluateService.saveShjsAuthenticateEvaluateList(id, BelongBusiness.BELONG_BUSINESS_5,shjsAuthenticateEvaluateList);
+        shjsAuthenticateEvaluateService.saveShjsAuthenticateEvaluateList(id, BelongBusiness.BELONG_BUSINESS_5, shjsAuthenticateEvaluateList);
         // 专家
         List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsFourNewsAchievement.getSgjsExpertLibraryList();
-        sgjsExpertLibraryService.saveSgjsExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_5,sgjsExpertLibraryList);
-//        executorService.execute(this::doSendGm);
-        doSendGm();
+        sgjsExpertLibraryService.saveSgjsExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_5, sgjsExpertLibraryList);
+        String tenantKey = SecurityUtils.getTenantKey();
+        String userName = SecurityUtils.getUserName();
+        ThreadPoolUtil.execute(() -> doSendGm(tenantKey, userName));
         return sgjsFourNewsAchievement;
     }
 
@@ -222,13 +224,13 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         SgjsFourNewsAchievement sgjsFourNewsAchievement = new SgjsFourNewsAchievement();
         sgjsFourNewsAchievement.setId(id);
         SgjsFourNewsAchievement existVo = sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievement(sgjsFourNewsAchievement);
-        if(existVo != null) {
-            if(StringUtils.isNotEmpty(isPass)) {
+        if (existVo != null) {
+            if (StringUtils.isNotEmpty(isPass)) {
                 sgjsFourNewsAchievement.setTaskStatus("5");
-                if("1".equals(isPass)) {
+                if ("1".equals(isPass)) {
                     sgjsFourNewsAchievement.setDataCurrentState("3");
                 }
-                if("0".equals(isPass)) {
+                if ("0".equals(isPass)) {
                     sgjsFourNewsAchievement.setDataCurrentState("4");
                 }
             } else {
@@ -237,8 +239,9 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
             }
             sgjsFourNewsAchievementMapper.updateSgjsFourNewsAchievement(sgjsFourNewsAchievement);
         }
-//        executorService.execute(this::doSendGm);
-        doSendGm();
+        String tenantKey = SecurityUtils.getTenantKey();
+        String userName = SecurityUtils.getUserName();
+        ThreadPoolUtil.execute(() -> doSendGm(tenantKey, userName));
     }
 
 
@@ -258,7 +261,7 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         R r = systemServiceApi.batchPublish(clientIds, topic, message);
         if (r.getCode() == 200) {
             return AjaxResult.success("消息发布成功");
-        }else {
+        } else {
             return AjaxResult.error("消息发布失败");
         }
 
@@ -279,66 +282,80 @@ public class SgjsFourNewsAchievementServiceImpl implements ISgjsFourNewsAchievem
         SgjsAuthenticateEvaluate shjsAuthenticateEvaluate = new SgjsAuthenticateEvaluate();
         shjsAuthenticateEvaluate.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_5);
         List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(shjsAuthenticateEvaluate);
-        if(CollectionUtils.isNotEmpty(sgjsFourNewsAchievementList4Ids)) {
-            for (SgjsFourNewsAchievement sgjsFourNewsAchievement1: sgjsFourNewsAchievementList4Ids) {
+        if (CollectionUtils.isNotEmpty(sgjsFourNewsAchievementList4Ids)) {
+            for (SgjsFourNewsAchievement sgjsFourNewsAchievement1 : sgjsFourNewsAchievementList4Ids) {
                 Long id = sgjsFourNewsAchievement1.getId();
-                if(CollectionUtils.isNotEmpty(sgjsExpertLibraryList)) {
+                if (CollectionUtils.isNotEmpty(sgjsExpertLibraryList)) {
                     List<SgjsExpertLibrary> sgjsExpertLibraries = sgjsExpertLibraryList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
                     sgjsFourNewsAchievement1.setSgjsExpertLibraryList(sgjsExpertLibraries);
                 }
-                if(CollectionUtils.isNotEmpty(sgjsAchievementAwardList)) {
+                if (CollectionUtils.isNotEmpty(sgjsAchievementAwardList)) {
                     List<SgjsAchievementAward> sgjsAchievementAwards = sgjsAchievementAwardList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
                     sgjsFourNewsAchievement1.setSgjsAchievementAwardList(sgjsAchievementAwards);
                 }
-                if(CollectionUtils.isNotEmpty(shjsAuthenticateEvaluateList)) {
+                if (CollectionUtils.isNotEmpty(shjsAuthenticateEvaluateList)) {
                     List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluates = shjsAuthenticateEvaluateList.stream().filter(vo -> id.equals(vo.getForeignId())).collect(Collectors.toList());
                     sgjsFourNewsAchievement1.setShjsAuthenticateEvaluateList(shjsAuthenticateEvaluates);
                 }
             }
-            FlowInfoSearchUtil.getFlowInfo(sgjsFourNewsAchievementList4Ids,FlowEnum.SGJS_FOUR_NEWS_ACHIEVEMENT);
+            FlowInfoSearchUtil.getFlowInfo(sgjsFourNewsAchievementList4Ids, FlowEnum.SGJS_FOUR_NEWS_ACHIEVEMENT);
         }
         return sgjsFourNewsAchievementList4Ids;
     }
 
     //数据推送总部版
-    public void doSendGm(){
+    public void doSendGm(String tenantKey, String loginUserName) {
         //全量推送，（已发起审批的）
-        //主表
-        SgjsFourNewsAchievement sgjsFourNewsAchievement = new SgjsFourNewsAchievement();
-        List<SgjsFourNewsAchievement> sgjsFourNewsAchievementList = sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievementList(sgjsFourNewsAchievement);
-        if (CollUtil.isEmpty(sgjsFourNewsAchievementList)) {
-            //推送空数据
-            sendEmpty();
-            return;
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        try {
+            String dataSourceNameByTenantKey = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+            DynamicDataSourceContextHolder.push(dataSourceNameByTenantKey);
+            Thread.sleep(3000);
+
+            //主表
+            SgjsFourNewsAchievement sgjsFourNewsAchievement = new SgjsFourNewsAchievement();
+            List<SgjsFourNewsAchievement> sgjsFourNewsAchievementList = sgjsFourNewsAchievementMapper.getSgjsFourNewsAchievementList(sgjsFourNewsAchievement);
+            if (CollUtil.isEmpty(sgjsFourNewsAchievementList)) {
+                //推送空数据
+                sendEmpty();
+                return;
+            }
+            //获取流程信息
+            FlowInfoSearchUtilNonReqest.getFlowInfo(sgjsFourNewsAchievementList, FlowEnum.SGJS_FOUR_NEWS_ACHIEVEMENT, tenantKey, loginUserName);
+            //（已发起审批的）
+            List<SgjsFourNewsAchievement> collect = sgjsFourNewsAchievementList.stream()
+                    .filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
+            if (CollUtil.isEmpty(collect)) {
+                //推送空数据
+                sendEmpty();
+                return;
+            }
+            //专家
+            SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
+            List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsExpertLibraryService.getSgjsExpertLibraryList(sgjsExpertLibrary);
+            Map<Long, List<SgjsExpertLibrary>> collect1 = sgjsExpertLibraryList.stream().collect(Collectors.groupingBy(SgjsExpertLibrary::getForeignId));
+            //鉴定或评价
+            SgjsAuthenticateEvaluate sgjsAuthenticateEvaluate = new SgjsAuthenticateEvaluate();
+            List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(sgjsAuthenticateEvaluate);
+            Map<Long, List<SgjsAuthenticateEvaluate>> collect2 = shjsAuthenticateEvaluateList.stream().collect(Collectors.groupingBy(SgjsAuthenticateEvaluate::getForeignId));
+            //成果奖项
+            SgjsAchievementAward sgjsAchievementAward = new SgjsAchievementAward();
+            List<SgjsAchievementAward> sgjsAchievementAwardList = sgjsAchievementAwardService.getSgjsAchievementAwardList(sgjsAchievementAward);
+            Map<Long, List<SgjsAchievementAward>> collect3 = sgjsAchievementAwardList.stream().collect(Collectors.groupingBy(SgjsAchievementAward::getForeignId));
+            collect.forEach(p -> {
+                if (CollUtil.isNotEmpty(collect1.get(p.getId()))) p.setSgjsExpertLibraryList(collect1.get(p.getId()));
+                if (CollUtil.isNotEmpty(collect2.get(p.getId())))
+                    p.setShjsAuthenticateEvaluateList(collect2.get(p.getId()));
+                if (CollUtil.isNotEmpty(collect3.get(p.getId())))
+                    p.setSgjsAchievementAwardList(collect3.get(p.getId()));
+            });
+            rocketMQTemplate.convertAndSend("sgjs_four_news_achievement:tenantSuccess", collect);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
         }
-        //获取流程信息
-        FlowInfoSearchUtil.getFlowInfo(sgjsFourNewsAchievementList,FlowEnum.SGJS_FOUR_NEWS_ACHIEVEMENT);
-        //（已发起审批的）
-        List<SgjsFourNewsAchievement> collect = sgjsFourNewsAchievementList.stream()
-                .filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
-        if (CollUtil.isEmpty(collect)) {
-            //推送空数据
-            sendEmpty();
-            return;
-        }
-        //专家
-        SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
-        List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsExpertLibraryService.getSgjsExpertLibraryList(sgjsExpertLibrary);
-        Map<Long, List<SgjsExpertLibrary>> collect1 = sgjsExpertLibraryList.stream().collect(Collectors.groupingBy(SgjsExpertLibrary::getForeignId));
-        //鉴定或评价
-        SgjsAuthenticateEvaluate sgjsAuthenticateEvaluate = new SgjsAuthenticateEvaluate();
-        List<SgjsAuthenticateEvaluate> shjsAuthenticateEvaluateList = shjsAuthenticateEvaluateService.getShjsAuthenticateEvaluateList(sgjsAuthenticateEvaluate);
-        Map<Long, List<SgjsAuthenticateEvaluate>> collect2 = shjsAuthenticateEvaluateList.stream().collect(Collectors.groupingBy(SgjsAuthenticateEvaluate::getForeignId));
-        //成果奖项
-        SgjsAchievementAward sgjsAchievementAward = new SgjsAchievementAward();
-        List<SgjsAchievementAward> sgjsAchievementAwardList = sgjsAchievementAwardService.getSgjsAchievementAwardList(sgjsAchievementAward);
-        Map<Long, List<SgjsAchievementAward>> collect3 = sgjsAchievementAwardList.stream().collect(Collectors.groupingBy(SgjsAchievementAward::getForeignId));
-        collect.forEach(p -> {
-            if (CollUtil.isNotEmpty(collect1.get(p.getId()))) p.setSgjsExpertLibraryList(collect1.get(p.getId()));
-            if (CollUtil.isNotEmpty(collect2.get(p.getId()))) p.setShjsAuthenticateEvaluateList(collect2.get(p.getId()));
-            if (CollUtil.isNotEmpty(collect3.get(p.getId()))) p.setSgjsAchievementAwardList(collect3.get(p.getId()));
-        });
-        rocketMQTemplate.convertAndSend("sgjs_four_news_achievement:tenantSuccess", collect);
     }
 
     //推送空数据

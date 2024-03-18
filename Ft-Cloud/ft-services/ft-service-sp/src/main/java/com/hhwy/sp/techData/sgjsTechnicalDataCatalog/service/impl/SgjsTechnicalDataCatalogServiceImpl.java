@@ -106,7 +106,7 @@ public class SgjsTechnicalDataCatalogServiceImpl implements ISgjsTechnicalDataCa
                 sgjsTechnicalDataCatalog.setRegionId(projectDto.getRegionId());
                 sgjsTechnicalDataCatalog.setRegionName(projectDto.getRegionName());
                 sgjsTechnicalDataCatalog.setProjectId(projectDto.getProjectId());
-                sgjsTechnicalDataCatalog.setPtVar5(projectDto.getProjectCode());
+                sgjsTechnicalDataCatalog.setPtVar4(projectDto.getProjectCode());
                 addList.add(sgjsTechnicalDataCatalog);
             } else {
                 sgjsTechnicalDataCatalog.setUpdateUser(SecurityUtils.getSysUser().getNickName());
