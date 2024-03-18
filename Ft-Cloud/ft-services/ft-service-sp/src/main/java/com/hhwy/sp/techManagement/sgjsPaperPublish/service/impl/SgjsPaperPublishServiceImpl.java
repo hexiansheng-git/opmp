@@ -12,6 +12,7 @@ import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
+import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.SgjsPaperPublish;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishExportVo;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishQueryVo;
@@ -51,6 +52,8 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
     @Autowired
     private SystemServiceApi systemServiceApi;
 
+    @Autowired
+    private ISysSyncInfoService4Sp sysSyncInfoService4Sp;
 
     @Override
     public SgjsPaperPublish getSgjsPaperPublishById(Long id, String type) {
@@ -154,6 +157,12 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         List<SgjsAchievementAward> awardList = paperPublish.getAwardList();
         sgjsAchievementAwardService.saveAchievementAward(id,BelongBusiness.BELONG_BUSINESS_8,awardList);
 
+        String taskStatus = paperPublish.getPtVar2();
+        if("1".equals(taskStatus) || "5".equals(taskStatus)){
+            paperPublish.setProcessStatus("no");
+            sysSyncInfoService4Sp.pushSgjsPaperPublish(paperPublish);
+        }
+
         return id;
     }
 
@@ -216,10 +225,18 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
             currentState = DataCurrentState.NO_PASS;
         }
         sgjsPaperPublishMapper.updatePaperPublishProcess(id,currentState,"5");
+
+        SgjsPaperPublish paperPublish = sgjsPaperPublishMapper.getSgjsPaperPublishById(id);
+        paperPublish.setProcessStatus("end");
+        sysSyncInfoService4Sp.pushSgjsPaperPublish(paperPublish);
     }
 
     @Override
     public void submitPaperPublishProcess(Long id) {
         sgjsPaperPublishMapper.updatePaperPublishProcess(id,DataCurrentState.APPLYING,"1");
+
+        SgjsPaperPublish paperPublish = this.getSgjsPaperPublishById(id,"2");
+        paperPublish.setProcessStatus("submit");
+        sysSyncInfoService4Sp.pushSgjsPaperPublish(paperPublish);
     }
 }

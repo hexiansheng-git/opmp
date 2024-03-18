@@ -1,28 +1,23 @@
 package com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.impl;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toCollection;
-
 import cn.hutool.core.date.DateTime;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
+import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.vo.ReportMeasureSubmitPushVo;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.mapper.SgjsReportMeasureSubmitMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.ISgjsReportMeasureSubmitService;
+import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.utils.date.FtDateUtils;
-import java.text.SimpleDateFormat;
-import java.util.Comparator;
-import java.util.TreeSet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,8 +32,9 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
 
     @Autowired
     private SgjsReportMeasureSubmitMapper sgjsReportMeasureSubmitMapper;
-    @Value("${file.url}")
-    private String url;
+
+    @Autowired
+    private ISysSyncInfoService4Sp sysSyncInfoService4Sp;
 
 
     public SgjsReportMeasureSubmit getSgjsReportMeasureSubmit(SgjsReportMeasureSubmit sgjsReportMeasureSubmit) {
@@ -74,6 +70,7 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
 
     @Transactional
     public AjaxResult batchAdd(SgjsReportMeasureSubmitVo sgjsReportMeasureSubmitVo) {
+        ReportMeasureSubmitPushVo pushVo = new ReportMeasureSubmitPushVo();
         if (!CollectionUtils.isEmpty(sgjsReportMeasureSubmitVo.getTreeList())) {
             for (SgjsReportMeasureSubmit sgjsReportMeasureSubmit : sgjsReportMeasureSubmitVo.getTreeList()) {
                 sgjsReportMeasureSubmit.setRealStartDate(sgjsReportMeasureSubmit.getRealStartDateStr() == null ? null : FtDateUtils.parseDate(sgjsReportMeasureSubmit.getRealStartDateStr().replaceAll("(?:年|月|日)", "-")));
@@ -94,9 +91,16 @@ public class SgjsReportMeasureSubmitServiceImpl implements ISgjsReportMeasureSub
             if(!CollectionUtils.isEmpty(updateList)){
                 sgjsReportMeasureSubmitMapper.updateSgjsReportMeasureSubmitList(updateList);
             }
+
+            pushVo.setInsertList(insertList);
+            pushVo.setUpdateList(updateList);
         }
         //批量删除
         deleteByIds(sgjsReportMeasureSubmitVo.getDelIdList());
+
+        pushVo.setDelIdList(sgjsReportMeasureSubmitVo.getDelIdList());
+        sysSyncInfoService4Sp.pushReportMeasureSubmit(pushVo);
+
         return AjaxResult.success();
     }
 

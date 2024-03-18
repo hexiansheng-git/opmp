@@ -8,19 +8,15 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
-import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.mapper.SgjsReportMeasureSubmitMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.ISgjsReportMeasureSubmitService;
-import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,10 +33,7 @@ public class SgjsReportMeasureSubmitController extends BaseController {
 
     @Autowired
     private ISgjsReportMeasureSubmitService sgjsReportMeasureSubmitService;
-    @Autowired
-    private SgjsReportMeasureSubmitMapper sgjsReportMeasureSubmitMapper;
-    @Value("${file.url}")
-    private String url;
+
 
     @GetMapping
     public AjaxResult getSgjsReportMeasureSubmit(

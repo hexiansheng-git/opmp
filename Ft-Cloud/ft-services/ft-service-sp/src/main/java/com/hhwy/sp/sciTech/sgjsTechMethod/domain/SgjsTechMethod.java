@@ -1,20 +1,18 @@
 package com.hhwy.sp.sciTech.sgjsTechMethod.domain;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
-import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain.SgjsAuthenticateEvaluate;
+import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author cjh
@@ -24,6 +22,9 @@ import lombok.Data;
 @Data
 public class SgjsTechMethod extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
+
+    /*流程标识   submit：发起   end：结束   no：不是流程*/
+    private String processStatus;
 
     /**
      * 字段描述：主键id

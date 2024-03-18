@@ -1,8 +1,5 @@
 package com.hhwy.sp.sciTech.sgjsTechMethod.service.impl;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
@@ -15,20 +12,24 @@ import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.constant.BelongBusiness;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
-import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
-import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
 import com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain.SgjsAuthenticateEvaluate;
 import com.hhwy.sp.common.sgjsAuthenticateEvaluate.service.ISgjsAuthenticateEvaluateService;
-import com.hhwy.system.api.domain.SysUser;
-import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
+import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
+import com.hhwy.sp.sciTech.sgjsTechMethod.domain.SgjsTechMethod;
 import com.hhwy.sp.sciTech.sgjsTechMethod.mapper.SgjsTechMethodMapper;
 import com.hhwy.sp.sciTech.sgjsTechMethod.service.ISgjsTechMethodService;
-import com.hhwy.sp.sciTech.sgjsTechMethod.domain.SgjsTechMethod;
+import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
+import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author cjh
@@ -58,6 +59,9 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
      */
     @Autowired
     private ISgjsAuthenticateEvaluateService shjsAuthenticateEvaluateService;
+
+    @Autowired
+    private ISysSyncInfoService4Sp sysSyncInfoService4Sp;
 
     @Autowired
     private SystemServiceApi systemServiceApi;
@@ -159,6 +163,13 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         // 专家
         List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsTechMethod.getSgjsExpertLibraryList();
         sgjsExpertLibraryService.saveSgjsExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_6,sgjsExpertLibraryList);
+
+        String taskStatus = sgjsTechMethod.getTaskStatus();
+        if("2".equals(taskStatus) || "5".equals(taskStatus)){
+            sgjsTechMethod.setProcessStatus("no");
+            sysSyncInfoService4Sp.pushSgjsTechMethod(sgjsTechMethod);
+        }
+
         return sgjsTechMethod;
     }
 
@@ -186,9 +197,11 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         SgjsTechMethod sgjsTechMethod = new SgjsTechMethod();
         sgjsTechMethod.setId(id);
         SgjsTechMethod existVo = sgjsTechMethodMapper.getSgjsTechMethod(sgjsTechMethod);
+        String processStatus = "";
         if(existVo != null) {
             if(StringUtils.isNotEmpty(isPass)) {
                 sgjsTechMethod.setTaskStatus("5");
+                processStatus = "end";
                 if("1".equals(isPass)) {
                     sgjsTechMethod.setDataCurrentState("3");
                 }
@@ -198,9 +211,18 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
             } else {
                 sgjsTechMethod.setDataCurrentState("2");
                 sgjsTechMethod.setTaskStatus("2");
+                processStatus = "submit";
             }
             sgjsTechMethodMapper.updateSgjsTechMethod(sgjsTechMethod);
         }
+
+        SgjsTechMethod query = new SgjsTechMethod();
+        sgjsTechMethod.setId(id);
+        SgjsTechMethod push = this.getSgjsTechMethod(query);
+        if(push != null){
+            push.setProcessStatus(processStatus);
+        }
+        sysSyncInfoService4Sp.pushSgjsTechMethod(push);
     }
 
 

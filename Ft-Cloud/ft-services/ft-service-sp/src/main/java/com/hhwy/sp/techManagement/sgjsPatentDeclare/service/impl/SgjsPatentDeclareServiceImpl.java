@@ -12,6 +12,7 @@ import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
+import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.SgjsPatentDeclare;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.vo.PatentDeclareQueryVo;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.mapper.SgjsPatentDeclareMapper;
@@ -47,6 +48,9 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
 
     @Autowired
     private SystemServiceApi systemServiceApi;
+
+    @Autowired
+    private ISysSyncInfoService4Sp sysSyncInfoService4Sp;
 
 
     @Override
@@ -165,6 +169,12 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
         List<SgjsAchievementAward> awardList = patentDeclare.getAwardList();
         sgjsAchievementAwardService.saveAchievementAward(id,BelongBusiness.BELONG_BUSINESS_7,awardList);
 
+        String taskStatus = patentDeclare.getPtVar2();
+        if("1".equals(taskStatus) || "5".equals(taskStatus)){
+            patentDeclare.setProcessStatus("no");
+            sysSyncInfoService4Sp.pushSgjsPatentDeclare(patentDeclare);
+        }
+
         return id;
     }
 
@@ -220,10 +230,18 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
             currentState = DataCurrentState.NO_PASS;
         }
         sgjsPatentDeclareMapper.updatePatentDeclareProcess(id,currentState,"5");
+
+        SgjsPatentDeclare patentDeclare = sgjsPatentDeclareMapper.getSgjsPatentDeclareById(id);
+        patentDeclare.setProcessStatus("end");
+        sysSyncInfoService4Sp.pushSgjsPatentDeclare(patentDeclare);
     }
 
     @Override
     public void submitPatentDeclareProcess(Long id) {
         sgjsPatentDeclareMapper.updatePatentDeclareProcess(id,DataCurrentState.APPLYING,"1");
+
+        SgjsPatentDeclare patentDeclare = this.getSgjsPatentDeclareById(id,"2");
+        patentDeclare.setProcessStatus("submit");
+        sysSyncInfoService4Sp.pushSgjsPatentDeclare(patentDeclare);
     }
 }

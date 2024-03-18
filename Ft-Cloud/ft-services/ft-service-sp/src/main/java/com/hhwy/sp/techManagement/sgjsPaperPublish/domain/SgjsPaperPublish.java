@@ -26,6 +26,9 @@ import java.util.List;
 public class SgjsPaperPublish extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
+    /*流程标识   submit：发起   end：结束   no：不是流程*/
+    private String processStatus;
+
     /**
      * 保存类型  1：新增；2：修改
      */

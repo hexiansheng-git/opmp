@@ -1,18 +1,15 @@
 package com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
-import com.hhwy.utils.tree.TreeNode;
-import java.util.Date;
-import java.math.BigDecimal;
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.utils.tree.TreeNode;
 import lombok.Data;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zmh
@@ -93,6 +90,39 @@ public class SgjsReportMeasureSubmit extends TreeNode<SgjsReportMeasureSubmit> {
 
     @JsonProperty
     private String realEndDateStr;
+
+    /*
+     * 字段描述：项目id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "项目id")
+    private Long projectId;
+    /**
+     * 字段描述：项目编码
+     */
+    @JsonProperty
+    @Excel(name = "项目编码")
+    private String projectCode;
+    /**
+     * 字段描述：项目名称（中文）
+     */
+    @JsonProperty
+    @Excel(name = "项目名称（中文）")
+    private String projectName;
+    /**
+     * 字段描述：所属区域id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "所属区域id")
+    private Long regionId;
+    /**
+     * 字段描述：所属区域名称
+     */
+    @JsonProperty
+    @Excel(name = "所属区域名称")
+    private String regionName;
 
 
     /**

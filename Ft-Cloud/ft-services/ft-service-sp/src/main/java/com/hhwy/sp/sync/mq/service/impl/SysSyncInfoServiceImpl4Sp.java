@@ -2,15 +2,21 @@ package com.hhwy.sp.sync.mq.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.SgjsCriticalExpReport;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportVo;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManage;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManageVo;
+import com.hhwy.sp.sciTech.sgjsTechMethod.domain.SgjsTechMethod;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
+import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
+import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.vo.ReportMeasureSubmitPushVo;
 import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
+import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.SgjsPaperPublish;
+import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.SgjsPatentDeclare;
 import com.hhwy.sp.techTrain.domain.SgjsTechnicalTraining;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,6 +159,60 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
 
             rocketMQTemplate.convertAndSend("sgjs_critical_exp_report:tenantSuccess", JSONObject.toJSONString(finalList));
         } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void pushReportMeasureSubmit(ReportMeasureSubmitPushVo pushVo){
+        try{
+            ProjectDto projectDto = pmServiceApi.getProjectDto();
+            List<SgjsReportMeasureSubmit> reportMeasureSubmitList = pushVo.getInsertList();
+            for (SgjsReportMeasureSubmit temp : reportMeasureSubmitList) {
+                temp.setProjectName(projectDto.getProjectName());
+                temp.setProjectId(projectDto.getProjectId());
+                temp.setRegionId(projectDto.getRegionId());
+                temp.setRegionName(projectDto.getRegionName());
+                temp.setProjectCode(projectDto.getProjectCode());
+            }
+            rocketMQTemplate.convertAndSend("sgjs_report_measure_submit:tenantSuccess", JSONObject.toJSONString(pushVo));
+        }catch(Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void pushSgjsTechMethod(SgjsTechMethod techMethod){
+        try{
+            ProjectDto projectDto = pmServiceApi.getProjectDto();
+            techMethod.setProjectId(projectDto.getProjectId());
+            techMethod.setRegionId(projectDto.getRegionId());
+            techMethod.setRegionName(projectDto.getRegionName());
+            techMethod.setPtVar5(projectDto.getProjectCode());
+            rocketMQTemplate.convertAndSend("sgjs_tech_method:tenantSuccess", JSONObject.toJSONString(techMethod));
+        }catch(Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void pushSgjsPatentDeclare(SgjsPatentDeclare patentDeclare){
+        try{
+            rocketMQTemplate.convertAndSend("sgjs_patent_declare:tenantSuccess", JSONObject.toJSONString(patentDeclare));
+        }catch(Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void pushSgjsPaperPublish(SgjsPaperPublish patentDeclare){
+        try{
+            rocketMQTemplate.convertAndSend("sgjs_paper_publish:tenantSuccess", JSONObject.toJSONString(patentDeclare));
+        }catch(Exception e){
             e.printStackTrace();
             throw e;
         }

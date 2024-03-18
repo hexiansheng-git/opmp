@@ -2,8 +2,12 @@ package com.hhwy.sp.sync.mq.service;
 
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportVo;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManageVo;
+import com.hhwy.sp.sciTech.sgjsTechMethod.domain.SgjsTechMethod;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
+import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.vo.ReportMeasureSubmitPushVo;
+import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.SgjsPaperPublish;
+import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.SgjsPatentDeclare;
 import com.hhwy.sp.techTrain.domain.SgjsTechnicalTraining;
 
 import java.util.List;
@@ -39,9 +43,17 @@ public interface ISysSyncInfoService4Sp {
      */
     public void pushSgjsPlanMeasureManage(SgjsPlanMeasureManageVo vo);
 
+    void pushReportMeasureSubmit(ReportMeasureSubmitPushVo pushVo);
+
     /**
      * 推送关键试验报告
      * @param vo
      */
     public void pushSgjsCriticalExpReport(CriticalExpReportVo vo);
+
+    void pushSgjsTechMethod(SgjsTechMethod techMethod);
+
+    void pushSgjsPatentDeclare(SgjsPatentDeclare patentDeclare);
+
+    void pushSgjsPaperPublish(SgjsPaperPublish patentDeclare);
 }
