@@ -11,6 +11,8 @@ import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.mapper.SgjsBuildSchemeMapper;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.ISgjsBuildSchemeService;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.sgjsBuildSchemeExpertSuggest.domain.SgjsBuildSchemeExpertSuggest;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.sgjsBuildSchemeExpertSuggest.service.ISgjsBuildSchemeExpertSuggestService;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
 import com.hhwy.sp.common.FileUploadUtil;
@@ -35,9 +37,10 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
 
     @Autowired
     private SgjsBuildSchemeMapper sgjsBuildSchemeMapper;
-
     @Autowired
     private ISgjsBuildSchemeListService sgjsBuildSchemeListService;
+    @Autowired
+    private ISgjsBuildSchemeExpertSuggestService schemeExpertSuggestService;
 
     @Autowired
     private PmServiceApi pmServiceApi;
@@ -58,7 +61,8 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             resultInit.setVersionStr("V1.00");
             resultInit.setCountryName(countryName);
             resultInit.setCountryCode(countryCode);
-            return sgjsBuildScheme;
+            resultInit.setTaskStatus("0");
+            return resultInit;
         }
         Long id = sgjsBuildScheme.getId();
         SgjsBuildSchemeList sgjsBuildSchemeList = new SgjsBuildSchemeList();
@@ -71,6 +75,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         return result;
     }
 
+    //调整
     @Override
     public SgjsBuildScheme adjust(SgjsBuildScheme sgjsBuildSchemeParam) {
         SgjsBuildScheme result = sgjsBuildSchemeMapper.getMaxVersionData();
@@ -130,13 +135,17 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             //修改
             this.updateSgjsBuildScheme(sgjsBuildScheme);
         }
-        /*保存方案清单*/
+        /*保存子表信息：方案清单、专家意见*/
         //只需要在流程未发起时处理
         sgjsBuildScheme.setId(id);
         FlowInfoSearchUtil.getFlowInfo(sgjsBuildScheme, FlowEnum.SGJS_BUILD_SCHEME);
         if (sgjsBuildScheme.getTaskStatus().equals("0")) {
+            //方案清单
             List<SgjsBuildSchemeList> children = sgjsBuildScheme.getChildren();
             sgjsBuildSchemeListService.insertSgjsBuildSchemeList(children, id);
+            //专家意见
+            List<SgjsBuildSchemeExpertSuggest> expertSuggest = sgjsBuildScheme.getExpertSuggest();
+            schemeExpertSuggestService.insertSgjsBuildSchemeExpertSuggestList(expertSuggest);
         }
         return id;
     }

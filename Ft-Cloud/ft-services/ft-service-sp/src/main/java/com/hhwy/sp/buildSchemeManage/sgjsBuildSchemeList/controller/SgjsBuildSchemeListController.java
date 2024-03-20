@@ -100,6 +100,7 @@ public class SgjsBuildSchemeListController extends BaseController {
         return toAjax(sgjsBuildSchemeListService.deleteSgjsBuildSchemeListByPks(sgjsBuildSchemeListPkList));
     }
 
+    //导出
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsBuildSchemeList sgjsBuildSchemeListParam) throws IOException {
         List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);

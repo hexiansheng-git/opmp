@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.sgjsBuildSchemeExpertSuggest.domain.SgjsBuildSchemeExpertSuggest;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
@@ -22,7 +23,10 @@ import java.util.List;
 public class SgjsBuildScheme extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
+    //方案清单
     private List<SgjsBuildSchemeList> children;
+    //专家意见
+    private List<SgjsBuildSchemeExpertSuggest> expertSuggest;
 
     /**
      * 字段描述：
