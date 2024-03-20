@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.tree.TreeNodeBase;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
@@ -23,7 +24,7 @@ import java.util.List;
  */
 @Data
 @ExcelIgnoreUnannotated
-public class TWbs extends BaseEntity {
+public class TWbs extends TreeNodeBase<TWbs,String> {
     private static final long serialVersionUID = 1L;
 
     /**

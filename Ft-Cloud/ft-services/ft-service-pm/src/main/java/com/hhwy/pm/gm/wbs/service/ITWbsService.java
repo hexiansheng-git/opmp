@@ -76,6 +76,9 @@ public interface ITWbsService {
      */
     Map<String,TWbs> getTWbsByPrjWbsCode(Set<String> set);
 
+    Long getEffectMainIdByType(String type);
+    
+
     int insertTWbs(TWbs tWbs);
 
     int insertTWbsMain(Map map);

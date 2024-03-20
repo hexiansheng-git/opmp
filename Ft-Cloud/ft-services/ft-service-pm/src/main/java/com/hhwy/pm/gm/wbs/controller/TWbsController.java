@@ -1,20 +1,29 @@
 package com.hhwy.pm.gm.wbs.controller;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.gm.wbs.domain.TWbs;
 import com.hhwy.pm.gm.wbs.service.ITWbsService;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.SetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +49,7 @@ public class TWbsController extends BaseController{
     @PostMapping("/effectLazyList")
     public AjaxResult effectLazyList(@RequestBody Map map) {
         String engineeringType = ObjectUtils.nvlString(map.get("engineeringType"));
-        Long parentId = ObjectUtils.nvlLong(map.get("parentId"),-1L);
+            Long parentId = ObjectUtils.nvlLong(map.get("parentId"),-1L);
         List<TWbs> list = tWbsService.wbsListByType(engineeringType,ObjectUtils.nvlString(map.get("name")),ObjectUtils.nvlString(map.get("nodeType")),parentId);
         return AjaxResult.success(list);
     }
@@ -91,6 +100,36 @@ public class TWbsController extends BaseController{
             return AjaxResult.success();
         Map<String,TWbs> map = tWbsService.getTWbsByPrjWbsCode(SetUtils.hashSet(wbsCodes.split(",")));
         return AjaxResult.success("",map);
+    }
+
+    @PostMapping("/exportData")
+    public void export(@RequestBody Map map, HttpServletResponse response) throws IOException {
+        String engineeringType = ObjectUtils.nvlString(map.get("engineeringType"));
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        try {
+            Long mainId = tWbsService.getEffectMainIdByType(engineeringType);
+            if(mainId == null){
+                new FtExcelUtil<>(TWbs.class).exportExcel(response, new ArrayList<>(2), DateUtils.getDate());
+                return ;
+            }
+            List list = tWbsService.getTWbsListByMainId(mainId);
+            list = TreeUtil.exportListFormat(list, (Class)String.class);
+            List result = new ArrayList();
+            for (int i = 0; i < list.size(); i++) {
+                TWbs temp = (TWbs) list.get(i);
+                if(temp.getLevel() != 1 ){ //第一层级编号默认为工程类型编码
+                    temp.setCode(temp.getAncestorsName());
+                }
+                result.add(temp);
+            }
+            FtExcelUtil<TWbs> util = new FtExcelUtil<>(TWbs.class);
+            util.exportExcel(response, result, DateUtils.getDate());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 
 

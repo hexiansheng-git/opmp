@@ -17,6 +17,7 @@ import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
+import jodd.util.StringUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -434,5 +435,10 @@ public class TWbsServiceImpl implements ITWbsService {
     public int deleteTWbsByPks(List<Long> tWbsPkList) {
         return tWbsMapper.deleteTWbsByPks(tWbsPkList);
     }
-    
+
+    @Override
+    public Long getEffectMainIdByType(String type) {
+        if(StringUtils.isBlank(type)) return null;
+        return tWbsMapper.getEffectMainIdByType(type);
+    }
 }
