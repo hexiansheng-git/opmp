@@ -1,14 +1,14 @@
-package com.hhwy.sp.buildScheme.sgjsBuildScheme.service.impl;
+package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
-import com.hhwy.sp.buildScheme.sgjsBuildScheme.domain.SgjsBuildScheme;
-import com.hhwy.sp.buildScheme.sgjsBuildScheme.mapper.SgjsBuildSchemeMapper;
-import com.hhwy.sp.buildScheme.sgjsBuildScheme.service.ISgjsBuildSchemeService;
 import com.hhwy.sp.buildScheme.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import com.hhwy.sp.buildScheme.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.mapper.SgjsBuildSchemeMapper;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.ISgjsBuildSchemeService;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;

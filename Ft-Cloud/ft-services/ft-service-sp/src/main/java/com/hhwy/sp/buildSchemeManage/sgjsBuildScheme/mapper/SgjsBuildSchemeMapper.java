@@ -1,9 +1,9 @@
-package com.hhwy.sp.buildScheme.sgjsBuildScheme.mapper;
+package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.mapper;
+
+import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
-import com.hhwy.sp.buildScheme.sgjsBuildScheme.domain.SgjsBuildScheme;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * @author fushudong

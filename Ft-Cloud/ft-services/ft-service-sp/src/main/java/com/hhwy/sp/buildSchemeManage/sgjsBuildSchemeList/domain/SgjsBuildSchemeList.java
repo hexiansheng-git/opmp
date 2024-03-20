@@ -1,33 +1,23 @@
-package com.hhwy.sp.buildScheme.sgjsBuildScheme.domain;
+package com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.util.Date;
-import java.math.BigDecimal;
-
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hhwy.sp.buildScheme.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
-import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
- * @author fsd
- * @date 2024-03-20 09:54:05
- * @remark sgjs_build_scheme
+ * @author fushudong
+ * @date 2024-03-19 15:57:37
+ * @remark sgjs_build_scheme_list
  */
 @Data
-public class SgjsBuildScheme extends CommonBaseEntity {
+public class SgjsBuildSchemeList extends BaseEntity {
     private static final long serialVersionUID = 1L;
-
-    private List<SgjsBuildSchemeList> children;
 
     /**
      * 字段描述：
@@ -36,139 +26,107 @@ public class SgjsBuildScheme extends CommonBaseEntity {
     @JsonProperty
     private Long id;
     /**
-     * 字段描述：当前状态
+     * 字段描述：主表id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "主表id")
+    private Long foreignId;
+    /**
+     * 字段描述：方案编号
      */
     @JsonProperty
-    @Excel(name = "当前状态")
-    private String taskStatus;
+    @Excel(name = "方案编号")
+    private String schemeNum;
     /**
-     * 字段描述：国别
+     * 字段描述：方案名称
      */
     @JsonProperty
-    @Excel(name = "国别")
-    private String countryCode;
+    @Excel(name = "方案名称")
+    private String schemeName;
     /**
-     * 字段描述：国家名称
+     * 字段描述：变更类型 1推迟、2提前、3新增、4废止
      */
     @JsonProperty
-    @Excel(name = "国家名称")
-    private String countryName;
+    @Excel(name = "变更类型 1推迟、2提前、3新增、4废止")
+    private String changeType;
     /**
-     * 字段描述：中标资质
+     * 字段描述：关联WBS
      */
     @JsonProperty
-    @Excel(name = "中标资质")
-    private String winCertificate;
+    @Excel(name = "关联WBS")
+    private String relationWbsId;
     /**
-     * 字段描述：业务领域及产品
+     * 字段描述：关联WBS
      */
     @JsonProperty
-    @Excel(name = "业务领域及产品")
-    private String businessAreasAndProducts;
+    @Excel(name = "关联WBS")
+    private String relationWbsName;
     /**
-     * 字段描述：0无效 1有效
+     * 字段描述：方案类型
      */
     @JsonProperty
-    @Excel(name = "0无效 1有效")
-    private String valid;
+    @Excel(name = "方案类型")
+    private String schemeType;
     /**
-     * 字段描述：版本
+     * 字段描述：方案分级 1Ⅰ、2Ⅱ、3Ⅲ、4Ⅳ
      */
     @JsonProperty
-    @Excel(name = "版本")
-    private BigDecimal version;
+    @Excel(name = "方案分级 1Ⅰ、2Ⅱ、3Ⅲ、4Ⅳ")
+    private String schemeLevel;
     /**
-     * 字段描述：版本字符
+     * 字段描述：是否危大工程 1危大、2超危大、3一般
      */
     @JsonProperty
-    @Excel(name = "版本字符")
-    private String versionStr;
+    @Excel(name = "是否危大工程 1危大、2超危大、3一般")
+    private String dangerLevel;
     /**
-     * 字段描述：项目总工id，多个逗号分割
+     * 字段描述：施工重难点
      */
     @JsonProperty
-    @Excel(name = "项目总工id，多个逗号分割")
-    private String leadEngineer;
+    @Excel(name = "施工重难点")
+    private String buildDifficult;
     /**
-     * 字段描述：项目总工姓名，多个逗号分割
-     */
-    @JsonProperty
-    @Excel(name = "项目总工姓名，多个逗号分割")
-    private String leadEngineerName;
-    /**
-     * 字段描述：项目总工联系方式，多个逗号分割
-     */
-    @JsonProperty
-    @Excel(name = "项目总工联系方式，多个逗号分割")
-    private String leadEngineerPhoneNum;
-    /**
-     * 字段描述：清单序列号
-     */
-    @JsonProperty
-    @Excel(name = "清单序列号")
-    private String listSerialNum;
-    /**
-     * 字段描述：清单提交日期
+     * 字段描述：计划编制完成时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "清单提交日期", dateFormat = "yyyy-MM-dd")
-    private Date submisionDate;
+    @Excel(name = "计划编制完成时间", dateFormat = "yyyy-MM-dd")
+    private Date planComplationTime;
     /**
-     * 字段描述：发起人id
-     */
-    @JsonProperty
-    @Excel(name = "发起人id")
-    private String submisionPerson;
-    /**
-     * 字段描述：发起人姓名
-     */
-    @JsonProperty
-    @Excel(name = "发起人姓名")
-    private String submisionPersonName;
-    /**
-     * 字段描述：方案清单项目内部审核记录表(附件)
-     */
-    @JsonProperty
-    @Excel(name = "方案清单项目内部审核记录表(附件)")
-    private String auditRecordFile;
-    /**
-     * 字段描述：项目简介(附件)
-     */
-    @JsonProperty
-    @Excel(name = "项目简介(附件)")
-    private String projectSummaryFile;
-    /**
-     * 字段描述：变更发起日期
+     * 字段描述：原计划实施时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "变更发起日期", dateFormat = "yyyy-MM-dd")
-    private Date changeDate;
+    @Excel(name = "原计划实施时间", dateFormat = "yyyy-MM-dd")
+    private Date planComplationTimeOrigin;
     /**
-     * 字段描述：变更发起人
+     * 字段描述：计划实施时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "变更发起人")
-    private String changePerson;
+    @Excel(name = "计划实施时间", dateFormat = "yyyy-MM-dd")
+    private Date planImplementTime;
     /**
-     * 字段描述：变更发起人姓名
+     * 字段描述：变更计划实施时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "变更发起人姓名")
-    private String changePersonName;
-    /**
-     * 字段描述：更新说明
-     */
-    @JsonProperty
-    @Excel(name = "更新说明")
-    private String changeSummary;
+    @Excel(name = "变更计划实施时间", dateFormat = "yyyy-MM-dd")
+    private Date planImplementTimeChange;
     /**
      * 字段描述：备注
      */
     @JsonProperty
     @Excel(name = "备注")
     private String remark;
+    /**
+     * 字段描述：关联id,业务唯一标识
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "关联id,业务唯一标识")
+    private Long relevancyId;
     /**
      * 字段描述：所属区域id
      */
@@ -182,12 +140,6 @@ public class SgjsBuildScheme extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "所属区域名称")
     private String regionName;
-    /**
-     * 字段描述：PJ码
-     */
-    @JsonProperty
-    @Excel(name = "PJ码")
-    private String projectCode;
     /**
      * 字段描述：项目id
      */
@@ -289,4 +241,9 @@ public class SgjsBuildScheme extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    private Integer ptVar6;
+    private String startTime;
+    private String endTime;
+
 }

@@ -1,8 +1,8 @@
-package com.hhwy.sp.buildScheme.sgjsBuildSchemeList.service;
+package com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service;
+
+import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 
 import java.util.List;
-
-import com.hhwy.sp.buildScheme.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 
 /**
  * @author fushudong

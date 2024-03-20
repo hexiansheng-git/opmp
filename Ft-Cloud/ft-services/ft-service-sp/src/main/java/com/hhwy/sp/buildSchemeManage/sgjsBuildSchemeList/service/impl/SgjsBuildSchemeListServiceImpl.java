@@ -1,4 +1,18 @@
-package com.hhwy.sp.buildScheme.sgjsBuildSchemeList.service.impl;
+package com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.impl;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.buildScheme.sgjsBuildScheme.domain.SgjsBuildScheme;
+import com.hhwy.sp.buildScheme.sgjsBuildScheme.service.ISgjsBuildSchemeService;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.mapper.SgjsBuildSchemeListMapper;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
+import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -6,30 +20,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
-import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.sp.buildScheme.sgjsBuildScheme.domain.SgjsBuildScheme;
-import com.hhwy.sp.buildScheme.sgjsBuildScheme.service.ISgjsBuildSchemeService;
-import io.swagger.models.auth.In;
-import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.sp.buildScheme.sgjsBuildSchemeList.mapper.SgjsBuildSchemeListMapper;
-import com.hhwy.sp.buildScheme.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
-import com.hhwy.sp.buildScheme.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
-import com.hhwy.utils.idworker.IdWorker;
-
 /**
  * @author fushudong
  * @date 2024-03-19 15:57:37
  * @remark 
  */
 @Service
-public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListService{
+public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListService {
 
     @Autowired
     private SgjsBuildSchemeListMapper sgjsBuildSchemeListMapper;

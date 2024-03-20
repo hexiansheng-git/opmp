@@ -1,21 +1,21 @@
-package com.hhwy.sp.buildScheme.sgjsBuildSchemeList.controller;
+package com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.sp.buildScheme.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
-import com.hhwy.sp.buildScheme.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 功能描述: 施工方案管理 - 施工方案清单详细清单
@@ -34,7 +34,7 @@ public class SgjsBuildSchemeListController extends BaseController{
 
     @PreAuthorize(hasPermi = "sgjsBuildSchemeList:list")
     @GetMapping
-    public AjaxResult getSgjsBuildSchemeList(@Validated(ValidationGroups.Get.class)  SgjsBuildSchemeList sgjsBuildSchemeListParam){
+    public AjaxResult getSgjsBuildSchemeList(@Validated(ValidationGroups.Get.class) SgjsBuildSchemeList sgjsBuildSchemeListParam){
         SgjsBuildSchemeList sgjsBuildSchemeList =  sgjsBuildSchemeListService.getSgjsBuildSchemeList(sgjsBuildSchemeListParam);
         return AjaxResult.success(sgjsBuildSchemeList);
     }
