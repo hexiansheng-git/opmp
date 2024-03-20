@@ -227,7 +227,7 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
         this.addAllData(kcsjGroupManageMainVo);
         //数据同步总部
         logger.info("收到顶顶顶顶【{}】",JSONObject.toJSONString(kcsjGroupManageMainVo));
-       // syncDataToGm(kcsjGroupManageMainVo);
+        syncDataToGm(kcsjGroupManageMainVo);
     }
 
     void digui(List<KcsjGroupManageDetail> rst){

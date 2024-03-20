@@ -45,6 +45,7 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
     }
 
     public List<SgjsExperimentTotalPlan> getSgjsExperimentTotalPlanList(SgjsExperimentTotalPlan sgjsExperimentTotalPlan) {
+
         return sgjsExperimentTotalPlanMapper.getSgjsExperimentTotalPlanList(sgjsExperimentTotalPlan);
     }
 
@@ -63,6 +64,7 @@ public class SgjsExperimentTotalPlanServiceImpl implements ISgjsExperimentTotalP
      * 总部版同步
      *
      * @param sgjsExperimentTotalPlan
+     * @param type
      */
     private void syncDataToGm(SgjsExperimentTotalPlan sgjsExperimentTotalPlan,String type) {
         long beginMills = System.currentTimeMillis();

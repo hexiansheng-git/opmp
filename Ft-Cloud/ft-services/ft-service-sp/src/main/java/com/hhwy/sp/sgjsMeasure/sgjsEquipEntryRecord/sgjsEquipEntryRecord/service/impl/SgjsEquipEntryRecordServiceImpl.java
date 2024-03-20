@@ -250,7 +250,7 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
 
     @Override
     public List<SgjsEquipEntryRecordInfo> getDatatByOther(Map<String, Object> map) {
-
+        //物设同步
         AjaxResult result = getMaterialInfoInterface.syncMaterialInfo(map);
         String code = result.get("code").toString();
         List<SgjsEquipEntryRecordInfo> list=new ArrayList<>();
@@ -262,6 +262,7 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
         for (GetMaterialInfoVo vo:data) {
             SgjsEquipEntryRecordInfo info=new SgjsEquipEntryRecordInfo();
             info.setManageCode(vo.getManagementcode());
+            info.setManageCode(vo.getCode());
             String type = vo.getType();
             if(type.equals("0")){//0：自有
 
