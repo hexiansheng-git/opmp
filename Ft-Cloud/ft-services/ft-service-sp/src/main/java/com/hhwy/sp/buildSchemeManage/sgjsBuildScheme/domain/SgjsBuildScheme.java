@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.sp.buildScheme.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 
