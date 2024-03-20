@@ -1,0 +1,202 @@
+package com.hhwy.sp.buildSchemeManage.review.domain;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Date;
+
+/**
+ * @author han
+ * @date 2024-03-20 09:39:48
+ * @remark sgjs_build_scheme_review_opinion_record
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class SgjsBuildSchemeReviewOpinionRecord extends BaseEntity {
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 字段描述：主键id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "主键id")
+    private Long id;
+    /**
+     * 字段描述：施工方案评审表主键id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "施工方案评审表主键id")
+    private Long reviewId;
+    /**
+     * 字段描述：方案总得分
+     */
+    @JsonProperty
+    @Excel(name = "方案总得分")
+    private Double description;
+    /**
+     * 字段描述：区域总工意见（1：通过  2：修改后通过  3：不通过）
+     */
+    @JsonProperty
+    @Excel(name = "区域总工意见（1：通过  2：修改后通过  3：不通过）")
+    private String regionChiefOpinion;
+    /**
+     * 字段描述：区域总工详细意见
+     */
+    @JsonProperty
+    @Excel(name = "区域总工详细意见")
+    private String regionChiefDetailOpinion;
+    /**
+     * 字段描述：海外事业部总工意见（1：通过  2：修改后通过  3：不通过）
+     */
+    @JsonProperty
+    @Excel(name = "海外事业部总工意见（1：通过  2：修改后通过  3：不通过）")
+    private String overseasChiefOpinion;
+    /**
+     * 字段描述：海外事业部总工详细意见
+     */
+    @JsonProperty
+    @Excel(name = "海外事业部总工详细意见")
+    private String overseasChiefDetailOpinion;
+    /**
+     * 字段描述：序列号（自增，每次加一）
+     */
+    @JsonProperty
+    @Excel(name = "序列号（自增，每次加一）")
+    private Integer serialNumber;
+    /**
+     * 字段描述：备注
+     */
+    @JsonProperty
+    @Excel(name = "备注")
+    private String remark;
+    /**
+     * 字段描述：所属区域id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "所属区域id")
+    private Long regionId;
+    /**
+     * 字段描述：所属区域名称
+     */
+    @JsonProperty
+    @Excel(name = "所属区域名称")
+    private String regionName;
+    /**
+     * 字段描述：项目id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "项目id")
+    private Long projectId;
+    /**
+     * 字段描述：项目名称
+     */
+    @JsonProperty
+    @Excel(name = "项目名称")
+    private String projectName;
+    /**
+     * 字段描述：项目编码
+     */
+    @JsonProperty
+    @Excel(name = "项目编码")
+    private String projectCode;
+    /**
+     * 字段描述：部门id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "部门id")
+    private Long deptId;
+    /**
+     * 字段描述：数据创建者id
+     */
+    @JsonProperty
+    @Excel(name = "数据创建者id")
+    private String createUser;
+    /**
+     * 字段描述：数据创建者名称
+     */
+    @JsonProperty
+    @Excel(name = "数据创建者名称")
+    private String createUserName;
+    /**
+     * 字段描述：数据创建系统时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty
+    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+    /**
+     * 字段描述：数据修改者id
+     */
+    @JsonProperty
+    @Excel(name = "数据修改者id")
+    private String updateUser;
+    /**
+     * 字段描述：数据修改系统时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty
+    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
+    /**
+     * 字段描述：数据删除者
+     */
+    @JsonProperty
+    @Excel(name = "数据删除者")
+    private String delUser;
+    /**
+     * 字段描述：数据删除系统时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty
+    @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date delTime;
+    /**
+     * 字段描述：删除标识：0未删除；1已删除
+     */
+    @JsonProperty
+    @Excel(name = "删除标识：0未删除；1已删除")
+    private String delFlag;
+    /**
+     * 字段描述：预留字段1
+     */
+    @JsonProperty
+    @Excel(name = "预留字段1")
+    private String ptVar1;
+    /**
+     * 字段描述：预留字段2
+     */
+    @JsonProperty
+    @Excel(name = "预留字段2")
+    private String ptVar2;
+    /**
+     * 字段描述：预留字段3
+     */
+    @JsonProperty
+    @Excel(name = "预留字段3")
+    private String ptVar3;
+    /**
+     * 字段描述：预留字段4
+     */
+    @JsonProperty
+    @Excel(name = "预留字段4")
+    private String ptVar4;
+    /**
+     * 字段描述：预留字段5
+     */
+    @JsonProperty
+    @Excel(name = "预留字段5")
+    private String ptVar5;
+}
