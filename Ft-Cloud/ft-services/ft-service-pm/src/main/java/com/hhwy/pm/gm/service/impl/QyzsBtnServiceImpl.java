@@ -2,7 +2,7 @@ package com.hhwy.pm.gm.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.pm.gm.enums.QyzsBtnEnum;
+import com.hhwy.enums.QyzsBtnEnum;
 import com.hhwy.pm.gm.service.IQyzsBtnService;
 import com.hhwy.pm.utils.HttpHeadersUtils;
 import com.hhwy.pm.utils.RestTemplateUtils;

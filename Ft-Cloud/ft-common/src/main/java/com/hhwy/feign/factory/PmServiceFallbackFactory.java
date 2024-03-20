@@ -101,6 +101,11 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             public List<DesignDisclosurePlanDto> getDisclosurePlanDtoList() {
                 return null;
             }
+
+            @Override
+            public AjaxResult qyzsBtnInfo(Map map) {
+                return AjaxResult.error("请求失败:", throwable.getMessage());
+            }
         };
     }
 }

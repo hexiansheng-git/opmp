@@ -9,6 +9,7 @@ import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.dto.DesignDisclo
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -121,6 +122,14 @@ public interface PmServiceApi {
      */
     @GetMapping("/qqchSurveyDesignTeams/list")
     AjaxResult getqqchSurveyDesignTeams();
+
+    /**
+     * 获取知识库按钮信息
+     * @param map {name:QyzsBtnEnum}
+     * @return {data : {btnName:按钮名称,filegroupid} }
+     */
+    @PostMapping("/gmThird/getQyzsBtnInfo")
+    AjaxResult qyzsBtnInfo(@RequestBody Map map);
 
 
 }

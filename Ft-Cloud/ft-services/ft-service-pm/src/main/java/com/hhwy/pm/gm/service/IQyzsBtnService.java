@@ -1,6 +1,6 @@
 package com.hhwy.pm.gm.service;
 
-import com.hhwy.pm.gm.enums.QyzsBtnEnum;
+import com.hhwy.enums.QyzsBtnEnum;
 
 import java.util.Map;
 

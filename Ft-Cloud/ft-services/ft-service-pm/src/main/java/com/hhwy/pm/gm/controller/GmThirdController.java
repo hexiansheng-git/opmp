@@ -4,8 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.page.TableDataInfo;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.enums.QyzsBtnEnum;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.gm.service.IGmThirdService;
+import com.hhwy.pm.gm.service.IQyzsBtnService;
 import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 import com.hhwy.pm.qqch.review.domain.Review;
@@ -14,6 +17,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +35,9 @@ import java.util.Map;
 public class GmThirdController {
     @Autowired
     private IGmThirdService gmThirdService;
-
+    @Autowired
+    private IQyzsBtnService qyzsBtnService;
+    
     /**
      * 前期策划工作计划功能
      * @param map  {planApprovalUnit,valid,pageNum,pageSize}
@@ -103,5 +109,32 @@ public class GmThirdController {
         Map map1 = ((Map)map.get("businessIds"));
         List list = FlowInfoSearchUtil.getFlowInfo(map1,flowEnum);
         return AjaxResult.success(list);
+    }
+
+    /**
+     * 获取总部版知识库按钮信息 
+     * @param map {name : 枚举名称}
+     * @return
+     */
+    @PostMapping("/getQyzsBtnInfo")
+    public AjaxResult getQyzsBtnInfo(@RequestBody Map map) {
+        String name = ObjectUtils.nvlString(map.get("name"));
+        QyzsBtnEnum qyzsBtnEnum = QyzsBtnEnum.valueOf(name);
+        Map result = new HashMap(2);
+        switch (qyzsBtnEnum.businessName()){
+            case "systemMan": //勘察设计-制度及管理方法库
+                result = qyzsBtnService.qyzsSystemManageMethod(qyzsBtnEnum);
+                break;
+            case "systemMan_file": //勘察设计-文件模板库
+                result = qyzsBtnService.qyzsFileMode(qyzsBtnEnum);
+                break;
+            case "con":   //施工技术知识库-制度及管理方法库
+                result = qyzsBtnService.qyzsConstructionManageMethod(qyzsBtnEnum);
+                break;
+            case "con_file":
+                result = qyzsBtnService.qyzsConstructionFileMode(qyzsBtnEnum);
+                break;
+        }
+        return AjaxResult.success(result);
     }
 }
