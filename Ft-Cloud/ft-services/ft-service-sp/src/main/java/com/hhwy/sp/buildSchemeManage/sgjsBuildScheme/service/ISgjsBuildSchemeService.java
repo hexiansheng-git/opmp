@@ -28,4 +28,6 @@ public interface ISgjsBuildSchemeService {
     int deleteSgjsBuildSchemeByPks(List<Long> sgjsBuildSchemePkList);
 
     SgjsBuildScheme detail(SgjsBuildScheme sgjsBuildSchemeParam);
+
+    SgjsBuildScheme adjust(SgjsBuildScheme sgjsBuildSchemeParam);
 }

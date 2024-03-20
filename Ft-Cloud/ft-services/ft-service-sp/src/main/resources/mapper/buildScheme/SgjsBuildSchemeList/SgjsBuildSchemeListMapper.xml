@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.sp.buildScheme.sgjsBuildSchemeList.mapper.SgjsBuildSchemeListMapper">
+<mapper namespace="com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.mapper.SgjsBuildSchemeListMapper">
 
-    <resultMap type="com.hhwy.sp.buildScheme.sgjsBuildSchemeList.domain.SgjsBuildSchemeList"
+    <resultMap type="com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList"
                id="SgjsBuildSchemeListResultMap">
         <result property="id" column="id"/>
         <result property="foreignId" column="foreign_id"/>

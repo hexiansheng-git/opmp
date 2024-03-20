@@ -36,4 +36,8 @@ public interface ISgjsBuildSchemeListService {
     int deleteSgjsBuildSchemeList(SgjsBuildSchemeList sgjsBuildSchemeList);
 
     int deleteSgjsBuildSchemeListByPks(List<Long> sgjsBuildSchemeListPkList);
+
+    List<SgjsBuildSchemeList> getLastValidScheme(SgjsBuildSchemeList sgjsBuildSchemeListParam);
+
+    List<SgjsBuildSchemeList> getRiskList(SgjsBuildSchemeList sgjsBuildSchemeListParam);
 }

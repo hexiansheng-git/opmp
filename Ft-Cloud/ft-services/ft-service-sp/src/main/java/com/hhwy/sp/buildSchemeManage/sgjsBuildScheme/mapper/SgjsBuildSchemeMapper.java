@@ -8,10 +8,10 @@ import java.util.List;
 /**
  * @author fushudong
  * @date 2024-03-19 15:57:26
- * @remark 
+ * @remark
  */
 public interface SgjsBuildSchemeMapper {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
     SgjsBuildScheme getSgjsBuildScheme(SgjsBuildScheme sgjsBuildScheme);
 
     List<SgjsBuildScheme> getSgjsBuildSchemeList(SgjsBuildScheme sgjsBuildScheme);
@@ -22,9 +22,11 @@ public interface SgjsBuildSchemeMapper {
 
     int updateSgjsBuildScheme(SgjsBuildScheme sgjsBuildScheme);
 
-            int updateSgjsBuildSchemeList(@Param("sgjsBuildSchemeList") List<SgjsBuildScheme> sgjsBuildSchemeList);
-    
+    int updateSgjsBuildSchemeList(@Param("sgjsBuildSchemeList") List<SgjsBuildScheme> sgjsBuildSchemeList);
+
     int deleteSgjsBuildScheme(SgjsBuildScheme sgjsBuildScheme);
 
-            int deleteSgjsBuildSchemeByPks(@Param("sgjsBuildSchemePkList") List<Long> sgjsBuildSchemePkList);
-    }
+    int deleteSgjsBuildSchemeByPks(@Param("sgjsBuildSchemePkList") List<Long> sgjsBuildSchemePkList);
+
+    SgjsBuildScheme getMaxVersionData();
+}

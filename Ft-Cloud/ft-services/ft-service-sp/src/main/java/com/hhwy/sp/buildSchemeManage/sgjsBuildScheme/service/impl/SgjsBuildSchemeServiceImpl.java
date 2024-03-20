@@ -1,21 +1,29 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.mapper.SgjsBuildSchemeMapper;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.ISgjsBuildSchemeService;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
+import com.hhwy.sp.common.FileUploadUtil;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author fushudong
@@ -31,11 +39,28 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     @Autowired
     private ISgjsBuildSchemeListService sgjsBuildSchemeListService;
 
+    @Autowired
+    private PmServiceApi pmServiceApi;
+
+    @Autowired
+    private FileUploadUtil fileUploadUtil;
+
     //详情
     public SgjsBuildScheme detail(SgjsBuildScheme sgjsBuildScheme) {
-        Long id = sgjsBuildScheme.getId();
         SgjsBuildScheme result = sgjsBuildSchemeMapper.getSgjsBuildScheme(sgjsBuildScheme);
-        if ( result == null ) return sgjsBuildScheme;
+        if ( result == null ) {
+            //返回初始化数据
+            Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+            String countryName = (String) prjInfo.get("countryName");
+            String countryCode = (String) prjInfo.get("projectLocation");
+            SgjsBuildScheme resultInit = new SgjsBuildScheme();
+            resultInit.setVersion(BigDecimal.ONE);
+            resultInit.setVersionStr("V1.00");
+            resultInit.setCountryName(countryName);
+            resultInit.setCountryCode(countryCode);
+            return sgjsBuildScheme;
+        }
+        Long id = sgjsBuildScheme.getId();
         SgjsBuildSchemeList sgjsBuildSchemeList = new SgjsBuildSchemeList();
         sgjsBuildSchemeList.setForeignId(id);
         List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getSgjsBuildSchemeListList(sgjsBuildSchemeList);
@@ -43,6 +68,36 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             result.setChildren(sgjsBuildSchemeListList);
         }
         FlowInfoSearchUtil.getFlowInfo(result, FlowEnum.SGJS_BUILD_SCHEME);
+        return result;
+    }
+
+    @Override
+    public SgjsBuildScheme adjust(SgjsBuildScheme sgjsBuildSchemeParam) {
+        SgjsBuildScheme result = sgjsBuildSchemeMapper.getMaxVersionData();
+        if (result == null) return result;
+        String taskStatus = result.getTaskStatus();
+        if (taskStatus.equals("5")) {
+            //创建新的数据
+            result.setVersion(result.getVersion().add(BigDecimal.ONE));
+            result.setVersionStr("V" + result.getVersion());
+            result.setTaskStatus("0");
+            result.setListSerialNum("0001");
+            result.setId(null);
+            //附件组id更新
+            String auditRecordFile = result.getAuditRecordFile();
+            String projectSummaryFile = result.getProjectSummaryFile();
+            if (StringUtils.isNotEmpty(auditRecordFile)) {
+                result.setAuditRecordFile(fileUploadUtil.copyFile(auditRecordFile));
+            }
+            if (StringUtils.isNotEmpty(projectSummaryFile)) {
+                result.setProjectSummaryFile(fileUploadUtil.copyFile(projectSummaryFile));
+            }
+        }
+        //历史记录按钮显隐，逻辑：所有数据中，只要有一条已审批完成即显示，否则不显示
+        List<SgjsBuildScheme> sgjsBuildSchemeList = sgjsBuildSchemeMapper.getSgjsBuildSchemeList(new SgjsBuildScheme());
+        List<SgjsBuildScheme> collect = sgjsBuildSchemeList.stream()
+                .filter(p -> StrUtil.isNotBlank(p.getTaskStatus()) && p.getTaskStatus().equals("5")).collect(Collectors.toList());
+        result.setPtVar2(CollUtil.isEmpty(collect) ? "0" : "4");
         return result;
     }
 

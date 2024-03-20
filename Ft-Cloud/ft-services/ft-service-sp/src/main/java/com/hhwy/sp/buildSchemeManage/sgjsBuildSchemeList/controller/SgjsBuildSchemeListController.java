@@ -25,66 +25,81 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/sgjsBuildSchemeList")
-public class SgjsBuildSchemeListController extends BaseController{
+public class SgjsBuildSchemeListController extends BaseController {
 
     @Autowired
     private ISgjsBuildSchemeListService sgjsBuildSchemeListService;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-
+    //选择原有方案
     @PreAuthorize(hasPermi = "sgjsBuildSchemeList:list")
-    @GetMapping
-    public AjaxResult getSgjsBuildSchemeList(@Validated(ValidationGroups.Get.class) SgjsBuildSchemeList sgjsBuildSchemeListParam){
-        SgjsBuildSchemeList sgjsBuildSchemeList =  sgjsBuildSchemeListService.getSgjsBuildSchemeList(sgjsBuildSchemeListParam);
-        return AjaxResult.success(sgjsBuildSchemeList);
+    @GetMapping("/getLastValidScheme")
+    public AjaxResult getLastValidScheme(@Validated(ValidationGroups.Get.class) SgjsBuildSchemeList sgjsBuildSchemeListParam) {
+        List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getLastValidScheme(sgjsBuildSchemeListParam);
+        return AjaxResult.success(sgjsBuildSchemeListList);
     }
 
+    //危大工程清单查询
+    @PreAuthorize(hasPermi = "sgjsBuildSchemeList:list")
+    @GetMapping("/getRiskList")
+    public AjaxResult getRiskList(@Validated(ValidationGroups.Get.class) SgjsBuildSchemeList sgjsBuildSchemeListParam) {
+        List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getRiskList(sgjsBuildSchemeListParam);
+        return AjaxResult.success(sgjsBuildSchemeListList);
+    }
+
+    //台账查询
     @PreAuthorize(hasPermi = "sgjsBuildSchemeList:list")
     @GetMapping("/list")
-    public AjaxResult getSgjsBuildSchemeListList(@Validated(ValidationGroups.Select.class) SgjsBuildSchemeList sgjsBuildSchemeListParam){
+    public AjaxResult getSgjsBuildSchemeListList(@Validated(ValidationGroups.Select.class) SgjsBuildSchemeList sgjsBuildSchemeListParam) {
         List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
         return AjaxResult.success(sgjsBuildSchemeListList);
     }
 
+    @PreAuthorize(hasPermi = "sgjsBuildSchemeList:list")
+    @GetMapping
+    public AjaxResult getSgjsBuildSchemeList(@Validated(ValidationGroups.Get.class) SgjsBuildSchemeList sgjsBuildSchemeListParam) {
+        SgjsBuildSchemeList sgjsBuildSchemeList = sgjsBuildSchemeListService.getSgjsBuildSchemeList(sgjsBuildSchemeListParam);
+        return AjaxResult.success(sgjsBuildSchemeList);
+    }
+
     @PreAuthorize(hasPermi = "sgjsBuildSchemeList:add")
     @PostMapping("/add")
-    public AjaxResult insertSgjsBuildSchemeList(@Validated(ValidationGroups.Save.class) @RequestBody SgjsBuildSchemeList sgjsBuildSchemeListParam){
+    public AjaxResult insertSgjsBuildSchemeList(@Validated(ValidationGroups.Save.class) @RequestBody SgjsBuildSchemeList sgjsBuildSchemeListParam) {
         sgjsBuildSchemeListService.insertSgjsBuildSchemeList(sgjsBuildSchemeListParam);
         return AjaxResult.success(sgjsBuildSchemeListParam);
     }
 
     @PreAuthorize(hasPermi = "sgjsBuildSchemeList:add")
     @PostMapping("/batchAdd")
-    public AjaxResult insertSgjsBuildSchemeListList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsBuildSchemeList> sgjsBuildSchemeListListParam){
+    public AjaxResult insertSgjsBuildSchemeListList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsBuildSchemeList> sgjsBuildSchemeListListParam) {
         sgjsBuildSchemeListService.insertSgjsBuildSchemeListList(sgjsBuildSchemeListListParam);
         return AjaxResult.success(sgjsBuildSchemeListListParam);
     }
 
     @PreAuthorize(hasPermi = "sgjsBuildSchemeList:update")
     @PostMapping("/update")
-    public AjaxResult updateSgjsBuildSchemeList(@Validated(ValidationGroups.Update.class) @RequestBody SgjsBuildSchemeList sgjsBuildSchemeListParam){
+    public AjaxResult updateSgjsBuildSchemeList(@Validated(ValidationGroups.Update.class) @RequestBody SgjsBuildSchemeList sgjsBuildSchemeListParam) {
         return toAjax(sgjsBuildSchemeListService.updateSgjsBuildSchemeList(sgjsBuildSchemeListParam));
     }
 
-            @PreAuthorize(hasPermi = "sgjsBuildSchemeList:update")
-        @PostMapping("/batchUpdate")
-        public AjaxResult updateSgjsBuildSchemeListList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsBuildSchemeList> sgjsBuildSchemeListListParam){
-            return toAjax(sgjsBuildSchemeListService.updateSgjsBuildSchemeListList(sgjsBuildSchemeListListParam));
-        }
-    
+    @PreAuthorize(hasPermi = "sgjsBuildSchemeList:update")
+    @PostMapping("/batchUpdate")
+    public AjaxResult updateSgjsBuildSchemeListList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsBuildSchemeList> sgjsBuildSchemeListListParam) {
+        return toAjax(sgjsBuildSchemeListService.updateSgjsBuildSchemeListList(sgjsBuildSchemeListListParam));
+    }
+
     @PreAuthorize(hasPermi = "sgjsBuildSchemeList:remove")
     @PostMapping("/delete")
-    public AjaxResult deleteSgjsBuildSchemeList(@Validated(ValidationGroups.Delete.class) @RequestBody SgjsBuildSchemeList sgjsBuildSchemeListParam){
+    public AjaxResult deleteSgjsBuildSchemeList(@Validated(ValidationGroups.Delete.class) @RequestBody SgjsBuildSchemeList sgjsBuildSchemeListParam) {
         return toAjax(sgjsBuildSchemeListService.deleteSgjsBuildSchemeList(sgjsBuildSchemeListParam));
     }
 
-            @PreAuthorize(hasPermi = "sgjsBuildSchemeList:remove")
-        @PostMapping("/{ids}")
-        public AjaxResult deleteSgjsBuildSchemeListByPks(@PathVariable Long[] ids){
-            List<Long> sgjsBuildSchemeListPkList = Arrays.asList(ids);
-            return toAjax(sgjsBuildSchemeListService.deleteSgjsBuildSchemeListByPks(sgjsBuildSchemeListPkList));
-        }
-    
+    @PreAuthorize(hasPermi = "sgjsBuildSchemeList:remove")
+    @PostMapping("/{ids}")
+    public AjaxResult deleteSgjsBuildSchemeListByPks(@PathVariable Long[] ids) {
+        List<Long> sgjsBuildSchemeListPkList = Arrays.asList(ids);
+        return toAjax(sgjsBuildSchemeListService.deleteSgjsBuildSchemeListByPks(sgjsBuildSchemeListPkList));
+    }
+
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsBuildSchemeList sgjsBuildSchemeListParam) throws IOException {
         List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);

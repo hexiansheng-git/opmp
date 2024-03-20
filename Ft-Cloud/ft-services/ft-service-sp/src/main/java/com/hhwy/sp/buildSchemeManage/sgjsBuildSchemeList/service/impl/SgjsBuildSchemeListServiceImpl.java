@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * @author fushudong
  * @date 2024-03-19 15:57:37
- * @remark 
+ * @remark
  */
 @Service
 public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListService {
@@ -33,21 +33,25 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
     @Autowired
     private ISgjsBuildSchemeService sgjsBuildSchemeService;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-    public SgjsBuildSchemeList getSgjsBuildSchemeList(SgjsBuildSchemeList sgjsBuildSchemeList) {
-        return sgjsBuildSchemeListMapper.getSgjsBuildSchemeList(sgjsBuildSchemeList);
+    //危大工程清单查询
+    @Override
+    public List<SgjsBuildSchemeList> getRiskList(SgjsBuildSchemeList sgjsBuildSchemeListParam) {
+        List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
+        return sgjsBuildSchemeListList.stream()
+                .filter(p -> StrUtil.isNotBlank(p.getDangerLevel()) && (p.getDangerLevel().equals("1") || p.getDangerLevel().equals("2")))
+                .collect(Collectors.toList());
     }
 
-    public List<SgjsBuildSchemeList> getSgjsBuildSchemeListList(SgjsBuildSchemeList sgjsBuildSchemeList) {
+    //选择原有方案
+    @Override
+    public List<SgjsBuildSchemeList> getLastValidScheme(SgjsBuildSchemeList sgjsBuildSchemeListParam) {
+        SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
+        sgjsBuildScheme.setValid("1");
+        SgjsBuildScheme sgjsBuildScheme1 = sgjsBuildSchemeService.getSgjsBuildScheme(sgjsBuildScheme);
+        if (null == sgjsBuildScheme1) return new ArrayList<>();
+        SgjsBuildSchemeList sgjsBuildSchemeList = new SgjsBuildSchemeList();
+        sgjsBuildSchemeList.setForeignId(sgjsBuildScheme1.getId());
         return sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeList);
-    }
-
-    @Transactional
-    public int insertSgjsBuildSchemeList(SgjsBuildSchemeList sgjsBuildSchemeList) {
-        sgjsBuildSchemeList.setId(IdWorker.createId());
-        sgjsBuildSchemeList.setCreateUser(SecurityUtils.getUserName());
-        sgjsBuildSchemeList.setCreateTime(DateUtils.getNowDate());
-        return sgjsBuildSchemeListMapper.insertSgjsBuildSchemeList(sgjsBuildSchemeList);
     }
 
     //保存
@@ -62,7 +66,7 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         sgjsBuildScheme.setValid("1");
         List<SgjsBuildScheme> sgjsBuildSchemes = sgjsBuildSchemeService.getSgjsBuildSchemeList(sgjsBuildScheme);
         List<SgjsBuildSchemeList> originList = new ArrayList<>();
-        if (CollUtil.isNotEmpty(sgjsBuildSchemes)){
+        if (CollUtil.isNotEmpty(sgjsBuildSchemes)) {
             SgjsBuildSchemeList param = new SgjsBuildSchemeList();
             param.setForeignId(sgjsBuildSchemes.get(0).getId());
             originList = sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(param);
@@ -99,16 +103,33 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         sgjsBuildSchemeListMapper.insertSgjsBuildSchemeListList(sgjsBuildSchemeListList);
     }
 
-    private String getSerialNumber(Integer serialNum){
+    private String getSerialNumber(Integer serialNum) {
         String tenantKey = SecurityUtils.getTenantKey();
         serialNum += 1;
         if (serialNum < 10) {
             return tenantKey + " + 00" + serialNum;
-        }else if (serialNum < 100) {
-            return tenantKey + " + 0"+serialNum;
-        }else {
-            return tenantKey + " + "+serialNum;
+        } else if (serialNum < 100) {
+            return tenantKey + " + 0" + serialNum;
+        } else {
+            return tenantKey + " + " + serialNum;
         }
+    }
+
+    public SgjsBuildSchemeList getSgjsBuildSchemeList(SgjsBuildSchemeList sgjsBuildSchemeList) {
+        return sgjsBuildSchemeListMapper.getSgjsBuildSchemeList(sgjsBuildSchemeList);
+    }
+
+    //台账查询
+    public List<SgjsBuildSchemeList> getSgjsBuildSchemeListList(SgjsBuildSchemeList sgjsBuildSchemeList) {
+        return sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeList);
+    }
+
+    @Transactional
+    public int insertSgjsBuildSchemeList(SgjsBuildSchemeList sgjsBuildSchemeList) {
+        sgjsBuildSchemeList.setId(IdWorker.createId());
+        sgjsBuildSchemeList.setCreateUser(SecurityUtils.getUserName());
+        sgjsBuildSchemeList.setCreateTime(DateUtils.getNowDate());
+        return sgjsBuildSchemeListMapper.insertSgjsBuildSchemeList(sgjsBuildSchemeList);
     }
 
     @Transactional
@@ -133,22 +154,22 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         return sgjsBuildSchemeListMapper.updateSgjsBuildSchemeList(sgjsBuildSchemeList);
     }
 
-            @Transactional
-        public int updateSgjsBuildSchemeListList(List<SgjsBuildSchemeList> sgjsBuildSchemeListList) {
-            for (SgjsBuildSchemeList sgjsBuildSchemeList : sgjsBuildSchemeListList) {
-                sgjsBuildSchemeList.setUpdateUser(SecurityUtils.getUserName());
-                sgjsBuildSchemeList.setUpdateTime(DateUtils.getNowDate());
-            }
-            return sgjsBuildSchemeListMapper.updateSgjsBuildSchemeListList(sgjsBuildSchemeListList);
+    @Transactional
+    public int updateSgjsBuildSchemeListList(List<SgjsBuildSchemeList> sgjsBuildSchemeListList) {
+        for (SgjsBuildSchemeList sgjsBuildSchemeList : sgjsBuildSchemeListList) {
+            sgjsBuildSchemeList.setUpdateUser(SecurityUtils.getUserName());
+            sgjsBuildSchemeList.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return sgjsBuildSchemeListMapper.updateSgjsBuildSchemeListList(sgjsBuildSchemeListList);
+    }
+
     @Transactional
     public int deleteSgjsBuildSchemeList(SgjsBuildSchemeList sgjsBuildSchemeList) {
         return sgjsBuildSchemeListMapper.deleteSgjsBuildSchemeList(sgjsBuildSchemeList);
     }
 
-            @Transactional
-        public int deleteSgjsBuildSchemeListByPks(List<Long> sgjsBuildSchemeListPkList) {
-            return sgjsBuildSchemeListMapper.deleteSgjsBuildSchemeListByPks(sgjsBuildSchemeListPkList);
-        }
+    @Transactional
+    public int deleteSgjsBuildSchemeListByPks(List<Long> sgjsBuildSchemeListPkList) {
+        return sgjsBuildSchemeListMapper.deleteSgjsBuildSchemeListByPks(sgjsBuildSchemeListPkList);
     }
+}

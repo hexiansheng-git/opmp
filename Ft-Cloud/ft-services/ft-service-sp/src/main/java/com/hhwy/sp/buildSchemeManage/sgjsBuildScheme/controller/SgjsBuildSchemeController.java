@@ -53,6 +53,16 @@ public class SgjsBuildSchemeController extends BaseController {
         return AjaxResult.success(sgjsBuildScheme);
     }
 
+    //调整
+    @PreAuthorize(hasPermi = "sgjsBuildScheme:list")
+    @GetMapping("/adjust")
+    public AjaxResult adjust(@Validated(ValidationGroups.Select.class) SgjsBuildScheme sgjsBuildSchemeParam) {
+        SgjsBuildScheme sgjsBuildScheme = sgjsBuildSchemeService.adjust(sgjsBuildSchemeParam);
+        return AjaxResult.success(sgjsBuildScheme);
+    }
+
+
+
     //保存、提交
     @PreAuthorize(hasPermi = "sgjsBuildScheme:add")
     @PostMapping("/add")
