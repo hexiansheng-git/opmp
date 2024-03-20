@@ -98,6 +98,9 @@ public enum FlowEnum {
         //科技管理 - 科研课题管理 - 课题立项
         SGJS_TECH_SCIENCE_TOPIC_LX("sgsj_technical_science_topic", "process_sgsj_technical_science_topic_lx"),
 
+        //施工方案管理 - 施工方案清单
+        SGJS_BUILD_SCHEME("sgjs_build_scheme", "process_sgjs_build_scheme"),
+
 
 
         /*********************勘察设计管理****************************/

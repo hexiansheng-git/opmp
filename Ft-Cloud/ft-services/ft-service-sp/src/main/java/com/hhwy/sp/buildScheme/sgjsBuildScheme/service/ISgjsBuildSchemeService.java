@@ -1,0 +1,31 @@
+package com.hhwy.sp.buildScheme.sgjsBuildScheme.service;
+
+import com.hhwy.sp.buildScheme.sgjsBuildScheme.domain.SgjsBuildScheme;
+
+import java.util.List;
+
+/**
+ * @author fushudong
+ * @date 2024-03-19 15:57:26
+ * @remark
+ */
+public interface ISgjsBuildSchemeService {
+
+    SgjsBuildScheme getSgjsBuildScheme(SgjsBuildScheme sgjsBuildScheme);
+
+    List<SgjsBuildScheme> getSgjsBuildSchemeList(SgjsBuildScheme sgjsBuildScheme);
+
+    Long insertSgjsBuildScheme(SgjsBuildScheme sgjsBuildScheme);
+
+    int insertSgjsBuildSchemeList(List<SgjsBuildScheme> sgjsBuildSchemeList);
+
+    int updateSgjsBuildScheme(SgjsBuildScheme sgjsBuildScheme);
+
+    int updateSgjsBuildSchemeList(List<SgjsBuildScheme> sgjsBuildSchemeList);
+
+    int deleteSgjsBuildScheme(SgjsBuildScheme sgjsBuildScheme);
+
+    int deleteSgjsBuildSchemeByPks(List<Long> sgjsBuildSchemePkList);
+
+    SgjsBuildScheme detail(SgjsBuildScheme sgjsBuildSchemeParam);
+}

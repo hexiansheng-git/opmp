@@ -1,0 +1,630 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.sp.buildScheme.sgjsBuildSchemeList.mapper.SgjsBuildSchemeListMapper">
+
+    <resultMap type="com.hhwy.sp.buildScheme.sgjsBuildSchemeList.domain.SgjsBuildSchemeList"
+               id="SgjsBuildSchemeListResultMap">
+        <result property="id" column="id"/>
+        <result property="foreignId" column="foreign_id"/>
+        <result property="schemeNum" column="scheme_num"/>
+        <result property="schemeName" column="scheme_name"/>
+        <result property="changeType" column="change_type"/>
+        <result property="relationWbsId" column="relation_wbs_id"/>
+        <result property="relationWbsName" column="relation_wbs_name"/>
+        <result property="schemeType" column="scheme_type"/>
+        <result property="schemeLevel" column="scheme_level"/>
+        <result property="dangerLevel" column="danger_level"/>
+        <result property="buildDifficult" column="build_difficult"/>
+        <result property="planComplationTime" column="plan_complation_time"/>
+        <result property="planComplationTimeOrigin" column="plan_complation_time_origin"/>
+        <result property="planImplementTime" column="plan_implement_time"/>
+        <result property="planImplementTimeChange" column="plan_implement_time_change"/>
+        <result property="remark" column="remark"/>
+        <result property="relevancyId" column="relevancy_id"/>
+        <result property="regionId" column="region_id"/>
+        <result property="regionName" column="region_name"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="ptVar5" column="pt_var5"/>
+    </resultMap>
+    <sql id="selectSgjsBuildSchemeListVo">
+        select `id`
+             , `foreign_id`
+             , `scheme_num`
+             , `scheme_name`
+             , `change_type`
+             , `relation_wbs_id`
+             , `relation_wbs_name`
+             , `scheme_type`
+             , `scheme_level`
+             , `danger_level`
+             , `build_difficult`
+             , `plan_complation_time`
+             , `plan_complation_time_origin`
+             , `plan_implement_time`
+             , `plan_implement_time_change`
+             , `remark`
+             , `relevancy_id`
+             , `region_id`
+             , `region_name`
+             , `project_id`
+             , `project_name`
+             , `dept_id`
+             , `create_user`
+             , `create_user_name`
+             , `create_time`
+             , `update_user`
+             , `update_time`
+             , `del_user`
+             , `del_time`
+             , `del_flag`
+             , `pt_var1`
+             , `pt_var2`
+             , `pt_var3`
+             , `pt_var4`
+             , `pt_var5`
+        from sgjs_build_scheme_list
+    </sql>
+    <select id="getSgjsBuildSchemeList" resultMap="SgjsBuildSchemeListResultMap">
+        <include refid="selectSgjsBuildSchemeListVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
+            <if test="schemeNum != null  and schemeNum != ''">and `scheme_num` = #{schemeNum}</if>
+            <if test="schemeName != null  and schemeName != ''">and `scheme_name` = #{schemeName}</if>
+            <if test="changeType != null  and changeType != ''">and `change_type` = #{changeType}</if>
+            <if test="relationWbsId != null  and relationWbsId != ''">and `relation_wbs_id` = #{relationWbsId}</if>
+            <if test="relationWbsName != null  and relationWbsName != ''">and `relation_wbs_name` = #{relationWbsName}
+            </if>
+            <if test="schemeType != null  and schemeType != ''">and `scheme_type` = #{schemeType}</if>
+            <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
+            <if test="dangerLevel != null  and dangerLevel != ''">and `danger_level` = #{dangerLevel}</if>
+            <if test="buildDifficult != null  and buildDifficult != ''">and `build_difficult` = #{buildDifficult}</if>
+            <if test="planComplationTime != null ">and `plan_complation_time` = #{planComplationTime}</if>
+            <if test="planComplationTimeOrigin != null ">and `plan_complation_time_origin` =
+                #{planComplationTimeOrigin}
+            </if>
+            <if test="planImplementTime != null ">and `plan_implement_time` = #{planImplementTime}</if>
+            <if test="planImplementTimeChange != null ">and `plan_implement_time_change` = #{planImplementTimeChange}
+            </if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="relevancyId != null ">and `relevancy_id` = #{relevancyId}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getSgjsBuildSchemeListList" resultMap="SgjsBuildSchemeListResultMap">
+        <include refid="selectSgjsBuildSchemeListVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
+            <if test="schemeNum != null  and schemeNum != ''">and `scheme_num` like concat('%', #{schemeNum}, '%' )</if>
+            <if test="schemeName != null  and schemeName != ''">and `scheme_name` like concat('%', #{schemeName}, '%' )</if>
+            <if test="changeType != null  and changeType != ''">and `change_type` = #{changeType}</if>
+            <if test="relationWbsId != null  and relationWbsId != ''">and `relation_wbs_id` = #{relationWbsId}</if>
+            <if test="relationWbsName != null  and relationWbsName != ''">and `relation_wbs_name` = #{relationWbsName}
+            </if>
+            <if test="schemeType != null  and schemeType != ''">and `scheme_type` = #{schemeType}</if>
+            <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
+            <if test="dangerLevel != null  and dangerLevel != ''">and `danger_level` = #{dangerLevel}</if>
+            <if test="buildDifficult != null  and buildDifficult != ''">and `build_difficult` = #{buildDifficult}</if>
+            <if test="planComplationTime != null ">and `plan_complation_time` = #{planComplationTime}</if>
+            <if test="planComplationTimeOrigin != null ">and `plan_complation_time_origin` =
+                #{planComplationTimeOrigin}
+            </if>
+            <if test="planImplementTime != null ">and `plan_implement_time` = #{planImplementTime}</if>
+            <if test="planImplementTimeChange != null ">and `plan_implement_time_change` = #{planImplementTimeChange}
+            </if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="relevancyId != null ">and `relevancy_id` = #{relevancyId}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+
+            <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+                and `plan_implement_time` between #{startTime} and #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertSgjsBuildSchemeList" useGeneratedKeys="true" keyProperty="id">
+        insert into sgjs_build_scheme_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="foreignId != null ">`foreign_id`,</if>
+            <if test="schemeNum != null  and schemeNum != ''">`scheme_num`,</if>
+            <if test="schemeName != null  and schemeName != ''">`scheme_name`,</if>
+            <if test="changeType != null  and changeType != ''">`change_type`,</if>
+            <if test="relationWbsId != null  and relationWbsId != ''">`relation_wbs_id`,</if>
+            <if test="relationWbsName != null  and relationWbsName != ''">`relation_wbs_name`,</if>
+            <if test="schemeType != null  and schemeType != ''">`scheme_type`,</if>
+            <if test="schemeLevel != null  and schemeLevel != ''">`scheme_level`,</if>
+            <if test="dangerLevel != null  and dangerLevel != ''">`danger_level`,</if>
+            <if test="buildDifficult != null  and buildDifficult != ''">`build_difficult`,</if>
+            <if test="planComplationTime != null ">`plan_complation_time`,</if>
+            <if test="planComplationTimeOrigin != null ">`plan_complation_time_origin`,</if>
+            <if test="planImplementTime != null ">`plan_implement_time`,</if>
+            <if test="planImplementTimeChange != null ">`plan_implement_time_change`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="relevancyId != null ">`relevancy_id`,</if>
+            <if test="regionId != null ">`region_id`,</if>
+            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+            <if test="projectId != null ">`project_id`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="deptId != null ">`dept_id`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="foreignId != null ">#{foreignId},</if>
+            <if test="schemeNum != null  and schemeNum != ''">#{schemeNum},</if>
+            <if test="schemeName != null  and schemeName != ''">#{schemeName},</if>
+            <if test="changeType != null  and changeType != ''">#{changeType},</if>
+            <if test="relationWbsId != null  and relationWbsId != ''">#{relationWbsId},</if>
+            <if test="relationWbsName != null  and relationWbsName != ''">#{relationWbsName},</if>
+            <if test="schemeType != null  and schemeType != ''">#{schemeType},</if>
+            <if test="schemeLevel != null  and schemeLevel != ''">#{schemeLevel},</if>
+            <if test="dangerLevel != null  and dangerLevel != ''">#{dangerLevel},</if>
+            <if test="buildDifficult != null  and buildDifficult != ''">#{buildDifficult},</if>
+            <if test="planComplationTime != null ">#{planComplationTime},</if>
+            <if test="planComplationTimeOrigin != null ">#{planComplationTimeOrigin},</if>
+            <if test="planImplementTime != null ">#{planImplementTime},</if>
+            <if test="planImplementTimeChange != null ">#{planImplementTimeChange},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="relevancyId != null ">#{relevancyId},</if>
+            <if test="regionId != null ">#{regionId},</if>
+            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsBuildSchemeList -->
+    <insert id="insertSgjsBuildSchemeListList">
+        insert into sgjs_build_scheme_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `foreign_id`,
+            `scheme_num`,
+            `scheme_name`,
+            `change_type`,
+            `relation_wbs_id`,
+            `relation_wbs_name`,
+            `scheme_type`,
+            `scheme_level`,
+            `danger_level`,
+            `build_difficult`,
+            `plan_complation_time`,
+            `plan_complation_time_origin`,
+            `plan_implement_time`,
+            `plan_implement_time_change`,
+            `remark`,
+            `relevancy_id`,
+            `region_id`,
+            `region_name`,
+            `project_id`,
+            `project_name`,
+            `dept_id`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+        </trim>
+        values
+        <foreach collection="sgjsBuildSchemeListList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.foreignId},
+                #{item.schemeNum},
+                #{item.schemeName},
+                #{item.changeType},
+                #{item.relationWbsId},
+                #{item.relationWbsName},
+                #{item.schemeType},
+                #{item.schemeLevel},
+                #{item.dangerLevel},
+                #{item.buildDifficult},
+                #{item.planComplationTime},
+                #{item.planComplationTimeOrigin},
+                #{item.planImplementTime},
+                #{item.planImplementTimeChange},
+                #{item.remark},
+                #{item.relevancyId},
+                #{item.regionId},
+                #{item.regionName},
+                #{item.projectId},
+                #{item.projectName},
+                #{item.deptId},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateSgjsBuildSchemeList">
+        update sgjs_build_scheme_list
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="foreignId != null ">`foreign_id` = #{foreignId},</if>
+            <if test="schemeNum != null  and  schemeNum != ''">`scheme_num` = #{schemeNum},</if>
+            <if test="schemeName != null  and  schemeName != ''">`scheme_name` = #{schemeName},</if>
+            <if test="changeType != null  and  changeType != ''">`change_type` = #{changeType},</if>
+            <if test="relationWbsId != null  and  relationWbsId != ''">`relation_wbs_id` = #{relationWbsId},</if>
+            <if test="relationWbsName != null  and  relationWbsName != ''">`relation_wbs_name` = #{relationWbsName},
+            </if>
+            <if test="schemeType != null  and  schemeType != ''">`scheme_type` = #{schemeType},</if>
+            <if test="schemeLevel != null  and  schemeLevel != ''">`scheme_level` = #{schemeLevel},</if>
+            <if test="dangerLevel != null  and  dangerLevel != ''">`danger_level` = #{dangerLevel},</if>
+            <if test="buildDifficult != null  and  buildDifficult != ''">`build_difficult` = #{buildDifficult},</if>
+            <if test="planComplationTime != null ">`plan_complation_time` = #{planComplationTime},</if>
+            <if test="planComplationTimeOrigin != null ">`plan_complation_time_origin` = #{planComplationTimeOrigin},
+            </if>
+            <if test="planImplementTime != null ">`plan_implement_time` = #{planImplementTime},</if>
+            <if test="planImplementTimeChange != null ">`plan_implement_time_change` = #{planImplementTimeChange},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="relevancyId != null ">`relevancy_id` = #{relevancyId},</if>
+            <if test="regionId != null ">`region_id` = #{regionId},</if>
+            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+        </trim>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateSgjsBuildSchemeListList">
+        update sgjs_build_scheme_list
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="foreign_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.foreignId}
+                </foreach>
+            </trim>
+            <trim prefix="scheme_num  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.schemeNum}
+                </foreach>
+            </trim>
+            <trim prefix="scheme_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.schemeName}
+                </foreach>
+            </trim>
+            <trim prefix="change_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.changeType}
+                </foreach>
+            </trim>
+            <trim prefix="relation_wbs_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.relationWbsId}
+                </foreach>
+            </trim>
+            <trim prefix="relation_wbs_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.relationWbsName}
+                </foreach>
+            </trim>
+            <trim prefix="scheme_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.schemeType}
+                </foreach>
+            </trim>
+            <trim prefix="scheme_level  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.schemeLevel}
+                </foreach>
+            </trim>
+            <trim prefix="danger_level  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.dangerLevel}
+                </foreach>
+            </trim>
+            <trim prefix="build_difficult  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.buildDifficult}
+                </foreach>
+            </trim>
+            <trim prefix="plan_complation_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planComplationTime}
+                </foreach>
+            </trim>
+            <trim prefix="plan_complation_time_origin  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planComplationTimeOrigin}
+                </foreach>
+            </trim>
+            <trim prefix="plan_implement_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planImplementTime}
+                </foreach>
+            </trim>
+            <trim prefix="plan_implement_time_change  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planImplementTimeChange}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="relevancy_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.relevancyId}
+                </foreach>
+            </trim>
+            <trim prefix="region_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionId}
+                </foreach>
+            </trim>
+            <trim prefix="region_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionName}
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.deptId}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar3}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar4}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar5}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="deleteSgjsBuildSchemeList">
+        update `sgjs_build_scheme_list` set del_flag = 1
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
+            <if test="schemeNum != null  and schemeNum != ''">and `scheme_num` = #{schemeNum}</if>
+            <if test="schemeName != null  and schemeName != ''">and `scheme_name` = #{schemeName}</if>
+            <if test="changeType != null  and changeType != ''">and `change_type` = #{changeType}</if>
+            <if test="relationWbsId != null  and relationWbsId != ''">and `relation_wbs_id` = #{relationWbsId}
+            </if>
+            <if test="relationWbsName != null  and relationWbsName != ''">and `relation_wbs_name` =
+                #{relationWbsName}
+            </if>
+            <if test="schemeType != null  and schemeType != ''">and `scheme_type` = #{schemeType}</if>
+            <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
+            <if test="dangerLevel != null  and dangerLevel != ''">and `danger_level` = #{dangerLevel}</if>
+            <if test="buildDifficult != null  and buildDifficult != ''">and `build_difficult` =
+                #{buildDifficult}
+            </if>
+            <if test="planComplationTime != null ">and `plan_complation_time` = #{planComplationTime}</if>
+            <if test="planComplationTimeOrigin != null ">and `plan_complation_time_origin` =
+                #{planComplationTimeOrigin}
+            </if>
+            <if test="planImplementTime != null ">and `plan_implement_time` = #{planImplementTime}</if>
+            <if test="planImplementTimeChange != null ">and `plan_implement_time_change` =
+                #{planImplementTimeChange}
+            </if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="relevancyId != null ">and `relevancy_id` = #{relevancyId}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` =
+                #{createUserName}
+            </if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+    </update>
+
+    <update id="deleteSgjsBuildSchemeListByPks">
+        update `sgjs_build_scheme_list` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="sgjsBuildSchemeListPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+</mapper>

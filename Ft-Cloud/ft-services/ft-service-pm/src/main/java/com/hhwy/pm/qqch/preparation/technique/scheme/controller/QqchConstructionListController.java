@@ -103,4 +103,11 @@ public class QqchConstructionListController extends BaseController {
             throw new RuntimeException("导入失败！"+e.getMessage());
         }
     }
+
+    //施工技术 - 施工方案清单同步数据
+    @GetMapping("/getLatestList")
+    public AjaxResult getLatest(@RequestParam(value = "version", required = false) BigDecimal version){
+        List<QqchConstructionList> latest = qqchConstructionListService.getLatest(version);
+        return AjaxResult.success(latest);
+    }
 }
