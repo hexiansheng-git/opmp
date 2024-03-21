@@ -112,6 +112,14 @@ public class SgjsExperimentRecordController extends BaseController{
      */
     @PostMapping("/syncWuShe")
     public AjaxResult syncWuShe(@RequestBody List<Map> map){
+        //传参校验
+        for (Map info:map) {
+            Object manageCode = info.get("manageCode");
+            Object source = info.get("source");
+            if(null==source){
+                return AjaxResult.error("设备编码"+manageCode.toString()+"的来源不能为空!!!!");
+            }
+        }
         AjaxResult ajaxResult = sgjsExperimentRecordService.syncWuShe(map);
         return ajaxResult;
     }

@@ -121,6 +121,15 @@ public class SgjsEquipEntryRecordController extends BaseController{
      */
     @PostMapping("/getDatatByOther")
     public AjaxResult getDatatByOther(@RequestBody List<Map> map){
+        //参数校验
+        for (Map info:map) {
+            Object materialCode = info.get("materialCode");
+            Object source = info.get("source");
+            if(null==source){
+                return AjaxResult.error("设备编码"+materialCode.toString()+"的来源不能为空！！！！");
+            }
+        }
+        //数据处理
         List<SgjsEquipEntryRecordInfo> list = sgjsEquipEntryRecordService.getDatatByOther(map);
         return AjaxResult.success(list);
     }
