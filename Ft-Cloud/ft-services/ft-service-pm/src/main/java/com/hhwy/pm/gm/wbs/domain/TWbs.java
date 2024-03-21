@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.utils.tree.TreeNodeBase;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
@@ -46,6 +47,7 @@ public class TWbs extends TreeNodeBase<TWbs,String> {
     @JsonProperty
     @Excel(name = "编号")
     @ExcelProperty("编号")
+    @FtExcel(name = "编号")
     private String code;
 
     //父级编码 不存在与数据库
@@ -79,6 +81,7 @@ public class TWbs extends TreeNodeBase<TWbs,String> {
     @JsonProperty
     @Excel(name = "名称")
     @ExcelProperty("名称")
+    @FtExcel(name = "名称")
     private String name;
 
     /**
@@ -86,6 +89,7 @@ public class TWbs extends TreeNodeBase<TWbs,String> {
      */
     @JsonProperty
     @Excel(name = "节点类型,字典:t_wbs_type")
+    @FtExcel(name = "类型",dictType = "t_wbs_type",type= FtExcel.Type.EXPORT)
     private String nodeType;
     
     /**
@@ -93,6 +97,7 @@ public class TWbs extends TreeNodeBase<TWbs,String> {
      */
     @JsonProperty
     @Excel(name = "状态",readConverterExp = "0=禁用,1:启用")
+    @FtExcel(name = "状态",readConverterExp = "0=禁用,1=启用",combo = {"启用","禁用"})
     private Integer status;
     
     /**
@@ -100,6 +105,7 @@ public class TWbs extends TreeNodeBase<TWbs,String> {
      */
     @JsonProperty
     @Excel(name = "单位,字典:t_wbs_unit")
+    @FtExcel(name = "单位",dictType = "t_wbs_unit")
     private String unit;
     /**
      * 字段描述：层级
@@ -118,6 +124,7 @@ public class TWbs extends TreeNodeBase<TWbs,String> {
      */
     @JsonProperty
     @Excel(name = "划分说明")
+    @FtExcel(name = "划分说明")
     private String description;
     
     /**
@@ -125,6 +132,7 @@ public class TWbs extends TreeNodeBase<TWbs,String> {
      */
     @JsonProperty
     @Excel(name = "备注/描述")
+    @FtExcel(name = "备注")
     private String remark;
     /**
      * 字段描述：所属区域id
