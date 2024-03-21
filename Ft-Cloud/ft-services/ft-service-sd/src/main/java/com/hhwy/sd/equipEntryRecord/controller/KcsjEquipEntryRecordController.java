@@ -127,7 +127,7 @@ public class KcsjEquipEntryRecordController extends BaseController {
      *
      * @return
      */
-    @PostMapping("/syncWusheJob")
+    @GetMapping("/syncWusheJob")
     public AjaxResult syncWusheJob(){
         kcsjEquipEntryRecordService.syncWusheJob();
         return AjaxResult.success();

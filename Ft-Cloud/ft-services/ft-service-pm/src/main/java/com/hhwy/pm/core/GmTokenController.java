@@ -26,11 +26,11 @@ import java.util.Map;
 @RequestMapping("/gmToken")
 @RefreshScope(proxyMode = ScopedProxyMode.DEFAULT)
 public class GmTokenController extends BaseController{
-    @Value("${gm.sso.url}")
+    //@Value("${gm.sso.url}")
     private String ssoUrl;
-    @Value("${gm.url}")
+    //@Value("${gm.url}")
     private String gmUrl;
-    @Value("${gm.sso.secrekey}")
+    //@Value("${gm.sso.secrekey}")
     private String ssoSecrekey;
 
     @PostMapping("/get")

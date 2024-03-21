@@ -29,4 +29,12 @@ public interface SdServiceApi {
      */
     @GetMapping("/kcsjDesignDocumentApproval/designFileTask")
     AjaxResult designFile();
+
+    /**
+     * 勘察设计--同步物设系统设备进场记录
+     *
+     * @return
+     */
+    @GetMapping("/kcsjEquipEntryRecord/syncWusheJob")
+    AjaxResult syncWusheJob();
 }

@@ -2,7 +2,7 @@ package com.hhwy.job.feign.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * sp服务
@@ -13,12 +13,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient(name = "ft-service-sd")
 public interface SpServiceApi {
     /**
-     * 试验进场设备
+     * 施工技术---试验进场设备
      *
      * @return
      */
-    @PostMapping("/jobController/getWuSheMaterialRecord")
+    @GetMapping("/jobController/getWuSheMaterialRecord")
     AjaxResult getWuSheMaterialRecord();
 
+    /**
+     * 施工技术---测量进场设备
+     *
+     * @return
+     */
+    @GetMapping("/jobController/getWuSheMeasureMaterialInfo")
+    AjaxResult syncWusheJob();
 
 }
