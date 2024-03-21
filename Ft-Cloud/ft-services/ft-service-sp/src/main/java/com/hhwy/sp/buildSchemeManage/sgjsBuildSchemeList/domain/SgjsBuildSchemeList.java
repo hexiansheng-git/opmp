@@ -211,7 +211,7 @@ public class SgjsBuildSchemeList extends BaseEntity {
     @JsonProperty
     private String ptVar2;
     /**
-     * 字段描述：预留字段3
+     * 字段描述：标识 0原版本带过来，1本次调整的
      */
     @JsonProperty
     private String ptVar3;
