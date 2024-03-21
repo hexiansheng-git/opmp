@@ -120,7 +120,7 @@ public class SgjsEquipEntryRecordController extends BaseController{
      * @return
      */
     @PostMapping("/getDatatByOther")
-    public AjaxResult getDatatByOther(@RequestBody Map<String,Object> map){
+    public AjaxResult getDatatByOther(@RequestBody List<Map> map){
         List<SgjsEquipEntryRecordInfo> list = sgjsEquipEntryRecordService.getDatatByOther(map);
         return AjaxResult.success(list);
     }

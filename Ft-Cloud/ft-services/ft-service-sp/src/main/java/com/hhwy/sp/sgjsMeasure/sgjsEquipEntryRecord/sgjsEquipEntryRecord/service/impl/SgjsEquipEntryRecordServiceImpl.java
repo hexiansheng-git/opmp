@@ -249,9 +249,12 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
     }
 
     @Override
-    public List<SgjsEquipEntryRecordInfo> getDatatByOther(Map<String, Object> map) {
+    public List<SgjsEquipEntryRecordInfo> getDatatByOther(List<Map> listMap) {
+        Map<String,Object> paramMap=new HashMap<>();
+        paramMap.put("projectCode",listMap.get(0).get("projectCode"));
+        paramMap.put("manageCodes",listMap.stream().map(e->e.get("materialCode")).collect(Collectors.toList()));
         //物设同步
-        AjaxResult result = getMaterialInfoInterface.syncMaterialInfo(map);
+        AjaxResult result = getMaterialInfoInterface.syncMaterialInfo(paramMap);
         String code = result.get("code").toString();
         List<SgjsEquipEntryRecordInfo> list=new ArrayList<>();
         if(!code.equals("200")){
@@ -259,23 +262,39 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             return list;
         }
         List<GetMaterialInfoVo> data = JSONArray.parseArray(result.get("data").toString(), GetMaterialInfoVo.class);
-        for (GetMaterialInfoVo vo:data) {
-            SgjsEquipEntryRecordInfo info=new SgjsEquipEntryRecordInfo();
-            info.setManageCode(vo.getManagementcode());
-            info.setManageCode(vo.getCode());
-            String type = vo.getType();
-            if(type.equals("0")){//0：自有
+        Map<String, List<GetMaterialInfoVo>> map = data.stream().collect(Collectors.groupingBy(e -> e.getCode() + e.getSource()));
 
+        for (int i = 0; i < listMap.size(); i++) {
+            String materialCode=listMap.get(i).get("materialCode")+"";
+            String source=listMap.get(i).get("source")+"";
+            logger.info("编码和来源，编码：【{}】，来源：【{}】",materialCode,source);
+            List<GetMaterialInfoVo> infoVoList = map.get(materialCode + source);
+            if(CollectionUtils.isEmpty(infoVoList)){
+                continue;
             }
-            if(type.equals("1")){//1协作单位
+            for (int j = 0; j < infoVoList.size(); j++) {
+                GetMaterialInfoVo vo = infoVoList.get(j);
+                SgjsEquipEntryRecordInfo info=new SgjsEquipEntryRecordInfo();
+                info.setManageCode(vo.getManagementcode());//管理编号
+                info.setMaterialName(vo.getName());//物资名称
+                info.setCategoryCode(vo.getTyptCode());//类别
+                info.setManufacturer(vo.getDeviceFrom());//厂商
+                info.setMaterialSpec(vo.getSpec());//型号
+                info.setSerialNum(vo.getMainNo());//主机系列号
+                info.setBottomNo(vo.getBottomNo());//底盘系列号
+//            info.setCategoryName();//类别名称
+                info.setPower(vo.getMainPower());//主机功率
+                if(!StringUtils.isEmpty(vo.getCheckDate())){
+                    info.setEntryDate(DateUtils.dateTime("yyyy-MM-dd",vo.getCheckDate()));
+                }
+//            info.setExitDate();//实际退场日期
+               info.setSource(vo.getSource());//来源
+//            info.setCurrentState();//当前状态
+//            info.setPower();//主机功率
+                info.setRecordId(Long.parseLong(map.get("recordId").toString()));//关联主表id   左侧数据id
+                list.add(info);
+            }
 
-            }
-            if(type.equals("2")){//2租赁
-
-            }
-            info.setMaterialName(vo.getName());
-            info.setPower(vo.getMainNo());//主机功率
-            list.add(info);
         }
         return list;
     }

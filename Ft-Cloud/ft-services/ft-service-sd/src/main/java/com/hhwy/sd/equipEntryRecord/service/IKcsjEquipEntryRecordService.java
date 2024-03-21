@@ -3,7 +3,10 @@ package com.hhwy.sd.equipEntryRecord.service;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecord;
 import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecordVo;
+import com.hhwy.sd.equipEntryRecord.domain.SyncWusheEquipVo;
+
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zmh
@@ -11,8 +14,6 @@ import java.util.List;
  * @remark
  */
 public interface IKcsjEquipEntryRecordService {
-
-    //KcsjEquipEntryRecord getKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
     KcsjEquipEntryRecordVo getKcsjEquipEntryRecordList(KcsjEquipEntryRecord kcsjEquipEntryRecord);
 
@@ -29,4 +30,19 @@ public interface IKcsjEquipEntryRecordService {
     int deleteKcsjEquipEntryRecordByPks(List<Long> kcsjEquipEntryRecordPkList);
 
     KcsjEquipEntryRecordVo sync();
+
+    /**
+     * 物设同步
+     *
+     * @return
+     */
+    AjaxResult syncWushe(List<SyncWusheEquipVo> list);
+
+    /**
+     * 定时任务
+     * 同步物设设备进场记录
+     *
+     * @return
+     */
+    void syncWusheJob();
 }

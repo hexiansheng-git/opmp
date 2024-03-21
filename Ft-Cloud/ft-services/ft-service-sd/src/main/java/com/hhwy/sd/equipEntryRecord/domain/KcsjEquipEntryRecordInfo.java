@@ -1,17 +1,15 @@
 package com.hhwy.sd.equipEntryRecord.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-import com.hhwy.utils.tree.TreeNode;
-import java.util.Date;
-import java.math.BigDecimal;
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.utils.tree.TreeNode;
 import lombok.Data;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zmh

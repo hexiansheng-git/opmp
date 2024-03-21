@@ -1,4 +1,4 @@
-package com.hhwy.sp.utils.syncThirdInterface.wushe.vo;
+package com.hhwy.sd.sync.wushe.vo;
 
 import lombok.Data;
 
@@ -9,8 +9,7 @@ import lombok.Data;
  * @author lcf
  */
 @Data
-public class GetMaterialInfoVo {
-
+public class SyncMaterialInfoVo {
     private String code;//materialCode
     private String bottomNo;//底盘系列号
     private String type;//0：自有  1协作单位   2租赁
@@ -29,7 +28,7 @@ public class GetMaterialInfoVo {
     private String checkDate;//验收日期
     private String source;//来源
     private String sizeMsg;//尺寸
-
+    private String unit;//单位
 
 
 

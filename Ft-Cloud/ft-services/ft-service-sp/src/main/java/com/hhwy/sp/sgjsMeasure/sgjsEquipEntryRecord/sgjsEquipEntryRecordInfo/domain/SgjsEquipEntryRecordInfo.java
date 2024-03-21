@@ -122,7 +122,7 @@ public class SgjsEquipEntryRecordInfo extends BaseEntity {
     @Excel(name = "最近自检校验日期"    ,dateFormat = "yyyy-MM-dd"  )
     private Date checkDate;
     /**
-     * 字段描述：
+     * 字段描述：来源
      */
     @JsonProperty
     private String source;

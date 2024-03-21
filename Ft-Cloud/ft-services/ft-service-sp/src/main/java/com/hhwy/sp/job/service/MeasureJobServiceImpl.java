@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.domain.SysSyncInfoLog;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
@@ -72,8 +74,6 @@ public class MeasureJobServiceImpl {
                 DynamicDataSourceContextHolder.push(dataSource);
                 //获取测量设备进场记录所有数据
                 List<SgjsEquipEntryRecord> list = equipEntryRecordService.selectList(new SgjsEquipEntryRecord());
-                //根据主id查询  recordId---materialCode
-                Map<Long, List<SgjsEquipEntryRecord>> recordIdMap = list.stream().collect(Collectors.groupingBy(e -> e.getId()));
 
                 List<String> materialCodeList = list.stream().map(e -> e.getMaterialCode()).collect(Collectors.toList());
                 if(CollectionUtils.isEmpty(materialCodeList)){
@@ -88,8 +88,10 @@ public class MeasureJobServiceImpl {
                     return;
                 }
                 List<GetMaterialInfoVo> data = JSONArray.parseArray(result.get("data").toString(), GetMaterialInfoVo.class);
+                Map<String, List<GetMaterialInfoVo>> listMap = data.stream().collect(Collectors.groupingBy(e -> e.getCode() + e.getSource()));
                 //数据处理并入库
-                hanldeDataLogic(data,recordIdMap);
+                //hanldeDataLogic(data,recordIdMap);
+                hanldeDataLogic(list,listMap);
             }
         }catch (Exception e){
             throw new CustomException(e.getMessage());
@@ -102,38 +104,53 @@ public class MeasureJobServiceImpl {
     /**
      * 数据处理并入库
      *
-     * @param data
-     * @param recordIdMap
+     * @param list
+     * @param listMap
      */
-    private void hanldeDataLogic(List<GetMaterialInfoVo> data, Map<Long, List<SgjsEquipEntryRecord>> recordIdMap) {
-        if(CollectionUtils.isEmpty(data)) return;
-        List<SgjsEquipEntryRecordInfo> list=new ArrayList<>();
-        for (GetMaterialInfoVo vo:data) {
-            SgjsEquipEntryRecordInfo info=new SgjsEquipEntryRecordInfo();
-            info.setManageCode(vo.getManagementcode());
-            info.setMaterialName(vo.getName());
-            String code = vo.getCode();//materialCode
-            Long recordId=null;
-            for (Map.Entry<Long, List<SgjsEquipEntryRecord>> entry : recordIdMap.entrySet()) {
-                if (entry.getValue().get(0).getMaterialCode() == code) {
-                    recordId = entry.getKey();
-                    break; // 找到匹配的value后结束循环
-                }
-            }
-            if(null==recordId){
-                logger.error("奇怪竟然没找到表格左侧基础设备信息！！！！！！不合理");
+    private void hanldeDataLogic(List<SgjsEquipEntryRecord> list, Map<String, List<GetMaterialInfoVo>> listMap) {
+        List<SgjsEquipEntryRecordInfo> rstList=new ArrayList<>();
+        for (SgjsEquipEntryRecord info:list) {
+            String key=info.getMaterialCode()+info.getSource();
+            List<GetMaterialInfoVo> voList = listMap.get(key);
+            if(CollectionUtils.isEmpty(voList)){
+                logger.info("空了。。。。。。");
                 continue;
             }
-            info.setRecordId(recordId);
-            list.add(info);
+            for (int i = 0; i < voList.size(); i++) {
+                GetMaterialInfoVo infoVo = voList.get(i);
+                SgjsEquipEntryRecordInfo recordInfo=new SgjsEquipEntryRecordInfo();
+                recordInfo.setRecordId(info.getId());
+                recordInfo.setManageCode(infoVo.getManagementcode());
+//                recordInfo.setCategoryName();
+//                recordInfo.setCategoryCode();
+                recordInfo.setMaterialName(infoVo.getName());
+                recordInfo.setManufacturer(infoVo.getDeviceFrom());
+                recordInfo.setMaterialSpec(infoVo.getSpec());
+                recordInfo.setPower(infoVo.getMainPower());
+                recordInfo.setSerialNum(infoVo.getMainNo());//主机系列号
+                recordInfo.setBottomNo(infoVo.getBottomNo());
+                String checkDate = infoVo.getCheckDate();
+                if(!StringUtils.isEmpty(checkDate)){
+                    recordInfo.setEntryDate(DateUtils.dateTime("yyyy-MM-dd",checkDate));//进场日期
+                }
+//                recordInfo.setExitDate();//退场日期
+//                recordInfo.setCurrentState();//当前状态
+                recordInfo.setProjectId(info.getProjectId());
+                recordInfo.setProjectName(info.getProjectName());
+                rstList.add(recordInfo);
+            }
         }
-        if(!CollectionUtils.isEmpty(list)){
-            sgjsEquipEntryRecordInfoService.insertSgjsEquipEntryRecordInfoList(list);
-            //同步总部
-            syncDataToGm(list);
+        if(CollectionUtils.isEmpty(rstList)){
+            logger.error("未找到匹配数据。。。。。。。。。。。。");
+            return;
         }
-
+        //入库
+        sgjsEquipEntryRecordInfoService.insertSgjsEquipEntryRecordInfoList(rstList);
+        //同步总部
+        syncDataToGm(rstList);
     }
+
+
 
     /**
      * 总部版同步

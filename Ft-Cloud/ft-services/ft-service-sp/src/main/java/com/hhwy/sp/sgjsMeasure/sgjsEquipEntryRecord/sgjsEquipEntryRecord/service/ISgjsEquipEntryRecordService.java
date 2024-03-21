@@ -51,5 +51,5 @@ public interface ISgjsEquipEntryRecordService {
      * @param map
      * @return
      */
-    List<SgjsEquipEntryRecordInfo> getDatatByOther(Map<String, Object> map);
+    List<SgjsEquipEntryRecordInfo> getDatatByOther(List<Map> map);
 }

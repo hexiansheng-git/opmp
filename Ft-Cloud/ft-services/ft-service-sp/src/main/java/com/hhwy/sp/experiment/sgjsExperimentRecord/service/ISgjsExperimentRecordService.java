@@ -41,7 +41,7 @@ public interface ISgjsExperimentRecordService {
      *
      * @return
      */
-    AjaxResult syncWuShe(Map<String,Object> map);
+    AjaxResult syncWuShe(List<Map> map);
 
     /**
      * 列表查询

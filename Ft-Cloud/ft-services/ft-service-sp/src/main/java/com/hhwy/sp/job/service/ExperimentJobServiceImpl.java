@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.domain.SysSyncInfoLog;
@@ -23,11 +24,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -66,11 +66,8 @@ public class ExperimentJobServiceImpl {
                 String tenantKey = tenant.getTenantKey();//租户key就是项目编码
                 String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
                 DynamicDataSourceContextHolder.push(dataSource);
-                //获取试验设备进场记录所有数据
-                //主表id
+                //获取试验设备进场记录所有数据 主表id
                 List<SgjsExperimentRecord> list = sgjsExperimentRecordService.selectList(new SgjsExperimentRecord());
-                //根据主id查询  recordId---materialCode
-                Map<Long, List<SgjsExperimentRecord>> recordIdMap = list.stream().collect(Collectors.groupingBy(e -> e.getId()));
                 //根据项目编码和设备编码查询物设系统设备进场记录
                 List<String> materialCodeList = list.stream().map(e -> e.getMaterialCode()).collect(Collectors.toList());
                 if(CollectionUtils.isEmpty(materialCodeList)){
@@ -85,8 +82,9 @@ public class ExperimentJobServiceImpl {
                     return;
                 }
                 List<GetMaterialInfoVo> data = JSONArray.parseArray(result.get("data").toString(), GetMaterialInfoVo.class);
+                Map<String, List<GetMaterialInfoVo>> wuSheDataMap = data.stream().collect(Collectors.groupingBy(e -> e.getCode() + e.getName()));
                 //数据处理并入库
-                hanldeDataLogic(data,recordIdMap);
+                hanldeDataLogic(list,wuSheDataMap);
             }
         }catch (Exception e){
             throw new CustomException(e.getMessage());
@@ -96,41 +94,58 @@ public class ExperimentJobServiceImpl {
         }
     }
 
-
     /**
      * 数据处理并入库
+     * 根据设备编码和来源进行数据反选匹配
      *
-     * @param data
-     * @param recordIdMap
+     * @param wuSheDataMap 物设返回结果
+     * @param list 左表数据
      */
-    void hanldeDataLogic(List<GetMaterialInfoVo> data,Map<Long, List<SgjsExperimentRecord>> recordIdMap){
-        if(CollectionUtils.isEmpty(data)) return;
-        List<SgjsExperimentRecordInfo> list=new ArrayList<>();
-        for (GetMaterialInfoVo vo:data) {
-            SgjsExperimentRecordInfo info=new SgjsExperimentRecordInfo();
-            info.setMaterialName(vo.getName());
-            String code = vo.getCode();//materialCode
-            info.setManageCode(vo.getCode());
-            Long recordId=null;
-            for (Map.Entry<Long, List<SgjsExperimentRecord>> entry : recordIdMap.entrySet()) {
-                if (entry.getValue().get(0).getMaterialCode() == code) {
-                    recordId = entry.getKey();
-                    break; // 找到匹配的value后结束循环
+    private void hanldeDataLogic(List<SgjsExperimentRecord> list, Map<String, List<GetMaterialInfoVo>> wuSheDataMap) {
+        List<SgjsExperimentRecordInfo> rstList=new ArrayList<>();
+        for (SgjsExperimentRecord info:list) {
+            String key=info.getMaterialCode()+info.getSource();
+            List<GetMaterialInfoVo> voList = wuSheDataMap.get(key);
+            for (GetMaterialInfoVo infoVo :voList){
+                SgjsExperimentRecordInfo recordInfo=new SgjsExperimentRecordInfo();
+                recordInfo.setSource(infoVo.getSource());
+                recordInfo.setRecordId(info.getId());
+                recordInfo.setMaterialName(infoVo.getName());
+                recordInfo.setManageCode(infoVo.getManagementcode());
+                recordInfo.setWeight(infoVo.getWeight());//自重
+                recordInfo.setManufacturer(infoVo.getDeviceFrom());//厂商
+                recordInfo.setMaterialSpec(infoVo.getSpec());//型号
+//                recordInfo.setCategoryCode();//类别编码
+//                recordInfo.setCategoryName();//类别名称
+                recordInfo.setSizeMsg(infoVo.getSizeMsg());//外形尺寸
+                String originalValue = infoVo.getOriginalValue();
+                if(!StringUtils.isEmpty(originalValue)){
+                    recordInfo.setOriginalValue(new BigDecimal(originalValue));//原值
                 }
+                //recordInfo.setResidualValue();//余值
+                String checkDate = infoVo.getCheckDate();
+                if(!StringUtils.isEmpty(checkDate)){
+                    Date date = DateUtils.dateTime("yyyy-MM-dd", checkDate);
+                    recordInfo.setAcceptDate(date);//验收日期
+                    recordInfo.setEntryDate(date);//实际进场日期
+                }
+//                recordInfo.setExitDate();//退场日期
+//                recordInfo.setSource();//来源
+//                recordInfo.setCurrentState();//当前状态
+                recordInfo.setProjectId(info.getProjectId());
+                recordInfo.setProjectName(info.getProjectName());
+                rstList.add(recordInfo);
             }
-            if(null==recordId){
-                logger.error("奇怪竟然没找到表格左侧基础设备信息！！！！！！不合理");
-                continue;
-            }
-            info.setRecordId(recordId);
-            list.add(info);
         }
-        if(!CollectionUtils.isEmpty(list)){
-            iSgjsExperimentRecordInfoService.insertSgjsExperimentRecordInfoList(list);
-            //同步总部
-            syncDataToGm(list);
+        if(CollectionUtils.isEmpty(rstList)){
+            logger.error("空了未找到匹配数据");
+            return;
         }
+        iSgjsExperimentRecordInfoService.insertSgjsExperimentRecordInfoList(rstList);
+        //同步总部
+        syncDataToGm(rstList);
     }
+
 
     /**
      * 总部版同步

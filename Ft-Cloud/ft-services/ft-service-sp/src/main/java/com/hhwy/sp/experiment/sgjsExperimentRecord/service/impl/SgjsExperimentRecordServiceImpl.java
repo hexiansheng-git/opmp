@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -238,37 +239,49 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
     }
 
     @Override
-    public AjaxResult syncWuShe(Map<String, Object> map) {
-        String projectId = ObjectUtils.toString(map.get("projectCode"));
-        if(StringUtils.isEmpty(projectId)) {
-            return AjaxResult.error("项目编码不能为空");
-        }
-        AjaxResult result = materialInfoInterface.syncMaterialInfo(map);
+    public AjaxResult syncWuShe(List<Map> listMap) {
+        Map<String,Object> paramMap=new HashMap<>();
+        paramMap.put("projectCode",listMap.get(0).get("projectCode"));
+        List<Object> codeList = listMap.stream().map(e -> e.get("manageCode")).collect(Collectors.toList());
+        paramMap.put("manageCodes",codeList);
+        AjaxResult result = materialInfoInterface.syncMaterialInfo(paramMap);
         if(!result.get("code").toString().equals("200")){
+            logger.error("同步物设出错！！！！！【{}】",JSONObject.toJSONString(result));
             return result;
         }
         List<GetMaterialInfoVo> dataList = JSONArray.parseArray(JSONObject.toJSONString(result.get("data")), GetMaterialInfoVo.class);
+        Map<String, List<GetMaterialInfoVo>> map = dataList.stream().collect(Collectors.groupingBy(e -> e.getCode() + e.getSource()));
         List<SgjsExperimentRecordInfo> list=new ArrayList<>();
-        for (int i = 0; i < dataList.size(); i++) {
-            SgjsExperimentRecordInfo info=new SgjsExperimentRecordInfo();
-            GetMaterialInfoVo vo = dataList.get(i);
-//            info.setManageCode(ObjectUtils.toString(vo.getManageCode()));//设备管理编码
-//            info.setCategoryName(ObjectUtils.toString(vo.getCategoryName()));
-//            info.setCategoryCode(ObjectUtils.toString(vo.getCategoryCode()));
-//            info.setMaterialName(ObjectUtils.toString(vo.getMaterialName()));
-//            info.setManufacturer(ObjectUtils.toString(vo.getCountryFactory()));
-//            info.setPower(ObjectUtils.toString(vo.getMEnginePower()));
-//            info.setBottomNo(ObjectUtils.toString(vo.getChassisNo()));
-//            info.setProductDate(ObjectUtils.toDate(vo.getMProduceDate()));
-//            info.setSizeMsg(ObjectUtils.toString(vo.getSizeMsg()));
-//            info.setWeight(ObjectUtils.toString(vo.getTheWeight()));
-//            info.setOriginalValue(ObjectUtils.toDecimal(vo.getOriginalValue()));
-//            info.setAcceptDate(ObjectUtils.toDate(vo.getCheckDate()));
-//            info.setEntryDate(ObjectUtils.toDate(vo.getCheckDate()));
-//            info.setExitDate(ObjectUtils.toDate(vo.getExitDate()));
-//            info.setSource(ObjectUtils.toString(vo.getSource()));
-//            info.setPtVar5(ObjectUtils.toString(vo.getId()));
-            list.add(info);
+        for (int i = 0; i < listMap.size(); i++) {
+            String source=listMap.get(i).get("source")+"";
+            String manageCode=listMap.get(i).get("manageCode")+"";
+            List<GetMaterialInfoVo> voList = map.get(manageCode + source);
+            if(CollectionUtils.isEmpty(voList)){
+                continue;
+            }
+            for (GetMaterialInfoVo vo:voList) {
+                SgjsExperimentRecordInfo info=new SgjsExperimentRecordInfo();
+                info.setManageCode(vo.getManagementcode());//管理编码
+                info.setCategoryCode(vo.getTyptCode());//类别编码
+                info.setCategoryName(vo.getName());//类别名称
+                info.setMaterialName(vo.getName());//物资名称
+//            info.setPower();
+//            info.setSerialNum();
+//            info.setBottomNo();
+//            info.setProductDate();
+//            info.setSizeMsg(vo.getSizeMsg());
+//            info.setWeight();
+                if(!StringUtils.isEmpty(vo.getOriginalValue())){
+                    info.setOriginalValue(new BigDecimal(vo.getOriginalValue()));
+                }
+                //info.setResidualValue();//余值
+                if(!StringUtils.isEmpty(vo.getCheckDate())){
+                    info.setAcceptDate(DateUtils.dateTime("yyyy-MM-dd",vo.getCheckDate()));
+                }
+                info.setSource(vo.getSource());
+                list.add(info);
+            }
+
         }
         return result;
     }

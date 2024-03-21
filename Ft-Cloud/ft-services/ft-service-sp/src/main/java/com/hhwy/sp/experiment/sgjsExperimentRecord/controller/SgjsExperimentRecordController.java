@@ -111,7 +111,7 @@ public class SgjsExperimentRecordController extends BaseController{
      * @return
      */
     @PostMapping("/syncWuShe")
-    public AjaxResult syncWuShe(@RequestBody Map<String,Object> map){
+    public AjaxResult syncWuShe(@RequestBody List<Map> map){
         AjaxResult ajaxResult = sgjsExperimentRecordService.syncWuShe(map);
         return ajaxResult;
     }

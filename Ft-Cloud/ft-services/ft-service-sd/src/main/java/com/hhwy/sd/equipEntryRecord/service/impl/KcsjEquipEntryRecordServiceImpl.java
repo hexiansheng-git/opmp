@@ -1,43 +1,47 @@
 package com.hhwy.sd.equipEntryRecord.service.impl;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toCollection;
-
 import cn.hutool.core.date.DateTime;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.BaseException;
+import com.hhwy.common.core.exception.CustomException;
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.domain.base.project.ProjectDto;
-import com.hhwy.excel.Util;
 import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecord;
 import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecordInfo;
 import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecordVo;
+import com.hhwy.sd.equipEntryRecord.domain.SyncWusheEquipVo;
 import com.hhwy.sd.equipEntryRecord.mapper.KcsjEquipEntryRecordInfoMapper;
-import com.hhwy.utils.Constant;
-import com.hhwy.utils.tree.TreeNode;
-import com.hhwy.utils.tree.TreeUtil;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.security.util.SecurityUtils;
-import java.util.Map;
-import java.util.Objects;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-
-import org.apache.rocketmq.spring.core.RocketMQTemplate;
-import org.checkerframework.checker.units.qual.C;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.sd.equipEntryRecord.mapper.KcsjEquipEntryRecordMapper;
 import com.hhwy.sd.equipEntryRecord.service.IKcsjEquipEntryRecordService;
-import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecord;
+import com.hhwy.sd.sync.wushe.SyncMaterialInfoInterface;
+import com.hhwy.sd.sync.wushe.vo.SyncMaterialInfoVo;
+import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.utils.Constant;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeUtil;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 
 /**
  * @author zmh
@@ -46,6 +50,8 @@ import org.springframework.util.CollectionUtils;
  */
 @Service
 public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordService {
+
+    private Logger logger= LoggerFactory.getLogger(KcsjEquipEntryRecordServiceImpl.class);
 
     @Autowired
     private KcsjEquipEntryRecordMapper kcsjEquipEntryRecordMapper;
@@ -56,11 +62,12 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
     @Autowired
     private PmServiceApi pmServiceApi;
     @Autowired
+    private SystemServiceApi systemServiceApi;
+    @Autowired
     private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private SyncMaterialInfoInterface syncMaterialInfoInterface;
 
-//    public KcsjEquipEntryRecord getKcsjEquipEntryRecord(KcsjEquipEntryRecord kcsjEquipEntryRecord) {
-//        return kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecord(kcsjEquipEntryRecord);
-//    }
 
     public KcsjEquipEntryRecordVo getKcsjEquipEntryRecordList(KcsjEquipEntryRecord kcsjEquipEntryRecord) {
         KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo = new KcsjEquipEntryRecordVo();
@@ -414,6 +421,168 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
 //        doSendGm();
         return kcsjEquipEntryRecordVo;
     }
+
+    @Override
+    public AjaxResult syncWushe(List<SyncWusheEquipVo> list) {
+        //同步物设接口
+        Map<String,Object> map=new HashMap<>();
+        map.put("projectCode",list.get(0).getProjectCode());
+        map.put("manageCodes",list.stream().map(e->e.getMaterialCode()).collect(Collectors.toList()));
+        AjaxResult result = syncMaterialInfoInterface.syncMaterialInfo(map);
+        if(!result.get("code").toString().equals("200")){
+            logger.error("同步物设出错！！！！！【{}】",JSONObject.toJSONString(result));
+            return result;
+        }
+        List<SyncMaterialInfoVo> wusheList= JSONArray.parseArray(JSONObject.toJSONString(result.get("data")),SyncMaterialInfoVo.class);
+        Map<String, List<SyncMaterialInfoVo>> listMap = wusheList.stream().collect(Collectors.groupingBy(e -> e.getCode() + e.getSource()));
+        List<KcsjEquipEntryRecordInfo> rstList=new ArrayList();
+        for (SyncWusheEquipVo info:list) {
+            //页面没有来源 只用设备编码是否可行?
+            String key=info.getMaterialCode()+info.getSource()+"";
+            List<SyncMaterialInfoVo> voList = listMap.get(key);
+            if(CollectionUtils.isEmpty(voList)){
+                continue;
+            }
+            for (int i = 0; i < voList.size(); i++) {
+                KcsjEquipEntryRecordInfo recordInfo=new KcsjEquipEntryRecordInfo();
+                recordInfo.setEquipCode(voList.get(i).getCode());//设备编码
+                recordInfo.setTeamNumber(voList.get(i).getManagementcode());//管理编码
+                recordInfo.setEquipName(voList.get(i).getName());//设备名称
+                recordInfo.setEquipSpec(voList.get(i).getSpec());//规格型号
+                recordInfo.setEquipUnit(voList.get(i).getUnit());//单位
+                recordInfo.setEquipSource(voList.get(i).getSource());//来源
+                String checkDate = voList.get(i).getCheckDate();
+                if(!StringUtils.isEmpty(checkDate)){
+                    recordInfo.setEntryDate(DateUtils.dateTime("yyyy-MM-dd",checkDate));//实际进场日期
+                }
+//            recordInfo.setExitDate();//实际退场时间
+//            recordInfo.setCurrentState();//当前状态
+                recordInfo.setPid(Long.parseLong(info.getRecordId()));
+                recordInfo.setTeamName(info.getTeamName());
+                rstList.add(recordInfo);
+            }
+
+        }
+        return AjaxResult.success(rstList);
+    }
+
+    @Override
+    public void syncWusheJob() {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+        try {
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();//租户key就是项目编码
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+                //查询左表设备编码信息
+                List<KcsjEquipEntryRecord> list = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(new KcsjEquipEntryRecord());
+                //根据项目编码和设备编码查询物设系统设备进场记录
+                List<String> materialCodeList = list.stream().map(e -> e.getEquipCode()).collect(Collectors.toList());
+                if(CollectionUtils.isEmpty(materialCodeList)){
+                    logger.error("该项目【{}】设备编码为空",tenantKey);
+                    continue;
+                }
+                Map<String,Object> map=new HashMap<>();
+                map.put("projectCode",tenantKey);
+                map.put("materialCodes",materialCodeList);
+                AjaxResult result = syncMaterialInfoInterface.syncMaterialInfo(map);
+                if(!"200".equals(result.get("code").toString())){
+                    return;
+                }
+                List<SyncMaterialInfoVo> data = JSONArray.parseArray(JSONObject.toJSONString(result.get("data")), SyncMaterialInfoVo.class);
+                Map<String, List<SyncMaterialInfoVo>> listMap = data.stream().collect(Collectors.groupingBy(e -> e.getCode()));
+                handleDataLogic(list,listMap);
+            }
+        }catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+
+    }
+
+    /**
+     * 数据处理
+     *
+     * @param list  左表数据
+     * @param listMap  物设系统设备进场记录
+     */
+    private void handleDataLogic(List<KcsjEquipEntryRecord> list, Map<String, List<SyncMaterialInfoVo>> listMap) {
+        List<KcsjEquipEntryRecordInfo> rstList=new ArrayList<>();
+        for (KcsjEquipEntryRecord info:list) {
+            String equipCode = info.getEquipCode();
+            List<SyncMaterialInfoVo> voList = listMap.get(equipCode);
+            if(CollectionUtils.isEmpty(voList)){
+                logger.info("空了,未找到匹配数据！！！！！");
+               return;
+            }
+            for (SyncMaterialInfoVo infoVo:voList) {
+                KcsjEquipEntryRecordInfo recordInfo=new KcsjEquipEntryRecordInfo();
+                recordInfo.setPid(info.getId());
+                recordInfo.setTeamName(info.getTeamName());
+                recordInfo.setProjectId(info.getProjectId());
+                recordInfo.setProjectName(info.getProjectName());
+                recordInfo.setEquipCode(infoVo.getCode());
+                recordInfo.setEquipName(infoVo.getName());
+                recordInfo.setTeamNumber(infoVo.getManagementcode());
+                recordInfo.setEquipSpec(infoVo.getSpec());//规格型号
+                recordInfo.setEquipUnit(infoVo.getUnit());//单位
+                recordInfo.setEquipSource(infoVo.getSource());//来源
+                String checkDate = infoVo.getCheckDate();
+                if(!StringUtils.isEmpty(checkDate)){
+                    Date date = DateUtils.dateTime("yyyy-MM-dd", checkDate);
+                    recordInfo.setEntryDate(date);//实际进场日期
+                }
+//                recordInfo.setExitDate();//实际退场时间
+//                recordInfo.setCurrentState();//当前状态
+                rstList.add(recordInfo);
+            }
+            if(CollectionUtils.isEmpty(rstList)){
+                logger.error("空了哪来回哪去");
+                return;
+            }
+            //数据入库
+            kcsjEquipEntryRecordInfoMapper.insertKcsjEquipEntryRecordInfoList(rstList);
+            //同步总部版
+            syncDataToGm(rstList);
+        }
+    }
+
+    /**
+     * 同步总部版
+     *
+     * @param rstList
+     */
+    private void syncDataToGm(List<KcsjEquipEntryRecordInfo> rstList) {
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try{
+            rocketMQTemplate.convertAndSend("kcsj_job_equip_entry_record:tenantSuccess1", JSONObject.toJSONString(rstList));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            logger.error("报错了【{}】",e.getMessage());
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("kcsj_job_equip_entry_record");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(JSONObject.toJSONString(rstList));
+            logger.error("kcsj_job_equip_entry_record同步失败【{}】,时间：【{}】",JSONObject.toJSONString(rstList),System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
+        }
+    }
+
     private void digui(List<LinkedHashMap<String, Object>> list, List<KcsjEquipEntryRecord> treeToList) {
         for (LinkedHashMap<String, Object> l : list) {
             KcsjEquipEntryRecord kcsjEquipEntryRecord = new KcsjEquipEntryRecord();
@@ -468,5 +637,7 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
         kcsjEquipEntryRecordInfoList.forEach(p -> p.setPtVar5(projectCode));
         rocketMQTemplate.convertAndSend("kcsj_equip_entry_record_info:tenantSuccess", kcsjEquipEntryRecordInfoList);
     }
+
+
 
 }
