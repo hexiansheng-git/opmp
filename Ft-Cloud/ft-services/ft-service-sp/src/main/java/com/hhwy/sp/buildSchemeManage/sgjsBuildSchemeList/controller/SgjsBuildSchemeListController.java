@@ -1,5 +1,7 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.controller;
 
+import cn.hutool.core.collection.CollUtil;
+import com.alibaba.excel.EasyExcel;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
@@ -7,15 +9,18 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
+import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.EasyExcelListener;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 功能描述: 施工方案管理 - 施工方案清单详细清单
@@ -107,4 +112,18 @@ public class SgjsBuildSchemeListController extends BaseController {
         ExcelUtils<SgjsBuildSchemeList> util = new ExcelUtils<>(SgjsBuildSchemeList.class);
         util.exportExcel(response, sgjsBuildSchemeListList, DateUtils.getDate());
     }
+
+    //导入
+    @GetMapping("/import")
+    public AjaxResult importExcel(MultipartFile file) throws IOException {
+        EasyExcelListener listener = new EasyExcelListener();
+        EasyExcel.read(file.getInputStream(), listener).sheet(0).doRead();
+        List<Map<Integer, String>> headList = listener.getHeadList();
+        if (CollUtil.isEmpty(headList)) return AjaxResult.error("表头为空");
+        List<Map<Integer, String>> dataList = listener.getDataList();
+        if (CollUtil.isEmpty(dataList)) return AjaxResult.error("数据为空");
+        return sgjsBuildSchemeListService.importData(headList, dataList);
+    }
+
+
 }

@@ -26,4 +26,6 @@ public interface ISgjsBuildSchemeExpertSuggestService {
     int deleteSgjsBuildSchemeExpertSuggest(SgjsBuildSchemeExpertSuggest sgjsBuildSchemeExpertSuggest);
 
     int deleteSgjsBuildSchemeExpertSuggestByPks(List<Long> sgjsBuildSchemeExpertSuggestPkList);
+
+    List<SgjsBuildSchemeExpertSuggest> getGroupList(SgjsBuildSchemeExpertSuggest sgjsBuildSchemeExpertSuggestParam);
 }

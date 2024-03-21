@@ -9,6 +9,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.system.api.domain.SysUser;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +18,26 @@ import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.sgjsBuildSchemeExpertSugges
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.sgjsBuildSchemeExpertSuggest.service.ISgjsBuildSchemeExpertSuggestService;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.sgjsBuildSchemeExpertSuggest.domain.SgjsBuildSchemeExpertSuggest;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.util.Assert;
 
 /**
  * @author fsd
  * @date 2024-03-20 18:18:03
- * @remark 
+ * @remark
  */
 @Service
-public class SgjsBuildSchemeExpertSuggestServiceImpl implements ISgjsBuildSchemeExpertSuggestService{
+public class SgjsBuildSchemeExpertSuggestServiceImpl implements ISgjsBuildSchemeExpertSuggestService {
 
     @Autowired
     private SgjsBuildSchemeExpertSuggestMapper sgjsBuildSchemeExpertSuggestMapper;
 
-                                                                                                                                                                                                                                                                                                                                                    
+    @Override
+    public List<SgjsBuildSchemeExpertSuggest> getGroupList(SgjsBuildSchemeExpertSuggest sgjsBuildSchemeExpertSuggestParam) {
+        Long foreignId = sgjsBuildSchemeExpertSuggestParam.getForeignId();
+        Assert.isTrue(foreignId!=null, "foreignId不能为空");
+        return sgjsBuildSchemeExpertSuggestMapper.getGroupList(foreignId);
+    }
+
     public SgjsBuildSchemeExpertSuggest getSgjsBuildSchemeExpertSuggest(SgjsBuildSchemeExpertSuggest sgjsBuildSchemeExpertSuggest) {
         return sgjsBuildSchemeExpertSuggestMapper.getSgjsBuildSchemeExpertSuggest(sgjsBuildSchemeExpertSuggest);
     }
@@ -57,9 +65,13 @@ public class SgjsBuildSchemeExpertSuggestServiceImpl implements ISgjsBuildScheme
     @Transactional
     public int insertSgjsBuildSchemeExpertSuggestList(List<SgjsBuildSchemeExpertSuggest> sgjsBuildSchemeExpertSuggestList) {
         if (CollUtil.isEmpty(sgjsBuildSchemeExpertSuggestList)) return 0;
+        Long userId = SecurityUtils.getUserId();
+        SysUser sysUser = SecurityUtils.getSysUser();
         for (SgjsBuildSchemeExpertSuggest sgjsBuildSchemeExpertSuggest : sgjsBuildSchemeExpertSuggestList) {
+            sgjsBuildSchemeExpertSuggest.setPersonId(String.valueOf(userId));
+            sgjsBuildSchemeExpertSuggest.setPersonName(sysUser.getNickName());
             sgjsBuildSchemeExpertSuggest.setId(IdWorker.createId());
-            sgjsBuildSchemeExpertSuggest.setCreateUser(SecurityUtils.getUserName());
+            sgjsBuildSchemeExpertSuggest.setCreateUser(sysUser.getUserName());
             sgjsBuildSchemeExpertSuggest.setCreateTime(DateUtils.getNowDate());
         }
         return sgjsBuildSchemeExpertSuggestMapper.insertSgjsBuildSchemeExpertSuggestList(sgjsBuildSchemeExpertSuggestList);
@@ -72,15 +84,15 @@ public class SgjsBuildSchemeExpertSuggestServiceImpl implements ISgjsBuildScheme
         return sgjsBuildSchemeExpertSuggestMapper.updateSgjsBuildSchemeExpertSuggest(sgjsBuildSchemeExpertSuggest);
     }
 
-            @Transactional
-        public int updateSgjsBuildSchemeExpertSuggestList(List<SgjsBuildSchemeExpertSuggest> sgjsBuildSchemeExpertSuggestList) {
-            for (SgjsBuildSchemeExpertSuggest sgjsBuildSchemeExpertSuggest : sgjsBuildSchemeExpertSuggestList) {
-                sgjsBuildSchemeExpertSuggest.setUpdateUser(SecurityUtils.getUserName());
-                sgjsBuildSchemeExpertSuggest.setUpdateTime(DateUtils.getNowDate());
-            }
-            return sgjsBuildSchemeExpertSuggestMapper.updateSgjsBuildSchemeExpertSuggestList(sgjsBuildSchemeExpertSuggestList);
+    @Transactional
+    public int updateSgjsBuildSchemeExpertSuggestList(List<SgjsBuildSchemeExpertSuggest> sgjsBuildSchemeExpertSuggestList) {
+        for (SgjsBuildSchemeExpertSuggest sgjsBuildSchemeExpertSuggest : sgjsBuildSchemeExpertSuggestList) {
+            sgjsBuildSchemeExpertSuggest.setUpdateUser(SecurityUtils.getUserName());
+            sgjsBuildSchemeExpertSuggest.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return sgjsBuildSchemeExpertSuggestMapper.updateSgjsBuildSchemeExpertSuggestList(sgjsBuildSchemeExpertSuggestList);
+    }
+
     @Transactional
     public int deleteSgjsBuildSchemeExpertSuggest(SgjsBuildSchemeExpertSuggest sgjsBuildSchemeExpertSuggest) {
         sgjsBuildSchemeExpertSuggest.setUpdateUser(SecurityUtils.getUserName());
@@ -88,8 +100,8 @@ public class SgjsBuildSchemeExpertSuggestServiceImpl implements ISgjsBuildScheme
         return sgjsBuildSchemeExpertSuggestMapper.deleteSgjsBuildSchemeExpertSuggest(sgjsBuildSchemeExpertSuggest);
     }
 
-            @Transactional
-        public int deleteSgjsBuildSchemeExpertSuggestByPks(List<Long> sgjsBuildSchemeExpertSuggestPkList) {
-            return sgjsBuildSchemeExpertSuggestMapper.deleteSgjsBuildSchemeExpertSuggestByPks(sgjsBuildSchemeExpertSuggestPkList);
-        }
+    @Transactional
+    public int deleteSgjsBuildSchemeExpertSuggestByPks(List<Long> sgjsBuildSchemeExpertSuggestPkList) {
+        return sgjsBuildSchemeExpertSuggestMapper.deleteSgjsBuildSchemeExpertSuggestByPks(sgjsBuildSchemeExpertSuggestPkList);
     }
+}

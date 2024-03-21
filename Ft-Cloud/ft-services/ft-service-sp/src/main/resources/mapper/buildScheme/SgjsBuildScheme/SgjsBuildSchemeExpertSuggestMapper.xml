@@ -484,4 +484,19 @@
             </foreach>
         </where>
     </update>
+
+    <select id="getGroupList" resultMap="SgjsBuildSchemeExpertSuggestResultMap">
+        SELECT
+            person_id,
+            person_name,
+            GROUP_CONCAT( suggest ) AS suggest,
+            GROUP_CONCAT( file_group ) AS file_group,
+            submit_time
+        FROM
+            sgjs_build_scheme_expert_suggest
+        WHERE
+            del_flag = '0' AND FOREIGN_ID = #{foreignId}
+        GROUP BY
+            person_id
+    </select>
 </mapper>

@@ -1,5 +1,7 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.controller;
 
+import cn.hutool.core.util.StrUtil;
+import com.github.pagehelper.Constant;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
@@ -108,5 +110,27 @@ public class SgjsBuildSchemeController extends BaseController {
         List<SgjsBuildScheme> sgjsBuildSchemeList = sgjsBuildSchemeService.getSgjsBuildSchemeList(sgjsBuildSchemeParam);
         ExcelUtils<SgjsBuildScheme> util = new ExcelUtils<>(SgjsBuildScheme.class);
         util.exportExcel(response, sgjsBuildSchemeList, DateUtils.getDate());
+    }
+
+    /*
+    * 功能描述: 流程结束监听器
+    * @param: id 业务id
+    * @param: isPass 1通过 0不通过
+    */
+    @RequestMapping("/listener")
+    public void updateBuildScheme(@RequestParam("id") Long id, @RequestParam("isPass") String isPass){
+        SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
+        sgjsBuildScheme.setTaskStatus("5");
+        sgjsBuildScheme.setId(id);
+        sgjsBuildScheme.setPtVar3(isPass);
+        if (StrUtil.isBlank(isPass)){
+            //设置为无效
+            sgjsBuildScheme.setValid("0");
+        }else {
+            //0不通过 1通过
+            String valid = isPass.equals("1") ? "1" : "0";
+            sgjsBuildScheme.setValid(valid);
+        }
+        sgjsBuildSchemeService.updateSgjsBuildScheme(sgjsBuildScheme);
     }
 }

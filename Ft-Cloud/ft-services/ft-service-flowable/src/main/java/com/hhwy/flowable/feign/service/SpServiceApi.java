@@ -64,4 +64,10 @@ public interface SpServiceApi {
      */
     @RequestMapping(value = "/sgsjTechnicalScienceTopic/messagePublic")
     void messagePublic();
+
+    /**
+     * 施工方案管理 - 施工方案清单
+     */
+    @RequestMapping(value = "/sgjsBuildScheme/listener")
+    void updateBuildScheme(@RequestParam("id") Long id, @RequestParam("isPass")String isPass);
 }

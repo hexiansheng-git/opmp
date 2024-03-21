@@ -1,8 +1,10 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author fushudong
@@ -40,4 +42,6 @@ public interface ISgjsBuildSchemeListService {
     List<SgjsBuildSchemeList> getLastValidScheme(SgjsBuildSchemeList sgjsBuildSchemeListParam);
 
     List<SgjsBuildSchemeList> getRiskList(SgjsBuildSchemeList sgjsBuildSchemeListParam);
+
+    AjaxResult importData(List<Map<Integer, String>> headList, List<Map<Integer, String>> dataList);
 }

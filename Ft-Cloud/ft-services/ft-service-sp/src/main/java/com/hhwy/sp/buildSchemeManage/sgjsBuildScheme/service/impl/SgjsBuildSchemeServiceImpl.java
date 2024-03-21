@@ -50,7 +50,16 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
 
     //详情
     public SgjsBuildScheme detail(SgjsBuildScheme sgjsBuildScheme) {
-        SgjsBuildScheme result = sgjsBuildSchemeMapper.getSgjsBuildScheme(sgjsBuildScheme);
+        //获取有效版本数据
+        SgjsBuildScheme result = sgjsBuildSchemeMapper.getValidVersionData();
+        //获取最高版本数据
+        if (result == null) result = sgjsBuildSchemeMapper.getMaxVersionData();
+        if (sgjsBuildScheme != null && sgjsBuildScheme.getId() != null) {
+            SgjsBuildScheme param = new SgjsBuildScheme();
+            param.setId(sgjsBuildScheme.getId());
+            result = sgjsBuildSchemeMapper.getSgjsBuildScheme(param);
+        }
+        /*有效版本、最高版本、入参查询均为命中*/
         if ( result == null ) {
             //返回初始化数据
             Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
@@ -78,7 +87,8 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     //调整
     @Override
     public SgjsBuildScheme adjust(SgjsBuildScheme sgjsBuildSchemeParam) {
-        SgjsBuildScheme result = sgjsBuildSchemeMapper.getMaxVersionData();
+        //获取有效版本数据
+        SgjsBuildScheme result = sgjsBuildSchemeMapper.getValidVersionData();
         if (result == null) return result;
         String taskStatus = result.getTaskStatus();
         if (taskStatus.equals("5")) {
@@ -139,7 +149,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         //只需要在流程未发起时处理
         sgjsBuildScheme.setId(id);
         FlowInfoSearchUtil.getFlowInfo(sgjsBuildScheme, FlowEnum.SGJS_BUILD_SCHEME);
-        if (sgjsBuildScheme.getTaskStatus().equals("0")) {
+        if (!sgjsBuildScheme.getTaskStatus().equals("0")) {
             //方案清单
             List<SgjsBuildSchemeList> children = sgjsBuildScheme.getChildren();
             sgjsBuildSchemeListService.insertSgjsBuildSchemeList(children, id);
