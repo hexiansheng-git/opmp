@@ -55,11 +55,11 @@ public class SgjsBuildSchemeExpertSuggest extends BaseEntity {
     @Excel(name = "建议")
     private String suggest;
     /**
-     * 字段描述：计划实施时间
+     * 字段描述：提交时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy年MM月dd日 HH:mm")
     @JsonProperty
-    @Excel(name = "计划实施时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "提交时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date submitTime;
     /**
      * 字段描述：附件

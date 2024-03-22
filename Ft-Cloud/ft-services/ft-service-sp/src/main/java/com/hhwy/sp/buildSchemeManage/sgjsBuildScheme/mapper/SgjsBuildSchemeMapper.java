@@ -28,6 +28,6 @@ public interface SgjsBuildSchemeMapper {
 
     int deleteSgjsBuildSchemeByPks(@Param("sgjsBuildSchemePkList") List<Long> sgjsBuildSchemePkList);
 
-    SgjsBuildScheme getMaxVersionData();
+    SgjsBuildScheme getMaxVersionData(SgjsBuildScheme sgjsBuildScheme);
     SgjsBuildScheme getValidVersionData();
 }

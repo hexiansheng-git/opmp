@@ -84,7 +84,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         //2获取有效版本数据
         if (result == null) result = sgjsBuildSchemeMapper.getValidVersionData();
         //3获取最高版本数据
-        if (result == null) result = sgjsBuildSchemeMapper.getMaxVersionData();
+        if (result == null) result = sgjsBuildSchemeMapper.getMaxVersionData(new SgjsBuildScheme());
         /*有效版本、最高版本、入参检索均未命中, 说明第一进入界面返回初始化数据*/
         if (result == null) {
             //返回初始化数据
@@ -136,8 +136,10 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     //调整
     @Override
     public SgjsBuildScheme adjust(SgjsBuildScheme sgjsBuildSchemeParam) {
-        //获取有效版本数据
-        SgjsBuildScheme result = sgjsBuildSchemeMapper.getValidVersionData();
+        //获取流程已经结束的最高版本数据
+        SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
+        sgjsBuildScheme.setTaskStatus("5");
+        SgjsBuildScheme result = sgjsBuildSchemeMapper.getMaxVersionData(sgjsBuildScheme);
         if (result == null) return new SgjsBuildScheme();
         //基于上一版本生成一条新的数据
         SgjsBuildScheme newDataResult = this.createNewData(result);
@@ -157,6 +159,10 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         result.setTaskStatus("0");
         result.setListSerialNum("0001");
         result.setId(null);
+        result.setCountryCode(lastData.getCountryCode());
+        result.setCountryName(lastData.getCountryName());
+        result.setBusinessAreasAndProducts(lastData.getBusinessAreasAndProducts());
+        result.setPtVar1(lastData.getPtVar1());
         //附件组id更新
         String auditRecordFile = lastData.getAuditRecordFile();
         String projectSummaryFile = lastData.getProjectSummaryFile();
@@ -193,6 +199,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             sgjsBuildScheme.setId(id);
             sgjsBuildScheme.setCreateUser(SecurityUtils.getUserName());
             sgjsBuildScheme.setCreateTime(DateUtils.getNowDate());
+            sgjsBuildScheme.setProjectCode(SecurityUtils.getTenantKey());
             sgjsBuildSchemeMapper.insertSgjsBuildScheme(sgjsBuildScheme);
         } else {
             //修改
@@ -302,7 +309,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 p.setExpertSuggest(suggestMap.get(p.getId()));
             });
             log.info("施工方案清单,推送数据：" + JSON.toJSONString(sgjsBuildSchemeList));
-            rocketMQTemplate.convertAndSend("sgjs_build_scheme_list:tenantSuccess", sgjsBuildSchemeList);
+            rocketMQTemplate.convertAndSend("sgjs_build_scheme:tenantSuccess", sgjsBuildSchemeList);
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
@@ -318,6 +325,6 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         param.setProjectCode(tenantKey);
         objects.add(param);
         log.info("施工方案清单,推送数据：" + JSON.toJSONString(objects));
-        rocketMQTemplate.convertAndSend("sgjs_technical_science_topic:tenantSuccess", objects);
+        rocketMQTemplate.convertAndSend("sgjs_build_scheme:tenantSuccess", objects);
     }
 }

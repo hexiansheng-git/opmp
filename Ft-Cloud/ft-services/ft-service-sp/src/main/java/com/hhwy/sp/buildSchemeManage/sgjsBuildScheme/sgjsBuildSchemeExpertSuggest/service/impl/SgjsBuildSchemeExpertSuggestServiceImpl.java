@@ -1,9 +1,6 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.sgjsBuildSchemeExpertSuggest.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import cn.hutool.core.collection.CollUtil;
@@ -47,10 +44,6 @@ public class SgjsBuildSchemeExpertSuggestServiceImpl implements ISgjsBuildScheme
     public List<SgjsBuildSchemeExpertSuggest> getSgjsBuildSchemeExpertSuggestList(SgjsBuildSchemeExpertSuggest sgjsBuildSchemeExpertSuggest) {
         List<SgjsBuildSchemeExpertSuggest> sgjsBuildSchemeExpertSuggestList = sgjsBuildSchemeExpertSuggestMapper.getSgjsBuildSchemeExpertSuggestList(sgjsBuildSchemeExpertSuggest);
         if (CollUtil.isEmpty(sgjsBuildSchemeExpertSuggestList)) return new ArrayList<>();
-        Map<String, List<SgjsBuildSchemeExpertSuggest>> collect = sgjsBuildSchemeExpertSuggestList.stream().collect(Collectors.groupingBy(SgjsBuildSchemeExpertSuggest::getPersonId));
-//        collect.forEach((key, value) -> {
-//
-//        });
         return sgjsBuildSchemeExpertSuggestList;
     }
 
@@ -71,6 +64,7 @@ public class SgjsBuildSchemeExpertSuggestServiceImpl implements ISgjsBuildScheme
         for (SgjsBuildSchemeExpertSuggest sgjsBuildSchemeExpertSuggest : sgjsBuildSchemeExpertSuggestList) {
             sgjsBuildSchemeExpertSuggest.setPersonId(String.valueOf(userId));
             sgjsBuildSchemeExpertSuggest.setPersonName(sysUser.getNickName());
+            sgjsBuildSchemeExpertSuggest.setSubmitTime(DateUtils.getNowDate());
             sgjsBuildSchemeExpertSuggest.setId(IdWorker.createId());
             sgjsBuildSchemeExpertSuggest.setCreateUser(sysUser.getUserName());
             sgjsBuildSchemeExpertSuggest.setCreateTime(DateUtils.getNowDate());

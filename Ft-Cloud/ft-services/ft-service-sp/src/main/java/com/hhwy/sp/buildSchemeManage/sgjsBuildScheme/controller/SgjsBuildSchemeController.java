@@ -128,8 +128,7 @@ public class SgjsBuildSchemeController extends BaseController {
             sgjsBuildScheme.setValid("0");
         }else {
             //0不通过 1通过
-            String valid = isPass.equals("1") ? "1" : "0";
-            sgjsBuildScheme.setValid(valid);
+            sgjsBuildScheme.setValid(isPass);
         }
         sgjsBuildSchemeService.updateSgjsBuildScheme(sgjsBuildScheme);
     }

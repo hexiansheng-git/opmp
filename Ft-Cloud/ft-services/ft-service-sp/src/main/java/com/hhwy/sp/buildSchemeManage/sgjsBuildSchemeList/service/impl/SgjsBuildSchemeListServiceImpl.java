@@ -133,9 +133,11 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             collect1.forEach(p -> p.setPtVar3("1"));
             sgjsBuildSchemeListList.addAll(collect1);
         }
+        Integer serilize = serilizeNum;
         for (SgjsBuildSchemeList param : sgjsBuildSchemeListList) {
             if (StrUtil.isBlank(param.getSchemeNum())) {
-                param.setSchemeNum(getSerialNumber(serilizeNum));
+                param.setSchemeNum(getSerialNumber(serilize));
+                serilize++;
             }
             param.setForeignId(foreignId);
             param.setId(IdWorker.createId());
