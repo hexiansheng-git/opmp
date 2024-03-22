@@ -42,7 +42,7 @@ public class SgjsBuildSchemeReviewOpinion extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "方案总得分")
-    private Double description;
+    private Double score;
     /**
      * 字段描述：类型（1：区域总工，  2：海外事业部总工）
      */

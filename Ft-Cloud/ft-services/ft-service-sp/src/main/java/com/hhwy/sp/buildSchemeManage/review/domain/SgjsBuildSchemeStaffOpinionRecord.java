@@ -53,10 +53,9 @@ public class SgjsBuildSchemeStaffOpinionRecord extends BaseEntity {
     /**
      * 字段描述：评审人员id
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "评审人员id")
-    private Long reviewStaffId;
+    private String reviewStaffId;
     /**
      * 字段描述：角色  - 评审人员类型  （1：专家  2：部门）
      */

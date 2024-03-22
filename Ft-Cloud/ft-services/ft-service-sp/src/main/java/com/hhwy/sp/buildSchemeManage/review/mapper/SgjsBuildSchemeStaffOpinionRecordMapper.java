@@ -2,6 +2,7 @@ package com.hhwy.sp.buildSchemeManage.review.mapper;
 
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeStaffOpinionRecord;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * @date 2024-03-20 09:40:06
  * @remark
  */
+@Repository
 public interface SgjsBuildSchemeStaffOpinionRecordMapper {
 
     SgjsBuildSchemeStaffOpinionRecord getSgjsBuildSchemeStaffOpinionRecord(SgjsBuildSchemeStaffOpinionRecord sgjsBuildSchemeStaffOpinionRecord);

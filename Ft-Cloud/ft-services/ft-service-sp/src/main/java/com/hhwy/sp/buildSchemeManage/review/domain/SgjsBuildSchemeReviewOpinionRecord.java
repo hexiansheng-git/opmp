@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -42,7 +43,7 @@ public class SgjsBuildSchemeReviewOpinionRecord extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "方案总得分")
-    private Double description;
+    private Double score;
     /**
      * 字段描述：区域总工意见（1：通过  2：修改后通过  3：不通过）
      */
@@ -199,4 +200,6 @@ public class SgjsBuildSchemeReviewOpinionRecord extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    private List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList;
 }

@@ -10,11 +10,13 @@
         <result property="reviewId" column="review_id"/>
         <result property="staffMark" column="staff_mark"/>
         <result property="description" column="description"/>
-        <result property="staffName" column="staff_name"/>
-        <result property="staffId" column="staff_id"/>
+        <result property="reviewStaffName" column="review_staff_name"/>
+        <result property="reviewStaffId" column="review_staff_id"/>
         <result property="staffType" column="staff_type"/>
         <result property="score" column="score"/>
+        <result property="sort" column="sort"/>
         <result property="submitTime" column="submit_time"/>
+        <result property="updateResult" column="update_result"/>
         <result property="flowNodeMark" column="flow_node_mark"/>
         <result property="remark" column="remark"/>
         <result property="regionId" column="region_id"/>
@@ -42,11 +44,13 @@
              , `review_id`
              , `staff_mark`
              , `description`
-             , `staff_name`
-             , `staff_id`
+             , `review_staff_name`
+             , `review_staff_id`
              , `staff_type`
              , `score`
+             , `sort`
              , `submit_time`
+             , `update_result`
              , `flow_node_mark`
              , `remark`
              , `region_id`
@@ -78,8 +82,8 @@
             <if test="reviewId != null ">and `review_id` = #{reviewId}</if>
             <if test="staffMark != null  and staffMark != ''">and `staff_mark` = #{staffMark}</if>
             <if test="description != null  and description != ''">and `description` = #{description}</if>
-            <if test="staffName != null  and staffName != ''">and `staff_name` = #{staffName}</if>
-            <if test="staffId != null  and staffId != ''">and `staff_id` = #{staffId}</if>
+            <if test="reviewStaffName != null  and reviewStaffName != ''">and `review_staff_name` = #{reviewStaffName}</if>
+            <if test="reviewStaffId != null  and reviewStaffId != ''">and `review_staff_id` = #{reviewStaffId}</if>
             <if test="staffType != null  and staffType != ''">and `staff_type` = #{staffType}</if>
             <if test="score != null ">and `score` = #{score}</if>
             <if test="submitTime != null ">and `submit_time` = #{submitTime}</if>
@@ -105,7 +109,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by create_time desc
+        limit 1
     </select>
 
     <select id="getSgjsBuildSchemeReviewStaffList" resultMap="SgjsBuildSchemeReviewStaffResultMap">
@@ -116,8 +120,8 @@
             <if test="reviewId != null ">and `review_id` = #{reviewId}</if>
             <if test="staffMark != null  and staffMark != ''">and `staff_mark` = #{staffMark}</if>
             <if test="description != null  and description != ''">and `description` = #{description}</if>
-            <if test="staffName != null  and staffName != ''">and `staff_name` = #{staffName}</if>
-            <if test="staffId != null  and staffId != ''">and `staff_id` = #{staffId}</if>
+            <if test="reviewStaffName != null  and reviewStaffName != ''">and `review_staff_name` = #{reviewStaffName}</if>
+            <if test="reviewStaffId != null  and reviewStaffId != ''">and `review_staff_id` = #{reviewStaffId}</if>
             <if test="staffType != null  and staffType != ''">and `staff_type` = #{staffType}</if>
             <if test="score != null ">and `score` = #{score}</if>
             <if test="submitTime != null ">and `submit_time` = #{submitTime}</if>
@@ -145,6 +149,27 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getListByReviewId" resultMap="SgjsBuildSchemeReviewStaffResultMap">
+        <include refid="selectSgjsBuildSchemeReviewStaffVo"/>
+        where del_flag = '0' and review_id = #{reviewId} and flow_node_mark = #{flowNodeMark}
+        order by staff_type,sort
+    </select>
+    <select id="getListByReviewIdGroupByUser" resultMap="SgjsBuildSchemeReviewStaffResultMap">
+        <include refid="selectSgjsBuildSchemeReviewStaffVo"/>
+        <where>
+            del_flag = '0' and review_id = #{reviewId}
+            <if test="flowNodeMark != null  and flowNodeMark != ''">and `flow_node_mark` = #{flowNodeMark}</if>
+        </where>
+        group by review_staff_id
+        order by staff_type,sort
+    </select>
+    <select id="getOneByReviewStaffId" resultMap="SgjsBuildSchemeReviewStaffResultMap">
+        <include refid="selectSgjsBuildSchemeReviewStaffVo"/>
+        <where>
+            del_flag = '0' and review_id = #{reviewId} and `reviewStaffId` = #{reviewStaffId}
+        </where>
+        group by review_staff_id
+    </select>
 
     <insert id="insertSgjsBuildSchemeReviewStaff" useGeneratedKeys="true" keyProperty="id">
         insert into sgjs_build_scheme_review_staff
@@ -153,11 +178,13 @@
             <if test="reviewId != null ">`review_id`,</if>
             <if test="staffMark != null  and staffMark != ''">`staff_mark`,</if>
             <if test="description != null  and description != ''">`description`,</if>
-            <if test="staffName != null  and staffName != ''">`staff_name`,</if>
-            <if test="staffId != null  and staffId != ''">`staff_id`,</if>
+            <if test="reviewStaffName != null  and reviewStaffName != ''">`review_staff_name`,</if>
+            <if test="reviewStaffId != null  and reviewStaffId != ''">`review_staff_id`,</if>
             <if test="staffType != null  and staffType != ''">`staff_type`,</if>
             <if test="score != null ">`score`,</if>
+            <if test="sort != null ">`sort`,</if>
             <if test="submitTime != null ">`submit_time`,</if>
+            <if test="updateResult != null  and updateResult != ''">`update_result`,</if>
             <if test="flowNodeMark != null  and flowNodeMark != ''">`flow_node_mark`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
@@ -185,11 +212,13 @@
             <if test="reviewId != null ">#{reviewId},</if>
             <if test="staffMark != null  and staffMark != ''">#{staffMark},</if>
             <if test="description != null  and description != ''">#{description},</if>
-            <if test="staffName != null  and staffName != ''">#{staffName},</if>
-            <if test="staffId != null  and staffId != ''">#{staffId},</if>
+            <if test="reviewStaffName != null  and reviewStaffName != ''">#{reviewStaffName},</if>
+            <if test="reviewStaffId != null  and reviewStaffId != ''">#{reviewStaffId},</if>
             <if test="staffType != null  and staffType != ''">#{staffType},</if>
             <if test="score != null ">#{score},</if>
+            <if test="sort != null ">#{sort},</if>
             <if test="submitTime != null ">#{submitTime},</if>
+            <if test="updateResult != null  and updateResult != ''">#{updateResult},</if>
             <if test="flowNodeMark != null  and flowNodeMark != ''">#{flowNodeMark},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="regionId != null ">#{regionId},</if>
@@ -222,11 +251,13 @@
             `review_id`,
             `staff_mark`,
             `description`,
-            `staff_name`,
-            `staff_id`,
+            `review_staff_name`,
+            `review_staff_id`,
             `staff_type`,
             `score`,
+            `sort`,
             `submit_time`,
+            `update_result`,
             `flow_node_mark`,
             `remark`,
             `region_id`,
@@ -255,11 +286,13 @@
                 #{item.reviewId},
                 #{item.staffMark},
                 #{item.description},
-                #{item.staffName},
-                #{item.staffId},
+                #{item.reviewStaffName},
+                #{item.reviewStaffId},
                 #{item.staffType},
                 #{item.score},
+                #{item.sort},
                 #{item.submitTime},
+                #{item.updateResult},
                 #{item.flowNodeMark},
                 #{item.remark},
                 #{item.regionId},
@@ -291,11 +324,13 @@
             <if test="reviewId != null ">`review_id` = #{reviewId},</if>
             <if test="staffMark != null  and  staffMark != ''">`staff_mark` = #{staffMark},</if>
             <if test="description != null  and  description != ''">`description` = #{description},</if>
-            <if test="staffName != null  and  staffName != ''">`staff_name` = #{staffName},</if>
-            <if test="staffId != null  and  staffId != ''">`staff_id` = #{staffId},</if>
+            <if test="reviewStaffName != null  and  reviewStaffName != ''">`review_staff_name` = #{reviewStaffName},</if>
+            <if test="reviewStaffId != null  and  reviewStaffId != ''">`review_staff_id` = #{reviewStaffId},</if>
             <if test="staffType != null  and  staffType != ''">`staff_type` = #{staffType},</if>
             <if test="score != null ">`score` = #{score},</if>
+            <if test="sort != null ">`sort` = #{sort},</if>
             <if test="submitTime != null ">`submit_time` = #{submitTime},</if>
+            <if test="updateResult != null  and  updateResult != ''">`update_result` = #{updateResult},</if>
             <if test="flowNodeMark != null  and  flowNodeMark != ''">`flow_node_mark` = #{flowNodeMark},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
@@ -346,14 +381,14 @@
                     when `id`=#{item.id} then #{item.description}
                 </foreach>
             </trim>
-            <trim prefix="staff_name  = case" suffix="end,">
+            <trim prefix="review_staff_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.staffName}
+                    when `id`=#{item.id} then #{item.reviewStaffName}
                 </foreach>
             </trim>
-            <trim prefix="staff_id  = case" suffix="end,">
+            <trim prefix="review_staff_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.staffId}
+                    when `id`=#{item.id} then #{item.reviewStaffId}
                 </foreach>
             </trim>
             <trim prefix="staff_type  = case" suffix="end,">
@@ -366,9 +401,19 @@
                     when `id`=#{item.id} then #{item.score}
                 </foreach>
             </trim>
+            <trim prefix="sort  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.sort}
+                </foreach>
+            </trim>
             <trim prefix="submit_time  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.submitTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_result  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateResult}
                 </foreach>
             </trim>
             <trim prefix="flow_node_mark  = case" suffix="end,">
@@ -490,10 +535,10 @@
             <if test="reviewId != null ">and `review_id` = #{reviewId}</if>
             <if test="staffMark != null  and staffMark != ''">and `staff_mark` = #{staffMark}</if>
             <if test="description != null  and description != ''">and `description` = #{description}</if>
-            <if test="staffName != null  and staffName != ''">and `staff_name` = #{staffName}</if>
-            <if test="staffId != null  and staffId != ''">and `staff_id` = #{staffId}</if>
+            <if test="reviewStaffName != null  and reviewStaffName != ''">and `review_staff_name` = #{reviewStaffName}</if>
+            <if test="reviewStaffId != null  and reviewStaffId != ''">and `review_staff_id` = #{reviewStaffId}</if>
             <if test="staffType != null  and staffType != ''">and `staff_type` = #{staffType}</if>
-            <if test="score != null ">and `score` = #{score}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="submitTime != null ">and `submit_time` = #{submitTime}</if>
             <if test="flowNodeMark != null  and flowNodeMark != ''">and `flow_node_mark` = #{flowNodeMark}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
@@ -506,8 +551,6 @@
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
@@ -517,6 +560,11 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
+    </update>
+
+    <update id="deleteByReviewId">
+        update `sgjs_build_scheme_review_staff` set del_flag = 1
+        where `review_id` = #{reviewId}
     </update>
 
     <update id="deleteSgjsBuildSchemeReviewStaffByPks">

@@ -45,6 +45,18 @@ public class SgjsBuildSchemeStaffOpinion extends BaseEntity {
     @Excel(name = "施工方案评审表主键id")
     private Long reviewId;
     /**
+     * 字段描述：评审人员姓名
+     */
+    @JsonProperty
+    @Excel(name = "评审人员姓名")
+    private String reviewStaffName;
+    /**
+     * 字段描述：评审人员id
+     */
+    @JsonProperty
+    @Excel(name = "评审人员id")
+    private String reviewStaffId;
+    /**
      * 字段描述：评审意见
      */
     @JsonProperty

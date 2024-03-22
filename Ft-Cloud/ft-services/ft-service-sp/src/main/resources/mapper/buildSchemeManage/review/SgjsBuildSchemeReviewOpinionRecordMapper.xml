@@ -8,7 +8,7 @@
                id="SgjsBuildSchemeReviewOpinionRecordResultMap">
         <result property="id" column="id"/>
         <result property="reviewId" column="review_id"/>
-        <result property="description" column="description"/>
+        <result property="score" column="score"/>
         <result property="regionChiefOpinion" column="region_chief_opinion"/>
         <result property="regionChiefDetailOpinion" column="region_chief_detail_opinion"/>
         <result property="overseasChiefOpinion" column="overseas_chief_opinion"/>
@@ -38,7 +38,7 @@
     <sql id="selectSgjsBuildSchemeReviewOpinionRecordVo">
         select `id`
              , `review_id`
-             , `description`
+             , `score`
              , `region_chief_opinion`
              , `region_chief_detail_opinion`
              , `overseas_chief_opinion`
@@ -72,7 +72,7 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="reviewId != null ">and `review_id` = #{reviewId}</if>
-            <if test="description != null ">and `description` = #{description}</if>
+            <if test="score != null ">and `score` = #{score}</if>
             <if test="regionChiefOpinion != null  and regionChiefOpinion != ''">and `region_chief_opinion` =
                 #{regionChiefOpinion}
             </if>
@@ -107,7 +107,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by create_time desc
+        limit 1
     </select>
 
     <select id="getSgjsBuildSchemeReviewOpinionRecordList" resultMap="SgjsBuildSchemeReviewOpinionRecordResultMap">
@@ -116,7 +116,7 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="reviewId != null ">and `review_id` = #{reviewId}</if>
-            <if test="description != null ">and `description` = #{description}</if>
+            <if test="score != null ">and `score` = #{score}</if>
             <if test="regionChiefOpinion != null  and regionChiefOpinion != ''">and `region_chief_opinion` =
                 #{regionChiefOpinion}
             </if>
@@ -153,13 +153,17 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getMaxSerialNumber" resultType="java.lang.Integer">
+        select ifnull(max(serial_number),0) from sgjs_build_scheme_review_opinion_record
+        where del_flag = '0' and review_id = #{reviewId}
+    </select>
 
     <insert id="insertSgjsBuildSchemeReviewOpinionRecord" useGeneratedKeys="true" keyProperty="id">
         insert into sgjs_build_scheme_review_opinion_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="reviewId != null ">`review_id`,</if>
-            <if test="description != null ">`description`,</if>
+            <if test="score != null ">`score`,</if>
             <if test="regionChiefOpinion != null  and regionChiefOpinion != ''">`region_chief_opinion`,</if>
             <if test="regionChiefDetailOpinion != null  and regionChiefDetailOpinion != ''">
                 `region_chief_detail_opinion`,
@@ -193,7 +197,7 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
             <if test="reviewId != null ">#{reviewId},</if>
-            <if test="description != null ">#{description},</if>
+            <if test="score != null ">#{score},</if>
             <if test="regionChiefOpinion != null  and regionChiefOpinion != ''">#{regionChiefOpinion},</if>
             <if test="regionChiefDetailOpinion != null  and regionChiefDetailOpinion != ''">
                 #{regionChiefDetailOpinion},
@@ -232,7 +236,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `review_id`,
-            `description`,
+            `score`,
             `region_chief_opinion`,
             `region_chief_detail_opinion`,
             `overseas_chief_opinion`,
@@ -263,7 +267,7 @@
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
                 #{item.reviewId},
-                #{item.description},
+                #{item.score},
                 #{item.regionChiefOpinion},
                 #{item.regionChiefDetailOpinion},
                 #{item.overseasChiefOpinion},
@@ -297,7 +301,7 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
             <if test="reviewId != null ">`review_id` = #{reviewId},</if>
-            <if test="description != null ">`description` = #{description},</if>
+            <if test="score != null ">`score` = #{score},</if>
             <if test="regionChiefOpinion != null  and  regionChiefOpinion != ''">`region_chief_opinion` =
                 #{regionChiefOpinion},
             </if>
@@ -350,9 +354,9 @@
                     when `id`=#{item.id} then #{item.reviewId}
                 </foreach>
             </trim>
-            <trim prefix="description  = case" suffix="end,">
+            <trim prefix="score  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.description}
+                    when `id`=#{item.id} then #{item.score}
                 </foreach>
             </trim>
             <trim prefix="region_chief_opinion  = case" suffix="end,">
@@ -492,7 +496,7 @@
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="reviewId != null ">and `review_id` = #{reviewId}</if>
-            <if test="description != null ">and `description` = #{description}</if>
+            <if test="score != null ">and `score` = #{score}</if>
             <if test="regionChiefOpinion != null  and regionChiefOpinion != ''">and `region_chief_opinion` =
                 #{regionChiefOpinion}
             </if>
