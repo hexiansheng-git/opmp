@@ -94,12 +94,12 @@
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="reportDate != null ">and `report_date` = #{reportDate}</if>
 
-            <if test="reportDateStart != null and reportDateStart != ''">and `report_date` &gt;= #{reportDateStart}</if>
-            <if test="reportDateEnd != null and reportDateEnd != ''">and `report_date` &lt;= #{reportDateEnd}</if>
+            <if test="reportDateStart != null">and `report_date` &gt;= #{reportDateStart}</if>
+            <if test="reportDateEnd != null">and `report_date` &lt;= #{reportDateEnd}</if>
 
 
-            <if test="retestDateStart != null and retestDateStart != ''">and `retest_date` &gt;= #{retestDateStart}</if>
-            <if test="retestDateEnd != null and retestDateEnd != ''">and `retest_date` &lt;= #{retestDateEnd}</if>
+            <if test="retestDateStart != null">and `retest_date` &gt;= #{retestDateStart}</if>
+            <if test="retestDateEnd != null">and `retest_date` &lt;= #{retestDateEnd}</if>
 
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>

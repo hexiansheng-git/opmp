@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -58,6 +59,10 @@ public class SgjsSpecialMeasureServiceImpl implements ISgjsSpecialMeasureService
 
     @Transactional
     public int insertSgjsSpecialMeasureList(List<SgjsSpecialMeasure> sgjsSpecialMeasureList) {
+        if(CollectionUtils.isEmpty(sgjsSpecialMeasureList)){
+            logger.info("空了！！！！！！！！");
+            return 1;
+        }
         SgjsSpecialMeasure info=new SgjsSpecialMeasure();
         info.setUpdateTime(DateUtils.getNowDate());
         info.setUpdateUser(SecurityUtils.getUserId().toString());
