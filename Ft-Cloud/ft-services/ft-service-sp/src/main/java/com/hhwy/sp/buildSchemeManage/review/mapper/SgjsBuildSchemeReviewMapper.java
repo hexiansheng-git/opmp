@@ -1,7 +1,9 @@
 package com.hhwy.sp.buildSchemeManage.review.mapper;
 
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
+import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewQueryVo;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -10,6 +12,7 @@ import java.util.List;
  * @date 2024-03-20 09:39:35
  * @remark
  */
+@Repository
 public interface SgjsBuildSchemeReviewMapper {
 
     SgjsBuildSchemeReview getSgjsBuildSchemeReview(SgjsBuildSchemeReview sgjsBuildSchemeReview);
@@ -27,4 +30,10 @@ public interface SgjsBuildSchemeReviewMapper {
     int deleteSgjsBuildSchemeReview(SgjsBuildSchemeReview sgjsBuildSchemeReview);
 
     int deleteSgjsBuildSchemeReviewByPks(@Param("sgjsBuildSchemeReviewPkList") List<Long> sgjsBuildSchemeReviewPkList);
+
+    List<SgjsBuildSchemeReview> getListByQueryVo(BuildSchemeReviewQueryVo queryVo);
+
+    SgjsBuildSchemeReview getById(@Param("id") Long id);
+
+    List<SgjsBuildSchemeReview> getListByIds(@Param("ids") List<Long> ids);
 }

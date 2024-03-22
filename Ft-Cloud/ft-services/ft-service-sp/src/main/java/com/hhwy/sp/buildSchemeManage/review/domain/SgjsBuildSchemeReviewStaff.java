@@ -6,11 +6,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.sp.buildSchemeManage.review.domain.vo.ReviewStaff;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -38,7 +40,7 @@ public class SgjsBuildSchemeReviewStaff extends BaseEntity {
     @Excel(name = "施工方案评审表主键id")
     private Long reviewId;
     /**
-     * 字段描述：评审人员标识
+     * 字段描述：评审人员标识 （属于专家还是某个部门）
      */
     @JsonProperty
     @Excel(name = "评审人员标识")
@@ -54,13 +56,14 @@ public class SgjsBuildSchemeReviewStaff extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "评审人员姓名")
-    private String staffName;
+    private String reviewStaffName;
     /**
      * 字段描述：评审人员id
      */
     @JsonProperty
     @Excel(name = "评审人员id")
-    private String staffId;
+    private String reviewStaffId;
+    private List<ReviewStaff> reviewStaffList;
     /**
      * 字段描述：评审人员类型  （1：专家  2：部门）
      */
@@ -74,12 +77,24 @@ public class SgjsBuildSchemeReviewStaff extends BaseEntity {
     @Excel(name = "评分")
     private Double score;
     /**
+     * 字段描述：排序
+     */
+    @JsonProperty
+    @Excel(name = "排序")
+    private Integer sort;
+    /**
      * 字段描述：提交时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
     @Excel(name = "提交时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date submitTime;
+    /**
+     * 字段描述：修改结果
+     */
+    @JsonProperty
+    @Excel(name = "修改结果")
+    private String updateResult;
     /**
      * 字段描述：流程节点标识
      */

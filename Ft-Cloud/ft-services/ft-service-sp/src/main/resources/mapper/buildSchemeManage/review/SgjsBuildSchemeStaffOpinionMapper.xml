@@ -9,6 +9,8 @@
         <result property="id" column="id"/>
         <result property="staffId" column="staff_id"/>
         <result property="reviewId" column="review_id"/>
+        <result property="reviewStaffName" column="review_staff_name"/>
+        <result property="reviewStaffId" column="review_staff_id"/>
         <result property="reviewOpinion" column="review_opinion"/>
         <result property="flowNodeMark" column="flow_node_mark"/>
         <result property="fileGroupId" column="file_group_id"/>
@@ -37,6 +39,8 @@
         select `id`
              , `staff_id`
              , `review_id`
+             , `review_staff_name`
+             , `review_staff_id`
              , `review_opinion`
              , `flow_node_mark`
              , `file_group_id`
@@ -103,6 +107,8 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="staffId != null ">and `staff_id` = #{staffId}</if>
             <if test="reviewId != null ">and `review_id` = #{reviewId}</if>
+            <if test="reviewStaffName != null  and reviewStaffName != ''">and `review_staff_name` = #{reviewStaffName}</if>
+            <if test="reviewStaffId != null  and reviewStaffId != ''">and `review_staff_id` = #{reviewStaffId}</if>
             <if test="reviewOpinion != null  and reviewOpinion != ''">and `review_opinion` = #{reviewOpinion}</if>
             <if test="flowNodeMark != null  and flowNodeMark != ''">and `flow_node_mark` = #{flowNodeMark}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
@@ -127,7 +133,32 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
+        order by staff_id desc,create_time desc
+    </select>
+    <select id="getListByReviewId" resultMap="SgjsBuildSchemeStaffOpinionResultMap">
+        <include refid="selectSgjsBuildSchemeStaffOpinionVo"/>
+        where del_flag = '0' and review_id = #{reviewId}
         order by create_time desc
+    </select>
+    <select id="getListByFlowNodeMarks" resultMap="SgjsBuildSchemeStaffOpinionResultMap">
+        <include refid="selectSgjsBuildSchemeStaffOpinionVo"/>
+        <where>
+            del_flag = '0' and review_id = #{reviewId}
+            and flow_node_mark in
+            <foreach item="flowNodeMark" collection="flowNodeMarks" open="(" separator="," close=")">
+                #{flowNodeMark}
+            </foreach>
+        </where>
+    </select>
+    <select id="getListByReviewStaffIdList" resultMap="SgjsBuildSchemeStaffOpinionResultMap">
+        <include refid="selectSgjsBuildSchemeStaffOpinionVo"/>
+        <where>
+            del_flag = '0' and review_id = #{reviewId}
+            and review_staff_id in
+            <foreach item="reviewStaffId" collection="reviewStaffIdList" open="(" separator="," close=")">
+                #{reviewStaffId}
+            </foreach>
+        </where>
     </select>
 
     <insert id="insertSgjsBuildSchemeStaffOpinion" useGeneratedKeys="true" keyProperty="id">
@@ -136,6 +167,8 @@
             <if test="id != null ">`id`,</if>
             <if test="staffId != null ">`staff_id`,</if>
             <if test="reviewId != null ">`review_id`,</if>
+            <if test="reviewStaffName != null  and reviewStaffName != ''">`review_staff_name`,</if>
+            <if test="reviewStaffId != null  and reviewStaffId != ''">`review_staff_id`,</if>
             <if test="reviewOpinion != null  and reviewOpinion != ''">`review_opinion`,</if>
             <if test="flowNodeMark != null  and flowNodeMark != ''">`flow_node_mark`,</if>
             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
@@ -164,6 +197,8 @@
             <if test="id != null ">#{id},</if>
             <if test="staffId != null ">#{staffId},</if>
             <if test="reviewId != null ">#{reviewId},</if>
+            <if test="reviewStaffName != null  and reviewStaffName != ''">#{reviewStaffName},</if>
+            <if test="reviewStaffId != null  and reviewStaffId != ''">#{reviewStaffId},</if>
             <if test="reviewOpinion != null  and reviewOpinion != ''">#{reviewOpinion},</if>
             <if test="flowNodeMark != null  and flowNodeMark != ''">#{flowNodeMark},</if>
             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
@@ -197,6 +232,8 @@
             `id`,
             `staff_id`,
             `review_id`,
+            `review_staff_name`,
+            `review_staff_id`,
             `review_opinion`,
             `flow_node_mark`,
             `file_group_id`,
@@ -226,6 +263,8 @@
                 #{item.id},
                 #{item.staffId},
                 #{item.reviewId},
+                #{item.reviewStaffName},
+                #{item.reviewStaffId},
                 #{item.reviewOpinion},
                 #{item.flowNodeMark},
                 #{item.fileGroupId},
@@ -258,6 +297,8 @@
             <if test="id != null ">`id` = #{id},</if>
             <if test="staffId != null ">`staff_id` = #{staffId},</if>
             <if test="reviewId != null ">`review_id` = #{reviewId},</if>
+            <if test="reviewStaffName != null  and  reviewStaffName != ''">`review_staff_name` = #{reviewStaffName},</if>
+            <if test="reviewStaffId != null  and  reviewStaffId != ''">`review_staff_id` = #{reviewStaffId},</if>
             <if test="reviewOpinion != null  and  reviewOpinion != ''">`review_opinion` = #{reviewOpinion},</if>
             <if test="flowNodeMark != null  and  flowNodeMark != ''">`flow_node_mark` = #{flowNodeMark},</if>
             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
@@ -303,6 +344,16 @@
             <trim prefix="review_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.reviewId}
+                </foreach>
+            </trim>
+            <trim prefix="review_staff_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.reviewStaffName}
+                </foreach>
+            </trim>
+            <trim prefix="review_staff_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.reviewStaffId}
                 </foreach>
             </trim>
             <trim prefix="review_opinion  = case" suffix="end,">
@@ -457,6 +508,11 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
+    </update>
+
+    <update id="deleteByReviewId">
+        update `sgjs_build_scheme_staff_opinion` set del_flag = 1
+        where `review_id` = #{reviewId}
     </update>
 
     <update id="deleteSgjsBuildSchemeStaffOpinionByPks">

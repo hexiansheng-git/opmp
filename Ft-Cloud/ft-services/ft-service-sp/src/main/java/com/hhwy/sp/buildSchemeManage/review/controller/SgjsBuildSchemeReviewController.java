@@ -1,20 +1,25 @@
 package com.hhwy.sp.buildSchemeManage.review.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.enums.FlowEnum;
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
+import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewDetailQueryVo;
+import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewQueryVo;
 import com.hhwy.sp.buildSchemeManage.review.service.ISgjsBuildSchemeReviewService;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
+import com.hhwy.sp.common.FlowInfoSearchUtil;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,64 +36,108 @@ public class SgjsBuildSchemeReviewController extends BaseController {
     private ISgjsBuildSchemeReviewService sgjsBuildSchemeReviewService;
 
 
-    @PreAuthorize(hasPermi = "sgjsBuildSchemeReview:list")
-    @GetMapping
-    public AjaxResult getSgjsBuildSchemeReview(@Validated(ValidationGroups.Get.class) SgjsBuildSchemeReview sgjsBuildSchemeReviewParam) {
-        SgjsBuildSchemeReview sgjsBuildSchemeReview = sgjsBuildSchemeReviewService.getSgjsBuildSchemeReview(sgjsBuildSchemeReviewParam);
-        return AjaxResult.success(sgjsBuildSchemeReview);
-    }
-
+    /**
+     * 台账
+     * @param queryVo
+     * @return
+     */
     @PreAuthorize(hasPermi = "sgjsBuildSchemeReview:list")
     @GetMapping("/list")
-    public AjaxResult getSgjsBuildSchemeReviewList(@Validated(ValidationGroups.Select.class) SgjsBuildSchemeReview sgjsBuildSchemeReviewParam) {
+    public AjaxResult getListByQueryVo(@Validated(ValidationGroups.Select.class) BuildSchemeReviewQueryVo queryVo) {
         startPage();
-        List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewList = sgjsBuildSchemeReviewService.getSgjsBuildSchemeReviewList(sgjsBuildSchemeReviewParam);
-        return getDataTableAjaxResult(sgjsBuildSchemeReviewList);
+        List<SgjsBuildSchemeReview> reviewList = sgjsBuildSchemeReviewService.getListByQueryVo(queryVo);
+        for (SgjsBuildSchemeReview review : reviewList) {
+            String schemeLevel = review.getSchemeLevel();
+            if("1".equals(schemeLevel)){
+                continue;
+            }
+            if("2".equals(schemeLevel) || "3".equals(schemeLevel)){
+                FlowInfoSearchUtil.getFlowInfo(review, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_2_3);
+            }
+            if("4".equals(schemeLevel)){
+                FlowInfoSearchUtil.getFlowInfo(review, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4);
+            }
+        }
+        return getDataTableAjaxResult(reviewList);
     }
 
-    @PreAuthorize(hasPermi = "sgjsBuildSchemeReview:add")
-    @PostMapping("/add")
-    public AjaxResult insertSgjsBuildSchemeReview(@Validated(ValidationGroups.Save.class) @RequestBody SgjsBuildSchemeReview sgjsBuildSchemeReviewParam) {
-        sgjsBuildSchemeReviewService.insertSgjsBuildSchemeReview(sgjsBuildSchemeReviewParam);
-        return AjaxResult.success(sgjsBuildSchemeReviewParam);
+    /**
+     * 详情
+     * @param detailQueryVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "sgjsBuildSchemeReview:list")
+    @GetMapping("/getDetail")
+    public AjaxResult getDetail(BuildSchemeReviewDetailQueryVo detailQueryVo) {
+        SgjsBuildSchemeReview review = sgjsBuildSchemeReviewService.getDetail(detailQueryVo);
+        String schemeLevel = review.getSchemeLevel();
+        if("2".equals(schemeLevel) || "3".equals(schemeLevel)){
+            FlowInfoSearchUtil.getFlowInfo(review, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_2_3);
+        }
+        if("4".equals(schemeLevel)){
+            FlowInfoSearchUtil.getFlowInfo(review, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4);
+        }
+        return AjaxResult.success(review);
     }
 
-    @PreAuthorize(hasPermi = "sgjsBuildSchemeReview:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertSgjsBuildSchemeReviewList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewListParam) {
-        sgjsBuildSchemeReviewService.insertSgjsBuildSchemeReviewList(sgjsBuildSchemeReviewListParam);
-        return AjaxResult.success(sgjsBuildSchemeReviewListParam);
+    /**
+     * 保存
+     * @param review
+     * @return
+     */
+    @PreAuthorize(hasPermi = "sgjsBuildSchemeReview:save")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody SgjsBuildSchemeReview review) {
+        Long id = sgjsBuildSchemeReviewService.save(review);
+        return AjaxResult.success(id);
     }
 
-    @PreAuthorize(hasPermi = "sgjsBuildSchemeReview:update")
-    @PostMapping("/update")
-    public AjaxResult updateSgjsBuildSchemeReview(@Validated(ValidationGroups.Update.class) @RequestBody SgjsBuildSchemeReview sgjsBuildSchemeReviewParam) {
-        return toAjax(sgjsBuildSchemeReviewService.updateSgjsBuildSchemeReview(sgjsBuildSchemeReviewParam));
+    /**
+     * 导出
+     * @param response
+     * @param queryVo
+     * @throws IOException
+     */
+    @PostMapping("/export")
+    public void export(HttpServletResponse response,@RequestBody BuildSchemeReviewQueryVo queryVo) throws IOException {
+        List<Long> ids = queryVo.getIds();
+        List<SgjsBuildSchemeReview> reviewList;
+        if(CollectionUtils.isEmpty(ids)){
+            reviewList = sgjsBuildSchemeReviewService.getListByQueryVo(queryVo);
+        }else {
+            reviewList = sgjsBuildSchemeReviewService.getListByIds(ids);
+        }
+        FtExcelUtil<SgjsBuildSchemeReview> util = new FtExcelUtil<>(SgjsBuildSchemeReview.class);
+        util.exportExcel(response, reviewList, DateUtils.getDate());
     }
 
-    @PreAuthorize(hasPermi = "sgjsBuildSchemeReview:update")
-    @PostMapping("/batchUpdate")
-    public AjaxResult updateSgjsBuildSchemeReviewList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewListParam) {
-        return toAjax(sgjsBuildSchemeReviewService.updateSgjsBuildSchemeReviewList(sgjsBuildSchemeReviewListParam));
+    /**
+     * 同步方案清单
+     * @return
+     */
+    @GetMapping("/sync")
+    public AjaxResult sync() {
+        sgjsBuildSchemeReviewService.sync();
+        return AjaxResult.success();
     }
 
-    @PreAuthorize(hasPermi = "sgjsBuildSchemeReview:remove")
-    @PostMapping("/delete")
-    public AjaxResult deleteSgjsBuildSchemeReview(@Validated(ValidationGroups.Delete.class) @RequestBody SgjsBuildSchemeReview sgjsBuildSchemeReviewParam) {
-        return toAjax(sgjsBuildSchemeReviewService.deleteSgjsBuildSchemeReview(sgjsBuildSchemeReviewParam));
+    /**
+     * 区域总工不通过/海外事业部总工不通过/海外事业部总工修改后通过  记录历史意见并清除所有数据
+     * @return
+     */
+    @GetMapping("/turnDown")
+    public AjaxResult turnDown(Long reviewId) {
+        sgjsBuildSchemeReviewService.turnDown(reviewId);
+        return AjaxResult.success();
     }
 
-    @PreAuthorize(hasPermi = "sgjsBuildSchemeReview:remove")
-    @PostMapping("/{ids}")
-    public AjaxResult deleteSgjsBuildSchemeReviewByPks(@PathVariable Long[] ids) {
-        List<Long> sgjsBuildSchemeReviewPkList = Arrays.asList(ids);
-        return toAjax(sgjsBuildSchemeReviewService.deleteSgjsBuildSchemeReviewByPks(sgjsBuildSchemeReviewPkList));
-    }
-
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, SgjsBuildSchemeReview sgjsBuildSchemeReviewParam) throws IOException {
-        List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewList = sgjsBuildSchemeReviewService.getSgjsBuildSchemeReviewList(sgjsBuildSchemeReviewParam);
-        ExcelUtils<SgjsBuildSchemeReview> util = new ExcelUtils<>(SgjsBuildSchemeReview.class);
-        util.exportExcel(response, sgjsBuildSchemeReviewList, DateUtils.getDate());
+    /**
+     * 弹窗选择方案
+     * @return
+     */
+    @GetMapping("/getSchemeList")
+    public AjaxResult getSchemeList() {
+        List<SgjsBuildSchemeList> schemeListList = sgjsBuildSchemeReviewService.getSchemeList();
+        return AjaxResult.success(schemeListList);
     }
 }

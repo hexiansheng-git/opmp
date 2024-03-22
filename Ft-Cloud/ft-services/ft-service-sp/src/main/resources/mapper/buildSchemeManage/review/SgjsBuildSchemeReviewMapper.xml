@@ -16,7 +16,7 @@
         <result property="schemeLevel" column="scheme_level"/>
         <result property="dangerLevel" column="danger_level"/>
         <result property="planComplationTime" column="plan_complation_time"/>
-        <result property="planStartTime" column="plan_start_time"/>
+        <result property="planImplementTime" column="plan_implement_time"/>
         <result property="schemeCompilePrincipal" column="scheme_compile_principal"/>
         <result property="principalContactWay" column="principal_contact_way"/>
         <result property="schemeInitiatorName" column="scheme_initiator_name"/>
@@ -57,7 +57,7 @@
              , `scheme_level`
              , `danger_level`
              , `plan_complation_time`
-             , `plan_start_time`
+             , `plan_implement_time`
              , `scheme_compile_principal`
              , `principal_contact_way`
              , `scheme_initiator_name`
@@ -103,7 +103,7 @@
             <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
             <if test="dangerLevel != null  and dangerLevel != ''">and `danger_level` = #{dangerLevel}</if>
             <if test="planComplationTime != null ">and `plan_complation_time` = #{planComplationTime}</if>
-            <if test="planStartTime != null ">and `plan_start_time` = #{planStartTime}</if>
+            <if test="planImplementTime != null ">and `plan_implement_time` = #{planImplementTime}</if>
             <if test="schemeCompilePrincipal != null  and schemeCompilePrincipal != ''">and `scheme_compile_principal` =
                 #{schemeCompilePrincipal}
             </if>
@@ -113,7 +113,7 @@
             <if test="schemeInitiatorName != null  and schemeInitiatorName != ''">and `scheme_initiator_name` =
                 #{schemeInitiatorName}
             </if>
-            <if test="schemeInitiatorId != null ">and `scheme_initiator_id` = #{schemeInitiatorId}</if>
+            <if test="schemeInitiatorId != null and schemeInitiatorId != ''">and `scheme_initiator_id` = #{schemeInitiatorId}</if>
             <if test="submitDate != null ">and `submit_date` = #{submitDate}</if>
             <if test="schemeGroupId != null  and schemeGroupId != ''">and `scheme_group_id` = #{schemeGroupId}</if>
             <if test="auditRecordGroupId != null  and auditRecordGroupId != ''">and `audit_record_group_id` =
@@ -159,7 +159,7 @@
             <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
             <if test="dangerLevel != null  and dangerLevel != ''">and `danger_level` = #{dangerLevel}</if>
             <if test="planComplationTime != null ">and `plan_complation_time` = #{planComplationTime}</if>
-            <if test="planStartTime != null ">and `plan_start_time` = #{planStartTime}</if>
+            <if test="planImplementTime != null ">and `plan_implement_time` = #{planImplementTime}</if>
             <if test="schemeCompilePrincipal != null  and schemeCompilePrincipal != ''">and `scheme_compile_principal` =
                 #{schemeCompilePrincipal}
             </if>
@@ -169,7 +169,7 @@
             <if test="schemeInitiatorName != null  and schemeInitiatorName != ''">and `scheme_initiator_name` =
                 #{schemeInitiatorName}
             </if>
-            <if test="schemeInitiatorId != null ">and `scheme_initiator_id` = #{schemeInitiatorId}</if>
+            <if test="schemeInitiatorId != null and schemeInitiatorId != '' ">and `scheme_initiator_id` = #{schemeInitiatorId}</if>
             <if test="submitDate != null ">and `submit_date` = #{submitDate}</if>
             <if test="schemeGroupId != null  and schemeGroupId != ''">and `scheme_group_id` = #{schemeGroupId}</if>
             <if test="auditRecordGroupId != null  and auditRecordGroupId != ''">and `audit_record_group_id` =
@@ -199,6 +199,34 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getListByQueryVo" resultMap="SgjsBuildSchemeReviewResultMap">
+        <include refid="selectSgjsBuildSchemeReviewVo"/>
+        <where>
+            del_flag = "0"
+            <if test="schemeNum != null  and schemeNum != ''">and `scheme_num` like concat('%' , #{schemeNum} , '%')</if>
+            <if test="schemeName != null  and schemeName != ''">and `scheme_name` like concat('%' , #{schemeName} , '%')</if>
+            <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
+        order by create_time desc
+    </select>
+    <select id="getById" resultMap="SgjsBuildSchemeReviewResultMap">
+        <include refid="selectSgjsBuildSchemeReviewVo"/>
+        where id = #{id}
+    </select>
+    <select id="getListByIds" resultMap="SgjsBuildSchemeReviewResultMap">
+        <include refid="selectSgjsBuildSchemeReviewVo"/>
+        <where>
+            del_flag = '0'
+            <if test="ids != null and ids.size() > 0">
+                and `id` in
+                <foreach item="id" collection="ids" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+        order by create_time desc
+    </select>
 
     <insert id="insertSgjsBuildSchemeReview" useGeneratedKeys="true" keyProperty="id">
         insert into sgjs_build_scheme_review
@@ -213,11 +241,11 @@
             <if test="schemeLevel != null  and schemeLevel != ''">`scheme_level`,</if>
             <if test="dangerLevel != null  and dangerLevel != ''">`danger_level`,</if>
             <if test="planComplationTime != null ">`plan_complation_time`,</if>
-            <if test="planStartTime != null ">`plan_start_time`,</if>
+            <if test="planImplementTime != null ">`plan_implement_time`,</if>
             <if test="schemeCompilePrincipal != null  and schemeCompilePrincipal != ''">`scheme_compile_principal`,</if>
             <if test="principalContactWay != null  and principalContactWay != ''">`principal_contact_way`,</if>
             <if test="schemeInitiatorName != null  and schemeInitiatorName != ''">`scheme_initiator_name`,</if>
-            <if test="schemeInitiatorId != null ">`scheme_initiator_id`,</if>
+            <if test="schemeInitiatorId != null and schemeInitiatorId != '' ">`scheme_initiator_id`,</if>
             <if test="submitDate != null ">`submit_date`,</if>
             <if test="schemeGroupId != null  and schemeGroupId != ''">`scheme_group_id`,</if>
             <if test="auditRecordGroupId != null  and auditRecordGroupId != ''">`audit_record_group_id`,</if>
@@ -254,11 +282,11 @@
             <if test="schemeLevel != null  and schemeLevel != ''">#{schemeLevel},</if>
             <if test="dangerLevel != null  and dangerLevel != ''">#{dangerLevel},</if>
             <if test="planComplationTime != null ">#{planComplationTime},</if>
-            <if test="planStartTime != null ">#{planStartTime},</if>
+            <if test="planImplementTime != null ">#{planImplementTime},</if>
             <if test="schemeCompilePrincipal != null  and schemeCompilePrincipal != ''">#{schemeCompilePrincipal},</if>
             <if test="principalContactWay != null  and principalContactWay != ''">#{principalContactWay},</if>
             <if test="schemeInitiatorName != null  and schemeInitiatorName != ''">#{schemeInitiatorName},</if>
-            <if test="schemeInitiatorId != null ">#{schemeInitiatorId},</if>
+            <if test="schemeInitiatorId != null and schemeInitiatorId != '' ">#{schemeInitiatorId},</if>
             <if test="submitDate != null ">#{submitDate},</if>
             <if test="schemeGroupId != null  and schemeGroupId != ''">#{schemeGroupId},</if>
             <if test="auditRecordGroupId != null  and auditRecordGroupId != ''">#{auditRecordGroupId},</if>
@@ -300,7 +328,7 @@
             `scheme_level`,
             `danger_level`,
             `plan_complation_time`,
-            `plan_start_time`,
+            `plan_implement_time`,
             `scheme_compile_principal`,
             `principal_contact_way`,
             `scheme_initiator_name`,
@@ -342,7 +370,7 @@
                 #{item.schemeLevel},
                 #{item.dangerLevel},
                 #{item.planComplationTime},
-                #{item.planStartTime},
+                #{item.planImplementTime},
                 #{item.schemeCompilePrincipal},
                 #{item.principalContactWay},
                 #{item.schemeInitiatorName},
@@ -388,7 +416,7 @@
             <if test="schemeLevel != null  and  schemeLevel != ''">`scheme_level` = #{schemeLevel},</if>
             <if test="dangerLevel != null  and  dangerLevel != ''">`danger_level` = #{dangerLevel},</if>
             <if test="planComplationTime != null ">`plan_complation_time` = #{planComplationTime},</if>
-            <if test="planStartTime != null ">`plan_start_time` = #{planStartTime},</if>
+            <if test="planImplementTime != null ">`plan_implement_time` = #{planImplementTime},</if>
             <if test="schemeCompilePrincipal != null  and  schemeCompilePrincipal != ''">`scheme_compile_principal` =
                 #{schemeCompilePrincipal},
             </if>
@@ -398,28 +426,21 @@
             <if test="schemeInitiatorName != null  and  schemeInitiatorName != ''">`scheme_initiator_name` =
                 #{schemeInitiatorName},
             </if>
-            <if test="schemeInitiatorId != null ">`scheme_initiator_id` = #{schemeInitiatorId},</if>
+            <if test="schemeInitiatorId != null and schemeInitiatorId != '' ">`scheme_initiator_id` = #{schemeInitiatorId},</if>
             <if test="submitDate != null ">`submit_date` = #{submitDate},</if>
             <if test="schemeGroupId != null  and  schemeGroupId != ''">`scheme_group_id` = #{schemeGroupId},</if>
             <if test="auditRecordGroupId != null  and  auditRecordGroupId != ''">`audit_record_group_id` =
                 #{auditRecordGroupId},
             </if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
-            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
             <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
             <if test="projectCode != null  and  projectCode != ''">`project_code` = #{projectCode},</if>
             <if test="deptId != null ">`dept_id` = #{deptId},</if>
-            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
-            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
-            <if test="createTime != null ">`create_time` = #{createTime},</if>
             <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
             <if test="updateTime != null ">`update_time` = #{updateTime},</if>
-            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
-            <if test="delTime != null ">`del_time` = #{delTime},</if>
-            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
             <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
             <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
             <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
@@ -484,9 +505,9 @@
                     when `id`=#{item.id} then #{item.planComplationTime}
                 </foreach>
             </trim>
-            <trim prefix="plan_start_time  = case" suffix="end,">
+            <trim prefix="plan_implement_time  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.planStartTime}
+                    when `id`=#{item.id} then #{item.planImplementTime}
                 </foreach>
             </trim>
             <trim prefix="scheme_compile_principal  = case" suffix="end,">
@@ -529,11 +550,6 @@
                     when `id`=#{item.id} then #{item.remark}
                 </foreach>
             </trim>
-            <trim prefix="task_status  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.taskStatus}
-                </foreach>
-            </trim>
             <trim prefix="region_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.regionId}
@@ -564,21 +580,6 @@
                     when `id`=#{item.id} then #{item.deptId}
                 </foreach>
             </trim>
-            <trim prefix="create_user  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createUser}
-                </foreach>
-            </trim>
-            <trim prefix="create_user_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createUserName}
-                </foreach>
-            </trim>
-            <trim prefix="create_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createTime}
-                </foreach>
-            </trim>
             <trim prefix="update_user  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.updateUser}
@@ -587,21 +588,6 @@
             <trim prefix="update_time  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.updateTime}
-                </foreach>
-            </trim>
-            <trim prefix="del_user  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delUser}
-                </foreach>
-            </trim>
-            <trim prefix="del_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delTime}
-                </foreach>
-            </trim>
-            <trim prefix="del_flag  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delFlag}
                 </foreach>
             </trim>
             <trim prefix="pt_var1  = case" suffix="end,">
@@ -650,7 +636,7 @@
             <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
             <if test="dangerLevel != null  and dangerLevel != ''">and `danger_level` = #{dangerLevel}</if>
             <if test="planComplationTime != null ">and `plan_complation_time` = #{planComplationTime}</if>
-            <if test="planStartTime != null ">and `plan_start_time` = #{planStartTime}</if>
+            <if test="planImplementTime != null ">and `plan_implement_time` = #{planImplementTime}</if>
             <if test="schemeCompilePrincipal != null  and schemeCompilePrincipal != ''">and `scheme_compile_principal` =
                 #{schemeCompilePrincipal}
             </if>
@@ -660,7 +646,7 @@
             <if test="schemeInitiatorName != null  and schemeInitiatorName != ''">and `scheme_initiator_name` =
                 #{schemeInitiatorName}
             </if>
-            <if test="schemeInitiatorId != null ">and `scheme_initiator_id` = #{schemeInitiatorId}</if>
+            <if test="schemeInitiatorId != null and schemeInitiatorId != '' ">and `scheme_initiator_id` = #{schemeInitiatorId}</if>
             <if test="submitDate != null ">and `submit_date` = #{submitDate}</if>
             <if test="schemeGroupId != null  and schemeGroupId != ''">and `scheme_group_id` = #{schemeGroupId}</if>
             <if test="auditRecordGroupId != null  and auditRecordGroupId != ''">and `audit_record_group_id` =

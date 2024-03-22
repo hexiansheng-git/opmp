@@ -83,6 +83,9 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         sgjsBuildScheme.setValid("1");
         SgjsBuildScheme sgjsBuildScheme1 = sgjsBuildSchemeService.getSgjsBuildScheme(sgjsBuildScheme);
         if (null == sgjsBuildScheme1) return new ArrayList<>();
+        if(sgjsBuildSchemeListParam == null){
+            sgjsBuildSchemeListParam = new SgjsBuildSchemeList();
+        }
         sgjsBuildSchemeListParam.setForeignId(sgjsBuildScheme1.getId());
         return sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
     }

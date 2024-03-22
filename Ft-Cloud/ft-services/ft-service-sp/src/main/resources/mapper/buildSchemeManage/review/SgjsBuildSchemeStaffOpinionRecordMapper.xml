@@ -80,7 +80,7 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="opinionRecordId != null ">and `opinion_record_id` = #{opinionRecordId}</if>
-            <if test="reviewId != null ">and `review_id` = #{reviewId}</if>
+            <if test="reviewId != null and reviewId != ''">and `review_id` = #{reviewId}</if>
             <if test="reviewStaffName != null  and reviewStaffName != ''">and `review_staff_name` = #{reviewStaffName}
             </if>
             <if test="reviewStaffId != null ">and `review_staff_id` = #{reviewStaffId}</if>
@@ -121,7 +121,7 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="opinionRecordId != null ">and `opinion_record_id` = #{opinionRecordId}</if>
-            <if test="reviewId != null ">and `review_id` = #{reviewId}</if>
+            <if test="reviewId != null and reviewId != ''">and `review_id` = #{reviewId}</if>
             <if test="reviewStaffName != null  and reviewStaffName != ''">and `review_staff_name` = #{reviewStaffName}
             </if>
             <if test="reviewStaffId != null ">and `review_staff_id` = #{reviewStaffId}</if>
@@ -161,7 +161,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="opinionRecordId != null ">`opinion_record_id`,</if>
-            <if test="reviewId != null ">`review_id`,</if>
+            <if test="reviewId != null and reviewId != ''">`review_id`,</if>
             <if test="reviewStaffName != null  and reviewStaffName != ''">`review_staff_name`,</if>
             <if test="reviewStaffId != null ">`review_staff_id`,</if>
             <if test="staffType != null  and staffType != ''">`staff_type`,</if>
@@ -195,7 +195,7 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
             <if test="opinionRecordId != null ">#{opinionRecordId},</if>
-            <if test="reviewId != null ">#{reviewId},</if>
+            <if test="reviewId != null and reviewId != ''">#{reviewId},</if>
             <if test="reviewStaffName != null  and reviewStaffName != ''">#{reviewStaffName},</if>
             <if test="reviewStaffId != null ">#{reviewStaffId},</if>
             <if test="staffType != null  and staffType != ''">#{staffType},</if>
@@ -307,7 +307,7 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
             <if test="opinionRecordId != null ">`opinion_record_id` = #{opinionRecordId},</if>
-            <if test="reviewId != null ">`review_id` = #{reviewId},</if>
+            <if test="reviewId != null and reviewId != ''">`review_id` = #{reviewId},</if>
             <if test="reviewStaffName != null  and  reviewStaffName != ''">`review_staff_name` = #{reviewStaffName},
             </if>
             <if test="reviewStaffId != null ">`review_staff_id` = #{reviewStaffId},</if>
@@ -519,7 +519,7 @@
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="opinionRecordId != null ">and `opinion_record_id` = #{opinionRecordId}</if>
-            <if test="reviewId != null ">and `review_id` = #{reviewId}</if>
+            <if test="reviewId != null and reviewId != ''">and `review_id` = #{reviewId}</if>
             <if test="reviewStaffName != null  and reviewStaffName != ''">and `review_staff_name` = #{reviewStaffName}
             </if>
             <if test="reviewStaffId != null ">and `review_staff_id` = #{reviewStaffId}</if>

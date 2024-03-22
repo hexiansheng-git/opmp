@@ -101,6 +101,10 @@ public enum FlowEnum {
         //施工方案管理 - 施工方案清单
         SGJS_BUILD_SCHEME("sgjs_build_scheme", "process_sgjs_build_scheme"),
 
+        /*施工发难管理 - 施工方案评审*/
+        SGJS_BUILD_SCHEME_REVIEW_2_3("sgjs_build_scheme_review", "process_sgjs_build_scheme_review_2_3"),
+        SGJS_BUILD_SCHEME_REVIEW_4("sgjs_build_scheme_review", "process_sgjs_build_scheme_review_4"),
+
 
 
         /*********************勘察设计管理****************************/

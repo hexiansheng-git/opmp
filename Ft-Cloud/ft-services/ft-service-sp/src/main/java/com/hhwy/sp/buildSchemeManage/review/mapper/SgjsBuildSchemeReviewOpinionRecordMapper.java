@@ -2,6 +2,7 @@ package com.hhwy.sp.buildSchemeManage.review.mapper;
 
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReviewOpinionRecord;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * @date 2024-03-20 09:39:48
  * @remark
  */
+@Repository
 public interface SgjsBuildSchemeReviewOpinionRecordMapper {
 
     SgjsBuildSchemeReviewOpinionRecord getSgjsBuildSchemeReviewOpinionRecord(SgjsBuildSchemeReviewOpinionRecord sgjsBuildSchemeReviewOpinionRecord);
@@ -27,4 +29,6 @@ public interface SgjsBuildSchemeReviewOpinionRecordMapper {
     int deleteSgjsBuildSchemeReviewOpinionRecord(SgjsBuildSchemeReviewOpinionRecord sgjsBuildSchemeReviewOpinionRecord);
 
     int deleteSgjsBuildSchemeReviewOpinionRecordByPks(@Param("sgjsBuildSchemeReviewOpinionRecordPkList") List<Long> sgjsBuildSchemeReviewOpinionRecordPkList);
+
+    int getMaxSerialNumber(@Param("reviewId") Long reviewId);
 }
