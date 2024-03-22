@@ -39,7 +39,7 @@ public class SbchTotalDemandPlanDetail extends CommonBaseEntity {
 
     /** 设备分类 */
     @Excel(name = "设备分类")
-    @NotBlank(message = "设备分类不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+//    @NotBlank(message = "设备分类不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private String materialType;
 
     /** 设备编码 */
