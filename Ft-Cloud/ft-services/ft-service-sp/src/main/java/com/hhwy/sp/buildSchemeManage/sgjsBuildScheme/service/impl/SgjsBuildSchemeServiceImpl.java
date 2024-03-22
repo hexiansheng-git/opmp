@@ -202,11 +202,13 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         //只需要在流程未发起时处理
         sgjsBuildScheme.setId(id);
         FlowInfoSearchUtil.getFlowInfo(sgjsBuildScheme, FlowEnum.SGJS_BUILD_SCHEME);
-        if (!sgjsBuildScheme.getTaskStatus().equals("0")) {
+        if (sgjsBuildScheme.getTaskStatus().equals("0")) {
             //方案清单
             List<SgjsBuildSchemeList> children = sgjsBuildScheme.getChildren();
             children.forEach(p -> p.setPtVar5(sgjsBuildScheme.getProjectCode()));
             sgjsBuildSchemeListService.insertSgjsBuildSchemeList(children, id);
+        }
+        if (!sgjsBuildScheme.getTaskStatus().equals("0")) {
             //专家意见
             List<SgjsBuildSchemeExpertSuggest> expertSuggest = sgjsBuildScheme.getExpertSuggest();
             expertSuggest.forEach(p -> p.setPtVar5(sgjsBuildScheme.getProjectCode()));
