@@ -15,7 +15,7 @@
         <result property="schemeType" column="scheme_type"/>
         <result property="schemeLevel" column="scheme_level"/>
         <result property="dangerLevel" column="danger_level"/>
-        <result property="planComplationTime" column="plan_complation_time"/>
+        <result property="planCompletionTime" column="plan_completion_time"/>
         <result property="planImplementTime" column="plan_implement_time"/>
         <result property="schemeCompilePrincipal" column="scheme_compile_principal"/>
         <result property="principalContactWay" column="principal_contact_way"/>
@@ -26,6 +26,8 @@
         <result property="auditRecordGroupId" column="audit_record_group_id"/>
         <result property="remark" column="remark"/>
         <result property="taskStatus" column="task_status"/>
+        <result property="score" column="score"/>
+        <result property="approvalTime" column="approval_time"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="projectId" column="project_id"/>
@@ -56,7 +58,7 @@
              , `scheme_type`
              , `scheme_level`
              , `danger_level`
-             , `plan_complation_time`
+             , `plan_completion_time`
              , `plan_implement_time`
              , `scheme_compile_principal`
              , `principal_contact_way`
@@ -67,6 +69,8 @@
              , `audit_record_group_id`
              , `remark`
              , `task_status`
+             , `score`
+             , `approval_time`
              , `region_id`
              , `region_name`
              , `project_id`
@@ -102,7 +106,7 @@
             <if test="schemeType != null  and schemeType != ''">and `scheme_type` = #{schemeType}</if>
             <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
             <if test="dangerLevel != null  and dangerLevel != ''">and `danger_level` = #{dangerLevel}</if>
-            <if test="planComplationTime != null ">and `plan_complation_time` = #{planComplationTime}</if>
+            <if test="planCompletionTime != null ">and `plan_completion_time` = #{planCompletionTime}</if>
             <if test="planImplementTime != null ">and `plan_implement_time` = #{planImplementTime}</if>
             <if test="schemeCompilePrincipal != null  and schemeCompilePrincipal != ''">and `scheme_compile_principal` =
                 #{schemeCompilePrincipal}
@@ -158,7 +162,7 @@
             <if test="schemeType != null  and schemeType != ''">and `scheme_type` = #{schemeType}</if>
             <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
             <if test="dangerLevel != null  and dangerLevel != ''">and `danger_level` = #{dangerLevel}</if>
-            <if test="planComplationTime != null ">and `plan_complation_time` = #{planComplationTime}</if>
+            <if test="planCompletionTime != null ">and `plan_completion_time` = #{planCompletionTime}</if>
             <if test="planImplementTime != null ">and `plan_implement_time` = #{planImplementTime}</if>
             <if test="schemeCompilePrincipal != null  and schemeCompilePrincipal != ''">and `scheme_compile_principal` =
                 #{schemeCompilePrincipal}
@@ -240,7 +244,7 @@
             <if test="schemeType != null  and schemeType != ''">`scheme_type`,</if>
             <if test="schemeLevel != null  and schemeLevel != ''">`scheme_level`,</if>
             <if test="dangerLevel != null  and dangerLevel != ''">`danger_level`,</if>
-            <if test="planComplationTime != null ">`plan_complation_time`,</if>
+            <if test="planCompletionTime != null ">`plan_completion_time`,</if>
             <if test="planImplementTime != null ">`plan_implement_time`,</if>
             <if test="schemeCompilePrincipal != null  and schemeCompilePrincipal != ''">`scheme_compile_principal`,</if>
             <if test="principalContactWay != null  and principalContactWay != ''">`principal_contact_way`,</if>
@@ -281,7 +285,7 @@
             <if test="schemeType != null  and schemeType != ''">#{schemeType},</if>
             <if test="schemeLevel != null  and schemeLevel != ''">#{schemeLevel},</if>
             <if test="dangerLevel != null  and dangerLevel != ''">#{dangerLevel},</if>
-            <if test="planComplationTime != null ">#{planComplationTime},</if>
+            <if test="planCompletionTime != null ">#{planCompletionTime},</if>
             <if test="planImplementTime != null ">#{planImplementTime},</if>
             <if test="schemeCompilePrincipal != null  and schemeCompilePrincipal != ''">#{schemeCompilePrincipal},</if>
             <if test="principalContactWay != null  and principalContactWay != ''">#{principalContactWay},</if>
@@ -327,7 +331,7 @@
             `scheme_type`,
             `scheme_level`,
             `danger_level`,
-            `plan_complation_time`,
+            `plan_completion_time`,
             `plan_implement_time`,
             `scheme_compile_principal`,
             `principal_contact_way`,
@@ -369,7 +373,7 @@
                 #{item.schemeType},
                 #{item.schemeLevel},
                 #{item.dangerLevel},
-                #{item.planComplationTime},
+                #{item.planCompletionTime},
                 #{item.planImplementTime},
                 #{item.schemeCompilePrincipal},
                 #{item.principalContactWay},
@@ -415,7 +419,7 @@
             <if test="schemeType != null  and  schemeType != ''">`scheme_type` = #{schemeType},</if>
             <if test="schemeLevel != null  and  schemeLevel != ''">`scheme_level` = #{schemeLevel},</if>
             <if test="dangerLevel != null  and  dangerLevel != ''">`danger_level` = #{dangerLevel},</if>
-            <if test="planComplationTime != null ">`plan_complation_time` = #{planComplationTime},</if>
+            <if test="planCompletionTime != null ">`plan_completion_time` = #{planCompletionTime},</if>
             <if test="planImplementTime != null ">`plan_implement_time` = #{planImplementTime},</if>
             <if test="schemeCompilePrincipal != null  and  schemeCompilePrincipal != ''">`scheme_compile_principal` =
                 #{schemeCompilePrincipal},
@@ -500,9 +504,9 @@
                     when `id`=#{item.id} then #{item.dangerLevel}
                 </foreach>
             </trim>
-            <trim prefix="plan_complation_time  = case" suffix="end,">
+            <trim prefix="plan_completion_time  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.planComplationTime}
+                    when `id`=#{item.id} then #{item.planCompletionTime}
                 </foreach>
             </trim>
             <trim prefix="plan_implement_time  = case" suffix="end,">
@@ -635,7 +639,7 @@
             <if test="schemeType != null  and schemeType != ''">and `scheme_type` = #{schemeType}</if>
             <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
             <if test="dangerLevel != null  and dangerLevel != ''">and `danger_level` = #{dangerLevel}</if>
-            <if test="planComplationTime != null ">and `plan_complation_time` = #{planComplationTime}</if>
+            <if test="planCompletionTime != null ">and `plan_completion_time` = #{planCompletionTime}</if>
             <if test="planImplementTime != null ">and `plan_implement_time` = #{planImplementTime}</if>
             <if test="schemeCompilePrincipal != null  and schemeCompilePrincipal != ''">and `scheme_compile_principal` =
                 #{schemeCompilePrincipal}

@@ -374,17 +374,17 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     public Long save(SgjsBuildSchemeReview review) {
         String saveType = review.getSaveType();
         CommonAssert.notBlank(saveType,"保存类型不能为空！");
-        if("1".equals(saveType) && review.getId() == null){
+        if("add".equals(saveType) && review.getId() == null){
             //新增
             this.insertSgjsBuildSchemeReview(review);
         }
 
-        if("2".equals(saveType)){
+        if("edit".equals(saveType)){
             //编辑保存
             this.updateSgjsBuildSchemeReview(review);
         }
 
-        if("3".equals(saveType)){
+        if("dispose".equals(saveType)){
             //处理保存
             Long id = review.getId();
             String flowNodeMark = review.getFlowNodeMark();
@@ -610,6 +610,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             String schemeNum = schemeList.getSchemeNum();
             if(reviewMap.containsKey(schemeNum)){
                 SgjsBuildSchemeReview review = reviewMap.get(schemeNum);
+                if("1".equals(review.getTaskStatus()) || "4".equals(review.getTaskStatus())){
+                    continue;
+                }
                 this.putSchemeListToReview(schemeList, review);
                 review.setUpdateUser(SecurityUtils.getUserName());
                 review.setUpdateTime(DateUtils.getNowDate());
@@ -643,13 +646,15 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 
     private void putSchemeListToReview(SgjsBuildSchemeList schemeList,SgjsBuildSchemeReview review){
         review.setSchemeName(schemeList.getSchemeName());
-        review.setSchemeName(schemeList.getSchemeName());
         review.setRelationWbsId(schemeList.getRelationWbsId());
         review.setRelationWbsName(schemeList.getRelationWbsName());
         review.setSchemeType(schemeList.getSchemeType());
+//        if("0".equals(review.getTaskStatus())){
+//            review.setSchemeLevel(schemeList.getSchemeLevel());
+//        }
         review.setSchemeLevel(schemeList.getSchemeLevel());
         review.setDangerLevel(schemeList.getDangerLevel());
-        review.setPlanComplationTime(schemeList.getPlanComplationTime());
+        review.setPlanCompletionTime(schemeList.getPlanComplationTime());
         review.setPlanImplementTime(schemeList.getPlanImplementTime());
     }
 

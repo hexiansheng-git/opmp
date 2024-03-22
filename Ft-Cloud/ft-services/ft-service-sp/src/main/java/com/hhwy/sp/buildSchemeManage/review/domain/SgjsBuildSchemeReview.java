@@ -26,7 +26,7 @@ import java.util.List;
 public class SgjsBuildSchemeReview extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
-    /*1:新增  2：编辑保存  3：处理保存*/
+    /*  add:新增     edit：编辑保存    dispose：处理保存*/
     private String saveType;
     /*流程节点标识*/
     private String flowNodeMark;
@@ -91,7 +91,7 @@ public class SgjsBuildSchemeReview extends CommonBaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @FtExcel(name = "计划编制完成时间", dateFormat = "yyyy-MM-dd")
-    private Date planComplationTime;
+    private Date planCompletionTime;
     /**
      * 字段描述：计划实施时间
      */
@@ -150,6 +150,16 @@ public class SgjsBuildSchemeReview extends CommonBaseEntity {
      */
     @JsonProperty
     private String taskStatus;
+    /**
+     * 字段描述：方案总得分
+     */
+    @JsonProperty
+    private Double score;
+    /**
+     * 字段描述：方案审核通过时间
+     */
+    @JsonProperty
+    private Date approvalTime;
     /**
      * 字段描述：所属区域id
      */
