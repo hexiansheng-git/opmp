@@ -58,16 +58,16 @@ public class SgjsControlPointRetestServiceImpl implements ISgjsControlPointRetes
 
     @Transactional
     public int insertSgjsControlPointRetestList(List<SgjsControlPointRetest> sgjsControlPointRetestList) {
-        if(CollectionUtils.isEmpty(sgjsControlPointRetestList)){
-            logger.info("空了！！！！！！！！");
-            return 1;
-        }
         //因为是全量新增,先删掉库里原有的
         SgjsControlPointRetest info= new SgjsControlPointRetest();
         info.setUpdateTime(DateUtils.getNowDate());
         info.setUpdateUser(SecurityUtils.getUserId().toString());
         info.setDelFlag("1");
         sgjsControlPointRetestMapper.updateSgjsControlPointRetest(info);
+        if(CollectionUtils.isEmpty(sgjsControlPointRetestList)){
+            logger.info("空了！！！！！！！！");
+            return 1;
+        }
         for (SgjsControlPointRetest sgjsControlPointRetest : sgjsControlPointRetestList) {
             sgjsControlPointRetest.setId(IdWorker.createId());
             sgjsControlPointRetest.setCreateUser(SecurityUtils.getUserName());

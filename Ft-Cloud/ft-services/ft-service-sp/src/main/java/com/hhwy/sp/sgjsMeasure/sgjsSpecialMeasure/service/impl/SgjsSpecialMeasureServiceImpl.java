@@ -59,16 +59,16 @@ public class SgjsSpecialMeasureServiceImpl implements ISgjsSpecialMeasureService
 
     @Transactional
     public int insertSgjsSpecialMeasureList(List<SgjsSpecialMeasure> sgjsSpecialMeasureList) {
-        if(CollectionUtils.isEmpty(sgjsSpecialMeasureList)){
-            logger.info("空了！！！！！！！！");
-            return 1;
-        }
         SgjsSpecialMeasure info=new SgjsSpecialMeasure();
         info.setUpdateTime(DateUtils.getNowDate());
         info.setUpdateUser(SecurityUtils.getUserId().toString());
         info.setDelFlag("1");
         sgjsSpecialMeasureMapper.updateSgjsSpecialMeasure(info);
         //入库
+        if(CollectionUtils.isEmpty(sgjsSpecialMeasureList)){
+            logger.info("空了！！！！！！！！");
+            return 1;
+        }
         for (SgjsSpecialMeasure sgjsSpecialMeasure : sgjsSpecialMeasureList) {
             sgjsSpecialMeasure.setId(IdWorker.createId());
             sgjsSpecialMeasure.setCreateUser(SecurityUtils.getUserName());
