@@ -188,7 +188,7 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             //同步总部版
             if(!CollectionUtils.isEmpty(dataList)){
                 logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(dataList));
-                syncDataToGm(insertList);
+                syncDataToGm(dataList);
             }
             return AjaxResult.success(dataList);
         }
