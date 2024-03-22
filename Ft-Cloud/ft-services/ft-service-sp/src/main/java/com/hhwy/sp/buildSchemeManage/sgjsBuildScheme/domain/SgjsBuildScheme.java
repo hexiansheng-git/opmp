@@ -104,7 +104,7 @@ public class SgjsBuildScheme extends CommonBaseEntity {
      * 字段描述：清单序列号
      */
     @JsonProperty
-    @Excel(name = "清单序列号")
+    @Excel(name = "施工方案清单编码")
     private String listSerialNum;
     /**
      * 字段描述：清单提交日期
@@ -259,7 +259,7 @@ public class SgjsBuildScheme extends CommonBaseEntity {
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：专业领域名称
      */
     @JsonProperty
     @Excel(name = "预留字段1")
@@ -271,13 +271,13 @@ public class SgjsBuildScheme extends CommonBaseEntity {
     @Excel(name = "预留字段2")
     private String ptVar2;
     /**
-     * 字段描述：预留字段3
+     * 字段描述：//0不通过 1通过
      */
     @JsonProperty
     @Excel(name = "预留字段3")
     private String ptVar3;
     /**
-     * 字段描述：预留字段4
+     * 字段描述：项目领域类型标识 1房建 2非房建
      */
     @JsonProperty
     @Excel(name = "预留字段4")

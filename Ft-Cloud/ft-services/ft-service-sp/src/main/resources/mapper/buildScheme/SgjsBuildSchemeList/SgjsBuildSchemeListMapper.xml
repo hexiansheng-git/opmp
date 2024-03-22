@@ -633,4 +633,15 @@
             </foreach>
         </where>
     </update>
+
+    <select id="getListByforeignList" resultMap="SgjsBuildSchemeListResultMap">
+        <include refid="selectSgjsBuildSchemeListVo"/>
+        WHERE DEL_FLAG = '0'
+        <if test="foreignIds != null">
+            AND foreign_id in
+            <foreach collection="foreignIds" separator="," item="foreignId" close=")" open="(">
+                #{foreignId}
+            </foreach>
+        </if>
+    </select>
 </mapper>

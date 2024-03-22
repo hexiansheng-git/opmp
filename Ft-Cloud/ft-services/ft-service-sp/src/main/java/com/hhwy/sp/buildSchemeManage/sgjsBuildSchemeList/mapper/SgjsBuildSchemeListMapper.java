@@ -3,6 +3,7 @@ package com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.mapper;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,4 +28,6 @@ public interface SgjsBuildSchemeListMapper {
     int deleteSgjsBuildSchemeList(SgjsBuildSchemeList sgjsBuildSchemeList);
 
     int deleteSgjsBuildSchemeListByPks(@Param("sgjsBuildSchemeListPkList") List<Long> sgjsBuildSchemeListPkList);
+
+    List<SgjsBuildSchemeList> getListByforeignList(@Param("foreignIds") Collection<Long> foreignIds);
 }

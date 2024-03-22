@@ -221,7 +221,7 @@ public class SgjsBuildSchemeList extends BaseEntity {
     @JsonProperty
     private String ptVar4;
     /**
-     * 字段描述：预留字段5
+     * 字段描述：项目编号
      */
     @JsonProperty
     private String ptVar5;

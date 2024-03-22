@@ -1,6 +1,7 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.sgjsBuildSchemeExpertSuggest.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.sgjsBuildSchemeExpertSuggest.domain.SgjsBuildSchemeExpertSuggest;
 
@@ -28,4 +29,7 @@ public interface ISgjsBuildSchemeExpertSuggestService {
     int deleteSgjsBuildSchemeExpertSuggestByPks(List<Long> sgjsBuildSchemeExpertSuggestPkList);
 
     List<SgjsBuildSchemeExpertSuggest> getGroupList(SgjsBuildSchemeExpertSuggest sgjsBuildSchemeExpertSuggestParam);
+
+    //批量查询，根据foreignId
+    List<SgjsBuildSchemeExpertSuggest> getListByforeignList(Set<Long> foreignId);
 }

@@ -499,4 +499,15 @@
         GROUP BY
             person_id
     </select>
+
+    <select id="getListByforeignList" resultMap="SgjsBuildSchemeExpertSuggestResultMap">
+        <include refid="selectSgjsBuildSchemeExpertSuggestVo"/>
+        WHERE DEL_FLAG = '0'
+        <if test="foreignIds != null">
+            AND foreign_id in
+            <foreach collection="foreignIds" separator="," item="foreignId" close=")" open="(">
+                #{foreignId}
+            </foreach>
+        </if>
+    </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.sgjsBuildSchemeExpertSuggest.mapper;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.ibatis.annotations.Param;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.sgjsBuildSchemeExpertSuggest.domain.SgjsBuildSchemeExpertSuggest;
@@ -29,4 +30,6 @@ public interface SgjsBuildSchemeExpertSuggestMapper {
     int deleteSgjsBuildSchemeExpertSuggestByPks(@Param("sgjsBuildSchemeExpertSuggestPkList") List<Long> sgjsBuildSchemeExpertSuggestPkList);
 
     List<SgjsBuildSchemeExpertSuggest> getGroupList(Long foreignId);
+
+    List<SgjsBuildSchemeExpertSuggest> getListByforeignList(@Param("foreignIds") Set<Long> foreignIds);
 }

@@ -3,6 +3,7 @@ package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.sgjsBuildSchemeExpertSugge
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import cn.hutool.core.collection.CollUtil;
@@ -103,5 +104,10 @@ public class SgjsBuildSchemeExpertSuggestServiceImpl implements ISgjsBuildScheme
     @Transactional
     public int deleteSgjsBuildSchemeExpertSuggestByPks(List<Long> sgjsBuildSchemeExpertSuggestPkList) {
         return sgjsBuildSchemeExpertSuggestMapper.deleteSgjsBuildSchemeExpertSuggestByPks(sgjsBuildSchemeExpertSuggestPkList);
+    }
+
+    @Override
+    public List<SgjsBuildSchemeExpertSuggest> getListByforeignList(Set<Long> foreignId) {
+        return sgjsBuildSchemeExpertSuggestMapper.getListByforeignList(foreignId);
     }
 }

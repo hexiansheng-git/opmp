@@ -146,11 +146,11 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         String tenantKey = SecurityUtils.getTenantKey();
         serialNum += 1;
         if (serialNum < 10) {
-            return tenantKey + "+00" + serialNum;
+            return tenantKey + "00" + serialNum;
         } else if (serialNum < 100) {
-            return tenantKey + "+0" + serialNum;
+            return tenantKey + "0" + serialNum;
         } else {
-            return tenantKey + "+" + serialNum;
+            return tenantKey + serialNum;
         }
     }
 
@@ -210,5 +210,10 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
     @Transactional
     public int deleteSgjsBuildSchemeListByPks(List<Long> sgjsBuildSchemeListPkList) {
         return sgjsBuildSchemeListMapper.deleteSgjsBuildSchemeListByPks(sgjsBuildSchemeListPkList);
+    }
+
+    @Override
+    public List<SgjsBuildSchemeList> getListByforeignList(Collection<Long> foreignId) {
+        return sgjsBuildSchemeListMapper.getListByforeignList(foreignId);
     }
 }

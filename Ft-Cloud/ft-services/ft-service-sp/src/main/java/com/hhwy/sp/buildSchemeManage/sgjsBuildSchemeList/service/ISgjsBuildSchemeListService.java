@@ -3,8 +3,10 @@ package com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author fushudong
@@ -44,4 +46,7 @@ public interface ISgjsBuildSchemeListService {
     List<SgjsBuildSchemeList> getRiskList(SgjsBuildSchemeList sgjsBuildSchemeListParam);
 
     AjaxResult importData(List<Map<Integer, String>> headList, List<Map<Integer, String>> dataList);
+
+    //批量查询，根据foreignId
+    List<SgjsBuildSchemeList> getListByforeignList(Collection<Long> foreignId);
 }
