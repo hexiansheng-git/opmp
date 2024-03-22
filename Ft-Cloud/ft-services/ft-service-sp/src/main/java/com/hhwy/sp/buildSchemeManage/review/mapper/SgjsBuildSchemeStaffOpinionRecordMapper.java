@@ -26,6 +26,8 @@ public interface SgjsBuildSchemeStaffOpinionRecordMapper {
 
     int updateSgjsBuildSchemeStaffOpinionRecordList(@Param("list") List<SgjsBuildSchemeStaffOpinionRecord> sgjsBuildSchemeStaffOpinionRecordList);
 
+    void updateUpdateResult(@Param("list") List<SgjsBuildSchemeStaffOpinionRecord> sgjsBuildSchemeStaffOpinionRecordList);
+
     int deleteSgjsBuildSchemeStaffOpinionRecord(SgjsBuildSchemeStaffOpinionRecord sgjsBuildSchemeStaffOpinionRecord);
 
     int deleteSgjsBuildSchemeStaffOpinionRecordByPks(@Param("sgjsBuildSchemeStaffOpinionRecordPkList") List<Long> sgjsBuildSchemeStaffOpinionRecordPkList);

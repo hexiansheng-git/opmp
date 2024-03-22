@@ -176,9 +176,9 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
                 sgjsExperimentRecordMapper.insertSgjsExperimentRecordList(list);
             }
             //数据同步总部
-            if(!CollectionUtils.isEmpty(insertList)) {
-                logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(insertList));
-                syncDataToGm(insertList);
+            if(!CollectionUtils.isEmpty(list)) {
+                logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(list));
+                syncDataToGm(list);
             }
             return AjaxResult.success(list);
         }

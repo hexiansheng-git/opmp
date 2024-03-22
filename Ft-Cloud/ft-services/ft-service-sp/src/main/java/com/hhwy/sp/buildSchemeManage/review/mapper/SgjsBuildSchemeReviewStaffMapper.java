@@ -42,4 +42,6 @@ public interface SgjsBuildSchemeReviewStaffMapper {
     void deleteByReviewId(@Param("reviewId") Long reviewId);
 
     int deleteSgjsBuildSchemeReviewStaffByPks(@Param("sgjsBuildSchemeReviewStaffPkList") List<Long> sgjsBuildSchemeReviewStaffPkList);
+
+    void updateScoreByUser(@Param("reviewId") Long reviewId,@Param("userName") String userName,@Param("score") Double score);
 }

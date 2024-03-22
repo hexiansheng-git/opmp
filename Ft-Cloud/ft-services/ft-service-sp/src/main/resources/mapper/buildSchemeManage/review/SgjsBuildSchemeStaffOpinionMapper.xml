@@ -484,6 +484,8 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="staffId != null ">and `staff_id` = #{staffId}</if>
             <if test="reviewId != null ">and `review_id` = #{reviewId}</if>
+            <if test="reviewStaffName != null  and  reviewStaffName != ''">and `review_staff_name` = #{reviewStaffName}</if>
+            <if test="reviewStaffId != null  and  reviewStaffId != ''">and `review_staff_id` = #{reviewStaffId}</if>
             <if test="reviewOpinion != null  and reviewOpinion != ''">and `review_opinion` = #{reviewOpinion}</if>
             <if test="flowNodeMark != null  and flowNodeMark != ''">and `flow_node_mark` = #{flowNodeMark}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>

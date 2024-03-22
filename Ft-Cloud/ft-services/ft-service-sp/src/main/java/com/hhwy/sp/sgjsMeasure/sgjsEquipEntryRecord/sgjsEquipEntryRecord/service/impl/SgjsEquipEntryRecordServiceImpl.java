@@ -155,8 +155,8 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
         JSONObject data = JSONObject.parseObject(JSONObject.toJSONString(result.get("data")));
         List<LinkedHashMap> map=(List<LinkedHashMap>)data.get("measureList");
         if(CollectionUtils.isEmpty(map)){
-            logger.error("同步转换异常");
-            return AjaxResult.error("同步转换异常");
+            logger.error("同步转换异常空了【{}】",JSONObject.toJSONString(data));
+            return AjaxResult.success("暂无数据!");
         }
         List<SgjsEquipEntryRecord> dataList=new ArrayList<>();
         for (int i = 0; i < map.size(); i++) {
@@ -186,8 +186,8 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
                 sgjsEquipEntryRecordMapper.insertSgjsEquipEntryRecordList(dataList);
             }
             //同步总部版
-            if(!CollectionUtils.isEmpty(insertList)){
-                logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(insertList));
+            if(!CollectionUtils.isEmpty(dataList)){
+                logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(dataList));
                 syncDataToGm(insertList);
             }
             return AjaxResult.success(dataList);
