@@ -74,24 +74,24 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
 
     //详情
     public SgjsBuildScheme detail(SgjsBuildScheme sgjsBuildScheme) {
-        //获取有效版本数据
-        SgjsBuildScheme result = sgjsBuildSchemeMapper.getValidVersionData();
-        //获取最高版本数据
-        if (result == null) result = sgjsBuildSchemeMapper.getMaxVersionData();
+        SgjsBuildScheme result = null;
+        //1按照界面传入id获取数据
         if (sgjsBuildScheme != null && sgjsBuildScheme.getId() != null) {
             SgjsBuildScheme param = new SgjsBuildScheme();
             param.setId(sgjsBuildScheme.getId());
             result = sgjsBuildSchemeMapper.getSgjsBuildScheme(param);
         }
+        //2获取有效版本数据
+        if (result == null) result = sgjsBuildSchemeMapper.getValidVersionData();
+        //3获取最高版本数据
+        if (result == null) result = sgjsBuildSchemeMapper.getMaxVersionData();
         /*有效版本、最高版本、入参检索均未命中, 说明第一进入界面返回初始化数据*/
         if (result == null) {
             //返回初始化数据
             return this.getInitializeData();
         }
         /*按id返回结果*/
-        Assert.isTrue(sgjsBuildScheme != null, "参数不能为空");
-        Assert.isTrue(sgjsBuildScheme.getId() != null, "id不能为空");
-        Long id = sgjsBuildScheme.getId();
+        Long id = result.getId();
         //子表
         SgjsBuildSchemeList sgjsBuildSchemeList = new SgjsBuildSchemeList();
         sgjsBuildSchemeList.setForeignId(id);
@@ -201,6 +201,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         /*保存子表信息：方案清单、专家意见*/
         //只需要在流程未发起时处理
         sgjsBuildScheme.setId(id);
+        Long foreignId = id;
         FlowInfoSearchUtil.getFlowInfo(sgjsBuildScheme, FlowEnum.SGJS_BUILD_SCHEME);
         if (sgjsBuildScheme.getTaskStatus().equals("0")) {
             //方案清单
@@ -211,7 +212,10 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         if (!sgjsBuildScheme.getTaskStatus().equals("0")) {
             //专家意见
             List<SgjsBuildSchemeExpertSuggest> expertSuggest = sgjsBuildScheme.getExpertSuggest();
-            expertSuggest.forEach(p -> p.setPtVar5(sgjsBuildScheme.getProjectCode()));
+            expertSuggest.forEach(p -> {
+                p.setPtVar5(sgjsBuildScheme.getProjectCode());
+                p.setForeignId(foreignId);
+            });
             schemeExpertSuggestService.insertSgjsBuildSchemeExpertSuggestList(expertSuggest);
         }
         SysUser sysUser = SecurityUtils.getSysUser();
@@ -277,7 +281,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 sendEmpty(tenantKey);
                 return;
             }
-            FlowInfoSearchUtilNonReqest.getFlowInfo(sgjsBuildSchemeList, FlowEnum.SGJS_BUILD_SCHEME, sysUser.getUserName());
+            FlowInfoSearchUtilNonReqest.getFlowInfo(sgjsBuildSchemeList, FlowEnum.SGJS_BUILD_SCHEME, tenantKey, sysUser.getUserName());
             List<SgjsBuildScheme> collect1 = sgjsBuildSchemeList.stream().filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
             if (CollUtil.isEmpty(collect1)) {
                 log.warn("施工方案清单 - 无已发起审批的数据");
