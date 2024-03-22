@@ -1,6 +1,7 @@
 package com.hhwy.sp.buildSchemeManage.review.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sp.buildSchemeManage.review.domain.*;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.*;
@@ -9,6 +10,7 @@ import com.hhwy.sp.buildSchemeManage.review.service.ISgjsBuildSchemeReviewServic
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
 import com.hhwy.system.api.domain.SysUser;
+import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,9 +158,11 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     SgjsBuildSchemeReviewStaff staff = sgjsBuildSchemeReviewStaffMapper.getSgjsBuildSchemeReviewStaff(staffQuery);
 
                     BuildSchemeStaffOpinionVo staffOpinionVo = new BuildSchemeStaffOpinionVo();
-                    staffOpinionVo.setReviewStaffId(staff.getReviewStaffId());
+                    if(staff != null){
+                        staffOpinionVo.setReviewStaffId(staff.getReviewStaffId());
+                        staffOpinionVo.setScore(staff.getScore());
+                    }
                     staffOpinionVo.setFlowNodeMark(flowNodeMark);
-                    staffOpinionVo.setScore(staff.getScore());
 
                     SgjsBuildSchemeStaffOpinion staffOpinionQuery = new SgjsBuildSchemeStaffOpinion();
                     staffOpinionQuery.setReviewId(id);
@@ -290,6 +294,18 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         SgjsBuildSchemeStaffOpinionRecord staffOpinionRecordQuery = new SgjsBuildSchemeStaffOpinionRecord();
         staffOpinionRecordQuery.setOpinionRecordId(opinionRecord.getId());
         List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList = sgjsBuildSchemeStaffOpinionRecordMapper.getSgjsBuildSchemeStaffOpinionRecordList(staffOpinionRecordQuery);
+        for (SgjsBuildSchemeStaffOpinionRecord staffOpinionRecord : staffOpinionRecordList) {
+            String reviewOpinion = staffOpinionRecord.getReviewOpinion();
+            if(StringUtils.isNotBlank(reviewOpinion)){
+                String[] reviewOpinionArr = reviewOpinion.split("==>");
+                staffOpinionRecord.setReviewOpinionList(Arrays.asList(reviewOpinionArr));
+            }
+            String fileGroupIdList = staffOpinionRecord.getFileGroupId();
+            if(StringUtils.isNotBlank(fileGroupIdList)){
+                String[] fileGroupIdArr = reviewOpinion.split(",");
+                staffOpinionRecord.setFileGroupIdList(Arrays.asList(fileGroupIdArr));
+            }
+        }
         opinionRecord.setStaffOpinionRecordList(staffOpinionRecordList);
         return opinionRecord;
     }
@@ -317,11 +333,13 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 if(CollectionUtils.isNotEmpty(opinionList)){
                     String opinionStr = String.join("==>", opinionList);
                     staffOpinionRecord.setReviewOpinion(opinionStr);
+                    staffOpinionRecord.setReviewOpinionList(opinionList);
                 }
                 List<String> fileGroupIdList = staffOpinionGatherVo.getFileGroupIdList();
                 if(CollectionUtils.isNotEmpty(fileGroupIdList)){
                     String fileGroupIdStr = String.join(",", fileGroupIdList);
                     staffOpinionRecord.setFileGroupId(fileGroupIdStr);
+                    staffOpinionRecord.setFileGroupIdList(fileGroupIdList);
                 }
                 staffOpinionRecordList.add(staffOpinionRecord);
             }
@@ -355,6 +373,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     @Transactional
     public Long save(SgjsBuildSchemeReview review) {
         String saveType = review.getSaveType();
+        CommonAssert.notBlank(saveType,"保存类型不能为空！");
         if("1".equals(saveType) && review.getId() == null){
             //新增
             this.insertSgjsBuildSchemeReview(review);
@@ -377,67 +396,105 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     List<SgjsBuildSchemeReviewStaff> staffList = review.getReviewStaffList();
                     this.saveStaffList(id,flowNodeMark,staffList);
                 }else if("3".equals(flowNodeMark) || "4".equals(flowNodeMark) || "5".equals(flowNodeMark) || "6".equals(flowNodeMark)){
-                    //专家或部门审批节点：根据当前登录人查询各自数据
+                    //专家或部门审批节点
                     String userName = SecurityUtils.getUserName();
-//                    String userName = detailQueryVo.getUserName();
-                    SgjsBuildSchemeReviewStaff staffQuery = new SgjsBuildSchemeReviewStaff();
-                    staffQuery.setReviewStaffId(userName);
-                    staffQuery.setReviewId(id);
-                    SgjsBuildSchemeReviewStaff staff = sgjsBuildSchemeReviewStaffMapper.getSgjsBuildSchemeReviewStaff(staffQuery);
-
+//                    String userName = review.getUserName();
                     BuildSchemeStaffOpinionVo staffOpinionVo = review.getStaffOpinionVo();
-//                    this.saveStaffOpinionVo(id,flowNodeMark,staffOpinionVo,staff);
-                    staffOpinionVo.setReviewStaffId(staff.getReviewStaffId());
-                    staffOpinionVo.setFlowNodeMark(flowNodeMark);
-                    staffOpinionVo.setScore(staff.getScore());
-
-                    SgjsBuildSchemeStaffOpinion staffOpinionQuery = new SgjsBuildSchemeStaffOpinion();
-                    staffOpinionQuery.setReviewId(id);
-                    staffOpinionQuery.setReviewStaffId(userName);
-                    List<SgjsBuildSchemeStaffOpinion> staffOpinionList = sgjsBuildSchemeStaffOpinionMapper.getSgjsBuildSchemeStaffOpinionList(staffOpinionQuery);
-                    staffOpinionVo.setStaffOpinionList(staffOpinionList);
-                    review.setStaffOpinionVo(staffOpinionVo);
+                    this.saveStaffOpinionVo(id,flowNodeMark,userName,staffOpinionVo);
                 }else if("7".equals(flowNodeMark) || "8".equals(flowNodeMark)){
-                    //区域总工审批节点  汇总 3 ，4节点数据    海外事业部总工审批节点  汇总 3 ，4 ，5 ，6节点数据
-                    BuildSchemeReviewOpinionVo reviewOpinionVo = new BuildSchemeReviewOpinionVo();
-                    SgjsBuildSchemeReviewOpinion reviewOpinionQuery = new SgjsBuildSchemeReviewOpinion();
-                    reviewOpinionQuery.setReviewId(id);
-                    String flowNodeMarkQuery;
-                    if("7".equals(flowNodeMark)){
-                        reviewOpinionQuery.setType("1");
-                        flowNodeMarkQuery = "1";
-                    }else {
-                        reviewOpinionQuery.setType("2");
-                        flowNodeMarkQuery = "2";
-                    }
-                    SgjsBuildSchemeReviewOpinion reviewOpinion = sgjsBuildSchemeReviewOpinionMapper.getSgjsBuildSchemeReviewOpinion(reviewOpinionQuery);
-                    if(reviewOpinion != null){
-                        reviewOpinionVo.setType(reviewOpinion.getType());
-                        reviewOpinionVo.setChiefOpinion(reviewOpinion.getChiefOpinion());
-                        reviewOpinionVo.setDetailOpinion(reviewOpinion.getDetailOpinion());
-                    }
-                    List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(id, flowNodeMarkQuery);
-                    reviewOpinionVo.setGatherVoList(staffOpinionGatherVoList);
-                    Double average = staffOpinionGatherVoList.stream().filter(o -> o.getScore() != null).collect(Collectors.averagingDouble(BuildSchemeStaffOpinionGatherVo::getScore));
-                    reviewOpinionVo.setScore(average);
-                    review.setReviewOpinionVo(reviewOpinionVo);
+                    //区域总工审批节点 / 海外事业部总工审批节点
+                    BuildSchemeReviewOpinionVo reviewOpinionVo = review.getReviewOpinionVo();
+                    this.saveReviewOpinionVo(id,flowNodeMark,reviewOpinionVo);
                 }else if("9".equals(flowNodeMark) || "10".equals(flowNodeMark)){
-                    //海外事业部总工意见为修改后通过后的审批节点
-                    SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = this.getMaxReviewOpinionRecord(id);
-                    review.setReviewOpinionRecord(reviewOpinionRecord);
+                    //海外事业部总工意见为修改后通过后的审批节点：需要修改字段-修改结果
+                    List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList = review.getReviewOpinionRecord().getStaffOpinionRecordList();
+                    this.updateStaffOpinionRecordList(staffOpinionRecordList);
                 }else {
-                    //节点标识为空：当前为驳回后的发起人节点，需要查看历史数据
-                    SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = this.getMaxReviewOpinionRecord(id);
-                    review.setReviewOpinionRecord(reviewOpinionRecord);
+                    //节点标识为空：当前为驳回后的发起人节点
+                    List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList = review.getReviewOpinionRecord().getStaffOpinionRecordList();
+                    this.updateStaffOpinionRecordList(staffOpinionRecordList);
                 }
             }else if("4".equals(schemeLevel) && "1".equals(flowNodeMark)){
                 //四级方案区域中心审批节点
-                List<SgjsBuildSchemeReviewStaff> staffList = sgjsBuildSchemeReviewStaffMapper.getListByReviewId(id, flowNodeMark);
-                List<SgjsBuildSchemeReviewStaff> staffListRes = this.assembleStaffList(staffList);
-                review.setReviewStaffList(staffListRes);
+                List<SgjsBuildSchemeReviewStaff> staffList = review.getReviewStaffList();
+                this.saveStaffList(id,flowNodeMark,staffList);
             }
         }
         return review.getId();
+    }
+
+    private void updateStaffOpinionRecordList(List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList) {
+        if(CollectionUtils.isNotEmpty(staffOpinionRecordList)){
+            sgjsBuildSchemeStaffOpinionRecordMapper.updateUpdateResult(staffOpinionRecordList);
+        }
+    }
+
+    /**
+     * 针对7,8节点的意见详情
+     * @param reviewId
+     * @param flowNodeMark
+     * @param reviewOpinionVo
+     */
+    private void saveReviewOpinionVo(Long reviewId, String flowNodeMark, BuildSchemeReviewOpinionVo reviewOpinionVo) {
+        SgjsBuildSchemeReviewOpinion queryParam = new SgjsBuildSchemeReviewOpinion();
+        queryParam.setReviewId(reviewId);
+        queryParam.setFlowNodeMark(flowNodeMark);
+        SgjsBuildSchemeReviewOpinion reviewOpinion = sgjsBuildSchemeReviewOpinionMapper.getSgjsBuildSchemeReviewOpinion(queryParam);
+        if(reviewOpinion != null){
+            reviewOpinion.setUpdateUser(SecurityUtils.getUserName());
+            reviewOpinion.setUpdateTime(DateUtils.getNowDate());
+            reviewOpinion.setScore(reviewOpinionVo.getScore());
+            reviewOpinion.setChiefOpinion(reviewOpinionVo.getChiefOpinion());
+            reviewOpinion.setDetailOpinion(reviewOpinionVo.getDetailOpinion());
+            sgjsBuildSchemeReviewOpinionMapper.updateSgjsBuildSchemeReviewOpinion(reviewOpinion);
+        }else {
+            reviewOpinion = new SgjsBuildSchemeReviewOpinion();
+            reviewOpinion.setId(IdWorker.createId());
+            reviewOpinion.setReviewId(reviewId);
+            reviewOpinion.setFlowNodeMark(flowNodeMark);
+            reviewOpinion.setType("7".equals(flowNodeMark)?"1":"2");
+            reviewOpinion.setChiefOpinion(reviewOpinionVo.getChiefOpinion());
+            reviewOpinion.setDetailOpinion(reviewOpinionVo.getDetailOpinion());
+            reviewOpinion.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            reviewOpinion.setCreateUserName(SecurityUtils.getUserName());
+            reviewOpinion.setCreateTime(DateUtils.getNowDate());
+            sgjsBuildSchemeReviewOpinionMapper.insertSgjsBuildSchemeReviewOpinion(reviewOpinion);
+        }
+    }
+
+    /**
+     * 针对3,4,5,6节点的意见详情数据
+     * @param reviewId
+     * @param flowNodeMark
+     * @param userName
+     * @param staffOpinionVo
+     */
+    private void saveStaffOpinionVo(Long reviewId, String flowNodeMark, String userName, BuildSchemeStaffOpinionVo staffOpinionVo) {
+        //删除当前登录人旧意见
+        SgjsBuildSchemeStaffOpinion delParam = new SgjsBuildSchemeStaffOpinion();
+        delParam.setReviewId(reviewId);
+        delParam.setReviewStaffId(userName);
+        sgjsBuildSchemeStaffOpinionMapper.deleteSgjsBuildSchemeStaffOpinion(delParam);
+
+        //修改分数
+        sgjsBuildSchemeReviewStaffMapper.updateScoreByUser(reviewId,userName,staffOpinionVo.getScore());
+
+        //保存意见
+        List<SgjsBuildSchemeStaffOpinion> staffOpinionList = staffOpinionVo.getStaffOpinionList();
+        if(CollectionUtils.isEmpty(staffOpinionList)){
+            return;
+        }
+        for (SgjsBuildSchemeStaffOpinion staffOpinion : staffOpinionList) {
+            staffOpinion.setId(IdWorker.createId());
+            staffOpinion.setReviewId(reviewId);
+            staffOpinion.setReviewStaffId(userName);
+            staffOpinion.setReviewStaffName(SecurityUtils.getSysUser().getNickName());
+            staffOpinion.setFlowNodeMark(flowNodeMark);
+            staffOpinion.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            staffOpinion.setCreateUserName(SecurityUtils.getUserName());
+            staffOpinion.setCreateTime(DateUtils.getNowDate());
+        }
+        sgjsBuildSchemeStaffOpinionMapper.insertSgjsBuildSchemeStaffOpinionList(staffOpinionList);
     }
 
     /**
@@ -455,6 +512,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         sgjsBuildSchemeReviewStaffMapper.deleteSgjsBuildSchemeReviewStaff(delParam);
 
         //保存审批人
+        if(CollectionUtils.isEmpty(staffList)){
+            return;
+        }
         List<SgjsBuildSchemeReviewStaff> insertList = new ArrayList<>();
         for (SgjsBuildSchemeReviewStaff staff : staffList) {
             List<ReviewStaff> reviewStaffList = staff.getReviewStaffList();
@@ -478,15 +538,17 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 }
             }
         }
-        this.checkSignle(reviewId,flowNodeMark,insertList);
-        sgjsBuildSchemeReviewStaffMapper.insertSgjsBuildSchemeReviewStaffList(insertList);
+        if(insertList.size() > 0){
+            this.checkSignle(reviewId,flowNodeMark,insertList);
+            sgjsBuildSchemeReviewStaffMapper.insertSgjsBuildSchemeReviewStaffList(insertList);
+        }
     }
 
     private void checkSignle(Long reviewId, String flowNodeMark, List<SgjsBuildSchemeReviewStaff> insertList) {
         Map<String, List<SgjsBuildSchemeReviewStaff>> reviewStaffMap = insertList.stream().collect(Collectors.groupingBy(SgjsBuildSchemeReviewStaff::getStaffType));
-        List<SgjsBuildSchemeReviewStaff> expertStaffList = null;
-        List<SgjsBuildSchemeReviewStaff> deptStaffList = null;
         if(reviewStaffMap.size() > 1){
+            List<SgjsBuildSchemeReviewStaff> expertStaffList = null;
+            List<SgjsBuildSchemeReviewStaff> deptStaffList = null;
             if(reviewStaffMap.containsKey("1")){
                 expertStaffList = reviewStaffMap.get("1");
             }
@@ -507,8 +569,13 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         if(CollectionUtils.isEmpty(existStaffList)){
             return;
         }
+        Set<String> insertStaffIdSet = insertList.stream().map(SgjsBuildSchemeReviewStaff::getReviewStaffId).collect(Collectors.toSet());
         Set<String> existStaffSet = existStaffList.stream().map(SgjsBuildSchemeReviewStaff::getReviewStaffId).collect(Collectors.toSet());
-
+        if(CollectionUtils.containsAny(insertStaffIdSet,existStaffSet)){
+            String name = "1".equals(flowNodeMark)?"海外事业部":"区域中心";
+            String users = existStaffList.stream().map(SgjsBuildSchemeReviewStaff::getReviewStaffName).collect(Collectors.joining(","));
+            throw new RuntimeException("当前页面评审人员与 " + name + " 节点评审人员不能相同！ " + name + "节点审批人员有 " + users);
+        }
     }
 
     @Override

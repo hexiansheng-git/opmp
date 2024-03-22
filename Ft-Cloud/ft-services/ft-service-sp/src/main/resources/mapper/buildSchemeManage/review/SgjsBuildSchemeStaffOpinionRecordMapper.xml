@@ -514,6 +514,21 @@
         </foreach>
     </update>
 
+    <update id="updateUpdateResult">
+        update sgjs_build_scheme_staff_opinion_record
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="update_result  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateResult}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
     <update id="deleteSgjsBuildSchemeStaffOpinionRecord">
         update `sgjs_build_scheme_staff_opinion_record` set del_flag = 1
         <where>
