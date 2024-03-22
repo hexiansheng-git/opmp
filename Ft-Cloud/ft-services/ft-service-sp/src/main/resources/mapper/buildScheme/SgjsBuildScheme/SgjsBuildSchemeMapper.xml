@@ -770,7 +770,7 @@
     <select id="getMaxVersionData" resultMap="SgjsBuildSchemeResultMap">
         <include refid="selectSgjsBuildSchemeVo"/>
         WHERE `del_flag` = '0'
-        ORDER BY VERSION LIMIT 1
+        ORDER BY VERSION DESC LIMIT 1
     </select>
 
     <select id="getValidVersionData" resultMap="SgjsBuildSchemeResultMap">

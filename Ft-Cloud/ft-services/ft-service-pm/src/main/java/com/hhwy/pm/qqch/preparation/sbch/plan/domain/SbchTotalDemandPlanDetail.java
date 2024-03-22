@@ -126,7 +126,7 @@ public class SbchTotalDemandPlanDetail extends CommonBaseEntity {
 
     /** 是否特种设备（0：否，1：是） */
     @Excel(name = "是否特种设备", readConverterExp = "0=：否，1：是")
-    @NotBlank(message = "是否特种设备不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+//    @NotBlank(message = "是否特种设备不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private String isSpecial;
 
     /** 创建人id */
