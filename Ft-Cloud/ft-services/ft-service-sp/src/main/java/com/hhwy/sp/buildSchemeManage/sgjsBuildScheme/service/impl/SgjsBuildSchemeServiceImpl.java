@@ -102,15 +102,22 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         //流程信息
         FlowInfoSearchUtil.getFlowInfo(result, FlowEnum.SGJS_BUILD_SCHEME);
         /*返回项目领域类型标识，用于判断流程分支走向*/
-        result.setPtVar4("2");
-        if (StrUtil.isNotBlank(result.getBusinessAreasAndProducts())) {
-            String businessAreasAndProducts = result.getBusinessAreasAndProducts();
-            String[] split = businessAreasAndProducts.split(",");
-            if (businessAreas.containsKey(split[split.length - 1])) {
-                result.setPtVar4("1");
-            }
-        }
+        this.getBusinessAreas(result);
         return result;
+    }
+
+    //获取项目领域类型标识
+    private void getBusinessAreas(SgjsBuildScheme result) {
+        //默认2：非房建
+        result.setPtVar4("2");
+        if (StrUtil.isBlank(result.getBusinessAreasAndProducts())) {
+            return;
+        }
+        String businessAreasAndProducts = result.getBusinessAreasAndProducts();
+        String[] split = businessAreasAndProducts.split(",");
+        if (businessAreas.containsKey(split[split.length - 1])) {
+            result.setPtVar4("1");
+        }
     }
 
     //第一次访问界面需要返回的数据，详情接口使用
@@ -130,6 +137,8 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         //固定值 0001
         resultInit.setListSerialNum("0001");
         resultInit.setPtVar1(businessAreasName);
+        resultInit.setSubmisionPerson(SecurityUtils.getSysUser().getNickName());
+        this.getBusinessAreas(resultInit);
         return resultInit;
     }
 
@@ -155,7 +164,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     private SgjsBuildScheme createNewData(SgjsBuildScheme lastData) {
         SgjsBuildScheme result = new SgjsBuildScheme();
         result.setVersion(lastData.getVersion().add(BigDecimal.ONE));
-        result.setVersionStr("V" + lastData.getVersion());
+        result.setVersionStr("V" + result.getVersion());
         result.setTaskStatus("0");
         result.setListSerialNum("0001");
         result.setId(null);
@@ -163,6 +172,10 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         result.setCountryName(lastData.getCountryName());
         result.setBusinessAreasAndProducts(lastData.getBusinessAreasAndProducts());
         result.setPtVar1(lastData.getPtVar1());
+        this.getBusinessAreas(result);
+        result.setWinCertificate(lastData.getWinCertificate());
+        result.setLeadEngineer(lastData.getLeadEngineer());
+        result.setLeadEngineerName(lastData.getLeadEngineerName());
         //附件组id更新
         String auditRecordFile = lastData.getAuditRecordFile();
         String projectSummaryFile = lastData.getProjectSummaryFile();

@@ -1,5 +1,6 @@
 package com.hhwy.sd.equipEntryRecord.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -640,10 +641,22 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
         String projectCode = projectDto.getProjectCode();
         KcsjEquipEntryRecord kcsjEquipEntryRecord = new KcsjEquipEntryRecord();
         List<KcsjEquipEntryRecord> kcsjEquipEntryRecordList = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(kcsjEquipEntryRecord);
-        kcsjEquipEntryRecordList.forEach(p -> p.setPtVar5(projectCode));
-        rocketMQTemplate.convertAndSend("kcsj_equip_entry_record:tenantSuccess", kcsjEquipEntryRecordList);
         KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo = new KcsjEquipEntryRecordInfo();
         List<KcsjEquipEntryRecordInfo> kcsjEquipEntryRecordInfoList = kcsjEquipEntryRecordInfoMapper.getKcsjEquipEntryRecordInfoList(kcsjEquipEntryRecordInfo);
+        if (CollUtil.isEmpty(kcsjEquipEntryRecordList)) {
+            //发送空数据
+            KcsjEquipEntryRecord param = new KcsjEquipEntryRecord();
+            param.setPtVar5(projectCode);
+            kcsjEquipEntryRecordList.add(param);
+            KcsjEquipEntryRecordInfo paramInfo = new KcsjEquipEntryRecordInfo();
+            paramInfo.setPtVar5(projectCode);
+            kcsjEquipEntryRecordInfoList.add(paramInfo);
+            rocketMQTemplate.convertAndSend("kcsj_equip_entry_record:tenantSuccess", kcsjEquipEntryRecordList);
+            rocketMQTemplate.convertAndSend("kcsj_equip_entry_record_info:tenantSuccess", kcsjEquipEntryRecordInfoList);
+            return;
+        }
+        kcsjEquipEntryRecordList.forEach(p -> p.setPtVar5(projectCode));
+        rocketMQTemplate.convertAndSend("kcsj_equip_entry_record:tenantSuccess", kcsjEquipEntryRecordList);
         kcsjEquipEntryRecordInfoList.forEach(p -> p.setPtVar5(projectCode));
         rocketMQTemplate.convertAndSend("kcsj_equip_entry_record_info:tenantSuccess", kcsjEquipEntryRecordInfoList);
     }

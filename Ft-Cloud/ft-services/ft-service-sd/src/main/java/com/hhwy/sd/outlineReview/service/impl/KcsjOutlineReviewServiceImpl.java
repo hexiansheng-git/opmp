@@ -8,6 +8,7 @@ import cn.hutool.core.lang.hash.Hash;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -30,6 +31,7 @@ import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.ThreadPoolUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import io.swagger.v3.oas.annotations.security.OAuthFlow;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +50,7 @@ import java.util.stream.Collectors;
  * @date 2024-02-04 15:29:15
  */
 @Service
+@Slf4j
 public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
 
     @Autowired
@@ -303,6 +306,7 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
                     p.setChildList(expertMap.get(p.getId()));
                 }
             });
+            log.info("大纲评审数据推送总部:{}", JSON.toJSONString(collect));
             rocketMQTemplate.convertAndSend("kcsj_outline_review:tenantSuccess", collect);
         } catch (Exception e) {
             throw new RuntimeException(e);
