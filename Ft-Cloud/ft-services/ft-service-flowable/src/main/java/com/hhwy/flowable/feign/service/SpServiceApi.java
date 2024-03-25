@@ -76,4 +76,12 @@ public interface SpServiceApi {
 
     @GetMapping("/sgjsBuildSchemeReview/listener")
     AjaxResult updateBuildSchemeReviewProcess(@RequestParam("id") Long id);
+
+    /**
+     * 施工方案评审：流程分支-修改后通过
+     * @param id
+     * @return
+     */
+    @GetMapping("/sgjsBuildSchemeReview/approvedAfterModification")
+    AjaxResult schemeReviewApprovedAfterModification(@RequestParam("id") Long id);
 }

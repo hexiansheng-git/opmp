@@ -57,4 +57,6 @@ public interface ISgjsBuildSchemeReviewService {
     void submitBuildSchemeReviewProcess(Long id);
 
     void updateBuildSchemeReviewProcess(Long id);
+
+    void approvedAfterModification(Long id);
 }

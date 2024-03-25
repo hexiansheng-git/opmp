@@ -663,6 +663,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 
     @Override
     public void turnDown(Long reviewId) {
+        this.recordData(reviewId);
+        //删除上一流程所有数据
+        this.deleteAllDataByReviewId(reviewId);
+    }
+
+    private void recordData(Long reviewId){
         SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = this.initReviewOpinionRecord(reviewId);
 
         Long reviewOpinionRecordId = IdWorker.createId();
@@ -706,9 +712,6 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             sgjsBuildSchemeStaffOpinionRecordMapper.insertSgjsBuildSchemeStaffOpinionRecordList(staffOpinionRecordList);
         }
         sgjsBuildSchemeReviewOpinionRecordMapper.insertSgjsBuildSchemeReviewOpinionRecord(reviewOpinionRecord);
-
-        //删除上一流程所有数据
-        this.deleteAllDataByReviewId(reviewId);
     }
 
     private void deleteAllDataByReviewId(Long reviewId){
@@ -742,5 +745,10 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     public void updateBuildSchemeReviewProcess(Long id) {
         sgjsBuildSchemeReviewMapper.updateTaskStatus(id, TaskStatus.COMPLETED.getCode());
         sgjsBuildSchemeReviewMapper.updateApprovalTime(id);
+    }
+
+    @Override
+    public void approvedAfterModification(Long id) {
+        this.recordData(id);
     }
 }
