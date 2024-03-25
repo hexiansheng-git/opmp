@@ -79,6 +79,9 @@ public class DictUtil {
      */
     public static <T> void dictValueToLabel(List<T> source, String dictType, Function<T,String> getDictValue, BiConsumer<T,String> setDictLabel){
         LinkedHashMap<String, String> valueLabelMap = getDictDataName(dictType);
+        if(valueLabelMap.size() == 0){
+           return;
+        }
         for (T t : source) {
             String dictValue = getDictValue.apply(t);
             if(StringUtils.isNotBlank(dictValue)){

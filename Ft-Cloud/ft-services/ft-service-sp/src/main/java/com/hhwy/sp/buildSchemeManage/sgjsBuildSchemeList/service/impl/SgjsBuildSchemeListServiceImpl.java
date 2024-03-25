@@ -5,6 +5,8 @@ import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeEvolve;
+import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeEvolveQueryVo;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.ISgjsBuildSchemeService;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
@@ -220,5 +222,15 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
     @Override
     public List<SgjsBuildSchemeList> getListByforeignList(Collection<Long> foreignId) {
         return sgjsBuildSchemeListMapper.getListByforeignList(foreignId);
+    }
+
+    @Override
+    public List<SgjsBuildSchemeEvolve> getListByEvolveQueryVo(BuildSchemeEvolveQueryVo queryVo) {
+        return sgjsBuildSchemeListMapper.getListByEvolveQueryVo(queryVo);
+    }
+
+    @Override
+    public List<SgjsBuildSchemeEvolve> getEvolveListByIds(List<Long> ids) {
+        return sgjsBuildSchemeListMapper.getEvolveListByIds(ids);
     }
 }

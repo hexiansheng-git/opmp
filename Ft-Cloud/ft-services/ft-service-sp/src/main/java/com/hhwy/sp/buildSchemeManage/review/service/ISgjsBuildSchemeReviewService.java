@@ -48,7 +48,7 @@ public interface ISgjsBuildSchemeReviewService {
 
     List<SgjsBuildSchemeReview> getListByIds(List<Long> ids);
 
-    void sync();
+    String sync();
 
     void turnDown(Long reviewId);
 

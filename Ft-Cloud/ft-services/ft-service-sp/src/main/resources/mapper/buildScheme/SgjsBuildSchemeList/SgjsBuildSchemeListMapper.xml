@@ -134,7 +134,9 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
             <if test="schemeNum != null  and schemeNum != ''">and `scheme_num` like concat('%', #{schemeNum}, '%' )</if>
-            <if test="schemeName != null  and schemeName != ''">and `scheme_name` like concat('%', #{schemeName}, '%' )</if>
+            <if test="schemeName != null  and schemeName != ''">and `scheme_name` like concat('%', #{schemeName}, '%'
+                )
+            </if>
             <if test="changeType != null  and changeType != ''">and `change_type` = #{changeType}</if>
             <if test="relationWbsId != null  and relationWbsId != ''">and `relation_wbs_id` = #{relationWbsId}</if>
             <if test="relationWbsName != null  and relationWbsName != ''">and `relation_wbs_name` = #{relationWbsName}
@@ -643,5 +645,51 @@
                 #{foreignId}
             </foreach>
         </if>
+    </select>
+    <select id="getListByEvolveQueryVo" resultType="com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeEvolve">
+        select
+            sbsl.id id,
+            sbsr.id reviewId,
+            sbsl.scheme_name schemeName,
+            sbsl.scheme_num schemeNum,
+            sbsl.scheme_level schemeLevel,
+            sbsl.scheme_type schemeType,
+            sbsl.relation_wbs_name subdivisionProject,
+            sbsl.plan_implement_time planImplementTime,
+            sbsl.plan_complation_time completionTime,
+            sbsr.submit_date submitDate,
+            sbsr.approval_time schemeApprovalTime,
+            sbsr.task_status taskStatus
+        from sgjs_build_scheme_list sbsl,sgjs_build_scheme_review sbsr
+        <where>
+            sbsl.del_flag = '0' and sbsl.foreign_id = #{foreignId} and sbsl.scheme_num = sbsr.scheme_num
+            <if test="schemeNum != null  and schemeNum != ''">and sbsl.`scheme_num` like concat('%' , #{schemeNum} , '%')</if>
+            <if test="schemeName != null  and schemeName != ''">and sbsl.`scheme_name` like concat('%' , #{schemeName} ,'%')</if>
+            <if test="schemeLevel != null  and schemeLevel != ''">and sbsl.`scheme_level` = #{schemeLevel}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and sbsr.`task_status` = #{taskStatus}</if>
+        </where>
+    </select>
+    <select id="getEvolveListByIds" resultType="com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeEvolve">
+        select
+            sbsl.id id,
+            sbsr.id reviewId,
+            sbsl.scheme_name schemeName,
+            sbsl.scheme_num schemeNum,
+            sbsl.scheme_level schemeLevel,
+            sbsl.scheme_type schemeType,
+            sbsl.relation_wbs_name subdivisionProject,
+            sbsl.plan_implement_time planImplementTime,
+            sbsl.plan_complation_time completionTime,
+            sbsr.submit_date submitDate,
+            sbsr.approval_time schemeApprovalTime,
+            sbsr.task_status taskStatus
+        from sgjs_build_scheme_list sbsl,sgjs_build_scheme_review sbsr
+        <where>
+            sbsl.del_flag = '0' and sbsl.scheme_num = sbsr.scheme_num
+            and sbsl.`id` in
+            <foreach item="id" collection="ids" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
     </select>
 </mapper>

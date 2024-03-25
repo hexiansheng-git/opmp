@@ -584,11 +584,14 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     }
 
     @Override
-    public void sync() {
+    public String sync() {
+        int syncNum;
         List<SgjsBuildSchemeList> lastValidSchemeListList = sgjsBuildSchemeListService.getLastValidScheme(null);
         if(CollectionUtils.isEmpty(lastValidSchemeListList)){
-            return;
+            syncNum = 0;
+            return "已同步 " + syncNum + " 条数据！";
         }
+
 
         List<SgjsBuildSchemeReview> reviewList = sgjsBuildSchemeReviewMapper.getListByQueryVo(new BuildSchemeReviewQueryVo());
         SysUser sysUser = SecurityUtils.getSysUser();
@@ -599,8 +602,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             for (SgjsBuildSchemeList schemeList : lastValidSchemeListList) {
                 this.setInsertList(reviewListNew,schemeList,userName,nickName);
             }
+            syncNum = reviewListNew.size();
             sgjsBuildSchemeReviewMapper.insertSgjsBuildSchemeReviewList(reviewListNew);
-            return;
+            return "已同步 " + syncNum + " 条数据！";
         }
 
         List<SgjsBuildSchemeReview> insertList = new ArrayList<>();
@@ -629,6 +633,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         if(CollectionUtils.isNotEmpty(updateList)){
             sgjsBuildSchemeReviewMapper.updateSgjsBuildSchemeReviewList(updateList);
         }
+        return "";
     }
 
     private void setInsertList(List<SgjsBuildSchemeReview> insertList,SgjsBuildSchemeList schemeList,String userName,String nickName){
@@ -649,9 +654,6 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         review.setRelationWbsId(schemeList.getRelationWbsId());
         review.setRelationWbsName(schemeList.getRelationWbsName());
         review.setSchemeType(schemeList.getSchemeType());
-//        if("0".equals(review.getTaskStatus())){
-//            review.setSchemeLevel(schemeList.getSchemeLevel());
-//        }
         review.setSchemeLevel(schemeList.getSchemeLevel());
         review.setDangerLevel(schemeList.getDangerLevel());
         review.setPlanCompletionTime(schemeList.getPlanComplationTime());

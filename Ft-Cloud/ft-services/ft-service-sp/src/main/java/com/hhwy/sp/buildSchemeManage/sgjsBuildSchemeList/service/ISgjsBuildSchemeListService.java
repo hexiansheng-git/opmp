@@ -1,12 +1,13 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeEvolve;
+import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeEvolveQueryVo;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author fushudong
@@ -49,4 +50,8 @@ public interface ISgjsBuildSchemeListService {
 
     //批量查询，根据foreignId
     List<SgjsBuildSchemeList> getListByforeignList(Collection<Long> foreignId);
+
+    List<SgjsBuildSchemeEvolve> getListByEvolveQueryVo(BuildSchemeEvolveQueryVo queryVo);
+
+    List<SgjsBuildSchemeEvolve> getEvolveListByIds(List<Long> ids);
 }

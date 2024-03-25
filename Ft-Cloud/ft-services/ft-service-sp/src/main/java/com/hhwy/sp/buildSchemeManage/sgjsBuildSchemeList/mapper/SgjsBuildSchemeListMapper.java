@@ -1,5 +1,7 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.mapper;
 
+import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeEvolve;
+import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeEvolveQueryVo;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,4 +32,8 @@ public interface SgjsBuildSchemeListMapper {
     int deleteSgjsBuildSchemeListByPks(@Param("sgjsBuildSchemeListPkList") List<Long> sgjsBuildSchemeListPkList);
 
     List<SgjsBuildSchemeList> getListByforeignList(@Param("foreignIds") Collection<Long> foreignIds);
+
+    List<SgjsBuildSchemeEvolve> getListByEvolveQueryVo(BuildSchemeEvolveQueryVo queryVo);
+
+    List<SgjsBuildSchemeEvolve> getEvolveListByIds(@Param("ids") List<Long> ids);
 }
