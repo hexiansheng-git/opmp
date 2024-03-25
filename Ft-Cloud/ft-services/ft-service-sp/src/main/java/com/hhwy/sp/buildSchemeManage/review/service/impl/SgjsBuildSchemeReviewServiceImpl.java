@@ -593,11 +593,10 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 
     @Override
     public String sync() {
-        int syncNum;
+        int syncNumTotal = 0;
         List<SgjsBuildSchemeList> lastValidSchemeListList = sgjsBuildSchemeListService.getLastValidScheme(null);
         if(CollectionUtils.isEmpty(lastValidSchemeListList)){
-            syncNum = 0;
-            return "已同步 " + syncNum + " 条数据！";
+            return "已同步 " + syncNumTotal + " 条数据！";
         }
 
 
@@ -610,9 +609,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             for (SgjsBuildSchemeList schemeList : lastValidSchemeListList) {
                 this.setInsertList(reviewListNew,schemeList,userName,nickName);
             }
-            syncNum = reviewListNew.size();
+            syncNumTotal = reviewListNew.size();
             sgjsBuildSchemeReviewMapper.insertSgjsBuildSchemeReviewList(reviewListNew);
-            return "已同步 " + syncNum + " 条数据！";
+            return "已同步 " + syncNumTotal + " 条数据！";
         }
 
         List<SgjsBuildSchemeReview> insertList = new ArrayList<>();
@@ -625,11 +624,13 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 if("1".equals(review.getTaskStatus()) || "4".equals(review.getTaskStatus())){
                     continue;
                 }
+                syncNumTotal++;
                 this.putSchemeListToReview(schemeList, review);
                 review.setUpdateUser(SecurityUtils.getUserName());
                 review.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(review);
             }else {
+                syncNumTotal++;
                 this.setInsertList(insertList,schemeList,userName,nickName);
             }
         }
@@ -641,7 +642,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         if(CollectionUtils.isNotEmpty(updateList)){
             sgjsBuildSchemeReviewMapper.updateSgjsBuildSchemeReviewList(updateList);
         }
-        return "";
+        return "已同步 " + syncNumTotal + " 条数据！ 其中，新增 " + insertList.size() + " 条数据，修改 " + updateList.size() + "条数据！";
     }
 
     private void setInsertList(List<SgjsBuildSchemeReview> insertList,SgjsBuildSchemeList schemeList,String userName,String nickName){
