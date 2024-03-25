@@ -128,6 +128,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         String flowNodeMark = detailQueryVo.getFlowNodeMark();
 
         SgjsBuildSchemeReview review = sgjsBuildSchemeReviewMapper.getById(id);
+        review.setFlowNodeMark(flowNodeMark);
         String schemeLevel = review.getSchemeLevel();
 
         if("1".equals(type) || "2".equals(type) || "1".equals(schemeLevel)){
