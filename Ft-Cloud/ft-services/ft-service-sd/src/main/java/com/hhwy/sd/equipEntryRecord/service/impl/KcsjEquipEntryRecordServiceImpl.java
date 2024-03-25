@@ -546,8 +546,11 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                     Date date = DateUtils.dateTime("yyyy-MM-dd", checkDate);
                     recordInfo.setEntryDate(date);//实际进场日期
                 }
-//                recordInfo.setExitDate();//实际退场时间
-//                recordInfo.setCurrentState();//当前状态
+                String exitDate = infoVo.getExitDate();
+                if(StringUtils.isNotEmpty(exitDate)){
+                    recordInfo.setExitDate(DateUtils.dateTime("yyyy-MM-dd", exitDate));//实际退场时间
+                }
+                recordInfo.setCurrentState(infoVo.getStatus());//当前状态
                 rstList.add(recordInfo);
             }
             if(CollectionUtils.isEmpty(rstList)){
