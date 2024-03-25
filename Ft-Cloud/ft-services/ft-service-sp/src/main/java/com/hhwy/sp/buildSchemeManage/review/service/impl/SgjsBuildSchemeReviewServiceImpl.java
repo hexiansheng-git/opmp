@@ -409,12 +409,18 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     this.saveReviewOpinionVo(id,flowNodeMark,reviewOpinionVo);
                 }else if("9".equals(flowNodeMark) || "10".equals(flowNodeMark)){
                     //海外事业部总工意见为修改后通过后的审批节点：需要修改字段-修改结果
-                    List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList = review.getReviewOpinionRecord().getStaffOpinionRecordList();
-                    this.updateStaffOpinionRecordList(staffOpinionRecordList);
+                    SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = review.getReviewOpinionRecord();
+                    if(reviewOpinionRecord != null){
+                        List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList = reviewOpinionRecord.getStaffOpinionRecordList();
+                        this.updateStaffOpinionRecordList(staffOpinionRecordList);
+                    }
                 }else {
                     //节点标识为空：当前为驳回后的发起人节点
-                    List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList = review.getReviewOpinionRecord().getStaffOpinionRecordList();
-                    this.updateStaffOpinionRecordList(staffOpinionRecordList);
+                    SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = review.getReviewOpinionRecord();
+                    if(reviewOpinionRecord != null){
+                        List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList = reviewOpinionRecord.getStaffOpinionRecordList();
+                        this.updateStaffOpinionRecordList(staffOpinionRecordList);
+                    }
                 }
             }else if("4".equals(schemeLevel) && "1".equals(flowNodeMark)){
                 //四级方案区域中心审批节点
