@@ -13,6 +13,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,6 +41,7 @@ public class SgjsBuildSchemeEvolveImpl implements ISgjsBuildSchemeEvolveService 
         }
         this.setSumScore(evolveList);
         this.changeDict(evolveList);
+        this.setSchemeEvolve(evolveList);
         return evolveList;
     }
 
@@ -48,6 +50,7 @@ public class SgjsBuildSchemeEvolveImpl implements ISgjsBuildSchemeEvolveService 
         List<SgjsBuildSchemeEvolve> evolveList = sgjsBuildSchemeListService.getEvolveListByIds(ids);
         this.setSumScore(evolveList);
         this.changeDict(evolveList);
+        this.setSchemeEvolve(evolveList);
         return evolveList;
     }
 
@@ -75,6 +78,53 @@ public class SgjsBuildSchemeEvolveImpl implements ISgjsBuildSchemeEvolveService 
                     case "1" : evolve.setTaskStatus(TaskStatus.IN_PROGRESS);
                     case "4" : evolve.setTaskStatus(TaskStatus.COMPLETED);
                 }
+            }
+        }
+    }
+
+    /**
+     * 设置方案进展
+     * @param evolveList
+     */
+    private void setSchemeEvolve(List<SgjsBuildSchemeEvolve> evolveList){
+        for (SgjsBuildSchemeEvolve evolve : evolveList) {
+            Date planImplementTime = evolve.getPlanImplementTime();//计划实施时间
+            if(planImplementTime != null){
+                Date schemeApprovalTime = evolve.getSchemeApprovalTime();//方案审核通过时间
+                if(schemeApprovalTime != null){
+                    int compare = schemeApprovalTime.compareTo(planImplementTime);
+                    if(compare > 0){
+                        evolve.setSchemeApprovalTimeColor("red");
+                    }else {
+                        evolve.setSchemeApprovalTimeColor("green");
+                    }
+                }
+            }
+            if(StringUtils.isBlank(evolve.getSchemeApprovalTimeColor()) && evolve.getSchemeApprovalTime() != null){
+                evolve.setSchemeApprovalTimeColor("gray");
+            }
+
+            Date completionTime = evolve.getCompletionTime();//编制完成时间
+            if(completionTime != null){
+                Date submitDate = evolve.getSubmitDate();//提交审核时间
+                if(submitDate != null){
+                    int compare = submitDate.compareTo(completionTime);
+                    if(compare > 0){
+                        evolve.setSubmitDateColor("red");
+                    }else {
+                        evolve.setSubmitDateColor("green");
+                    }
+                }
+            }
+            if(StringUtils.isBlank(evolve.getSubmitDateColor()) && evolve.getSubmitDate() != null){
+                evolve.setSubmitDateColor("gray");
+            }
+
+            //设置进展状态
+            if("red".equals(evolve.getSchemeApprovalTimeColor())|| "red".equals(evolve.getSubmitDateColor())){
+                evolve.setSchemeEvolve("滞后");
+            }else{
+                evolve.setSchemeEvolve("正常");
             }
         }
     }

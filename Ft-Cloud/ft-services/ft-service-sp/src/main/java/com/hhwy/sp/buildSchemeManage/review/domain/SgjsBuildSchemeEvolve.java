@@ -93,11 +93,21 @@ public class SgjsBuildSchemeEvolve {
     @FtExcel(name = "提交审核时间", dateFormat = "yyyy年MM月dd日")
     private Date submitDate;
     /**
+     * 字段描述：提交审核时间颜色  "red"  "green"   “gray"
+     */
+    @JsonProperty
+    private String submitDateColor;
+    /**
      * 字段描述：方案审核通过时间
      */
     @JsonProperty
     @FtExcel(name = "方案审核通过时间", dateFormat = "yyyy年MM月dd日")
     private Date schemeApprovalTime;
+    /**
+     * 字段描述：方案审核通过时间颜色  "red"  "green"  “gray"
+     */
+    @JsonProperty
+    private String schemeApprovalTimeColor;
     /**
      * 字段描述：方案总得分
      */
