@@ -294,7 +294,7 @@ public class SbchImportInquiryServiceImpl implements ISbchImportInquiryService {
                     //处理港口详情数据
                     for (SbchImportInquiryCustoms sbchImportInquiryCustoms : customsList) {
                         String fileGroupId = sbchImportInquiryCustoms.getFileGroupId();
-                        BeanUtils.copyProperties(vo,sbchImportInquiryCustoms);
+                        BeanUtils.copyProperties(vo,sbchImportInquiryCustoms, "remark");
                         sbchImportInquiryCustoms.setId(IdWorker.createId());
                         sbchImportInquiryCustoms.setInquiryId(vo.getId());
                         sbchImportInquiryCustoms.setCountryId(sbchImportInquiryCountry.getId());

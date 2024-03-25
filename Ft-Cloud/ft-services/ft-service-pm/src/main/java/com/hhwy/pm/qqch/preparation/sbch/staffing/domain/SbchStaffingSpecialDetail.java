@@ -59,7 +59,7 @@ public class SbchStaffingSpecialDetail extends CommonBaseEntity {
 
     /** 工种 */
     @Excel(name = "工种")
-    @NotBlank(message = "岗位名称不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+    @NotBlank(message = "工种名称不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private String workType;
 
     /** 人员姓名 */

@@ -57,7 +57,7 @@ public class SgjsBuildSchemeExpertSuggest extends BaseEntity {
     /**
      * 字段描述：提交时间
      */
-    @JsonFormat(pattern = "yyyy年MM月dd日 HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
     @Excel(name = "提交时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date submitTime;

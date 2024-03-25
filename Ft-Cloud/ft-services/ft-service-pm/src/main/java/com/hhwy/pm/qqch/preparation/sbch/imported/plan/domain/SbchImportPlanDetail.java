@@ -36,7 +36,7 @@ public class SbchImportPlanDetail extends CommonBaseEntity {
 
     /** 项目编码 */
     @Excel(name = "项目编码")
-    @NotBlank(message = "项目编码不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+//    @NotBlank(message = "项目编码不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private String projectCodes;
 
     /** 进口方式 */
@@ -107,12 +107,12 @@ public class SbchImportPlanDetail extends CommonBaseEntity {
 
     /** 所属项目 */
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "所属项目不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+//    @NotNull(message = "所属项目不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private Long projectId;
 
     /** 项目名称 */
     @Excel(name = "项目名称")
-    @NotBlank(message = "项目名称方式不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+//    @NotBlank(message = "项目名称方式不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private String projectName;
 
     /** 区域id */

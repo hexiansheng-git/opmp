@@ -35,7 +35,7 @@ public class SbchEquipmentTeamDetails extends CommonBaseEntity {
 
     /** 项目名称 */
     @Excel(name = "项目名称")
-    @NotBlank(message = "项目名称不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotBlank(message = "项目名称不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private String projectName;
 
     /** 协作单位名称 */
