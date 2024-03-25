@@ -547,12 +547,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             }
         }
         if(insertList.size() > 0){
-            this.checkSignle(reviewId,flowNodeMark,insertList);
+            this.checkSingle(reviewId,flowNodeMark,insertList);
             sgjsBuildSchemeReviewStaffMapper.insertSgjsBuildSchemeReviewStaffList(insertList);
         }
     }
 
-    private void checkSignle(Long reviewId, String flowNodeMark, List<SgjsBuildSchemeReviewStaff> insertList) {
+    private void checkSingle(Long reviewId, String flowNodeMark, List<SgjsBuildSchemeReviewStaff> insertList) {
         Map<String, List<SgjsBuildSchemeReviewStaff>> reviewStaffMap = insertList.stream().collect(Collectors.groupingBy(SgjsBuildSchemeReviewStaff::getStaffType));
         if(reviewStaffMap.size() > 1){
             List<SgjsBuildSchemeReviewStaff> expertStaffList = null;
