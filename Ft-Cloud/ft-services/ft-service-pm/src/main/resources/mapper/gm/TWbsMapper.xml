@@ -245,7 +245,7 @@
     <select id="getEffectEngineeringTypeByProType" parameterType="String" resultType="String">
         select engineering_type from `opmp-pm`.t_wbs_main
         <where>
-            product_type like concat('%', #{item},'%') and valid = 1
+            product_type like concat('%', #{item},'%') and valid = 1 and del_flag = 0
         </where>
         order by version desc limit 1
     </select>
@@ -754,11 +754,7 @@
         </where>
     </update>
 
-    <update id="deleteByParentIds">
-        update `t_wbs` set del_flag = 1
-        where
-        <foreach item="id" collection="list" separator="or">
-            FIND_IN_SET(#{id},ancestors)
-        </foreach>
+    <update id="updateValid" >
+        update `t_wbs_main` set valid = 0 where global_id = #{globalId}
     </update>
 </mapper>

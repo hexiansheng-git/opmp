@@ -422,8 +422,14 @@ public class TWbsServiceImpl implements ITWbsService {
     }
 
     @Override
+    @Transactional
     public int insertTWbsMain(Map map) {
-        return tWbsMapper.insertTWbsMain(map);
+        Long globalId = ObjectUtils.toLong(map.get("globalId"));
+        tWbsMapper.updateValid(globalId);
+        int result = tWbsMapper.insertTWbsMain(map);
+//        if(ObjectUtils.isNotBlank(map.get("ptVar1")))
+//            this.deleteTWbsMain(ObjectUtils.nvlLong(map.get("ptVar1")));
+        return result;
     }
 
     @Override

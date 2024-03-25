@@ -59,4 +59,6 @@ public interface TWbsMapper {
     int deleteTWbsMain(Long id);
 
     int deleteTWbsByPks(@Param("tWbsPkList") List<Long> tWbsPkList);
+    
+    int updateValid(Long globalId);
 }

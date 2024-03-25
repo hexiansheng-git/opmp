@@ -48,8 +48,6 @@ public class TWbsMainConsumerListener implements RocketMQListener<String> , Rock
             map.put("createTime",new Date());
             map.put("updateTime",new Date());
             wbsService.insertTWbsMain(map);
-            if(ObjectUtils.isNotBlank(map.get("ptVar1")))
-                wbsService.deleteTWbsMain(ObjectUtils.nvlLong(map.get("ptVar1")));
         }catch (Exception e){
             throw new CustomBusinessException(e.getMessage());
         }finally {
