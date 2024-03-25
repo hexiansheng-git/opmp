@@ -70,4 +70,10 @@ public interface SpServiceApi {
      */
     @RequestMapping(value = "/sgjsBuildScheme/listener")
     void updateBuildScheme(@RequestParam("id") Long id, @RequestParam("isPass")String isPass);
+
+    @GetMapping("/sgjsBuildSchemeReview/submit")
+    AjaxResult submitBuildSchemeReviewProcess(@RequestParam("id") Long id);
+
+    @GetMapping("/sgjsBuildSchemeReview/listener")
+    AjaxResult updateBuildSchemeReviewProcess(@RequestParam("id") Long id);
 }

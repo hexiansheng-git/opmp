@@ -3,6 +3,7 @@ package com.hhwy.sp.buildSchemeManage.review.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.buildSchemeManage.review.constant.TaskStatus;
 import com.hhwy.sp.buildSchemeManage.review.domain.*;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.*;
 import com.hhwy.sp.buildSchemeManage.review.mapper.*;
@@ -730,5 +731,16 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         Set<String> schemeNumSet = reviewList.stream().map(SgjsBuildSchemeReview::getSchemeNum).collect(Collectors.toSet());
         List<SgjsBuildSchemeList> resultList = lastValidSchemeListList.stream().filter(sgjsBuildSchemeList -> !schemeNumSet.contains(sgjsBuildSchemeList.getSchemeNum())).collect(Collectors.toList());
         return resultList;
+    }
+
+    @Override
+    public void submitBuildSchemeReviewProcess(Long id) {
+        sgjsBuildSchemeReviewMapper.updateTaskStatus(id, TaskStatus.IN_PROGRESS.getCode());
+    }
+
+    @Override
+    public void updateBuildSchemeReviewProcess(Long id) {
+        sgjsBuildSchemeReviewMapper.updateTaskStatus(id, TaskStatus.COMPLETED.getCode());
+        sgjsBuildSchemeReviewMapper.updateApprovalTime(id);
     }
 }

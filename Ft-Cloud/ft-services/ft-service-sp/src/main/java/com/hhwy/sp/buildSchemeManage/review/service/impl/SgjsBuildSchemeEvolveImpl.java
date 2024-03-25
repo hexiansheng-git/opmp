@@ -74,9 +74,9 @@ public class SgjsBuildSchemeEvolveImpl implements ISgjsBuildSchemeEvolveService 
             String taskStatus = evolve.getTaskStatus();
             if(StringUtils.isNotBlank(taskStatus)){
                 switch (taskStatus){
-                    case "0" : evolve.setTaskStatus(TaskStatus.NOT_INITIATED);
-                    case "1" : evolve.setTaskStatus(TaskStatus.IN_PROGRESS);
-                    case "4" : evolve.setTaskStatus(TaskStatus.COMPLETED);
+                    case "0" : evolve.setTaskStatus(TaskStatus.NOT_INITIATED.getValue());
+                    case "1" : evolve.setTaskStatus(TaskStatus.IN_PROGRESS.getValue());
+                    case "4" : evolve.setTaskStatus(TaskStatus.COMPLETED.getValue());
                 }
             }
         }

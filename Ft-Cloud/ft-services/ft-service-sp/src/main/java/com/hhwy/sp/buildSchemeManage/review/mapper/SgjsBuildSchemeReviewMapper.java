@@ -36,4 +36,8 @@ public interface SgjsBuildSchemeReviewMapper {
     SgjsBuildSchemeReview getById(@Param("id") Long id);
 
     List<SgjsBuildSchemeReview> getListByIds(@Param("ids") List<Long> ids);
+
+    void updateTaskStatus(@Param("id") Long id,@Param("taskStatus") String taskStatus);
+
+    void updateApprovalTime(@Param("id") Long id);
 }

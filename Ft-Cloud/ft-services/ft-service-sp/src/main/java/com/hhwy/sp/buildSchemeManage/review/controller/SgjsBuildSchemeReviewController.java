@@ -140,4 +140,16 @@ public class SgjsBuildSchemeReviewController extends BaseController {
         List<SgjsBuildSchemeList> schemeListList = sgjsBuildSchemeReviewService.getSchemeList();
         return AjaxResult.success(schemeListList);
     }
+
+    @GetMapping("/submit")
+    public AjaxResult submitBuildSchemeReviewProcess(@RequestParam("id") Long id){
+        sgjsBuildSchemeReviewService.submitBuildSchemeReviewProcess(id);
+        return AjaxResult.success();
+    }
+
+    @GetMapping("/listener")
+    public AjaxResult updateBuildSchemeReviewProcess(@RequestParam("id") Long id){
+        sgjsBuildSchemeReviewService.updateBuildSchemeReviewProcess(id);
+        return AjaxResult.success();
+    }
 }

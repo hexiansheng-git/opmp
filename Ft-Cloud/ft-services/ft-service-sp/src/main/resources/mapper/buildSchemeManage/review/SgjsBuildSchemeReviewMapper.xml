@@ -689,4 +689,12 @@
             </foreach>
         </where>
     </update>
+    <update id="updateTaskStatus">
+        update `sgjs_build_scheme_review` set task_status = #{taskStatus}
+        where id = #{id}
+    </update>
+    <update id="updateApprovalTime">
+        update `sgjs_build_scheme_review` set approval_time = now()
+        where id = #{id}
+    </update>
 </mapper>
