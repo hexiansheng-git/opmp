@@ -48,7 +48,7 @@ public class SyncMaterialInfoInterface {
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("projectCode",map.get("projectCode"));
         JSONObject params=new JSONObject();
-        params.put("materialCodes",map.get("manageCodes"));
+        params.put("materialCodes",map.get("materialCodes"));
         params.put("getAllFlag","1");//值为1，传则获取所有设备，包括已退场，否则只获取未退场
         jsonObject.put("params",params);
         String rst = HttpUtils.sendPost(url, jsonObject.toJSONString(), headerMap);
