@@ -48,7 +48,8 @@ public class SyncMaterialInfoInterface {
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("projectCode",map.get("projectCode"));
         JSONObject params=new JSONObject();
-        params.put("manageCodes",map.get("manageCodes"));
+        params.put("materialCodes",map.get("manageCodes"));
+        params.put("getAllFlag","1");//值为1，传则获取所有设备，包括已退场，否则只获取未退场
         jsonObject.put("params",params);
         String rst = HttpUtils.sendPost(url, jsonObject.toJSONString(), headerMap);
         logger.info("获取物设系统【设备进场记录】接口返回结果信息【{}】",rst);
@@ -59,16 +60,16 @@ public class SyncMaterialInfoInterface {
         try {
             //响应码校验
             JSONObject object = JSONObject.parseObject(rst);
-            String code = (String) object.get("code");
-            if(!code.equals("200")){
+            Integer code = (Integer)object.get("code");
+            if(200!=code){
                 return AjaxResult.error("获取物设系统【设备进场记录】接口返回响应码异常");
             }
             List<SyncMaterialInfoVo> dataList = JSONArray.parseArray(JSONObject.toJSONString(object.get("data")), SyncMaterialInfoVo.class);
             return AjaxResult.success(dataList);
         }catch (Exception e){
             e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
         }
-        return AjaxResult.success();
     }
 
 }

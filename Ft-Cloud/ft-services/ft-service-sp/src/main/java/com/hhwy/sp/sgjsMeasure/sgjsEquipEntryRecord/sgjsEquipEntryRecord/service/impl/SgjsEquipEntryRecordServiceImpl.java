@@ -252,7 +252,7 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
     public List<SgjsEquipEntryRecordInfo> getDatatByOther(List<Map> listMap) {
         Map<String,Object> paramMap=new HashMap<>();
         paramMap.put("projectCode",listMap.get(0).get("projectCode"));
-        paramMap.put("manageCodes",listMap.stream().map(e->e.get("materialCode")).collect(Collectors.toList()));
+        paramMap.put("materialCodes",listMap.stream().map(e->e.get("materialCode")).collect(Collectors.toList()));
         //物设同步
         AjaxResult result = getMaterialInfoInterface.syncMaterialInfo(paramMap);
         String code = result.get("code").toString();
@@ -261,9 +261,17 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             logger.error("物设接口返回异常【{}】",JSONObject.toJSONString(result));
             return list;
         }
-        List<GetMaterialInfoVo> data = JSONArray.parseArray(result.get("data").toString(), GetMaterialInfoVo.class);
-        Map<String, List<GetMaterialInfoVo>> map = data.stream().collect(Collectors.groupingBy(e -> e.getCode() + e.getSource()));
-
+        List<GetMaterialInfoVo> data = JSONArray.parseArray(JSONObject.toJSONString(result.get("data")), GetMaterialInfoVo.class);
+        if(CollectionUtils.isEmpty(data)){
+            logger.info("暂未同步到数据！！！！【{}】",JSONObject.toJSONString(data));
+            return list;
+        }
+        List<GetMaterialInfoVo> voList = data.stream().filter(e -> StringUtils.isNotEmpty(e.getSource())).collect(Collectors.toList());
+        if(!CollectionUtils.isEmpty(voList)){
+            logger.info("source全空了【{}】",JSONObject.toJSONString(voList));
+            return list;
+        }
+        Map<String, List<GetMaterialInfoVo>> map = voList.stream().collect(Collectors.groupingBy(e -> e.getCode() + e.getSource()));
         for (int i = 0; i < listMap.size(); i++) {
             String materialCode=listMap.get(i).get("materialCode")+"";
             String source=listMap.get(i).get("source")+"";
@@ -277,20 +285,22 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
                 SgjsEquipEntryRecordInfo info=new SgjsEquipEntryRecordInfo();
                 info.setManageCode(vo.getManagementcode());//管理编号
                 info.setMaterialName(vo.getName());//物资名称
-                info.setCategoryCode(vo.getTyptCode());//类别
                 info.setManufacturer(vo.getDeviceFrom());//厂商
                 info.setMaterialSpec(vo.getSpec());//型号
                 info.setSerialNum(vo.getMainNo());//主机系列号
                 info.setBottomNo(vo.getBottomNo());//底盘系列号
-//            info.setCategoryName();//类别名称
+                info.setCategoryCode(vo.getTypeCode());//类别
+                info.setCategoryName(vo.getTypeName());//类别名称
                 info.setPower(vo.getMainPower());//主机功率
                 if(!StringUtils.isEmpty(vo.getCheckDate())){
                     info.setEntryDate(DateUtils.dateTime("yyyy-MM-dd",vo.getCheckDate()));
                 }
-//            info.setExitDate();//实际退场日期
-               info.setSource(vo.getSource());//来源
-//            info.setCurrentState();//当前状态
-//            info.setPower();//主机功率
+                if(StringUtils.isNotEmpty(vo.getExitDate())){
+                    info.setExitDate(DateUtils.dateTime("yyyy-MM-dd",vo.getExitDate()));//实际退场日期
+                }
+                info.setSource(vo.getSource());//来源
+                info.setCurrentState(vo.getStatus());//当前状态
+                info.setPower(vo.getMainPower());//主机功率
                 info.setRecordId(Long.parseLong(map.get("recordId").toString()));//关联主表id   左侧数据id
                 list.add(info);
             }

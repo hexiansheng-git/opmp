@@ -6,6 +6,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.http.HttpUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.utils.syncThirdInterface.wushe.vo.GetMaterialInfoVo;
+import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +40,7 @@ public class GetMaterialInfoInterface {
      * -H 'apikey: pJWDnryyVsmDiiPeEI5Bfv0B4Lm3nOoI' -d '{ "projectCode": "123", "params": { "manageCodes": [ "dfgdfg", "dfgdfg" ] } }'
      * 'http://esb.cfhec.net/env-101/hhwy-wsxt/wsxt/xg/fms/xcsb/chooseEqu/getEquipList'
      *
-     * @param map
+     * @param map  0 国内采购 1当地采购 2第三国采购 4当地租赁  5协作队伍自带
      * @return
      */
     public AjaxResult syncMaterialInfo(@RequestBody Map<String,Object> map){
@@ -48,7 +49,8 @@ public class GetMaterialInfoInterface {
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("projectCode",map.get("projectCode"));
         JSONObject params=new JSONObject();
-        params.put("manageCodes",map.get("manageCodes"));
+        params.put("materialCodes",map.get("materialCodes"));
+        params.put("getAllFlag","1");//值为1，传则获取所有设备，包括已退场，否则只获取未退场
         jsonObject.put("params",params);
         String rst = HttpUtils.sendPost(url, jsonObject.toJSONString(), headerMap);
         logger.info("获取物设系统【设备进场记录】接口返回结果信息【{}】",rst);
@@ -59,16 +61,17 @@ public class GetMaterialInfoInterface {
         try {
             //响应码校验
             JSONObject object = JSONObject.parseObject(rst);
-            String code = (String) object.get("code");
-            if(!code.equals("200")){
+            Integer code = (Integer) object.get("code");
+            if(200!=code){
                 return AjaxResult.error("获取物设系统【设备进场记录】接口返回响应码异常");
             }
             List<GetMaterialInfoVo> dataList = JSONArray.parseArray(JSONObject.toJSONString(object.get("data")), GetMaterialInfoVo.class);
             return AjaxResult.success(dataList);
         }catch (Exception e){
             e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
         }
-        return AjaxResult.success();
+
     }
 
 }

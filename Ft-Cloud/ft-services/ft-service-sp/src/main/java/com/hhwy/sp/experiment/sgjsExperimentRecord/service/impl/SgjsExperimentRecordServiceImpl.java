@@ -242,15 +242,25 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
     public AjaxResult syncWuShe(List<Map> listMap) {
         Map<String,Object> paramMap=new HashMap<>();
         paramMap.put("projectCode",listMap.get(0).get("projectCode"));
-        List<Object> codeList = listMap.stream().map(e -> e.get("manageCode")).collect(Collectors.toList());
-        paramMap.put("manageCodes",codeList);
+        List<Object> codeList = listMap.stream().map(e -> e.get("materialCode")).collect(Collectors.toList());
+        paramMap.put("materialCodes",codeList);
         AjaxResult result = materialInfoInterface.syncMaterialInfo(paramMap);
         if(!result.get("code").toString().equals("200")){
             logger.error("同步物设出错！！！！！【{}】",JSONObject.toJSONString(result));
             return result;
         }
         List<GetMaterialInfoVo> dataList = JSONArray.parseArray(JSONObject.toJSONString(result.get("data")), GetMaterialInfoVo.class);
-        Map<String, List<GetMaterialInfoVo>> map = dataList.stream().collect(Collectors.groupingBy(e -> e.getCode() + e.getSource()));
+        if(CollectionUtils.isEmpty(dataList)){
+            logger.info("暂未同步到数据！！！！！【{}】",JSONObject.toJSONString(dataList));
+            return AjaxResult.success("暂未同步到数据！！！！！");
+        }
+        //过滤source  不为空
+        List<GetMaterialInfoVo> infoVoList = dataList.stream().filter(e -> StringUtils.isNotEmpty(e.getSource())).collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(infoVoList)){
+            logger.info("source全空了。。。。。【{}】",JSONObject.toJSONString(infoVoList));
+            return AjaxResult.success();
+        }
+        Map<String, List<GetMaterialInfoVo>> map = infoVoList.stream().collect(Collectors.groupingBy(e -> e.getCode() + e.getSource()));
         List<SgjsExperimentRecordInfo> list=new ArrayList<>();
         for (int i = 0; i < listMap.size(); i++) {
             String source=listMap.get(i).get("source")+"";
@@ -262,15 +272,15 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
             for (GetMaterialInfoVo vo:voList) {
                 SgjsExperimentRecordInfo info=new SgjsExperimentRecordInfo();
                 info.setManageCode(vo.getManagementcode());//管理编码
-                info.setCategoryCode(vo.getTyptCode());//类别编码
+                info.setCategoryCode(vo.getTypeCode());//类别编码
                 info.setCategoryName(vo.getName());//类别名称
                 info.setMaterialName(vo.getName());//物资名称
-//            info.setPower();
-//            info.setSerialNum();
-//            info.setBottomNo();
-//            info.setProductDate();
-//            info.setSizeMsg(vo.getSizeMsg());
-//            info.setWeight();
+                info.setPower(vo.getMainPower());//主机功率
+                info.setSerialNum(vo.getMainNo());//主机系列号
+                info.setBottomNo(vo.getBottomNo());//底盘系列号
+                //info.setProductDate();
+                info.setSizeMsg(vo.getSizeMsg());
+                info.setWeight(vo.getWeight());
                 if(!StringUtils.isEmpty(vo.getOriginalValue())){
                     info.setOriginalValue(new BigDecimal(vo.getOriginalValue()));
                 }

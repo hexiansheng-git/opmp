@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.domain.SysSyncInfoLog;
@@ -23,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
@@ -88,9 +88,12 @@ public class MeasureJobServiceImpl {
                     return;
                 }
                 List<GetMaterialInfoVo> data = JSONArray.parseArray(result.get("data").toString(), GetMaterialInfoVo.class);
+                if(CollectionUtils.isEmpty(data)){
+                    logger.info("空了，下一个【{}】",JSONObject.toJSONString(data));
+                    continue;
+                }
                 Map<String, List<GetMaterialInfoVo>> listMap = data.stream().collect(Collectors.groupingBy(e -> e.getCode() + e.getSource()));
                 //数据处理并入库
-                //hanldeDataLogic(data,recordIdMap);
                 hanldeDataLogic(list,listMap);
             }
         }catch (Exception e){
@@ -121,8 +124,8 @@ public class MeasureJobServiceImpl {
                 SgjsEquipEntryRecordInfo recordInfo=new SgjsEquipEntryRecordInfo();
                 recordInfo.setRecordId(info.getId());
                 recordInfo.setManageCode(infoVo.getManagementcode());
-//                recordInfo.setCategoryName();
-//                recordInfo.setCategoryCode();
+                recordInfo.setCategoryName(infoVo.getTypeName());
+                recordInfo.setCategoryCode(infoVo.getTypeCode());
                 recordInfo.setMaterialName(infoVo.getName());
                 recordInfo.setManufacturer(infoVo.getDeviceFrom());
                 recordInfo.setMaterialSpec(infoVo.getSpec());
@@ -130,11 +133,15 @@ public class MeasureJobServiceImpl {
                 recordInfo.setSerialNum(infoVo.getMainNo());//主机系列号
                 recordInfo.setBottomNo(infoVo.getBottomNo());
                 String checkDate = infoVo.getCheckDate();
-                if(!StringUtils.isEmpty(checkDate)){
+                if(StringUtils.isNotEmpty(checkDate)){
                     recordInfo.setEntryDate(DateUtils.dateTime("yyyy-MM-dd",checkDate));//进场日期
                 }
-//                recordInfo.setExitDate();//退场日期
-//                recordInfo.setCurrentState();//当前状态
+                String exitDate = infoVo.getExitDate();
+                if(StringUtils.isNotEmpty(exitDate)){
+
+                    recordInfo.setExitDate(DateUtils.dateTime("yyyy-MM-dd",exitDate));//退场日期
+                }
+                recordInfo.setCurrentState(infoVo.getStatus());//当前状态
                 recordInfo.setProjectId(info.getProjectId());
                 recordInfo.setProjectName(info.getProjectName());
                 rstList.add(recordInfo);

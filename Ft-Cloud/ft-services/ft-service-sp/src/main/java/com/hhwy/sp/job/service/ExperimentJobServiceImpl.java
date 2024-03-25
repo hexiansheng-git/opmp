@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.domain.SysSyncInfoLog;
@@ -14,7 +15,6 @@ import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.service.ISgjsExperimentRecordService;
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfo.domain.SgjsExperimentRecordInfo;
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfo.service.ISgjsExperimentRecordInfoService;
-import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
 import com.hhwy.sp.utils.syncThirdInterface.wushe.GetMaterialInfoInterface;
 import com.hhwy.sp.utils.syncThirdInterface.wushe.vo.GetMaterialInfoVo;
 import com.hhwy.system.api.domain.SysTenant;
@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -82,6 +81,10 @@ public class ExperimentJobServiceImpl {
                     return;
                 }
                 List<GetMaterialInfoVo> data = JSONArray.parseArray(result.get("data").toString(), GetMaterialInfoVo.class);
+                if(CollectionUtils.isEmpty(data)){
+                    logger.info("空了，下一个【{}】",JSONObject.toJSONString(data));
+                    continue;
+                }
                 Map<String, List<GetMaterialInfoVo>> wuSheDataMap = data.stream().collect(Collectors.groupingBy(e -> e.getCode() + e.getName()));
                 //数据处理并入库
                 hanldeDataLogic(list,wuSheDataMap);
@@ -115,23 +118,27 @@ public class ExperimentJobServiceImpl {
                 recordInfo.setWeight(infoVo.getWeight());//自重
                 recordInfo.setManufacturer(infoVo.getDeviceFrom());//厂商
                 recordInfo.setMaterialSpec(infoVo.getSpec());//型号
-//                recordInfo.setCategoryCode();//类别编码
-//                recordInfo.setCategoryName();//类别名称
+                recordInfo.setCategoryCode(infoVo.getTypeCode());//类别编码
+                recordInfo.setCategoryName(infoVo.getTypeName());//类别名称
                 recordInfo.setSizeMsg(infoVo.getSizeMsg());//外形尺寸
                 String originalValue = infoVo.getOriginalValue();
-                if(!StringUtils.isEmpty(originalValue)){
+                if(StringUtils.isNotEmpty(originalValue)){
                     recordInfo.setOriginalValue(new BigDecimal(originalValue));//原值
                 }
                 //recordInfo.setResidualValue();//余值
                 String checkDate = infoVo.getCheckDate();
-                if(!StringUtils.isEmpty(checkDate)){
+                if(StringUtils.isNotEmpty(checkDate)){
                     Date date = DateUtils.dateTime("yyyy-MM-dd", checkDate);
                     recordInfo.setAcceptDate(date);//验收日期
                     recordInfo.setEntryDate(date);//实际进场日期
                 }
-//                recordInfo.setExitDate();//退场日期
-//                recordInfo.setSource();//来源
-//                recordInfo.setCurrentState();//当前状态
+                String exitDate = infoVo.getExitDate();
+                if(StringUtils.isNotEmpty(exitDate)){
+                    Date date = DateUtils.dateTime("yyyy-MM-dd", exitDate);
+                    recordInfo.setExitDate(date);//退场日期
+                }
+                recordInfo.setSource(infoVo.getSource());//来源
+                recordInfo.setCurrentState(infoVo.getStatus());//当前状态
                 recordInfo.setProjectId(info.getProjectId());
                 recordInfo.setProjectName(info.getProjectName());
                 rstList.add(recordInfo);

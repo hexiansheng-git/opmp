@@ -434,11 +434,15 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
             return result;
         }
         List<SyncMaterialInfoVo> wusheList= JSONArray.parseArray(JSONObject.toJSONString(result.get("data")),SyncMaterialInfoVo.class);
-        Map<String, List<SyncMaterialInfoVo>> listMap = wusheList.stream().collect(Collectors.groupingBy(e -> e.getCode() + e.getSource()));
+        if(CollectionUtils.isEmpty(wusheList)){
+            logger.info("暂未同步到数据！！！！！！【{}】",JSONObject.toJSONString(wusheList));
+            return AjaxResult.success("暂未同步到数据！！！！！！");
+        }
+        Map<String, List<SyncMaterialInfoVo>> listMap = wusheList.stream().collect(Collectors.groupingBy(e -> e.getCode()));
         List<KcsjEquipEntryRecordInfo> rstList=new ArrayList();
         for (SyncWusheEquipVo info:list) {
-            //页面没有来源 只用设备编码是否可行?
-            String key=info.getMaterialCode()+info.getSource()+"";
+            //页面没有来源 只用设备编码
+            String key=info.getMaterialCode();
             List<SyncMaterialInfoVo> voList = listMap.get(key);
             if(CollectionUtils.isEmpty(voList)){
                 continue;
@@ -455,8 +459,11 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                 if(!StringUtils.isEmpty(checkDate)){
                     recordInfo.setEntryDate(DateUtils.dateTime("yyyy-MM-dd",checkDate));//实际进场日期
                 }
-//            recordInfo.setExitDate();//实际退场时间
-//            recordInfo.setCurrentState();//当前状态
+                String exitDate = voList.get(i).getExitDate();
+                if(StringUtils.isNotEmpty(exitDate)){
+                    recordInfo.setExitDate(DateUtils.dateTime("yyyy-MM-dd",exitDate));//实际退场时间
+                }
+                recordInfo.setCurrentState(voList.get(i).getStatus());//当前状态
                 recordInfo.setPid(Long.parseLong(info.getRecordId()));
                 recordInfo.setTeamName(info.getTeamName());
                 rstList.add(recordInfo);
