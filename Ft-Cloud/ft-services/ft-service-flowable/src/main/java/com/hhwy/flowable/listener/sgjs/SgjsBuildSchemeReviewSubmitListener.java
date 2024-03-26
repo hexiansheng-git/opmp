@@ -31,8 +31,7 @@ public class SgjsBuildSchemeReviewSubmitListener implements TaskListener, Execut
         ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(delegateTask.getProcessInstanceId()).singleResult();
         String businessKey = processInstance.getBusinessKey();
         SpServiceApi bean = SpringUtils.getBean(SpServiceApi.class);
-        AjaxResult result = bean.submitPatentDeclareProcess(Long.valueOf(businessKey));
+        AjaxResult result = bean.submitBuildSchemeReviewProcess(Long.valueOf(businessKey));
         Assert.isTrue(AjaxResult.isSuccess(result),result.get(AjaxResult.MSG_TAG)==null?"":result.get(AjaxResult.MSG_TAG).toString());
-
     }
 }
