@@ -44,23 +44,29 @@ public class SgjsBuildSchemeReviewOpinion extends BaseEntity {
     @Excel(name = "方案总得分")
     private Double score;
     /**
-     * 字段描述：类型（1：区域总工，  2：海外事业部总工）
+     * 字段描述：区域总工意见（1：通过  2：修改后通过  3：不通过）
      */
     @JsonProperty
-    @Excel(name = "类型（1：区域总工，  2：海外事业部总工）")
-    private String type;
+    @Excel(name = "区域总工意见（1：通过  2：修改后通过  3：不通过）")
+    private String regionChiefOpinion;
     /**
-     * 字段描述：总工意见（1：通过  2：修改后通过  3：不通过）
+     * 字段描述：区域总工详细意见
      */
     @JsonProperty
-    @Excel(name = "总工意见（1：通过  2：修改后通过  3：不通过）")
-    private String chiefOpinion;
+    @Excel(name = "区域总工详细意见")
+    private String regionChiefDetailOpinion;
     /**
-     * 字段描述：详细意见
+     * 字段描述：海外事业部总工意见（1：通过  2：修改后通过  3：不通过）
      */
     @JsonProperty
-    @Excel(name = "详细意见")
-    private String detailOpinion;
+    @Excel(name = "海外事业部总工意见（1：通过  2：修改后通过  3：不通过）")
+    private String overseasChiefOpinion;
+    /**
+     * 字段描述：海外事业部总工详细意见
+     */
+    @JsonProperty
+    @Excel(name = "海外事业部总工详细意见")
+    private String overseasChiefDetailOpinion;
     /**
      * 字段描述：流程节点标识
      */

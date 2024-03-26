@@ -15,6 +15,7 @@
         <result property="flowNodeMark" column="flow_node_mark"/>
         <result property="fileGroupId" column="file_group_id"/>
         <result property="remark" column="remark"/>
+        <result property="sort" column="sort"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="projectId" column="project_id"/>
@@ -45,6 +46,7 @@
              , `flow_node_mark`
              , `file_group_id`
              , `remark`
+             , `sort`
              , `region_id`
              , `region_name`
              , `project_id`
@@ -133,7 +135,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by staff_id desc,create_time desc
+        order by staff_id desc,sort asc
     </select>
     <select id="getListByReviewId" resultMap="SgjsBuildSchemeStaffOpinionResultMap">
         <include refid="selectSgjsBuildSchemeStaffOpinionVo"/>
@@ -173,6 +175,7 @@
             <if test="flowNodeMark != null  and flowNodeMark != ''">`flow_node_mark`,</if>
             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="sort != null ">`sort`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -203,6 +206,7 @@
             <if test="flowNodeMark != null  and flowNodeMark != ''">#{flowNodeMark},</if>
             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="sort != null ">#{sort},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>
@@ -238,6 +242,7 @@
             `flow_node_mark`,
             `file_group_id`,
             `remark`,
+            `sort`,
             `region_id`,
             `region_name`,
             `project_id`,
@@ -269,6 +274,7 @@
                 #{item.flowNodeMark},
                 #{item.fileGroupId},
                 #{item.remark},
+                #{item.sort},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.projectId},

@@ -9,9 +9,10 @@
         <result property="id" column="id"/>
         <result property="reviewId" column="review_id"/>
         <result property="score" column="score"/>
-        <result property="type" column="type"/>
-        <result property="chiefOpinion" column="chief_opinion"/>
-        <result property="detailOpinion" column="detail_opinion"/>
+        <result property="regionChiefOpinion" column="region_chief_opinion"/>
+        <result property="regionChiefDetailOpinion" column="region_chief_detail_opinion"/>
+        <result property="overseasChiefOpinion" column="overseas_chief_opinion"/>
+        <result property="overseasChiefDetailOpinion" column="overseas_chief_detail_opinion"/>
         <result property="flowNodeMark" column="flow_node_mark"/>
         <result property="remark" column="remark"/>
         <result property="regionId" column="region_id"/>
@@ -38,9 +39,10 @@
         select `id`
              , `review_id`
              , `score`
-             , `type`
-             , `chief_opinion`
-             , `detail_opinion`
+             , `region_chief_opinion`
+             , `region_chief_detail_opinion`
+             , `overseas_chief_opinion`
+             , `overseas_chief_detail_opinion`
              , `flow_node_mark`
              , `remark`
              , `region_id`
@@ -71,9 +73,6 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="reviewId != null ">and `review_id` = #{reviewId}</if>
             <if test="score != null ">and `score` = #{score}</if>
-            <if test="type != null  and type != ''">and `type` = #{type}</if>
-            <if test="chiefOpinion != null  and chiefOpinion != ''">and `chief_opinion` = #{chiefOpinion}</if>
-            <if test="detailOpinion != null  and detailOpinion != ''">and `detail_opinion` = #{detailOpinion}</if>
             <if test="flowNodeMark != null  and flowNodeMark != ''">and `flow_node_mark` = #{flowNodeMark}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
@@ -106,9 +105,6 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="reviewId != null ">and `review_id` = #{reviewId}</if>
             <if test="score != null ">and `score` = #{score}</if>
-            <if test="type != null  and type != ''">and `type` = #{type}</if>
-            <if test="chiefOpinion != null  and chiefOpinion != ''">and `chief_opinion` = #{chiefOpinion}</if>
-            <if test="detailOpinion != null  and detailOpinion != ''">and `detail_opinion` = #{detailOpinion}</if>
             <if test="flowNodeMark != null  and flowNodeMark != ''">and `flow_node_mark` = #{flowNodeMark}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
@@ -145,9 +141,14 @@
             <if test="id != null ">`id`,</if>
             <if test="reviewId != null ">`review_id`,</if>
             <if test="score != null ">`score`,</if>
-            <if test="type != null  and type != ''">`type`,</if>
-            <if test="chiefOpinion != null  and chiefOpinion != ''">`chief_opinion`,</if>
-            <if test="detailOpinion != null  and detailOpinion != ''">`detail_opinion`,</if>
+            <if test="regionChiefOpinion != null  and regionChiefOpinion != ''">`region_chief_opinion`,</if>
+            <if test="regionChiefDetailOpinion != null  and regionChiefDetailOpinion != ''">
+                `region_chief_detail_opinion`,
+            </if>
+            <if test="overseasChiefOpinion != null  and overseasChiefOpinion != ''">`overseas_chief_opinion`,</if>
+            <if test="overseasChiefDetailOpinion != null  and overseasChiefDetailOpinion != ''">
+                `overseas_chief_detail_opinion`,
+            </if>
             <if test="flowNodeMark != null  and flowNodeMark != ''">`flow_node_mark`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
@@ -174,9 +175,14 @@
             <if test="id != null ">#{id},</if>
             <if test="reviewId != null ">#{reviewId},</if>
             <if test="score != null ">#{score},</if>
-            <if test="type != null  and type != ''">#{type},</if>
-            <if test="chiefOpinion != null  and chiefOpinion != ''">#{chiefOpinion},</if>
-            <if test="detailOpinion != null  and detailOpinion != ''">#{detailOpinion},</if>
+            <if test="regionChiefOpinion != null  and regionChiefOpinion != ''">#{regionChiefOpinion},</if>
+            <if test="regionChiefDetailOpinion != null  and regionChiefDetailOpinion != ''">
+                #{regionChiefDetailOpinion},
+            </if>
+            <if test="overseasChiefOpinion != null  and overseasChiefOpinion != ''">#{overseasChiefOpinion},</if>
+            <if test="overseasChiefDetailOpinion != null  and overseasChiefDetailOpinion != ''">
+                #{overseasChiefDetailOpinion},
+            </if>
             <if test="flowNodeMark != null  and flowNodeMark != ''">#{flowNodeMark},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="regionId != null ">#{regionId},</if>
@@ -208,9 +214,10 @@
             `id`,
             `review_id`,
             `score`,
-            `type`,
-            `chief_opinion`,
-            `detail_opinion`,
+            `region_chief_opinion`,
+            `region_chief_detail_opinion`,
+            `overseas_chief_opinion`,
+            `overseas_chief_detail_opinion`,
             `flow_node_mark`,
             `remark`,
             `region_id`,
@@ -238,9 +245,10 @@
                 #{item.id},
                 #{item.reviewId},
                 #{item.score},
-                #{item.type},
-                #{item.chiefOpinion},
-                #{item.detailOpinion},
+                #{item.regionChiefOpinion},
+                #{item.regionChiefDetailOpinion},
+                #{item.overseasChiefOpinion},
+                #{item.overseasChiefDetailOpinion},
                 #{item.flowNodeMark},
                 #{item.remark},
                 #{item.regionId},
@@ -271,9 +279,18 @@
             <if test="id != null ">`id` = #{id},</if>
             <if test="reviewId != null ">`review_id` = #{reviewId},</if>
             <if test="score != null ">`score` = #{score},</if>
-            <if test="type != null  and  type != ''">`type` = #{type},</if>
-            <if test="chiefOpinion != null  and  chiefOpinion != ''">`chief_opinion` = #{chiefOpinion},</if>
-            <if test="detailOpinion != null  and  detailOpinion != ''">`detail_opinion` = #{detailOpinion},</if>
+            <if test="regionChiefOpinion != null  and  regionChiefOpinion != ''">`region_chief_opinion` =
+                #{regionChiefOpinion},
+            </if>
+            <if test="regionChiefDetailOpinion != null  and  regionChiefDetailOpinion != ''">
+                `region_chief_detail_opinion` = #{regionChiefDetailOpinion},
+            </if>
+            <if test="overseasChiefOpinion != null  and  overseasChiefOpinion != ''">`overseas_chief_opinion` =
+                #{overseasChiefOpinion},
+            </if>
+            <if test="overseasChiefDetailOpinion != null  and  overseasChiefDetailOpinion != ''">
+                `overseas_chief_detail_opinion` = #{overseasChiefDetailOpinion},
+            </if>
             <if test="flowNodeMark != null  and  flowNodeMark != ''">`flow_node_mark` = #{flowNodeMark},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
@@ -319,19 +336,24 @@
                     when `id`=#{item.id} then #{item.score}
                 </foreach>
             </trim>
-            <trim prefix="type  = case" suffix="end,">
+            <trim prefix="region_chief_opinion  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.type}
+                    when `id`=#{item.id} then #{item.regionChiefOpinion}
                 </foreach>
             </trim>
-            <trim prefix="chief_opinion  = case" suffix="end,">
+            <trim prefix="region_chief_detail_opinion  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.chiefOpinion}
+                    when `id`=#{item.id} then #{item.regionChiefDetailOpinion}
                 </foreach>
             </trim>
-            <trim prefix="detail_opinion  = case" suffix="end,">
+            <trim prefix="overseas_chief_opinion  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.detailOpinion}
+                    when `id`=#{item.id} then #{item.overseasChiefOpinion}
+                </foreach>
+            </trim>
+            <trim prefix="overseas_chief_detail_opinion  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.overseasChiefDetailOpinion}
                 </foreach>
             </trim>
             <trim prefix="flow_node_mark  = case" suffix="end,">
@@ -452,9 +474,6 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="reviewId != null ">and `review_id` = #{reviewId}</if>
             <if test="score != null ">and `score` = #{score}</if>
-            <if test="type != null  and type != ''">and `type` = #{type}</if>
-            <if test="chiefOpinion != null  and chiefOpinion != ''">and `chief_opinion` = #{chiefOpinion}</if>
-            <if test="detailOpinion != null  and detailOpinion != ''">and `detail_opinion` = #{detailOpinion}</if>
             <if test="flowNodeMark != null  and flowNodeMark != ''">and `flow_node_mark` = #{flowNodeMark}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>

@@ -179,17 +179,16 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     reviewOpinionQuery.setReviewId(id);
                     String flowNodeMarkQuery;
                     if("7".equals(flowNodeMark)){
-                        reviewOpinionQuery.setType("1");
                         flowNodeMarkQuery = "1";
                     }else {
-                        reviewOpinionQuery.setType("2");
                         flowNodeMarkQuery = "2";
                     }
                     SgjsBuildSchemeReviewOpinion reviewOpinion = sgjsBuildSchemeReviewOpinionMapper.getSgjsBuildSchemeReviewOpinion(reviewOpinionQuery);
                     if(reviewOpinion != null){
-                        reviewOpinionVo.setType(reviewOpinion.getType());
-                        reviewOpinionVo.setChiefOpinion(reviewOpinion.getChiefOpinion());
-                        reviewOpinionVo.setDetailOpinion(reviewOpinion.getDetailOpinion());
+                        reviewOpinionVo.setRegionChiefOpinion(reviewOpinion.getRegionChiefOpinion());
+                        reviewOpinionVo.setRegionChiefDetailOpinion(reviewOpinion.getRegionChiefDetailOpinion());
+                        reviewOpinionVo.setOverseasChiefOpinion(reviewOpinion.getOverseasChiefOpinion());
+                        reviewOpinionVo.setOverseasChiefDetailOpinion(reviewOpinion.getOverseasChiefDetailOpinion());
                     }
                     List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(id, flowNodeMarkQuery);
                     reviewOpinionVo.setGatherVoList(staffOpinionGatherVoList);
@@ -352,22 +351,13 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 
     private SgjsBuildSchemeReviewOpinionRecord initReviewOpinionRecord(Long reviewId){
         SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = new SgjsBuildSchemeReviewOpinionRecord();
-
         SgjsBuildSchemeReviewOpinion reviewOpinionQuery = new SgjsBuildSchemeReviewOpinion();
         reviewOpinionQuery.setReviewId(reviewId);
-        List<SgjsBuildSchemeReviewOpinion> reviewOpinionList = sgjsBuildSchemeReviewOpinionMapper.getSgjsBuildSchemeReviewOpinionList(reviewOpinionQuery);
-        Map<String, SgjsBuildSchemeReviewOpinion> typeReviewOpinionMap = reviewOpinionList.stream().collect(Collectors.toMap(SgjsBuildSchemeReviewOpinion::getType, o -> o));
-
-        if(typeReviewOpinionMap.containsKey("1")){
-            SgjsBuildSchemeReviewOpinion regionChief = typeReviewOpinionMap.get("1");
-            reviewOpinionRecord.setRegionChiefOpinion(regionChief.getChiefOpinion());
-            reviewOpinionRecord.setRegionChiefDetailOpinion(regionChief.getDetailOpinion());
-        }
-        if(typeReviewOpinionMap.containsKey("2")){
-            SgjsBuildSchemeReviewOpinion regionChief = typeReviewOpinionMap.get("2");
-            reviewOpinionRecord.setOverseasChiefOpinion(regionChief.getChiefOpinion());
-            reviewOpinionRecord.setOverseasChiefDetailOpinion(regionChief.getDetailOpinion());
-        }
+        SgjsBuildSchemeReviewOpinion reviewOpinion = sgjsBuildSchemeReviewOpinionMapper.getSgjsBuildSchemeReviewOpinion(reviewOpinionQuery);
+        reviewOpinionRecord.setRegionChiefOpinion(reviewOpinion.getRegionChiefOpinion());
+        reviewOpinionRecord.setRegionChiefDetailOpinion(reviewOpinion.getRegionChiefDetailOpinion());
+        reviewOpinionRecord.setOverseasChiefOpinion(reviewOpinion.getOverseasChiefOpinion());
+        reviewOpinionRecord.setOverseasChiefDetailOpinion(reviewOpinion.getOverseasChiefDetailOpinion());
         return reviewOpinionRecord;
     }
 
@@ -446,23 +436,23 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     private void saveReviewOpinionVo(Long reviewId, String flowNodeMark, BuildSchemeReviewOpinionVo reviewOpinionVo) {
         SgjsBuildSchemeReviewOpinion queryParam = new SgjsBuildSchemeReviewOpinion();
         queryParam.setReviewId(reviewId);
-        queryParam.setFlowNodeMark(flowNodeMark);
+//        queryParam.setFlowNodeMark(flowNodeMark);
         SgjsBuildSchemeReviewOpinion reviewOpinion = sgjsBuildSchemeReviewOpinionMapper.getSgjsBuildSchemeReviewOpinion(queryParam);
         if(reviewOpinion != null){
             reviewOpinion.setUpdateUser(SecurityUtils.getUserName());
             reviewOpinion.setUpdateTime(DateUtils.getNowDate());
             reviewOpinion.setScore(reviewOpinionVo.getScore());
-            reviewOpinion.setChiefOpinion(reviewOpinionVo.getChiefOpinion());
-            reviewOpinion.setDetailOpinion(reviewOpinionVo.getDetailOpinion());
+//            reviewOpinion.setRegionChiefOpinion(reviewOpinionVo.getRegionChiefOpinion());
+//            reviewOpinion.setRegionChiefDetailOpinion(reviewOpinionVo.getRegionChiefDetailOpinion());
+            reviewOpinion.setOverseasChiefOpinion(reviewOpinionVo.getOverseasChiefOpinion());
+            reviewOpinion.setOverseasChiefDetailOpinion(reviewOpinionVo.getOverseasChiefDetailOpinion());
             sgjsBuildSchemeReviewOpinionMapper.updateSgjsBuildSchemeReviewOpinion(reviewOpinion);
         }else {
             reviewOpinion = new SgjsBuildSchemeReviewOpinion();
             reviewOpinion.setId(IdWorker.createId());
             reviewOpinion.setReviewId(reviewId);
-            reviewOpinion.setFlowNodeMark(flowNodeMark);
-            reviewOpinion.setType("7".equals(flowNodeMark)?"1":"2");
-            reviewOpinion.setChiefOpinion(reviewOpinionVo.getChiefOpinion());
-            reviewOpinion.setDetailOpinion(reviewOpinionVo.getDetailOpinion());
+            reviewOpinion.setRegionChiefOpinion(reviewOpinionVo.getRegionChiefOpinion());
+            reviewOpinion.setRegionChiefDetailOpinion(reviewOpinionVo.getRegionChiefDetailOpinion());
             reviewOpinion.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             reviewOpinion.setCreateUserName(SecurityUtils.getUserName());
             reviewOpinion.setCreateTime(DateUtils.getNowDate());
@@ -492,12 +482,14 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         if(CollectionUtils.isEmpty(staffOpinionList)){
             return;
         }
+        int sort = 1;
         for (SgjsBuildSchemeStaffOpinion staffOpinion : staffOpinionList) {
             staffOpinion.setId(IdWorker.createId());
             staffOpinion.setReviewId(reviewId);
             staffOpinion.setReviewStaffId(userName);
             staffOpinion.setReviewStaffName(SecurityUtils.getSysUser().getNickName());
             staffOpinion.setFlowNodeMark(flowNodeMark);
+            staffOpinion.setSort(sort++);
             staffOpinion.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             staffOpinion.setCreateUserName(SecurityUtils.getUserName());
             staffOpinion.setCreateTime(DateUtils.getNowDate());
