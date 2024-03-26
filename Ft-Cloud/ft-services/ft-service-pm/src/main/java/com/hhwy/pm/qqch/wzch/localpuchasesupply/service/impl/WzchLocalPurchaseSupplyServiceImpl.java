@@ -373,6 +373,7 @@ public class WzchLocalPurchaseSupplyServiceImpl implements IWzchLocalPurchaseSup
         dto.setTitle(tenantName+"-"+"属地化采购供应策划");
         // 设置版本号码
         dto.setVersionCode(new BigDecimal("1.0"));
+        dto.setCreateUserName(SecurityUtils.getSysUser().getNickName());
         // 设置新增信息
         EntityUtils.setCreateUpdateInfo(dto);
         if(dto.getId()==null){

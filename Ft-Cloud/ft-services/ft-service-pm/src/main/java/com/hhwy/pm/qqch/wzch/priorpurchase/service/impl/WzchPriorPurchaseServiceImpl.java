@@ -231,6 +231,7 @@ public class WzchPriorPurchaseServiceImpl implements IWzchPriorPurchaseService {
         wzchPriorPurchaseDTO.setVersionCode(wzchPriorPurchaseDTO.getVersion());
         // 是否生效
         wzchPriorPurchaseDTO.setValid("0");
+        wzchPriorPurchaseDTO.setCreateUserName(SecurityUtils.getSysUser().getNickName());
         // 设置创建信息
         EntityUtils.setCreateUpdateInfo(wzchPriorPurchaseDTO);
 

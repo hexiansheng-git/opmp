@@ -307,6 +307,7 @@ public class WzchRevolveRentServiceImpl implements IWzchRevolveRentService {
         dto.setRentCode(genCodeService.getSetCode(CodeEnum.WRR));
         String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
         dto.setTitle(tenantName+"-"+"周转材租赁策划");
+        dto.setCreateUserName(SecurityUtils.getSysUser().getNickName());
         // 设置新增信息
         if(dto.getId()==null){
             new AddBaseInfoUtil<>().addBaseEntity(dto);

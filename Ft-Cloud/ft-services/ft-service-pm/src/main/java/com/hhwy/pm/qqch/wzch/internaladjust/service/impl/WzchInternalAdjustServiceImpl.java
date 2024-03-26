@@ -462,6 +462,7 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
         dto.setVersionCodeStr(dto.getVersion()+"");
         dto.setVersionCode(new BigDecimal(dto.getVersionCodeStr()));
         dto.setVersionNo(dto.getVersion());
+        dto.setCreateUserName(SecurityUtils.getSysUser().getNickName());
         if(dto.getId() == null){
             String code = genCodeService.getCode(CodeEnum.EQU_SPECIALCONTROLPLAN);
             code += genCodeService.fillString(1, 2);

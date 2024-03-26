@@ -301,6 +301,7 @@ public class WzchSpecialProjectServiceImpl implements IWzchSpecialProjectService
         EntityUtils.setCreateUpdateInfo(dto);
         String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
         dto.setTitle(tenantName+"-"+"专项物资策划");
+        dto.setCreateUserName(SecurityUtils.getSysUser().getNickName());
         if(dto.getId() == null){
             dto.setId(IdWorker.createId());
             new AddBaseInfoUtil<>().addBaseEntity(dto);

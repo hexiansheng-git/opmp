@@ -293,8 +293,8 @@ public class WzchFundServiceImpl implements IWzchFundService {
         dto.setValid("0");
         String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
         dto.setTitle(tenantName+"-"+"资金策划");
-        // 设置新增信息
         EntityUtils.setCreateUpdateInfo(dto);
+        dto.setCreateUserName(SecurityUtils.getSysUser().getNickName());
         if(dto.getId()==null) {
             dto.setId(IdWorker.createId());
             new AddBaseInfoUtil<>().addBaseEntity(dto);
