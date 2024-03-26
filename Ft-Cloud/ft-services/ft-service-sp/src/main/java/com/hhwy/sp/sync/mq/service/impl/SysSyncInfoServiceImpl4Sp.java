@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.SgjsCriticalExpReport;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportVo;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManage;
@@ -212,6 +213,16 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
     public void pushSgjsPaperPublish(SgjsPaperPublish patentDeclare){
         try{
             rocketMQTemplate.convertAndSend("sgjs_paper_publish:tenantSuccess", JSONObject.toJSONString(patentDeclare));
+        }catch(Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void pushSgjsBuildSchemeReview(SgjsBuildSchemeReview review){
+        try{
+            rocketMQTemplate.convertAndSend("sgjs_build_scheme_review:tenantSuccess", JSONObject.toJSONString(review));
         }catch(Exception e){
             e.printStackTrace();
             throw e;

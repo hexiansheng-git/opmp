@@ -3,6 +3,8 @@ package com.hhwy.sp.buildSchemeManage.review.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.buildSchemeManage.review.constant.TaskStatus;
 import com.hhwy.sp.buildSchemeManage.review.domain.*;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.*;
@@ -10,6 +12,7 @@ import com.hhwy.sp.buildSchemeManage.review.mapper.*;
 import com.hhwy.sp.buildSchemeManage.review.service.ISgjsBuildSchemeReviewService;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
+import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
@@ -50,6 +53,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     @Autowired
     private ISgjsBuildSchemeListService sgjsBuildSchemeListService;
 
+    @Autowired
+    private PmServiceApi pmServiceApi;
+
+    @Autowired
+    private ISysSyncInfoService4Sp sysSyncInfoService4Sp;
+
 
     public SgjsBuildSchemeReview getSgjsBuildSchemeReview(SgjsBuildSchemeReview sgjsBuildSchemeReview) {
         return sgjsBuildSchemeReviewMapper.getSgjsBuildSchemeReview(sgjsBuildSchemeReview);
@@ -65,6 +74,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         sgjsBuildSchemeReview.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
         sgjsBuildSchemeReview.setCreateUserName(SecurityUtils.getUserName());
         sgjsBuildSchemeReview.setCreateTime(DateUtils.getNowDate());
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        sgjsBuildSchemeReview.setProjectName(projectDto.getProjectName());
+        sgjsBuildSchemeReview.setProjectId(projectDto.getProjectId());
+        sgjsBuildSchemeReview.setRegionId(projectDto.getRegionId());
+        sgjsBuildSchemeReview.setRegionName(projectDto.getRegionName());
+        sgjsBuildSchemeReview.setProjectCode(projectDto.getProjectCode());
         return sgjsBuildSchemeReviewMapper.insertSgjsBuildSchemeReview(sgjsBuildSchemeReview);
     }
 
@@ -418,6 +433,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 this.saveStaffList(id,flowNodeMark,staffList);
             }
         }
+
+        String taskStatus = review.getTaskStatus();
+        if("1".equals(taskStatus) || "4".equals(taskStatus)){
+            review.setProcessStatus("no");
+            sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
+        }
         return review.getId();
     }
 
@@ -748,12 +769,18 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     @Override
     public void submitBuildSchemeReviewProcess(Long id) {
         sgjsBuildSchemeReviewMapper.updateTaskStatus(id, TaskStatus.IN_PROGRESS.getCode());
+        SgjsBuildSchemeReview review = sgjsBuildSchemeReviewMapper.getById(id);
+        review.setProcessStatus("submit");
+        sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
     }
 
     @Override
     public void updateBuildSchemeReviewProcess(Long id) {
         sgjsBuildSchemeReviewMapper.updateTaskStatus(id, TaskStatus.COMPLETED.getCode());
         sgjsBuildSchemeReviewMapper.updateApprovalTime(id);
+        SgjsBuildSchemeReview review = sgjsBuildSchemeReviewMapper.getById(id);
+        review.setProcessStatus("end");
+        sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
     }
 
     @Override

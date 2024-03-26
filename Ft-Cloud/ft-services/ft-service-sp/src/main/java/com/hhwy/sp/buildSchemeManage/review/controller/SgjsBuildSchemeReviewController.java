@@ -118,8 +118,8 @@ public class SgjsBuildSchemeReviewController extends BaseController {
      */
     @GetMapping("/sync")
     public AjaxResult sync() {
-        sgjsBuildSchemeReviewService.sync();
-        return AjaxResult.success();
+        String remind = sgjsBuildSchemeReviewService.sync();
+        return AjaxResult.success(remind);
     }
 
     /**
