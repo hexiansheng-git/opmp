@@ -19,7 +19,7 @@ import java.util.Date;
 public class SgjsBuildSchemeList extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    private Integer ptVar6;
+    private Integer serialNum;
     private String startTime;
     private String endTime;
     private Long[] ids;

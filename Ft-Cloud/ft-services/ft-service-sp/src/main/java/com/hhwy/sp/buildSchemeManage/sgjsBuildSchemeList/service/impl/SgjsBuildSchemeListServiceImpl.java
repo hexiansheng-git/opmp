@@ -127,10 +127,11 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         Set<String> collect = sgjsBuildSchemeListList.stream().map(SgjsBuildSchemeList::getSchemeNum).collect(Collectors.toSet());
         if (CollUtil.isNotEmpty(originList)) {
             originList.stream().filter(p -> StrUtil.isNotBlank(p.getSchemeNum())).forEach(p -> {
-                Integer num = Integer.valueOf(p.getSchemeNum().split("\\+")[1]);
-                p.setPtVar6(num);
+                String schemeNum = p.getSchemeNum();
+                Integer num = Integer.valueOf(schemeNum.substring(schemeNum.length() - 5));
+                p.setSerialNum(num);
             });
-            serilizeNum = originList.stream().max(Comparator.comparing(SgjsBuildSchemeList::getPtVar6)).get().getPtVar6();
+            serilizeNum = originList.stream().max(Comparator.comparing(SgjsBuildSchemeList::getSerialNum)).get().getSerialNum();
             List<SgjsBuildSchemeList> collect1 = originList.stream().filter(p -> !collect.contains(p.getSchemeNum())).collect(Collectors.toList());
             collect1.forEach(p -> p.setPtVar3("1"));
             sgjsBuildSchemeListList.addAll(collect1);
@@ -153,8 +154,10 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         String tenantKey = SecurityUtils.getTenantKey();
         serialNum += 1;
         if (serialNum < 10) {
-            return tenantKey + "00" + serialNum;
+            return tenantKey + "000" + serialNum;
         } else if (serialNum < 100) {
+            return tenantKey + "00" + serialNum;
+        } else if (serialNum < 1000) {
             return tenantKey + "0" + serialNum;
         } else {
             return tenantKey + serialNum;
