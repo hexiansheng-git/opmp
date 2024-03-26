@@ -237,10 +237,10 @@ public class SgjsBuildSchemeReview extends CommonBaseEntity {
     @JsonProperty
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：是否是被驳回的数据  是：“YES”  否：”NO“
      */
     @JsonProperty
-    private String ptVar1;
+    private String dismissed;
     /**
      * 字段描述：预留字段2
      */

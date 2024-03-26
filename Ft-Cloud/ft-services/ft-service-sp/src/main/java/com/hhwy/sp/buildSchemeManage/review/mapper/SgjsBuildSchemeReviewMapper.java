@@ -40,4 +40,6 @@ public interface SgjsBuildSchemeReviewMapper {
     void updateTaskStatus(@Param("id") Long id,@Param("taskStatus") String taskStatus);
 
     void updateApprovalTime(@Param("id") Long id);
+
+    void dismissedSchemeReview(@Param("id") Long id);
 }

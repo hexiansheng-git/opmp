@@ -668,6 +668,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         this.recordData(reviewId);
         //删除上一流程所有数据
         this.deleteAllDataByReviewId(reviewId);
+        //驳回数据
+        sgjsBuildSchemeReviewMapper.dismissedSchemeReview(reviewId);
     }
 
     private void recordData(Long reviewId){
@@ -736,6 +738,11 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         Set<String> schemeNumSet = reviewList.stream().map(SgjsBuildSchemeReview::getSchemeNum).collect(Collectors.toSet());
         List<SgjsBuildSchemeList> resultList = lastValidSchemeListList.stream().filter(sgjsBuildSchemeList -> !schemeNumSet.contains(sgjsBuildSchemeList.getSchemeNum())).collect(Collectors.toList());
         return resultList;
+    }
+
+    @Override
+    public SgjsBuildSchemeReviewOpinionRecord getSchemeReviewRecord(Long reviewId) {
+        return this.getMaxReviewOpinionRecord(reviewId);
     }
 
     @Override

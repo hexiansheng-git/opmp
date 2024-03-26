@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
+import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReviewOpinionRecord;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewDetailQueryVo;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewQueryVo;
 import com.hhwy.sp.buildSchemeManage.review.service.ISgjsBuildSchemeReviewService;
@@ -139,6 +140,17 @@ public class SgjsBuildSchemeReviewController extends BaseController {
     public AjaxResult getSchemeList() {
         List<SgjsBuildSchemeList> schemeListList = sgjsBuildSchemeReviewService.getSchemeList();
         return AjaxResult.success(schemeListList);
+    }
+
+    /**
+     * 获取方案评审记录
+     * @param reviewId
+     * @return
+     */
+    @GetMapping("/getSchemeReviewRecord")
+    public AjaxResult getSchemeReviewRecord(Long reviewId){
+        SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = sgjsBuildSchemeReviewService.getSchemeReviewRecord(reviewId);
+        return AjaxResult.success(reviewOpinionRecord);
     }
 
     @GetMapping("/submit")

@@ -1,6 +1,7 @@
 package com.hhwy.sp.buildSchemeManage.review.service;
 
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
+import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReviewOpinionRecord;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewDetailQueryVo;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewQueryVo;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
@@ -59,4 +60,6 @@ public interface ISgjsBuildSchemeReviewService {
     void updateBuildSchemeReviewProcess(Long id);
 
     void approvedAfterModification(Long id);
+
+    SgjsBuildSchemeReviewOpinionRecord getSchemeReviewRecord(Long reviewId);
 }
