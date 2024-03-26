@@ -27,7 +27,7 @@ public class SgjsBuildSchemeReview extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
 
-    /*流程标识   submit：发起   end：结束   no：不是流程*/
+    /*流程标识   submit：发起   end：结束   no：不是流程   turnDown： 驳回，清数据*/
     private String processStatus;
 
     /*  add:新增     edit：编辑保存    dispose：处理保存*/

@@ -691,6 +691,10 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         this.deleteAllDataByReviewId(reviewId);
         //驳回数据
         sgjsBuildSchemeReviewMapper.dismissedSchemeReview(reviewId);
+
+        SgjsBuildSchemeReview review = sgjsBuildSchemeReviewMapper.getById(reviewId);
+        review.setProcessStatus("turnDown");
+        sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
     }
 
     private void recordData(Long reviewId){
