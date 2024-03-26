@@ -3,6 +3,7 @@ package com.hhwy.sp.techData.sgjsTechnicalDataCatalog.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import java.util.Locale;
 
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.nacos.common.utils.CollectionUtils;
@@ -98,21 +99,25 @@ public class SgjsTechnicalDataCatalogController extends BaseController {
         if(CollectionUtils.isNotEmpty(delIdList)) {
             i += sgjsTechnicalDataCatalogService.deleteSgjsTechnicalDataCatalogByPks(delIdList);
         }
-        doSendGm();
+        doSendGm(delIdList);
         return AjaxResult.success(i);
     }
 
     //数据推送总部版
-    public void doSendGm(){
+    public void doSendGm(List<Long> delIdList){
+        SgjsTechnicalDataCatalog4Update sendData = new SgjsTechnicalDataCatalog4Update();
+        sendData.setProjectCode(getProjectDto().getProjectCode());
+        //查询待推送数据
         SgjsTechnicalDataCatalog sgjsTechnicalDataCatalog = new SgjsTechnicalDataCatalog();
         List<SgjsTechnicalDataCatalog> sgjsTechnicalDataList = sgjsTechnicalDataCatalogService.getList(sgjsTechnicalDataCatalog);
         if (CollUtil.isEmpty(sgjsTechnicalDataList)) {
             //集合为空，推送一个项目编号
-            Long projectId = getProjectDto().getProjectId();
-            sgjsTechnicalDataCatalog.setProjectId(projectId);
-            sgjsTechnicalDataList.add(sgjsTechnicalDataCatalog);
+            rocketMQTemplate.convertAndSend("sgjs_technical_data_catalog:tenantSuccess", sendData);
+            return;
         }
-        rocketMQTemplate.convertAndSend("sgjs_technical_data_catalog:tenantSuccess", sgjsTechnicalDataList);
+        sendData.setTreeList(sgjsTechnicalDataList);
+        sendData.setDelIdList(delIdList);
+        rocketMQTemplate.convertAndSend("sgjs_technical_data_catalog:tenantSuccess", sendData);
     }
 
     @PreAuthorize(hasPermi = "sgjsTechnicalDataCatalog:remove")

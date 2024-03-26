@@ -128,7 +128,7 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         if (CollUtil.isNotEmpty(originList)) {
             originList.stream().filter(p -> StrUtil.isNotBlank(p.getSchemeNum())).forEach(p -> {
                 String schemeNum = p.getSchemeNum();
-                Integer num = Integer.valueOf(schemeNum.substring(schemeNum.length() - 5));
+                Integer num = Integer.valueOf(schemeNum.substring(schemeNum.length() - 4));
                 p.setSerialNum(num);
             });
             serilizeNum = originList.stream().max(Comparator.comparing(SgjsBuildSchemeList::getSerialNum)).get().getSerialNum();

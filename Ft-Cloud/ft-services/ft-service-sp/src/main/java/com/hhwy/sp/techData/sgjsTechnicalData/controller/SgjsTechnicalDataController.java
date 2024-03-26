@@ -106,21 +106,24 @@ public class SgjsTechnicalDataController extends BaseController {
         if(CollectionUtils.isNotEmpty(delIdList)) {
             sgjsTechnicalDataService.deleteSgjsTechnicalDataByPks(delIdList);
         }
-        doSendGm();
+        doSendGm(delIdList);
         return AjaxResult.success(i);
     }
 
     //数据推送总部版
-    public void doSendGm(){
-        SgjsTechnicalData sgjsTechnicalData = new SgjsTechnicalData();
-        List<SgjsTechnicalData> sgjsTechnicalDataList = sgjsTechnicalDataService.getList(sgjsTechnicalData);
-        if (CollUtil.isEmpty(sgjsTechnicalDataList)) {
+    public void doSendGm(List<Long> delIdList){
+        SgjsTechnicalData4Update sendData = new SgjsTechnicalData4Update();
+        sendData.setProjectCode(getProjectDto().getProjectCode());
+        //查询待推送数据
+        List<SgjsTechnicalData> sgjsTechnicalData = sgjsTechnicalDataService.getList(new SgjsTechnicalData());
+        if (CollUtil.isEmpty(sgjsTechnicalData)) {
             //集合为空，推送一个项目编号
-            Long projectId = getProjectDto().getProjectId();
-            sgjsTechnicalData.setProjectId(projectId);
-            sgjsTechnicalDataList.add(sgjsTechnicalData);
+            rocketMQTemplate.convertAndSend("sgjs_technical_data:tenantSuccess", sendData);
+            return;
         }
-        rocketMQTemplate.convertAndSend("sgjs_technical_data:tenantSuccess", sgjsTechnicalDataList);
+        sendData.setTreeList(sgjsTechnicalData);
+        sendData.setDelIdList(delIdList);
+        rocketMQTemplate.convertAndSend("sgjs_technical_data:tenantSuccess", sendData);
     }
 
     @PreAuthorize(hasPermi = "sgjsTechnicalData:remove")

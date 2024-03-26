@@ -11,4 +11,6 @@ public class SgjsTechnicalDataCatalog4Update {
 
     private List<Long> delIdList;
 
+    private String projectCode;
+
 }
