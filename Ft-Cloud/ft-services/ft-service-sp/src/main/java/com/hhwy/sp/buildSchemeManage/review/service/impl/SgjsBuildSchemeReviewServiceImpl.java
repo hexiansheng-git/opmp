@@ -442,8 +442,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             reviewOpinion.setUpdateUser(SecurityUtils.getUserName());
             reviewOpinion.setUpdateTime(DateUtils.getNowDate());
             reviewOpinion.setScore(reviewOpinionVo.getScore());
-//            reviewOpinion.setRegionChiefOpinion(reviewOpinionVo.getRegionChiefOpinion());
-//            reviewOpinion.setRegionChiefDetailOpinion(reviewOpinionVo.getRegionChiefDetailOpinion());
+            reviewOpinion.setRegionChiefOpinion(reviewOpinionVo.getRegionChiefOpinion());
+            reviewOpinion.setRegionChiefDetailOpinion(reviewOpinionVo.getRegionChiefDetailOpinion());
             reviewOpinion.setOverseasChiefOpinion(reviewOpinionVo.getOverseasChiefOpinion());
             reviewOpinion.setOverseasChiefDetailOpinion(reviewOpinionVo.getOverseasChiefDetailOpinion());
             sgjsBuildSchemeReviewOpinionMapper.updateSgjsBuildSchemeReviewOpinion(reviewOpinion);
@@ -453,6 +453,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             reviewOpinion.setReviewId(reviewId);
             reviewOpinion.setRegionChiefOpinion(reviewOpinionVo.getRegionChiefOpinion());
             reviewOpinion.setRegionChiefDetailOpinion(reviewOpinionVo.getRegionChiefDetailOpinion());
+            reviewOpinion.setOverseasChiefOpinion(reviewOpinionVo.getOverseasChiefOpinion());
+            reviewOpinion.setOverseasChiefDetailOpinion(reviewOpinionVo.getOverseasChiefDetailOpinion());
             reviewOpinion.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             reviewOpinion.setCreateUserName(SecurityUtils.getUserName());
             reviewOpinion.setCreateTime(DateUtils.getNowDate());
