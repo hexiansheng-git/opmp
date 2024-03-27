@@ -5,6 +5,8 @@ import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.KcsjPlanMonthlyReport;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.vo.PlanMonthlyReportQueryVo;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +41,9 @@ public class KcsjPlanMonthlyReportServiceImpl implements IKcsjPlanMonthlyReportS
 
     @Autowired
     private ISysSyncInfoService4Sd sysSyncInfoService4Sd;
+
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
 
     public KcsjPlanMonthlyReport getKcsjPlanMonthlyReport(KcsjPlanMonthlyReport kcsjPlanMonthlyReport) {
@@ -85,6 +90,10 @@ public class KcsjPlanMonthlyReportServiceImpl implements IKcsjPlanMonthlyReportS
             kcsjPlanMonthlyReport.setUpdateTime(DateUtils.getNowDate());
         }
 
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        for (KcsjPlanMonthlyReport report : kcsjPlanMonthlyReportList) {
+            report.setPtVar5(projectDto.getProjectCode());
+        }
         sysSyncInfoService4Sd.pushPlanMonthlyReport(kcsjPlanMonthlyReportList);
 
         return kcsjPlanMonthlyReportMapper.updateKcsjPlanMonthlyReportList(kcsjPlanMonthlyReportList);
@@ -113,6 +122,7 @@ public class KcsjPlanMonthlyReportServiceImpl implements IKcsjPlanMonthlyReportS
         List<SysTenant> tenantList = systemServiceApi.tenantList();
 
         try {
+            List<KcsjPlanMonthlyReport> reportList = new ArrayList<>();
             for (SysTenant tenant : tenantList) {
                 //切换租户
                 String tenantKey = tenant.getTenantKey();
@@ -129,9 +139,10 @@ public class KcsjPlanMonthlyReportServiceImpl implements IKcsjPlanMonthlyReportS
                 report.setCreateUserName("定时生成");
                 report.setCreateTime(nowDate);
                 kcsjPlanMonthlyReportMapper.insertKcsjPlanMonthlyReport(report);
-
-                sysSyncInfoService4Sd.pushPlanMonthlyReport(Collections.singletonList(report));
+                report.setPtVar5(tenantKey);
+                reportList.add(report);
             }
+            sysSyncInfoService4Sd.pushPlanMonthlyReport(reportList);
         }catch (Exception e){
             throw new CustomException(e.getMessage());
         }finally {
