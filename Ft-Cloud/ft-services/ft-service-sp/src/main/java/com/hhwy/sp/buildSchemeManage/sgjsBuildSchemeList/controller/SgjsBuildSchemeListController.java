@@ -1,5 +1,6 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.excel.EasyExcel;
 import com.hhwy.common.core.utils.DateUtils;
@@ -8,10 +9,12 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeRiskList;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.EasyExcelListener;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,11 +38,19 @@ public class SgjsBuildSchemeListController extends BaseController {
     @Autowired
     private ISgjsBuildSchemeListService sgjsBuildSchemeListService;
 
-    //选择原有方案
+    //选择原有方案，（最新有效版本）
     @PreAuthorize(hasPermi = "sgjsBuildSchemeList:list")
     @GetMapping("/getLastValidScheme")
     public AjaxResult getLastValidScheme(@Validated(ValidationGroups.Get.class) SgjsBuildSchemeList sgjsBuildSchemeListParam) {
         List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getLastValidScheme(sgjsBuildSchemeListParam);
+        return AjaxResult.success(sgjsBuildSchemeListList);
+    }
+
+    //查看本次变更的方案
+    @PreAuthorize(hasPermi = "sgjsBuildSchemeList:list")
+    @GetMapping("/getCurrentChangeScheme")
+    public AjaxResult getCurrentChangeScheme(@Validated(ValidationGroups.Get.class) SgjsBuildSchemeList sgjsBuildSchemeListParam) {
+        List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getCurrentChangeScheme(sgjsBuildSchemeListParam);
         return AjaxResult.success(sgjsBuildSchemeListList);
     }
 
@@ -105,12 +116,22 @@ public class SgjsBuildSchemeListController extends BaseController {
         return toAjax(sgjsBuildSchemeListService.deleteSgjsBuildSchemeListByPks(sgjsBuildSchemeListPkList));
     }
 
-    //导出
+    //方案清单导出
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsBuildSchemeList sgjsBuildSchemeListParam) throws IOException {
-        List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
+        List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getRiskList(sgjsBuildSchemeListParam);
         ExcelUtils<SgjsBuildSchemeList> util = new ExcelUtils<>(SgjsBuildSchemeList.class);
         util.exportExcel(response, sgjsBuildSchemeListList, DateUtils.getDate());
+    }
+
+    //危大方案清单导出
+    @GetMapping("/exportRisk")
+    public void exportRisk(HttpServletResponse response, SgjsBuildSchemeList sgjsBuildSchemeListParam) throws IOException {
+        List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getRiskList(sgjsBuildSchemeListParam);
+        Assert.isTrue(CollUtil.isNotEmpty(sgjsBuildSchemeListList), "无数据可以导出");
+        List<SgjsBuildSchemeRiskList> sgjsBuildSchemeRiskLists = BeanUtil.copyToList(sgjsBuildSchemeListList, SgjsBuildSchemeRiskList.class);
+        ExcelUtils<SgjsBuildSchemeRiskList> util = new ExcelUtils<>(SgjsBuildSchemeRiskList.class);
+        util.exportExcel(response, sgjsBuildSchemeRiskLists, DateUtils.getDate());
     }
 
     //导入

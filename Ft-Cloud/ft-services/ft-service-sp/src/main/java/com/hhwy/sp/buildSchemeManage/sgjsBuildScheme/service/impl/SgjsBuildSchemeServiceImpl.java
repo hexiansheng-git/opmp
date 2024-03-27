@@ -145,13 +145,19 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     //调整
     @Override
     public SgjsBuildScheme adjust(SgjsBuildScheme sgjsBuildSchemeParam) {
-        //获取流程已经结束的最高版本数据
+        //获取流最高版本数据
         SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
-        sgjsBuildScheme.setTaskStatus("5");
         SgjsBuildScheme result = sgjsBuildSchemeMapper.getMaxVersionData(sgjsBuildScheme);
-        if (result == null) return new SgjsBuildScheme();
-        //基于上一版本生成一条新的数据
-        SgjsBuildScheme newDataResult = this.createNewData(result);
+        SgjsBuildScheme newDataResult = new SgjsBuildScheme();
+        if (result == null) return newDataResult;
+        String taskStatus = result.getTaskStatus();
+        if (StrUtil.isNotBlank(taskStatus) && taskStatus.equals("5")){
+            //最高版本审批通过。基于上一版本生成一条新的数据
+            newDataResult = this.createNewData(result);
+        }else {
+            //最高版本未发起审批。返回当前版本
+            newDataResult = result;
+        }
         //历史记录按钮显隐，逻辑：所有数据中，只要有一条已审批完成即显示，否则不显示
         List<SgjsBuildScheme> sgjsBuildSchemeList = sgjsBuildSchemeMapper.getSgjsBuildSchemeList(new SgjsBuildScheme());
         List<SgjsBuildScheme> collect = sgjsBuildSchemeList.stream()

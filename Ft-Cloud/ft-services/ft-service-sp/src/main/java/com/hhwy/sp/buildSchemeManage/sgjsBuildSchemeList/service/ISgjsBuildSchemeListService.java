@@ -54,4 +54,6 @@ public interface ISgjsBuildSchemeListService {
     List<SgjsBuildSchemeEvolve> getListByEvolveQueryVo(BuildSchemeEvolveQueryVo queryVo);
 
     List<SgjsBuildSchemeEvolve> getEvolveListByIds(List<Long> ids);
+
+    List<SgjsBuildSchemeList> getCurrentChangeScheme(SgjsBuildSchemeList sgjsBuildSchemeListParam);
 }

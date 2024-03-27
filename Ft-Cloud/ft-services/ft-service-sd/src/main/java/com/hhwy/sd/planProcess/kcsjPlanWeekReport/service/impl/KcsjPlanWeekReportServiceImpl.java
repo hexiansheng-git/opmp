@@ -2,6 +2,8 @@ package com.hhwy.sd.planProcess.kcsjPlanWeekReport.service.impl;
 
 import java.util.*;
 
+import cn.hutool.core.collection.CollUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
@@ -14,6 +16,7 @@ import com.hhwy.sd.organManage.util.StatisticsUtils;
 import com.hhwy.sd.planProcess.kcsjPlanProcess.domain.KcsjPlanProcess;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.exception.CustomBusinessException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
@@ -30,6 +33,7 @@ import com.hhwy.utils.idworker.IdWorker;
  * @remark
  */
 @Service
+@Slf4j
 public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService {
 
     @Autowired
@@ -92,7 +96,7 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
             kcsjPlanWeekReport.setUpdateTime(DateUtils.getNowDate());
         }
         int i = kcsjPlanWeekReportMapper.updateKcsjPlanWeekReportList(kcsjPlanWeekReportList);
-        doSendGm();
+        doSendGm(SecurityUtils.getTenantKey());
         return i;
     }
 
@@ -126,6 +130,8 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
                 DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
                 try {
                     produceDataByPeriod(DateUtils.getNowDate());
+                    //推送总部
+                    doSendGm(tenantKey);
                 }catch (Exception e){
                     e.printStackTrace();
                     throw new CustomBusinessException(e.getMessage());
@@ -135,7 +141,7 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
                 }
             }
         }
-        doSendGm();
+
         return i;
 
     }
@@ -155,15 +161,14 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
     }
 
     //数据推送总部版
-    public void doSendGm(){
-        ProjectDto projectDto = pmServiceApi.getProjectDto();
-        String projectCode = projectDto.getProjectCode();
+    public void doSendGm(String tenantKey){
         KcsjPlanWeekReport planWeekReport = new KcsjPlanWeekReport();
         List<KcsjPlanWeekReport> kcsjPlanWeekReportList = kcsjPlanWeekReportMapper.getKcsjPlanWeekReportList(planWeekReport);
+        if (CollUtil.isEmpty(kcsjPlanWeekReportList)) return;
         kcsjPlanWeekReportList.forEach(p ->{
-            p.setPtVar5(projectCode);
-            p.setProjectId(projectDto.getProjectId());
+            p.setPtVar5(tenantKey);
         });
+        log.info("推送周报数据: {}", JSONObject.toJSONString(kcsjPlanWeekReportList));
         rocketMQTemplate.convertAndSend("kcsj_plan_week_report:tenantSuccess", kcsjPlanWeekReportList);
     }
 }

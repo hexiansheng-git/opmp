@@ -92,6 +92,19 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         return sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
     }
 
+    //查看本次变更的方案
+    @Override
+    public List<SgjsBuildSchemeList> getCurrentChangeScheme(SgjsBuildSchemeList sgjsBuildSchemeListParam) {
+        SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
+        SgjsBuildScheme sgjsBuildScheme1 = sgjsBuildSchemeService.getSgjsBuildScheme(sgjsBuildScheme);
+        if (null == sgjsBuildScheme1) return new ArrayList<>();
+        if(sgjsBuildSchemeListParam == null){
+            sgjsBuildSchemeListParam = new SgjsBuildSchemeList();
+        }
+        sgjsBuildSchemeListParam.setForeignId(sgjsBuildScheme1.getId());
+        return sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
+    }
+
     //保存
     @Transactional
     public void insertSgjsBuildSchemeList(List<SgjsBuildSchemeList> sgjsBuildSchemeListList, Long foreignId) {
