@@ -306,6 +306,15 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             }
 
         }
+        //管理编号+实际进场日期 去重
+        if(!CollectionUtils.isEmpty(list)){
+            // 列表对象中，多个字段校验，去重后生成新的列表
+            list = list.stream().collect(
+                    Collectors.collectingAndThen(Collectors.toCollection(
+                            () -> new TreeSet<>(Comparator.comparing(
+                                    o -> o.getManageCode()+ o.getEntryDate())
+                            )), ArrayList::new));
+        }
         return list;
     }
 
