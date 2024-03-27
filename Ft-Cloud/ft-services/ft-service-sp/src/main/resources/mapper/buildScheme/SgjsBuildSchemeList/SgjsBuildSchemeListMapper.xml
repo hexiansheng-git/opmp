@@ -654,6 +654,7 @@
             sbsl.scheme_num schemeNum,
             sbsl.scheme_level schemeLevel,
             sbsl.scheme_type schemeType,
+            sbsl.change_type changeType,
             sbsl.relation_wbs_name subdivisionProject,
             sbsl.plan_implement_time planImplementTime,
             sbsl.plan_complation_time completionTime,
