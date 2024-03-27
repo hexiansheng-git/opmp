@@ -391,11 +391,11 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             //编辑保存
             this.updateSgjsBuildSchemeReview(review);
         }
-
+        String flowNodeMark = review.getFlowNodeMark();
         if("dispose".equals(saveType)){
             //处理保存
             Long id = review.getId();
-            String flowNodeMark = review.getFlowNodeMark();
+
             String schemeLevel = review.getSchemeLevel();
             if("2".equals(schemeLevel) || "3".equals(schemeLevel)){
                 //二三级方案
@@ -436,7 +436,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         }
 
         String taskStatus = review.getTaskStatus();
-        if("1".equals(taskStatus) || "4".equals(taskStatus)){
+        if(("1".equals(taskStatus) || "4".equals(taskStatus)) && StringUtils.isNotBlank(flowNodeMark) && !ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark) && !ReviewFlowNodeMark.FlowNodeMark10.equals(flowNodeMark)){
             review.setProcessStatus("no");
             sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
         }
