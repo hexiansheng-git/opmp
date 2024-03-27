@@ -407,6 +407,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     //专家或部门审批节点
                     String userName = SecurityUtils.getUserName();
 //                    String userName = review.getUserName();
+                    review.setUserName(userName);
                     BuildSchemeStaffOpinionVo staffOpinionVo = review.getStaffOpinionVo();
                     this.saveStaffOpinionVo(id,flowNodeMark,userName,staffOpinionVo);
                 }else if(ReviewFlowNodeMark.FlowNodeMark7.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark8.equals(flowNodeMark)){
