@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -51,13 +52,14 @@ public class SgjsAchievementAwardServiceImpl implements ISgjsAchievementAwardSer
                 DictUtil.dictValueToLabel(awardList,"award_type",SgjsAchievementAward::getAwardType,SgjsAchievementAward::setAwardType);
                 StringBuilder allAward = new StringBuilder();
                 int i = 1;
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
                 for (SgjsAchievementAward award1 : awardList) {
                     allAward.append(i).append("、");
                     this.append(allAward,award1.getApplyAward());
                     this.append(allAward,award1.getAwardGrade());
                     this.append(allAward,award1.getAwardType());
                     this.append(allAward,award1.getGrantUnit());
-                    this.append(allAward,award1.getAwardTime());
+                    this.append(allAward,award1.getAwardTime() == null?null:sdf.format(award1.getAwardTime()));
                     allAward.append("\n");
                     i++;
                 }
