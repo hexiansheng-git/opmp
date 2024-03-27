@@ -3,7 +3,10 @@ package com.hhwy.system.service.impl;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.system.api.domain.SysDept;
+import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.system.core.mapper.SysDeptMapper;
+import com.hhwy.system.core.mapper.SysUserMapper;
+import com.hhwy.system.core.service.ISysUserService;
 import com.hhwy.system.utils.TreeObject;
 import com.hhwy.domain.base.system.SysTreeUtil;
 import com.hhwy.system.mapper.DeptMapper;
@@ -14,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 @Service
@@ -32,6 +37,8 @@ public class DeptServiceImpl implements IDeptService {
     @Autowired
     private SysDeptMapper sysDeptMapper;
 
+    @Autowired
+    private ISysUserService sysUserService;
     @Override
     public List<SysDept> list(SysDept dept) {
         
@@ -94,6 +101,27 @@ public class DeptServiceImpl implements IDeptService {
         ArrayList<String> list = new ArrayList<>();
         list.add("master");
         return sysDeptMapper.selectChildrenDeptList(dept, list);
+    }
+
+    @Override
+    public String getAllDepNames() {
+         String userName = SecurityUtils.getSysUser().getUserName();
+        //1、根据用户账号查询master中 账号的信息
+        SysUser user = sysUserService.selectUserByUserName("master", userName);
+        //2、根据用户查询部门信息
+        SysDept dept = user.getDept();
+        String ancestors = dept.getAncestors();
+        String deptName = dept.getDeptName();
+        Long deptId = dept.getDeptId();
+        //3、根据部门信息查询全部上级部门信息
+        List<SysDept> deptList = this.selectAllDept(deptId, ancestors);
+        //4、拼接数据
+        StringBuffer sb = new StringBuffer();
+        for(SysDept item:deptList){
+            sb.append(item.getDeptName()).append("-");
+        }
+        sb.append(deptName);
+        return sb.toString();
     }
 
 
