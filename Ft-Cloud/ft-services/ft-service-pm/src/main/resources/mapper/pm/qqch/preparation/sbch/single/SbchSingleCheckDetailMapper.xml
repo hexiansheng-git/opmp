@@ -74,7 +74,6 @@
             </if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
         </where>
-        order by `id` desc
     </select>
 
     <select id="validList" parameterType="com.hhwy.pm.qqch.preparation.sbch.single.domain.SbchSingleCheckDetail"

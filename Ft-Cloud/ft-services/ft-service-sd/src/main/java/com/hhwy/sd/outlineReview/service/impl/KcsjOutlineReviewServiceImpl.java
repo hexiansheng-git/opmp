@@ -284,8 +284,6 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
             String dataSourceNameByTenantKey = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
             DynamicDataSourceContextHolder.push(dataSourceNameByTenantKey);
             Thread.sleep(3000);
-            ProjectDto projectDto = getProjectDto();
-            String projectCode = projectDto.getProjectCode();
             //全量推送，（已发起审批的）
             KcsjOutlineReview kcsjOutlineReview = new KcsjOutlineReview();
             List<KcsjOutlineReview> kcsjOutlineReviewList = kcsjOutlineReviewMapper.getKcsjOutlineReviewList(kcsjOutlineReview);
@@ -295,7 +293,7 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
             List<KcsjOutlineReview> collect = kcsjOutlineReviewList.stream()
                     .filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
             if (CollUtil.isEmpty(collect)) return;
-            collect.forEach(p -> p.setPtVar5(projectCode));
+            collect.forEach(p -> p.setPtVar5(tenantKey));
             //专家数据
             SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();
             sgjsExpertLibrary.setBelongBusiness(BelongBusiness.BELONG_BUSINESS_1);
