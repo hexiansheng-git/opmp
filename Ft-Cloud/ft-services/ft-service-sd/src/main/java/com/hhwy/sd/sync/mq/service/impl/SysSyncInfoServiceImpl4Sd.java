@@ -65,18 +65,7 @@ public class SysSyncInfoServiceImpl4Sd implements ISysSyncInfoService4Sd {
     @Override
     public void pushPlanMonthlyReport(List<KcsjPlanMonthlyReport> list){
         try{
-            ProjectDto projectDto = pmServiceApi.getProjectDto();
-            List<JSONObject> finalList = new ArrayList<>();
-            for (KcsjPlanMonthlyReport temp : list) {
-                temp.setProjectName(projectDto.getProjectName());
-                temp.setProjectId(projectDto.getProjectId());
-                temp.setRegionId(projectDto.getRegionId());
-                temp.setRegionName(projectDto.getRegionName());
-                temp.setPtVar5(projectDto.getProjectCode());
-                JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(temp));
-                finalList.add(json);
-            }
-            rocketMQTemplate.convertAndSend("kcsj_plan_monthly_report:tenantSuccess", JSONObject.toJSONString(finalList));
+            rocketMQTemplate.convertAndSend("kcsj_plan_monthly_report:tenantSuccess", JSONObject.toJSONString(list));
         }catch(Exception e){
             e.printStackTrace();
             throw e;

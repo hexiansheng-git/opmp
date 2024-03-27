@@ -35,6 +35,7 @@ public class SgjsBuildSchemeReview extends CommonBaseEntity {
     /*流程节点标识*/
     private String flowNodeMark;
     /*用户名  测试用*/
+    @JsonProperty
     private String userName;
     /**
      * 字段描述：主键id

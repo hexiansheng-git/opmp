@@ -27,4 +27,6 @@ public interface IDeptService {
     List selectOneLevelDeptList(SysDept dept);
 
     List selectChildrenDeptList(SysDept dept);
+
+    String getAllDepNames();
 }

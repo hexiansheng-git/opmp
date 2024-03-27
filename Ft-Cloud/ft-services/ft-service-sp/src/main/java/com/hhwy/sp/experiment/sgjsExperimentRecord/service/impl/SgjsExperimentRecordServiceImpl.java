@@ -28,10 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -265,6 +262,7 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
         for (int i = 0; i < listMap.size(); i++) {
             String source=listMap.get(i).get("source")+"";
             String manageCode=listMap.get(i).get("manageCode")+"";
+            String recordId=listMap.get(i).get("recordId")+"";
             List<GetMaterialInfoVo> voList = map.get(manageCode + source);
             if(CollectionUtils.isEmpty(voList)){
                 continue;
@@ -289,11 +287,23 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
                     info.setAcceptDate(DateUtils.dateTime("yyyy-MM-dd",vo.getCheckDate()));
                 }
                 info.setSource(vo.getSource());
+                if(StringUtils.isNotEmpty(recordId)){
+                    info.setRecordId(Long.parseLong(recordId));
+                }
                 list.add(info);
             }
 
         }
-        return result;
+        //管理编号+实际进场日期 去重
+        if(!CollectionUtils.isEmpty(list)){
+            // 列表对象中，多个字段校验，去重后生成新的列表
+            list = list.stream().collect(
+                    Collectors.collectingAndThen(Collectors.toCollection(
+                            () -> new TreeSet<>(Comparator.comparing(
+                                    o -> o.getManageCode()+ o.getEntryDate())
+                            )), ArrayList::new));
+        }
+        return AjaxResult.success(list);
     }
 
     @Override

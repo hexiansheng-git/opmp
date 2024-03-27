@@ -86,4 +86,12 @@ public class DeptController {
     public AjaxResult getRegionInfo(@RequestBody(required = false) Map map){
         return AjaxResult.success("查询成功!", deptService.getRegionInfo());
     }
+    /**
+     * 获取当前登录人员所有部门信息
+     * @return
+     */
+    @GetMapping("/getAllDepNames")
+    public AjaxResult getAllDepNames(){
+        return AjaxResult.success("查询成功!", deptService.getAllDepNames());
+    }
 }

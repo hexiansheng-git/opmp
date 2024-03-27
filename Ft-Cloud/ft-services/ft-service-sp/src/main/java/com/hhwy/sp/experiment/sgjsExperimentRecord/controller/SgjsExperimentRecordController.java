@@ -114,10 +114,10 @@ public class SgjsExperimentRecordController extends BaseController{
     public AjaxResult syncWuShe(@RequestBody List<Map> map){
         //传参校验
         for (Map info:map) {
-            Object manageCode = info.get("manageCode");
+            Object materialCode = info.get("materialCode");
             Object source = info.get("source");
             if(null==source){
-                return AjaxResult.error("设备编码"+manageCode.toString()+"的来源不能为空!!!!");
+                return AjaxResult.error("设备编码"+materialCode.toString()+"的来源不能为空!!!!");
             }
         }
         AjaxResult ajaxResult = sgjsExperimentRecordService.syncWuShe(map);

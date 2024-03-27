@@ -183,6 +183,7 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                 kcsjEquipEntryRecordMapper.updateKcsjEquipEntryRecordList(updateList);
             }
         }
+        //数据同步总部
         doSendGm();
         return AjaxResult.success();
     }
@@ -470,6 +471,15 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                 rstList.add(recordInfo);
             }
 
+        }
+        //管理编号+实际进场日期 去重
+        if(!CollectionUtils.isEmpty(rstList)){
+            // 列表对象中，多个字段校验，去重后生成新的列表
+            rstList = rstList.stream().collect(
+                    Collectors.collectingAndThen(Collectors.toCollection(
+                            () -> new TreeSet<>(Comparator.comparing(
+                                    o -> o.getTeamNumber()+ o.getEntryDate())
+                            )), ArrayList::new));
         }
         return AjaxResult.success(rstList);
     }
