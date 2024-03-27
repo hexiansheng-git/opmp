@@ -59,6 +59,11 @@ public class SgjsBuildSchemeEvolve {
     @FtExcel(name = "方案类型")
     private String schemeType;
     /**
+     * 字段描述：变更类型 1推迟、2提前、3新增、4废止
+     */
+    @JsonProperty
+    private String changeType;
+    /**
      * 字段描述：分部分项工程（取关联wbs）
      */
     @JsonProperty
@@ -96,7 +101,7 @@ public class SgjsBuildSchemeEvolve {
      * 字段描述：提交审核时间颜色  "red"  "green"   “gray"
      */
     @JsonProperty
-    private String submitDateColor;
+    private String submitDateColor = "white";
     /**
      * 字段描述：方案审核通过时间
      */
@@ -104,10 +109,10 @@ public class SgjsBuildSchemeEvolve {
     @FtExcel(name = "方案审核通过时间", dateFormat = "yyyy年MM月dd日")
     private Date schemeApprovalTime;
     /**
-     * 字段描述：方案审核通过时间颜色  "red"  "green"  “gray"
+     * 字段描述：方案审核通过时间颜色  "red"  "green"  “gray"：废弃   white
      */
     @JsonProperty
-    private String schemeApprovalTimeColor;
+    private String schemeApprovalTimeColor = "white";
     /**
      * 字段描述：方案总得分
      */

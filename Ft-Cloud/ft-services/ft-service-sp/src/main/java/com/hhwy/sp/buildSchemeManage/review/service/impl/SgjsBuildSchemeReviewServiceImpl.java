@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.sp.buildSchemeManage.review.constant.ReviewFlowNodeMark;
 import com.hhwy.sp.buildSchemeManage.review.constant.TaskStatus;
 import com.hhwy.sp.buildSchemeManage.review.domain.*;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.*;
@@ -160,12 +161,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             //处理
             if("2".equals(schemeLevel) || "3".equals(schemeLevel)){
                 //二三级方案
-                if("1".equals(flowNodeMark) || "2".equals(flowNodeMark)){
+                if(ReviewFlowNodeMark.FlowNodeMark1.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark2.equals(flowNodeMark)){
                     //区域中心或海外事业部角色审批节点
                     List<SgjsBuildSchemeReviewStaff> staffList = sgjsBuildSchemeReviewStaffMapper.getListByReviewId(id, flowNodeMark);
                     List<SgjsBuildSchemeReviewStaff> staffListRes = this.assembleStaffList(staffList);
                     review.setReviewStaffList(staffListRes);
-                }else if("3".equals(flowNodeMark) || "4".equals(flowNodeMark) || "5".equals(flowNodeMark) || "6".equals(flowNodeMark)){
+                }else if(ReviewFlowNodeMark.FlowNodeMark3.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark4.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark5.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark6.equals(flowNodeMark)){
                     //专家或部门审批节点：根据当前登录人查询各自数据
                     String userName = SecurityUtils.getUserName();
 //                    String userName = detailQueryVo.getUserName();
@@ -187,7 +188,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     List<SgjsBuildSchemeStaffOpinion> staffOpinionList = sgjsBuildSchemeStaffOpinionMapper.getSgjsBuildSchemeStaffOpinionList(staffOpinionQuery);
                     staffOpinionVo.setStaffOpinionList(staffOpinionList);
                     review.setStaffOpinionVo(staffOpinionVo);
-                }else if("7".equals(flowNodeMark) || "8".equals(flowNodeMark)){
+                }else if(ReviewFlowNodeMark.FlowNodeMark7.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark8.equals(flowNodeMark)){
                     //区域总工审批节点  汇总 3 ，4节点数据    海外事业部总工审批节点  汇总 3 ，4 ，5 ，6节点数据
                     BuildSchemeReviewOpinionVo reviewOpinionVo = new BuildSchemeReviewOpinionVo();
                     SgjsBuildSchemeReviewOpinion reviewOpinionQuery = new SgjsBuildSchemeReviewOpinion();
@@ -210,7 +211,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     Double average = staffOpinionGatherVoList.stream().filter(o -> o.getScore() != null).collect(Collectors.averagingDouble(BuildSchemeStaffOpinionGatherVo::getScore));
                     reviewOpinionVo.setScore(average);
                     review.setReviewOpinionVo(reviewOpinionVo);
-                }else if("9".equals(flowNodeMark) || "10".equals(flowNodeMark)){
+                }else if(ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark10.equals(flowNodeMark)){
                     //海外事业部总工意见为修改后通过后的审批节点
                     SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = this.getMaxReviewOpinionRecord(id);
                     review.setReviewOpinionRecord(reviewOpinionRecord);
@@ -398,21 +399,21 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             String schemeLevel = review.getSchemeLevel();
             if("2".equals(schemeLevel) || "3".equals(schemeLevel)){
                 //二三级方案
-                if("1".equals(flowNodeMark) || "2".equals(flowNodeMark)){
+                if(ReviewFlowNodeMark.FlowNodeMark1.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark2.equals(flowNodeMark)){
                     //区域中心或海外事业部角色审批节点
                     List<SgjsBuildSchemeReviewStaff> staffList = review.getReviewStaffList();
                     this.saveStaffList(id,flowNodeMark,staffList);
-                }else if("3".equals(flowNodeMark) || "4".equals(flowNodeMark) || "5".equals(flowNodeMark) || "6".equals(flowNodeMark)){
+                }else if(ReviewFlowNodeMark.FlowNodeMark3.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark4.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark5.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark6.equals(flowNodeMark)){
                     //专家或部门审批节点
                     String userName = SecurityUtils.getUserName();
 //                    String userName = review.getUserName();
                     BuildSchemeStaffOpinionVo staffOpinionVo = review.getStaffOpinionVo();
                     this.saveStaffOpinionVo(id,flowNodeMark,userName,staffOpinionVo);
-                }else if("7".equals(flowNodeMark) || "8".equals(flowNodeMark)){
+                }else if(ReviewFlowNodeMark.FlowNodeMark7.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark8.equals(flowNodeMark)){
                     //区域总工审批节点 / 海外事业部总工审批节点
                     BuildSchemeReviewOpinionVo reviewOpinionVo = review.getReviewOpinionVo();
                     this.saveReviewOpinionVo(id,flowNodeMark,reviewOpinionVo);
-                }else if("9".equals(flowNodeMark) || "10".equals(flowNodeMark)){
+                }else if(ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark10.equals(flowNodeMark)){
                     //海外事业部总工意见为修改后通过后的审批节点：需要修改字段-修改结果
                     SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = review.getReviewOpinionRecord();
                     if(reviewOpinionRecord != null){
@@ -427,7 +428,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                         this.updateStaffOpinionRecordList(staffOpinionRecordList);
                     }
                 }
-            }else if("4".equals(schemeLevel) && "1".equals(flowNodeMark)){
+            }else if("4".equals(schemeLevel) && ReviewFlowNodeMark.FlowNodeMark1.equals(flowNodeMark)){
                 //四级方案区域中心审批节点
                 List<SgjsBuildSchemeReviewStaff> staffList = review.getReviewStaffList();
                 this.saveStaffList(id,flowNodeMark,staffList);
@@ -595,7 +596,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         Set<String> insertStaffIdSet = insertList.stream().map(SgjsBuildSchemeReviewStaff::getReviewStaffId).collect(Collectors.toSet());
         Set<String> existStaffSet = existStaffList.stream().map(SgjsBuildSchemeReviewStaff::getReviewStaffId).collect(Collectors.toSet());
         if(CollectionUtils.containsAny(insertStaffIdSet,existStaffSet)){
-            String name = "1".equals(flowNodeMark)?"海外事业部":"区域中心";
+            String name = ReviewFlowNodeMark.FlowNodeMark1.equals(flowNodeMark)?"海外事业部":"区域中心";
             String users = existStaffList.stream().map(SgjsBuildSchemeReviewStaff::getReviewStaffName).collect(Collectors.joining(","));
             throw new RuntimeException("当前页面评审人员与 " + name + " 节点评审人员不能相同！ " + name + "节点审批人员有 " + users);
         }

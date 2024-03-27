@@ -1,5 +1,6 @@
 package com.hhwy.sp.buildSchemeManage.review.service.impl;
 
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.sp.buildSchemeManage.review.constant.TaskStatus;
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeEvolve;
@@ -88,36 +89,40 @@ public class SgjsBuildSchemeEvolveImpl implements ISgjsBuildSchemeEvolveService 
      */
     private void setSchemeEvolve(List<SgjsBuildSchemeEvolve> evolveList){
         for (SgjsBuildSchemeEvolve evolve : evolveList) {
+            String changeType = evolve.getChangeType();
+            if("4".equals(changeType)){
+                //改数据是废弃数据
+                evolve.setSchemeApprovalTimeColor("gray");
+                evolve.setSubmitDateColor("gray");
+                evolve.setSchemeEvolve("废弃");
+                continue;
+            }
             Date planImplementTime = evolve.getPlanImplementTime();//计划实施时间
             if(planImplementTime != null){
                 Date schemeApprovalTime = evolve.getSchemeApprovalTime();//方案审核通过时间
-                if(schemeApprovalTime != null){
-                    int compare = schemeApprovalTime.compareTo(planImplementTime);
-                    if(compare > 0){
-                        evolve.setSchemeApprovalTimeColor("red");
-                    }else {
-                        evolve.setSchemeApprovalTimeColor("green");
-                    }
+                if(schemeApprovalTime == null){
+                    schemeApprovalTime = DateUtils.getNowDate();
                 }
-            }
-            if(StringUtils.isBlank(evolve.getSchemeApprovalTimeColor()) && evolve.getSchemeApprovalTime() != null){
-                evolve.setSchemeApprovalTimeColor("gray");
+                int compare = schemeApprovalTime.compareTo(planImplementTime);
+                if(compare > 0){
+                    evolve.setSchemeApprovalTimeColor("red");
+                }else {
+                    evolve.setSchemeApprovalTimeColor("green");
+                }
             }
 
             Date completionTime = evolve.getCompletionTime();//编制完成时间
             if(completionTime != null){
                 Date submitDate = evolve.getSubmitDate();//提交审核时间
-                if(submitDate != null){
-                    int compare = submitDate.compareTo(completionTime);
-                    if(compare > 0){
-                        evolve.setSubmitDateColor("red");
-                    }else {
-                        evolve.setSubmitDateColor("green");
-                    }
+                if(submitDate == null){
+                    submitDate = DateUtils.getNowDate();
                 }
-            }
-            if(StringUtils.isBlank(evolve.getSubmitDateColor()) && evolve.getSubmitDate() != null){
-                evolve.setSubmitDateColor("gray");
+                int compare = submitDate.compareTo(completionTime);
+                if(compare > 0){
+                    evolve.setSubmitDateColor("red");
+                }else {
+                    evolve.setSubmitDateColor("green");
+                }
             }
 
             //设置进展状态
