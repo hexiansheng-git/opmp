@@ -299,6 +299,7 @@ public class SbchImportInquiryServiceImpl implements ISbchImportInquiryService {
                         sbchImportInquiryCustoms.setInquiryId(vo.getId());
                         sbchImportInquiryCustoms.setCountryId(sbchImportInquiryCountry.getId());
                         sbchImportInquiryCustoms.setFileGroupId(fileGroupId);
+                        sbchImportInquiryCustoms.setCountryCode(sbchImportInquiryCountry.getCountryCode());
                     }
                     saveList.addAll(customsList);
                 }
