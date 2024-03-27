@@ -676,6 +676,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     }
 
     private void putSchemeListToReview(SgjsBuildSchemeList schemeList,SgjsBuildSchemeReview review){
+        review.setSchemeNum(schemeList.getSchemeNum());
         review.setSchemeName(schemeList.getSchemeName());
         review.setRelationWbsId(schemeList.getRelationWbsId());
         review.setRelationWbsName(schemeList.getRelationWbsName());
