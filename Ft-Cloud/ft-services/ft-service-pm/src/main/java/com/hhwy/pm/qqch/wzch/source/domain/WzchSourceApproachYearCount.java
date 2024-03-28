@@ -61,6 +61,8 @@ public class WzchSourceApproachYearCount extends BaseEntity {
 
     private BigDecimal version;
 
+    private BigDecimal yearNum;
+
     /** 删除标识：0有效1无效 */
     private String delFlag = "0";
 
