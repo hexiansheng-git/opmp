@@ -30,4 +30,6 @@ public interface ISgjsBuildSchemeService {
     SgjsBuildScheme detail(SgjsBuildScheme sgjsBuildSchemeParam);
 
     SgjsBuildScheme adjust(SgjsBuildScheme sgjsBuildSchemeParam);
+
+    void updateTaskStatus(Long id, String isPass);
 }

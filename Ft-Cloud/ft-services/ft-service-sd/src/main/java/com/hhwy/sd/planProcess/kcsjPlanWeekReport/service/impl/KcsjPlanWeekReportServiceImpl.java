@@ -61,11 +61,6 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
         kcsjPlanWeekReport.setId(IdWorker.createId());
 //        kcsjPlanWeekReport.setCreateUser(SecurityUtils.getUserName());
         kcsjPlanWeekReport.setCreateTime(DateUtils.getNowDate());
-        ProjectDto projectDto = pmServiceApi.getProjectDto();
-        kcsjPlanWeekReport.setProjectId(projectDto.getProjectId());
-        kcsjPlanWeekReport.setProjectName(projectDto.getProjectName());
-        kcsjPlanWeekReport.setRegionId(projectDto.getRegionId());
-        kcsjPlanWeekReport.setRegionName(projectDto.getRegionName());
         return kcsjPlanWeekReportMapper.insertKcsjPlanWeekReport(kcsjPlanWeekReport);
     }
 

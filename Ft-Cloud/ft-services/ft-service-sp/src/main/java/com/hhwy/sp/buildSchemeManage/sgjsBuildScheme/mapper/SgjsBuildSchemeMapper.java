@@ -30,4 +30,6 @@ public interface SgjsBuildSchemeMapper {
 
     SgjsBuildScheme getMaxVersionData(SgjsBuildScheme sgjsBuildScheme);
     SgjsBuildScheme getValidVersionData();
+
+    void updateNonValid(SgjsBuildScheme param);
 }

@@ -119,17 +119,6 @@ public class SgjsBuildSchemeController extends BaseController {
     */
     @RequestMapping("/listener")
     public void updateBuildScheme(@RequestParam("id") Long id, @RequestParam("isPass") String isPass){
-        SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
-        sgjsBuildScheme.setTaskStatus("5");
-        sgjsBuildScheme.setId(id);
-        sgjsBuildScheme.setPtVar3(isPass);
-        if (StrUtil.isBlank(isPass)){
-            //设置为无效
-            sgjsBuildScheme.setValid("0");
-        }else {
-            //0不通过 1通过
-            sgjsBuildScheme.setValid(isPass);
-        }
-        sgjsBuildSchemeService.updateSgjsBuildScheme(sgjsBuildScheme);
+        sgjsBuildSchemeService.updateTaskStatus(id, isPass);
     }
 }

@@ -411,6 +411,10 @@
         </foreach>
     </insert>
 
+    <update id="updateNonValid">
+        update sgjs_build_scheme set valid = '0' where valid = '1'
+    </update>
+
     <update id="updateSgjsBuildScheme">
         update sgjs_build_scheme
         <trim prefix="SET" suffixOverrides=",">

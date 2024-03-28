@@ -81,11 +81,9 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             param.setId(sgjsBuildScheme.getId());
             result = sgjsBuildSchemeMapper.getSgjsBuildScheme(param);
         }
-        //2获取有效版本数据
-        if (result == null) result = sgjsBuildSchemeMapper.getValidVersionData();
-        //3获取最高版本数据
+        //2获取最高版本数据
         if (result == null) result = sgjsBuildSchemeMapper.getMaxVersionData(new SgjsBuildScheme());
-        /*有效版本、最高版本、入参检索均未命中, 说明第一进入界面返回初始化数据*/
+        /*最高版本、入参检索均未命中, 说明第一进入界面返回初始化数据*/
         if (result == null) {
             //返回初始化数据
             return this.getInitializeData();
@@ -103,6 +101,11 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         FlowInfoSearchUtil.getFlowInfo(result, FlowEnum.SGJS_BUILD_SCHEME);
         /*返回项目领域类型标识，用于判断流程分支走向*/
         this.getBusinessAreas(result);
+        //历史记录按钮显隐，逻辑：所有数据中，只要有一条已审批完成即显示，否则不显示
+        List<SgjsBuildScheme> allList = sgjsBuildSchemeMapper.getSgjsBuildSchemeList(new SgjsBuildScheme());
+        List<SgjsBuildScheme> collect = allList.stream()
+                .filter(p -> StrUtil.isNotBlank(p.getTaskStatus()) && p.getTaskStatus().equals("5")).collect(Collectors.toList());
+        result.setPtVar2(CollUtil.isEmpty(collect) ? "0" : "4");
         return result;
     }
 
@@ -129,7 +132,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         String businessAreasName = (String) prjInfo.get("businessAreasAndProductsLabel");
         SgjsBuildScheme resultInit = new SgjsBuildScheme();
         resultInit.setVersion(BigDecimal.ONE);
-        resultInit.setVersionStr("V1.00");
+        resultInit.setVersionStr("V1.0");
         resultInit.setCountryName(countryName);
         resultInit.setCountryCode(countryCode);
         resultInit.setTaskStatus("0");
@@ -174,6 +177,10 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         result.setTaskStatus("0");
         result.setListSerialNum("0001");
         result.setId(null);
+        result.setPtVar3(null);
+        result.setPtVar2(null);
+        result.setValid("0");
+        result.setSubmisionDate(lastData.getSubmisionDate());
         result.setCountryCode(lastData.getCountryCode());
         result.setCountryName(lastData.getCountryName());
         result.setBusinessAreasAndProducts(lastData.getBusinessAreasAndProducts());
@@ -182,6 +189,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         result.setWinCertificate(lastData.getWinCertificate());
         result.setLeadEngineer(lastData.getLeadEngineer());
         result.setLeadEngineerName(lastData.getLeadEngineerName());
+        result.setLeadEngineerPhoneNum(lastData.getLeadEngineerPhoneNum());
         //附件组id更新
         String auditRecordFile = lastData.getAuditRecordFile();
         String projectSummaryFile = lastData.getProjectSummaryFile();
@@ -216,6 +224,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             //新增
             id = IdWorker.createId();
             sgjsBuildScheme.setId(id);
+            sgjsBuildScheme.setPtVar3(null);
             sgjsBuildScheme.setCreateUser(SecurityUtils.getUserName());
             sgjsBuildScheme.setCreateTime(DateUtils.getNowDate());
             sgjsBuildScheme.setProjectCode(SecurityUtils.getTenantKey());
@@ -346,4 +355,33 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         log.info("施工方案清单,推送数据：" + JSON.toJSONString(objects));
         rocketMQTemplate.convertAndSend("sgjs_build_scheme:tenantSuccess", objects);
     }
+
+    //流程监听，状态修改
+    @Override
+    @Transactional
+    public void updateTaskStatus(Long id, String isPass) {
+        SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
+        sgjsBuildScheme.setTaskStatus("5");
+        sgjsBuildScheme.setId(id);
+        sgjsBuildScheme.setPtVar3(isPass);
+        if (StrUtil.isBlank(isPass)){
+            //设置为无效
+            sgjsBuildScheme.setValid("0");
+            //修改当前记录状态
+            sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
+        }else {
+            //0不通过 1通过
+            sgjsBuildScheme.setValid(isPass);
+            if (isPass.equals("0")) {
+                //不通过 修改当前记录状态
+                sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
+            } else {
+                //通过 修改原有效数据为无效
+                sgjsBuildSchemeMapper.updateNonValid(new SgjsBuildScheme());
+                //修改当前记录状态
+                sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
+            }
+        }
+    }
+
 }

@@ -139,7 +139,7 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             });
             serilizeNum = originList.stream().max(Comparator.comparing(SgjsBuildSchemeList::getSerialNum)).get().getSerialNum();
             List<SgjsBuildSchemeList> collect1 = originList.stream().filter(p -> !collect.contains(p.getSchemeNum())).collect(Collectors.toList());
-            collect1.forEach(p -> p.setPtVar3("1"));
+            collect1.forEach(p -> p.setPtVar3("0"));
             sgjsBuildSchemeListList.addAll(collect1);
         }
         Integer serilize = serilizeNum;
