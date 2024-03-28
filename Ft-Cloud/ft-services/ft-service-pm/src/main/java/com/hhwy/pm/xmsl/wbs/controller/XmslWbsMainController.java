@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wk
@@ -168,5 +169,14 @@ public class XmslWbsMainController extends BaseController {
             logger.debug("更新WBS对应P6编号，耗时:{}毫秒",usemills);
         }
         return AjaxResult.success("");
+    }
+
+    @PostMapping("/repushP6")
+    public AjaxResult repushP6(@RequestBody Map map) {
+        if(!SecurityUtils.getSysUser().isAdmin())
+            return AjaxResult.error("ERROR");
+        Long mainId = ObjectUtils.toLong(map.get("mainId"));
+        xmslWbsMainService.repushP6(mainId);
+        return AjaxResult.success();
     }
 }
