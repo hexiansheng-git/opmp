@@ -12,6 +12,7 @@ import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeL
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeRiskList;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.EasyExcelListener;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -120,7 +121,7 @@ public class SgjsBuildSchemeListController extends BaseController {
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsBuildSchemeList sgjsBuildSchemeListParam) throws IOException {
         List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
-        ExcelUtils<SgjsBuildSchemeList> util = new ExcelUtils<>(SgjsBuildSchemeList.class);
+        FtExcelUtil<SgjsBuildSchemeList> util = new FtExcelUtil<>(SgjsBuildSchemeList.class);
         util.exportExcel(response, sgjsBuildSchemeListList, DateUtils.getDate());
     }
 

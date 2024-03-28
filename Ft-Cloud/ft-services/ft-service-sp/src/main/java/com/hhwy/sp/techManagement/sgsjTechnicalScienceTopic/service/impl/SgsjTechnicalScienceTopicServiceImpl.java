@@ -842,6 +842,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
                 if (CollUtil.isNotEmpty(collect3.get(p.getId()))) p.setAwardList(collect3.get(p.getId()));
                 if (CollUtil.isNotEmpty(collect4.get(p.getId()))) p.setListModify(collect4.get(p.getId()));
                 p.setPtVar5(projectCode);
+                p.setPtVar1(String.valueOf(p.getId()));
             });
             rocketMQTemplate.convertAndSend("sgjs_technical_science_topic:tenantSuccess", collect);
         } catch (Exception e) {

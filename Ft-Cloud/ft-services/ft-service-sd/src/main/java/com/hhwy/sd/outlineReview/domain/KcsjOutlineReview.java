@@ -62,14 +62,14 @@ public class KcsjOutlineReview extends CommonBaseEntity {
     /**
      * 字段描述：计划提交日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "计划提交日期", dateFormat = "yyyy年MM月dd日")
     private Date submitPlanDate;
     /**
      * 字段描述：计划评审日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "计划评审日期", dateFormat = "yyyy年MM月dd日")
     private Date reviewPlanDate;
@@ -101,14 +101,14 @@ public class KcsjOutlineReview extends CommonBaseEntity {
     /**
      * 字段描述：发起日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "发起日期", dateFormat = "yyyy年MM月dd日")
     private Date startDate;
     /**
      * 字段描述：大纲修回日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "大纲修回日期", dateFormat = "yyyy年MM月dd日")
     private Date remodifyDate;

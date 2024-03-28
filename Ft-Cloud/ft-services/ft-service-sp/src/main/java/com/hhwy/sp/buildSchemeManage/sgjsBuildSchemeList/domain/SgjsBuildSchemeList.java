@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
 
 import java.util.Date;
@@ -40,83 +41,83 @@ public class SgjsBuildSchemeList extends BaseEntity {
      * 字段描述：方案编号
      */
     @JsonProperty
-    @Excel(name = "方案编号")
+    @FtExcel(name = "方案编号")
     private String schemeNum;
     /**
      * 字段描述：方案名称
      */
     @JsonProperty
-    @Excel(name = "方案名称")
+    @FtExcel(name = "方案名称")
     private String schemeName;
     /**
      * 字段描述：变更类型 1推迟、2提前、3新增、4废止
      */
     @JsonProperty
-    @Excel(name = "变更类型", dictType = "change_type")
+    @FtExcel(name = "变更类型", dictType = "change_type")
     private String changeType;
     /**
      * 字段描述：关联WBS
      */
     @JsonProperty
-    @Excel(name = "关联WBS编号")
+//    @FtExcel(name = "关联WBS编号")
     private String relationWbsId;
     /**
      * 字段描述：关联WBS
      */
     @JsonProperty
-    @Excel(name = "关联WBS名称")
+    @FtExcel(name = "关联WBS名称")
     private String relationWbsName;
     /**
      * 字段描述：方案类型
      */
     @JsonProperty
-    @Excel(name = "方案类型", dictType = "scheme_type")
+    @FtExcel(name = "方案类型", dictType = "scheme_type")
     private String schemeType;
     /**
      * 字段描述：方案分级 1Ⅰ、2Ⅱ、3Ⅲ、4Ⅳ
      */
     @JsonProperty
-    @Excel(name = "方案分级", dictType = "scheme_level")
+    @FtExcel(name = "方案分级", dictType = "scheme_level")
     private String schemeLevel;
     /**
      * 字段描述：是否危大工程 1危大、2超危大、3一般
      */
     @JsonProperty
-    @Excel(name = "是否危大工程", dictType = "danger_level")
+    @FtExcel(name = "是否危大工程", dictType = "danger_level")
     private String dangerLevel;
     /**
      * 字段描述：施工重难点
      */
     @JsonProperty
-    @Excel(name = "施工重难点")
+    @FtExcel(name = "施工重难点")
     private String buildDifficult;
     /**
      * 字段描述：计划编制完成时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划编制完成时间", dateFormat = "yyyy年MM月dd日")
+    @FtExcel(name = "计划编制完成时间", dateFormat = "yyyy年MM月dd日")
     private Date planComplationTime;
     /**
      * 字段描述：原计划实施时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-//    @Excel(name = "原计划实施时间", dateFormat = "yyyy-MM-dd")
+//    @FtExcel(name = "原计划实施时间", dateFormat = "yyyy-MM-dd")
     private Date planComplationTimeOrigin;
     /**
      * 字段描述：计划实施时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划实施时间", dateFormat = "yyyy年MM月dd日")
+    @FtExcel(name = "计划实施时间", dateFormat = "yyyy年MM月dd日")
     private Date planImplementTime;
     /**
      * 字段描述：变更计划实施时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "变更计划实施时间", dateFormat = "yyyy年MM月dd日")
+    @FtExcel(name = "变更计划实施时间", dateFormat = "yyyy年MM月dd日")
     private Date planImplementTimeChange;
     /**
      * 字段描述：备注
