@@ -53,7 +53,7 @@ public interface ISgjsBuildSchemeReviewService {
 
     void turnDown(Long reviewId);
 
-    List<SgjsBuildSchemeList> getSchemeList();
+    List<SgjsBuildSchemeList> getSchemeList(SgjsBuildSchemeList schemeList);
 
     void submitBuildSchemeReviewProcess(Long id);
 

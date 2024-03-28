@@ -756,8 +756,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     }
 
     @Override
-    public List<SgjsBuildSchemeList> getSchemeList() {
-        List<SgjsBuildSchemeList> lastValidSchemeListList = sgjsBuildSchemeListService.getLastValidScheme(null);
+    public List<SgjsBuildSchemeList> getSchemeList(SgjsBuildSchemeList schemeList) {
+        List<SgjsBuildSchemeList> lastValidSchemeListList = sgjsBuildSchemeListService.getLastValidScheme(schemeList);
         if(CollectionUtils.isEmpty(lastValidSchemeListList)){
             return lastValidSchemeListList;
         }

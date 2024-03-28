@@ -1,6 +1,5 @@
 package com.hhwy.sp.buildSchemeManage.review.domain.vo;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BuildSchemeReviewOpinionVo extends BaseEntity {
+public class BuildSchemeReviewOpinionVo {
     private static final long serialVersionUID = 1L;
 
     /**

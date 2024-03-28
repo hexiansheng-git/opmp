@@ -137,8 +137,8 @@ public class SgjsBuildSchemeReviewController extends BaseController {
      * @return
      */
     @GetMapping("/getSchemeList")
-    public AjaxResult getSchemeList() {
-        List<SgjsBuildSchemeList> schemeListList = sgjsBuildSchemeReviewService.getSchemeList();
+    public AjaxResult getSchemeList(SgjsBuildSchemeList schemeList) {
+        List<SgjsBuildSchemeList> schemeListList = sgjsBuildSchemeReviewService.getSchemeList(schemeList);
         return AjaxResult.success(schemeListList);
     }
 
