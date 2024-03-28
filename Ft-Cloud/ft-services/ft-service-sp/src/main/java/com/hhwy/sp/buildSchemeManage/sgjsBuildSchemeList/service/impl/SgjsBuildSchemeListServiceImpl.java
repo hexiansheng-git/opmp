@@ -72,6 +72,11 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
     //危大工程清单查询
     @Override
     public List<SgjsBuildSchemeList> getRiskList(SgjsBuildSchemeList sgjsBuildSchemeListParam) {
+        SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
+        sgjsBuildScheme.setValid("1");
+        SgjsBuildScheme sgjsBuildScheme1 = sgjsBuildSchemeService.getSgjsBuildScheme(sgjsBuildScheme);
+        if (sgjsBuildScheme1 == null ) return  new ArrayList<>();
+        sgjsBuildSchemeListParam.setForeignId(sgjsBuildScheme1.getId());
         List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
         return sgjsBuildSchemeListList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getDangerLevel()) && (p.getDangerLevel().equals("1") || p.getDangerLevel().equals("2")))
