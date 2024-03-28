@@ -71,4 +71,10 @@ public interface IXmslWbsMainService {
      */
     public int updateP6Code(WbsInfoVo wbsInfoVo);
 
+    /**
+     * 重推wbs到p6
+     * @param mainId
+     */
+    public void repushP6(Long mainId);
+
 }

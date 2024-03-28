@@ -7,6 +7,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsListRelation;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
@@ -378,6 +379,26 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         return result;
     }
 
-
-
+    @Override
+    @Transactional
+    public void repushP6(Long mainId) {
+        String projectCode = SecurityUtils.getTenantKey();
+        List<XmslWbs> wbsList = wbsService.getByMainId(mainId);
+        wbsList.sort(Comparator.comparingInt(r->r.getLevel()));
+        Set<String> invalidIdSet = new HashSet<>();
+        for (int i = 0; i < wbsList.size(); i++) {
+            XmslWbs r = wbsList.get(i);
+            if(r.getStatus() == Constant.NO_INT)
+                invalidIdSet.add(r.getId());
+            String[] pids = r.getAncestors().split(",");
+            for (int j = 0; j < pids.length; j++) {
+                if(invalidIdSet.contains(pids[j])){
+                    invalidIdSet.add(r.getId());
+                    break;
+                }
+            }
+        }
+        MySecurityUtils.set(projectCode);
+        wbsPushP6.push2P6(mainId, projectCode, wbsList, invalidIdSet);
+    }
 }

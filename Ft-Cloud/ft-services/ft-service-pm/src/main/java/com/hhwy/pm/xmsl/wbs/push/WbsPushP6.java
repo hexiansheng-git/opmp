@@ -122,7 +122,7 @@ public class WbsPushP6 {
                 temp.setParentObjectId(parent.getObjectId());
                 parent.getChildren().add(temp);
             }
-            //projectCode = "PJ2019010034";
+            projectCode = "PJ2019010034";
             //推送新增修改数据到p6
             push(mainId,projectCode,treeList,updateList);
             //禁用wbs推送到p6,需要判断这些wbs是否已经推送给p6
@@ -164,7 +164,7 @@ public class WbsPushP6 {
                             null,null,stringEntity,null);
                     AjaxResult result = JSONObject.parseObject(resultStr, AjaxResult.class);
                     isSuccess = AjaxResult.isSuccess(result);
-                    Assert.isTrue(AjaxResult.isSuccess(result), "新增p6返回失败:"+result.get(AjaxResult.MSG_TAG));
+                        Assert.isTrue(AjaxResult.isSuccess(result), "新增p6返回失败:"+result.get(AjaxResult.MSG_TAG));
                     WbsInfoVo vo = JSONObject.parseObject(JSONObject.toJSONString(result.get(AjaxResult.DATA_TAG)),WbsInfoVo.class);
                     wbsMainService.updateP6Code(vo);
                 }finally {
@@ -274,7 +274,8 @@ public class WbsPushP6 {
             long usemills = System.currentTimeMillis()-begin;
             log.debug("wbs推送删除p6，mainID:{},耗时:{}毫秒",mainId,usemills);
             Integer status = isSuccess?Constant.YES_INT:Constant.NO_INT;
-            syncLogMasterService.save(SyncBusinessEnum.WBSPUSHP6_DELETE_ENUM.name(),getContent(stringEntity),resultStr,status,"",System.currentTimeMillis()-begin);
+            if(stringEntity != null)
+                syncLogMasterService.save(SyncBusinessEnum.WBSPUSHP6_DELETE_ENUM.name(),getContent(stringEntity),resultStr,status,"",System.currentTimeMillis()-begin);
         }
     }
 
