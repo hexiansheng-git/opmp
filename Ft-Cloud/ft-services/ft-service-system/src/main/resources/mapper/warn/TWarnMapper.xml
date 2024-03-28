@@ -114,7 +114,7 @@
         w.update_user,
         w.update_time,
         w.remark,
-        r.`status` handleStatus
+        ifnull(r.`status`,'0') handleStatus
         FROM
         t_warn w
         LEFT JOIN t_warn_record r ON w.warn_id = r.warn_id
