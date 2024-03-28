@@ -5,22 +5,22 @@ spring:
   cloud:
     nacos:
       #      一公局测试nacos
-      namespace: d2ab536f-0a9d-48d0-925c-c063e8faab2b
-      server-addr: localhost:8848
-      username: nacos
-      password: nacos
+      namespace: wk_pm
+      server-addr: 10.0.1.118:8848
+#      username: nacos
+#      password: hhwy@dgl
       discovery:
         # 服务注册地址
         server-addr: ${spring.cloud.nacos.server-addr}
         namespace: ${spring.cloud.nacos.namespace}
-        username: ${spring.cloud.nacos.username}
-        password: ${spring.cloud.nacos.password}
+#        username: ${spring.cloud.nacos.username}
+#        password: ${spring.cloud.nacos.password}
       config:
         # 配置中心地址
         server-addr: ${spring.cloud.nacos.server-addr}
         namespace: ${spring.cloud.nacos.namespace}
-        username: ${spring.cloud.nacos.username}
-        password: ${spring.cloud.nacos.password}
+#        username: ${spring.cloud.nacos.username}
+#        password: ${spring.cloud.nacos.password}
         # 配置文件格式
         file-extension: yml
         # 共享配置
