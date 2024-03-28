@@ -48,7 +48,7 @@
         delete from wzch_total_demand_detail where version = #{version}
     </delete>
 
-    s<select id="selectWzchTotalDemandDetailList" parameterType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandDetail" resultMap="WzchTotalDemandDetailResult">
+    <select id="selectWzchTotalDemandDetailList" parameterType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandDetail" resultMap="WzchTotalDemandDetailResult">
         <include refid="selectWzchTotalDemandDetailVo"/>
         <where>
             `del_flag` = 0
