@@ -298,7 +298,7 @@ public class SgjsPatentDeclare extends CommonBaseEntity {
      */
     private String allAwardName;
 
-    @FtExcel(name = "成果奖项")
+    @FtExcel(name = "成果奖项",width = 50.0D)
     private String allAward;
 
     private List<SgjsAchievementAward> awardList;
