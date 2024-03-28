@@ -19,6 +19,7 @@ import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.flowable.api.RemoteBpmnService;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.constant.WarnUrl;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
@@ -562,7 +563,11 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                             warnScope.append(qqchWorkGroupMember.getDirectorUserName()).append(",");
                         }
                         if(StringUtils.isNotBlank(warnScope)){
-                            warnService.addWarn(WarnItem.WORK_PLAN_COMMIT, WarnScopeType.USER,null,warnScope.toString(),tenantKey);
+                            Long businessId = null;
+                            if(firstVersionQqchWorkPlan != null){
+                                businessId = firstVersionQqchWorkPlan.getId();
+                            }
+                            warnService.addWarn1(WarnItem.WORK_PLAN_COMMIT,businessId, WarnScopeType.USER, WarnUrl.WORK_PLAN,warnScope.toString(),tenantKey);
                         }
                     }
                 }
@@ -634,7 +639,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                     if(StringUtils.isNotBlank(approve)){
                         warnScope.append(approve);
                     }
-                    warnService.addWarn(WarnItem.WORK_PLAN_APPROVAL, WarnScopeType.USER,null,warnScope.toString(),tenantKey);
+                    warnService.addWarn1(WarnItem.WORK_PLAN_APPROVAL,workPlan.getId(), WarnScopeType.USER,WarnUrl.WORK_PLAN,warnScope.toString(),tenantKey);
                 }
             }
         }catch (Exception e){

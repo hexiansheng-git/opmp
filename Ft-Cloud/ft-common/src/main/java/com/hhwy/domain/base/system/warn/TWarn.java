@@ -31,6 +31,13 @@ public class TWarn extends BaseEntity {
     @Excel(name = "记录id")
     private Long warnId;
     /**
+     * 字段描述：业务id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "业务id")
+    private Long businessId;
+    /**
      * 字段描述：预警项
      */
     @JsonProperty
@@ -43,17 +50,23 @@ public class TWarn extends BaseEntity {
     @Excel(name = "预警项id")
     private String warnItemId;
     /**
-     * 字段描述：预警范围类型（1：全部，2：部门，3：用户）
+     * 字段描述：预警范围类型（1：全部，2：部门，3：用户，4：角色）
      */
     @JsonProperty
-    @Excel(name = "预警范围类型（1：全部，2：部门，3：用户）")
+    @Excel(name = "预警范围类型（1：全部，2：部门，3：用户，4：角色）")
     private String warnScopeType;
     /**
-     * 字段描述：部门或者用户id，多个之间用 ” ， “ 隔开
+     * 字段描述：部门或者用户id或者角色key，多个之间用 ” ， “ 隔开
      */
     @JsonProperty
-    @Excel(name = "部门或者用户id，多个之间用 ” ， “ 隔开")
+    @Excel(name = "部门或者用户id或者角色key，多个之间用 ” ， “ 隔开")
     private String warnScope;
+    /**
+     * 字段描述：部门或者用户id或者角色key名称，多个之间用 ” ， “ 隔开
+     */
+    @JsonProperty
+    @Excel(name = "部门或者用户id或者角色key名称，多个之间用 ” ， “ 隔开")
+    private String warnScopeName;
     /**
      * 字段描述：预警内容
      */
@@ -87,9 +100,9 @@ public class TWarn extends BaseEntity {
     /**
      * 字段描述：创建时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "创建时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "创建时间", dateFormat = "yyyy-MM-dd")
     private Date createTime;
     /**
      * 字段描述：更新者

@@ -14,6 +14,7 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.enums.FlowStatusEnum;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.constant.WarnUrl;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupMemberService;
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
@@ -565,7 +566,7 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
                         if(StringUtils.isNotBlank(approve)){
                             warnScope.append(approve);
                         }
-                        warnService.addWarn(WarnItem.QQCH_CHANGE_APPROVAL, WarnScopeType.USER,null,warnScope.toString(),tenantKey);
+                        warnService.addWarn1(WarnItem.QQCH_CHANGE_APPROVAL, change.getId(), WarnScopeType.USER, WarnUrl.CHANGE,warnScope.toString(),tenantKey);
                     }
                 }
             }

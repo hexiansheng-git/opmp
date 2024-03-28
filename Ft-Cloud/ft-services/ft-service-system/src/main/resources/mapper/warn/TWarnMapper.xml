@@ -6,10 +6,12 @@
 
     <resultMap type="com.hhwy.domain.base.system.warn.TWarn" id="TWarnResultMap">
         <result property="warnId" column="warn_id"/>
+        <result property="businessId" column="business_id"/>
         <result property="warnItem" column="warn_item"/>
         <result property="warnItemId" column="warn_item_id"/>
         <result property="warnScopeType" column="warn_scope_type"/>
         <result property="warnScope" column="warn_scope"/>
+        <result property="warnScopeName" column="warn_scope_name"/>
         <result property="warnContent" column="warn_content"/>
         <result property="warnStatus" column="warn_status"/>
         <result property="warnType" column="warn_type"/>
@@ -23,10 +25,12 @@
     </resultMap>
     <sql id="selectTWarnVo">
         select `warn_id`
+             ,`business_id`
              , `warn_item`
              , `warn_item_id`
              , `warn_scope_type`
              , `warn_scope`
+             , `warn_scope_name`
              , `warn_content`
              , `warn_status`
              , `warn_type`
@@ -48,6 +52,7 @@
             <if test="warnItemId != null  and warnItemId != ''">and `warn_item_id` = #{warnItemId}</if>
             <if test="warnScopeType != null  and warnScopeType != ''">and `warn_scope_type` = #{warnScopeType}</if>
             <if test="warnScope != null  and warnScope != ''">and `warn_scope` = #{warnScope}</if>
+            <if test="warnScopeName != null  and warnScopeName != ''">and `warn_scope_name` = #{warnScopeName}</if>
             <if test="warnContent != null  and warnContent != ''">and `warn_content` = #{warnContent}</if>
             <if test="warnStatus != null  and warnStatus != ''">and `warn_status` = #{warnStatus}</if>
             <if test="warnType != null  and warnType != ''">and `warn_type` = #{warnType}</if>
@@ -76,6 +81,7 @@
             <if test="warnItemId != null  and warnItemId != ''">and `warn_item_id` = #{warnItemId}</if>
             <if test="warnScopeType != null  and warnScopeType != ''">and `warn_scope_type` = #{warnScopeType}</if>
             <if test="warnScope != null  and warnScope != ''">and `warn_scope` = #{warnScope}</if>
+            <if test="warnScopeName != null  and warnScopeName != ''">and `warn_scope_name` = #{warnScopeName}</if>
             <if test="warnContent != null  and warnContent != ''">and `warn_content` = #{warnContent}</if>
             <if test="warnStatus != null  and warnStatus != ''">and `warn_status` = #{warnStatus}</if>
             <if test="warnType != null  and warnType != ''">and `warn_type` = #{warnType}</if>
@@ -92,11 +98,13 @@
     <select id="selectWarnListForSelf" resultMap="TWarnResultMap">
         SELECT
         w.warn_id,
+        w.business_id,
         w.warn_item,
         w.warn_item_id,
         cast(w.warn_content AS CHAR) AS warn_content,
         w.warn_scope_type,
         w.warn_scope,
+        w.warn_scope_name,
         w.warn_status,
         w.warn_type,
         w.warn_url,
@@ -112,7 +120,10 @@
         LEFT JOIN t_warn_record r ON w.warn_id = r.warn_id
         <where>
             w.tenant_key = #{tenantKey} AND
-            (w.warn_scope_type = '1' OR (w.warn_scope_type = '2' AND FIND_IN_SET(#{params.deptId},w.warn_scope)) OR (w.warn_scope_type = '3' AND FIND_IN_SET(#{params.userName},w.warn_scope)) OR (w.warn_scope_type = '4' AND FIND_IN_SET(w.warn_scope,#{params.roleKeys})))
+            (w.warn_scope_type = '1'
+                OR (w.warn_scope_type = '2' AND FIND_IN_SET(#{params.deptId},w.warn_scope))
+                OR (w.warn_scope_type = '3' AND FIND_IN_SET(#{params.userName},w.warn_scope))
+                OR (w.warn_scope_type = '4' AND FIND_IN_SET(w.warn_scope,#{params.roleKeys})))
             <if test="handleStatus != null and handleStatus != ''">
                 <if test="handleStatus == '0'.toString()">
                     AND (r.`status` IS NULL or r.`status` = '0' )
@@ -121,6 +132,9 @@
                     AND r.`status` = #{handleStatus}
                 </if>
             </if>
+            <if test="warnItem != null  and warnItem != ''">and w.`warn_item` like concat('%' , #{warnItem} , '%')</if>
+            <if test="warnScopeName != null  and warnScopeName != ''">and w.`warn_scope_name` like concat('%' , #{warnScopeName} , '%')</if>
+            <if test="createTime != null ">and DATE_FORMAT( `create_time`, '%Y-%m-%d' ) = #{createTime}</if>
         </where>
         order by w.create_time desc
     </select>
@@ -129,10 +143,12 @@
         replace into t_warn
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="warnId != null ">`warn_id`,</if>
+            <if test="businessId != null ">`business_id`,</if>
             <if test="warnItem != null  and warnItem != ''">`warn_item`,</if>
             <if test="warnItemId != null  and warnItemId != ''">`warn_item_id`,</if>
             <if test="warnScopeType != null  and warnScopeType != ''">`warn_scope_type`,</if>
             <if test="warnScope != null  and warnScope != ''">`warn_scope`,</if>
+            <if test="warnScopeName != null  and warnScopeName != ''">`warn_scope_name`,</if>
             <if test="warnContent != null  and warnContent != ''">`warn_content`,</if>
             <if test="warnStatus != null  and warnStatus != ''">`warn_status`,</if>
             <if test="warnType != null  and warnType != ''">`warn_type`,</if>
@@ -146,10 +162,12 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="warnId != null ">#{warnId},</if>
+            <if test="businessId != null ">#{businessId},</if>
             <if test="warnItem != null  and warnItem != ''">#{warnItem},</if>
             <if test="warnItemId != null  and warnItemId != ''">#{warnItemId},</if>
             <if test="warnScopeType != null  and warnScopeType != ''">#{warnScopeType},</if>
             <if test="warnScope != null  and warnScope != ''">#{warnScope},</if>
+            <if test="warnScopeName != null  and warnScopeName != ''">#{warnScopeName},</if>
             <if test="warnContent != null  and warnContent != ''">#{warnContent},</if>
             <if test="warnStatus != null  and warnStatus != ''">#{warnStatus},</if>
             <if test="warnType != null  and warnType != ''">#{warnType},</if>
@@ -168,10 +186,12 @@
         replace into t_warn
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `warn_id`,
+            `business_id`,
             `warn_item`,
             `warn_item_id`,
             `warn_scope_type`,
             `warn_scope`,
+            `warn_scope_name`,
             `warn_content`,
             `warn_status`,
             `warn_type`,
@@ -187,10 +207,12 @@
         <foreach collection="tWarnList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.warnId},
+                #{item.businessId},
                 #{item.warnItem},
                 #{item.warnItemId},
                 #{item.warnScopeType},
                 #{item.warnScope},
+                #{item.warnScopeName},
                 #{item.warnContent},
                 #{item.warnStatus},
                 #{item.warnType},

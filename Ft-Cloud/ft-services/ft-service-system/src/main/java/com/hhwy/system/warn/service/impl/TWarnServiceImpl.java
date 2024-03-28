@@ -75,6 +75,7 @@ public class TWarnServiceImpl implements ITWarnService {
         if(StringUtils.isBlank(warnScope)){
             return 1;
         }
+        this.setWarnScopeName(tWarn);
         tWarn.setWarnId(IdWorker.createId());
         tWarn.setCreateUser("admin");
         tWarn.setCreateTime(DateUtils.getNowDate());
@@ -90,6 +91,31 @@ public class TWarnServiceImpl implements ITWarnService {
         this.push2Head(tWarn);
 
         return result;
+    }
+
+    private void setWarnScopeName(TWarn tWarn){
+        String warnScopeType = tWarn.getWarnScopeType();
+        if(StringUtils.isBlank(warnScopeType) ){
+            return;
+        }
+        String warnScope = tWarn.getWarnScope();
+        String warnScopeName;
+        if(WarnScopeType.ALL.getWarnScopeType().equals(warnScopeType)){
+            warnScopeName = "全部";
+        }else{
+            List<SysUser> userList = new ArrayList<>();
+            if(WarnScopeType.USER.getWarnScopeType().equals(warnScopeType)){
+                List<String> userNameList = Arrays.stream(warnScope.split(",")).distinct().collect(Collectors.toList());
+                userList = this.userMapper.selectUserListByUserNameList(userNameList, Collections.singletonList(tWarn.getTenantKey()));
+            }else if(WarnScopeType.DEPT.getWarnScopeType().equals(warnScopeType)){
+                userList = this.userMapper.selectUserListByDeptIds(warnScope);
+            }else if(WarnScopeType.ROLE.getWarnScopeType().equals(warnScopeType)) {
+                String[] roleKeyList = warnScope.split(",");
+                userList = myUserMapper.selectByRoleKeyList(roleKeyList, tWarn.getTenantKey());
+            }
+            warnScopeName = userList.stream().map(SysUser::getNickName).collect(Collectors.joining(","));
+        }
+        tWarn.setWarnScopeName(warnScopeName);
     }
 
     private void push2Head(TWarn tWarn){

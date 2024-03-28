@@ -42,6 +42,27 @@ public class WarnServiceImpl implements WarnService {
         systemServiceApi.addWarn(tWarn);
     }
 
+    public void addWarn1(WarnItem warnItem, Long businessId, WarnScopeType warnScopeType, String warnUrl, String warnScope, String tenantKey) {
+        TWarn tWarn = new TWarn();
+        tWarn.setBusinessId(businessId);
+        tWarn.setWarnItem(warnItem.getWarnItem());
+        tWarn.setWarnItemId(warnItem.getWarnItemId());
+        tWarn.setWarnScopeType(warnScopeType.getWarnScopeType());
+        tWarn.setWarnScope(warnScope);
+        tWarn.setWarnUrl(warnUrl);
+        tWarn.setTenantKey(tenantKey);
+
+        String projectName = "";
+        ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+        if(projectInfo != null){
+            projectName = projectInfo.getProjectName();
+        }
+        String warnContent = this.buildWarnContent(projectName, warnItem.getWarnItem(), warnItem.getWarnRule());
+        tWarn.setWarnContent(warnContent);
+
+        systemServiceApi.addWarn(tWarn);
+    }
+
 
     private String buildWarnContent(String projectName,String warnItem,String warnRule){
         return WARN_TEMPLATE.replace("【项目名称】",projectName).replace("【预警项名称】",warnItem).replace("【预警规则】",warnRule);

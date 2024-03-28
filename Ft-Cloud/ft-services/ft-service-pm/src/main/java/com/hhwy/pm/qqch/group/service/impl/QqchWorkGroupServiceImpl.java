@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -16,6 +15,7 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.enums.FlowStatusEnum;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.constant.WarnUrl;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
@@ -507,7 +507,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
                         }else {
                             warnScope = "cons_assistant_manager";
                         }
-                        warnService.addWarn(WarnItem.WORK_GROUP_SET_UP,WarnScopeType.ROLE,null,warnScope,tenantKey);
+                        warnService.addWarn(WarnItem.WORK_GROUP_SET_UP,WarnScopeType.ROLE, WarnUrl.WORK_GROUP,warnScope,tenantKey);
                     }
                 }
             }

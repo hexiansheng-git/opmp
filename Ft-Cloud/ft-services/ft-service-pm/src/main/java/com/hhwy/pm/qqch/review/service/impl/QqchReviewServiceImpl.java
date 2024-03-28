@@ -11,6 +11,7 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.constant.PmConstant;
+import com.hhwy.pm.constant.WarnUrl;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
@@ -538,7 +539,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                     /*发送预警*/
                     String warnScope = getStageWarnScope("1");
                     if(StringUtils.isNotBlank(warnScope)){
-                        warnService.addWarn(WarnItem.PREPARATION_FIRST_STAGE, WarnScopeType.USER,null,warnScope,tenantKey);
+                        warnService.addWarn(WarnItem.PREPARATION_FIRST_STAGE, WarnScopeType.USER, WarnUrl.REVIEW,warnScope,tenantKey);
                     }
                 }
             }
@@ -611,7 +612,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                 if(FtDateUtils.dateFormatCompareTo(smallDate,nowDate)){
                     String warnScope = getStageWarnScope("1");
                     if(StringUtils.isNotBlank(warnScope)){
-                        warnService.addWarn(WarnItem.PREPARATION_SECOND_STAGE,WarnScopeType.USER,null,"admin",tenantKey);
+                        warnService.addWarn(WarnItem.PREPARATION_SECOND_STAGE,WarnScopeType.USER,WarnUrl.REVIEW,"admin",tenantKey);
                     }
                 }
             }
@@ -669,7 +670,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                     /*发送预警*/
                     String warnScope = getStageWarnScope("1");
                     if(StringUtils.isNotBlank(warnScope)) {
-                        warnService.addWarn(WarnItem.PREPARATION_THIRD_STAGE, WarnScopeType.USER, null, "admin", tenantKey);
+                        warnService.addWarn(WarnItem.PREPARATION_THIRD_STAGE, WarnScopeType.USER, WarnUrl.REVIEW, "admin", tenantKey);
                     }
                 }
             }
@@ -716,7 +717,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                     StringBuilder warnScope = new StringBuilder();
                     String approve = FlowInfoSearchUtil.getApprove(instanceId);
                     warnScope.append(approve).append("yinqingbo");
-                    warnService.addWarn(WarnItem.QQCH_REVIEW,WarnScopeType.USER,null,warnScope.toString(),tenantKey);
+                    warnService.addWarn1(WarnItem.QQCH_REVIEW,approvedDate.getId(),WarnScopeType.USER,WarnUrl.REVIEW_DETAIL,warnScope.toString(),tenantKey);
                 }
             }
         }catch (Exception e){

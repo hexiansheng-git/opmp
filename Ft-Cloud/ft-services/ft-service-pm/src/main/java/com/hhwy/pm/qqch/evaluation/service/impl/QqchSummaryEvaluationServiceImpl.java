@@ -10,6 +10,7 @@ import com.hhwy.constant.WarnScopeType;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.constant.WarnUrl;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.evaluation.mapper.QqchSummaryEvaluationMapper;
@@ -148,7 +149,7 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
                     if (diffDays >= 10) {
                         if (qqchSummaryEvaluation == null) {
                             // 发送预警
-                            warnService.addWarn(WarnItem.SUMMARY, WarnScopeType.USER, null, "admin", tenantKey);
+                            warnService.addWarn(WarnItem.SUMMARY, WarnScopeType.USER, WarnUrl.SUMMARY_EVALUATION, "admin", tenantKey);
                         }
                     }
                 }
@@ -171,7 +172,7 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
                             .equals(qqchSummaryEvaluation.getTaskStatus())) {
                             // 发送预警
                             warnService
-                                .addWarn(WarnItem.EVALUATION, WarnScopeType.USER, null, "admin", tenantKey);
+                                .addWarn(WarnItem.EVALUATION, WarnScopeType.USER, WarnUrl.SUMMARY_EVALUATION, "admin", tenantKey);
                         }
                     }
                 }
