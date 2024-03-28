@@ -104,6 +104,8 @@ public class TWarn extends BaseEntity {
     @JsonProperty
     @Excel(name = "创建时间", dateFormat = "yyyy-MM-dd")
     private Date createTime;
+    /*预警时间*/
+    private String warnDate;
     /**
      * 字段描述：更新者
      */

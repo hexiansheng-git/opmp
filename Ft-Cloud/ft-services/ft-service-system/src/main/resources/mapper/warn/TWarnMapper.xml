@@ -134,7 +134,7 @@
             </if>
             <if test="warnItem != null  and warnItem != ''">and w.`warn_item` like concat('%' , #{warnItem} , '%')</if>
             <if test="warnScopeName != null  and warnScopeName != ''">and w.`warn_scope_name` like concat('%' , #{warnScopeName} , '%')</if>
-            <if test="createTime != null ">and DATE_FORMAT( w.`create_time`, '%Y-%m-%d' ) = #{createTime}</if>
+            <if test="createTime != null ">and DATE_FORMAT( w.`create_time`, '%Y-%m-%d' ) = #{warnDate}</if>
         </where>
         order by w.create_time desc
     </select>
