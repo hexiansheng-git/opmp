@@ -10,9 +10,7 @@ import com.hhwy.constant.WarnItem;
 import com.hhwy.constant.WarnScopeType;
 import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.domain.base.system.warn.TWarnRecord;
-import com.hhwy.system.api.domain.SysRole;
 import com.hhwy.system.api.domain.SysUser;
-import com.hhwy.system.core.mapper.SysRoleMapper;
 import com.hhwy.system.core.mapper.SysUserMapper;
 import com.hhwy.system.mapper.UserMapper;
 import com.hhwy.system.warn.mapper.TWarnMapper;
@@ -25,7 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -44,9 +45,6 @@ public class TWarnServiceImpl implements ITWarnService {
 
     @Autowired
     private SysUserMapper userMapper;
-
-    @Autowired
-    private SysRoleMapper roleMapper;
 
     @Autowired
     private UserMapper myUserMapper;
@@ -185,16 +183,6 @@ public class TWarnServiceImpl implements ITWarnService {
     }
 
     public List<TWarn> selectWarnListForSelf(TWarn warn) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("deptId", SecurityUtils.getSysUser().getDeptId());
-        params.put("userName", SecurityUtils.getUserName());
-        Long userId = SecurityUtils.getUserId();
-        String tenantKey = SecurityUtils.getTenantKey();
-        List<SysRole> sysRoles = roleMapper.selectRoleListByUserId(userId, tenantKey, Collections.singletonList("master"));
-        String roleKeys = sysRoles.stream().map(SysRole::getRoleKey).collect(Collectors.joining(","));
-        params.put("roleKeys",roleKeys);
-        warn.setParams(params);
-        warn.setTenantKey(tenantKey);
         return tWarnMapper.selectWarnListForSelf(warn);
     }
 

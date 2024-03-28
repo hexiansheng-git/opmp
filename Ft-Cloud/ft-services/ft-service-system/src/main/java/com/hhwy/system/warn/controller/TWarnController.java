@@ -5,21 +5,23 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.WarnItem;
 import com.hhwy.constant.WarnScopeType;
 import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.domain.base.system.warn.TWarnRecord;
+import com.hhwy.system.api.domain.SysRole;
+import com.hhwy.system.core.mapper.SysRoleMapper;
 import com.hhwy.system.warn.service.ITWarnService;
 import com.hhwy.utils.validation.ValidationGroups;
-import com.sun.javafx.collections.MappingChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -34,6 +36,9 @@ public class TWarnController extends BaseController {
     @Autowired
     private ITWarnService tWarnService;
 
+    @Autowired
+    private SysRoleMapper roleMapper;
+
 
 //    @PreAuthorize(hasPermi = "tWarn:list")
     @GetMapping
@@ -44,8 +49,19 @@ public class TWarnController extends BaseController {
 
     @GetMapping({"/selfAllList"})
     public AjaxResult selfAllList(TWarn warn) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("deptId", SecurityUtils.getSysUser().getDeptId());
+        params.put("userName", SecurityUtils.getUserName());
+        Long userId = SecurityUtils.getUserId();
+        String tenantKey = SecurityUtils.getTenantKey();
+        List<SysRole> sysRoles = roleMapper.selectRoleListByUserId(userId, tenantKey, Collections.singletonList("master"));
+        String roleKeys = sysRoles.stream().map(SysRole::getRoleKey).collect(Collectors.joining(","));
+        params.put("roleKeys",roleKeys);
+        warn.setParams(params);
+        warn.setTenantKey(tenantKey);
+        startPage();
         List<TWarn> list = this.tWarnService.selectWarnListForSelf(warn);
-        return AjaxResult.success(list);
+        return getDataTableAjaxResult(list);
     }
 
     @PutMapping({"/changeHandleStatus"})
