@@ -80,22 +80,22 @@ public class KcsjEquipEntryRecordInfo extends TreeNode<KcsjEquipEntryRecordInfo>
     /**
      * 字段描述：实际进场日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "实际进场日期", dateFormat = "yyyy-MM-dd")
     private Date entryDate;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private String entryDateStr;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private String entryEndDateStr;
     /**
      * 字段描述：实际退场时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "实际退场时间", dateFormat = "yyyy-MM-dd")
     private Date exitDate;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private String exitDateStr;
     /**
      * 字段描述：当前状态
@@ -124,7 +124,7 @@ public class KcsjEquipEntryRecordInfo extends TreeNode<KcsjEquipEntryRecordInfo>
     /**
      * 字段描述：数据创建系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     //@Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
@@ -137,7 +137,7 @@ public class KcsjEquipEntryRecordInfo extends TreeNode<KcsjEquipEntryRecordInfo>
     /**
      * 字段描述：数据修改系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     //@Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
@@ -150,7 +150,7 @@ public class KcsjEquipEntryRecordInfo extends TreeNode<KcsjEquipEntryRecordInfo>
     /**
      * 字段描述：数据删除系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     //@Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date delTime;

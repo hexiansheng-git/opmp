@@ -94,28 +94,28 @@ public class SgjsBuildSchemeList extends BaseEntity {
     /**
      * 字段描述：计划编制完成时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @FtExcel(name = "计划编制完成时间", dateFormat = "yyyy年MM月dd日")
     private Date planComplationTime;
     /**
      * 字段描述：原计划实施时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
 //    @FtExcel(name = "原计划实施时间", dateFormat = "yyyy-MM-dd")
     private Date planComplationTimeOrigin;
     /**
      * 字段描述：计划实施时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @FtExcel(name = "计划实施时间", dateFormat = "yyyy年MM月dd日")
     private Date planImplementTime;
     /**
      * 字段描述：变更计划实施时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @FtExcel(name = "变更计划实施时间", dateFormat = "yyyy年MM月dd日")
     private Date planImplementTimeChange;
@@ -171,7 +171,7 @@ public class SgjsBuildSchemeList extends BaseEntity {
     /**
      * 字段描述：数据创建系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     private Date createTime;
     /**
@@ -182,7 +182,7 @@ public class SgjsBuildSchemeList extends BaseEntity {
     /**
      * 字段描述：数据修改系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     private Date updateTime;
     /**
@@ -193,7 +193,7 @@ public class SgjsBuildSchemeList extends BaseEntity {
     /**
      * 字段描述：数据删除系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     private Date delTime;
     /**

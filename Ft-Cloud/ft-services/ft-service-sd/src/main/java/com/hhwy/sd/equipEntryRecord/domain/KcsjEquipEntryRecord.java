@@ -123,7 +123,7 @@ public class KcsjEquipEntryRecord extends TreeNode<KcsjEquipEntryRecord> {
     /**
      * 字段描述：数据创建系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
@@ -136,7 +136,7 @@ public class KcsjEquipEntryRecord extends TreeNode<KcsjEquipEntryRecord> {
     /**
      * 字段描述：数据修改系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
@@ -149,7 +149,7 @@ public class KcsjEquipEntryRecord extends TreeNode<KcsjEquipEntryRecord> {
     /**
      * 字段描述：数据删除系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date delTime;

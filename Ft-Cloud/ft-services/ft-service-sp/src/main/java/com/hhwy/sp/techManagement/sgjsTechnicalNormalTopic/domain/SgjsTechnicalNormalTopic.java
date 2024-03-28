@@ -165,7 +165,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
     /**
      * 字段描述：研发起始时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "研发起始日期", dateFormat = "yyyy年MM月dd日", sort = 10)
     @NotNull(message = "研发起始日期不能为空！",groups = ValidationGroups.Save.class)
@@ -173,7 +173,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
     /**
      * 字段描述：研发完成时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "研发完成日期", dateFormat = "yyyy年MM月dd日", sort = 11)
     @NotNull(message = "研发完成日期不能为空！",groups = ValidationGroups.Save.class)
@@ -244,7 +244,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
     /**
      * 字段描述：数据创建系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     private Date createTime;
     /**
@@ -255,7 +255,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
     /**
      * 字段描述：数据修改系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     private Date updateTime;
     /**
@@ -266,7 +266,7 @@ public class SgjsTechnicalNormalTopic extends BaseEntity {
     /**
      * 字段描述：数据删除系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     private Date delTime;
     /**

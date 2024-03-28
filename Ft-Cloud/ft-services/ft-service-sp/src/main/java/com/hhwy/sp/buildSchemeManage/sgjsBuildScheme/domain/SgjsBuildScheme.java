@@ -109,7 +109,7 @@ public class SgjsBuildScheme extends CommonBaseEntity {
     /**
      * 字段描述：清单提交日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "清单提交日期", dateFormat = "yyyy-MM-dd")
     private Date submisionDate;
@@ -140,7 +140,7 @@ public class SgjsBuildScheme extends CommonBaseEntity {
     /**
      * 字段描述：变更发起日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "变更发起日期", dateFormat = "yyyy-MM-dd")
     private Date changeDate;
@@ -222,7 +222,7 @@ public class SgjsBuildScheme extends CommonBaseEntity {
     /**
      * 字段描述：数据创建系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
@@ -235,7 +235,7 @@ public class SgjsBuildScheme extends CommonBaseEntity {
     /**
      * 字段描述：数据修改系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
@@ -248,7 +248,7 @@ public class SgjsBuildScheme extends CommonBaseEntity {
     /**
      * 字段描述：数据删除系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date delTime;
