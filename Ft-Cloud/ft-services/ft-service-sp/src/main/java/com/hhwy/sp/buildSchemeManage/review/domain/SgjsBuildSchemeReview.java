@@ -93,16 +93,16 @@ public class SgjsBuildSchemeReview extends CommonBaseEntity {
     /**
      * 字段描述：计划编制完成时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @FtExcel(name = "计划编制完成时间", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "计划编制完成时间", dateFormat = "yyyy年MM月dd日")
     private Date planCompletionTime;
     /**
      * 字段描述：计划实施时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @FtExcel(name = "计划实施时间", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "计划实施时间", dateFormat = "yyyy年MM月dd日")
     private Date planImplementTime;
     /**
      * 字段描述：本方案编制负责人
@@ -131,9 +131,9 @@ public class SgjsBuildSchemeReview extends CommonBaseEntity {
     /**
      * 字段描述：提交日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
-    @FtExcel(name = "提交日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "提交日期", dateFormat = "yyyy年MM月dd日")
     private Date submitDate;
     /**
      * 字段描述：方案附件组id

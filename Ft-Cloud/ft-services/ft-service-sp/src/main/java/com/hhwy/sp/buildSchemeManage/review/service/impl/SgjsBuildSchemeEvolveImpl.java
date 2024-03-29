@@ -69,7 +69,7 @@ public class SgjsBuildSchemeEvolveImpl implements ISgjsBuildSchemeEvolveService 
 
     private void changeDict(List<SgjsBuildSchemeEvolve> evolveList){
         DictUtil.dictValueToLabel(evolveList, "scheme_level", SgjsBuildSchemeEvolve::getSchemeLevel, SgjsBuildSchemeEvolve::setSchemeLevel);
-        DictUtil.dictValueToLabel(evolveList, "scheme_type", SgjsBuildSchemeEvolve::getSchemeType, SgjsBuildSchemeEvolve::setSchemeType);
+        DictUtil.dictValueToLabel(evolveList, "scheme_type_all", SgjsBuildSchemeEvolve::getSchemeType, SgjsBuildSchemeEvolve::setSchemeType);
 
         for (SgjsBuildSchemeEvolve evolve : evolveList) {
             String taskStatus = evolve.getTaskStatus();
