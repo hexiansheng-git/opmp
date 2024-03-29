@@ -131,7 +131,7 @@ public class SgjsBuildSchemeListController extends BaseController {
         List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getRiskList(sgjsBuildSchemeListParam);
         Assert.isTrue(CollUtil.isNotEmpty(sgjsBuildSchemeListList), "无数据可以导出");
         List<SgjsBuildSchemeRiskList> sgjsBuildSchemeRiskLists = BeanUtil.copyToList(sgjsBuildSchemeListList, SgjsBuildSchemeRiskList.class);
-        ExcelUtils<SgjsBuildSchemeRiskList> util = new ExcelUtils<>(SgjsBuildSchemeRiskList.class);
+        FtExcelUtil<SgjsBuildSchemeRiskList> util = new FtExcelUtil<>(SgjsBuildSchemeRiskList.class);
         util.exportExcel(response, sgjsBuildSchemeRiskLists, DateUtils.getDate());
     }
 
