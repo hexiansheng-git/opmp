@@ -13,6 +13,7 @@ import com.hhwy.domain.base.system.warn.TWarnRecord;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.system.core.mapper.SysUserMapper;
 import com.hhwy.system.mapper.UserMapper;
+import com.hhwy.system.warn.constant.WarnUrl;
 import com.hhwy.system.warn.mapper.TWarnMapper;
 import com.hhwy.system.warn.mapper.TWarnRecordMapper;
 import com.hhwy.system.warn.service.ITWarnService;
@@ -183,7 +184,38 @@ public class TWarnServiceImpl implements ITWarnService {
     }
 
     public List<TWarn> selectWarnListForSelf(TWarn warn) {
-        return tWarnMapper.selectWarnListForSelf(warn);
+        List<TWarn> tWarnList = tWarnMapper.selectWarnListForSelf(warn);
+        for (TWarn tWarn : tWarnList) {
+            String warnUrl = tWarn.getWarnUrl();
+            if(StringUtils.isBlank(warnUrl)){
+                String warnItemId = tWarn.getWarnItemId();
+                if(WarnItem.WORK_GROUP_SET_UP.getWarnItemId().equals(warnItemId)){
+                    warnUrl = WarnUrl.WORK_GROUP;
+                }
+                if(WarnItem.WORK_PLAN_COMMIT.getWarnItemId().equals(warnItemId)){
+                    warnUrl = WarnUrl.WORK_PLAN;
+                }
+                if(WarnItem.WORK_PLAN_APPROVAL.getWarnItemId().equals(warnItemId)){
+                    warnUrl = WarnUrl.WORK_PLAN;
+                }
+                if(WarnItem.PREPARATION_FIRST_STAGE.getWarnItemId().equals(warnItemId)
+                        || WarnItem.PREPARATION_SECOND_STAGE.getWarnItemId().equals(warnItemId)
+                        || WarnItem.PREPARATION_THIRD_STAGE.getWarnItemId().equals(warnItemId)){
+                    warnUrl = WarnUrl.REVIEW;
+                }
+                if(WarnItem.QQCH_REVIEW.getWarnItemId().equals(warnItemId)){
+                    warnUrl = WarnUrl.REVIEW;
+                }
+                if(WarnItem.QQCH_CHANGE_APPROVAL.getWarnItemId().equals(warnItemId)){
+                    warnUrl = WarnUrl.CHANGE;
+                }
+                if(WarnItem.SUMMARY.getWarnItemId().equals(warnItemId) || WarnItem.EVALUATION.getWarnItemId().equals(warnItemId)){
+                    warnUrl = WarnUrl.SUMMARY_EVALUATION;
+                }
+                tWarn.setWarnUrl(warnUrl);
+            }
+        }
+        return tWarnList;
     }
 
     @Override
