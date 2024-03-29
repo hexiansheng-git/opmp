@@ -170,7 +170,7 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
         sgjsAchievementAwardService.saveAchievementAward(id,BelongBusiness.BELONG_BUSINESS_7,awardList);
 
         String taskStatus = patentDeclare.getPtVar2();
-        if("1".equals(taskStatus) || "4".equals(taskStatus)){
+        if("1".equals(taskStatus) || "5".equals(taskStatus)){
             patentDeclare.setProcessStatus("no");
             sysSyncInfoService4Sp.pushSgjsPatentDeclare(patentDeclare);
         }
@@ -229,7 +229,7 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
         }else {
             currentState = DataCurrentState.NO_PASS;
         }
-        sgjsPatentDeclareMapper.updatePatentDeclareProcess(id,currentState,"4");
+        sgjsPatentDeclareMapper.updatePatentDeclareProcess(id,currentState,"5");
 
         SgjsPatentDeclare patentDeclare = sgjsPatentDeclareMapper.getSgjsPatentDeclareById(id);
         patentDeclare.setProcessStatus("end");

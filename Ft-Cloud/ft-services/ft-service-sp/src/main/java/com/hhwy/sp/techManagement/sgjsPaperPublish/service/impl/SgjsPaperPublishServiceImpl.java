@@ -158,7 +158,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         sgjsAchievementAwardService.saveAchievementAward(id,BelongBusiness.BELONG_BUSINESS_8,awardList);
 
         String taskStatus = paperPublish.getPtVar2();
-        if("1".equals(taskStatus) || "4".equals(taskStatus)){
+        if("1".equals(taskStatus) || "5".equals(taskStatus)){
             paperPublish.setProcessStatus("no");
             sysSyncInfoService4Sp.pushSgjsPaperPublish(paperPublish);
         }
@@ -224,7 +224,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         }else {
             currentState = DataCurrentState.NO_PASS;
         }
-        sgjsPaperPublishMapper.updatePaperPublishProcess(id,currentState,"4");
+        sgjsPaperPublishMapper.updatePaperPublishProcess(id,currentState,"5");
 
         SgjsPaperPublish paperPublish = sgjsPaperPublishMapper.getSgjsPaperPublishById(id);
         paperPublish.setProcessStatus("end");
