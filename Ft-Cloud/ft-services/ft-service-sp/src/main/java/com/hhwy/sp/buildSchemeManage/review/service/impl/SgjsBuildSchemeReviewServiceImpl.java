@@ -72,6 +72,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     @Transactional
     public int insertSgjsBuildSchemeReview(SgjsBuildSchemeReview sgjsBuildSchemeReview) {
         sgjsBuildSchemeReview.setId(IdWorker.createId());
+        sgjsBuildSchemeReview.setSchemeInitiatorName(SecurityUtils.getSysUser().getNickName());
+        sgjsBuildSchemeReview.setSchemeInitiatorId(SecurityUtils.getSysUser().getUserName());
         sgjsBuildSchemeReview.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
         sgjsBuildSchemeReview.setCreateUserName(SecurityUtils.getUserName());
         sgjsBuildSchemeReview.setCreateTime(DateUtils.getNowDate());
@@ -384,6 +386,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         CommonAssert.notBlank(saveType,"保存类型不能为空！");
         if("add".equals(saveType) && review.getId() == null){
             //新增
+
             this.insertSgjsBuildSchemeReview(review);
         }
 
