@@ -106,11 +106,12 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
     //保存
     @Transactional
     public void insertSgjsBuildSchemeList(List<SgjsBuildSchemeList> sgjsBuildSchemeListList, Long foreignId) {
-        //删除当前版本数据
+        /*删除当前版本数据*/
         SgjsBuildSchemeList sgjsBuildSchemeList = new SgjsBuildSchemeList();
         sgjsBuildSchemeList.setForeignId(foreignId);
         this.deleteSgjsBuildSchemeList(sgjsBuildSchemeList);
-        //获取上一版本有效版本
+        /*保存*/
+        //获取上一版本有效版本 清单
         SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
         sgjsBuildScheme.setValid("1");
         List<SgjsBuildScheme> sgjsBuildSchemes = sgjsBuildSchemeService.getSgjsBuildSchemeList(sgjsBuildScheme);
@@ -120,10 +121,10 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             param.setForeignId(sgjsBuildSchemes.get(0).getId());
             originList = sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(param);
         }
-        /*入参为空（界面台账中的数据），则只需保存从上一版本继承过来的清单*/
+        /*入参为空（界面台账中的数据），只需保存:上一版本有效版本 清单*/
         if (CollUtil.isEmpty(sgjsBuildSchemeListList)) {
             if (CollUtil.isEmpty(originList)) return;
-            //上一版本继承过来的清单不为空，走保存
+            //上一版本有效版本 清单不为空，走保存
             originList.forEach(p -> {
                 p.setId(IdWorker.createId());
                 p.setPtVar3("0");
@@ -131,23 +132,30 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             sgjsBuildSchemeListMapper.insertSgjsBuildSchemeListList(originList);
             return;
         }
-        /*入参不为空（界面台账中的数据）*/
-        //上一有效版本数据与界面台账中的数据合并
+        /*入参不为空（界面台账中的数据） 同 上一版本有效版本 清单合并保存*/
+        //序号
         Integer serilizeNum = 0;
         sgjsBuildSchemeListList.forEach(p -> p.setPtVar3("1"));
-        Set<String> collect = sgjsBuildSchemeListList.stream().map(SgjsBuildSchemeList::getSchemeNum).collect(Collectors.toSet());
         if (CollUtil.isNotEmpty(originList)) {
-            originList.stream().filter(p -> StrUtil.isNotBlank(p.getSchemeNum())).forEach(p -> {
-                String schemeNum = p.getSchemeNum();
-                Integer num = Integer.valueOf(schemeNum.substring(schemeNum.length() - 4));
-                p.setSerialNum(num);
-            });
-            serilizeNum = originList.stream().max(Comparator.comparing(SgjsBuildSchemeList::getSerialNum)).get().getSerialNum();
+            //从上一版本有效版本清单中，过滤掉界面传过来的清单
+            Set<String> collect = sgjsBuildSchemeListList.stream().map(SgjsBuildSchemeList::getSchemeNum).collect(Collectors.toSet());
             List<SgjsBuildSchemeList> collect1 = originList.stream().filter(p -> !collect.contains(p.getSchemeNum())).collect(Collectors.toList());
             collect1.forEach(p -> p.setPtVar3("0"));
             sgjsBuildSchemeListList.addAll(collect1);
         }
+        //得到最大序列号
+        sgjsBuildSchemeListList.stream().filter(p -> StrUtil.isNotBlank(p.getSchemeNum())).forEach(p -> {
+            String schemeNum = p.getSchemeNum();
+            Integer num = Integer.valueOf(schemeNum.substring(schemeNum.length() - 4));
+            p.setSerialNum(num);
+        });
+        List<SgjsBuildSchemeList> collect = sgjsBuildSchemeListList.stream().filter(p -> null != p.getSerialNum()).collect(Collectors.toList());
+        Optional<SgjsBuildSchemeList> max = collect.stream().max(Comparator.comparing(SgjsBuildSchemeList::getSerialNum));
+        if (max.isPresent()) {
+            serilizeNum = max.get().getSerialNum();
+        }
         Integer serilize = serilizeNum;
+        String userName = SecurityUtils.getUserName();
         for (SgjsBuildSchemeList param : sgjsBuildSchemeListList) {
             if (StrUtil.isBlank(param.getSchemeNum())) {
                 param.setSchemeNum(getSerialNumber(serilize));
@@ -155,7 +163,7 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             }
             param.setForeignId(foreignId);
             param.setId(IdWorker.createId());
-            param.setCreateUser(SecurityUtils.getUserName());
+            param.setCreateUser(userName);
             param.setCreateTime(DateUtils.getNowDate());
         }
         sgjsBuildSchemeListMapper.insertSgjsBuildSchemeListList(sgjsBuildSchemeListList);

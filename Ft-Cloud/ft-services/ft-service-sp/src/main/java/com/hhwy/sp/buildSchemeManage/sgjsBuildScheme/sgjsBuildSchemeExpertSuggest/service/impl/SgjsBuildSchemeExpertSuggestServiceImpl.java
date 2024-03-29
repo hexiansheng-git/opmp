@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -29,11 +30,20 @@ public class SgjsBuildSchemeExpertSuggestServiceImpl implements ISgjsBuildScheme
     @Autowired
     private SgjsBuildSchemeExpertSuggestMapper sgjsBuildSchemeExpertSuggestMapper;
 
+    //台账查询
     @Override
     public List<SgjsBuildSchemeExpertSuggest> getGroupList(SgjsBuildSchemeExpertSuggest sgjsBuildSchemeExpertSuggestParam) {
         Long foreignId = sgjsBuildSchemeExpertSuggestParam.getForeignId();
         Assert.isTrue(foreignId!=null, "foreignId不能为空");
-        return sgjsBuildSchemeExpertSuggestMapper.getGroupList(foreignId);
+        List<SgjsBuildSchemeExpertSuggest> groupList = sgjsBuildSchemeExpertSuggestMapper.getGroupList(foreignId);
+        groupList.forEach(p -> {
+            Date submitTime = p.getSubmitTime();
+            if (submitTime != null) {
+                String format = DateUtil.format(submitTime, "yyyy-MM-dd HH");
+                p.setPtVar2(format + ":00");
+            }
+        });
+        return groupList;
     }
 
     public SgjsBuildSchemeExpertSuggest getSgjsBuildSchemeExpertSuggest(SgjsBuildSchemeExpertSuggest sgjsBuildSchemeExpertSuggest) {

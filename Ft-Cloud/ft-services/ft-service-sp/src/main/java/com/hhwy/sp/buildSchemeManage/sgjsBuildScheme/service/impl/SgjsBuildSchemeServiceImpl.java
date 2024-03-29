@@ -211,10 +211,11 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     public List<SgjsBuildScheme> getSgjsBuildSchemeList(SgjsBuildScheme sgjsBuildScheme) {
         List<SgjsBuildScheme> sgjsBuildSchemeList = sgjsBuildSchemeMapper.getSgjsBuildSchemeList(sgjsBuildScheme);
         FlowInfoSearchUtil.getFlowInfo(sgjsBuildSchemeList, FlowEnum.SGJS_BUILD_SCHEME);
+        //修改时间格式
         sgjsBuildSchemeList.forEach(p -> {
             Date updateTime = p.getUpdateTime();
             if (updateTime!=null) {
-                String format = DateUtil.format(updateTime, "yyyy-MM-dd HH");
+                String format = DateUtil.format(updateTime, "yyyy年MM月dd日 HH");
                 p.setPtVar2(format + ":00");
             }
         });
