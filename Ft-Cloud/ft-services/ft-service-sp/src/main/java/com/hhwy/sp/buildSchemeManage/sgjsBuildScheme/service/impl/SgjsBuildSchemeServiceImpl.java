@@ -1,6 +1,7 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
@@ -210,6 +211,13 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     public List<SgjsBuildScheme> getSgjsBuildSchemeList(SgjsBuildScheme sgjsBuildScheme) {
         List<SgjsBuildScheme> sgjsBuildSchemeList = sgjsBuildSchemeMapper.getSgjsBuildSchemeList(sgjsBuildScheme);
         FlowInfoSearchUtil.getFlowInfo(sgjsBuildSchemeList, FlowEnum.SGJS_BUILD_SCHEME);
+        sgjsBuildSchemeList.forEach(p -> {
+            Date updateTime = p.getUpdateTime();
+            if (updateTime!=null) {
+                String format = DateUtil.format(updateTime, "yyyy-MM-dd HH");
+                p.setPtVar2(format + ":00");
+            }
+        });
         return sgjsBuildSchemeList;
     }
 
