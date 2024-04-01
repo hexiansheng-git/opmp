@@ -91,17 +91,32 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         }
         /*按id返回结果*/
         Long id = result.getId();
+        //流程信息
+        FlowInfoSearchUtil.getFlowInfo(result, FlowEnum.SGJS_BUILD_SCHEME);
         //子表
         SgjsBuildSchemeList sgjsBuildSchemeList = new SgjsBuildSchemeList();
         sgjsBuildSchemeList.setForeignId(id);
+        if (!result.getTaskStatus().equals("4")) {
+            //未发起审批和未审批完成的 只展示本次调整的
+            sgjsBuildSchemeList.setPtVar3("1");
+        }
         List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getSgjsBuildSchemeListList(sgjsBuildSchemeList);
         if (CollUtil.isNotEmpty(sgjsBuildSchemeListList)) {
             result.setChildren(sgjsBuildSchemeListList);
         }
-        //流程信息
-        FlowInfoSearchUtil.getFlowInfo(result, FlowEnum.SGJS_BUILD_SCHEME);
         /*返回项目领域类型标识，用于判断流程分支走向*/
         this.getBusinessAreas(result);
+        //-----------给ptVar2赋值，以下逻辑用于给前端判断按钮显隐------------------
+        //调整按钮显隐， 逻辑：当前请求数据如果是最高版本，并且流程结束即显示，否则不显示
+        SgjsBuildScheme maxVersionData = sgjsBuildSchemeMapper.getMaxVersionData(new SgjsBuildScheme());
+        FlowInfoSearchUtil.getFlowInfo(maxVersionData, FlowEnum.SGJS_BUILD_SCHEME);
+        if (maxVersionData.getId().equals(result.getId()) && maxVersionData.getTaskStatus().equals("4")) {
+            //可以调整
+            result.setPtVar2("1");
+        } else {
+            //不能调整
+            result.setPtVar2("2");
+        }
         //历史记录按钮显隐，逻辑：所有数据中，只要有一条已审批完成即显示，否则不显示
         List<SgjsBuildScheme> allList = sgjsBuildSchemeMapper.getSgjsBuildSchemeList(new SgjsBuildScheme());
         List<SgjsBuildScheme> collect = allList.stream()
