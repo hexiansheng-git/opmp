@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.sbch.plan.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -20,6 +21,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.myUtilPrepare.MyUtilPrepareUtil;
 import com.hhwy.utils.myUtilPrepare.SetMaterialNameUtils;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.selfEmpty.SelfEmpty;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -53,6 +55,8 @@ public class SbchTotalDemandPlanDetailServiceImpl implements ISbchTotalDemandPla
     private SbchTotalDemandPlanService totalDemandPlanService;
     @Autowired
     private GenCodeService genCodeService;
+    @Autowired
+    private RedisUtils redisUtils;
 
     /***
      * 功能描述:  同步施工策划设备总需数据
@@ -95,6 +99,19 @@ public class SbchTotalDemandPlanDetailServiceImpl implements ISbchTotalDemandPla
             p.setPtVar1(StrUtil.isBlank(p.getMaterialType())?p.getPtVar3():p.getMaterialType());
             p.setIsSpecial("0");
             p.setMaterialType(null);
+            p.setPtVar3(null);
+            p.setMaterialType(p.getPtVar1());
+            //设备类型编号为空，从redis中获取
+            if (StrUtil.isBlank(p.getPtVar2())) {
+                Object materialInfo = redisUtils.hGet("materialInfoRedis", p.getMaterialCode());
+                if (materialInfo != null) {
+                    Map<String, Object> materialMap = JSON.parseObject(materialInfo.toString(), Map.class);
+                    //从categoryInfoRedis取出来分类名称
+//                    Object categoryInfo = redisUtils.hGet("categoryInfoRedis", ObjectUtils.toString(materialMap.get("categoryCode")));
+//                    Map<String, Object> categoryMap = JSON.parseObject(categoryInfo.toString(), Map.class);
+                    p.setPtVar2(ObjectUtils.toString(materialMap.get("categoryCode")));
+                }
+            }
         });
         sbchTotalDemandPlanDetailMapper.deleteSbchTotalDemandPlanDetailByPlanId(planId, SecurityUtils.getUserId(), DateUtils.getNowDate());
         sbchTotalDemandPlanDetailMapper.batchInsert(list);
