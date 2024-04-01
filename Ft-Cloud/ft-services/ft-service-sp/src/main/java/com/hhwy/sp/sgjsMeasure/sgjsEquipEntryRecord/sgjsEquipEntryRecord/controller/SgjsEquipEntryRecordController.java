@@ -35,7 +35,7 @@ public class SgjsEquipEntryRecordController extends BaseController{
     private ISgjsEquipEntryRecordService sgjsEquipEntryRecordService;
 
 
-    @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:list")
+    //@PreAuthorize(hasPermi = "sgjsEquipEntryRecord:list")
     @GetMapping
     public AjaxResult getSgjsEquipEntryRecord(@Validated(ValidationGroups.Get.class)  SgjsEquipEntryRecord sgjsEquipEntryRecordParam){
         SgjsEquipEntryRecord sgjsEquipEntryRecord =  sgjsEquipEntryRecordService.getSgjsEquipEntryRecord(sgjsEquipEntryRecordParam);
@@ -48,7 +48,7 @@ public class SgjsEquipEntryRecordController extends BaseController{
      * @param sgjsEquipEntryRecordParam
      * @return
      */
-    @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:list")
+    //@PreAuthorize(hasPermi = "sgjsEquipEntryRecord:list")
     @GetMapping("/list")
     public AjaxResult getSgjsEquipEntryRecordList(@Validated(ValidationGroups.Select.class) SgjsEquipEntryRecord sgjsEquipEntryRecordParam){
         startPage();
