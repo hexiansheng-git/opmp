@@ -17,6 +17,8 @@ import com.hhwy.sd.organManage.util.TreeCountUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
@@ -141,15 +143,13 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
         List<KcsjOrganManage> addList = new ArrayList<>();
         List<KcsjOrganManage> updateList = new ArrayList<>();
 
-        List<KcsjOrganManage> kcsjOrganManages = TreeUtil.treeToListWithoutId(kcsjOrganManageList);
-        int validNum = 0;
-        for (KcsjOrganManage kcsjOrganManage : kcsjOrganManages) {
-            if(StringUtils.isNotEmpty(kcsjOrganManage.getUserName()) && kcsjOrganManage.getActualEnterDate() == null) {
-                validNum ++;
+        JyDetailsUtil.jyDetails(kcsjOrganManageList,KcsjOrganManage::getLeaf, ValidationGroups.Update.class);
+        for (KcsjOrganManage manage : kcsjOrganManageList) {
+            if(manage.getActualEnterDate() == null){
+                throw new RuntimeException("实际进场日期不能为空！");
             }
-            if(StringUtils.isEmpty(kcsjOrganManage.getPostName()) && StringUtils.isEmpty(kcsjOrganManage.getUserName())) {
-                validNum ++;
-            }
+        }
+        for (KcsjOrganManage kcsjOrganManage : kcsjOrganManageList) {
             if("1".equals(kcsjOrganManage.getIsAdd())) {
                 kcsjOrganManage.setCreateUser(SecurityUtils.getSysUser().getNickName());
                 kcsjOrganManage.setCreateTime(DateUtils.getNowDate());
@@ -160,9 +160,6 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
                 kcsjOrganManage.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(kcsjOrganManage);
             }
-        }
-        if(validNum > 0) {
-            throw new RuntimeException("必填字段为空!");
         }
         int i = 0;
         if(CollectionUtils.isNotEmpty(updateList)) {

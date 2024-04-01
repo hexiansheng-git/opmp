@@ -75,7 +75,7 @@ public class KcsjOrganManageController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjOrganManage:update")
     @PostMapping("/batchUpdate")
-    public AjaxResult updateKcsjOrganManageList(@Validated(ValidationGroups.Update.class) @RequestBody KcsjOrganManage4Update kcsjOrganManage4Update) {
+    public AjaxResult updateKcsjOrganManageList(@RequestBody KcsjOrganManage4Update kcsjOrganManage4Update) {
         int i = kcsjOrganManageService.newUpdateKcsjOrganManageList(kcsjOrganManage4Update);
         return toAjax(i);
     }

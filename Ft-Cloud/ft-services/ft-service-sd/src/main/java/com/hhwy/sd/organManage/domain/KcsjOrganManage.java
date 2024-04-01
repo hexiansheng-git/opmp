@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.tree.TreeNode;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -38,12 +40,6 @@ public class KcsjOrganManage extends TreeNode<KcsjOrganManage> {
     @JsonProperty
     @Excel(name = "排序号")
     private Integer sort;
-    /**
-     * 字段描述：叶子节点
-     */
-    @JsonProperty
-    @Excel(name = "叶子节点")
-    private String leaf;
     /**
      * 字段描述：岗位
      */
@@ -80,6 +76,7 @@ public class KcsjOrganManage extends TreeNode<KcsjOrganManage> {
      */
     @JsonProperty
     @Excel(name = "人员姓名")
+    @NotBlank(message = "最末级人员不能为空！",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private String userName;
     /**
      * 字段描述：工作年限

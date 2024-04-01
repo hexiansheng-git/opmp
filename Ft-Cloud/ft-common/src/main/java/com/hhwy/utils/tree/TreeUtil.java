@@ -308,10 +308,13 @@ public class TreeUtil {
         node.setChildren(null);
         resultList.add(node);
         if (!CollectionUtils.isEmpty(children)) {
+            node.setLeaf("0");
             for (T child : children) {
                 child.setSort(sort++);
                 splitWithoutId(child, resultList);
             }
+        }else {
+            node.setLeaf("1");
         }
     }
 
