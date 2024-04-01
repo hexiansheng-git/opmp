@@ -22,6 +22,7 @@
         <result property="updateTime" column="update_time"/>
         <result property="remark" column="remark"/>
         <result property="tenantKey" column="tenant_key"/>
+        <result property="projectName" column="project_name"/>
     </resultMap>
     <sql id="selectTWarnVo">
         select `warn_id`
@@ -41,6 +42,7 @@
              , `update_time`
              , `remark`
              , `tenant_key`
+             , `project_name`
         from t_warn
     </sql>
     <select id="getTWarn" resultMap="TWarnResultMap">
@@ -63,6 +65,7 @@
             <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="tenantKey != null  and tenantKey != ''">and `tenant_key` = #{tenantKey}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` like concat('%',#{projectName},'%')</if>
         </where>
         order by create_time desc
     </select>
@@ -92,6 +95,7 @@
             <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="tenantKey != null  and tenantKey != ''">and `tenant_key` = #{tenantKey}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` like concat('%',#{projectName},'%')</if>
         </where>
         order by create_time desc
     </select>
@@ -114,6 +118,7 @@
         w.update_user,
         w.update_time,
         w.remark,
+        w.project_name,
         ifnull(r.`status`,'0') handleStatus
         FROM
         t_warn w
@@ -159,6 +164,7 @@
             <if test="updateTime != null ">`update_time`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="tenantKey != null  and tenantKey != ''">`tenant_key`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="warnId != null ">#{warnId},</if>
@@ -178,6 +184,7 @@
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="tenantKey != null  and tenantKey != ''">#{tenantKey},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
         </trim>
     </insert>
 
@@ -202,6 +209,7 @@
             `update_time`,
             `remark`,
             `tenant_key`,
+            `project_name`,
         </trim>
         values
         <foreach collection="tWarnList" item="item" separator=",">
@@ -223,6 +231,7 @@
                 #{item.updateTime},
                 #{item.remark},
                 #{item.tenantKey},
+                #{item.projectName},
             </trim>
         </foreach>
     </insert>
@@ -245,6 +254,7 @@
             <if test="updateTime != null ">`update_time` = #{updateTime},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="tenantKey != null  and  tenantKey != ''">`tenant_key` = #{tenantKey},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
         </trim>
         <where>
             <if test="warnId != null ">and `warn_id` = #{warnId}</if>
@@ -327,6 +337,11 @@
             <trim prefix="tenant_key  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `warn_id`=#{item.warnId} then #{item.tenantKey}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `warn_id`=#{item.warnId} then #{item.projectName}
                 </foreach>
             </trim>
         </trim>

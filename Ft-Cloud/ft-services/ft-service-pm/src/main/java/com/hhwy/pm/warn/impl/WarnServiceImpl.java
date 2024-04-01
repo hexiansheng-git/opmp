@@ -37,6 +37,7 @@ public class WarnServiceImpl implements WarnService {
             projectName = projectInfo.getProjectName();
         }
         String warnContent = this.buildWarnContent(projectName, warnItem.getWarnItem(), warnItem.getWarnRule());
+        tWarn.setProjectName(projectName);
         tWarn.setWarnContent(warnContent);
 
         systemServiceApi.addWarn(tWarn);
@@ -58,6 +59,7 @@ public class WarnServiceImpl implements WarnService {
             projectName = projectInfo.getProjectName();
         }
         String warnContent = this.buildWarnContent(projectName, warnItem.getWarnItem(), warnItem.getWarnRule());
+        tWarn.setProjectName(projectName);
         tWarn.setWarnContent(warnContent);
 
         systemServiceApi.addWarn(tWarn);
@@ -78,6 +80,12 @@ public class WarnServiceImpl implements WarnService {
         tWarn.setWarnUrl(warnUrl);
         tWarn.setTenantKey(tenantKey);
         tWarn.setWarnContent(warnContent);
+        String projectName = "";
+        ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+        if(projectInfo != null){
+            projectName = projectInfo.getProjectName();
+        }
+        tWarn.setProjectName(projectName);
         systemServiceApi.addWarn(tWarn);
     }
 }
