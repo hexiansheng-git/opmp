@@ -780,6 +780,11 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     public void submitBuildSchemeReviewProcess(Long id) {
         sgjsBuildSchemeReviewMapper.updateTaskStatus(id, TaskStatus.IN_PROGRESS.getCode());
         SgjsBuildSchemeReview review = sgjsBuildSchemeReviewMapper.getById(id);
+        review.setSubmitDate(DateUtils.getNowDate());
+        SysUser sysUser = SecurityUtils.getSysUser();
+        review.setSchemeInitiatorId(sysUser.getUserName());
+        review.setSchemeInitiatorName(sysUser.getNickName());
+        sgjsBuildSchemeReviewMapper.updateSgjsBuildSchemeReview(review);
         review.setProcessStatus("submit");
         sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
     }
