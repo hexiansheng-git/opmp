@@ -50,4 +50,13 @@ public interface ISgjsExperimentRecordService {
      * @return
      */
     List<SgjsExperimentRecord> selectList(SgjsExperimentRecord sgjsExperimentRecord);
+
+    /**
+     * 施工技术--设备台账及检验报告 预警消息
+     *
+     * @date 2024-04-01
+     * @author lcf
+     * @return
+     */
+    AjaxResult experimentRecordJob();
 }

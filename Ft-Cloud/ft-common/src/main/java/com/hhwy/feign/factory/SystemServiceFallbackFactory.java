@@ -115,6 +115,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             }
 
             @Override
+            public AjaxResult insertTWarnList(List<TWarn> tWarnListParam) {
+                return AjaxResult.error("请求失败:",throwable.getMessage());
+            }
+
+            @Override
             public List<SysUser> selectUserInfoByUserNameAndTenant(Map map) {
                 return new ArrayList<>();
             }

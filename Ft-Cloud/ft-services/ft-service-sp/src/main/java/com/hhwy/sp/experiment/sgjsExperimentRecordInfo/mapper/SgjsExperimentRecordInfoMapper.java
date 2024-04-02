@@ -52,4 +52,11 @@ public interface SgjsExperimentRecordInfoMapper {
      * @return
      */
     List<SgjsExperimentRecordInfo> selectByIdList(@Param(value = "idList") List<String> idList);
+
+    /**
+     * 日期查询
+     *
+     * @return
+     */
+    List<SgjsExperimentRecordInfo> selectByDate();
 }

@@ -123,4 +123,17 @@ public class SgjsExperimentRecordController extends BaseController{
         AjaxResult ajaxResult = sgjsExperimentRecordService.syncWuShe(map);
         return ajaxResult;
     }
+
+    /**
+     *
+     * 施工技术--设备台账及检验报告 预警消息
+     *
+     * @date2024-04-01
+     * @return
+     */
+    @GetMapping("/experimentRecordJob")
+    public AjaxResult experimentRecordJob(){
+        AjaxResult ajaxResult =sgjsExperimentRecordService.experimentRecordJob();
+        return ajaxResult;
+    }
 }

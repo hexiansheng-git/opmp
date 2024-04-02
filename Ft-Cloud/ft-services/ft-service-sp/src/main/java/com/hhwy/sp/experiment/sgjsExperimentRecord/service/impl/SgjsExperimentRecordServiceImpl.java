@@ -2,12 +2,19 @@ package com.hhwy.sp.experiment.sgjsExperimentRecord.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.constant.WarnItem;
 import com.hhwy.domain.SysSyncInfoLog;
+import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.KcsjWarnRecordInfo;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.mapper.SgjsExperimentRecordMapper;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.service.ISgjsExperimentRecordService;
@@ -17,7 +24,9 @@ import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.domain.SgjsExperime
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.mapper.SgjsExperimentRecordInfoDetailMapper;
 import com.hhwy.sp.utils.syncThirdInterface.wushe.GetMaterialInfoInterface;
 import com.hhwy.sp.utils.syncThirdInterface.wushe.vo.GetMaterialInfoVo;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
@@ -47,6 +56,8 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
     private SgjsExperimentRecordInfoDetailMapper detailMapper;
     @Autowired
     private PmServiceApi pmServiceApi;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
     @Autowired
@@ -309,6 +320,86 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
     @Override
     public List<SgjsExperimentRecord> selectList(SgjsExperimentRecord sgjsExperimentRecord) {
         return sgjsExperimentRecordMapper.getSgjsExperimentRecordList(sgjsExperimentRecord);
+    }
+
+    @Override
+    public AjaxResult experimentRecordJob() {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+        //存放所有租户的消息
+        List<KcsjWarnRecordInfo> warnList=new ArrayList<>();
+        try {
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+
+                List<SgjsExperimentRecordInfo> list = infoMapper.selectByDate();
+                if(CollectionUtils.isEmpty(list)){
+                    logger.info("该租户【{}】数据为空，暂不执行",tenant.getTenantKey());
+                    continue;
+                }
+                for (SgjsExperimentRecordInfo info:list) {
+                    List<TWarn> sysWarnList=new ArrayList<>();
+                    TWarn warn=new TWarn();
+                    warn.setCreateTime(DateUtils.getNowDate());
+                    warn.setTenantKey(tenantKey);
+                    warn.setProjectName(tenant.getTenantName());
+                    warn.setWarnItem(WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
+                    warn.setWarnItemId(WarnItem.KCSJ_PLAN_PROCESS.getWarnItemId());
+                    //超过下次检验标定日期 7天后 提醒
+                    Date checkDate = info.getCheckDate();
+                    //超时 延迟7天后 提醒
+                    long diffDays = FtDateUtils.getDiffDays(DateUtils.getNowDate(),checkDate);//-7
+                    if(diffDays==-7){
+                        sysWarnList.add(warn);
+                    }
+                    if(org.apache.commons.collections4.CollectionUtils.isNotEmpty(sysWarnList)){
+                        systemServiceApi.insertTWarnList(sysWarnList);
+                        logger.info("一个项目只发一次，发完就撤");
+                        KcsjWarnRecordInfo record=new KcsjWarnRecordInfo();
+                        record.setCreateTime(DateUtils.getNowDate());
+                        record.setProjectCode(tenant.getTenantKey());
+                        record.setProjectName(tenant.getTenantName());
+                        record.setWarnTime(DateUtils.getNowDate());
+                        record.setWarnSubject(WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
+//                        record.setWarnContent();
+//                        record.setWarnUser();
+//                        record.setWarnUserId();
+                        break;
+                    }
+
+                }
+            }
+
+            //同步总部数据
+            syncToGm(warnList);
+        }catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+
+        return AjaxResult.success();
+    }
+
+    /**
+     * 同步总部版数据
+     *
+     * @param warnList
+     */
+    private void syncToGm(List<KcsjWarnRecordInfo> warnList) {
+        try{
+            rocketMQTemplate.convertAndSend("sgjs_experiment_record_warn:tenantSuccess", JSONObject.toJSONString(warnList));
+        }catch(Exception e){
+            e.printStackTrace();
+            throw e;
+        }
     }
 
 }

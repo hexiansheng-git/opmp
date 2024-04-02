@@ -28,4 +28,15 @@ public interface SpServiceApi {
     @GetMapping("/jobController/getWuSheMeasureMaterialInfo")
     AjaxResult syncWusheJob();
 
+    /**
+     * 施工技术---试验进场设备
+     * 发预警发预警发预警!!!!!!
+     *
+     * @return
+     * @author lcf
+     * @date 2024-04-01
+     */
+    @GetMapping("/sgjsExperimentRecord/experimentRecordJob")
+    AjaxResult experimentRecordJob();
+
 }

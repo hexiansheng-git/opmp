@@ -31,6 +31,11 @@ public class SdServiceFallbackFactory implements FallbackFactory<SdServiceApi> {
             public AjaxResult syncWusheJob() {
                 return null;
             }
+
+            @Override
+            public AjaxResult jobPlanProcess() {
+                return null;
+            }
         };
     }
 }

@@ -1,11 +1,12 @@
 package com.hhwy.job.feign.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * sa服务
+ * sd服务
  *
  * @author hhwy
  */
@@ -37,4 +38,12 @@ public interface SdServiceApi {
      */
     @GetMapping("/kcsjEquipEntryRecord/syncWusheJob")
     AjaxResult syncWusheJob();
+
+    /**
+     * 计划进度 job 预警
+     *
+     * @return
+     */
+    @GetMapping("/kcsjPlanProcess/jobPlanProcess")
+    AjaxResult jobPlanProcess();
 }

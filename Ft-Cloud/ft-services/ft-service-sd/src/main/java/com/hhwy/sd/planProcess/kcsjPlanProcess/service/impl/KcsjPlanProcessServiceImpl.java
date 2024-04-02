@@ -1,34 +1,44 @@
 package com.hhwy.sd.planProcess.kcsjPlanProcess.service.impl;
 
-import java.math.BigDecimal;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.constant.WarnItem;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.domain.base.system.warn.TWarn;
+import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.sd.organManage.util.StatisticsUtils;
+import com.hhwy.sd.organManage.util.TreeCountUtils;
+import com.hhwy.sd.planProcess.kcsjPlanProcess.domain.KcsjPlanProcess;
+import com.hhwy.sd.planProcess.kcsjPlanProcess.domain.KcsjWarnRecord;
+import com.hhwy.sd.planProcess.kcsjPlanProcess.mapper.KcsjPlanProcessMapper;
+import com.hhwy.sd.planProcess.kcsjPlanProcess.service.IKcsjPlanProcessService;
+import com.hhwy.system.api.RemoteNoticeService;
+import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.date.FtDateUtils;
+import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import cn.hutool.core.lang.tree.Tree;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.domain.base.project.ProjectDto;
-import com.hhwy.feign.service.PmServiceApi;
-import com.hhwy.sd.organManage.util.StatisticsUtils;
-import com.hhwy.sd.organManage.util.TreeCountUtils;
-import com.hhwy.utils.ObjectUtils;
-import com.hhwy.utils.tree.TreeUtil;
-import org.apache.rocketmq.spring.core.RocketMQTemplate;
-import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.sd.planProcess.kcsjPlanProcess.mapper.KcsjPlanProcessMapper;
-import com.hhwy.sd.planProcess.kcsjPlanProcess.service.IKcsjPlanProcessService;
-import com.hhwy.sd.planProcess.kcsjPlanProcess.domain.KcsjPlanProcess;
-import com.hhwy.utils.idworker.IdWorker;
 
 /**
  * @author cjh
@@ -40,13 +50,17 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
 
     @Autowired
     private KcsjPlanProcessMapper kcsjPlanProcessMapper;
-
     @Autowired
     private PmServiceApi pmServiceApi;
-
+    @Autowired
+    private SystemServiceApi systemServiceApi;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private RemoteNoticeService remoteNoticeService;
 
+
+    private Logger logger= LoggerFactory.getLogger(KcsjPlanProcessServiceImpl.class);
 
     public KcsjPlanProcess getKcsjPlanProcess(KcsjPlanProcess kcsjPlanProcess) {
         return kcsjPlanProcessMapper.getKcsjPlanProcess(kcsjPlanProcess);
@@ -225,6 +239,112 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
         doSendGm();
     }
 
+    /**
+     * 勘察设计--计划进度 预警消息发送
+     *
+     * @author lcf
+     * @date 2024-04-01
+     * @return
+     */
+    @Override
+    public AjaxResult jobPlanProcess() {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+        //存放所有租户的消息
+        List<KcsjWarnRecord> warnList=new ArrayList<>();
+        try {
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+                //过滤出实际开始日期为空的  不为空就不预警了
+                List<KcsjPlanProcess> list = kcsjPlanProcessMapper.selectByDate();
+                if(CollectionUtils.isEmpty(list)){
+                    logger.info("该租户【{}】数据为空，暂不执行",tenant.getTenantKey());
+                    continue;
+                }
+                for (KcsjPlanProcess info:list) {
+                    List<TWarn> sysWarnList=new ArrayList<>();
+                    TWarn warn=new TWarn();
+                    warn.setCreateTime(DateUtils.getNowDate());
+                    warn.setTenantKey(tenantKey);
+                    warn.setProjectName(tenant.getTenantName());
+                    warn.setWarnItem(WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
+                    warn.setWarnItemId(WarnItem.KCSJ_PLAN_PROCESS.getWarnItemId());
+                    Date startDate = info.getPlanStartDate();
+                    if(null==startDate){
+                        continue;
+                    }
+                    //超期每2天提醒一次   2  4   6  请注意每2天  2天后
+                    long twoDays = FtDateUtils.getDiffDays(DateUtils.getNowDate(),startDate);
+                    long ltr=twoDays%2;
+                    if(ltr==0) {
+
+                        sysWarnList.add(warn);
+                    }
+                    //提前7天提醒   7天前的数据
+                    long diffDays = FtDateUtils.getDiffDays(startDate, DateUtils.getNowDate());
+                    if(diffDays==7){
+
+                        sysWarnList.add(warn);
+                    }
+                    //2个条件满足一个就行  因为预警只预警一次  一个项目上
+                    if(CollectionUtils.isNotEmpty(sysWarnList)){
+                        systemServiceApi.insertTWarnList(sysWarnList);
+                        logger.info("一个项目只发一次，发完就撤");
+                        KcsjWarnRecord record=new KcsjWarnRecord();
+                        record.setCreateTime(DateUtils.getNowDate());
+                        record.setProjectCode(tenant.getTenantKey());
+                        record.setProjectName(tenant.getTenantName());
+                        record.setWarnTime(DateUtils.getNowDate());
+                        record.setWarnSubject(WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
+//                        record.setWarnContent();
+//                        record.setWarnUser();
+//                        record.setWarnUserId();
+                        break;
+                    }
+                }
+            }
+
+            //同步总部数据
+            syncToGm(warnList);
+        }catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+        return AjaxResult.success();
+    }
+
+    /**
+     * 同步总部
+     *
+     * @param warnList
+     */
+    private void syncToGm(List<KcsjWarnRecord> warnList) {
+        try{
+            rocketMQTemplate.convertAndSend("kcsj_plan_process_warn:tenantSuccess", JSONObject.toJSONString(warnList));
+        }catch(Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
+    public static void main(String[] args) throws ParseException {
+        SimpleDateFormat sd=new SimpleDateFormat("yyyy-MM-dd");
+        Date parse = sd.parse("2024-04-03");
+        Date nowDate = DateUtils.getNowDate();
+        Long days = FtDateUtils.getDiffDays(parse,nowDate);
+        System.out.println(-8%2+"脑子宕机了。。。。。"+days);
+    }
+    
+    
     public void deleteAllKcsjPlanProcess() {
         kcsjPlanProcessMapper.deleteAllKcsjPlanProcess();
     }

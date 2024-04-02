@@ -58,7 +58,7 @@ public class KcsjDesignFileManage extends TreeNode<KcsjDesignFileManage> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "接收日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "接收日期", dateFormat = "yyyy年MM月dd日")
     private Date receptionDate;
 
     private String receptionDateStr;
@@ -79,7 +79,7 @@ public class KcsjDesignFileManage extends TreeNode<KcsjDesignFileManage> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "报监理业主日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "报监理业主日期", dateFormat = "yyyy年MM月dd日")
     private Date reportDate;
     private String reportDateStr;
     /**
@@ -87,7 +87,7 @@ public class KcsjDesignFileManage extends TreeNode<KcsjDesignFileManage> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "监理业主批复日期", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "监理业主批复日期", dateFormat = "yyyy年MM月dd日")
     private Date repleDate;
     private String repleDateStr;
     /**

@@ -116,4 +116,17 @@ public class KcsjPlanProcessController extends BaseController {
         ExcelUtils<KcsjPlanProcess> util = new ExcelUtils<>(KcsjPlanProcess.class);
         util.exportExcel(response, kcsjPlanProcessList, DateUtils.getDate());
     }
+
+    /**
+     * 勘察设计--计划进度 预警消息发送
+     *
+     * @author lcf
+     * @date 2024-04-01
+     * @return
+     */
+    @GetMapping("/jobPlanProcess")
+    public AjaxResult jobPlanProcess(){
+        AjaxResult result=kcsjPlanProcessService.jobPlanProcess();
+        return result;
+    }
 }

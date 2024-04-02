@@ -590,4 +590,8 @@
             </foreach>
         </where>
     </update>
+
+    <select id="selectByDate">
+        select * from kcsj_plan_process where del_flag='0' and act_start_date is null
+    </select>
 </mapper>

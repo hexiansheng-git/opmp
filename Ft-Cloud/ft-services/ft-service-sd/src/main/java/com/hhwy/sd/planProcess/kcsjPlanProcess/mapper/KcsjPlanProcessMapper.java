@@ -29,4 +29,11 @@ public interface KcsjPlanProcessMapper {
     int deleteKcsjPlanProcessByPks(@Param("kcsjPlanProcessPkList") List<Long> kcsjPlanProcessPkList);
 
     void deleteAllKcsjPlanProcess();
+
+    /**
+     * 从今天起7天前的数据
+     *
+     * @return
+     */
+    List<KcsjPlanProcess> selectByDate();
 }
