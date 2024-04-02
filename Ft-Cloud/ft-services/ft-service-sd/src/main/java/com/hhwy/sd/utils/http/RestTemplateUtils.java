@@ -1,4 +1,4 @@
-package com.hhwy.utils.http;
+package com.hhwy.sd.utils.http;
 
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.SpringUtils;

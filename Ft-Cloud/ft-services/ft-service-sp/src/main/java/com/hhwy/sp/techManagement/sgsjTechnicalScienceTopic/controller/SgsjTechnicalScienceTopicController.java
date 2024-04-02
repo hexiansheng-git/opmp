@@ -10,7 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.sp.common.WordUtil;
+import com.hhwy.sp.utils.WordUtil;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.FileDto;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO;

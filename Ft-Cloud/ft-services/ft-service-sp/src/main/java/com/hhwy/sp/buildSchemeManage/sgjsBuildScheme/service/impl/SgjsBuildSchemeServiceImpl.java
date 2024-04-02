@@ -3,7 +3,6 @@ package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
@@ -13,6 +12,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.constant.WarnItem;
 import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.enums.FlowEnum;
@@ -21,6 +21,7 @@ import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
 import com.hhwy.sp.buildSchemeManage.review.service.ISgjsBuildSchemeReviewService;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsWarnConfig;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.mapper.SgjsBuildSchemeMapper;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.ISgjsBuildSchemeService;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.sgjsBuildSchemeExpertSuggest.domain.SgjsBuildSchemeExpertSuggest;
@@ -30,12 +31,13 @@ import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchem
 import com.hhwy.sp.common.FileUploadUtil;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.FlowInfoSearchUtilNonReqest;
-import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
+import com.hhwy.sp.common.warn.CommonBusiness;
+import com.hhwy.sp.common.warn.SgjsWarnRecord;
+import com.hhwy.sp.utils.http.HttpHeadersUtils;
+import com.hhwy.sp.utils.http.RestTemplateUtils;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.ThreadPoolUtil;
-import com.hhwy.utils.http.HttpHeadersUtils;
-import com.hhwy.utils.http.RestTemplateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -427,24 +429,27 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     }
 
 
-    @Value("${gm.back-url}")
+    @Value("${gm.url}")
     private String gmUrl;
+    @Value("${warn.schemeListUrl}")
+    private String schemeListUrl;
+    @Value("${warn.schemeReviewUrl}")
+    private String schemeReviewUrl;
 
     //预警消息发送
     @Override
     public void warnMessage() {
         //从总部获取预警配置信息
-        String roleKeyArr = "common";
-        String url = gmUrl + "gm/sgjsWarnConfig/list?warnSubject={warnSubject}";
-        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
-        HttpEntity<MultiValueMap<String,Object>> httpEntity = new HttpEntity<>(headers);
-        AjaxResult ajaxResul = RestTemplateUtils.get(url, httpEntity, AjaxResult.class, "预警项");
+        String url = gmUrl + "/gm/sgjsWarnConfig?warnSubject={warnSubject}";
+        SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, "施工方案编制");
+        if (null == sgjsWarnConfig) return;
+        /*遍历所有租户发送预警*/
         // 切换到master
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         DynamicDataSourceContextHolder.push("master");
-        // 获取所有租户
-        List<SysTenant> tenantList = systemServiceApi.tenantList();
         try {
+            //获取所有租户
+            List<SysTenant> tenantList = systemServiceApi.tenantList();
             for (SysTenant tenant : tenantList) {
                 /*查询施工方案评审数据*/
                 SgjsBuildSchemeReview sgjsBuildSchemeReview = new SgjsBuildSchemeReview();
@@ -460,7 +465,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 List<SgjsBuildSchemeReview> list4 = sgjsBuildSchemeReviewList.stream()
                         .filter(p -> StrUtil.isNotBlank(p.getSchemeLevel()) && (p.getSchemeLevel().equals("4")))
                         .collect(Collectors.toList());
-                //不同方案级别走不同的流程
+                //不同方案级别走不同的流程,级别1不走流程
                 FlowInfoSearchUtil.getFlowInfo(list23, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_2_3);
                 FlowInfoSearchUtil.getFlowInfo(list4, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4);
                 ArrayList<SgjsBuildSchemeReview> allList = new ArrayList<>();
@@ -468,7 +473,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 allList.addAll(list4);
                 //未发起审批的数据
                 List<SgjsBuildSchemeReview> warnList = allList.stream()
-                        .filter(p -> StrUtil.isBlank(p.getTaskStatus()) && p.getTaskStatus().equals("0")).collect(Collectors.toList());
+                        .filter(p -> StrUtil.isNotBlank(p.getTaskStatus()) && p.getTaskStatus().equals("0")).collect(Collectors.toList());
                 /*提前七天提醒一次，超期后每两天进行告警*/
                 //预警触发标识
                 boolean triggerFlag = false;
@@ -482,36 +487,59 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                         break;
                     }
                 }
+                if (!triggerFlag) {
+                    log.info("施工方案清单预警执行, 无需预警。。。。");
+                    return;
+                }
                 /*执行预警*/
-                if (triggerFlag) {
-                    //根据角色获取用户
-                    String[] roles = StrUtil.splitToArray(roleKeyArr, ",");
-                    AjaxResult ajaxResult = systemServiceApi.selectByRoleAndTenant(roles, SecurityUtils.getTenantKey());
-                    Integer code = (Integer) ajaxResult.get("code");
-                    Assert.isTrue(code.equals(200), "获取用户列表失败");
-                    String userInfoStr = JSON.toJSONString(ajaxResult.get("data"));
-                    Assert.isTrue(StrUtil.isNotBlank(userInfoStr), "角色未绑定用户");
-                    List<SysUser> sysUsers = JSON.parseArray(userInfoStr, SysUser.class);
-                    String userIds = sysUsers.stream().map(p -> String.valueOf(p.getUserId())).collect(Collectors.joining(","));
-                    //发送预警
-                    ArrayList<TWarn> objects = new ArrayList<>();
-
-                    sysUsers.forEach(p -> {
-//                        TWarn tWarn = new TWarn();
-//                        tWarn.setWarnItem();
-//                        tWarn.setWarnItemId();
-//                        tWarn.setWarnScope(userIds);
-//                        tWarn.setWarnUrl();
-//                        tWarn.setWarnScopeType("3");
-//                        tWarn.setWarnContent();
-//                        tWarn.setProjectName();
-//                        tWarn.setTenantKey();
-//                        tWarn.setWarnType();
-//                        objects.addAll(tWarn);
-                    });
-
-
+                log.info("施工方案清单预警执行。。。。");
+                //根据角色获取用户
+                String[] roles = StrUtil.splitToArray(sgjsWarnConfig.getWarnObjectId(), ",");
+                AjaxResult ajaxResult = systemServiceApi.selectByRoleAndTenant(roles, SecurityUtils.getTenantKey());
+                Integer code1 = (Integer) ajaxResult.get("code");
+                Assert.isTrue(code1.equals(200), "获取用户列表失败");
+                String userInfoStr = JSON.toJSONString(ajaxResult.get("data"));
+                Assert.isTrue(StrUtil.isNotBlank(userInfoStr), "角色未绑定用户");
+                List<SysUser> sysUsers = JSON.parseArray(userInfoStr, SysUser.class);
+                String userNames = sysUsers.stream().map(p -> String.valueOf(p.getUserName())).collect(Collectors.joining(","));
+                //发送预警
+                ArrayList<TWarn> objects = new ArrayList<>();
+                TWarn tWarn = new TWarn();
+                tWarn.setWarnItem(sgjsWarnConfig.getWarnSubject());
+                tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_LIST.getWarnItemId());
+                tWarn.setWarnScope(userNames);
+                tWarn.setWarnUrl(schemeListUrl);
+                tWarn.setWarnScopeType("3");
+//                String tenantName = "埃塞RG道路升级施工总承包项目";
+//                tWarn.setWarnContent(warnMessageHandle(warnMassage, p.getNickName(),tenantName, warnSubject, warnRule));
+//                tWarn.setProjectName(tenantName);
+//                tWarn.setTenantKey("PJ2022037953");
+                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getWarnSubject(), sgjsWarnConfig.getWarnRule());
+                tWarn.setWarnContent(warnContent);
+                tWarn.setProjectName(tenant.getTenantName());
+                tWarn.setTenantKey(tenant.getTenantKey());
+                objects.add(tWarn);
+                //预警记录保存
+                List<SgjsWarnRecord> warnRecordList = new ArrayList<>();
+                sysUsers.forEach(p -> {
+                    //预警记录
+                    SgjsWarnRecord sgjsWarnRecord = new SgjsWarnRecord();
+                    sgjsWarnRecord.setProjectCode(tenant.getTenantKey());
+                    sgjsWarnRecord.setProjectName(tenant.getTenantName());
+                    sgjsWarnRecord.setWarnContent(warnContent);
+                    sgjsWarnRecord.setWarnUserId(String.valueOf(p.getUserId()));
+                    sgjsWarnRecord.setWarnUser(p.getUserName());
+                    warnRecordList.add(sgjsWarnRecord);
+                });
+                //发送预警
+                if (CollUtil.isNotEmpty(objects)) {
                     systemServiceApi.insertTWarnList(objects);
+                }
+                log.info("施工方案清单预警执行完成。。。。共:{}", objects.size());
+                /*推送总部*/
+                if (CollUtil.isNotEmpty(warnRecordList)) {
+                    log.info("施工方案清单预警记录推送数据：" + JSON.toJSONString(warnRecordList));
+                    rocketMQTemplate.convertAndSend("sgjs_build_scheme_list_war:tenantSuccess", warnRecordList);
                 }
             }
         } catch (Exception e) {
@@ -520,6 +548,5 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
         }
-
     }
 }
