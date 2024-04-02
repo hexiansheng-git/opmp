@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -112,7 +111,7 @@ public class SgjsReportMeasureSubmitController extends BaseController {
     @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:export")
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody SgjsReportMeasureSubmit sgjsReportMeasureSubmitParam) throws IOException {
-        List<SgjsReportMeasureSubmit> list = new ArrayList<>();
+        List<SgjsReportMeasureSubmit> list;
         List<Long> ids = sgjsReportMeasureSubmitParam.getIds();
         if(CollectionUtils.isNotEmpty(ids)){
             SgjsReportMeasureSubmit sgjsReportMeasureSubmit  = new SgjsReportMeasureSubmit();
