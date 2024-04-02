@@ -12,6 +12,7 @@ import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.domain.base.system.warn.TWarnRecord;
 import com.hhwy.system.api.domain.SysRole;
 import com.hhwy.system.core.mapper.SysRoleMapper;
+import com.hhwy.system.warn.push.Warn2Push;
 import com.hhwy.system.warn.service.ITWarnService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class TWarnController extends BaseController {
 
     @Autowired
     private SysRoleMapper roleMapper;
+    @Autowired
+    private Warn2Push warn2Push;
 
 
 //    @PreAuthorize(hasPermi = "tWarn:list")
@@ -163,4 +166,16 @@ public class TWarnController extends BaseController {
     public AjaxResult selectByRoleAndTenant(@RequestParam String[] roleKeyList, @RequestParam(value = "tenantKey", required = false) String tenantKey){
         return AjaxResult.success(tWarnService.selectByRoleKeyList(roleKeyList, tenantKey));
     }
+    
+    @GetMapping("/pushWarn/{id}")
+    public AjaxResult pushWarn(@PathVariable("id") Long mainId) {
+        if(!SecurityUtils.getSysUser().isAdmin())
+            return AjaxResult.error("ERROR");
+        TWarn query = new TWarn();
+        query.setWarnId(mainId);
+        TWarn warn = this.tWarnService.getTWarn(query);
+        warn2Push.push(warn);
+        return AjaxResult.success();
+    }
+
 }

@@ -51,8 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ptVar3 != null">`pt_var3`,</if>
             <if test="ptVar4 != null">`pt_var4`,</if>
             <if test="ptVar5 != null">`pt_var5`,</if>
-            <if test="interfaceUrl != null">`interface_url`,</if>
-            <if test="funName != null">`fun_name`,</if>
+            <if test="interfaceUrl != null">`interface_url`</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -74,8 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ptVar3 != null">#{ptVar3},</if>
             <if test="ptVar4 != null">#{ptVar4},</if>
             <if test="ptVar5 != null">#{ptVar5},</if>
-            <if test="interfaceUrl != null">#{interfaceUrl},</if>
-            <if test="funName != null">#{funName},</if>
+            <if test="interfaceUrl != null">#{interfaceUrl}</if>
         </trim>
     </insert>
 
