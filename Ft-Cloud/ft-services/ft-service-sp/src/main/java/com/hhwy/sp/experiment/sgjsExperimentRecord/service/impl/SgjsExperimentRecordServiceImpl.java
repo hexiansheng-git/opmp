@@ -1,5 +1,6 @@
 package com.hhwy.sp.experiment.sgjsExperimentRecord.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
@@ -14,6 +15,9 @@ import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsWarnConfig;
+import com.hhwy.sp.common.warn.CommonBusiness;
+import com.hhwy.sp.common.warn.SgjsWarnRecord;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.KcsjWarnRecordInfo;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.mapper.SgjsExperimentRecordMapper;
@@ -25,6 +29,7 @@ import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.mapper.SgjsExperime
 import com.hhwy.sp.utils.syncThirdInterface.wushe.GetMaterialInfoInterface;
 import com.hhwy.sp.utils.syncThirdInterface.wushe.vo.GetMaterialInfoVo;
 import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
@@ -32,6 +37,7 @@ import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -39,6 +45,8 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.hhwy.constant.WarnItem.KCSJ_PLAN_PROCESS;
 
 /**
  * @author lcf--试验设备进场记录
@@ -62,6 +70,10 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
     private RocketMQTemplate rocketMQTemplate;
     @Autowired
     private GetMaterialInfoInterface materialInfoInterface;
+    @Value("${gm.url}")
+    private String gmUrl;
+    @Value("${warn.experimentUrl}")
+    private String warnUrl;
 
 
     private Logger logger= LoggerFactory.getLogger(SgjsExperimentRecordServiceImpl.class);
@@ -330,7 +342,13 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
         //获取所有租户
         List<SysTenant> tenantList = systemServiceApi.tenantList();
         //存放所有租户的消息
-        List<KcsjWarnRecordInfo> warnList=new ArrayList<>();
+        List<SgjsWarnConfig> warnList=new ArrayList<>();
+        //从总部找预警接收角色 和预警消息内容
+        String url = gmUrl + "/gm/sgjsWarnConfig?warnSubject={warnSubject}";
+        SgjsWarnConfig warnConfigRst = CommonBusiness.getSgjsWarnConfig(url, KCSJ_PLAN_PROCESS.getWarnItem());
+        if(null==warnConfigRst){
+            return AjaxResult.error("未找到总部版预警配置信息");
+        }
         try {
             for (SysTenant tenant : tenantList) {
                 //切换租户
@@ -344,32 +362,35 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
                     continue;
                 }
                 for (SgjsExperimentRecordInfo info:list) {
-                    List<TWarn> sysWarnList=new ArrayList<>();
-                    TWarn warn=new TWarn();
-                    warn.setCreateTime(DateUtils.getNowDate());
-                    warn.setTenantKey(tenantKey);
-                    warn.setProjectName(tenant.getTenantName());
-                    warn.setWarnItem(WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
-                    warn.setWarnItemId(WarnItem.KCSJ_PLAN_PROCESS.getWarnItemId());
                     //超过下次检验标定日期 7天后 提醒
                     Date checkDate = info.getCheckDate();
                     //超时 延迟7天后 提醒
                     long diffDays = FtDateUtils.getDiffDays(DateUtils.getNowDate(),checkDate);//-7
                     if(diffDays==-7){
-                        sysWarnList.add(warn);
-                    }
-                    if(org.apache.commons.collections4.CollectionUtils.isNotEmpty(sysWarnList)){
-                        systemServiceApi.insertTWarnList(sysWarnList);
+                        TWarn warn=new TWarn();
+                        warn.setCreateTime(DateUtils.getNowDate());
+                        warn.setTenantKey(tenantKey);
+                        warn.setProjectName(tenant.getTenantName());
+                        warn.setWarnItem(KCSJ_PLAN_PROCESS.getWarnItem());
+                        warn.setWarnItemId(KCSJ_PLAN_PROCESS.getWarnItemId());
+                        warn.setWarnScopeType("3");
+                        warn.setWarnScope(warnConfigRst.getWarnObject());
+                        String warnContent = CommonBusiness.warnMessageHandle(warnConfigRst.getWarnMassage(), tenant.getTenantName(), warnConfigRst.getWarnSubject(), warnConfigRst.getWarnRule());
+                        warn.setWarnContent(warnContent);
+                        warn.setWarnUrl(warnUrl);
+                        warn.setTenantKey(tenantKey);
+                        systemServiceApi.addWarnNonGm(warn);
                         logger.info("一个项目只发一次，发完就撤");
-                        KcsjWarnRecordInfo record=new KcsjWarnRecordInfo();
-                        record.setCreateTime(DateUtils.getNowDate());
-                        record.setProjectCode(tenant.getTenantKey());
-                        record.setProjectName(tenant.getTenantName());
-                        record.setWarnTime(DateUtils.getNowDate());
-                        record.setWarnSubject(WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
-//                        record.setWarnContent();
-//                        record.setWarnUser();
-//                        record.setWarnUserId();
+                        //总部数据处理
+                        SgjsWarnConfig config=new SgjsWarnConfig();
+                        config.setCreateTime(DateUtils.getNowDate());
+                        config.setWarnSubject(KCSJ_PLAN_PROCESS.getWarnItem());
+                        config.setPtVar1(KCSJ_PLAN_PROCESS.getWarnItemId());
+                        config.setWarnObjectId(warnConfigRst.getWarnObjectId());
+                        config.setPrjCode(tenantKey);
+                        config.setPrjName(tenant.getTenantName());
+                        config.setWarnMassage(warnConfigRst.getWarnMassage());
+                        warnList.add(config);
                         break;
                     }
 
@@ -393,7 +414,34 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
      *
      * @param warnList
      */
-    private void syncToGm(List<KcsjWarnRecordInfo> warnList) {
+    private void syncToGm(List<SgjsWarnConfig> warnList) {
+        if(org.apache.commons.collections4.CollectionUtils.isEmpty(warnList)){
+            logger.info("空了，哪来回哪去！！！！");
+            return;
+        }
+        List<SgjsWarnRecord> rstList=new ArrayList<>();
+        Map<String, List<SgjsWarnConfig>> map = warnList.stream().collect(Collectors.groupingBy(e -> e.getPrjCode()));
+        for (Map.Entry<String, List<SgjsWarnConfig>> info:map.entrySet()) {
+            List<SgjsWarnConfig> valueList = info.getValue();
+            if(org.apache.commons.collections4.CollectionUtils.isEmpty(valueList))continue;
+            //一个项目一条预警信息
+            String warnObjectId = valueList.get(0).getWarnObjectId();
+            SgjsWarnConfig sgjsWarnConfig=new SgjsWarnConfig();
+            sgjsWarnConfig.setWarnObjectId(warnObjectId);
+            List<SysUser> sysUsers = CommonBusiness.getSysUsers(sgjsWarnConfig);
+            if (CollUtil.isEmpty(sysUsers)) continue;
+            sysUsers.forEach(e->{
+                SgjsWarnRecord record=new SgjsWarnRecord();
+                record.setProjectCode(valueList.get(0).getPrjCode());
+                record.setProjectName(valueList.get(0).getPrjName());
+                record.setWarnContent(valueList.get(0).getWarnMassage());
+                record.setWarnUserId(e.getUserId()+"");
+                record.setWarnUser(e.getUserName());
+                record.setWarnSubject(valueList.get(0).getWarnSubject());
+                record.setWarnTime(DateUtils.getNowDate());
+                rstList.add(record);
+            });
+        }
         try{
             rocketMQTemplate.convertAndSend("sgjs_experiment_record_warn:tenantSuccess", JSONObject.toJSONString(warnList));
         }catch(Exception e){
