@@ -22,6 +22,8 @@ public enum WarnItem {
     PERSON_CONTROL_PLAN_TWO("人员管控策划", "person_control_plan_two", "证件到期前2个月，进行预警"),
     PERSON_CONTROL_PLAN_THREE("人员管控策划", "person_control_plan_three", "证件到期前3个月，进行预警"),
     WBS_P6_WARN("P6推送预警", "wbs_p6_warn", "P6数据已推送，请及时上传作业"),
+    SGJS_BUILD_SCHEME_LIST("施工技术-施工方案编制", "sgjs_build_scheme_list", "根据施工方案清单计划，若该方案未按计划完成编制时间进行提交评审，则进行预警"),
+    SGJS_BUILD_SCHEME_REVIEW("施工技术-施工方案评审", "sgjs_build_scheme_review", "根据施工方案清单计划，若该方案未按时完成评审，则进行预警"),
     KCSJ_PLAN_PROCESS("勘察设计-计划进度","plan_process_warn","提前七天提醒一次给项目总工；超期每两天提醒预警人");
 
     public String getWarnItem() {

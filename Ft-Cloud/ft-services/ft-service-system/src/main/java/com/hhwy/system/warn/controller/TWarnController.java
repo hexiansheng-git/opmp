@@ -85,13 +85,23 @@ public class TWarnController extends BaseController {
     }
 
     /**
-     * 发送预警
+     * 发送预警 同时推送总部
      * @param tWarn
      * @return
      */
     @PostMapping("/addWarn")
     public AjaxResult addWarn(@Validated(ValidationGroups.Save.class) @RequestBody TWarn tWarn) {
         return toAjax(tWarnService.addWarn(tWarn));
+    }
+
+    /**
+     * 发送预警 不推送总部
+     * @param tWarn
+     * @return
+     */
+    @PostMapping("/addWarnNonGm")
+    public AjaxResult addWarnNonGm(@Validated(ValidationGroups.Save.class) @RequestBody TWarn tWarn) {
+        return toAjax(tWarnService.addWarnNonGm(tWarn));
     }
 
     @PostMapping("/addWarn1")

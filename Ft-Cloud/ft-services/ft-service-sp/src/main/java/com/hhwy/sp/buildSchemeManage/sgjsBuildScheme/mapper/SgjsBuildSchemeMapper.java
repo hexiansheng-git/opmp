@@ -28,7 +28,9 @@ public interface SgjsBuildSchemeMapper {
 
     int deleteSgjsBuildSchemeByPks(@Param("sgjsBuildSchemePkList") List<Long> sgjsBuildSchemePkList);
 
+    //最高版本
     SgjsBuildScheme getMaxVersionData(SgjsBuildScheme sgjsBuildScheme);
+    //有效版本
     SgjsBuildScheme getValidVersionData();
 
     void updateNonValid(SgjsBuildScheme param);

@@ -66,12 +66,31 @@ public class TWarnServiceImpl implements ITWarnService {
         return tWarnMapper.getTWarnList(tWarn);
     }
 
+    @Override
+    @Transactional
+    public int addWarnNonGm(TWarn tWarn) {
+        String warnScope = tWarn.getWarnScope();
+        if(StringUtils.isBlank(warnScope)){
+            return 1;
+        }
+        this.setWarnScopeName(tWarn);
+        tWarn.setWarnId(IdWorker.createId());
+        tWarn.setCreateUser("admin");
+        tWarn.setCreateTime(DateUtils.getNowDate());
+        int result = tWarnMapper.insertTWarn(tWarn);
+        if (result > 0) {
+            ThreadUtil.execAsync(() -> {
+                this.notify(tWarn);
+            });
+        }
+        return result;
+    }
 
     @Override
     @Transactional
     public int addWarn(TWarn tWarn) {
         String warnScope = tWarn.getWarnScope();
-        if(StringUtils.isBlank(warnScope)){
+        if (StringUtils.isBlank(warnScope)) {
             return 1;
         }
         this.setWarnScopeName(tWarn);
@@ -270,7 +289,15 @@ public class TWarnServiceImpl implements ITWarnService {
             tWarn.setCreateUser(SecurityUtils.getUserName());
             tWarn.setCreateTime(DateUtils.getNowDate());
         }
-        return tWarnMapper.insertTWarnList(tWarnList);
+        int result = tWarnMapper.insertTWarnList(tWarnList);
+        if (result > 0) {
+            ThreadUtil.execAsync(() -> {
+                for (TWarn tWarn : tWarnList) {
+                    this.notify(tWarn);
+                }
+            });
+        }
+        return result;
     }
 
     @Transactional

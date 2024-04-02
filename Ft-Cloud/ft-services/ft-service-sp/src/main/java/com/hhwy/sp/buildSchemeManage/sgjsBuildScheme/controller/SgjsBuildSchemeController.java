@@ -121,4 +121,12 @@ public class SgjsBuildSchemeController extends BaseController {
     public void updateBuildScheme(@RequestParam("id") Long id, @RequestParam("isPass") String isPass){
         sgjsBuildSchemeService.updateTaskStatus(id, isPass);
     }
+
+    /*
+     * 功能描述: 预警消息发送
+     */
+    @RequestMapping("/warnMessage")
+    public void warnMessage(){
+        sgjsBuildSchemeService.warnMessage();
+    }
 }

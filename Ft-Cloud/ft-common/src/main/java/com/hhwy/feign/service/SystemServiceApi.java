@@ -103,12 +103,20 @@ public interface SystemServiceApi {
     AjaxResult selectListRatePeriodByCodeAndCurrent(@RequestBody Map<String,String> map);
 
     /**
-     * 发送预警
+     * 发送预警 同时推送总部
      * @param tWarn
      * @return
      */
     @PostMapping("/tWarn/addWarn")
     AjaxResult addWarn(@RequestBody TWarn tWarn);
+
+    /**
+     * 发送预警 不推送总部
+     * @param tWarn
+     * @return
+     */
+    @PostMapping("/tWarn/addWarnNonGm")
+    AjaxResult addWarnNonGm(@RequestBody TWarn tWarn);
 
     /**
      * 批量新增预警

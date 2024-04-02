@@ -1,17 +1,25 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
+import com.hhwy.sp.buildSchemeManage.review.service.ISgjsBuildSchemeReviewService;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.mapper.SgjsBuildSchemeMapper;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.ISgjsBuildSchemeService;
@@ -23,15 +31,22 @@ import com.hhwy.sp.common.FileUploadUtil;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.FlowInfoSearchUtilNonReqest;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.ThreadPoolUtil;
+import com.hhwy.utils.http.HttpHeadersUtils;
+import com.hhwy.utils.http.RestTemplateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.MultiValueMap;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -56,9 +71,12 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     private RocketMQTemplate rocketMQTemplate;
     @Autowired
     private PmServiceApi pmServiceApi;
-
+    @Autowired
+    private SystemServiceApi systemServiceApi;
     @Autowired
     private FileUploadUtil fileUploadUtil;
+    @Autowired
+    private ISgjsBuildSchemeReviewService sgjsBuildSchemeReviewService;
 
     private static final Map<String, String> businessAreas = new HashMap<>();
 
@@ -170,10 +188,10 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         SgjsBuildScheme newDataResult = new SgjsBuildScheme();
         if (result == null) return newDataResult;
         String taskStatus = result.getTaskStatus();
-        if (StrUtil.isNotBlank(taskStatus) && taskStatus.equals("5")){
+        if (StrUtil.isNotBlank(taskStatus) && taskStatus.equals("5")) {
             //最高版本审批通过。基于上一版本生成一条新的数据
             newDataResult = this.createNewData(result);
-        }else {
+        } else {
             //最高版本未发起审批。返回当前版本
             newDataResult = result;
         }
@@ -229,7 +247,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         //修改时间格式
         sgjsBuildSchemeList.forEach(p -> {
             Date updateTime = p.getUpdateTime();
-            if (updateTime!=null) {
+            if (updateTime != null) {
                 String format = DateUtil.format(updateTime, "yyyy年MM月dd日 HH");
                 p.setPtVar2(format + ":00");
             }
@@ -388,12 +406,12 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         sgjsBuildScheme.setTaskStatus("5");
         sgjsBuildScheme.setId(id);
         sgjsBuildScheme.setPtVar3(isPass);
-        if (StrUtil.isBlank(isPass)){
+        if (StrUtil.isBlank(isPass)) {
             //设置为无效
             sgjsBuildScheme.setValid("0");
             //修改当前记录状态
             sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
-        }else {
+        } else {
             //0不通过 1通过
             sgjsBuildScheme.setValid(isPass);
             if (isPass.equals("0")) {
@@ -408,4 +426,100 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         }
     }
 
+
+    @Value("${gm.back-url}")
+    private String gmUrl;
+
+    //预警消息发送
+    @Override
+    public void warnMessage() {
+        //从总部获取预警配置信息
+        String roleKeyArr = "common";
+        String url = gmUrl + "gm/sgjsWarnConfig/list?warnSubject={warnSubject}";
+        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
+        HttpEntity<MultiValueMap<String,Object>> httpEntity = new HttpEntity<>(headers);
+        AjaxResult ajaxResul = RestTemplateUtils.get(url, httpEntity, AjaxResult.class, "预警项");
+        // 切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        // 获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+        try {
+            for (SysTenant tenant : tenantList) {
+                /*查询施工方案评审数据*/
+                SgjsBuildSchemeReview sgjsBuildSchemeReview = new SgjsBuildSchemeReview();
+                List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewList = sgjsBuildSchemeReviewService.getSgjsBuildSchemeReviewList(sgjsBuildSchemeReview);
+                if (CollUtil.isEmpty(sgjsBuildSchemeReviewList)) {
+                    log.info("施工方案评审数据无数据");
+                    return;
+                }
+                /*查询流程，过滤得到未发起审批的数据*/
+                List<SgjsBuildSchemeReview> list23 = sgjsBuildSchemeReviewList.stream()
+                        .filter(p -> StrUtil.isNotBlank(p.getSchemeLevel()) && (p.getSchemeLevel().equals("2") || p.getSchemeLevel().equals("3")))
+                        .collect(Collectors.toList());
+                List<SgjsBuildSchemeReview> list4 = sgjsBuildSchemeReviewList.stream()
+                        .filter(p -> StrUtil.isNotBlank(p.getSchemeLevel()) && (p.getSchemeLevel().equals("4")))
+                        .collect(Collectors.toList());
+                //不同方案级别走不同的流程
+                FlowInfoSearchUtil.getFlowInfo(list23, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_2_3);
+                FlowInfoSearchUtil.getFlowInfo(list4, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4);
+                ArrayList<SgjsBuildSchemeReview> allList = new ArrayList<>();
+                allList.addAll(list23);
+                allList.addAll(list4);
+                //未发起审批的数据
+                List<SgjsBuildSchemeReview> warnList = allList.stream()
+                        .filter(p -> StrUtil.isBlank(p.getTaskStatus()) && p.getTaskStatus().equals("0")).collect(Collectors.toList());
+                /*提前七天提醒一次，超期后每两天进行告警*/
+                //预警触发标识
+                boolean triggerFlag = false;
+                Date nowDate = new Date();
+                for (SgjsBuildSchemeReview schemeList : warnList) {
+                    Date planCompletionTime = schemeList.getPlanCompletionTime();
+                    long between = DateUtil.between(nowDate, planCompletionTime, DateUnit.DAY, false);
+                    if (between == 7 || (between <= 0 && between % 2 == 0)) {
+                        //有一条数据满足条件则修改标识
+                        triggerFlag = true;
+                        break;
+                    }
+                }
+                /*执行预警*/
+                if (triggerFlag) {
+                    //根据角色获取用户
+                    String[] roles = StrUtil.splitToArray(roleKeyArr, ",");
+                    AjaxResult ajaxResult = systemServiceApi.selectByRoleAndTenant(roles, SecurityUtils.getTenantKey());
+                    Integer code = (Integer) ajaxResult.get("code");
+                    Assert.isTrue(code.equals(200), "获取用户列表失败");
+                    String userInfoStr = JSON.toJSONString(ajaxResult.get("data"));
+                    Assert.isTrue(StrUtil.isNotBlank(userInfoStr), "角色未绑定用户");
+                    List<SysUser> sysUsers = JSON.parseArray(userInfoStr, SysUser.class);
+                    String userIds = sysUsers.stream().map(p -> String.valueOf(p.getUserId())).collect(Collectors.joining(","));
+                    //发送预警
+                    ArrayList<TWarn> objects = new ArrayList<>();
+
+                    sysUsers.forEach(p -> {
+//                        TWarn tWarn = new TWarn();
+//                        tWarn.setWarnItem();
+//                        tWarn.setWarnItemId();
+//                        tWarn.setWarnScope(userIds);
+//                        tWarn.setWarnUrl();
+//                        tWarn.setWarnScopeType("3");
+//                        tWarn.setWarnContent();
+//                        tWarn.setProjectName();
+//                        tWarn.setTenantKey();
+//                        tWarn.setWarnType();
+//                        objects.addAll(tWarn);
+                    });
+
+
+                    systemServiceApi.insertTWarnList(objects);
+                }
+            }
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        } finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+
+    }
 }
