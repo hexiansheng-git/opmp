@@ -247,7 +247,7 @@ public class SgjsBuildSchemeReview extends CommonBaseEntity {
     @JsonProperty
     private String dismissed;
     /**
-     * 字段描述：预留字段2
+     * 字段描述：本方案编制负责人用户名
      */
     @JsonProperty
     private String ptVar2;
