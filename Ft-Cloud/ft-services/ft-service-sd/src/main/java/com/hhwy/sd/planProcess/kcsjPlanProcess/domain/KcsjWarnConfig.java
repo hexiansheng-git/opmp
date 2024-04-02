@@ -1,12 +1,10 @@
-package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain;
+package com.hhwy.sd.planProcess.kcsjPlanProcess.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,7 +16,7 @@ import java.util.Date;
  * @remark sgjs_warn_config
  */
 @Data
-public class SgjsWarnConfig extends BaseEntity {
+public class KcsjWarnConfig {
     private static final long serialVersionUID = 1L;
 
     /**

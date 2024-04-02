@@ -1,5 +1,6 @@
 package com.hhwy.sd.planProcess.kcsjPlanProcess.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
@@ -8,7 +9,6 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
-import com.hhwy.constant.WarnItem;
 import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.feign.service.PmServiceApi;
@@ -16,11 +16,14 @@ import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sd.organManage.util.StatisticsUtils;
 import com.hhwy.sd.organManage.util.TreeCountUtils;
 import com.hhwy.sd.planProcess.kcsjPlanProcess.domain.KcsjPlanProcess;
+import com.hhwy.sd.planProcess.kcsjPlanProcess.domain.KcsjWarnConfig;
 import com.hhwy.sd.planProcess.kcsjPlanProcess.domain.KcsjWarnRecord;
 import com.hhwy.sd.planProcess.kcsjPlanProcess.mapper.KcsjPlanProcessMapper;
 import com.hhwy.sd.planProcess.kcsjPlanProcess.service.IKcsjPlanProcessService;
+import com.hhwy.sd.utils.http.WarnCommonBusiness;
 import com.hhwy.system.api.RemoteNoticeService;
 import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
@@ -30,6 +33,7 @@ import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +42,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.hhwy.constant.WarnItem.KCSJ_PLAN_PROCESS;
 
 /**
  * @author cjh
@@ -56,8 +63,11 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
     private SystemServiceApi systemServiceApi;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
-    @Autowired
-    private RemoteNoticeService remoteNoticeService;
+
+    @Value("${warn.planProgressIUrl}")
+    private String warnUrl;
+    @Value("${gm.url}")
+    private String gmUrl;
 
 
     private Logger logger= LoggerFactory.getLogger(KcsjPlanProcessServiceImpl.class);
@@ -254,10 +264,15 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
         //获取所有租户
         List<SysTenant> tenantList = systemServiceApi.tenantList();
         //存放所有租户的消息
-        List<KcsjWarnRecord> warnList=new ArrayList<>();
+        List<KcsjWarnConfig> warnList=new ArrayList<>();
+        //从总部找预警接收角色 和预警消息内容
+        String url = gmUrl + "/gm/sgjsWarnConfig?warnSubject={warnSubject}";
+        KcsjWarnConfig warnConfigRst = WarnCommonBusiness.getSgjsWarnConfig(url, KCSJ_PLAN_PROCESS.getWarnItem());
+        if(null==warnConfigRst){
+            return AjaxResult.error("未找到总部版预警配置信息");
+        }
         try {
             for (SysTenant tenant : tenantList) {
-                //切换租户
                 String tenantKey = tenant.getTenantKey();
                 String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
                 DynamicDataSourceContextHolder.push(dataSource);
@@ -268,13 +283,7 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
                     continue;
                 }
                 for (KcsjPlanProcess info:list) {
-                    List<TWarn> sysWarnList=new ArrayList<>();
-                    TWarn warn=new TWarn();
-                    warn.setCreateTime(DateUtils.getNowDate());
-                    warn.setTenantKey(tenantKey);
-                    warn.setProjectName(tenant.getTenantName());
-                    warn.setWarnItem(WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
-                    warn.setWarnItemId(WarnItem.KCSJ_PLAN_PROCESS.getWarnItemId());
+                    //发个消息
                     Date startDate = info.getPlanStartDate();
                     if(null==startDate){
                         continue;
@@ -282,34 +291,39 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
                     //超期每2天提醒一次   2  4   6  请注意每2天  2天后
                     long twoDays = FtDateUtils.getDiffDays(DateUtils.getNowDate(),startDate);
                     long ltr=twoDays%2;
-                    if(ltr==0) {
-
-                        sysWarnList.add(warn);
-                    }
                     //提前7天提醒   7天前的数据
                     long diffDays = FtDateUtils.getDiffDays(startDate, DateUtils.getNowDate());
-                    if(diffDays==7){
-
-                        sysWarnList.add(warn);
-                    }
                     //2个条件满足一个就行  因为预警只预警一次  一个项目上
-                    if(CollectionUtils.isNotEmpty(sysWarnList)){
-                        systemServiceApi.insertTWarnList(sysWarnList);
+                    if(ltr==0 || diffDays==7) {
+                        TWarn warn=new TWarn();
+                        warn.setCreateTime(DateUtils.getNowDate());
+                        warn.setTenantKey(tenantKey);
+                        warn.setProjectName(tenant.getTenantName());
+                        warn.setWarnItem(KCSJ_PLAN_PROCESS.getWarnItem());
+                        warn.setWarnItemId(KCSJ_PLAN_PROCESS.getWarnItemId());
+                        warn.setWarnScopeType("3");
+                        warn.setWarnScope(warnConfigRst.getWarnObject());
+                        String warnContent = WarnCommonBusiness.warnMessageHandle(warnConfigRst.getWarnMassage(), tenant.getTenantName(), warnConfigRst.getWarnSubject(), warnConfigRst.getWarnRule());
+                        warn.setWarnContent(warnContent);
+                        warn.setWarnUrl(warnUrl);
+                        warn.setTenantKey(tenantKey);
+                        systemServiceApi.addWarnNonGm(warn);
                         logger.info("一个项目只发一次，发完就撤");
-                        KcsjWarnRecord record=new KcsjWarnRecord();
-                        record.setCreateTime(DateUtils.getNowDate());
-                        record.setProjectCode(tenant.getTenantKey());
-                        record.setProjectName(tenant.getTenantName());
-                        record.setWarnTime(DateUtils.getNowDate());
-                        record.setWarnSubject(WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
-//                        record.setWarnContent();
-//                        record.setWarnUser();
-//                        record.setWarnUserId();
+                        //总部数据处理
+                        KcsjWarnConfig config=new KcsjWarnConfig();
+                        config.setCreateTime(DateUtils.getNowDate());
+                        config.setWarnSubject(KCSJ_PLAN_PROCESS.getWarnItem());
+                        config.setPtVar1(KCSJ_PLAN_PROCESS.getWarnItemId());
+                        config.setWarnObjectId(warnConfigRst.getWarnObjectId());
+                        config.setPrjCode(tenantKey);
+                        config.setPrjName(tenant.getTenantName());
+                        config.setWarnMassage(warnConfigRst.getWarnMassage());
+                        warnList.add(config);
                         break;
                     }
+
                 }
             }
-
             //同步总部数据
             syncToGm(warnList);
         }catch (Exception e){
@@ -326,9 +340,36 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
      *
      * @param warnList
      */
-    private void syncToGm(List<KcsjWarnRecord> warnList) {
+    private void syncToGm(List<KcsjWarnConfig> warnList) {
+        if(CollectionUtils.isEmpty(warnList)){
+            logger.info("空了，哪来回哪去！！！！");
+            return;
+        }
+        List<KcsjWarnRecord> rstList=new ArrayList<>();
+        Map<String, List<KcsjWarnConfig>> map = warnList.stream().collect(Collectors.groupingBy(e -> e.getPrjCode()));
+        for (Map.Entry<String, List<KcsjWarnConfig>> info:map.entrySet()) {
+            List<KcsjWarnConfig> valueList = info.getValue();
+            if(CollectionUtils.isEmpty(valueList))continue;
+            //一个项目一条预警信息
+            String warnObjectId = valueList.get(0).getWarnObjectId();
+            KcsjWarnConfig sgjsWarnConfig=new KcsjWarnConfig();
+            sgjsWarnConfig.setWarnObjectId(warnObjectId);
+            List<SysUser> sysUsers = WarnCommonBusiness.getSysUsers(sgjsWarnConfig);
+            if (CollUtil.isEmpty(sysUsers)) continue;
+            sysUsers.forEach(e->{
+                KcsjWarnRecord record=new KcsjWarnRecord();
+                record.setProjectCode(valueList.get(0).getPrjCode());
+                record.setProjectName(valueList.get(0).getPrjName());
+                record.setWarnContent(valueList.get(0).getWarnMassage());
+                record.setWarnUserId(e.getUserId()+"");
+                record.setWarnUser(e.getUserName());
+                record.setWarnSubject(valueList.get(0).getWarnSubject());
+                record.setWarnTime(DateUtils.getNowDate());
+                rstList.add(record);
+            });
+        }
         try{
-            rocketMQTemplate.convertAndSend("kcsj_plan_process_warn:tenantSuccess", JSONObject.toJSONString(warnList));
+            rocketMQTemplate.convertAndSend("kcsj_plan_process_warn:tenantSuccess", JSONObject.toJSONString(rstList));
         }catch(Exception e){
             e.printStackTrace();
             throw e;
