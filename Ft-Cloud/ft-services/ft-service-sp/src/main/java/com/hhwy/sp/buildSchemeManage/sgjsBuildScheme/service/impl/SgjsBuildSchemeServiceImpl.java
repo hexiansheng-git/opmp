@@ -492,15 +492,9 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                     return;
                 }
                 /*执行预警*/
-                log.info("施工方案清单预警执行。。。。");
                 //根据角色获取用户
-                String[] roles = StrUtil.splitToArray(sgjsWarnConfig.getWarnObjectId(), ",");
-                AjaxResult ajaxResult = systemServiceApi.selectByRoleAndTenant(roles, SecurityUtils.getTenantKey());
-                Integer code1 = (Integer) ajaxResult.get("code");
-                Assert.isTrue(code1.equals(200), "获取用户列表失败");
-                String userInfoStr = JSON.toJSONString(ajaxResult.get("data"));
-                Assert.isTrue(StrUtil.isNotBlank(userInfoStr), "角色未绑定用户");
-                List<SysUser> sysUsers = JSON.parseArray(userInfoStr, SysUser.class);
+                List<SysUser> sysUsers = CommonBusiness.getSysUsers(sgjsWarnConfig);
+                if (CollUtil.isEmpty(sysUsers)) return;
                 String userNames = sysUsers.stream().map(p -> String.valueOf(p.getUserName())).collect(Collectors.joining(","));
                 //发送预警
                 ArrayList<TWarn> objects = new ArrayList<>();
@@ -510,10 +504,6 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 tWarn.setWarnScope(userNames);
                 tWarn.setWarnUrl(schemeListUrl);
                 tWarn.setWarnScopeType("3");
-//                String tenantName = "埃塞RG道路升级施工总承包项目";
-//                tWarn.setWarnContent(warnMessageHandle(warnMassage, p.getNickName(),tenantName, warnSubject, warnRule));
-//                tWarn.setProjectName(tenantName);
-//                tWarn.setTenantKey("PJ2022037953");
                 String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getWarnSubject(), sgjsWarnConfig.getWarnRule());
                 tWarn.setWarnContent(warnContent);
                 tWarn.setProjectName(tenant.getTenantName());
@@ -549,4 +539,5 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             DynamicDataSourceContextHolder.push(oldDataSource);
         }
     }
+
 }
