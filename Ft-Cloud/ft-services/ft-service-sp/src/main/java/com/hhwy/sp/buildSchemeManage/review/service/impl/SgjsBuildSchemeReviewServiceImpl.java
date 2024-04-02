@@ -1,24 +1,44 @@
 package com.hhwy.sp.buildSchemeManage.review.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.WarnItem;
 import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.domain.base.system.warn.TWarn;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.feign.service.FlowServiceApi;
 import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.buildSchemeManage.review.constant.ReviewFlowNodeMark;
 import com.hhwy.sp.buildSchemeManage.review.constant.TaskStatus;
 import com.hhwy.sp.buildSchemeManage.review.domain.*;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.*;
 import com.hhwy.sp.buildSchemeManage.review.mapper.*;
 import com.hhwy.sp.buildSchemeManage.review.service.ISgjsBuildSchemeReviewService;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsWarnConfig;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
+import com.hhwy.sp.common.FlowInfoSearchUtil;
+import com.hhwy.sp.common.warn.CommonBusiness;
+import com.hhwy.sp.common.warn.SgjsWarnRecord;
 import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +51,7 @@ import java.util.stream.Collectors;
  * @remark
  */
 @Service
+@Slf4j
 public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewService {
 
     @Autowired
@@ -56,9 +77,15 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 
     @Autowired
     private PmServiceApi pmServiceApi;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
+    @Autowired
+    private FlowServiceApi flowServiceApi;
 
     @Autowired
     private ISysSyncInfoService4Sp sysSyncInfoService4Sp;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
 
     public SgjsBuildSchemeReview getSgjsBuildSchemeReview(SgjsBuildSchemeReview sgjsBuildSchemeReview) {
@@ -411,30 +438,30 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 //                    String userName = review.getUserName();
                     review.setUserName(userName);
                     BuildSchemeStaffOpinionVo staffOpinionVo = review.getStaffOpinionVo();
-                    this.saveStaffOpinionVo(id,flowNodeMark,userName,staffOpinionVo);
-                }else if(ReviewFlowNodeMark.FlowNodeMark7.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark8.equals(flowNodeMark)){
+                    this.saveStaffOpinionVo(id, flowNodeMark, userName, staffOpinionVo);
+                } else if (ReviewFlowNodeMark.FlowNodeMark7.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark8.equals(flowNodeMark)) {
                     //区域总工审批节点 / 海外事业部总工审批节点
                     BuildSchemeReviewOpinionVo reviewOpinionVo = review.getReviewOpinionVo();
-                    this.saveReviewOpinionVo(id,flowNodeMark,reviewOpinionVo);
-                }else if(ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark10.equals(flowNodeMark)){
+                    this.saveReviewOpinionVo(id, flowNodeMark, reviewOpinionVo);
+                } else if (ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark10.equals(flowNodeMark)) {
                     //海外事业部总工意见为修改后通过后的审批节点：需要修改字段-修改结果
                     SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = review.getReviewOpinionRecord();
-                    if(reviewOpinionRecord != null){
+                    if (reviewOpinionRecord != null) {
                         List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList = reviewOpinionRecord.getStaffOpinionRecordList();
                         this.updateStaffOpinionRecordList(staffOpinionRecordList);
                     }
-                }else {
+                } else {
                     //节点标识为空：当前为驳回后的发起人节点
                     SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = review.getReviewOpinionRecord();
-                    if(reviewOpinionRecord != null){
+                    if (reviewOpinionRecord != null) {
                         List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList = reviewOpinionRecord.getStaffOpinionRecordList();
                         this.updateStaffOpinionRecordList(staffOpinionRecordList);
                     }
                 }
-            }else if("4".equals(schemeLevel) && ReviewFlowNodeMark.FlowNodeMark1.equals(flowNodeMark)){
+            } else if ("4".equals(schemeLevel) && ReviewFlowNodeMark.FlowNodeMark1.equals(flowNodeMark)) {
                 //四级方案区域中心审批节点
                 List<SgjsBuildSchemeReviewStaff> staffList = review.getReviewStaffList();
-                this.saveStaffList(id,flowNodeMark,staffList);
+                this.saveStaffList(id, flowNodeMark, staffList);
             }
         }
 
@@ -446,13 +473,14 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     }
 
     private void updateStaffOpinionRecordList(List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList) {
-        if(CollectionUtils.isNotEmpty(staffOpinionRecordList)){
+        if (CollectionUtils.isNotEmpty(staffOpinionRecordList)) {
             sgjsBuildSchemeStaffOpinionRecordMapper.updateUpdateResult(staffOpinionRecordList);
         }
     }
 
     /**
      * 针对7,8节点的意见详情
+     *
      * @param reviewId
      * @param flowNodeMark
      * @param reviewOpinionVo
@@ -462,7 +490,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         queryParam.setReviewId(reviewId);
 //        queryParam.setFlowNodeMark(flowNodeMark);
         SgjsBuildSchemeReviewOpinion reviewOpinion = sgjsBuildSchemeReviewOpinionMapper.getSgjsBuildSchemeReviewOpinion(queryParam);
-        if(reviewOpinion != null){
+        if (reviewOpinion != null) {
             reviewOpinion.setUpdateUser(SecurityUtils.getUserName());
             reviewOpinion.setUpdateTime(DateUtils.getNowDate());
             reviewOpinion.setScore(reviewOpinionVo.getScore());
@@ -471,7 +499,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             reviewOpinion.setOverseasChiefOpinion(reviewOpinionVo.getOverseasChiefOpinion());
             reviewOpinion.setOverseasChiefDetailOpinion(reviewOpinionVo.getOverseasChiefDetailOpinion());
             sgjsBuildSchemeReviewOpinionMapper.updateSgjsBuildSchemeReviewOpinion(reviewOpinion);
-        }else {
+        } else {
             reviewOpinion = new SgjsBuildSchemeReviewOpinion();
             reviewOpinion.setId(IdWorker.createId());
             reviewOpinion.setReviewId(reviewId);
@@ -488,6 +516,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 
     /**
      * 针对3,4,5,6节点的意见详情数据
+     *
      * @param reviewId
      * @param flowNodeMark
      * @param userName
@@ -616,6 +645,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         if(CollectionUtils.isEmpty(lastValidSchemeListList)){
             return "已同步 " + syncNumTotal + " 条数据！";
         }
+
 
         List<SgjsBuildSchemeReview> reviewList = sgjsBuildSchemeReviewMapper.getListByQueryVo(new BuildSchemeReviewQueryVo());
         SysUser sysUser = SecurityUtils.getSysUser();
@@ -804,5 +834,118 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     @Override
     public void approvedAfterModification(Long id) {
         this.recordData(id);
+    }
+
+
+    @Value("${gm.url}")
+    private String gmUrl;
+    @Value("${warn.schemeReviewUrl}")
+    private String schemeReviewUrl;
+
+    //预警消息发送
+    public void warnMessage() {
+        //从总部获取预警配置信息
+        String url = gmUrl + "/gm/sgjsWarnConfig?warnSubject={warnSubject}";
+        String warnItemId = WarnItem.SGJS_BUILD_SCHEME_REVIEW.getWarnItemId();
+        SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, warnItemId);
+        if (null == sgjsWarnConfig) return;
+        /*遍历所有租户发送预警*/
+        // 切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        try {
+            //获取所有租户
+            List<SysTenant> tenantList = systemServiceApi.tenantList();
+            for (SysTenant tenant : tenantList) {
+                /*查询施工方案评审数据*/
+                SgjsBuildSchemeReview sgjsBuildSchemeReview = new SgjsBuildSchemeReview();
+                List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewList = sgjsBuildSchemeReviewMapper.getSgjsBuildSchemeReviewList(sgjsBuildSchemeReview);
+                if (CollUtil.isEmpty(sgjsBuildSchemeReviewList)) {
+                    log.info("施工方案评审数据无数据");
+                    return;
+                }
+                /*查询流程，过滤得到未发起审批的数据*/
+                List<SgjsBuildSchemeReview> list23 = sgjsBuildSchemeReviewList.stream()
+                        .filter(p -> StrUtil.isNotBlank(p.getSchemeLevel()) && (p.getSchemeLevel().equals("2") || p.getSchemeLevel().equals("3")))
+                        .collect(Collectors.toList());
+                List<SgjsBuildSchemeReview> list4 = sgjsBuildSchemeReviewList.stream()
+                        .filter(p -> StrUtil.isNotBlank(p.getSchemeLevel()) && (p.getSchemeLevel().equals("4")))
+                        .collect(Collectors.toList());
+                //不同方案级别走不同的流程,级别1不走流程
+                FlowInfoSearchUtil.getFlowInfo(list23, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_2_3);
+                FlowInfoSearchUtil.getFlowInfo(list4, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4);
+                ArrayList<SgjsBuildSchemeReview> allList = new ArrayList<>();
+                allList.addAll(list23);
+                allList.addAll(list4);
+                //获取任务详情，自定义
+                //审批中的数据
+                List<SgjsBuildSchemeReview> warnList = allList.stream()
+                        .filter(p -> StrUtil.isNotBlank(p.getTaskStatus()))
+                        .filter(p -> !p.getTaskStatus().equals("0") && !p.getTaskStatus().equals("4"))
+                        .collect(Collectors.toList());
+                /*流程到【专家、部门评审人员】节点，五天未处理，每天进行提醒*/
+                //预警触发标识
+                boolean triggerFlag = false;
+                Date nowDate = new Date();
+                for (SgjsBuildSchemeReview schemeList : warnList) {
+                    Date planCompletionTime = schemeList.getPlanCompletionTime();
+                    long between = DateUtil.between(nowDate, planCompletionTime, DateUnit.DAY, false);
+                    if (between == 7 || (between <= 0 && between % 2 == 0)) {
+                        //有一条数据满足条件则修改标识
+                        triggerFlag = true;
+                        break;
+                    }
+                }
+                if (!triggerFlag) {
+                    log.info("施工方案清单预警执行, 无需预警。。。。");
+                    return;
+                }
+                /*执行预警*/
+                //根据角色获取用户
+                List<SysUser> sysUsers = CommonBusiness.getSysUsers(sgjsWarnConfig);
+                if (CollUtil.isEmpty(sysUsers)) return;
+                String userNames = sysUsers.stream().map(p -> String.valueOf(p.getUserName())).collect(Collectors.joining(","));
+                //发送预警
+                ArrayList<TWarn> objects = new ArrayList<>();
+                TWarn tWarn = new TWarn();
+                tWarn.setWarnItem(sgjsWarnConfig.getWarnSubject());
+                tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_LIST.getWarnItemId());
+                tWarn.setWarnScope(userNames);
+                tWarn.setWarnUrl(schemeReviewUrl);
+                tWarn.setWarnScopeType("3");
+                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getWarnSubject(), sgjsWarnConfig.getWarnRule());
+                tWarn.setWarnContent(warnContent);
+                tWarn.setProjectName(tenant.getTenantName());
+                tWarn.setTenantKey(tenant.getTenantKey());
+                objects.add(tWarn);
+                //预警记录保存
+                List<SgjsWarnRecord> warnRecordList = new ArrayList<>();
+                sysUsers.forEach(p -> {
+                    //预警记录
+                    SgjsWarnRecord sgjsWarnRecord = new SgjsWarnRecord();
+                    sgjsWarnRecord.setProjectCode(tenant.getTenantKey());
+                    sgjsWarnRecord.setProjectName(tenant.getTenantName());
+                    sgjsWarnRecord.setWarnContent(warnContent);
+                    sgjsWarnRecord.setWarnUserId(String.valueOf(p.getUserId()));
+                    sgjsWarnRecord.setWarnUser(p.getUserName());
+                    warnRecordList.add(sgjsWarnRecord);
+                });
+                //发送预警
+                if (CollUtil.isNotEmpty(objects)) {
+                    systemServiceApi.insertTWarnList(objects);
+                }
+                log.info("施工方案清单预警执行完成。。。。共:{}", objects.size());
+                /*推送总部*/
+                if (CollUtil.isNotEmpty(warnRecordList)) {
+                    log.info("施工方案清单预警记录推送数据：" + JSON.toJSONString(warnRecordList));
+                    rocketMQTemplate.convertAndSend("sgjs_build_scheme_list_warn:tenantSuccess", warnRecordList);
+                }
+            }
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        } finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 }

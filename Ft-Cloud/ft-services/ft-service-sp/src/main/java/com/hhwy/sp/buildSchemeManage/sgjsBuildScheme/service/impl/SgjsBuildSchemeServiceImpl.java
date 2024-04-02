@@ -433,15 +433,14 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     private String gmUrl;
     @Value("${warn.schemeListUrl}")
     private String schemeListUrl;
-    @Value("${warn.schemeReviewUrl}")
-    private String schemeReviewUrl;
 
     //预警消息发送
     @Override
     public void warnMessage() {
         //从总部获取预警配置信息
         String url = gmUrl + "/gm/sgjsWarnConfig?warnSubject={warnSubject}";
-        SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, "施工方案编制");
+        String warnItemId = WarnItem.SGJS_BUILD_SCHEME_LIST.getWarnItemId();
+        SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, warnItemId);
         if (null == sgjsWarnConfig) return;
         /*遍历所有租户发送预警*/
         // 切换到master
@@ -529,7 +528,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 /*推送总部*/
                 if (CollUtil.isNotEmpty(warnRecordList)) {
                     log.info("施工方案清单预警记录推送数据：" + JSON.toJSONString(warnRecordList));
-                    rocketMQTemplate.convertAndSend("sgjs_build_scheme_list_war:tenantSuccess", warnRecordList);
+                    rocketMQTemplate.convertAndSend("sgjs_build_scheme_list_warn:tenantSuccess", warnRecordList);
                 }
             }
         } catch (Exception e) {

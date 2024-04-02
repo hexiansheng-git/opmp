@@ -25,4 +25,10 @@ public interface FlowServiceApi {
      */
     @PostMapping("/myFlow/isNowfirstNode")
     AjaxResult isNowfirstNode(@RequestParam("insId") String insId);
+
+    /**
+     *  获取任务信息
+     */
+    @PostMapping("/myFlow/taskInfoDetail")
+    AjaxResult taskInfoDetail(@RequestParam("taskId") String taskId);
 }
