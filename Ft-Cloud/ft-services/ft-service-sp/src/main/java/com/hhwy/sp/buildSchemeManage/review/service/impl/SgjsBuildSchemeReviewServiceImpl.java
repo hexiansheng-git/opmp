@@ -619,7 +619,6 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             return "已同步 " + syncNumTotal + " 条数据！";
         }
 
-
         List<SgjsBuildSchemeReview> reviewList = sgjsBuildSchemeReviewMapper.getListByQueryVo(new BuildSchemeReviewQueryVo());
         SysUser sysUser = SecurityUtils.getSysUser();
         String userName = sysUser.getUserName();
@@ -669,6 +668,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         SgjsBuildSchemeReview review = new SgjsBuildSchemeReview();
         review.setId(IdWorker.createId());
         this.putSchemeListToReview(schemeList, review);
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        review.setProjectName(projectDto.getProjectName());
+        review.setProjectId(projectDto.getProjectId());
+        review.setRegionId(projectDto.getRegionId());
+        review.setRegionName(projectDto.getRegionName());
+        review.setProjectCode(projectDto.getProjectCode());
         review.setSchemeInitiatorId(userName);
         review.setSchemeInitiatorName(nickName);
         review.setSubmitDate(DateUtils.getNowDate());
