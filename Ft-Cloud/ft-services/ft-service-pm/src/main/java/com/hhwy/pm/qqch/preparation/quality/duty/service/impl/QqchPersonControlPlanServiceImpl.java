@@ -9,6 +9,7 @@ import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.constant.WarnItem;
 import com.hhwy.constant.WarnScopeType;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.constant.WarnUrl;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -194,19 +195,19 @@ public class QqchPersonControlPlanServiceImpl implements IQqchPersonControlPlanS
                         // 到期前1个月提醒
                         if ("1".equals(plan.getMessageWarn()) && diffDays < 30) {
                             // 发送预警
-                            warnService.addWarn(WarnItem.PERSON_CONTROL_PLAN_ONE, warnContent,WarnScopeType.USER, null, personId, tenantKey);
+                            warnService.addWarn(WarnItem.PERSON_CONTROL_PLAN_ONE, warnContent,WarnScopeType.USER, WarnUrl.PERSON_CONTROL_PLAN, personId, tenantKey);
                         }
 
                         // 到期前2个月提醒
                         if ("2".equals(plan.getMessageWarn()) && diffDays < 60) {
                             // 发送预警
-                            warnService.addWarn(WarnItem.PERSON_CONTROL_PLAN_ONE, warnContent,WarnScopeType.USER, null, personId, tenantKey);
+                            warnService.addWarn(WarnItem.PERSON_CONTROL_PLAN_TWO, warnContent,WarnScopeType.USER, WarnUrl.PERSON_CONTROL_PLAN, personId, tenantKey);
                         }
 
                         // 到期前3个月提醒
                         if ("3".equals(plan.getMessageWarn()) && diffDays < 90) {
                             // 发送预警
-                            warnService.addWarn(WarnItem.PERSON_CONTROL_PLAN_ONE, warnContent,WarnScopeType.USER, null, personId, tenantKey);
+                            warnService.addWarn(WarnItem.PERSON_CONTROL_PLAN_THREE, warnContent,WarnScopeType.USER, WarnUrl.PERSON_CONTROL_PLAN, personId, tenantKey);
                         }
                     }
                 }

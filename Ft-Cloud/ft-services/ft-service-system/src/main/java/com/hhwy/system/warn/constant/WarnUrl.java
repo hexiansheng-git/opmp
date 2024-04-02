@@ -36,7 +36,7 @@ public class WarnUrl {
     @Value("${warn.url.change}")
     private String change;
 
-   @Value("${warn.url.summaryEvaluation}")
+    @Value("${warn.url.summaryEvaluation}")
     private String summaryEvaluation;
 
     @PostConstruct

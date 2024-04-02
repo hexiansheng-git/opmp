@@ -21,6 +21,8 @@ public class WarnUrl {
 
     public static String SUMMARY_EVALUATION;
 
+    public static String PERSON_CONTROL_PLAN;
+
     @Value("${warn.url.workGroup}")
     private String workGroup;
 
@@ -36,8 +38,11 @@ public class WarnUrl {
     @Value("${warn.url.change}")
     private String change;
 
-   @Value("${warn.url.summaryEvaluation}")
+    @Value("${warn.url.summaryEvaluation}")
     private String summaryEvaluation;
+
+    @Value("${warn.url.personControlPlan}")
+    private String personControlPlan;
 
     @PostConstruct
     public void init() {
