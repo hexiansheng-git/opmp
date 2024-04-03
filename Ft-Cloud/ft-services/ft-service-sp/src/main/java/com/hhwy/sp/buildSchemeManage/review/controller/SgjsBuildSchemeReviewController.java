@@ -198,7 +198,7 @@ public class SgjsBuildSchemeReviewController extends BaseController {
      * 功能描述: 预警消息发送
      */
     @RequestMapping("/warnMessage")
-    public void warnMessage(){
+    public void warnMessageSchemeReview(){
         sgjsBuildSchemeReviewService.warnMessage();
     }
 }

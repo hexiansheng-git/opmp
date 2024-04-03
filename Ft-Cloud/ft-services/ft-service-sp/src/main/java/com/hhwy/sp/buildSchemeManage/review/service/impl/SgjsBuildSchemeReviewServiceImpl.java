@@ -921,9 +921,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                                 && (flowNodeMark.equals("3") || flowNodeMark.equals("4") || flowNodeMark.equals("5") || flowNodeMark.equals("6"))
                                 && between >= 5 ) {
                             //得到流程节点标识为 3，4，5，6的节点, 并且在此节点大于等于5天
-//                            SysUser sysUser = new SysUser();
-//                            sysUser.setUserName(assignee);
-//                            sysUser.setNickName(assigneeNickName);
+//                                SysUser sysUser = new SysUser();
+//                                sysUser.setUserName(assignee);
+//                                sysUser.setNickName(assigneeNickName);
                             userList.add(assignee);
                         }
                     }

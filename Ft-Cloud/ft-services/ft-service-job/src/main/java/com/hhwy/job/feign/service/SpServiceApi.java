@@ -39,4 +39,20 @@ public interface SpServiceApi {
     @GetMapping("/sgjsExperimentRecord/experimentRecordJob")
     AjaxResult experimentRecordJob();
 
+    /**
+     * 施工技术---施工方案清单
+     * 发预警发预警发预警!!!!!!
+     *
+     */
+    @GetMapping("/sgjsBuildSchemeList/warnMessage")
+    void warnMessageSchemeList();
+
+    /**
+     * 施工技术---施工方案评审
+     * 发预警发预警发预警!!!!!!
+     *
+     */
+    @GetMapping("/sgjsBuildSchemeReview/warnMessage")
+    void warnMessageSchemeReview();
+
 }
