@@ -41,6 +41,10 @@ public class CommonBaseEntity extends BaseEntity {
      */
     private String currentTaskId;//未用
     /**
+     * 当前任务id,多个逗号分割
+     */
+    private String currentTaskIds;//未用
+    /**
      * 流程key(如果是未发起的流程)，则是必填
      */
     private String processKey; //前端已用
@@ -189,6 +193,14 @@ public class CommonBaseEntity extends BaseEntity {
 
     public void setCurrentTaskId(String currentTaskId) {
         this.currentTaskId = currentTaskId;
+    }
+
+    public String getCurrentTaskIds() {
+        return currentTaskIds;
+    }
+
+    public void setCurrentTaskIds(String currentTaskIds) {
+        this.currentTaskIds = currentTaskIds;
     }
 
     public String getProcessKey() {

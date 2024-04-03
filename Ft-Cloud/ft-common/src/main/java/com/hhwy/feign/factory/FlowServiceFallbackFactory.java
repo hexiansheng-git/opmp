@@ -27,6 +27,11 @@ public class FlowServiceFallbackFactory implements FallbackFactory<FlowServiceAp
             public AjaxResult isNowfirstNode(String insId) {
                 return AjaxResult.error("");
             }
+
+            @Override
+            public AjaxResult taskInfoDetail(String taskId) {
+                return null;
+            }
         };
     }
 }

@@ -12,7 +12,7 @@
             taskNode nextNodeId, 
             name_ AS processTaskName,
             GROUP_CONCAT( ASSIGNEE_ ) AS processTaskManId,
-            GROUP_CONCAT( taskId ) currentTaskId
+            GROUP_CONCAT( taskId ) currentTaskIds
         FROM
             (
                 SELECT
