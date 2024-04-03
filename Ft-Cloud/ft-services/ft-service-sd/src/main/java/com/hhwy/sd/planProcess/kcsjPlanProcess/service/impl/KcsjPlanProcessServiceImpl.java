@@ -21,7 +21,6 @@ import com.hhwy.sd.planProcess.kcsjPlanProcess.domain.KcsjWarnRecord;
 import com.hhwy.sd.planProcess.kcsjPlanProcess.mapper.KcsjPlanProcessMapper;
 import com.hhwy.sd.planProcess.kcsjPlanProcess.service.IKcsjPlanProcessService;
 import com.hhwy.sd.utils.http.WarnCommonBusiness;
-import com.hhwy.system.api.RemoteNoticeService;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.ObjectUtils;
@@ -294,7 +293,7 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
                     //提前7天提醒   7天前的数据
                     long diffDays = FtDateUtils.getDiffDays(startDate, DateUtils.getNowDate());
                     //2个条件满足一个就行  因为预警只预警一次  一个项目上
-                    if(ltr==0 || diffDays==7) {
+                    if((ltr==0 && twoDays>0) || diffDays==7) {
                         TWarn warn=new TWarn();
                         warn.setCreateTime(DateUtils.getNowDate());
                         warn.setTenantKey(tenantKey);
