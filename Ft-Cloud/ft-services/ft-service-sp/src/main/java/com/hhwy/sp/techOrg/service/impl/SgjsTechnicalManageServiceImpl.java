@@ -485,6 +485,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         manage.setPtVar5(info.getId()+"");
         manage.setCreateUser(SecurityUtils.getUserId()+"");
         manage.setCreateTime(DateUtils.getNowDate());
+        manage.setType("0");
     }
 
 
