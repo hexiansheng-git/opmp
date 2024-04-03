@@ -43,8 +43,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-import springfox.documentation.spring.web.json.Json;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -646,10 +644,14 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     public String sync() {
         int syncNumTotal = 0;
         List<SgjsBuildSchemeList> lastValidSchemeListList = sgjsBuildSchemeListService.getLastValidScheme(null);
+
         if(CollectionUtils.isEmpty(lastValidSchemeListList)){
             return "已同步 " + syncNumTotal + " 条数据！";
         }
-
+        List<SgjsBuildSchemeList> filterList = lastValidSchemeListList.stream().filter(o -> !"1".equals(o.getSchemeLevel())).collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(filterList)){
+            return "已同步 " + syncNumTotal + " 条数据！";
+        }
 
         List<SgjsBuildSchemeReview> reviewList = sgjsBuildSchemeReviewMapper.getListByQueryVo(new BuildSchemeReviewQueryVo());
         SysUser sysUser = SecurityUtils.getSysUser();
@@ -657,7 +659,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         String nickName = sysUser.getNickName();
         if(CollectionUtils.isEmpty(reviewList)){
             List<SgjsBuildSchemeReview> reviewListNew = new ArrayList<>();
-            for (SgjsBuildSchemeList schemeList : lastValidSchemeListList) {
+            for (SgjsBuildSchemeList schemeList : filterList) {
                 this.setInsertList(reviewListNew,schemeList,userName,nickName);
             }
             syncNumTotal = reviewListNew.size();
@@ -668,7 +670,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         List<SgjsBuildSchemeReview> insertList = new ArrayList<>();
         List<SgjsBuildSchemeReview> updateList = new ArrayList<>();
         Map<String, SgjsBuildSchemeReview> reviewMap = reviewList.stream().collect(Collectors.toMap(SgjsBuildSchemeReview::getSchemeNum, o -> o));
-        for (SgjsBuildSchemeList schemeList : lastValidSchemeListList) {
+        for (SgjsBuildSchemeList schemeList : filterList) {
             String schemeNum = schemeList.getSchemeNum();
             if(reviewMap.containsKey(schemeNum)){
                 SgjsBuildSchemeReview review = reviewMap.get(schemeNum);
@@ -799,13 +801,15 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     public List<SgjsBuildSchemeList> getSchemeList(SgjsBuildSchemeList schemeList) {
         List<SgjsBuildSchemeList> lastValidSchemeListList = sgjsBuildSchemeListService.getLastValidScheme(schemeList);
         if(CollectionUtils.isEmpty(lastValidSchemeListList)){
-            return lastValidSchemeListList;
+            return new ArrayList<>();
         }
-
+        List<SgjsBuildSchemeList> filterList = lastValidSchemeListList.stream().filter(o -> !"1".equals(o.getSchemeLevel())).collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(filterList)){
+            return new ArrayList<>();
+        }
         List<SgjsBuildSchemeReview> reviewList = sgjsBuildSchemeReviewMapper.getListByQueryVo(new BuildSchemeReviewQueryVo());
         Set<String> schemeNumSet = reviewList.stream().map(SgjsBuildSchemeReview::getSchemeNum).collect(Collectors.toSet());
-        List<SgjsBuildSchemeList> resultList = lastValidSchemeListList.stream().filter(sgjsBuildSchemeList -> !schemeNumSet.contains(sgjsBuildSchemeList.getSchemeNum())).collect(Collectors.toList());
-        return resultList;
+        return lastValidSchemeListList.stream().filter(sgjsBuildSchemeList -> !schemeNumSet.contains(sgjsBuildSchemeList.getSchemeNum())).collect(Collectors.toList());
     }
 
     @Override
