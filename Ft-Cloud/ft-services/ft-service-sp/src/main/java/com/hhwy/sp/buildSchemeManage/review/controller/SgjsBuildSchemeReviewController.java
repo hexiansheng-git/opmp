@@ -1,9 +1,11 @@
 package com.hhwy.sp.buildSchemeManage.review.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReviewOpinionRecord;
@@ -57,6 +59,22 @@ public class SgjsBuildSchemeReviewController extends BaseController {
             }
             if("4".equals(schemeLevel)){
                 FlowInfoSearchUtil.getFlowInfo(review, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4);
+            }
+        }
+        String userName = SecurityUtils.getUserName();
+        for (SgjsBuildSchemeReview review : reviewList) {
+            String currentTaskIds = review.getCurrentTaskIds();
+            if(StringUtils.isBlank(currentTaskIds)){
+                continue;
+            }
+            String[] currentTaskIdStr = currentTaskIds.split(",");
+            String processTaskManId = review.getProcessTaskManId();
+            String[] taskManIdStr = processTaskManId.split(",");
+            for (int i = 0; i < taskManIdStr.length; i++) {
+                if(userName.equals(taskManIdStr[i])){
+                    review.setCurrentTaskId(currentTaskIdStr[i]);
+                    break;
+                }
             }
         }
         return getDataTableAjaxResult(reviewList);

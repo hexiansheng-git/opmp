@@ -129,6 +129,7 @@ public class FlowInfoSearchUtil {
             t.setProcessTaskManId(flowInfo.getProcessTaskManId());
             t.setNextNodeId(flowInfo.getNextNodeId());
             t.setCurrentTaskId(flowInfo.getCurrentTaskId());
+            t.setCurrentTaskIds(flowInfo.getCurrentTaskIds());
             if (!t.getTaskStatus().equals(FlowStatusEnum.FLOW_STATUS_END.getKey()))
                 userNameSet.addAll(SetUtils.hashSet(flowInfo.getProcessTaskManId().split(",")));
             //是否为第一节点发起&当前登录用户等于发起人
