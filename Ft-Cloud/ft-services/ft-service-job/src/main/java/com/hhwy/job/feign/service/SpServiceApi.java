@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  * @author lcf
  * @data 2023-12-18
  */
-@FeignClient(name = "ft-service-sd")
+@FeignClient(name = "ft-service-sp")
 public interface SpServiceApi {
     /**
      * 施工技术---试验进场设备
