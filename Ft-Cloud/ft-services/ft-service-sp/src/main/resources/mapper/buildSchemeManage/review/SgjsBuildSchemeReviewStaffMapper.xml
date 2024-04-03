@@ -590,7 +590,7 @@
         </where>
     </update>
     <update id="updateScoreByUser">
-        update sgjs_build_scheme_review_staff set score = #{score}
+        update sgjs_build_scheme_review_staff set score = #{score},submit_time = now()
         where del_flag = '0' and review_id = #{reviewId} and review_staff_id = #{userName}
     </update>
 </mapper>
