@@ -855,15 +855,15 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         if (null == sgjsWarnConfig) return;
         /*遍历所有租户发送预警*/
         // 切换到master
-//        String oldDataSource = DynamicDataSourceContextHolder.peek();
-//        DynamicDataSourceContextHolder.push("master");
-//        try {
-//            //获取所有租户
-//            List<SysTenant> tenantList = systemServiceApi.tenantList();
-//            for (SysTenant tenant : tenantList) {
-        SysTenant tenant = new SysTenant();
-        tenant.setTenantKey("PJ2022037953");
-        tenant.setTenantName("埃塞RG道路升级施工总承包项目");
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        try {
+            //获取所有租户
+            List<SysTenant> tenantList = systemServiceApi.tenantList();
+            for (SysTenant tenant : tenantList) {
+//        SysTenant tenant = new SysTenant();
+//        tenant.setTenantKey("PJ2022037953");
+//        tenant.setTenantName("埃塞RG道路升级施工总承包项目");
         /*查询施工方案评审数据*/
                 SgjsBuildSchemeReview sgjsBuildSchemeReview = new SgjsBuildSchemeReview();
                 List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewList = sgjsBuildSchemeReviewMapper.getSgjsBuildSchemeReviewList(sgjsBuildSchemeReview);
@@ -890,7 +890,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                         .filter(p -> !p.getTaskStatus().equals("0") && !p.getTaskStatus().equals("4"))
                         .collect(Collectors.toList());
                 //获取任务详情，得到当前任务节点; 只需处理专家、部门评审人员节点
-                List<SysUser> userList = new ArrayList<>();
+                Set<String> userList = new HashSet<>();
                 Date nowDate = new Date();
                 //遍历所有业务数据
                 for (SgjsBuildSchemeReview schemeReview : flowList) {
@@ -921,10 +921,10 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                                 && (flowNodeMark.equals("3") || flowNodeMark.equals("4") || flowNodeMark.equals("5") || flowNodeMark.equals("6"))
                                 && between >= 5 ) {
                             //得到流程节点标识为 3，4，5，6的节点, 并且在此节点大于等于5天
-                            SysUser sysUser = new SysUser();
-                            sysUser.setUserName(assignee);
-                            sysUser.setNickName(assigneeNickName);
-                            userList.add(sysUser);
+//                            SysUser sysUser = new SysUser();
+//                            sysUser.setUserName(assignee);
+//                            sysUser.setNickName(assigneeNickName);
+                            userList.add(assignee);
                         }
                     }
                 }
@@ -937,7 +937,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 TWarn tWarn = new TWarn();
                 tWarn.setWarnItem(sgjsWarnConfig.getWarnSubject());
                 tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_REVIEW.getWarnItemId());
-                String userNames = userList.stream().map(SysUser::getUserName).distinct().collect(Collectors.joining());
+                String userNames = String.join(",", userList);
                 tWarn.setWarnScope(userNames);
                 tWarn.setWarnUrl(schemeReviewUrl);
                 tWarn.setWarnScopeType("3");
@@ -949,14 +949,15 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 systemServiceApi.addWarnNonGm(tWarn);
                 //预警记录保存
                 List<SgjsWarnRecord> warnRecordList = new ArrayList<>();
-                for (SysUser user : userList) {
+                for (String userName : userList) {
                     //预警记录
                     SgjsWarnRecord sgjsWarnRecord = new SgjsWarnRecord();
                     sgjsWarnRecord.setProjectCode(tenant.getTenantKey());
                     sgjsWarnRecord.setProjectName(tenant.getTenantName());
                     sgjsWarnRecord.setWarnContent(warnContent);
 //                    sgjsWarnRecord.setWarnUserId(String.valueOf(p.getUserId()));
-                    sgjsWarnRecord.setWarnUser(user.getUserName());
+                    sgjsWarnRecord.setWarnUser(userName);
+                    sgjsWarnRecord.setWarnSubject(sgjsWarnConfig.getWarnSubject());
                     warnRecordList.add(sgjsWarnRecord);
                 }
                 /*推送总部*/
@@ -965,12 +966,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     log.info("施工方案清单预警记录推送数据：" + JSON.toJSONString(warnRecordList));
                 }
                 log.info("施工方案评审预警执行完成。。。。: {}", userNames);
-//            }
-//        } catch (Exception e) {
-//            throw new CustomException(e.getMessage());
-//        } finally {
-//            DynamicDataSourceContextHolder.poll();
-//            DynamicDataSourceContextHolder.push(oldDataSource);
-//        }
+            }
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        } finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 }
