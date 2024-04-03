@@ -106,8 +106,8 @@
       <if test="pid != null ">and `pid` = #{pid}</if>
       <if test="designFileName != null  and designFileName != ''">and `design_file_name` like concat('%',#{designFileName},'%')</if>
       <if test="designScopeSketch != null  and designScopeSketch != ''">and `design_scope_sketch` like concat('%',#{designScopeSketch},'%')</if>
-      <if test="repleDateStart != null and repleDateStart != ''">and `reple_date` &gt; #{repleDateStart}</if>
-      <if test="repleDateEnd != null and repleDateEnd != ''">and `reple_date` &lt; #{repleDateEnd}</if>
+      <if test="repleDateStart != null and repleDateStart != ''">and `reple_date` &gt;= #{repleDateStart}</if>
+      <if test="repleDateEnd != null and repleDateEnd != ''">and `reple_date` &lt;= #{repleDateEnd}</if>
       <if test="path != null  and path != ''"> and `path` = #{path}</if>
       <if test="null!=paths and paths.size()>0">
         and id in
