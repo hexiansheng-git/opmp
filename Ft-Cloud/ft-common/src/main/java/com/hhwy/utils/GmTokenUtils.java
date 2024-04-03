@@ -1,6 +1,8 @@
 package com.hhwy.utils;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.hhwy.common.core.utils.ServletUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -52,7 +54,11 @@ public class GmTokenUtils {
             return "";
         String key = "gmToken::"+tenantKey;
         String entenantKey = EncryptUtils.AESEncode(tenantKey,ssoSecrekey);
-        String enUsername = EncryptUtils.AESEncode(SecurityUtils.getUserName(),ssoSecrekey);
+        String userName = "admin";
+        if (StrUtil.isNotBlank(ServletUtils.getRequest().getHeader("username"))) {
+            userName = SecurityUtils.getUserName();
+        }
+        String enUsername = EncryptUtils.AESEncode(userName,ssoSecrekey);
         //封装请求参数并发送
         String json = JSONObject.toJSONString(ObjectUtils.toMap("tenantKey",entenantKey,"userName",enUsername));
         StringEntity stringEntity = new StringEntity(json, ContentType.APPLICATION_JSON);

@@ -41,16 +41,12 @@ public interface SpServiceApi {
 
     /**
      * 施工技术---施工方案清单
-     * 发预警发预警发预警!!!!!!
-     *
      */
-    @GetMapping("/sgjsBuildSchemeList/warnMessage")
+    @GetMapping("/sgjsBuildScheme/warnMessage")
     void warnMessageSchemeList();
 
     /**
      * 施工技术---施工方案评审
-     * 发预警发预警发预警!!!!!!
-     *
      */
     @GetMapping("/sgjsBuildSchemeReview/warnMessage")
     void warnMessageSchemeReview();

@@ -71,7 +71,7 @@ public class SgjsBuildSchemeList extends BaseEntity {
      * 字段描述：方案类型
      */
     @JsonProperty
-    @FtExcel(name = "方案类型", dictType = "scheme_type")
+    @FtExcel(name = "方案类型", dictType = "scheme_type_all")
     private String schemeType;
     /**
      * 字段描述：方案分级 1Ⅰ、2Ⅱ、3Ⅲ、4Ⅳ

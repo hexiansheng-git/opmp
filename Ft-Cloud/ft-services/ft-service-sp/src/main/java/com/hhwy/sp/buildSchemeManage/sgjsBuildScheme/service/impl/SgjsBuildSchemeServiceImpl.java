@@ -362,27 +362,27 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 return;
             }
             FlowInfoSearchUtilNonReqest.getFlowInfo(sgjsBuildSchemeList, FlowEnum.SGJS_BUILD_SCHEME, tenantKey, sysUser.getUserName());
-            List<SgjsBuildScheme> collect1 = sgjsBuildSchemeList.stream().filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
-            if (CollUtil.isEmpty(collect1)) {
+            List<SgjsBuildScheme> sendList = sgjsBuildSchemeList.stream().filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
+            if (CollUtil.isEmpty(sendList)) {
                 log.warn("施工方案清单 - 无已发起审批的数据");
                 sendEmpty(tenantKey);
                 return;
             }
             //主表
-            Set<Long> collect = sgjsBuildSchemeList.stream().map(SgjsBuildScheme::getId).collect(Collectors.toSet());
+            Set<Long> collect = sendList.stream().map(SgjsBuildScheme::getId).collect(Collectors.toSet());
             List<SgjsBuildSchemeList> childrenlist = sgjsBuildSchemeListService.getListByforeignList(collect);
             //子表  清单
             Map<Long, List<SgjsBuildSchemeList>> childrenMap = childrenlist.stream().collect(Collectors.groupingBy(SgjsBuildSchemeList::getForeignId));
             //子表，专家建议
             List<SgjsBuildSchemeExpertSuggest> suggestList = schemeExpertSuggestService.getListByforeignList(collect);
             Map<Long, List<SgjsBuildSchemeExpertSuggest>> suggestMap = suggestList.stream().collect(Collectors.groupingBy(SgjsBuildSchemeExpertSuggest::getForeignId));
-            sgjsBuildSchemeList.forEach(p -> {
+            sendList.forEach(p -> {
                 p.setPtVar5(p.getProcessTaskMan());
                 p.setChildren(childrenMap.get(p.getId()));
                 p.setExpertSuggest(suggestMap.get(p.getId()));
             });
-            log.info("施工方案清单,推送数据：" + JSON.toJSONString(sgjsBuildSchemeList));
-            rocketMQTemplate.convertAndSend("sgjs_build_scheme:tenantSuccess", sgjsBuildSchemeList);
+            log.info("施工方案清单,推送数据：" + JSON.toJSONString(sendList));
+            rocketMQTemplate.convertAndSend("sgjs_build_scheme:tenantSuccess", sendList);
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
