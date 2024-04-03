@@ -39,6 +39,8 @@ import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.ThreadPoolUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -263,6 +265,8 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     //保存、提交
     @Transactional
     public Long insertSgjsBuildScheme(SgjsBuildScheme sgjsBuildScheme) {
+        List<SgjsBuildSchemeList> children1 = sgjsBuildScheme.getChildren();
+        JyDetailsUtil.jyDetails(children1, ValidationGroups.Save.class);
         Long id = sgjsBuildScheme.getId();
         if (null == id) {
             //新增

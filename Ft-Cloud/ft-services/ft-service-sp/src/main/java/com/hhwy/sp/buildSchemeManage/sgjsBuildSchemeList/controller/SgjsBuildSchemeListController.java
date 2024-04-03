@@ -136,7 +136,7 @@ public class SgjsBuildSchemeListController extends BaseController {
     }
 
     //导入
-    @GetMapping("/import")
+    @PostMapping("/import")
     public AjaxResult importExcel(MultipartFile file) throws IOException {
         EasyExcelListener listener = new EasyExcelListener();
         EasyExcel.read(file.getInputStream(), listener).sheet(0).doRead();

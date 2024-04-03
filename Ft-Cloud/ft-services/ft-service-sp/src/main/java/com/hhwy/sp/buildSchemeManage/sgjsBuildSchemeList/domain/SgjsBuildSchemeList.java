@@ -7,8 +7,11 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.excel.FtExcel;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -48,6 +51,7 @@ public class SgjsBuildSchemeList extends BaseEntity {
      */
     @JsonProperty
     @FtExcel(name = "方案名称")
+    @NotBlank(message = "方案名称不能为空",groups = {ValidationGroups.Save.class})
     private String schemeName;
     /**
      * 字段描述：变更类型 1推迟、2提前、3新增、4废止
@@ -90,6 +94,7 @@ public class SgjsBuildSchemeList extends BaseEntity {
      */
     @JsonProperty
     @FtExcel(name = "施工重难点")
+    @NotBlank(message = "施工重难点不能为空",groups = {ValidationGroups.Save.class})
     private String buildDifficult;
     /**
      * 字段描述：计划编制完成时间
@@ -97,6 +102,7 @@ public class SgjsBuildSchemeList extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @FtExcel(name = "计划编制完成时间", dateFormat = "yyyy年MM月dd日")
+    @NotNull(message = "计划编制完成时间不能为空",groups = {ValidationGroups.Save.class})
     private Date planComplationTime;
     /**
      * 字段描述：原计划实施时间
@@ -111,6 +117,7 @@ public class SgjsBuildSchemeList extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @FtExcel(name = "计划实施时间", dateFormat = "yyyy年MM月dd日")
+    @NotNull(message = "计划实施时间不能为空",groups = {ValidationGroups.Save.class})
     private Date planImplementTime;
     /**
      * 字段描述：变更计划实施时间
