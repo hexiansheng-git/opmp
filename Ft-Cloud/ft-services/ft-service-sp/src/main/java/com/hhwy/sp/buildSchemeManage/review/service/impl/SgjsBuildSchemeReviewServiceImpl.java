@@ -849,19 +849,22 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     //预警消息发送
     public void warnMessage() {
         //从总部获取预警配置信息
-        String url = gmUrl + "/gm/sgjsWarnConfig?warnSubject={warnSubject}";
+        String url = gmUrl + "/gm/sgjsWarnConfig/list?warnSubject={warnSubject}";
         String warnItemId = WarnItem.SGJS_BUILD_SCHEME_REVIEW.getWarnItemId();
         SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, warnItemId);
         if (null == sgjsWarnConfig) return;
         /*遍历所有租户发送预警*/
         // 切换到master
-        String oldDataSource = DynamicDataSourceContextHolder.peek();
-        DynamicDataSourceContextHolder.push("master");
-        try {
-            //获取所有租户
-            List<SysTenant> tenantList = systemServiceApi.tenantList();
-            for (SysTenant tenant : tenantList) {
-                /*查询施工方案评审数据*/
+//        String oldDataSource = DynamicDataSourceContextHolder.peek();
+//        DynamicDataSourceContextHolder.push("master");
+//        try {
+//            //获取所有租户
+//            List<SysTenant> tenantList = systemServiceApi.tenantList();
+//            for (SysTenant tenant : tenantList) {
+        SysTenant tenant = new SysTenant();
+        tenant.setTenantKey("PJ2022037953");
+        tenant.setTenantName("埃塞RG道路升级施工总承包项目");
+        /*查询施工方案评审数据*/
                 SgjsBuildSchemeReview sgjsBuildSchemeReview = new SgjsBuildSchemeReview();
                 List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewList = sgjsBuildSchemeReviewMapper.getSgjsBuildSchemeReviewList(sgjsBuildSchemeReview);
                 if (CollUtil.isEmpty(sgjsBuildSchemeReviewList)) {
@@ -905,7 +908,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                         TaskResource taskResource = JSON.parseObject(warnInfo, TaskResource.class);
                         Date createTime = taskResource.getCreateTime();
                         if (null == createTime) continue;
-                        long between = DateUtil.between(nowDate, createTime, DateUnit.DAY, false);
+                        long between = DateUtil.between(createTime, nowDate, DateUnit.MINUTE, false);
                         Map<String, Object> variables = taskResource.getVariables();
                         String assignee = taskResource.getAssignee();
                         String assigneeNickName = taskResource.getAssigneeNickName();
@@ -934,11 +937,11 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 TWarn tWarn = new TWarn();
                 tWarn.setWarnItem(sgjsWarnConfig.getWarnSubject());
                 tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_REVIEW.getWarnItemId());
-                String userNames = userList.stream().map(SysUser::getUserName).collect(Collectors.joining());
+                String userNames = userList.stream().map(SysUser::getUserName).distinct().collect(Collectors.joining());
                 tWarn.setWarnScope(userNames);
                 tWarn.setWarnUrl(schemeReviewUrl);
                 tWarn.setWarnScopeType("3");
-                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getWarnSubject(), sgjsWarnConfig.getWarnRule());
+                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getPtVar1(), sgjsWarnConfig.getWarnRule());
                 tWarn.setWarnContent(warnContent);
                 tWarn.setProjectName(tenant.getTenantName());
                 tWarn.setTenantKey(tenant.getTenantKey());
@@ -962,12 +965,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     log.info("施工方案清单预警记录推送数据：" + JSON.toJSONString(warnRecordList));
                 }
                 log.info("施工方案评审预警执行完成。。。。: {}", userNames);
-            }
-        } catch (Exception e) {
-            throw new CustomException(e.getMessage());
-        } finally {
-            DynamicDataSourceContextHolder.poll();
-            DynamicDataSourceContextHolder.push(oldDataSource);
-        }
+//            }
+//        } catch (Exception e) {
+//            throw new CustomException(e.getMessage());
+//        } finally {
+//            DynamicDataSourceContextHolder.poll();
+//            DynamicDataSourceContextHolder.push(oldDataSource);
+//        }
     }
 }

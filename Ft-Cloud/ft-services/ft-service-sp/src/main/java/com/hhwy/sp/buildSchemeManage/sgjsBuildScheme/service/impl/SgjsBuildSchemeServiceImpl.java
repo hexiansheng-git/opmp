@@ -275,6 +275,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             sgjsBuildSchemeMapper.insertSgjsBuildScheme(sgjsBuildScheme);
         } else {
             //修改
+            sgjsBuildScheme.setPtVar3(null);
             this.updateSgjsBuildScheme(sgjsBuildScheme);
         }
         /*保存子表信息：方案清单、专家意见*/
@@ -438,7 +439,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     @Override
     public void warnMessage() {
         //从总部获取预警配置信息
-        String url = gmUrl + "/gm/sgjsWarnConfig?warnSubject={warnSubject}";
+        String url = gmUrl + "/gm/sgjsWarnConfig/list?warnSubject={warnSubject}";
         String warnItemId = WarnItem.SGJS_BUILD_SCHEME_LIST.getWarnItemId();
         SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, warnItemId);
         if (null == sgjsWarnConfig) return;
@@ -503,7 +504,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 tWarn.setWarnScope(userNames);
                 tWarn.setWarnUrl(schemeListUrl);
                 tWarn.setWarnScopeType("3");
-                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getWarnSubject(), sgjsWarnConfig.getWarnRule());
+                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getPtVar1(), sgjsWarnConfig.getWarnRule());
                 tWarn.setWarnContent(warnContent);
                 tWarn.setProjectName(tenant.getTenantName());
                 tWarn.setTenantKey(tenant.getTenantKey());

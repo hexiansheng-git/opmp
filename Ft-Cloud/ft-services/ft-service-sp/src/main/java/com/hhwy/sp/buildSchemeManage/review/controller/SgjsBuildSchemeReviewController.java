@@ -193,4 +193,12 @@ public class SgjsBuildSchemeReviewController extends BaseController {
         sgjsBuildSchemeReviewService.approvedAfterModification(id);
         return AjaxResult.success();
     }
+
+    /*
+     * 功能描述: 预警消息发送
+     */
+    @RequestMapping("/warnMessage")
+    public void warnMessage(){
+        sgjsBuildSchemeReviewService.warnMessage();
+    }
 }
