@@ -9,6 +9,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.constant.WarnItem;
 import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.feign.service.PmServiceApi;
@@ -266,7 +267,7 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
         List<KcsjWarnConfig> warnList=new ArrayList<>();
         //从总部找预警接收角色 和预警消息内容
         String url = gmUrl + "/gm/sgjsWarnConfig?warnSubject={warnSubject}";
-        KcsjWarnConfig warnConfigRst = WarnCommonBusiness.getSgjsWarnConfig(url, KCSJ_PLAN_PROCESS.getWarnItem());
+        KcsjWarnConfig warnConfigRst = WarnCommonBusiness.getSgjsWarnConfig(url, WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
         if(null==warnConfigRst){
             return AjaxResult.error("未找到总部版预警配置信息");
         }
@@ -298,8 +299,8 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
                         warn.setCreateTime(DateUtils.getNowDate());
                         warn.setTenantKey(tenantKey);
                         warn.setProjectName(tenant.getTenantName());
-                        warn.setWarnItem(KCSJ_PLAN_PROCESS.getWarnItem());
-                        warn.setWarnItemId(KCSJ_PLAN_PROCESS.getWarnItemId());
+                        warn.setWarnItem(WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
+                        warn.setWarnItemId(WarnItem.KCSJ_PLAN_PROCESS.getWarnItemId());
                         warn.setWarnScopeType("3");
                         warn.setWarnScope(warnConfigRst.getWarnObject());
                         String warnContent = WarnCommonBusiness.warnMessageHandle(warnConfigRst.getWarnMassage(), tenant.getTenantName(), warnConfigRst.getWarnSubject(), warnConfigRst.getWarnRule());
@@ -311,8 +312,8 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
                         //总部数据处理
                         KcsjWarnConfig config=new KcsjWarnConfig();
                         config.setCreateTime(DateUtils.getNowDate());
-                        config.setWarnSubject(KCSJ_PLAN_PROCESS.getWarnItem());
-                        config.setPtVar1(KCSJ_PLAN_PROCESS.getWarnItemId());
+                        config.setWarnSubject(WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
+                        config.setPtVar1(WarnItem.KCSJ_PLAN_PROCESS.getWarnItemId());
                         config.setWarnObjectId(warnConfigRst.getWarnObjectId());
                         config.setPrjCode(tenantKey);
                         config.setPrjName(tenant.getTenantName());

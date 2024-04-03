@@ -9,7 +9,6 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.constant.WarnItem;
 import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.domain.base.system.warn.TWarn;
@@ -18,7 +17,6 @@ import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsWarnConfig;
 import com.hhwy.sp.common.warn.CommonBusiness;
 import com.hhwy.sp.common.warn.SgjsWarnRecord;
-import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.KcsjWarnRecordInfo;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.mapper.SgjsExperimentRecordMapper;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.service.ISgjsExperimentRecordService;
@@ -45,8 +43,6 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.hhwy.constant.WarnItem.KCSJ_PLAN_PROCESS;
 
 /**
  * @author lcf--试验设备进场记录
@@ -344,8 +340,14 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
         //存放所有租户的消息
         List<SgjsWarnConfig> warnList=new ArrayList<>();
         //从总部找预警接收角色 和预警消息内容
-        String url = gmUrl + "/gm/sgjsWarnConfig?warnSubject={warnSubject}";
-        SgjsWarnConfig warnConfigRst = CommonBusiness.getSgjsWarnConfig(url, KCSJ_PLAN_PROCESS.getWarnItem());
+//        String url = gmUrl + "/gm/sgjsWarnConfig?warnSubject={warnSubject}";
+//        SgjsWarnConfig warnConfigRst = CommonBusiness.getSgjsWarnConfig(url, KCSJ_PLAN_PROCESS.getWarnItem());
+        SgjsWarnConfig warnConfigRst =new SgjsWarnConfig();
+        warnConfigRst.setWarnObject("普通角色,项目角色");
+        warnConfigRst.setWarnObjectId("common,project");
+        warnConfigRst.setWarnMassage("你好,消息体！！！");
+        warnConfigRst.setWarnRule("111");
+        warnConfigRst.setWarnSubject("施工计划--设备台账进场记录");
         if(null==warnConfigRst){
             return AjaxResult.error("未找到总部版预警配置信息");
         }
@@ -353,8 +355,8 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
             for (SysTenant tenant : tenantList) {
                 //切换租户
                 String tenantKey = tenant.getTenantKey();
-                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
-                DynamicDataSourceContextHolder.push(dataSource);
+//                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+//                DynamicDataSourceContextHolder.push(dataSource);
 
                 List<SgjsExperimentRecordInfo> list = infoMapper.selectByDate();
                 if(CollectionUtils.isEmpty(list)){
@@ -363,16 +365,16 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
                 }
                 for (SgjsExperimentRecordInfo info:list) {
                     //超过下次检验标定日期 7天后 提醒
-                    Date checkDate = info.getCheckDate();
+                    Date checkDate = info.getNextCheckDate();
                     //超时 延迟7天后 提醒
-                    long diffDays = FtDateUtils.getDiffDays(DateUtils.getNowDate(),checkDate);//-7
+                    long diffDays = FtDateUtils.getDiffDays(checkDate,DateUtils.getNowDate());//-7
                     if(diffDays==-7){
                         TWarn warn=new TWarn();
                         warn.setCreateTime(DateUtils.getNowDate());
                         warn.setTenantKey(tenantKey);
                         warn.setProjectName(tenant.getTenantName());
-                        warn.setWarnItem(KCSJ_PLAN_PROCESS.getWarnItem());
-                        warn.setWarnItemId(KCSJ_PLAN_PROCESS.getWarnItemId());
+                        warn.setWarnItem(WarnItem.SGJS_EXPERIMENT_WARN.getWarnItem());
+                        warn.setWarnItemId(WarnItem.SGJS_EXPERIMENT_WARN.getWarnItemId());
                         warn.setWarnScopeType("3");
                         warn.setWarnScope(warnConfigRst.getWarnObject());
                         String warnContent = CommonBusiness.warnMessageHandle(warnConfigRst.getWarnMassage(), tenant.getTenantName(), warnConfigRst.getWarnSubject(), warnConfigRst.getWarnRule());
@@ -384,8 +386,8 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
                         //总部数据处理
                         SgjsWarnConfig config=new SgjsWarnConfig();
                         config.setCreateTime(DateUtils.getNowDate());
-                        config.setWarnSubject(KCSJ_PLAN_PROCESS.getWarnItem());
-                        config.setPtVar1(KCSJ_PLAN_PROCESS.getWarnItemId());
+                        config.setWarnSubject(WarnItem.SGJS_EXPERIMENT_WARN.getWarnItem());
+                        config.setPtVar1(WarnItem.SGJS_EXPERIMENT_WARN.getWarnItemId());
                         config.setWarnObjectId(warnConfigRst.getWarnObjectId());
                         config.setPrjCode(tenantKey);
                         config.setPrjName(tenant.getTenantName());
@@ -415,7 +417,7 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
      * @param warnList
      */
     private void syncToGm(List<SgjsWarnConfig> warnList) {
-        if(org.apache.commons.collections4.CollectionUtils.isEmpty(warnList)){
+        if(CollectionUtils.isEmpty(warnList)){
             logger.info("空了，哪来回哪去！！！！");
             return;
         }
@@ -423,7 +425,7 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
         Map<String, List<SgjsWarnConfig>> map = warnList.stream().collect(Collectors.groupingBy(e -> e.getPrjCode()));
         for (Map.Entry<String, List<SgjsWarnConfig>> info:map.entrySet()) {
             List<SgjsWarnConfig> valueList = info.getValue();
-            if(org.apache.commons.collections4.CollectionUtils.isEmpty(valueList))continue;
+            if(CollectionUtils.isEmpty(valueList))continue;
             //一个项目一条预警信息
             String warnObjectId = valueList.get(0).getWarnObjectId();
             SgjsWarnConfig sgjsWarnConfig=new SgjsWarnConfig();
