@@ -132,10 +132,10 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         FlowInfoSearchUtil.getFlowInfo(maxVersionData, FlowEnum.SGJS_BUILD_SCHEME);
         if (maxVersionData.getId().equals(result.getId()) && maxVersionData.getTaskStatus().equals("4")) {
             //可以调整
-            result.setPtVar2("1");
+            result.setPtVar5("1");
         } else {
             //不能调整
-            result.setPtVar2("2");
+            result.setPtVar5("2");
         }
         //历史记录按钮显隐，逻辑：所有数据中，只要有一条已审批完成即显示，否则不显示
         List<SgjsBuildScheme> allList = sgjsBuildSchemeMapper.getSgjsBuildSchemeList(new SgjsBuildScheme());

@@ -195,6 +195,14 @@ public class CommonBaseEntity extends BaseEntity {
         this.currentTaskId = currentTaskId;
     }
 
+    public String getCurrentTaskIds() {
+        return currentTaskIds;
+    }
+
+    public void setCurrentTaskIds(String currentTaskIds) {
+        this.currentTaskIds = currentTaskIds;
+    }
+
     public String getProcessKey() {
         return processKey;
     }
