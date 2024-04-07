@@ -41,6 +41,8 @@ public class Warn2Push {
     private String warnUrl;
     @Value("${pushTask.pmUrl}")
     private String pmUrl;
+    @Value("${gm.url}")
+    private String gmUrl;
     @Autowired
     private ILogServiceApi logServiceApi;
     @Autowired
@@ -53,7 +55,7 @@ public class Warn2Push {
 
     /**
      * 推送至门户
-     * @param warn
+     * @param warn { ptVar1: 空或者0:项目版 / 1:总部版 }
      */
     public void push(TWarn warn) {
         Map param = new HashMap();
@@ -95,6 +97,7 @@ public class Warn2Push {
             log.error(errMsg);
             throw new IllegalArgumentException(errMsg);
         }
+        String sysUrl = StringUtils.equals(warn.getPtVar1(),"1")?gmUrl:pmUrl; 
         Map map = new HashMap();
         map.put("syscode","PM");
         map.put("flowid",warn.getWarnId()+warn.getWarnScope());
@@ -103,7 +106,7 @@ public class Warn2Push {
         map.put("nodename",warn.getWarnItem());
         map.put("nodeId",warn.getWarnId()+"");
         String warnUrl = warn.getWarnUrl();
-        String path = (pmUrl.endsWith("/")?pmUrl.substring(0,pmUrl.length()-1):pmUrl) +
+        String path = (sysUrl.endsWith("/")?sysUrl.substring(0,sysUrl.length()-1):sysUrl) +
                 (warnUrl.startsWith("/")?warnUrl:warnUrl.substring(1));
         map.put("pcurl",String.format("%s?id=%s&tenantKey=%s&receiver=%s&pageType=fw",
                 path,ObjectUtils.nvlString(warn.getBusinessId()),warn.getTenantKey(),receive) );

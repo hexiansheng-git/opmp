@@ -15,6 +15,7 @@ import com.hhwy.system.core.mapper.SysUserMapper;
 import com.hhwy.system.mapper.UserMapper;
 import com.hhwy.system.warn.mapper.TWarnMapper;
 import com.hhwy.system.warn.mapper.TWarnRecordMapper;
+import com.hhwy.system.warn.push.Warn2Push;
 import com.hhwy.system.warn.service.ITWarnService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.lang3.StringUtils;
@@ -54,8 +55,8 @@ public class TWarnServiceImpl implements ITWarnService {
 
     @Autowired
     private ISocketIOServerService socketIOServerService;
-
-
+    @Autowired
+    private Warn2Push warn2Push;
 
     public TWarn getTWarn(TWarn tWarn) {
         return tWarnMapper.getTWarn(tWarn);
@@ -241,8 +242,11 @@ public class TWarnServiceImpl implements ITWarnService {
 
     @Override
     public void pushTWarn(TWarn tWarn) {
+        //总部版推送
         int result = tWarnMapper.insertTWarn(tWarn);
         if (result > 0) {
+            tWarn.setPtVar1("1");
+            warn2Push.push(tWarn);
             ThreadUtil.execAsync(() -> {
                 this.notify(tWarn);
             });
