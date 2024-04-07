@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.sp.experiment.mixRatioManage.mapper.SgjsMixRatioManageMapper">
+
+    <resultMap type="com.hhwy.sp.experiment.mixRatioManage.domain.SgjsMixRatioManage" id="SgjsMixRatioManageResultMap">
+        <result property="id" column="id"/>
+        <result property="mixRatioCode" column="mix_ratio_code"/>
+        <result property="mixRatioType" column="mix_ratio_type"/>
+        <result property="previousPlanMixRatio" column="previous_plan_mix_ratio"/>
+        <result property="relationWbsCode" column="relation_wbs_code"/>
+        <result property="relationWbsName" column="relation_wbs_name"/>
+        <result property="mixRatioName" column="mix_ratio_name"/>
+        <result property="specification" column="specification"/>
+        <result property="internalAuditDate" column="internal_audit_date"/>
+        <result property="externalApprovalDate" column="external_approval_date"/>
+        <result property="approveOrNot" column="approve_or_not"/>
+        <result property="validOrNot" column="valid_or_not"/>
+        <result property="principalUserName" column="principal_user_name"/>
+        <result property="principalName" column="principal_name"/>
+        <result property="principalContactWay" column="principal_contact_way"/>
+        <result property="mixRatioGroupId" column="mix_ratio_group_id"/>
+        <result property="remark" column="remark"/>
+        <result property="regionId" column="region_id"/>
+        <result property="regionName" column="region_name"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="projectCode" column="project_code"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="ptVar5" column="pt_var5"/>
+    </resultMap>
+    <sql id="selectSgjsMixRatioManageVo">
+        select `id`
+             , `mix_ratio_code`
+             , `mix_ratio_type`
+             , `previous_plan_mix_ratio`
+             , `relation_wbs_code`
+             , `relation_wbs_name`
+             , `mix_ratio_name`
+             , `specification`
+             , `internal_audit_date`
+             , `external_approval_date`
+             , `approve_or_not`
+             , `valid_or_not`
+             , `principal_user_name`
+             , `principal_name`
+             , `principal_contact_way`
+             , `mix_ratio_group_id`
+             , `remark`
+             , `region_id`
+             , `region_name`
+             , `project_id`
+             , `project_name`
+             , `project_code`
+             , `dept_id`
+             , `create_user`
+             , `create_user_name`
+             , `create_time`
+             , `update_user`
+             , `update_time`
+             , `del_user`
+             , `del_time`
+             , `del_flag`
+             , `pt_var1`
+             , `pt_var2`
+             , `pt_var3`
+             , `pt_var4`
+             , `pt_var5`
+        from sgjs_mix_ratio_manage
+    </sql>
+    <select id="getSgjsMixRatioManage" resultMap="SgjsMixRatioManageResultMap">
+        <include refid="selectSgjsMixRatioManageVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="mixRatioCode != null  and mixRatioCode != ''">and `mix_ratio_code` = #{mixRatioCode}</if>
+            <if test="mixRatioType != null  and mixRatioType != ''">and `mix_ratio_type` = #{mixRatioType}</if>
+            <if test="previousPlanMixRatio != null  and previousPlanMixRatio != ''">and `previous_plan_mix_ratio` =
+                #{previousPlanMixRatio}
+            </if>
+            <if test="relationWbsCode != null  and relationWbsCode != ''">and `relation_wbs_code` = #{relationWbsCode}
+            </if>
+            <if test="relationWbsName != null  and relationWbsName != ''">and `relation_wbs_name` = #{relationWbsName}
+            </if>
+            <if test="mixRatioName != null  and mixRatioName != ''">and `mix_ratio_name` = #{mixRatioName}</if>
+            <if test="specification != null  and specification != ''">and `specification` = #{specification}</if>
+            <if test="internalAuditDate != null ">and `internal_audit_date` = #{internalAuditDate}</if>
+            <if test="externalApprovalDate != null ">and `external_approval_date` = #{externalApprovalDate}</if>
+            <if test="approveOrNot != null  and approveOrNot != ''">and `approve_or_not` = #{approveOrNot}</if>
+            <if test="validOrNot != null  and validOrNot != ''">and `valid_or_not` = #{validOrNot}</if>
+            <if test="principalUserName != null  and principalUserName != ''">and `principal_user_name` =
+                #{principalUserName}
+            </if>
+            <if test="principalName != null  and principalName != ''">and `principal_name` = #{principalName}</if>
+            <if test="principalContactWay != null  and principalContactWay != ''">and `principal_contact_way` =
+                #{principalContactWay}
+            </if>
+            <if test="mixRatioGroupId != null  and mixRatioGroupId != ''">and `mix_ratio_group_id` =
+                #{mixRatioGroupId}
+            </if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="projectCode != null  and projectCode != ''">and `project_code` = #{projectCode}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getSgjsMixRatioManageList" resultMap="SgjsMixRatioManageResultMap">
+        <include refid="selectSgjsMixRatioManageVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="mixRatioCode != null  and mixRatioCode != ''">and `mix_ratio_code` = #{mixRatioCode}</if>
+            <if test="mixRatioType != null  and mixRatioType != ''">and `mix_ratio_type` = #{mixRatioType}</if>
+            <if test="previousPlanMixRatio != null  and previousPlanMixRatio != ''">and `previous_plan_mix_ratio` =
+                #{previousPlanMixRatio}
+            </if>
+            <if test="relationWbsCode != null  and relationWbsCode != ''">and `relation_wbs_code` = #{relationWbsCode}
+            </if>
+            <if test="relationWbsName != null  and relationWbsName != ''">and `relation_wbs_name` = #{relationWbsName}
+            </if>
+            <if test="mixRatioName != null  and mixRatioName != ''">and `mix_ratio_name` = #{mixRatioName}</if>
+            <if test="specification != null  and specification != ''">and `specification` = #{specification}</if>
+            <if test="internalAuditDate != null ">and `internal_audit_date` = #{internalAuditDate}</if>
+            <if test="externalApprovalDate != null ">and `external_approval_date` = #{externalApprovalDate}</if>
+            <if test="approveOrNot != null  and approveOrNot != ''">and `approve_or_not` = #{approveOrNot}</if>
+            <if test="validOrNot != null  and validOrNot != ''">and `valid_or_not` = #{validOrNot}</if>
+            <if test="principalUserName != null  and principalUserName != ''">and `principal_user_name` =
+                #{principalUserName}
+            </if>
+            <if test="principalName != null  and principalName != ''">and `principal_name` = #{principalName}</if>
+            <if test="principalContactWay != null  and principalContactWay != ''">and `principal_contact_way` =
+                #{principalContactWay}
+            </if>
+            <if test="mixRatioGroupId != null  and mixRatioGroupId != ''">and `mix_ratio_group_id` =
+                #{mixRatioGroupId}
+            </if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="projectCode != null  and projectCode != ''">and `project_code` = #{projectCode}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+        order by create_time desc
+    </select>
+    <select id="getListByQueryVo" resultMap="SgjsMixRatioManageResultMap">
+        <include refid="selectSgjsMixRatioManageVo"/>
+        <where>
+            del_flag = '0'
+            <if test="mixRatioCode != null  and mixRatioCode != ''">and `mix_ratio_code` like concat('%' , #{mixRatioCode} , '%')</if>
+            <if test="mixRatioType != null  and mixRatioType != ''">and `mix_ratio_type` = #{mixRatioType}</if>
+            <if test="mixRatioName != null  and mixRatioName != ''">and `mix_ratio_name` like concat('%' , #{mixRatioName} , '%')</if>
+            <if test="approveOrNot != null  and approveOrNot != ''">and `approve_or_not` = #{approveOrNot}</if>
+        </where>
+    </select>
+    <select id="getById" resultMap="SgjsMixRatioManageResultMap">
+        <include refid="selectSgjsMixRatioManageVo"/>
+        where del_flag = '0' and id = #{id}
+    </select>
+    <select id="getListByIds" resultMap="SgjsMixRatioManageResultMap">
+        <include refid="selectSgjsMixRatioManageVo"/>
+        <where>
+            del_flag = '0'
+            and `id` in
+            <foreach item="id" collection="ids" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+
+    <insert id="insertSgjsMixRatioManage" useGeneratedKeys="true" keyProperty="id">
+        insert into sgjs_mix_ratio_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="mixRatioCode != null  and mixRatioCode != ''">`mix_ratio_code`,</if>
+            <if test="mixRatioType != null  and mixRatioType != ''">`mix_ratio_type`,</if>
+            <if test="previousPlanMixRatio != null  and previousPlanMixRatio != ''">`previous_plan_mix_ratio`,</if>
+            <if test="relationWbsCode != null  and relationWbsCode != ''">`relation_wbs_code`,</if>
+            <if test="relationWbsName != null  and relationWbsName != ''">`relation_wbs_name`,</if>
+            <if test="mixRatioName != null  and mixRatioName != ''">`mix_ratio_name`,</if>
+            <if test="specification != null  and specification != ''">`specification`,</if>
+            <if test="internalAuditDate != null ">`internal_audit_date`,</if>
+            <if test="externalApprovalDate != null ">`external_approval_date`,</if>
+            <if test="approveOrNot != null  and approveOrNot != ''">`approve_or_not`,</if>
+            <if test="validOrNot != null  and validOrNot != ''">`valid_or_not`,</if>
+            <if test="principalUserName != null  and principalUserName != ''">`principal_user_name`,</if>
+            <if test="principalName != null  and principalName != ''">`principal_name`,</if>
+            <if test="principalContactWay != null  and principalContactWay != ''">`principal_contact_way`,</if>
+            <if test="mixRatioGroupId != null  and mixRatioGroupId != ''">`mix_ratio_group_id`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="regionId != null ">`region_id`,</if>
+            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+            <if test="projectId != null ">`project_id`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="projectCode != null  and projectCode != ''">`project_code`,</if>
+            <if test="deptId != null ">`dept_id`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="mixRatioCode != null  and mixRatioCode != ''">#{mixRatioCode},</if>
+            <if test="mixRatioType != null  and mixRatioType != ''">#{mixRatioType},</if>
+            <if test="previousPlanMixRatio != null  and previousPlanMixRatio != ''">#{previousPlanMixRatio},</if>
+            <if test="relationWbsCode != null  and relationWbsCode != ''">#{relationWbsCode},</if>
+            <if test="relationWbsName != null  and relationWbsName != ''">#{relationWbsName},</if>
+            <if test="mixRatioName != null  and mixRatioName != ''">#{mixRatioName},</if>
+            <if test="specification != null  and specification != ''">#{specification},</if>
+            <if test="internalAuditDate != null ">#{internalAuditDate},</if>
+            <if test="externalApprovalDate != null ">#{externalApprovalDate},</if>
+            <if test="approveOrNot != null  and approveOrNot != ''">#{approveOrNot},</if>
+            <if test="validOrNot != null  and validOrNot != ''">#{validOrNot},</if>
+            <if test="principalUserName != null  and principalUserName != ''">#{principalUserName},</if>
+            <if test="principalName != null  and principalName != ''">#{principalName},</if>
+            <if test="principalContactWay != null  and principalContactWay != ''">#{principalContactWay},</if>
+            <if test="mixRatioGroupId != null  and mixRatioGroupId != ''">#{mixRatioGroupId},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="regionId != null ">#{regionId},</if>
+            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="projectCode != null  and projectCode != ''">#{projectCode},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsMixRatioManage -->
+    <insert id="insertSgjsMixRatioManageList">
+        insert into sgjs_mix_ratio_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `mix_ratio_code`,
+            `mix_ratio_type`,
+            `previous_plan_mix_ratio`,
+            `relation_wbs_code`,
+            `relation_wbs_name`,
+            `mix_ratio_name`,
+            `specification`,
+            `internal_audit_date`,
+            `external_approval_date`,
+            `approve_or_not`,
+            `valid_or_not`,
+            `principal_user_name`,
+            `principal_name`,
+            `principal_contact_way`,
+            `mix_ratio_group_id`,
+            `remark`,
+            `region_id`,
+            `region_name`,
+            `project_id`,
+            `project_name`,
+            `project_code`,
+            `dept_id`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+        </trim>
+        values
+        <foreach collection="sgjsMixRatioManageList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.mixRatioCode},
+                #{item.mixRatioType},
+                #{item.previousPlanMixRatio},
+                #{item.relationWbsCode},
+                #{item.relationWbsName},
+                #{item.mixRatioName},
+                #{item.specification},
+                #{item.internalAuditDate},
+                #{item.externalApprovalDate},
+                #{item.approveOrNot},
+                #{item.validOrNot},
+                #{item.principalUserName},
+                #{item.principalName},
+                #{item.principalContactWay},
+                #{item.mixRatioGroupId},
+                #{item.remark},
+                #{item.regionId},
+                #{item.regionName},
+                #{item.projectId},
+                #{item.projectName},
+                #{item.projectCode},
+                #{item.deptId},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateSgjsMixRatioManage">
+        update sgjs_mix_ratio_manage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="mixRatioCode != null  and  mixRatioCode != ''">`mix_ratio_code` = #{mixRatioCode},</if>
+            <if test="mixRatioType != null  and  mixRatioType != ''">`mix_ratio_type` = #{mixRatioType},</if>
+            <if test="previousPlanMixRatio != null  and  previousPlanMixRatio != ''">`previous_plan_mix_ratio` =
+                #{previousPlanMixRatio},
+            </if>
+            <if test="relationWbsCode != null  and  relationWbsCode != ''">`relation_wbs_code` = #{relationWbsCode},
+            </if>
+            <if test="relationWbsName != null  and  relationWbsName != ''">`relation_wbs_name` = #{relationWbsName},
+            </if>
+            <if test="mixRatioName != null  and  mixRatioName != ''">`mix_ratio_name` = #{mixRatioName},</if>
+            <if test="specification != null  and  specification != ''">`specification` = #{specification},</if>
+            <if test="internalAuditDate != null ">`internal_audit_date` = #{internalAuditDate},</if>
+            <if test="externalApprovalDate != null ">`external_approval_date` = #{externalApprovalDate},</if>
+            <if test="approveOrNot != null  and  approveOrNot != ''">`approve_or_not` = #{approveOrNot},</if>
+            <if test="validOrNot != null  and  validOrNot != ''">`valid_or_not` = #{validOrNot},</if>
+            <if test="principalUserName != null  and  principalUserName != ''">`principal_user_name` =
+                #{principalUserName},
+            </if>
+            <if test="principalName != null  and  principalName != ''">`principal_name` = #{principalName},</if>
+            <if test="principalContactWay != null  and  principalContactWay != ''">`principal_contact_way` =
+                #{principalContactWay},
+            </if>
+            <if test="mixRatioGroupId != null  and  mixRatioGroupId != ''">`mix_ratio_group_id` = #{mixRatioGroupId},
+            </if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="regionId != null ">`region_id` = #{regionId},</if>
+            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="projectCode != null  and  projectCode != ''">`project_code` = #{projectCode},</if>
+            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+        </trim>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateSgjsMixRatioManageList">
+        update sgjs_mix_ratio_manage
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="mix_ratio_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.mixRatioCode}
+                </foreach>
+            </trim>
+            <trim prefix="mix_ratio_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.mixRatioType}
+                </foreach>
+            </trim>
+            <trim prefix="previous_plan_mix_ratio  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.previousPlanMixRatio}
+                </foreach>
+            </trim>
+            <trim prefix="relation_wbs_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.relationWbsCode}
+                </foreach>
+            </trim>
+            <trim prefix="relation_wbs_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.relationWbsName}
+                </foreach>
+            </trim>
+            <trim prefix="mix_ratio_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.mixRatioName}
+                </foreach>
+            </trim>
+            <trim prefix="specification  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.specification}
+                </foreach>
+            </trim>
+            <trim prefix="internal_audit_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.internalAuditDate}
+                </foreach>
+            </trim>
+            <trim prefix="external_approval_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.externalApprovalDate}
+                </foreach>
+            </trim>
+            <trim prefix="approve_or_not  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.approveOrNot}
+                </foreach>
+            </trim>
+            <trim prefix="valid_or_not  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.validOrNot}
+                </foreach>
+            </trim>
+            <trim prefix="principal_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.principalUserName}
+                </foreach>
+            </trim>
+            <trim prefix="principal_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.principalName}
+                </foreach>
+            </trim>
+            <trim prefix="principal_contact_way  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.principalContactWay}
+                </foreach>
+            </trim>
+            <trim prefix="mix_ratio_group_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.mixRatioGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="region_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionId}
+                </foreach>
+            </trim>
+            <trim prefix="region_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionName}
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="project_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectCode}
+                </foreach>
+            </trim>
+            <trim prefix="dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.deptId}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar3}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar4}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar5}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="deleteSgjsMixRatioManage">
+        update `sgjs_mix_ratio_manage` set del_flag = 1
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="mixRatioCode != null  and mixRatioCode != ''">and `mix_ratio_code` = #{mixRatioCode}</if>
+            <if test="mixRatioType != null  and mixRatioType != ''">and `mix_ratio_type` = #{mixRatioType}</if>
+            <if test="previousPlanMixRatio != null  and previousPlanMixRatio != ''">and `previous_plan_mix_ratio` =
+                #{previousPlanMixRatio}
+            </if>
+            <if test="relationWbsCode != null  and relationWbsCode != ''">and `relation_wbs_code` = #{relationWbsCode}
+            </if>
+            <if test="relationWbsName != null  and relationWbsName != ''">and `relation_wbs_name` = #{relationWbsName}
+            </if>
+            <if test="mixRatioName != null  and mixRatioName != ''">and `mix_ratio_name` = #{mixRatioName}</if>
+            <if test="specification != null  and specification != ''">and `specification` = #{specification}</if>
+            <if test="internalAuditDate != null ">and `internal_audit_date` = #{internalAuditDate}</if>
+            <if test="externalApprovalDate != null ">and `external_approval_date` = #{externalApprovalDate}</if>
+            <if test="approveOrNot != null  and approveOrNot != ''">and `approve_or_not` = #{approveOrNot}</if>
+            <if test="validOrNot != null  and validOrNot != ''">and `valid_or_not` = #{validOrNot}</if>
+            <if test="principalUserName != null  and principalUserName != ''">and `principal_user_name` =
+                #{principalUserName}
+            </if>
+            <if test="principalName != null  and principalName != ''">and `principal_name` = #{principalName}</if>
+            <if test="principalContactWay != null  and principalContactWay != ''">and `principal_contact_way` =
+                #{principalContactWay}
+            </if>
+            <if test="mixRatioGroupId != null  and mixRatioGroupId != ''">and `mix_ratio_group_id` =
+                #{mixRatioGroupId}
+            </if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="projectCode != null  and projectCode != ''">and `project_code` = #{projectCode}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+    </update>
+
+    <update id="deleteSgjsMixRatioManageByPks">
+        update `sgjs_mix_ratio_manage` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="sgjsMixRatioManagePkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+</mapper>
