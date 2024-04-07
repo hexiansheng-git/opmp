@@ -207,7 +207,8 @@ public class SgjsBuildSchemeReviewController extends BaseController {
      * @param id
      */
     @PostMapping("/deleteById")
-    public void deleteById(Long id){
+    public AjaxResult deleteById(Long id){
         sgjsBuildSchemeReviewService.deleteById(id);
+        return AjaxResult.success("删除成功！");
     }
 }
