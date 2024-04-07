@@ -64,4 +64,6 @@ public interface ISgjsBuildSchemeReviewService {
     SgjsBuildSchemeReviewOpinionRecord getSchemeReviewRecord(Long reviewId);
 
     void warnMessage();
+
+    void deleteById(Long id);
 }

@@ -228,7 +228,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     if("7".equals(flowNodeMark)){
                         flowNodeMarkQuery = "1";
                     }else {
-                        flowNodeMarkQuery = "2";
+                        flowNodeMarkQuery = null;
                     }
                     SgjsBuildSchemeReviewOpinion reviewOpinion = sgjsBuildSchemeReviewOpinionMapper.getSgjsBuildSchemeReviewOpinion(reviewOpinionQuery);
                     if(reviewOpinion != null){
@@ -977,5 +977,10 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
         }
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        sgjsBuildSchemeReviewMapper.deleteById(id);
     }
 }

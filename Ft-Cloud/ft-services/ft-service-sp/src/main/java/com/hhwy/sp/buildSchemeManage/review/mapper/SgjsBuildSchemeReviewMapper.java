@@ -42,4 +42,6 @@ public interface SgjsBuildSchemeReviewMapper {
     void updateApprovalTime(@Param("id") Long id);
 
     void dismissedSchemeReview(@Param("id") Long id);
+
+    void deleteById(@Param("id") Long id);
 }

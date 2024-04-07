@@ -689,6 +689,10 @@
             </foreach>
         </where>
     </update>
+    <delete id="deleteById">
+        update `sgjs_build_scheme_review` set del_flag = 1
+        where id = #{id}
+    </delete>
     <update id="updateTaskStatus">
         update `sgjs_build_scheme_review` set task_status = #{taskStatus}
         where id = #{id}

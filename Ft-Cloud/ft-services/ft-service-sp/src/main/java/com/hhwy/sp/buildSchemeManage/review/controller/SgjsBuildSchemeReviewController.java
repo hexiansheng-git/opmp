@@ -201,4 +201,13 @@ public class SgjsBuildSchemeReviewController extends BaseController {
     public void warnMessageSchemeReview(){
         sgjsBuildSchemeReviewService.warnMessage();
     }
+
+    /**
+     * 删除
+     * @param id
+     */
+    @PostMapping("/deleteById")
+    public void deleteById(Long id){
+        sgjsBuildSchemeReviewService.deleteById(id);
+    }
 }
