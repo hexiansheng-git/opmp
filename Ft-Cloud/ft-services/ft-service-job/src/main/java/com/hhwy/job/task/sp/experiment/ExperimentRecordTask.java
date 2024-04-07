@@ -20,4 +20,18 @@ public class ExperimentRecordTask {
 
     }
 
+    /**
+     * 试验--物设同步
+     */
+    public void syncWusheTask(){
+        spServiceApi.getWuSheMaterialRecord();
+    }
+
+    /**
+     * 测量--物设同步
+     */
+    public void syncWusheInfoTask(){
+        spServiceApi.syncWusheJob();
+    }
+
 }
