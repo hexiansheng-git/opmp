@@ -117,7 +117,7 @@ public class SgjsBuildSchemeList extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @FtExcel(name = "计划实施时间", dateFormat = "yyyy年MM月dd日")
-    @NotNull(message = "计划实施时间不能为空",groups = {ValidationGroups.Save.class})
+//    @NotNull(message = "计划实施时间不能为空",groups = {ValidationGroups.Save.class})
     private Date planImplementTime;
     /**
      * 字段描述：变更计划实施时间
