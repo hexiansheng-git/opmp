@@ -48,7 +48,7 @@ public class SgjsSpecialMeasure extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "上传日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "上传日期", dateFormat = "yyyy年MM月dd日")
     private Date reportDate;
 
     //报告上传日期开始时间
@@ -60,7 +60,7 @@ public class SgjsSpecialMeasure extends BaseEntity {
      * 字段描述：备注/描述
      */
     @JsonProperty
-    @Excel(name = "备注/描述")
+    @Excel(name = "备注")
     private String remark;
     /**
      * 字段描述：所属区域id
