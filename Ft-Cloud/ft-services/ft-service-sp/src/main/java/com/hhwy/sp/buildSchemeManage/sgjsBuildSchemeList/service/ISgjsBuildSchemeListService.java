@@ -3,6 +3,7 @@ package com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeEvolve;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeEvolveQueryVo;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 
 import java.util.Collection;
@@ -27,12 +28,12 @@ public interface ISgjsBuildSchemeListService {
     /*
     * 功能描述: 新增
     * @param: sgjsBuildSchemeListList  待处理集合
-    * @param: foreignId     主表id
+    * @param: sgjsBuildScheme          主表信息
     * @return: int
     * 作者: fsd
     * 时间: 2024/3/20
     */
-    void insertSgjsBuildSchemeList(List<SgjsBuildSchemeList> sgjsBuildSchemeListList, Long foreignId);
+    void insertSgjsBuildSchemeList(List<SgjsBuildSchemeList> sgjsBuildSchemeListList, SgjsBuildScheme sgjsBuildScheme);
 
     int updateSgjsBuildSchemeList(SgjsBuildSchemeList sgjsBuildSchemeList);
 

@@ -105,10 +105,10 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
 
     //保存
     @Transactional
-    public void insertSgjsBuildSchemeList(List<SgjsBuildSchemeList> sgjsBuildSchemeListList, Long foreignId) {
+    public void insertSgjsBuildSchemeList(List<SgjsBuildSchemeList> sgjsBuildSchemeListList, SgjsBuildScheme basicInfo) {
         /*删除当前版本数据*/
         SgjsBuildSchemeList sgjsBuildSchemeList = new SgjsBuildSchemeList();
-        sgjsBuildSchemeList.setForeignId(foreignId);
+        sgjsBuildSchemeList.setForeignId(basicInfo.getId());
         this.deleteSgjsBuildSchemeList(sgjsBuildSchemeList);
         /*保存*/
         //获取上一版本有效版本 清单
@@ -127,7 +127,7 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             //上一版本有效版本 清单不为空，走保存
             originList.forEach(p -> {
                 p.setId(IdWorker.createId());
-                p.setForeignId(foreignId);
+                p.setForeignId(basicInfo.getId());
                 p.setPtVar3("0");
             });
             sgjsBuildSchemeListMapper.insertSgjsBuildSchemeListList(originList);
@@ -162,7 +162,12 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
                 param.setSchemeNum(getSerialNumber(serilize));
                 serilize++;
             }
-            param.setForeignId(foreignId);
+            param.setForeignId(basicInfo.getId());
+            param.setProjectId(basicInfo.getProjectId());
+            param.setProjectName(basicInfo.getProjectName());
+            param.setRegionId(basicInfo.getRegionId());
+            param.setRegionName(basicInfo.getRegionName());
+            param.setPtVar5(basicInfo.getProjectCode());
             param.setId(IdWorker.createId());
             param.setCreateUser(userName);
             param.setCreateTime(DateUtils.getNowDate());

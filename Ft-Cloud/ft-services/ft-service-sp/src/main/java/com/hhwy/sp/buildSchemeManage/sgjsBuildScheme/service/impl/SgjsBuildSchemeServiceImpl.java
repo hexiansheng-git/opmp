@@ -269,6 +269,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     public Long insertSgjsBuildScheme(SgjsBuildScheme sgjsBuildScheme) {
         List<SgjsBuildSchemeList> children1 = sgjsBuildScheme.getChildren();
         JyDetailsUtil.jyDetails(children1, ValidationGroups.Save.class);
+        sgjsBuildScheme.setProjectCode(SecurityUtils.getTenantKey());
         Long id = sgjsBuildScheme.getId();
         if (null == id) {
             //新增
@@ -277,7 +278,6 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             sgjsBuildScheme.setPtVar3(null);
             sgjsBuildScheme.setCreateUser(SecurityUtils.getUserName());
             sgjsBuildScheme.setCreateTime(DateUtils.getNowDate());
-            sgjsBuildScheme.setProjectCode(SecurityUtils.getTenantKey());
             sgjsBuildSchemeMapper.insertSgjsBuildScheme(sgjsBuildScheme);
         } else {
             //修改
@@ -292,10 +292,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         if (sgjsBuildScheme.getTaskStatus().equals("0")) {
             //方案清单
             List<SgjsBuildSchemeList> children = sgjsBuildScheme.getChildren();
-            children.forEach(p -> {
-                p.setPtVar5(sgjsBuildScheme.getProjectCode());
-            });
-            sgjsBuildSchemeListService.insertSgjsBuildSchemeList(children, id);
+            sgjsBuildSchemeListService.insertSgjsBuildSchemeList(children, sgjsBuildScheme);
         }
         if (!sgjsBuildScheme.getTaskStatus().equals("0")) {
             //专家意见
