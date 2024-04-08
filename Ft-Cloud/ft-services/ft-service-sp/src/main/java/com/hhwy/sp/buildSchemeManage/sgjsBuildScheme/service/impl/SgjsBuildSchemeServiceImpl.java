@@ -252,8 +252,8 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         sgjsBuildSchemeList.forEach(p -> {
             Date updateTime = p.getUpdateTime();
             if (updateTime != null) {
-                String format = DateUtil.format(updateTime, "yyyy年MM月dd日 HH");
-                p.setPtVar2(format + ":00");
+                String format = DateUtil.format(updateTime, "yyyy年MM月dd日 HH:mm");
+                p.setPtVar2(format);
             }
         });
         return sgjsBuildSchemeList;

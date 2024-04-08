@@ -127,6 +127,7 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             //上一版本有效版本 清单不为空，走保存
             originList.forEach(p -> {
                 p.setId(IdWorker.createId());
+                p.setForeignId(foreignId);
                 p.setPtVar3("0");
             });
             sgjsBuildSchemeListMapper.insertSgjsBuildSchemeListList(originList);
