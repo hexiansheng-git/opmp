@@ -54,12 +54,15 @@ public class Warn2Push {
     
 
     /**
-     * 推送至门户
+     * 推送至一公局门户
      * @param warn { ptVar1: 空或者0:项目版 / 1:总部版 }
      */
     public void push(TWarn warn) {
         Map param = new HashMap();
         String result = "",errMsg = "";
+        if(StringUtils.isBlank(warn.getWarnUrl())){
+            log.error("{},url地址为空！id:{},租户:{}",logTitle,warn.getWarnId(), warn.getTenantKey());
+        }
         //为了能正常单点，每个用户单独发消息
         List<String> usernameList = getUsernames(warn);
         for (int i = 0; i < usernameList.size(); i++) {
@@ -68,9 +71,6 @@ public class Warn2Push {
             warn.setPtVar3(uname);
             try{
                 param = buildParam(warn);
-                if(StringUtils.isBlank(warn.getWarnUrl())){
-                    log.error("{},url地址为空！id:{},租户:{}",logTitle,warn.getWarnId(), warn.getTenantKey());
-                }
                 result= HttpRequest.post(warnUrl)
                         .body(JSONObject.toJSONString(param)).execute().body();
                 JSONObject jsonObject = JSONObject.parseObject(result);
@@ -88,7 +88,23 @@ public class Warn2Push {
             log.error("{},用户名获取为空！id:{},租户:{}",logTitle,warn.getWarnId(), warn.getTenantKey());
     }
 
-    
+    public List<String> getUsernames(TWarn warn){
+        List<SysUser> userList = new ArrayList<>();
+        List<String> usernameList = new ArrayList<>();
+        if(WarnScopeType.ALL.getWarnScopeType().equals(warn.getWarnScopeType())){
+            userList = userMapper.selectUserListAll(new SysUser(), Arrays.asList(warn.getTenantKey()));
+        }else if(WarnScopeType.DEPT.getWarnScopeType().equals(warn.getWarnScopeType())){
+            userList = this.userMapper.selectUserListByDeptIds(warn.getWarnScope());
+        }else if(WarnScopeType.ROLE.getWarnScopeType().equals(warn.getWarnScopeType())){
+            String[] roleKeyList = warn.getWarnScope().split(",");
+            userList = myUserMapper.selectByRoleKeyList(roleKeyList, warn.getTenantKey());
+        }else if(WarnScopeType.USER.getWarnScopeType().equals(warn.getWarnScopeType())){
+            usernameList = Arrays.asList(warn.getWarnScope().split(","));
+        }
+        if(CollectionUtils.isNotEmpty(userList))
+            usernameList = userList.stream().map(r->r.getUserName()).collect(Collectors.toList());
+        return usernameList;
+    }
     
     private Map buildParam(TWarn warn){
         String receive = Stream.of(warn.getWarnScope().split(",")).filter(r->StringUtils.isNotBlank(r)).collect(Collectors.joining(";"));
@@ -119,23 +135,6 @@ public class Warn2Push {
         map.put("receivedatetime",DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,new Date()));
         map.put("requestlevel","0");
         return map;
-    }
-    private List<String> getUsernames(TWarn warn){
-        List<SysUser> userList = new ArrayList<>();
-        List<String> usernameList = new ArrayList<>();
-        if(WarnScopeType.ALL.getWarnScopeType().equals(warn.getWarnScopeType())){
-            userList = userMapper.selectUserListAll(new SysUser(), Arrays.asList(warn.getTenantKey()));
-        }else if(WarnScopeType.DEPT.getWarnScopeType().equals(warn.getWarnScopeType())){
-            userList = this.userMapper.selectUserListByDeptIds(warn.getWarnScope());
-        }else if(WarnScopeType.ROLE.getWarnScopeType().equals(warn.getWarnScopeType())){
-            String[] roleKeyList = warn.getWarnScope().split(",");
-            userList = myUserMapper.selectByRoleKeyList(roleKeyList, warn.getTenantKey());
-        }else if(WarnScopeType.USER.getWarnScopeType().equals(warn.getWarnScopeType())){
-            usernameList = Arrays.asList(warn.getWarnScope().split(","));
-        }
-        if(CollectionUtils.isNotEmpty(userList))
-            usernameList = userList.stream().map(r->r.getUserName()).collect(Collectors.toList());    
-        return usernameList;
     }
 
     private SysSyncLog buildLog(TWarn warn, String typeStr, String params, String result, String failMsg){
