@@ -15,7 +15,6 @@ import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -289,12 +288,13 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
     private void pushData() {
         SgjsPlanMeasureManageVo vo=new SgjsPlanMeasureManageVo();
         List<SgjsPlanMeasureManage> list=sgjsPlanMeasureManageMapper.getAll();
-        list= ListTreeUtil.formatTree(
+        /*list= ListTreeUtil.formatTree(
                 list,
                 o -> o.getPid() == 0,
                 (r, n) -> r.getId().equals(n.getPid()),
                 SgjsPlanMeasureManage::getChildren,
                 SgjsPlanMeasureManage::setChildren);
+        vo.setTreeList(list);*/
         vo.setTreeList(list);
         if (list!=null&&!list.isEmpty()){
             sysSyncInfoService4Sp.pushSgjsPlanMeasureManage(vo);

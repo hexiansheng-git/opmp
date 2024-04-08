@@ -132,6 +132,10 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     @JsonProperty
 //    @Excel(name = "项目id")
     private Long projectId;
+
+
+
+
     /**
      * 字段描述：项目名称
      */
