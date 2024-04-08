@@ -39,8 +39,8 @@ public class SgjsBuildSchemeExpertSuggestServiceImpl implements ISgjsBuildScheme
         groupList.forEach(p -> {
             Date submitTime = p.getSubmitTime();
             if (submitTime != null) {
-                String format = DateUtil.format(submitTime, "yyyy-MM-dd HH");
-                p.setPtVar2(format + ":00");
+                String format = DateUtil.format(submitTime, "yyyy-MM-dd HH:mm");
+                p.setPtVar2(format);
             }
         });
         return groupList;
