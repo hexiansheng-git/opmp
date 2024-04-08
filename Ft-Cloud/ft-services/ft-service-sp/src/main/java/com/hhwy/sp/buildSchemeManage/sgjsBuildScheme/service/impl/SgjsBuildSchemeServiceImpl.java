@@ -186,17 +186,16 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     //调整
     @Override
     public SgjsBuildScheme adjust(SgjsBuildScheme sgjsBuildSchemeParam) {
-        //获取流最高版本数据
-        SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
-        SgjsBuildScheme result = sgjsBuildSchemeMapper.getMaxVersionData(sgjsBuildScheme);
+        //获取最高版本数据
+        SgjsBuildScheme result = sgjsBuildSchemeMapper.getMaxVersionData(new SgjsBuildScheme());
         SgjsBuildScheme newDataResult = new SgjsBuildScheme();
         if (result == null) return newDataResult;
         String taskStatus = result.getTaskStatus();
         if (StrUtil.isNotBlank(taskStatus) && taskStatus.equals("5")) {
-            //最高版本审批通过。基于上一版本生成一条新的数据
+            //最高版本审批通过。基于它生成一条新的数据
             newDataResult = this.createNewData(result);
         } else {
-            //最高版本未发起审批。返回当前版本
+            //最高版本未发起审批。返回它
             newDataResult = result;
         }
         //历史记录按钮显隐，逻辑：所有数据中，只要有一条已审批完成即显示，否则不显示
@@ -228,6 +227,9 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         result.setLeadEngineer(lastData.getLeadEngineer());
         result.setLeadEngineerName(lastData.getLeadEngineerName());
         result.setLeadEngineerPhoneNum(lastData.getLeadEngineerPhoneNum());
+        //获取有效版本数据，用于按钮"查看整体方案"
+        SgjsBuildScheme validVersionData = sgjsBuildSchemeMapper.getValidVersionData();
+        if (validVersionData != null ) result.setPtVar5(String.valueOf(validVersionData.getId()));
         //附件组id更新
         String auditRecordFile = lastData.getAuditRecordFile();
         String projectSummaryFile = lastData.getProjectSummaryFile();
@@ -290,7 +292,9 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         if (sgjsBuildScheme.getTaskStatus().equals("0")) {
             //方案清单
             List<SgjsBuildSchemeList> children = sgjsBuildScheme.getChildren();
-            children.forEach(p -> p.setPtVar5(sgjsBuildScheme.getProjectCode()));
+            children.forEach(p -> {
+                p.setPtVar5(sgjsBuildScheme.getProjectCode());
+            });
             sgjsBuildSchemeListService.insertSgjsBuildSchemeList(children, id);
         }
         if (!sgjsBuildScheme.getTaskStatus().equals("0")) {
@@ -351,8 +355,39 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         return sgjsBuildSchemeMapper.deleteSgjsBuildSchemeByPks(sgjsBuildSchemePkList);
     }
 
+    //流程监听，状态修改
+    @Override
+    @Transactional
+    public void updateTaskStatus(Long id, String isPass) {
+        SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
+        sgjsBuildScheme.setTaskStatus("5");
+        sgjsBuildScheme.setId(id);
+        sgjsBuildScheme.setPtVar3(isPass);
+        if (StrUtil.isBlank(isPass)) {
+            //设置为无效
+            sgjsBuildScheme.setValid("0");
+            //修改当前记录状态
+            sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
+        } else {
+            //0不通过 1通过
+            sgjsBuildScheme.setValid(isPass);
+            if (isPass.equals("0")) {
+                //不通过 修改当前记录状态
+                sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
+            } else {
+                //通过 修改原有效数据为无效
+                sgjsBuildSchemeMapper.updateNonValid(new SgjsBuildScheme());
+                //修改当前记录状态
+                sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
+            }
+        }
+        this.doSendGm(null, "");
+    }
+
     //发送总部版
     public void doSendGm(SysUser sysUser, String tenantKey) {
+        if (StrUtil.isBlank(tenantKey)) tenantKey = SecurityUtils.getTenantKey();
+        if (sysUser == null) sysUser = SecurityUtils.getSysUser();
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         try {
             String dataSourceNameByTenantKey = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
@@ -404,35 +439,6 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         log.info("施工方案清单,推送数据：" + JSON.toJSONString(objects));
         rocketMQTemplate.convertAndSend("sgjs_build_scheme:tenantSuccess", objects);
     }
-
-    //流程监听，状态修改
-    @Override
-    @Transactional
-    public void updateTaskStatus(Long id, String isPass) {
-        SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
-        sgjsBuildScheme.setTaskStatus("5");
-        sgjsBuildScheme.setId(id);
-        sgjsBuildScheme.setPtVar3(isPass);
-        if (StrUtil.isBlank(isPass)) {
-            //设置为无效
-            sgjsBuildScheme.setValid("0");
-            //修改当前记录状态
-            sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
-        } else {
-            //0不通过 1通过
-            sgjsBuildScheme.setValid(isPass);
-            if (isPass.equals("0")) {
-                //不通过 修改当前记录状态
-                sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
-            } else {
-                //通过 修改原有效数据为无效
-                sgjsBuildSchemeMapper.updateNonValid(new SgjsBuildScheme());
-                //修改当前记录状态
-                sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
-            }
-        }
-    }
-
 
     @Value("${gm.url}")
     private String gmUrl;
