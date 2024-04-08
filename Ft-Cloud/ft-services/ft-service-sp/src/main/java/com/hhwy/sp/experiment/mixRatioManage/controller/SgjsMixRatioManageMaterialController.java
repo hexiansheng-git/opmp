@@ -1,7 +1,6 @@
 package com.hhwy.sp.experiment.mixRatioManage.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.experiment.mixRatioManage.domain.SgjsMixRatioManageMaterial;
@@ -64,7 +63,7 @@ public class SgjsMixRatioManageMaterialController extends BaseController {
         }else {
             materialList = sgjsMixRatioManageMaterialService.getListByIds(ids);
         }
-        ExcelUtils<SgjsMixRatioManageMaterial> util = new ExcelUtils<>(SgjsMixRatioManageMaterial.class);
+        FtExcelUtil<SgjsMixRatioManageMaterial> util = new FtExcelUtil<>(SgjsMixRatioManageMaterial.class);
         util.exportExcel(response, materialList, DateUtils.getDate());
     }
 }

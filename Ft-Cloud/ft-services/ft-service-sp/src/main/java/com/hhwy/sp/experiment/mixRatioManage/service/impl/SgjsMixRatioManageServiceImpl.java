@@ -108,7 +108,7 @@ public class SgjsMixRatioManageServiceImpl implements ISgjsMixRatioManageService
     public void save(SgjsMixRatioManage mixRatioManage) {
         String saveType = mixRatioManage.getSaveType();
         Long id = mixRatioManage.getId();
-        if("add".equals(saveType) && id == null){
+        if("add".equals(saveType) || id == null){
             id = IdWorker.createId();
             mixRatioManage.setId(id);
             ProjectDto projectDto = pmServiceApi.getProjectDto();
