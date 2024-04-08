@@ -809,7 +809,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         }
         List<SgjsBuildSchemeReview> reviewList = sgjsBuildSchemeReviewMapper.getListByQueryVo(new BuildSchemeReviewQueryVo());
         Set<String> schemeNumSet = reviewList.stream().map(SgjsBuildSchemeReview::getSchemeNum).collect(Collectors.toSet());
-        return lastValidSchemeListList.stream().filter(sgjsBuildSchemeList -> !schemeNumSet.contains(sgjsBuildSchemeList.getSchemeNum())).collect(Collectors.toList());
+        return filterList.stream().filter(sgjsBuildSchemeList -> !schemeNumSet.contains(sgjsBuildSchemeList.getSchemeNum())).collect(Collectors.toList());
     }
 
     @Override
