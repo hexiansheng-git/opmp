@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.util.Base64Utils;
 
 import java.util.*;
 
@@ -41,6 +42,8 @@ public class WarnPushMenHu {
     private String todoUrl;
     @Value("${menhu.verifykey}")
     private String verifykey;
+    @Value("${menhu.sysType}")
+    private String sysType;
     @Value("${pushTask.pmUrl}")
     private String pmUrl;
     @Value("${gm.url}")
@@ -62,7 +65,7 @@ public class WarnPushMenHu {
         String sysUrl = StringUtils.equals(warn.getPtVar1(),"1")?gmUrl:pmUrl;
         long createTime = new Date().getTime();
         if(StringUtils.isBlank(warn.getWarnUrl())){
-            log.error("{},url地址为空！id:{},s:{}",logTitle,warn.getWarnId(), warn.getTenantKey());
+            log.error("{},url地址为空！id:{},租户:{}",logTitle,warn.getWarnId(), warn.getTenantKey());
         }
         //获取预警接收人
         List<String> unameList = warn2Push.getUsernames(warn);
@@ -76,13 +79,15 @@ public class WarnPushMenHu {
 //                    path, ObjectUtils.nvlString(warn.getBusinessId()),warn.getTenantKey(),receive) ;
                 String pcurl = String.format("?id=%s&tenantKey=%s&receiver=%s&pageType=fw",
                         ObjectUtils.nvlString(warn.getBusinessId()),warn.getTenantKey(),receive) ;
+                //拉哥要求做base64
+                pcurl = new String(Base64Utils.encode(pcurl.getBytes()));
                 SysUser createUser = userMapper.selectUserByUserName(warn.getCreateUser(), Arrays.asList(warn.getTenantKey()));
                 String createUserName = createUser==null?warn.getCreateUser():createUser.getNickName();
                 Map<String,Object> paramMap = new HashMap();
                 paramMap.put("dataId","0");
                 paramMap.put("dataNo",warn.getWarnId()+receive);
                 paramMap.put("doUserId",receive);
-                paramMap.put("sysType","FHEB_HWXG");     //系统标识
+                paramMap.put("sysType",sysType);     //系统标识
                 paramMap.put("contentType","5");         //消息类型
                 paramMap.put("sysModel",warn.getWarnItem());     //业务系统特定模块
                 paramMap.put("title",String.format("项管信息提醒,【%s】%s",warn.getWarnItem(),warn.getWarnContent()));
