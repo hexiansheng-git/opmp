@@ -401,10 +401,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         SgjsBuildSchemeReviewOpinion reviewOpinionQuery = new SgjsBuildSchemeReviewOpinion();
         reviewOpinionQuery.setReviewId(reviewId);
         SgjsBuildSchemeReviewOpinion reviewOpinion = sgjsBuildSchemeReviewOpinionMapper.getSgjsBuildSchemeReviewOpinion(reviewOpinionQuery);
-        reviewOpinionRecord.setRegionChiefOpinion(reviewOpinion.getRegionChiefOpinion());
-        reviewOpinionRecord.setRegionChiefDetailOpinion(reviewOpinion.getRegionChiefDetailOpinion());
-        reviewOpinionRecord.setOverseasChiefOpinion(reviewOpinion.getOverseasChiefOpinion());
-        reviewOpinionRecord.setOverseasChiefDetailOpinion(reviewOpinion.getOverseasChiefDetailOpinion());
+        if(reviewOpinion != null){
+            reviewOpinionRecord.setRegionChiefOpinion(reviewOpinion.getRegionChiefOpinion());
+            reviewOpinionRecord.setRegionChiefDetailOpinion(reviewOpinion.getRegionChiefDetailOpinion());
+            reviewOpinionRecord.setOverseasChiefOpinion(reviewOpinion.getOverseasChiefOpinion());
+            reviewOpinionRecord.setOverseasChiefDetailOpinion(reviewOpinion.getOverseasChiefDetailOpinion());
+        }
         return reviewOpinionRecord;
     }
 
@@ -711,6 +713,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         review.setSchemeInitiatorId(userName);
         review.setSchemeInitiatorName(nickName);
         review.setSubmitDate(DateUtils.getNowDate());
+        review.setTaskStatus("0");
         review.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
         review.setCreateUserName(SecurityUtils.getUserName());
         review.setCreateTime(DateUtils.getNowDate());
