@@ -101,9 +101,16 @@ public class JdglDiffAnalysisController extends BaseController {
         return toAjax(jdglDiffAnalysisService.deleteJdglDiffAnalysisByPks(jdglDiffAnalysisPkList));
     }
 
+    /**
+    * 功能描述: 仅用于手动生成历史数据，前端未使用该接口
+    * @param: dateMonth
+    * @return: com.hhwy.common.core.web.domain.AjaxResult
+    * 作者:
+    * 时间: 2024/4/9
+    */
     @GetMapping("/initDiffData")
-    public AjaxResult initDiffData() {
-        jdglDiffAnalysisService.initDiffData();
+    public AjaxResult initDiffData(@RequestParam("dateMonth") String dateMonth) {
+        jdglDiffAnalysisService.initDiffData(dateMonth);
         return AjaxResult.success();
     }
 

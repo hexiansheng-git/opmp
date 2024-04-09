@@ -35,7 +35,7 @@ public interface IJdglDiffAnalysisService {
      */
     void initDiffAnalysis();
 
-    void initDiffData();
+    void initDiffData(String dateMonth);
 
     List<JdglDiffAnalysis> gmList(DiffAnalysisQueryVo queryVo);
 

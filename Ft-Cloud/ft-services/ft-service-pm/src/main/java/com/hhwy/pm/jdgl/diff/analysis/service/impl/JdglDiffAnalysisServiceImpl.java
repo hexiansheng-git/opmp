@@ -1,5 +1,8 @@
 package com.hhwy.pm.jdgl.diff.analysis.service.impl;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -320,7 +323,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
                 String oldDataSource = DynamicDataSourceContextHolder.peek();
                 DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
                 try {
-                    initDiffData();
+                    initDiffData("");
                 }catch (Exception e){
                     e.printStackTrace();
                     throw new CustomBusinessException(e.getMessage());
@@ -334,7 +337,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
     }
 
     @Transactional
-    public void initDiffData() {
+    public void initDiffData(String dateStr) {
         JdglDiffAnalysis jdglDiffAnalysis = new JdglDiffAnalysis();
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //        Date nowDate = null;
@@ -344,6 +347,9 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 //            e.printStackTrace();
 //        }
         Date nowDate = FtDateUtils.getYearMonthDate(new Date());
+        if (StrUtil.isNotBlank(dateStr)) {
+            nowDate = DateUtil.parse(dateStr, "yyyy-MM");
+        }
 
         deleteDiffAnalysisByPeriod(nowDate);
 
