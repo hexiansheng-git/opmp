@@ -212,6 +212,11 @@
             </foreach>
         </where>
     </select>
+    <select id="getByMixRatioCodeExceptId" resultType="java.lang.Integer">
+        select count(*) from sgjs_mix_ratio_manage
+        where del_flag = '0' and mix_ratio_code = #{mixRatioCode}
+        <if test="id != null ">and `id` != #{id}</if>
+    </select>
 
     <insert id="insertSgjsMixRatioManage" useGeneratedKeys="true" keyProperty="id">
         insert into sgjs_mix_ratio_manage

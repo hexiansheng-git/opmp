@@ -1,6 +1,7 @@
 package com.hhwy.sp.sync.mq.service;
 
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
+import com.hhwy.sp.experiment.mixRatioManage.domain.SgjsMixRatioManage;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportVo;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManageVo;
 import com.hhwy.sp.sciTech.sgjsTechMethod.domain.SgjsTechMethod;
@@ -59,4 +60,6 @@ public interface ISysSyncInfoService4Sp {
     void pushSgjsPaperPublish(SgjsPaperPublish patentDeclare);
 
     void pushSgjsBuildSchemeReview(SgjsBuildSchemeReview review);
+
+    void pushSgjsMixRatioManage(SgjsMixRatioManage mixRatioManage);
 }

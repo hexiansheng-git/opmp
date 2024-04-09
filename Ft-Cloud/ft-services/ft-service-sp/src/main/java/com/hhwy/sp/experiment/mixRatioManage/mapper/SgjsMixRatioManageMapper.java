@@ -36,4 +36,6 @@ public interface SgjsMixRatioManageMapper {
     SgjsMixRatioManage getById(@Param("id") Long id);
 
     List<SgjsMixRatioManage> getListByIds(@Param("ids") List<Long> ids);
+
+    int getByMixRatioCodeExceptId(@Param("mixRatioCode") String mixRatioCode, @Param("id") Long id);
 }

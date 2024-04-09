@@ -5,6 +5,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
+import com.hhwy.sp.experiment.mixRatioManage.domain.SgjsMixRatioManage;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.SgjsCriticalExpReport;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportVo;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManage;
@@ -223,6 +224,16 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
     public void pushSgjsBuildSchemeReview(SgjsBuildSchemeReview review){
         try{
             rocketMQTemplate.convertAndSend("sgjs_build_scheme_review:tenantSuccess", JSONObject.toJSONString(review));
+        }catch(Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public void pushSgjsMixRatioManage(SgjsMixRatioManage mixRatioManage){
+        try{
+            rocketMQTemplate.convertAndSend("sgjs_mix_ratio_manage:tenantSuccess", JSONObject.toJSONString(mixRatioManage));
         }catch(Exception e){
             e.printStackTrace();
             throw e;

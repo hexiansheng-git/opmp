@@ -10,6 +10,7 @@ import com.hhwy.sp.experiment.mixRatioManage.domain.vo.MixRatioManageQueryVo;
 import com.hhwy.sp.experiment.mixRatioManage.mapper.SgjsMixRatioManageMapper;
 import com.hhwy.sp.experiment.mixRatioManage.mapper.SgjsMixRatioManageMaterialMapper;
 import com.hhwy.sp.experiment.mixRatioManage.service.ISgjsMixRatioManageService;
+import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class SgjsMixRatioManageServiceImpl implements ISgjsMixRatioManageService
 
     @Autowired
     private PmServiceApi pmServiceApi;
+
+    @Autowired
+    private ISysSyncInfoService4Sp sysSyncInfoService4Sp;
 
 
     public SgjsMixRatioManage getSgjsMixRatioManage(SgjsMixRatioManage sgjsMixRatioManage) {
@@ -108,6 +112,8 @@ public class SgjsMixRatioManageServiceImpl implements ISgjsMixRatioManageService
     public void save(SgjsMixRatioManage mixRatioManage) {
         String saveType = mixRatioManage.getSaveType();
         Long id = mixRatioManage.getId();
+        String mixRatioCode = mixRatioManage.getMixRatioCode();
+        this.checkSingle(mixRatioCode,id);
         if("add".equals(saveType) || id == null){
             id = IdWorker.createId();
             mixRatioManage.setId(id);
@@ -124,6 +130,15 @@ public class SgjsMixRatioManageServiceImpl implements ISgjsMixRatioManageService
 
         List<SgjsMixRatioManageMaterial> materialList = mixRatioManage.getMaterialList();
         this.saveMaterialList(id, materialList);
+
+        sysSyncInfoService4Sp.pushSgjsMixRatioManage(mixRatioManage);
+    }
+
+    private void checkSingle(String mixRatioCode,Long id){
+        int count = sgjsMixRatioManageMapper.getByMixRatioCodeExceptId(mixRatioCode,id);
+        if(count >= 1){
+            throw new RuntimeException("配合比编号已存在，请重新编辑！");
+        }
     }
 
     private void saveMaterialList(Long foreignId, List<SgjsMixRatioManageMaterial> materialList){
