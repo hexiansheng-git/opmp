@@ -305,7 +305,8 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         }
         SysUser sysUser = SecurityUtils.getSysUser();
         String tenantKey = SecurityUtils.getTenantKey();
-        ThreadPoolUtil.execute(() -> doSendGm(sysUser, tenantKey));
+        doSendGm(sysUser, tenantKey);
+//        ThreadPoolUtil.execute(() -> doSendGm(sysUser, tenantKey));
         return id;
     }
 
@@ -319,16 +320,12 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         return sgjsBuildSchemeMapper.insertSgjsBuildSchemeList(sgjsBuildSchemeList);
     }
 
-    //状态修改
+    //修改
     @Transactional
     public int updateSgjsBuildScheme(SgjsBuildScheme sgjsBuildScheme) {
         sgjsBuildScheme.setUpdateUser(SecurityUtils.getUserName());
         sgjsBuildScheme.setUpdateTime(DateUtils.getNowDate());
-        int i = sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
-        String tenantKey = SecurityUtils.getTenantKey();
-        SysUser sysUser = SecurityUtils.getSysUser();
-        this.doSendGm(sysUser, tenantKey);
-        return i;
+        return sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
     }
 
     @Transactional
@@ -378,13 +375,14 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
             }
         }
-        this.doSendGm(null, "");
+        SysUser sysUser = SecurityUtils.getSysUser();
+        String tenantKey = SecurityUtils.getTenantKey();
+        doSendGm(sysUser, tenantKey);
+//        ThreadPoolUtil.execute(() -> doSendGm(sysUser, tenantKey));
     }
 
     //发送总部版
     public void doSendGm(SysUser sysUser, String tenantKey) {
-        if (StrUtil.isBlank(tenantKey)) tenantKey = SecurityUtils.getTenantKey();
-        if (sysUser == null) sysUser = SecurityUtils.getSysUser();
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         try {
             String dataSourceNameByTenantKey = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
