@@ -5,6 +5,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
+import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.ExpBetonQueryVo;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonImportVo;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonVo;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.service.IQqchExpBetonService;
@@ -101,5 +102,16 @@ public class QqchExpBetonController extends BaseController {
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");
         }
+    }
+
+    /**
+     * 前期策划配合比弹窗
+     * @param queryVo
+     * @return
+     */
+    @GetMapping("getPopWindows")
+    public AjaxResult getPopWindows(ExpBetonQueryVo queryVo){
+        List<QqchExpBeton> expBetonList = qqchExpBetonService.getPopWindows(queryVo);
+        return AjaxResult.success(expBetonList);
     }
 }

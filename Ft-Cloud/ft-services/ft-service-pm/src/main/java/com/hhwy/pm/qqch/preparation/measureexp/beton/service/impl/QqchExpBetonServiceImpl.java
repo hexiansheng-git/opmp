@@ -1,23 +1,27 @@
 package com.hhwy.pm.qqch.preparation.measureexp.beton.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
+import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.ExpBetonQueryVo;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonVo;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.mapper.QqchExpBetonMapper;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.service.IQqchExpBetonService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
-import java.math.BigDecimal;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -109,5 +113,41 @@ public class QqchExpBetonServiceImpl implements IQqchExpBetonService {
         qryParam.setVersion(version);
         List<QqchExpBeton> list = qqchExpBetonMapper.getQqchExpBetonList(qryParam);
         return list;
+    }
+
+    @Override
+    public List<QqchExpBeton> getPopWindows(ExpBetonQueryVo queryVo) {
+        List<QqchExpBeton> resultList;
+        BigDecimal version = VersionUtil.getVersion("qqch_exp_beton", null);
+        QqchExpBeton query = new QqchExpBeton();
+        query.setVersion(version);
+        //全量数据
+        List<QqchExpBeton> allList = qqchExpBetonMapper.getQqchExpBetonList(query);
+
+        String mixRatioName = queryVo.getMixRatioName();
+        String mixRatioType = queryVo.getMixRatioType();
+
+        if(StringUtils.isNotBlank(mixRatioName) || StringUtils.isNotBlank(mixRatioType)){
+            query.setMixRatioName(mixRatioName);
+            query.setMixRatioType(mixRatioType);
+            List<QqchExpBeton> subList = qqchExpBetonMapper.getQqchExpBetonList(query);
+            resultList = ListTreeUtil.getUpListBySublistToTree(
+                    subList,
+                    allList,
+                    QqchExpBeton::getId,
+                    QqchExpBeton::getPid,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchExpBeton::getChildren,
+                    QqchExpBeton::setChildren);
+        }else {
+            resultList = ListTreeUtil.formatTree(
+                    allList,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchExpBeton::getChildren,
+                    QqchExpBeton::setChildren);
+        }
+        return resultList;
     }
 }

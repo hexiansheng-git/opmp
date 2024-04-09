@@ -111,8 +111,8 @@
       del_flag = "0"
       <if test="id != null ">and `id` = #{id}</if>
       <if test="pid != null ">and `pid` = #{pid}</if>
-      <if test="mixRatioType != null  and mixRatioType != ''">and `mix_ratio_type` = #{mixRatioType}</if>
-      <if test="mixRatioName != null  and mixRatioName != ''">and `mix_ratio_name` = #{mixRatioName}</if>
+      <if test="mixRatioType != null  and mixRatioType != ''">and `mix_ratio_type` like concat('%' , #{mixRatioType} , '%')</if>
+      <if test="mixRatioName != null  and mixRatioName != ''">and `mix_ratio_name` like concat('%' , #{mixRatioName} , '%')</if>
       <if test="slumps != null  and slumps != ''">and `slumps` = #{slumps}</if>
       <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
       <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>

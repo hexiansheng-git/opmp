@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.measureexp.beton.service;
 
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
+import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.ExpBetonQueryVo;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonVo;
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,4 +32,6 @@ public interface IQqchExpBetonService {
      * @return
      */
     List<QqchExpBeton> getList(BigDecimal version);
+
+    List<QqchExpBeton> getPopWindows(ExpBetonQueryVo queryVo);
 }
