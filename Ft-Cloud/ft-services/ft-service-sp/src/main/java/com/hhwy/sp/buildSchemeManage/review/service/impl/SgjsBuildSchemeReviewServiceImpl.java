@@ -184,8 +184,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         }
         if("3".equals(type)){
             //查看
-            SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = this.getLookOverData(id);
-            review.setReviewOpinionRecord(reviewOpinionRecord);
+            BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id);
+            review.setReviewOpinionVo(reviewOpinionVo);
         }
 
         if("4".equals(type)){
@@ -219,31 +219,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 review.setStaffOpinionVo(staffOpinionVo);
             }else if(ReviewFlowNodeMark.FlowNodeMark7.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark8.equals(flowNodeMark)){
                 //区域总工审批节点  汇总 3 ，4节点数据    海外事业部总工审批节点  汇总 3 ，4 ，5 ，6节点数据
-                BuildSchemeReviewOpinionVo reviewOpinionVo = new BuildSchemeReviewOpinionVo();
-                SgjsBuildSchemeReviewOpinion reviewOpinionQuery = new SgjsBuildSchemeReviewOpinion();
-                reviewOpinionQuery.setReviewId(id);
-                String flowNodeMarkQuery;
-                if("7".equals(flowNodeMark)){
-                    flowNodeMarkQuery = "1";
-                }else {
-                    flowNodeMarkQuery = null;
-                }
-                SgjsBuildSchemeReviewOpinion reviewOpinion = sgjsBuildSchemeReviewOpinionMapper.getSgjsBuildSchemeReviewOpinion(reviewOpinionQuery);
-                if(reviewOpinion != null){
-                    reviewOpinionVo.setRegionChiefOpinion(reviewOpinion.getRegionChiefOpinion());
-                    reviewOpinionVo.setRegionChiefDetailOpinion(reviewOpinion.getRegionChiefDetailOpinion());
-                    reviewOpinionVo.setOverseasChiefOpinion(reviewOpinion.getOverseasChiefOpinion());
-                    reviewOpinionVo.setOverseasChiefDetailOpinion(reviewOpinion.getOverseasChiefDetailOpinion());
-                }
-                List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(id, flowNodeMarkQuery);
-                reviewOpinionVo.setGatherVoList(staffOpinionGatherVoList);
-                Double average = staffOpinionGatherVoList.stream().filter(o -> o.getScore() != null).collect(Collectors.averagingDouble(BuildSchemeStaffOpinionGatherVo::getScore));
-                reviewOpinionVo.setScore(average);
+                BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id);
                 review.setReviewOpinionVo(reviewOpinionVo);
             }else if(ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark10.equals(flowNodeMark)){
                 //海外事业部总工意见为修改后通过后的审批节点
-                SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = this.getMaxReviewOpinionRecord(id);
-                review.setReviewOpinionRecord(reviewOpinionRecord);
+                BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id);
+                review.setReviewOpinionVo(reviewOpinionVo);
             }else {
                 //节点标识为空：当前为驳回后的发起人节点，需要查看历史数据
                 SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = this.getMaxReviewOpinionRecord(id);
@@ -251,6 +232,24 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             }
         }
         return review;
+    }
+
+    private BuildSchemeReviewOpinionVo getReviewOpinionVo(Long reviewId){
+        BuildSchemeReviewOpinionVo reviewOpinionVo = new BuildSchemeReviewOpinionVo();
+        SgjsBuildSchemeReviewOpinion reviewOpinionQuery = new SgjsBuildSchemeReviewOpinion();
+        reviewOpinionQuery.setReviewId(reviewId);
+        SgjsBuildSchemeReviewOpinion reviewOpinion = sgjsBuildSchemeReviewOpinionMapper.getSgjsBuildSchemeReviewOpinion(reviewOpinionQuery);
+        if(reviewOpinion != null){
+            reviewOpinionVo.setRegionChiefOpinion(reviewOpinion.getRegionChiefOpinion());
+            reviewOpinionVo.setRegionChiefDetailOpinion(reviewOpinion.getRegionChiefDetailOpinion());
+            reviewOpinionVo.setOverseasChiefOpinion(reviewOpinion.getOverseasChiefOpinion());
+            reviewOpinionVo.setOverseasChiefDetailOpinion(reviewOpinion.getOverseasChiefDetailOpinion());
+        }
+        List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(reviewId, null);
+        reviewOpinionVo.setGatherVoList(staffOpinionGatherVoList);
+        Double average = staffOpinionGatherVoList.stream().filter(o -> o.getScore() != null).collect(Collectors.averagingDouble(BuildSchemeStaffOpinionGatherVo::getScore));
+        reviewOpinionVo.setScore(average);
+        return reviewOpinionVo;
     }
 
     private List<SgjsBuildSchemeReviewStaff> assembleStaffList(List<SgjsBuildSchemeReviewStaff> staffList){
@@ -303,6 +302,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             staffOpinionGatherVo.setStaffType(staff.getStaffType());
             staffOpinionGatherVo.setScore(staff.getScore());
             staffOpinionGatherVo.setSubmitTime(staff.getSubmitTime());
+            staffOpinionGatherVo.setUpdateResult(staff.getUpdateResult());
 
             List<SgjsBuildSchemeStaffOpinion> staffOpinions = staffOpinionMap.get(staff.getReviewStaffId());
             if(CollectionUtils.isNotEmpty(staffOpinions)){
@@ -369,6 +369,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 staffOpinionRecord.setReviewStaffName(staffOpinionGatherVo.getReviewStaffName());
                 staffOpinionRecord.setReviewStaffId(staffOpinionGatherVo.getReviewStaffId());
                 staffOpinionRecord.setStaffType(staffOpinionGatherVo.getStaffType());
+                staffOpinionRecord.setUpdateResult(staffOpinionGatherVo.getUpdateResult());
                 List<String> opinionList = staffOpinionGatherVo.getReviewOpinionList();
                 if(CollectionUtils.isNotEmpty(opinionList)){
                     String opinionStr = String.join("==>", opinionList);
@@ -440,10 +441,14 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 this.saveReviewOpinionVo(id, flowNodeMark, reviewOpinionVo);
             } else if (ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark10.equals(flowNodeMark)) {
                 //海外事业部总工意见为修改后通过后的审批节点：需要修改字段-修改结果
-                SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = review.getReviewOpinionRecord();
-                if (reviewOpinionRecord != null) {
-                    List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList = reviewOpinionRecord.getStaffOpinionRecordList();
-                    this.updateStaffOpinionRecordList(staffOpinionRecordList);
+                if(ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark)){
+                    BuildSchemeReviewOpinionVo reviewOpinionVo = review.getReviewOpinionVo();
+                    if (reviewOpinionVo != null) {
+                        List<BuildSchemeStaffOpinionGatherVo> gatherVoList = reviewOpinionVo.getGatherVoList();
+                        if(CollectionUtils.isNotEmpty(gatherVoList)){
+                            sgjsBuildSchemeReviewStaffMapper.updateUpdateResultByUser(id,gatherVoList);
+                        }
+                    }
                 }
             } else {
                 //节点标识为空：当前为驳回后的发起人节点
@@ -827,12 +832,6 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         review.setProcessStatus("end");
         sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
     }
-
-    @Override
-    public void approvedAfterModification(Long id) {
-        this.recordData(id);
-    }
-
 
     @Value("${gm.url}")
     private String gmUrl;

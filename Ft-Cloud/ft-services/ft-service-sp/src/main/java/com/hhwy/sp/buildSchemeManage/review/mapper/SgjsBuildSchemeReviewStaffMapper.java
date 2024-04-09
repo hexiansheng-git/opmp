@@ -1,6 +1,7 @@
 package com.hhwy.sp.buildSchemeManage.review.mapper;
 
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReviewStaff;
+import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeStaffOpinionGatherVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -46,4 +47,6 @@ public interface SgjsBuildSchemeReviewStaffMapper {
     int deleteSgjsBuildSchemeReviewStaffByPks(@Param("sgjsBuildSchemeReviewStaffPkList") List<Long> sgjsBuildSchemeReviewStaffPkList);
 
     void updateScoreByUser(@Param("reviewId") Long reviewId,@Param("userName") String userName,@Param("score") Double score);
+
+    void updateUpdateResultByUser(@Param("reviewId") Long reviewId,@Param("gatherVoList") List<BuildSchemeStaffOpinionGatherVo> gatherVoList);
 }

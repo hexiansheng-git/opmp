@@ -65,6 +65,12 @@ public class BuildSchemeStaffOpinionGatherVo {
     @Excel(name = "提交时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date submitTime;
     /**
+     * 字段描述：修改结果
+     */
+    @JsonProperty
+    @Excel(name = "修改结果")
+    private String updateResult;
+    /**
      * 字段描述：流程节点标识
      */
     @JsonProperty

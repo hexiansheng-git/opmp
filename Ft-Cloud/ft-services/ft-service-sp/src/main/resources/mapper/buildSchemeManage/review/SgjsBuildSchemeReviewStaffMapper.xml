@@ -593,4 +593,16 @@
         update sgjs_build_scheme_review_staff set score = #{score},submit_time = now()
         where del_flag = '0' and review_id = #{reviewId} and review_staff_id = #{userName}
     </update>
+
+    <update id="updateUpdateResultByUser">
+        update sgjs_build_scheme_review_staff
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="update_result  = case" suffix="end,">
+                <foreach collection="gatherVoList" item="item" index="index">
+                    when `review_staff_id`=#{item.reviewStaffId} then #{item.updateResult}
+                </foreach>
+            </trim>
+        </trim>
+        where review_id = #{reviewId}
+    </update>
 </mapper>

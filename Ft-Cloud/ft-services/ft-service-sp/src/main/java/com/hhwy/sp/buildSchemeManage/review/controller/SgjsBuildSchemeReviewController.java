@@ -183,17 +183,6 @@ public class SgjsBuildSchemeReviewController extends BaseController {
         return AjaxResult.success();
     }
 
-    /**
-     * 流程分支-修改后通过
-     * @param id
-     * @return
-     */
-    @GetMapping("/approvedAfterModification")
-    public AjaxResult approvedAfterModification(@RequestParam("id") Long id){
-        sgjsBuildSchemeReviewService.approvedAfterModification(id);
-        return AjaxResult.success();
-    }
-
     /*
      * 功能描述: 预警消息发送
      */

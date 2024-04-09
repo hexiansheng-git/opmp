@@ -59,8 +59,6 @@ public interface ISgjsBuildSchemeReviewService {
 
     void updateBuildSchemeReviewProcess(Long id);
 
-    void approvedAfterModification(Long id);
-
     SgjsBuildSchemeReviewOpinionRecord getSchemeReviewRecord(Long reviewId);
 
     void warnMessage();

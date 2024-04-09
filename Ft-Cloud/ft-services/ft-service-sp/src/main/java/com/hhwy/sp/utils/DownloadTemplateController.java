@@ -49,6 +49,31 @@ public class DownloadTemplateController {
     }
 
     /**
+     * 下载模板
+     *
+     * @param response
+     * @throws Exception
+     */
+    @PostMapping("/downloadTemplatePost")
+    public void downloadTemplatePost(@RequestParam(value = "fileName") String fileName, HttpServletResponse response)
+            throws Exception {
+        // 读取文件流（可从jar包取）
+        InputStream inStream = this.getClass().getClassLoader()
+                .getResourceAsStream("template/" + fileName);
+        OutputStream outputStream = response.getOutputStream();
+
+        // 设置输出的格式
+        response.reset();
+        response.setContentType("bin");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+
+        IOUtils.copy(inStream, outputStream, 100);
+        outputStream.flush();
+        inStream.close();
+        outputStream.close();
+    }
+
+    /**
      * 下载模板，.xls或.xlsx
      * @param fileName 模板名称，带后缀
      * @param exportName 导出名称，不带后缀
