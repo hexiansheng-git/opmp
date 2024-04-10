@@ -408,7 +408,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     public Long save(SgjsBuildSchemeReview review) {
         String saveType = review.getSaveType();
         CommonAssert.notBlank(saveType,"保存类型不能为空！");
-        if("add".equals(saveType) && review.getId() == null){
+        if("add".equals(saveType) || review.getId() == null){
             //新增
             this.insertSgjsBuildSchemeReview(review);
         }
