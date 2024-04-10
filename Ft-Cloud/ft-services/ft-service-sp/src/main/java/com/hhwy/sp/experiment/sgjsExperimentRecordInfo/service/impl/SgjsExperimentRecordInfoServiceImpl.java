@@ -200,6 +200,10 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
      * @return
      */
     private int validData(List<SgjsExperimentRecordInfo> iList){
+        if(CollectionUtils.isEmpty(iList)){
+            logger.error("空了。。。。。。。。【{}】",iList);
+            return 0;
+        }
         //1、校验传过来的试验管理编号 是否重复 experimentCode
         Map<String,List<SgjsExperimentRecordInfo>> filterMap = iList.stream().collect(Collectors.groupingBy(e->e.getExperimentCode()));
         Set<String> keySet = filterMap.keySet();

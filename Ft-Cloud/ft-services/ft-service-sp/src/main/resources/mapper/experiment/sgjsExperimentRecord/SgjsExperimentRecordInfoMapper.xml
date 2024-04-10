@@ -180,6 +180,7 @@
             <if test="residualValue != null  and residualValue != ''"> and `residual_value` = #{residualValue}</if>
             <if test="acceptDate != null "> and `accept_date` = #{acceptDate}</if>
             <if test="entryDate != null "> and `entry_date` = #{entryDate}</if>
+
             <if test="exitDate != null "> and `exit_date` = #{exitDate}</if>
             <if test="checkDate != null "> and `check_date` = #{checkDate}</if>
             <if test="checkDay != null "> and `check_day` = #{checkDay}</if>
@@ -212,6 +213,8 @@
                  #{id}
              </foreach>
             </if>
+            <if test="entryDateBegin != null"> and `entry_date` &gt;= #{entryDateBegin}</if>
+            <if test="entryDateEnd != null"> and `entry_date` &lt;= #{entryDateEnd}</if>
         </where>
         order by create_time desc
     </select>
