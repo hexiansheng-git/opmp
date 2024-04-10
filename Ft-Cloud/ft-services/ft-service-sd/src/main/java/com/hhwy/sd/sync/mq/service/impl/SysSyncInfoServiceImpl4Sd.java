@@ -100,7 +100,6 @@ public class SysSyncInfoServiceImpl4Sd implements ISysSyncInfoService4Sd {
             review.setRegionId(projectDto.getRegionId());
             review.setRegionName(projectDto.getRegionName());
             review.setPtVar5(projectDto.getProjectCode());
-            JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(review));
             List<KcsjAchievement> achievementList = review.getAchievementList();
             for (KcsjAchievement achievement : achievementList) {
                 achievement.setProjectName(projectDto.getProjectName());
@@ -109,7 +108,7 @@ public class SysSyncInfoServiceImpl4Sd implements ISysSyncInfoService4Sd {
                 achievement.setRegionName(projectDto.getRegionName());
                 achievement.setPtVar5(projectDto.getProjectCode());
             }
-            rocketMQTemplate.convertAndSend("kcsj_achievement_review:tenantSuccess", JSONObject.toJSONString(json));
+            rocketMQTemplate.convertAndSend("kcsj_achievement_review:tenantSuccess", JSONObject.toJSONString(review));
         }catch(Exception e){
             e.printStackTrace();
             throw e;
