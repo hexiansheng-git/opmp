@@ -143,6 +143,7 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
     public SgjsTechMethod updateSgjsTechMethod(SgjsTechMethod sgjsTechMethod) {
         Long id = sgjsTechMethod.getId();
         sgjsTechMethod.setDataCurrentState(null);
+        sgjsTechMethod.setTaskStatus(null);
         if (id == null) {
             id = IdWorker.createId();
             sgjsTechMethod.setId(id);
@@ -210,14 +211,14 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
                 }
             } else {
                 sgjsTechMethod.setDataCurrentState("2");
-                sgjsTechMethod.setTaskStatus("2");
+                sgjsTechMethod.setTaskStatus("1");
                 processStatus = "submit";
             }
             sgjsTechMethodMapper.updateSgjsTechMethod(sgjsTechMethod);
         }
 
         SgjsTechMethod query = new SgjsTechMethod();
-        sgjsTechMethod.setId(id);
+        query.setId(id);
         SgjsTechMethod push = this.getSgjsTechMethod(query);
         if(push != null){
             push.setProcessStatus(processStatus);
