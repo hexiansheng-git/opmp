@@ -27,7 +27,7 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
     private KcsjPlanCommunicationRecordsMapper kcsjPlanCommunicationRecordsMapper;
 
     @Autowired
-    private  ISysSyncInfoService4Sd sysSyncInfoService4Sd;
+    private ISysSyncInfoService4Sd sysSyncInfoService4Sd;
 
     public KcsjPlanCommunicationRecords getKcsjPlanCommunicationRecords(KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords) {
         return kcsjPlanCommunicationRecordsMapper.getKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecords);
@@ -109,8 +109,8 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
         }
 
         //同步数据到总部
-        List<KcsjPlanCommunicationRecords> all=kcsjPlanCommunicationRecordsMapper.getAll();
-        if (all!=null){
+        List<KcsjPlanCommunicationRecords> all = kcsjPlanCommunicationRecordsMapper.getAll();
+        if (all != null) {
             sysSyncInfoService4Sd.pushKcsjPlanCommunicationRecords(all);
         }
 
@@ -144,6 +144,7 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
 
     /**
      * 批量删除
+     *
      * @param kcsjPlanCommunicationRecordsPkList
      * @return
      */
@@ -151,14 +152,13 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
     public int deleteKcsjPlanCommunicationRecordsByPks(List<Long> kcsjPlanCommunicationRecordsPkList) {
 
         String delUser = SecurityUtils.getSysUser().getNickName();
-         int i= kcsjPlanCommunicationRecordsMapper.deleteKcsjPlanCommunicationRecordsByPks(kcsjPlanCommunicationRecordsPkList, delUser);
+        int i = kcsjPlanCommunicationRecordsMapper.deleteKcsjPlanCommunicationRecordsByPks(kcsjPlanCommunicationRecordsPkList, delUser);
 
-        if (kcsjPlanCommunicationRecordsPkList.size()>0){
-            //推送数据到总部
-            List<KcsjPlanCommunicationRecords> all=kcsjPlanCommunicationRecordsMapper.getAll();
-            if (all!=null) {
-                sysSyncInfoService4Sd.pushKcsjPlanCommunicationRecords(all);
-            }
+        //推送数据到总部
+        List<KcsjPlanCommunicationRecords> all = kcsjPlanCommunicationRecordsMapper.getAll();
+        if (all != null) {
+            sysSyncInfoService4Sd.pushKcsjPlanCommunicationRecords(all);
+
         }
         return i;
     }
