@@ -1,7 +1,6 @@
 package com.hhwy.system.warn.push;
 
 import cn.hutool.http.HttpRequest;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -20,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Base64Utils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -41,6 +41,8 @@ public class Warn2Push {
     private String warnUrl;
     @Value("${pushTask.pmUrl}")
     private String pmUrl;
+    @Value("${pushTask.apiKey}")
+    private String apiKey;
     @Value("${gm.url}")
     private String gmUrl;
     @Autowired
@@ -72,6 +74,7 @@ public class Warn2Push {
             try{
                 param = buildParam(warn);
                 result= HttpRequest.post(warnUrl)
+                        .header("apikey",apiKey)
                         .body(JSONObject.toJSONString(param)).execute().body();
                 JSONObject jsonObject = JSONObject.parseObject(result);
                 Object resuCode = jsonObject.get("operResult");
