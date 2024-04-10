@@ -96,6 +96,8 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
                 kcsjPlanCommunicationRecords.setCreateUserName(SecurityUtils.getSysUser().getNickName());
                 kcsjPlanCommunicationRecords.setCreateTime(DateUtils.getNowDate());
                 kcsjPlanCommunicationRecords.setDelFlag("0");
+                kcsjPlanCommunicationRecords.setUpdateUser(SecurityUtils.getUserId().toString());
+                kcsjPlanCommunicationRecords.setUpdateTime(DateUtils.getNowDate());
             }
             kcsjPlanCommunicationRecordsMapper.insertKcsjPlanCommunicationRecordsList(insertList);
         }
