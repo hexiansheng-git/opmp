@@ -26,5 +26,5 @@ public interface IKcsjPlanCommunicationRecordsService {
 
     int deleteKcsjPlanCommunicationRecords(KcsjPlanCommunicationRecords kcsjPlanCommunicationRecords);
 
-    int deleteKcsjPlanCommunicationRecordsByPks(List<Long> kcsjPlanCommunicationRecordsPkList);
+    int deleteKcsjPlanCommunicationRecordsByPks(List<Long> ids);
 }

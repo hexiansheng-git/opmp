@@ -147,14 +147,14 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
     /**
      * 批量删除
      *
-     * @param kcsjPlanCommunicationRecordsPkList
+     * @param ids
      * @return
      */
     @Transactional
-    public int deleteKcsjPlanCommunicationRecordsByPks(List<Long> kcsjPlanCommunicationRecordsPkList) {
+    public int deleteKcsjPlanCommunicationRecordsByPks(List<Long> ids) {
 
         String delUser = SecurityUtils.getSysUser().getNickName();
-        int i = kcsjPlanCommunicationRecordsMapper.deleteKcsjPlanCommunicationRecordsByPks(kcsjPlanCommunicationRecordsPkList, delUser);
+        int i = kcsjPlanCommunicationRecordsMapper.deleteKcsjPlanCommunicationRecordsByPks(ids, delUser);
 
         //推送数据到总部
         List<KcsjPlanCommunicationRecords> all = kcsjPlanCommunicationRecordsMapper.getAll();
