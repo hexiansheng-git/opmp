@@ -661,9 +661,10 @@
             sbsr.submit_date submitDate,
             sbsr.approval_time schemeApprovalTime,
             sbsr.task_status taskStatus
-        from sgjs_build_scheme_list sbsl,sgjs_build_scheme_review sbsr
+        from sgjs_build_scheme_list sbsl
+        left join sgjs_build_scheme_review sbsr on sbsl.scheme_num = sbsr.scheme_num and sbsr.del_flag = '0'
         <where>
-            sbsl.del_flag = '0' and sbsl.foreign_id = #{foreignId} and sbsl.scheme_num = sbsr.scheme_num
+            sbsl.del_flag = '0' and sbsl.foreign_id = #{foreignId}
             <if test="schemeNum != null  and schemeNum != ''">and sbsl.`scheme_num` like concat('%' , #{schemeNum} , '%')</if>
             <if test="schemeName != null  and schemeName != ''">and sbsl.`scheme_name` like concat('%' , #{schemeName} ,'%')</if>
             <if test="schemeLevel != null  and schemeLevel != ''">and sbsl.`scheme_level` = #{schemeLevel}</if>
