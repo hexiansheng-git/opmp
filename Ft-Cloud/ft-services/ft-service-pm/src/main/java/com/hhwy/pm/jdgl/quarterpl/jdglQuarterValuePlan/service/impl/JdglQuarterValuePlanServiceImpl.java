@@ -217,6 +217,7 @@ public class JdglQuarterValuePlanServiceImpl implements IJdglQuarterValuePlanSer
                         valuePlan.setUnit(xmslContractList.getUnit());
                         valuePlan.setDesignQuantity(xmslContractList.getChangeNum() == null ? xmslContractList.getWinNum() : xmslContractList.getChangeNum());
                         valuePlan.setPriceCu(xmslContractList.getChangeUnitPrice() == null ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice());
+                        valuePlan.setTotalCompDesignQuantity(BigDecimal.ZERO);
                         if(!CollectionUtils.isEmpty(dayScheduleBillList)) {
                             JdglDayScheduleBill jdglDayScheduleBill = dayScheduleBillList.stream().filter(vo -> xmslContractList.getCode().equals(vo.getBillCode())).findFirst().orElse(null);
                             if(jdglDayScheduleBill != null) valuePlan.setTotalCompDesignQuantity(jdglDayScheduleBill.getThisQuantity());

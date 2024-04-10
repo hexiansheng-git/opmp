@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.statistics.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
@@ -515,7 +516,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
             // 填充计划产值数据
             switch (queryDateType) {
                 case "z":
-                    if(!CollectionUtils.isEmpty(jdglWeekValuePlans)){
+                    if(CollUtil.isNotEmpty(jdglWeekValuePlans)){
                         JdglWeekValuePlan jdglWeekValuePlan = jdglWeekValuePlans.stream().filter(vo -> billCode.equals(vo.getInventoryCode())).findFirst().orElse(null);
                         if(jdglWeekValuePlan != null) {
                             planStatisticsBillValueVO.setThisPlanDesignNum(jdglWeekValuePlan.getWeekPlanCompDesignQuantity());;

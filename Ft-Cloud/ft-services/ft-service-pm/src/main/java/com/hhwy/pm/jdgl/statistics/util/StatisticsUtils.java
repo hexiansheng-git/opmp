@@ -37,6 +37,7 @@ public class StatisticsUtils {
         return quarter + "";
     };
 
+    //根据年和季度 得到 季度开始日期和结束日期
     public static Map<String, Date> getDateRange4Quarter(String yearStr, String quarterStr) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

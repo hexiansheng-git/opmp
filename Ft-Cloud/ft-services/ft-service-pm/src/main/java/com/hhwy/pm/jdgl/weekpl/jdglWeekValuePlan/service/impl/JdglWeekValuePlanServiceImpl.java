@@ -217,6 +217,7 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
                         valuePlan.setUnit(xmslContractList.getUnit());
                         valuePlan.setDesignQuantity(xmslContractList.getChangeNum() == null ? xmslContractList.getWinNum() : xmslContractList.getChangeNum());
                         valuePlan.setPriceCu(xmslContractList.getChangeUnitPrice() == null ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice());
+                        valuePlan.setTotalCompDesignQuantity(BigDecimal.ZERO);
                         if(!CollectionUtils.isEmpty(dayScheduleBillList)) {
                             JdglDayScheduleBill jdglDayScheduleBill = dayScheduleBillList.stream().filter(vo -> xmslContractList.getCode().equals(vo.getBillCode())).findFirst().orElse(null);
                             if(jdglDayScheduleBill != null) valuePlan.setTotalCompDesignQuantity(jdglDayScheduleBill.getThisQuantity());
@@ -264,7 +265,7 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
                     }
                     deleteJdglWeekValuePlanByPlanId(planId);
                     TreeCountUtils<JdglWeekValuePlan> treeCountUtils = new TreeCountUtils<>();
-                    treeCountUtils.upCountValue(returnList, "WeekPlanValueCu");
+                    treeCountUtils.upCountValue(returnList, "weekPlanValueCu");
                     insertJdglWeekValuePlanList(returnList);
                 }
             }

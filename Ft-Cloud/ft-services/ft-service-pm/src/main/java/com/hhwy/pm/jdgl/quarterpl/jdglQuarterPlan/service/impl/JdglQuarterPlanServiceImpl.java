@@ -335,6 +335,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         Long id = jdglQuarterPlan.getId();
         String year = jdglQuarterPlan.getYear();
         String quarter = jdglQuarterPlan.getQuarter();
+        /*判断当前时间是否已存在数据*/
         JdglQuarterPlan queryExist = new JdglQuarterPlan();
         queryExist.setYear(year);
         queryExist.setQuarter(quarter);
@@ -350,6 +351,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         jdglQuarterPlan.setUpdateTime(DateUtils.getNowDate());
 //        iJdglQuarterValuePlanService.updateJdglQuarterValuePlanList(jdglQuarterPlan.getJdglQuarterValuePlanList());
         List<JdglQuarterImagePlan> jdglQuarterImagePlanList = jdglQuarterPlan.getJdglQuarterImagePlanList();
+        /*保存形象计划和产值计划*/
         if(!CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
             List<JdglQuarterImagePlan> jdglQuarterImagePlans = TreeUtil.treeToListWithoutId(jdglQuarterImagePlanList);
             for (JdglQuarterImagePlan jdglQuarterImagePlan: jdglQuarterImagePlans) {
@@ -357,13 +359,17 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
             }
             iJdglQuarterImagePlanService.updateJdglQuarterImagePlanList(jdglQuarterImagePlans);
         }
-
+        /*修改季度计划产值*/
+        //获取形象计划完成产值
         BigDecimal thisPlanAmt = iJdglQuarterImagePlanService.getThisPlanAmt(id);
         BigDecimal exchangeRate = jdglQuarterPlan.getExchangeRate();
+        //本季度计划产值（合同币种）
         jdglQuarterPlan.setThisPlanValueCu(thisPlanAmt);
         if(thisPlanAmt != null && exchangeRate != null && BigDecimal.ZERO.compareTo(exchangeRate) != 0) {
+            //本季度计划产值（万美元）
             jdglQuarterPlan.setThisPlanValueDl(thisPlanAmt.divide(exchangeRate, 2, BigDecimal.ROUND_HALF_UP));
         } else {
+            //本季度计划产值（万美元）
             jdglQuarterPlan.setThisPlanValueDl(BigDecimal.ZERO);
         }
         return jdglQuarterPlanMapper.updateJdglQuarterPlan(jdglQuarterPlan);

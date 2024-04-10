@@ -156,6 +156,7 @@
     </select>
     <select id="getBillListByYear"
             resultMap="JdglYearValuePlanResultMap">
+        SELECT * FROM (
         select jwvp.`id`
              , jwvp.`pid`
              , jwvp.`year_plan_id`
@@ -172,6 +173,7 @@
             from jdgl_year_value_plan jwvp,
                            (select * from jdgl_year_plan where year = #{year}) jwp
         where jwp.id = jwvp.year_plan_id
+            )t  WHERE ID IS NOT NULL
     </select>
     <select id="getBillListByNextYear"
             resultMap="JdglYearValuePlanResultMap">

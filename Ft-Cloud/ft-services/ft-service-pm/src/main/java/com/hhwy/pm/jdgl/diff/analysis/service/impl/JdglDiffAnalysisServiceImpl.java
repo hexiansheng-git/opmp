@@ -153,6 +153,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             }
         }
         BigDecimal sumMin = null;
+        //计量产值除以开累完成产值
         if(totalMeterValue != null && totalCompValue != null && BigDecimal.ZERO.compareTo(totalCompValue) != 0) {
             sumMin = totalMeterValue.divide(totalCompValue, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100));
         }
