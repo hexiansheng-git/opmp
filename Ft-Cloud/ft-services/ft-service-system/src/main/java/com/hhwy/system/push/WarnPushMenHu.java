@@ -75,10 +75,10 @@ public class WarnPushMenHu {
                 warn.setPtVar3(receive);
                 String path = (sysUrl.endsWith("/")?sysUrl.substring(0,sysUrl.length()-1):sysUrl) +
                         (todoUrl.startsWith("/")?todoUrl:todoUrl.substring(1));
-//            String pcurl = String.format("%s?id=%s&tenantKey=%s&receiver=%s&pageType=fw",
-//                    path, ObjectUtils.nvlString(warn.getBusinessId()),warn.getTenantKey(),receive) ;
-                String pcurl = String.format("?id=%s&tenantKey=%s&receiver=%s&pageType=fw",
-                        ObjectUtils.nvlString(warn.getBusinessId()),warn.getTenantKey(),receive) ;
+                String pcurl = String.format("%s?id=%s&tenantKey=%s&receiver=%s&pageType=fw",
+                        path, ObjectUtils.nvlString(warn.getBusinessId()),warn.getTenantKey(),receive) ;
+//                String pcurl = String.format("?id=%s&tenantKey=%s&receiver=%s&pageType=fw",
+//                        ObjectUtils.nvlString(warn.getBusinessId()),warn.getTenantKey(),receive) ;
                 //拉哥要求做base64
                 pcurl = new String(Base64Utils.encode(pcurl.getBytes()));
                 SysUser createUser = userMapper.selectUserByUserName(warn.getCreateUser(), Arrays.asList(warn.getTenantKey()));

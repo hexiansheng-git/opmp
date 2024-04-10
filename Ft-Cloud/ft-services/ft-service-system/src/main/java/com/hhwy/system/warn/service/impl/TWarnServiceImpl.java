@@ -13,6 +13,7 @@ import com.hhwy.domain.base.system.warn.TWarnRecord;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.system.core.mapper.SysUserMapper;
 import com.hhwy.system.mapper.UserMapper;
+import com.hhwy.system.push.WarnPushMenHu;
 import com.hhwy.system.warn.mapper.TWarnMapper;
 import com.hhwy.system.warn.mapper.TWarnRecordMapper;
 import com.hhwy.system.warn.push.Warn2Push;
@@ -57,6 +58,8 @@ public class TWarnServiceImpl implements ITWarnService {
     private ISocketIOServerService socketIOServerService;
     @Autowired
     private Warn2Push warn2Push;
+    @Autowired
+    private WarnPushMenHu warnPushMenHu;
 
     public TWarn getTWarn(TWarn tWarn) {
         return tWarnMapper.getTWarn(tWarn);
@@ -104,10 +107,12 @@ public class TWarnServiceImpl implements ITWarnService {
                 this.notify(tWarn);
             });
         }
-
         //推送到总部版
         this.push2Head(tWarn);
-
+        //推送到一公局门户
+        warn2Push.push(tWarn);
+        //推送到中交门户
+        warnPushMenHu.push(tWarn);
         return result;
     }
 
@@ -245,8 +250,10 @@ public class TWarnServiceImpl implements ITWarnService {
         //总部版推送
         int result = tWarnMapper.insertTWarn(tWarn);
         if (result > 0) {
-            tWarn.setPtVar1("1");
+            tWarn.setPtVar1("1"); //标记为总部版
             warn2Push.push(tWarn);
+            //推送到中交门户
+            warnPushMenHu.push(tWarn);
             ThreadUtil.execAsync(() -> {
                 this.notify(tWarn);
             });

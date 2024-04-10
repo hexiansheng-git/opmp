@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- *  预警推送门户
+ *  预警推送一公局门户
  * <br/>@Author:       wk
  * <br/>@CreateDate:   2024/4/2 10:25   
  * <br/>@UpdateUser:   wk   
