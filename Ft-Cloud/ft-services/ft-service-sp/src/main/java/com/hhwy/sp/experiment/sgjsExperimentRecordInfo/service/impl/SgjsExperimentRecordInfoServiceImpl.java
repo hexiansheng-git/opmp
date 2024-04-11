@@ -159,7 +159,7 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
             detailService.insertSgjsExperimentRecordInfoDetailList(list);
         }
         //同步总部版数据
-        syncDataToGm(map);
+        //syncDataToGm(map);
         return 0;
     }
 
@@ -214,13 +214,23 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
                 return -1;
             }
         }
-        //2、校验库中是否重复
-        List<String> codeList = iList.stream().map(e -> e.getExperimentCode()).collect(Collectors.toList());
-        List<SgjsExperimentRecordInfo> rstList=sgjsExperimentRecordInfoMapper.selectByExperimentNos(codeList);
-        if(!CollectionUtils.isEmpty(rstList)){
-            logger.error("试验编码重复了【{}】",JSONObject.toJSONString(rstList));
-            return -1;
+        //2、校验库中是否重复 查询的sql语句无敌了
+        //List<String> codeList = iList.stream().map(e -> e.getExperimentCode()).collect(Collectors.toList());
+        List<SgjsExperimentRecordInfo> rstList=sgjsExperimentRecordInfoMapper.selectByExperimentNos(iList);
+        Map<String,List<SgjsExperimentRecordInfo>> paramMap = rstList.stream().collect(Collectors.groupingBy(e->e.getId()+e.getExperimentCode()));
+        for (int i = 0; i < iList.size(); i++) {
+            String id = iList.get(i).getId()+"";
+            String experimentCode = iList.get(i).getExperimentCode();
+            List<SgjsExperimentRecordInfo> list = paramMap.get(id + experimentCode);
+            if(!CollectionUtils.isEmpty(list)&&list.size()>1){
+                logger.error("试验编码重复了【{}】",JSONObject.toJSONString(rstList));
+                return -1;
+            }
         }
+//        if(!CollectionUtils.isEmpty(rstList)){
+//            logger.error("试验编码重复了【{}】",JSONObject.toJSONString(rstList));
+//            return -1;
+//        }
         return 1;
     }
 

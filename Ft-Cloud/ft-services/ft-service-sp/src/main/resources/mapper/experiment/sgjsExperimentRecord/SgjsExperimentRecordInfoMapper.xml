@@ -786,9 +786,10 @@
     </update>
 
     <select id="selectByExperimentNos" parameterType="list" resultMap="SgjsExperimentRecordInfoResultMap">
-        select  * from sgjs_experiment_record_info  where  experiment_code in
-        <foreach collection="codeList" separator="," open="(" close=")" item="code">
-            #{code}
+        select  * from sgjs_experiment_record_info i where i.del_flag='0' and (i.id,i.experiment_code) in
+        <!--        select  * from sgjs_experiment_record_info  where  experiment_code in-->
+        <foreach collection="codeList" open="("  separator=","  close=")" item="item">
+            (#{item.id},#{item.experimentCode})
         </foreach>
     </select>
 
