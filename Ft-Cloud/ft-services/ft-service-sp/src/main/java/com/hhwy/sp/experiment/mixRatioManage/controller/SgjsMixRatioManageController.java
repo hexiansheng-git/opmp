@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2024-04-07 13:38:19
- * @remark
+ * @remark 配合比管理
  */
 @Validated
 @RestController

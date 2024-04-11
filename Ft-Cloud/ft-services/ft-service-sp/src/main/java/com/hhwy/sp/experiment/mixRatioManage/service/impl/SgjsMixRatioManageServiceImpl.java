@@ -102,8 +102,10 @@ public class SgjsMixRatioManageServiceImpl implements ISgjsMixRatioManageService
     @Override
     public SgjsMixRatioManage getById(Long id) {
         SgjsMixRatioManage mixRatioManage = sgjsMixRatioManageMapper.getById(id);
-        List<SgjsMixRatioManageMaterial> materialList = sgjsMixRatioManageMaterialMapper.getListByForeignId(id);
-        mixRatioManage.setMaterialList(materialList);
+        if(mixRatioManage != null){
+            List<SgjsMixRatioManageMaterial> materialList = sgjsMixRatioManageMaterialMapper.getListByForeignId(id);
+            mixRatioManage.setMaterialList(materialList);
+        }
         return mixRatioManage;
     }
 
