@@ -131,23 +131,36 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
     public void pushSgjsPlanMeasureManage(SgjsPlanMeasureManageVo vo) {
         try {
             List<SgjsPlanMeasureManage> treeList = vo.getTreeList();
+            treeList = TreeUtil.treeToList(treeList);
             List<JSONObject> finalList = new ArrayList<>();
-            for (SgjsPlanMeasureManage sgjsPlanMeasureManage : treeList) {
-                Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
-                sgjsPlanMeasureManage.setPtVar2(SecurityUtils.getTenantKey());
-                if (prjInfo.get("regionId") != null)
-                    sgjsPlanMeasureManage.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
-                sgjsPlanMeasureManage.setRegionName((String) prjInfo.get("regionName"));
-                if (prjInfo.get("projectId") != null)
-                    sgjsPlanMeasureManage.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
-                sgjsPlanMeasureManage.setProjectName((String) prjInfo.get("projectName"));
-                sgjsPlanMeasureManage.setProjectCode((String) prjInfo.get("projectCode"));
-                JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(sgjsPlanMeasureManage));
-                finalList.add(json);
-            }
+            Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+            if (!CollectionUtils.isEmpty(treeList)) {
+                for (SgjsPlanMeasureManage sgjsPlanMeasureManage : treeList) {
 
-            rocketMQTemplate.convertAndSend("sgjs_plan_measure_manage:tenantSuccess", JSONObject.toJSONString(finalList));
-        } catch (Exception e) {
+                    sgjsPlanMeasureManage.setPtVar2(SecurityUtils.getTenantKey());
+                    if (prjInfo.get("regionId") != null)
+                        sgjsPlanMeasureManage.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
+                    sgjsPlanMeasureManage.setRegionName((String) prjInfo.get("regionName"));
+                    if (prjInfo.get("projectId") != null)
+                        sgjsPlanMeasureManage.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+                    sgjsPlanMeasureManage.setProjectName((String) prjInfo.get("projectName"));
+                    sgjsPlanMeasureManage.setProjectCode((String) prjInfo.get("projectCode"));
+                    JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(sgjsPlanMeasureManage));
+                    finalList.add(json);
+                }
+                rocketMQTemplate.convertAndSend("sgjs_plan_measure_manage:tenantSuccess", JSONObject.toJSONString(finalList));
+            }else {
+
+                SgjsPlanMeasureManage manage = new SgjsPlanMeasureManage();
+                if (prjInfo.get("projectId") != null) {
+                    manage.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+                }
+                JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(manage));
+                finalList.add(json);
+                rocketMQTemplate.convertAndSend("sgjs_plan_measure_manage:tenantSuccess", JSONObject.toJSONString(finalList));
+
+            }
+            } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
