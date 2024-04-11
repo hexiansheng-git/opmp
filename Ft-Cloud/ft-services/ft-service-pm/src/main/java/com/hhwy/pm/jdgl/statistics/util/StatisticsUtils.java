@@ -417,4 +417,9 @@ public class StatisticsUtils {
         return num.divide(new BigDecimal(divideNum), 2, BigDecimal.ROUND_HALF_UP);
     }
 
+    public static void main(String[] args) {
+        Integer daysByRangeDate = getDaysByRangeDate(DateUtils.dateTime("yyyy-MM-dd", "2023-06-05"), DateUtils.dateTime("yyyy-MM-dd", "2023-10-07"));
+        System.out.println(daysByRangeDate);
+    }
+
 }
