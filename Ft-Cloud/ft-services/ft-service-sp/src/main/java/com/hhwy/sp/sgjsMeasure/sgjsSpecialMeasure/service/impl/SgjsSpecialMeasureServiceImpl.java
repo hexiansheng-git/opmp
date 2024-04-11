@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.sp.sgjsMeasure.sgjsControlPointRetest.domain.SgjsControlPointRetest;
 import com.hhwy.sp.sgjsMeasure.sgjsSpecialMeasure.domain.SgjsSpecialMeasure;
 import com.hhwy.sp.sgjsMeasure.sgjsSpecialMeasure.mapper.SgjsSpecialMeasureMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsSpecialMeasure.service.ISgjsSpecialMeasureService;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 施工技术--测量管理--特殊工程监控量测
@@ -81,6 +83,15 @@ public class SgjsSpecialMeasureServiceImpl implements ISgjsSpecialMeasureService
     }
 
     private void syncDataToGm(List<SgjsSpecialMeasure> sgjsSpecialMeasureList) {
+        //空了 ，但需要删除总部版数据，所以只穿id
+        if(CollectionUtils.isEmpty(sgjsSpecialMeasureList)){
+            Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+            if(prjInfo.get("projectId") != null){
+                SgjsSpecialMeasure info= new SgjsSpecialMeasure();
+                info.setProjectId(Long.parseLong(prjInfo.get("projectId")+""));
+                sgjsSpecialMeasureList.add(info);
+            }
+        }
         long beginMills = System.currentTimeMillis();
         Integer status = 1;
         String errMsg = "";

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 施工技术--测量管理--控制点复测
@@ -79,6 +80,15 @@ public class SgjsControlPointRetestServiceImpl implements ISgjsControlPointRetes
     }
 
     private void syncDataToGm(List<SgjsControlPointRetest> sgjsControlPointRetestList) {
+        //空了 ，但需要删除总部版数据，所以只穿id
+        if(CollectionUtils.isEmpty(sgjsControlPointRetestList)){
+            Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+            if(prjInfo.get("projectId") != null){
+                SgjsControlPointRetest info= new SgjsControlPointRetest();
+                info.setProjectId(Long.parseLong(prjInfo.get("projectId")+""));
+                sgjsControlPointRetestList.add(info);
+            }
+        }
         long beginMills = System.currentTimeMillis();
         Integer status = 1;
         String errMsg = "";
