@@ -3,6 +3,7 @@ package com.hhwy.pm.jdgl.diff.track.service;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
 import com.hhwy.pm.jdgl.diff.track.domain.vo.ProgressCorrectionTrackQueryVo;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,5 +32,7 @@ public interface IJdglProgressCorrectionTrackService {
 
     List<JdglProgressCorrectionTrack> gmList(ProgressCorrectionTrackQueryVo queryVo);
 
-    void weekTimerTrack();
+    void weekTimerTrack(Date date);
+
+    void weekTimerTrackByDate(String date);
 }

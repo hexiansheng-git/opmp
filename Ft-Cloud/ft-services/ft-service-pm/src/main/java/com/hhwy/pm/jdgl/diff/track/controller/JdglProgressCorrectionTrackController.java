@@ -17,12 +17,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zhenglili
@@ -166,12 +161,28 @@ public class JdglProgressCorrectionTrackController extends BaseController {
     /**
      * 每周定时生成追踪数据。（偏差小于0的最新一条纠偏措施制定数据）
      *
+     * job调用
+     *
      * @return
      */
     @PostMapping("/weekTimerTrack")
     @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪", businessType = CustomBusinessType.SAVE)
     public AjaxResult weekTimerTrack() {
-        jdglProgressCorrectionTrackService.weekTimerTrack();
+        jdglProgressCorrectionTrackService.weekTimerTrack(null);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 每周定时生成追踪数据。（偏差小于0的最新一条纠偏措施制定数据）
+     *
+     * 自定义时间  手动执行任务
+     *
+     * @return
+     */
+    @PostMapping("/weekTimerTrackByDate")
+    @CustomLogger(title = "进度管理-进度纠偏跟踪", name = "进度纠偏跟踪", businessType = CustomBusinessType.SAVE)
+    public AjaxResult weekTimerTrackByDate(@RequestParam("date") String date) {
+        jdglProgressCorrectionTrackService.weekTimerTrackByDate(date);
         return AjaxResult.success();
     }
 }
