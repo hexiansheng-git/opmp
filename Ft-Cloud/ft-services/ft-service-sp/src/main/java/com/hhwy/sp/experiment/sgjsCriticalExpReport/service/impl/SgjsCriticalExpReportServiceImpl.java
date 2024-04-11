@@ -174,8 +174,7 @@ public class SgjsCriticalExpReportServiceImpl implements ISgjsCriticalExpReportS
         CriticalExpReportVo vo = new CriticalExpReportVo();
         List<SgjsCriticalExpReport> list = sgjsCriticalExpReportMapper.getAll();
         vo.setReportList(list);
-        if (list != null && !list.isEmpty()) {
-            sysSyncInfoService4Sp.pushSgjsCriticalExpReport(vo);
-        }
+       sysSyncInfoService4Sp.pushSgjsCriticalExpReport(vo);
+
     }
 }

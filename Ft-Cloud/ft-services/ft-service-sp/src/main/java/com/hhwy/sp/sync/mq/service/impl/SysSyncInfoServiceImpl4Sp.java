@@ -172,22 +172,35 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
         try {
             List<SgjsCriticalExpReport> list = vo.getReportList();
             List<JSONObject> finalList = new ArrayList<>();
-            for (SgjsCriticalExpReport sgjsCriticalExpReport : list) {
-                Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
-                sgjsCriticalExpReport.setPtVar2(SecurityUtils.getTenantKey());
-                if (prjInfo.get("regionId") != null)
-                    sgjsCriticalExpReport.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
-                sgjsCriticalExpReport.setRegionName((String) prjInfo.get("regionName"));
-                if (prjInfo.get("projectId") != null)
-                    sgjsCriticalExpReport.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
-                sgjsCriticalExpReport.setProjectName((String) prjInfo.get("projectName"));
-                sgjsCriticalExpReport.setPtVar5((String) prjInfo.get("projectCode"));
-                JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(sgjsCriticalExpReport));
-                finalList.add(json);
-            }
+            Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+            if (!CollectionUtils.isEmpty(list)) {
+                for (SgjsCriticalExpReport sgjsCriticalExpReport : list) {
 
-            rocketMQTemplate.convertAndSend("sgjs_critical_exp_report:tenantSuccess", JSONObject.toJSONString(finalList));
-        } catch (Exception e) {
+                    sgjsCriticalExpReport.setPtVar2(SecurityUtils.getTenantKey());
+                    if (prjInfo.get("regionId") != null)
+                        sgjsCriticalExpReport.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
+                    sgjsCriticalExpReport.setRegionName((String) prjInfo.get("regionName"));
+                    if (prjInfo.get("projectId") != null)
+                        sgjsCriticalExpReport.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+                    sgjsCriticalExpReport.setProjectName((String) prjInfo.get("projectName"));
+                    sgjsCriticalExpReport.setPtVar5((String) prjInfo.get("projectCode"));
+                    JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(sgjsCriticalExpReport));
+                    finalList.add(json);
+                }
+
+                rocketMQTemplate.convertAndSend("sgjs_critical_exp_report:tenantSuccess", JSONObject.toJSONString(finalList));
+            }else {
+
+                SgjsCriticalExpReport report = new SgjsCriticalExpReport();
+                if (prjInfo.get("projectId") != null) {
+                    report.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+                }
+                JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(report));
+                finalList.add(json);
+                rocketMQTemplate.convertAndSend("sgjs_critical_exp_report:tenantSuccess", JSONObject.toJSONString(finalList));
+
+            }
+            } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
