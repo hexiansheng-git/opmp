@@ -11,6 +11,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,15 +154,14 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
     @Transactional
     public int deleteKcsjPlanCommunicationRecordsByPks(List<Long> ids) {
 
+        //List<KcsjPlanCommunicationRecords> list = kcsjPlanCommunicationRecordsMapper.getKcsjPlanCommunicationRecordsListByIds(ids);
+
         String delUser = SecurityUtils.getSysUser().getNickName();
         int i = kcsjPlanCommunicationRecordsMapper.deleteKcsjPlanCommunicationRecordsByPks(ids, delUser);
 
         //推送数据到总部
         List<KcsjPlanCommunicationRecords> all = kcsjPlanCommunicationRecordsMapper.getAll();
-        if (all != null) {
-            sysSyncInfoService4Sd.pushKcsjPlanCommunicationRecords(all);
-
-        }
+        sysSyncInfoService4Sd.pushKcsjPlanCommunicationRecords(all);
         return i;
     }
 

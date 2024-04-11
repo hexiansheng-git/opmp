@@ -19,6 +19,7 @@ import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,17 +46,27 @@ public class SysSyncInfoServiceImpl4Sd implements ISysSyncInfoService4Sd {
         try{
             List<JSONObject> finalList = new ArrayList<>();
             Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
-            for (int i = 0; i < list.size(); i++) {
-                KcsjPlanCommunicationRecords temp = list.get(i);
-                temp.setPtVar2(SecurityUtils.getTenantKey());
-                if(prjInfo.get("regionId") != null)temp.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
-                temp.setRegionName((String) prjInfo.get("regionName"));
-                if(prjInfo.get("projectId") != null)temp.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
-                temp.setProjectName((String) prjInfo.get("projectName"));
-                JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(list.get(i)));
+            if (!CollectionUtils.isEmpty(list)){
+                for (int i = 0; i < list.size(); i++) {
+                    KcsjPlanCommunicationRecords temp = list.get(i);
+                    temp.setPtVar2(SecurityUtils.getTenantKey());
+                    if(prjInfo.get("regionId") != null)temp.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
+                    temp.setRegionName((String) prjInfo.get("regionName"));
+                    if(prjInfo.get("projectId") != null)temp.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+                    temp.setProjectName((String) prjInfo.get("projectName"));
+                    JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(list.get(i)));
+                    finalList.add(json);
+                }
+                rocketMQTemplate.convertAndSend("kcsj_plan_communication_records:tenantSuccess", JSONObject.toJSONString(finalList));
+            }else {
+                KcsjPlanCommunicationRecords record=new KcsjPlanCommunicationRecords();
+                if(prjInfo.get("projectId") != null)record.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+                JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(record));
                 finalList.add(json);
+                rocketMQTemplate.convertAndSend("kcsj_plan_communication_records:tenantSuccess", JSONObject.toJSONString(finalList));
+
             }
-            rocketMQTemplate.convertAndSend("kcsj_plan_communication_records:tenantSuccess", JSONObject.toJSONString(finalList));
+
         }catch(Exception e){
             e.printStackTrace();
             throw e;
