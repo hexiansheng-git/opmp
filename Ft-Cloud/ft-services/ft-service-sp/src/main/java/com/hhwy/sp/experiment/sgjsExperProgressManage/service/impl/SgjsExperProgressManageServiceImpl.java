@@ -251,10 +251,8 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
                 (r, n) -> r.getId().equals(n.getPid()),
                 SgjsExperProgressManage::getChildren,
                 SgjsExperProgressManage::setChildren);
-        if(!CollectionUtils.isEmpty(list)){
-            vo.setTreeList(list);
-        }
 
+        vo.setTreeList(list);
         sysSyncInfoService4Sp.pushSgjsExperProgressManage(vo);
     }
 
