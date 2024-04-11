@@ -75,7 +75,9 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
             treeList = TreeUtil.treeToList(treeList);
             List<JSONObject> finalList = new ArrayList<>();
             Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+            //判断当前项目下是否有数据可推送
             if (!CollectionUtils.isEmpty(treeList)) {
+                //有则正常推送
                 for (SgjsExperProgressManage sgjsExperProgressManage : treeList) {
                     sgjsExperProgressManage.setPtVar2(SecurityUtils.getTenantKey());
                     if (prjInfo.get("regionId") != null)
@@ -89,6 +91,7 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
                 }
                 rocketMQTemplate.convertAndSend("sgjs_exper_progress_manage:tenantSuccess", JSONObject.toJSONString(finalList));
             } else {
+                //没有则传projectId，总部版删除该项目id下的数
                 SgjsExperProgressManage manage = new SgjsExperProgressManage();
                 if (prjInfo.get("projectId") != null) {
                     manage.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
@@ -96,7 +99,6 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
                 JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(manage));
                 finalList.add(json);
                 rocketMQTemplate.convertAndSend("sgjs_exper_progress_manage:tenantSuccess", JSONObject.toJSONString(finalList));
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,7 +110,6 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
     @Override
     public void pushSgjsTechnicalTraining(SgjsTechnicalTraining sgjsTechnicalTraining) {
         try {
-
             Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
             sgjsTechnicalTraining.setPtVar2(SecurityUtils.getTenantKey());
             if (prjInfo.get("regionId") != null)
@@ -118,7 +119,6 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
                 sgjsTechnicalTraining.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
             sgjsTechnicalTraining.setProjectName((String) prjInfo.get("projectName"));
             JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(sgjsTechnicalTraining));
-
             rocketMQTemplate.convertAndSend("sgjs_technical_training:tenantSuccess", JSONObject.toJSONString(json));
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,9 +134,10 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
             treeList = TreeUtil.treeToList(treeList);
             List<JSONObject> finalList = new ArrayList<>();
             Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+            //判当前项目下是否有数据可推送
             if (!CollectionUtils.isEmpty(treeList)) {
+                //有数据，则正常推送
                 for (SgjsPlanMeasureManage sgjsPlanMeasureManage : treeList) {
-
                     sgjsPlanMeasureManage.setPtVar2(SecurityUtils.getTenantKey());
                     if (prjInfo.get("regionId") != null)
                         sgjsPlanMeasureManage.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
@@ -149,8 +150,8 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
                     finalList.add(json);
                 }
                 rocketMQTemplate.convertAndSend("sgjs_plan_measure_manage:tenantSuccess", JSONObject.toJSONString(finalList));
-            }else {
-
+            } else {
+                //当前项目无数据可推送   传projectId,总部版删除该项目id下的数据
                 SgjsPlanMeasureManage manage = new SgjsPlanMeasureManage();
                 if (prjInfo.get("projectId") != null) {
                     manage.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
@@ -158,9 +159,8 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
                 JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(manage));
                 finalList.add(json);
                 rocketMQTemplate.convertAndSend("sgjs_plan_measure_manage:tenantSuccess", JSONObject.toJSONString(finalList));
-
             }
-            } catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
@@ -173,9 +173,10 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
             List<SgjsCriticalExpReport> list = vo.getReportList();
             List<JSONObject> finalList = new ArrayList<>();
             Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+            //判断当前项目是否无数据可推送
             if (!CollectionUtils.isEmpty(list)) {
+                //有数据，则正常推送，给每个数据赋项目和区域信息
                 for (SgjsCriticalExpReport sgjsCriticalExpReport : list) {
-
                     sgjsCriticalExpReport.setPtVar2(SecurityUtils.getTenantKey());
                     if (prjInfo.get("regionId") != null)
                         sgjsCriticalExpReport.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
@@ -187,10 +188,9 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
                     JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(sgjsCriticalExpReport));
                     finalList.add(json);
                 }
-
                 rocketMQTemplate.convertAndSend("sgjs_critical_exp_report:tenantSuccess", JSONObject.toJSONString(finalList));
-            }else {
-
+            } else {
+                //无数据可推   传一个projectId,总部版删除该项目下的数据
                 SgjsCriticalExpReport report = new SgjsCriticalExpReport();
                 if (prjInfo.get("projectId") != null) {
                     report.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
@@ -198,9 +198,8 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
                 JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(report));
                 finalList.add(json);
                 rocketMQTemplate.convertAndSend("sgjs_critical_exp_report:tenantSuccess", JSONObject.toJSONString(finalList));
-
             }
-            } catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
