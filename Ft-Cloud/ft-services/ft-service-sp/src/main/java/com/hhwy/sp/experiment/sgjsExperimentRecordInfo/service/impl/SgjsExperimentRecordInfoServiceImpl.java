@@ -159,7 +159,7 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
             detailService.insertSgjsExperimentRecordInfoDetailList(list);
         }
         //同步总部版数据
-        //syncDataToGm(map);
+        syncDataToGm(map);
         return 0;
     }
 
