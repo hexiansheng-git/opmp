@@ -72,7 +72,7 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
     public void pushSgjsExperProgressManage(SgjsExperProgressManageVo sgjsExperProgressManageVo) {
         try {
             List<SgjsExperProgressManage> treeList = sgjsExperProgressManageVo.getTreeList();
-            treeList = TreeUtil.treeToList(treeList);
+            treeList = TreeUtil.treeToListWithoutId(treeList);
             List<JSONObject> finalList = new ArrayList<>();
             Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
             //判断当前项目下是否有数据可推送
@@ -91,7 +91,7 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
                 }
                 rocketMQTemplate.convertAndSend("sgjs_exper_progress_manage:tenantSuccess", JSONObject.toJSONString(finalList));
             } else {
-                //没有则传projectId，总部版删除该项目id下的数
+                //没有则传projectId，总部版删除该项目id下的数据
                 SgjsExperProgressManage manage = new SgjsExperProgressManage();
                 if (prjInfo.get("projectId") != null) {
                     manage.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));

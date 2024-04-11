@@ -295,9 +295,7 @@ public class SgjsPlanMeasureManageServiceImpl implements ISgjsPlanMeasureManageS
                 (r, n) -> r.getId().equals(n.getPid()),
                 SgjsPlanMeasureManage::getChildren,
                 SgjsPlanMeasureManage::setChildren);
-        if(!CollectionUtils.isEmpty(list)){
-            vo.setTreeList(list);
-        }
+        vo.setTreeList(list);
         sysSyncInfoService4Sp.pushSgjsPlanMeasureManage(vo);
     }
     @Transactional
