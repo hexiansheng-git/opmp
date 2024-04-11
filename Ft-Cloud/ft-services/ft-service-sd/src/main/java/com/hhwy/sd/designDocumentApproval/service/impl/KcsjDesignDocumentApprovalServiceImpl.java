@@ -154,9 +154,7 @@ public class KcsjDesignDocumentApprovalServiceImpl implements IKcsjDesignDocumen
         //查询全部数据
         List<KcsjDesignDocumentApproval> all=kcsjDesignDocumentApprovalMapper.getAll();
         //推送到总部
-        if (all!=null){
-            sysSyncInfoService4Sd.pushKcsjDesignDocumentApproval(all);
-        }
+        sysSyncInfoService4Sd.pushKcsjDesignDocumentApproval(all);
         return AjaxResult.success();
     }
 
