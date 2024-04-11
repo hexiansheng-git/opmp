@@ -20,10 +20,12 @@ import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.SgjsPaperPublish;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.SgjsPatentDeclare;
 import com.hhwy.sp.techTrain.domain.SgjsTechnicalTraining;
+import com.hhwy.utils.tree.TreeUtil;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,20 +72,32 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
     public void pushSgjsExperProgressManage(SgjsExperProgressManageVo sgjsExperProgressManageVo) {
         try {
             List<SgjsExperProgressManage> treeList = sgjsExperProgressManageVo.getTreeList();
+            treeList = TreeUtil.treeToList(treeList);
             List<JSONObject> finalList = new ArrayList<>();
             Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
-            for (SgjsExperProgressManage sgjsExperProgressManage : treeList) {
-                sgjsExperProgressManage.setPtVar2(SecurityUtils.getTenantKey());
-                if (prjInfo.get("regionId") != null)
-                    sgjsExperProgressManage.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
-                sgjsExperProgressManage.setRegionName((String) prjInfo.get("regionName"));
-                if (prjInfo.get("projectId") != null)
-                    sgjsExperProgressManage.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
-                sgjsExperProgressManage.setProjectName((String) prjInfo.get("projectName"));
-                JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(sgjsExperProgressManage));
+            if (!CollectionUtils.isEmpty(treeList)) {
+                for (SgjsExperProgressManage sgjsExperProgressManage : treeList) {
+                    sgjsExperProgressManage.setPtVar2(SecurityUtils.getTenantKey());
+                    if (prjInfo.get("regionId") != null)
+                        sgjsExperProgressManage.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
+                    sgjsExperProgressManage.setRegionName((String) prjInfo.get("regionName"));
+                    if (prjInfo.get("projectId") != null)
+                        sgjsExperProgressManage.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+                    sgjsExperProgressManage.setProjectName((String) prjInfo.get("projectName"));
+                    JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(sgjsExperProgressManage));
+                    finalList.add(json);
+                }
+                rocketMQTemplate.convertAndSend("sgjs_exper_progress_manage:tenantSuccess", JSONObject.toJSONString(finalList));
+            } else {
+                SgjsExperProgressManage manage = new SgjsExperProgressManage();
+                if (prjInfo.get("projectId") != null) {
+                    manage.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
+                }
+                JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(manage));
                 finalList.add(json);
+                rocketMQTemplate.convertAndSend("sgjs_exper_progress_manage:tenantSuccess", JSONObject.toJSONString(finalList));
+
             }
-            rocketMQTemplate.convertAndSend("sgjs_exper_progress_manage:tenantSuccess", JSONObject.toJSONString(finalList));
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -167,8 +181,8 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
     }
 
     @Override
-    public void pushReportMeasureSubmit(ReportMeasureSubmitPushVo pushVo){
-        try{
+    public void pushReportMeasureSubmit(ReportMeasureSubmitPushVo pushVo) {
+        try {
             ProjectDto projectDto = pmServiceApi.getProjectDto();
             List<SgjsReportMeasureSubmit> reportMeasureSubmitList = pushVo.getInsertList();
             for (SgjsReportMeasureSubmit temp : reportMeasureSubmitList) {
@@ -179,62 +193,62 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
                 temp.setProjectCode(projectDto.getProjectCode());
             }
             rocketMQTemplate.convertAndSend("sgjs_report_measure_submit:tenantSuccess", JSONObject.toJSONString(pushVo));
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
     }
 
     @Override
-    public void pushSgjsTechMethod(SgjsTechMethod techMethod){
-        try{
+    public void pushSgjsTechMethod(SgjsTechMethod techMethod) {
+        try {
             ProjectDto projectDto = pmServiceApi.getProjectDto();
             techMethod.setProjectId(projectDto.getProjectId());
             techMethod.setRegionId(projectDto.getRegionId());
             techMethod.setRegionName(projectDto.getRegionName());
             techMethod.setPtVar5(projectDto.getProjectCode());
             rocketMQTemplate.convertAndSend("sgjs_tech_method:tenantSuccess", JSONObject.toJSONString(techMethod));
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
     }
 
     @Override
-    public void pushSgjsPatentDeclare(SgjsPatentDeclare patentDeclare){
-        try{
+    public void pushSgjsPatentDeclare(SgjsPatentDeclare patentDeclare) {
+        try {
             rocketMQTemplate.convertAndSend("sgjs_patent_declare:tenantSuccess", JSONObject.toJSONString(patentDeclare));
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
     }
 
     @Override
-    public void pushSgjsPaperPublish(SgjsPaperPublish patentDeclare){
-        try{
+    public void pushSgjsPaperPublish(SgjsPaperPublish patentDeclare) {
+        try {
             rocketMQTemplate.convertAndSend("sgjs_paper_publish:tenantSuccess", JSONObject.toJSONString(patentDeclare));
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
     }
 
     @Override
-    public void pushSgjsBuildSchemeReview(SgjsBuildSchemeReview review){
-        try{
+    public void pushSgjsBuildSchemeReview(SgjsBuildSchemeReview review) {
+        try {
             rocketMQTemplate.convertAndSend("sgjs_build_scheme_review:tenantSuccess", JSONObject.toJSONString(review));
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
     }
 
     @Override
-    public void pushSgjsMixRatioManage(SgjsMixRatioManage mixRatioManage){
-        try{
+    public void pushSgjsMixRatioManage(SgjsMixRatioManage mixRatioManage) {
+        try {
             rocketMQTemplate.convertAndSend("sgjs_mix_ratio_manage:tenantSuccess", JSONObject.toJSONString(mixRatioManage));
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw e;
         }
