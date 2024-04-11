@@ -102,7 +102,7 @@ public class KcsjPlanCommunicationRecords extends BaseEntity {
      * 字段描述：数据创建系统时间  编制时间用此字段显示
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss ")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
     @Excel(name = "数据创建系统时间  编制时间用此字段显示", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
