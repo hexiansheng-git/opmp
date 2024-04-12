@@ -34,5 +34,5 @@ public interface SgjsExperimentRecordMapper {
      * @param eList
      * @return
      */
-    int bathUpdateByList(List<SgjsExperimentRecord> eList);
+    int bathUpdateByList(@Param("list") List<SgjsExperimentRecord> eList);
 }

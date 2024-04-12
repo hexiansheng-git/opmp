@@ -115,6 +115,18 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
             logger.error("传参equipList空了");
             return -1;
         }
+        //1、批量修改主表实际进场数量
+        List<SgjsExperimentRecord> eList=new ArrayList<>();
+        for (LinkedHashMap<String,Object> mInfo:equipList) {
+            SgjsExperimentRecord info=new SgjsExperimentRecord();
+            info.setUpdateTime(DateUtils.getNowDate());
+            info.setUpdateUser(SecurityUtils.getUserName());
+            info.setId(Long.parseLong(mInfo.get("recordId")+""));
+            info.setActualNum(Integer.parseInt(mInfo.get("actualNum")+""));
+            eList.add(info);
+        }
+        sgjsExperimentRecordMapper.bathUpdateByList(eList);
+        //2、子表内容修改
         List<LinkedHashMap<String,Object>> infoList= (List<LinkedHashMap<String,Object>>)map.get("infoList");
         if(CollectionUtils.isEmpty(infoList)){
             logger.error("传参infoList空了");
@@ -143,17 +155,6 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
             //不等于1  不成功 直接返回
             return i;
         }
-        //1、批量修改主表实际进场数量
-        List<SgjsExperimentRecord> eList=new ArrayList<>();
-        for (LinkedHashMap<String,Object> mInfo:equipList) {
-            SgjsExperimentRecord info=new SgjsExperimentRecord();
-            info.setUpdateTime(DateUtils.getNowDate());
-            info.setUpdateUser(SecurityUtils.getUserName());
-            info.setId(Long.parseLong(mInfo.get("recordId")+""));
-            info.setActualNum(Integer.parseInt(mInfo.get("actualNum")+""));
-            eList.add(info);
-        }
-        sgjsExperimentRecordMapper.bathUpdateByList(eList);
         //2、有则修改没有则新增
 //        SgjsEquipEntryRecordInfo record=new SgjsEquipEntryRecordInfo();
 //        record.setUpdateTime(DateUtils.getNowDate());
@@ -167,7 +168,7 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
             detailService.handleExperimentRecordInfoDetailData(list,recordIdList);
         }
         //同步总部版数据
-        syncDataToGm(map);
+        //syncDataToGm(map);
         return 0;
     }
 
