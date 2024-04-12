@@ -8,8 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
-import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReviewOpinionRecord;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewDetailQueryVo;
+import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewOpinionRecordVo;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewQueryVo;
 import com.hhwy.sp.buildSchemeManage.review.service.ISgjsBuildSchemeReviewService;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
@@ -167,8 +167,8 @@ public class SgjsBuildSchemeReviewController extends BaseController {
      */
     @GetMapping("/getSchemeReviewRecord")
     public AjaxResult getSchemeReviewRecord(Long reviewId){
-        SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = sgjsBuildSchemeReviewService.getSchemeReviewRecord(reviewId);
-        return AjaxResult.success(reviewOpinionRecord);
+        BuildSchemeReviewOpinionRecordVo recordVo = sgjsBuildSchemeReviewService.getSchemeReviewRecordVo(reviewId);
+        return AjaxResult.success(recordVo);
     }
 
     @GetMapping("/submit")

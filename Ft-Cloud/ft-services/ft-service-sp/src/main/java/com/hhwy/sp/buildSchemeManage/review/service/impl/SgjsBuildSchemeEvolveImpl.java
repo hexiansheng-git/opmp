@@ -62,7 +62,11 @@ public class SgjsBuildSchemeEvolveImpl implements ISgjsBuildSchemeEvolveService 
         for (SgjsBuildSchemeEvolve evolve : evolveList) {
             Long reviewId = evolve.getReviewId();
             if(sumSocreMap.containsKey(reviewId)){
-                evolve.setScore(sumSocreMap.get(reviewId));
+                Double score = sumSocreMap.get(reviewId);
+                if(score != null){
+                    score = (double) Math.round(score);
+                }
+                evolve.setScore(score);
             }
         }
     }

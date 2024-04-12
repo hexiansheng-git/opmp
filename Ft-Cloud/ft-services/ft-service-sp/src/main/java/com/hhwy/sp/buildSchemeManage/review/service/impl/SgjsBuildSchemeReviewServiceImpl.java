@@ -809,8 +809,13 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     }
 
     @Override
-    public SgjsBuildSchemeReviewOpinionRecord getSchemeReviewRecord(Long reviewId) {
-        return this.getMaxReviewOpinionRecord(reviewId);
+    public BuildSchemeReviewOpinionRecordVo getSchemeReviewRecordVo(Long reviewId) {
+        BuildSchemeReviewOpinionRecordVo recordVo = new BuildSchemeReviewOpinionRecordVo();
+        SgjsBuildSchemeReview review = sgjsBuildSchemeReviewMapper.getById(reviewId);
+        SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = this.getMaxReviewOpinionRecord(reviewId);
+        recordVo.setReview(review);
+        recordVo.setRecord(reviewOpinionRecord);
+        return recordVo;
     }
 
     @Override
