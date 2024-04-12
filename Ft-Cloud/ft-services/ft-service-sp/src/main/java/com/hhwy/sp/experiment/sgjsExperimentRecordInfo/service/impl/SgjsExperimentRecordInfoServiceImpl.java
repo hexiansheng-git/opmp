@@ -130,6 +130,8 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
         List<LinkedHashMap<String,Object>> infoList= (List<LinkedHashMap<String,Object>>)map.get("infoList");
         if(CollectionUtils.isEmpty(infoList)){
             logger.error("传参infoList空了");
+            //同步总部版数据 空有可能是删除
+            syncDataToGm(map);
             return -2;
         }
         List<SgjsExperimentRecordInfoDetail> list=new ArrayList<>();
@@ -156,14 +158,8 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
             return i;
         }
         //2、有则修改没有则新增
-//        SgjsEquipEntryRecordInfo record=new SgjsEquipEntryRecordInfo();
-//        record.setUpdateTime(DateUtils.getNowDate());
-//        record.setUpdateUser(SecurityUtils.getUserId()+"");
-//        sgjsExperimentRecordInfoMapper.deleteAll(record);
         handleRecordInfo(iList);
-        //3、重新添加数据
-        //sgjsExperimentRecordInfoMapper.insertSgjsExperimentRecordInfoList(iList);
-        //4、自检自校数据新增
+        //3、自检自校数据新增
         if(!CollectionUtils.isEmpty(list) || !CollectionUtils.isEmpty(recordIdList)){
             detailService.handleExperimentRecordInfoDetailData(list,recordIdList);
         }

@@ -156,6 +156,8 @@ public class SgjsEquipEntryRecordInfoServiceImpl implements ISgjsEquipEntryRecor
         List<LinkedHashMap<String,Object>> infoList= (List<LinkedHashMap<String,Object>>)map.get("infoList");
         if(CollectionUtils.isEmpty(infoList)){
             logger.error("传参infoList空了");
+            //总部版同步 空有可能是删除
+            syncDataToGm(map);
             return -2;
         }
         //2、删除子表本次修改所有数据
