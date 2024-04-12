@@ -210,14 +210,16 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
         try {
             ProjectDto projectDto = pmServiceApi.getProjectDto();
             List<SgjsReportMeasureSubmit> reportMeasureSubmitList = pushVo.getInsertList();
-            for (SgjsReportMeasureSubmit temp : reportMeasureSubmitList) {
-                temp.setProjectName(projectDto.getProjectName());
-                temp.setProjectId(projectDto.getProjectId());
-                temp.setRegionId(projectDto.getRegionId());
-                temp.setRegionName(projectDto.getRegionName());
-                temp.setProjectCode(projectDto.getProjectCode());
+            if(!CollectionUtils.isEmpty(reportMeasureSubmitList)){
+                for (SgjsReportMeasureSubmit temp : reportMeasureSubmitList) {
+                    temp.setProjectName(projectDto.getProjectName());
+                    temp.setProjectId(projectDto.getProjectId());
+                    temp.setRegionId(projectDto.getRegionId());
+                    temp.setRegionName(projectDto.getRegionName());
+                    temp.setProjectCode(projectDto.getProjectCode());
+                }
+                rocketMQTemplate.convertAndSend("sgjs_report_measure_submit:tenantSuccess", JSONObject.toJSONString(pushVo));
             }
-            rocketMQTemplate.convertAndSend("sgjs_report_measure_submit:tenantSuccess", JSONObject.toJSONString(pushVo));
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
