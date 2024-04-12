@@ -342,7 +342,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             }
             String fileGroupIdList = staffOpinionRecord.getFileGroupId();
             if(StringUtils.isNotBlank(fileGroupIdList)){
-                String[] fileGroupIdArr = reviewOpinion.split(",");
+                String[] fileGroupIdArr = fileGroupIdList.split(",");
                 staffOpinionRecord.setFileGroupIdList(Arrays.asList(fileGroupIdArr));
             }
         }
