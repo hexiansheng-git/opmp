@@ -1,15 +1,15 @@
 package com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-import java.util.Date;
-import java.math.BigDecimal;
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.util.List;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author lcf--自检自校表记录
@@ -168,6 +168,16 @@ public class SgjsExperimentRecordInfoDetail extends BaseEntity {
 
     /** 附件 */
     private String fileGroupId;
+
+    private List<Long>  infoDelIdList;
+
+    public List<Long> getInfoDelIdList() {
+        return infoDelIdList;
+    }
+
+    public void setInfoDelIdList(List<Long> infoDelIdList) {
+        this.infoDelIdList = infoDelIdList;
+    }
 
     public String getFileGroupId() {
         return fileGroupId;

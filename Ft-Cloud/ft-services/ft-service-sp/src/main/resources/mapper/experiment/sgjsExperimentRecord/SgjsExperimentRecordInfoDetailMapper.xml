@@ -389,7 +389,7 @@
             </trim>
         </trim>
         where `id` in
-        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </update>
@@ -440,4 +440,14 @@
             #{infoId}
         </foreach>
     </select>
+
+    <update id="deleteByRecordIds">
+        update `sgjs_experiment_record_info_detail` set del_flag = 1
+        <where>
+            `info_id` in
+            <foreach item="id" collection="delIdList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
 </mapper>

@@ -18,6 +18,8 @@ public interface ISgjsExperimentRecordInfoDetailService {
 
     int insertSgjsExperimentRecordInfoDetailList(List<SgjsExperimentRecordInfoDetail> sgjsExperimentRecordInfoDetailList);
 
+    int handleExperimentRecordInfoDetailData(List<SgjsExperimentRecordInfoDetail> sgjsExperimentRecordInfoDetailList,List<Long> recordIdList);
+
     int updateSgjsExperimentRecordInfoDetail(SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetail);
 
     int updateSgjsExperimentRecordInfoDetailList(List<SgjsExperimentRecordInfoDetail> sgjsExperimentRecordInfoDetailList);
@@ -25,4 +27,6 @@ public interface ISgjsExperimentRecordInfoDetailService {
     int deleteSgjsExperimentRecordInfoDetail(SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetail);
 
     int deleteSgjsExperimentRecordInfoDetailByPks(List<Long> sgjsExperimentRecordInfoDetailPkList);
+
+    int deleteByRecordIds(List<Long> delIdList);
 }

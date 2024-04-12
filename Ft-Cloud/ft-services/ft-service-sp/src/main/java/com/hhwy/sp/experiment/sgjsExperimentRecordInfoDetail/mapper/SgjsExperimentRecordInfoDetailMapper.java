@@ -21,7 +21,7 @@ public interface SgjsExperimentRecordInfoDetailMapper {
 
     int updateSgjsExperimentRecordInfoDetail(SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetail);
 
-    int updateSgjsExperimentRecordInfoDetailList(@Param("sgjsExperimentRecordInfoDetailList") List<SgjsExperimentRecordInfoDetail> sgjsExperimentRecordInfoDetailList);
+    int updateSgjsExperimentRecordInfoDetailList(@Param("list") List<SgjsExperimentRecordInfoDetail> sgjsExperimentRecordInfoDetailList);
 
     int deleteSgjsExperimentRecordInfoDetail(SgjsExperimentRecordInfoDetail sgjsExperimentRecordInfoDetail);
 
@@ -34,4 +34,6 @@ public interface SgjsExperimentRecordInfoDetailMapper {
      * @return
      */
     List<SgjsExperimentRecordInfoDetail> selectByInfoIdList(@Param(value = "infoIdList") List<String> infoIdList);
+
+    int deleteByRecordIds(@Param("delIdList") List<Long> delIdList);
 }

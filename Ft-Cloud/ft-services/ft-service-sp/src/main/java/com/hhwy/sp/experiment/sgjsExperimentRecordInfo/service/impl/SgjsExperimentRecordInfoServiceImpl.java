@@ -12,7 +12,6 @@ import com.hhwy.sp.experiment.sgjsExperimentRecordInfo.mapper.SgjsExperimentReco
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfo.service.ISgjsExperimentRecordInfoService;
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.domain.SgjsExperimentRecordInfoDetail;
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfoDetail.service.ISgjsExperimentRecordInfoDetailService;
-import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
@@ -106,6 +105,11 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
     @Override
     @Transactional
     public int batchAddMap(Map<String, Object> map) {
+        List<Long> delIdList=(List<Long>)map.get("delIdList");
+        if(!CollectionUtils.isEmpty(delIdList)){
+            //数据删除
+            handleDeleteData(delIdList);
+        }
         List<LinkedHashMap<String,Object>> equipList= (List<LinkedHashMap<String,Object>>)map.get("equipList");
         if(CollectionUtils.isEmpty(equipList)){
             logger.error("传参equipList空了");
@@ -118,6 +122,7 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
         }
         List<SgjsExperimentRecordInfoDetail> list=new ArrayList<>();
         List<SgjsExperimentRecordInfo> iList=new ArrayList<>();
+        List<Long> recordIdList=new ArrayList<>();
         for (LinkedHashMap<String,Object> mInfo:infoList) {
             String s = JSONObject.toJSONString(mInfo);
             SgjsExperimentRecordInfo info = JSONObject.parseObject(s, SgjsExperimentRecordInfo.class);
@@ -127,6 +132,8 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
             List<SgjsExperimentRecordInfoDetail> detailList = info.getDetailList();
             if(!CollectionUtils.isEmpty(detailList)){
                 list.addAll(detailList);
+            }else{
+                recordIdList.add(Long.parseLong(mInfo.get("id")+""));
             }
             iList.add(info);
         }
@@ -147,20 +154,59 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
             eList.add(info);
         }
         sgjsExperimentRecordMapper.bathUpdateByList(eList);
-        //2、删除子表所有数据
-        SgjsEquipEntryRecordInfo record=new SgjsEquipEntryRecordInfo();
-        record.setUpdateTime(DateUtils.getNowDate());
-        record.setUpdateUser(SecurityUtils.getUserId()+"");
-        sgjsExperimentRecordInfoMapper.deleteAll(record);
+        //2、有则修改没有则新增
+//        SgjsEquipEntryRecordInfo record=new SgjsEquipEntryRecordInfo();
+//        record.setUpdateTime(DateUtils.getNowDate());
+//        record.setUpdateUser(SecurityUtils.getUserId()+"");
+//        sgjsExperimentRecordInfoMapper.deleteAll(record);
+        handleRecordInfo(iList);
         //3、重新添加数据
-        sgjsExperimentRecordInfoMapper.insertSgjsExperimentRecordInfoList(iList);
+        //sgjsExperimentRecordInfoMapper.insertSgjsExperimentRecordInfoList(iList);
         //4、自检自校数据新增
-        if(!CollectionUtils.isEmpty(list)){
-            detailService.insertSgjsExperimentRecordInfoDetailList(list);
+        if(!CollectionUtils.isEmpty(list) || !CollectionUtils.isEmpty(recordIdList)){
+            detailService.handleExperimentRecordInfoDetailData(list,recordIdList);
         }
         //同步总部版数据
         syncDataToGm(map);
         return 0;
+    }
+
+    /**
+     * 数据删除
+     *
+     * @param delIdList
+     */
+    private void handleDeleteData(List<Long> delIdList) {
+        //删除设备进场记录数据
+        sgjsExperimentRecordInfoMapper.deleteSgjsExperimentRecordInfoByPks(delIdList);
+        //删除进场/离场数据
+        detailService.deleteByRecordIds(delIdList);
+    }
+
+    private void handleRecordInfo(List<SgjsExperimentRecordInfo> iList) {
+        List<SgjsExperimentRecordInfo> infoList = sgjsExperimentRecordInfoMapper.getSgjsExperimentRecordInfoList(new SgjsExperimentRecordInfo());
+        Map<Long, List<SgjsExperimentRecordInfo>> map = infoList.stream().collect(Collectors.groupingBy(SgjsExperimentRecordInfo::getId));
+        List<SgjsExperimentRecordInfo> insertList = new ArrayList<>();
+        List<SgjsExperimentRecordInfo> updateList = new ArrayList<>();
+        for (int i = 0; i < iList.size(); i++) {
+            Long id = iList.get(i).getId();
+            List<SgjsExperimentRecordInfo> manageList = map.get(id);
+            if(org.apache.commons.collections4.CollectionUtils.isNotEmpty(manageList)){
+                SgjsExperimentRecordInfo info = iList.get(i);
+                info.setUpdateTime(DateUtils.getNowDate());
+                updateList.add(iList.get(i));
+            }else {
+                SgjsExperimentRecordInfo recordInfo = iList.get(i);
+                recordInfo.setDelFlag("0");
+                insertList.add(iList.get(i));
+            }
+        }
+        if(org.apache.commons.collections4.CollectionUtils.isNotEmpty(updateList)){
+            sgjsExperimentRecordInfoMapper.updateSgjsExperimentRecordInfoList(updateList);
+        }
+        if(org.apache.commons.collections4.CollectionUtils.isNotEmpty(insertList)){
+            sgjsExperimentRecordInfoMapper.insertSgjsExperimentRecordInfoList(insertList);
+        }
     }
 
     /**

@@ -23,7 +23,7 @@ public interface SgjsExperimentRecordInfoMapper {
 
     int updateSgjsExperimentRecordInfo(SgjsExperimentRecordInfo sgjsExperimentRecordInfo);
 
-    int updateSgjsExperimentRecordInfoList(@Param("sgjsExperimentRecordInfoList") List<SgjsExperimentRecordInfo> sgjsExperimentRecordInfoList);
+    int updateSgjsExperimentRecordInfoList(@Param("list") List<SgjsExperimentRecordInfo> sgjsExperimentRecordInfoList);
 
     int deleteSgjsExperimentRecordInfo(SgjsExperimentRecordInfo sgjsExperimentRecordInfo);
 
