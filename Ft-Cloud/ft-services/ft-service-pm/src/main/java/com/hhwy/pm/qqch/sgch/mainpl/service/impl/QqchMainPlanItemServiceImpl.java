@@ -8,12 +8,14 @@ import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.preparation.sbch.equipmentlocalpurchase.domain.SbchEquipmentLocalPurchaseDetails;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
 import com.hhwy.pm.qqch.sgch.mainpl.domain.vo.QqchMainPlanItemVo;
 import com.hhwy.pm.qqch.sgch.mainpl.mapper.QqchMainPlanItemMapper;
 import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -56,6 +58,18 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
         if(CollectionUtils.isEmpty(qqchMainPlanItemList)) {
             return qqchMainPlanItemList;
         }
+        // 转换总浮时、原定工期
+        qqchMainPlanItemList = qqchMainPlanItemList.stream().map(item -> {
+            // 原定工期
+            if (item.getStartDate() != null && item.getFinishDate() != null) {
+                Integer rangeDate = StatisticsUtils.getDaysByRangeDate(item.getStartDate(), item.getFinishDate());
+                item.setPlannedDuration(rangeDate);
+            }
+            // 总浮时 / 8
+            if(item.getTotalFloat() != null)
+                item.setTotalFloat(new BigDecimal(item.getTotalFloat()).divide(new BigDecimal(8), 0, BigDecimal.ROUND_UP).intValue());
+            return item;
+        }).collect(Collectors.toList());
 //        List<QqchMainPlanItem> build = TreeUtil.build(qqchMainPlanItemList, qqchMainPlanItem.getPid());
         return qqchMainPlanItemList;
     }
