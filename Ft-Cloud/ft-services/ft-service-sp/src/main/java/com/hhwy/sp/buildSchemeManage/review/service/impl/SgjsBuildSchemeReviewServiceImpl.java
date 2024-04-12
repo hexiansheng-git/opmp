@@ -765,6 +765,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 staffOpinionRecord.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 staffOpinionRecord.setCreateUserName(SecurityUtils.getUserName());
                 staffOpinionRecord.setCreateTime(DateUtils.getNowDate());
+                staffOpinionRecord.setScore(staffOpinionGatherVo.getScore());
+                staffOpinionRecord.setSubmitTime(staffOpinionGatherVo.getSubmitTime());
                 List<String> opinionList = staffOpinionGatherVo.getReviewOpinionList();
                 if(CollectionUtils.isNotEmpty(opinionList)){
                     String opinionStr = String.join("==>", opinionList);
