@@ -11,7 +11,6 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +115,6 @@ public class KcsjPlanCommunicationRecordsServiceImpl implements IKcsjPlanCommuni
         if (all != null) {
             sysSyncInfoService4Sd.pushKcsjPlanCommunicationRecords(all);
         }
-
         return AjaxResult.success();
 
     }

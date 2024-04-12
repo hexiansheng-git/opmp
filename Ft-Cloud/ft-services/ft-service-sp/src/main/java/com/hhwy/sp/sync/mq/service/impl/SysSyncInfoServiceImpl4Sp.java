@@ -72,7 +72,7 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
     public void pushSgjsExperProgressManage(SgjsExperProgressManageVo sgjsExperProgressManageVo) {
         try {
             List<SgjsExperProgressManage> treeList = sgjsExperProgressManageVo.getTreeList();
-            treeList = TreeUtil.treeToList(treeList);
+            treeList = TreeUtil.treeToListWithoutId(treeList);
             List<JSONObject> finalList = new ArrayList<>();
             Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
             //判断当前项目下是否有数据可推送
@@ -131,7 +131,7 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
     public void pushSgjsPlanMeasureManage(SgjsPlanMeasureManageVo vo) {
         try {
             List<SgjsPlanMeasureManage> treeList = vo.getTreeList();
-            treeList = TreeUtil.treeToList(treeList);
+            treeList = TreeUtil.treeToListWithoutId(treeList);
             List<JSONObject> finalList = new ArrayList<>();
             Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
             //判当前项目下是否有数据可推送
