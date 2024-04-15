@@ -261,6 +261,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
 //            executorService.execute(() -> handleModifyRecord(sgsjTechnicalScienceTopic, parm));
         }
         //保存主表
+        sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
         sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
         String tenantKey = SecurityUtils.getTenantKey();
         String userName = SecurityUtils.getUserName();
@@ -342,20 +343,21 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
         } else {
             //修改
+            sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
             sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
-//            String applyState = sgsjTechnicalScienceTopic.getApplyState();
-//            if (StrUtil.isNotBlank(applyState) && (StrUtil.equalsAny(applyState, "3", "4"))) {
-//                //3，4代表流程结束，需要创建一条新数据给立项用
-//                SgsjTechnicalScienceTopic param = new SgsjTechnicalScienceTopic();
-//                param.setId(sgsjTechnicalScienceTopic.getId());
-//                SgsjTechnicalScienceTopic lxData = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param);
-//                this.addLxData(lxData);
-//            }
+            String applyState = sgsjTechnicalScienceTopic.getApplyState();
+            if (StrUtil.isNotBlank(applyState) && (StrUtil.equalsAny(applyState, "3", "4"))) {
+                //保存子表
+                Long id = sgsjTechnicalScienceTopic.getId();
+                List<SgjsExpertLibrary> libraryList = sgsjTechnicalScienceTopic.getListApply();
+                sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_1, libraryList);
+                //3，4代表流程结束，需要创建一条新数据给立项用
+                SgsjTechnicalScienceTopic param = new SgsjTechnicalScienceTopic();
+                param.setId(sgsjTechnicalScienceTopic.getId());
+                SgsjTechnicalScienceTopic lxData = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param);
+                this.addLxData(lxData);
+            }
         }
-        //保存子表
-        Long id = sgsjTechnicalScienceTopic.getId();
-        List<SgjsExpertLibrary> libraryList = sgsjTechnicalScienceTopic.getListApply();
-        sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_1, libraryList);
         String tenantKey = SecurityUtils.getTenantKey();
         String userName = SecurityUtils.getUserName();
         ThreadPoolUtil.execute(() -> doSendGm(tenantKey, userName, projectDto));
@@ -387,9 +389,19 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
      */
     @Override
     public SgsjTechnicalScienceTopic applyDetail(SgsjTechnicalScienceTopic param) {
-        SgsjTechnicalScienceTopic resultBean = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param);
-        Assert.isTrue(resultBean != null, "课题不存在,请检查参数是否正确");
-        Long id = resultBean.getId();
+        SgsjTechnicalScienceTopic lxdata = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param);
+        Assert.isTrue(lxdata != null, "课题不存在,请检查参数是否正确");
+        //根据id查询立项数据,
+        SgsjTechnicalScienceTopic resultBean = lxdata;
+        Long id = param.getId();
+        if (StrUtil.isNotBlank(lxdata.getTopicCurentNode())) {
+            //立项得ptvar4保存了 申请得id
+            SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic1 = new SgsjTechnicalScienceTopic();
+            sgsjTechnicalScienceTopic1.setId(Long.valueOf(lxdata.getPtVar4()));
+            resultBean = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic1);
+            Assert.isTrue(resultBean != null, "课题不存在,请检查参数是否正确");
+            id = resultBean.getId();
+        }
         //知识库
         List<SgjsExpertLibrary> listByForeignId = sgjsExpertLibraryService.getListByForeignId(id);
         if (CollUtil.isNotEmpty(listByForeignId)) {

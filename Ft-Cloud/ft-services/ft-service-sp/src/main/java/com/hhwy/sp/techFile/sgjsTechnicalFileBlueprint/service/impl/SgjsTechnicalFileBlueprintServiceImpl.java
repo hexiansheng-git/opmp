@@ -79,6 +79,8 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
     @Transactional
     public void insertSgjsTechnicalFileBlueprintList(List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList) {
         if (CollUtil.isEmpty(sgjsTechnicalFileBlueprintList)) {
+            sgjsTechnicalFileBlueprintMapper.deleteSgjsTechnicalFileBlueprint(new SgjsTechnicalFileBlueprint());
+            doSendGm();
             return;
         }
         //校验数据必填
