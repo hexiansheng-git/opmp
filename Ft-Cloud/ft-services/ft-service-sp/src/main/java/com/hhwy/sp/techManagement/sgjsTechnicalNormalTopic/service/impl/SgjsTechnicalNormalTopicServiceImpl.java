@@ -122,6 +122,7 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
         SgjsTechnicalNormalTopicCost sgjsTechnicalNormalTopicCost = new SgjsTechnicalNormalTopicCost();
         sgjsTechnicalNormalTopicCostService.deleteSgjsTechnicalNormalTopicCost(sgjsTechnicalNormalTopicCost);
         if (CollUtil.isEmpty(sgjsTechnicalNormalTopicList)) {
+            doSendGm();
             return;
         }
         ProjectDto projectDto = getProjectDto();
