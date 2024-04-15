@@ -647,8 +647,7 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
 
     //数据推送总部版
     public void doSendGm(){
-        ProjectDto projectDto = pmServiceApi.getProjectDto();
-        String projectCode = projectDto.getProjectCode();
+        String projectCode = SecurityUtils.getTenantKey();
         KcsjEquipEntryRecord kcsjEquipEntryRecord = new KcsjEquipEntryRecord();
         List<KcsjEquipEntryRecord> kcsjEquipEntryRecordList = kcsjEquipEntryRecordMapper.getKcsjEquipEntryRecordList(kcsjEquipEntryRecord);
         KcsjEquipEntryRecordInfo kcsjEquipEntryRecordInfo = new KcsjEquipEntryRecordInfo();
@@ -658,17 +657,15 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
             KcsjEquipEntryRecord param = new KcsjEquipEntryRecord();
             param.setPtVar5(projectCode);
             kcsjEquipEntryRecordList.add(param);
-            KcsjEquipEntryRecordInfo paramInfo = new KcsjEquipEntryRecordInfo();
-            paramInfo.setPtVar5(projectCode);
-            kcsjEquipEntryRecordInfoList.add(paramInfo);
             rocketMQTemplate.convertAndSend("kcsj_equip_entry_record:tenantSuccess", kcsjEquipEntryRecordList);
-            rocketMQTemplate.convertAndSend("kcsj_equip_entry_record_info:tenantSuccess", kcsjEquipEntryRecordInfoList);
             return;
         }
         kcsjEquipEntryRecordList.forEach(p -> p.setPtVar5(projectCode));
         rocketMQTemplate.convertAndSend("kcsj_equip_entry_record:tenantSuccess", kcsjEquipEntryRecordList);
-        kcsjEquipEntryRecordInfoList.forEach(p -> p.setPtVar5(projectCode));
-        rocketMQTemplate.convertAndSend("kcsj_equip_entry_record_info:tenantSuccess", kcsjEquipEntryRecordInfoList);
+        if (CollUtil.isEmpty(kcsjEquipEntryRecordInfoList)) {
+            kcsjEquipEntryRecordInfoList.forEach(p -> p.setPtVar5(projectCode));
+            rocketMQTemplate.convertAndSend("kcsj_equip_entry_record_info:tenantSuccess", kcsjEquipEntryRecordInfoList);
+        }
     }
 
 

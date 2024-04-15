@@ -343,14 +343,14 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         } else {
             //修改
             sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
-            String applyState = sgsjTechnicalScienceTopic.getApplyState();
-            if (StrUtil.isNotBlank(applyState) && (StrUtil.equalsAny(applyState, "3", "4"))) {
-                //3，4代表流程结束，需要创建一条新数据给立项用
-                SgsjTechnicalScienceTopic param = new SgsjTechnicalScienceTopic();
-                param.setId(sgsjTechnicalScienceTopic.getId());
-                SgsjTechnicalScienceTopic lxData = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param);
-                this.addLxData(lxData);
-            }
+//            String applyState = sgsjTechnicalScienceTopic.getApplyState();
+//            if (StrUtil.isNotBlank(applyState) && (StrUtil.equalsAny(applyState, "3", "4"))) {
+//                //3，4代表流程结束，需要创建一条新数据给立项用
+//                SgsjTechnicalScienceTopic param = new SgsjTechnicalScienceTopic();
+//                param.setId(sgsjTechnicalScienceTopic.getId());
+//                SgsjTechnicalScienceTopic lxData = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param);
+//                this.addLxData(lxData);
+//            }
         }
         //保存子表
         Long id = sgsjTechnicalScienceTopic.getId();

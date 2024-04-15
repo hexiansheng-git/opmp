@@ -136,7 +136,10 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
             sgjsTechnicalNormalTopic.setProjectId(projectDto.getProjectId());
             sgjsTechnicalNormalTopic.setPtVar5(projectDto.getProjectCode());
             List<SgjsTechnicalNormalTopicCost> childList = sgjsTechnicalNormalTopic.getChildList();
-            childList.forEach(p -> p.setForeignId(id));
+            childList.forEach(p -> {
+                p.setForeignId(id);
+                p.setPtVar5(projectDto.getProjectCode());
+            });
             childSave.addAll(childList);
         }
         sgjsTechnicalNormalTopicMapper.insertSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopicList);
@@ -362,13 +365,13 @@ public class SgjsTechnicalNormalTopicServiceImpl implements ISgjsTechnicalNormal
     //数据推送总部版
     public void doSendGm(){
         //主表
-        SgjsTechnicalNormalTopic sgjsTechnicalNormalTopic = new SgjsTechnicalNormalTopic();
-        List<SgjsTechnicalNormalTopic> sgjsTechnicalNormalTopicList = sgjsTechnicalNormalTopicMapper.getSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopic);
+        List<SgjsTechnicalNormalTopic> sgjsTechnicalNormalTopicList = sgjsTechnicalNormalTopicMapper.getSgjsTechnicalNormalTopicList(new SgjsTechnicalNormalTopic());
         if (CollUtil.isEmpty(sgjsTechnicalNormalTopicList)) {
             List<SgjsTechnicalNormalTopic> objects = new ArrayList<>();
             SgjsTechnicalNormalTopic param = new SgjsTechnicalNormalTopic();
             ProjectDto projectDto = getProjectDto();
             param.setProjectId(projectDto.getProjectId());
+            param.setPtVar5(projectDto.getProjectCode());
             objects.add(param);
             rocketMQTemplate.convertAndSend("sgjs_technical_normal_topic:tenantSuccess", objects);
             return;

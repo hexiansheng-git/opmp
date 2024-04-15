@@ -145,13 +145,14 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
 
     //数据推送总部版
     public void doSendGm(){
-        SgjsTechnicalFileBlueprintParam sgjsTechnicalFileBlueprintParam = new SgjsTechnicalFileBlueprintParam();
-        List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList = sgjsTechnicalFileBlueprintMapper.getSgjsTechnicalFileBlueprintList(sgjsTechnicalFileBlueprintParam);
+        List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintList = sgjsTechnicalFileBlueprintMapper.getSgjsTechnicalFileBlueprintList(new SgjsTechnicalFileBlueprintParam());
         if (CollUtil.isEmpty(sgjsTechnicalFileBlueprintList)) {
             //集合为空，推送一个项目编号
-            SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint = new SgjsTechnicalFileBlueprint();
+            String projectCode = getProjectDto().getProjectCode();
             Long projectId = getProjectDto().getProjectId();
+            SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint = new SgjsTechnicalFileBlueprint();
             sgjsTechnicalFileBlueprint.setProjectId(projectId);
+            sgjsTechnicalFileBlueprint.setPtVar5(projectCode);
             sgjsTechnicalFileBlueprintList.add(sgjsTechnicalFileBlueprint);
         }
         rocketMQTemplate.convertAndSend("sgjs_technical_file_blueprint:tenantSuccess", sgjsTechnicalFileBlueprintList);
