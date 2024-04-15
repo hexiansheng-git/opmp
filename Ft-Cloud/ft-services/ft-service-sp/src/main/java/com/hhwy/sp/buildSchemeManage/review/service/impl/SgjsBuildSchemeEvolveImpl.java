@@ -58,7 +58,7 @@ public class SgjsBuildSchemeEvolveImpl implements ISgjsBuildSchemeEvolveService 
     private void setSumScore(List<SgjsBuildSchemeEvolve> evolveList){
         List<Long> reviewIdList = evolveList.stream().map(SgjsBuildSchemeEvolve::getReviewId).collect(Collectors.toList());
         List<SgjsBuildSchemeReviewStaff> sumScoreList = sgjsBuildSchemeReviewStaffMapper.getSumScoreByReviewIdList(reviewIdList);
-        Map<Long, Double> sumSocreMap = sumScoreList.stream().collect(Collectors.toMap(SgjsBuildSchemeReviewStaff::getReviewId, SgjsBuildSchemeReviewStaff::getScore));
+        Map<Long, Double> sumSocreMap = sumScoreList.stream().filter(o -> o.getScore() != null).collect(Collectors.toMap(SgjsBuildSchemeReviewStaff::getReviewId, SgjsBuildSchemeReviewStaff::getScore));
         for (SgjsBuildSchemeEvolve evolve : evolveList) {
             Long reviewId = evolve.getReviewId();
             if(sumSocreMap.containsKey(reviewId)){
