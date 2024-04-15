@@ -69,6 +69,8 @@ public class SgjsSpecialMeasureServiceImpl implements ISgjsSpecialMeasureService
         //入库
         if(CollectionUtils.isEmpty(sgjsSpecialMeasureList)){
             logger.info("空了！！！！！！！！");
+            //同步
+            syncDataToGm(sgjsSpecialMeasureList);
             return 1;
         }
         for (SgjsSpecialMeasure sgjsSpecialMeasure : sgjsSpecialMeasureList) {

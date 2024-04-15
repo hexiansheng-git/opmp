@@ -67,6 +67,7 @@ public class SgjsControlPointRetestServiceImpl implements ISgjsControlPointRetes
         sgjsControlPointRetestMapper.updateSgjsControlPointRetest(info);
         if(CollectionUtils.isEmpty(sgjsControlPointRetestList)){
             logger.info("空了！！！！！！！！");
+            syncDataToGm(sgjsControlPointRetestList);
             return 1;
         }
         for (SgjsControlPointRetest sgjsControlPointRetest : sgjsControlPointRetestList) {
