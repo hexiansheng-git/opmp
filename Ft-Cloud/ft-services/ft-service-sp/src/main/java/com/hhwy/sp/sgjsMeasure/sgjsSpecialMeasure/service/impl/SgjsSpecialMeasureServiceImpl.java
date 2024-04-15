@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,10 +68,14 @@ public class SgjsSpecialMeasureServiceImpl implements ISgjsSpecialMeasureService
         info.setDelFlag("1");
         sgjsSpecialMeasureMapper.updateSgjsSpecialMeasure(info);
         //入库
+        Map<String,Object> map=new HashMap<>();
         if(CollectionUtils.isEmpty(sgjsSpecialMeasureList)){
             logger.info("空了！！！！！！！！");
-            //同步
-            syncDataToGm(sgjsSpecialMeasureList);
+            map.put("isDel","0");
+            //空了 ，但需要删除总部版数据，所以只穿id
+            Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+            if(prjInfo.get("projectId") != null)map.put("prjId",prjInfo.get("projectId")+"");
+            syncDataToGm(map);
             return 1;
         }
         for (SgjsSpecialMeasure sgjsSpecialMeasure : sgjsSpecialMeasureList) {
@@ -80,25 +85,18 @@ public class SgjsSpecialMeasureServiceImpl implements ISgjsSpecialMeasureService
         }
         int i = sgjsSpecialMeasureMapper.insertSgjsSpecialMeasureList(sgjsSpecialMeasureList);
         //同步
-        syncDataToGm(sgjsSpecialMeasureList);
+        map.put("isDel","1");
+        map.put("infoList",sgjsSpecialMeasureList);
+        syncDataToGm(map);
         return i;
     }
 
-    private void syncDataToGm(List<SgjsSpecialMeasure> sgjsSpecialMeasureList) {
-        //空了 ，但需要删除总部版数据，所以只穿id
-        if(CollectionUtils.isEmpty(sgjsSpecialMeasureList)){
-            Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
-            if(prjInfo.get("projectId") != null){
-                SgjsSpecialMeasure info= new SgjsSpecialMeasure();
-                info.setProjectId(Long.parseLong(prjInfo.get("projectId")+""));
-                sgjsSpecialMeasureList.add(info);
-            }
-        }
+    private void syncDataToGm(Map<String, Object> map) {
         long beginMills = System.currentTimeMillis();
         Integer status = 1;
         String errMsg = "";
         try{
-            rocketMQTemplate.convertAndSend("sgjs_special_measure:tenantSuccess1", JSONObject.toJSONString(sgjsSpecialMeasureList));
+            rocketMQTemplate.convertAndSend("sgjs_special_measure:tenantSuccess1", JSONObject.toJSONString(map));
         }catch (Exception e){
             e.printStackTrace();
             status = 0;
@@ -111,8 +109,8 @@ public class SgjsSpecialMeasureServiceImpl implements ISgjsSpecialMeasureService
             log.setBusinessName("sgjs_special_measure");
             log.setStatus(status);
             log.setFailMsg(errMsg);
-            log.setPtVar1(JSONObject.toJSONString(sgjsSpecialMeasureList));
-            logger.error("sgjs_special_measure同步失败【{}】,时间：【{}】",JSONObject.toJSONString(sgjsSpecialMeasureList),System.currentTimeMillis()-beginMills);
+            log.setPtVar1(JSONObject.toJSONString(map));
+            logger.error("sgjs_special_measure同步失败【{}】,时间：【{}】",JSONObject.toJSONString(map),System.currentTimeMillis()-beginMills);
             pmServiceApi.insertSyncLog(log);
         }
     }

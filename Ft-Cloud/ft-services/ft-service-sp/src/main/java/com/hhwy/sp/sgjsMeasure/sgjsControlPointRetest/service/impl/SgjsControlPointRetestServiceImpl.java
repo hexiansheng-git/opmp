@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,9 +66,15 @@ public class SgjsControlPointRetestServiceImpl implements ISgjsControlPointRetes
         info.setUpdateUser(SecurityUtils.getUserId().toString());
         info.setDelFlag("1");
         sgjsControlPointRetestMapper.updateSgjsControlPointRetest(info);
+        //入库
+        Map<String,Object> map=new HashMap<>();
         if(CollectionUtils.isEmpty(sgjsControlPointRetestList)){
             logger.info("空了！！！！！！！！");
-            syncDataToGm(sgjsControlPointRetestList);
+            map.put("isDel","0");
+            //空了 ，但需要删除总部版数据，所以只穿id
+            Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+            if(prjInfo.get("projectId") != null)map.put("prjId",prjInfo.get("projectId")+"");
+            syncDataToGm(map);
             return 1;
         }
         for (SgjsControlPointRetest sgjsControlPointRetest : sgjsControlPointRetestList) {
@@ -76,25 +83,19 @@ public class SgjsControlPointRetestServiceImpl implements ISgjsControlPointRetes
             sgjsControlPointRetest.setCreateTime(DateUtils.getNowDate());
         }
         int i = sgjsControlPointRetestMapper.insertSgjsControlPointRetestList(sgjsControlPointRetestList);
-        syncDataToGm(sgjsControlPointRetestList);
+        //同步
+        map.put("isDel","1");
+        map.put("infoList",sgjsControlPointRetestList);
+        syncDataToGm(map);
         return i;
     }
 
-    private void syncDataToGm(List<SgjsControlPointRetest> sgjsControlPointRetestList) {
-        //空了 ，但需要删除总部版数据，所以只穿id
-        if(CollectionUtils.isEmpty(sgjsControlPointRetestList)){
-            Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
-            if(prjInfo.get("projectId") != null){
-                SgjsControlPointRetest info= new SgjsControlPointRetest();
-                info.setProjectId(Long.parseLong(prjInfo.get("projectId")+""));
-                sgjsControlPointRetestList.add(info);
-            }
-        }
+    private void syncDataToGm(Map<String, Object> map) {
         long beginMills = System.currentTimeMillis();
         Integer status = 1;
         String errMsg = "";
         try{
-            rocketMQTemplate.convertAndSend("sgjs_control_point_retest:tenantSuccess1", JSONObject.toJSONString(sgjsControlPointRetestList));
+            rocketMQTemplate.convertAndSend("sgjs_control_point_retest:tenantSuccess1", JSONObject.toJSONString(map));
         }catch (Exception e){
             e.printStackTrace();
             status = 0;
@@ -107,8 +108,8 @@ public class SgjsControlPointRetestServiceImpl implements ISgjsControlPointRetes
             log.setBusinessName("sgjs_control_point_retest");
             log.setStatus(status);
             log.setFailMsg(errMsg);
-            log.setPtVar1(JSONObject.toJSONString(sgjsControlPointRetestList));
-            logger.error("sgjs_control_point_retest同步失败【{}】,时间：【{}】",JSONObject.toJSONString(sgjsControlPointRetestList),System.currentTimeMillis()-beginMills);
+            log.setPtVar1(JSONObject.toJSONString(map));
+            logger.error("sgjs_control_point_retest同步失败【{}】,时间：【{}】",JSONObject.toJSONString(map),System.currentTimeMillis()-beginMills);
             pmServiceApi.insertSyncLog(log);
         }
     }
