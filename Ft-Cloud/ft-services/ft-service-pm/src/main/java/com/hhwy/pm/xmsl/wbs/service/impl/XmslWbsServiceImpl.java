@@ -623,6 +623,13 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         Map<String,String> idRepalceMap = new ConcurrentHashMap<>(list.size()/2);
         list.sort((r, r1) -> {return r.getLevel()==r1.getLevel()?0:(r.getLevel() > r1.getLevel() ? 1 : -1);});
         Map<String,XmslWbsHistory> map = list.stream().collect(Collectors.toMap(r->r.getId(),r->r));
+        //序号处理
+        Map<String,Integer> sortNumMap = new HashMap<>();
+        Function<String,Integer> getSort = (pcode)->{
+            Integer num = ObjectUtils.nvl(sortNumMap.get(pcode),-1);
+            sortNumMap.put(pcode,++num);
+            return num; 
+        };
         for (int i = 0; i < list.size(); i++) {
             XmslWbsHistory temp = list.get(i);
             XmslWbsHistory parent = map.get(temp.getParentId());
@@ -648,6 +655,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                 temp.setListCode(null);
                 temp.setListIds(null);
             }
+            temp.setSort(getSort.apply(temp.getParentCode()));
             temp.setHaveChildren(ObjectUtils.nvl(temp.getHaveChildren(),0));
             if(temp.getId().length() < 21){
                 new AddBaseInfoUtil<>().updateBaseEntity(temp);
