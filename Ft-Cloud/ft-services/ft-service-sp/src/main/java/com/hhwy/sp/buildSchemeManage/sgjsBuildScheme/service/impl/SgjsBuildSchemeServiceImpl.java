@@ -305,8 +305,8 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         }
         SysUser sysUser = SecurityUtils.getSysUser();
         String tenantKey = SecurityUtils.getTenantKey();
-        doSendGm(sysUser, tenantKey);
-//        ThreadPoolUtil.execute(() -> doSendGm(sysUser, tenantKey));
+//        doSendGm(sysUser, tenantKey);
+        ThreadPoolUtil.execute(() -> doSendGm(sysUser, tenantKey));
         return id;
     }
 
@@ -377,8 +377,8 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         }
         SysUser sysUser = SecurityUtils.getSysUser();
         String tenantKey = SecurityUtils.getTenantKey();
-        doSendGm(sysUser, tenantKey);
-//        ThreadPoolUtil.execute(() -> doSendGm(sysUser, tenantKey));
+//        doSendGm(sysUser, tenantKey);
+        ThreadPoolUtil.execute(() -> doSendGm(sysUser, tenantKey));
     }
 
     //发送总部版
