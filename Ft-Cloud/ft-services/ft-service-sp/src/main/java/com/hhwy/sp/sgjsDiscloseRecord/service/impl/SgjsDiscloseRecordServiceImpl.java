@@ -98,9 +98,7 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
         if(CollectionUtils.isNotEmpty(updateList)) {
             i = i + sgjsDiscloseRecordMapper.updateSgjsDiscloseRecordList(updateList);
         }
-        if(i > 0) {
-            pushDataToHeadquarters(dataType);
-        }
+        pushDataToHeadquarters(dataType);
         return i;
     }
 
