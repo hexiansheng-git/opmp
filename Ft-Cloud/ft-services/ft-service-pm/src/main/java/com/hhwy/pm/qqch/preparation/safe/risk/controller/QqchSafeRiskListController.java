@@ -5,7 +5,9 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskList;
+import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskListDetail;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskListVo;
+import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.SafeRiskAssembleDataVo;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.SafeRiskListQueryVo;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskListService;
 import com.hhwy.utils.customLog.CustomBusinessType;
@@ -108,5 +110,16 @@ public class QqchSafeRiskListController extends BaseController {
     @GetMapping("/getList")
     public AjaxResult getList(@Validated(ValidationGroups.Select.class) SafeRiskListQueryVo queryVo) {
          return AjaxResult.success(qqchSafeRiskListService.getList(queryVo));
+    }
+
+    /**
+     * 组装数据
+     * @param assembleDataVo
+     * @return
+     */
+    @PostMapping("assembleDataVo")
+    public AjaxResult assembleData(@RequestBody SafeRiskAssembleDataVo assembleDataVo) {
+        List<QqchSafeRiskListDetail> detailList = qqchSafeRiskListService.assembleData(assembleDataVo);
+        return AjaxResult.success(detailList);
     }
 }
