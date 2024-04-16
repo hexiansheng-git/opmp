@@ -45,6 +45,8 @@ public class QyzsSafeSafeRiskServiceImpl implements IQyzsSafeSafeRiskService {
     public List<QyzsSafeSafeRisk> getCommonListBy(QyzsSafeSafeRisk qyzsSafeSafeRisk) {
         String url = gmUrl + "/gm/qyzsSafeSafeRisk/getCommonListBy";
         HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
+        String projectType = tWbsService.getDefaultEngineeringType();
+        qyzsSafeSafeRisk.setProjectType(projectType);
         HttpEntity<QyzsSafeSafeRisk> httpEntity = new HttpEntity<>(qyzsSafeSafeRisk,headers);
         AjaxResult result = RestTemplateUtils.post(url, httpEntity, AjaxResult.class);
         Object data = result.get("data");

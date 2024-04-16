@@ -296,7 +296,7 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
     public List<QqchSafeRiskListDetail> assembleData(SafeRiskAssembleDataVo assembleDataVo) {
         List<QqchSafeRiskListDetail> detailList = assembleDataVo.getDetailList();
         List<QyzsSafeSafeRisk> safeRiskList = assembleDataVo.getSafeSafeRiskList();
-        if(org.springframework.util.CollectionUtils.isEmpty(safeRiskList)){
+        if(CollectionUtils.isEmpty(safeRiskList)){
             return detailList;
         }
 
