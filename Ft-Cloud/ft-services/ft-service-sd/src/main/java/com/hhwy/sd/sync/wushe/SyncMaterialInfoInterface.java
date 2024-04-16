@@ -51,6 +51,7 @@ public class SyncMaterialInfoInterface {
         params.put("materialCodes",map.get("materialCodes"));
         params.put("getAllFlag","1");//值为1，传则获取所有设备，包括已退场，否则只获取未退场
         jsonObject.put("params",params);
+        logger.info("请求传参【{}】",jsonObject.toJSONString());
         String rst = HttpUtils.sendPost(url, jsonObject.toJSONString(), headerMap);
         logger.info("获取物设系统【设备进场记录】接口返回结果信息【{}】",rst);
         if(StringUtils.isBlank(rst)){
