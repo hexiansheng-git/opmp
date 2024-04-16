@@ -2,7 +2,10 @@ package com.hhwy.pm.qyzs.safe.qyzsSafeSafeRisk.service;
 
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.pm.qyzs.safe.qyzsSafeSafeRisk.domain.QyzsSafeSafeRisk;
 import com.hhwy.pm.qyzs.safe.qyzsSafeSafeRisk.domain.SafeSafeRiskQueryVo;
+
+import java.util.List;
 
 /**
  * @author cjh
@@ -12,4 +15,6 @@ import com.hhwy.pm.qyzs.safe.qyzsSafeSafeRisk.domain.SafeSafeRiskQueryVo;
 public interface IQyzsSafeSafeRiskService {
 
     AjaxResult getQyzsSafeSafeRiskList(SafeSafeRiskQueryVo queryVo);
+
+    List<QyzsSafeSafeRisk> getCommonListBy(QyzsSafeSafeRisk qyzsSafeSafeRisk);
 }

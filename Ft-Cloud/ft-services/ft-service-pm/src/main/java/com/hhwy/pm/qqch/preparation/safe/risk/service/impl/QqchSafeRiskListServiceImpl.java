@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.safe.risk.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -9,6 +10,7 @@ import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskList;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskListDetail;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskListVo;
+import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.SafeRiskAssembleDataVo;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.SafeRiskListQueryVo;
 import com.hhwy.pm.qqch.preparation.safe.risk.mapper.QqchSafeRiskListDetailMapper;
 import com.hhwy.pm.qqch.preparation.safe.risk.mapper.QqchSafeRiskListMapper;
@@ -18,6 +20,8 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
 import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.qyzs.safe.qyzsSafeSafeRisk.domain.QyzsSafeSafeRisk;
+import com.hhwy.pm.qyzs.safe.qyzsSafeSafeRisk.service.IQyzsSafeSafeRiskService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
@@ -53,6 +57,9 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
 
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+
+    @Autowired
+    private IQyzsSafeSafeRiskService qyzsSafeSafeRiskService;
 
     private static final String TN = "qqch_safe_risk_list";
 
@@ -283,5 +290,81 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         qqchSafeRiskListMapper.insertQqchSafeRiskListList(qqchSafeRiskListList);
         //插入子表数据
         qqchSafeRiskListDetailMapper.insertQqchSafeRiskListDetailList(insertList);
+    }
+
+    @Override
+    public List<QqchSafeRiskListDetail> assembleData(SafeRiskAssembleDataVo assembleDataVo) {
+        List<QqchSafeRiskListDetail> detailList = assembleDataVo.getDetailList();
+        List<QyzsSafeSafeRisk> safeRiskList = assembleDataVo.getSafeSafeRiskList();
+        if(org.springframework.util.CollectionUtils.isEmpty(safeRiskList)){
+            return detailList;
+        }
+
+        for (QyzsSafeSafeRisk risk : safeRiskList) {
+            risk.setChildren(null);
+        }
+        QyzsSafeSafeRisk query = new QyzsSafeSafeRisk();
+        query.setWbsCode(assembleDataVo.getWbsCode());
+        List<QyzsSafeSafeRisk> allList = qyzsSafeSafeRiskService.getCommonListBy(query);
+        //获取选中数据的父子级集合
+        safeRiskList = ListTreeUtil.getRelevancyListBySublist(safeRiskList, allList, QyzsSafeSafeRisk::getId,QyzsSafeSafeRisk::getPid);
+
+        List<QqchSafeRiskListDetail> tempList = new ArrayList<>();
+        for (QyzsSafeSafeRisk risk : safeRiskList) {
+            QqchSafeRiskListDetail detail = new QqchSafeRiskListDetail();
+            detail.setId(risk.getId());
+            detail.setPid(risk.getPid());
+            detail.setWorkType(risk.getWorkType());
+            detail.setWorkUnit(risk.getWorkUnit());
+            detail.setDangerThing(risk.getRiskEvent());
+            detail.setPossibleResult(risk.getPossibleConsequence());
+            detail.setRiskLevel(risk.getRiskLevel());
+            detail.setRiskControWay(risk.getRiskControlMeasure());
+            detail.setPtVar1(risk.getId().toString());
+            detail.setPtVar2("0");
+            tempList.add(detail);
+        }
+
+        if(CollectionUtils.isEmpty(detailList)){
+            //转树列表
+            return ListTreeUtil.formatTree(
+                    tempList,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchSafeRiskListDetail::getChildren,
+                    QqchSafeRiskListDetail::setChildren);
+        }
+
+
+        //合并
+        detailList = ListTreeUtil.formatList(
+                detailList,
+                QqchSafeRiskListDetail::setId,
+                QqchSafeRiskListDetail::setPid,
+                QqchSafeRiskListDetail::getChildren,
+                QqchSafeRiskListDetail::setChildren);
+
+        Map<String, QqchSafeRiskListDetail> repositoryMap = detailList.stream().filter(o -> StringUtils.isNotBlank(o.getPtVar1())).collect(Collectors.toMap(QqchSafeRiskListDetail::getPtVar1, o -> o));
+
+        for (QqchSafeRiskListDetail detail : tempList) {
+            Long id = detail.getId();
+            if(repositoryMap.containsKey(id.toString())){
+                continue;
+            }
+            Long pid = detail.getPid();
+            if (pid != null && repositoryMap.containsKey(pid.toString())) {
+                QqchSafeRiskListDetail safeRiskListDetail = repositoryMap.get(pid.toString());
+                detail.setPid(safeRiskListDetail.getId());
+            }
+            detailList.add(detail);
+        }
+
+        detailList = ListTreeUtil.formatTree(
+                detailList,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchSafeRiskListDetail::getChildren,
+                QqchSafeRiskListDetail::setChildren);
+        return detailList;
     }
 }
