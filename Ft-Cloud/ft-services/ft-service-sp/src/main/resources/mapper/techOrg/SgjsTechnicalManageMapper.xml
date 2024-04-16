@@ -159,7 +159,7 @@
                 </foreach>
             </if>
         </where>
-        order by pt_var5
+        order by create_time
     </select>
 
     <insert id="insertSgjsTechnicalManage"  useGeneratedKeys="true" keyProperty="id"  >
