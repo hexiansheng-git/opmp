@@ -336,6 +336,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             sgsjTechnicalScienceTopic.setId(IdWorker.createId());
             sgsjTechnicalScienceTopic.setPtVar1(String.valueOf(IdWorker.createId()));
             sgsjTechnicalScienceTopic.setCreateUser(SecurityUtils.getUserName());
+            sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
             sgsjTechnicalScienceTopic.setCreateTime(DateUtils.getNowDate());
             sgsjTechnicalScienceTopic.setRegionId(projectDto.getRegionId());
             sgsjTechnicalScienceTopic.setRegionName(projectDto.getRegionName());
@@ -377,6 +378,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
         sgsjTechnicalScienceTopic.setPtVar4(String.valueOf(sgsjTechnicalScienceTopic.getId()));
         sgsjTechnicalScienceTopic.setId(IdWorker.createId());
         sgsjTechnicalScienceTopic.setPtVar2(String.valueOf(IdWorker.createId()));
+        sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
         sgsjTechnicalScienceTopicMapper.insertSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
         String tenantKey = SecurityUtils.getTenantKey();
         String userName = SecurityUtils.getUserName();
@@ -825,7 +827,7 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             List<SgsjTechnicalScienceTopic> sgsjTechnicalScienceTopics = this.tableListFlowableInfo(sgsjTechnicalScienceTopicList, tenantKey, loginUserName);
             //（已发起审批的）
             List<SgsjTechnicalScienceTopic> collect = sgsjTechnicalScienceTopics.stream()
-                    .filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
+                    .filter(p -> !p.getTaskStatus().equals("0") || !p.getApplyState().equals("1")).collect(Collectors.toList());
             if (CollUtil.isEmpty(collect)) {
                 //推送空数据
                 sendEmpty(tenantKey, projectDto);

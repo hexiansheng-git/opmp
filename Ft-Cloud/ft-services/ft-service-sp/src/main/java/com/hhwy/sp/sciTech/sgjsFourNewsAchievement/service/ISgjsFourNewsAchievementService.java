@@ -3,6 +3,7 @@ package com.hhwy.sp.sciTech.sgjsFourNewsAchievement.service;
 import java.util.List;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.sp.sciTech.sgjsFourNewsAchievement.domain.SgjsFourNewsAchievement;
 
 /**
@@ -33,4 +34,6 @@ public interface ISgjsFourNewsAchievementService {
     AjaxResult messagePublic(String message);
 
     List<SgjsFourNewsAchievement> getSgjsFourNewsAchievementList4Ids(List<Long> ids);
+
+    void doSendGm(String tenantKey, String admin);
 }

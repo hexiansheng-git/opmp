@@ -34,4 +34,6 @@ public interface ISgjsBuildSchemeService {
     void updateTaskStatus(Long id, String isPass);
 
     void warnMessage();
+
+    void doSendGm(String tenantKey, String admin);
 }

@@ -15,10 +15,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface SdServiceApi {
 
     /**
-     * 修改四新成果管理
+     * 大纲设计流程状态修改
      */
     @RequestMapping(value = "/kcsjOutlineReview/listener")
     void updateTaskStatus(@RequestParam("id") Long id);
+
+    /**
+     * 大纲设计 总部数据推送
+     */
+    @RequestMapping(value = "/kcsjOutlineReview/doSendGmlistener")
+    void outLineDoSendGm(@RequestParam("tenantKey") String tenantKey);
 
     /**
      * 勘察设计成果评审提交监听器

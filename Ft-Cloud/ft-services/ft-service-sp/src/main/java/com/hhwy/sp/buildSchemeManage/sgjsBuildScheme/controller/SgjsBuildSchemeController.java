@@ -7,8 +7,10 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.ISgjsBuildSchemeService;
+import com.hhwy.utils.ThreadPoolUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -128,5 +130,11 @@ public class SgjsBuildSchemeController extends BaseController {
     @GetMapping("/warnMessage")
     public void warnMessageSchemeList(){
         sgjsBuildSchemeService.warnMessage();
+    }
+
+    //监听器，推送总部数据
+    @RequestMapping("/doSendGmlistener")
+    public void schemeListDoSendGm(@RequestParam("tenantKey") String tenantKey){
+        ThreadPoolUtil.execute(() -> sgjsBuildSchemeService.doSendGm(tenantKey, "admin"));
     }
 }

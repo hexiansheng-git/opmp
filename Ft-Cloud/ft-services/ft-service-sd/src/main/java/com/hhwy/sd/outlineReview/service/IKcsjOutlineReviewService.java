@@ -35,4 +35,6 @@ public interface IKcsjOutlineReviewService {
     Map<String, Object> getExpertSuggest(KcsjOutlineReview param);
 
     void update(KcsjOutlineReview param);
+
+    void doSendGm(String tenantKey, String admin);
 }

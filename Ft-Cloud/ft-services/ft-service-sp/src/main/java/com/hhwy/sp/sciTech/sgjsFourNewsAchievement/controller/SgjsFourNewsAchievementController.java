@@ -5,8 +5,11 @@ import java.util.*;
 import java.io.IOException;
 
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain.SgjsAuthenticateEvaluate;
+import com.hhwy.utils.ThreadPoolUtil;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -38,7 +41,6 @@ public class SgjsFourNewsAchievementController extends BaseController {
 
     @Autowired
     private ISgjsFourNewsAchievementService sgjsFourNewsAchievementService;
-
 
     @PreAuthorize(hasPermi = "sgjsFourNewsAchievement:list")
     @GetMapping
@@ -187,6 +189,12 @@ public class SgjsFourNewsAchievementController extends BaseController {
     public AjaxResult updateTaskStatus(@RequestParam ("id") Long id, @RequestParam ("isPass") String isPass) {
         sgjsFourNewsAchievementService.updateTaskStatus(id, isPass);
         return AjaxResult.success();
+    }
+
+    //监听器，推送总部数据
+    @RequestMapping("/doSendGmlistener")
+    public void fourNewsDoSendGm(@RequestParam("tenantKey") String tenantKey){
+        ThreadPoolUtil.execute(() -> sgjsFourNewsAchievementService.doSendGm(tenantKey, "admin"));
     }
 
     /***

@@ -1,6 +1,7 @@
 package com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO;
 
@@ -49,4 +50,6 @@ public interface ISgsjTechnicalScienceTopicService {
     SgsjTechnicalScienceTopic lxAdd(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam);
 
     void addLxData(SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic);
+
+    void doSendGm(String tenantKey, String loginUserName, ProjectDto projectDto);
 }

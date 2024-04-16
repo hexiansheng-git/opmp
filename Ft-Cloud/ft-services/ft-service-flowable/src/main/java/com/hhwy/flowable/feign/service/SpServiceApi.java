@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public interface SpServiceApi {
 
     /**
+     * 修改四新成果管理 - 推送总部数据
+     */
+    @RequestMapping(value = "/sgjsFourNewsAchievement/doSendGmlistener")
+    void fourNewsDoSendGm(@RequestParam("tenantKey") String tenantKey);
+    /**
      * 修改四新成果管理
      */
     @RequestMapping(value = "/sgjsFourNewsAchievement/listener", method = RequestMethod.POST)
@@ -49,6 +54,11 @@ public interface SpServiceApi {
     AjaxResult submitPaperPublishProcess(@RequestParam("id") Long id);
 
     /**
+     * 科技管理 - 科研课题管理 推送总部数据
+     */
+    @RequestMapping(value = "/sgsjTechnicalScienceTopic/doSendGmlistener")
+    void technicalTopicDoSendGm(@RequestParam("tenantKey") String tenantKey);
+    /**
      * 科技管理 - 科研课题管理 申请流程状态修改
      */
     @RequestMapping(value = "/sgsjTechnicalScienceTopic/appplyListener")
@@ -65,6 +75,11 @@ public interface SpServiceApi {
     @RequestMapping(value = "/sgsjTechnicalScienceTopic/messagePublic")
     void messagePublic();
 
+    /**
+     * 施工方案管理 -  推送总部数据
+     */
+    @RequestMapping(value = "/sgjsBuildScheme/doSendGmlistener")
+    void schemeListDoSendGm(@RequestParam("tenantKey") String tenantKey);
     /**
      * 施工方案管理 - 施工方案清单
      */

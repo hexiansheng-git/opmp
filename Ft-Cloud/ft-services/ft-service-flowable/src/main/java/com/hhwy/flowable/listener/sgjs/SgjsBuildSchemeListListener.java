@@ -1,6 +1,5 @@
 package com.hhwy.flowable.listener.sgjs;
 
-import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.flowable.feign.service.SpServiceApi;
 import org.flowable.engine.RuntimeService;
@@ -17,7 +16,7 @@ import java.util.Map;
  * 作者: fushudong
  * 时间: 2024/02/01
  */
-public class SgsjBuildSchemeListListener implements TaskListener, ExecutionListener {
+public class SgjsBuildSchemeListListener implements TaskListener, ExecutionListener {
     @Override
     public void notify(DelegateTask delegateTask) {
         RuntimeService runtimeService = SpringUtils.getBean(RuntimeService.class);

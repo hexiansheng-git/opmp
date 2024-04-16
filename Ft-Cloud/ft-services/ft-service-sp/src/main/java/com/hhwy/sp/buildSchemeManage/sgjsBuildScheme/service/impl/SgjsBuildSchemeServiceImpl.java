@@ -303,10 +303,9 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             });
             schemeExpertSuggestService.insertSgjsBuildSchemeExpertSuggestList(expertSuggest);
         }
-        SysUser sysUser = SecurityUtils.getSysUser();
+        String userName = SecurityUtils.getUserName();
         String tenantKey = SecurityUtils.getTenantKey();
-//        doSendGm(sysUser, tenantKey);
-        ThreadPoolUtil.execute(() -> doSendGm(sysUser, tenantKey));
+        ThreadPoolUtil.execute(() -> doSendGm(tenantKey, userName));
         return id;
     }
 
@@ -375,14 +374,13 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
             }
         }
-        SysUser sysUser = SecurityUtils.getSysUser();
+        String userName = SecurityUtils.getUserName();
         String tenantKey = SecurityUtils.getTenantKey();
-//        doSendGm(sysUser, tenantKey);
-        ThreadPoolUtil.execute(() -> doSendGm(sysUser, tenantKey));
+        ThreadPoolUtil.execute(() -> doSendGm(tenantKey, userName));
     }
 
     //发送总部版
-    public void doSendGm(SysUser sysUser, String tenantKey) {
+    public void doSendGm(String tenantKey, String loginUserName) {
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         try {
             String dataSourceNameByTenantKey = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
@@ -395,7 +393,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 sendEmpty(tenantKey);
                 return;
             }
-            FlowInfoSearchUtilNonReqest.getFlowInfo(sgjsBuildSchemeList, FlowEnum.SGJS_BUILD_SCHEME, tenantKey, sysUser.getUserName());
+            FlowInfoSearchUtilNonReqest.getFlowInfo(sgjsBuildSchemeList, FlowEnum.SGJS_BUILD_SCHEME, tenantKey, loginUserName);
             List<SgjsBuildScheme> sendList = sgjsBuildSchemeList.stream().filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
             if (CollUtil.isEmpty(sendList)) {
                 log.warn("施工方案清单 - 无已发起审批的数据");

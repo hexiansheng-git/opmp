@@ -279,6 +279,7 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
 
     //数据推送总部版
     public void doSendGm(String tenantKey, String loginUserName) {
+        log.info("勘察设计大纲评审推送总部开始");
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         try {
             String dataSourceNameByTenantKey = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
@@ -287,12 +288,18 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
             //全量推送，（已发起审批的）
             KcsjOutlineReview kcsjOutlineReview = new KcsjOutlineReview();
             List<KcsjOutlineReview> kcsjOutlineReviewList = kcsjOutlineReviewMapper.getKcsjOutlineReviewList(kcsjOutlineReview);
-            if (CollUtil.isEmpty(kcsjOutlineReviewList)) return;
+            if (CollUtil.isEmpty(kcsjOutlineReviewList)) {
+                log.info("勘察设计大纲评审无数据");
+                return;
+            }
             FlowInfoSearchUtilNonReqest.getFlowInfo(kcsjOutlineReviewList, FlowEnum.KCSJ_PATENT_DECLARE, tenantKey, loginUserName);
             //（已发起审批的）
             List<KcsjOutlineReview> collect = kcsjOutlineReviewList.stream()
                     .filter(p -> !p.getTaskStatus().equals("0")).collect(Collectors.toList());
-            if (CollUtil.isEmpty(collect)) return;
+            if (CollUtil.isEmpty(collect)) {
+                log.info("勘察设计大纲评审， 无已审批数据");
+                return;
+            }
             collect.forEach(p -> p.setPtVar5(tenantKey));
             //专家数据
             SgjsExpertLibrary sgjsExpertLibrary = new SgjsExpertLibrary();

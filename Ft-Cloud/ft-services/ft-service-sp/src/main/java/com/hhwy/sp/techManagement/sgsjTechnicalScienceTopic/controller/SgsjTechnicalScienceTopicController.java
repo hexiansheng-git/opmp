@@ -10,12 +10,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.utils.WordUtil;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.FileDto;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopic;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnicalScienceTopicDTO;
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.ISgsjTechnicalScienceTopicService;
 import com.hhwy.sp.utils.easyExcel.CustomMergeStrategy;
+import com.hhwy.utils.ThreadPoolUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +42,8 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
 
     @Autowired
     private ISgsjTechnicalScienceTopicService sgsjTechnicalScienceTopicService;
+    @Autowired
+    private PmServiceApi pmServiceApi;
 
 
     @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopic:list")
@@ -252,15 +257,13 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
             String fileName = fileDto.getFileName();
             String extension = fileDto.getExtension();
         }
+    }
 
-//        FileUtils fileUtils = new FileUtils();
-//        ArrayList<String> objects = new ArrayList<>();
-//        objects.add("1111");
-//        List<File> fileByGroupIds = fileUtils.getFileByGroupIds(objects);
-//        for (File fileByGroupId : fileByGroupIds) {
-//            String name = fileByGroupId.getName();
-//            System.out.printf("name");
-//        }
+    //监听器，推送总部数据
+    @RequestMapping("/doSendGmlistener")
+    public void technicalTopicDoSendGm(@RequestParam("tenantKey") String tenantKey){
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        ThreadPoolUtil.execute(() -> sgsjTechnicalScienceTopicService.doSendGm(tenantKey, "admin", projectDto));
 
     }
 }

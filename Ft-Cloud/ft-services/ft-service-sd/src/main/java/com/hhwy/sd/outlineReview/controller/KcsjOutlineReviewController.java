@@ -16,6 +16,7 @@ import com.hhwy.sd.common.ProjectBasicInfo;
 import com.hhwy.sd.outlineReview.domain.KcsjOutlineReview;
 import com.hhwy.sd.outlineReview.service.IKcsjOutlineReviewService;
 import com.hhwy.system.api.domain.SysUser;
+import com.hhwy.utils.ThreadPoolUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -190,5 +191,11 @@ public class KcsjOutlineReviewController extends BaseController {
         String templatePath = "03-勘察设计大纲评审专家意见导出表.docx";
         String exportFileName = "勘察设计大纲评审专家意见";
         WordUtil.responeDocxFile(response, map, "template/"+templatePath, exportFileName);
+    }
+
+    //监听器，推送总部数据
+    @RequestMapping("/doSendGmlistener")
+    public void outLineDoSendGm(@RequestParam("tenantKey") String tenantKey){
+        ThreadPoolUtil.execute(() -> kcsjOutlineReviewService.doSendGm(tenantKey, "admin"));
     }
 }
