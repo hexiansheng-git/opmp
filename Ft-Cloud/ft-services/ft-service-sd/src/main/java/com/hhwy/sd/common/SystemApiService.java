@@ -43,6 +43,20 @@ public class SystemApiService {
     }
 
     /**
+     *
+     * @param userName
+     * @return
+     */
+    public List<SysUser> selectUserListByUsernames(String userName, String tenantKey){
+        R<List<SysUser>> r = systemServiceApi.selectUserListByUsernames(tenantKey, userName);
+        if(r.getCode() != R.SUCCESS){
+            log.info("从system获取用户信息失败:"+r.getMsg());
+            return new ArrayList<>(2);
+        }
+        return r.getData();
+    }
+
+    /**
      * 查询字典项
      * @param dictType 字典key
      * @return

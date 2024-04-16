@@ -58,74 +58,12 @@ public class FlowInfoSearchUtilNonReqest {
         //           2、ft_act_business有数据，根据process_instance_id联查act_ru_task（PROC_INST_ID_），查到的记录即为当前流程待审核节点，
         //          如若没有数据，表明流程已结束，NAME_：当前审批节点名称，ASSIGNEE_：审批人
         List<CommonBaseEntity> flowList = flowInfoMapper.flowByTBNameAndId(flowEnum.getTableName(), businessIds, tenantKey);
-        setProcessInfo(list,flowEnum,flowList,loginUserName);
-        return list;
-    }
-    
-    /***
-     * 功能描述: 查询流程信息
-     * 台账页使用
-     * @param list
-     * @param flowEnum
-     * 作者: fushudong
-     * 时间: 2023/9/4
-     */
-    public static <T extends CommonBaseEntity> List<T> getFlowInfo(List<T> list, FlowEnum flowEnum, String loginUserName){
-        if(CollectionUtils.isEmpty(list) || flowEnum == null || StringUtil.isBlank(flowEnum.getTableName()))
-            return list;
-        String[] businessIds =list.stream().filter(o -> o.getId() != null).map(r->r.getId()+"").toArray(String[]::new);
-        if(businessIds.length == 0){
-            return list;
-        }
-        //查询流程数据：1、ft_act_business查不到数据（根据 业务主键business_id、表名business_table_name、租户标识tenant_key），表明流程未发起
-        //           2、ft_act_business有数据，根据process_instance_id联查act_ru_task（PROC_INST_ID_），查到的记录即为当前流程待审核节点，
-        //          如若没有数据，表明流程已结束，NAME_：当前审批节点名称，ASSIGNEE_：审批人
-        List<CommonBaseEntity> flowList = flowInfoMapper.flowByTBNameAndId(flowEnum.getTableName(), businessIds, SecurityUtils.getTenantKey());
-        setProcessInfo(list,flowEnum,flowList, loginUserName);
+        setProcessInfo(list,flowEnum,flowList,loginUserName, tenantKey);
         return list;
     }
 
-    /**
-     * 只根据业务id查询流程信息
-     * 为总部提供
-     * @param busMap  
-     * @param flowEnum
-     * @param <T>
-     * @return
-     */
-    public static <T extends CommonBaseEntity> List<T> getFlowInfo(Map<String,String> busMap, FlowEnum flowEnum, String loginUserName){
-        if(MapUtils.isEmpty(busMap) || flowEnum == null || StringUtil.isBlank(flowEnum.getTableName()))
-            return new ArrayList<>();
-        //租户标识: 业务ID集合
-        Map<String,List<String>> groupBusMap = new HashMap<>();
-        for(String k: busMap.keySet()){
-            if(busMap.get(k) ==null)                
-                continue;
-            ObjectUtils.add2MapList(groupBusMap, busMap.get(k), k);
-        }
-        if(MapUtils.isEmpty(groupBusMap) )
-            return new ArrayList<>();
-        List<CommonBaseEntity> flowList = new ArrayList<>();
-        //生成list
-        List list = new ArrayList<>();
-        for(String k: groupBusMap.keySet()){
-            if(CollectionUtils.isEmpty(groupBusMap.get(k)))
-                continue;
-            List<String> busIdList = groupBusMap.get(k);
-            for (int i = 0; i < busIdList.size(); i++) {
-                CommonBaseEntity entity = new CommonBaseEntity();
-                entity.setId(Long.valueOf(busIdList.get(i)));
-                list.add(entity);
-            }
-            List<CommonBaseEntity> tempList = flowInfoMapper.flowByTBNameAndId(flowEnum.getTableName(),groupBusMap.get(k).toArray(new String[]{}) , k);
-            if(tempList != null)
-                flowList.addAll(tempList);
-        }
-        setProcessInfo(list,flowEnum,flowList, loginUserName);
-        return list;
-    }
-
-    private static <T extends CommonBaseEntity> void setProcessInfo(List<T> list, FlowEnum flowEnum, List<CommonBaseEntity> flowList, String loginUserName){
+    private static <T extends CommonBaseEntity> void setProcessInfo(List<T> list, FlowEnum flowEnum,
+                                                                    List<CommonBaseEntity> flowList, String loginUserName, String tenantKey){
         //业务ID : 流程信息
         Map<String,CommonBaseEntity> flowMap = new HashMap<>();
         for (CommonBaseEntity temp : flowList) {
@@ -158,7 +96,7 @@ public class FlowInfoSearchUtilNonReqest {
         }
         //查询流程审批人名称
         if(CollectionUtils.isNotEmpty(userNameSet)){
-            List<SysUser> userList = systemApiService.selectUserListByUsernames(StringUtils.join(userNameSet,","));
+            List<SysUser> userList = systemApiService.selectUserListByUsernames(StringUtils.join(userNameSet,","), tenantKey);
             //用户登陆名 ： 用户nickName
             Map<String,String> nickNameMap = userList.stream().collect(Collectors.toMap(SysUser::getUserName, SysUser::getNickName));
             for (T t : list) {

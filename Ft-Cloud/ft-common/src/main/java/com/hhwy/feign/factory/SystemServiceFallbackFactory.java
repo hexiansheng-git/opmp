@@ -88,6 +88,12 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             public R<List<SysUser>> selectUserListByUsernames(String usernames) {
                 return R.fail("请求失败:" + throwable.getMessage());
             }
+
+            @Override
+            public R<List<SysUser>> selectUserListByUsernames(String tenantKey, String usernames) {
+                return R.fail("请求失败:" + throwable.getMessage());
+            }
+
             @Override
             public AjaxResult selectPeriodByYear(@RequestBody PeriodInfo periodInfo){
                 return AjaxResult.error("请求失败:",throwable.getMessage());

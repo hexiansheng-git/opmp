@@ -87,6 +87,15 @@ public interface SystemServiceApi {
      */
     @GetMapping({"/user/selectUserListByUsernames/{usernames}"})
     R<List<SysUser>> selectUserListByUsernames(@PathVariable("usernames") String usernames);
+
+    /**
+     * 根据用户名获取信息
+     * @param usernames
+     * @return
+     */
+    @GetMapping({"/selfSysUser/selectUserListByUsernames"})
+    R<List<SysUser>> selectUserListByUsernames(@RequestParam("tenantKey") String tenantKey,
+                                               @RequestParam("usernames") String usernames);
     
     @PostMapping("/period/info/selectPeriodByYear")
     AjaxResult selectPeriodByYear(@RequestBody PeriodInfo periodInfo);

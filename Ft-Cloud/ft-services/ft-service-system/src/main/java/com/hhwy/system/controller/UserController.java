@@ -1,5 +1,6 @@
 package com.hhwy.system.controller;
 
+import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -40,6 +41,14 @@ public class UserController extends BaseController {
     private UserMapper userMapper;
     @Autowired
     private ISysUserService userService;
+
+
+    @GetMapping({"/selectUserListByUsernames"})
+    public R<List<SysUser>> selectUserListByUsernames(@RequestParam("tenantKey") String tenantKey,
+                                                      @RequestParam("usernames") String usernames) {
+        List<SysUser> sysUsers = this.userService.selectUserListByUsernames(tenantKey, usernames);
+        return R.ok(sysUsers);
+    }
 
 
 //    @CustomLogger(title = "根据4A编码获取人员信息", businessType = CustomBusinessType.SELECT)
