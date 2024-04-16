@@ -185,6 +185,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         if("3".equals(type)){
             //查看
             BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id);
+            review.setScore(reviewOpinionVo.getScore());
             review.setReviewOpinionVo(reviewOpinionVo);
         }
 
@@ -220,10 +221,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             }else if(ReviewFlowNodeMark.FlowNodeMark7.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark8.equals(flowNodeMark)){
                 //区域总工审批节点  汇总 3 ，4节点数据    海外事业部总工审批节点  汇总 3 ，4 ，5 ，6节点数据
                 BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id);
+                review.setScore(reviewOpinionVo.getScore());
                 review.setReviewOpinionVo(reviewOpinionVo);
             }else if(ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark10.equals(flowNodeMark)){
                 //海外事业部总工意见为修改后通过后的审批节点
                 BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id);
+                review.setScore(reviewOpinionVo.getScore());
                 review.setReviewOpinionVo(reviewOpinionVo);
             }else {
                 //节点标识为空：当前为驳回后的发起人节点，需要查看历史数据

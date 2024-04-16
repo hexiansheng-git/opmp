@@ -218,8 +218,8 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
                     temp.setRegionName(projectDto.getRegionName());
                     temp.setProjectCode(projectDto.getProjectCode());
                 }
-                rocketMQTemplate.convertAndSend("sgjs_report_measure_submit:tenantSuccess", JSONObject.toJSONString(pushVo));
             }
+            rocketMQTemplate.convertAndSend("sgjs_report_measure_submit:tenantSuccess", JSONObject.toJSONString(pushVo));
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
