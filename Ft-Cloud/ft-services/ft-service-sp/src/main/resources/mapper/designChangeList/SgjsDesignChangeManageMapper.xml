@@ -1,0 +1,668 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.sp.designChangeList.mapper.SgjsDesignChangeManageMapper">
+    <resultMap type="com.hhwy.sp.designChangeList.domain.SgjsDesignChangeManage" id="SgjsDesignChangeManageResult">
+        <result property="id"    column="id"    />
+        <result property="changeCode"    column="change_code"    />
+        <result property="masterContractCode"    column="master_contract_code"    />
+        <result property="responsibleDeptId"    column="responsible_dept_id"    />
+        <result property="responsibleDeptName"    column="responsible_dept_name"    />
+        <result property="changeSource"    column="change_source"    />
+        <result property="orderDate"    column="order_date"    />
+        <result property="changeApplyDate"    column="change_apply_date"    />
+        <result property="adjustOrNot"    column="adjust_or_not"    />
+        <result property="changeAmount"    column="change_amount"    />
+        <result property="changePurpose"    column="change_purpose"    />
+        <result property="designChangeBrief"    column="design_change_brief"    />
+        <result property="optimizedDirection"    column="optimized_direction"    />
+        <result property="secondManageKeyPoint"    column="second_manage_key_point"    />
+        <result property="changeGroupId"    column="change_group_id"    />
+        <result property="reportSubmitDate"    column="report_submit_date"    />
+        <result property="reportExplain"    column="report_explain"    />
+        <result property="changeReportGroupId"    column="change_report_group_id"    />
+        <result property="alreadyChangeOrNot"    column="already_change_or_not"    />
+        <result property="handleExplain"    column="handle_explain"    />
+        <result property="changeResultGroupId"    column="change_result_group_id"    />
+        <result property="taskStatus"    column="task_status"    />
+        <result property="currentNode"    column="current_node"    />
+        <result property="remark"    column="remark"    />
+        <result property="regionId"    column="region_id"    />
+        <result property="regionName"    column="region_name"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="projectCode"    column="project_code"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createUserName"    column="create_user_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="ptVar1"    column="pt_var1"    />
+        <result property="ptVar2"    column="pt_var2"    />
+        <result property="ptVar3"    column="pt_var3"    />
+        <result property="ptVar4"    column="pt_var4"    />
+        <result property="ptVar5"    column="pt_var5"    />
+    </resultMap>
+
+    <sql id="selectSgjsDesignChangeManageVo">
+        select `id`, `change_code`, `master_contract_code`, `responsible_dept_id`, `responsible_dept_name`, `change_source`, `order_date`, `change_apply_date`, `adjust_or_not`, `change_amount`, `change_purpose`, `design_change_brief`, `optimized_direction`, `second_manage_key_point`, `change_group_id`, `report_submit_date`, `report_explain`, `change_report_group_id`, `already_change_or_not`, `handle_explain`, `change_result_group_id`, `task_status`, `current_node`, `remark`, `region_id`, `region_name`, `project_id`, `project_name`, `project_code`, `dept_id`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `pt_var5` from `sgjs_design_change_manage`
+    </sql>
+
+    <select id="selectSgjsDesignChangeManageList" parameterType="com.hhwy.sp.designChangeList.domain.SgjsDesignChangeManage" resultMap="SgjsDesignChangeManageResult">
+        <include refid="selectSgjsDesignChangeManageVo"/>
+        <where>
+            `del_flag` = 0
+            <if test="changeCode != null  and changeCode != ''"> and `change_code` like concat('%',#{changeCode},'%')</if>
+            <if test="masterContractCode != null  and masterContractCode != ''"> and `master_contract_code` = #{masterContractCode}</if>
+            <if test="responsibleDeptId != null  and responsibleDeptId != ''"> and `responsible_dept_id` = #{responsibleDeptId}</if>
+            <if test="responsibleDeptName != null  and responsibleDeptName != ''"> and `responsible_dept_name` like concat('%', #{responsibleDeptName}, '%')</if>
+            <if test="changeSource != null  and changeSource != ''"> and `change_source` = #{changeSource}</if>
+            <if test="orderDate != null "> and `order_date` = #{orderDate}</if>
+            <if test="changeApplyDate != null "> and `change_apply_date` = #{changeApplyDate}</if>
+            <if test="adjustOrNot != null  and adjustOrNot != ''"> and `adjust_or_not` = #{adjustOrNot}</if>
+            <if test="changeAmount != null "> and `change_amount` = #{changeAmount}</if>
+            <if test="changePurpose != null  and changePurpose != ''"> and `change_purpose` = #{changePurpose}</if>
+            <if test="designChangeBrief != null  and designChangeBrief != ''"> and `design_change_brief` = #{designChangeBrief}</if>
+            <if test="optimizedDirection != null  and optimizedDirection != ''"> and `optimized_direction` = #{optimizedDirection}</if>
+            <if test="secondManageKeyPoint != null  and secondManageKeyPoint != ''"> and `second_manage_key_point` = #{secondManageKeyPoint}</if>
+            <if test="changeGroupId != null  and changeGroupId != ''"> and `change_group_id` = #{changeGroupId}</if>
+            <if test="reportSubmitDate != null "> and `report_submit_date` = #{reportSubmitDate}</if>
+            <if test="reportExplain != null  and reportExplain != ''"> and `report_explain` = #{reportExplain}</if>
+            <if test="changeReportGroupId != null  and changeReportGroupId != ''"> and `change_report_group_id` = #{changeReportGroupId}</if>
+            <if test="alreadyChangeOrNot != null  and alreadyChangeOrNot != ''"> and `already_change_or_not` = #{alreadyChangeOrNot}</if>
+            <if test="handleExplain != null  and handleExplain != ''"> and `handle_explain` = #{handleExplain}</if>
+            <if test="changeResultGroupId != null  and changeResultGroupId != ''"> and `change_result_group_id` = #{changeResultGroupId}</if>
+            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+            <if test="currentNode != null  and currentNode != ''"> and `current_node` = #{currentNode}</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and `region_name` like concat('%', #{regionName}, '%')</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` like concat('%', #{projectName}, '%')</if>
+            <if test="projectCode != null  and projectCode != ''"> and `project_code` = #{projectCode}</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` like concat('%', #{createUserName}, '%')</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+            <if test="params != null and params.startDate != null">and order_date &gt;= #{params.startDate} </if>
+            <if test="params != null and params.endDate != null">and order_date &lt;= #{params.endDate} </if>
+        </where>
+        order by `id` desc
+    </select>
+    
+    <select id="selectSgjsDesignChangeManageById" parameterType="Long" resultMap="SgjsDesignChangeManageResult">
+        <include refid="selectSgjsDesignChangeManageVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertSgjsDesignChangeManage" parameterType="com.hhwy.sp.designChangeList.domain.SgjsDesignChangeManage">
+        insert into `sgjs_design_change_manage`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="changeCode != null">`change_code`,</if>
+            <if test="masterContractCode != null">`master_contract_code`,</if>
+            <if test="responsibleDeptId != null">`responsible_dept_id`,</if>
+            <if test="responsibleDeptName != null">`responsible_dept_name`,</if>
+            <if test="changeSource != null">`change_source`,</if>
+            <if test="orderDate != null">`order_date`,</if>
+            <if test="changeApplyDate != null">`change_apply_date`,</if>
+            <if test="adjustOrNot != null">`adjust_or_not`,</if>
+            <if test="changeAmount != null">`change_amount`,</if>
+            <if test="changePurpose != null">`change_purpose`,</if>
+            <if test="designChangeBrief != null">`design_change_brief`,</if>
+            <if test="optimizedDirection != null">`optimized_direction`,</if>
+            <if test="secondManageKeyPoint != null">`second_manage_key_point`,</if>
+            <if test="changeGroupId != null">`change_group_id`,</if>
+            <if test="reportSubmitDate != null">`report_submit_date`,</if>
+            <if test="reportExplain != null">`report_explain`,</if>
+            <if test="changeReportGroupId != null">`change_report_group_id`,</if>
+            <if test="alreadyChangeOrNot != null">`already_change_or_not`,</if>
+            <if test="handleExplain != null">`handle_explain`,</if>
+            <if test="changeResultGroupId != null">`change_result_group_id`,</if>
+            <if test="taskStatus != null">`task_status`,</if>
+            <if test="currentNode != null">`current_node`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="regionId != null">`region_id`,</if>
+            <if test="regionName != null">`region_name`,</if>
+            <if test="projectId != null">`project_id`,</if>
+            <if test="projectName != null">`project_name`,</if>
+            <if test="projectCode != null">`project_code`,</if>
+            <if test="deptId != null">`dept_id`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createUserName != null">`create_user_name`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+            <if test="ptVar4 != null">`pt_var4`,</if>
+            <if test="ptVar5 != null">`pt_var5`,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="changeCode != null">#{changeCode},</if>
+            <if test="masterContractCode != null">#{masterContractCode},</if>
+            <if test="responsibleDeptId != null">#{responsibleDeptId},</if>
+            <if test="responsibleDeptName != null">#{responsibleDeptName},</if>
+            <if test="changeSource != null">#{changeSource},</if>
+            <if test="orderDate != null">#{orderDate},</if>
+            <if test="changeApplyDate != null">#{changeApplyDate},</if>
+            <if test="adjustOrNot != null">#{adjustOrNot},</if>
+            <if test="changeAmount != null">#{changeAmount},</if>
+            <if test="changePurpose != null">#{changePurpose},</if>
+            <if test="designChangeBrief != null">#{designChangeBrief},</if>
+            <if test="optimizedDirection != null">#{optimizedDirection},</if>
+            <if test="secondManageKeyPoint != null">#{secondManageKeyPoint},</if>
+            <if test="changeGroupId != null">#{changeGroupId},</if>
+            <if test="reportSubmitDate != null">#{reportSubmitDate},</if>
+            <if test="reportExplain != null">#{reportExplain},</if>
+            <if test="changeReportGroupId != null">#{changeReportGroupId},</if>
+            <if test="alreadyChangeOrNot != null">#{alreadyChangeOrNot},</if>
+            <if test="handleExplain != null">#{handleExplain},</if>
+            <if test="changeResultGroupId != null">#{changeResultGroupId},</if>
+            <if test="taskStatus != null">#{taskStatus},</if>
+            <if test="currentNode != null">#{currentNode},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="regionId != null">#{regionId},</if>
+            <if test="regionName != null">#{regionName},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="projectCode != null">#{projectCode},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createUserName != null">#{createUserName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="ptVar4 != null">#{ptVar4},</if>
+            <if test="ptVar5 != null">#{ptVar5},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert into `sgjs_design_change_manage` (
+                                    `id`,
+                                                `change_code`,
+                                                `master_contract_code`,
+                                                `responsible_dept_id`,
+                                                `responsible_dept_name`,
+                                                `change_source`,
+                                                `order_date`,
+                                                `change_apply_date`,
+                                                `adjust_or_not`,
+                                                `change_amount`,
+                                                `change_purpose`,
+                                                `design_change_brief`,
+                                                `optimized_direction`,
+                                                `second_manage_key_point`,
+                                                `change_group_id`,
+                                                `report_submit_date`,
+                                                `report_explain`,
+                                                `change_report_group_id`,
+                                                `already_change_or_not`,
+                                                `handle_explain`,
+                                                `change_result_group_id`,
+                                                `task_status`,
+                                                `current_node`,
+                                                `remark`,
+                                                `region_id`,
+                                                `region_name`,
+                                                `project_id`,
+                                                `project_name`,
+                                                `project_code`,
+                                                `dept_id`,
+                                                `create_user`,
+                                                `create_user_name`,
+                                                `create_time`,
+                                                `update_user`,
+                                                `update_time`,
+                                                `del_user`,
+                                                `del_time`,
+                                                `del_flag`,
+                                                `pt_var1`,
+                                                `pt_var2`,
+                                                `pt_var3`,
+                                                `pt_var4`,
+                                                `pt_var5`,
+                            )values
+        <foreach collection="dataList" separator="," item="item" index="index" >
+(
+                                                #{item.id},
+                                                                #{item.changeCode},
+                                                                #{item.masterContractCode},
+                                                                #{item.responsibleDeptId},
+                                                                #{item.responsibleDeptName},
+                                                                #{item.changeSource},
+                                                                #{item.orderDate},
+                                                                #{item.changeApplyDate},
+                                                                #{item.adjustOrNot},
+                                                                #{item.changeAmount},
+                                                                #{item.changePurpose},
+                                                                #{item.designChangeBrief},
+                                                                #{item.optimizedDirection},
+                                                                #{item.secondManageKeyPoint},
+                                                                #{item.changeGroupId},
+                                                                #{item.reportSubmitDate},
+                                                                #{item.reportExplain},
+                                                                #{item.changeReportGroupId},
+                                                                #{item.alreadyChangeOrNot},
+                                                                #{item.handleExplain},
+                                                                #{item.changeResultGroupId},
+                                                                #{item.taskStatus},
+                                                                #{item.currentNode},
+                                                                #{item.remark},
+                                                                #{item.regionId},
+                                                                #{item.regionName},
+                                                                #{item.projectId},
+                                                                #{item.projectName},
+                                                                #{item.projectCode},
+                                                                #{item.deptId},
+                                                                #{item.createUser},
+                                                                #{item.createUserName},
+                                                                #{item.createTime},
+                                                                #{item.updateUser},
+                                                                #{item.updateTime},
+                                                                #{item.delUser},
+                                                                #{item.delTime},
+                                                                #{item.delFlag},
+                                                                #{item.ptVar1},
+                                                                #{item.ptVar2},
+                                                                #{item.ptVar3},
+                                                                #{item.ptVar4},
+                                                                #{item.ptVar5},
+                                        )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `sgjs_design_change_manage`
+        <trim prefix="set" suffixOverrides=",">
+                                                                <trim prefix="change_code =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.changeCode != null ">
+                                when `id` = #{item.id} then #{item.changeCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="master_contract_code =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.masterContractCode != null ">
+                                when `id` = #{item.id} then #{item.masterContractCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="responsible_dept_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.responsibleDeptId != null ">
+                                when `id` = #{item.id} then #{item.responsibleDeptId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="responsible_dept_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.responsibleDeptName != null ">
+                                when `id` = #{item.id} then #{item.responsibleDeptName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="change_source =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.changeSource != null ">
+                                when `id` = #{item.id} then #{item.changeSource}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="order_date =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.orderDate != null ">
+                                when `id` = #{item.id} then #{item.orderDate}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="change_apply_date =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.changeApplyDate != null ">
+                                when `id` = #{item.id} then #{item.changeApplyDate}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="adjust_or_not =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.adjustOrNot != null ">
+                                when `id` = #{item.id} then #{item.adjustOrNot}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="change_amount =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.changeAmount != null ">
+                                when `id` = #{item.id} then #{item.changeAmount}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="change_purpose =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.changePurpose != null ">
+                                when `id` = #{item.id} then #{item.changePurpose}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="design_change_brief =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.designChangeBrief != null ">
+                                when `id` = #{item.id} then #{item.designChangeBrief}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="optimized_direction =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.optimizedDirection != null ">
+                                when `id` = #{item.id} then #{item.optimizedDirection}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="second_manage_key_point =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.secondManageKeyPoint != null ">
+                                when `id` = #{item.id} then #{item.secondManageKeyPoint}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="change_group_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.changeGroupId != null ">
+                                when `id` = #{item.id} then #{item.changeGroupId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="report_submit_date =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.reportSubmitDate != null ">
+                                when `id` = #{item.id} then #{item.reportSubmitDate}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="report_explain =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.reportExplain != null ">
+                                when `id` = #{item.id} then #{item.reportExplain}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="change_report_group_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.changeReportGroupId != null ">
+                                when `id` = #{item.id} then #{item.changeReportGroupId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="already_change_or_not =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.alreadyChangeOrNot != null ">
+                                when `id` = #{item.id} then #{item.alreadyChangeOrNot}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="handle_explain =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.handleExplain != null ">
+                                when `id` = #{item.id} then #{item.handleExplain}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="change_result_group_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.changeResultGroupId != null ">
+                                when `id` = #{item.id} then #{item.changeResultGroupId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="task_status =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.taskStatus != null ">
+                                when `id` = #{item.id} then #{item.taskStatus}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="current_node =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.currentNode != null ">
+                                when `id` = #{item.id} then #{item.currentNode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="remark =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.remark != null ">
+                                when `id` = #{item.id} then #{item.remark}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="region_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.regionId != null ">
+                                when `id` = #{item.id} then #{item.regionId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="region_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.regionName != null ">
+                                when `id` = #{item.id} then #{item.regionName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="project_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.projectId != null ">
+                                when `id` = #{item.id} then #{item.projectId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="project_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.projectName != null ">
+                                when `id` = #{item.id} then #{item.projectName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="project_code =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.projectCode != null ">
+                                when `id` = #{item.id} then #{item.projectCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="dept_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.deptId != null ">
+                                when `id` = #{item.id} then #{item.deptId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUser != null ">
+                                when `id` = #{item.id} then #{item.createUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUserName != null ">
+                                when `id` = #{item.id} then #{item.createUserName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createTime != null ">
+                                when `id` = #{item.id} then #{item.createTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateUser != null ">
+                                when `id` = #{item.id} then #{item.updateUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateTime != null ">
+                                when `id` = #{item.id} then #{item.updateTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delUser != null ">
+                                when `id` = #{item.id} then #{item.delUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delTime != null ">
+                                when `id` = #{item.id} then #{item.delTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_flag =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delFlag != null ">
+                                when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var1 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar1 != null ">
+                                when `id` = #{item.id} then #{item.ptVar1}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var2 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar2 != null ">
+                                when `id` = #{item.id} then #{item.ptVar2}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var3 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar3 != null ">
+                                when `id` = #{item.id} then #{item.ptVar3}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var4 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar4 != null ">
+                                when `id` = #{item.id} then #{item.ptVar4}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var5 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar5 != null ">
+                                when `id` = #{item.id} then #{item.ptVar5}
+                            </if>
+                        </foreach>
+                    </trim>
+                                    </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index" >
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+
+
+    <update id="updateSgjsDesignChangeManage" parameterType="com.hhwy.sp.designChangeList.domain.SgjsDesignChangeManage">
+        update `sgjs_design_change_manage`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="changeCode != null">`change_code` = #{changeCode},</if>
+            <if test="masterContractCode != null">`master_contract_code` = #{masterContractCode},</if>
+            <if test="responsibleDeptId != null">`responsible_dept_id` = #{responsibleDeptId},</if>
+            <if test="responsibleDeptName != null">`responsible_dept_name` = #{responsibleDeptName},</if>
+            <if test="changeSource != null">`change_source` = #{changeSource},</if>
+            <if test="orderDate != null">`order_date` = #{orderDate},</if>
+            <if test="changeApplyDate != null">`change_apply_date` = #{changeApplyDate},</if>
+            <if test="adjustOrNot != null">`adjust_or_not` = #{adjustOrNot},</if>
+            <if test="changeAmount != null">`change_amount` = #{changeAmount},</if>
+            <if test="changePurpose != null">`change_purpose` = #{changePurpose},</if>
+            <if test="designChangeBrief != null">`design_change_brief` = #{designChangeBrief},</if>
+            <if test="optimizedDirection != null">`optimized_direction` = #{optimizedDirection},</if>
+            <if test="secondManageKeyPoint != null">`second_manage_key_point` = #{secondManageKeyPoint},</if>
+            <if test="changeGroupId != null">`change_group_id` = #{changeGroupId},</if>
+            <if test="reportSubmitDate != null">`report_submit_date` = #{reportSubmitDate},</if>
+            <if test="reportExplain != null">`report_explain` = #{reportExplain},</if>
+            <if test="changeReportGroupId != null">`change_report_group_id` = #{changeReportGroupId},</if>
+            <if test="alreadyChangeOrNot != null">`already_change_or_not` = #{alreadyChangeOrNot},</if>
+            <if test="handleExplain != null">`handle_explain` = #{handleExplain},</if>
+            <if test="changeResultGroupId != null">`change_result_group_id` = #{changeResultGroupId},</if>
+            <if test="taskStatus != null">`task_status` = #{taskStatus},</if>
+            <if test="currentNode != null">`current_node` = #{currentNode},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="regionId != null">`region_id` = #{regionId},</if>
+            <if test="regionName != null">`region_name` = #{regionName},</if>
+            <if test="projectId != null">`project_id` = #{projectId},</if>
+            <if test="projectName != null">`project_name` = #{projectName},</if>
+            <if test="projectCode != null">`project_code` = #{projectCode},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createUserName != null">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null">`pt_var5` = #{ptVar5},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteSgjsDesignChangeManageById" parameterType="Long">
+        update `sgjs_design_change_manage` set del_flag = 1 where `id` = #{id}
+    </update>
+
+    <update id="deleteSgjsDesignChangeManageByIds" parameterType="String">
+        update `sgjs_design_change_manage` set del_flag = 1 where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteWbsByMainId" parameterType="Long">
+        delete from `sgjs_design_change_wbs` where `mainId` = #{mainId}
+    </update>
+
+</mapper>

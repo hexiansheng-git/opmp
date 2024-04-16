@@ -1,8 +1,10 @@
 package com.hhwy.utils.validation;
 
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.constant.CommonYesNo;
 import com.hhwy.utils.exception.CustomBusinessException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.Assert;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -56,6 +58,12 @@ public class JyDetailsUtil {
                 }
             }
         }
+    }
+
+    public static <T> void jy(T t, Class<?>[] groups) {
+        StringBuilder sb = new StringBuilder();
+        jy(sb, t, groups);
+        Assert.isTrue(StringUtils.isBlank(sb),sb.toString());
     }
 
     /**

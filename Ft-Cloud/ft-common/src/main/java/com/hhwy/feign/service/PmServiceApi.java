@@ -54,7 +54,7 @@ public interface PmServiceApi {
 
     @GetMapping("/projectBasicInfo/getPrjInfo")
     Map<String,Object> getPrjInfo();
-
+    
     @GetMapping("/projectBasicInfo/getProjectDto")
     ProjectDto getProjectDto();
 
@@ -130,6 +130,9 @@ public interface PmServiceApi {
      */
     @PostMapping("/gmThird/getQyzsBtnInfo")
     AjaxResult qyzsBtnInfo(@RequestBody Map map);
+
+    @GetMapping("/xmslContractInfo")
+    AjaxResult getContractInfo();
 
 
 }

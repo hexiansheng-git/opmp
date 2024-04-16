@@ -81,6 +81,7 @@ public enum FlowEnum {
 
 
         /*********************施工技术管理****************************/
+        SGJS_DESIGN_CHANGE_MANAGE("sgjs_design_change_manage", "process_sgjs_design_change_manage"),
         /*********************科技管理****************************/
         //专利申报管理
         SGJS_PATENT_DECLARE("sgjs_patent_declare","process_sgjs_patent_declare"),
@@ -112,7 +113,7 @@ public enum FlowEnum {
         KCSJ_PATENT_DECLARE("kcsj_outline_review","process_kcsj_outline_review"),
         /*勘察设计成果评审*/
         KCSJ_ACHIEVEMENT_REVIEW("kcsj_achievement_review","process_kcsj_achievement_review");
-
+        
         public String getTableName() {
             return this.tableName;
         }
