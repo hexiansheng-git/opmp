@@ -14,7 +14,7 @@ import org.flowable.task.service.delegate.DelegateTask;
  * 作者: fushudong
  * 时间: 2024/02/01
  */
-public class SgsjTechnicalScienceTopicMessageListener implements TaskListener, ExecutionListener {
+public class SgjsTechnicalScienceTopicMessageListener implements TaskListener, ExecutionListener {
     @Override
     public void notify(DelegateTask delegateTask) {
         RuntimeService runtimeService = SpringUtils.getBean(RuntimeService.class);
