@@ -1,0 +1,670 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.sp.designChangeList.mapper.SgjsDesignChangeListMapper">
+    <resultMap type="com.hhwy.sp.designChangeList.domain.SgjsDesignChangeList" id="SgjsDesignChangeListResult">
+        <result property="id"    column="id"    />
+        <result property="mainId"    column="main_id"    />
+        <result property="type"    column="type"    />
+        <result property="listCode"    column="list_code"    />
+        <result property="pid"    column="pid"    />
+        <result property="listId"    column="list_id"    />
+        <result property="wbsId"    column="wbs_id"    />
+        <result property="wbsCode"    column="wbs_code"    />
+        <result property="ancestors"    column="ancestors"    />
+        <result property="chineseName"    column="chinese_name"    />
+        <result property="foreignName"    column="foreign_name"    />
+        <result property="listType"    column="list_type"    />
+        <result property="unitCode"    column="unit_code"    />
+        <result property="unit"    column="unit"    />
+        <result property="conNum"    column="con_num"    />
+        <result property="conExcludePrice"    column="con_exclude_price"    />
+        <result property="conIncludePrice"    column="con_include_price"    />
+        <result property="zeroNum"    column="zero_num"    />
+        <result property="zeroExcludePrice"    column="zero_exclude_price"    />
+        <result property="zeroIncludePrice"    column="zero_include_price"    />
+        <result property="beforeNum"    column="before_num"    />
+        <result property="beforeExcludePrice"    column="before_exclude_price"    />
+        <result property="beforeIncludePrice"    column="before_include_price"    />
+        <result property="changeNum"    column="change_num"    />
+        <result property="changeExcludePrice"    column="change_exclude_price"    />
+        <result property="changeIncludePrice"    column="change_include_price"    />
+        <result property="afterNum"    column="after_num"    />
+        <result property="afterExcludePrice"    column="after_exclude_price"    />
+        <result property="afterIncludePrice"    column="after_include_price"    />
+        <result property="remark"    column="remark"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createUserName"    column="create_user_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="ptVar1"    column="pt_var1"    />
+        <result property="ptVar2"    column="pt_var2"    />
+        <result property="ptVar3"    column="pt_var3"    />
+        <result property="ptVar4"    column="pt_var4"    />
+        <result property="ptVar5"    column="pt_var5"    />
+    </resultMap>
+
+    <sql id="selectSgjsDesignChangeListVo">
+        select `id`, `main_id`, `type`, `list_code`, `pid`, `list_id`, `wbs_id`, `wbs_code`, `ancestors`, `chinese_name`, `foreign_name`, `list_type`, `unit_code`, `unit`, `con_num`, `con_exclude_price`, `con_include_price`, `zero_num`, `zero_exclude_price`, `zero_include_price`, `before_num`, `before_exclude_price`, `before_include_price`, `change_num`, `change_exclude_price`, `change_include_price`, `after_num`, `after_exclude_price`, `after_include_price`, `remark`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `pt_var5` from `sgjs_design_change_list`
+    </sql>
+
+    <select id="selectSgjsDesignChangeListList" parameterType="com.hhwy.sp.designChangeList.domain.SgjsDesignChangeList" resultMap="SgjsDesignChangeListResult">
+        <include refid="selectSgjsDesignChangeListVo"/>
+        <where>
+            `del_flag` = 0
+            <if test="mainId != null "> and `main_id` = #{mainId}</if>
+            <if test="type != null "> and `type` = #{type}</if>
+            <if test="listCode != null  and listCode != ''"> and `list_code` = #{listCode}</if>
+            <if test="pid != null "> and `pid` = #{pid}</if>
+            <if test="listId != null "> and `list_id` = #{listId}</if>
+            <if test="wbsId != null "> and `wbs_id` = #{wbsId}</if>
+            <if test="wbsCode != null  and wbsCode != ''"> and `wbs_code` = #{wbsCode}</if>
+            <if test="ancestors != null  and ancestors != ''"> and `ancestors` = #{ancestors}</if>
+            <if test="chineseName != null  and chineseName != ''"> and `chinese_name` like concat('%', #{chineseName}, '%')</if>
+            <if test="foreignName != null  and foreignName != ''"> and `foreign_name` like concat('%', #{foreignName}, '%')</if>
+            <if test="listType != null  and listType != ''"> and `list_type` = #{listType}</if>
+            <if test="unitCode != null  and unitCode != ''"> and `unit_code` = #{unitCode}</if>
+            <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
+            <if test="conNum != null "> and `con_num` = #{conNum}</if>
+            <if test="conExcludePrice != null "> and `con_exclude_price` = #{conExcludePrice}</if>
+            <if test="conIncludePrice != null "> and `con_include_price` = #{conIncludePrice}</if>
+            <if test="zeroNum != null "> and `zero_num` = #{zeroNum}</if>
+            <if test="zeroExcludePrice != null "> and `zero_exclude_price` = #{zeroExcludePrice}</if>
+            <if test="zeroIncludePrice != null "> and `zero_include_price` = #{zeroIncludePrice}</if>
+            <if test="beforeNum != null "> and `before_num` = #{beforeNum}</if>
+            <if test="beforeExcludePrice != null "> and `before_exclude_price` = #{beforeExcludePrice}</if>
+            <if test="beforeIncludePrice != null "> and `before_include_price` = #{beforeIncludePrice}</if>
+            <if test="changeNum != null "> and `change_num` = #{changeNum}</if>
+            <if test="changeExcludePrice != null "> and `change_exclude_price` = #{changeExcludePrice}</if>
+            <if test="changeIncludePrice != null "> and `change_include_price` = #{changeIncludePrice}</if>
+            <if test="afterNum != null "> and `after_num` = #{afterNum}</if>
+            <if test="afterExcludePrice != null "> and `after_exclude_price` = #{afterExcludePrice}</if>
+            <if test="afterIncludePrice != null "> and `after_include_price` = #{afterIncludePrice}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` like concat('%', #{createUserName}, '%')</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+        </where>
+        order by `id`
+    </select>
+    
+    <select id="selectSgjsDesignChangeListById" parameterType="Long" resultMap="SgjsDesignChangeListResult">
+        <include refid="selectSgjsDesignChangeListVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertSgjsDesignChangeList" parameterType="com.hhwy.sp.designChangeList.domain.SgjsDesignChangeList">
+        insert into `sgjs_design_change_list`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="mainId != null">`main_id`,</if>
+            <if test="type != null">`type`,</if>
+            <if test="listCode != null and listCode != ''">`list_code`,</if>
+            <if test="pid != null">`pid`,</if>
+            <if test="listId != null">`list_id`,</if>
+            <if test="wbsId != null">`wbs_id`,</if>
+            <if test="wbsCode != null">`wbs_code`,</if>
+            <if test="ancestors != null">`ancestors`,</if>
+            <if test="chineseName != null">`chinese_name`,</if>
+            <if test="foreignName != null">`foreign_name`,</if>
+            <if test="listType != null">`list_type`,</if>
+            <if test="unitCode != null">`unit_code`,</if>
+            <if test="unit != null">`unit`,</if>
+            <if test="conNum != null">`con_num`,</if>
+            <if test="conExcludePrice != null">`con_exclude_price`,</if>
+            <if test="conIncludePrice != null">`con_include_price`,</if>
+            <if test="zeroNum != null">`zero_num`,</if>
+            <if test="zeroExcludePrice != null">`zero_exclude_price`,</if>
+            <if test="zeroIncludePrice != null">`zero_include_price`,</if>
+            <if test="beforeNum != null">`before_num`,</if>
+            <if test="beforeExcludePrice != null">`before_exclude_price`,</if>
+            <if test="beforeIncludePrice != null">`before_include_price`,</if>
+            <if test="changeNum != null">`change_num`,</if>
+            <if test="changeExcludePrice != null">`change_exclude_price`,</if>
+            <if test="changeIncludePrice != null">`change_include_price`,</if>
+            <if test="afterNum != null">`after_num`,</if>
+            <if test="afterExcludePrice != null">`after_exclude_price`,</if>
+            <if test="afterIncludePrice != null">`after_include_price`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createUserName != null">`create_user_name`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+            <if test="ptVar4 != null">`pt_var4`,</if>
+            <if test="ptVar5 != null">`pt_var5`,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="mainId != null">#{mainId},</if>
+            <if test="type != null">#{type},</if>
+            <if test="listCode != null and listCode != ''">#{listCode},</if>
+            <if test="pid != null">#{pid},</if>
+            <if test="listId != null">#{listId},</if>
+            <if test="wbsId != null">#{wbsId},</if>
+            <if test="wbsCode != null">#{wbsCode},</if>
+            <if test="ancestors != null">#{ancestors},</if>
+            <if test="chineseName != null">#{chineseName},</if>
+            <if test="foreignName != null">#{foreignName},</if>
+            <if test="listType != null">#{listType},</if>
+            <if test="unitCode != null">#{unitCode},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="conNum != null">#{conNum},</if>
+            <if test="conExcludePrice != null">#{conExcludePrice},</if>
+            <if test="conIncludePrice != null">#{conIncludePrice},</if>
+            <if test="zeroNum != null">#{zeroNum},</if>
+            <if test="zeroExcludePrice != null">#{zeroExcludePrice},</if>
+            <if test="zeroIncludePrice != null">#{zeroIncludePrice},</if>
+            <if test="beforeNum != null">#{beforeNum},</if>
+            <if test="beforeExcludePrice != null">#{beforeExcludePrice},</if>
+            <if test="beforeIncludePrice != null">#{beforeIncludePrice},</if>
+            <if test="changeNum != null">#{changeNum},</if>
+            <if test="changeExcludePrice != null">#{changeExcludePrice},</if>
+            <if test="changeIncludePrice != null">#{changeIncludePrice},</if>
+            <if test="afterNum != null">#{afterNum},</if>
+            <if test="afterExcludePrice != null">#{afterExcludePrice},</if>
+            <if test="afterIncludePrice != null">#{afterIncludePrice},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createUserName != null">#{createUserName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="ptVar4 != null">#{ptVar4},</if>
+            <if test="ptVar5 != null">#{ptVar5},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert into `sgjs_design_change_list` (
+                                    `id`,
+                                                `main_id`,
+                                                `type`,
+                                                `list_code`,
+                                                `pid`,
+                                                `list_id`,
+                                                `wbs_id`,
+                                                `wbs_code`,
+                                                `ancestors`,
+                                                `chinese_name`,
+                                                `foreign_name`,
+                                                `list_type`,
+                                                `unit_code`,
+                                                `unit`,
+                                                `con_num`,
+                                                `con_exclude_price`,
+                                                `con_include_price`,
+                                                `zero_num`,
+                                                `zero_exclude_price`,
+                                                `zero_include_price`,
+                                                `before_num`,
+                                                `before_exclude_price`,
+                                                `before_include_price`,
+                                                `change_num`,
+                                                `change_exclude_price`,
+                                                `change_include_price`,
+                                                `after_num`,
+                                                `after_exclude_price`,
+                                                `after_include_price`,
+                                                `remark`,
+                                                `create_user`,
+                                                `create_user_name`,
+                                                `create_time`,
+                                                `update_user`,
+                                                `update_time`,
+                                                `del_user`,
+                                                `del_time`,
+                                                `del_flag`,
+                                                `pt_var1`,
+                                                `pt_var2`,
+                                                `pt_var3`,
+                                                `pt_var4`,
+                                                `pt_var5`
+                            )values
+        <foreach collection="dataList" separator="," item="item" index="index" >
+(
+                                                #{item.id},
+                                                                #{item.mainId},
+                                                                #{item.type},
+                                                                #{item.listCode},
+                                                                #{item.pid},
+                                                                #{item.listId},
+                                                                #{item.wbsId},
+                                                                #{item.wbsCode},
+                                                                #{item.ancestors},
+                                                                #{item.chineseName},
+                                                                #{item.foreignName},
+                                                                #{item.listType},
+                                                                #{item.unitCode},
+                                                                #{item.unit},
+                                                                #{item.conNum},
+                                                                #{item.conExcludePrice},
+                                                                #{item.conIncludePrice},
+                                                                #{item.zeroNum},
+                                                                #{item.zeroExcludePrice},
+                                                                #{item.zeroIncludePrice},
+                                                                #{item.beforeNum},
+                                                                #{item.beforeExcludePrice},
+                                                                #{item.beforeIncludePrice},
+                                                                #{item.changeNum},
+                                                                #{item.changeExcludePrice},
+                                                                #{item.changeIncludePrice},
+                                                                #{item.afterNum},
+                                                                #{item.afterExcludePrice},
+                                                                #{item.afterIncludePrice},
+                                                                #{item.remark},
+                                                                #{item.createUser},
+                                                                #{item.createUserName},
+                                                                #{item.createTime},
+                                                                #{item.updateUser},
+                                                                #{item.updateTime},
+                                                                #{item.delUser},
+                                                                #{item.delTime},
+                                                                #{item.delFlag},
+                                                                #{item.ptVar1},
+                                                                #{item.ptVar2},
+                                                                #{item.ptVar3},
+                                                                #{item.ptVar4},
+                                                                #{item.ptVar5}
+                                        )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `sgjs_design_change_list`
+        <trim prefix="set" suffixOverrides=",">
+                                                                <trim prefix="main_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.mainId != null ">
+                                when `id` = #{item.id} then #{item.mainId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="type =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.type != null ">
+                                when `id` = #{item.id} then #{item.type}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="list_code =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.listCode != null  and listCode != ''">
+                                when `id` = #{item.id} then #{item.listCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pid =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.pid != null ">
+                                when `id` = #{item.id} then #{item.pid}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="list_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.listId != null ">
+                                when `id` = #{item.id} then #{item.listId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="wbs_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.wbsId != null ">
+                                when `id` = #{item.id} then #{item.wbsId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="wbs_code =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.wbsCode != null ">
+                                when `id` = #{item.id} then #{item.wbsCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="ancestors =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ancestors != null ">
+                                when `id` = #{item.id} then #{item.ancestors}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="chinese_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.chineseName != null ">
+                                when `id` = #{item.id} then #{item.chineseName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="foreign_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.foreignName != null ">
+                                when `id` = #{item.id} then #{item.foreignName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="list_type =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.listType != null ">
+                                when `id` = #{item.id} then #{item.listType}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="unit_code =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.unitCode != null ">
+                                when `id` = #{item.id} then #{item.unitCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="unit =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.unit != null ">
+                                when `id` = #{item.id} then #{item.unit}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="con_num =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.conNum != null ">
+                                when `id` = #{item.id} then #{item.conNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="con_exclude_price =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.conExcludePrice != null ">
+                                when `id` = #{item.id} then #{item.conExcludePrice}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="con_include_price =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.conIncludePrice != null ">
+                                when `id` = #{item.id} then #{item.conIncludePrice}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="zero_num =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.zeroNum != null ">
+                                when `id` = #{item.id} then #{item.zeroNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="zero_exclude_price =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.zeroExcludePrice != null ">
+                                when `id` = #{item.id} then #{item.zeroExcludePrice}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="zero_include_price =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.zeroIncludePrice != null ">
+                                when `id` = #{item.id} then #{item.zeroIncludePrice}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="before_num =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.beforeNum != null ">
+                                when `id` = #{item.id} then #{item.beforeNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="before_exclude_price =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.beforeExcludePrice != null ">
+                                when `id` = #{item.id} then #{item.beforeExcludePrice}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="before_include_price =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.beforeIncludePrice != null ">
+                                when `id` = #{item.id} then #{item.beforeIncludePrice}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="change_num =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.changeNum != null ">
+                                when `id` = #{item.id} then #{item.changeNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="change_exclude_price =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.changeExcludePrice != null ">
+                                when `id` = #{item.id} then #{item.changeExcludePrice}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="change_include_price =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.changeIncludePrice != null ">
+                                when `id` = #{item.id} then #{item.changeIncludePrice}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="after_num =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.afterNum != null ">
+                                when `id` = #{item.id} then #{item.afterNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="after_exclude_price =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.afterExcludePrice != null ">
+                                when `id` = #{item.id} then #{item.afterExcludePrice}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="after_include_price =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.afterIncludePrice != null ">
+                                when `id` = #{item.id} then #{item.afterIncludePrice}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="remark =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.remark != null ">
+                                when `id` = #{item.id} then #{item.remark}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUser != null ">
+                                when `id` = #{item.id} then #{item.createUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUserName != null ">
+                                when `id` = #{item.id} then #{item.createUserName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createTime != null ">
+                                when `id` = #{item.id} then #{item.createTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateUser != null ">
+                                when `id` = #{item.id} then #{item.updateUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateTime != null ">
+                                when `id` = #{item.id} then #{item.updateTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delUser != null ">
+                                when `id` = #{item.id} then #{item.delUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delTime != null ">
+                                when `id` = #{item.id} then #{item.delTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_flag =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delFlag != null ">
+                                when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var1 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar1 != null ">
+                                when `id` = #{item.id} then #{item.ptVar1}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var2 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar2 != null ">
+                                when `id` = #{item.id} then #{item.ptVar2}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var3 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar3 != null ">
+                                when `id` = #{item.id} then #{item.ptVar3}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var4 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar4 != null ">
+                                when `id` = #{item.id} then #{item.ptVar4}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var5 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar5 != null ">
+                                when `id` = #{item.id} then #{item.ptVar5}
+                            </if>
+                        </foreach>
+                    </trim>
+                                    </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index" >
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+
+
+    <update id="updateSgjsDesignChangeList" parameterType="com.hhwy.sp.designChangeList.domain.SgjsDesignChangeList">
+        update `sgjs_design_change_list`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mainId != null">`main_id` = #{mainId},</if>
+            <if test="type != null">`type` = #{type},</if>
+            <if test="listCode != null and listCode != ''">`list_code` = #{listCode},</if>
+            <if test="pid != null">`pid` = #{pid},</if>
+            <if test="listId != null">`list_id` = #{listId},</if>
+            <if test="wbsId != null">`wbs_id` = #{wbsId},</if>
+            <if test="wbsCode != null">`wbs_code` = #{wbsCode},</if>
+            <if test="ancestors != null">`ancestors` = #{ancestors},</if>
+            <if test="chineseName != null">`chinese_name` = #{chineseName},</if>
+            <if test="foreignName != null">`foreign_name` = #{foreignName},</if>
+            <if test="listType != null">`list_type` = #{listType},</if>
+            <if test="unitCode != null">`unit_code` = #{unitCode},</if>
+            <if test="unit != null">`unit` = #{unit},</if>
+            <if test="conNum != null">`con_num` = #{conNum},</if>
+            <if test="conExcludePrice != null">`con_exclude_price` = #{conExcludePrice},</if>
+            <if test="conIncludePrice != null">`con_include_price` = #{conIncludePrice},</if>
+            <if test="zeroNum != null">`zero_num` = #{zeroNum},</if>
+            <if test="zeroExcludePrice != null">`zero_exclude_price` = #{zeroExcludePrice},</if>
+            <if test="zeroIncludePrice != null">`zero_include_price` = #{zeroIncludePrice},</if>
+            <if test="beforeNum != null">`before_num` = #{beforeNum},</if>
+            <if test="beforeExcludePrice != null">`before_exclude_price` = #{beforeExcludePrice},</if>
+            <if test="beforeIncludePrice != null">`before_include_price` = #{beforeIncludePrice},</if>
+            <if test="changeNum != null">`change_num` = #{changeNum},</if>
+            <if test="changeExcludePrice != null">`change_exclude_price` = #{changeExcludePrice},</if>
+            <if test="changeIncludePrice != null">`change_include_price` = #{changeIncludePrice},</if>
+            <if test="afterNum != null">`after_num` = #{afterNum},</if>
+            <if test="afterExcludePrice != null">`after_exclude_price` = #{afterExcludePrice},</if>
+            <if test="afterIncludePrice != null">`after_include_price` = #{afterIncludePrice},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createUserName != null">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null">`pt_var5` = #{ptVar5},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteSgjsDesignChangeListById" parameterType="Long">
+        update `sgjs_design_change_list` set del_flag = 1 where `id` = #{id}
+    </update>
+
+    <update id="deleteSgjsDesignChangeListByIds" parameterType="String">
+        update `sgjs_design_change_list` set del_flag = 1 where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteByWbsCodes" parameterType="map">
+        update `sgjs_design_change_list` set del_flag = 1 where main_id = #{mainId} and `type` = #{type} and wbs_code in
+        <foreach item="code" collection="wbsCodes" open="(" separator="," close=")">
+            #{code}
+        </foreach>
+    </update>
+
+
+</mapper>
