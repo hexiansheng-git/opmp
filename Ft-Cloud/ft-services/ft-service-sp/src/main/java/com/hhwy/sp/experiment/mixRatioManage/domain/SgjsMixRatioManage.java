@@ -92,13 +92,13 @@ public class SgjsMixRatioManage extends BaseEntity {
      * 字段描述：是否批复
      */
     @JsonProperty
-    @FtExcel(name = "是否批复")
+    @FtExcel(name = "是否批复",dictType = "common_yes")
     private String approveOrNot;
     /**
      * 字段描述：是否有效
      */
     @JsonProperty
-    @FtExcel(name = "是否有效")
+    @FtExcel(name = "是否有效",dictType = "common_yes")
     private String validOrNot;
     /**
      * 字段描述：编制人用户名
