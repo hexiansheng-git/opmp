@@ -5,14 +5,12 @@ import com.hhwy.sp.experiment.mixRatioManage.domain.SgjsMixRatioManage;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportVo;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManageVo;
 import com.hhwy.sp.sciTech.sgjsTechMethod.domain.SgjsTechMethod;
-import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
+import com.hhwy.sp.sgjsDiscloseRecord.domain.vo.DiscloseRecordPushVo;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.vo.ReportMeasureSubmitPushVo;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.SgjsPaperPublish;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.SgjsPatentDeclare;
 import com.hhwy.sp.techTrain.domain.SgjsTechnicalTraining;
-
-import java.util.List;
 
 /**
  * 数据同步节点记录Service接口
@@ -24,7 +22,7 @@ public interface ISysSyncInfoService4Sp {
     /**
      * 推送交底记录管理
      */
-    public void pushSgjsDiscloseRecord(List<SgjsDiscloseRecord> List);
+    public void pushSgjsDiscloseRecord(DiscloseRecordPushVo pushVo);
 
     /**
      * 推送试验进度计划管理

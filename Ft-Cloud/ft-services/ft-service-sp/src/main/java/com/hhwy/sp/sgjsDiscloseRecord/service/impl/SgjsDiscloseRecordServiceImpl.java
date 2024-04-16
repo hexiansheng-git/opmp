@@ -1,23 +1,22 @@
 package com.hhwy.sp.sgjsDiscloseRecord.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
+import com.hhwy.sp.sgjsDiscloseRecord.domain.vo.DiscloseRecordPushVo;
 import com.hhwy.sp.sgjsDiscloseRecord.mapper.SgjsDiscloseRecordMapper;
 import com.hhwy.sp.sgjsDiscloseRecord.service.ISgjsDiscloseRecordService;
 import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
-import org.springframework.stereotype.Service;
+import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.utils.idworker.IdWorker;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author cjh
@@ -116,9 +115,10 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
         SgjsDiscloseRecord sgjsDiscloseRecord = new SgjsDiscloseRecord();
         sgjsDiscloseRecord.setDataType(dataType);
         List<SgjsDiscloseRecord> sgjsDiscloseRecordList = getSgjsDiscloseRecordList(sgjsDiscloseRecord);
-        if(CollectionUtils.isNotEmpty(sgjsDiscloseRecordList)) {
-            syncInfoService.pushSgjsDiscloseRecord(sgjsDiscloseRecordList);
-        }
+        DiscloseRecordPushVo pushVo = new DiscloseRecordPushVo();
+        pushVo.setDataType(dataType);
+        pushVo.setRecordList(sgjsDiscloseRecordList);
+        syncInfoService.pushSgjsDiscloseRecord(pushVo);
     };
 
     @Transactional

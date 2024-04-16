@@ -12,6 +12,7 @@ import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressMa
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManageVo;
 import com.hhwy.sp.sciTech.sgjsTechMethod.domain.SgjsTechMethod;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
+import com.hhwy.sp.sgjsDiscloseRecord.domain.vo.DiscloseRecordPushVo;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManage;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
@@ -47,20 +48,19 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
 
     @Override
     @Transactional
-    public void pushSgjsDiscloseRecord(List<SgjsDiscloseRecord> list) {
+    public void pushSgjsDiscloseRecord(DiscloseRecordPushVo pushVo) {
         try {
-            List<JSONObject> finalList = new ArrayList<>();
-            Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
-            for (int i = 0; i < list.size(); i++) {
-                SgjsDiscloseRecord temp = list.get(i);
-                temp.setPtVar2(SecurityUtils.getTenantKey());
-                if (prjInfo.get("regionId") != null)
-                    temp.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
-                temp.setRegionName((String) prjInfo.get("regionName"));
-                JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(list.get(i)));
-                finalList.add(json);
+            ProjectDto projectDto = pmServiceApi.getProjectDto();
+            pushVo.setProjectCode(projectDto.getProjectCode());
+            List<SgjsDiscloseRecord> list = pushVo.getRecordList();
+            if(!CollectionUtils.isEmpty(list)){
+                for (SgjsDiscloseRecord temp : list) {
+                    temp.setPtVar2(SecurityUtils.getTenantKey());
+                    temp.setRegionId(projectDto.getRegionId());
+                    temp.setRegionName(projectDto.getRegionName());
+                }
             }
-            rocketMQTemplate.convertAndSend("sgjs_disclose_record:tenantSuccess", JSONObject.toJSONString(finalList));
+            rocketMQTemplate.convertAndSend("sgjs_disclose_record:tenantSuccess", JSONObject.toJSONString(pushVo));
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
