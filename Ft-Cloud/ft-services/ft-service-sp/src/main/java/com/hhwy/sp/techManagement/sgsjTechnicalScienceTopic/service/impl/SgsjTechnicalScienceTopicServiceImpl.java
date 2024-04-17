@@ -346,12 +346,15 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             //修改
             sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
             sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
+            //保存子表
+            Long id = sgsjTechnicalScienceTopic.getId();
+            List<SgjsExpertLibrary> libraryList = sgsjTechnicalScienceTopic.getListApply();
+            if (CollUtil.isNotEmpty(libraryList)) {
+                sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_1, libraryList);
+            }
+            //判断是否结束流程，如果结束需要新建一条数据
             String applyState = sgsjTechnicalScienceTopic.getApplyState();
             if (StrUtil.isNotBlank(applyState) && (StrUtil.equalsAny(applyState, "3", "4"))) {
-                //保存子表
-                Long id = sgsjTechnicalScienceTopic.getId();
-                List<SgjsExpertLibrary> libraryList = sgsjTechnicalScienceTopic.getListApply();
-                sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_1, libraryList);
                 //3，4代表流程结束，需要创建一条新数据给立项用
                 SgsjTechnicalScienceTopic param = new SgsjTechnicalScienceTopic();
                 param.setId(sgsjTechnicalScienceTopic.getId());
