@@ -15,6 +15,7 @@ import com.hhwy.sd.sync.mq.ISysSyncInfoService4Sd;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
+import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -221,12 +222,13 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
 
         List<KcsjEngineeringQuantitiesBillDetail> newList=new ArrayList<>();
         //将树形拆成普通列表
-        newList = ListTreeUtil.formatList(
+        /*newList = ListTreeUtil.formatList(
                 detailsList,
                 KcsjEngineeringQuantitiesBillDetail::setId,
                 KcsjEngineeringQuantitiesBillDetail::setPid,
                 KcsjEngineeringQuantitiesBillDetail::getChildren,
-                KcsjEngineeringQuantitiesBillDetail::setChildren);
+                KcsjEngineeringQuantitiesBillDetail::setChildren);*/
+        newList = TreeUtil.treeToListWithoutId(detailsList);
 
         kcsjEngineeringQuantitiesBill.setDetailsList(newList);
 
@@ -238,13 +240,16 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
 
         //修改子表数据
         List<KcsjEngineeringQuantitiesBillDetail> updateList = new ArrayList<>();
-        updateList = detailsList.stream().filter(d -> StringUtils.isEmpty(d.getIsAdd()) || (!d.getIsAdd().equals("1"))).collect(Collectors.toList());
+
+//        updateList = detailsList.stream().filter(d -> StringUtils.isEmpty(d.getIsAdd()) || (!d.getIsAdd().equals("1"))).collect(Collectors.toList());
+        updateList = newList.stream().filter(d -> StringUtils.isEmpty(d.getIsAdd()) || (!d.getIsAdd().equals("1"))).collect(Collectors.toList());
         if (updateList.size() > 0) {
-            handleUpdate(updateList);
-        }
-        if (!CollectionUtils.isEmpty(updateList)) {
+//            handleUpdate(updateList);
             kcsjEngineeringQuantitiesBillDetailMapper.updateKcsjEngineeringQuantitiesBillDetailList(updateList);
         }
+       /* if (!CollectionUtils.isEmpty(updateList)) {
+            kcsjEngineeringQuantitiesBillDetailMapper.updateKcsjEngineeringQuantitiesBillDetailList(updateList);
+        }*/
         //推送到总部版
         if (kcsjEngineeringQuantitiesBill!=null){
             sysSyncInfoService4Sd.pushKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBill);
@@ -253,7 +258,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
 
     }
 
-    private void handleUpdate(List<KcsjEngineeringQuantitiesBillDetail> updateList) {
+    /*private void handleUpdate(List<KcsjEngineeringQuantitiesBillDetail> updateList) {
 
         //批量编辑
         if (!CollectionUtils.isEmpty(updateList)) {
@@ -272,7 +277,7 @@ public class KcsjEngineeringQuantitiesBillServiceImpl implements IKcsjEngineerin
             }
             kcsjEngineeringQuantitiesBillDetailMapper.updateKcsjEngineeringQuantitiesBillDetailList(newUpdateList);
         }
-    }
+    }*/
 
     private void handleUpdateChildren(List<KcsjEngineeringQuantitiesBillDetail> newUpdateList, KcsjEngineeringQuantitiesBillDetail detail) {
 
