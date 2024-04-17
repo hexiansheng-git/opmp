@@ -465,6 +465,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 
         if(("1".equals(taskStatus) || "4".equals(taskStatus)) && StringUtils.isNotBlank(flowNodeMark) && !ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark) && !ReviewFlowNodeMark.FlowNodeMark10.equals(flowNodeMark)){
             review.setProcessStatus("no");
+            List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(review.getId(), null);
+            Double average = staffOpinionGatherVoList.stream().filter(o -> o.getScore() != null).collect(Collectors.averagingDouble(BuildSchemeStaffOpinionGatherVo::getScore));
+            review.setScore(average);
             sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
         }
         return review.getId();
