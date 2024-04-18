@@ -219,6 +219,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
         List<JdglDayScheduleWbs4Value> wbsListByDateRange = iJdglDayScheduleWbsService.getWbsListByEndDate(endDate);
 
 //        if(usingMonthPlanByYearAndMonth != null) {
+        //获取月度计划
         List<JdglMonthImagePlan> jdglMonthImagePlanListByPlanId = jdglMonthImagePlanService.getJdglMonthImagePlanListByEndDate(endDate);
 //        List<JdglMonthImagePlan> jdglMonthImagePlans = TreeUtil.treeToList(jdglMonthImagePlanListByPlanId);
 
@@ -261,11 +262,13 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
                     BigDecimal planCompValue = StatisticsUtils.getDivideTenThousand(jdglMonthImagePlan.getPlanCompValue());
                     BigDecimal thisValue = StatisticsUtils.getDivideTenThousand(jdglDayScheduleWbs4Value.getThisValue());
                     if(thisValue != null && planCompValue!= null) {
+                        //SV值  = 进度填报完成数量 - 计划完成数量
                         jdglDiffAnalysisSv.setSvNum(thisValue.subtract(planCompValue));
                     }
                     BigDecimal thisQuantity = jdglDayScheduleWbs4Value.getThisQuantity();
                     BigDecimal planCompQuantity = jdglMonthImagePlan.getPlanCompQuantity();
                     if(thisQuantity != null &&  planCompQuantity != null){
+                        //当前偏差量  = 进度填报完成数量 - 计划完成数量
                         jdglDiffAnalysisSv.setThisDeviationNum(thisQuantity.subtract(planCompQuantity));
                     }
                 }

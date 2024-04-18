@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -123,6 +124,12 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
                     .collect(Collectors.toList());
             resultList = TreeNodeUtil.getAncestral(allList, afterFilterList);
         }
+        resultList.forEach(p -> {
+            BigDecimal completeDatePercentage = p.getCompleteDatePercentage() == null ? BigDecimal.ZERO : p.getCompleteDatePercentage();
+            BigDecimal completeProgressPercentage = p.getCompleteProgressPercentage() == null ? BigDecimal.ZERO : p.getCompleteProgressPercentage();
+            p.setCompleteDatePercentage(completeDatePercentage);
+            p.setCompleteProgressPercentage(completeProgressPercentage);
+        });
         //将所有责任人username和nickname返回前端，给流程审批用
         String loginAcccount = allList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getDirectorId()) && StrUtil.isBlank(p.getPtVar1()))

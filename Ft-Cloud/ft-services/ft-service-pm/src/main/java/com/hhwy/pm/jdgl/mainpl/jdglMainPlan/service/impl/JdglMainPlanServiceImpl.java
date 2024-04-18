@@ -116,6 +116,7 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         return getJdglMainPlan(jdglMainPlan, queryVO);
     }
 
+    //查询已生效的总体计划
     @Override
     public JdglMainPlan getUsingJdglMainPlanNoItem() {
         JdglMainPlan jdglMainPlan = new JdglMainPlan();

@@ -434,7 +434,8 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
             wbsListByDateRange4Value.stream().forEach(vo -> {
                 itemCodes.add(vo.getWbsCode());
             });
-
+            /*找父子关系*/
+            //得到已生效的wbs和作业项 ，根据wbsCode
             List<JdglMainPlanItem> mainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemByItemCodes(itemCodes);
             if(mainPlanItemList != null) {
                 for (JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value : wbsListByDateRange4Value) {

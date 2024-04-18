@@ -333,7 +333,8 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
                 Integer totalFloat = jdglMainPlanItems.getTotalFloat();
                 BigDecimal aa = BigDecimal.ZERO;
                 if (totalFloat != null ){
-                    aa = NumberUtil.toBigDecimal(jdglMainPlanItems.getTotalFloat());
+                    Integer day = totalFloat / 8;
+                    aa = NumberUtil.toBigDecimal(day);
                 }
                 JdglCorrectionMeasuresMakeDetail.setTotalFloat(aa);
                 // 责任人

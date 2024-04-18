@@ -447,12 +447,13 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
                 Set<String> interCode = wbsCode.stream().filter(itemCode::contains).collect(Collectors.toSet());
                 List<JdglDayScheduleWbs4Value> interList = wbsListByDateRange.stream().filter(p -> interCode.contains(p.getWbsCode())).collect(Collectors.toList());
                 //得到关键线路产值
-                BigDecimal keyRoadValue = interList.stream().map(JdglDayScheduleWbs4Value::getThisValue).reduce(BigDecimal.ZERO, BigDecimal::add);
+                BigDecimal keyRoadValue = interList.stream().filter(p -> p.getThisValue()!=null).map(JdglDayScheduleWbs4Value::getThisValue).reduce(BigDecimal.ZERO, BigDecimal::add);
                 //得到关键线路计划产值
                 BigDecimal keyRoadValuePlan = BigDecimal.ZERO;
                 JdglYearPlan jdglYearPlan = new JdglYearPlan();
                 jdglYearPlan.setTaskStatus("5");
                 jdglYearPlan.setIsUse("1");
+                jdglYearPlan.setYear(String.valueOf(thisYear));
                 JdglYearPlan jdglYearPlan1 = jdglYearPlanService.getJdglYearPlan(jdglYearPlan);
                 if (ObjectUtil.isNotEmpty(jdglYearPlan1)) {
                     log.info("每周定时生成追踪数据，---------------11");
@@ -506,7 +507,7 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
                 log.info("每周定时生成追踪数据，---------------17");
                 // 纠偏方案详情入库
                 jdglProgressCorrectionTrackDetailService.insertJdglProgressCorrectionTrackDetailList(trackDetailList);
-                log.info("每周定时生成追踪数据，---------------18");
+                log.info("每周定时生成追踪数据，完成");
             }catch (Exception e){
                 e.printStackTrace();
             }

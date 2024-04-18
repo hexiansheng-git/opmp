@@ -1,5 +1,6 @@
 package com.hhwy.pm.mq;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
@@ -7,6 +8,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisCorrect;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisCorrectService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.spring.annotation.ConsumeMode;
@@ -27,6 +29,7 @@ import java.util.List;
         topic = "diff_analysis_correct",
         selectorExpression = "update",
         consumeMode = ConsumeMode.ORDERLY)
+@Slf4j
 public class DiffAnalysisCorrectConsumerListener implements RocketMQListener<String> , RocketMQPushConsumerLifecycleListener {
 
     @Autowired
@@ -36,6 +39,7 @@ public class DiffAnalysisCorrectConsumerListener implements RocketMQListener<Str
     public void onMessage(String s) {
         String oldDataSource = null;
         try {
+            log.info("差异化分析修正得分推送数据: {}", s);
             List<JdglDiffAnalysisCorrect> correctList = JSONObject.parseArray(s, JdglDiffAnalysisCorrect.class);
             if(CollectionUtils.isEmpty(correctList)){
                 return;
