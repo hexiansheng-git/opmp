@@ -44,6 +44,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 工程量报表
@@ -320,5 +321,43 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
     @Transactional
     public int deleteXmslEngineeringReportByPks(List<Long> xmslEngineeringReportPkList) {
         return xmslEngineeringReportMapper.deleteXmslEngineeringReportByPks(xmslEngineeringReportPkList);
+    }
+
+    @Override
+    public Map<String,List<XmslContractList>> relateListByWbsCode(String wbsCode) {
+        Map<String,List<XmslContractList>> resultMap = new HashMap<>();
+        if(StringUtils.isBlank(wbsCode)) return new HashMap<>();
+        String[] wbsCodes = wbsCode.split(",");
+        List<XmslEngineeringReport> wbsList = xmslEngineeringReportMapper.getListByWbsCodes(1, wbsCodes);
+        Map<Long,String> wbsCodeMap = wbsList.stream().collect(Collectors.toMap(r->r.getId(), r->r.getWbsCode()));
+        if(CollectionUtils.isEmpty(wbsList)) return new HashMap<>();
+        //查询出所有挂接的清单
+        List<XmslEngineeringReport> childList = xmslEngineeringReportMapper.getListByParentIds(1,wbsList.stream().map(r->r.getId()).toArray(Long[]::new));
+        if(CollectionUtils.isEmpty(childList)) return new HashMap<>();
+        Map<Long,List<XmslEngineeringReport>> listMap = childList.stream().collect(Collectors.groupingBy(r->r.getParentId()));
+        for(Long pwbsId : listMap.keySet()){
+            List<XmslEngineeringReport> list = listMap.get(pwbsId);
+            Map<String,XmslEngineeringReport> reportMap = list.stream().collect(Collectors.toMap(r->r.getListCode(), r->r,(v1,v2)->v1));
+            //构建成树形 
+            Set<String> listCodeSet = list.stream().map(r->r.getListCode()).collect(Collectors.toSet());
+            List<XmslContractList> conList = contractListService.getByCodes(listCodeSet);
+            Set<Long> allListIdSet = new HashSet<>();
+            for (int i = 0; i < conList.size(); i++) {
+                XmslContractList temp = conList.get(i);
+                //加载工程量报表中的金额
+                XmslEngineeringReport tempReport = reportMap.get(temp.getCode());
+                temp.setPtVar1(ObjectUtils.nvlBigDecimal(tempReport.getCheckQuanlity()).toString()); //复核数量
+                if(StringUtils.isBlank(temp.getAncestors()))
+                    continue;
+                List<Long> idList = new ArrayList<>(Arrays.asList(Convert.toLongArray(temp.getAncestors())));
+                idList.remove(temp.getId());
+                allListIdSet.addAll(idList);
+            }
+            //查询出所有父级
+            List<XmslContractList> conParentList = contractListService.getByIds(allListIdSet.toArray(new Long[]{}));
+            conParentList.addAll(conList);
+            resultMap.put(wbsCodeMap.get(pwbsId),conParentList);
+        }
+        return resultMap;
     }
 }

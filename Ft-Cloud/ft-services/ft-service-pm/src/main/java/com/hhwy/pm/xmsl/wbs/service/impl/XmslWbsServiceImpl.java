@@ -32,6 +32,7 @@ import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
+import com.hhwy.utils.tree.TreeUtil;
 import nonapi.io.github.classgraph.json.Id;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
@@ -41,10 +42,12 @@ import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.metadata.TableMetaDataProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
+import sun.plugin2.util.ParameterNames;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Array;
@@ -203,6 +206,31 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     public List<XmslWbs> getXmslWbsList(XmslWbs xmslWbs) {
         xmslWbs.setParams(ObjectUtils.toMap("tableName","xmsl_wbs"));
         return getXmslWbsListByTname(xmslWbs);
+    }
+
+    @Override
+    public List<XmslWbs> getFullByWbsCode(String wbsCode) {
+        if(StringUtils.isBlank(wbsCode)) return new ArrayList<>(2);
+        XmslWbs wbs = WbsRedisUtils.getWbsByCode(wbsCode);
+        Long[] ancestors =  Convert.toLongArray(wbs.getAncestors());
+        List<XmslWbs> parentList = WbsRedisUtils.getWbs(ancestors);
+        List<XmslWbs> childList = WbsRedisUtils.getChildWbs(wbs.getId());
+        parentList.addAll(childList);
+        return parentList;
+        //转换成树形
+//        List<XmslWbs> firstLevelList = new ArrayList<>(); 
+//        Map<String,XmslWbs> wbsMap = parentList.stream().collect(Collectors.toMap(r->r.getId(), r->r));
+//        for (int i = 0; i < parentList.size(); i++) {
+//            XmslWbs temp = parentList.get(i);
+//            if(StringUtils.isBlank(temp.getParentId()) || StringUtils.equals(temp.getParentId(), "-1")){
+//                firstLevelList.add(temp);
+//                continue;
+//            }
+//            XmslWbs parent = wbsMap.get(temp.getParentId());
+//            parent.setChildren(parent.getChildren()==null?new ArrayList<>():parent.getChildren());
+//            parent.getChildren().add(temp);
+//        }
+//        return firstLevelList;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.hhwy.sp.designChangeList.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.excel.FtExcel;
+import com.hhwy.utils.tree.TreeNode;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -17,42 +18,39 @@ import java.util.List;
  * @date 2024-04-16
  */
 @Data
-public class SgjsDesignChangeList extends BaseEntity {
+public class SgjsDesignChangeList extends TreeNode<SgjsDesignChangeList> {
     private static final long serialVersionUID = 1L;
 
     /** id */
-    private Long id;
+    protected Long id;
 
     /** 主表id */
-    @FtExcel(name = "主表id")
     private Long mainId;
 
     /** 类型,1:元数据/2:调整后 */
-    @FtExcel(name = "类型,1:元数据/2:调整后")
     private Integer type;
+    
+    /** wbs编码 */
+    @FtExcel(name = "wbs编码",type = FtExcel.Type.EXPORT)
+    private String wbsCode;
+
+    @FtExcel(name = "wbs名称",type = FtExcel.Type.EXPORT)
+    private String wbsName;
 
     /** 清单编码,xmsl_contract_list.code */
-    @FtExcel(name = "清单编码,xmsl_contract_list.code")
+    @FtExcel(name = "清单编号")
     private String listCode;
 
     /** 父id */
-    @FtExcel(name = "父id")
-    private Long pid;
+    protected Long pid;
 
     /** 主合同清单ID,xmsl_contract_list.id */
-    @FtExcel(name = "主合同清单ID,xmsl_contract_list.id")
     private Long listId;
 
     /** wbsId */
-    @FtExcel(name = "wbsId")
     private Long wbsId;
 
-    /** wbs编码 */
-    @FtExcel(name = "wbs编码")
-    private String wbsCode;
-
     /** 祖籍id集合 */
-    @FtExcel(name = "祖籍id集合")
     private String ancestors;
 
     /** 清单中文名称 */
@@ -64,11 +62,10 @@ public class SgjsDesignChangeList extends BaseEntity {
     private String foreignName;
 
     /** 清单类型(字典项（sp_list_type）) */
-    @FtExcel(name = "清单类型(字典项", readConverterExp = "sp_list_type")
+    @FtExcel(name = "清单类型", dictType = "sp_list_type")
     private String listType;
 
     /** 单位编码 */
-    @FtExcel(name = "单位编码")
     private String unitCode;
 
     /** 单位 */
@@ -76,106 +73,96 @@ public class SgjsDesignChangeList extends BaseEntity {
     private String unit;
 
     /** 合同总数量 */
-    @FtExcel(name = "合同总数量")
+    @FtExcel(name = "合同总数量",type = FtExcel.Type.EXPORT)
     private BigDecimal conNum;
 
     /** 合同单价不含税 */
-    @FtExcel(name = "合同单价不含税")
+    @FtExcel(name = "合同单价不含税",type = FtExcel.Type.EXPORT)
     private BigDecimal conExcludePrice;
 
     /** 合同单价含税 */
-    @FtExcel(name = "合同单价含税")
-    private BigDecimal conIncludePrice;
+    @FtExcel(name = "合同单价含税",type = FtExcel.Type.EXPORT)
+    private BigDecimal conSumPrice;
 
     /** 0#工程量清单 */
-    @FtExcel(name = "0#工程量清单")
+    @FtExcel(name = "0#工程量清单-数量",type = FtExcel.Type.EXPORT)
     private BigDecimal zeroNum;
 
     /** 0#单价不含税 */
-    @FtExcel(name = "0#单价不含税")
+    @FtExcel(name = "0#工程量清单-单价（不含税）",type = FtExcel.Type.EXPORT)
     private BigDecimal zeroExcludePrice;
 
     /** 0#单价含税 */
-    @FtExcel(name = "0#单价含税")
-    private BigDecimal zeroIncludePrice;
+    @FtExcel(name = "0#工程量清单-金额（不含税）",type = FtExcel.Type.EXPORT)
+    private BigDecimal zeroSumPrice;
 
-    /** 变更前-工程量清单 */
-    @FtExcel(name = "变更前-工程量清单")
+    /** 本次变更前累计-工程量清单 */
+    @FtExcel(name = "本次变更前累计-工程量清单",type = FtExcel.Type.EXPORT)
     private BigDecimal beforeNum;
 
-    /** 变更前-单价不含税 */
-    @FtExcel(name = "变更前-单价不含税")
+    /** 本次变更前累计-单价不含税 */
+    @FtExcel(name = "本次变更前累计-单价不含税",type = FtExcel.Type.EXPORT)
     private BigDecimal beforeExcludePrice;
 
-    /** 变更前-单价含税 */
-    @FtExcel(name = "变更前-单价含税")
-    private BigDecimal beforeIncludePrice;
+    /** 本次变更前累计-单价含税 */
+    @FtExcel(name = "本次变更前累计-单价含税",type = FtExcel.Type.EXPORT)
+    private BigDecimal beforeSumPrice;
 
     /** 当前工程量清单 */
-    @FtExcel(name = "当前工程量清单")
+    @FtExcel(name = "本次变更数量")
     private BigDecimal changeNum;
 
     /** 当前单价不含税 */
-    @FtExcel(name = "当前单价不含税")
+    @FtExcel(name = "本次变更单价（不含税）",width = 21L)
     private BigDecimal changeExcludePrice;
 
     /** 当前单价含税 */
-    @FtExcel(name = "当前单价含税")
-    private BigDecimal changeIncludePrice;
+    @FtExcel(name = "本次变更金额（不含税）",width = 21L)
+    private BigDecimal changeSumPrice;
 
     /** 变更后-工程量清单 */
-    @FtExcel(name = "变更后-工程量清单")
+    @FtExcel(name = "变更后-工程量清单",type = FtExcel.Type.EXPORT)
     private BigDecimal afterNum;
 
     /** 变更后-单价不含税 */
-    @FtExcel(name = "变更后-单价不含税")
+    @FtExcel(name = "变更后-单价不含税",type = FtExcel.Type.EXPORT)
     private BigDecimal afterExcludePrice;
 
     /** 变更后-单价含税 */
-    @FtExcel(name = "变更后-单价含税")
-    private BigDecimal afterIncludePrice;
+    @FtExcel(name = "变更后-单价含税",type = FtExcel.Type.EXPORT)
+    private BigDecimal afterSumPrice;
 
     /** 数据创建者id */
-    @FtExcel(name = "数据创建者id")
     private String createUser;
 
     /** 数据创建者名称 */
-    @FtExcel(name = "数据创建者名称")
     private String createUserName;
 
     /** 数据修改者id */
-    @FtExcel(name = "数据修改者id")
     private String updateUser;
 
     /** 数据删除者 */
-    @FtExcel(name = "数据删除者")
     private String delUser;
 
     /** 数据删除系统时间 */
-    @FtExcel(name = "数据删除系统时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date delTime;
 
     /** 删除标识：0未删除；1已删除 */
     private String delFlag;
 
     /** 预留字段1 */
-    @FtExcel(name = "预留字段1")
     private String ptVar1;
 
     /** 预留字段2 */
-    @FtExcel(name = "预留字段2")
     private String ptVar2;
 
     /** 预留字段3 */
-    @FtExcel(name = "预留字段3")
     private String ptVar3;
 
     /** 预留字段4 */
-    @FtExcel(name = "预留字段4")
     private String ptVar4;
 
     /** 预留字段5 */
-    @FtExcel(name = "预留字段5")
     private String ptVar5;
 
     private List<SgjsDesignChangeList> children;
@@ -199,19 +186,19 @@ public class SgjsDesignChangeList extends BaseEntity {
             .append("unit", getUnit())
             .append("conNum", getConNum())
             .append("conExcludePrice", getConExcludePrice())
-            .append("conIncludePrice", getConIncludePrice())
+            .append("conSumPrice", getConSumPrice())
             .append("zeroNum", getZeroNum())
             .append("zeroExcludePrice", getZeroExcludePrice())
-            .append("zeroIncludePrice", getZeroIncludePrice())
+            .append("zeroSumPrice", getZeroSumPrice())
             .append("beforeNum", getBeforeNum())
             .append("beforeExcludePrice", getBeforeExcludePrice())
-            .append("beforeIncludePrice", getBeforeIncludePrice())
+            .append("beforeSumPrice", getBeforeSumPrice())
             .append("changeNum", getChangeNum())
             .append("changeExcludePrice", getChangeExcludePrice())
-            .append("changeIncludePrice", getChangeIncludePrice())
+            .append("changeSumPrice", getChangeSumPrice())
             .append("afterNum", getAfterNum())
             .append("afterExcludePrice", getAfterExcludePrice())
-            .append("afterIncludePrice", getAfterIncludePrice())
+            .append("afterSumPrice", getAfterSumPrice())
             .append("remark", getRemark())
             .append("createUser", getCreateUser())
             .append("createUserName", getCreateUserName())

@@ -1,6 +1,7 @@
 package com.hhwy.sp.designChangeList.mapper;
 
 import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeList;
+import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeWbs;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,6 +29,8 @@ public interface SgjsDesignChangeListMapper {
      * @return 设计变更清单集合
      */
     public List<SgjsDesignChangeList> selectSgjsDesignChangeListList(SgjsDesignChangeList sgjsDesignChangeList);
+
+    public List<SgjsDesignChangeList> selectWbsAsDesignList(Long mainId);
     
     public int batchInsert(@Param("dataList") List<SgjsDesignChangeList> list);
 

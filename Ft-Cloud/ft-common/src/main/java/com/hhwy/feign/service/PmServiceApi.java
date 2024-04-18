@@ -7,6 +7,7 @@ import com.hhwy.feign.factory.PmServiceFallbackFactory;
 import com.hhwy.feign.service.domain.CommonQqchMeasureExpRange;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.dto.DesignDisclosurePlanDto;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
+import com.hhwy.pm.xmsl.xmslEngineeringReport.domain.XmslEngineeringReport;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.Mapping;
@@ -134,5 +135,23 @@ public interface PmServiceApi {
     @GetMapping("/xmslContractInfo")
     AjaxResult getContractInfo();
 
+    @PostMapping("/xmslEngineeringReport/list")
+    AjaxResult engineeringReport(@RequestBody XmslEngineeringReport report);
+
+    /**
+     * 获取wbs挂接的清单(树形)
+     * @param report {wbsCode:多个以逗号隔开}
+     * @return
+     */
+    @PostMapping("/xmslEngineeringReport/relateList")
+    AjaxResult relateList(@RequestBody XmslEngineeringReport report);
+
+    /**
+     * 获取wbs关联的父子级
+     * @param map {code}
+     * @return
+     */
+    @PostMapping("/xmslWbs/fullByWbsCode")
+    AjaxResult fullByWbsCode(@RequestBody Map map);
 
 }

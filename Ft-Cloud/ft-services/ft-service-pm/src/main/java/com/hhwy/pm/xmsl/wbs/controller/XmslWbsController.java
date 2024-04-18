@@ -117,6 +117,18 @@ public class XmslWbsController extends BaseController {
     }
 
     /**
+     * 获取wbs的完整树形，父子级
+     * @param {code}
+     * @return
+     */
+    @PostMapping("/fullByWbsCode")
+    public AjaxResult fullByWbsCode(@RequestBody Map map) {
+        List<XmslWbs> list = xmslWbsService.getFullByWbsCode(ObjectUtils.nvlString(map.get("code")));
+        return AjaxResult.success(list);
+    }
+    
+    
+    /**
      * 处理祖级名称、id
      * @return
      */

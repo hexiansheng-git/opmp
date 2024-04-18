@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="listId"    column="list_id"    />
         <result property="wbsId"    column="wbs_id"    />
         <result property="wbsCode"    column="wbs_code"    />
+        <result property="wbsName"    column="wbs_name"    />
         <result property="ancestors"    column="ancestors"    />
         <result property="chineseName"    column="chinese_name"    />
         <result property="foreignName"    column="foreign_name"    />
@@ -20,19 +21,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="unit"    column="unit"    />
         <result property="conNum"    column="con_num"    />
         <result property="conExcludePrice"    column="con_exclude_price"    />
-        <result property="conIncludePrice"    column="con_include_price"    />
+        <result property="conSumPrice"    column="con_sum_price"    />
         <result property="zeroNum"    column="zero_num"    />
         <result property="zeroExcludePrice"    column="zero_exclude_price"    />
-        <result property="zeroIncludePrice"    column="zero_include_price"    />
+        <result property="zeroSumPrice"    column="zero_sum_price"    />
         <result property="beforeNum"    column="before_num"    />
         <result property="beforeExcludePrice"    column="before_exclude_price"    />
-        <result property="beforeIncludePrice"    column="before_include_price"    />
+        <result property="beforeSumPrice"    column="before_sum_price"    />
         <result property="changeNum"    column="change_num"    />
         <result property="changeExcludePrice"    column="change_exclude_price"    />
-        <result property="changeIncludePrice"    column="change_include_price"    />
+        <result property="changeSumPrice"    column="change_sum_price"    />
         <result property="afterNum"    column="after_num"    />
         <result property="afterExcludePrice"    column="after_exclude_price"    />
-        <result property="afterIncludePrice"    column="after_include_price"    />
+        <result property="afterSumPrice"    column="after_sum_price"    />
         <result property="remark"    column="remark"    />
         <result property="createUser"    column="create_user"    />
         <result property="createUserName"    column="create_user_name"    />
@@ -50,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSgjsDesignChangeListVo">
-        select `id`, `main_id`, `type`, `list_code`, `pid`, `list_id`, `wbs_id`, `wbs_code`, `ancestors`, `chinese_name`, `foreign_name`, `list_type`, `unit_code`, `unit`, `con_num`, `con_exclude_price`, `con_include_price`, `zero_num`, `zero_exclude_price`, `zero_include_price`, `before_num`, `before_exclude_price`, `before_include_price`, `change_num`, `change_exclude_price`, `change_include_price`, `after_num`, `after_exclude_price`, `after_include_price`, `remark`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `pt_var5` from `sgjs_design_change_list`
+        select `id`, `main_id`, `type`, `list_code`, `pid`, `list_id`, `wbs_id`, `wbs_code`, `ancestors`, `chinese_name`, `foreign_name`, `list_type`, `unit_code`, `unit`, `con_num`, `con_exclude_price`, `con_sum_price`, `zero_num`, `zero_exclude_price`, `zero_sum_price`, `before_num`, `before_exclude_price`, `before_sum_price`, `change_num`, `change_exclude_price`, `change_sum_price`, `after_num`, `after_exclude_price`, `after_sum_price`, `remark`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `pt_var5` from `sgjs_design_change_list`
     </sql>
 
     <select id="selectSgjsDesignChangeListList" parameterType="com.hhwy.sp.designChangeList.domain.SgjsDesignChangeList" resultMap="SgjsDesignChangeListResult">
@@ -72,19 +73,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
             <if test="conNum != null "> and `con_num` = #{conNum}</if>
             <if test="conExcludePrice != null "> and `con_exclude_price` = #{conExcludePrice}</if>
-            <if test="conIncludePrice != null "> and `con_include_price` = #{conIncludePrice}</if>
+            <if test="conSumPrice != null "> and `con_sum_price` = #{conSumPrice}</if>
             <if test="zeroNum != null "> and `zero_num` = #{zeroNum}</if>
             <if test="zeroExcludePrice != null "> and `zero_exclude_price` = #{zeroExcludePrice}</if>
-            <if test="zeroIncludePrice != null "> and `zero_include_price` = #{zeroIncludePrice}</if>
+            <if test="zeroSumPrice != null "> and `zero_sum_price` = #{zeroSumPrice}</if>
             <if test="beforeNum != null "> and `before_num` = #{beforeNum}</if>
             <if test="beforeExcludePrice != null "> and `before_exclude_price` = #{beforeExcludePrice}</if>
-            <if test="beforeIncludePrice != null "> and `before_include_price` = #{beforeIncludePrice}</if>
+            <if test="beforeSumPrice != null "> and `before_sum_price` = #{beforeSumPrice}</if>
             <if test="changeNum != null "> and `change_num` = #{changeNum}</if>
             <if test="changeExcludePrice != null "> and `change_exclude_price` = #{changeExcludePrice}</if>
-            <if test="changeIncludePrice != null "> and `change_include_price` = #{changeIncludePrice}</if>
+            <if test="changeSumPrice != null "> and `change_sum_price` = #{changeSumPrice}</if>
             <if test="afterNum != null "> and `after_num` = #{afterNum}</if>
             <if test="afterExcludePrice != null "> and `after_exclude_price` = #{afterExcludePrice}</if>
-            <if test="afterIncludePrice != null "> and `after_include_price` = #{afterIncludePrice}</if>
+            <if test="afterSumPrice != null "> and `after_sum_price` = #{afterSumPrice}</if>
             <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
             <if test="createUserName != null  and createUserName != ''"> and `create_user_name` like concat('%', #{createUserName}, '%')</if>
             <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
@@ -95,8 +96,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+            <if test="params != null  and params.wbsCodes != null">
+                and `wbs_code` in
+                <foreach item="code" collection="params.wbsCodes" open="(" separator="," close=")">
+                    #{code}
+                </foreach>
+            </if> 
         </where>
         order by `id`
+    </select>
+    
+    
+    <!-- 查询wbs转换为清单实体类 -->
+    <select id="selectWbsAsDesignList" parameterType="Long" resultMap="SgjsDesignChangeListResult">
+        select `id`,id as wbs_id,`main_id`, parent_id pid, `name` wbs_name, `code` wbs_code  from `sgjs_design_change_wbs`
+        where `del_flag` = 0 and main_id = #{mainId}  
     </select>
     
     <select id="selectSgjsDesignChangeListById" parameterType="Long" resultMap="SgjsDesignChangeListResult">
@@ -122,19 +136,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null">`unit`,</if>
             <if test="conNum != null">`con_num`,</if>
             <if test="conExcludePrice != null">`con_exclude_price`,</if>
-            <if test="conIncludePrice != null">`con_include_price`,</if>
+            <if test="conSumPrice != null">`con_sum_price`,</if>
             <if test="zeroNum != null">`zero_num`,</if>
             <if test="zeroExcludePrice != null">`zero_exclude_price`,</if>
-            <if test="zeroIncludePrice != null">`zero_include_price`,</if>
+            <if test="zeroSumPrice != null">`zero_sum_price`,</if>
             <if test="beforeNum != null">`before_num`,</if>
             <if test="beforeExcludePrice != null">`before_exclude_price`,</if>
-            <if test="beforeIncludePrice != null">`before_include_price`,</if>
+            <if test="beforeSumPrice != null">`before_sum_price`,</if>
             <if test="changeNum != null">`change_num`,</if>
             <if test="changeExcludePrice != null">`change_exclude_price`,</if>
-            <if test="changeIncludePrice != null">`change_include_price`,</if>
+            <if test="changeSumPrice != null">`change_sum_price`,</if>
             <if test="afterNum != null">`after_num`,</if>
             <if test="afterExcludePrice != null">`after_exclude_price`,</if>
-            <if test="afterIncludePrice != null">`after_include_price`,</if>
+            <if test="afterSumPrice != null">`after_sum_price`,</if>
             <if test="remark != null">`remark`,</if>
             <if test="createUser != null">`create_user`,</if>
             <if test="createUserName != null">`create_user_name`,</if>
@@ -167,19 +181,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null">#{unit},</if>
             <if test="conNum != null">#{conNum},</if>
             <if test="conExcludePrice != null">#{conExcludePrice},</if>
-            <if test="conIncludePrice != null">#{conIncludePrice},</if>
+            <if test="conSumPrice != null">#{conSumPrice},</if>
             <if test="zeroNum != null">#{zeroNum},</if>
             <if test="zeroExcludePrice != null">#{zeroExcludePrice},</if>
-            <if test="zeroIncludePrice != null">#{zeroIncludePrice},</if>
+            <if test="zeroSumPrice != null">#{zeroSumPrice},</if>
             <if test="beforeNum != null">#{beforeNum},</if>
             <if test="beforeExcludePrice != null">#{beforeExcludePrice},</if>
-            <if test="beforeIncludePrice != null">#{beforeIncludePrice},</if>
+            <if test="beforeSumPrice != null">#{beforeSumPrice},</if>
             <if test="changeNum != null">#{changeNum},</if>
             <if test="changeExcludePrice != null">#{changeExcludePrice},</if>
-            <if test="changeIncludePrice != null">#{changeIncludePrice},</if>
+            <if test="changeSumPrice != null">#{changeSumPrice},</if>
             <if test="afterNum != null">#{afterNum},</if>
             <if test="afterExcludePrice != null">#{afterExcludePrice},</if>
-            <if test="afterIncludePrice != null">#{afterIncludePrice},</if>
+            <if test="afterSumPrice != null">#{afterSumPrice},</if>
             <if test="remark != null">#{remark},</if>
             <if test="createUser != null">#{createUser},</if>
             <if test="createUserName != null">#{createUserName},</if>
@@ -215,19 +229,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                 `unit`,
                                                 `con_num`,
                                                 `con_exclude_price`,
-                                                `con_include_price`,
+                                                `con_sum_price`,
                                                 `zero_num`,
                                                 `zero_exclude_price`,
-                                                `zero_include_price`,
+                                                `zero_sum_price`,
                                                 `before_num`,
                                                 `before_exclude_price`,
-                                                `before_include_price`,
+                                                `before_sum_price`,
                                                 `change_num`,
                                                 `change_exclude_price`,
-                                                `change_include_price`,
+                                                `change_sum_price`,
                                                 `after_num`,
                                                 `after_exclude_price`,
-                                                `after_include_price`,
+                                                `after_sum_price`,
                                                 `remark`,
                                                 `create_user`,
                                                 `create_user_name`,
@@ -261,19 +275,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                 #{item.unit},
                                                                 #{item.conNum},
                                                                 #{item.conExcludePrice},
-                                                                #{item.conIncludePrice},
+                                                                #{item.conSumPrice},
                                                                 #{item.zeroNum},
                                                                 #{item.zeroExcludePrice},
-                                                                #{item.zeroIncludePrice},
+                                                                #{item.zeroSumPrice},
                                                                 #{item.beforeNum},
                                                                 #{item.beforeExcludePrice},
-                                                                #{item.beforeIncludePrice},
+                                                                #{item.beforeSumPrice},
                                                                 #{item.changeNum},
                                                                 #{item.changeExcludePrice},
-                                                                #{item.changeIncludePrice},
+                                                                #{item.changeSumPrice},
                                                                 #{item.afterNum},
                                                                 #{item.afterExcludePrice},
-                                                                #{item.afterIncludePrice},
+                                                                #{item.afterSumPrice},
                                                                 #{item.remark},
                                                                 #{item.createUser},
                                                                 #{item.createUserName},
@@ -400,10 +414,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             </if>
                         </foreach>
                     </trim>
-                                                    <trim prefix="con_include_price =case" suffix="end,">
+                                                    <trim prefix="con_sum_price =case" suffix="end,">
                         <foreach collection="dataList" item="item" index="index">
-                            <if test="item.conIncludePrice != null ">
-                                when `id` = #{item.id} then #{item.conIncludePrice}
+                            <if test="item.conSumPrice != null ">
+                                when `id` = #{item.id} then #{item.conSumPrice}
                             </if>
                         </foreach>
                     </trim>
@@ -421,10 +435,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             </if>
                         </foreach>
                     </trim>
-                                                    <trim prefix="zero_include_price =case" suffix="end,">
+                                                    <trim prefix="zero_sum_price =case" suffix="end,">
                         <foreach collection="dataList" item="item" index="index">
-                            <if test="item.zeroIncludePrice != null ">
-                                when `id` = #{item.id} then #{item.zeroIncludePrice}
+                            <if test="item.zeroSumPrice != null ">
+                                when `id` = #{item.id} then #{item.zeroSumPrice}
                             </if>
                         </foreach>
                     </trim>
@@ -442,10 +456,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             </if>
                         </foreach>
                     </trim>
-                                                    <trim prefix="before_include_price =case" suffix="end,">
+                                                    <trim prefix="before_sum_price =case" suffix="end,">
                         <foreach collection="dataList" item="item" index="index">
-                            <if test="item.beforeIncludePrice != null ">
-                                when `id` = #{item.id} then #{item.beforeIncludePrice}
+                            <if test="item.beforeSumPrice != null ">
+                                when `id` = #{item.id} then #{item.beforeSumPrice}
                             </if>
                         </foreach>
                     </trim>
@@ -463,10 +477,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             </if>
                         </foreach>
                     </trim>
-                                                    <trim prefix="change_include_price =case" suffix="end,">
+                                                    <trim prefix="change_sum_price =case" suffix="end,">
                         <foreach collection="dataList" item="item" index="index">
-                            <if test="item.changeIncludePrice != null ">
-                                when `id` = #{item.id} then #{item.changeIncludePrice}
+                            <if test="item.changeSumPrice != null ">
+                                when `id` = #{item.id} then #{item.changeSumPrice}
                             </if>
                         </foreach>
                     </trim>
@@ -484,10 +498,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             </if>
                         </foreach>
                     </trim>
-                                                    <trim prefix="after_include_price =case" suffix="end,">
+                                                    <trim prefix="after_sum_price =case" suffix="end,">
                         <foreach collection="dataList" item="item" index="index">
-                            <if test="item.afterIncludePrice != null ">
-                                when `id` = #{item.id} then #{item.afterIncludePrice}
+                            <if test="item.afterSumPrice != null ">
+                                when `id` = #{item.id} then #{item.afterSumPrice}
                             </if>
                         </foreach>
                     </trim>
@@ -617,19 +631,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null">`unit` = #{unit},</if>
             <if test="conNum != null">`con_num` = #{conNum},</if>
             <if test="conExcludePrice != null">`con_exclude_price` = #{conExcludePrice},</if>
-            <if test="conIncludePrice != null">`con_include_price` = #{conIncludePrice},</if>
+            <if test="conSumPrice != null">`con_sum_price` = #{conSumPrice},</if>
             <if test="zeroNum != null">`zero_num` = #{zeroNum},</if>
             <if test="zeroExcludePrice != null">`zero_exclude_price` = #{zeroExcludePrice},</if>
-            <if test="zeroIncludePrice != null">`zero_include_price` = #{zeroIncludePrice},</if>
+            <if test="zeroSumPrice != null">`zero_sum_price` = #{zeroSumPrice},</if>
             <if test="beforeNum != null">`before_num` = #{beforeNum},</if>
             <if test="beforeExcludePrice != null">`before_exclude_price` = #{beforeExcludePrice},</if>
-            <if test="beforeIncludePrice != null">`before_include_price` = #{beforeIncludePrice},</if>
+            <if test="beforeSumPrice != null">`before_sum_price` = #{beforeSumPrice},</if>
             <if test="changeNum != null">`change_num` = #{changeNum},</if>
             <if test="changeExcludePrice != null">`change_exclude_price` = #{changeExcludePrice},</if>
-            <if test="changeIncludePrice != null">`change_include_price` = #{changeIncludePrice},</if>
+            <if test="changeSumPrice != null">`change_sum_price` = #{changeSumPrice},</if>
             <if test="afterNum != null">`after_num` = #{afterNum},</if>
             <if test="afterExcludePrice != null">`after_exclude_price` = #{afterExcludePrice},</if>
-            <if test="afterIncludePrice != null">`after_include_price` = #{afterIncludePrice},</if>
+            <if test="afterSumPrice != null">`after_sum_price` = #{afterSumPrice},</if>
             <if test="remark != null">`remark` = #{remark},</if>
             <if test="createUser != null">`create_user` = #{createUser},</if>
             <if test="createUserName != null">`create_user_name` = #{createUserName},</if>

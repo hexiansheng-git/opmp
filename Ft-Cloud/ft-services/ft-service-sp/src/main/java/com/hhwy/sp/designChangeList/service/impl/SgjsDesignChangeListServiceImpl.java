@@ -77,6 +77,12 @@ public class SgjsDesignChangeListServiceImpl implements ISgjsDesignChangeListSer
         return sgjsDesignChangeListMapper.selectSgjsDesignChangeListList(sgjsDesignChangeList);
     }
 
+    @Override
+    public List<SgjsDesignChangeList> selectWbsAsDesignList(Long mainId) {
+        List<SgjsDesignChangeList> list  = sgjsDesignChangeListMapper.selectWbsAsDesignList(mainId);
+        return list;
+    }
+
     /**
      * 新增设计变更清单
      * 

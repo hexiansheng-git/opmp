@@ -225,7 +225,7 @@ public class XmslEngineeringReport extends TreeNode<XmslEngineeringReport> {
     @JsonProperty
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：预留字段1  是否生效 
      */
     @JsonProperty
     private String ptVar1;

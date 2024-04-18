@@ -14,6 +14,9 @@ public interface XmslEngineeringReportMapper {
 
     XmslEngineeringReport getXmslEngineeringReport(XmslEngineeringReport xmslEngineeringReport);
 
+    List<XmslEngineeringReport> getListByWbsCodes(@Param("reportType") Integer reportType,@Param("wbsCodes") String[] wbsCodes);
+    List<XmslEngineeringReport> getListByParentIds(@Param("reportType") Integer reportType,@Param("parentIds") Long[] parentIds);
+    
     List<XmslEngineeringReport> getXmslEngineeringReportList(XmslEngineeringReport xmslEngineeringReport);
 
     List<XmslEngineeringReport> getId(XmslEngineeringReport xmslEngineeringReport);

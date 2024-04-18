@@ -148,6 +148,23 @@
         order by create_time desc
     </select>
 
+
+    <select id="getListByWbsCodes"  resultMap="XmslEngineeringReportResultMap">
+        <include refid="selectXmslEngineeringReportVo"/>
+        where report_type = #{reportType} and wbs_code in
+        <foreach collection="wbsCodes" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>      
+    </select>
+
+    <select id="getListByParentIds"  resultMap="XmslEngineeringReportResultMap">
+        <include refid="selectXmslEngineeringReportVo"/>
+        where report_type = #{reportType} and parent_id in
+        <foreach collection="parentIds" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+    
     <select id="getXmslEngineeringReportList" resultMap="XmslEngineeringReportResultMap">
         <include refid="selectXmslEngineeringReportVo"/>
         <where>
@@ -192,7 +209,7 @@
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` != ''</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="params != null  and params.ids != null ">
                 and `id` in

@@ -86,6 +86,13 @@ public interface IXmslWbsService {
     Map<String,List<XmslWbsHistory>> copyChildList(String parentCode,Integer level,Integer rootNum,Integer num,Long[] ids,Long mainId);
 
     /**
+     * 获取完整树形（父级子级）
+     * @param wbsCode 
+     * @return
+     */
+    List<XmslWbs> getFullByWbsCode(String wbsCode);
+
+    /**
      * 获取wbs简要信息
      * @return
      */

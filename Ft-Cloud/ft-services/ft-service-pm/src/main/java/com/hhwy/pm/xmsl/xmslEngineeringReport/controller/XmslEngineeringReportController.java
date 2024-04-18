@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.domain.XmslEngineeringReport;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportService;
 import com.hhwy.utils.customLog.CustomBusinessType;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 工程量报表
@@ -81,5 +83,16 @@ public class XmslEngineeringReportController extends BaseController {
             return AjaxResult.error("ERROR");
         xmslEngineeringReportService.sync(SecurityUtils.getTenantKey());
         return AjaxResult.success();
+    }
+
+    /**
+     * 获取wbs下的工程量清单
+     * @param xmslEngineeringReportParam
+     * @return
+     */
+    @PostMapping("/relateList")
+    public AjaxResult relateList(@RequestBody XmslEngineeringReport xmslEngineeringReportParam) {
+        Map<String,List<XmslContractList>> map = xmslEngineeringReportService.relateListByWbsCode(xmslEngineeringReportParam.getWbsCode());
+        return AjaxResult.success(map);
     }
 }

@@ -1,9 +1,14 @@
 package com.hhwy.sp.designChangeList.service;
 
+import com.hhwy.pm.xmsl.xmslEngineeringReport.domain.XmslEngineeringReport;
+import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeList;
 import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeManage;
+import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeWbs;
 import com.hhwy.sp.designChangeList.vo.ChangeManagSaveVo;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 施工技术管理-设计变更管理Service接口
@@ -61,4 +66,13 @@ public interface ISgjsDesignChangeManageService {
      * @return 结果
      */
     public int deleteSgjsDesignChangeManageById(Long id);
+
+    /**
+     * 查询wbs挂接的清单
+     * @param wbs
+     * @return {list: 挂接的清单树形集合,wbsList: wbs树形 }
+     */
+    public Map<String,Object> relateList(SgjsDesignChangeWbs wbs);
+
+    public List<SgjsDesignChangeList> importData(MultipartFile file) throws Exception;
 }

@@ -7,6 +7,7 @@ import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.domain.CommonQqchMeasureExpRange;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.dto.DesignDisclosurePlanDto;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
+import com.hhwy.pm.xmsl.xmslEngineeringReport.domain.XmslEngineeringReport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -109,6 +110,21 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
 
             @Override
             public AjaxResult getContractInfo() {
+                return AjaxResult.error("请求失败:", throwable.getMessage());
+            }
+
+            @Override
+            public AjaxResult engineeringReport(XmslEngineeringReport report) {
+                return AjaxResult.error("请求失败:", throwable.getMessage());
+            }
+
+            @Override
+            public AjaxResult relateList(XmslEngineeringReport report) {
+                return AjaxResult.error("请求失败:", throwable.getMessage());
+            }
+
+            @Override
+            public AjaxResult fullByWbsCode(Map map) {
                 return AjaxResult.error("请求失败:", throwable.getMessage());
             }
         };

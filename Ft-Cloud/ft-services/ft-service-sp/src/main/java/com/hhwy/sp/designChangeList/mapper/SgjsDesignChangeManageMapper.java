@@ -27,6 +27,14 @@ public interface SgjsDesignChangeManageMapper {
     public List<SgjsDesignChangeManage> selectSgjsDesignChangeManageList(SgjsDesignChangeManage sgjsDesignChangeManage);
 
     /**
+     * 获取最新的生效数据
+     * @return
+     */
+    public Long lastEffectId();
+    
+    public Integer countSgjsDesignChangeManage(SgjsDesignChangeManage sgjsDesignChangeManage);
+
+    /**
      * 新增施工技术管理-设计变更管理
      * 
      * @param sgjsDesignChangeManage 施工技术管理-设计变更管理
