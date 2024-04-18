@@ -96,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="selfCode != null  and selfCode != ''"> and `self_code` = #{selfCode}</if>
             <if test="parentCode != null  and parentCode != ''"> and `parent_code` = #{parentCode}</if>
         </where>
-        order by `level`,`id` desc
+        order by `level`,`id`
     </select>
     
     <select id="selectSgjsDesignChangeWbsById" parameterType="Long" resultMap="SgjsDesignChangeWbsResult">

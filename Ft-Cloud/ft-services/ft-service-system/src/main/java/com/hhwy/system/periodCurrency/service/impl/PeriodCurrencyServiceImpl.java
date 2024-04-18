@@ -166,7 +166,7 @@ public class PeriodCurrencyServiceImpl implements IPeriodCurrencyService {
 
     @Override
     public List<PeriodCurrency> selectRatePeriodByCodeAndCurrent(Map<String, String> map) {
-        String periodCode = map.get("periodCode");
+            String periodCode = map.get("periodCode");
         String currency = map.get("currency");
         String periodDate = map.get("periodDate");
         if (StringUtils.isNotEmpty(periodCode) && StringUtils.isNotEmpty(periodDate)) throw new RuntimeException("期次编码和期次时间只能填写一个");

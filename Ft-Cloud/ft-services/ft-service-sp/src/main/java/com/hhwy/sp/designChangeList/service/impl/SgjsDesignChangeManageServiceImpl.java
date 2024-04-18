@@ -46,9 +46,7 @@ import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeManage;
 import com.hhwy.sp.designChangeList.service.ISgjsDesignChangeManageService;
 import com.hhwy.common.core.text.Convert;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
-import sun.rmi.runtime.Log;
 
 /**
  * 施工技术管理-设计变更管理Service业务层处理
@@ -128,24 +126,28 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
     private void handlerWbsList(ChangeManagSaveVo saveVo, SgjsDesignChangeWbs parent,List<SgjsDesignChangeWbs> wbsList 
             , List<SgjsDesignChangeWbs> addWbsList,List<String> deleteWbsCodeList, List<SgjsDesignChangeList> addList){
         Integer level = parent==null?1:parent.getLevel()+1;
+        if(CollectionUtils.isEmpty(wbsList)) return;
         for (int i = 0; i < wbsList.size(); i++) {
             SgjsDesignChangeWbs wbs = wbsList.get(i);
             if(StringUtils.equals(saveVo.getSubmitFlag(),"1")){
                 JyDetailsUtil.jy(wbs, new Class[]{ValidationGroups.Other.class} );
             }
             wbs.setId(IdWorker.createId());
+            wbs.setParentId(parent==null?-1L:parent.getId());
             new AddBaseInfoUtil<>().addBaseEntity(wbs);
             wbs.setMainId(saveVo.getId());
             wbs.setLevel(level);
-            wbs.setPtVar1("");
             addWbsList.add(wbs);
-            deleteWbsCodeList.add(wbs.getCode());
+            if(wbs.getPtVar1().equals("1"))
+                deleteWbsCodeList.add(wbs.getCode());
             //处理清单
-            handlerList(saveVo,wbs,saveVo.getList(),addList);
+            handlerList(saveVo,wbs,null,wbs.getList(),addList);
+            handlerWbsList(saveVo,wbs,wbs.getChildren(),addWbsList,deleteWbsCodeList,addList);
+            wbs.setPtVar1("");
         }
     }
 
-    private void handlerList(ChangeManagSaveVo saveVo, SgjsDesignChangeWbs wbs,List<SgjsDesignChangeList> list,
+    private void handlerList(ChangeManagSaveVo saveVo, SgjsDesignChangeWbs wbs,SgjsDesignChangeList parent,List<SgjsDesignChangeList> list,
                              List<SgjsDesignChangeList> addList){
         if(!StringUtils.equals(wbs.getPtVar1(),"1") || CollectionUtils.isEmpty(list))
             return;
@@ -159,8 +161,9 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
             temp.setMainId(saveVo.getId());
             temp.setWbsCode(wbs.getCode());
             temp.setWbsId(wbs.getId());
+            temp.setPid(parent==null?-1L:parent.getId());
             addList.add(temp);
-            handlerList(saveVo,wbs,temp.getChildren(),addList);
+            handlerList(saveVo,wbs,temp,temp.getChildren(),addList);
         }
     }
 
@@ -246,6 +249,7 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
             List<XmslWbs> treeList = new ArrayList<>();
             for (int i = 0; i < wbsList.size(); i++) {
                 XmslWbs temp = wbsList.get(i);
+                temp.setPtVar1("1"); //标记为已加载清单数据
                 if(StringUtils.isBlank(temp.getParentId()) || temp.getParentId().equals("-1")){
                     treeList.add(temp);
                     continue;

@@ -715,7 +715,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <update id="deleteWbsByMainId" parameterType="Long">
-        delete from `sgjs_design_change_wbs` where `mainId` = #{mainId}
+        delete from `sgjs_design_change_wbs` where `main_id` = #{mainId}
     </update>
 
 </mapper>

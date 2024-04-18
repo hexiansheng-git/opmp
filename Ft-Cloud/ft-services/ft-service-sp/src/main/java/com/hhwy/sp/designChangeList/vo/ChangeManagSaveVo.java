@@ -26,7 +26,7 @@ public class ChangeManagSaveVo extends SgjsDesignChangeManage {
     
     @NotBlank(message = "WBS不能为空",groups = {ValidationGroups.Other.class})
     private List<SgjsDesignChangeWbs> wbsList;
-    @NotBlank(message = "清单不能为空",groups = {ValidationGroups.Other.class})
-    private List<SgjsDesignChangeList> list;
+//    @NotBlank(message = "清单不能为空",groups = {ValidationGroups.Other.class})
+//    private List<SgjsDesignChangeList> list;
     
 }

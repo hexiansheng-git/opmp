@@ -3,10 +3,12 @@ package com.hhwy.sp.designChangeList.domain;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.utils.tree.TreeNode;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +41,7 @@ public class SgjsDesignChangeList extends TreeNode<SgjsDesignChangeList> {
 
     /** 清单编码,xmsl_contract_list.code */
     @FtExcel(name = "清单编号")
+    @NotBlank(message = "清单编号不能为空",groups = {ValidationGroups.Other.class})
     private String listCode;
 
     /** 父id */
@@ -55,6 +58,7 @@ public class SgjsDesignChangeList extends TreeNode<SgjsDesignChangeList> {
 
     /** 清单中文名称 */
     @FtExcel(name = "清单中文名称")
+    @NotBlank(message = "清单中文名称不能为空",groups = {ValidationGroups.Other.class})
     private String chineseName;
 
     /** 清单外文名称 */
@@ -63,6 +67,7 @@ public class SgjsDesignChangeList extends TreeNode<SgjsDesignChangeList> {
 
     /** 清单类型(字典项（sp_list_type）) */
     @FtExcel(name = "清单类型", dictType = "sp_list_type")
+    @NotBlank(message = "清单类型不能为空",groups = {ValidationGroups.Other.class})
     private String listType;
 
     /** 单位编码 */
@@ -70,6 +75,7 @@ public class SgjsDesignChangeList extends TreeNode<SgjsDesignChangeList> {
 
     /** 单位 */
     @FtExcel(name = "单位")
+    @NotBlank(message = "单位不能为空",groups = {ValidationGroups.Other.class})
     private String unit;
 
     /** 合同总数量 */
@@ -97,7 +103,7 @@ public class SgjsDesignChangeList extends TreeNode<SgjsDesignChangeList> {
     private BigDecimal zeroSumPrice;
 
     /** 本次变更前累计-工程量清单 */
-    @FtExcel(name = "本次变更前累计-工程量清单",type = FtExcel.Type.EXPORT)
+    @FtExcel(name = "本次变更前累计-数量",type = FtExcel.Type.EXPORT)
     private BigDecimal beforeNum;
 
     /** 本次变更前累计-单价不含税 */
@@ -110,14 +116,17 @@ public class SgjsDesignChangeList extends TreeNode<SgjsDesignChangeList> {
 
     /** 当前工程量清单 */
     @FtExcel(name = "本次变更数量")
+    @NotBlank(message = "本次变更数量不能为空",groups = {ValidationGroups.Other.class})
     private BigDecimal changeNum;
 
     /** 当前单价不含税 */
     @FtExcel(name = "本次变更单价（不含税）",width = 21L)
+    @NotBlank(message = "本次变更单价（不含税）不能为空",groups = {ValidationGroups.Other.class})
     private BigDecimal changeExcludePrice;
 
     /** 当前单价含税 */
     @FtExcel(name = "本次变更金额（不含税）",width = 21L)
+    @NotBlank(message = "本次变更金额（不含税）不能为空",groups = {ValidationGroups.Other.class})
     private BigDecimal changeSumPrice;
 
     /** 变更后-工程量清单 */

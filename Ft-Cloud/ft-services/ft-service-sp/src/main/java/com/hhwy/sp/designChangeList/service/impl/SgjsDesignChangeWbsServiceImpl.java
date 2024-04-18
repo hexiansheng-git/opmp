@@ -51,10 +51,10 @@ public class SgjsDesignChangeWbsServiceImpl implements ISgjsDesignChangeWbsServi
         for (int i = 0; i < list.size(); i++) {
             SgjsDesignChangeWbs temp = list.get(i);
             wbsMap.put(temp.getId(),temp);
-            if(temp.getPid() == null || temp.getPid() < 1){
+            if(temp.getParentId() == null || temp.getParentId() < 1){
                 firstList.add(temp);
             }else{
-                SgjsDesignChangeWbs parent = wbsMap.get(temp.getId());
+                SgjsDesignChangeWbs parent = wbsMap.get(temp.getParentId());
                 parent.setChildren(CollectionUtils.isEmpty(parent.getChildren())?new ArrayList<>():parent.getChildren());
                 parent.getChildren().add(temp);
             }

@@ -47,7 +47,7 @@ public class SgjsDesignChangeListServiceImpl implements ISgjsDesignChangeListSer
             if(temp.getPid() == null || temp.getPid() < 1){
                 firstList.add(temp);
             }else{
-                SgjsDesignChangeList parent = listMap.get(temp.getId());
+                SgjsDesignChangeList parent = listMap.get(temp.getPid());
                 parent.setChildren(CollectionUtils.isEmpty(parent.getChildren())?new ArrayList<>():parent.getChildren());
                 parent.getChildren().add(temp);
             }
