@@ -52,5 +52,6 @@ public class WarnUrl {
         REVIEW_DETAIL = reviewDetail;
         CHANGE = change;
         SUMMARY_EVALUATION = summaryEvaluation;
+        PERSON_CONTROL_PLAN = personControlPlan;
     }
 }
