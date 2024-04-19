@@ -1,5 +1,6 @@
 package com.hhwy.sp.designChangeList.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.excel.FtExcel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -28,6 +29,7 @@ public class SgjsDesignChangeManageRecord extends BaseEntity {
 
     /** 登记日期/沟通日期 */
     @FtExcel(name = "登记日期/沟通日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date recordDate;
 
     /** 事项记录 */

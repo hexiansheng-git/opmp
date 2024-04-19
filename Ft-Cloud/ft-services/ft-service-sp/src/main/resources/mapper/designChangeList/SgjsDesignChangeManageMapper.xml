@@ -152,6 +152,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectSgjsDesignChangeManageVo"/>
         where `id` = #{id}
     </select>
+    <select id="selectSgjsDesignChangeManageByIds" parameterType="Long" resultMap="SgjsDesignChangeManageResult">
+        <include refid="selectSgjsDesignChangeManageVo"/>
+        where `id` in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 
     <select id="lastEffectId"  resultType="Long">
         select id from sgjs_design_change_manage where del_flag =0 and pt_var1 = 1 order by id desc limit 1
@@ -718,4 +725,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from `sgjs_design_change_wbs` where `main_id` = #{mainId}
     </update>
 
+    <update id="deleteWbsByType" >
+        delete from `sgjs_design_change_wbs` where `main_id` = #{mainId} and `pt_var2` = #{type} 
+    </update>
+
+    <update id="deleteListByType" >
+        delete from `sgjs_design_change_list` where `main_id` = #{mainId} and `type` = #{type} 
+    </update>
+    
 </mapper>

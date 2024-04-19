@@ -1,6 +1,8 @@
 package com.hhwy.sp.designChangeList.mapper;
 
 import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeManageRecord;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -34,6 +36,8 @@ public interface SgjsDesignChangeManageRecordMapper {
      */
     public int insertSgjsDesignChangeManageRecord(SgjsDesignChangeManageRecord sgjsDesignChangeManageRecord);
 
+    public int batchInsert(@Param("dataList") List<SgjsDesignChangeManageRecord> list);
+
     /**
      * 修改施工技术管理-设计变更管理-过程记录
      * 
@@ -57,4 +61,6 @@ public interface SgjsDesignChangeManageRecordMapper {
      * @return 结果
      */
     public int deleteSgjsDesignChangeManageRecordByIds(String[] ids);
+
+    public int deleteByMainId(@Param("mainId") Long mainId);
 }

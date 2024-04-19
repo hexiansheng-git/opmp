@@ -1,6 +1,8 @@
 package com.hhwy.sp.designChangeList.mapper;
 
 import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeManage;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -17,6 +19,8 @@ public interface SgjsDesignChangeManageMapper {
      * @return 施工技术管理-设计变更管理
      */
     public SgjsDesignChangeManage selectSgjsDesignChangeManageById(Long id);
+
+    public List<SgjsDesignChangeManage> selectSgjsDesignChangeManageByIds(@Param("ids") Long[] ids);
 
     /**
      * 查询施工技术管理-设计变更管理列表
@@ -67,4 +71,7 @@ public interface SgjsDesignChangeManageMapper {
     public int deleteSgjsDesignChangeManageByIds(String[] ids);
 
     int deleteWbsByMainId(Long mainId);
+
+    int deleteWbsByType(@Param("mainId") Long mainId, @Param("type")String type);
+    int deleteListByType(@Param("mainId") Long mainId,@Param("type")Integer type);
 }

@@ -156,7 +156,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                 `pt_var2`,
                                                 `pt_var3`,
                                                 `pt_var4`,
-                                                `pt_var5`,
+                                                `pt_var5`
                             )values
         <foreach collection="dataList" separator="," item="item" index="index" >
 (
@@ -185,7 +185,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                 #{item.ptVar2},
                                                                 #{item.ptVar3},
                                                                 #{item.ptVar4},
-                                                                #{item.ptVar5},
+                                                                #{item.ptVar5}
                                         )
         </foreach>
     </insert>
@@ -419,6 +419,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
+    </update>
+
+    <update id="deleteByMainId" parameterType="Long">
+        delete from `sgjs_design_change_manage_record` where `main_id` = #{mainId}
     </update>
 
 

@@ -26,7 +26,13 @@ public interface ISgjsDesignChangeWbsService {
      */
     public List<SgjsDesignChangeWbs> selectSgjsDesignChangeWbsList(SgjsDesignChangeWbs sgjsDesignChangeWbs);
 
-    public List<SgjsDesignChangeWbs> wbsTreeList(Long mainId);
+    /**
+     * wbs全量树形
+     * @param mainId
+     * @param type   类型，1：元数据/2:变更后
+     * @return
+     */
+    public List<SgjsDesignChangeWbs> wbsTreeList(Long mainId,String type);
 
     /**
      * 新增wbs

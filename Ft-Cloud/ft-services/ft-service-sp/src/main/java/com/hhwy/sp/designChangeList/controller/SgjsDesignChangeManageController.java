@@ -5,18 +5,22 @@ import java.util.*;
 import java.util.function.Function;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.page.TableDataInfo;
 import com.hhwy.common.log.enums.BusinessType;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeList;
+import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeManageRecord;
 import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeWbs;
 import com.hhwy.sp.designChangeList.service.ISgjsDesignChangeListService;
+import com.hhwy.sp.designChangeList.service.ISgjsDesignChangeManageRecordService;
 import com.hhwy.sp.designChangeList.service.ISgjsDesignChangeWbsService;
 import com.hhwy.sp.designChangeList.vo.ChangeManagSaveVo;
 import com.hhwy.sp.designChangeList.vo.SgjsDesignChangeManageVo;
@@ -57,6 +61,8 @@ public class SgjsDesignChangeManageController extends BaseController {
     @Autowired
     private ISgjsDesignChangeListService designChangeListService;
     @Autowired
+    private ISgjsDesignChangeManageRecordService recordService;
+    @Autowired
     private PmServiceApi pmServiceApi;
 
     /**
@@ -82,27 +88,58 @@ public class SgjsDesignChangeManageController extends BaseController {
         }else{
             manage = this.sgjsDesignChangeManageService.selectSgjsDesignChangeManageById(manage.getId());
             //wbs
-            List<SgjsDesignChangeWbs> wbsList = designChangeWbsService.wbsTreeList(manage.getId());
+            List<SgjsDesignChangeWbs> wbsList = designChangeWbsService.wbsTreeList(manage.getId(),"1");
             manage.setWbsList(wbsList);
         }
-        Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
-        if (CollectionUtils.isEmpty(prjInfo)) {
-            logger.error("获取项目信息异常");
-        }else{
-            manage.setProjectCode(ObjectUtils.nvlString(prjInfo.get("projectCode")));
-            manage.setProjectName(ObjectUtils.nvlString(prjInfo.get("projectName")));
-        }
-        AjaxResult result = pmServiceApi.getContractInfo();
-        if(!AjaxResult.isSuccess(result)){
-            logger.error("获取合同信息异常");
-        }else{
-            JSONObject conObj = JSONObject.parseObject(JSONObject.toJSONString(result.getData()));
-            manage.setMasterContractCode(conObj.getString("code"));
-            manage.setCurrency(conObj.getString("listCurrencyName"));
-        }    
+        putPrjInfo(manage);
+        //是否为直属项目
+        manage.setDirectFlag( sgjsDesignChangeManageService.isDirectProject() );
+        
         return AjaxResult.success(manage);
     }
 
+    //过程及结果登记明细
+    @GetMapping("/detailProcess")
+    public AjaxResult detailProcess(SgjsDesignChangeManage manage) {
+        if(manage.getId() == null)
+            return AjaxResult.success(new SgjsDesignChangeManage());
+        manage = this.sgjsDesignChangeManageService.selectSgjsDesignChangeManageById(manage.getId());
+        if(manage == null)
+            return AjaxResult.error("未获取到数据，请确认ID是否正确");
+        //wbs
+        List<SgjsDesignChangeWbs> wbsList = designChangeWbsService.wbsTreeList(manage.getId(),"2");
+        manage.setWbsList(wbsList);
+        putPrjInfo(manage);
+        //过程记录
+        SgjsDesignChangeManageRecord query = new SgjsDesignChangeManageRecord();
+        query.setMainId(manage.getId());
+        List<SgjsDesignChangeManageRecord> list = recordService.selectSgjsDesignChangeManageRecordList(query);
+        List<SgjsDesignChangeManageRecord> recordList = new ArrayList<>();
+        List<SgjsDesignChangeManageRecord> recordContactList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            SgjsDesignChangeManageRecord temp = list.get(i);
+            if(StringUtils.equals(temp.getType(),"1"))
+                recordList.add(temp);
+            if(StringUtils.equals(temp.getType(),"2"))
+                recordContactList.add(temp);
+        }
+        manage.setRecordList(recordList);
+        manage.setRecordContactList(recordContactList);
+        return AjaxResult.success(manage);
+    }
+
+    /**
+     * 获取wbs全量树形，
+     * @param wbs {id,type类型，默认2}
+     * @return
+     */
+    @GetMapping("/wbsTreeList")
+    public AjaxResult wbsTreeList(SgjsDesignChangeWbs wbs) {
+        String type = ObjectUtils.nvlString(wbs.getPtVar2(),"2");
+        List<SgjsDesignChangeWbs> wbsList = designChangeWbsService.wbsTreeList(wbs.getId(),type);
+        return AjaxResult.success(wbsList);
+    }
+    
     //根据wbs编号获取清单(全量树形)
     @GetMapping("/listByWbsCode")
     public AjaxResult listByWbsCode(SgjsDesignChangeList list) {
@@ -110,8 +147,7 @@ public class SgjsDesignChangeManageController extends BaseController {
         return AjaxResult.success(resultList);
     }
 
-
-    /**
+    /**                            
      * 获取wbs挂接的清单
      * @param wbs {code WBS编号}
      * @return {list清单集合，wbsList:wbs集合}
@@ -133,8 +169,22 @@ public class SgjsDesignChangeManageController extends BaseController {
         }
     }
 
+    //台账页导出
+    @PostMapping("/export")
+    public void export(@RequestBody Map map, HttpServletResponse response) throws IOException {
+        FtExcelUtil<SgjsDesignChangeManage> util = new FtExcelUtil<>(SgjsDesignChangeManage.class);
+        List<SgjsDesignChangeManage> list = new ArrayList<>();
+        if(map == null || ObjectUtils.isBlank(map.get("ids")) ){
+            list = this.sgjsDesignChangeManageService.selectSgjsDesignChangeManageList(new SgjsDesignChangeManage());
+        }else{
+            Long[] ids = Convert.toLongArray(map.get("ids").toString());
+            list = this.sgjsDesignChangeManageService.selectSgjsDesignChangeManageByIds(ids);
+        }
+        util.exportExcel(response, list, "数据","设计变更管理.xlsx");
+    }
+    
     @PostMapping("/exportData")
-    public void export(@RequestBody SgjsDesignChangeList designChangeList, HttpServletResponse response) throws IOException {
+    public void exportData(@RequestBody SgjsDesignChangeList designChangeList, HttpServletResponse response) throws IOException {
         FtExcelUtil<SgjsDesignChangeList> util = new FtExcelUtil<>(SgjsDesignChangeList.class);
         if(designChangeList.getId() != null){
             //重写wbs的Id,从100开始
@@ -174,16 +224,15 @@ public class SgjsDesignChangeManageController extends BaseController {
                     "清单编号","清单中文名称","清单外文名称","清单类型","单位","本次变更数量","本次变更单价（不含税）","本次变更金额（不含税）"
             ));
         }
-        
     }
 
     /**
      * 新增保存施工技术管理-设计变更管理
      */
     @PostMapping("/save")
-    @ResponseBody
     public AjaxResult save(@RequestBody ChangeManagSaveVo saveVo) {
         try{
+            saveVo.setPtVar2(ObjectUtils.nvlString(saveVo.getPtVar2(),"1"));
             sgjsDesignChangeManageService.save(saveVo);
         }catch(IllegalArgumentException e){
             e.printStackTrace();
@@ -192,6 +241,23 @@ public class SgjsDesignChangeManageController extends BaseController {
         return AjaxResult.success();
     }
 
+    /**
+     * 同步
+     * @param manage
+     * @return
+     */
+    @PostMapping("/sync")
+    public AjaxResult sync(@RequestBody SgjsDesignChangeManage manage) {
+        try{
+            sgjsDesignChangeManageService.sync(manage.getId());
+        }catch(IllegalArgumentException e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
+        return AjaxResult.success();
+    }
+
+    
 
     /**
      * 删除施工技术管理-设计变更管理
@@ -201,5 +267,24 @@ public class SgjsDesignChangeManageController extends BaseController {
     public AjaxResult remove(String ids)
     {
         return toAjax(sgjsDesignChangeManageService.deleteSgjsDesignChangeManageByIds(ids));
+    }
+    
+    private void putPrjInfo(SgjsDesignChangeManage manage){
+        Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+        if (CollectionUtils.isEmpty(prjInfo)) {
+            logger.error("获取项目信息异常");
+        }else{
+            manage.setProjectCode(ObjectUtils.nvlString(prjInfo.get("projectCode")));
+            manage.setProjectName(ObjectUtils.nvlString(prjInfo.get("projectName")));
+        }
+        AjaxResult result = pmServiceApi.getContractInfo();
+        if(!AjaxResult.isSuccess(result)){
+            logger.error("获取合同信息异常");
+        }else{
+            JSONObject conObj = JSONObject.parseObject(JSONObject.toJSONString(result.getData()));
+            manage.setMasterContractCode(conObj.getString("code"));
+            manage.setCurrency(conObj.getString("listCurrencyName"));
+            manage.setCurrencyCode(conObj.getString("listCurrencyCode"));
+        } 
     }
 }

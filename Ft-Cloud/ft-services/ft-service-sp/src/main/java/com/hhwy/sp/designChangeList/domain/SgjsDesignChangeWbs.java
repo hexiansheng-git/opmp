@@ -148,7 +148,7 @@ public class SgjsDesignChangeWbs extends TreeNode<SgjsDesignChangeWbs> {
     private String ptVar1;
 
     /** null */
-    @FtExcel(name = "null")
+    @FtExcel(name = "预留字段2 类型,1:元数据/2:调整后")
     private String ptVar2;
 
     /** 预留字段3 */

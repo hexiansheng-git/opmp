@@ -25,6 +25,8 @@ public interface ISgjsDesignChangeManageService {
      */
     public SgjsDesignChangeManage selectSgjsDesignChangeManageById(Long id);
 
+    public List<SgjsDesignChangeManage> selectSgjsDesignChangeManageByIds(Long[] ids);
+
     /**
      * 查询施工技术管理-设计变更管理列表
      * 
@@ -75,4 +77,16 @@ public interface ISgjsDesignChangeManageService {
     public Map<String,Object> relateList(SgjsDesignChangeWbs wbs);
 
     public List<SgjsDesignChangeList> importData(MultipartFile file) throws Exception;
+
+    /**
+     * 当前项目是否为直属项目
+     * @return 0:否，1：是
+     */
+    public Integer isDirectProject();
+
+    /**
+     * 同步原数据
+     * @param mainId 
+     */
+    public void sync(Long mainId);
 }

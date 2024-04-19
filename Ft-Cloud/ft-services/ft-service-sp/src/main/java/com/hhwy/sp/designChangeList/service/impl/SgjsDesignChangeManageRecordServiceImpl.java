@@ -3,12 +3,14 @@ package com.hhwy.sp.designChangeList.service.impl;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hhwy.sp.designChangeList.mapper.SgjsDesignChangeManageRecordMapper;
 import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeManageRecord;
 import com.hhwy.sp.designChangeList.service.ISgjsDesignChangeManageRecordService;
 import com.hhwy.common.core.text.Convert;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 施工技术管理-设计变更管理-过程记录Service业务层处理
@@ -55,6 +57,14 @@ public class SgjsDesignChangeManageRecordServiceImpl implements ISgjsDesignChang
         return sgjsDesignChangeManageRecordMapper.insertSgjsDesignChangeManageRecord(sgjsDesignChangeManageRecord);
     }
 
+    @Override
+    @Transactional
+    public int batchInsert(List<SgjsDesignChangeManageRecord> list) {
+        if(CollectionUtils.isEmpty(list))
+            return 0;
+        return sgjsDesignChangeManageRecordMapper.batchInsert(list);
+    }
+
     /**
      * 修改施工技术管理-设计变更管理-过程记录
      * 
@@ -86,5 +96,10 @@ public class SgjsDesignChangeManageRecordServiceImpl implements ISgjsDesignChang
      */
     public int deleteSgjsDesignChangeManageRecordById(Long id) {
         return sgjsDesignChangeManageRecordMapper.deleteSgjsDesignChangeManageRecordById(id);
+    }
+
+    @Override
+    public int deleteByMainId(Long mainId){
+        return sgjsDesignChangeManageRecordMapper.deleteByMainId(mainId);
     }
 }

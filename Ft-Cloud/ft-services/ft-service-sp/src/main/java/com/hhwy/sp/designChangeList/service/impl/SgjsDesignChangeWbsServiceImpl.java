@@ -42,9 +42,10 @@ public class SgjsDesignChangeWbsServiceImpl implements ISgjsDesignChangeWbsServi
     }
 
     @Override
-    public List<SgjsDesignChangeWbs> wbsTreeList(Long mainId) {
+    public List<SgjsDesignChangeWbs> wbsTreeList(Long mainId,String type) {
         SgjsDesignChangeWbs query = new SgjsDesignChangeWbs();
         query.setMainId(mainId);
+        query.setPtVar2(type);
         List<SgjsDesignChangeWbs> list = sgjsDesignChangeWbsMapper.selectSgjsDesignChangeWbsList(query);
         List<SgjsDesignChangeWbs> firstList = new ArrayList<>();
         Map<Long,SgjsDesignChangeWbs> wbsMap = new HashMap<>();

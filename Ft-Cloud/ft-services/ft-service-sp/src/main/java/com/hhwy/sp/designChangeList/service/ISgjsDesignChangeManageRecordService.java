@@ -34,6 +34,7 @@ public interface ISgjsDesignChangeManageRecordService {
      */
     public int insertSgjsDesignChangeManageRecord(SgjsDesignChangeManageRecord sgjsDesignChangeManageRecord);
 
+    public int batchInsert(List<SgjsDesignChangeManageRecord> list);
     /**
      * 修改施工技术管理-设计变更管理-过程记录
      * 
@@ -57,4 +58,5 @@ public interface ISgjsDesignChangeManageRecordService {
      * @return 结果
      */
     public int deleteSgjsDesignChangeManageRecordById(Long id);
+    public int deleteByMainId(Long mainId);
 }

@@ -1,14 +1,9 @@
 package com.hhwy.sp.designChangeList.service.impl;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-import cn.hutool.core.util.NumberUtil;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -16,12 +11,15 @@ import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.domain.XmslEngineeringReport;
+import com.hhwy.sp.core.system.SystemApiService;
 import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeList;
 import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeWbs;
 import com.hhwy.sp.designChangeList.service.ISgjsDesignChangeListService;
+import com.hhwy.sp.designChangeList.service.ISgjsDesignChangeManageRecordService;
 import com.hhwy.sp.designChangeList.service.ISgjsDesignChangeWbsService;
 import com.hhwy.sp.designChangeList.vo.ChangeManagSaveVo;
 import com.hhwy.system.api.domain.SysDictData;
@@ -35,6 +33,7 @@ import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.utils.validation.ValidationUtil;
 import jdk.nashorn.internal.ir.ContinueNode;
+import lombok.var;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.slf4j.Logger;
@@ -47,6 +46,8 @@ import com.hhwy.sp.designChangeList.service.ISgjsDesignChangeManageService;
 import com.hhwy.common.core.text.Convert;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.print.event.PrintJobAttributeEvent;
 
 /**
  * 施工技术管理-设计变更管理Service业务层处理
@@ -64,6 +65,8 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
     @Autowired
     private ISgjsDesignChangeListService changeListService;
     @Autowired
+    private ISgjsDesignChangeManageRecordService changeManageRecordService;
+    @Autowired
     private PmServiceApi pmServiceApi;
 
     /**
@@ -75,6 +78,11 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
     @Override
     public SgjsDesignChangeManage selectSgjsDesignChangeManageById(Long id) {
         return sgjsDesignChangeManageMapper.selectSgjsDesignChangeManageById(id);
+    }
+
+    @Override
+    public List<SgjsDesignChangeManage> selectSgjsDesignChangeManageByIds(Long[] ids) {
+        return sgjsDesignChangeManageMapper.selectSgjsDesignChangeManageByIds(ids);
     }
 
     /**
@@ -114,14 +122,29 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
             sgjsDesignChangeManageMapper.updateSgjsDesignChangeManage(saveVo);
         }
         if(!isNew)
-            sgjsDesignChangeManageMapper.deleteWbsByMainId(saveVo.getId());
+            sgjsDesignChangeManageMapper.deleteWbsByType(saveVo.getId(),saveVo.getPtVar2());
         List<SgjsDesignChangeWbs> addWbsList = new ArrayList<>();
         List<SgjsDesignChangeList> addList = new ArrayList<>();
         List<String> wbsCodeList = new ArrayList<>();
         handlerWbsList(saveVo,null,saveVo.getWbsList(),addWbsList,wbsCodeList,addList);
-        changeListService.deleteByWbsCodes(saveVo.getId(),"1",wbsCodeList);
+        changeListService.deleteByWbsCodes(saveVo.getId(),saveVo.getPtVar2(),wbsCodeList);
         changeWbsService.batchInsert(addWbsList);
         changeListService.batchInsert(addList);
+        //事项记录
+        changeManageRecordService.deleteByMainId(saveVo.getId());
+        saveVo.getRecordList().stream().forEach(r->{
+            r.setId(IdWorker.createId());
+            r.setMainId(saveVo.getId());
+            new AddBaseInfoUtil<>().addBaseEntity(r);
+        });
+        saveVo.getRecordContactList().stream().forEach(r->{
+            r.setId(IdWorker.createId());
+            r.setMainId(saveVo.getId());
+            new AddBaseInfoUtil<>().addBaseEntity(r);
+        });
+        saveVo.getRecordList().addAll(saveVo.getRecordContactList());
+        changeManageRecordService.batchInsert(saveVo.getRecordList());
+        
     }
     private void handlerWbsList(ChangeManagSaveVo saveVo, SgjsDesignChangeWbs parent,List<SgjsDesignChangeWbs> wbsList 
             , List<SgjsDesignChangeWbs> addWbsList,List<String> deleteWbsCodeList, List<SgjsDesignChangeList> addList){
@@ -137,6 +160,7 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
             new AddBaseInfoUtil<>().addBaseEntity(wbs);
             wbs.setMainId(saveVo.getId());
             wbs.setLevel(level);
+            wbs.setPtVar2(saveVo.getPtVar2());
             addWbsList.add(wbs);
             if(wbs.getPtVar1().equals("1"))
                 deleteWbsCodeList.add(wbs.getCode());
@@ -162,6 +186,8 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
             temp.setWbsCode(wbs.getCode());
             temp.setWbsId(wbs.getId());
             temp.setPid(parent==null?-1L:parent.getId());
+            Integer type = StringUtils.equals(saveVo.getPtVar2(),"1")?1:2;
+            temp.setType(type);
             addList.add(temp);
             handlerList(saveVo,wbs,temp,temp.getChildren(),addList);
         }
@@ -308,4 +334,65 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
         List<SgjsDesignChangeList> list = excelUtil.importExcel(file.getInputStream());
         return list;
     }
+
+    @Override
+    public Integer isDirectProject() {
+        String ancestorStr = SecurityUtils.getSysUser().getDept().getAncestors();
+        Set<String> regionIdSet = new HashSet(Arrays.asList("101148617,101148910,101149129,101149344,101187590,101321233,101322264,101322275,101322288,101322301".split(",")));
+        if(StringUtils.isBlank(ancestorStr))
+            return 0;
+        String[] ancestors = ancestorStr.split(",");
+        for(String pid : ancestors){
+            if(regionIdSet.contains(pid))
+                return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    @Transactional
+    public void sync(Long mainId) {
+        sgjsDesignChangeManageMapper.deleteWbsByType(mainId, "2");
+        sgjsDesignChangeManageMapper.deleteListByType(mainId, 2);
+        //查询wbs和清单
+        Map<Long,Long> newWbsIdMap = new HashMap<>();
+        Map<Long,Long> newListIdMap = new HashMap<>();
+        BiFunction<Long,Map,Long> replaceIdFunc = (id,map)->{
+            if(id == null || id < 1L)
+                return id;
+            Object o = map.get(id);
+            if(o != null)
+                return (Long)o;
+            Long nid = IdWorker.createId();
+            map.put(id, nid);
+            return nid;
+        };
+        Date now = new Date();
+        SgjsDesignChangeWbs query = new SgjsDesignChangeWbs();
+        query.setMainId(mainId);
+        query.setPtVar2("1");
+        List<SgjsDesignChangeWbs> wbsList = this.changeWbsService.selectSgjsDesignChangeWbsList(query);
+        for (int i = 0; i < wbsList.size(); i++) {
+            SgjsDesignChangeWbs temp = wbsList.get(i);
+            temp.setId(replaceIdFunc.apply(temp.getId(), newWbsIdMap));
+            temp.setParentId(replaceIdFunc.apply(temp.getParentId(), newWbsIdMap));
+            temp.setPtVar2("2");
+            temp.setCreateTime(now);
+        }
+        SgjsDesignChangeList listQuery = new SgjsDesignChangeList();
+        listQuery.setMainId(mainId);
+        listQuery.setType(1);
+        List<SgjsDesignChangeList> list = this.changeListService.selectSgjsDesignChangeListList(listQuery);
+        for (int i = 0; i < list.size(); i++) {
+            SgjsDesignChangeList temp = list.get(i);
+            temp.setId(replaceIdFunc.apply(temp.getId(), newListIdMap));
+            temp.setPid(replaceIdFunc.apply(temp.getPid(), newListIdMap));
+            temp.setWbsId(newWbsIdMap.get(temp.getWbsId()));
+            temp.setType(2);
+            temp.setCreateTime(now);
+        }
+        this.changeWbsService.batchInsert(wbsList);
+        this.changeListService.batchInsert(list);
+    }
 }
+
