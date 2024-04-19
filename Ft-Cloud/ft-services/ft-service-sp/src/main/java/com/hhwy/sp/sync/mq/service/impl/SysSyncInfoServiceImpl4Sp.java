@@ -244,6 +244,12 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
     @Override
     public void pushSgjsPatentDeclare(SgjsPatentDeclare patentDeclare) {
         try {
+            ProjectDto projectDto = pmServiceApi.getProjectDto();
+            patentDeclare.setPtVar4(projectDto.getProjectCode());
+            patentDeclare.setProjectId(projectDto.getProjectId());
+            patentDeclare.setProjectName(projectDto.getProjectName());
+//            patentDeclare.setRegionId(projectDto.getRegionId());
+//            patentDeclare.setRegionName(projectDto.getRegionName());
             rocketMQTemplate.convertAndSend("sgjs_patent_declare:tenantSuccess", JSONObject.toJSONString(patentDeclare));
         } catch (Exception e) {
             e.printStackTrace();
@@ -252,9 +258,15 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
     }
 
     @Override
-    public void pushSgjsPaperPublish(SgjsPaperPublish patentDeclare) {
+    public void pushSgjsPaperPublish(SgjsPaperPublish paperPublish) {
         try {
-            rocketMQTemplate.convertAndSend("sgjs_paper_publish:tenantSuccess", JSONObject.toJSONString(patentDeclare));
+            ProjectDto projectDto = pmServiceApi.getProjectDto();
+            paperPublish.setPtVar4(projectDto.getProjectCode());
+            paperPublish.setProjectId(projectDto.getProjectId());
+            paperPublish.setProjectName(projectDto.getProjectName());
+            paperPublish.setRegionId(projectDto.getRegionId());
+            paperPublish.setRegionName(projectDto.getRegionName());
+            rocketMQTemplate.convertAndSend("sgjs_paper_publish:tenantSuccess", JSONObject.toJSONString(paperPublish));
         } catch (Exception e) {
             e.printStackTrace();
             throw e;

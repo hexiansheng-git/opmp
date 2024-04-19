@@ -5,7 +5,6 @@ import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.common.constant.BelongBusiness;
@@ -155,8 +154,6 @@ public class SgjsPatentDeclareServiceImpl implements ISgjsPatentDeclareService {
             id = IdWorker.createId();
             patentDeclare.setId(id);
             checkPatentNumberSingle(id,patentDeclare.getPatentNumber());
-            ProjectDto projectDto = pmServiceApi.getProjectDto();
-            patentDeclare.setPtVar4(projectDto.getProjectCode());
             this.insertSgjsPatentDeclare(patentDeclare);
         }else if("2".equals(saveType) || patentDeclare.getId() != null){
             //修改

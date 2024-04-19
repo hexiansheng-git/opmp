@@ -5,7 +5,6 @@ import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.common.constant.BelongBusiness;
@@ -145,8 +144,6 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
             //新增
             id = IdWorker.createId();
             paperPublish.setId(id);
-            ProjectDto projectDto = pmServiceApi.getProjectDto();
-            paperPublish.setPtVar4(projectDto.getProjectCode());
             this.insertSgjsPaperPublish(paperPublish);
         }else if("2".equals(saveType) || paperPublish.getId() != null){
             //修改
