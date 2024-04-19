@@ -111,27 +111,39 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
             String wbsCode = jdglWeekImagePlan.getWbsCode();
             Long pid = jdglWeekImagePlan.getPid();
             if(!CollectionUtils.isEmpty(list)) {
+                //找到当前迭代对象的父亲
                 JdglWeekImagePlan imagePlan = jdglWeekImagePlanList.stream().filter(vo -> vo.getId().equals(pid)).findFirst().orElse(null);
                 BigDecimal compValue = new BigDecimal(0);
+                //设计工程量，从总体计划同步过来的数据
                 BigDecimal designQuantity = jdglWeekImagePlan.getDesignQuantity();
+                //计划完成工程量 界面中唯一手填的数据
                 BigDecimal planCompQuantity = jdglWeekImagePlan.getPlanCompQuantity();
+                //父亲的设计工程量
                 if(imagePlan != null) designQuantity = imagePlan.getDesignQuantity();
                 BigDecimal rate = new BigDecimal(0);
                 if(planCompQuantity != null && designQuantity != null && rate.compareTo(designQuantity) != 0) {
+                    //孩子与父亲的设计量比值，得到一个百分比，目测用于计算计划完成产值
                     rate = planCompQuantity.divide(designQuantity, 4, BigDecimal.ROUND_HALF_UP);
                 }
+                //找到当前迭代对象对应的复核清单
                 List<XmslDrawReviewList> collect = list.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
                 if(!CollectionUtils.isEmpty(collect)) {
                     for (XmslDrawReviewList xmslDrawReviewList : collect) {
+                        //合同清单编码
                         String listCode = xmslDrawReviewList.getListCode();
+                        //复核量
                         BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
                         if(!CollectionUtils.isEmpty(inventoryList)) {
+                            //找到当前迭代对象对应的合同清单
                             XmslContractList xmslContractList = inventoryList.stream().filter(vo -> listCode.equals(vo.getCode())).findFirst().orElse(null);
                             if(xmslContractList != null) {
+                                //清单单价
                                 BigDecimal price = xmslContractList.getChangeUnitPrice() == null
                                         ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
+                                //复核量与当前迭代对象设计量所占父亲设计量比例的乘积 得到工程量
                                 BigDecimal quantity = checkNum == null
                                         ? new BigDecimal(0) : checkNum.multiply(rate);
+                                //工程量与清单单价的乘积，得到计划完成产值
                                 if (quantity != null && price != null) {
                                     compValue = compValue.add(quantity.multiply(price));
                                 }
