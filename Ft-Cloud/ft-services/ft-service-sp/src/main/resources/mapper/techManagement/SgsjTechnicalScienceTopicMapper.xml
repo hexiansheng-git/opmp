@@ -94,7 +94,7 @@
                 , `pt_var3`
                 , `pt_var4`
                 , `pt_var5`
-        FROM sgsj_technical_science_topic
+        FROM sgjs_technical_science_topic
     </sql>
 
     <select id="getSgsjTechnicalScienceTopic" resultMap="SgsjTechnicalScienceTopicResultMap">
@@ -320,7 +320,7 @@
     </select>
 
     <insert id="insertSgsjTechnicalScienceTopic" useGeneratedKeys="true" keyProperty="id">
-        insert into sgsj_technical_science_topic
+        insert into sgjs_technical_science_topic
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="applyState != null  and applyState != ''">`apply_state`,</if>
@@ -415,7 +415,7 @@
 
     <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgsjTechnicalScienceTopic -->
     <insert id="insertSgsjTechnicalScienceTopicList">
-        insert into sgsj_technical_science_topic
+        insert into sgjs_technical_science_topic
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `apply_state`,
@@ -510,7 +510,7 @@
     </insert>
 
     <update id="updateSgsjTechnicalScienceTopic">
-        update sgsj_technical_science_topic
+        update sgjs_technical_science_topic
         <trim prefix="SET" suffixOverrides=",">
             <if test="applyState != null  and  applyState != ''">`apply_state` = #{applyState},</if>
             <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
@@ -578,7 +578,7 @@
     </update>
 
     <update id="updateTaskStatus">
-        update sgsj_technical_science_topic
+        update sgjs_technical_science_topic
         <trim prefix="SET" suffixOverrides=",">
             <if test="applyState != null  and  applyState != ''">`apply_state` = #{applyState},</if>
             <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
@@ -592,7 +592,7 @@
     </update>
 
     <update id="updateSgsjTechnicalScienceTopicList">
-        update sgsj_technical_science_topic
+        update sgjs_technical_science_topic
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
@@ -817,12 +817,12 @@
     </update>
 
     <delete id="deleteById">
-        update `sgsj_technical_science_topic` set del_flag = 1
+        update `sgjs_technical_science_topic` set del_flag = 1
         where `id` = #{id}
     </delete>
 
     <update id="deleteSgsjTechnicalScienceTopic">
-        update `sgsj_technical_science_topic` set del_flag = 1
+        update `sgjs_technical_science_topic` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="applyState != null  and applyState != ''">and `apply_state` = #{applyState}</if>
@@ -888,7 +888,7 @@
     </update>
 
     <update id="deleteSgsjTechnicalScienceTopicByPks">
-        update `sgsj_technical_science_topic` set del_flag = 1
+        update `sgjs_technical_science_topic` set del_flag = 1
         <where>
             `id` in
             <foreach item="id" collection="sgsjTechnicalScienceTopicPkList" open="(" separator="," close=")">
@@ -901,7 +901,7 @@
         SELECT
             *
         FROM
-            sgsj_technical_science_topic a
+            sgjs_technical_science_topic a
                 LEFT JOIN sgjs_achievement_award b ON a.id = b.foreign_id
                 LEFT JOIN sgjs_authenticate_evaluate c ON a.id = c.foreign_id
     </select>
