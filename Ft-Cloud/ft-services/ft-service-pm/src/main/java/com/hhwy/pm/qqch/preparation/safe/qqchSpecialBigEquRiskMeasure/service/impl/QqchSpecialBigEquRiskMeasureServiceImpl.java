@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquRiskMeasure.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -104,18 +105,20 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
         version = VersionUtil.getVersion("qqch_special_big_equ_risk_measure", version);
         qqchSpecialBigEquRiskMeasure.setVersion(version);
 
-
-        QqchSpecialBigEquList param = new QqchSpecialBigEquList();
-        param.setVersion(version);
+//        QqchSpecialBigEquList param = new QqchSpecialBigEquList();
+//        param.setVersion(version);
         //获取8.4.1中有所有的设备
-        QqchSpecialBigEquListVo specialBigEquList = specialBigEquListService.getSpecialBigEquList(param);
-        List<QqchSpecialBigEquList> qqchSpecialBigEquListList = specialBigEquList.getQqchSpecialBigEquListList();
+//        QqchSpecialBigEquListVo specialBigEquList = specialBigEquListService.getSpecialBigEquList(param);
+//        List<QqchSpecialBigEquList> qqchSpecialBigEquListList = specialBigEquList.getQqchSpecialBigEquListList();
         List<QqchSpecialBigEquRiskMeasure> result = new ArrayList<>();
-        if (CollectionUtil.isNotEmpty(qqchSpecialBigEquListList)) {
-            List<String> collect = qqchSpecialBigEquListList.stream().map(QqchSpecialBigEquList::getEquName).collect(Collectors.toList());
+//        if (CollectionUtil.isNotEmpty(qqchSpecialBigEquListList)) {
+//            List<String> collect = qqchSpecialBigEquListList.stream().map(QqchSpecialBigEquList::getEquName).collect(Collectors.toList());
             ////根据设备集合获取7.6.2中的数据
-            List<SbchEquipmentSpecialPlanDetails> list = sbchEquipmentSpecialPlanService.getListByDeviceCode(collect, version);
-            list.forEach(p -> {
+//            List<SbchEquipmentSpecialPlanDetails> list = sbchEquipmentSpecialPlanService.getListByDeviceCode(collect, version);
+        SbchEquipmentSpecialPlan plan = sbchEquipmentSpecialPlanService.getList(version);
+        if (CollUtil.isNotEmpty(plan.getDetailsList())){
+            List<SbchEquipmentSpecialPlanDetails> detailsList = plan.getDetailsList();
+            detailsList.forEach(p -> {
                 QqchSpecialBigEquRiskMeasure bean = new QqchSpecialBigEquRiskMeasure();
                 bean.setEquName(p.getMaterialName());
                 bean.setRiskContent(p.getRiskContent());
@@ -123,6 +126,7 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
                 result.add(bean);
             });
         }
+//        }
 //        List<QqchSpecialBigEquRiskMeasure> qqchSpecialBigEquRiskMeasureList = qqchSpecialBigEquRiskMeasureMapper.getQqchSpecialBigEquRiskMeasureList(qqchSpecialBigEquRiskMeasure);
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
