@@ -135,11 +135,13 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
         saveVo.getRecordList().stream().forEach(r->{
             r.setId(IdWorker.createId());
             r.setMainId(saveVo.getId());
+            r.setType("1");
             new AddBaseInfoUtil<>().addBaseEntity(r);
         });
         saveVo.getRecordContactList().stream().forEach(r->{
             r.setId(IdWorker.createId());
             r.setMainId(saveVo.getId());
+            r.setType("2");
             new AddBaseInfoUtil<>().addBaseEntity(r);
         });
         saveVo.getRecordList().addAll(saveVo.getRecordContactList());
