@@ -36,6 +36,7 @@ import jdk.nashorn.internal.ir.ContinueNode;
 import lombok.var;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,8 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
     private ISgjsDesignChangeManageRecordService changeManageRecordService;
     @Autowired
     private PmServiceApi pmServiceApi;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     /**
      * 查询施工技术管理-设计变更管理
@@ -146,7 +149,11 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
         });
         saveVo.getRecordList().addAll(saveVo.getRecordContactList());
         changeManageRecordService.batchInsert(saveVo.getRecordList());
-        
+        //推送到总部版
+        if(StringUtils.equals(saveVo.getSubmitFlag(),"1")){
+            saveVo.setProjectCode(SecurityUtils.getTenantKey());
+//            rocketMQTemplate.convertAndSend("sgjs_design_change:tenantSuccess", JSONObject.toJSONString(list));
+        }
     }
     private void handlerWbsList(ChangeManagSaveVo saveVo, SgjsDesignChangeWbs parent,List<SgjsDesignChangeWbs> wbsList 
             , List<SgjsDesignChangeWbs> addWbsList,List<String> deleteWbsCodeList, List<SgjsDesignChangeList> addList){
@@ -224,8 +231,14 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
      * @param id 施工技术管理-设计变更管理ID
      * @return 结果
      */
+    @Override
+    @Transactional
     public int deleteSgjsDesignChangeManageById(Long id) {
-        return sgjsDesignChangeManageMapper.deleteSgjsDesignChangeManageById(id);
+        int result = sgjsDesignChangeManageMapper.deleteSgjsDesignChangeManageById(id);
+        sgjsDesignChangeManageMapper.deleteWbsByMainIdVitual(id);
+        sgjsDesignChangeManageMapper.deleteListByMainIdVitual(id);
+        sgjsDesignChangeManageMapper.deleteRecordByMainIdVitual(id);
+        return result;
     }
 
     @Override

@@ -6,13 +6,9 @@ import java.util.function.Function;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.text.Convert;
-import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.page.TableDataInfo;
-import com.hhwy.common.log.enums.BusinessType;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
@@ -34,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -173,6 +170,13 @@ public class SgjsDesignChangeManageController extends BaseController {
     @PostMapping("/export")
     public void export(@RequestBody Map map, HttpServletResponse response) throws IOException {
         FtExcelUtil<SgjsDesignChangeManage> util = new FtExcelUtil<>(SgjsDesignChangeManage.class);
+        List<SgjsDesignChangeManage> list = exportForGm(map);
+        util.exportExcel(response, list, "数据","设计变更管理.xlsx");
+    }
+
+    //查询台账页导出数据
+    @PostMapping("/exportForGm")
+    public List<SgjsDesignChangeManage> exportForGm(@RequestBody Map map) throws IOException {
         List<SgjsDesignChangeManage> list = new ArrayList<>();
         if(map == null || ObjectUtils.isBlank(map.get("ids")) ){
             list = this.sgjsDesignChangeManageService.selectSgjsDesignChangeManageList(new SgjsDesignChangeManage());
@@ -180,8 +184,9 @@ public class SgjsDesignChangeManageController extends BaseController {
             Long[] ids = Convert.toLongArray(map.get("ids").toString());
             list = this.sgjsDesignChangeManageService.selectSgjsDesignChangeManageByIds(ids);
         }
-        util.exportExcel(response, list, "数据","设计变更管理.xlsx");
+        return list;
     }
+     
     
     @PostMapping("/exportData")
     public void exportData(@RequestBody SgjsDesignChangeList designChangeList, HttpServletResponse response) throws IOException {
@@ -264,9 +269,15 @@ public class SgjsDesignChangeManageController extends BaseController {
      */
     @PostMapping( "/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
-        return toAjax(sgjsDesignChangeManageService.deleteSgjsDesignChangeManageByIds(ids));
+    public AjaxResult remove(@RequestBody SgjsDesignChangeManage manage){
+        try{
+            Assert.notNull(manage.getId(), "id不能为空");
+            sgjsDesignChangeManageService.deleteSgjsDesignChangeManageById(manage.getId());
+        }catch(Exception e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
+        return AjaxResult.success();
     }
     
     private void putPrjInfo(SgjsDesignChangeManage manage){

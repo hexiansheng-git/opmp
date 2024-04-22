@@ -2,6 +2,8 @@ package com.hhwy.sp.designChangeList.mapper;
 
 import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeManage;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -74,4 +76,12 @@ public interface SgjsDesignChangeManageMapper {
 
     int deleteWbsByType(@Param("mainId") Long mainId, @Param("type")String type);
     int deleteListByType(@Param("mainId") Long mainId,@Param("type")Integer type);
+
+    @Update("update sgjs_design_change_wbs set del_flag = 1 where main_id = #{mainId}")
+    int deleteWbsByMainIdVitual(@Param("mainId") Long mainId);
+    @Update("update sgjs_design_change_list set del_flag = 1 where main_id = #{mainId}")
+    int deleteListByMainIdVitual(@Param("mainId") Long mainId);
+    @Update("update sgjs_design_change_manage_record set del_flag = 1 where main_id = #{mainId}")
+    int deleteRecordByMainIdVitual(@Param("mainId") Long mainId);
+    
 }
