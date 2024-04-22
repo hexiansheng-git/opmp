@@ -8,6 +8,7 @@ import com.hhwy.pm.qqch.preparation.survey.extend.domain.EnvReport;
 import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
 import com.hhwy.pm.qqch.preparation.survey.extend.mapper.QqchPreparationSurveyExtendMapper;
 import com.hhwy.pm.qqch.preparation.survey.extend.service.IQqchPreparationSurveyExtendService;
+import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -126,7 +127,8 @@ public class QqchPreparationSurveyExtendServiceImpl implements IQqchPreparationS
     public int insertQqchPreparationSurveyExtend(QqchPreparationSurveyExtend qqchPreparationSurveyExtend) {
         qqchPreparationSurveyExtend.setId(IdWorker.createId());
         qqchPreparationSurveyExtend.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
-        qqchPreparationSurveyExtend.setCreateUserName(SecurityUtils.getUserName());
+        SysUser sysUser = SecurityUtils.getSysUser();
+        qqchPreparationSurveyExtend.setCreateUserName(sysUser.getNickName());
         qqchPreparationSurveyExtend.setCreateTime(DateUtils.getNowDate());
         return qqchPreparationSurveyExtendMapper.insertQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
     }
