@@ -306,7 +306,7 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
             if(qqchMainPlanItem != null){
                 info.setPlanStartDate(qqchMainPlanItem.getStartDate());
                 info.setPlanEndDate(qqchMainPlanItem.getFinishDate());
-                info.setPlanOverDate(qqchMainPlanItem.getStartDate());
+//                info.setPlanOverDate(qqchMainPlanItem.getStartDate());
             }
         }
 

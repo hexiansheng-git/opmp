@@ -189,7 +189,7 @@ public class QqchSafeMostEnvirRiskListServiceImpl implements IQqchSafeMostEnvirR
             if(qqchMainPlanItem != null){
                 info.setPlanStartDate(qqchMainPlanItem.getStartDate());
                 info.setPlanEndDate(qqchMainPlanItem.getFinishDate());
-                info.setPlanOverDate(qqchMainPlanItem.getStartDate());
+//                info.setPlanOverDate(qqchMainPlanItem.getStartDate());
             }
         }
 
