@@ -89,4 +89,5 @@ public interface ISgjsDesignChangeManageService {
      * @param mainId 
      */
     public void sync(Long mainId);
+    void  finishFlow(Long id);
 }

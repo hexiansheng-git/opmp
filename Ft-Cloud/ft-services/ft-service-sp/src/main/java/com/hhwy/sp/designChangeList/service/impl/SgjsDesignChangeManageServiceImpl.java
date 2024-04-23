@@ -11,7 +11,6 @@ import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.PmServiceApi;
-import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.domain.XmslEngineeringReport;
@@ -27,6 +26,7 @@ import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
@@ -340,15 +340,15 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
         design.setListType(list.getListType());
         design.setUnitCode(list.getUnitCode());
         design.setUnit(list.getUnit());
-        design.setConNum(list.getWinNum());
-        design.setConExcludePrice(list.getWinAmount());
-        design.setConSumPrice(list.getWinAmount());
+        design.setConNum(ObjectUtils.nvlBigDecimal(list.getWinNum()));
+        design.setConExcludePrice(ObjectUtils.nvlBigDecimal(list.getWinUnitPrice()));
+        design.setConSumPrice(ObjectUtils.nvlBigDecimal(list.getWinAmount()));
         design.setZeroNum(ObjectUtils.toDecimal(list.getPtVar1()));
         design.setZeroExcludePrice(list.getWinAmount());
-        design.setZeroSumPrice(design.getZeroNum().multiply(design.getZeroExcludePrice()));
-        design.setBeforeNum(design.getZeroNum());
-        design.setBeforeExcludePrice(design.getZeroExcludePrice());
-        design.setBeforeSumPrice(design.getZeroSumPrice());
+        design.setZeroSumPrice(BigDecimalUtils.multiply(design.getZeroNum(),design.getZeroExcludePrice()));
+        design.setBeforeNum(ObjectUtils.nvlBigDecimal(design.getZeroNum()));
+        design.setBeforeExcludePrice(ObjectUtils.nvlBigDecimal(design.getZeroExcludePrice()));
+        design.setBeforeSumPrice(ObjectUtils.nvlBigDecimal(design.getZeroSumPrice()));
         design.setCreateUser(list.getCreateUser());
         design.setCreateUserName(list.getCreateUserName());
         design.setUpdateUser(list.getUpdateUser());
@@ -430,6 +430,14 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
         }
         this.changeWbsService.batchInsert(wbsList);
         this.changeListService.batchInsert(list);
+    }
+
+    @Override
+    @Transactional
+    public void finishFlow(Long id) {
+        if(id == null)
+            return ;
+        this.sgjsDesignChangeManageMapper.effect(id);
     }
 }
 

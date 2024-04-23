@@ -127,6 +127,8 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             public AjaxResult fullByWbsCode(Map map) {
                 return AjaxResult.error("请求失败:", throwable.getMessage());
             }
+
+            
         };
     }
 }

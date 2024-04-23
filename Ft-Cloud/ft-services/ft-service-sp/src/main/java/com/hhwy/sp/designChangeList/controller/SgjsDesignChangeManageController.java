@@ -301,4 +301,10 @@ public class SgjsDesignChangeManageController extends BaseController {
             manage.setCurrencyCode(conObj.getString("listCurrencyCode"));
         } 
     }
+
+    @PostMapping("/listener")
+    public AjaxResult listener(@RequestParam("id") Long businessId){
+        sgjsDesignChangeManageService.finishFlow(businessId);
+        return AjaxResult.success();
+    }
 }

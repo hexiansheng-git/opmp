@@ -86,5 +86,8 @@ public interface SgjsDesignChangeManageMapper {
 
     @Update("select count(1) from sgjs_design_change_manage where del_flag = 0 and main_id != #{mainId} and change_code = #{changeCode}")
     int checkExist(@Param("mainId") Long mainId,String changeCode);
+
+    @Update("update sgjs_design_change_manage set pt_var1=1 where id = #{id}")
+    int effect(@Param("id") Long id);
     
 }
