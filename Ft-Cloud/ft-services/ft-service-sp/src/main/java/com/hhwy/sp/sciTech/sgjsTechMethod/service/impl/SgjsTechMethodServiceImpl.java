@@ -166,7 +166,7 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         sgjsExpertLibraryService.saveSgjsExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_6,sgjsExpertLibraryList);
 
         String taskStatus = sgjsTechMethod.getTaskStatus();
-        if("2".equals(taskStatus) || "5".equals(taskStatus)){
+        if("1".equals(taskStatus) || "4".equals(taskStatus) || "5".equals(taskStatus)){
             sgjsTechMethod.setProcessStatus("no");
             sysSyncInfoService4Sp.pushSgjsTechMethod(sgjsTechMethod);
         }
