@@ -135,6 +135,8 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
         changeListService.batchInsert(addList);
         //事项记录
         changeManageRecordService.deleteByMainId(saveVo.getId());
+        saveVo.setRecordList(CollectionUtils.isEmpty(saveVo.getRecordList())?new ArrayList<>():saveVo.getRecordList());
+        saveVo.setRecordContactList(CollectionUtils.isEmpty(saveVo.getRecordContactList())?new ArrayList<>():saveVo.getRecordContactList());
         saveVo.getRecordList().stream().forEach(r->{
             r.setId(IdWorker.createId());
             r.setMainId(saveVo.getId());
@@ -152,7 +154,10 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
         //推送到总部版
         if(StringUtils.equals(saveVo.getSubmitFlag(),"1")){
             saveVo.setProjectCode(SecurityUtils.getTenantKey());
-//            rocketMQTemplate.convertAndSend("sgjs_design_change:tenantSuccess", JSONObject.toJSONString(list));
+            saveVo.setWbsList(null);
+            saveVo.setRecordList(null);
+            saveVo.setRecordContactList(null);
+//            rocketMQTemplate.convertAndSend("sgjs_design_change:tenantSuccess", JSONObject.toJSONString(saveVo));
         }
     }
     private void handlerWbsList(ChangeManagSaveVo saveVo, SgjsDesignChangeWbs parent,List<SgjsDesignChangeWbs> wbsList 
