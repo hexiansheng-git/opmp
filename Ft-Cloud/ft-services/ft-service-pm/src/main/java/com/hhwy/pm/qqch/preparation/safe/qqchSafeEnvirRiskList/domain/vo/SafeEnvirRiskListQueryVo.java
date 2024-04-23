@@ -17,7 +17,7 @@ public class SafeEnvirRiskListQueryVo {
     @NotBlank(message = "wbsId不能为空！",groups = ValidationGroups.Select.class)
     private String wbsId;
 
-    @NotBlank(message = "wbsI编码不能为空！",groups = ValidationGroups.Select.class)
+    @NotBlank(message = "wbs编码不能为空！",groups = ValidationGroups.Select.class)
     private String wbsCode;
 
     private BigDecimal version;
