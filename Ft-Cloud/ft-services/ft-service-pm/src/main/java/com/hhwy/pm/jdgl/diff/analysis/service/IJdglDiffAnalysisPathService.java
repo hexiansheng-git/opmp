@@ -17,6 +17,8 @@ public interface IJdglDiffAnalysisPathService {
 
     List<JdglDiffAnalysisPath> getJdglDiffAnalysisPathList(JdglDiffAnalysisPath jdglDiffAnalysisPath);
 
+    List<JdglDiffAnalysisPath> getList(JdglDiffAnalysisPath jdglDiffAnalysisPath);
+
     int insertJdglDiffAnalysisPath(JdglDiffAnalysisPath jdglDiffAnalysisPath);
 
     int insertJdglDiffAnalysisPathList(List<JdglDiffAnalysisPath> jdglDiffAnalysisPathList);

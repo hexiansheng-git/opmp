@@ -51,6 +51,10 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
         return jdglDiffAnalysisPathMapper.getJdglDiffAnalysisPath(jdglDiffAnalysisPath);
     }
 
+    public List<JdglDiffAnalysisPath> getList(JdglDiffAnalysisPath jdglDiffAnalysisPath) {
+        return jdglDiffAnalysisPathMapper.getJdglDiffAnalysisPathList(jdglDiffAnalysisPath);
+    }
+
     public List<JdglDiffAnalysisPath> getJdglDiffAnalysisPathList(JdglDiffAnalysisPath jdglDiffAnalysisPath) {
         List<JdglDiffAnalysisPath> jdglDiffAnalysisPathList = jdglDiffAnalysisPathMapper.getJdglDiffAnalysisPathList(jdglDiffAnalysisPath);
         if(CollectionUtils.isEmpty(jdglDiffAnalysisPathList)) {
@@ -191,19 +195,24 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
             Date actualStartDate = jdglMainPlanItem.getActualStartDate();
             Date actualFinishDate = jdglMainPlanItem.getActualFinishDate() == null ? DateUtils.getNowDate() : jdglMainPlanItem.getActualFinishDate();
             if(actualStartDate != null) {
+                //实际结束日期 减去 实际开始日期 等于 实际所用工期
                 totalCompDays =  Math.round((actualFinishDate.getTime() - actualStartDate.getTime())/24/60/60/1000);
             }
 
+            //实际用的工期 除 原定工期 等于 总体工期完成百分比
             BigDecimal totalDayCompRate = new BigDecimal(totalPlanDays == 0 ? 0 : totalCompDays /totalPlanDays);
             jdglDiffAnalysisPath.setTotalDayCompRate(totalDayCompRate);
 
             // 计算总体进度完成百分比
+            //总体计划工程量
             BigDecimal totalPlanQty = jdglMainPlanItem.getQuantity();
+            //实际完成工程量
             BigDecimal totalActQty = new BigDecimal(0);
             if(!CollectionUtils.isEmpty(totalWbsListByDateRange)) {
                 JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = totalWbsListByDateRange.stream().filter(vo -> vo.getWbsCode().equals(jdglMainPlanItem.getItemCode())).findFirst().orElse(null);
                 if(jdglDayScheduleWbs4Value != null) totalActQty = jdglDayScheduleWbs4Value.getThisQuantity() == null ? totalActQty : jdglDayScheduleWbs4Value.getThisQuantity();
             }
+            //实际完成工程量 除 总体计划工程量 等于 总体进度完成百分比
             BigDecimal totalProgressCompRate = totalPlanQty == null || totalPlanQty.compareTo(new BigDecimal(0)) == 0
                     ? new BigDecimal(0) : totalActQty.divide(totalPlanQty,4,BigDecimal.ROUND_HALF_UP);
             jdglDiffAnalysisPath.setTotalProgressCompRate(totalProgressCompRate);

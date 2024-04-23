@@ -307,7 +307,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         //获取 差异化分析-关键/非关键线路进度分析  回填工期完成百分比、进度完成百分比
         JdglDiffAnalysisPath jdglDiffAnalysisPath = new JdglDiffAnalysisPath();
         jdglDiffAnalysisPath.setDiffAnalysisId(JdglDiffAnalysis.getId());
-        List<JdglDiffAnalysisPath> jdglDiffAnalysisPathList = jdglDiffAnalysisPathService.getJdglDiffAnalysisPathList(jdglDiffAnalysisPath);
+        List<JdglDiffAnalysisPath> jdglDiffAnalysisPathList = jdglDiffAnalysisPathService.getList(jdglDiffAnalysisPath);
         Map<String, JdglDiffAnalysisPath> pathMap = new HashMap<>();
         if (CollectionUtil.isNotEmpty(jdglDiffAnalysisPathList)) {
             pathMap = jdglDiffAnalysisPathList.stream()
