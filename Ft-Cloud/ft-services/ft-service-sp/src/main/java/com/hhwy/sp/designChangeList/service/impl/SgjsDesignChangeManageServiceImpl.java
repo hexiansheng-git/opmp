@@ -16,6 +16,7 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.domain.XmslEngineeringReport;
 import com.hhwy.sp.core.system.SystemApiService;
+import com.hhwy.sp.designChangeList.domain.ProjectBasicInfo;
 import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeList;
 import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeWbs;
 import com.hhwy.sp.designChangeList.service.ISgjsDesignChangeListService;
@@ -153,11 +154,7 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
         changeManageRecordService.batchInsert(saveVo.getRecordList());
         //推送到总部版
         if(StringUtils.equals(saveVo.getSubmitFlag(),"1")){
-            saveVo.setProjectCode(SecurityUtils.getTenantKey());
-            saveVo.setWbsList(null);
-            saveVo.setRecordList(null);
-            saveVo.setRecordContactList(null);
-//            rocketMQTemplate.convertAndSend("sgjs_design_change:tenantSuccess", JSONObject.toJSONString(saveVo));
+            push2Gm(saveVo);
         }
         return saveVo.getId();
     }
@@ -207,7 +204,25 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
             handlerList(saveVo,wbs,temp,temp.getChildren(),addList);
         }
     }
-
+    
+    private void push2Gm(ChangeManagSaveVo saveVo){
+        String regionName = "",prjName = "";
+        AjaxResult result = pmServiceApi.projectInfo();
+        if(!AjaxResult.isSuccess(result)){
+            logger.error("获取项目信息失败,{}",result.get(AjaxResult.MSG_TAG));
+        }else{
+            ProjectBasicInfo projectBasicInfo = JSONObject.parseObject(JSONObject.toJSONString(result.getData()),ProjectBasicInfo.class);
+            regionName = projectBasicInfo.getRegionName();
+            prjName = projectBasicInfo.getProjectName();
+        }
+        saveVo.setProjectCode(SecurityUtils.getTenantKey());
+        saveVo.setProjectName(prjName);
+        saveVo.setRegionName(regionName);
+        saveVo.setWbsList(null);
+        saveVo.setRecordList(null);
+        saveVo.setRecordContactList(null);
+        rocketMQTemplate.convertAndSend("sgjs_design_change:tenantSuccess", JSONObject.toJSONString(saveVo));
+    }
     /**
      * 修改施工技术管理-设计变更管理
      * 

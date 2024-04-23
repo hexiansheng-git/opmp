@@ -85,7 +85,9 @@ public class SgjsDesignChangeManageController extends BaseController {
         }else{
             manage = this.sgjsDesignChangeManageService.selectSgjsDesignChangeManageById(manage.getId());
             //wbs
+            
             List<SgjsDesignChangeWbs> wbsList = designChangeWbsService.wbsTreeList(manage.getId(),"1");
+            
             manage.setWbsList(wbsList);
         }
         putPrjInfo(manage);
