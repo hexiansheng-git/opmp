@@ -373,6 +373,7 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
 
     @Override
     public Integer isDirectProject() {
+        if(SecurityUtils.getSysUser().getDept() == null) return 0;
         String ancestorStr = SecurityUtils.getSysUser().getDept().getAncestors();
         Set<String> regionIdSet = new HashSet(Arrays.asList("101148617,101148910,101149129,101149344,101187590,101321233,101322264,101322275,101322288,101322301".split(",")));
         if(StringUtils.isBlank(ancestorStr))

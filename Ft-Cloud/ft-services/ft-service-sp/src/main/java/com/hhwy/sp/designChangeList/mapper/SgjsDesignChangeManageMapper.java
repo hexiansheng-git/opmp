@@ -83,5 +83,8 @@ public interface SgjsDesignChangeManageMapper {
     int deleteListByMainIdVitual(@Param("mainId") Long mainId);
     @Update("update sgjs_design_change_manage_record set del_flag = 1 where main_id = #{mainId}")
     int deleteRecordByMainIdVitual(@Param("mainId") Long mainId);
+
+    @Update("select count(1) from sgjs_design_change_manage where del_flag = 0 and main_id != #{mainId} and change_code = #{changeCode}")
+    int checkExist(@Param("mainId") Long mainId,String changeCode);
     
 }

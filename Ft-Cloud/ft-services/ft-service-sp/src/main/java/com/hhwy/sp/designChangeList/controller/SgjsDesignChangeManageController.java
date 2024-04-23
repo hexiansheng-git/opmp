@@ -27,6 +27,7 @@ import com.hhwy.utils.validation.ValidationGroups;
 import io.lettuce.core.dynamic.annotation.CommandNaming;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.transaction.operation.map.MapAddAndGetOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -91,7 +92,7 @@ public class SgjsDesignChangeManageController extends BaseController {
             manage.setWbsList(wbsList);
         }
         putPrjInfo(manage);
-        //是否为直属项目
+        FlowInfoSearchUtil.getFlowInfo(manage, FlowEnum.SGJS_DESIGN_CHANGE_MANAGE);
         manage.setDirectFlag( sgjsDesignChangeManageService.isDirectProject() );
         
         return AjaxResult.success(manage);
