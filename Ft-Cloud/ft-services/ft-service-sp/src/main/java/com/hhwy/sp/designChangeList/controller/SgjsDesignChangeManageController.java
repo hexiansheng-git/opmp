@@ -238,12 +238,12 @@ public class SgjsDesignChangeManageController extends BaseController {
     public AjaxResult save(@RequestBody ChangeManagSaveVo saveVo) {
         try{
             saveVo.setPtVar2(ObjectUtils.nvlString(saveVo.getPtVar2(),"1"));
-            sgjsDesignChangeManageService.save(saveVo);
+            Long id = sgjsDesignChangeManageService.save(saveVo);
+            return AjaxResult.success(id);
         }catch(IllegalArgumentException e){
             e.printStackTrace();
             return AjaxResult.error(e.getMessage());
         }
-        return AjaxResult.success();
     }
 
     /**

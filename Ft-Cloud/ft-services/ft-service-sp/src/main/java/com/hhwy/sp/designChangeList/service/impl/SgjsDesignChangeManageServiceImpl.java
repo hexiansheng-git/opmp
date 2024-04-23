@@ -113,7 +113,7 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
 
     @Override
     @Transactional
-    public void save(ChangeManagSaveVo saveVo) {
+    public Long save(ChangeManagSaveVo saveVo) {
         boolean isNew = saveVo.getId() == null;
         saveVo.setPtVar1("0"); //是否生效
         if(isNew){
@@ -159,6 +159,7 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
             saveVo.setRecordContactList(null);
 //            rocketMQTemplate.convertAndSend("sgjs_design_change:tenantSuccess", JSONObject.toJSONString(saveVo));
         }
+        return saveVo.getId();
     }
     private void handlerWbsList(ChangeManagSaveVo saveVo, SgjsDesignChangeWbs parent,List<SgjsDesignChangeWbs> wbsList 
             , List<SgjsDesignChangeWbs> addWbsList,List<String> deleteWbsCodeList, List<SgjsDesignChangeList> addList){

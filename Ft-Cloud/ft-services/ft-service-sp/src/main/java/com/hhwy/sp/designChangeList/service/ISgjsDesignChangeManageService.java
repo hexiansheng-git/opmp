@@ -35,7 +35,7 @@ public interface ISgjsDesignChangeManageService {
      */
     public List<SgjsDesignChangeManage> selectSgjsDesignChangeManageList(SgjsDesignChangeManage sgjsDesignChangeManage);
 
-    public void save(ChangeManagSaveVo changeManagSaveVo);
+    public Long save(ChangeManagSaveVo changeManagSaveVo);
     
     /**
      * 新增施工技术管理-设计变更管理
