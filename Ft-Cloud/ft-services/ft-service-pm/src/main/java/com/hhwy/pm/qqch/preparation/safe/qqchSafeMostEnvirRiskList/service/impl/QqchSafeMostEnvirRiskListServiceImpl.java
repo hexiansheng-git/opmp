@@ -15,6 +15,8 @@ import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.mapper.QqchSa
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.service.IQqchSafeMostEnvirRiskListDetailService;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.service.IQqchSafeMostEnvirRiskListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
+import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
@@ -52,6 +54,8 @@ public class QqchSafeMostEnvirRiskListServiceImpl implements IQqchSafeMostEnvirR
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchMainPlanItemService qqchMainPlanItemService;
 
     private static final String TN = "qqch_safe_most_envir_risk_list";
 
@@ -175,6 +179,18 @@ public class QqchSafeMostEnvirRiskListServiceImpl implements IQqchSafeMostEnvirR
             info.setDetailList(detailList);
         }else {
             info = new QqchSafeMostEnvirRiskList();
+        }
+
+        //获取p6计划数据
+        String wbsCode = queryVo.getWbsCode();
+        List<QqchMainPlanItem> mainPlanItemList = qqchMainPlanItemService.getListByItemCodes(wbsCode);
+        if(!CollectionUtils.isEmpty(mainPlanItemList)){
+            QqchMainPlanItem qqchMainPlanItem = mainPlanItemList.get(0);
+            if(qqchMainPlanItem != null){
+                info.setPlanStartDate(qqchMainPlanItem.getStartDate());
+                info.setPlanEndDate(qqchMainPlanItem.getFinishDate());
+                info.setPlanOverDate(qqchMainPlanItem.getStartDate());
+            }
         }
 
         safeMostEnvirRiskListVo.setQqchSafeMostEnvirRiskList(info);
