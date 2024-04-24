@@ -47,12 +47,12 @@ public class SgjsDesignChangeManage extends CommonBaseEntity {
     private String changeSource;
 
     /** 指令下达日期 */
-    @FtExcel(name = "指令下达日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "指令下达日期", width = 30, dateFormat = "yyyy年MM月dd日")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date orderDate;
 
     /** 变更申请日期 */
-    @FtExcel(name = "变更申请日期", width = 30, dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "变更申请日期", width = 30, dateFormat = "yyyy年MM月dd日")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date changeApplyDate;
 
