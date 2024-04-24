@@ -194,7 +194,7 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
             }catch(Exception e){
                 e.printStackTrace();
             }
-            handlerList(saveVo,wbs,null,wbs.getList(),addList);
+            handlerList(saveVo,wbs,null,list,addList);
             handlerWbsList(saveVo,wbs,wbs.getChildren(),addWbsList,deleteWbsCodeList,addList);
             wbs.setPtVar1("");
         }
@@ -476,6 +476,7 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
         if(manage == null)
             return ;
         TWarn warn = new TWarn();
+        warn.setBusinessId(id);
         warn.setCreateTime(DateUtils.getNowDate());
         warn.setTenantKey(SecurityUtils.getTenantKey());
         warn.setWarnItem(WarnItem.SGJS_DESIGN_CHANGE.getWarnItem());
