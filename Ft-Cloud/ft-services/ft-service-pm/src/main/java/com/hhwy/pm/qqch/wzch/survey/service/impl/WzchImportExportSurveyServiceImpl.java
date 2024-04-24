@@ -20,6 +20,7 @@ import com.hhwy.pm.qqch.wzch.survey.service.IWzchImportExportSurveyCountryServic
 import com.hhwy.pm.qqch.wzch.survey.service.IWzchImportExportSurveyCustomsService;
 import com.hhwy.pm.qqch.wzch.survey.service.IWzchImportExportSurveyService;
 import com.hhwy.utils.AddBaseInfoUtil;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -131,6 +132,7 @@ public class WzchImportExportSurveyServiceImpl implements IWzchImportExportSurve
     @Override
     public WzchImportExportSurvey edit(WzchImportExportSurvey vo) {
         BigDecimal version = VersionUtil.getVersion("wzch_import_export_survey", vo.getVersion());
+        boolean isMatchVersion = BigDecimalUtils.equals(version,vo.getVersion())||vo.getId()==null;
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         
@@ -141,6 +143,7 @@ public class WzchImportExportSurveyServiceImpl implements IWzchImportExportSurve
             return vo;
         }
         BeanUtils.copyProperties(list.get(0),vo);
+        vo.setId(isMatchVersion?vo.getId():null); //若取得不是本版本，将id滞空，
         vo.setStageIdentity(qqchReviewService.getStage());
         List<WzchImportExportSurveyCountry> wzchImportExportSurveyCountries = wzchImportExportSurveyCountryService.selectWzchImportExportSurveyCountryList(new WzchImportExportSurveyCountry(vo.getId()));
         List<WzchImportExportSurveyCustoms> wzchImportExportSurveyCustoms = wzchImportExportSurveyCustomsService.selectWzchImportExportSurveyCustomsList(new WzchImportExportSurveyCustoms(vo.getId()));

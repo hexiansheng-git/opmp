@@ -18,6 +18,7 @@ import com.hhwy.pm.qqch.wzch.scenemanage.service.WzchSceneManageService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -119,6 +120,7 @@ public class WzchSceneManageServiceImpl implements WzchSceneManageService {
     @Override
     public WzchSceneManageDTO baseInfo(WzchSceneManageDTO dto) {
         BigDecimal version = VersionUtil.getVersion("wzch_scene_manage", dto.getVersion());
+        boolean isMatchVersion = BigDecimalUtils.equals(version,dto.getVersion())||dto.getId()==null;
         dto.setVersion(version);
         dto.setStageIdentity(qqchReviewService.getStage());
 
@@ -128,6 +130,7 @@ public class WzchSceneManageServiceImpl implements WzchSceneManageService {
             return dto;
         }
         dto.setId(list.get(0).getId());
+        dto.setId(isMatchVersion?dto.getId():null); //若取得不是本版本，将id滞空，
         WzchSceneManageDetail queryDetail = new WzchSceneManageDetail();
         queryDetail.setSceneManageId(dto.getId());
         List<WzchSceneManageDetail> detailList =detailService.selectDetailList(queryDetail);

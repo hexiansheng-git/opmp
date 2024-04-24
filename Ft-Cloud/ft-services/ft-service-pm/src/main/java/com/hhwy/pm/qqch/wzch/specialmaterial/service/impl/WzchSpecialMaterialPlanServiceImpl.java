@@ -21,6 +21,7 @@ import com.hhwy.pm.qqch.wzch.specialmaterial.mapper.WzchSpecialMaterialPlanMappe
 import com.hhwy.pm.qqch.wzch.specialmaterial.service.IWzchSpecialMaterialPlanDetailService;
 import com.hhwy.pm.qqch.wzch.specialmaterial.service.IWzchSpecialMaterialPlanService;
 import com.hhwy.pm.qqch.wzch.specialmaterial.service.IWzchSpecialMaterialRequestDetailService;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -121,6 +122,7 @@ public class WzchSpecialMaterialPlanServiceImpl implements IWzchSpecialMaterialP
     @Override
     public WzchSpecialMaterialPlan detail(WzchSpecialMaterialPlan wzchSpecialMaterialPlan) {
         BigDecimal version = VersionUtil.getVersion("wzch_special_material_plan", wzchSpecialMaterialPlan.getVersion());
+        boolean isMatchVersion = BigDecimalUtils.equals(version,wzchSpecialMaterialPlan.getVersion())||wzchSpecialMaterialPlan.getId()==null;
         wzchSpecialMaterialPlan.setVersion(version);
         wzchSpecialMaterialPlan.setStageIdentity(qqchReviewService.getStage());
         
@@ -131,6 +133,7 @@ public class WzchSpecialMaterialPlanServiceImpl implements IWzchSpecialMaterialP
             return wzchSpecialMaterialPlan;
         }
         wzchSpecialMaterialPlan = list.get(0);
+        wzchSpecialMaterialPlan.setId(isMatchVersion?wzchSpecialMaterialPlan.getId():null); //若取得不是本版本，将id滞空，
         wzchSpecialMaterialPlan.setStageIdentity(qqchReviewService.getStage());
         List<WzchSpecialMaterialPlanDetail> wzchSpecialMaterialPlanDetails = wzchSpecialMaterialPlanDetailService.selectWzchSpecialMaterialPlanDetailList(new WzchSpecialMaterialPlanDetail(wzchSpecialMaterialPlan.getId()));
         HashMap<String, String> map = new HashMap<>(1);
