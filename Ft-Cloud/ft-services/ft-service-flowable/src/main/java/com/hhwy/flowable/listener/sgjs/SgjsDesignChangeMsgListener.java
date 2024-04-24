@@ -1,5 +1,7 @@
 package com.hhwy.flowable.listener.sgjs;
 
+import com.hhwy.common.core.utils.SpringUtils;
+import com.hhwy.flowable.feign.service.SpServiceApi;
 import com.hhwy.flowable.listener.BaseExecutionListener;
 import com.hhwy.flowable.listener.BaseTaskListener;
 import org.flowable.task.service.delegate.DelegateTask;
@@ -16,6 +18,8 @@ import org.flowable.task.service.delegate.DelegateTask;
 public class SgjsDesignChangeMsgListener extends BaseTaskListener {
     @Override
     public void notify(DelegateTask delegateTask) {
-        
+        Long businessId = init(delegateTask);
+        SpServiceApi spServiceApi = SpringUtils.getBean(SpServiceApi.class);
+        spServiceApi.pushMsg(businessId);
     }
 }

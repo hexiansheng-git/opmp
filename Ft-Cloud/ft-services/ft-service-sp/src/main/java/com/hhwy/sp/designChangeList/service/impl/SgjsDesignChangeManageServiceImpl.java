@@ -10,10 +10,14 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.WarnItem;
+import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.domain.XmslEngineeringReport;
+import com.hhwy.sp.common.warn.CommonBusiness;
 import com.hhwy.sp.core.system.SystemApiService;
 import com.hhwy.sp.designChangeList.domain.ProjectBasicInfo;
 import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeList;
@@ -38,6 +42,7 @@ import lombok.var;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.ehcache.shadow.org.terracotta.offheapstore.storage.listener.ListenableStorageEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +77,8 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
     private PmServiceApi pmServiceApi;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
     /**
      * 查询施工技术管理-设计变更管理
@@ -99,6 +106,8 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
     public List<SgjsDesignChangeManage> selectSgjsDesignChangeManageList(SgjsDesignChangeManage sgjsDesignChangeManage) {
         return sgjsDesignChangeManageMapper.selectSgjsDesignChangeManageList(sgjsDesignChangeManage);
     }
+    
+    
 
     /**
      * 新增施工技术管理-设计变更管理
@@ -177,6 +186,14 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
             if(wbs.getPtVar1().equals("1"))
                 deleteWbsCodeList.add(wbs.getCode());
             //处理清单
+            List<SgjsDesignChangeList> list = new ArrayList<>();
+            try{
+                list = CollectionUtils.isEmpty(wbs.getList())?
+                        JSONObject.parseArray(JSONObject.toJSONString(wbs.getParams().get("list")),SgjsDesignChangeList.class):
+                        wbs.getList();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
             handlerList(saveVo,wbs,null,wbs.getList(),addList);
             handlerWbsList(saveVo,wbs,wbs.getChildren(),addWbsList,deleteWbsCodeList,addList);
             wbs.setPtVar1("");
@@ -274,37 +291,47 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
             }
             List<XmslWbs> wbsList = JSONObject.parseArray(JSONObject.toJSONString(wbsResult.getData()), XmslWbs.class);
             Map<String,XmslWbs> wbsMap = wbsList.stream().collect(Collectors.toMap(r->r.getCode(), r->r));
-            //2、加载其下清单
-            Long id = sgjsDesignChangeManageMapper.lastEffectId();
-            if(id == null){ //第一次添加
+            //2、加载最新挂接关系
+            List<SgjsDesignChangeList> finalList = new ArrayList<>();
+            List<SgjsDesignChangeList> designList = changeListService.selectLastByWbsCode(wbsMap.keySet().toArray(new String[]{}));
+            Map<String,Long> lastVersionMap = new HashMap<>();
+            for (int i = 0; i < designList.size(); i++) {
+                SgjsDesignChangeList temp = designList.get(i);
+                Long lastMainId = lastVersionMap.get(temp.getWbsCode());
+                if(lastMainId != null && !lastMainId.equals(temp.getMainId()))
+                    continue;
+                lastVersionMap.put(temp.getWbsCode(), temp.getMainId());
+                finalList.add(temp);
+            }
+            //若没有存在于design，从工程量报表里找
+            Set<String> queryReportCodeSet = new HashSet<>(); 
+            for(String wbsCode : wbsMap.keySet()){
+                if(!lastVersionMap.containsKey(wbsCode))
+                    queryReportCodeSet.add(wbsCode);
+            }
+            if(CollectionUtils.isNotEmpty(queryReportCodeSet)){
                 XmslEngineeringReport report = new XmslEngineeringReport();
-                report.setWbsCode(StringUtils.join(wbsMap.keySet(), ","));
+                report.setWbsCode(StringUtils.join(queryReportCodeSet, ","));
                 AjaxResult result = pmServiceApi.relateList(report);
                 Map<String,Object> resultMap = (Map)result.getData();
                 for(String wbsCode : resultMap.keySet()){
-                    List<SgjsDesignChangeList> designList = new ArrayList<>();
                     List<XmslContractList> list = JSONObject.parseArray(JSONObject.toJSONString(resultMap.get(wbsCode)),XmslContractList.class);
                     //转换成SgjsDesignChangeList
                     for (int i = 0; i < list.size(); i++) {
                         XmslContractList temp = list.get(i);
+                        if(temp.getPid()==null || temp.getPid() < 1)
+                            temp.setPid(-1L);
                         SgjsDesignChangeList designChangeList = trans2DesignList(wbs.getCode(),temp);
-                        designList.add(designChangeList);
+                        finalList.add(designChangeList);
                     }
-                    designList = TreeUtil.build(designList,null);
-                    wbsMap.get(wbsCode).setParams(ObjectUtils.toMap("list",designList));
                 }
-            }else{ //查询设计变更最新版本的挂接清单
-                SgjsDesignChangeList query = new SgjsDesignChangeList();
-                query.setMainId(id);
-                query.setType(1);
-                query.setParams(ObjectUtils.toMap("wbsCodes", wbsMap.keySet()));
-                List<SgjsDesignChangeList> designList = changeListService.selectSgjsDesignChangeListList(query);
-                Map<String,List<SgjsDesignChangeList>> groupDeisngList = designList.stream().collect(Collectors.groupingBy(r->r.getWbsCode()));
-                for(String wbsCode : groupDeisngList.keySet()){
-                    List<SgjsDesignChangeList> tempList = groupDeisngList.get(wbsCode);
-                    designList = TreeUtil.build(designList,-1L);
-                    wbsMap.get(wbsCode).setParams(ObjectUtils.toMap("list",designList));
-                }
+            }
+            //分组处理获取到的清单 ，塞入wbs
+            Map<String,List<SgjsDesignChangeList>> listMap = finalList.stream().collect(Collectors.groupingBy(r->r.getWbsCode()));
+            for(String wbsCode : listMap.keySet()){
+                List<SgjsDesignChangeList> list = listMap.get(wbsCode);
+                List<SgjsDesignChangeList> tlist = TreeUtil.build(list,-1L);
+                wbsMap.get(wbsCode).setParams(ObjectUtils.toMap("list",tlist));
             }
             //3、wbs转成树形
             Map<String,XmslWbs> wbsIdMap = wbsList.stream().collect(Collectors.toMap(r->r.getId(), r->r));
@@ -438,6 +465,27 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
         if(id == null)
             return ;
         this.sgjsDesignChangeManageMapper.effect(id);
+    }
+
+    @Override
+    @Transactional
+    public void pushMsg(Long id) {
+        if(id == null)
+            return ;
+        SgjsDesignChangeManage manage = this.sgjsDesignChangeManageMapper.selectSgjsDesignChangeManageById(id);
+        if(manage == null)
+            return ;
+        TWarn warn = new TWarn();
+        warn.setCreateTime(DateUtils.getNowDate());
+        warn.setTenantKey(SecurityUtils.getTenantKey());
+        warn.setWarnItem(WarnItem.SGJS_DESIGN_CHANGE.getWarnItem());
+        warn.setWarnItemId(WarnItem.SGJS_DESIGN_CHANGE.getWarnItemId());
+        warn.setWarnScopeType("4");
+        warn.setWarnScope("area_technology_leader");
+        String warnContent = "您好，设计变更管理新增了数据【"+ObjectUtils.nvlString(manage.getChangeAmount())+"】已提交至海外事业部审批";
+        warn.setWarnContent(warnContent);
+        warn.setWarnUrl("/constructionTechnique/DesignChangeManagement/detail");
+        systemServiceApi.addWarnNonGm(warn);
     }
 }
 

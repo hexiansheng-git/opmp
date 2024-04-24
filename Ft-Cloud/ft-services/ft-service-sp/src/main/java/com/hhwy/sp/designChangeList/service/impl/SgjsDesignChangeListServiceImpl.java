@@ -10,6 +10,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeWbs;
 import com.hhwy.utils.ObjectUtils;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hhwy.sp.designChangeList.mapper.SgjsDesignChangeListMapper;
@@ -81,6 +82,13 @@ public class SgjsDesignChangeListServiceImpl implements ISgjsDesignChangeListSer
     public List<SgjsDesignChangeList> selectWbsAsDesignList(Long mainId) {
         List<SgjsDesignChangeList> list  = sgjsDesignChangeListMapper.selectWbsAsDesignList(mainId);
         return list;
+    }
+
+    @Override
+    public List<SgjsDesignChangeList> selectLastByWbsCode(String[] wbsCodes) {
+        if(ArrayUtils.isEmpty(wbsCodes))
+            return new ArrayList<>();
+        return sgjsDesignChangeListMapper.selectLastByWbsCode(wbsCodes);
     }
 
     /**

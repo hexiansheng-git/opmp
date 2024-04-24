@@ -31,6 +31,8 @@ public interface SgjsDesignChangeListMapper {
     public List<SgjsDesignChangeList> selectSgjsDesignChangeListList(SgjsDesignChangeList sgjsDesignChangeList);
 
     public List<SgjsDesignChangeList> selectWbsAsDesignList(Long mainId);
+
+    public List<SgjsDesignChangeList> selectLastByWbsCode(@Param("wbsCodes") String[] wbsCodes);
     
     public int batchInsert(@Param("dataList") List<SgjsDesignChangeList> list);
 
@@ -67,4 +69,5 @@ public interface SgjsDesignChangeListMapper {
     public int deleteSgjsDesignChangeListByIds(String[] ids);
 
     public int deleteByWbsCodes(Map map);
+    
 }

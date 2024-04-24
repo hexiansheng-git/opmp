@@ -112,6 +112,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select `id`,id as wbs_id,`main_id`, parent_id pid, `name` wbs_name, `code` wbs_code  from `sgjs_design_change_wbs`
         where `del_flag` = 0 and main_id = #{mainId}  
     </select>
+
+    <select id="selectLastByWbsCode" resultMap="SgjsDesignChangeListResult">
+        <include refid="selectSgjsDesignChangeListVo"/>
+        where `del_flag` = 0 and `wbs_code` in
+        <foreach item="code" collection="wbsCodes" open="(" separator="," close=")">
+            #{code}
+        </foreach>
+        order by main_id desc,type desc  
+    </select>
+    
     
     <select id="selectSgjsDesignChangeListById" parameterType="Long" resultMap="SgjsDesignChangeListResult">
         <include refid="selectSgjsDesignChangeListVo"/>

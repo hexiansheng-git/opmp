@@ -94,4 +94,7 @@ public interface SpServiceApi {
 
     @RequestMapping(value = "/designChangeList/listener", method = RequestMethod.POST)
     AjaxResult designChangeListListener(@RequestParam("id") Long id);
+
+    @RequestMapping(value = "/designChangeList/pushMsg", method = RequestMethod.POST)
+    AjaxResult pushMsg(@RequestParam("id") Long id);
 }

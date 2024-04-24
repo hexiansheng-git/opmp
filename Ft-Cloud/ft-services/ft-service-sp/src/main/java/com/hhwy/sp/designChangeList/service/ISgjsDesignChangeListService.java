@@ -32,7 +32,7 @@ public interface ISgjsDesignChangeListService {
     public List<SgjsDesignChangeList> selectSgjsDesignChangeListList(SgjsDesignChangeList sgjsDesignChangeList);
 
     public List<SgjsDesignChangeList> selectWbsAsDesignList(Long mainId);
-
+    public List<SgjsDesignChangeList> selectLastByWbsCode(String[] wbsCodes);
     /**
      * 新增设计变更清单
      * 

@@ -307,4 +307,10 @@ public class SgjsDesignChangeManageController extends BaseController {
         sgjsDesignChangeManageService.finishFlow(businessId);
         return AjaxResult.success();
     }
+
+    @PostMapping("/pushMsg")
+    public AjaxResult pushMsg(@RequestParam("id") Long id){
+        sgjsDesignChangeManageService.pushMsg(id);
+        return AjaxResult.success();
+    }
 }
