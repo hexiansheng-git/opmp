@@ -143,6 +143,7 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
     public SgjsTechMethod updateSgjsTechMethod(SgjsTechMethod sgjsTechMethod) {
         Long id = sgjsTechMethod.getId();
         sgjsTechMethod.setDataCurrentState(null);
+        String taskStatus = sgjsTechMethod.getTaskStatus();
         sgjsTechMethod.setTaskStatus(null);
         if (id == null) {
             id = IdWorker.createId();
@@ -165,7 +166,6 @@ public class SgjsTechMethodServiceImpl implements ISgjsTechMethodService {
         List<SgjsExpertLibrary> sgjsExpertLibraryList = sgjsTechMethod.getSgjsExpertLibraryList();
         sgjsExpertLibraryService.saveSgjsExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_6,sgjsExpertLibraryList);
 
-        String taskStatus = sgjsTechMethod.getTaskStatus();
         if("1".equals(taskStatus) || "4".equals(taskStatus) || "5".equals(taskStatus)){
             sgjsTechMethod.setProcessStatus("no");
             sysSyncInfoService4Sp.pushSgjsTechMethod(sgjsTechMethod);
