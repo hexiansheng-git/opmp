@@ -242,13 +242,16 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
                 Assert.isTrue(sgsjTechnicalScienceTopic.getId().equals(sgsjTechnicalScienceTopic2.getId()), "编号不能重复");
             }
         }
-        Long id = sgsjTechnicalScienceTopic.getId();
-        //保存子表
-        handleChilderData(sgsjTechnicalScienceTopic, id);
+        //换id：“处理”按钮审批的流程传的i值对应id字段， 从代办审批的流程传的值对应pt_var1字段
         //返回结果获取
-        SgsjTechnicalScienceTopic sgsjTechnicalScienceTopic1 = new SgsjTechnicalScienceTopic();
-        sgsjTechnicalScienceTopic1.setId(id);
-        SgsjTechnicalScienceTopic result = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic1);
+        SgsjTechnicalScienceTopic param = new SgsjTechnicalScienceTopic();
+        param.setId(sgsjTechnicalScienceTopic.getId());
+        SgsjTechnicalScienceTopic result = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param);
+        sgsjTechnicalScienceTopic.setId(result.getId());
+
+        /*保存子表*/
+        Long id = sgsjTechnicalScienceTopic.getId();
+        handleChilderData(sgsjTechnicalScienceTopic, id);
         //判断当前记录是否在流程中，如果已发起审批，则需要保存修改记录你
         SgsjTechnicalScienceTopic parm = new SgsjTechnicalScienceTopic();
         parm.setId(Long.valueOf(result.getPtVar2()));
@@ -346,20 +349,22 @@ public class SgsjTechnicalScienceTopicServiceImpl implements ISgsjTechnicalScien
             //修改
             sgsjTechnicalScienceTopic.setUpdateTime(DateUtils.getNowDate());
             sgsjTechnicalScienceTopicMapper.updateSgsjTechnicalScienceTopic(sgsjTechnicalScienceTopic);
-            //保存子表
-            Long id = sgsjTechnicalScienceTopic.getId();
+            /*保存子表*/
+            //换id：“处理”按钮审批的流程传的i值对应id字段， 从代办审批的流程传的值对应pt_var1字段
+            SgsjTechnicalScienceTopic param = new SgsjTechnicalScienceTopic();
+            param.setId(sgsjTechnicalScienceTopic.getId());
+            SgsjTechnicalScienceTopic applyData = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param);
+            //保存专家建议
             List<SgjsExpertLibrary> libraryList = sgsjTechnicalScienceTopic.getListApply();
             if (CollUtil.isNotEmpty(libraryList)) {
+                Long id = applyData.getId();
                 sgjsExpertLibraryService.saveExpertLibrary(id, BelongBusiness.BELONG_BUSINESS_1, libraryList);
             }
             //判断是否结束流程，如果结束需要新建一条数据
             String applyState = sgsjTechnicalScienceTopic.getApplyState();
             if (StrUtil.isNotBlank(applyState) && (StrUtil.equalsAny(applyState, "3", "4"))) {
                 //3，4代表流程结束，需要创建一条新数据给立项用
-                SgsjTechnicalScienceTopic param = new SgsjTechnicalScienceTopic();
-                param.setId(sgsjTechnicalScienceTopic.getId());
-                SgsjTechnicalScienceTopic lxData = sgsjTechnicalScienceTopicMapper.getSgsjTechnicalScienceTopic(param);
-                this.addLxData(lxData);
+                this.addLxData(applyData);
             }
         }
         String tenantKey = SecurityUtils.getTenantKey();
