@@ -321,7 +321,7 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
                         XmslContractList temp = list.get(i);
                         if(temp.getPid()==null || temp.getPid() < 1)
                             temp.setPid(-1L);
-                        SgjsDesignChangeList designChangeList = trans2DesignList(wbs.getCode(),temp);
+                        SgjsDesignChangeList designChangeList = trans2DesignList(wbsCode,temp);
                         finalList.add(designChangeList);
                     }
                 }
