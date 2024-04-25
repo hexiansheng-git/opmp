@@ -62,6 +62,7 @@ public class WzchCommonService {
     private SystemApiService systemApiService;
     @Resource
     private SystemServiceApi systemServiceApi;
+    
 //    @Resource
 //    private IMaterialInfoService materialInfoService;
 
@@ -572,6 +573,7 @@ public class WzchCommonService {
             // 单线程
             detailList = this.getDic(detailList, fields, fieldDicListMap);
         }
+        
         return detailList;
     }
 

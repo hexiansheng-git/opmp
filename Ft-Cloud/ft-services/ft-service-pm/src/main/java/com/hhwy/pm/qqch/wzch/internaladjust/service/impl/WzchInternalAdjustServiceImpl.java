@@ -9,6 +9,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -16,6 +17,10 @@ import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
+import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand;
+import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandDetail;
+import com.hhwy.pm.qqch.wzch.demand.service.IWzchTotalDemandDetailService;
+import com.hhwy.pm.qqch.wzch.demand.service.IWzchTotalDemandService;
 import com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchInternalAdjust;
 import com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchInternalAdjustDetail;
 import com.hhwy.pm.qqch.wzch.internaladjust.dto.WzchInternalAdjustDTO;
@@ -29,6 +34,7 @@ import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
 import com.hhwy.pm.qqch.wzch.source.domain.WzchSourceDetail;
 import com.hhwy.pm.qqch.wzch.source.service.IWzchSourceDetailService;
 import com.hhwy.pm.qqch.wzch.source.service.IWzchSourceService;
+import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.ObjectUtils;
@@ -76,6 +82,12 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
     private WzchInternalAdjustDetailMapper wzchInternalAdjustDetailMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IWzchTotalDemandService totalDemandService;
+    @Autowired
+    private IWzchTotalDemandDetailService totalDemandDetailService;
+    @Autowired
+    private SystemApiService systemApiService;
 
 
     private final static String ONE = "1";
@@ -395,9 +407,29 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
     }
 
     @Override
-    public void setAdjustProjectIds(List<WzchInternalAdjustDetail> dtoList) {
+    public void checkImportData(List<WzchInternalAdjustDetail> dtoList,BigDecimal version) {
+        //判断是否存在于物资总需台账  
+        version = ObjectUtils.nvlBigDecimal(version,BigDecimal.ONE);
+        WzchTotalDemand totalDemand = totalDemandService.selectByVersion(version);
+        Assert.notNull(totalDemand,"未获取到物资总需台账数据，请先完成物资总需台账的编制");
+        List<WzchTotalDemandDetail> detailList = totalDemandDetailService.selectDetailByTotalDemandIds(Arrays.asList(totalDemand.getId()));
+        Assert.isTrue(CollectionUtils.isNotEmpty(detailList),"未获取到物资总需台账数据，请先完成物资总需台账的编制");
+        //校验
+        Map<String,WzchTotalDemandDetail> totalDemandDetailMap = detailList.stream().collect(Collectors.toMap(r->r.getMaterialCode(), r->r));
+        Map<String,String> standDictMap = systemApiService.selectDictDataByType("material_standard").stream().collect(Collectors.toMap(r->r.getDictLabel(), r->r.getDictValue()));
+        for (int i = 0; i < dtoList.size(); i++) {
+            WzchInternalAdjustDetail temp = dtoList.get(i);
+            Assert.isTrue(StringUtils.isNotBlank(temp.getMaterialStandard()), "物资编码["+temp.getMaterialCode()+"]的执行标准不能为空！");
+            String standVal = standDictMap.get(StringUtils.trim(temp.getMaterialStandard()));
+            temp.setMaterialStandard(standVal);
+            Assert.isTrue(StringUtils.isNotBlank(standVal), "物资编码["+temp.getMaterialCode()+"]的执行标准填写有误！");
+            WzchTotalDemandDetail demandDetail = totalDemandDetailMap.get(temp.getMaterialCode());
+            Assert.notNull(demandDetail, "物资编码["+temp.getMaterialCode()+"]不存在于物资总需台账中！");
+            Assert.isTrue(StringUtils.equals(demandDetail.getMaterialStandard(),temp.getMaterialStandard()), "物资编码["+temp.getMaterialCode()+"]的执行标准与物资总需台账中的不一致！");
+        }
+        
         // 获取项目名称集合
-        String projectNames = dtoList.stream().map(WzchInternalAdjustDetail::getAdjustProjectName).distinct().collect(Collectors.joining(","));
+//        String projectNames = dtoList.stream().map(WzchInternalAdjustDetail::getAdjustProjectName).distinct().collect(Collectors.joining(","));
 //        ProjectInfo projectInfo = new ProjectInfo();
 //        Map<String, Object> where = new HashMap<>();
 //        where.put("projectNames", projectNames);

@@ -116,7 +116,7 @@ public interface IWzchInternalAdjustService {
      *
      * @param dtoList
      */
-    void setAdjustProjectIds(List<WzchInternalAdjustDetail> dtoList);
+    void checkImportData(List<WzchInternalAdjustDetail> dtoList,BigDecimal version);
 
     /**
      * 校验导入数据

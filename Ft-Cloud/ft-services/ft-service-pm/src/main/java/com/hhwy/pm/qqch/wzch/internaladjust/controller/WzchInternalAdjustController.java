@@ -18,6 +18,7 @@ import com.hhwy.pm.qqch.wzch.internaladjust.dto.WzchInternalAdjustDTO;
 import com.hhwy.pm.qqch.wzch.internaladjust.service.IWzchInternalAdjustDetailService;
 import com.hhwy.pm.qqch.wzch.internaladjust.service.IWzchInternalAdjustService;
 import com.hhwy.pm.qqch.wzch.localpuchasesupply.domain.WzchLocalPurchaseSupply;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.exception.CustomBusinessException;
@@ -208,8 +209,7 @@ public class WzchInternalAdjustController extends BaseController {
             for (int i = 0; i < dtoList.size(); i++) {
                 dtoList.get(i).setId(IdWorker.createId());
             }
-            
-            wzchInternalAdjustService.setAdjustProjectIds(dtoList);
+            wzchInternalAdjustService.checkImportData(dtoList, ObjectUtils.nvlBigDecimal(map.get("version")));
             wzchCommonService.importDealDict(dtoList, this.getDictMap());
             wzchCommonService.setDicValue(dtoList, this.getDictNameMap());
             return AjaxResult.success(dtoList);
