@@ -127,8 +127,8 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
         resultList.forEach(p -> {
             BigDecimal completeDatePercentage = p.getCompleteDatePercentage() == null ? BigDecimal.ZERO : p.getCompleteDatePercentage();
             BigDecimal completeProgressPercentage = p.getCompleteProgressPercentage() == null ? BigDecimal.ZERO : p.getCompleteProgressPercentage();
-            p.setCompleteDatePercentage(completeDatePercentage);
-            p.setCompleteProgressPercentage(completeProgressPercentage);
+            p.setCompleteDatePercentage(completeDatePercentage.multiply(new BigDecimal("100")));
+            p.setCompleteProgressPercentage(completeProgressPercentage.multiply(new BigDecimal("100")));
         });
         //将所有责任人username和nickname返回前端，给流程审批用
         String loginAcccount = allList.stream()

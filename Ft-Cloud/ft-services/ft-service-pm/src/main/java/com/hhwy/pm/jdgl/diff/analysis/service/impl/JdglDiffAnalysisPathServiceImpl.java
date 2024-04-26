@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import cn.hutool.core.util.NumberUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -200,9 +201,9 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
             }
 
             //实际用的工期 除 原定工期 等于 总体工期完成百分比
-            BigDecimal totalDayCompRate = new BigDecimal(totalPlanDays == 0 ? 0 : totalCompDays /totalPlanDays);
-            jdglDiffAnalysisPath.setTotalDayCompRate(totalDayCompRate);
+            BigDecimal totalDayCompRate = new BigDecimal(totalPlanDays == 0 ? 0 : NumberUtil.div(totalCompDays, totalPlanDays, 2));
 
+            jdglDiffAnalysisPath.setTotalDayCompRate(totalDayCompRate);
             // 计算总体进度完成百分比
             //总体计划工程量
             BigDecimal totalPlanQty = jdglMainPlanItem.getQuantity();

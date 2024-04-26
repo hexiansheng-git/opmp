@@ -311,7 +311,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         Map<String, JdglDiffAnalysisPath> pathMap = new HashMap<>();
         if (CollectionUtil.isNotEmpty(jdglDiffAnalysisPathList)) {
             pathMap = jdglDiffAnalysisPathList.stream()
-                    .filter(p -> StrUtil.isBlank(p.getPlanItemCode()) && null != p.getTotalDayCompRate())
+                    .filter(p -> StrUtil.isNotBlank(p.getPlanItemCode()) && null != p.getTotalDayCompRate())
                     .collect(Collectors.toMap(JdglDiffAnalysisPath::getPlanItemCode, Function.identity(), (k1, k2) -> k1));
         }
         //开始处理数据，差异化分析数据组装到纠偏指定
