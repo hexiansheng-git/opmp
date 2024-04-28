@@ -1,6 +1,7 @@
 package com.hhwy.pm.qyzs.safe.qyzsSafeSafeRisk.service.impl;
 
 
+import com.alibaba.excel.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,6 +48,9 @@ public class QyzsSafeSafeRiskServiceImpl implements IQyzsSafeSafeRiskService {
         String url = gmUrl + "/gm/qyzsSafeSafeRisk/getCommonListBy";
         HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
         String projectType = tWbsService.getDefaultEngineeringType();
+        if(StringUtils.isBlank(projectType)){
+            return new ArrayList<>();
+        }
         qyzsSafeSafeRisk.setProjectType(projectType);
         HttpEntity<QyzsSafeSafeRisk> httpEntity = new HttpEntity<>(qyzsSafeSafeRisk,headers);
         AjaxResult result = RestTemplateUtils.post(url, httpEntity, AjaxResult.class);

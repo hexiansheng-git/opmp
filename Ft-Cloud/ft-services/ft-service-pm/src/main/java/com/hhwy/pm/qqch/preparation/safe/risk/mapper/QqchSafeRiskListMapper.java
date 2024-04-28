@@ -1,11 +1,11 @@
 package com.hhwy.pm.qqch.preparation.safe.risk.mapper;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskList;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskListVo;
 import org.apache.ibatis.annotations.Param;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zq
@@ -33,4 +33,6 @@ public interface QqchSafeRiskListMapper {
     BigDecimal selectMaxVersion(QqchSafeRiskListVo qqchSafeRiskListVo);
 
     BigDecimal selectLessOrEqualAssignVersion(QqchSafeRiskListVo qqchSafeRiskListVo);
+
+    int getCount(@Param("version") BigDecimal version,@Param("type") String type);
 }

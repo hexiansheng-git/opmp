@@ -122,4 +122,24 @@ public class QqchSafeRiskListController extends BaseController {
         List<QqchSafeRiskListDetail> detailList = qqchSafeRiskListService.assembleData(assembleDataVo);
         return AjaxResult.success(detailList);
     }
+
+    /**
+     * 初始化，同步标准wbs关联的所有数据
+     * @return
+     */
+    @GetMapping("initData")
+    public AjaxResult initData() {
+        qqchSafeRiskListService.initData();
+        return AjaxResult.success();
+    }
+
+    /**
+     * 同步标准wbs关联的所有数据
+     * @return
+     */
+    @GetMapping("syncData")
+    public AjaxResult syncData() {
+        qqchSafeRiskListService.syncData();
+        return AjaxResult.success();
+    }
 }

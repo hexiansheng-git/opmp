@@ -539,4 +539,7 @@
         group by version
         order by version desc limit 1
     </select>
+    <select id="getCount" resultType="java.lang.Integer">
+        select count(*) from qqch_safe_risk_list where del_flag = '0' and version = #{version} and type = #{type}
+    </select>
 </mapper>

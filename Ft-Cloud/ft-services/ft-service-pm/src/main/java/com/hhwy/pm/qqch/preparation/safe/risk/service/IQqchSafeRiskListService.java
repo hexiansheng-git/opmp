@@ -35,4 +35,8 @@ public interface IQqchSafeRiskListService {
     QqchSafeRiskListVo getList(SafeRiskListQueryVo queryVo);
 
     List<QqchSafeRiskListDetail> assembleData(SafeRiskAssembleDataVo assembleDataVo);
+
+    void syncData();
+
+    void initData();
 }
