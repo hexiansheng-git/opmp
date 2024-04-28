@@ -514,7 +514,7 @@ public class WzchTotalDemandServiceImpl implements IWzchTotalDemandService
     @Override
     public WzchTotalDemandDetailVO detail(WzchTotalDemandDetailVO vo) {
         BigDecimal version = VersionUtil.getVersion("wzch_total_demand_detail", vo.getVersion());
-        boolean isMatchVersion = BigDecimalUtils.equals(version,vo.getVersion())||vo.getId()==null;
+        boolean isMatchVersion = BigDecimalUtils.equals(version,vo.getVersion());
         vo.setVersion(ObjectUtils.nvlBigDecimal(vo.getVersion(),version));
         vo.setStageIdentity(qqchReviewService.getStage());
 

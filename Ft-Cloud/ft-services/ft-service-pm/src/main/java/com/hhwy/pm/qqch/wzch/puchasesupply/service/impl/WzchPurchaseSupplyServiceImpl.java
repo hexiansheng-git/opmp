@@ -176,6 +176,7 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
         }
         BeanUtils.copyProperties(list.get(0), vo);
         vo.setStageIdentity(qqchReviewService.getStage());
+        vo.setVersion(ObjectUtils.nvlBigDecimal(vo.getVersion(),version));
         WzchPurchaseSupplyDetail detail = new WzchPurchaseSupplyDetail();
         detail.setPurchaseSupplyId(vo.getId());
         detail.setDelFlag("0");

@@ -132,8 +132,7 @@ public class WzchImportExportSurveyServiceImpl implements IWzchImportExportSurve
     @Override
     public WzchImportExportSurvey edit(WzchImportExportSurvey vo) {
         BigDecimal version = VersionUtil.getVersion("wzch_import_export_survey", vo.getVersion());
-        boolean isMatchVersion = BigDecimalUtils.equals(version,vo.getVersion())||vo.getId()==null;
-        vo.setVersion(version);
+        boolean isMatchVersion = BigDecimalUtils.equals(version,vo.getVersion());
         vo.setStageIdentity(qqchReviewService.getStage());
         
         List<WzchImportExportSurvey> list = wzchImportExportSurveyMapper.selectWzchImportExportSurveyList(new WzchImportExportSurvey(version));
@@ -142,11 +141,13 @@ public class WzchImportExportSurveyServiceImpl implements IWzchImportExportSurve
             vo.setWzchImportExportSurveyCustomsList(new ArrayList<>());
             return vo;
         }
+        BigDecimal sourceVersion = vo.getVersion();
         BeanUtils.copyProperties(list.get(0),vo);
-        vo.setId(isMatchVersion?vo.getId():null); //若取得不是本版本，将id滞空，
         vo.setStageIdentity(qqchReviewService.getStage());
+        vo.setVersion(com.hhwy.utils.ObjectUtils.nvlBigDecimal(sourceVersion,version));
         List<WzchImportExportSurveyCountry> wzchImportExportSurveyCountries = wzchImportExportSurveyCountryService.selectWzchImportExportSurveyCountryList(new WzchImportExportSurveyCountry(vo.getId()));
         List<WzchImportExportSurveyCustoms> wzchImportExportSurveyCustoms = wzchImportExportSurveyCustomsService.selectWzchImportExportSurveyCustomsList(new WzchImportExportSurveyCustoms(vo.getId()));
+        vo.setId(isMatchVersion?vo.getId():null); //若取得不是本版本，将id滞空，
         vo.setWzchImportExportSurveyCountryList(wzchImportExportSurveyCountries);
         if(CollectionUtils.isNotEmpty(wzchImportExportSurveyCustoms)){
             wzchImportExportSurveyCustoms = wzchImportExportSurveyCustoms.stream().sorted(Comparator.comparing(WzchImportExportSurveyCustoms::getId)).collect(Collectors.toList());
@@ -173,9 +174,17 @@ public class WzchImportExportSurveyServiceImpl implements IWzchImportExportSurve
         }
         
         if (CollectionUtils.isNotEmpty(wzchImportExportSurvey.getWzchImportExportSurveyCountryList())) {
+            wzchImportExportSurvey.getWzchImportExportSurveyCountryList().stream().forEach(r->{
+                r.setId(IdWorker.createId());
+                r.setSurveyId(wzchImportExportSurvey.getId());
+            });
             wzchImportExportSurveyCountryService.batchInsert(wzchImportExportSurvey.getWzchImportExportSurveyCountryList());
         }
         if (CollectionUtils.isNotEmpty(wzchImportExportSurvey.getWzchImportExportSurveyCustomsList())) {
+            wzchImportExportSurvey.getWzchImportExportSurveyCustomsList().stream().forEach(r->{
+                r.setId(IdWorker.createId());
+                r.setSurveyId(wzchImportExportSurvey.getId());
+            });
             wzchImportExportSurveyCustomsService.batchInsert(wzchImportExportSurvey.getWzchImportExportSurveyCustomsList());
         }
         if (ButtonMark.CONFIRM.equals(wzchImportExportSurvey.getButtonMark())) {

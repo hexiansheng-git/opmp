@@ -23,6 +23,7 @@ import com.hhwy.pm.qqch.wzch.revolverent.service.IWzchRevolveRentDetailService;
 import com.hhwy.pm.qqch.wzch.revolverent.service.IWzchRevolveRentService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -158,7 +159,7 @@ public class WzchRevolveRentServiceImpl implements IWzchRevolveRentService {
     @Override
     public WzchRevolveRentDTO baseInfo(WzchRevolveRentDTO vo){
         BigDecimal version = VersionUtil.getVersion("wzch_revolve_rent", vo.getVersion());
-        vo.setVersion(version);
+        vo.setVersion(ObjectUtils.nvlBigDecimal(vo.getVersion(),version));
         vo.setStageIdentity(qqchReviewService.getStage());
 
         List<WzchRevolveRent> list = wzchRevolveRentMapper.selectWzchRevolveRentList(new WzchRevolveRent(version));
@@ -168,6 +169,7 @@ public class WzchRevolveRentServiceImpl implements IWzchRevolveRentService {
         }
         BeanUtils.copyProperties(list.get(0),vo);
         vo.setStageIdentity(qqchReviewService.getStage());
+        vo.setVersion(ObjectUtils.nvlBigDecimal(vo.getVersion(),version));
         WzchRevolveRentDetail detail = new WzchRevolveRentDetail();
         detail.setRevolveRentId(vo.getId());
         detail.setDelFlag("0");

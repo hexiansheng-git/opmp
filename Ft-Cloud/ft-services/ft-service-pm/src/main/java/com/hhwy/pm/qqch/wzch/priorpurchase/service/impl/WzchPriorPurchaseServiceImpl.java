@@ -21,6 +21,7 @@ import com.hhwy.pm.qqch.wzch.priorpurchase.service.IWzchPriorPurchaseService;
 import com.hhwy.pm.qqch.wzch.puchasesupply.domain.WzchPurchaseSupply;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
@@ -305,7 +306,7 @@ public class WzchPriorPurchaseServiceImpl implements IWzchPriorPurchaseService {
     @Override
     public WzchPriorPurchaseDTO baseInfo(WzchPriorPurchaseDTO vo) {
         BigDecimal version = VersionUtil.getVersion("wzch_prior_purchase", vo.getVersion());
-        vo.setVersion(version);
+        vo.setVersion(ObjectUtils.nvlBigDecimal(vo.getVersion(),version));
         vo.setStageIdentity(qqchReviewService.getStage());
         List<WzchPriorPurchase> list = this.wzchPriorPurchaseMapper.selectWzchPriorPurchaseList(new WzchPriorPurchase(version));
         if(CollectionUtils.isEmpty(list)){
@@ -314,6 +315,7 @@ public class WzchPriorPurchaseServiceImpl implements IWzchPriorPurchaseService {
         }
         BeanUtils.copyProperties(list.get(0), vo);
         vo.setStageIdentity(qqchReviewService.getStage());
+        vo.setVersion(ObjectUtils.nvlBigDecimal(vo.getVersion(),version));
         WzchPriorPurchaseDetail detail = new WzchPriorPurchaseDetail();
         detail.setPriorPurchaseId(vo.getId());
         detail.setDelFlag("0");

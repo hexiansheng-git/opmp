@@ -14,6 +14,7 @@ import com.hhwy.pm.qqch.wzch.importplan.domain.WzchImportExportPlanDetail;
 import com.hhwy.pm.qqch.wzch.importplan.mapper.WzchImportExportPlanMapper;
 import com.hhwy.pm.qqch.wzch.importplan.service.IWzchImportExportPlanDetailService;
 import com.hhwy.pm.qqch.wzch.importplan.service.IWzchImportExportPlanService;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -114,17 +115,19 @@ public class WzchImportExportPlanServiceImpl implements IWzchImportExportPlanSer
 
     @Override
     public WzchImportExportPlan detail(WzchImportExportPlan wzchImportExportPlan) {
+        BigDecimal sourceVersion = wzchImportExportPlan.getVersion();
         BigDecimal version = VersionUtil.getVersion("wzch_import_export_plan", wzchImportExportPlan.getVersion());
-        boolean isMatchVersion = BigDecimalUtils.equals(version,wzchImportExportPlan.getVersion())||wzchImportExportPlan.getId()==null;
+        boolean isMatchVersion = BigDecimalUtils.equals(version,wzchImportExportPlan.getVersion());
         wzchImportExportPlan.setVersion(version);
         wzchImportExportPlan.setStageIdentity(qqchReviewService.getStage());
         List<WzchImportExportPlan> list = wzchImportExportPlanMapper.selectWzchImportExportPlanList(wzchImportExportPlan);
+        wzchImportExportPlan.setVersion(ObjectUtils.nvlBigDecimal(sourceVersion,version));
         if(CollectionUtils.isEmpty(list)){
             wzchImportExportPlan.setWzchImportExportPlanDetailList(new ArrayList<>());
             return wzchImportExportPlan;
         }
         wzchImportExportPlan.setId(list.get(0).getId());
-        wzchImportExportPlan.setId(isMatchVersion?wzchImportExportPlan.getId():null); //若取得不是本版本，将id滞空，
+        wzchImportExportPlan.setId(isMatchVersion||sourceVersion==null?wzchImportExportPlan.getId():null); //若取得不是本版本，将id滞空，
         List<WzchImportExportPlanDetail> wzchImportExportPlanDetails = wzchImportExportPlanDetailService.selectWzchImportExportPlanDetailList(new WzchImportExportPlanDetail(wzchImportExportPlan.getId()));
         wzchImportExportPlan.setWzchImportExportPlanDetailList(wzchImportExportPlanDetails);
         return wzchImportExportPlan;

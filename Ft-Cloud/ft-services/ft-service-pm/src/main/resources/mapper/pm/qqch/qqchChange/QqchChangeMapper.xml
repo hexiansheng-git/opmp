@@ -178,7 +178,7 @@
     <select id="countEditQqchChangeDetail" resultType="Integer" parameterType="com.hhwy.pm.qqch.qqchChange.domain.QqchChangeDetail">
         select count(1) from qqch_change_detail where del_flag =0 and is_first = 1
         <if test="mainId != null"> and main_id = #{mainId} </if>
-        <if test="editorFirst != null"> and editor_first = #{editorFirst} </if>
+        <if test="ptVar2 != null"> and pt_var2 = #{ptVar2} </if>
         <if test="ptVar1 != null"> and pt_var1 = #{ptVar1} </if>
     </select>
 

@@ -205,12 +205,14 @@ public class WzchSpecialMaterialPlanDetailServiceImpl implements IWzchSpecialMat
             List<WzchSpecialMaterialPlanDetail> list = wzchSpecialMaterialPlan.getPlanDetailList();
             for (int i = 0; i < list.size(); i++) {
                 WzchSpecialMaterialPlanDetail temp = list.get(i);
+                temp.setId(IdWorker.createId());
                 temp.setPlanId(wzchSpecialMaterialPlan.getId());
             }
             wzchSpecialMaterialPlanDetailMapper.batchInsert(wzchSpecialMaterialPlan.getPlanDetailList());
         }
         if (CollectionUtils.isNotEmpty(wzchSpecialMaterialPlan.getRequestDetailList())){
             wzchSpecialMaterialPlan.getRequestDetailList().stream().forEach(r->{
+                r.setId(IdWorker.createId());
                 r.setPlanId(wzchSpecialMaterialPlan.getId());
             });
             wzchSpecialMaterialRequestDetailService.batchInsert(wzchSpecialMaterialPlan.getRequestDetailList());

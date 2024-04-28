@@ -120,8 +120,8 @@ public class WzchSceneManageServiceImpl implements WzchSceneManageService {
     @Override
     public WzchSceneManageDTO baseInfo(WzchSceneManageDTO dto) {
         BigDecimal version = VersionUtil.getVersion("wzch_scene_manage", dto.getVersion());
-        boolean isMatchVersion = BigDecimalUtils.equals(version,dto.getVersion())||dto.getId()==null;
-        dto.setVersion(version);
+        boolean isMatchVersion = BigDecimalUtils.equals(version,dto.getVersion());
+        dto.setVersion(ObjectUtils.nvlBigDecimal(dto.getVersion(),version));
         dto.setStageIdentity(qqchReviewService.getStage());
 
         List<WzchSceneManage> list = wzchSceneManageMapper.selectWzchSceneManageList(new WzchSceneManage(version));

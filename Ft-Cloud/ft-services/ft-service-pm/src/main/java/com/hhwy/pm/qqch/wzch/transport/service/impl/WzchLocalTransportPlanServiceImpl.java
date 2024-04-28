@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.wzch.transport.domain.WzchLocalTransportPlanDetail;
 import com.hhwy.pm.qqch.wzch.transport.mapper.WzchLocalTransportPlanMapper;
 import com.hhwy.pm.qqch.wzch.transport.service.IWzchLocalTransportPlanDetailService;
 import com.hhwy.pm.qqch.wzch.transport.service.IWzchLocalTransportPlanService;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -113,9 +114,10 @@ public class WzchLocalTransportPlanServiceImpl implements IWzchLocalTransportPla
 
     @Override
     public WzchLocalTransportPlan edit(WzchLocalTransportPlan wzchLocalTransportPlan) {
+        BigDecimal sourceVersion = wzchLocalTransportPlan.getVersion();
         BigDecimal version = VersionUtil.getVersion("wzch_local_transport_plan", wzchLocalTransportPlan.getVersion());
-        boolean isMatchVersion = BigDecimalUtils.equals(version,wzchLocalTransportPlan.getVersion())||wzchLocalTransportPlan.getId()==null;
-        wzchLocalTransportPlan.setVersion(version);
+        boolean isMatchVersion = BigDecimalUtils.equals(version,wzchLocalTransportPlan.getVersion());
+        
         wzchLocalTransportPlan.setStageIdentity(qqchReviewService.getStage());
         List<WzchLocalTransportPlan> list = wzchLocalTransportPlanMapper.selectWzchLocalTransportPlanList(new WzchLocalTransportPlan(version));
         if(CollectionUtils.isEmpty(list)){
@@ -123,9 +125,11 @@ public class WzchLocalTransportPlanServiceImpl implements IWzchLocalTransportPla
             return wzchLocalTransportPlan;
         }
         wzchLocalTransportPlan = list.get(0);
-        wzchLocalTransportPlan.setId(isMatchVersion?wzchLocalTransportPlan.getId():null); //若取得不是本版本，将id滞空，
+        wzchLocalTransportPlan.setVersion(ObjectUtils.nvlBigDecimal(sourceVersion,version));
+        wzchLocalTransportPlan.setVersionCode(wzchLocalTransportPlan.getVersion()+"");
         wzchLocalTransportPlan.setStageIdentity(qqchReviewService.getStage());
         List<WzchLocalTransportPlanDetail> wzchLocalTransportPlanDetails = wzchLocalTransportPlanDetailService.selectWzchLocalTransportPlanDetailList(new WzchLocalTransportPlanDetail(wzchLocalTransportPlan.getId()));
+        wzchLocalTransportPlan.setId(isMatchVersion?wzchLocalTransportPlan.getId():null); //若取得不是本版本，将id滞空，
         wzchLocalTransportPlanDetails = wzchLocalTransportPlanDetails.stream().sorted(Comparator.comparing(WzchLocalTransportPlanDetail::getId)).collect(Collectors.toList());
         wzchLocalTransportPlan.setWzchLocalTransportPlanDetailList(wzchLocalTransportPlanDetails);
         return wzchLocalTransportPlan;

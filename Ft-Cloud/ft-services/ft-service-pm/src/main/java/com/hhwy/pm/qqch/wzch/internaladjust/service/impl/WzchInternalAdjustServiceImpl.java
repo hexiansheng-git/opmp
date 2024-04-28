@@ -260,7 +260,7 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
         BeanUtils.copyProperties(list.get(0), dto);
 
         dto.setStageIdentity(qqchReviewService.getStage());
-        
+        dto.setVersion(ObjectUtils.nvlBigDecimal(dto.getVersion(),version));
         WzchInternalAdjust lastVersionData = list.get(0);
         // 如果不为空 就给前端数据进行赋值
         if (lastVersionData != null) {

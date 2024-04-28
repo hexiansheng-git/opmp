@@ -203,6 +203,7 @@ public class WzchImportExportPlanDetailServiceImpl implements IWzchImportExportP
         if (CollectionUtils.isEmpty(wzchImportExportPlanDetailList))
             return wzchImportExportPlan.getId();
         for (int i = 0; i < wzchImportExportPlanDetailList.size(); i++) {
+            wzchImportExportPlanDetailList.get(i).setId(IdWorker.createId());
             wzchImportExportPlanDetailList.get(i).setPlanId(wzchImportExportPlan.getId());
         }
         wzchImportExportPlanDetailMapper.batchInsert(wzchImportExportPlanDetailList);

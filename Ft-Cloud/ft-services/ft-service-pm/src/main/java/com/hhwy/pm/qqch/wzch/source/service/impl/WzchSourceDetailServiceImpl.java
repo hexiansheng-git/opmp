@@ -438,7 +438,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
     public WzchSourceTotalDemandVO getProjectTotalDemandDetail(WzchSourceTotalDemandVO vo) {
 //        wzchTotalDemandDetailService.selectWzchTotalDemandDetailList();
         BigDecimal version = VersionUtil.getVersion("wzch_source_detail", vo.getVersion());
-        vo.setVersion(version);
+        vo.setVersion(com.hhwy.utils.ObjectUtils.nvlBigDecimal(vo.getVersion(),version));
         vo.setStageIdentity(qqchReviewService.getStage());
 
         WzchTotalDemandDetail queryDetail = new WzchTotalDemandDetail();

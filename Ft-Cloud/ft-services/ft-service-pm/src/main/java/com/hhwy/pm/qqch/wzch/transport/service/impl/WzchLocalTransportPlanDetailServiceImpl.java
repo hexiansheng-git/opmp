@@ -144,6 +144,7 @@ public class WzchLocalTransportPlanDetailServiceImpl implements IWzchLocalTransp
             wzchLocalTransportPlanDetailMapper.deleteByPlanId(wzchLocalTransportPlan.getId());
         }
         wzchLocalTransportPlan.getWzchLocalTransportPlanDetailList().stream().forEach(r->{
+            r.setId(IdWorker.createId());
             r.setPlanId(wzchLocalTransportPlan.getId());
         });
         if(CollectionUtils.isNotEmpty(wzchLocalTransportPlan.getWzchLocalTransportPlanDetailList()))

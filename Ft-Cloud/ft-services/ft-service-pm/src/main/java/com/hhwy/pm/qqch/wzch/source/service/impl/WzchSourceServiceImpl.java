@@ -22,6 +22,7 @@ import com.hhwy.pm.qqch.wzch.source.mapper.WzchSourceMapper;
 import com.hhwy.pm.qqch.wzch.source.service.IWzchSourceService;
 import com.hhwy.pm.qqch.wzch.source.vo.ProjectOfChangeInfoRequest;
 import com.hhwy.pm.qqch.wzch.source.vo.ReminderOfChangeResponse;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
@@ -140,7 +141,7 @@ public class WzchSourceServiceImpl implements IWzchSourceService {
 //        }
         WzchSource wzchSource = new WzchSource();
         BigDecimal version = VersionUtil.getVersion("wzch_source", vo.getVersion());
-        wzchSource.setVersion(version);
+        wzchSource.setVersion(ObjectUtils.nvlBigDecimal(vo.getVersion(),version));
         wzchSource.setStageIdentity(qqchReviewService.getStage());
         if(version == null){
             wzchSource.setWzchSourceDetailList(new ArrayList<>(2));    
@@ -152,7 +153,7 @@ public class WzchSourceServiceImpl implements IWzchSourceService {
             return wzchSource;
         }
         wzchSource = list.get(0);
-        wzchSource.setVersion(version);
+        wzchSource.setVersion(ObjectUtils.nvlBigDecimal(vo.getVersion(),version));
         wzchSource.setStageIdentity(qqchReviewService.getStage());
         List<WzchSourceDetail> wzchSourceDetails = queryWzchSourceDetailList(version);
 //        wzchSourceDetails = wzchSourceDetails.stream().sorted(Comparator.comparing(WzchSourceDetail::getMaterialCode)).collect(Collectors.toList());

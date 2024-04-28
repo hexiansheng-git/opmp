@@ -272,7 +272,7 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
     public WzchPriorApproach detail(WzchPriorApproach approach) {
         BigDecimal version = VersionUtil.getVersion("wzch_prior_approach_detail", approach.getVersion());
         WzchPriorApproach query = new WzchPriorApproach();
-        query.setVersion(version);
+        query.setVersion(ObjectUtils.nvlBigDecimal(approach.getVersion(),version));
         List<WzchPriorApproach> list = this.wzchPriorApproachMapper.selectWzchPriorApproachList(query);
         if(CollectionUtils.isNotEmpty(list))
             approach = list.get(0);

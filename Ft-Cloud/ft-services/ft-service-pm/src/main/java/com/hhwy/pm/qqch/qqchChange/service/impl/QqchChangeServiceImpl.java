@@ -357,7 +357,7 @@ public class QqchChangeServiceImpl implements IQqchChangeService {
         new AddBaseInfoUtil<>().update(query);
         this.qqchChangeMapper.updateQqchChange(query);
         //version 扔redis
-        final String key = "qqchValidVersion";
+        final String key = "qqchValidVersion::"+SecurityUtils.getTenantKey();
         redisUtils.setAndExpire(key,qqchChange.getVersion()+"",1, TimeUnit.HOURS);
     }
 
