@@ -37,4 +37,11 @@ public interface IJdglMainPlanService {
     JdglMainPlan getBaseMainPlan();
 
     void test(Long id);
+
+    void updateJdglBaseMainPlan();
+
+    List<JdglMainPlan> getBaseMainPlanList();
+
+    JdglMainPlan getBaseMainPlanDetail(Long id);
+
 }

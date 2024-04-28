@@ -10,6 +10,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglData4P6Service;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchSimilarProjectSchemeService;
 import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
@@ -50,6 +51,8 @@ public class ReviewController extends BaseController {
     private DataShareDevicePlanService dataShareDevicePlanService;
     @Autowired
     private IQqchSimilarProjectSchemeService qqchSimilarProjectSchemeService;
+    @Autowired
+    private IJdglData4P6Service jdglData4P6Service;
 
 
     public static void main(String[] args) {
@@ -277,7 +280,8 @@ public class ReviewController extends BaseController {
     @PostMapping("/listener")
     public AjaxResult reviewListener(Long id) {
         qqchReviewService.listener(id);
-        //推送设备策划数据到物设中间库
+
+        /*评审完成后触发一些操作*/
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         String tenantKey = SecurityUtils.getTenantKey();
         executorService.submit(() -> {
@@ -285,7 +289,10 @@ public class ReviewController extends BaseController {
             String oldDataSource = DynamicDataSourceContextHolder.peek();
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
             try {
+                //推送设备策划数据到物设中间库
                 dataShareDevicePlanService.eachStagePush(tenantKey);
+                //进度管理 - 总体计划数据初始化
+                jdglData4P6Service.initJdglData4P6ByOne(tenantKey);
             }catch (Exception e){
                 e.printStackTrace();
                 throw new CustomException(e.getMessage());

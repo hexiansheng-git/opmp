@@ -31,4 +31,11 @@ public interface JdglMainPlanMapper {
     int deleteJdglMainPlanByPks(@Param("jdglMainPlanPkList") List<Long> jdglMainPlanPkList);
 
     JdglMainPlan getMinVersionMainPlan();
+
+    JdglMainPlan getBaseMainPlanMaxVersion();
+
+    JdglMainPlan getMaxVersionMainPlan();
+
+    List<JdglMainPlan> getBaseMainPlanList();
+
 }

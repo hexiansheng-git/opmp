@@ -55,6 +55,20 @@ public class JdglMainPlanController extends BaseController {
         return AjaxResult.success(jdglMainPlan);
     }
 
+    //基线计划列表查询
+    @GetMapping("/getBaseMainPlanList")
+    public AjaxResult getBaseMainPlanList() {
+        List<JdglMainPlan> jdglMainPlanList = jdglMainPlanService.getBaseMainPlanList();
+        return AjaxResult.success(jdglMainPlanList);
+    }
+
+    //基线计划详情查询
+    @GetMapping("/getBaseMainPlanDetail")
+    public AjaxResult getBaseMainPlanDetail(@RequestParam("id") Long id) {
+        JdglMainPlan jdglMainPlan = jdglMainPlanService.getBaseMainPlanDetail(id);
+        return AjaxResult.success(jdglMainPlan);
+    }
+
     // // @PreAuthorize(hasPermi = "jdglMainPlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglMainPlanList(@Validated(ValidationGroups.Select.class) JdglMainPlan jdglMainPlanParam) {

@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.qqchChange.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
@@ -11,8 +12,13 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglData4P6Service;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchSimilarProjectSchemeService;
 import com.hhwy.pm.qqch.qqchChange.domain.QqchChange;
+import com.hhwy.pm.qqch.qqchChange.domain.QqchChangeDetail;
+import com.hhwy.pm.qqch.qqchChange.service.IQqchChangeDetailService;
 import com.hhwy.pm.qqch.qqchChange.service.IQqchChangeService;
 import com.hhwy.pm.qqch.qqchChange.vo.QqchChangeVo;
 import com.hhwy.pm.qqch.sgch.dataShare.DataShareDevicePlanService;
@@ -34,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 /**
  * 前期策划变更
@@ -49,6 +56,8 @@ public class QqchChangeController extends BaseController {
     @Autowired
     private IQqchChangeService qqchChangeService;
     @Autowired
+    private IQqchChangeDetailService qqchChangeDetailService;
+    @Autowired
     private IXmslContractInfoService contractInfoService;
     @Autowired
     private IXmslProjectBasicInfoService projectBasicInfoService;
@@ -56,6 +65,10 @@ public class QqchChangeController extends BaseController {
     private DataShareDevicePlanService dataShareDevicePlanService;
     @Autowired
     private IQqchSimilarProjectSchemeService qqchSimilarProjectSchemeService;
+    @Autowired
+    private IJdglData4P6Service jdglData4P6Service;
+    @Autowired
+    private IJdglMainPlanService jdglMainPlanService;
 
     @PreAuthorize(hasPermi = "qqchChange:list")
     @PostMapping("/list")
@@ -173,7 +186,8 @@ public class QqchChangeController extends BaseController {
     @PostMapping("/listener")
     public AjaxResult listener(@RequestParam("id") Long businessId){
         qqchChangeService.finishFlow(businessId);
-        //推送设备策划数据到物设中间库
+
+        /*变更完成后触发一些操作*/
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         String tenantKey = SecurityUtils.getTenantKey();
         executorService.submit(() -> {
@@ -181,7 +195,22 @@ public class QqchChangeController extends BaseController {
             String oldDataSource = DynamicDataSourceContextHolder.peek();
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
             try {
+                //推送设备策划数据到物设中间库
                 dataShareDevicePlanService.eachChangePush(tenantKey);
+                //进度管理 - 总体计划数据初始化
+                //判断此次变更有没有涉及到1.2.1的内容
+                QqchChange qqchChange = new QqchChange();
+                qqchChange.setId(businessId);
+                QqchChange qqchChange1 = qqchChangeService.getQqchChange(qqchChange);
+                List<QqchChangeDetail> qqchChangeDetailList = qqchChangeDetailService.getQqchChangeDetailList(qqchChange1.getId());
+                List<QqchChangeDetail> collect = qqchChangeDetailList.stream().filter(p -> p.getItemId().equals("/preliminaryPlanning/constructionPlannin/child2/list2_1")
+                        || p.getItemName().equals("1.2.1 总体进度计划")).collect(Collectors.toList());
+                if (CollUtil.isNotEmpty(collect)) {
+                    //p6数据拉去
+                    jdglData4P6Service.initJdglData4P6ByOne(tenantKey);
+                    //进度管理 - 总体计划  设置基线版本
+                    jdglMainPlanService.updateJdglBaseMainPlan();
+                }
             }catch (Exception e){
                 e.printStackTrace();
                 throw new CustomException(e.getMessage());

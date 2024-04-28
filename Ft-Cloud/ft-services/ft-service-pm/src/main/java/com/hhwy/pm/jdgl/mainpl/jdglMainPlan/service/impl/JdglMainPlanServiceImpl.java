@@ -1,5 +1,7 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.impl;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
@@ -211,5 +213,51 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         query.setId(id);
         JdglMainPlan jdglMainPlan = jdglMainPlanMapper.getJdglMainPlan(query);
         sysSyncInfoService.pushJdglMainPlan(jdglMainPlan);
+    }
+
+    //设置基线计划版本信息
+    @Override
+    public void updateJdglBaseMainPlan() {
+        /*总体计划表中维护了两个版本,1.每次拉去数据的版本 2.基线的版本(pt_var2)*/
+        //查询总体计划中最新版本
+        JdglMainPlan maxVersionMainPlan = jdglMainPlanMapper.getMaxVersionMainPlan();
+        if (null == maxVersionMainPlan) return;
+        //查询已存在的基线最高版本
+        JdglMainPlan jdglMainPlan = jdglMainPlanMapper.getBaseMainPlanMaxVersion();
+        JdglMainPlan param = new JdglMainPlan();
+        if (null == jdglMainPlan) {
+            param.setPtVar1("1");
+        }else {
+            String ptVar2 = jdglMainPlan.getPtVar2();
+            param.setPtVar2(Integer.valueOf(ptVar2) + 1 + "");
+        }
+        param.setId(maxVersionMainPlan.getId());
+        param.setPtVar3(DateUtil.format(new Date(), "yyyy年MM月dd日 HH") + ":00");
+        jdglMainPlanMapper.updateJdglMainPlan(param);
+    }
+
+    //基线计划详情查询
+    @Override
+    public JdglMainPlan getBaseMainPlanDetail(Long id) {
+        JdglMainPlan query = new JdglMainPlan();
+        query.setId(id);
+        return getJdglMainPlan(query);
+    }
+
+    //基线计划列表查询
+    @Override
+    public List<JdglMainPlan> getBaseMainPlanList() {
+        List<JdglMainPlan> resuleList = jdglMainPlanMapper.getBaseMainPlanList();
+        resuleList.forEach(p -> {
+            int i = Integer.parseInt(p.getPtVar2());
+            if (i < 10) {
+                p.setPtVar2("JX00" + p.getPtVar2());
+            }else if (i < 100) {
+                p.setPtVar2("JX0" + p.getPtVar2());
+            }else {
+                p.setPtVar2("JX" + p.getPtVar2());
+            }
+        });
+        return resuleList;
     }
 }
