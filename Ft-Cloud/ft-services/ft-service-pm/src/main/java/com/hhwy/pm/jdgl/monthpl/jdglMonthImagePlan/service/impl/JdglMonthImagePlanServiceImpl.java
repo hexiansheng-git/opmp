@@ -83,6 +83,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
         return build;
     }
 
+    //计算作业产值
     private void workValueCalc(List<JdglMonthImagePlan> jdglMonthImagePlanList) {
         // 获取图纸复核的清单
         List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
@@ -109,7 +110,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
                             ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
                     workValue = workValue.add(checkNum.multiply(price));
                 }
-            }
+                }
             imagePlan.setWorkValue(workValue);
         }
     }
@@ -235,15 +236,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
     @Transactional
     public int updateJdglMonthImagePlanList(List<JdglMonthImagePlan> jdglMonthImagePlanList) {
         if(!CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
-//            List<JdglMonthImagePlan> jdglMonthImagePlans = TreeUtil.treeToList(jdglMonthImagePlanList);
             Long planId = jdglMonthImagePlanList.get(0).getPlanId();
-
-            // 主合同清单
-            List<XmslContractList> inventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
-
-            // 获取图纸复核的清单
-            List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
-
             for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlanList) {
                 jdglMonthImagePlan.setUpdateUser(SecurityUtils.getUserName());
                 jdglMonthImagePlan.setUpdateTime(DateUtils.getNowDate());
@@ -254,7 +247,6 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
             jdglMonthValuePlanService.updateValuePlanData(planId, jdglMonthImagePlanList);
             return jdglMonthImagePlanMapper.insertJdglMonthImagePlanList(jdglMonthImagePlanList);
         }
-
         return 0;
     }
 
