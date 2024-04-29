@@ -1,6 +1,7 @@
 package com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -29,8 +30,10 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.awt.image.PixelConverter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -108,10 +111,18 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
                     //得到清单单价，优先使用变更后的单价
                     BigDecimal price = xmslContractList.getChangeUnitPrice() == null
                             ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
-                    workValue = workValue.add(checkNum.multiply(price));
+                    if (checkNum != null && price != null){
+                        workValue = workValue.add(checkNum.multiply(price));
+                    }
                 }
             }
             imagePlan.setWorkValue(workValue);
+            if (!NumberUtil.equals(workValue, BigDecimal.ZERO)
+                    && imagePlan.getPlanCompQuantity() != null
+                    && imagePlan.getDesignQuantity() != null
+                    && imagePlan.getPlanCompValue() == null) {
+                imagePlan.setPlanCompValue(imagePlan.getPlanCompQuantity().divide(imagePlan.getDesignQuantity(), 4, RoundingMode.HALF_UP).multiply(workValue));
+            }
         }
     }
 
