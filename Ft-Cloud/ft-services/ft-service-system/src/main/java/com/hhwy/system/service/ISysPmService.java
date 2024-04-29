@@ -5,6 +5,7 @@ package com.hhwy.system.service;/*
  **/
 
 import com.hhwy.system.api.domain.SysDictData;
+import com.hhwy.system.api.domain.SysMenu;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface ISysPmService {
      * @return
      */
     public String importDict(MultipartFile file);
+
+    List<SysMenu> testTenant(String s);
 }
