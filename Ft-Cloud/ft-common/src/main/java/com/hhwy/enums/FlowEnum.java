@@ -82,6 +82,8 @@ public enum FlowEnum {
 
         /*********************施工技术管理****************************/
         SGJS_DESIGN_CHANGE_MANAGE("sgjs_design_change_manage", "process_sgjs_design_change_manage"),
+        //配合比管理
+        SGJS_MIX_MANAGE("sgjs_mix_ratio_manage", "process_sgjs_mix_ratio_manage"),
         /*********************科技管理****************************/
         //专利申报管理
         SGJS_PATENT_DECLARE("sgjs_patent_declare","process_sgjs_patent_declare"),

@@ -34,6 +34,7 @@ import com.hhwy.sp.common.warn.SgjsWarnRecord;
 import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import lombok.extern.slf4j.Slf4j;
@@ -220,8 +221,10 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 staffOpinionVo.setStaffOpinionList(staffOpinionList);
                 review.setStaffOpinionVo(staffOpinionVo);
             }else if(ReviewFlowNodeMark.FlowNodeMark7.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark8.equals(flowNodeMark)){
+                //区域中心只能看区域中心的意见，flowNodeMark = 1
+                String flowNodeMarkParam = ReviewFlowNodeMark.FlowNodeMark7.equals(flowNodeMark)?"1":null;
                 //区域总工审批节点  汇总 3 ，4节点数据    海外事业部总工审批节点  汇总 3 ，4 ，5 ，6节点数据
-                BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id);
+                BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id,flowNodeMarkParam);
                 review.setScore(reviewOpinionVo.getScore());
                 review.setReviewOpinionVo(reviewOpinionVo);
             }else if(ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark10.equals(flowNodeMark)){
@@ -239,6 +242,15 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     }
 
     private BuildSchemeReviewOpinionVo getReviewOpinionVo(Long reviewId){
+        return getReviewOpinionVo(reviewId,null);
+    }
+    /**
+     * 
+     * @param reviewId
+     * @param flowNodeMark  为空:全查,1:查询区域中心,2:查询海外事业部
+     * @return
+     */
+    private BuildSchemeReviewOpinionVo getReviewOpinionVo(Long reviewId,String flowNodeMark){
         BuildSchemeReviewOpinionVo reviewOpinionVo = new BuildSchemeReviewOpinionVo();
         SgjsBuildSchemeReviewOpinion reviewOpinionQuery = new SgjsBuildSchemeReviewOpinion();
         reviewOpinionQuery.setReviewId(reviewId);
@@ -249,7 +261,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             reviewOpinionVo.setOverseasChiefOpinion(reviewOpinion.getOverseasChiefOpinion());
             reviewOpinionVo.setOverseasChiefDetailOpinion(reviewOpinion.getOverseasChiefDetailOpinion());
         }
-        List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(reviewId, null);
+        List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(reviewId, flowNodeMark);
         reviewOpinionVo.setGatherVoList(staffOpinionGatherVoList);
         Double average = staffOpinionGatherVoList.stream().filter(o -> o.getScore() != null).collect(Collectors.averagingDouble(BuildSchemeStaffOpinionGatherVo::getScore));
         reviewOpinionVo.setScore(average);
@@ -287,7 +299,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     /**
      * 获取选择的审批人信息
      * @param reviewId
-     * @param flowNodeMark 选择审批人的节点标识  1或2
+     * @param flowNodeMark 选择审批人的节点标识  1(区域中心)或2(海外事业部)
      * @return
      */
     private List<BuildSchemeStaffOpinionGatherVo> getStaffOpinionGatherVoList(Long reviewId,String flowNodeMark){
@@ -299,6 +311,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         List<String> reviewStaffIdList = staffList.stream().map(SgjsBuildSchemeReviewStaff::getReviewStaffId).collect(Collectors.toList());
         List<SgjsBuildSchemeStaffOpinion> staffOpinionList = sgjsBuildSchemeStaffOpinionMapper.getListByReviewStaffIdList(reviewId, reviewStaffIdList);
         Map<String, List<SgjsBuildSchemeStaffOpinion>> staffOpinionMap = staffOpinionList.stream().collect(Collectors.groupingBy(SgjsBuildSchemeStaffOpinion::getReviewStaffId));
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
         for (SgjsBuildSchemeReviewStaff staff : staffList) {
             BuildSchemeStaffOpinionGatherVo staffOpinionGatherVo = new BuildSchemeStaffOpinionGatherVo();
             staffOpinionGatherVo.setReviewStaffName(staff.getReviewStaffName());
@@ -307,7 +320,14 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             staffOpinionGatherVo.setScore(staff.getScore());
             staffOpinionGatherVo.setSubmitTime(staff.getSubmitTime());
             staffOpinionGatherVo.setUpdateResult(staff.getUpdateResult());
-
+            if(StringUtils.equals(staff.getStaffType(),"1")){ //专家
+                staffOpinionGatherVo.setRolePrefix("");
+            }else { //部门
+                staffOpinionGatherVo.setRolePrefix(ObjectUtils.nvlString(staff.getDescription()));
+            }
+            String suffix = StringUtils.equals(staff.getFlowNodeMark(),"1")?"-"+projectDto.getRegionName():"-海外事业部";
+            staffOpinionGatherVo.setRoleSuffix(suffix);
+            staffOpinionGatherVo.setFlowNodeMark(staff.getFlowNodeMark()); 
             List<SgjsBuildSchemeStaffOpinion> staffOpinions = staffOpinionMap.get(staff.getReviewStaffId());
             if(CollectionUtils.isNotEmpty(staffOpinions)){
                 List<String> reviewOpinionList = staffOpinions.stream().map(SgjsBuildSchemeStaffOpinion::getReviewOpinion).collect(Collectors.toList());
@@ -586,7 +606,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     insertStaff.setId(IdWorker.createId());
                     insertStaff.setReviewId(reviewId);
                     insertStaff.setStaffMark(staff.getStaffMark());
-                    insertStaff.setDescription(staff.getDescription());
+                    //处理desciption,实际存的是部门名称
+                    String desc = ObjectUtils.nvlString(staff.getDescription()).replace("选择","").replace("人员", "");
+                    insertStaff.setDescription(desc);
                     insertStaff.setFlowNodeMark(flowNodeMark);
                     insertStaff.setReviewStaffId(reviewStaff.getReviewStaffId());
                     insertStaff.setReviewStaffName(reviewStaff.getReviewStaffName());

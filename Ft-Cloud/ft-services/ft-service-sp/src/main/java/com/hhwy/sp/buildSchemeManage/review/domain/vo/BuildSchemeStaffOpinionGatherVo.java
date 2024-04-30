@@ -76,4 +76,10 @@ public class BuildSchemeStaffOpinionGatherVo {
     @JsonProperty
     @Excel(name = "流程节点标识")
     private String flowNodeMark;
+    
+    //角色前缀
+    private String rolePrefix;
+    //角色后缀
+    private String roleSuffix;
 }
+
