@@ -22,11 +22,13 @@
         <result property="submisionPerson" column="submision_person"/>
         <result property="submisionPersonName" column="submision_person_name"/>
         <result property="auditRecordFile" column="audit_record_file"/>
+        <result property="auditRecordFileRegion" column="audit_record_file_region"/>
         <result property="projectSummaryFile" column="project_summary_file"/>
         <result property="changeDate" column="change_date"/>
         <result property="changePerson" column="change_person"/>
         <result property="changePersonName" column="change_person_name"/>
         <result property="changeSummary" column="change_summary"/>
+        <result property="dutyPersonSuggest" column="duty_person_suggest"/>
         <result property="remark" column="remark"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
@@ -66,11 +68,13 @@
              , `submision_person`
              , `submision_person_name`
              , `audit_record_file`
+             , `audit_record_file_region`
              , `project_summary_file`
              , `change_date`
              , `change_person`
              , `change_person_name`
              , `change_summary`
+             , `duty_person_suggest`
              , `remark`
              , `region_id`
              , `region_name`
@@ -124,6 +128,8 @@
             </if>
             <if test="auditRecordFile != null  and auditRecordFile != ''">and `audit_record_file` = #{auditRecordFile}
             </if>
+            <if test="auditRecordFileRegion != null  and auditRecordFileRegion != ''">and `audit_record_file_region` = #{auditRecordFileRegion}
+            </if>
             <if test="projectSummaryFile != null  and projectSummaryFile != ''">and `project_summary_file` =
                 #{projectSummaryFile}
             </if>
@@ -133,6 +139,7 @@
                 #{changePersonName}
             </if>
             <if test="changeSummary != null  and changeSummary != ''">and `change_summary` = #{changeSummary}</if>
+            <if test="dutyPersonSuggest != null  and dutyPersonSuggest != ''">and `duty_person_suggest` = #{dutyPersonSuggest}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -188,6 +195,8 @@
             </if>
             <if test="auditRecordFile != null  and auditRecordFile != ''">and `audit_record_file` = #{auditRecordFile}
             </if>
+            <if test="auditRecordFileRegion != null  and auditRecordFileRegion != ''">and `audit_record_file_region` = #{auditRecordFileRegion}
+            </if>
             <if test="projectSummaryFile != null  and projectSummaryFile != ''">and `project_summary_file` =
                 #{projectSummaryFile}
             </if>
@@ -197,6 +206,7 @@
                 #{changePersonName}
             </if>
             <if test="changeSummary != null  and changeSummary != ''">and `change_summary` = #{changeSummary}</if>
+            <if test="dutyPersonSuggest != null  and dutyPersonSuggest != ''">and `duty_person_suggest` = #{dutyPersonSuggest}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -243,11 +253,13 @@
             <if test="submisionPerson != null  and submisionPerson != ''">`submision_person`,</if>
             <if test="submisionPersonName != null  and submisionPersonName != ''">`submision_person_name`,</if>
             <if test="auditRecordFile != null  and auditRecordFile != ''">`audit_record_file`,</if>
+            <if test="auditRecordFileRegion != null  and auditRecordFileRegion != ''">`audit_record_file_region`,</if>
             <if test="projectSummaryFile != null  and projectSummaryFile != ''">`project_summary_file`,</if>
             <if test="changeDate != null ">`change_date`,</if>
             <if test="changePerson != null  and changePerson != ''">`change_person`,</if>
             <if test="changePersonName != null  and changePersonName != ''">`change_person_name`,</if>
             <if test="changeSummary != null  and changeSummary != ''">`change_summary`,</if>
+            <if test="dutyPersonSuggest != null  and dutyPersonSuggest != ''">`duty_person_suggest`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -289,11 +301,13 @@
             <if test="submisionPerson != null  and submisionPerson != ''">#{submisionPerson},</if>
             <if test="submisionPersonName != null  and submisionPersonName != ''">#{submisionPersonName},</if>
             <if test="auditRecordFile != null  and auditRecordFile != ''">#{auditRecordFile},</if>
+            <if test="auditRecordFileRegion != null  and auditRecordFileRegion != ''">#{auditRecordFileRegion},</if>
             <if test="projectSummaryFile != null  and projectSummaryFile != ''">#{projectSummaryFile},</if>
             <if test="changeDate != null ">#{changeDate},</if>
             <if test="changePerson != null  and changePerson != ''">#{changePerson},</if>
             <if test="changePersonName != null  and changePersonName != ''">#{changePersonName},</if>
             <if test="changeSummary != null  and changeSummary != ''">#{changeSummary},</if>
+            <if test="dutyPersonSuggest != null  and dutyPersonSuggest != ''">#{dutyPersonSuggest},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -338,11 +352,13 @@
             `submision_person`,
             `submision_person_name`,
             `audit_record_file`,
+            `audit_record_file_region`,
             `project_summary_file`,
             `change_date`,
             `change_person`,
             `change_person_name`,
             `change_summary`,
+            `duty_person_suggest`,
             `remark`,
             `region_id`,
             `region_name`,
@@ -383,11 +399,13 @@
                 #{item.submisionPerson},
                 #{item.submisionPersonName},
                 #{item.auditRecordFile},
+                #{item.auditRecordFileRegion},
                 #{item.projectSummaryFile},
                 #{item.changeDate},
                 #{item.changePerson},
                 #{item.changePersonName},
                 #{item.changeSummary},
+                #{item.dutyPersonSuggest},
                 #{item.remark},
                 #{item.regionId},
                 #{item.regionName},
@@ -444,6 +462,8 @@
             </if>
             <if test="auditRecordFile != null  and  auditRecordFile != ''">`audit_record_file` = #{auditRecordFile},
             </if>
+            <if test="auditRecordFileRegion != null  and  auditRecordFileRegion != ''">`audit_record_file_region` = #{auditRecordFileRegion},
+            </if>
             <if test="projectSummaryFile != null  and  projectSummaryFile != ''">`project_summary_file` =
                 #{projectSummaryFile},
             </if>
@@ -453,6 +473,7 @@
                 #{changePersonName},
             </if>
             <if test="changeSummary != null  and  changeSummary != ''">`change_summary` = #{changeSummary},</if>
+            <if test="dutyPersonSuggest != null  and  dutyPersonSuggest != ''">`duty_person_suggest` = #{dutyPersonSuggest},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -567,6 +588,11 @@
                     when `id`=#{item.id} then #{item.auditRecordFile}
                 </foreach>
             </trim>
+            <trim prefix="audit_record_file_region  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.auditRecordFileRegion}
+                </foreach>
+            </trim>
             <trim prefix="project_summary_file  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.projectSummaryFile}
@@ -590,6 +616,11 @@
             <trim prefix="change_summary  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.changeSummary}
+                </foreach>
+            </trim>
+            <trim prefix="duty_person_suggest  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.dutyPersonSuggest}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">
@@ -729,6 +760,8 @@
             </if>
             <if test="auditRecordFile != null  and auditRecordFile != ''">and `audit_record_file` = #{auditRecordFile}
             </if>
+            <if test="auditRecordFileRegion != null  and auditRecordFileRegion != ''">and `audit_record_file_region` = #{auditRecordFileRegion}
+            </if>
             <if test="projectSummaryFile != null  and projectSummaryFile != ''">and `project_summary_file` =
                 #{projectSummaryFile}
             </if>
@@ -738,6 +771,7 @@
                 #{changePersonName}
             </if>
             <if test="changeSummary != null  and changeSummary != ''">and `change_summary` = #{changeSummary}</if>
+            <if test="dutyPersonSuggest != null  and dutyPersonSuggest != ''">and `duty_person_suggest` = #{dutyPersonSuggest}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -802,6 +836,8 @@
             </if>
             <if test="auditRecordFile != null  and auditRecordFile != ''">and `audit_record_file` = #{auditRecordFile}
             </if>
+            <if test="auditRecordFileRegion != null  and auditRecordFileRegion != ''">and `audit_record_file_region` = #{auditRecordFileRegion}
+            </if>
             <if test="projectSummaryFile != null  and projectSummaryFile != ''">and `project_summary_file` =
                 #{projectSummaryFile}
             </if>
@@ -811,6 +847,7 @@
                 #{changePersonName}
             </if>
             <if test="changeSummary != null  and changeSummary != ''">and `change_summary` = #{changeSummary}</if>
+            <if test="dutyPersonSuggest != null  and dutyPersonSuggest != ''">and `duty_person_suggest` = #{dutyPersonSuggest}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>

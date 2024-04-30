@@ -17,6 +17,8 @@ public interface IQqchMainPlanItemService {
 
     List<QqchMainPlanItem> getQqchMainPlanItemList(QqchMainPlanItem qqchMainPlanItem);
 
+    List<QqchMainPlanItem> getItemList(QqchMainPlanItem qqchMainPlanItem);
+
     List<QqchMainPlanItem> getListByItemCodes(String itemCodes);
 
     List<QqchMainPlanItem> getQqchMainPlanItemList4Lazy(QqchMainPlanItem qqchMainPlanItem);

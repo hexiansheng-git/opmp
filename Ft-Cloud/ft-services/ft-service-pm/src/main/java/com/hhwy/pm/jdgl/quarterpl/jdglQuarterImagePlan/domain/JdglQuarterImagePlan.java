@@ -21,6 +21,12 @@ public class JdglQuarterImagePlan extends TreeNode<JdglQuarterImagePlan> {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 字段描述：作业产值, 用于前端计算"计划完成产值"
+     */
+    @JsonProperty
+    private BigDecimal workValue;
+
+    /**
      * 字段描述：主键id
      */
     @JsonSerialize(using = ToStringSerializer.class)

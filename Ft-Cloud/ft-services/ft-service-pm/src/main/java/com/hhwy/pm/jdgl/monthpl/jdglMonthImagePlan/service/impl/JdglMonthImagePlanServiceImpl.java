@@ -1,5 +1,8 @@
 package com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -16,6 +19,7 @@ import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.service.IJdglMonthValuePlanService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.jdgl.statistics.util.TreeCountUtils;
+import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
@@ -28,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,11 +76,53 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
     public List<JdglMonthImagePlan> getJdglMonthImagePlanList(JdglMonthImagePlan jdglMonthImagePlan) {
         Long pid = jdglMonthImagePlan.getPid();
         List<JdglMonthImagePlan> jdglMonthImagePlanList = jdglMonthImagePlanMapper.getJdglMonthImagePlanList(jdglMonthImagePlan);
-        if(CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
+        if (CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
             return jdglMonthImagePlanList;
         }
+        /*计算作业产值 : ∑作业挂接的清单价*复核数量*/
+        workValueCalc(jdglMonthImagePlanList);
         List<JdglMonthImagePlan> build = TreeUtil.build(jdglMonthImagePlanList, pid);
         return build;
+    }
+
+    //计算作业产值
+    private void workValueCalc(List<JdglMonthImagePlan> jdglMonthImagePlanList) {
+        // 获取图纸复核的清单
+        List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
+        // 主合同清单
+        List<XmslContractList> contractList = xmslContractListService.getValidMaxVersionContractInventoryList();
+        Map<String, XmslContractList> contractMap = contractList.stream().collect(Collectors.toMap(XmslContractList::getCode, v -> v, (k1, k2) -> k1));
+        for (JdglMonthImagePlan imagePlan : jdglMonthImagePlanList) {
+            //作业产值 初始
+            BigDecimal workValue = new BigDecimal(0);
+            String workCode = imagePlan.getWorkCode();
+            List<XmslDrawReviewList> drawReviewList = viewList.stream()
+                    .filter(p -> StrUtil.isNotBlank(p.getWbsCode()) && p.getWbsCode().equals(workCode))
+                    .collect(Collectors.toList());
+            if (CollUtil.isEmpty(drawReviewList)) continue;
+            for (XmslDrawReviewList xmslDrawReviewList : drawReviewList) {
+                //复核数量
+                BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
+                //合同清单标号
+                String listCode = xmslDrawReviewList.getListCode();
+                XmslContractList xmslContractList = contractMap.get(listCode);
+                if (null != xmslContractList) {
+                    //得到清单单价，优先使用变更后的单价
+                    BigDecimal price = xmslContractList.getChangeUnitPrice() == null
+                            ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
+                    if (checkNum != null && price != null) {
+                        workValue = workValue.add(checkNum.multiply(price));
+                    }
+                }
+            }
+            imagePlan.setWorkValue(workValue);
+            if (!NumberUtil.equals(workValue, BigDecimal.ZERO)
+                    && imagePlan.getPlanCompQuantity() != null
+                    && imagePlan.getDesignQuantity() != null
+                    && imagePlan.getPlanCompValue() == null) {
+                imagePlan.setPlanCompValue(imagePlan.getPlanCompQuantity().divide(imagePlan.getDesignQuantity(), 4, RoundingMode.HALF_UP).multiply(workValue));
+            }
+        }
     }
 
     public List<JdglMonthImagePlan> getJdglMonthImagePlanListByPlanId(Long planId) {
@@ -93,11 +140,11 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
         });
 
         List<JdglMainPlanItem> mainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemByItemCodes(itemCodes);
-        if(mainPlanItemList != null) {
+        if (mainPlanItemList != null) {
             for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlanListByEndDate) {
                 String wbsCode = jdglMonthImagePlan.getWorkCode();
                 JdglMainPlanItem jdglMainPlanItem = mainPlanItemList.stream().filter(vo -> wbsCode != null && wbsCode.equals(vo.getItemCode())).findFirst().orElse(null);
-                if(jdglMainPlanItem != null) {
+                if (jdglMainPlanItem != null) {
                     jdglMonthImagePlan.setId(jdglMainPlanItem.getId());
                     jdglMonthImagePlan.setPid(jdglMainPlanItem.getPid());
                 } else {
@@ -118,55 +165,10 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
 
     @Transactional
     public int insertJdglMonthImagePlanList(List<JdglMonthImagePlan> jdglMonthImagePlanList) {
-        if(CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
+        if (CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
             return 0;
         }
         Long planId = jdglMonthImagePlanList.get(0).getPlanId();
-
-        // 主合同清单
-        List<XmslContractList> inventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
-
-        // 获取图纸复核的清单
-        List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
-
-        for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlanList) {
-            jdglMonthImagePlan.setCreateUser(SecurityUtils.getUserName());
-            jdglMonthImagePlan.setCreateTime(DateUtils.getNowDate());
-
-            String wbsCode = jdglMonthImagePlan.getWbsCode();
-            Long pid = jdglMonthImagePlan.getPid();
-            if(!CollectionUtils.isEmpty(list)) {
-                JdglMonthImagePlan jdglMonthImagePlan1 = jdglMonthImagePlanList.stream().filter(vo -> vo.getId().equals(pid)).findFirst().orElse(null);
-                BigDecimal compValue = new BigDecimal(0);
-                BigDecimal designQuantity = jdglMonthImagePlan.getDesignQuantity();
-                BigDecimal planCompQuantity = jdglMonthImagePlan.getPlanCompQuantity();
-                if(jdglMonthImagePlan1 != null) designQuantity = jdglMonthImagePlan1.getDesignQuantity();
-                BigDecimal rate = new BigDecimal(0);
-                if(planCompQuantity != null && designQuantity != null && rate.compareTo(designQuantity) != 0) {
-                    rate = planCompQuantity.divide(designQuantity, 4, BigDecimal.ROUND_HALF_UP);
-                }
-                List<XmslDrawReviewList> collect = list.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
-                if(!CollectionUtils.isEmpty(collect)) {
-                    for (XmslDrawReviewList xmslDrawReviewList : collect) {
-                        String listCode = xmslDrawReviewList.getListCode();
-                        BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
-                        if(!CollectionUtils.isEmpty(inventoryList)) {
-                            XmslContractList xmslContractList = inventoryList.stream().filter(vo -> listCode.equals(vo.getCode())).findFirst().orElse(null);
-                            if(xmslContractList != null) {
-                                BigDecimal price = xmslContractList.getChangeUnitPrice() == null
-                                        ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
-                                BigDecimal quantity = checkNum == null
-                                        ? new BigDecimal(0) : checkNum.multiply(rate);
-                                if (quantity != null && price != null) {
-                                    compValue = compValue.add(quantity.multiply(price));
-                                }
-                            }
-                        }
-                    }
-                }
-                jdglMonthImagePlan.setPlanCompValue(compValue);
-            }
-        }
         TreeCountUtils<JdglMonthImagePlan> treeCountUtils = new TreeCountUtils<>();
         treeCountUtils.upCountValue(jdglMonthImagePlanList, "planCompValue");
         jdglMonthValuePlanService.updateValuePlanData(planId, jdglMonthImagePlanList);
@@ -182,53 +184,11 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
 
     @Transactional
     public int updateJdglMonthImagePlanList(List<JdglMonthImagePlan> jdglMonthImagePlanList) {
-        if(!CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
-//            List<JdglMonthImagePlan> jdglMonthImagePlans = TreeUtil.treeToList(jdglMonthImagePlanList);
+        if (!CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
             Long planId = jdglMonthImagePlanList.get(0).getPlanId();
-
-            // 主合同清单
-            List<XmslContractList> inventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
-
-            // 获取图纸复核的清单
-            List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
-
             for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlanList) {
                 jdglMonthImagePlan.setUpdateUser(SecurityUtils.getUserName());
                 jdglMonthImagePlan.setUpdateTime(DateUtils.getNowDate());
-
-                String wbsCode = jdglMonthImagePlan.getWbsCode();
-                Long pid = jdglMonthImagePlan.getPid();
-                if(!CollectionUtils.isEmpty(list)) {
-                    JdglMonthImagePlan jdglMonthImagePlan1 = jdglMonthImagePlanList.stream().filter(vo -> vo.getId().equals(pid)).findFirst().orElse(null);
-                    BigDecimal compValue = new BigDecimal(0);
-                    BigDecimal designQuantity = jdglMonthImagePlan.getDesignQuantity();
-                    BigDecimal planCompQuantity = jdglMonthImagePlan.getPlanCompQuantity();
-                    if(jdglMonthImagePlan1 != null) designQuantity = jdglMonthImagePlan1.getDesignQuantity();
-                    BigDecimal rate = new BigDecimal(0);
-                    if(planCompQuantity != null && designQuantity != null && rate.compareTo(designQuantity) != 0) {
-                        rate = planCompQuantity.divide(designQuantity, 4, BigDecimal.ROUND_HALF_UP);
-                    }
-                    List<XmslDrawReviewList> collect = list.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
-                    if(!CollectionUtils.isEmpty(collect)) {
-                        for (XmslDrawReviewList xmslDrawReviewList : collect) {
-                            String listCode = xmslDrawReviewList.getListCode();
-                            BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
-                            if(!CollectionUtils.isEmpty(inventoryList)) {
-                                XmslContractList xmslContractList = inventoryList.stream().filter(vo -> listCode.equals(vo.getCode())).findFirst().orElse(null);
-                                if(xmslContractList != null) {
-                                    BigDecimal price = xmslContractList.getChangeUnitPrice() == null
-                                            ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
-                                    BigDecimal quantity = checkNum == null
-                                            ? new BigDecimal(0) : checkNum.multiply(rate);
-                                    if (quantity != null && price != null) {
-                                        compValue = compValue.add(quantity.multiply(price));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    jdglMonthImagePlan.setPlanCompValue(compValue);
-                }
             }
             TreeCountUtils<JdglMonthImagePlan> treeCountUtils = new TreeCountUtils<>();
             treeCountUtils.upCountValue(jdglMonthImagePlanList, "planCompValue");
@@ -236,7 +196,6 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
             jdglMonthValuePlanService.updateValuePlanData(planId, jdglMonthImagePlanList);
             return jdglMonthImagePlanMapper.insertJdglMonthImagePlanList(jdglMonthImagePlanList);
         }
-
         return 0;
     }
 
@@ -259,6 +218,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
 
     /**
      * 从总进度计划获取数据&未完&
+     *
      * @param jdglMonthPlanParam
      * @return
      */
@@ -268,7 +228,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
         String year = jdglMonthPlanParam.getYear();
         String month = jdglMonthPlanParam.getMonth();
 
-        if(StringUtils.isEmpty(year)||StringUtils.isEmpty(month)) {
+        if (StringUtils.isEmpty(year) || StringUtils.isEmpty(month)) {
             throw new RuntimeException("传参异常!");
         }
 
@@ -280,7 +240,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
 
         // 获取所有总进度计划数据
         List<JdglMainPlanItem> allMainPlanItem = jdglMainPlanItemService.getJdglMainPlanItemByMainPlanId(usingJdglMainPlan.getId());
-        if(CollectionUtils.isEmpty(allMainPlanItem)) {
+        if (CollectionUtils.isEmpty(allMainPlanItem)) {
             return jdglMonthPlanParam;
         }
 
@@ -289,7 +249,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
         // 获取在日期区间内的总进度计划数据
         List<JdglMainPlanItem> listByDateRange = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(dateRange.get("start"), dateRange.get("end"));
 
-        if(CollectionUtils.isEmpty(listByDateRange)) {
+        if (CollectionUtils.isEmpty(listByDateRange)) {
             return jdglMonthPlanParam;
         }
 
@@ -303,10 +263,10 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
         for (JdglMainPlanItem jdglMainPlanItem : listByDateRange) {
             String ancestors = jdglMainPlanItem.getAncestors();
             List<JdglMainPlanItem> collect = allMainPlanItem.stream().filter(vo -> ancestors.contains(vo.getAncestors())).collect(Collectors.toList());
-            if(!CollectionUtils.isEmpty(collect)) jdglMainPlanItemList.addAll(collect);
+            if (!CollectionUtils.isEmpty(collect)) jdglMainPlanItemList.addAll(collect);
         }
 
-        if(CollectionUtils.isEmpty(jdglMainPlanItemList)){
+        if (CollectionUtils.isEmpty(jdglMainPlanItemList)) {
             return jdglMonthPlanParam;
         }
 
@@ -330,18 +290,19 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
             imagePlan.setUnit(jdglMainPlanItem.getUnit());
             imagePlan.setDesignQuantity(jdglMainPlanItem.getQuantity());
             imagePlan.setSort(jdglMainPlanItem.getSort());
-            if(!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
+            if (!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
                 JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = dayScheduleWbs4ValueList.stream().filter(vo -> jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())).findFirst().orElse(null);
-                if(jdglDayScheduleWbs4Value != null) {
+                if (jdglDayScheduleWbs4Value != null) {
                     BigDecimal thisQuantity = jdglDayScheduleWbs4Value.getThisQuantity();
                     imagePlan.setTotalCompQuantity(thisQuantity);
-                    if(thisQuantity != null && jdglMainPlanItem.getQuantity() != null) {
+                    if (thisQuantity != null && jdglMainPlanItem.getQuantity() != null) {
                         imagePlan.setRemainQuantity(jdglMainPlanItem.getQuantity().subtract(thisQuantity));
                     }
                 }
             }
-            if(imagePlan.getTotalCompQuantity() == null && imagePlan.getDesignQuantity() != null) imagePlan.setTotalCompQuantity(BigDecimal.ZERO);
-            if(imagePlan.getRemainQuantity() == null) imagePlan.setRemainQuantity(imagePlan.getDesignQuantity());
+            if (imagePlan.getTotalCompQuantity() == null && imagePlan.getDesignQuantity() != null)
+                imagePlan.setTotalCompQuantity(BigDecimal.ZERO);
+            if (imagePlan.getRemainQuantity() == null) imagePlan.setRemainQuantity(imagePlan.getDesignQuantity());
             imagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
             imagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
             imagePlan.setWbsCode(jdglMainPlanItem.getWbsCode());
@@ -353,10 +314,10 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
             returnList.add(imagePlan);
         }
 
-        if(!CollectionUtils.isEmpty(returnList)) {
+        if (!CollectionUtils.isEmpty(returnList)) {
             for (JdglMonthImagePlan imagePlan : returnList) {
                 JdglMonthImagePlan imagePlan1 = returnList.stream().filter(vo -> vo.getPtVar1().equals(imagePlan.getPtVar2())).findFirst().orElse(null);
-                if(imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
+                if (imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
             }
         }
 
@@ -366,7 +327,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
 
 
         // 修改年进度计划主表引用总体计划的版本号
-        if(usingJdglMainPlan != null) {
+        if (usingJdglMainPlan != null) {
             jdglMonthPlanParam.setThisTotalVersion(usingJdglMainPlan.getVersion());
         }
 

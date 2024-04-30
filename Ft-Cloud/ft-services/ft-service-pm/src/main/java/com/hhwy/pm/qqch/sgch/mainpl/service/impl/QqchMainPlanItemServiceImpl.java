@@ -53,6 +53,10 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
         return qqchMainPlanItemMapper.getQqchMainPlanItem(qqchMainPlanItem);
     }
 
+    public List<QqchMainPlanItem> getItemList(QqchMainPlanItem qqchMainPlanItem) {
+        return qqchMainPlanItemMapper.getQqchMainPlanItemList(qqchMainPlanItem);
+    }
+
     public List<QqchMainPlanItem> getQqchMainPlanItemList(QqchMainPlanItem qqchMainPlanItem) {
         List<QqchMainPlanItem> qqchMainPlanItemList = qqchMainPlanItemMapper.getQqchMainPlanItemList(qqchMainPlanItem);
         if(CollectionUtils.isEmpty(qqchMainPlanItemList)) {

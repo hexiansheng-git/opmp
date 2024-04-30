@@ -60,6 +60,7 @@ public class SysPmController {
     private IDeptService deptService;
 
 
+
     @Autowired
     SysPmMapper sysPmMapper;
     /**
@@ -405,5 +406,12 @@ public class SysPmController {
     public List<SysMenu> getMenuId(@RequestParam("component") String component,  @RequestParam("tenantKey") String tenantKey) {
         return menuService1.getMenuId(tenantKey, component);
     }
+    @GetMapping("/testTenant")
+    public List<SysMenu> testTenant(@RequestParam("s") String s) {
+        return dictService.testTenant(s);
+    }
+
+
+
 
 }

@@ -1,5 +1,8 @@
 package com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -16,6 +19,7 @@ import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.mapper.JdglWeekImagePlanMapper;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.service.IJdglWeekImagePlanService;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.service.IJdglWeekValuePlanService;
+import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
@@ -28,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -74,8 +79,51 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
         if(CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
             return jdglWeekImagePlanList;
         }
+        /*计算作业产值 : ∑作业挂接的清单价*复核数量*/
+        workValueCalc(jdglWeekImagePlanList);
         List<JdglWeekImagePlan> build = TreeUtil.build(jdglWeekImagePlanList, pid);
         return build;
+    }
+
+    //计算作业产值
+    private void workValueCalc(List<JdglWeekImagePlan> jdglWeekImagePlanList) {
+        // 获取图纸复核的清单
+        List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
+        // 主合同清单
+        List<XmslContractList> contractList = xmslContractListService.getValidMaxVersionContractInventoryList();
+        Map<String, XmslContractList> contractMap = contractList.stream().collect(Collectors.toMap(XmslContractList::getCode, v -> v, (k1, k2) -> k1));
+        for (JdglWeekImagePlan imagePlan : jdglWeekImagePlanList) {
+            //作业产值 初始
+            BigDecimal workValue = new BigDecimal(0);
+            String workCode = imagePlan.getWorkCode();
+            List<XmslDrawReviewList> drawReviewList = viewList.stream()
+                    .filter(p -> StrUtil.isNotBlank(p.getWbsCode()) && p.getWbsCode().equals(workCode))
+                    .collect(Collectors.toList());
+            if (CollUtil.isEmpty(drawReviewList)) continue;
+            for (XmslDrawReviewList xmslDrawReviewList : drawReviewList) {
+                //复核数量
+                BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
+                //合同清单标号
+                String listCode = xmslDrawReviewList.getListCode();
+                XmslContractList xmslContractList = contractMap.get(listCode);
+                if (null != xmslContractList) {
+                    //得到清单单价，优先使用变更后的单价
+                    BigDecimal price = xmslContractList.getChangeUnitPrice() == null
+                            ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
+                    if (checkNum != null && price != null){
+                        workValue = workValue.add(checkNum.multiply(price));
+                    }
+                }
+            }
+            imagePlan.setWorkValue(workValue);
+            if (!NumberUtil.equals(workValue, BigDecimal.ZERO)
+                    && imagePlan.getPlanCompQuantity() != null
+                    && imagePlan.getDesignQuantity() != null
+                    && imagePlan.getPlanCompValue() == null) {
+                //计划完成产值 = 计划完成工程量/设计工程量*作业产值
+                imagePlan.setPlanCompValue(imagePlan.getPlanCompQuantity().divide(imagePlan.getDesignQuantity(), 4, RoundingMode.HALF_UP).multiply(workValue));
+            }
+        }
     }
 
     public List<JdglWeekImagePlan> getJdglWeekImagePlanListByPlanId(Long planId) {
@@ -98,61 +146,9 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
             return 0;
         }
         Long planId = jdglWeekImagePlanList.get(0).getPlanId();
-
-        // 主合同清单
-        List<XmslContractList> inventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
-
-        // 获取图纸复核的清单
-        List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
-
         for (JdglWeekImagePlan jdglWeekImagePlan : jdglWeekImagePlanList) {
             jdglWeekImagePlan.setCreateUser(SecurityUtils.getUserName());
             jdglWeekImagePlan.setCreateTime(DateUtils.getNowDate());
-            String wbsCode = jdglWeekImagePlan.getWbsCode();
-            Long pid = jdglWeekImagePlan.getPid();
-            if(!CollectionUtils.isEmpty(list)) {
-                //找到当前迭代对象的父亲
-                JdglWeekImagePlan imagePlan = jdglWeekImagePlanList.stream().filter(vo -> vo.getId().equals(pid)).findFirst().orElse(null);
-                BigDecimal compValue = new BigDecimal(0);
-                //设计工程量，从总体计划同步过来的数据
-                BigDecimal designQuantity = jdglWeekImagePlan.getDesignQuantity();
-                //计划完成工程量 界面中唯一手填的数据
-                BigDecimal planCompQuantity = jdglWeekImagePlan.getPlanCompQuantity();
-                //父亲的设计工程量
-                if(imagePlan != null) designQuantity = imagePlan.getDesignQuantity();
-                BigDecimal rate = new BigDecimal(0);
-                if(planCompQuantity != null && designQuantity != null && rate.compareTo(designQuantity) != 0) {
-                    //孩子与父亲的设计量比值，得到一个百分比，目测用于计算计划完成产值
-                    rate = planCompQuantity.divide(designQuantity, 4, BigDecimal.ROUND_HALF_UP);
-                }
-                //找到当前迭代对象对应的复核清单
-                List<XmslDrawReviewList> collect = list.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
-                if(!CollectionUtils.isEmpty(collect)) {
-                    for (XmslDrawReviewList xmslDrawReviewList : collect) {
-                        //合同清单编码
-                        String listCode = xmslDrawReviewList.getListCode();
-                        //复核量
-                        BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
-                        if(!CollectionUtils.isEmpty(inventoryList)) {
-                            //找到当前迭代对象对应的合同清单
-                            XmslContractList xmslContractList = inventoryList.stream().filter(vo -> listCode.equals(vo.getCode())).findFirst().orElse(null);
-                            if(xmslContractList != null) {
-                                //清单单价
-                                BigDecimal price = xmslContractList.getChangeUnitPrice() == null
-                                        ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
-                                //复核量与当前迭代对象设计量所占父亲设计量比例的乘积 得到工程量
-                                BigDecimal quantity = checkNum == null
-                                        ? new BigDecimal(0) : checkNum.multiply(rate);
-                                //工程量与清单单价的乘积，得到计划完成产值
-                                if (quantity != null && price != null) {
-                                    compValue = compValue.add(quantity.multiply(price));
-                                }
-                            }
-                        }
-                    }
-                }
-                jdglWeekImagePlan.setPlanCompValue(compValue);
-            }
         }
         TreeCountUtils<JdglWeekImagePlan> treeCountUtils = new TreeCountUtils<>();
         treeCountUtils.upCountValue(jdglWeekImagePlanList, "planCompValue");
@@ -171,50 +167,9 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
     public int updateJdglWeekImagePlanList(List<JdglWeekImagePlan> jdglWeekImagePlanList) {
         if(!CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
             Long planId = jdglWeekImagePlanList.get(0).getPlanId();
-//            List<JdglWeekImagePlan> jdglWeekImagePlans = TreeUtil.treeToList(jdglWeekImagePlanList);
-
-            // 主合同清单
-            List<XmslContractList> inventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
-
-            // 获取图纸复核的清单
-            List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
-
             for (JdglWeekImagePlan jdglWeekImagePlan : jdglWeekImagePlanList) {
                 jdglWeekImagePlan.setUpdateUser(SecurityUtils.getUserName());
                 jdglWeekImagePlan.setUpdateTime(DateUtils.getNowDate());
-                String wbsCode = jdglWeekImagePlan.getWbsCode();
-                Long pid = jdglWeekImagePlan.getPid();
-                if(!CollectionUtils.isEmpty(list)) {
-                    JdglWeekImagePlan imagePlan = jdglWeekImagePlanList.stream().filter(vo -> vo.getId().equals(pid)).findFirst().orElse(null);
-                    BigDecimal compValue = new BigDecimal(0);
-                    BigDecimal designQuantity = jdglWeekImagePlan.getDesignQuantity();
-                    BigDecimal planCompQuantity = jdglWeekImagePlan.getPlanCompQuantity();
-                    if(imagePlan != null) designQuantity = imagePlan.getDesignQuantity();
-                    BigDecimal rate = new BigDecimal(0);
-                    if(planCompQuantity != null && designQuantity != null && rate.compareTo(designQuantity) != 0) {
-                        rate = planCompQuantity.divide(designQuantity, 4, BigDecimal.ROUND_HALF_UP);
-                    }
-                    List<XmslDrawReviewList> collect = list.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
-                    if(!CollectionUtils.isEmpty(collect)) {
-                        for (XmslDrawReviewList xmslDrawReviewList : collect) {
-                            String listCode = xmslDrawReviewList.getListCode();
-                            BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
-                            if(!CollectionUtils.isEmpty(inventoryList)) {
-                                XmslContractList xmslContractList = inventoryList.stream().filter(vo -> listCode.equals(vo.getCode())).findFirst().orElse(null);
-                                if(xmslContractList != null) {
-                                    BigDecimal price = xmslContractList.getChangeUnitPrice() == null
-                                            ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
-                                    BigDecimal quantity = checkNum == null
-                                            ? new BigDecimal(0) : checkNum.multiply(rate);
-                                    if (quantity != null && price != null) {
-                                        compValue = compValue.add(quantity.multiply(price));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    jdglWeekImagePlan.setPlanCompValue(compValue);
-                }
             }
             TreeCountUtils<JdglWeekImagePlan> treeCountUtils = new TreeCountUtils<>();
             treeCountUtils.upCountValue(jdglWeekImagePlanList, "planCompValue");
