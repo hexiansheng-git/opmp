@@ -43,6 +43,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -475,6 +476,10 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 
     private void updateStaffOpinionRecordList(List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList) {
         if (CollectionUtils.isNotEmpty(staffOpinionRecordList)) {
+            //校验修改结果不能为空
+            for (int i = 0; i < staffOpinionRecordList.size(); i++) {
+                Assert.isTrue(StringUtils.isNotBlank(staffOpinionRecordList.get(i).getUpdateResult()),"第"+(i+1)+"行,修改结果不能为空!" ); 
+            }
             sgjsBuildSchemeStaffOpinionRecordMapper.updateUpdateResult(staffOpinionRecordList);
         }
     }
