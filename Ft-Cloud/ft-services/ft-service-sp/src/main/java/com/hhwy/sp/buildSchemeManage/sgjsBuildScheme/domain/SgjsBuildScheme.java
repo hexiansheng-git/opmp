@@ -132,6 +132,12 @@ public class SgjsBuildScheme extends CommonBaseEntity {
     @Excel(name = "方案清单项目内部审核记录表(附件)")
     private String auditRecordFile;
     /**
+     * 字段描述：方案清单区域中心内部审核记录表(附件)
+     */
+    @JsonProperty
+    @Excel(name = "方案清单区域中心内部审核记录表(附件)")
+    private String auditRecordFileRegion;
+    /**
      * 字段描述：项目简介(附件)
      */
     @JsonProperty
@@ -162,6 +168,12 @@ public class SgjsBuildScheme extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "更新说明")
     private String changeSummary;
+    /**
+     * 字段描述：产品负责人审核意见
+     */
+    @JsonProperty
+    @Excel(name = "产品负责人审核意见")
+    private String dutyPersonSuggest;
     /**
      * 字段描述：备注
      */
