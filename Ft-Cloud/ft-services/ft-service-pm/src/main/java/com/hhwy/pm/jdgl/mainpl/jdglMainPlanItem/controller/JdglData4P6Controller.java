@@ -17,6 +17,17 @@ public class JdglData4P6Controller {
     private IJdglData4P6Service jdglData4P6Service;
 
     /**
+     * 从1.2.1同步数据，测试用
+     * @param
+     * @return
+     */
+    @PostMapping("/syncData")
+    public AjaxResult syncData() {
+        jdglData4P6Service.syncData();
+        return AjaxResult.success();
+    }
+
+    /**
      * 根据租户编号拉取p6数据(不切租户)
      * @param
      * @return

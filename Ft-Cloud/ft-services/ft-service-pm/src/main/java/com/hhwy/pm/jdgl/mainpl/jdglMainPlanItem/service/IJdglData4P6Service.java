@@ -21,4 +21,7 @@ public interface IJdglData4P6Service {
     String initJdglWorkPreData4P6ByTenent(String projectId);
 
     void pushUserToP6(List<ActivityInfoVoBean> activityInfoVoBeanList);
+
+    void syncData();
+
 }

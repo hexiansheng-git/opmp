@@ -91,8 +91,8 @@ public class JdglMainPlanItemPreServiceImpl implements IJdglMainPlanItemPreServi
 
     @Transactional
     public int deleteJdglMainPlanItemPre(JdglMainPlanItemPre jdglMainPlanItemPre) {
-        jdglMainPlanItemPre.setUpdateUser(SecurityUtils.getUserName());
-        jdglMainPlanItemPre.setUpdateTime(DateUtils.getNowDate());
+//        jdglMainPlanItemPre.setUpdateUser(SecurityUtils.getUserName());
+//        jdglMainPlanItemPre.setUpdateTime(DateUtils.getNowDate());
         return jdglMainPlanItemPreMapper.deleteJdglMainPlanItemPre(jdglMainPlanItemPre);
     }
 

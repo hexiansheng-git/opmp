@@ -319,8 +319,8 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
 
     @Transactional
     public int deleteJdglMainPlanItem(JdglMainPlanItem jdglMainPlanItem) {
-        jdglMainPlanItem.setUpdateUser(SecurityUtils.getUserName());
-        jdglMainPlanItem.setUpdateTime(DateUtils.getNowDate());
+//        jdglMainPlanItem.setUpdateUser(SecurityUtils.getUserName());
+//        jdglMainPlanItem.setUpdateTime(DateUtils.getNowDate());
         return jdglMainPlanItemMapper.deleteJdglMainPlanItem(jdglMainPlanItem);
     }
 

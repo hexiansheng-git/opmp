@@ -1,5 +1,9 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -16,6 +20,10 @@ import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemPreServ
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItemPre;
+import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemPreService;
+import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -30,6 +38,7 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -62,6 +71,10 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private IQqchMainPlanItemService qqchMainPlanItemService;
+    @Autowired
+    private IQqchMainPlanItemPreService qqchMainPlanItemPreService;
 
     @Value("${p6.ip_port}")
     private String p6IpPort;
@@ -69,6 +82,57 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
     private String pre = "";
 
     private String alex = "";
+
+    //从1.2.1获取数据，生成基线计划
+    @Transactional
+    public void syncData(){
+        /*清空表*/
+        jdglMainPlanService.deleteJdglMainPlan(new JdglMainPlan());
+        jdglMainPlanItemService.deleteJdglMainPlanItem(new JdglMainPlanItem());
+        iJdglMainPlanItemPreService.deleteJdglMainPlanItemPre(new JdglMainPlanItemPre());
+        /*保存 总体进度计划主表*/
+        Long mainPlanId = IdWorker.createId();
+        Calendar cl = Calendar.getInstance();
+        cl.setTime(DateUtils.getNowDate());
+        String datePro = "Y" + cl.get(Calendar.YEAR) + "M" + (cl.get(Calendar.MONTH) + 1) + "W" + (cl.get(Calendar.WEEK_OF_MONTH));
+        JdglMainPlan usingJdglMainPlan = new JdglMainPlan();
+        usingJdglMainPlan.setId(mainPlanId);
+        usingJdglMainPlan.setIsUse("1");
+        usingJdglMainPlan.setVersion(datePro + "." + 1);
+        usingJdglMainPlan.setVersionPro(datePro);
+        usingJdglMainPlan.setNum(1);
+        usingJdglMainPlan.setPtVar2("1");
+        usingJdglMainPlan.setPtVar3(DateUtil.format(new Date(), "yyyy年MM月dd日 HH") + ":00");
+        jdglMainPlanService.insertJdglMainPlan(usingJdglMainPlan);
+
+        /*保存总体计划详细数据*/
+        //查询1.2.1基线计划
+        QqchMainPlanItem qqchMainPlanItem = new QqchMainPlanItem();
+        List<QqchMainPlanItem> itemList = qqchMainPlanItemService.getItemList(qqchMainPlanItem);
+        if (CollUtil.isNotEmpty(itemList)) {
+            CopyOptions copyOptions = new CopyOptions();
+            copyOptions.ignoreNullValue();
+            List<JdglMainPlanItem> jdglMainPlanItems = BeanUtil.copyToList(itemList, JdglMainPlanItem.class);
+            jdglMainPlanItems.forEach(p -> {
+                p.setMainPlanId(mainPlanId);
+//                p.setId(IdWorker.createId());
+                p.setCreateTime(DateUtils.getNowDate());
+            });
+            jdglMainPlanItemService.insertJdglMainPlanItemList(jdglMainPlanItems);
+        }
+        List<QqchMainPlanItemPre> qqchMainPlanItemPreList = qqchMainPlanItemPreService.getQqchMainPlanItemPreList(new QqchMainPlanItemPre());
+        if (CollUtil.isNotEmpty(qqchMainPlanItemPreList)) {
+            CopyOptions copyOptions = new CopyOptions();
+            copyOptions.ignoreNullValue();
+            List<JdglMainPlanItemPre> jdglMainPlanItemPres = BeanUtil.copyToList(itemList, JdglMainPlanItemPre.class);
+            jdglMainPlanItemPres.forEach(p -> {
+                p.setMainPlanId(mainPlanId);
+//                p.setId(IdWorker.createId());
+                p.setCreateTime(DateUtils.getNowDate());
+            });
+            iJdglMainPlanItemPreService.insertJdglMainPlanItemPreList(jdglMainPlanItemPres);
+        }
+    }
 
     @Override
     public List<JdglMainPlanItem> initJdglData4P6ByThis() {
