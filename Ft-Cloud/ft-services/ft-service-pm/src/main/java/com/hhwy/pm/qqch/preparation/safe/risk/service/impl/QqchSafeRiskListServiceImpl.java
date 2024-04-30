@@ -382,7 +382,7 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         if(CollectionUtils.isEmpty(riskList)){
             return;
         }
-        List<QyzsSafeSafeRisk> riskMiddleList = riskList.stream().filter(o -> StringUtils.isNotBlank(o.getPtVar1())).collect(Collectors.toList());
+        List<QyzsSafeSafeRisk> riskMiddleList = riskList.stream().filter(o -> StringUtils.isNotBlank(o.getWbsCode())).collect(Collectors.toList());
         if(CollectionUtils.isEmpty(riskMiddleList)){
             return;
         }
@@ -390,26 +390,26 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         if(CollectionUtils.isEmpty(wbsList)){
             return;
         }
-        List<XmslWbs> wbsMiddleList = wbsList.stream().filter(o -> o.getStandardId() != null).collect(Collectors.toList());
+        List<XmslWbs> wbsMiddleList = wbsList.stream().filter(o -> o.getStandardCode() != null).collect(Collectors.toList());
         if(CollectionUtils.isEmpty(wbsMiddleList)){
             return;
         }
 
-        Map<Long, XmslWbs> wbsMap = wbsMiddleList.stream().collect(Collectors.toMap(XmslWbs::getStandardId, Function.identity()));
+        Map<String, XmslWbs> wbsMap = wbsMiddleList.stream().collect(Collectors.toMap(XmslWbs::getStandardCode, Function.identity()));
         //获取所有主表数据
         BigDecimal version = VersionUtil.getVersion(TN,null);
         Map<String, QqchSafeRiskList> masterMap = this.getMasterMap(version);
         List<QqchSafeRiskList> insterList = new ArrayList<>();
 
         List<QqchSafeRiskListDetail> detailList = new ArrayList<>();
-        Map<String, List<QyzsSafeSafeRisk>> qyzsRiskMap = riskMiddleList.stream().collect(Collectors.groupingBy(QyzsSafeSafeRisk::getPtVar1));
+        Map<String, List<QyzsSafeSafeRisk>> qyzsRiskMap = riskMiddleList.stream().collect(Collectors.groupingBy(QyzsSafeSafeRisk::getWbsCode));
         for (Map.Entry<String, List<QyzsSafeSafeRisk>> entry : qyzsRiskMap.entrySet()) {
             String key = entry.getKey();
             List<QyzsSafeSafeRisk> value = entry.getValue();
-            if (!wbsMap.containsKey(Long.valueOf(key))) {
+            if (!wbsMap.containsKey(key)) {
                 continue;
             }
-            XmslWbs xmslWbs = wbsMap.get(Long.valueOf(key));
+            XmslWbs xmslWbs = wbsMap.get(key);
             String id = xmslWbs.getId();
             QqchSafeRiskList master;
             if (masterMap.containsKey(id)) {
