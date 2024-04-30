@@ -27,6 +27,7 @@ public class SgjsBuildSchemeList extends BaseEntity {
     private String startTime;
     private String endTime;
     private Long[] ids;
+    private String[] schemeTypeArr;
 
     /**
      * 字段描述：

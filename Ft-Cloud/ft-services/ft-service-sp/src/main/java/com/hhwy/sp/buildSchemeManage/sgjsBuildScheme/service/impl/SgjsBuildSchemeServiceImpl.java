@@ -3,6 +3,7 @@ package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
@@ -124,6 +125,12 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         }
         List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getSgjsBuildSchemeListList(sgjsBuildSchemeList);
         if (CollUtil.isNotEmpty(sgjsBuildSchemeListList)) {
+            sgjsBuildSchemeListList.forEach(p -> {
+                if (StrUtil.isNotBlank(p.getSchemeType())) {
+                    String[] split = p.getSchemeType().split(",");
+                    p.setSchemeTypeArr(split);
+                }
+            });
             result.setChildren(sgjsBuildSchemeListList);
         }
         /*返回项目领域类型标识，用于判断流程分支走向*/
@@ -292,6 +299,15 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         if (sgjsBuildScheme.getTaskStatus().equals("0")) {
             //方案清单
             List<SgjsBuildSchemeList> children = sgjsBuildScheme.getChildren();
+            if (CollUtil.isNotEmpty(children)) {
+                children.forEach(p -> {
+                    String[] schemeTypeArr = p.getSchemeTypeArr();
+                    if (ArrayUtil.isNotEmpty(schemeTypeArr)) {
+                        String collect = Arrays.stream(schemeTypeArr).collect(Collectors.joining(","));
+                        p.setSchemeType(collect);
+                    }
+                });
+            }
             sgjsBuildSchemeListService.insertSgjsBuildSchemeList(children, sgjsBuildScheme);
         }
         if (!sgjsBuildScheme.getTaskStatus().equals("0")) {
