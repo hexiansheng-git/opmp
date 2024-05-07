@@ -4,9 +4,14 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.experiment.mixRatioManage.domain.SgjsMixRatioManage;
 import com.hhwy.sp.experiment.mixRatioManage.domain.vo.MixRatioManageQueryVo;
+import com.hhwy.sp.experiment.mixRatioManage.domain.vo.SgjsMixRatioManageDto;
+import com.hhwy.sp.experiment.mixRatioManage.domain.vo.SgjsMixRatioManageSaveVo;
 import com.hhwy.sp.experiment.mixRatioManage.service.ISgjsMixRatioManageService;
+import com.hhwy.sp.experiment.mixRatioManage.service.ISgjsMixRatioManageStaffRecordService;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
@@ -31,6 +36,8 @@ public class SgjsMixRatioManageController extends BaseController {
 
     @Autowired
     private ISgjsMixRatioManageService sgjsMixRatioManageService;
+    @Autowired
+    private ISgjsMixRatioManageStaffRecordService recordService;
 
 
     /**
@@ -43,6 +50,7 @@ public class SgjsMixRatioManageController extends BaseController {
     public AjaxResult getListByQueryVo(@Validated(ValidationGroups.Select.class) MixRatioManageQueryVo queryVo) {
         startPage();
         List<SgjsMixRatioManage> sgjsMixRatioManageList = sgjsMixRatioManageService.getListByQueryVo(queryVo);
+        FlowInfoSearchUtil.getFlowInfo(sgjsMixRatioManageList, FlowEnum.SGJS_MIX_MANAGE);
         return getDataTableAjaxResult(sgjsMixRatioManageList);
     }
 
@@ -54,7 +62,7 @@ public class SgjsMixRatioManageController extends BaseController {
     @PreAuthorize(hasPermi = "sgjsMixRatioManage:list")
     @GetMapping("/getById")
     public AjaxResult getById(Long id) {
-        SgjsMixRatioManage mixRatioManage = sgjsMixRatioManageService.getById(id);
+        SgjsMixRatioManageDto mixRatioManage = sgjsMixRatioManageService.getByIdWithFlag(id);
         return AjaxResult.success(mixRatioManage);
     }
 
@@ -65,8 +73,33 @@ public class SgjsMixRatioManageController extends BaseController {
      */
     @PreAuthorize(hasPermi = "sgjsMixRatioManage:save")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody SgjsMixRatioManage mixRatioManage) {
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody SgjsMixRatioManageSaveVo mixRatioManage) {
         sgjsMixRatioManageService.save(mixRatioManage);
+        return AjaxResult.success();
+    }
+
+
+    /**
+     * 保存审批人
+     * @param saveVo
+     * @return
+     */
+    @PostMapping("/saveApproval")
+    public AjaxResult saveApproval(@RequestBody SgjsMixRatioManageSaveVo saveVo) {
+        sgjsMixRatioManageService.saveApproval(saveVo);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/saveSuggestion")
+    public AjaxResult saveSuggestion(@RequestBody SgjsMixRatioManageSaveVo saveVo) {
+        recordService.saveRecord(saveVo);
+        return AjaxResult.success();
+    }                           
+
+    
+    @PostMapping("/reject")
+    public AjaxResult reject(@RequestBody SgjsMixRatioManageSaveVo saveVo) {
+        sgjsMixRatioManageService.reject(saveVo);
         return AjaxResult.success();
     }
 

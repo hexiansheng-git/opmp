@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.excel.FtExcel;
-import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +23,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SgjsMixRatioManage extends BaseEntity {
+public class SgjsMixRatioManage extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /*保存类型  add：新增  update：修改 */
@@ -38,13 +40,27 @@ public class SgjsMixRatioManage extends BaseEntity {
      */
     @JsonProperty
     @FtExcel(name = "配合比编号")
+    @NotBlank(message = "配合比编号不能为空",groups = {ValidationGroups.Save.class})
     private String mixRatioCode;
     /**
      * 字段描述：配合比类型
      */
     @JsonProperty
     @FtExcel(name = "配合比类型")
+    @NotBlank(message = "配合比类型不能为空",groups = {ValidationGroups.Save.class})
     private String mixRatioType;
+    
+    //配合比等级
+    private String mixLevel;
+    //计划开始日期
+    private Date planStartDate;
+    //计划结束日期
+    private Date planEndDate;
+    //是否批复
+    private Integer allowFlag;
+    //是否审批通过
+    private Integer approvalFlag;
+    
     /**
      * 字段描述：前期策划配合比
      */
@@ -67,6 +83,7 @@ public class SgjsMixRatioManage extends BaseEntity {
      */
     @JsonProperty
     @FtExcel(name = "配合比名称")
+    @NotBlank(message = "配合比名称不能为空",groups = {ValidationGroups.Save.class})
     private String mixRatioName;
     /**
      * 字段描述：规格
@@ -204,7 +221,7 @@ public class SgjsMixRatioManage extends BaseEntity {
     @JsonProperty
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：源数据ID
      */
     @JsonProperty
     private String ptVar1;

@@ -2,6 +2,8 @@ package com.hhwy.sp.experiment.mixRatioManage.service;
 
 import com.hhwy.sp.experiment.mixRatioManage.domain.SgjsMixRatioManage;
 import com.hhwy.sp.experiment.mixRatioManage.domain.vo.MixRatioManageQueryVo;
+import com.hhwy.sp.experiment.mixRatioManage.domain.vo.SgjsMixRatioManageDto;
+import com.hhwy.sp.experiment.mixRatioManage.domain.vo.SgjsMixRatioManageSaveVo;
 
 import java.util.List;
 
@@ -22,7 +24,14 @@ public interface ISgjsMixRatioManageService {
 
     SgjsMixRatioManage getById(Long id);
 
-    void save(SgjsMixRatioManage mixRatioManage);
+    SgjsMixRatioManageDto getByIdWithFlag(Long id);
+
+    void save(SgjsMixRatioManageSaveVo mixRatioManage);
+    
+    void saveApproval(SgjsMixRatioManageSaveVo mixRatioManage);
 
     List<SgjsMixRatioManage> getListByIds(List<Long> ids);
+    
+    void reject(SgjsMixRatioManageSaveVo saveVo);
+    
 }
