@@ -247,4 +247,6 @@ public class SgjsMixRatioManage extends CommonBaseEntity {
     private String ptVar5;
 
     private List<SgjsMixRatioManageMaterial> materialList;
+
+    private List<SgjsMixRatioManageStaff> staffList;
 }

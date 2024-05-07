@@ -31,6 +31,7 @@ import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -44,6 +45,7 @@ import sun.rmi.runtime.Log;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -151,7 +153,6 @@ public class SgjsMixRatioManageServiceImpl implements ISgjsMixRatioManageService
         List<SgjsMixRatioManageMaterial> materialList = sgjsMixRatioManageMaterialMapper.getListByForeignId(id);
         dto.setMaterialList(materialList);
         FlowInfoSearchUtil.getFlowInfo(dto, FlowEnum.SGJS_MIX_MANAGE);
-        dto.setIsFirstNode("1");
         Integer nodeNum = 0;
         if(StringUtils.isNotBlank(dto.getNextNodeId())){
             Matcher matcher = Pattern.compile("\\d+").matcher(dto.getNextNodeId());
@@ -345,5 +346,39 @@ public class SgjsMixRatioManageServiceImpl implements ISgjsMixRatioManageService
         staffService.batchInsert(staffList);
         recordService.batchInsert(recordList);
         
+    }
+
+    @Override
+    public List<SgjsMixRatioManage> historyList(Long id) {
+        SgjsMixRatioManage query = new SgjsMixRatioManage();
+        query.setPtVar1(id+"");
+        List<SgjsMixRatioManage> hisList = sgjsMixRatioManageMapper.getSgjsMixRatioManageList(query);
+        if(CollectionUtils.isEmpty(hisList))
+            return hisList;
+        hisList.sort((v1,v2)->{
+            return v1.getId()==v2.getId()?0:(v1.getId()>v2.getId()?1:-1);
+        });
+        Map<Long,SgjsMixRatioManage> map = hisList.stream().collect(Collectors.toMap(r->r.getId(), r->r));
+        SgjsMixRatioManageStaff queryStaff = new SgjsMixRatioManageStaff();
+        queryStaff.setParams(ObjectUtils.toMap("mainIds", map.keySet()));
+        List<SgjsMixRatioManageStaff> staffList = staffService.selectSgjsMixRatioManageStaffList(queryStaff);
+        Map<Long,SgjsMixRatioManageStaff> staffMap = new HashMap<>();
+        for (int s = 0; s < staffList.size(); s++) {
+            SgjsMixRatioManageStaff temp = staffList.get(s);
+            staffMap.put(temp.getId(), temp);
+            SgjsMixRatioManage main = map.get(temp.getMainId());
+            main.setStaffList(CollectionUtils.isEmpty(main.getStaffList())?new ArrayList<>():main.getStaffList());
+            main.getStaffList().add(temp);
+        }
+        SgjsMixRatioManageStaffRecord queryRecord = new SgjsMixRatioManageStaffRecord();
+        queryRecord.setParams(ObjectUtils.toMap("mainIds", map.keySet()));
+        List<SgjsMixRatioManageStaffRecord> recordList = recordService.selectSgjsMixRatioManageStaffRecordList(queryRecord);
+        for (int s = 0; s < recordList.size(); s++) {
+            SgjsMixRatioManageStaffRecord temp = recordList.get(s);
+            SgjsMixRatioManageStaff staff = staffMap.get(temp.getStaffId());
+            staff.setRecordList(CollectionUtils.isEmpty(staff.getRecordList())?new ArrayList<>():staff.getRecordList());
+            staff.getRecordList().add(temp);
+        }
+        return hisList;
     }
 }

@@ -77,7 +77,13 @@ public class SgjsMixRatioManageController extends BaseController {
         sgjsMixRatioManageService.save(mixRatioManage);
         return AjaxResult.success();
     }
-
+    
+    
+    @GetMapping("/historyList")
+    public AjaxResult historyList(Long id) {
+        List<SgjsMixRatioManage> sgjsMixRatioManageList = sgjsMixRatioManageService.historyList(id);
+        return AjaxResult.success(sgjsMixRatioManageList);
+    }
 
     /**
      * 保存审批人

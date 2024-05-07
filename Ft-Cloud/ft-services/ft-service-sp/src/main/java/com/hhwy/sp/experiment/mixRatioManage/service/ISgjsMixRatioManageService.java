@@ -34,4 +34,6 @@ public interface ISgjsMixRatioManageService {
     
     void reject(SgjsMixRatioManageSaveVo saveVo);
     
+    List<SgjsMixRatioManage> historyList(Long id);
+    
 }
