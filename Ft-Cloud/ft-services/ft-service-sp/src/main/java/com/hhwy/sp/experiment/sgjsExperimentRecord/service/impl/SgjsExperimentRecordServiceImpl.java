@@ -44,6 +44,8 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.hhwy.constant.WarnItem.KCSJ_PLAN_PROCESS;
+
 /**
  * @author lcf--试验设备进场记录
  * @date 2023-12-11 15:03:30
@@ -332,31 +334,22 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
 
     @Override
     public AjaxResult experimentRecordJob() {
+        //存放所有租户的消息
+        List<SgjsWarnConfig> warnList=new ArrayList<>();
+        //从总部找预警接收角色 和预警消息内容
+        String url = gmUrl + "/gm/sgjsWarnConfig?warnSubject={warnSubject}";
+        SgjsWarnConfig warnConfigRst = CommonBusiness.getSgjsWarnConfig(url, KCSJ_PLAN_PROCESS.getWarnItem());
+        if(null==warnConfigRst) return AjaxResult.error("未找到总部版预警配置信息");
+
         //切换到master
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         DynamicDataSourceContextHolder.push("master");
         //获取所有租户
         List<SysTenant> tenantList = systemServiceApi.tenantList();
-        //存放所有租户的消息
-        List<SgjsWarnConfig> warnList=new ArrayList<>();
-        //从总部找预警接收角色 和预警消息内容
-//        String url = gmUrl + "/gm/sgjsWarnConfig?warnSubject={warnSubject}";
-//        SgjsWarnConfig warnConfigRst = CommonBusiness.getSgjsWarnConfig(url, KCSJ_PLAN_PROCESS.getWarnItem());
-        SgjsWarnConfig warnConfigRst =new SgjsWarnConfig();
-        warnConfigRst.setWarnObject("普通角色,项目角色");
-        warnConfigRst.setWarnObjectId("common,project");
-        warnConfigRst.setWarnMassage("你好,消息体！！！");
-        warnConfigRst.setWarnRule("111");
-        warnConfigRst.setWarnSubject("施工计划--设备台账进场记录");
-        if(null==warnConfigRst){
-            return AjaxResult.error("未找到总部版预警配置信息");
-        }
         try {
             for (SysTenant tenant : tenantList) {
                 //切换租户
                 String tenantKey = tenant.getTenantKey();
-//                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
-//                DynamicDataSourceContextHolder.push(dataSource);
 
                 List<SgjsExperimentRecordInfo> list = infoMapper.selectByDate();
                 if(CollectionUtils.isEmpty(list)){
