@@ -75,7 +75,7 @@ public class SgjsMixRatioManageController extends BaseController {
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody SgjsMixRatioManageSaveVo mixRatioManage) {
         sgjsMixRatioManageService.save(mixRatioManage);
-        return AjaxResult.success();
+        return AjaxResult.success(mixRatioManage.getId());
     }
     
     
