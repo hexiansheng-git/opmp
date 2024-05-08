@@ -261,8 +261,14 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
             List<XmslWbs> updateFlagList = new ArrayList<>();
             List<XmslWbs> allList = new ArrayList<>();
             Set<String> invalidIdSet = new HashSet<>(); //失效的wbsId (父级失效，需要将其所有子级状态改为失效)
+            Map<String,Integer> workFlagMap = new HashMap<>();
             Function<XmslWbs,XmslWbs> iteratFunc = (r)->{
                 allList.add(r);
+                if(r.getNodeType().equals("5")){
+                    workFlagMap.put(r.getParentId(),workFlagMap.containsKey(r.getParentId())?-1:1);        
+                }else{
+                    workFlagMap.put(r.getParentId(),-1);
+                }
                 if(r.getStatus() == Constant.NO_INT)
                     invalidIdSet.add(r.getId());
                 String[] pids = r.getAncestors().split(",");
@@ -287,11 +293,15 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                 }
                 return r;
             };
-
             wbsService.handlerAncestors(iteratFunc);
             wbsListRelationService.insertXmslWbsListRelationList(relationList);
             //4、修改版本变更标志
             wbsService.updatePtVar2List(updateFlagList);
+            //8、修改子级全是作业的wbs ptVar5 改为1
+            Set<String> ptVar5IdSet = workFlagMap.keySet().stream().filter(r->workFlagMap.get(r)==1).collect(Collectors.toSet());
+            if(CollectionUtils.isNotEmpty(ptVar5IdSet)){
+                xmslWbsMainMapper.updatePtVar5(ptVar5IdSet);    
+            }
             //5、wbs塞入redis
             wbsService.initWbs2Redis(tenantKey);
             //6、更新子级状态
@@ -329,6 +339,8 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         }
         if(StringUtils.isNotBlank(wbs.getPtVar4()) && !StringUtils.equals(oldWbs.getName(), wbs.getName())){ //给推送p6准备的，若改了名称需要推送p6修改接口
             wbs.setPtVar5("1");
+        }else{
+            wbs.setPtVar5("");
         }
         if(flag != null){
             wbs.setPtVar2(flag);

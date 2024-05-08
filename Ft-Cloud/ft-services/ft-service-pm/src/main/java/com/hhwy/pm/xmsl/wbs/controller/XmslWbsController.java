@@ -16,6 +16,7 @@ import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.utils.validation.ValidationUtil;
+import jodd.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -106,7 +107,14 @@ public class XmslWbsController extends BaseController {
     @PostMapping("/latestList")
     public AjaxResult latestList(@RequestBody XmslWbs wbs) {
         List<XmslWbs> list = xmslWbsService.latestData(wbs);
-        List<XmslWbs> resuList = list.stream().filter(r->!r.getNodeType().equals("5")).collect(Collectors.toList());
+        List<XmslWbs> resuList = list.stream().filter(r->!StringUtils.equals(r.getNodeType(),"5")).collect(Collectors.toList());
+        //若ptVar5为1，表示其子级全部为作业，
+        resuList.forEach(r->{
+            if(r.getHaveChildren() != 1)
+                return;
+            if(StringUtils.equals(r.getPtVar5(),"1"))
+                r.setHaveChildren(0);
+        });
         return AjaxResult.success(resuList);
     }
 

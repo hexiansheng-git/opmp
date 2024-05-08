@@ -122,7 +122,6 @@ public class WbsPushP6 {
                 temp.setParentObjectId(parent.getObjectId());
                 parent.getChildren().add(temp);
             }
-            projectCode = "PJ2019010034";
             //推送新增修改数据到p6
             push(mainId,projectCode,treeList,updateList);
             //禁用wbs推送到p6,需要判断这些wbs是否已经推送给p6

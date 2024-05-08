@@ -3,9 +3,11 @@ package com.hhwy.pm.xmsl.wbs.mapper;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVoBean;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author wk
@@ -78,4 +80,6 @@ public interface XmslWbsMainMapper {
     int deleteLogic(Long id);
     int deleteHistoryLogic(Long id);
     int deleteRelation(Long id);
+    
+    void updatePtVar5(@Param("set") Set<String> idSet);
 }

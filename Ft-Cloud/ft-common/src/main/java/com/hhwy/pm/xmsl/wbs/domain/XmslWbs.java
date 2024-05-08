@@ -260,7 +260,7 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     @JsonProperty
     private String ptVar4;
     /**
-     * 字段描述：预留字段5  父级编号
+     * 字段描述：预留字段5  标记子级是否全部为作业
      */
     @JsonProperty
     private String ptVar5;

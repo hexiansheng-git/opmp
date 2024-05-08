@@ -375,5 +375,12 @@
     <delete id="deleteWbsHitoryByMainId">
         delete from `xmsl_wbs_history` where main_id = #{mainId}
     </delete>
-   
+
+    <update id="updatePtVar5">
+        update xmsl_wbs set pt_var5=1 where id in 
+        <foreach item="id" collection="set" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    
 </mapper>
