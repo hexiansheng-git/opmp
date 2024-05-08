@@ -272,7 +272,7 @@ public class SgjsMixRatioManageServiceImpl implements ISgjsMixRatioManageService
         //校验混凝土等级
         if(mixRatioManage.getMixRatioType().charAt(0) == '1'){ //水泥，必填
             Assert.isTrue(StringUtils.isNotBlank(mixRatioManage.getMixLevel()), "配合比类型为水泥混凝土时，混凝土等级必填");
-            Matcher matcher = Pattern.compile("\\d+/g").matcher(mixRatioManage.getMixLevel().trim());
+            Matcher matcher = Pattern.compile("\\d+").matcher(mixRatioManage.getMixLevel().trim());
             Assert.isTrue(matcher.find(),"混凝土等级填写有误，未获取到数字，填写格式类似于C30,C35");
         }else{
             mixRatioManage.setMixLevel("");

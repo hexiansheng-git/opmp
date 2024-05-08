@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * wbs
@@ -105,7 +106,8 @@ public class XmslWbsController extends BaseController {
     @PostMapping("/latestList")
     public AjaxResult latestList(@RequestBody XmslWbs wbs) {
         List<XmslWbs> list = xmslWbsService.latestData(wbs);
-        return AjaxResult.success(list);
+        List<XmslWbs> resuList = list.stream().filter(r->!r.getNodeType().equals("5")).collect(Collectors.toList());
+        return AjaxResult.success(resuList);
     }
 
     @PostMapping("/save")
