@@ -390,12 +390,12 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         if(CollectionUtils.isEmpty(wbsList)){
             return;
         }
-        List<XmslWbs> wbsMiddleList = wbsList.stream().filter(o -> o.getStandardCode() != null).collect(Collectors.toList());
+        List<XmslWbs> wbsMiddleList = wbsList.stream().filter(o -> o.getHaveChildren() == 0).filter(o -> StringUtils.isNotBlank(o.getStandardCode())).collect(Collectors.toList());
         if(CollectionUtils.isEmpty(wbsMiddleList)){
             return;
         }
 
-        Map<String, XmslWbs> wbsMap = wbsMiddleList.stream().collect(Collectors.toMap(XmslWbs::getStandardCode, Function.identity()));
+        Map<String, List<XmslWbs>> wbsStandardMap = wbsMiddleList.stream().collect(Collectors.groupingBy(XmslWbs::getStandardCode));
         //获取所有主表数据
         BigDecimal version = VersionUtil.getVersion(TN,null);
         Map<String, QqchSafeRiskList> masterMap = this.getMasterMap(version);
@@ -406,36 +406,38 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         for (Map.Entry<String, List<QyzsSafeSafeRisk>> entry : qyzsRiskMap.entrySet()) {
             String key = entry.getKey();
             List<QyzsSafeSafeRisk> value = entry.getValue();
-            if (!wbsMap.containsKey(key)) {
+            if (!wbsStandardMap.containsKey(key)) {
                 continue;
             }
-            XmslWbs xmslWbs = wbsMap.get(key);
-            String id = xmslWbs.getId();
-            QqchSafeRiskList master;
-            if (masterMap.containsKey(id)) {
-                master = masterMap.get(id);
-            } else {
-                master = new QqchSafeRiskList();
-                master.setId(IdWorker.createId());
-                master.setWbsId(xmslWbs.getId());
-                master.setType("0");
-                master.setVersion(version);
-                insterList.add(master);
-            }
+            List<XmslWbs> xmslWbsList = wbsStandardMap.get(key);
+            for (XmslWbs wbs : xmslWbsList) {
+                String id = wbs.getId();
+                QqchSafeRiskList master;
+                if (masterMap.containsKey(id)) {
+                    master = masterMap.get(id);
+                } else {
+                    master = new QqchSafeRiskList();
+                    master.setId(IdWorker.createId());
+                    master.setWbsId(wbs.getId());
+                    master.setType("0");
+                    master.setVersion(version);
+                    insterList.add(master);
+                }
 
-            for (QyzsSafeSafeRisk risk : value) {
-                QqchSafeRiskListDetail detail = new QqchSafeRiskListDetail();
-                detail.setId(risk.getId());
-                detail.setPid(risk.getPid());
-                detail.setInfoId(master.getId());
-                detail.setWorkType(risk.getWorkType());
-                detail.setWorkUnit(risk.getWorkUnit());
-                detail.setDangerThing(risk.getRiskEvent());
-                detail.setPossibleResult(risk.getPossibleConsequence());
-                detail.setRiskLevel(risk.getRiskLevel());
-                detail.setRiskControWay(risk.getRiskControlMeasure());
-                detail.setPtVar2("0");
-                detailList.add(detail);
+                for (QyzsSafeSafeRisk risk : value) {
+                    QqchSafeRiskListDetail detail = new QqchSafeRiskListDetail();
+                    detail.setId(risk.getId());
+                    detail.setPid(risk.getPid());
+                    detail.setInfoId(master.getId());
+                    detail.setWorkType(risk.getWorkType());
+                    detail.setWorkUnit(risk.getWorkUnit());
+                    detail.setDangerThing(risk.getRiskEvent());
+                    detail.setPossibleResult(risk.getPossibleConsequence());
+                    detail.setRiskLevel(risk.getRiskLevel());
+                    detail.setRiskControWay(risk.getRiskControlMeasure());
+                    detail.setPtVar2("0");
+                    detailList.add(detail);
+                }
             }
         }
 
@@ -468,7 +470,7 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         query.setVersion(version);
         query.setType("0");
         List<QqchSafeRiskList> masterList = qqchSafeRiskListMapper.getQqchSafeRiskListList(query);
-        Map<String, QqchSafeRiskList> masterMap = masterList.stream().collect(Collectors.toMap(QqchSafeRiskList::getWbsId, Function.identity()));
+        Map<String, QqchSafeRiskList> masterMap = masterList.stream().filter(o -> StringUtils.isNotBlank(o.getWbsId())).collect(Collectors.toMap(QqchSafeRiskList::getWbsId, Function.identity()));
         return masterMap;
     }
 
