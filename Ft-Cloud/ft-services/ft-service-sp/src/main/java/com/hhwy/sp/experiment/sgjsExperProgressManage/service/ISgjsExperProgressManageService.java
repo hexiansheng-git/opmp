@@ -4,6 +4,7 @@ package com.hhwy.sp.experiment.sgjsExperProgressManage.service;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManage;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManageVo;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -56,4 +57,12 @@ public interface ISgjsExperProgressManageService {
 
 
     List<SgjsExperProgressManage> getIds(List<String> ids);
+
+    /**
+     * 导入文件
+     * @param file
+     * @return
+     */
+    AjaxResult importData(MultipartFile file);
+
 }

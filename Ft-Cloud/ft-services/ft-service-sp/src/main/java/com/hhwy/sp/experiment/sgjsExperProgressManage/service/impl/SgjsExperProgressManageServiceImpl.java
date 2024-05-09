@@ -15,15 +15,19 @@ import com.hhwy.sp.experiment.sgjsExperProgressManage.service.ISgjsExperProgress
 import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.date.FtDateUtils;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -63,31 +67,31 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
     /**
      * 列表查询 条件查询
      *
-     * @param sgjsTechnicalManage
+     * @param sgjsExperProgressManage
      * @return
      */
     @Override
-    public SgjsExperProgressManageVo list(SgjsExperProgressManage sgjsTechnicalManage) {
+    public SgjsExperProgressManageVo list(SgjsExperProgressManage sgjsExperProgressManage) {
 
         SgjsExperProgressManageVo vo = new SgjsExperProgressManageVo();
         //筛选条件  试验工作项  计划开始日期  实际开始日期
         //接收时间范围的字符串 处理之后赋值给对象属性
-        if (StringUtils.isNotEmpty(sgjsTechnicalManage.getPlanStartDateStr())) {
-            String planStartDateStr = sgjsTechnicalManage.getPlanStartDateStr();
+        if (StringUtils.isNotEmpty(sgjsExperProgressManage.getPlanStartDateStr())) {
+            String planStartDateStr = sgjsExperProgressManage.getPlanStartDateStr();
             String[] split = planStartDateStr.split("~");
-            sgjsTechnicalManage.setPlanStartDate1(FtDateUtils.parseDate(split[0].replaceAll("(?:年|月|日)", "-")));
-            sgjsTechnicalManage.setPlanStartDate2(FtDateUtils.parseDate(split[1].replaceAll("(?:年|月|日)", "-")));
+            sgjsExperProgressManage.setPlanStartDate1(FtDateUtils.parseDate(split[0].replaceAll("(?:年|月|日)", "-")));
+            sgjsExperProgressManage.setPlanStartDate2(FtDateUtils.parseDate(split[1].replaceAll("(?:年|月|日)", "-")));
         }
 
-        if (StringUtils.isNotEmpty(sgjsTechnicalManage.getRealStartDateStr())) {
-            String realStartDateStr = sgjsTechnicalManage.getRealStartDateStr();
+        if (StringUtils.isNotEmpty(sgjsExperProgressManage.getRealStartDateStr())) {
+            String realStartDateStr = sgjsExperProgressManage.getRealStartDateStr();
             String[] split = realStartDateStr.split("~");
-            sgjsTechnicalManage.setRealStartDate1(FtDateUtils.parseDate(split[0].replaceAll("(?:年|月|日)", "-")));
-            sgjsTechnicalManage.setRealStartDate2(FtDateUtils.parseDate(split[1].replaceAll("(?:年|月|日)", "-")));
+            sgjsExperProgressManage.setRealStartDate1(FtDateUtils.parseDate(split[0].replaceAll("(?:年|月|日)", "-")));
+            sgjsExperProgressManage.setRealStartDate2(FtDateUtils.parseDate(split[1].replaceAll("(?:年|月|日)", "-")));
         }
 
         //查询符合条件的数据
-        List<SgjsExperProgressManage> sgjsExperProgressManageList = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(sgjsTechnicalManage);
+        List<SgjsExperProgressManage> sgjsExperProgressManageList = sgjsExperProgressManageMapper.getSgjsExperProgressManageListByCondition(sgjsExperProgressManage);
         List<SgjsExperProgressManage> list = new ArrayList<>();
         if (sgjsExperProgressManageList.size() > 0) {
 
@@ -435,5 +439,47 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         return 0;
     }
 
+
+    /**
+     * 导入文件
+     * @param file
+     * @return
+     */
+    @Override
+    public AjaxResult importData(MultipartFile file) {
+        FtExcelUtil<SgjsExperProgressManage> util = new FtExcelUtil<>(SgjsExperProgressManage.class);
+        List<SgjsExperProgressManage> recordList = new ArrayList<>();
+        try {
+            InputStream inputStream = file.getInputStream();
+            recordList = util.importTreeExcel(inputStream);
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败");
+        }
+        //数据校验
+        List<SgjsExperProgressManage> records = new ArrayList<>();
+        for (SgjsExperProgressManage manage : recordList) {
+            SgjsExperProgressManage newManage = new SgjsExperProgressManage();
+            BeanUtils.copyProperties(manage, newManage);
+            records.add(newManage);
+        }
+        records = TreeUtil.treeToList(recordList);
+        //校验
+        for (SgjsExperProgressManage detail : records) {
+            if (StringUtils.isEmpty(detail.getSerialNumber())) {
+                throw new BaseException("序号不能为空");
+            }
+        }
+        //构建树形返回数据
+        records = ListTreeUtil.formatTree(
+                records,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                SgjsExperProgressManage::getChildren,
+                SgjsExperProgressManage::setChildren);
+        if (records.size() == 0) {
+            throw new BaseException("请检查数据层级序号是否正确");
+        }
+        return AjaxResult.success(records);
+    }
 
 }

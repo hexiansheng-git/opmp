@@ -15,6 +15,7 @@ import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -156,5 +157,16 @@ public class SgjsExperProgressManageController extends BaseController {
         return AjaxResult.success(sgjsExperProgressManageParam);
     }
 
+    /**
+     * 导入
+     *
+     * @param file
+     * @return
+     */
+    @PreAuthorize(hasPermi = "sgjsExperProgressManage:import")
+    @PostMapping("/importData")
+    public AjaxResult importData(@RequestPart("file") MultipartFile file) {
+        return sgjsExperProgressManageService.importData(file);
+    }
 
 }
