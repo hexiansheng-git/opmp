@@ -179,14 +179,19 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         SgjsBuildSchemeReview review = sgjsBuildSchemeReviewMapper.getById(id);
         review.setFlowNodeMark(flowNodeMark);
         String schemeLevel = review.getSchemeLevel();
-
+        if("2".equals(schemeLevel) || "3".equals(schemeLevel)){
+            FlowInfoSearchUtil.getFlowInfo(review, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_2_3);
+        }
+        if("4".equals(schemeLevel)){
+            FlowInfoSearchUtil.getFlowInfo(review, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4);
+        }
         if("1".equals(type) || "2".equals(type)){
             //查看/发起审批
             return review;
         }
         if("3".equals(type)){
             //查看
-            BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id);
+            BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id,SecurityUtils.getUserName());
             review.setScore(reviewOpinionVo.getScore());
             review.setReviewOpinionVo(reviewOpinionVo);
         }
@@ -198,7 +203,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 List<SgjsBuildSchemeReviewStaff> staffList = sgjsBuildSchemeReviewStaffMapper.getListByReviewId(id, flowNodeMark);
                 List<SgjsBuildSchemeReviewStaff> staffListRes = this.assembleStaffList(staffList);
                 review.setReviewStaffList(staffListRes);
-            }else if(ReviewFlowNodeMark.FlowNodeMark3.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark4.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark5.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark6.equals(flowNodeMark)){
+            }else if(ReviewFlowNodeMark.FlowNodeMark3.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark4.equals(flowNodeMark) 
+                    || ReviewFlowNodeMark.FlowNodeMark5.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark6.equals(flowNodeMark)){
                 //专家或部门审批节点：根据当前登录人查询各自数据
                 String userName = SecurityUtils.getUserName();
 //                    String userName = detailQueryVo.getUserName();
@@ -224,7 +230,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 //区域中心只能看区域中心的意见，flowNodeMark = 1
                 String flowNodeMarkParam = ReviewFlowNodeMark.FlowNodeMark7.equals(flowNodeMark)?"1":null;
                 //区域总工审批节点  汇总 3 ，4节点数据    海外事业部总工审批节点  汇总 3 ，4 ，5 ，6节点数据
-                BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id,flowNodeMarkParam);
+                BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id,flowNodeMarkParam,null);
                 review.setScore(reviewOpinionVo.getScore());
                 review.setReviewOpinionVo(reviewOpinionVo);
             }else if(ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark10.equals(flowNodeMark)){
@@ -241,8 +247,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         return review;
     }
 
+    private BuildSchemeReviewOpinionVo getReviewOpinionVo(Long reviewId,String username){
+        return getReviewOpinionVo(reviewId,null,username);
+    }
+    
     private BuildSchemeReviewOpinionVo getReviewOpinionVo(Long reviewId){
-        return getReviewOpinionVo(reviewId,null);
+        return getReviewOpinionVo(reviewId,null,null);
     }
     /**
      * 
@@ -250,7 +260,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
      * @param flowNodeMark  为空:全查,1:查询区域中心,2:查询海外事业部
      * @return
      */
-    private BuildSchemeReviewOpinionVo getReviewOpinionVo(Long reviewId,String flowNodeMark){
+    private BuildSchemeReviewOpinionVo getReviewOpinionVo(Long reviewId,String flowNodeMark,String username){
         BuildSchemeReviewOpinionVo reviewOpinionVo = new BuildSchemeReviewOpinionVo();
         SgjsBuildSchemeReviewOpinion reviewOpinionQuery = new SgjsBuildSchemeReviewOpinion();
         reviewOpinionQuery.setReviewId(reviewId);
@@ -261,7 +271,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             reviewOpinionVo.setOverseasChiefOpinion(reviewOpinion.getOverseasChiefOpinion());
             reviewOpinionVo.setOverseasChiefDetailOpinion(reviewOpinion.getOverseasChiefDetailOpinion());
         }
-        List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(reviewId, flowNodeMark);
+        List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(reviewId, flowNodeMark,username);
         reviewOpinionVo.setGatherVoList(staffOpinionGatherVoList);
         Double average = staffOpinionGatherVoList.stream().filter(o -> o.getScore() != null).collect(Collectors.averagingDouble(BuildSchemeStaffOpinionGatherVo::getScore));
         reviewOpinionVo.setScore(average);
@@ -300,11 +310,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
      * 获取选择的审批人信息
      * @param reviewId
      * @param flowNodeMark 选择审批人的节点标识  1(区域中心)或2(海外事业部)
+     * @param username 专家username                   
      * @return
      */
-    private List<BuildSchemeStaffOpinionGatherVo> getStaffOpinionGatherVoList(Long reviewId,String flowNodeMark){
+    private List<BuildSchemeStaffOpinionGatherVo> getStaffOpinionGatherVoList(Long reviewId,String flowNodeMark,String username){
         List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = new ArrayList<>();
-        List<SgjsBuildSchemeReviewStaff> staffList = sgjsBuildSchemeReviewStaffMapper.getListByReviewIdGroupByUser(reviewId, flowNodeMark);
+        List<SgjsBuildSchemeReviewStaff> staffList = sgjsBuildSchemeReviewStaffMapper.getListByReviewIdGroupByUser(reviewId, flowNodeMark,username);
         if(CollectionUtils.isEmpty(staffList)){
             return staffOpinionGatherVoList;
         }
@@ -382,7 +393,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     private SgjsBuildSchemeReviewOpinionRecord getLookOverData(Long reviewId){
         SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = this.initReviewOpinionRecord(reviewId);
 
-        List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(reviewId, null);
+        List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(reviewId, null,null);
         if(CollectionUtils.isNotEmpty(staffOpinionGatherVoList)){
             Double average = staffOpinionGatherVoList.stream().filter(o -> o.getScore() != null).collect(Collectors.averagingDouble(BuildSchemeStaffOpinionGatherVo::getScore));
             reviewOpinionRecord.setScore(average);
@@ -486,7 +497,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 
         if(("1".equals(taskStatus) || "4".equals(taskStatus)) && StringUtils.isNotBlank(flowNodeMark) && !ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark) && !ReviewFlowNodeMark.FlowNodeMark10.equals(flowNodeMark)){
             review.setProcessStatus("no");
-            List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(review.getId(), null);
+            List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(review.getId(), null,null);
             Double average = staffOpinionGatherVoList.stream().filter(o -> o.getScore() != null).collect(Collectors.averagingDouble(BuildSchemeStaffOpinionGatherVo::getScore));
             review.setScore(average);
             sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
@@ -648,7 +659,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             }
         }
 
-        List<SgjsBuildSchemeReviewStaff> existStaffList = sgjsBuildSchemeReviewStaffMapper.getListByReviewIdGroupByUser(reviewId, null);
+        List<SgjsBuildSchemeReviewStaff> existStaffList = sgjsBuildSchemeReviewStaffMapper.getListByReviewIdGroupByUser(reviewId, null,null);
         if(CollectionUtils.isEmpty(existStaffList)){
             return;
         }
@@ -782,7 +793,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         reviewOpinionRecord.setCreateUserName(SecurityUtils.getUserName());
         reviewOpinionRecord.setCreateTime(DateUtils.getNowDate());
 
-        List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(reviewId, null);
+        List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(reviewId, null,null);
         if(CollectionUtils.isNotEmpty(staffOpinionGatherVoList)){
             Double average = staffOpinionGatherVoList.stream().filter(o -> o.getScore() != null).collect(Collectors.averagingDouble(BuildSchemeStaffOpinionGatherVo::getScore));
             reviewOpinionRecord.setScore(average);

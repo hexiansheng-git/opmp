@@ -159,6 +159,7 @@
         <where>
             del_flag = '0' and review_id = #{reviewId}
             <if test="flowNodeMark != null  and flowNodeMark != ''">and `flow_node_mark` = #{flowNodeMark}</if>
+            <if test="username != null  and username != ''">and `review_staff_id` = #{username}</if>
         </where>
         group by review_staff_id
         order by staff_type,sort

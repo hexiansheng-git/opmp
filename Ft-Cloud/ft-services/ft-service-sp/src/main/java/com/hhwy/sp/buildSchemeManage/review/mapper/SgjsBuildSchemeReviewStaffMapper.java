@@ -28,7 +28,7 @@ public interface SgjsBuildSchemeReviewStaffMapper {
 
     List<SgjsBuildSchemeReviewStaff> getOneByReviewStaffId(@Param("reviewId") Long reviewId,@Param("reviewStaffId") String reviewStaffId);
 
-    List<SgjsBuildSchemeReviewStaff> getListByReviewIdGroupByUser(@Param("reviewId") Long reviewId, @Param("flowNodeMark") String flowNodeMark);
+    List<SgjsBuildSchemeReviewStaff> getListByReviewIdGroupByUser(@Param("reviewId") Long reviewId, @Param("flowNodeMark") String flowNodeMark,@Param("username") String username);
 
     List<SgjsBuildSchemeReviewStaff> getSumScoreByReviewIdList(@Param("reviewIdList") List<Long> reviewIdList);
 

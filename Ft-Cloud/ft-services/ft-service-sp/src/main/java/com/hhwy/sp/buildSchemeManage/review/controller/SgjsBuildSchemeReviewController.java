@@ -89,13 +89,6 @@ public class SgjsBuildSchemeReviewController extends BaseController {
     @GetMapping("/getDetail")
     public AjaxResult getDetail(BuildSchemeReviewDetailQueryVo detailQueryVo) {
         SgjsBuildSchemeReview review = sgjsBuildSchemeReviewService.getDetail(detailQueryVo);
-        String schemeLevel = review.getSchemeLevel();
-        if("2".equals(schemeLevel) || "3".equals(schemeLevel)){
-            FlowInfoSearchUtil.getFlowInfo(review, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_2_3);
-        }
-        if("4".equals(schemeLevel)){
-            FlowInfoSearchUtil.getFlowInfo(review, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4);
-        }
         return AjaxResult.success(review);
     }
 
