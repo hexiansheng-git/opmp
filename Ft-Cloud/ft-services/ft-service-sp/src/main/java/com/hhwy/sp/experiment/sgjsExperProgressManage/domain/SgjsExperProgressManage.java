@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.utils.tree.TreeNode;
 import lombok.Data;
 
@@ -26,6 +27,7 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
      */
     @JsonProperty
     @Excel(name = "序号"    )
+    @FtExcel(name = "序号",serialNumFlag = true)
     private String serialNumber;
 
     private List<String> paths;
@@ -59,18 +61,21 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
      */
     @JsonProperty
     @Excel(name = "试验工作项")
+    @FtExcel(name = "试验工作项")
     private String experimentalWorkItems;
     /**
      * 字段描述：计量单位
      */
     @JsonProperty
     @Excel(name = "计量单位")
+    @FtExcel(name = "计量单位")
     private String measureUnit;
     /**
      * 字段描述：工作量
      */
     @JsonProperty
     @Excel(name = "工作量")
+    @FtExcel(name = "工作量")
     private String workload;
     /**
      * 字段描述：计划开始日期
@@ -78,6 +83,7 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
     @Excel(name = "计划开始日期", dateFormat = "yyyy年MM月dd日")
+    @FtExcel(name = "计划开始日期", dateFormat = "yyyy年MM月dd日")
     private Date planStartDate;
     /**
      * 字段描述：计划结束日期
@@ -85,6 +91,7 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
     @Excel(name = "计划结束日期", dateFormat = "yyyy年MM月dd日")
+    @FtExcel(name = "计划结束日期", dateFormat = "yyyy年MM月dd日")
     private Date planEndDate;
     /**
      * 字段描述：实际开始日期
@@ -92,6 +99,7 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
     @Excel(name = "实际开始日期", dateFormat = "yyyy年MM月dd日")
+    @FtExcel(name = "实际开始日期", dateFormat = "yyyy年MM月dd日")
     private Date realStartDate;
     /**
      * 字段描述：实际结束日期
@@ -99,12 +107,14 @@ public class SgjsExperProgressManage extends TreeNode<SgjsExperProgressManage> {
     @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
     @Excel(name = "实际结束日期", dateFormat = "yyyy年MM月dd日")
+    @FtExcel(name = "实际结束日期", dateFormat = "yyyy年MM月dd日")
     private Date realEndDate;
     /**
      * 字段描述：备注
      */
     @JsonProperty
     @Excel(name = "备注")
+    @FtExcel(name = "备注")
     private String remark;
     /**
      * 字段描述：数据来源 0新增1同步
