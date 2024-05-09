@@ -1,14 +1,18 @@
 package com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.controller;
 
 import com.alibaba.nacos.common.utils.CollectionUtils;
+import com.google.common.util.concurrent.ListenableFutureTask;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
@@ -22,6 +26,7 @@ import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManag
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author zmh 测量计划进度管理
@@ -153,7 +158,30 @@ public class SgjsPlanMeasureManageController extends BaseController {
 
             }
         }
-        ExcelUtils<SgjsPlanMeasureManage> utils = new ExcelUtils<>(SgjsPlanMeasureManage.class);
+        FtExcelUtil<SgjsPlanMeasureManage> utils = new FtExcelUtil<>(SgjsPlanMeasureManage.class);
         utils.exportExcel(response,treeList,DateUtils.getDate());
     }
+
+    @PostMapping("/exportTemplate")
+    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:import")
+    public void exportTemplate(HttpServletResponse response) throws IOException {
+        FtExcelUtil<SgjsPlanMeasureManage> utils = new FtExcelUtil<>(SgjsPlanMeasureManage.class);
+        utils.exportExcel(response,new ArrayList<>(),DateUtils.getDate());
+    }
+
+    @PostMapping("/importData")
+    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:import")
+    public AjaxResult importData(HttpServletResponse response, MultipartFile file) throws Exception {
+        FtExcelUtil<SgjsPlanMeasureManage> utils = new FtExcelUtil<>(SgjsPlanMeasureManage.class);
+        List<SgjsPlanMeasureManage> list = utils.importExcel(file.getInputStream());
+        for (int i = 0; i < list.size(); i++) {
+            SgjsPlanMeasureManage temp = list.get(i);
+            if(temp.getPlanStartDate() != null && temp.getPlanEndDate() != null)
+                Assert.isTrue(temp.getPlanStartDate().before(temp.getPlanEndDate()),"计划开始日期必须早于计划结束日期");
+            if(temp.getRealStartDate() != null && temp.getRealEndDate() != null)
+                Assert.isTrue(temp.getRealStartDate().before(temp.getRealEndDate()),"实际开始日期必须早于实际结束日期");
+        }
+        return AjaxResult.success(list);
+    }
+    
 }

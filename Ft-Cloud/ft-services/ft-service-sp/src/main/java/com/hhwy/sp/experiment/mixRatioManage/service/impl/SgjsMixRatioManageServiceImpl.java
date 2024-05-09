@@ -26,6 +26,7 @@ import com.hhwy.sp.experiment.mixRatioManage.service.ISgjsMixRatioManageService;
 import com.hhwy.sp.experiment.mixRatioManage.service.ISgjsMixRatioManageStaffRecordService;
 import com.hhwy.sp.experiment.mixRatioManage.service.ISgjsMixRatioManageStaffService;
 import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
+import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.ObjectUtils;
@@ -47,6 +48,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author han
@@ -130,7 +132,27 @@ public class SgjsMixRatioManageServiceImpl implements ISgjsMixRatioManageService
 
     @Override
     public List<SgjsMixRatioManage> getListByQueryVo(MixRatioManageQueryVo queryVo) {
-        return sgjsMixRatioManageMapper.getListByQueryVo(queryVo);
+        List<SgjsMixRatioManage> list = sgjsMixRatioManageMapper.getListByQueryVo(queryVo);
+        List<SysDictData> mixTypeList = systemApiService.selectDictDataByType("sp_mix_type");
+        Map<Long,SysDictData> mixTypeDictMap = mixTypeList.stream().collect(Collectors.toMap(r->r.getDictDataId(), r->r));
+        Map<String,String> mixTypeMap = mixTypeList.stream().collect(
+                Collectors.toMap(r->{
+                        String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":mixTypeDictMap.get(r.getParentId()).getDictValue()+",";
+                        return parent+r.getDictValue();
+                    }
+                    , r->{
+                        String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":mixTypeDictMap.get(r.getParentId()).getDictLabel()+"/";
+                        return parent+r.getDictLabel();
+                    })
+        );
+        for (int i = 0; i < list.size(); i++) {
+            SgjsMixRatioManage temp = list.get(i);
+            if(StringUtils.isBlank(temp.getMixRatioType()))
+                continue;
+            String mixTypeStr = mixTypeMap.get(temp.getMixRatioType());
+            temp.setPtVar3(mixTypeStr);
+        }    
+        return list;
     }
 
     @Override

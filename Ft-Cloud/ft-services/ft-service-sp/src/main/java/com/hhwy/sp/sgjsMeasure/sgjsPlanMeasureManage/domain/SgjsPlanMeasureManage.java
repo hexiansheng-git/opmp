@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.utils.tree.TreeNode;
 import lombok.Data;
 
@@ -33,31 +34,31 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    //@Excel(name = "父级id")
+    //@FtExcel(name = "父级id")
     private Long pid;
 
-    //@Excel(name = "序号")
+    //@FtExcel(name = "序号")
     private String serialNumber;
 
     /**
      * 字段描述：测量工作项
      */
     @JsonProperty
-    @Excel(name = "测量工作项")
+    @FtExcel(name = "测量工作项")
     private String measureName;
     
     /**
      * 字段描述：计量单位
      */
     @JsonProperty
-    @Excel(name = "计量单位")
+    @FtExcel(name = "计量单位")
     private String measureUnit;
 
     /**
      * 字段描述：工作量
      */
     @JsonProperty
-    @Excel(name = "工作量")
+    @FtExcel(name = "工作量")
     private String workload;
 
     /**
@@ -65,8 +66,9 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
+    @FtExcel(name = "计划开始日期",dateFormat = "yyyy-MM-dd")
     private Date planStartDate;
-    @Excel(name = "计划开始日期")
+    
     private String planStartDateStr;
 
     /**
@@ -74,8 +76,9 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
+    @FtExcel(name = "计划结束日期",dateFormat = "yyyy-MM-dd")
     private Date planEndDate;
-    @Excel(name = "计划结束日期")
+    
     private String planEndDateStr;
 
     /**
@@ -83,8 +86,9 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
+    @FtExcel(name = "实际开始日期",dateFormat = "yyyy-MM-dd")
     private Date realStartDate;
-    @Excel(name = "实际开始日期")
+    
     private String realStartDateStr;
 
     /**
@@ -92,36 +96,37 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
+    @FtExcel(name = "实际结束日期",dateFormat = "yyyy-MM-dd")
     private Date realEndDate;
-    @Excel(name = "实际结束日期")
+    
     private String realEndDateStr;
 
     /**
      * 字段描述：备注
      */
     @JsonProperty
-    @Excel(name = "备注")
+    @FtExcel(name = "备注")
     private String remark;
 
     /**
      * 字段描述：数据来源 0新增1同步
      */
     @JsonProperty
-    //@Excel(name = "数据来源 0新增1同步")
+    //@FtExcel(name = "数据来源 0新增1同步")
     private String dataSource;
 
     /**
      * 字段描述：数据创建者id
      */
     @JsonProperty
-    //@Excel(name = "数据创建者id")
+    //@FtExcel(name = "数据创建者id")
     private String createUser;
 
     /**
      * 字段描述：数据创建者名称
      */
     @JsonProperty
-    //@Excel(name = "数据创建者名称")
+    //@FtExcel(name = "数据创建者名称")
     private String createUserName;
 
     /**
@@ -129,14 +134,14 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    //@Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    //@FtExcel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
      * 字段描述：数据修改者id
      */
     @JsonProperty
-    //@Excel(name = "数据修改者id")
+    //@FtExcel(name = "数据修改者id")
     private String updateUser;
 
     /**
@@ -144,14 +149,14 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    //@Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    //@FtExcel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     /**
      * 字段描述：数据删除者
      */
     @JsonProperty
-    //@Excel(name = "数据删除者")
+    //@FtExcel(name = "数据删除者")
     private String delUser;
 
     /**
@@ -159,44 +164,44 @@ public class SgjsPlanMeasureManage extends TreeNode<SgjsPlanMeasureManage> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    //@Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    //@FtExcel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date delTime;
     /**
      * 字段描述：删除标识：0未删除；1已删除
      */
     @JsonProperty
-    //@Excel(name = "删除标识：0未删除；1已删除")
+    //@FtExcel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
 
     /**
      * 字段描述：预留字段1   项目编码
      */
     @JsonProperty
-    //@Excel(name = "预留字段1   项目编码")
+    //@FtExcel(name = "预留字段1   项目编码")
     private Long syncId;
     /**
      * 字段描述：预留字段2  leaf 是否是叶子节点 0否1是
      */
     @JsonProperty
-    //@Excel(name = "预留字段2  leaf 是否是叶子节点 0否1是")
+    //@FtExcel(name = "预留字段2  leaf 是否是叶子节点 0否1是")
     private String ptVar2;
     /**
      * 字段描述：预留字段3
      */
     @JsonProperty
-    //@Excel(name = "预留字段3")
+    //@FtExcel(name = "预留字段3")
     private String ptVar3;
     /**
      * 字段描述：预留字段4
      */
     @JsonProperty
-    //@Excel(name = "预留字段4")
+    //@FtExcel(name = "预留字段4")
     private String ptVar4;
     /**
      * 字段描述：预留字段5
      */
     @JsonProperty
-    //@Excel(name = "预留字段5")
+    //@FtExcel(name = "预留字段5")
     private String ptVar5;
 
     //节点判断标识

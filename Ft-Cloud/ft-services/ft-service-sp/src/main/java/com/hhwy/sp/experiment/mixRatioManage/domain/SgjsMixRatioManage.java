@@ -226,7 +226,7 @@ public class SgjsMixRatioManage extends CommonBaseEntity {
     @JsonProperty
     private String ptVar1;
     /**
-     * 字段描述：预留字段2
+     * 字段描述：是否存在历史记录，1：存在
      */
     @JsonProperty
     private String ptVar2;
