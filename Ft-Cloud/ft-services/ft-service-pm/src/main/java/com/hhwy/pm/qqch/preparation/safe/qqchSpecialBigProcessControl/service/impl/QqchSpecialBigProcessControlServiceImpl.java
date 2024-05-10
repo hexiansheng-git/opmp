@@ -1,7 +1,5 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigProcessControl.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
-import com.google.j2objc.annotations.AutoreleasePool;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -136,13 +134,14 @@ public class QqchSpecialBigProcessControlServiceImpl implements IQqchSpecialBigP
         List<QqchSpecialBigProcessControl> qqchSpecialBigProcessControlList = vo.getList();
 
         this.insertQqchSpecialBigProcessControlList(qqchSpecialBigProcessControlList,version);
-        if(CollectionUtils.isEmpty(qqchSpecialBigProcessControlList)){
-            return;
-        }
+
         //判断是否是确认
         if(ButtonMark.CONFIRM.equals(buttonMark)){
             //校验数据必填
-            JyDetailsUtil.jyDetails(qqchSpecialBigProcessControlList, ValidationGroups.Save.class);
+            if(CollectionUtils.isNotEmpty(qqchSpecialBigProcessControlList)){
+                JyDetailsUtil.jyDetails(qqchSpecialBigProcessControlList, ValidationGroups.Save.class);
+            }
+
             //插入确认记录
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
