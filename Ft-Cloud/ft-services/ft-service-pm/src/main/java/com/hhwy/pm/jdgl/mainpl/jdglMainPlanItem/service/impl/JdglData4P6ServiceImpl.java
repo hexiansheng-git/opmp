@@ -28,6 +28,7 @@ import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,6 +53,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
     @Autowired
@@ -153,6 +155,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         //判断当前租户"前期策划评审"三阶段是否完成，如果未完成则不需拉取
         String stage = qqchReviewService.getStage();
         if (!PmConstant.END_STAGE.equals(stage)){
+            log.warn("根据租户拉取P6数据 - 前期策划评审三阶段未结束，不能获取数据");
             return returnList;
         }
 

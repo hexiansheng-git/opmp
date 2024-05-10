@@ -1,9 +1,13 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.controller;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.pm.constant.PmConstant;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.ProjectInfo;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglData4P6Service;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +19,9 @@ public class JdglData4P6Controller {
 
     @Autowired
     private IJdglData4P6Service jdglData4P6Service;
+
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     /**
      * 从1.2.1同步数据，测试用
@@ -44,6 +51,9 @@ public class JdglData4P6Controller {
      */
     @PostMapping("/initJdglData4P6ByOne")
     public AjaxResult initJdglData4P6ByOne(String tenantKey) {
+        //判断当前租户"前期策划评审"三阶段是否完成，如果未完成则不需拉取
+        String stage = qqchReviewService.getStage();
+        Assert.isTrue(PmConstant.END_STAGE.equals(stage), "前期策划评审三阶段未结束，不能获取数据");
         return AjaxResult.success(jdglData4P6Service.initJdglData4P6ByOne(tenantKey));
     }
 

@@ -340,6 +340,9 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
                 // 责任人
                 JdglCorrectionMeasuresMakeDetail.setDirectorId(jdglMainPlanItems.getExecuterId());
                 JdglCorrectionMeasuresMakeDetail.setDirector(jdglMainPlanItems.getExecuter());
+                if (jdglMainPlanItems.getFinishDateVariance() != null){
+                    JdglCorrectionMeasuresMakeDetail.setExpectLagDay(new BigDecimal(jdglMainPlanItems.getFinishDateVariance()));
+                }
             }
             //SV值
             JdglCorrectionMeasuresMakeDetail.setSvValue(jdglDiffAnalysisSv.getSvNum());
