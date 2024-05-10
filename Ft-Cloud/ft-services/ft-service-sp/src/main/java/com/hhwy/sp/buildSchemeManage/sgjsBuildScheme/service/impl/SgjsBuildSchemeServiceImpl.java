@@ -151,6 +151,11 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         List<SgjsBuildScheme> collect = allList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getTaskStatus()) && p.getTaskStatus().equals("5")).collect(Collectors.toList());
         result.setPtVar2(CollUtil.isEmpty(collect) ? "0" : "4");
+        //查询审批意见
+        SgjsBuildSchemeExpertSuggest sgjsBuildSchemeExpertSuggest = new SgjsBuildSchemeExpertSuggest();
+        sgjsBuildSchemeExpertSuggest.setForeignId(result.getId());
+        List<SgjsBuildSchemeExpertSuggest> groupList = schemeExpertSuggestService.getGroupList(sgjsBuildSchemeExpertSuggest);
+        result.setExpertSuggest(groupList);
         return result;
     }
 
