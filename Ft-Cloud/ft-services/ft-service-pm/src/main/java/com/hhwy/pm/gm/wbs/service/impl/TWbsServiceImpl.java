@@ -289,6 +289,7 @@ public class TWbsServiceImpl implements ITWbsService {
                     temp.setId(newId);
                     existIdSet.add(temp.getId());
                     wbsMap.put(temp.getId(),temp);
+                    temp.setStandardCode(temp.getCode());
 //                    if(temp.getLevel() != 2)
 //                        temp.setParentCode(StringUtils.removeEnd(temp.getAncestorsName().replace(temp.getCode(),""),"-") );
 //                    else

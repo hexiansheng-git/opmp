@@ -381,6 +381,15 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         try {
             result = xmslWbsMainMapper.updateWbsP6Code(list);
             xmslWbsMainMapper.updateWbsHisP6Code(list);
+//            //更新redis中的数据
+//            String tenantKey = MySecurityUtils.getTenantKey();
+//            Map<String,String> objIdMap = wbsInfoVo.getWbsList().stream().collect(Collectors.toMap(r->r.getWbsCode(), r->r.getObjectId()));
+//            String key = WbsRedisUtils.getKey(tenantKey);
+//            Set<String> wbsCodeSet = list.stream().map(r->r.getWbsCode()).collect(Collectors.toSet());
+//            List<XmslWbs> wbsList = WbsRedisUtils.getWbsByCodes(wbsCodeSet);
+//            for (int i = 0; i < wbsList.size(); i++) {
+////                wbsList.get(i)
+//            }
         }catch (Exception e){
             e.printStackTrace();
             throw new CustomBusinessException(e.getMessage());

@@ -261,6 +261,8 @@ public class TWbs extends TreeNodeBase<TWbs,String> {
     @JsonProperty
     @Excel(name = "序号")
     private Integer sort;
+    
+    private String standardCode;
 
 
     private List<TWbs> children;
