@@ -65,17 +65,6 @@ public class WbsPushP6 {
     @Value("${p6.ip_port}")
     private String p6Url;
 
-    /**
-     * 推送wbs到p6
-     * @param mainId
-     * @param projectCode
-     */
-    public void push2P6(Long mainId, String projectCode)  {
-        //List<XmslWbs> wbsList = WbsRedisUtils.allWbs(projectCode);
-
-
-
-    }
 
 
     /**
@@ -95,6 +84,9 @@ public class WbsPushP6 {
             List<WbsInfoVoBean> updateList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 XmslWbs temp = list.get(i);
+                if(StringUtils.equals(temp.getNodeType(),"5")){
+                    continue;
+                }
                 if(StringUtils.isBlank(temp.getCode())){
                     log.error("WBS编号为空,ID:"+temp.getId()+",mainId:"+temp.getMainId());
                     continue;
@@ -122,6 +114,7 @@ public class WbsPushP6 {
                 temp.setParentObjectId(parent.getObjectId());
                 parent.getChildren().add(temp);
             }
+//            projectCode = "PJ2019010034";
             //推送新增修改数据到p6
             push(mainId,projectCode,treeList,updateList);
             //禁用wbs推送到p6,需要判断这些wbs是否已经推送给p6

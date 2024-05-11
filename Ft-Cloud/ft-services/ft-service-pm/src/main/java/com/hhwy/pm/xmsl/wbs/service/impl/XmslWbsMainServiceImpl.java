@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.wbs.service.impl;
 
 import cn.hutool.core.lang.Assert;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
@@ -13,6 +14,7 @@ import com.hhwy.pm.xmsl.wbs.domain.XmslWbsListRelation;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsMainMapper;
 import com.hhwy.pm.xmsl.wbs.push.WbsPushP6;
+import com.hhwy.pm.xmsl.wbs.push.WorkPushP6;
 import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVo;
 import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVoBean;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsListRelationService;
@@ -21,6 +23,7 @@ import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.*;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -54,6 +57,10 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
     private IXmslWbsListRelationService wbsListRelationService;
     @Resource
     private WbsPushP6 wbsPushP6;
+    @Autowired
+    private WorkPushP6 workPushP6;
+    @Autowired
+    private RedisUtils redisUtils;
 
 
     public XmslWbsMain getXmslWbsMain(XmslWbsMain xmslWbsMain) {
@@ -297,17 +304,19 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
             wbsListRelationService.insertXmslWbsListRelationList(relationList);
             //4、修改版本变更标志
             wbsService.updatePtVar2List(updateFlagList);
-            //8、修改子级全是作业的wbs ptVar5 改为1
+            //5、修改子级全是作业的wbs ptVar5 改为1
             Set<String> ptVar5IdSet = workFlagMap.keySet().stream().filter(r->workFlagMap.get(r)==1).collect(Collectors.toSet());
             if(CollectionUtils.isNotEmpty(ptVar5IdSet)){
                 xmslWbsMainMapper.updatePtVar5(ptVar5IdSet);    
             }
-            //5、wbs塞入redis
+            //6、wbs塞入redis
             wbsService.initWbs2Redis(tenantKey);
-            //6、更新子级状态
+            //7、更新子级状态
             updateChildStatus(invalidIdSet);
-            //7、推送到p6  
+            //8、推送到p6  
             wbsPushP6.push2P6(main.getId(),tenantKey,allList,invalidIdSet);
+            //9、推送作业到p6
+            workPushP6.push(main.getId(), tenantKey, allList, invalidIdSet);
         }catch(Exception e){
             e.printStackTrace();
             log.error("wbs加载祖级名称&塞redis失败，mainid:{},消息：{}",main.getId(),e.getMessage());
@@ -381,15 +390,23 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         try {
             result = xmslWbsMainMapper.updateWbsP6Code(list);
             xmslWbsMainMapper.updateWbsHisP6Code(list);
-//            //更新redis中的数据
-//            String tenantKey = MySecurityUtils.getTenantKey();
-//            Map<String,String> objIdMap = wbsInfoVo.getWbsList().stream().collect(Collectors.toMap(r->r.getWbsCode(), r->r.getObjectId()));
-//            String key = WbsRedisUtils.getKey(tenantKey);
-//            Set<String> wbsCodeSet = list.stream().map(r->r.getWbsCode()).collect(Collectors.toSet());
-//            List<XmslWbs> wbsList = WbsRedisUtils.getWbsByCodes(wbsCodeSet);
-//            for (int i = 0; i < wbsList.size(); i++) {
-////                wbsList.get(i)
-//            }
+            //更新redis中的数据
+            String tenantKey = MySecurityUtils.getTenantKey();
+            Map<String,String> objIdMap = list.stream().collect(Collectors.toMap(r->r.getId(), r->r.getObjectId()));
+            List<XmslWbs> wbsList = WbsRedisUtils.getWbs(objIdMap.keySet());
+            Map<String, String> map = new HashMap<>();
+            for (int i = 0; i < wbsList.size(); i++) {
+                XmslWbs temp = wbsList.get(i);
+                temp.setPtVar4(objIdMap.get(temp.getId()));
+                if(StringUtils.isBlank(temp.getPtVar4())){
+                    log.error("wbs推送p6接口，未获取到objectId,id:{},tenantKey:{}", temp.getId(),tenantKey);
+                    continue;
+                }                    
+                map.put(temp.getId(), JSONObject.toJSONString(temp));
+            }
+            String key = WbsRedisUtils.getKey(tenantKey);
+            redisUtils.hPutAll(key,map);
+            log.debug("wbs推送p6接口，成功修改{}条数据,tenantKey:{}", map.size(),tenantKey);
         }catch (Exception e){
             e.printStackTrace();
             throw new CustomBusinessException(e.getMessage());

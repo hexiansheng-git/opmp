@@ -17,4 +17,11 @@ public class WbsInfoVo {
 
     List<WbsInfoVoBean> wbsList;
 
+    public WbsInfoVo(String projectId, List<WbsInfoVoBean> wbsList) {
+        this.projectId = projectId;
+        this.wbsList = wbsList;
+    }
+
+    public WbsInfoVo() {
+    }
 }

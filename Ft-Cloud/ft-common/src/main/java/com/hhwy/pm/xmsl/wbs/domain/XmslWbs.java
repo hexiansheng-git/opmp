@@ -285,4 +285,12 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     public String toString() {
         return partCode + StringUtils.trim(name) + nodeType + listCode;
     }
+    
+    //用于前期策划所有功能判断是否有子级
+    public boolean hadChild(){
+        if(this.haveChildren == 0)
+            return false;
+        //ptvar5为1表示其子级全部为作业
+        return !StringUtils.equals(this.getPtVar5(),"1");
+    }
 }

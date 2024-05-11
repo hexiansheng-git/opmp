@@ -12,7 +12,14 @@ public enum SyncBusinessEnum {
     /** wbs推送p6修改 */
     WBSPUSHP6_UPDATE_ENUM("wbsPushP6_update"),
     /** wbs推送p6删除 */
-    WBSPUSHP6_DELETE_ENUM("wbsPushP6_delete")
+    WBSPUSHP6_DELETE_ENUM("wbsPushP6_delete"),
+
+    /** 作业推送p6删除 */
+    WORKPUSHP6_ADD_ENUM("workPushP6_add"),
+    /** 作业推送p6删除 */
+    WORKPUSHP6_UPDATE_ENUM("workPushP6_update"),
+    /** 作业推送p6删除 */
+    WORKPUSHP6_DELETE_ENUM("wbsPushP6_delete"),
     ;
 
 

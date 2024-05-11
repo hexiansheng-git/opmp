@@ -27,11 +27,20 @@ public class WbsInfoVoBean {
 
     @JsonIgnore
     private String id;
-
+    
     @JsonIgnore
     private String pid;
 
     private List<WbsInfoVoBean> children;
+
+    public WbsInfoVoBean(String wbsCode, String wbsName,String objectId) {
+        this.wbsCode = wbsCode;
+        this.wbsName = wbsName;
+        this.objectId = objectId;
+    }
+
+    public WbsInfoVoBean() {
+    }
 
     public static WbsInfoVoBean parseWbs(XmslWbs wbs){
         WbsInfoVoBean vo = new WbsInfoVoBean();
