@@ -53,8 +53,14 @@ public class SgjsMixRatioManage extends CommonBaseEntity {
     //配合比等级
     private String mixLevel;
     //计划开始日期
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @FtExcel(name = "计划开始日期", dateFormat = "yyyy年MM月dd日")
     private Date planStartDate;
     //计划结束日期
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @FtExcel(name = "计划结束日期", dateFormat = "yyyy年MM月dd日")
     private Date planEndDate;
     //是否批复
     private Integer allowFlag;
