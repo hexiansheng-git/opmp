@@ -219,6 +219,7 @@
             <if test="mixRatioName != null  and mixRatioName != ''">and `mix_ratio_name` like concat('%' , #{mixRatioName} , '%')</if>
             <if test="approveOrNot != null  and approveOrNot != ''">and `approve_or_not` = #{approveOrNot}</if>
         </where>
+        order by id desc
     </select>
     <select id="getById" resultMap="SgjsMixRatioManageResultMap">
         <include refid="selectSgjsMixRatioManageVo"/>

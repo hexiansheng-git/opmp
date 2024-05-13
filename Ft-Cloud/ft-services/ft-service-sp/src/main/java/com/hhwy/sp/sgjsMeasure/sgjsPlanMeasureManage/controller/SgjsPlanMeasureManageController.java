@@ -163,14 +163,14 @@ public class SgjsPlanMeasureManageController extends BaseController {
     }
 
     @PostMapping("/exportTemplate")
-    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:import")
+//    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:import")
     public void exportTemplate(HttpServletResponse response) throws IOException {
         FtExcelUtil<SgjsPlanMeasureManage> utils = new FtExcelUtil<>(SgjsPlanMeasureManage.class);
         utils.exportExcel(response,new ArrayList<>(),DateUtils.getDate(),"测量计划进度管理.xls");
     }
 
     @PostMapping("/importData")
-    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:import")
+//    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:import")
     public AjaxResult importData(HttpServletResponse response, MultipartFile file) throws Exception {
         FtExcelUtil<SgjsPlanMeasureManage> utils = new FtExcelUtil<>(SgjsPlanMeasureManage.class);
         List<SgjsPlanMeasureManage> list = utils.importExcel(file.getInputStream());

@@ -31,11 +31,15 @@ import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchem
 import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.warn.CommonBusiness;
 import com.hhwy.sp.common.warn.SgjsWarnRecord;
+import com.hhwy.sp.core.system.SystemApiService;
+import com.hhwy.sp.designChangeList.domain.SgjsDesignChangeManage;
 import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
+import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonAssert;
+import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -177,6 +181,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         String flowNodeMark = detailQueryVo.getFlowNodeMark();
 
         SgjsBuildSchemeReview review = sgjsBuildSchemeReviewMapper.getById(id);
+        //格式化方案类型
+        String schemeType = DictUtil.formatMultiDict("scheme_type_all",review.getSchemeType());
+        review.setSchemeType(schemeType);
         review.setFlowNodeMark(flowNodeMark);
         String schemeLevel = review.getSchemeLevel();
         if("2".equals(schemeLevel) || "3".equals(schemeLevel)){
