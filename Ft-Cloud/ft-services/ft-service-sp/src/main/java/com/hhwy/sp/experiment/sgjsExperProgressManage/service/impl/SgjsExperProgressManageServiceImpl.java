@@ -460,7 +460,9 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         for (SgjsExperProgressManage manage : recordList) {
             SgjsExperProgressManage newManage = new SgjsExperProgressManage();
             BeanUtils.copyProperties(manage, newManage);
+            newManage.setType("0");
             records.add(newManage);
+
         }
         records = TreeUtil.treeToList(recordList);
         //校验
