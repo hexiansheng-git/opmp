@@ -14,4 +14,5 @@ public class ReviewFlowNodeMark {
     public static final String FlowNodeMark8 = "8";
     public static final String FlowNodeMark9 = "9";
     public static final String FlowNodeMark10 = "10";
+    public static final String FlowNodeMark11 = "11";
 }

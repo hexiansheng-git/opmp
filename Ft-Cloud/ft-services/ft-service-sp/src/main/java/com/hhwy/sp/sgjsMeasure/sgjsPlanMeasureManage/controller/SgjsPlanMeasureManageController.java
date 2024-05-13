@@ -166,7 +166,7 @@ public class SgjsPlanMeasureManageController extends BaseController {
     @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:import")
     public void exportTemplate(HttpServletResponse response) throws IOException {
         FtExcelUtil<SgjsPlanMeasureManage> utils = new FtExcelUtil<>(SgjsPlanMeasureManage.class);
-        utils.exportExcel(response,new ArrayList<>(),DateUtils.getDate(),"测量计划进度管理");
+        utils.exportExcel(response,new ArrayList<>(),DateUtils.getDate(),"测量计划进度管理.xls");
     }
 
     @PostMapping("/importData")

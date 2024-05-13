@@ -226,7 +226,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 List<SgjsBuildSchemeStaffOpinion> staffOpinionList = sgjsBuildSchemeStaffOpinionMapper.getSgjsBuildSchemeStaffOpinionList(staffOpinionQuery);
                 staffOpinionVo.setStaffOpinionList(staffOpinionList);
                 review.setStaffOpinionVo(staffOpinionVo);
-            }else if(ReviewFlowNodeMark.FlowNodeMark7.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark8.equals(flowNodeMark)){
+            }else if(ReviewFlowNodeMark.FlowNodeMark7.equals(flowNodeMark) || ReviewFlowNodeMark.FlowNodeMark8.equals(flowNodeMark)
+                    || ReviewFlowNodeMark.FlowNodeMark11.equals(flowNodeMark) ){
                 //区域中心只能看区域中心的意见，flowNodeMark = 1
                 String flowNodeMarkParam = ReviewFlowNodeMark.FlowNodeMark7.equals(flowNodeMark)?"1":null;
                 //区域总工审批节点  汇总 3 ，4节点数据    海外事业部总工审批节点  汇总 3 ，4 ，5 ，6节点数据
