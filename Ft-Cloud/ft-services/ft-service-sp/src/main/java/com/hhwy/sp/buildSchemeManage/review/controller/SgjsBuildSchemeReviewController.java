@@ -1,5 +1,6 @@
 package com.hhwy.sp.buildSchemeManage.review.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.controller.BaseController;
@@ -14,6 +15,9 @@ import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewQueryVo;
 import com.hhwy.sp.buildSchemeManage.review.service.ISgjsBuildSchemeReviewService;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
+import com.hhwy.sp.core.system.SystemApiService;
+import com.hhwy.system.api.domain.SysDictData;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,6 +28,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -37,7 +43,8 @@ public class SgjsBuildSchemeReviewController extends BaseController {
 
     @Autowired
     private ISgjsBuildSchemeReviewService sgjsBuildSchemeReviewService;
-
+    @Autowired
+    private SystemApiService systemApiService;
 
     /**
      * 台账
@@ -76,6 +83,24 @@ public class SgjsBuildSchemeReviewController extends BaseController {
                     break;
                 }
             }
+        }
+        //格式化方案类型
+
+        List<SysDictData> list = systemApiService.selectDictDataByType("scheme_type_all");
+        Map<Long,SysDictData> dictMap = list.stream().collect(Collectors.toMap(r->r.getDictDataId(), r->r));
+        Map<String,String> map = list.stream().collect(
+                Collectors.toMap(r->{
+                            String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":dictMap.get(r.getParentId()).getDictValue()+",";
+                            return parent+r.getDictValue();
+                        }
+                        , r->{
+                            String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":dictMap.get(r.getParentId()).getDictLabel()+"/";
+                            return parent+r.getDictLabel();
+                        })
+        );
+        for (int i = 0; i < reviewList.size(); i++) {
+            String fmtStr = ObjectUtils.nvlString(map.get(reviewList.get(i).getSchemeType()),reviewList.get(i).getSchemeType());
+            reviewList.get(i).setSchemeType(fmtStr);
         }
         return getDataTableAjaxResult(reviewList);
     }
