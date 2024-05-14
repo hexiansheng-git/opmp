@@ -4,6 +4,7 @@ import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.google.common.util.concurrent.ListenableFutureTask;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
 import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -181,6 +182,8 @@ public class SgjsPlanMeasureManageController extends BaseController {
             if(temp.getRealStartDate() != null && temp.getRealEndDate() != null)
                 Assert.isTrue(temp.getRealStartDate().before(temp.getRealEndDate()),"实际开始日期必须早于实际结束日期");
             temp.setIsAdd("1");
+            temp.setId(IdWorker.createId());
+            temp.setPid(0L);
         }
         return AjaxResult.success(list);
     }
