@@ -1,5 +1,6 @@
 package com.hhwy.sp.experiment.mixRatioManage.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
@@ -49,6 +50,7 @@ public class SgjsMixRatioManageStaff extends BaseEntity {
 
     /** 提交时间 */
     @FtExcel(name = "提交时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date submitTime;
 
     /** 修改结果 */

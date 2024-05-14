@@ -6,6 +6,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -198,7 +199,10 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         }
         if("3".equals(type)){
             //查看
-            BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id,SecurityUtils.getUserName());
+            String uname = SecurityUtils.getUserName();
+            if(StringUtils.equals(review.getTaskStatus(),TaskStatus.COMPLETED.getValue()))
+                uname = null;
+            BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id,uname);
             review.setScore(reviewOpinionVo.getScore());
             review.setReviewOpinionVo(reviewOpinionVo);
         }

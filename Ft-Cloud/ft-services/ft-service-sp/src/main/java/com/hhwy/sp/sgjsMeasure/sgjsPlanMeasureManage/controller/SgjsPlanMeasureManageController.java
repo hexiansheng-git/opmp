@@ -180,6 +180,7 @@ public class SgjsPlanMeasureManageController extends BaseController {
                 Assert.isTrue(temp.getPlanStartDate().before(temp.getPlanEndDate()),"计划开始日期必须早于计划结束日期");
             if(temp.getRealStartDate() != null && temp.getRealEndDate() != null)
                 Assert.isTrue(temp.getRealStartDate().before(temp.getRealEndDate()),"实际开始日期必须早于实际结束日期");
+            temp.setIsAdd("1");
         }
         return AjaxResult.success(list);
     }
