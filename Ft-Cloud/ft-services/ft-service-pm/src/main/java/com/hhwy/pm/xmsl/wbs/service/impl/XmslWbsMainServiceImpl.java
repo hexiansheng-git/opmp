@@ -390,23 +390,28 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         try {
             result = xmslWbsMainMapper.updateWbsP6Code(list);
             xmslWbsMainMapper.updateWbsHisP6Code(list);
-            //更新redis中的数据
             String tenantKey = MySecurityUtils.getTenantKey();
-            Map<String,String> objIdMap = list.stream().collect(Collectors.toMap(r->r.getId(), r->r.getObjectId()));
-            List<XmslWbs> wbsList = WbsRedisUtils.getWbs(objIdMap.keySet());
-            Map<String, String> map = new HashMap<>();
-            for (int i = 0; i < wbsList.size(); i++) {
-                XmslWbs temp = wbsList.get(i);
-                temp.setPtVar4(objIdMap.get(temp.getId()));
-                if(StringUtils.isBlank(temp.getPtVar4())){
-                    log.error("wbs推送p6接口，未获取到objectId,id:{},tenantKey:{}", temp.getId(),tenantKey);
-                    continue;
-                }                    
-                map.put(temp.getId(), JSONObject.toJSONString(temp));
+            try{
+                //更新redis中的数据
+                Map<String,String> objIdMap = list.stream().collect(Collectors.toMap(r->r.getId(), r->r.getObjectId()));
+                List<XmslWbs> wbsList = WbsRedisUtils.getWbs(objIdMap.keySet());
+                Map<String, String> map = new HashMap<>();
+                for (int i = 0; i < wbsList.size(); i++) {
+                    XmslWbs temp = wbsList.get(i);
+                    temp.setPtVar4(objIdMap.get(temp.getId()));
+                    if(StringUtils.isBlank(temp.getPtVar4())){
+                        log.error("wbs推送p6接口，未获取到objectId,id:{},tenantKey:{}", temp.getId(),tenantKey);
+                        continue;
+                    }
+                    map.put(temp.getId(), JSONObject.toJSONString(temp));
+                }
+                String key = WbsRedisUtils.getKey(tenantKey);
+                redisUtils.hPutAll(key,map);
+                log.debug("wbs推送p6接口，成功修改{}条数据,tenantKey:{}", map.size(),tenantKey);
+            }catch(Exception e){
+                e.printStackTrace();
+                log.error("[修改wbsP6编码]更新redis失败!msg:{},tenantKey:{}", e.getMessage(),tenantKey);
             }
-            String key = WbsRedisUtils.getKey(tenantKey);
-            redisUtils.hPutAll(key,map);
-            log.debug("wbs推送p6接口，成功修改{}条数据,tenantKey:{}", map.size(),tenantKey);
         }catch (Exception e){
             e.printStackTrace();
             throw new CustomBusinessException(e.getMessage());

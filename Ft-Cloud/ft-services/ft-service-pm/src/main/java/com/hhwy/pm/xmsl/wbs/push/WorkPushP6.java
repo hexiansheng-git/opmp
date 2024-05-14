@@ -118,6 +118,7 @@ public class WorkPushP6 {
         int successCount = 0;
         try{
             Map<String,Map> createMap = new HashMap<>();
+            Map<String,String> idMap = new HashMap<>();
             //构建请求参数
             List<Map> pushList = new ArrayList<>();
             for (int i = 0; i < addList.size(); i++) {
@@ -137,6 +138,7 @@ public class WorkPushP6 {
                 }
                 if(temp.getStatus() == 0)
                     continue;
+                idMap.put(temp.getSelfCode(),temp.getId());
                 Map tempMap = ObjectUtils.toMap(
                         "id",temp.getSelfCode()
                         ,"name",temp.getName()
@@ -182,7 +184,9 @@ public class WorkPushP6 {
                     errMsgBuild.append(temp.getId()+":"+temp.getReason()+";");
                     continue;
                 }
-                successList.add(new WbsInfoVoBean(temp.getId(),temp.getName(),temp.getObjectId()));    
+                WbsInfoVoBean bean = new WbsInfoVoBean(temp.getId(),temp.getName(),temp.getObjectId());
+                bean.setId(idMap.get(bean.getWbsCode()));
+                successList.add(bean);    
             }
             successCount = successList.size();
             wbsMainService.updateP6Code(new WbsInfoVo(tenantKey,successList));

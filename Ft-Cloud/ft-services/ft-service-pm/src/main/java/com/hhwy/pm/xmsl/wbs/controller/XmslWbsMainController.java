@@ -10,10 +10,13 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.push.WbsPushP6;
+import com.hhwy.pm.xmsl.wbs.push.WorkPushP6;
 import com.hhwy.pm.xmsl.wbs.push.bean.WbsInfoVo;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
+import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.customLog.CustomBusinessType;
@@ -26,8 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author wk
@@ -42,7 +44,11 @@ public class XmslWbsMainController extends BaseController {
     @Autowired
     private IXmslWbsMainService xmslWbsMainService;
     @Autowired
+    private IXmslWbsService wbsService;
+    @Autowired
     private WbsPushP6 wbsPushP6;
+    @Autowired
+    private WorkPushP6 workPushP6;
     @Value("${spring.profiles.active}")
     private String profileActive; 
 
@@ -178,5 +184,6 @@ public class XmslWbsMainController extends BaseController {
         Long mainId = ObjectUtils.toLong(map.get("mainId"));
         xmslWbsMainService.repushP6(mainId);
         return AjaxResult.success();
+    }
     }
 }
