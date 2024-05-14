@@ -185,5 +185,4 @@ public class XmslWbsMainController extends BaseController {
         xmslWbsMainService.repushP6(mainId);
         return AjaxResult.success();
     }
-    }
 }
