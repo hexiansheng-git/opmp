@@ -474,7 +474,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
         //构建树形返回数据
         records = ListTreeUtil.formatTree(
                 records,
-                o -> o.getPid() == null,
+                o -> o.getPid() == 0,
                 (r, n) -> r.getId().equals(n.getPid()),
                 SgjsExperProgressManage::getChildren,
                 SgjsExperProgressManage::setChildren);

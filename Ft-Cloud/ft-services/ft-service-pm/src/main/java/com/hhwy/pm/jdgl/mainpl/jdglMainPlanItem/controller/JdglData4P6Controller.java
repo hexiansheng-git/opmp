@@ -41,6 +41,9 @@ public class JdglData4P6Controller {
      */
     @PostMapping("/initJdglData4P6ByThis")
     public AjaxResult initJdglData4P6ByThis() {
+        //判断当前租户"前期策划评审"三阶段是否完成，如果未完成则不需拉取
+//        String stage = qqchReviewService.getStage();
+//        Assert.isTrue(PmConstant.END_STAGE.equals(stage), "前期策划评审三阶段未结束，不能获取数据");
         return AjaxResult.success(jdglData4P6Service.initJdglData4P6ByThis());
     }
 

@@ -153,11 +153,11 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         List<JdglMainPlanItem> returnList = new ArrayList<>();
 
         //判断当前租户"前期策划评审"三阶段是否完成，如果未完成则不需拉取
-        String stage = qqchReviewService.getStage();
-        if (!PmConstant.END_STAGE.equals(stage)){
-            log.warn("根据租户拉取P6数据 - 前期策划评审三阶段未结束，不能获取数据");
-            return returnList;
-        }
+//        String stage = qqchReviewService.getStage();
+//        if (!PmConstant.END_STAGE.equals(stage)){
+//            log.warn("根据租户拉取P6数据 - 前期策划评审三阶段未结束，不能获取数据");
+//            return returnList;
+//        }
 
         System.out.println("--获取p6项目数据--租户:" + tenantKey + "--开始:" +  DateUtils.getTime());
         ProjectInfo projectInfo = getProjectInfo(tenantKey);
