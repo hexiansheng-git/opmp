@@ -50,7 +50,7 @@ public class SgjsMixRatioManageStaff extends BaseEntity {
 
     /** 提交时间 */
     @FtExcel(name = "提交时间", width = 30, dateFormat = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     private Date submitTime;
 
     /** 修改结果 */
