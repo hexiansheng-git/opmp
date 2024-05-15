@@ -42,6 +42,6 @@ public interface IJdglMainPlanService {
 
     List<JdglMainPlan> getBaseMainPlanList(String tenantKey);
 
-    JdglMainPlan getBaseMainPlanDetail(Long id);
+    JdglMainPlan getBaseMainPlanDetail(String tenantKey, Long id);
 
 }

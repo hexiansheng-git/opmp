@@ -58,14 +58,15 @@ public class JdglMainPlanController extends BaseController {
     //基线计划列表查询
     @GetMapping("/getBaseMainPlanList")
     public AjaxResult getBaseMainPlanList(@RequestParam(value = "tenantKey", required = false) String tenantKey) {
-        List<JdglMainPlan> jdglMainPlanList = jdglMainPlanService.getBaseMainPlanList(tenantKey);
+            List<JdglMainPlan> jdglMainPlanList = jdglMainPlanService.getBaseMainPlanList(tenantKey);
         return AjaxResult.success(jdglMainPlanList);
     }
 
     //基线计划详情查询
     @GetMapping("/getBaseMainPlanDetail")
-    public AjaxResult getBaseMainPlanDetail(@RequestParam("id") Long id) {
-        JdglMainPlan jdglMainPlan = jdglMainPlanService.getBaseMainPlanDetail(id);
+    public AjaxResult getBaseMainPlanDetail(@RequestParam(value = "tenantKey", required = false) String tenantKey,
+                                            @RequestParam("id") Long id) {
+        JdglMainPlan jdglMainPlan = jdglMainPlanService.getBaseMainPlanDetail(tenantKey, id);
         return AjaxResult.success(jdglMainPlan);
     }
 

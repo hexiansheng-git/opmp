@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlanQueryVO;
@@ -241,10 +242,21 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
 
     //基线计划详情查询
     @Override
-    public JdglMainPlan getBaseMainPlanDetail(Long id) {
+    public JdglMainPlan getBaseMainPlanDetail(String tenantKey, Long id) {
         JdglMainPlan query = new JdglMainPlan();
         query.setId(id);
-        return getJdglMainPlan(query);
+        if (StrUtil.isBlank(tenantKey)) {
+            return getJdglMainPlan(query);
+        } else {
+            String peek = DynamicDataSourceContextHolder.peek();
+            try {
+                DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+                return getJdglMainPlan(query);
+            }finally {
+                DynamicDataSourceContextHolder.poll();
+                DynamicDataSourceContextHolder.push(peek);
+            }
+        }
     }
 
     //基线计划列表查询
@@ -256,7 +268,7 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         } else {
             String peek = DynamicDataSourceContextHolder.peek();
             try {
-                DynamicDataSourceContextHolder.push(tenantKey);
+                DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
                 resuleList = jdglMainPlanMapper.getBaseMainPlanList();
             }finally {
                 DynamicDataSourceContextHolder.poll();
