@@ -89,6 +89,11 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
     private void workValueCalc(List<JdglWeekImagePlan> jdglWeekImagePlanList) {
         // 获取图纸复核的清单
         List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
+        viewList.stream().filter(p -> StrUtil.isBlankIfStr(p.getWbsCode()))
+                .forEach(p -> {
+                    String[] split = p.getWbsCode().split("-");
+                    p.setWbsCode(split[split.length-1]);
+                });
         // 主合同清单
         List<XmslContractList> contractList = xmslContractListService.getValidMaxVersionContractInventoryList();
         Map<String, XmslContractList> contractMap = contractList.stream().collect(Collectors.toMap(XmslContractList::getCode, v -> v, (k1, k2) -> k1));
@@ -223,6 +228,16 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
         if(CollectionUtils.isEmpty(allMainPlanItem)) {
             return jdglWeekPlanParam;
         }
+        // 获取图纸复核的清单，用于回填设计工程量
+        List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
+        viewList.stream().filter(p -> StrUtil.isBlankIfStr(p.getWbsCode()))
+                .forEach(p -> {
+                    String[] split = p.getWbsCode().split("-");
+                    p.setWbsCode(split[split.length-1]);
+                });
+        Map<String, BigDecimal> viewMap = viewList.stream()
+                .filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
+                .collect(Collectors.toMap(XmslDrawReviewList::getWbsCode, XmslDrawReviewList::getCheckNum));
 
         List<JdglMainPlanItem> jdglMainPlanItemList = new ArrayList<>();
 
@@ -268,7 +283,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
             imagePlan.setWorkCode(jdglMainPlanItem.getItemCode());
             imagePlan.setWorkName(jdglMainPlanItem.getItemName());
             imagePlan.setUnit(jdglMainPlanItem.getUnit());
-            imagePlan.setDesignQuantity(jdglMainPlanItem.getQuantity());
+            imagePlan.setDesignQuantity(viewMap.get(jdglMainPlanItem.getWbsCode()) == null ? BigDecimal.ZERO : viewMap.get(jdglMainPlanItem.getWbsCode()));
             imagePlan.setSort(jdglMainPlanItem.getSort());
             if(!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
                 JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = dayScheduleWbs4ValueList.stream().filter(vo -> jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())).findFirst().orElse(null);
@@ -297,6 +312,8 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
                 JdglWeekImagePlan imagePlan1 = returnList.stream().filter(vo -> vo.getPtVar1().equals(imagePlan.getPtVar2())).findFirst().orElse(null);
                 if(imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
             }
+            /*计算作业产值 : ∑作业挂接的清单价*复核数量*/
+            workValueCalc(returnList);
         }
 
         // 维护returnList树结构

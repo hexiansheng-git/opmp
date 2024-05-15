@@ -88,6 +88,11 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
     private void workValueCalc(List<JdglYearImagePlan> jdglYearImagePlanList) {
         // 获取图纸复核的清单
         List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
+        viewList.stream().filter(p -> StrUtil.isBlankIfStr(p.getWbsCode()))
+                .forEach(p -> {
+                    String[] split = p.getWbsCode().split("-");
+                    p.setWbsCode(split[split.length-1]);
+                });
         // 主合同清单
         List<XmslContractList> contractList = xmslContractListService.getValidMaxVersionContractInventoryList();
         Map<String, XmslContractList> contractMap = contractList.stream().collect(Collectors.toMap(XmslContractList::getCode, v -> v, (k1, k2) -> k1));
@@ -248,6 +253,18 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
             return jdglYearPlanParam;
         }
 
+        // 获取图纸复核的清单，用于回填设计工程量
+        List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
+        viewList.stream().filter(p -> StrUtil.isBlankIfStr(p.getWbsCode()))
+                .forEach(p -> {
+                    String[] split = p.getWbsCode().split("-");
+                    p.setWbsCode(split[split.length-1]);
+                });
+        Map<String, BigDecimal> viewMap = viewList.stream()
+                .filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
+                .collect(Collectors.toMap(XmslDrawReviewList::getWbsCode, XmslDrawReviewList::getCheckNum));
+
+
         List<JdglMainPlanItem> jdglMainPlanItemList = new ArrayList<>();
 
         // 获取在日期区间内的总进度计划数据
@@ -291,7 +308,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
             jdglYearImagePlan.setWorkCode(jdglMainPlanItem.getItemCode());
             jdglYearImagePlan.setWorkName(jdglMainPlanItem.getItemName());
             jdglYearImagePlan.setUnit(jdglMainPlanItem.getUnit());
-            jdglYearImagePlan.setDesignQuantity(jdglMainPlanItem.getQuantity());
+            jdglYearImagePlan.setDesignQuantity(viewMap.get(jdglMainPlanItem.getWbsCode()) == null ? BigDecimal.ZERO : viewMap.get(jdglMainPlanItem.getWbsCode()));
             jdglYearImagePlan.setSort(jdglMainPlanItem.getSort());
             if(!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
                 JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = dayScheduleWbs4ValueList.stream().filter(vo -> jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())).findFirst().orElse(null);
@@ -320,6 +337,9 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
                 JdglYearImagePlan jdglYearImagePlan = returnList.stream().filter(vo -> vo.getPtVar1().equals(yearImagePlan.getPtVar2())).findFirst().orElse(null);
                 if(jdglYearImagePlan != null) yearImagePlan.setPid(jdglYearImagePlan.getId());
             }
+
+            /*计算作业产值 : ∑作业挂接的清单价*复核数量*/
+            workValueCalc(returnList);
         }
 
         // 维护returnList树结构

@@ -245,6 +245,11 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
         }
         // 获取图纸复核的清单，用于回填设计工程量
         List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
+        viewList.stream().filter(p -> StrUtil.isBlankIfStr(p.getWbsCode()))
+                .forEach(p -> {
+                    String[] split = p.getWbsCode().split("-");
+                    p.setWbsCode(split[split.length-1]);
+                });
         Map<String, BigDecimal> viewMap = viewList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
                 .collect(Collectors.toMap(XmslDrawReviewList::getWbsCode, XmslDrawReviewList::getCheckNum));
@@ -321,6 +326,9 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
                 JdglMonthImagePlan imagePlan1 = returnList.stream().filter(vo -> vo.getPtVar1().equals(imagePlan.getPtVar2())).findFirst().orElse(null);
                 if (imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
             }
+
+            /*计算作业产值 : ∑作业挂接的清单价*复核数量*/
+            workValueCalc(returnList);
         }
 
         // 维护returnList树结构
