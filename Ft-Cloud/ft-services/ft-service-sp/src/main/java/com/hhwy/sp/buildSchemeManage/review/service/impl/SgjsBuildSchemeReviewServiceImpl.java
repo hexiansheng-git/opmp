@@ -336,9 +336,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         List<String> reviewStaffIdList = staffList.stream().map(SgjsBuildSchemeReviewStaff::getReviewStaffId).collect(Collectors.toList());
         List<SgjsBuildSchemeStaffOpinion> staffOpinionList = sgjsBuildSchemeStaffOpinionMapper.getListByReviewStaffIdList(reviewId, reviewStaffIdList);
         Map<String, List<SgjsBuildSchemeStaffOpinion>> staffOpinionMap = staffOpinionList.stream().collect(Collectors.groupingBy(SgjsBuildSchemeStaffOpinion::getReviewStaffId));
-//        ProjectDto projectDto = pmServiceApi.getProjectDto();
-        ProjectDto  projectDto = new ProjectDto();
-        projectDto.setRegionName("");
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
         for (SgjsBuildSchemeReviewStaff staff : staffList) {
             BuildSchemeStaffOpinionGatherVo staffOpinionGatherVo = new BuildSchemeStaffOpinionGatherVo();
             staffOpinionGatherVo.setReviewStaffName(staff.getReviewStaffName());
