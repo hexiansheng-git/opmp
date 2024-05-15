@@ -2,6 +2,8 @@ package com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.impl;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
@@ -15,6 +17,7 @@ import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemPreServ
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.el.lang.ELArithmetic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -246,8 +249,20 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
 
     //基线计划列表查询
     @Override
-    public List<JdglMainPlan> getBaseMainPlanList() {
-        List<JdglMainPlan> resuleList = jdglMainPlanMapper.getBaseMainPlanList();
+    public List<JdglMainPlan> getBaseMainPlanList(String tenantKey) {
+        List<JdglMainPlan> resuleList = null;
+        if (StrUtil.isBlank(tenantKey)) {
+            resuleList = jdglMainPlanMapper.getBaseMainPlanList();
+        } else {
+            String peek = DynamicDataSourceContextHolder.peek();
+            try {
+                DynamicDataSourceContextHolder.push(tenantKey);
+                resuleList = jdglMainPlanMapper.getBaseMainPlanList();
+            }finally {
+                DynamicDataSourceContextHolder.poll();
+                DynamicDataSourceContextHolder.push(peek);
+            }
+        }
         resuleList.forEach(p -> {
             int i = Integer.parseInt(p.getPtVar2());
             if (i < 10) {

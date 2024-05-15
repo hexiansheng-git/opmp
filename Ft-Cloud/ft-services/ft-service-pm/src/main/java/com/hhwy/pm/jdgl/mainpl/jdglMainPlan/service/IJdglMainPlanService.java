@@ -40,7 +40,7 @@ public interface IJdglMainPlanService {
 
     void updateJdglBaseMainPlan();
 
-    List<JdglMainPlan> getBaseMainPlanList();
+    List<JdglMainPlan> getBaseMainPlanList(String tenantKey);
 
     JdglMainPlan getBaseMainPlanDetail(Long id);
 

@@ -57,8 +57,8 @@ public class JdglMainPlanController extends BaseController {
 
     //基线计划列表查询
     @GetMapping("/getBaseMainPlanList")
-    public AjaxResult getBaseMainPlanList() {
-        List<JdglMainPlan> jdglMainPlanList = jdglMainPlanService.getBaseMainPlanList();
+    public AjaxResult getBaseMainPlanList(@RequestParam(value = "tenantKey", required = false) String tenantKey) {
+        List<JdglMainPlan> jdglMainPlanList = jdglMainPlanService.getBaseMainPlanList(tenantKey);
         return AjaxResult.success(jdglMainPlanList);
     }
 
