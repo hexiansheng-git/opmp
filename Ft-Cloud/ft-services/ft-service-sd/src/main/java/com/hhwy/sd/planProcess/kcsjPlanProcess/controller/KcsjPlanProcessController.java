@@ -91,10 +91,15 @@ public class KcsjPlanProcessController extends BaseController {
             i += kcsjPlanProcessService.updateKcsjPlanProcessList(treeList);
         }
         List<Long> delIdList = kcsjPlanProcess4Update.getDelIdList();
-        if(CollectionUtils.isNotEmpty(delIdList)) {
+//        if(CollectionUtils.isNotEmpty(delIdList)) {
+        try{
             i += kcsjPlanProcessService.deleteKcsjPlanProcessByPks(delIdList);
+        }catch(IllegalArgumentException e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
         }
-        return toAjax(i);
+//        }
+        return AjaxResult.success("");
     }
 
     @PreAuthorize(hasPermi = "kcsjPlanProcess:remove")
