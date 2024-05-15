@@ -95,6 +95,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     private ISysSyncInfoService4Sp sysSyncInfoService4Sp;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private SystemApiService systemApiService;
 
 
     public SgjsBuildSchemeReview getSgjsBuildSchemeReview(SgjsBuildSchemeReview sgjsBuildSchemeReview) {
@@ -861,9 +863,27 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         if(CollectionUtils.isEmpty(filterList)){
             return new ArrayList<>();
         }
-        List<SgjsBuildSchemeReview> reviewList = sgjsBuildSchemeReviewMapper.getListByQueryVo(new BuildSchemeReviewQueryVo());
-        Set<String> schemeNumSet = reviewList.stream().map(SgjsBuildSchemeReview::getSchemeNum).collect(Collectors.toSet());
-        return filterList.stream().filter(sgjsBuildSchemeList -> !schemeNumSet.contains(sgjsBuildSchemeList.getSchemeNum())).collect(Collectors.toList());
+        List<SgjsBuildSchemeReview> reviewList1 = sgjsBuildSchemeReviewMapper.getListByQueryVo(new BuildSchemeReviewQueryVo());
+        Set<String> schemeNumSet = reviewList1.stream().map(SgjsBuildSchemeReview::getSchemeNum).collect(Collectors.toSet());
+        List<SgjsBuildSchemeList> resultList =  filterList.stream().filter(sgjsBuildSchemeList -> !schemeNumSet.contains(sgjsBuildSchemeList.getSchemeNum())).collect(Collectors.toList());
+        //格式化方案类型
+        List<SysDictData> list = systemApiService.selectDictDataByType("scheme_type_all");
+        Map<Long,SysDictData> dictMap = list.stream().collect(Collectors.toMap(r->r.getDictDataId(), r->r));
+        Map<String,String> map = list.stream().collect(
+                Collectors.toMap(r->{
+                            String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":dictMap.get(r.getParentId()).getDictValue()+",";
+                            return parent+r.getDictValue();
+                        }
+                        , r->{
+                            String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":dictMap.get(r.getParentId()).getDictLabel()+"/";
+                            return parent+r.getDictLabel();
+                        })
+        );
+        for (int i = 0; i < resultList.size(); i++) {
+            String fmtStr = ObjectUtils.nvlString(map.get(resultList.get(i).getSchemeType()),resultList.get(i).getSchemeType());
+            resultList.get(i).setSchemeType(fmtStr);
+        }
+        return resultList;
     }
 
     @Override
