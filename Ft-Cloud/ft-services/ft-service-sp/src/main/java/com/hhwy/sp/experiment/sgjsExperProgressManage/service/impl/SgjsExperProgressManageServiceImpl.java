@@ -374,7 +374,7 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
                 sgjsExperProgressManage.setDataSource("0");
                 newInsertList.add(sgjsExperProgressManage);
                 //处理子节点，将当前数据的子节点加入集合
-                handleChildren(newInsertList, sgjsExperProgressManage);
+                //handleChildren(newInsertList, sgjsExperProgressManage);
             }
             sgjsExperProgressManageMapper.insertSgjsExperProgressManageList(newInsertList);
         }
@@ -461,10 +461,13 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             SgjsExperProgressManage newManage = new SgjsExperProgressManage();
             BeanUtils.copyProperties(manage, newManage);
             newManage.setType("0");
+            if (newManage.getPid()==null){
+                newManage.setPid(0L);
+            }
             records.add(newManage);
 
         }
-        records = TreeUtil.treeToList(recordList);
+        records = TreeUtil.treeToList(records);
         //校验
         for (SgjsExperProgressManage detail : records) {
             if (StringUtils.isEmpty(detail.getSerialNumber())) {
