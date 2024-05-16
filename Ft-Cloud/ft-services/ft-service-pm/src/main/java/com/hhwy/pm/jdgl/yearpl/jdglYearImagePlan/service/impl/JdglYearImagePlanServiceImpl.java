@@ -72,7 +72,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
     public List<JdglYearImagePlan> getJdglYearImagePlanList(JdglYearImagePlan jdglYearImagePlan) {
         Long pid = jdglYearImagePlan.getPid();
         List<JdglYearImagePlan> jdglYearImagePlanList = jdglYearImagePlanMapper.getJdglYearImagePlanList(jdglYearImagePlan);
-        if(CollectionUtils.isEmpty(jdglYearImagePlanList)) {
+        if (CollectionUtils.isEmpty(jdglYearImagePlanList)) {
             return jdglYearImagePlanList;
         }
         /*计算作业产值 : ∑作业挂接的清单价*复核数量*/
@@ -88,7 +88,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
         viewList.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
                 .forEach(p -> {
                     String[] split = p.getWbsCode().split("-");
-                    p.setWbsCode(split[split.length-1]);
+                    p.setWbsCode(split[split.length - 1]);
                 });
         // 主合同清单
         List<XmslContractList> contractList = xmslContractListService.getValidMaxVersionContractInventoryList();
@@ -111,7 +111,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
                     //得到清单单价，优先使用变更后的单价
                     BigDecimal price = xmslContractList.getChangeUnitPrice() == null
                             ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
-                    if (checkNum != null && price != null){
+                    if (checkNum != null && price != null) {
                         workValue = workValue.add(checkNum.multiply(price));
                     }
                 }
@@ -131,14 +131,14 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
         List<JdglYearImagePlan> jdglYearImagePlanList = jdglYearImagePlanMapper.getJdglYearImagePlanList(jdglYearImagePlanParam);
 
-        if(jdglYearImagePlanParam.getPid() == null) {
+        if (jdglYearImagePlanParam.getPid() == null) {
             jdglYearImagePlanList = jdglYearImagePlanList.stream().filter(vo -> vo.getPid() == null).collect(Collectors.toList());
         }
 
 
-        if(!CollectionUtils.isEmpty(jdglYearImagePlanList)) {
+        if (!CollectionUtils.isEmpty(jdglYearImagePlanList)) {
             for (JdglYearImagePlan jdglYearImagePlan : jdglYearImagePlanList) {
-                if(jdglYearImagePlan.getWorkCode().equals(jdglYearImagePlan.getWbsCode())) {
+                if (jdglYearImagePlan.getWorkCode().equals(jdglYearImagePlan.getWbsCode())) {
                     jdglYearImagePlan.setHaveChildren(1);
                 } else {
                     jdglYearImagePlan.setHaveChildren(0);
@@ -165,7 +165,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
     @Transactional
     public int insertJdglYearImagePlanList(List<JdglYearImagePlan> jdglYearImagePlanList) {
-        if(CollectionUtils.isEmpty(jdglYearImagePlanList)) {
+        if (CollectionUtils.isEmpty(jdglYearImagePlanList)) {
             return 0;
         }
         Long yearPlanId = jdglYearImagePlanList.get(0).getYearPlanId();
@@ -189,7 +189,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
     @Transactional
     public int updateJdglYearImagePlanList(List<JdglYearImagePlan> jdglYearImagePlanList) {
-        if(!CollectionUtils.isEmpty(jdglYearImagePlanList)) {
+        if (!CollectionUtils.isEmpty(jdglYearImagePlanList)) {
 //            List<JdglYearImagePlan> jdglYearImagePlanList1 = TreeUtil.treeToList(jdglYearImagePlanList);
             Long yearPlanId = jdglYearImagePlanList.get(0).getYearPlanId();
             for (JdglYearImagePlan jdglYearImagePlan : jdglYearImagePlanList) {
@@ -225,6 +225,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
     /**
      * 从总进度计划获取数据&未完&
+     *
      * @param jdglYearPlanParam
      * @return
      */
@@ -234,7 +235,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
         // 年份
         String year = jdglYearPlanParam.getYear();
 
-        if(StringUtils.isEmpty(year)) {
+        if (StringUtils.isEmpty(year)) {
             throw new RuntimeException("传参异常!");
         }
 
@@ -246,17 +247,17 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
         // 获取所有总进度计划数据
         List<JdglMainPlanItem> allMainPlanItem = jdglMainPlanItemService.getJdglMainPlanItemByMainPlanId(usingJdglMainPlan.getId());
-        if(CollectionUtils.isEmpty(allMainPlanItem)) {
+        if (CollectionUtils.isEmpty(allMainPlanItem)) {
             return jdglYearPlanParam;
         }
 
         // 获取图纸复核的清单，用于回填设计工程量
-        List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
-        viewList.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
-                .forEach(p -> {
-                    String[] split = p.getWbsCode().split("-");
-                    p.setWbsCode(split[split.length-1]);
-                });
+        List<XmslDrawReviewList> viewListAll = drawReviewListService.getFullEffectList();
+        List<XmslDrawReviewList> viewList = viewListAll.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()) && p.getImageProgress().equals("1")).collect(Collectors.toList());
+        viewList.forEach(p -> {
+            String[] split = p.getWbsCode().split("-");
+            p.setWbsCode(split[split.length - 1]);
+        });
         Map<String, BigDecimal> viewMap = viewList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
                 .collect(Collectors.groupingBy(XmslDrawReviewList::getWbsCode, Collectors.reducing(BigDecimal.ZERO, XmslDrawReviewList::getCheckNum, BigDecimal::add)));
@@ -267,7 +268,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
         // 获取在日期区间内的总进度计划数据
         List<JdglMainPlanItem> listByDateRange = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(dateRange.get("start"), dateRange.get("end"));
 
-        if(CollectionUtils.isEmpty(listByDateRange)) {
+        if (CollectionUtils.isEmpty(listByDateRange)) {
             return jdglYearPlanParam;
         }
 
@@ -281,10 +282,10 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
         for (JdglMainPlanItem jdglMainPlanItem : listByDateRange) {
             String ancestors = jdglMainPlanItem.getAncestors();
             List<JdglMainPlanItem> collect = allMainPlanItem.stream().filter(vo -> ancestors.contains(vo.getAncestors())).collect(Collectors.toList());
-            if(!CollectionUtils.isEmpty(collect)) jdglMainPlanItemList.addAll(collect);
+            if (!CollectionUtils.isEmpty(collect)) jdglMainPlanItemList.addAll(collect);
         }
 
-        if(CollectionUtils.isEmpty(jdglMainPlanItemList)){
+        if (CollectionUtils.isEmpty(jdglMainPlanItemList)) {
             return jdglYearPlanParam;
         }
 
@@ -307,32 +308,34 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
             jdglYearImagePlan.setUnit(jdglMainPlanItem.getUnit());
             jdglYearImagePlan.setDesignQuantity(viewMap.get(jdglMainPlanItem.getItemCode()) == null ? BigDecimal.ZERO : viewMap.get(jdglMainPlanItem.getItemCode()));
             jdglYearImagePlan.setSort(jdglMainPlanItem.getSort());
-            if(!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
+            if (!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
                 JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = dayScheduleWbs4ValueList.stream().filter(vo -> jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())).findFirst().orElse(null);
-                if(jdglDayScheduleWbs4Value != null) {
+                if (jdglDayScheduleWbs4Value != null) {
                     BigDecimal thisQuantity = jdglDayScheduleWbs4Value.getThisQuantity();
                     jdglYearImagePlan.setTotalCompQuantity(thisQuantity);
-                    if(thisQuantity != null && jdglMainPlanItem.getQuantity() != null) {
+                    if (thisQuantity != null && jdglMainPlanItem.getQuantity() != null) {
                         jdglYearImagePlan.setRemainQuantity(jdglMainPlanItem.getQuantity().subtract(thisQuantity));
                     }
                 }
             }
-            if(jdglYearImagePlan.getTotalCompQuantity() == null && jdglYearImagePlan.getDesignQuantity() != null) jdglYearImagePlan.setTotalCompQuantity(BigDecimal.ZERO);
-            if(jdglYearImagePlan.getRemainQuantity() == null) jdglYearImagePlan.setRemainQuantity(jdglYearImagePlan.getDesignQuantity());
+            if (jdglYearImagePlan.getTotalCompQuantity() == null && jdglYearImagePlan.getDesignQuantity() != null)
+                jdglYearImagePlan.setTotalCompQuantity(BigDecimal.ZERO);
+            if (jdglYearImagePlan.getRemainQuantity() == null)
+                jdglYearImagePlan.setRemainQuantity(jdglYearImagePlan.getDesignQuantity());
             jdglYearImagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
             jdglYearImagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
             jdglYearImagePlan.setWbsCode(jdglMainPlanItem.getWbsCode());
             jdglYearImagePlan.setWbsName(jdglMainPlanItem.getWbsName());
-    //                jdglYearImagePlan.setWbsId();
+            //                jdglYearImagePlan.setWbsId();
             jdglYearImagePlan.setResponsePerson(jdglMainPlanItem.getExecuter());
             jdglYearImagePlan.setResponsePersonId(jdglMainPlanItem.getExecuterId());
             returnList.add(jdglYearImagePlan);
         }
 
-        if(!CollectionUtils.isEmpty(returnList)) {
+        if (!CollectionUtils.isEmpty(returnList)) {
             for (JdglYearImagePlan yearImagePlan : returnList) {
                 JdglYearImagePlan jdglYearImagePlan = returnList.stream().filter(vo -> vo.getPtVar1().equals(yearImagePlan.getPtVar2())).findFirst().orElse(null);
-                if(jdglYearImagePlan != null) yearImagePlan.setPid(jdglYearImagePlan.getId());
+                if (jdglYearImagePlan != null) yearImagePlan.setPid(jdglYearImagePlan.getId());
             }
 
             /*计算作业产值 : ∑作业挂接的清单价*复核数量*/
@@ -345,7 +348,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
         jdglYearPlanParam.setJdglYearImagePlanList(build);
 
         // 修改年进度计划主表引用总体计划的版本号
-        if(usingJdglMainPlan != null) {
+        if (usingJdglMainPlan != null) {
             jdglYearPlanParam.setThisTotalVersion(usingJdglMainPlan.getVersion());
         }
 

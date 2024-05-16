@@ -77,7 +77,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
     public List<JdglQuarterImagePlan> getJdglQuarterImagePlanList(JdglQuarterImagePlan jdglQuarterImagePlan) {
         Long pid = jdglQuarterImagePlan.getPid();
         List<JdglQuarterImagePlan> jdglQuarterImagePlanList = jdglQuarterImagePlanMapper.getJdglQuarterImagePlanList(jdglQuarterImagePlan);
-        if(CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
+        if (CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
             return jdglQuarterImagePlanList;
         }
         /*计算作业产值 : ∑作业挂接的清单价*复核数量*/
@@ -93,7 +93,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
         viewList.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
                 .forEach(p -> {
                     String[] split = p.getWbsCode().split("-");
-                    p.setWbsCode(split[split.length-1]);
+                    p.setWbsCode(split[split.length - 1]);
                 });
         // 主合同清单
         List<XmslContractList> contractList = xmslContractListService.getValidMaxVersionContractInventoryList();
@@ -116,7 +116,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
                     //得到清单单价，优先使用变更后的单价
                     BigDecimal price = xmslContractList.getChangeUnitPrice() == null
                             ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
-                    if (checkNum != null && price != null){
+                    if (checkNum != null && price != null) {
                         workValue = workValue.add(checkNum.multiply(price));
                     }
                 }
@@ -147,7 +147,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
 
     @Transactional
     public int insertJdglQuarterImagePlanList(List<JdglQuarterImagePlan> jdglQuarterImagePlanList) {
-        if(CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
+        if (CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
             return 0;
         }
         Long planId = jdglQuarterImagePlanList.get(0).getPlanId();
@@ -171,7 +171,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
 
     @Transactional
     public int updateJdglQuarterImagePlanList(List<JdglQuarterImagePlan> jdglQuarterImagePlanList) {
-        if(!CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
+        if (!CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
 //            List<JdglQuarterImagePlan> jdglQuarterImagePlans = TreeUtil.treeToList(jdglQuarterImagePlanList);
             Long planId = jdglQuarterImagePlanList.get(0).getPlanId();
 
@@ -207,6 +207,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
 
     /**
      * 从总进度计划获取数据&未完&
+     *
      * @param jdglQuarterPlanParam
      * @return
      */
@@ -216,7 +217,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
         String year = jdglQuarterPlanParam.getYear();
         String quarter = jdglQuarterPlanParam.getQuarter();
 
-        if(StringUtils.isEmpty(year)||StringUtils.isEmpty(quarter)) {
+        if (StringUtils.isEmpty(year) || StringUtils.isEmpty(quarter)) {
             throw new RuntimeException("传参异常!");
         }
 
@@ -228,16 +229,16 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
 
         // 获取所有总进度计划数据
         List<JdglMainPlanItem> allMainPlanItem = jdglMainPlanItemService.getJdglMainPlanItemByMainPlanId(usingJdglMainPlan.getId());
-        if(CollectionUtils.isEmpty(allMainPlanItem)) {
+        if (CollectionUtils.isEmpty(allMainPlanItem)) {
             return jdglQuarterPlanParam;
         }
         // 获取图纸复核的清单，用于回填设计工程量
-        List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
-        viewList.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
-                .forEach(p -> {
-                    String[] split = p.getWbsCode().split("-");
-                    p.setWbsCode(split[split.length-1]);
-                });
+        List<XmslDrawReviewList> viewListAll = drawReviewListService.getFullEffectList();
+        List<XmslDrawReviewList> viewList = viewListAll.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()) && p.getImageProgress().equals("1")).collect(Collectors.toList());
+        viewList.forEach(p -> {
+            String[] split = p.getWbsCode().split("-");
+            p.setWbsCode(split[split.length - 1]);
+        });
         Map<String, BigDecimal> viewMap = viewList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
                 .collect(Collectors.groupingBy(XmslDrawReviewList::getWbsCode, Collectors.reducing(BigDecimal.ZERO, XmslDrawReviewList::getCheckNum, BigDecimal::add)));
@@ -248,7 +249,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
         // 获取在日期区间内的总进度计划数据
         List<JdglMainPlanItem> listByDateRange = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(dateRange.get("start"), dateRange.get("end"));
 
-        if(CollectionUtils.isEmpty(listByDateRange)) {
+        if (CollectionUtils.isEmpty(listByDateRange)) {
             return jdglQuarterPlanParam;
         }
 
@@ -262,10 +263,10 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
         for (JdglMainPlanItem jdglMainPlanItem : listByDateRange) {
             String ancestors = jdglMainPlanItem.getAncestors();
             List<JdglMainPlanItem> collect = allMainPlanItem.stream().filter(vo -> ancestors.contains(vo.getAncestors())).collect(Collectors.toList());
-            if(!CollectionUtils.isEmpty(collect)) jdglMainPlanItemList.addAll(collect);
+            if (!CollectionUtils.isEmpty(collect)) jdglMainPlanItemList.addAll(collect);
         }
 
-        if(CollectionUtils.isEmpty(jdglMainPlanItemList)){
+        if (CollectionUtils.isEmpty(jdglMainPlanItemList)) {
             return jdglQuarterPlanParam;
         }
 
@@ -288,18 +289,20 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
             jdglQuarterImagePlan.setUnit(jdglMainPlanItem.getUnit());
             jdglQuarterImagePlan.setDesignQuantity(viewMap.get(jdglMainPlanItem.getItemCode()) == null ? BigDecimal.ZERO : viewMap.get(jdglMainPlanItem.getItemCode()));
             jdglQuarterImagePlan.setSort(jdglMainPlanItem.getSort());
-            if(!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
+            if (!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
                 JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = dayScheduleWbs4ValueList.stream().filter(vo -> jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())).findFirst().orElse(null);
-                if(jdglDayScheduleWbs4Value != null) {
+                if (jdglDayScheduleWbs4Value != null) {
                     BigDecimal thisQuantity = jdglDayScheduleWbs4Value.getThisQuantity();
                     jdglQuarterImagePlan.setTotalCompQuantity(thisQuantity);
-                    if(thisQuantity != null && jdglMainPlanItem.getQuantity() != null) {
+                    if (thisQuantity != null && jdglMainPlanItem.getQuantity() != null) {
                         jdglQuarterImagePlan.setRemainQuantity(jdglMainPlanItem.getQuantity().subtract(thisQuantity));
                     }
                 }
             }
-            if(jdglQuarterImagePlan.getTotalCompQuantity() == null && jdglQuarterImagePlan.getDesignQuantity() != null) jdglQuarterImagePlan.setTotalCompQuantity(BigDecimal.ZERO);
-            if(jdglQuarterImagePlan.getRemainQuantity() == null) jdglQuarterImagePlan.setRemainQuantity(jdglQuarterImagePlan.getDesignQuantity());
+            if (jdglQuarterImagePlan.getTotalCompQuantity() == null && jdglQuarterImagePlan.getDesignQuantity() != null)
+                jdglQuarterImagePlan.setTotalCompQuantity(BigDecimal.ZERO);
+            if (jdglQuarterImagePlan.getRemainQuantity() == null)
+                jdglQuarterImagePlan.setRemainQuantity(jdglQuarterImagePlan.getDesignQuantity());
             jdglQuarterImagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
             jdglQuarterImagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
             jdglQuarterImagePlan.setWbsCode(jdglMainPlanItem.getWbsCode());
@@ -310,10 +313,10 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
             returnList.add(jdglQuarterImagePlan);
         }
 
-        if(!CollectionUtils.isEmpty(returnList)) {
+        if (!CollectionUtils.isEmpty(returnList)) {
             for (JdglQuarterImagePlan imagePlan : returnList) {
                 JdglQuarterImagePlan imagePlan1 = returnList.stream().filter(vo -> vo.getPtVar1().equals(imagePlan.getPtVar2())).findFirst().orElse(null);
-                if(imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
+                if (imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
             }
 
             /*计算作业产值 : ∑作业挂接的清单价*复核数量*/
@@ -326,7 +329,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
 
 
         // 修改年进度计划主表引用总体计划的版本号
-        if(usingJdglMainPlan != null) {
+        if (usingJdglMainPlan != null) {
             jdglQuarterPlanParam.setThisTotalVersion(usingJdglMainPlan.getVersion());
         }
 

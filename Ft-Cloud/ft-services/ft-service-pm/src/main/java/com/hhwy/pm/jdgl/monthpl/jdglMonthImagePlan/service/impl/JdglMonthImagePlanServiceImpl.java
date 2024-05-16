@@ -92,7 +92,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
         viewList.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
                 .forEach(p -> {
                     String[] split = p.getWbsCode().split("-");
-                    p.setWbsCode(split[split.length-1]);
+                    p.setWbsCode(split[split.length - 1]);
                 });
         // 主合同清单
         List<XmslContractList> contractList = xmslContractListService.getValidMaxVersionContractInventoryList();
@@ -249,12 +249,12 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
             return jdglMonthPlanParam;
         }
         // 获取图纸复核的清单，用于回填设计工程量
-        List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
-        viewList.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
-                .forEach(p -> {
-                    String[] split = p.getWbsCode().split("-");
-                    p.setWbsCode(split[split.length-1]);
-                });
+        List<XmslDrawReviewList> viewListAll = drawReviewListService.getFullEffectList();
+        List<XmslDrawReviewList> viewList = viewListAll.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()) && p.getImageProgress().equals("1")).collect(Collectors.toList());
+        viewList.forEach(p -> {
+            String[] split = p.getWbsCode().split("-");
+            p.setWbsCode(split[split.length - 1]);
+        });
         Map<String, BigDecimal> viewMap = viewList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
                 .collect(Collectors.groupingBy(XmslDrawReviewList::getWbsCode, Collectors.reducing(BigDecimal.ZERO, XmslDrawReviewList::getCheckNum, BigDecimal::add)));

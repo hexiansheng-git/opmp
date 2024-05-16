@@ -76,7 +76,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
     public List<JdglWeekImagePlan> getJdglWeekImagePlanList(JdglWeekImagePlan jdglWeekImagePlan) {
         Long pid = jdglWeekImagePlan.getPid();
         List<JdglWeekImagePlan> jdglWeekImagePlanList = jdglWeekImagePlanMapper.getJdglWeekImagePlanList(jdglWeekImagePlan);
-        if(CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
+        if (CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
             return jdglWeekImagePlanList;
         }
         /*计算作业产值 : ∑作业挂接的清单价*复核数量*/
@@ -92,7 +92,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
         viewList.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
                 .forEach(p -> {
                     String[] split = p.getWbsCode().split("-");
-                    p.setWbsCode(split[split.length-1]);
+                    p.setWbsCode(split[split.length - 1]);
                 });
         // 主合同清单
         List<XmslContractList> contractList = xmslContractListService.getValidMaxVersionContractInventoryList();
@@ -115,7 +115,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
                     //得到清单单价，优先使用变更后的单价
                     BigDecimal price = xmslContractList.getChangeUnitPrice() == null
                             ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
-                    if (checkNum != null && price != null){
+                    if (checkNum != null && price != null) {
                         workValue = workValue.add(checkNum.multiply(price));
                     }
                 }
@@ -147,7 +147,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
 
     @Transactional
     public int insertJdglWeekImagePlanList(List<JdglWeekImagePlan> jdglWeekImagePlanList) {
-        if(CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
+        if (CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
             return 0;
         }
         Long planId = jdglWeekImagePlanList.get(0).getPlanId();
@@ -170,7 +170,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
 
     @Transactional
     public int updateJdglWeekImagePlanList(List<JdglWeekImagePlan> jdglWeekImagePlanList) {
-        if(!CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
+        if (!CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
             Long planId = jdglWeekImagePlanList.get(0).getPlanId();
             for (JdglWeekImagePlan jdglWeekImagePlan : jdglWeekImagePlanList) {
                 jdglWeekImagePlan.setUpdateUser(SecurityUtils.getUserName());
@@ -204,6 +204,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
 
     /**
      * 从总进度计划获取数据&未完&
+     *
      * @param jdglWeekPlanParam
      * @return
      */
@@ -213,7 +214,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
         String year = jdglWeekPlanParam.getYear();
         String week = jdglWeekPlanParam.getWeek();
 
-        if(StringUtils.isEmpty(year)||StringUtils.isEmpty(week)) {
+        if (StringUtils.isEmpty(year) || StringUtils.isEmpty(week)) {
             throw new RuntimeException("传参异常!");
         }
 
@@ -225,16 +226,16 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
 
         // 获取所有总进度计划数据
         List<JdglMainPlanItem> allMainPlanItem = jdglMainPlanItemService.getJdglMainPlanItemByMainPlanId(usingJdglMainPlan.getId());
-        if(CollectionUtils.isEmpty(allMainPlanItem)) {
+        if (CollectionUtils.isEmpty(allMainPlanItem)) {
             return jdglWeekPlanParam;
         }
         // 获取图纸复核的清单，用于回填设计工程量
-        List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
-        viewList.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
-                .forEach(p -> {
-                    String[] split = p.getWbsCode().split("-");
-                    p.setWbsCode(split[split.length-1]);
-                });
+        List<XmslDrawReviewList> viewListAll = drawReviewListService.getFullEffectList();
+        List<XmslDrawReviewList> viewList = viewListAll.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()) && p.getImageProgress().equals("1")).collect(Collectors.toList());
+        viewList.forEach(p -> {
+            String[] split = p.getWbsCode().split("-");
+            p.setWbsCode(split[split.length - 1]);
+        });
         Map<String, BigDecimal> viewMap = viewList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
                 .collect(Collectors.groupingBy(XmslDrawReviewList::getWbsCode, Collectors.reducing(BigDecimal.ZERO, XmslDrawReviewList::getCheckNum, BigDecimal::add)));
@@ -244,7 +245,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
         // 获取在日期区间内的总进度计划数据
         List<JdglMainPlanItem> listByDateRange = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(dateRange.get("start"), dateRange.get("end"));
 
-        if(CollectionUtils.isEmpty(listByDateRange)) {
+        if (CollectionUtils.isEmpty(listByDateRange)) {
             return jdglWeekPlanParam;
         }
 
@@ -258,10 +259,10 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
         for (JdglMainPlanItem jdglMainPlanItem : listByDateRange) {
             String ancestors = jdglMainPlanItem.getAncestors();
             List<JdglMainPlanItem> collect = allMainPlanItem.stream().filter(vo -> ancestors.contains(vo.getAncestors())).collect(Collectors.toList());
-            if(!CollectionUtils.isEmpty(collect)) jdglMainPlanItemList.addAll(collect);
+            if (!CollectionUtils.isEmpty(collect)) jdglMainPlanItemList.addAll(collect);
         }
 
-        if(CollectionUtils.isEmpty(jdglMainPlanItemList)){
+        if (CollectionUtils.isEmpty(jdglMainPlanItemList)) {
             return jdglWeekPlanParam;
         }
 
@@ -285,18 +286,19 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
             imagePlan.setUnit(jdglMainPlanItem.getUnit());
             imagePlan.setDesignQuantity(viewMap.get(jdglMainPlanItem.getItemCode()) == null ? BigDecimal.ZERO : viewMap.get(jdglMainPlanItem.getItemCode()));
             imagePlan.setSort(jdglMainPlanItem.getSort());
-            if(!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
+            if (!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
                 JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = dayScheduleWbs4ValueList.stream().filter(vo -> jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())).findFirst().orElse(null);
-                if(jdglDayScheduleWbs4Value != null) {
+                if (jdglDayScheduleWbs4Value != null) {
                     BigDecimal thisQuantity = jdglDayScheduleWbs4Value.getThisQuantity();
                     imagePlan.setTotalCompQuantity(thisQuantity);
-                    if(thisQuantity != null && jdglMainPlanItem.getQuantity() != null) {
+                    if (thisQuantity != null && jdglMainPlanItem.getQuantity() != null) {
                         imagePlan.setRemainQuantity(jdglMainPlanItem.getQuantity().subtract(thisQuantity));
                     }
                 }
             }
-            if(imagePlan.getTotalCompQuantity() == null && imagePlan.getDesignQuantity() != null) imagePlan.setTotalCompQuantity(BigDecimal.ZERO);
-            if(imagePlan.getRemainQuantity() == null) imagePlan.setRemainQuantity(imagePlan.getDesignQuantity());
+            if (imagePlan.getTotalCompQuantity() == null && imagePlan.getDesignQuantity() != null)
+                imagePlan.setTotalCompQuantity(BigDecimal.ZERO);
+            if (imagePlan.getRemainQuantity() == null) imagePlan.setRemainQuantity(imagePlan.getDesignQuantity());
             imagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
             imagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
             imagePlan.setWbsCode(jdglMainPlanItem.getWbsCode());
@@ -307,10 +309,10 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
             returnList.add(imagePlan);
         }
 
-        if(!CollectionUtils.isEmpty(returnList)) {
+        if (!CollectionUtils.isEmpty(returnList)) {
             for (JdglWeekImagePlan imagePlan : returnList) {
                 JdglWeekImagePlan imagePlan1 = returnList.stream().filter(vo -> vo.getPtVar1().equals(imagePlan.getPtVar2())).findFirst().orElse(null);
-                if(imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
+                if (imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
             }
             /*计算作业产值 : ∑作业挂接的清单价*复核数量*/
             workValueCalc(returnList);
@@ -322,7 +324,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
 
 
         // 修改年进度计划主表引用总体计划的版本号
-        if(usingJdglMainPlan != null) {
+        if (usingJdglMainPlan != null) {
             jdglWeekPlanParam.setThisTotalVersion(usingJdglMainPlan.getVersion());
         }
 
