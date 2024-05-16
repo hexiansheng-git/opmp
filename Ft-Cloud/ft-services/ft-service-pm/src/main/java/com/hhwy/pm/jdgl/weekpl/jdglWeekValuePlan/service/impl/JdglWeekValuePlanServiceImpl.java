@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -174,6 +175,11 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
         if(!CollectionUtils.isEmpty(imagePlans)) {
             // 获取图纸复核的清单
             List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
+            list.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
+                    .forEach(p -> {
+                        String[] split = p.getWbsCode().split("-");
+                        p.setWbsCode(split[split.length - 1]);
+                    });
             // 获取主合同清单
             List<XmslContractList> validMaxVersionContractInventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
             if(CollectionUtils.isEmpty(list) || CollectionUtils.isEmpty(validMaxVersionContractInventoryList)) {
@@ -182,7 +188,7 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
             Set<String> listCodes = new HashSet<>();
             for (JdglWeekImagePlan jdglWeekImagePlan : imagePlans) {
                 for (XmslDrawReviewList xmslDrawReviewList: list) {
-                    if(jdglWeekImagePlan.getWbsCode() != null && jdglWeekImagePlan.getWbsCode().equals(xmslDrawReviewList.getWbsCode())) {
+                    if(jdglWeekImagePlan.getWorkCode() != null && jdglWeekImagePlan.getWorkCode().equals(xmslDrawReviewList.getWbsCode())) {
                         listCodes.add(xmslDrawReviewList.getListCode());
                     }
                 }

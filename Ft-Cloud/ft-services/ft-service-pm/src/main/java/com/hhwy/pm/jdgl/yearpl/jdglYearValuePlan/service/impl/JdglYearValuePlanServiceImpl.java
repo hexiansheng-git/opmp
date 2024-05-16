@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import cn.hutool.core.lang.hash.Hash;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.StringUtils;
@@ -52,7 +53,7 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
 
     @Autowired
     private IXmslDrawReviewListService drawReviewListService;
-    
+
     @Autowired
     private IXmslContractListService xmslContractListService;
 
@@ -177,6 +178,12 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
         if(!CollectionUtils.isEmpty(imagePlans)) {
             // 获取图纸复核的清单
             List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
+            list.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
+                    .forEach(p -> {
+                        String[] split = p.getWbsCode().split("-");
+                        p.setWbsCode(split[split.length - 1]);
+                    });
+
             // 获取主合同清单
             List<XmslContractList> validMaxVersionContractInventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
             if(CollectionUtils.isEmpty(list) || CollectionUtils.isEmpty(validMaxVersionContractInventoryList)) {
@@ -185,7 +192,7 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
             Set<String> listCodes = new HashSet<>();
             for (JdglYearImagePlan jdglYearImagePlan : imagePlans) {
                 for (XmslDrawReviewList xmslDrawReviewList: list) {
-                    if(jdglYearImagePlan.getWbsCode() != null && jdglYearImagePlan.getWbsCode().equals(xmslDrawReviewList.getWbsCode())) {
+                    if(jdglYearImagePlan.getWorkCode() != null && jdglYearImagePlan.getWorkCode().equals(xmslDrawReviewList.getWbsCode())) {
                         listCodes.add(xmslDrawReviewList.getListCode());
                     }
                 }

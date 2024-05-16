@@ -77,6 +77,9 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
         }
         /*计算作业产值 : ∑作业挂接的清单价*复核数量*/
         workValueCalc(jdglYearImagePlanList);
+        //剩余工程量等于 设计工程量 - 开累完成工程量
+        jdglYearImagePlanList.stream().filter(p -> p.getDesignQuantity()!= null && p.getTotalCompQuantity() != null)
+                .forEach(p -> p.setRemainQuantity(p.getDesignQuantity().subtract(p.getTotalCompQuantity())));
         List<JdglYearImagePlan> build = TreeUtil.build(jdglYearImagePlanList, pid);
         return build;
     }
@@ -340,6 +343,9 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
             /*计算作业产值 : ∑作业挂接的清单价*复核数量*/
             workValueCalc(returnList);
+            //剩余工程量等于 设计工程量 - 开累完成工程量
+            returnList.stream().filter(p -> p.getDesignQuantity()!= null && p.getTotalCompQuantity() != null)
+                    .forEach(p -> p.setRemainQuantity(p.getDesignQuantity().subtract(p.getTotalCompQuantity())));
         }
 
         // 维护returnList树结构
