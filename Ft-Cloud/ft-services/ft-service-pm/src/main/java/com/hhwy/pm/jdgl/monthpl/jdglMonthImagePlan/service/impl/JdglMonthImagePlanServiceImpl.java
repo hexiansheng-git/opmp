@@ -252,7 +252,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
                 });
         Map<String, BigDecimal> viewMap = viewList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
-                .collect(Collectors.toMap(XmslDrawReviewList::getWbsCode, XmslDrawReviewList::getCheckNum));
+                .collect(Collectors.groupingBy(XmslDrawReviewList::getWbsCode, Collectors.reducing(BigDecimal.ZERO, XmslDrawReviewList::getCheckNum, BigDecimal::add)));
 
         List<JdglMainPlanItem> jdglMainPlanItemList = new ArrayList<>();
         // 获取在日期区间内的总进度计划数据

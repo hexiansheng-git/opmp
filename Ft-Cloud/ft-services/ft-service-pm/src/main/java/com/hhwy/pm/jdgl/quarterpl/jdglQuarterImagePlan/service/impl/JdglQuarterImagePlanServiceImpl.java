@@ -240,7 +240,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
                 });
         Map<String, BigDecimal> viewMap = viewList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
-                .collect(Collectors.toMap(XmslDrawReviewList::getWbsCode, XmslDrawReviewList::getCheckNum));
+                .collect(Collectors.groupingBy(XmslDrawReviewList::getWbsCode, Collectors.reducing(BigDecimal.ZERO, XmslDrawReviewList::getCheckNum, BigDecimal::add)));
 
 
         List<JdglMainPlanItem> jdglMainPlanItemList = new ArrayList<>();
