@@ -118,6 +118,9 @@ public class SgjsExperProgressManageServiceImpl implements ISgjsExperProgressMan
             }
             List<SgjsExperProgressManage> collect = sgjsExperProgressManageList.stream().collect(collectingAndThen(toCollection(() -> new TreeSet<>(Comparator.comparing(SgjsExperProgressManage::getId))), ArrayList::new));
             list = collect.stream().sorted(Comparator.comparing(SgjsExperProgressManage::getSerialNumber)).collect(Collectors.toList());
+            list.stream().forEach(obj -> {
+                obj.setType("1");
+            });
         }
         vo.setTreeList(TreeUtil.newBuild(list));
         return vo;
