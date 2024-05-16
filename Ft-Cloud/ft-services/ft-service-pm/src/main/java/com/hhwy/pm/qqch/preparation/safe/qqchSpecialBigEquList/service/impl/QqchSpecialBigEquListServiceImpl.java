@@ -1,7 +1,10 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -14,6 +17,7 @@ import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.mapper.QqchSpecia
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service.IQqchInformationSheetService;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service.IQqchSpecialBigEquListService;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service.IQqchTransitionRecordService;
+import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.ActiveEquVo;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.domain.SbchEquipmentSpecial;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.domain.SbchEquipmentSpecialDetails;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.service.ISbchEquipmentSpecialService;
@@ -22,11 +26,13 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -240,5 +246,22 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
             }
         }
         qqchSpecialBigEquListMapper.insertQqchSpecialBigEquListList(qqchSpecialBigEquListList);
+    }
+
+    @Value("${WSPlatform}")
+    private String WSPlatform;
+    @Override
+    public AjaxResult selfEquDetail(String bhEqu) {
+        AjaxResult ajaxResult;
+        String url = WSPlatform + "/basic-api/fms/xcsb/XcsbCheckEquInfo/getDetailInfoByManageCode";
+        Map map = ObjectUtils.toMap("manageCode",bhEqu);
+        try {
+            String resp = HttpUtil.get(url, map, 3000);
+            ajaxResult = JSON.parseObject(resp, AjaxResult.class);
+        }catch (Exception e){
+            e.printStackTrace();
+            ajaxResult = AjaxResult.error("网络异常，请求无法到达物设系统");
+        }
+        return ajaxResult;
     }
 }

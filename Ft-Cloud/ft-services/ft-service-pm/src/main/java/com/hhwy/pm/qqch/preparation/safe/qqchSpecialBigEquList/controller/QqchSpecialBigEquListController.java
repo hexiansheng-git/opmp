@@ -1,14 +1,17 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.controller;
 
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.domain.QqchSpecialBigEquList;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.domain.vo.QqchSpecialBigEquListVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service.IQqchSpecialBigEquListService;
+import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.ActiveEquVo;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -99,5 +102,19 @@ public class QqchSpecialBigEquListController extends BaseController {
         List<Long> qqchSpecialBigEquListPkList = Arrays.asList(ids);
         return toAjax(qqchSpecialBigEquListService.deleteQqchSpecialBigEquListByPks(qqchSpecialBigEquListPkList));
     }
+
+    /***
+     * 功能描述: 查询自有设备进场验收模块  调用物设接口（现场设备）
+     * 作者: 何文杰
+     * 时间: 2024/5/13
+     */
+    @PostMapping("/selfEquDetail")
+    public AjaxResult selfEquDetail(@RequestBody QqchSpecialBigEquList qqchSpecialBigEquListParam){
+        if (StringUtils.isBlank(qqchSpecialBigEquListParam.getManageCode())) {
+            return AjaxResult.error("管理编号不能为空");
+        }
+        return qqchSpecialBigEquListService.selfEquDetail(qqchSpecialBigEquListParam.getManageCode());
+    }
+
 
 }

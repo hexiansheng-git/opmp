@@ -313,6 +313,7 @@ public class EquAllotServiceImpl implements EquAllotService {
         AjaxResult ajaxResult;
         String tenantKey = SecurityUtils.getTenantKey();
         activeEquVo.setPrjCode(tenantKey);
+//        activeEquVo.setPrjCode("PJ2012001880");
         try {
             String resp = HttpUtil.post(url, JSON.toJSONString(activeEquVo), 3000);
             ajaxResult = JSON.parseObject(resp, AjaxResult.class);

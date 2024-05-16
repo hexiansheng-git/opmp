@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.domain.QqchSpecialBigEquList;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.domain.vo.QqchSpecialBigEquListVo;
+import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.ActiveEquVo;
 
 import java.util.List;
 
@@ -27,6 +29,8 @@ public interface IQqchSpecialBigEquListService {
     int deleteQqchSpecialBigEquListByPks(List<Long> qqchSpecialBigEquListPkList);
 
     void save(QqchSpecialBigEquListVo vo);
+
+    AjaxResult selfEquDetail(String bhEqu);
 
     QqchSpecialBigEquListVo getSpecialBigEquList(QqchSpecialBigEquList qqchSpecialBigEquList);
 }

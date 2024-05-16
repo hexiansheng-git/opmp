@@ -259,4 +259,7 @@ public class QqchSpecialBigEquList extends CommonBaseEntity {
     private List<QqchTransitionRecord> qqchTransitionRecordList;
 
     private List<String> arrDviceName;
+
+
+    private String manageCode;//设备管理编号
 }
