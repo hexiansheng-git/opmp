@@ -1,6 +1,7 @@
 package com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.service.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -245,23 +246,23 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
                             List<XmslDrawReviewList> collect = list.stream().filter(vo -> xmslContractList.getCode().equals(vo.getListCode())).collect(Collectors.toList());
                             if(!CollectionUtils.isEmpty(collect)) {
                                 for (XmslDrawReviewList xmslDrawReviewList :  collect) {
-                                    String wbsCode = xmslDrawReviewList.getWbsCode();
-                                    // 根据wbs获取年形象计划对应wbs
-                                    List<JdglYearImagePlan> collect1 = imagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
+                                    String workCode = xmslDrawReviewList.getWbsCode();
+                                    // 根据作业编号获取年形象计划对应的作业
+                                    List<JdglYearImagePlan> collect1 = imagePlans.stream().filter(vo -> workCode.equals(vo.getWorkCode())).collect(Collectors.toList());
                                     if(!CollectionUtils.isEmpty(collect1)) {
-                                        BigDecimal wbsDesignNum = new BigDecimal(0);
-                                        BigDecimal wbsPlanNum = new BigDecimal(0);
-                                        for (JdglYearImagePlan jdglYearImagePlan : collect1) {
-                                            if(wbsCode.equals(jdglYearImagePlan.getWorkCode())) {
-                                                if(jdglYearImagePlan.getDesignQuantity() != null) wbsDesignNum = jdglYearImagePlan.getDesignQuantity();
-                                            } else {
-                                                wbsPlanNum = wbsPlanNum.add(jdglYearImagePlan.getPlanCompQuantity() == null ? new BigDecimal(0) : jdglYearImagePlan.getPlanCompQuantity());
-                                            }
-//                                            if(jdglYearImagePlan.getPlanCompQuantity() != null) yearplanCompQuantity = yearplanCompQuantity.add(jdglYearImagePlan.getPlanCompQuantity());
-                                        }
-                                        if(wbsDesignNum.compareTo(new BigDecimal(0)) != 0) {
-                                            yearplanCompQuantity = yearplanCompQuantity.add(xmslDrawReviewList.getCheckNum() == null
-                                                    ? new BigDecimal(0) : xmslDrawReviewList.getCheckNum().multiply(wbsPlanNum.divide(wbsDesignNum, 4, BigDecimal.ROUND_HALF_UP)));
+                                        BigDecimal workDesignNum = new BigDecimal(0);
+                                        BigDecimal workPlanNum = new BigDecimal(0);
+                                        JdglYearImagePlan jdglYearImagePlan = collect1.get(0);
+                                        BigDecimal designQuantity = jdglYearImagePlan.getDesignQuantity();
+                                        workDesignNum = designQuantity == null ? BigDecimal.ZERO : jdglYearImagePlan.getDesignQuantity();
+                                        BigDecimal planCompQuantity = jdglYearImagePlan.getPlanCompQuantity();
+                                        workPlanNum = planCompQuantity == null ? new BigDecimal(0) : planCompQuantity;
+
+                                        if(workDesignNum.compareTo(new BigDecimal(0)) != 0) {
+                                            BigDecimal divide = workPlanNum.divide(workDesignNum, 4, RoundingMode.HALF_UP);
+                                            BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
+                                            BigDecimal multiply = checkNum.multiply(divide);
+                                            yearplanCompQuantity = yearplanCompQuantity.add(multiply);
                                         }
                                     }
                                 }
