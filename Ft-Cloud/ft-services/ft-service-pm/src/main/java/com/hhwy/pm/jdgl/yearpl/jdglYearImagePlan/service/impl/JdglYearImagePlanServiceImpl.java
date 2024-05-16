@@ -85,7 +85,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
     private void workValueCalc(List<JdglYearImagePlan> jdglYearImagePlanList) {
         // 获取图纸复核的清单
         List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
-        viewList.stream().filter(p -> StrUtil.isBlankIfStr(p.getWbsCode()))
+        viewList.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
                 .forEach(p -> {
                     String[] split = p.getWbsCode().split("-");
                     p.setWbsCode(split[split.length-1]);
@@ -252,7 +252,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
         // 获取图纸复核的清单，用于回填设计工程量
         List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
-        viewList.stream().filter(p -> StrUtil.isBlankIfStr(p.getWbsCode()))
+        viewList.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
                 .forEach(p -> {
                     String[] split = p.getWbsCode().split("-");
                     p.setWbsCode(split[split.length-1]);
@@ -305,7 +305,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
             jdglYearImagePlan.setWorkCode(jdglMainPlanItem.getItemCode());
             jdglYearImagePlan.setWorkName(jdglMainPlanItem.getItemName());
             jdglYearImagePlan.setUnit(jdglMainPlanItem.getUnit());
-            jdglYearImagePlan.setDesignQuantity(viewMap.get(jdglMainPlanItem.getWbsCode()) == null ? BigDecimal.ZERO : viewMap.get(jdglMainPlanItem.getWbsCode()));
+            jdglYearImagePlan.setDesignQuantity(viewMap.get(jdglMainPlanItem.getItemCode()) == null ? BigDecimal.ZERO : viewMap.get(jdglMainPlanItem.getItemCode()));
             jdglYearImagePlan.setSort(jdglMainPlanItem.getSort());
             if(!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
                 JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = dayScheduleWbs4ValueList.stream().filter(vo -> jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())).findFirst().orElse(null);

@@ -89,6 +89,11 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
     private void workValueCalc(List<JdglMonthImagePlan> jdglMonthImagePlanList) {
         // 获取图纸复核的清单
         List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
+        viewList.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
+                .forEach(p -> {
+                    String[] split = p.getWbsCode().split("-");
+                    p.setWbsCode(split[split.length-1]);
+                });
         // 主合同清单
         List<XmslContractList> contractList = xmslContractListService.getValidMaxVersionContractInventoryList();
         Map<String, XmslContractList> contractMap = contractList.stream().collect(Collectors.toMap(XmslContractList::getCode, v -> v, (k1, k2) -> k1));
@@ -245,7 +250,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
         }
         // 获取图纸复核的清单，用于回填设计工程量
         List<XmslDrawReviewList> viewList = drawReviewListService.getFullEffectList();
-        viewList.stream().filter(p -> StrUtil.isBlankIfStr(p.getWbsCode()))
+        viewList.stream().filter(p -> StrUtil.isNotBlank(p.getWbsCode()))
                 .forEach(p -> {
                     String[] split = p.getWbsCode().split("-");
                     p.setWbsCode(split[split.length-1]);
@@ -295,7 +300,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
             imagePlan.setWorkName(jdglMainPlanItem.getItemName());
             imagePlan.setUnit(jdglMainPlanItem.getUnit());
 //            imagePlan.setDesignQuantity(jdglMainPlanItem.getQuantity());
-            imagePlan.setDesignQuantity(viewMap.get(jdglMainPlanItem.getWbsCode()) == null ? BigDecimal.ZERO : viewMap.get(jdglMainPlanItem.getWbsCode()));
+            imagePlan.setDesignQuantity(viewMap.get(jdglMainPlanItem.getItemCode()) == null ? BigDecimal.ZERO : viewMap.get(jdglMainPlanItem.getItemCode()));
             imagePlan.setSort(jdglMainPlanItem.getSort());
             if (!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
                 JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = dayScheduleWbs4ValueList.stream().filter(vo -> jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())).findFirst().orElse(null);
