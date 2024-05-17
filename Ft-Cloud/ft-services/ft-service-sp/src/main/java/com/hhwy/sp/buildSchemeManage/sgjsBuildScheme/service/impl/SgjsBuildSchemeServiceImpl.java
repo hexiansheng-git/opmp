@@ -301,20 +301,18 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         sgjsBuildScheme.setId(id);
         Long foreignId = id;
         FlowInfoSearchUtil.getFlowInfo(sgjsBuildScheme, FlowEnum.SGJS_BUILD_SCHEME);
-        if (sgjsBuildScheme.getTaskStatus().equals("0")) {
-            //方案清单
-            List<SgjsBuildSchemeList> children = sgjsBuildScheme.getChildren();
-            if (CollUtil.isNotEmpty(children)) {
-                children.forEach(p -> {
-                    String[] schemeTypeArr = p.getSchemeTypeArr();
-                    if (ArrayUtil.isNotEmpty(schemeTypeArr)) {
-                        String collect = Arrays.stream(schemeTypeArr).collect(Collectors.joining(","));
-                        p.setSchemeType(collect);
-                    }
-                });
-            }
-            sgjsBuildSchemeListService.insertSgjsBuildSchemeList(children, sgjsBuildScheme);
+        //方案清单
+        List<SgjsBuildSchemeList> children = sgjsBuildScheme.getChildren();
+        if (CollUtil.isNotEmpty(children)) {
+            children.forEach(p -> {
+                String[] schemeTypeArr = p.getSchemeTypeArr();
+                if (ArrayUtil.isNotEmpty(schemeTypeArr)) {
+                    String collect = Arrays.stream(schemeTypeArr).collect(Collectors.joining(","));
+                    p.setSchemeType(collect);
+                }
+            });
         }
+        sgjsBuildSchemeListService.insertSgjsBuildSchemeList(children, sgjsBuildScheme);
         if (!sgjsBuildScheme.getTaskStatus().equals("0")) {
             //专家意见
             List<SgjsBuildSchemeExpertSuggest> expertSuggest = sgjsBuildScheme.getExpertSuggest();
