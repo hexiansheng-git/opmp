@@ -112,7 +112,8 @@ public class SgjsMixRatioManageController extends BaseController {
     @PreAuthorize(hasPermi = "sgjsMixRatioManage:remove")
     @PostMapping("/delete")
     public AjaxResult deleteSgjsMixRatioManage(@Validated(ValidationGroups.Delete.class) @RequestBody SgjsMixRatioManage sgjsMixRatioManageParam) {
-        return toAjax(sgjsMixRatioManageService.deleteSgjsMixRatioManage(sgjsMixRatioManageParam));
+        sgjsMixRatioManageService.deleteSgjsMixRatioManage(sgjsMixRatioManageParam.getId());
+        return AjaxResult.success("");
     }
 
     @PreAuthorize(hasPermi = "sgjsMixRatioManage:remove")

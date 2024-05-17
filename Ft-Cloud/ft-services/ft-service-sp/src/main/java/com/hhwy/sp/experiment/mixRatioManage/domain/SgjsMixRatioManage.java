@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class SgjsMixRatioManage extends CommonBaseEntity {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
+    @NotNull(message = "ID不能为空",groups = {ValidationGroups.Delete.class})
     private Long id;
     /**
      * 字段描述：配合比编号

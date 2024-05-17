@@ -22,6 +22,7 @@ import com.hhwy.sp.experiment.mixRatioManage.domain.vo.SgjsMixRatioManageDto;
 import com.hhwy.sp.experiment.mixRatioManage.domain.vo.SgjsMixRatioManageSaveVo;
 import com.hhwy.sp.experiment.mixRatioManage.mapper.SgjsMixRatioManageMapper;
 import com.hhwy.sp.experiment.mixRatioManage.mapper.SgjsMixRatioManageMaterialMapper;
+import com.hhwy.sp.experiment.mixRatioManage.mapper.SgjsMixRatioManageStaffMapper;
 import com.hhwy.sp.experiment.mixRatioManage.service.ISgjsMixRatioManageService;
 import com.hhwy.sp.experiment.mixRatioManage.service.ISgjsMixRatioManageStaffRecordService;
 import com.hhwy.sp.experiment.mixRatioManage.service.ISgjsMixRatioManageStaffService;
@@ -119,10 +120,14 @@ public class SgjsMixRatioManageServiceImpl implements ISgjsMixRatioManageService
     }
 
     @Transactional
-    public int deleteSgjsMixRatioManage(SgjsMixRatioManage sgjsMixRatioManage) {
-        sgjsMixRatioManage.setUpdateUser(SecurityUtils.getUserName());
-        sgjsMixRatioManage.setUpdateTime(DateUtils.getNowDate());
-        return sgjsMixRatioManageMapper.deleteSgjsMixRatioManage(sgjsMixRatioManage);
+    public void deleteSgjsMixRatioManage(Long id) {
+        SgjsMixRatioManage sgjsMixRatioManage = new SgjsMixRatioManage();
+        sgjsMixRatioManage.setId(id);
+        sgjsMixRatioManageMapper.deleteSgjsMixRatioManage(sgjsMixRatioManage);
+
+        sgjsMixRatioManageMaterialMapper.deleteByForeignId(id);
+        sgjsMixRatioManageMapper.deleteStaff(id);
+        sgjsMixRatioManageMapper.deleteStaffRecord(id);
     }
 
     @Transactional

@@ -16,7 +16,7 @@ public interface ISgjsMixRatioManageService {
 
     List<SgjsMixRatioManage> getSgjsMixRatioManageList(SgjsMixRatioManage sgjsMixRatioManage);
 
-    int deleteSgjsMixRatioManage(SgjsMixRatioManage sgjsMixRatioManage);
+    void deleteSgjsMixRatioManage(Long id);
 
     int deleteSgjsMixRatioManageByPks(List<Long> sgjsMixRatioManagePkList);
 
