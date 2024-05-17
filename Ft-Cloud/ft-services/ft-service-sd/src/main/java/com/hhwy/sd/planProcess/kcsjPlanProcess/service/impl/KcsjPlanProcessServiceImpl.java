@@ -162,10 +162,9 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
     @Transactional
     public int deleteKcsjPlanProcessByPks(List<Long> kcsjPlanProcessPkList) {
         List<KcsjPlanProcess> kcsjPlanProcessList = kcsjPlanProcessMapper.getKcsjPlanProcessList(new KcsjPlanProcess());
-        checkPlan(kcsjPlanProcessList);
-        if(CollectionUtils.isNotEmpty(kcsjPlanProcessPkList)) {
-            return 0;
-        }
+//            checkPlan(kcsjPlanProcessList);
+//            return 0;
+//        }
         List<Long> needDeleteIds = new ArrayList<>();
         needDeleteIds.addAll(kcsjPlanProcessPkList);
         if(CollectionUtils.isNotEmpty(kcsjPlanProcessList) && CollectionUtils.isNotEmpty(kcsjPlanProcessPkList)) {
@@ -185,16 +184,19 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
         }
         List<Long> collect = needDeleteIds.stream().distinct().collect(Collectors.toList());
         if(CollectionUtils.isEmpty(collect)) {
+            checkPlan();
             return 0;
         }
         int i = kcsjPlanProcessMapper.deleteKcsjPlanProcessByPks(collect);
+        checkPlan();
         doSendGm();
         return i;
     }
 
     //校验子级计划开始时间、结束时间必须在父级开始、结束时间范围内
     //实际开始日期、实际结束日期 是当前日期之前；结束日期在开始日期之后
-    private void checkPlan(List<KcsjPlanProcess> list){
+    private void checkPlan(){
+        List<KcsjPlanProcess> list = kcsjPlanProcessMapper.getKcsjPlanProcessList(new KcsjPlanProcess());
         if(CollectionUtils.isEmpty(list))
             return ;
         Date now = new Date();
@@ -202,14 +204,16 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
         Map<String,Date> minMaxDateMap = new HashMap<>();
         for (int i = 0; i < list.size(); i++) {
             KcsjPlanProcess temp = list.get(i);
+            String workCode = ObjectUtils.nvlString(temp.getWorkCode());
+            String workName = ObjectUtils.nvlString(temp.getWorkName());
             if(temp.getPlanStartDate() != null && temp.getPlanEndDate() != null && temp.getPlanEndDate().before(temp.getPlanStartDate()))
-                sb.append(String.format("作业代码[%s]作业名称[%s]的计划结束时间不能早于计划开始时间\n",temp.getWorkCode(),temp.getWorkName() ));
+                sb.append(String.format("作业代码[%s]作业名称[%s]的计划结束时间不能早于计划开始时间\n",workCode,workName ));
             if(temp.getActStartDate() != null && temp.getActEndDate() != null && temp.getActEndDate().before(temp.getActStartDate()))
-                sb.append(String.format("作业代码[%s]作业名称[%s]的实际结束时间不能早于实际开始时间\n",temp.getWorkCode(),temp.getWorkName() ));
-            if(temp.getPlanStartDate() != null && temp.getPlanStartDate().after(now))
-                sb.append(String.format("作业代码[%s]作业名称[%s]的实际开始时间不能晚于当前时间\n",temp.getWorkCode(),temp.getWorkName() ));
-            if(temp.getPlanEndDate() != null && temp.getPlanEndDate().after(now))
-                sb.append(String.format("作业代码[%s]作业名称[%s]的实际结束时间不能晚于当前时间\n",temp.getWorkCode(),temp.getWorkName() ));
+                sb.append(String.format("作业代码[%s]作业名称[%s]的实际结束时间不能早于实际开始时间\n",workCode,workName ));
+            if(temp.getActStartDate() != null && temp.getActStartDate().after(now))
+                sb.append(String.format("作业代码[%s]作业名称[%s]的实际开始时间不能晚于当前时间\n",workCode,workName ));
+            if(temp.getActEndDate() != null && temp.getActEndDate().after(now))
+                sb.append(String.format("作业代码[%s]作业名称[%s]的实际结束时间不能晚于当前时间\n",workCode,workName ));
             //统计父级的最小发起日期，最大结束日期
             if(temp.getPid() == null || temp.getPid() < 1L)
                 continue;
@@ -229,15 +233,17 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
         for (int i = 0; i < list.size(); i++) {
             KcsjPlanProcess temp = list.get(i);
+            String workCode = ObjectUtils.nvlString(temp.getWorkCode());
+            String workName = ObjectUtils.nvlString(temp.getWorkName());
             Date min = minMaxDateMap.get(temp.getId()+"_min");
             if(min != null && temp.getPlanStartDate().after(min)){
                 sb.append(String.format("作业代码[%s]作业名称[%s]的计划开始时间[%s]不能晚于子级开始时间[%s]\n"
-                        ,temp.getWorkCode(),temp.getWorkName(),fmt.format(temp.getPlanStartDate()),fmt.format(min)));
+                        ,workCode,workName,fmt.format(temp.getPlanStartDate()),fmt.format(min)));
             }
             Date max = minMaxDateMap.get(temp.getId()+"_max");
             if(max != null && temp.getPlanEndDate().before(max)){
                 sb.append(String.format("作业代码[%s]作业名称[%s]的计划结束时间[%s]不能早于子级结束时间[%s]\n"
-                        ,temp.getWorkCode(),temp.getWorkName(),fmt.format(temp.getPlanEndDate()),fmt.format(max)));
+                        ,workCode,workName,fmt.format(temp.getPlanEndDate()),fmt.format(max)));
             }
         }
         Assert.isTrue(sb.length() < 1, sb.toString());
