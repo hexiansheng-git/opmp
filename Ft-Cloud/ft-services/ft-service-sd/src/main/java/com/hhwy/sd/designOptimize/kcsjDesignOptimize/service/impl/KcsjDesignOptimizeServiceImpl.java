@@ -72,8 +72,14 @@ public class KcsjDesignOptimizeServiceImpl implements IKcsjDesignOptimizeService
     public int updateKcsjDesignOptimize(KcsjDesignOptimize kcsjDesignOptimize) {
         Long id = kcsjDesignOptimize.getId();
         int i = 0;
-        if(id == null) {
+        boolean isNew = id == null;
+        if(isNew)
             id = IdWorker.createId();
+        List<KcsjDesignOptimizeItem> kcsjDesignOptimizeItemList = kcsjDesignOptimize.getKcsjDesignOptimizeItemList();
+        if(CollectionUtils.isNotEmpty(kcsjDesignOptimizeItemList)) {
+            kcsjDesignOptimizeItemService.updateKcsjDesignOptimizeItemList(id, kcsjDesignOptimizeItemList,kcsjDesignOptimize);
+        }
+        if(isNew) {
             kcsjDesignOptimize.setId(id);
             kcsjDesignOptimize.setAddOrUpdate("add");
             kcsjDesignOptimize.setCreateUser(SecurityUtils.getSysUser().getNickName());
@@ -85,11 +91,6 @@ public class KcsjDesignOptimizeServiceImpl implements IKcsjDesignOptimizeService
             kcsjDesignOptimize.setUpdateTime(DateUtils.getNowDate());
             i = kcsjDesignOptimizeMapper.updateKcsjDesignOptimize(kcsjDesignOptimize);
         }
-        List<KcsjDesignOptimizeItem> kcsjDesignOptimizeItemList = kcsjDesignOptimize.getKcsjDesignOptimizeItemList();
-        if(CollectionUtils.isNotEmpty(kcsjDesignOptimizeItemList)) {
-            kcsjDesignOptimizeItemService.updateKcsjDesignOptimizeItemList(id, kcsjDesignOptimizeItemList);
-        }
-
         this.pushData(kcsjDesignOptimize);
         return i;
     }

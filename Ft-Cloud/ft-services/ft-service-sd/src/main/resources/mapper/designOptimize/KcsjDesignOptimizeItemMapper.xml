@@ -34,6 +34,9 @@
         <result property="afterOptimizeQty" column="after_optimize_qty"/>
         <result property="estimatePrice" column="estimate_price"/>
         <result property="estimateAmt" column="estimate_amt"/>
+        <result property="beforeUnitPrice" column="before_unit_price"/>
+        <result property="beforePrice" column="before_price"/>
+        <result property="afterPrice" column="after_price"/>
     </resultMap>
     <sql id="selectKcsjDesignOptimizeItemVo">
         select `id`
@@ -64,6 +67,9 @@
              , `after_optimize_qty`
              , `estimate_price`
              , `estimate_amt`
+        , `before_unit_price`
+        , `before_price`
+        , `after_price`
         from kcsj_design_optimize_item
     </sql>
     <delete id="deleteKcsjDesignOptimizeItemByOptimizeId">
@@ -172,6 +178,9 @@
             <if test="afterOptimizeQty != null ">`after_optimize_qty`,</if>
             <if test="estimatePrice != null ">`estimate_price`,</if>
             <if test="estimateAmt != null ">`estimate_amt`,</if>
+            <if test="beforeUnitPrice != null ">`before_unit_price`,</if>
+            <if test="beforePrice != null ">`before_price`,</if>
+            <if test="afterPrice != null ">`after_price`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -202,6 +211,9 @@
             <if test="afterOptimizeQty != null ">#{afterOptimizeQty},</if>
             <if test="estimatePrice != null ">#{estimatePrice},</if>
             <if test="estimateAmt != null ">#{estimateAmt},</if>
+            <if test="beforeUnitPrice != null ">#{beforeUnitPrice},</if>
+            <if test="beforePrice != null ">#{beforePrice},</if>
+            <if test="afterPrice != null ">#{afterPrice},</if>
         </trim>
     </insert>
 
@@ -236,6 +248,9 @@
             `after_optimize_qty`,
             `estimate_price`,
             `estimate_amt`,
+            `before_unit_price`,
+            `before_price`,
+            `after_price`,
         </trim>
         values
         <foreach collection="kcsjDesignOptimizeItemList" item="item" separator=",">
@@ -267,6 +282,9 @@
                 #{item.afterOptimizeQty},
                 #{item.estimatePrice},
                 #{item.estimateAmt},
+                #{item.beforeUnitPrice},
+                #{item.beforePrice},
+                #{item.afterPrice},
             </trim>
         </foreach>
     </insert>
@@ -302,6 +320,9 @@
             <if test="afterOptimizeQty != null ">`after_optimize_qty` = #{afterOptimizeQty},</if>
             <if test="estimatePrice != null ">`estimate_price` = #{estimatePrice},</if>
             <if test="estimateAmt != null ">`estimate_amt` = #{estimateAmt},</if>
+            <if test="beforeUnitPrice != null ">`before_unit_price` = #{beforeUnitPrice},</if>
+            <if test="beforePrice != null ">`before_price` = #{beforePrice},</if>
+            <if test="afterPrice != null ">`after_price` = #{afterPrice},</if>
         </trim>
         <where>
             <if test="id != null ">and `id` = #{id}</if>
@@ -449,6 +470,21 @@
             <trim prefix="estimate_amt  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.estimateAmt}
+                </foreach>
+            </trim>
+            <trim prefix="before_unit_price = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.beforeUnitPrice}
+                </foreach>
+            </trim>
+            <trim prefix="before_price = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.beforePrice}
+                </foreach>
+            </trim>
+            <trim prefix="after_price = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.afterPrice}
                 </foreach>
             </trim>
         </trim>

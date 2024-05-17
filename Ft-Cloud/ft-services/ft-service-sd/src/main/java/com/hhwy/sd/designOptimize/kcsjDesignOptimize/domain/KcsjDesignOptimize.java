@@ -168,6 +168,7 @@ public class KcsjDesignOptimize extends BaseEntity {
     @JsonProperty
     @FtExcel(name = "优化金额")
     private BigDecimal optimizeAmt;
+    
     /**
      * 字段描述：优化完成日期
      */
@@ -181,6 +182,13 @@ public class KcsjDesignOptimize extends BaseEntity {
     @JsonProperty
     @FtExcel(name = "优化设计简述")
     private String optimizeSketch;
+
+    @FtExcel(name = "优化前合计")
+    private BigDecimal beforeSumPrice;
+    @FtExcel(name = "优化后合计")
+    private BigDecimal afterSumPrice;
+    @FtExcel(name = "本次优化预估金额")
+    private BigDecimal changeSumPrice;
 
     private List<KcsjDesignOptimizeItem> kcsjDesignOptimizeItemList;
 

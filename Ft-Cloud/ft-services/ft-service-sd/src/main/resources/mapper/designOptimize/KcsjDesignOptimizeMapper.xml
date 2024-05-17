@@ -32,6 +32,9 @@
         <result property="optimizeAmt" column="optimize_amt"/>
         <result property="optimizeCompDate" column="optimize_comp_date"/>
         <result property="optimizeSketch" column="optimize_sketch"/>
+        <result property="beforeSumPrice" column="before_sum_price"/>
+        <result property="afterSumPrice" column="after_sum_price"/>
+        <result property="changeSumPrice" column="change_sum_price"/>
     </resultMap>
     <sql id="selectKcsjDesignOptimizeVo">
         select `id`
@@ -60,6 +63,9 @@
              , `optimize_amt`
              , `optimize_comp_date`
              , `optimize_sketch`
+             , before_sum_price
+            , after_sum_price
+            , change_sum_price
         from kcsj_design_optimize
     </sql>
     <delete id="deleteKcsjDesignOptimizeById">
@@ -173,6 +179,9 @@
             <if test="optimizeAmt != null ">`optimize_amt`,</if>
             <if test="optimizeCompDate != null ">`optimize_comp_date`,</if>
             <if test="optimizeSketch != null  and optimizeSketch != ''">`optimize_sketch`,</if>
+            <if test="beforeSumPrice != null ">`before_sum_price`,</if>
+            <if test="afterSumPrice != null ">`after_sum_price`,</if>
+            <if test="changeSumPrice != null ">`change_sum_price`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -201,6 +210,9 @@
             <if test="optimizeAmt != null ">#{optimizeAmt},</if>
             <if test="optimizeCompDate != null ">#{optimizeCompDate},</if>
             <if test="optimizeSketch != null  and optimizeSketch != ''">#{optimizeSketch},</if>
+            <if test="beforeSumPrice != null ">#{beforeSumPrice},</if>
+            <if test="afterSumPrice != null ">#{afterSumPrice},</if>
+            <if test="changeSumPrice != null ">#{changeSumPrice},</if>
         </trim>
     </insert>
 
@@ -233,6 +245,9 @@
             `optimize_amt`,
             `optimize_comp_date`,
             `optimize_sketch`,
+            before_sum_price,
+            after_sum_price,
+            change_sum_price
         </trim>
         values
         <foreach collection="kcsjDesignOptimizeList" item="item" separator=",">
@@ -262,6 +277,9 @@
                 #{item.optimizeAmt},
                 #{item.optimizeCompDate},
                 #{item.optimizeSketch},
+                #{item.beforeSumPrice},
+                #{item.afterSumPrice},
+                #{item.changeSumPrice},
             </trim>
         </foreach>
     </insert>
@@ -295,6 +313,9 @@
             <if test="optimizeAmt != null ">`optimize_amt` = #{optimizeAmt},</if>
             <if test="optimizeCompDate != null ">`optimize_comp_date` = #{optimizeCompDate},</if>
             <if test="optimizeSketch != null  and  optimizeSketch != ''">`optimize_sketch` = #{optimizeSketch},</if>
+            <if test="beforeSumPrice != null ">`before_sum_price` = #{beforeSumPrice},</if>
+            <if test="afterSumPrice != null ">`after_sum_price` = #{afterSumPrice},</if>
+            <if test="changeSumPrice != null ">`change_sum_price` = #{changeSumPrice},</if>
         </trim>
         <where>
             <if test="id != null ">and `id` = #{id}</if>

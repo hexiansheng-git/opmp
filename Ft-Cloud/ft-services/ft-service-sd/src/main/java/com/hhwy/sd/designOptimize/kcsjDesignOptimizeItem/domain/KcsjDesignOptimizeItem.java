@@ -5,17 +5,18 @@ import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;
 import java.math.BigDecimal;
 
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.util.List;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.utils.excel.FtExcel;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author cjh
@@ -159,37 +160,56 @@ public class KcsjDesignOptimizeItem extends BaseEntity {
      */
     @JsonProperty
     @FtExcel(name = "主材/清单编码")
+    @NotBlank(message = "主材/清单编码不能为空",groups = {ValidationGroups.Save.class})
     private String itemCode;
     /**
      * 字段描述：主材/清单名称
      */
     @JsonProperty
     @FtExcel(name = "主材/清单名称")
+    @NotBlank(message = "主材/清单名称不能为空",groups = {ValidationGroups.Save.class})
     private String itemName;
     /**
      * 字段描述：单位
      */
     @JsonProperty
     @FtExcel(name = "单位")
+    @NotBlank(message = "单位不能为空",groups = {ValidationGroups.Save.class})
     private String unit;
     /**
      * 字段描述：优化前工程量
      */
     @JsonProperty
     @FtExcel(name = "优化前工程量")
+    @NotNull(message = "优化前工程量不能为空",groups = {ValidationGroups.Save.class})
     private BigDecimal beforeOptimizeQty;
+    
+    @FtExcel(name = "优化前预估单价")
+    @NotNull(message = "优化前单价不能为空",groups = {ValidationGroups.Save.class})
+    private BigDecimal beforeUnitPrice;
+    
+    @FtExcel(name = "优化前预估金额")
+    @NotNull(message = "优化前金额不能为空",groups = {ValidationGroups.Save.class})
+    private BigDecimal beforePrice;
+    
     /**
      * 字段描述：优化后工程量
      */
     @JsonProperty
     @FtExcel(name = "优化后工程量")
+    @NotNull(message = "优化后工程量不能为空",groups = {ValidationGroups.Save.class})
     private BigDecimal afterOptimizeQty;
     /**
      * 字段描述：预估单价
      */
     @JsonProperty
-    @FtExcel(name = "预估单价")
+    @FtExcel(name = "优化后预估单价")
+    @NotNull(message = "优化后预估单价不能为空",groups = {ValidationGroups.Save.class})
     private BigDecimal estimatePrice;
+
+    @FtExcel(name = "优化后预估金额")
+    @NotNull(message = "优化后金额不能为空",groups = {ValidationGroups.Save.class})
+    private BigDecimal afterPrice;
     /**
      * 字段描述：预估优化金额
      */
@@ -202,5 +222,4 @@ public class KcsjDesignOptimizeItem extends BaseEntity {
     @JsonProperty
     @FtExcel(name = "备注")
     private String remark;
-
 }

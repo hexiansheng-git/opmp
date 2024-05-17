@@ -1,12 +1,19 @@
 package com.hhwy.sd.designOptimize.kcsjDesignOptimizeItem.controller;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.io.IOException;
+import java.util.Set;
 
+import com.hhwy.sd.designOptimize.kcsjDesignOptimize.domain.KcsjDesignOptimize;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
+import com.sun.xml.internal.ws.policy.AssertionSet;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -77,7 +84,7 @@ public class KcsjDesignOptimizeItemController extends BaseController {
     @PostMapping("/batchUpdate")
     public AjaxResult updateKcsjDesignOptimizeItemList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjDesignOptimizeItem> kcsjDesignOptimizeItemListParam) {
         Long optimizeId = kcsjDesignOptimizeItemListParam.get(0).getOptimizeId();
-        return toAjax(kcsjDesignOptimizeItemService.updateKcsjDesignOptimizeItemList(optimizeId, kcsjDesignOptimizeItemListParam));
+        return toAjax(kcsjDesignOptimizeItemService.updateKcsjDesignOptimizeItemList(optimizeId, kcsjDesignOptimizeItemListParam,new KcsjDesignOptimize()));
     }
 
     @PreAuthorize(hasPermi = "kcsjDesignOptimizeItem:remove")
@@ -103,7 +110,21 @@ public class KcsjDesignOptimizeItemController extends BaseController {
     @PostMapping("/import")
     public AjaxResult importData(@RequestPart("file") MultipartFile file) throws Exception {
         FtExcelUtil<KcsjDesignOptimizeItem> excelUtil = new FtExcelUtil<>(KcsjDesignOptimizeItem.class);
-        List<KcsjDesignOptimizeItem> list = excelUtil.importExcel("sheet1", file.getInputStream());
+        List<KcsjDesignOptimizeItem> list = excelUtil.importExcel("数据", file.getInputStream());
+        Set<String> codeSet = new HashSet<>(list.size());
+        for (int i = 0; i < list.size(); i++) {
+            KcsjDesignOptimizeItem vo = list.get(i);
+            BigDecimal beforePrice = ObjectUtils.nvlBigDecimal(vo.getBeforeOptimizeQty()).
+                    multiply(ObjectUtils.nvlBigDecimal(vo.getBeforeUnitPrice()));
+            vo.setBeforePrice(beforePrice);
+            BigDecimal afterPrice = ObjectUtils.nvlBigDecimal(vo.getAfterOptimizeQty()).
+                    multiply(ObjectUtils.nvlBigDecimal(vo.getEstimatePrice()));
+            vo.setAfterPrice(afterPrice);        
+            vo.setEstimateAmt(ObjectUtils.nvlBigDecimal(vo.getAfterPrice()).subtract(
+                    ObjectUtils.nvlBigDecimal(vo.getBeforePrice())));
+            Assert.isTrue(!codeSet.contains(vo.getItemCode()), "主材/清单编码["+vo.getItemCode()+"]已存在，无法重复录入");
+            codeSet.add(vo.getItemCode());
+        }
         return AjaxResult.success(list);
     }
 }
