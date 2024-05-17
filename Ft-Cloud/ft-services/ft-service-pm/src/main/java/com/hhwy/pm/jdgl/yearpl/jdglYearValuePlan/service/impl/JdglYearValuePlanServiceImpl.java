@@ -26,6 +26,7 @@ import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewListService;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewService;
 import com.hhwy.utils.tree.TreeUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ import com.hhwy.utils.idworker.IdWorker;
  * @remark
  */
 @Service
+@Slf4j
 public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
 
     @Autowired
@@ -239,36 +241,43 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
                             jdglYearValuePlan.setTotalCompDesignQuantity(BigDecimal.ZERO);
                             jdglYearValuePlan.setRemainDesignQuantity(jdglYearValuePlan.getDesignQuantity());
                         }
-                        if(xmslContractList.getCode() != null) {
-                            BigDecimal yearplanCompQuantity = new BigDecimal(0);
-
-                            // 根据清单获取图纸复核wbs清单数据
-                            List<XmslDrawReviewList> collect = list.stream().filter(vo -> xmslContractList.getCode().equals(vo.getListCode())).collect(Collectors.toList());
-                            if(!CollectionUtils.isEmpty(collect)) {
-                                for (XmslDrawReviewList xmslDrawReviewList :  collect) {
-                                    String workCode = xmslDrawReviewList.getWbsCode();
-                                    // 根据作业编号获取年形象计划对应的作业
-                                    List<JdglYearImagePlan> collect1 = imagePlans.stream().filter(vo -> workCode.equals(vo.getWorkCode())).collect(Collectors.toList());
-                                    if(!CollectionUtils.isEmpty(collect1)) {
-                                        BigDecimal workDesignNum = new BigDecimal(0);
-                                        BigDecimal workPlanNum = new BigDecimal(0);
-                                        JdglYearImagePlan jdglYearImagePlan = collect1.get(0);
-                                        BigDecimal designQuantity = jdglYearImagePlan.getDesignQuantity();
-                                        workDesignNum = designQuantity == null ? BigDecimal.ZERO : jdglYearImagePlan.getDesignQuantity();
-                                        BigDecimal planCompQuantity = jdglYearImagePlan.getPlanCompQuantity();
-                                        workPlanNum = planCompQuantity == null ? new BigDecimal(0) : planCompQuantity;
-
-                                        if(workDesignNum.compareTo(new BigDecimal(0)) != 0) {
-                                            BigDecimal divide = workPlanNum.divide(workDesignNum, 4, RoundingMode.HALF_UP);
-                                            BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
-                                            BigDecimal multiply = checkNum.multiply(divide);
-                                            yearplanCompQuantity = yearplanCompQuantity.add(multiply);
-                                        }
+                        if(xmslContractList.getCode() == null) {
+                            log.info("清单编号为空");
+                            continue;
+                        }
+                        BigDecimal yearplanCompQuantity = new BigDecimal(0);
+                        // 根据清单获取图纸复核wbs清单数据
+                        List<XmslDrawReviewList> collect = list.stream().filter(vo -> xmslContractList.getCode().equals(vo.getListCode())).collect(Collectors.toList());
+                        if(!CollectionUtils.isEmpty(collect)) {
+                            for (XmslDrawReviewList xmslDrawReviewList :  collect) {
+                                String workCode = xmslDrawReviewList.getWbsCode();
+                                String imageProgress = xmslDrawReviewList.getImageProgress();
+                                // 根据作业编号获取年形象计划对应的作业
+                                List<JdglYearImagePlan> yearImagePlan = imagePlans.stream().filter(vo -> workCode.equals(vo.getWorkCode())).collect(Collectors.toList());
+                                if(CollectionUtils.isEmpty(yearImagePlan)) {
+                                    log.info("根据作业编号获取年形象计划对应的作业 未找到");
+                                   continue;
+                                }
+                                BigDecimal workDesignNum = new BigDecimal(0);
+                                BigDecimal workPlanComplNum = new BigDecimal(0);
+                                JdglYearImagePlan jdglYearImagePlan = yearImagePlan.get(0);
+                                BigDecimal designQuantity = jdglYearImagePlan.getDesignQuantity();
+                                workDesignNum = designQuantity == null ? BigDecimal.ZERO : jdglYearImagePlan.getDesignQuantity();
+                                BigDecimal planCompQuantity = jdglYearImagePlan.getPlanCompQuantity();
+                                workPlanComplNum = planCompQuantity == null ? new BigDecimal(0) : planCompQuantity;
+                                if (StrUtil.isNotBlank(imageProgress) && imageProgress.equals("1")) {
+                                    yearplanCompQuantity = yearplanCompQuantity.add(workPlanComplNum);
+                                }else {
+                                    if(workPlanComplNum.compareTo(new BigDecimal(0)) != 0) {
+                                        BigDecimal divide = workPlanComplNum.divide(workDesignNum, 4, RoundingMode.HALF_UP);
+                                        BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
+                                        BigDecimal multiply = checkNum.multiply(divide);
+                                        yearplanCompQuantity = yearplanCompQuantity.add(multiply);
                                     }
                                 }
                             }
-                            jdglYearValuePlan.setYearPlanCompDesignQuantity(yearplanCompQuantity);
                         }
+                        jdglYearValuePlan.setYearPlanCompDesignQuantity(yearplanCompQuantity);
                         if (jdglYearValuePlan.getPriceCu() != null && jdglYearValuePlan.getYearPlanCompDesignQuantity() != null) {
                             jdglYearValuePlan.setYearPlanValueCu(jdglYearValuePlan.getPriceCu().multiply(jdglYearValuePlan.getYearPlanCompDesignQuantity()));
                         }
