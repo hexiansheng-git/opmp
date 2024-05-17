@@ -221,13 +221,27 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
             if(min == null){
                 minMaxDateMap.put(temp.getPid()+"_min", temp.getPlanStartDate());
                 minMaxDateMap.put(temp.getPid()+"_max", temp.getPlanEndDate());
-                continue;
+            }else{
+                if(min == null || temp.getPlanStartDate().before(min)){
+                    minMaxDateMap.put(temp.getPid()+"_min", temp.getPlanStartDate());
+                }
+                Date max = minMaxDateMap.get(temp.getPid()+"_max");
+                if(max == null || temp.getPlanEndDate().after(max)){
+                    minMaxDateMap.put(temp.getPid()+"_max", temp.getPlanEndDate());
+                }
             }
-            if(temp.getPlanStartDate().before(min)){
-                minMaxDateMap.put(temp.getPid()+"_min", temp.getPlanStartDate());
-            }
-            if(temp.getPlanEndDate().after(minMaxDateMap.get(temp.getPid()+"_max"))){
-                minMaxDateMap.put(temp.getPid()+"_max", temp.getPlanEndDate());
+            Date actMin = minMaxDateMap.get(temp.getPid()+"_actMin");
+            if(actMin == null){
+                minMaxDateMap.put(temp.getPid()+"_actMin", temp.getActStartDate());
+                minMaxDateMap.put(temp.getPid()+"_actMax", temp.getActEndDate());
+            }else{
+                if(actMin == null || temp.getActStartDate().before(actMin)){
+                    minMaxDateMap.put(temp.getPid()+"_actMin", temp.getActStartDate());
+                }
+                Date max = minMaxDateMap.get(temp.getPid()+"_actMax");
+                if(max == null || temp.getActEndDate().after(max)){
+                    minMaxDateMap.put(temp.getPid()+"_actMax", temp.getActEndDate());
+                }
             }
         }
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
@@ -236,14 +250,24 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
             String workCode = ObjectUtils.nvlString(temp.getWorkCode());
             String workName = ObjectUtils.nvlString(temp.getWorkName());
             Date min = minMaxDateMap.get(temp.getId()+"_min");
-            if(min != null && temp.getPlanStartDate().after(min)){
+            if(min != null && temp.getPlanStartDate() != null && temp.getPlanStartDate().after(min)){
                 sb.append(String.format("作业代码[%s]作业名称[%s]的计划开始时间[%s]不能晚于子级开始时间[%s]\n"
                         ,workCode,workName,fmt.format(temp.getPlanStartDate()),fmt.format(min)));
             }
             Date max = minMaxDateMap.get(temp.getId()+"_max");
-            if(max != null && temp.getPlanEndDate().before(max)){
+            if(max != null && temp.getPlanEndDate() != null && temp.getPlanEndDate().before(max)){
                 sb.append(String.format("作业代码[%s]作业名称[%s]的计划结束时间[%s]不能早于子级结束时间[%s]\n"
                         ,workCode,workName,fmt.format(temp.getPlanEndDate()),fmt.format(max)));
+            }
+            Date actMin = minMaxDateMap.get(temp.getId()+"_actMin");
+            if(actMin != null && temp.getActStartDate() != null && temp.getActStartDate().after(actMin)){
+                sb.append(String.format("作业代码[%s]作业名称[%s]的实际开始时间[%s]不能晚于子级开始时间[%s]\n"
+                        ,workCode,workName,fmt.format(temp.getActStartDate()),fmt.format(actMin)));
+            }
+            Date actMax = minMaxDateMap.get(temp.getId()+"_actMax");
+            if(actMax != null && temp.getActEndDate() != null && temp.getActEndDate().before(actMax)){
+                sb.append(String.format("作业代码[%s]作业名称[%s]的实际结束时间[%s]不能早于子级结束时间[%s]\n"
+                        ,workCode,workName,fmt.format(temp.getActEndDate()),fmt.format(actMax)));
             }
         }
         Assert.isTrue(sb.length() < 1, sb.toString());
