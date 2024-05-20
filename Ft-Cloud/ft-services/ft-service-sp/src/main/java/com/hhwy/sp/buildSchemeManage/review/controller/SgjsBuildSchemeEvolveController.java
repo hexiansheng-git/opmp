@@ -9,6 +9,9 @@ import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeEvolveQueryVo;
 import com.hhwy.sp.buildSchemeManage.review.service.ISgjsBuildSchemeEvolveService;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.ISgjsBuildSchemeService;
+import com.hhwy.sp.core.system.SystemApiService;
+import com.hhwy.system.api.domain.SysDictData;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
@@ -20,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -36,6 +41,8 @@ public class SgjsBuildSchemeEvolveController extends BaseController {
 
     @Autowired
     private ISgjsBuildSchemeService sgjsBuildSchemeService;
+    @Autowired
+    private SystemApiService systemApiService;
 
 
     /**
@@ -55,10 +62,24 @@ public class SgjsBuildSchemeEvolveController extends BaseController {
         if(lastValidScheme == null){
             evolveList = new ArrayList<>();
         }else {
+            List<SysDictData> list = systemApiService.selectDictDataByType("scheme_type_all");
+            Map<Long,SysDictData> dictMap = list.stream().collect(Collectors.toMap(r->r.getDictDataId(), r->r));
+            Map<String,String> map = list.stream().collect(
+                    Collectors.toMap(r->{
+                                String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":dictMap.get(r.getParentId()).getDictValue()+",";
+                                return parent+r.getDictValue();
+                            }
+                            , r->{
+                                String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":dictMap.get(r.getParentId()).getDictLabel()+"/";
+                                return parent+r.getDictLabel();
+                            })
+            );
             queryVo.setForeignId(lastValidScheme.getId());
             evolveList = sgjsBuildSchemeEvolveService.getListByQueryVo(queryVo);
             for (SgjsBuildSchemeEvolve evolve : evolveList) {
                 evolve.setInventoryApprovalTime(lastValidScheme.getUpdateTime());
+                String fmtStr = ObjectUtils.nvlString(map.get(evolve.getSchemeType()),evolve.getSchemeType());
+                evolve.setSchemeType(fmtStr);
             }
         }
         return getDataTableAjaxResult(evolveList);
