@@ -243,18 +243,18 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         SgjsBuildScheme validVersionData = sgjsBuildSchemeMapper.getValidVersionData();
         if (validVersionData != null ) result.setPtVar5(String.valueOf(validVersionData.getId()));
         //附件组id更新
-        String auditRecordFile = lastData.getAuditRecordFile();
-        String auditRecordFileRegion = lastData.getAuditRecordFileRegion();
-        String projectSummaryFile = lastData.getProjectSummaryFile();
-        if (StringUtils.isNotEmpty(auditRecordFile)) {
-            result.setAuditRecordFile(fileUploadUtil.copyFile(auditRecordFile));
-        }
-        if (StringUtils.isNotEmpty(auditRecordFileRegion)) {
-            result.setAuditRecordFile(fileUploadUtil.copyFile(auditRecordFileRegion));
-        }
-        if (StringUtils.isNotEmpty(projectSummaryFile)) {
-            result.setProjectSummaryFile(fileUploadUtil.copyFile(projectSummaryFile));
-        }
+//        String auditRecordFile = lastData.getAuditRecordFile();
+//        String auditRecordFileRegion = lastData.getAuditRecordFileRegion();
+//        String projectSummaryFile = lastData.getProjectSummaryFile();
+//        if (StringUtils.isNotEmpty(auditRecordFile)) {
+//            result.setAuditRecordFile(fileUploadUtil.copyFile(auditRecordFile));
+//        }
+//        if (StringUtils.isNotEmpty(auditRecordFileRegion)) {
+//            result.setAuditRecordFile(fileUploadUtil.copyFile(auditRecordFileRegion));
+//        }
+//        if (StringUtils.isNotEmpty(projectSummaryFile)) {
+//            result.setProjectSummaryFile(fileUploadUtil.copyFile(projectSummaryFile));
+//        }
         return result;
     }
 
