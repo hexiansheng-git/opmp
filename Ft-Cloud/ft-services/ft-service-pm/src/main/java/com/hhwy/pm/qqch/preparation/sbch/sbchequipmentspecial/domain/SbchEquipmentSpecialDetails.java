@@ -161,4 +161,6 @@ public class SbchEquipmentSpecialDetails extends CommonBaseEntity {
     /** 所属区域 */
     @Excel(name = "所属区域")
     private String region;
+
+    private String manageCode;
 }
