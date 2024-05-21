@@ -36,10 +36,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="projectId"    column="project_id"    />
         <result property="regionId"    column="region_id"    />
         <result property="region"    column="region"    />
+        <result property="manageCode" column="manage_code"></result>
     </resultMap>
 
     <sql id="selectSbchEquipmentSpecialDetailsVo">
-        select `id`, `main_id`, `material_code`, `material_name`, `material_spec`, `sb_product_factory`, `sb_product_time`, `sb_new_coefficient`, `whole_status`, `sb_purchase_source`, `plan_entry_time`, `plan_exit_time`, `operator_name`, `operator_certificate`, `third_organization`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_user_name`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `dept_id`, `project_id`, `region_id`, `region` from `sbch_equipment_special_details`
+        select `id`, `main_id`, `material_code`, `material_name`, `material_spec`, `sb_product_factory`, `sb_product_time`, `sb_new_coefficient`, `whole_status`, `sb_purchase_source`, `plan_entry_time`, `plan_exit_time`, `operator_name`, `operator_certificate`, `third_organization`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_user_name`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `dept_id`, `project_id`, `region_id`, `region`,`manage_code` from `sbch_equipment_special_details`
     </sql>
 
     <select id="selectSbchEquipmentSpecialDetailsList" parameterType="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.domain.SbchEquipmentSpecialDetails" resultMap="SbchEquipmentSpecialDetailsResult">
@@ -74,6 +75,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null "> and `project_id` = #{projectId}</if>
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="region != null  and region != ''"> and `region` = #{region}</if>
+            <if test="manageCode != null  and manageCode != ''"> and `manage_code` = #{manageCode}</if>
         </where>
 #         order by `id` desc
     </select>
@@ -117,7 +119,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">`project_id`,</if>
             <if test="regionId != null">`region_id`,</if>
             <if test="region != null">`region`,</if>
-         </trim>
+            <if test="manageCode != null">`manage_code`,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
             <if test="mainId != null">#{mainId},</if>
@@ -151,7 +154,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">#{projectId},</if>
             <if test="regionId != null">#{regionId},</if>
             <if test="region != null">#{region},</if>
-         </trim>
+            <if test="manageCode != null">#{manage_code},</if>
+        </trim>
     </insert>
 
     <insert id="batchInsert" parameterType="list">
@@ -187,7 +191,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                 `dept_id`,
                                                                 `project_id`,
                                                                 `region_id`,
-                                                                `region`
+                                                                `region`,
+                                                                `manage_code`
                                     )values
         <foreach collection="list" separator="," item="item" index="index" >
             (#{item.id},
@@ -221,7 +226,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                 #{item.deptId},
                                                                 #{item.projectId},
                                                                 #{item.regionId},
-                                                                #{item.region}
+                                                                #{item.region},
+            #{item.manageCode}
             )
                                     </foreach>
     </insert>
@@ -490,6 +496,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">`project_id` = #{projectId},</if>
             <if test="regionId != null">`region_id` = #{regionId},</if>
             <if test="region != null">`region` = #{region},</if>
+            <if test="manageCode != null">`manage_code` = #{manageCode},</if>
         </trim>
         where `id` = #{id}
     </update>

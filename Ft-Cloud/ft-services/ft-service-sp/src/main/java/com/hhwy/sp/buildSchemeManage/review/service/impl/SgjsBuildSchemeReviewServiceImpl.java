@@ -853,6 +853,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 
     @Override
     public List<SgjsBuildSchemeList> getSchemeList(SgjsBuildSchemeList schemeList) {
+        schemeList.setParams(ObjectUtils.toMap("limitType","1"));
         List<SgjsBuildSchemeList> lastValidSchemeListList = sgjsBuildSchemeListService.getLastValidScheme(schemeList);
         if(CollectionUtils.isEmpty(lastValidSchemeListList)){
             return new ArrayList<>();

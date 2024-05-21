@@ -189,6 +189,9 @@
                     #{dangerLevel}
                 </foreach>
             </if>
+            <if test="params != null  and params.limitType != null ">
+                and `change_type` != '4'
+            </if>
         </where>
     </select>
 
