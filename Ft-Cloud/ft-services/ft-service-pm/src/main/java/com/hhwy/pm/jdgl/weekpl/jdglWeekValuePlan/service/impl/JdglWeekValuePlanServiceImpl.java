@@ -15,18 +15,22 @@ import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.service.IJdglWeekPlanService;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.domain.JdglWeekValuePlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.mapper.JdglWeekValuePlanMapper;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.service.IJdglWeekValuePlanService;
+import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
+import com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.domain.JdglYearValuePlan;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewListService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,6 +40,7 @@ import java.util.stream.Collectors;
  * @remark
  */
 @Service
+@Slf4j
 public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
 
     @Autowired
@@ -210,58 +215,71 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
                     }
                 }
                 for (String listCode : allListCode) {
-                    JdglWeekValuePlan valuePlan = new JdglWeekValuePlan();
+                    JdglWeekValuePlan jdglYearValuePlan = new JdglWeekValuePlan();
                     XmslContractList xmslContractList = validMaxVersionContractInventoryList.stream().filter(vo -> listCode.equals(vo.getCode())).findFirst().orElse(null);
                     if(xmslContractList != null) {
-                        valuePlan.setId(IdWorker.createId());
+                        jdglYearValuePlan.setId(IdWorker.createId());
 //                            jdglYearValuePlan.setPid();
-                        valuePlan.setInventoryId(xmslContractList.getId());
-                        valuePlan.setInventoryPid(xmslContractList.getPid());
-                        valuePlan.setInventoryCode(xmslContractList.getCode());
-                        valuePlan.setInventoryName(xmslContractList.getChineseName());
-                        valuePlan.setPlanId(planId);
-                        valuePlan.setUnit(xmslContractList.getUnit());
-                        valuePlan.setDesignQuantity(xmslContractList.getChangeNum() == null ? xmslContractList.getWinNum() : xmslContractList.getChangeNum());
-                        valuePlan.setPriceCu(xmslContractList.getChangeUnitPrice() == null ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice());
-                        valuePlan.setTotalCompDesignQuantity(BigDecimal.ZERO);
+                        jdglYearValuePlan.setInventoryId(xmslContractList.getId());
+                        jdglYearValuePlan.setInventoryPid(xmslContractList.getPid());
+                        jdglYearValuePlan.setInventoryCode(xmslContractList.getCode());
+                        jdglYearValuePlan.setInventoryName(xmslContractList.getChineseName());
+                        jdglYearValuePlan.setPlanId(planId);
+                        jdglYearValuePlan.setUnit(xmslContractList.getUnit());
+                        jdglYearValuePlan.setDesignQuantity(xmslContractList.getChangeNum() == null ? xmslContractList.getWinNum() : xmslContractList.getChangeNum());
+                        jdglYearValuePlan.setPriceCu(xmslContractList.getChangeUnitPrice() == null ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice());
                         if(!CollectionUtils.isEmpty(dayScheduleBillList)) {
                             JdglDayScheduleBill jdglDayScheduleBill = dayScheduleBillList.stream().filter(vo -> xmslContractList.getCode().equals(vo.getBillCode())).findFirst().orElse(null);
-                            if(jdglDayScheduleBill != null) valuePlan.setTotalCompDesignQuantity(jdglDayScheduleBill.getThisQuantity());
+                            if(jdglDayScheduleBill != null) jdglYearValuePlan.setTotalCompDesignQuantity(jdglDayScheduleBill.getThisQuantity());
                         }
-                        if(valuePlan.getDesignQuantity() != null && valuePlan.getTotalCompDesignQuantity() != null) {
-                            valuePlan.setRemainDesignQuantity(valuePlan.getDesignQuantity().subtract(valuePlan.getTotalCompDesignQuantity()));
+                        if(jdglYearValuePlan.getDesignQuantity() != null && jdglYearValuePlan.getTotalCompDesignQuantity() != null) {
+                            jdglYearValuePlan.setRemainDesignQuantity(jdglYearValuePlan.getDesignQuantity().subtract(jdglYearValuePlan.getTotalCompDesignQuantity()));
                         }
-                        if(xmslContractList.getCode() != null) {
-                            BigDecimal weekplanCompQuantity = new BigDecimal(0);
-                            List<XmslDrawReviewList> collect = list.stream().filter(vo -> xmslContractList.getCode().equals(vo.getListCode())).collect(Collectors.toList());
-                            if(!CollectionUtils.isEmpty(collect)) {
-                                for (XmslDrawReviewList xmslDrawReviewList :  collect) {
-                                    String wbsCode = xmslDrawReviewList.getWbsCode();
-                                    // 根据wbs获取年形象计划对应wbs
-                                    List<JdglWeekImagePlan> collect1 = imagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
-                                    if(!CollectionUtils.isEmpty(collect1)) {
-                                        BigDecimal wbsDesignNum = new BigDecimal(0);
-                                        BigDecimal wbsPlanNum = new BigDecimal(0);
-                                        for (JdglWeekImagePlan jdglWeekImagePlan : collect1) {
-                                            if(wbsCode.equals(jdglWeekImagePlan.getWorkCode())) {
-                                                if(jdglWeekImagePlan.getDesignQuantity() != null) wbsDesignNum = jdglWeekImagePlan.getDesignQuantity();
-                                            } else {
-                                                wbsPlanNum = wbsPlanNum.add(jdglWeekImagePlan.getPlanCompQuantity() == null ? new BigDecimal(0) : jdglWeekImagePlan.getPlanCompQuantity());
-                                            }
-                                        }
-                                        if(wbsDesignNum.compareTo(new BigDecimal(0)) != 0) {
-                                            weekplanCompQuantity = weekplanCompQuantity.add(xmslDrawReviewList.getCheckNum() == null
-                                                    ? new BigDecimal(0) : xmslDrawReviewList.getCheckNum().multiply(wbsPlanNum.divide(wbsDesignNum, 4, BigDecimal.ROUND_HALF_UP)));
-                                        }
+                        if(jdglYearValuePlan.getTotalCompDesignQuantity() == null) {
+                            jdglYearValuePlan.setTotalCompDesignQuantity(BigDecimal.ZERO);
+                            jdglYearValuePlan.setRemainDesignQuantity(jdglYearValuePlan.getDesignQuantity());
+                        }
+                        if(xmslContractList.getCode() == null) {
+                            log.info("清单编号为空");
+                            continue;
+                        }
+                        BigDecimal yearplanCompQuantity = new BigDecimal(0);
+                        // 根据清单获取图纸复核wbs清单数据
+                        List<XmslDrawReviewList> collect = list.stream().filter(vo -> xmslContractList.getCode().equals(vo.getListCode())).collect(Collectors.toList());
+                        if(!CollectionUtils.isEmpty(collect)) {
+                            for (XmslDrawReviewList xmslDrawReviewList :  collect) {
+                                String workCode = xmslDrawReviewList.getWbsCode();
+                                String imageProgress = xmslDrawReviewList.getImageProgress();
+                                // 根据作业编号获取年形象计划对应的作业
+                                List<JdglWeekImagePlan> yearImagePlan = imagePlans.stream().filter(vo -> workCode.equals(vo.getWorkCode())).collect(Collectors.toList());
+                                if(CollectionUtils.isEmpty(yearImagePlan)) {
+                                    log.info("根据作业编号获取年形象计划对应的作业 未找到");
+                                    continue;
+                                }
+                                BigDecimal workDesignNum = new BigDecimal(0);
+                                BigDecimal workPlanComplNum = new BigDecimal(0);
+                                JdglWeekImagePlan jdglYearImagePlan = yearImagePlan.get(0);
+                                BigDecimal designQuantity = jdglYearImagePlan.getDesignQuantity();
+                                workDesignNum = designQuantity == null ? BigDecimal.ZERO : jdglYearImagePlan.getDesignQuantity();
+                                BigDecimal planCompQuantity = jdglYearImagePlan.getPlanCompQuantity();
+                                workPlanComplNum = planCompQuantity == null ? new BigDecimal(0) : planCompQuantity;
+                                if (StrUtil.isNotBlank(imageProgress) && imageProgress.equals("1")) {
+                                    yearplanCompQuantity = yearplanCompQuantity.add(workPlanComplNum);
+                                }else {
+                                    if(workPlanComplNum.compareTo(new BigDecimal(0)) != 0) {
+                                        BigDecimal divide = workPlanComplNum.divide(workDesignNum, 4, RoundingMode.HALF_UP);
+                                        BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
+                                        BigDecimal multiply = checkNum.multiply(divide);
+                                        yearplanCompQuantity = yearplanCompQuantity.add(multiply);
                                     }
                                 }
                             }
-                            valuePlan.setWeekPlanCompDesignQuantity(weekplanCompQuantity);
                         }
-                        if (valuePlan.getPriceCu() != null && valuePlan.getWeekPlanCompDesignQuantity() != null) {
-                            valuePlan.setWeekPlanValueCu(valuePlan.getPriceCu().multiply(valuePlan.getWeekPlanCompDesignQuantity()));
+                        jdglYearValuePlan.setWeekPlanCompDesignQuantity(yearplanCompQuantity);
+                        if (jdglYearValuePlan.getPriceCu() != null && jdglYearValuePlan.getWeekPlanCompDesignQuantity() != null) {
+                            jdglYearValuePlan.setWeekPlanValueCu(jdglYearValuePlan.getPriceCu().multiply(jdglYearValuePlan.getWeekPlanCompDesignQuantity()));
                         }
-                        returnList.add(valuePlan);
+                        returnList.add(jdglYearValuePlan);
                     }
                 }
                 if(!CollectionUtils.isEmpty(returnList)) {
