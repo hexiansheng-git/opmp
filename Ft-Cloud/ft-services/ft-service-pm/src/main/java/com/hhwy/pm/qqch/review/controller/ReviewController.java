@@ -291,8 +291,8 @@ public class ReviewController extends BaseController {
             try {
                 //推送设备策划数据到物设中间库
                 dataShareDevicePlanService.eachStagePush(tenantKey);
-                //进度管理 - 总体计划数据初始化
-                jdglData4P6Service.initJdglData4P6ByOne(tenantKey);
+                //进度管理 - 总体计划数据初始化， 前期策划评审结束后，生成基线计划
+                jdglData4P6Service.syncData();
             }catch (Exception e){
                 e.printStackTrace();
                 throw new CustomException(e.getMessage());

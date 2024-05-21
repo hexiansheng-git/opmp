@@ -206,8 +206,8 @@ public class QqchChangeController extends BaseController {
                 List<QqchChangeDetail> collect = qqchChangeDetailList.stream().filter(p -> p.getItemId().equals("/preliminaryPlanning/constructionPlannin/child2/list2_1")
                         || p.getItemName().equals("1.2.1 总体进度计划")).collect(Collectors.toList());
                 if (CollUtil.isNotEmpty(collect)) {
-                    //p6数据拉去
-                    jdglData4P6Service.initJdglData4P6ByOne(tenantKey);
+                    //如果变更中包含1.2.1的内容，则重新拉去1.2.1的数据到 进度管理 - 总体计划
+                    jdglData4P6Service.syncData();
                     //进度管理 - 总体计划  设置基线版本
                     jdglMainPlanService.updateJdglBaseMainPlan();
                 }
