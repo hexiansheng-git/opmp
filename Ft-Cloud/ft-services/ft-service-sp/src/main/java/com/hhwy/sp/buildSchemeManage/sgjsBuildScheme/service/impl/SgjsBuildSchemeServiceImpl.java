@@ -326,9 +326,9 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             });
             schemeExpertSuggestService.insertSgjsBuildSchemeExpertSuggestList(expertSuggest);
         }
-        String userName = SecurityUtils.getUserName();
-        String tenantKey = SecurityUtils.getTenantKey();
-        ThreadPoolUtil.execute(() -> doSendGm(tenantKey, userName));
+//        String userName = SecurityUtils.getUserName();
+//        String tenantKey = SecurityUtils.getTenantKey();
+//        ThreadPoolUtil.execute(() -> doSendGm(tenantKey, userName));
         return id;
     }
 
@@ -395,11 +395,12 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 sgjsBuildSchemeMapper.updateNonValid(new SgjsBuildScheme());
                 //修改当前记录状态
                 sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
+                //发送总部版， 只有生效得数据需要推送
+                String userName = SecurityUtils.getUserName();
+                String tenantKey = SecurityUtils.getTenantKey();
+                ThreadPoolUtil.execute(() -> doSendGm(tenantKey, userName));
             }
         }
-        String userName = SecurityUtils.getUserName();
-        String tenantKey = SecurityUtils.getTenantKey();
-        ThreadPoolUtil.execute(() -> doSendGm(tenantKey, userName));
     }
 
     //发送总部版

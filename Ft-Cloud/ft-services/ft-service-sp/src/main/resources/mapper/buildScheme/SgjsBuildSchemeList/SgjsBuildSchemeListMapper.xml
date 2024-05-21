@@ -182,6 +182,13 @@
                     #{id}
                 </foreach>
             </if>
+
+            <if test="dangerLevelArr != null">
+                and danger_level in
+                <foreach collection="dangerLevelArr" open="(" close=")" item="dangerLevel" separator=",">
+                    #{dangerLevel}
+                </foreach>
+            </if>
         </where>
     </select>
 

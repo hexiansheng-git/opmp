@@ -133,8 +133,9 @@ public class SgjsBuildSchemeController extends BaseController {
     }
 
     //监听器，推送总部数据
+    //0520 修改需求  只有生效数据才需要推送
     @RequestMapping("/doSendGmlistener")
     public void schemeListDoSendGm(@RequestParam("tenantKey") String tenantKey){
-        ThreadPoolUtil.execute(() -> sgjsBuildSchemeService.doSendGm(tenantKey, "admin"));
+//        ThreadPoolUtil.execute(() -> sgjsBuildSchemeService.doSendGm(tenantKey, "admin"));
     }
 }

@@ -195,6 +195,12 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
 
     //台账查询
     public List<SgjsBuildSchemeList> getSgjsBuildSchemeListList(SgjsBuildSchemeList sgjsBuildSchemeList) {
+        String dangerLevel = sgjsBuildSchemeList.getDangerLevel();
+        if (StrUtil.isNotBlank(dangerLevel)) {
+            String[] dangerLevelArr = dangerLevel.split(",");
+            sgjsBuildSchemeList.setDangerLevelArr(dangerLevelArr);
+            sgjsBuildSchemeList.setDangerLevel(null);
+        }
         return sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeList);
     }
 
