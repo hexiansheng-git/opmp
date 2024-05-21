@@ -489,7 +489,8 @@
         SELECT
             person_id,
             person_name,
-            GROUP_CONCAT( suggest ) AS suggest,
+            IF
+            ( LENGTH( suggest ) > 0, GROUP_CONCAT( CONCAT( submit_time, '--', suggest )), suggest ) AS suggest,
             GROUP_CONCAT( file_group ) AS file_group,
             submit_time
         FROM

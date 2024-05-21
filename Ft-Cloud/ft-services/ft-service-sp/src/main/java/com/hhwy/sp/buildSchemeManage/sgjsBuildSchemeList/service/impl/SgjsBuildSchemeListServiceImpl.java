@@ -1,6 +1,7 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -52,9 +53,9 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             String schemeLevel = map.get(5);
             String riskLevel = map.get(6);
             String buildDifficult = map.get(7);
-            String passTime = map.get(8);
+            String planImplementTime = map.get(8);
             if (StrUtil.isBlank(schemeName) || StrUtil.isBlank(buildDifficult)) {
-                AjaxResult.error("必填项为空，请检查:方案名称、施工重难点");
+                AjaxResult.error("必填项为空，请检查:方案名称、施工重难点、计划实施时间");
             }
             sgjsBuildSchemeList.setSchemeName(schemeName);
             sgjsBuildSchemeList.setRelationWbsId(wbsId);
@@ -64,6 +65,7 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             sgjsBuildSchemeList.setSchemeType(schemeTypeAllDict.get(schemeType));
             sgjsBuildSchemeList.setSchemeLevel(schemeLevelDict.get(schemeLevel));
             sgjsBuildSchemeList.setDangerLevel(dangerLevelDict.get(riskLevel));
+            sgjsBuildSchemeList.setPlanImplementTime(DateUtil.parseDate(planImplementTime));
             result.add(sgjsBuildSchemeList);
         }
         return AjaxResult.success(result);
@@ -179,10 +181,8 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         String tenantKey = SecurityUtils.getTenantKey();
         serialNum += 1;
         if (serialNum < 10) {
-            return tenantKey + "000" + serialNum;
-        } else if (serialNum < 100) {
             return tenantKey + "00" + serialNum;
-        } else if (serialNum < 1000) {
+        } else if (serialNum < 100) {
             return tenantKey + "0" + serialNum;
         } else {
             return tenantKey + serialNum;
