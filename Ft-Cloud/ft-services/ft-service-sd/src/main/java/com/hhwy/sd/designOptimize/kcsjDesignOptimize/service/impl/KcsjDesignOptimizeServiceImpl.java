@@ -8,6 +8,7 @@ import com.hhwy.sd.designOptimize.kcsjDesignOptimize.service.IKcsjDesignOptimize
 import com.hhwy.sd.designOptimize.kcsjDesignOptimizeItem.domain.KcsjDesignOptimizeItem;
 import com.hhwy.sd.designOptimize.kcsjDesignOptimizeItem.service.IKcsjDesignOptimizeItemService;
 import com.hhwy.sd.sync.mq.ISysSyncInfoService4Sd;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,7 @@ public class KcsjDesignOptimizeServiceImpl implements IKcsjDesignOptimizeService
         if(CollectionUtils.isNotEmpty(kcsjDesignOptimizeItemList)) {
             kcsjDesignOptimizeItemService.updateKcsjDesignOptimizeItemList(id, kcsjDesignOptimizeItemList,kcsjDesignOptimize);
         }
+        kcsjDesignOptimize.setOptimizeAmt(ObjectUtils.nvlBigDecimal(kcsjDesignOptimize.getChangeSumPrice()));
         if(isNew) {
             kcsjDesignOptimize.setId(id);
             kcsjDesignOptimize.setAddOrUpdate("add");
