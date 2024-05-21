@@ -289,10 +289,10 @@ public class ReviewController extends BaseController {
             String oldDataSource = DynamicDataSourceContextHolder.peek();
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
             try {
-                //推送设备策划数据到物设中间库
-                dataShareDevicePlanService.eachStagePush(tenantKey);
                 //进度管理 - 总体计划数据初始化， 前期策划评审结束后，生成基线计划
                 jdglData4P6Service.syncData();
+                //推送设备策划数据到物设中间库
+                dataShareDevicePlanService.eachStagePush(tenantKey);
             }catch (Exception e){
                 e.printStackTrace();
                 throw new CustomException(e.getMessage());

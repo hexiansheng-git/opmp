@@ -412,6 +412,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             Thread.sleep(3000);
             //全量推送，（已发起审批的）
             SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
+            sgjsBuildScheme.setValid("1");
             List<SgjsBuildScheme> sgjsBuildSchemeList = sgjsBuildSchemeMapper.getSgjsBuildSchemeList(sgjsBuildScheme);
             if (CollUtil.isEmpty(sgjsBuildSchemeList)) {
                 sendEmpty(tenantKey);

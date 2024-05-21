@@ -88,10 +88,12 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
     //从1.2.1获取数据，生成基线计划
     @Transactional
     public void syncData(){
+        log.info("从1.2.1获取数据，生成基线计划开始.....");
         /*清空表*/
         jdglMainPlanService.deleteJdglMainPlan(new JdglMainPlan());
         jdglMainPlanItemService.deleteJdglMainPlanItem(new JdglMainPlanItem());
         iJdglMainPlanItemPreService.deleteJdglMainPlanItemPre(new JdglMainPlanItemPre());
+        log.info("从1.2.1获取数据，生成基线计划.....1");
         /*保存 总体进度计划主表*/
         Long mainPlanId = IdWorker.createId();
         Calendar cl = Calendar.getInstance();
@@ -106,12 +108,13 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         usingJdglMainPlan.setPtVar2("1");
         usingJdglMainPlan.setPtVar3(DateUtil.format(new Date(), "yyyy年MM月dd日 HH") + ":00");
         jdglMainPlanService.insertJdglMainPlan(usingJdglMainPlan);
-
+        log.info("从1.2.1获取数据，生成基线计划.....2");
         /*保存总体计划详细数据*/
         //查询1.2.1基线计划
         QqchMainPlanItem qqchMainPlanItem = new QqchMainPlanItem();
         List<QqchMainPlanItem> itemList = qqchMainPlanItemService.getItemList(qqchMainPlanItem);
         if (CollUtil.isNotEmpty(itemList)) {
+            log.info("从1.2.1获取数据，生成基线计划.....3");
             CopyOptions copyOptions = new CopyOptions();
             copyOptions.ignoreNullValue();
             List<JdglMainPlanItem> jdglMainPlanItems = BeanUtil.copyToList(itemList, JdglMainPlanItem.class);
@@ -121,9 +124,11 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 p.setCreateTime(DateUtils.getNowDate());
             });
             jdglMainPlanItemService.insertJdglMainPlanItemList(jdglMainPlanItems);
+            log.info("从1.2.1获取数据，生成基线计划.....4");
         }
         List<QqchMainPlanItemPre> qqchMainPlanItemPreList = qqchMainPlanItemPreService.getQqchMainPlanItemPreList(new QqchMainPlanItemPre());
         if (CollUtil.isNotEmpty(qqchMainPlanItemPreList)) {
+            log.info("从1.2.1获取数据，生成基线计划.....5");
             CopyOptions copyOptions = new CopyOptions();
             copyOptions.ignoreNullValue();
             List<JdglMainPlanItemPre> jdglMainPlanItemPres = BeanUtil.copyToList(itemList, JdglMainPlanItemPre.class);
@@ -133,7 +138,9 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 p.setCreateTime(DateUtils.getNowDate());
             });
             iJdglMainPlanItemPreService.insertJdglMainPlanItemPreList(jdglMainPlanItemPres);
+            log.info("从1.2.1获取数据，生成基线计划.....6");
         }
+        log.info("从1.2.1获取数据，生成基线计划结束.....");
     }
 
     @Override
