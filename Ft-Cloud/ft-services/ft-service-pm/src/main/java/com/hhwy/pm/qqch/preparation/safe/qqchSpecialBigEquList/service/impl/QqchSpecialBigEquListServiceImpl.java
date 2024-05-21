@@ -145,6 +145,7 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
                 equList.setFileGroupId(bean.getOperatorCertificate());
                 equList.setEquSourse(bean.getSbPurchaseSource());
                 equList.setWhetherFirst("1");
+                equList.setManageCode(bean.getManageCode());
                 addList.add(equList);
             }
         }
