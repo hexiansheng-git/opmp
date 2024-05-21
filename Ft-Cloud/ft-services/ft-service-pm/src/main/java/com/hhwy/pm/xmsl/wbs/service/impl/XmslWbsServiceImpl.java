@@ -767,19 +767,6 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         XmslWbsMain wbsMain = this.wbsMainService.getById(dto.getMainId());
         Assert.notNull(wbsMain,"mainId有误，获取主数据失败");
         Assert.isTrue(wbsMain.getValid()==Constant.NO_INT,"已生效的数据无法编辑");
-
-
-        XmslWbsHistory query = new XmslWbsHistory();
-        query.setMainId(dto.getMainId());
-        query.setNodeType("5");
-        List<XmslWbsHistory> list1 = xmslWbsHistoryMapper.getXmslWbsHistoryList(query);
-        Set<String> set = new HashSet<>();
-        for (int i = 0; i < list1.size(); i++) {
-            XmslWbsHistory temp = list1.get(i);
-            Assert.isTrue(!set.contains(temp.getSelfCode()),"作业["+temp.getSelfCode()+"]已存在，作业编码不允许重复");
-            Assert.isTrue(temp.getHaveChildren()==0,"作业["+temp.getCode()+"]下不能有任何子级");
-            set.add(temp.getSelfCode());
-        }
     }
 
     private void submitCheck(XmslWbsDto dto){
@@ -804,6 +791,18 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
 //                Assert.isTrue(temp.getHaveChildren()==0,"作业["+temp.getCode()+"]下不能有任何子级");
 //                set.add(temp.getSelfCode());
 //            }
+        }
+        //校验作业
+        XmslWbsHistory query = new XmslWbsHistory();
+        query.setMainId(dto.getMainId());
+        query.setNodeType("5");
+        List<XmslWbsHistory> list1 = xmslWbsHistoryMapper.getXmslWbsHistoryList(query);
+        Set<String> set = new HashSet<>();
+        for (int i = 0; i < list1.size(); i++) {
+            XmslWbsHistory temp = list1.get(i);
+            Assert.isTrue(!set.contains(temp.getSelfCode()),"作业["+temp.getSelfCode()+"]已存在，作业编码不允许重复");
+            Assert.isTrue(temp.getHaveChildren()==0,"作业["+temp.getCode()+"]下不能有任何子级");
+            set.add(temp.getSelfCode());
         }
     }
 
