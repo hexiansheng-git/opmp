@@ -149,7 +149,7 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         //得到最大序列号
         sgjsBuildSchemeListList.stream().filter(p -> StrUtil.isNotBlank(p.getSchemeNum())).forEach(p -> {
             String schemeNum = p.getSchemeNum();
-            Integer num = Integer.valueOf(schemeNum.substring(schemeNum.length() - 4));
+            Integer num = Integer.valueOf(schemeNum.substring(schemeNum.length() - 3));
             p.setSerialNum(num);
         });
         List<SgjsBuildSchemeList> collect = sgjsBuildSchemeListList.stream().filter(p -> null != p.getSerialNum()).collect(Collectors.toList());
