@@ -694,7 +694,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     @Override
     public String sync() {
         int syncNumTotal = 0;
-        List<SgjsBuildSchemeList> lastValidSchemeListList = sgjsBuildSchemeListService.getLastValidScheme(null);
+        SgjsBuildSchemeList query = new SgjsBuildSchemeList();
+        query.setParams(ObjectUtils.toMap("limitType","1"));
+        List<SgjsBuildSchemeList> lastValidSchemeListList = sgjsBuildSchemeListService.getLastValidScheme(query);
 
         if(CollectionUtils.isEmpty(lastValidSchemeListList)){
             return "已同步 " + syncNumTotal + " 条数据！";
