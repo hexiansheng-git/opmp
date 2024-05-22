@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.hash.Hash;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
@@ -70,6 +71,9 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
     public List<JdglYearValuePlan> getJdglYearValuePlanList(JdglYearValuePlan jdglYearValuePlan) {
         Long pid = jdglYearValuePlan.getPid();
         List<JdglYearValuePlan> jdglYearValuePlanList = jdglYearValuePlanMapper.getJdglYearValuePlanList(jdglYearValuePlan);
+        if (CollUtil.isNotEmpty(jdglYearValuePlanList)) {
+            jdglYearValuePlanList.sort(Comparator.comparing(JdglYearValuePlan::getInventoryCode));
+        }
         List<JdglYearValuePlan> build = TreeUtil.build(jdglYearValuePlanList, pid);
         return build;
     }

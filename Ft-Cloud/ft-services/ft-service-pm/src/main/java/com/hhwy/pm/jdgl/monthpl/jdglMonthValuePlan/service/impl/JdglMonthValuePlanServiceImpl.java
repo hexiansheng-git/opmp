@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -69,6 +70,9 @@ public class JdglMonthValuePlanServiceImpl implements IJdglMonthValuePlanService
     public List<JdglMonthValuePlan> getJdglMonthValuePlanList(JdglMonthValuePlan jdglMonthValuePlan) {
         Long pid = jdglMonthValuePlan.getPid();
         List<JdglMonthValuePlan> jdglMonthValuePlanList = jdglMonthValuePlanMapper.getJdglMonthValuePlanList(jdglMonthValuePlan);
+        if (CollUtil.isNotEmpty(jdglMonthValuePlanList)) {
+            jdglMonthValuePlanList.sort(Comparator.comparing(JdglMonthValuePlan::getInventoryCode));
+        }
         List<JdglMonthValuePlan> build = TreeUtil.build(jdglMonthValuePlanList, pid);
         return build;
     }

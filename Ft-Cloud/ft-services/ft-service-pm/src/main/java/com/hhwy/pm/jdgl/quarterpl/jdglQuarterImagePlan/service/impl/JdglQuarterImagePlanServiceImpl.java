@@ -34,10 +34,7 @@ import sun.awt.image.PixelConverter;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -85,6 +82,9 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
         //剩余工程量等于 设计工程量 - 开累完成工程量
         jdglQuarterImagePlanList.stream().filter(p -> p.getDesignQuantity()!= null && p.getTotalCompQuantity() != null)
                 .forEach(p -> p.setRemainQuantity(p.getDesignQuantity().subtract(p.getTotalCompQuantity())));
+        if (CollUtil.isNotEmpty(jdglQuarterImagePlanList)) {
+            jdglQuarterImagePlanList.sort(Comparator.comparing(JdglQuarterImagePlan::getWorkCode));
+        }
         List<JdglQuarterImagePlan> build = TreeUtil.build(jdglQuarterImagePlanList, pid);
         return build;
     }
