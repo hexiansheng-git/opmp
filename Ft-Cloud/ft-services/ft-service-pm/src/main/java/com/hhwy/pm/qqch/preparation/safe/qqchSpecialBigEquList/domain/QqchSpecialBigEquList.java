@@ -261,5 +261,17 @@ public class QqchSpecialBigEquList extends CommonBaseEntity {
     private List<String> arrDviceName;
 
     private String equType;//特种设备类型
+//    private String wbsCode;
+    /**
+     * 字段描述：项目WBS编码
+     */
+    @JsonProperty
+    @Excel(name = "项目WBS编码")
     private String wbsCode;
+    /**
+     * 字段描述：项目WBS
+     */
+    @JsonProperty
+    @Excel(name = "项目WBS")
+    private String wbsName;
 }

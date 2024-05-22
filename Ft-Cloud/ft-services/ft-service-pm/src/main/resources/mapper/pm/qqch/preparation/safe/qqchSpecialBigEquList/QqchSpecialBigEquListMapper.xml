@@ -41,6 +41,9 @@
         <result property="taskStatus" column="task_status"/>
         <result property="version" column="version"/>
         <result property="valid" column="valid"/>
+        <result property="wbsCode" column="wbs_code"/>
+        <result property="wbsName" column="wbs_name"/>
+        <result property="equType" column="equ_type"/>
     </resultMap>
     <sql id="selectQqchSpecialBigEquListVo">
         SELECT `id`
@@ -78,6 +81,9 @@
                 , `task_status`
                 , `version`
                 , `valid`
+                ,`wbs_code`
+                ,`wbs_name`
+                ,`equ_type`
         FROM qqch_special_big_equ_list
     </sql>
     <select id="getQqchSpecialBigEquList" resultMap="QqchSpecialBigEquListResultMap">
@@ -119,6 +125,9 @@
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="equType != null  and equType != ''">and `equ_type` = #{equType}</if>
         </where>
         order by create_time desc
     </select>
@@ -168,6 +177,9 @@
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="equType != null  and equType != ''">and `equ_type` = #{equType}</if>
         </where>
         # order by create_time desc
     </select>
@@ -210,6 +222,9 @@
             <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
             <if test="version != null ">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
+            <if test="wbsCode != null  and wbsCode != ''">`wbs_code`,</if>
+            <if test="wbsName != null  and wbsName != ''">`wbs_name`,</if>
+            <if test="equType != null  and equType != ''">`equ_type`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -247,6 +262,9 @@
             <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
             <if test="version != null ">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
+            <if test="wbsCode != null  and wbsCode != ''">#{wbsCode},</if>
+            <if test="wbsName != null  and wbsName != ''">#{wbsName},</if>
+            <if test="equType != null  and equType != ''">#{equType},</if>
         </trim>
     </insert>
 
@@ -288,6 +306,9 @@
             `task_status`,
             `version`,
             `valid`,
+            `wbs_code`,
+            `wbs_name`,
+            `equ_type`,
         </trim>
         values
         <foreach collection="qqchSpecialBigEquListList" item="item" separator=",">
@@ -326,6 +347,9 @@
                 #{item.taskStatus},
                 #{item.version},
                 #{item.valid},
+                #{item.wbsCode},
+                #{item.wbsName},
+                #{item.equType},
             </trim>
         </foreach>
     </insert>
@@ -368,6 +392,9 @@
             <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
             <if test="version != null ">`version` = #{version},</if>
             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
+            <if test="wbsCode != null  and  wbsCode != ''">`wbs_code` = #{wbsCode},</if>
+            <if test="wbsName != null  and  wbsName != ''">`wbs_name` = #{wbsName},</if>
+            <if test="equType != null  and  equType != ''">`equ_type` = #{equType},</if>
         </trim>
         <where>
             <if test="id != null ">and `id` = #{id}</if>
@@ -598,6 +625,9 @@
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="equType != null  and equType != ''">and `equ_type` = #{equType}</if>
         </where>
     </update>
 
