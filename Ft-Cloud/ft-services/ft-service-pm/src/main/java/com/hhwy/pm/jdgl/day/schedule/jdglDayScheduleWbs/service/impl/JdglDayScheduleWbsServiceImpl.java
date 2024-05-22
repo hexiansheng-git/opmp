@@ -547,8 +547,8 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         Assert.isTrue(date != null, "日期不能为空");
         Assert.isTrue(CollUtil.isNotEmpty(addWbsList), "addWbsList参数为空");
 
+        Map<String, JdglDayScheduleWbs> addWbsMap = addWbsList.stream().collect(Collectors.toMap(JdglDayScheduleWbs::getWbsCode, value -> value, (v1, v2) -> v1));
         Set<String> ancestorsSet = new HashSet<>();
-
         addWbsList.stream().forEach(vo -> {
             vo.setId(IdWorker.createId());
             vo.setPid(null);
@@ -585,25 +585,28 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
                     if(!CollectionUtils.isEmpty(existsDayScheduleWbsList)) {
                         jdglDayScheduleWbs1 = existsDayScheduleWbsList.stream().filter(vo -> jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())).findFirst().orElse(null);
                     }
+                    //设计工程量和单位取前端传过来的
+                    JdglDayScheduleWbs requestParam = addWbsMap.get(jdglMainPlanItem.getItemCode());
+                    BigDecimal designQuantity = requestParam.getDesignQuantity() == null ? BigDecimal.ZERO : requestParam.getDesignQuantity();
+                    String unit = StrUtil.isBlank(requestParam.getUnit()) ? "" : requestParam.getUnit();
                     if(jdglDayScheduleWbs1 != null) {
                         jdglDayScheduleWbs.setId(jdglDayScheduleWbs1.getId());
-                        jdglDayScheduleWbs.setDesignQuantity(jdglDayScheduleWbs1.getDesignQuantity());
+                        jdglDayScheduleWbs.setDesignQuantity(designQuantity);
                         jdglDayScheduleWbs.setThisQuantity(jdglDayScheduleWbs1.getThisQuantity());
                         jdglDayScheduleWbs.setRemainQuantity(jdglDayScheduleWbs1.getRemainQuantity());
                     } else {
                         jdglDayScheduleWbs.setId(IdWorker.createId());
                         jdglDayScheduleWbs.setIsAdd("1");
-                        jdglDayScheduleWbs.setDesignQuantity(jdglMainPlanItem.getQuantity());
+                        jdglDayScheduleWbs.setDesignQuantity(designQuantity);
                         // 赋值wbs的剩余数量
                         if(!CollectionUtils.isEmpty(totalWbsListByDateRange)) {
                             JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = totalWbsListByDateRange.stream().filter(vo ->
                                     jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())
                             ).findFirst().orElse(null);
-                            BigDecimal designQuantity = jdglDayScheduleWbs.getDesignQuantity();
                             if(jdglDayScheduleWbs4Value == null) {
                                 jdglDayScheduleWbs.setRemainQuantity(designQuantity);
                             } else {
-                                if(designQuantity != null && jdglDayScheduleWbs4Value.getThisQuantity() != null) {
+                                if(jdglDayScheduleWbs4Value.getThisQuantity() != null) {
                                     jdglDayScheduleWbs.setRemainQuantity(designQuantity.subtract(jdglDayScheduleWbs4Value.getThisQuantity()));
                                 }
                             }
@@ -613,10 +616,10 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
                     jdglDayScheduleWbs.setIsLeaf(jdglMainPlanItem.getLeaf());
                     jdglDayScheduleWbs.setWbsCode(jdglMainPlanItem.getItemCode());
                     jdglDayScheduleWbs.setWbsName(jdglMainPlanItem.getItemName());
-                    jdglDayScheduleWbs.setUnit(jdglMainPlanItem.getUnit());
+                    jdglDayScheduleWbs.setUnit(unit);
                     if(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType())) {
                         jdglDayScheduleWbs.setEditer(SecurityUtils.getSysUser().getNickName());
-                        jdglDayScheduleWbs.setEditerId(SecurityUtils.getUserName()+"");
+                        jdglDayScheduleWbs.setEditerId(SecurityUtils.getUserName());
                         jdglDayScheduleWbs.setEditerDate(DateUtils.getNowDate());
                     }
                     XmslWbs wbsByCode = xmslWbsService.getByCode(jdglMainPlanItem.getWbsCode());
