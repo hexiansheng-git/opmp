@@ -110,10 +110,10 @@ public class QqchSpecialBigEquListController extends BaseController {
      */
     @PostMapping("/selfEquDetail")
     public AjaxResult selfEquDetail(@RequestBody QqchSpecialBigEquList qqchSpecialBigEquListParam){
-        if (StringUtils.isBlank(qqchSpecialBigEquListParam.getManageCode())) {
+        if (StringUtils.isBlank(qqchSpecialBigEquListParam.getManageNum())) {
             return AjaxResult.error("管理编号不能为空");
         }
-        return qqchSpecialBigEquListService.selfEquDetail(qqchSpecialBigEquListParam.getManageCode());
+        return qqchSpecialBigEquListService.selfEquDetail(qqchSpecialBigEquListParam.getManageNum());
     }
 
 

@@ -5,6 +5,7 @@ import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.SpringUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.gencode.enums.CodeEnum;
@@ -311,9 +312,11 @@ public class EquAllotServiceImpl implements EquAllotService {
     public AjaxResult xzxcsb(ActiveEquVo activeEquVo) {
         String url = WSPlatform + "/basic-api/fms/xcsb/xcsbMonthSelfEquInfo/list";
         AjaxResult ajaxResult;
-        String tenantKey = SecurityUtils.getTenantKey();
-        activeEquVo.setPrjCode(tenantKey);
+        if (StringUtils.isBlank(activeEquVo.getIsFilterPro())||"0".equals(activeEquVo.getIsFilterPro())) {
+            String tenantKey = SecurityUtils.getTenantKey();
+            activeEquVo.setPrjCode(tenantKey);
 //        activeEquVo.setPrjCode("PJ2012001880");
+        }
         try {
             String resp = HttpUtil.post(url, JSON.toJSONString(activeEquVo), 3000);
             ajaxResult = JSON.parseObject(resp, AjaxResult.class);

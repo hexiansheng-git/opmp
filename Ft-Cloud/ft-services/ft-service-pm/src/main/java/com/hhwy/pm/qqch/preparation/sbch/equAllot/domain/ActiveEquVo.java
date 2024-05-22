@@ -283,4 +283,6 @@ public class ActiveEquVo extends BaseEntity {
             pattern = "yyyy-MM-dd"
     )
     private Date createTime;
+    private String isSpecial;//是否特种设备 1：是 0/空：不是
+    private String isFilterPro;//1：不过滤 0/空：过滤
 }
