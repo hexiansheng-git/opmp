@@ -284,7 +284,11 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     @Transactional
     public Long insertSgjsBuildScheme(SgjsBuildScheme sgjsBuildScheme) {
         List<SgjsBuildSchemeList> children1 = sgjsBuildScheme.getChildren();
-        JyDetailsUtil.jyDetails(children1, ValidationGroups.Save.class);
+        //1 保存  2发起
+        String comment = sgjsBuildScheme.getComment();
+        if (StrUtil.isNotBlank(comment) && comment.equals("2")) {
+            JyDetailsUtil.jyDetails(children1, ValidationGroups.Save.class);
+        }
         sgjsBuildScheme.setProjectCode(SecurityUtils.getTenantKey());
         Long id = sgjsBuildScheme.getId();
         if (null == id) {

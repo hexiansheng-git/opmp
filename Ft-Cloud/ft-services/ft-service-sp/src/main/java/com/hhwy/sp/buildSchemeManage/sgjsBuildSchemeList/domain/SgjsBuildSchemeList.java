@@ -84,14 +84,14 @@ public class SgjsBuildSchemeList extends BaseEntity {
      */
     @JsonProperty
     @FtExcel(name = "方案分级", dictType = "scheme_level")
-    @NotBlank(message = "方案分级",groups = {ValidationGroups.Save.class})
+    @NotBlank(message = "方案分级不能为空",groups = {ValidationGroups.Save.class})
     private String schemeLevel;
     /**
      * 字段描述：是否危大工程 1危大、2超危大、3一般
      */
     @JsonProperty
     @FtExcel(name = "是否危大工程", dictType = "danger_level")
-    @NotBlank(message = "是否危大工程",groups = {ValidationGroups.Save.class})
+    @NotBlank(message = "是否危大工程不能为空",groups = {ValidationGroups.Save.class})
     private String dangerLevel;
     /**
      * 字段描述：施工重难点
