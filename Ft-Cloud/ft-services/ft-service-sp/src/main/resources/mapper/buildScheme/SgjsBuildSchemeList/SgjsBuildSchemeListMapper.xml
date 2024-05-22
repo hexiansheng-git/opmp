@@ -190,7 +190,7 @@
                 </foreach>
             </if>
             <if test="params != null  and params.limitType != null ">
-                and `change_type` != '4'
+                and (`change_type` != '4' or `change_type` is null)
             </if>
         </where>
     </select>
