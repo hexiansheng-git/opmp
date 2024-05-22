@@ -915,6 +915,15 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         sgjsBuildSchemeReviewMapper.updateTaskStatus(id, TaskStatus.COMPLETED.getCode());
         sgjsBuildSchemeReviewMapper.updateApprovalTime(id);
         SgjsBuildSchemeReview review = sgjsBuildSchemeReviewMapper.getById(id);
+        //fuck
+        List<SgjsBuildSchemeReviewStaff> sumScoreList = sgjsBuildSchemeReviewStaffMapper.getSumScoreByReviewIdList(Arrays.asList(id));
+        Map<Long, Double> sumSocreMap = sumScoreList.stream().filter(o -> o.getScore() != null).collect(Collectors.toMap(SgjsBuildSchemeReviewStaff::getReviewId, SgjsBuildSchemeReviewStaff::getScore));
+        Double score = sumSocreMap.get(id);
+        if(score != null){
+            score = (double) Math.round(score);
+        }
+        review.setScore(score);
+        //log.error("20240522:算分结果:{}",score );
         review.setProcessStatus("end");
         sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
     }

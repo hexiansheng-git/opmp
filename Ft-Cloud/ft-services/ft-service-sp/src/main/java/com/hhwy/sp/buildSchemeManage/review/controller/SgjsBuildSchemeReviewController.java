@@ -85,7 +85,6 @@ public class SgjsBuildSchemeReviewController extends BaseController {
             }
         }
         //格式化方案类型
-
         List<SysDictData> list = systemApiService.selectDictDataByType("scheme_type_all");
         Map<Long,SysDictData> dictMap = list.stream().collect(Collectors.toMap(r->r.getDictDataId(), r->r));
         Map<String,String> map = list.stream().collect(
