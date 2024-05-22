@@ -1,11 +1,13 @@
 package com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.domain.JdglDayScheduleBill;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.service.IJdglDayScheduleBillService;
+import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.domain.JdglQuarterValuePlan;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.jdgl.statistics.util.TreeCountUtils;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.domain.JdglWeekImagePlan;
@@ -69,6 +71,9 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
     public List<JdglWeekValuePlan> getJdglWeekValuePlanList(JdglWeekValuePlan jdglWeekValuePlan) {
         Long pid = jdglWeekValuePlan.getPid();
         List<JdglWeekValuePlan> jdglWeekValuePlanList = jdglWeekValuePlanMapper.getJdglWeekValuePlanList(jdglWeekValuePlan);
+        if (CollUtil.isNotEmpty(jdglWeekValuePlanList)) {
+            jdglWeekValuePlanList.sort(Comparator.comparing(JdglWeekValuePlan::getInventoryCode));
+        }
         List<JdglWeekValuePlan> build = TreeUtil.build(jdglWeekValuePlanList, pid);
         return build;
     }
