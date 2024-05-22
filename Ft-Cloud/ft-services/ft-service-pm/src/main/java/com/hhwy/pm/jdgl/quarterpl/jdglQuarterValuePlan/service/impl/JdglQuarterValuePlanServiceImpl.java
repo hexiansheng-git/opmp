@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -69,6 +70,9 @@ public class JdglQuarterValuePlanServiceImpl implements IJdglQuarterValuePlanSer
     public List<JdglQuarterValuePlan> getJdglQuarterValuePlanList(JdglQuarterValuePlan jdglQuarterValuePlan) {
         Long pid = jdglQuarterValuePlan.getPid();
         List<JdglQuarterValuePlan> jdglQuarterValuePlanList = jdglQuarterValuePlanMapper.getJdglQuarterValuePlanList(jdglQuarterValuePlan);
+        if (CollUtil.isNotEmpty(jdglQuarterValuePlanList)) {
+            jdglQuarterValuePlanList.sort(Comparator.comparing(JdglQuarterValuePlan::getInventoryCode));
+        }
         List<JdglQuarterValuePlan> build = TreeUtil.build(jdglQuarterValuePlanList, pid);
         return build;
     }

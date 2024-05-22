@@ -96,21 +96,6 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
                 return jdglDayScheduleBillList;
             }
 
-            List<String> itemCodes = new ArrayList<>();
-            itemCodes.add(wbsCode);
-            itemCodes.add(itemCode);
-            List<JdglMainPlanItem> planItemByItemCodes = jdglMainPlanItemService.getUsingJdglMainPlanItemByItemCodes(itemCodes);
-            BigDecimal radio = BigDecimal.ZERO;
-            if(!CollectionUtils.isEmpty(planItemByItemCodes)) {
-                JdglMainPlanItem wbsPlanItem = planItemByItemCodes.stream().filter(vo -> wbsCode.equals(vo.getItemCode())).findFirst().orElse(null);
-                JdglMainPlanItem itemPlanItem = planItemByItemCodes.stream().filter(vo -> itemCode.equals(vo.getItemCode())).findFirst().orElse(null);
-                if(itemPlanItem != null && itemPlanItem.getQuantity() != null && wbsPlanItem != null && wbsPlanItem.getQuantity() != null) {
-                    if(BigDecimal.ZERO.compareTo(wbsPlanItem.getQuantity()) != 0) {
-                        radio = itemPlanItem.getQuantity().divide(wbsPlanItem.getQuantity(), 4, BigDecimal.ROUND_HALF_UP);
-                    }
-                }
-            }
-
             // 获取主合同清单数据
             List<XmslContractList> validMaxVersionContractInventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
 
@@ -137,8 +122,7 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
                     }
                 }
                 jdglDayScheduleBill1.setUnit(xmslDrawReviewList.getUnit());
-                BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
-                if(checkNum != null) jdglDayScheduleBill1.setDesignQuantity(checkNum.multiply(radio));
+                jdglDayScheduleBill1.setDesignQuantity(xmslDrawReviewList.getCheckNum());
                 BigDecimal totalQty = BigDecimal.ZERO;
                 if(!CollectionUtils.isEmpty(billValueListByEndDate4WbsBill)) {
                     JdglDayScheduleBill jdglDayScheduleBill2 = billValueListByEndDate4WbsBill.stream().filter(vo ->
