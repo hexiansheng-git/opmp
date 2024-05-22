@@ -91,7 +91,7 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
                 XmslWbs wbsByCode = wbsService.getByCode(wbsCode);
                 if(wbsByCode != null) wbsId = Long.parseLong(wbsByCode.getId());
             }
-            List<XmslDrawReviewList> xmslDrawReviewLists = xmslDrawReviewService.relationWbsList(version, id, wbsCode, wbsId);
+            List<XmslDrawReviewList> xmslDrawReviewLists = xmslDrawReviewService.relationWbsList(version, id, wbsCode + "-" + itemCode, wbsId);
             if(CollectionUtils.isEmpty(xmslDrawReviewLists)) {
                 return jdglDayScheduleBillList;
             }
