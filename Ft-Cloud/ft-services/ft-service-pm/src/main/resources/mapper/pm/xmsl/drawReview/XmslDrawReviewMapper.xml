@@ -192,7 +192,7 @@
 
     <select id="relationListCode" parameterType="com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList" resultMap="XmslDrawReviewListResultMap">
         select id,   `list_code` ,`main_id` ,`list_id` ,`wbs_id`,`wbs_code`,`pid`,`ancestors`,`chinese_name`,`foreign_name`,`list_type`,`unit_code`,`unit`,`win_num`,`check_num`,`image_progress`,`remark`,`create_user`,`create_user_name`,`create_time`,`update_user`,`update_time`,`del_user`,`del_time`,`del_flag`,`pt_var1`,`pt_var2`,`pt_var3`,`pt_var4`,`pt_var5`,version,version_flag
-        from xmsl_draw_review_list where del_flag = 0 and version &lt;= #{version}
+        from xmsl_draw_review_list where del_flag = 0 and version &lt;= #{version} and version_flag = 1
         <if test="wbsCode != null and wbsCode != ''">
             and wbs_code = #{wbsCode}
         </if>

@@ -6,6 +6,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewRelation;
 import com.hhwy.pm.xmsl.drawReview.mapper.XmslDrawReviewRelationMapper;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewRelationService;
+import jodd.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author wk
@@ -73,7 +75,8 @@ public class XmslDrawReviewRelationServiceImpl implements IXmslDrawReviewRelatio
     public int insertXmslDrawReviewRelationList(List<XmslDrawReviewRelation> xmslDrawReviewRelationList) {
         if(CollectionUtils.isEmpty(xmslDrawReviewRelationList))
             return 0;
-        return xmslDrawReviewRelationMapper.insertXmslDrawReviewRelationList(xmslDrawReviewRelationList);
+        List<XmslDrawReviewRelation> resuList = xmslDrawReviewRelationList.stream().filter(r->StringUtils.isNotBlank(r.getWbsCode()) && StringUtils.isNotBlank(r.getListCode())).collect(Collectors.toList()); 
+        return xmslDrawReviewRelationMapper.insertXmslDrawReviewRelationList(resuList);
     }
 
     @Transactional

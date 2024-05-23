@@ -34,6 +34,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.mapreduce.SubTasksExecutor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -227,8 +228,9 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         }
         mainId = relationlist.get(0).getMainId(); //获取最大版本
         //查询清单
-        final Long finalMainId = mainId;
-        List<XmslDrawReviewList> list = relationlist.stream().filter(r->r.getMainId().equals(finalMainId)).collect(Collectors.toList());
+//        final Long finalMainId = mainId;
+//        List<XmslDrawReviewList> list = relationlist.stream().filter(r->r.getMainId().equals(finalMainId)).collect(Collectors.toList());
+        List<XmslDrawReviewList> list = relationlist;
         Set<String> listCodeSet = list.stream().map(r->r.getListCode()).collect(Collectors.toSet());
         //获取清单对应的细目、配合比
         Map<String,XmslDrawReviewList> listMap = new HashMap<>(list.size());
@@ -409,9 +411,9 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         }
         mainId = relationlist.get(0).getMainId(); //获取最大版本
         //查询清单
-
-        final Long finalMainId = mainId;
-        List<XmslDrawReviewList> drawList = relationlist.stream().filter(r->r.getMainId().equals(finalMainId)).collect(Collectors.toList());
+//        final Long finalMainId = mainId;
+//        List<XmslDrawReviewList> drawList = relationlist.stream().filter(r->r.getMainId().equals(finalMainId)).collect(Collectors.toList());
+        List<XmslDrawReviewList> drawList = relationlist;
         List<XmslDrawReviewWbs> list = trans2Wbs(drawList);
         //获取清单对应的细目、配合比
         Set<String> wbsCodeSet = drawList.stream().map(r->r.getWbsCode()).collect(Collectors.toSet());
@@ -571,15 +573,18 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             temp.setVersion(version);
             temp.setVersionFlag(Constant.YES_INT);
             temp.setMainId(dto.getId());
-            if(temp.getId() ==null){
+            if(temp.getId() == null){
                 temp.initAdd();
                 addWbsList.add(temp);
             }else{
                 new AddBaseInfoUtil().updateBaseEntity(temp);
-                updateWbsList.add(temp);
+                updateWbsList.add(temp); 
             }
-            if(CollectionUtils.isEmpty(temp.getList()))
+            addRelationList.add(new XmslDrawReviewRelation(dto.getId(),temp.getId(),temp.getCode(),null,null,version));
+            if(CollectionUtils.isEmpty(temp.getList())){ 
+                
                 continue;
+            }
             Set<String> listCodeSet = new HashSet<>();
             BigDecimal sumCheck = BigDecimal.ZERO;
             //清单&挂接清单
@@ -1011,5 +1016,21 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
 //        drawList.setUpdateTime(temp.getUpdateTime());
         drawList.setDelFlag("0");
         return drawList;
+    }
+    
+    private void handlerLastData(String wbsCode,Integer version,List<XmslDrawReviewList> list
+            ,List<XmslDrawReviewRelation> relateList){
+        if(version<=1)
+            return ;
+        XmslDrawReviewList queryList = new XmslDrawReviewList();
+        queryList.setWbsCode(wbsCode);
+        queryList.setVersion(--version);
+        List<XmslDrawReviewList> lastList = xmslDrawReviewMapper.relationListCode(queryList);
+        for (int i = 0; i < lastList.size(); i++) {
+//            addRelationList.add(new XmslDrawReviewRelation(dto.getId(),temp.getId(),temp.getCode(),
+//                    tempList.getListCode(),tempList.getId(),version));
+        }
+        
+        
     }
 }
