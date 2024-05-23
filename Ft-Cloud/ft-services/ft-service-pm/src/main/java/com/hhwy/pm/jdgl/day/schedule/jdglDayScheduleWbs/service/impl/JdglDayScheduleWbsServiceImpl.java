@@ -587,8 +587,13 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
                     }
                     //设计工程量和单位取前端传过来的
                     JdglDayScheduleWbs requestParam = addWbsMap.get(jdglMainPlanItem.getItemCode());
-                    BigDecimal designQuantity = requestParam.getDesignQuantity() == null ? BigDecimal.ZERO : requestParam.getDesignQuantity();
-                    String unit = StrUtil.isBlank(requestParam.getUnit()) ? "" : requestParam.getUnit();
+                    BigDecimal designQuantity = BigDecimal.ZERO;
+                    String unit = "";
+                    if (requestParam != null) {
+                        designQuantity = requestParam.getDesignQuantity() == null ? BigDecimal.ZERO : requestParam.getDesignQuantity();
+                        unit = StrUtil.isBlank(requestParam.getUnit()) ? "" : requestParam.getUnit();
+                    }
+
                     if(jdglDayScheduleWbs1 != null) {
                         jdglDayScheduleWbs.setId(jdglDayScheduleWbs1.getId());
                         jdglDayScheduleWbs.setDesignQuantity(designQuantity);
