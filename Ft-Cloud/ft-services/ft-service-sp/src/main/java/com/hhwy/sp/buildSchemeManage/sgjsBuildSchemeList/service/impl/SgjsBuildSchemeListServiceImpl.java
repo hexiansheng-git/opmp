@@ -67,9 +67,9 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
 //            sgjsBuildSchemeList.setSchemeType(schemeTypeAllDict.get(schemeType));
             sgjsBuildSchemeList.setSchemeLevel(schemeLevelDict.get(schemeLevel));
             sgjsBuildSchemeList.setDangerLevel(dangerLevelDict.get(riskLevel));
-            sgjsBuildSchemeList.setPlanImplementTime(DateUtil.parseDate(planImplementTime));
-            sgjsBuildSchemeList.setPlanImplementTimeChange(DateUtil.parseDate(planImplementTimeChange));
-            sgjsBuildSchemeList.setPlanComplationTime(DateUtil.parseDate(planComplationTime));
+            if (StrUtil.isNotBlank(planImplementTime)) sgjsBuildSchemeList.setPlanImplementTime(DateUtil.parseDate(planImplementTime));
+            if (StrUtil.isNotBlank(planImplementTimeChange))  sgjsBuildSchemeList.setPlanImplementTimeChange(DateUtil.parseDate(planImplementTimeChange));
+            if (StrUtil.isNotBlank(planComplationTime))  sgjsBuildSchemeList.setPlanComplationTime(DateUtil.parseDate(planComplationTime));
             result.add(sgjsBuildSchemeList);
         }
         return AjaxResult.success(result);
