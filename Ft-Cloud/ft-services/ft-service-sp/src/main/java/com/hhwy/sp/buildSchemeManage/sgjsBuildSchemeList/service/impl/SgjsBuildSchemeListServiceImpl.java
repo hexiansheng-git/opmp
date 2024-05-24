@@ -41,7 +41,7 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         List<SgjsBuildSchemeList> result = new ArrayList<>();
         LinkedHashMap<String, String> changeTypeDict = DictUtil.getDictData("change_type");
         LinkedHashMap<String, String> schemeLevelDict = DictUtil.getDictData("scheme_level");
-        LinkedHashMap<String, String> schemeTypeAllDict = DictUtil.getDictData("scheme_type_all");
+//        LinkedHashMap<String, String> schemeTypeAllDict = DictUtil.getDictData("scheme_type_all");
         LinkedHashMap<String, String> dangerLevelDict = DictUtil.getDictData("danger_level");
         for (Map<Integer, String> map : dataList) {
             SgjsBuildSchemeList sgjsBuildSchemeList = new SgjsBuildSchemeList();
@@ -49,23 +49,27 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             String changeType = map.get(1);
             String wbsId = map.get(2);
             String wbsName = map.get(3);
-            String schemeType = map.get(4);
-            String schemeLevel = map.get(5);
-            String riskLevel = map.get(6);
-            String buildDifficult = map.get(7);
-            String planImplementTime = map.get(8);
-            if (StrUtil.isBlank(schemeName) || StrUtil.isBlank(buildDifficult)) {
-                AjaxResult.error("必填项为空，请检查:方案名称、施工重难点、计划实施时间");
+//            String schemeType = map.get(4);
+            String schemeLevel = map.get(4);
+            String riskLevel = map.get(5);
+            String buildDifficult = map.get(6);
+            String planImplementTime = map.get(7);
+            String planImplementTimeChange = map.get(8);
+            String planComplationTime = map.get(9);
+            if (StrUtil.isBlank(schemeName) || StrUtil.isBlank(schemeLevel) ||StrUtil.isBlank(riskLevel) || StrUtil.isBlank(buildDifficult)) {
+                AjaxResult.error("必填项为空，请检查:方案名称、方案分级、是否危大工程、施工重难点");
             }
             sgjsBuildSchemeList.setSchemeName(schemeName);
             sgjsBuildSchemeList.setRelationWbsId(wbsId);
             sgjsBuildSchemeList.setRelationWbsName(wbsName);
             sgjsBuildSchemeList.setBuildDifficult(buildDifficult);
             sgjsBuildSchemeList.setChangeType(changeTypeDict.get(changeType));
-            sgjsBuildSchemeList.setSchemeType(schemeTypeAllDict.get(schemeType));
+//            sgjsBuildSchemeList.setSchemeType(schemeTypeAllDict.get(schemeType));
             sgjsBuildSchemeList.setSchemeLevel(schemeLevelDict.get(schemeLevel));
             sgjsBuildSchemeList.setDangerLevel(dangerLevelDict.get(riskLevel));
             sgjsBuildSchemeList.setPlanImplementTime(DateUtil.parseDate(planImplementTime));
+            sgjsBuildSchemeList.setPlanImplementTimeChange(DateUtil.parseDate(planImplementTimeChange));
+            sgjsBuildSchemeList.setPlanComplationTime(DateUtil.parseDate(planComplationTime));
             result.add(sgjsBuildSchemeList);
         }
         return AjaxResult.success(result);
