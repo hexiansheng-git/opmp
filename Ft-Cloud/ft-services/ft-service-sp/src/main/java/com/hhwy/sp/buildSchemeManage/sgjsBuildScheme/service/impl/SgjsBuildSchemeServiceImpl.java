@@ -324,11 +324,13 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         if (!sgjsBuildScheme.getTaskStatus().equals("0")) {
             //专家意见
             List<SgjsBuildSchemeExpertSuggest> expertSuggest = sgjsBuildScheme.getExpertSuggest();
-            expertSuggest.forEach(p -> {
-                p.setPtVar5(sgjsBuildScheme.getProjectCode());
-                p.setForeignId(foreignId);
-            });
-            schemeExpertSuggestService.insertSgjsBuildSchemeExpertSuggestList(expertSuggest);
+            if (CollUtil.isNotEmpty(expertSuggest)) {
+                expertSuggest.forEach(p -> {
+                    p.setPtVar5(sgjsBuildScheme.getProjectCode());
+                    p.setForeignId(foreignId);
+                });
+                schemeExpertSuggestService.insertSgjsBuildSchemeExpertSuggestList(expertSuggest);
+            }
         }
 //        String userName = SecurityUtils.getUserName();
 //        String tenantKey = SecurityUtils.getTenantKey();
