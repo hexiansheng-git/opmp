@@ -1,0 +1,50 @@
+[
+  {
+    "riskType": "政治稳定风险",
+    "ptVar1": "1",
+    "version": "1",
+    "valid": 1
+  },
+  {
+    "riskType": "恐怖袭击风险",
+    "ptVar1": "2",
+    "version": "1",
+    "valid": 1
+  },
+  {
+    "riskType": "社会治安风险",
+    "ptVar1": "3",
+    "version": "1",
+    "valid": 1
+  },
+  {
+    "riskType": "舆情民意风险",
+    "ptVar1": "4",
+    "version": "1",
+    "valid": 1
+  },
+  {
+    "riskType": "经济金融风险",
+    "ptVar1": "5",
+    "version": "1",
+    "valid": 1
+  },
+  {
+    "riskType": "灾害疫病风险",
+    "ptVar1": "6",
+    "version": "1",
+    "valid": 1
+  },
+  {
+    "riskType": "地缘政治风险",
+    "ptVar1": "7",
+    "version": "1",
+    "valid": 1
+  },
+  {
+    "riskType": "项目风险评价总分",
+    "ptVar1": "8",
+    "version": "1",
+    "valid": 1
+  }
+]
