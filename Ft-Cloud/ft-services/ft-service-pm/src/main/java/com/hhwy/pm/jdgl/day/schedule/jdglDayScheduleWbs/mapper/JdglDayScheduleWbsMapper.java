@@ -43,4 +43,6 @@ public interface JdglDayScheduleWbsMapper {
     List<JdglDayScheduleWbs4Value> getTotalWbsListByDateRange4OnlyWbs(@Param("endDate") Date endDate);
 
     List<JdglDayScheduleWbs> getJdglDayScheduleWbsByDate(@Param("date") Date date);
+
+    List<JdglDayScheduleWbs> getComplateQuantity(@Param("date") Date date);
 }

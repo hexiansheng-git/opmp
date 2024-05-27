@@ -343,7 +343,11 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         });
         Map<String, XmslDrawReviewList> viewMap = viewList.stream().collect(Collectors.toMap(XmslDrawReviewList::getWbsCode, value -> value, (v1, v2) -> v1));
 
-        List<JdglDayScheduleWbs4Value> totalWbsListByDateRange = getTotalWbsListByDateRange4OnlyWbs(StatisticsUtils.addDays(date, -1));
+//        List<JdglDayScheduleWbs4Value> totalWbsListByDateRange = getTotalWbsListByDateRange4OnlyWbs(StatisticsUtils.addDays(date, -1));
+        //查询开累工程量
+        List<JdglDayScheduleWbs> complateQuantity = getComplateQuantity(date);
+        Map<String, BigDecimal> complateQuantityMap = complateQuantity.stream().collect(Collectors.toMap(JdglDayScheduleWbs::getWbsCode, JdglDayScheduleWbs::getThisQuantity));
+
 
         for (JdglMainPlanItem jdglMainPlanItem : allList4User) {
             JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
@@ -364,19 +368,12 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
             } else {
                 jdglDayScheduleWbs.setId(IdWorker.createId());
                 jdglDayScheduleWbs.setIsAdd("1");
-                if(!CollectionUtils.isEmpty(totalWbsListByDateRange)) {
-                    JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = totalWbsListByDateRange.stream().filter(vo ->
-                            jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())
-                    ).findFirst().orElse(null);
-                    if(jdglDayScheduleWbs4Value == null) {
-                        jdglDayScheduleWbs.setRemainQuantity(designQuantity);
-                    } else {
-                        if(designQuantity != null && jdglDayScheduleWbs4Value.getThisQuantity() != null) {
-                            jdglDayScheduleWbs.setRemainQuantity(designQuantity.subtract(jdglDayScheduleWbs4Value.getThisQuantity()));
-                        }
-                    }
+                jdglDayScheduleWbs.setRemainQuantity(designQuantity);
+                //如果完成工程量不为空，设置剩余数量
+                BigDecimal complateQ= complateQuantityMap.get(jdglMainPlanItem.getItemCode());
+                if (complateQ != null) {
+                    jdglDayScheduleWbs.setRemainQuantity(designQuantity.subtract(complateQ));
                 }
-                if(jdglDayScheduleWbs.getRemainQuantity() == null) jdglDayScheduleWbs.setRemainQuantity(jdglDayScheduleWbs.getDesignQuantity());
             }
             jdglDayScheduleWbs.setIsLeaf(jdglMainPlanItem.getLeaf());
             jdglDayScheduleWbs.setWbsCode(jdglMainPlanItem.getItemCode());
@@ -489,6 +486,10 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         return jdglDayScheduleWbsMapper.getTotalWbsListByDateRange4OnlyWbs(endDate);
     }
 
+    //查询开累填报工程量
+    public List<JdglDayScheduleWbs> getComplateQuantity(Date endDate) {
+        return jdglDayScheduleWbsMapper.getComplateQuantity(endDate);
+    }
 
     @Transactional
     public int insertJdglDayScheduleWbs(JdglDayScheduleWbs jdglDayScheduleWbs) {
