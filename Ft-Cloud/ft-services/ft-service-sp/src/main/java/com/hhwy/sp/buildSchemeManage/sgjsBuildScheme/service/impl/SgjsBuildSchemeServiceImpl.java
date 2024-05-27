@@ -266,13 +266,18 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     public List<SgjsBuildScheme> getSgjsBuildSchemeList(SgjsBuildScheme sgjsBuildScheme) {
         List<SgjsBuildScheme> sgjsBuildSchemeList = sgjsBuildSchemeMapper.getSgjsBuildSchemeList(sgjsBuildScheme);
         FlowInfoSearchUtil.getFlowInfo(sgjsBuildSchemeList, FlowEnum.SGJS_BUILD_SCHEME);
-        //修改时间格式
+        BigDecimal maxVersion = sgjsBuildSchemeList.stream().max(Comparator.comparing(SgjsBuildScheme::getVersion)).get().getVersion();
         sgjsBuildSchemeList.forEach(p -> {
+            //修改时间格式
             Date updateTime = p.getUpdateTime();
             if (updateTime != null) {
                 String format = DateUtil.format(updateTime, "yyyy年MM月dd日 HH:mm");
                 p.setPtVar2(format);
             }
+            //设置删除按钮显隐
+            if (maxVersion.compareTo(p.getVersion()) == 0 && p.getTaskStatus().equals("0"))
+                //可以删除
+                p.setPtVar3("1");
         });
         return sgjsBuildSchemeList;
     }
@@ -367,8 +372,6 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
 
     @Transactional
     public int deleteSgjsBuildScheme(SgjsBuildScheme sgjsBuildScheme) {
-        sgjsBuildScheme.setUpdateUser(SecurityUtils.getUserName());
-        sgjsBuildScheme.setUpdateTime(DateUtils.getNowDate());
         return sgjsBuildSchemeMapper.deleteSgjsBuildScheme(sgjsBuildScheme);
     }
 
