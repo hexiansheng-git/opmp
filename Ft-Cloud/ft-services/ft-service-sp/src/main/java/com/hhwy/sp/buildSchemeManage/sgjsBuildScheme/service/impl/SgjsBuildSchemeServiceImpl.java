@@ -265,6 +265,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     //台账、历史记录
     public List<SgjsBuildScheme> getSgjsBuildSchemeList(SgjsBuildScheme sgjsBuildScheme) {
         List<SgjsBuildScheme> sgjsBuildSchemeList = sgjsBuildSchemeMapper.getSgjsBuildSchemeList(sgjsBuildScheme);
+        if (CollUtil.isEmpty(sgjsBuildSchemeList)) return new ArrayList<>();
         FlowInfoSearchUtil.getFlowInfo(sgjsBuildSchemeList, FlowEnum.SGJS_BUILD_SCHEME);
         BigDecimal maxVersion = sgjsBuildSchemeList.stream().max(Comparator.comparing(SgjsBuildScheme::getVersion)).get().getVersion();
         for (SgjsBuildScheme p : sgjsBuildSchemeList) {

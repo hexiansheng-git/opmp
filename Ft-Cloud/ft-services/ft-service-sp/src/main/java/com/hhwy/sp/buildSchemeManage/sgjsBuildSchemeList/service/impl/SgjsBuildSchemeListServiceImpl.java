@@ -56,8 +56,17 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             String planImplementTime = map.get(7);
             String planImplementTimeChange = map.get(8);
 //            String planComplationTime = map.get(9);
-            if (StrUtil.isBlank(schemeName) || StrUtil.isBlank(schemeLevel) ||StrUtil.isBlank(riskLevel) || StrUtil.isBlank(buildDifficult)) {
-                return AjaxResult.error("必填项为空，请检查:方案名称、方案分级、是否危大工程、施工重难点");
+            if (StrUtil.isBlank(schemeName)) {
+                return AjaxResult.error("必填项为空，请检查:方案名称");
+            }
+            if (StrUtil.isBlank(schemeLevel)) {
+                return AjaxResult.error("必填项为空，请检查:方案分级");
+            }
+            if (StrUtil.isBlank(riskLevel)) {
+                return AjaxResult.error("必填项为空，请检查:是否危大工程");
+            }
+            if (StrUtil.isBlank(buildDifficult)) {
+                return AjaxResult.error("必填项为空，请检查:施工重难点");
             }
             sgjsBuildSchemeList.setSchemeName(schemeName);
             sgjsBuildSchemeList.setRelationWbsId(wbsId);
