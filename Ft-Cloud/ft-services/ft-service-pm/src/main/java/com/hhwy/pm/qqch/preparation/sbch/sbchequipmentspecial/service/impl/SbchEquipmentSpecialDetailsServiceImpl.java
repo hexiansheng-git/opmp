@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.service.impl;
 
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.domain.SbchEquipmentSpecialDetails;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.mapper.SbchEquipmentSpecialDetailsMapper;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.service.ISbchEquipmentSpecialDetailsService;
@@ -107,7 +108,9 @@ public class SbchEquipmentSpecialDetailsServiceImpl implements ISbchEquipmentSpe
                 item.setId(IdWorker.createId());
                 item.setMainId(mainId);
                 item.setMaterialName(item.getMaterialName().trim());
-                item.setPtVar1(IdWorker.createId()+"");
+                if (StringUtils.isBlank(item.getPtVar1())) {
+                    item.setPtVar1(IdWorker.createId()+"");
+                }
                 EntityUtils.setCreateUpdateInfo(item);
                 return item;
 
