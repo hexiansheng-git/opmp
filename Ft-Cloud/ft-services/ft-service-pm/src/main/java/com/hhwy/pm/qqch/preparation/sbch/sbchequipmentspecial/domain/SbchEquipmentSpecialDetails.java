@@ -125,7 +125,7 @@ public class SbchEquipmentSpecialDetails extends CommonBaseEntity {
     private String delFlag;
 
     /** 预留字段1 */
-    @Excel(name = "预留字段1")
+    @Excel(name = "唯一标识")
     private String ptVar1;
 
     /** 预留字段2 */

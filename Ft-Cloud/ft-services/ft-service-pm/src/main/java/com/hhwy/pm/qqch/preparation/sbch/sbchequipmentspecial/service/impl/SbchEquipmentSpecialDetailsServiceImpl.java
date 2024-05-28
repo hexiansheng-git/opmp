@@ -107,6 +107,7 @@ public class SbchEquipmentSpecialDetailsServiceImpl implements ISbchEquipmentSpe
                 item.setId(IdWorker.createId());
                 item.setMainId(mainId);
                 item.setMaterialName(item.getMaterialName().trim());
+                item.setPtVar1(IdWorker.createId()+"");
                 EntityUtils.setCreateUpdateInfo(item);
                 return item;
 
