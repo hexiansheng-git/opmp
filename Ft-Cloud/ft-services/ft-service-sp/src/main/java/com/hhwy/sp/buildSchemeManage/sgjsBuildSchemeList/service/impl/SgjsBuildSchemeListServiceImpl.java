@@ -84,6 +84,20 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         return AjaxResult.success(result);
     }
 
+
+    //schemeTypeArr 方案清单转数组
+    private void schemeTypeToArr(List<SgjsBuildSchemeList> sgjsBuildSchemeListList) {
+        if (CollUtil.isEmpty(sgjsBuildSchemeListList)) {
+            return;
+        }
+        sgjsBuildSchemeListList.forEach(p -> {
+            if (StrUtil.isNotBlank(p.getSchemeType())) {
+                String[] split = p.getSchemeType().split(",");
+                p.setSchemeTypeArr(split);
+            }
+        });
+    }
+
     //危大工程清单查询
     @Override
     public List<SgjsBuildSchemeList> getRiskList(SgjsBuildSchemeList sgjsBuildSchemeListParam) {
@@ -93,9 +107,11 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         if (sgjsBuildScheme1 == null ) return  new ArrayList<>();
         sgjsBuildSchemeListParam.setForeignId(sgjsBuildScheme1.getId());
         List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
-        return sgjsBuildSchemeListList.stream()
+        List<SgjsBuildSchemeList> collect = sgjsBuildSchemeListList.stream()
                 .filter(p -> StrUtil.isNotBlank(p.getDangerLevel()) && (p.getDangerLevel().equals("1") || p.getDangerLevel().equals("2")))
                 .collect(Collectors.toList());
+        schemeTypeToArr(collect);
+        return collect;
     }
 
     //选择原有方案
@@ -109,7 +125,9 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             sgjsBuildSchemeListParam = new SgjsBuildSchemeList();
         }
         sgjsBuildSchemeListParam.setForeignId(sgjsBuildScheme1.getId());
-        return sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
+        List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
+        schemeTypeToArr(sgjsBuildSchemeListList);
+        return sgjsBuildSchemeListList;
     }
 
     //查看本次变更的方案
@@ -124,7 +142,9 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             sgjsBuildSchemeListParam.setDangerLevelArr(dangerLevelArr);
             sgjsBuildSchemeListParam.setDangerLevel(null);
         }
-        return sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
+        List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
+        schemeTypeToArr(sgjsBuildSchemeListList);
+        return sgjsBuildSchemeListList;
     }
 
     //台账查询
@@ -138,7 +158,9 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             sgjsBuildSchemeList.setDangerLevelArr(dangerLevelArr);
             sgjsBuildSchemeList.setDangerLevel(null);
         }
-        return sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeList);
+        List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeList);
+        schemeTypeToArr(sgjsBuildSchemeListList);
+        return sgjsBuildSchemeListList;
     }
 
     //保存
