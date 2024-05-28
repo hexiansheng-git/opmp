@@ -161,6 +161,6 @@ public class SbchEquipmentSpecialDetails extends CommonBaseEntity {
     /** 所属区域 */
     @Excel(name = "所属区域")
     private String region;
-
+    @NotBlank(message = "管理编号不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private String manageCode;
 }

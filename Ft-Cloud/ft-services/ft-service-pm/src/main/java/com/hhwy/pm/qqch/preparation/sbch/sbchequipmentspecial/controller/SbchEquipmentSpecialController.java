@@ -144,8 +144,7 @@ public class SbchEquipmentSpecialController extends BaseController {
     @CustomLogger(title = "前期策划-前期策划编制-设备策划-特种设备策划", name = "7.6.1特种设备清单", businessType = CustomBusinessType.SAVE)
     public AjaxResult batchAdd(@Validated(ValidationGroups.Save.class) @RequestBody SbchEquipmentSpecial sbchEquipmentSpecial){
         try{
-            sbchEquipmentSpecialService.batchSave(sbchEquipmentSpecial);
-            return AjaxResult.success();
+            return sbchEquipmentSpecialService.batchSave(sbchEquipmentSpecial);
         }catch (CustomBusinessException e){
             e.printStackTrace();
             return AjaxResult.error(e.getMsg());

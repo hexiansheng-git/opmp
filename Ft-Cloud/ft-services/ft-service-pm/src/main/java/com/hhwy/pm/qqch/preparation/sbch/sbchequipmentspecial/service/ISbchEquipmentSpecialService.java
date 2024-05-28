@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.service;
 
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.domain.SbchEquipmentSpecial;
 import com.hhwy.utils.common.CommonBaseEntity;
 
@@ -72,5 +73,5 @@ public interface ISbchEquipmentSpecialService {
 
     SbchEquipmentSpecial getList(BigDecimal version);
 
-    void batchSave(SbchEquipmentSpecial sbchEquipmentSpecial);
+    AjaxResult batchSave(SbchEquipmentSpecial sbchEquipmentSpecial);
 }

@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.service.impl;
 
+import com.alibaba.nacos.client.naming.utils.CollectionUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.SecurityUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -31,6 +33,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 特种设备管理Service业务层处理
@@ -208,8 +211,23 @@ public class SbchEquipmentSpecialServiceImpl implements ISbchEquipmentSpecialSer
     }
 
     @Override
-    public void batchSave(SbchEquipmentSpecial sbchEquipmentSpecial) {
+    @Transactional
+    public AjaxResult batchSave(SbchEquipmentSpecial sbchEquipmentSpecial) {
         List<SbchEquipmentSpecialDetails> detailsList = sbchEquipmentSpecial.getDetailsList();
+
+        Map<String, Long> mapgroup = detailsList.stream().collect(Collectors.groupingBy(s -> s.getManageCode(), Collectors.counting()));
+        List<String> collect3 = mapgroup.keySet().stream().filter(key -> mapgroup.get(key) > 1).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(collect3)) {
+            return AjaxResult.error("管理编号 "+collect3.stream().collect(Collectors.joining(","))+" 不能重复");
+        }
+
+        //校验数据必填
+        if("1".equals(sbchEquipmentSpecial.getButtonMark())||"2".equals(sbchEquipmentSpecial.getButtonMark())){//确认
+            if(!ObjectNullUtil.isEmpty(detailsList)){
+                JyDetailsUtil.jyDetails(detailsList, ValidationGroups.Save.class);
+            }
+        }
+
         SbchEquipmentSpecial temp = new SbchEquipmentSpecial();
         temp.setVersion(sbchEquipmentSpecial.getVersion());
         List<SbchEquipmentSpecial> sbchEquipmentSpecials = sbchEquipmentSpecialMapper.selectSbchEquipmentSpecialList(temp);
@@ -229,12 +247,6 @@ public class SbchEquipmentSpecialServiceImpl implements ISbchEquipmentSpecialSer
 
             sbchEquipmentSpecialMapper.insertSbchEquipmentSpecial(sbchEquipmentSpecial);
         }
-        //校验数据必填
-        if("1".equals(sbchEquipmentSpecial.getButtonMark())||"2".equals(sbchEquipmentSpecial.getButtonMark())){//确认
-            if(!ObjectNullUtil.isEmpty(detailsList)){
-                JyDetailsUtil.jyDetails(detailsList, ValidationGroups.Save.class);
-            }
-        }
         //子表
         detailsService.insertOrEditBatchByMainId(detailsList,sbchEquipmentSpecial.getId(),false);
         //判断是否是确认
@@ -244,5 +256,6 @@ public class SbchEquipmentSpecialServiceImpl implements ISbchEquipmentSpecialSer
             String stageIdentity = sbchEquipmentSpecial.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
+        return AjaxResult.success();
     }
 }
