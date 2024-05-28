@@ -55,9 +55,18 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             String buildDifficult = map.get(6);
             String planImplementTime = map.get(7);
             String planImplementTimeChange = map.get(8);
-            String planComplationTime = map.get(9);
-            if (StrUtil.isBlank(schemeName) || StrUtil.isBlank(schemeLevel) ||StrUtil.isBlank(riskLevel) || StrUtil.isBlank(buildDifficult)) {
-                AjaxResult.error("必填项为空，请检查:方案名称、方案分级、是否危大工程、施工重难点");
+//            String planComplationTime = map.get(9);
+            if (StrUtil.isBlank(schemeName)) {
+                return AjaxResult.error("必填项为空，请检查:方案名称");
+            }
+            if (StrUtil.isBlank(schemeLevel)) {
+                return AjaxResult.error("必填项为空，请检查:方案分级");
+            }
+            if (StrUtil.isBlank(riskLevel)) {
+                return AjaxResult.error("必填项为空，请检查:是否危大工程");
+            }
+            if (StrUtil.isBlank(buildDifficult)) {
+                return AjaxResult.error("必填项为空，请检查:施工重难点");
             }
             sgjsBuildSchemeList.setSchemeName(schemeName);
             sgjsBuildSchemeList.setRelationWbsId(wbsId);
@@ -69,7 +78,7 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             sgjsBuildSchemeList.setDangerLevel(dangerLevelDict.get(riskLevel));
             if (StrUtil.isNotBlank(planImplementTime)) sgjsBuildSchemeList.setPlanImplementTime(DateUtil.parseDate(planImplementTime));
             if (StrUtil.isNotBlank(planImplementTimeChange))  sgjsBuildSchemeList.setPlanImplementTimeChange(DateUtil.parseDate(planImplementTimeChange));
-            if (StrUtil.isNotBlank(planComplationTime))  sgjsBuildSchemeList.setPlanComplationTime(DateUtil.parseDate(planComplationTime));
+//            if (StrUtil.isNotBlank(planComplationTime))  sgjsBuildSchemeList.setPlanComplationTime(DateUtil.parseDate(planComplationTime));
             result.add(sgjsBuildSchemeList);
         }
         return AjaxResult.success(result);
@@ -199,6 +208,9 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
 
     //台账查询
     public List<SgjsBuildSchemeList> getSgjsBuildSchemeListList(SgjsBuildSchemeList sgjsBuildSchemeList) {
+        if (sgjsBuildSchemeList.getForeignId() == null) {
+            new ArrayList<>();
+        }
         String dangerLevel = sgjsBuildSchemeList.getDangerLevel();
         if (StrUtil.isNotBlank(dangerLevel)) {
             String[] dangerLevelArr = dangerLevel.split(",");

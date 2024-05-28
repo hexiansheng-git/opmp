@@ -265,9 +265,10 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     //台账、历史记录
     public List<SgjsBuildScheme> getSgjsBuildSchemeList(SgjsBuildScheme sgjsBuildScheme) {
         List<SgjsBuildScheme> sgjsBuildSchemeList = sgjsBuildSchemeMapper.getSgjsBuildSchemeList(sgjsBuildScheme);
+        if (CollUtil.isEmpty(sgjsBuildSchemeList)) return new ArrayList<>();
         FlowInfoSearchUtil.getFlowInfo(sgjsBuildSchemeList, FlowEnum.SGJS_BUILD_SCHEME);
         BigDecimal maxVersion = sgjsBuildSchemeList.stream().max(Comparator.comparing(SgjsBuildScheme::getVersion)).get().getVersion();
-        sgjsBuildSchemeList.forEach(p -> {
+        for (SgjsBuildScheme p : sgjsBuildSchemeList) {
             //修改时间格式
             Date updateTime = p.getUpdateTime();
             if (updateTime != null) {
@@ -277,8 +278,8 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             //设置删除按钮显隐
             if (maxVersion.compareTo(p.getVersion()) == 0 && p.getTaskStatus().equals("0"))
                 //可以删除
-                p.setPtVar3("1");
-        });
+                p.setRemark("1");
+        }
         return sgjsBuildSchemeList;
     }
 
