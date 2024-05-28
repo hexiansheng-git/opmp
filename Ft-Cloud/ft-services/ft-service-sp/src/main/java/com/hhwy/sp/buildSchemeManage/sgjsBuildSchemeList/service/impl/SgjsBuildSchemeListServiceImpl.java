@@ -115,7 +115,30 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
     //查看本次变更的方案
     @Override
     public List<SgjsBuildSchemeList> getCurrentChangeScheme(SgjsBuildSchemeList sgjsBuildSchemeListParam) {
+        if (sgjsBuildSchemeListParam.getForeignId() == null) {
+            return new ArrayList<>();
+        }
+        String dangerLevel = sgjsBuildSchemeListParam.getDangerLevel();
+        if (StrUtil.isNotBlank(dangerLevel)) {
+            String[] dangerLevelArr = dangerLevel.split(",");
+            sgjsBuildSchemeListParam.setDangerLevelArr(dangerLevelArr);
+            sgjsBuildSchemeListParam.setDangerLevel(null);
+        }
         return sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
+    }
+
+    //台账查询
+    public List<SgjsBuildSchemeList> getSgjsBuildSchemeListList(SgjsBuildSchemeList sgjsBuildSchemeList) {
+        if (sgjsBuildSchemeList.getForeignId() == null) {
+            return new ArrayList<>();
+        }
+        String dangerLevel = sgjsBuildSchemeList.getDangerLevel();
+        if (StrUtil.isNotBlank(dangerLevel)) {
+            String[] dangerLevelArr = dangerLevel.split(",");
+            sgjsBuildSchemeList.setDangerLevelArr(dangerLevelArr);
+            sgjsBuildSchemeList.setDangerLevel(null);
+        }
+        return sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeList);
     }
 
     //保存
@@ -206,19 +229,6 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
         return sgjsBuildSchemeListMapper.getSgjsBuildSchemeList(sgjsBuildSchemeList);
     }
 
-    //台账查询
-    public List<SgjsBuildSchemeList> getSgjsBuildSchemeListList(SgjsBuildSchemeList sgjsBuildSchemeList) {
-        if (sgjsBuildSchemeList.getForeignId() == null) {
-            new ArrayList<>();
-        }
-        String dangerLevel = sgjsBuildSchemeList.getDangerLevel();
-        if (StrUtil.isNotBlank(dangerLevel)) {
-            String[] dangerLevelArr = dangerLevel.split(",");
-            sgjsBuildSchemeList.setDangerLevelArr(dangerLevelArr);
-            sgjsBuildSchemeList.setDangerLevel(null);
-        }
-        return sgjsBuildSchemeListMapper.getSgjsBuildSchemeListList(sgjsBuildSchemeList);
-    }
 
     @Transactional
     public int insertSgjsBuildSchemeList(SgjsBuildSchemeList sgjsBuildSchemeList) {
