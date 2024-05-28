@@ -260,7 +260,7 @@
         SUM( a.this_quantity ) AS this_quantity
         FROM
         ( SELECT * FROM jdgl_day_schedule_wbs WHERE del_flag = '0' AND this_quantity IS NOT NULL ) a
-        INNER JOIN ( SELECT id FROM jdgl_day_schedule WHERE del_flag = '0' AND `date` &lt; #{date} AND task_status != "0" ) b ON a.day_schedule_id = b.id
+        INNER JOIN ( SELECT id FROM jdgl_day_schedule WHERE del_flag = '0' AND `date` &lt;= #{date} AND task_status != "0" ) b ON a.day_schedule_id = b.id
         GROUP BY
         a.wbs_code
     </select>
