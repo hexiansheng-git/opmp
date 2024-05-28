@@ -41,6 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -225,7 +226,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
      *
      * @param 期次 yyyy-MM
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void syncData(Date yearMonth) {
         // 获取差异化分析主表数据
         JdglDiffAnalysis qryAnalysis = new JdglDiffAnalysis();
