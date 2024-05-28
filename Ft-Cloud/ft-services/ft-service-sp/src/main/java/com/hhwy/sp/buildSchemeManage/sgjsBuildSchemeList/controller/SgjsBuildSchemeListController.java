@@ -2,6 +2,7 @@ package com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.excel.EasyExcel;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
@@ -137,14 +138,16 @@ public class SgjsBuildSchemeListController extends BaseController {
 
     //导入
     @PostMapping("/import")
-    public AjaxResult importExcel(MultipartFile file) throws IOException {
+    public AjaxResult importExcel(MultipartFile file, String version) throws IOException {
+        Assert.isTrue(file != null, "文件不能为空");
+        Assert.isTrue(StrUtil.isNotBlank(version), "版本不能为空");
         EasyExcelListener listener = new EasyExcelListener();
         EasyExcel.read(file.getInputStream(), listener).sheet(0).doRead();
         List<Map<Integer, String>> headList = listener.getHeadList();
         if (CollUtil.isEmpty(headList)) return AjaxResult.error("表头为空");
         List<Map<Integer, String>> dataList = listener.getDataList();
         if (CollUtil.isEmpty(dataList)) return AjaxResult.error("数据为空");
-        return sgjsBuildSchemeListService.importData(headList, dataList);
+        return sgjsBuildSchemeListService.importData(headList, dataList, version);
     }
 
 

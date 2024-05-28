@@ -37,7 +37,7 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
 
     //导入
     @Override
-    public AjaxResult importData(List<Map<Integer, String>> headList, List<Map<Integer, String>> dataList) {
+    public AjaxResult importData(List<Map<Integer, String>> headList, List<Map<Integer, String>> dataList, String version) {
         List<SgjsBuildSchemeList> result = new ArrayList<>();
         LinkedHashMap<String, String> changeTypeDict = DictUtil.getDictData("change_type");
         LinkedHashMap<String, String> schemeLevelDict = DictUtil.getDictData("scheme_level");
@@ -67,6 +67,20 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             }
             if (StrUtil.isBlank(buildDifficult)) {
                 return AjaxResult.error("必填项为空，请检查:施工重难点");
+            }
+            if (version.equals("1")) {
+                //版本等于1需要校验的字段
+                if (StrUtil.isBlank(planImplementTime)) {
+                    return AjaxResult.error("必填项为空，请检查:计划实施时间");
+                }
+            }else {
+                //版本不等于1就是调整；调整时需要校验的字段
+                if (StrUtil.isBlank(changeType)) {
+                    return AjaxResult.error("必填项为空，请检查:变更类型");
+                }
+                if (StrUtil.isBlank(planImplementTimeChange)) {
+                    return AjaxResult.error("必填项为空，请检查:变更计划实施时间");
+                }
             }
             sgjsBuildSchemeList.setSchemeName(schemeName);
             sgjsBuildSchemeList.setRelationWbsId(wbsId);

@@ -47,7 +47,7 @@ public interface ISgjsBuildSchemeListService {
 
     List<SgjsBuildSchemeList> getRiskList(SgjsBuildSchemeList sgjsBuildSchemeListParam);
 
-    AjaxResult importData(List<Map<Integer, String>> headList, List<Map<Integer, String>> dataList);
+    AjaxResult importData(List<Map<Integer, String>> headList, List<Map<Integer, String>> dataList, String version);
 
     //批量查询，根据foreignId
     List<SgjsBuildSchemeList> getListByforeignList(Collection<Long> foreignId);
