@@ -363,7 +363,8 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                     jdglMainPlanItem.setQuantity(activityInfo.getQuantity());
                     jdglMainPlanItem.setSchedulePercentComplete(activityInfo.getSchedulePercentComplete());
                     jdglMainPlanItem.setExpectedFinishDate(activityInfo.getExpectedFinishDate());
-                    jdglMainPlanItem.setFinishDateVariance(activityInfo.getFinishDateVariance());
+                    Integer finishDateVariance = activityInfo.getFinishDateVariance();
+                    jdglMainPlanItem.setFinishDateVariance(finishDateVariance != null ? activityInfo.getFinishDateVariance() / 8 : 0);
                     jdglMainPlanItem.setLagReason(activityInfo.getLagReason());
                     jdglMainPlanItem.setCorrectionTarget(activityInfo.getCorrectionTarget());
                     jdglMainPlanItem.setConcreteMeasure(activityInfo.getConcreteMeasure());

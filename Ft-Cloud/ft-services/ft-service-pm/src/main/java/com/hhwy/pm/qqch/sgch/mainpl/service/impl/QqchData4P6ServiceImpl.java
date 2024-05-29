@@ -203,7 +203,8 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
                     qqchMainPlanItem.setQuantity(activityInfo.getQuantity());
                     qqchMainPlanItem.setSchedulePercentComplete(activityInfo.getSchedulePercentComplete());
                     qqchMainPlanItem.setExpectedFinishDate(activityInfo.getExpectedFinishDate());
-                    qqchMainPlanItem.setFinishDateVariance(activityInfo.getFinishDateVariance());
+                    Integer finishDateVariance = activityInfo.getFinishDateVariance();
+                    qqchMainPlanItem.setFinishDateVariance(finishDateVariance != null ? finishDateVariance / 8 : 0);
                     qqchMainPlanItem.setLagReason(activityInfo.getLagReason());
                     qqchMainPlanItem.setCorrectionTarget(activityInfo.getCorrectionTarget());
                     qqchMainPlanItem.setConcreteMeasure(activityInfo.getConcreteMeasure());
