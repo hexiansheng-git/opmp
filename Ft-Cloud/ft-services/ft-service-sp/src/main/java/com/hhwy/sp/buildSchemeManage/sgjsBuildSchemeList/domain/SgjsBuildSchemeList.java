@@ -109,6 +109,14 @@ public class SgjsBuildSchemeList extends BaseEntity {
     @NotBlank(message = "施工重难点不能为空",groups = {ValidationGroups.Save.class})
     private String buildDifficult;
     /**
+     * 字段描述：计划实施时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @JsonProperty
+    @FtExcel(name = "计划实施时间", dateFormat = "yyyy年MM月dd日")
+//    @NotNull(message = "计划实施时间不能为空",groups = {ValidationGroups.Save.class})
+    private Date planImplementTime;
+    /**
      * 字段描述：计划编制完成时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
@@ -123,14 +131,6 @@ public class SgjsBuildSchemeList extends BaseEntity {
     @JsonProperty
 //    @FtExcel(name = "原计划实施时间", dateFormat = "yyyy-MM-dd")
     private Date planComplationTimeOrigin;
-    /**
-     * 字段描述：计划实施时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    @JsonProperty
-    @FtExcel(name = "计划实施时间", dateFormat = "yyyy年MM月dd日")
-//    @NotNull(message = "计划实施时间不能为空",groups = {ValidationGroups.Save.class})
-    private Date planImplementTime;
     /**
      * 字段描述：变更计划实施时间
      */
