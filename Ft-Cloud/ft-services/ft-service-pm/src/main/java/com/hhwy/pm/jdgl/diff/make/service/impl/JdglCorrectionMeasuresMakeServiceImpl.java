@@ -380,10 +380,10 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             collect = menuIdList.stream().filter(p -> "master".equals(p.getTenantKey())).collect(Collectors.toList());
         }
         if (CollectionUtil.isEmpty(collect)) return;
-        String processKey = "process_jdgl_correction_measures_make";
+//        String processKey = "process_jdgl_correction_measures_make";
         //临时做测试数据
-        userNameList.add("chenxiaodong");
-        FlowStartUtil.start(processKey, String.valueOf(id), "jdgl_correction_measures_make", userNameList, String.valueOf(collect.get(0).getMenuId()));
+//        userNameList.add("chenxiaodong");
+//        FlowStartUtil.start(processKey, String.valueOf(id), "jdgl_correction_measures_make", userNameList, String.valueOf(collect.get(0).getMenuId()));
 //        });
     }
 
