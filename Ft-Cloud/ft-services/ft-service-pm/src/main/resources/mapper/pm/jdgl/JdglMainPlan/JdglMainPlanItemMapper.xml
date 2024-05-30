@@ -266,6 +266,12 @@
             <if test="itemType != null  and itemType != ''"> and `item_type` = #{itemType}</if>
             <if test="taskType != null  and taskType != ''"> and `task_type` = #{taskType}</if>
             <if test="ancestors != null  and ancestors != ''"> and `ancestors` = #{ancestors}</if>
+            <if test="itemCodeList!=null">
+                and item_code in
+                <foreach item="id" collection="itemCodeList" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
         </where>
         order by sort asc, item_code asc
     </select>

@@ -218,7 +218,7 @@ public class QqchDangerProcessControlPlan extends BaseEntity {
      * 字段描述：预留字段2
      */
     @JsonProperty
-    @Excel(name = "预留字段2")
+    @Excel(name = "对应8.9中唯一标志pt_var1")
     private String ptVar2;
     /**
      * 字段描述：预留字段3
@@ -238,4 +238,6 @@ public class QqchDangerProcessControlPlan extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    private String wbsCode;
 }

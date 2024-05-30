@@ -490,5 +490,7 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
     @JsonProperty
     private int haveChildren;
 
+    /*编码数组*/
+    private List<String> itemCodeList;
 
 }

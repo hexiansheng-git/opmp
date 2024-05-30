@@ -337,6 +337,29 @@ public class FtDateUtils extends DateUtils {
         return min ;
     }
 
+    /**
+     * 根据输入的日期，往前一个月的日期
+     * @param date
+     * @return
+     */
+    public static Date getDateLastMonth(Date date) {
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, -1);
+        return calendar.getTime();
+    }
+    /**
+     * 根据输入的日期，往前两周
+     * @param date
+     * @return
+     */
+    public static Date getDateLastTwoWeek(Date date) {
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.WEEK_OF_YEAR, -2);
+        return calendar.getTime();
+    }
+
     public static void main(String[] args) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     }

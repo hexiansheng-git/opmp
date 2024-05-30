@@ -2,6 +2,7 @@ package com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service;
 
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlanQueryVO;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 
 import java.util.List;
 
@@ -43,5 +44,10 @@ public interface IJdglMainPlanService {
     List<JdglMainPlan> getBaseMainPlanList(String tenantKey);
 
     JdglMainPlan getBaseMainPlanDetail(String tenantKey, Long id);
+    /**
+     * 根据wbs编码获取对应的进度管理数据
+     * @return
+     */
+    List<JdglMainPlanItem> getJdglMainPlanByWBS(JdglMainPlanItem jdglMainPlanItem);
 
 }
