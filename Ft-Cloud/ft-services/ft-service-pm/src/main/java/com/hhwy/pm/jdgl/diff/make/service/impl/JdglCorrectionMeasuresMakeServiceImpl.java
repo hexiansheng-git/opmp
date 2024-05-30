@@ -398,8 +398,8 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         String processKey = "process_jdgl_correction_measures_make";
         String tableName = "jdgl_correction_measures_make";
 //        log.info("流程发起参数, 流程定义key:{}, 业务id:{}, 表名:{}, 提交目标:{}, 路由id:{}", processKey, id, tableName, JSON.toJSONString(userNameList), collect.get(0).getMenuId());
-        userNameList.clear();
-        userNameList.add("guolan");
+//        userNameList.clear();
+//        userNameList.add("guolan");
         FlowStartUtil.start(processKey, String.valueOf(id), tableName, userNameList, String.valueOf(collect.get(0).getMenuId()), "纠偏措施制定-0530");
 //        });
     }
