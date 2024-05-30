@@ -1028,7 +1028,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 tWarn.setWarnScope(userNames);
                 tWarn.setWarnUrl(schemeReviewUrl);
                 tWarn.setWarnScopeType("3");
-                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getPtVar1(), sgjsWarnConfig.getWarnRule());
+                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getWarnSubject(), sgjsWarnConfig.getWarnRule());
                 tWarn.setWarnContent(warnContent);
                 tWarn.setProjectName(tenant.getTenantName());
                 tWarn.setTenantKey(tenant.getTenantKey());

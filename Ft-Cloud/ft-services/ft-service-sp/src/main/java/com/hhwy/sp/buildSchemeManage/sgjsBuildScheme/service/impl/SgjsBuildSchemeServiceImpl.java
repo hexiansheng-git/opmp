@@ -478,23 +478,41 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     public void warnMessage() {
         //从总部获取预警配置信息
         String url = gmUrl + "/gm/sgjsWarnConfig/list?warnSubject={warnSubject}";
-        String warnItemId = WarnItem.SGJS_BUILD_SCHEME_LIST.getWarnItemId();
-        SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, warnItemId);
-        if (null == sgjsWarnConfig) return;
+        SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, "施工方案编制");
+        if (null == sgjsWarnConfig) {
+            log.error("获取施工方案编制预警配置无数据");
+            return;
+        }
         /*遍历所有租户发送预警*/
-        // 切换到master
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         DynamicDataSourceContextHolder.push("master");
         try {
             //获取所有租户
             List<SysTenant> tenantList = systemServiceApi.tenantList();
-            for (SysTenant tenant : tenantList) {
+//            List<SysTenant> tenantList = new ArrayList<>();
+//            SysTenant sysTenant = new SysTenant();
+//            sysTenant.setTenantKey("PJ2020011492");
+//            sysTenant.setTenantName("吉布提风力发电项目");
+//            tenantList.add(sysTenant);
+            warnHandler(tenantList, sgjsWarnConfig);
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        } finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+    }
+
+    private void warnHandler(List<SysTenant> tenantList, SgjsWarnConfig sgjsWarnConfig) {
+        for (SysTenant tenant : tenantList) {
+            DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenant.getTenantKey()));
+            try {
                 /*查询施工方案评审数据*/
                 SgjsBuildSchemeReview sgjsBuildSchemeReview = new SgjsBuildSchemeReview();
                 List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewList = sgjsBuildSchemeReviewService.getSgjsBuildSchemeReviewList(sgjsBuildSchemeReview);
                 if (CollUtil.isEmpty(sgjsBuildSchemeReviewList)) {
-                    log.info("施工方案评审数据无数据");
-                    return;
+                    log.info("租户：{}，施工方案评审数据无数据", tenant.getTenantName());
+                    continue;
                 }
                 /*查询流程，过滤得到未发起审批的数据*/
                 List<SgjsBuildSchemeReview> list23 = sgjsBuildSchemeReviewList.stream()
@@ -526,13 +544,16 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                     }
                 }
                 if (!triggerFlag) {
-                    log.info("施工方案清单预警执行, 无需预警。。。。");
-                    return;
+                    log.info("租户：{}，施工方案清单预警执行, 无需预警。。。。", tenant.getTenantName());
+                    continue;
                 }
                 /*执行预警*/
                 //根据角色获取用户
                 List<SysUser> sysUsers = CommonBusiness.getSysUsers(sgjsWarnConfig);
-                if (CollUtil.isEmpty(sysUsers)) return;
+                if (CollUtil.isEmpty(sysUsers)) {
+                    log.info("租户：{}，根据角色获取用户, 无数据，{}", tenant.getTenantName(), JSON.toJSONString(sgjsWarnConfig));
+                    continue;
+                }
                 String userNames = sysUsers.stream().map(p -> String.valueOf(p.getUserName())).collect(Collectors.joining(","));
                 //发送预警
                 ArrayList<TWarn> objects = new ArrayList<>();
@@ -542,7 +563,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 tWarn.setWarnScope(userNames);
                 tWarn.setWarnUrl(schemeListUrl);
                 tWarn.setWarnScopeType("3");
-                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getPtVar1(), sgjsWarnConfig.getWarnRule());
+                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getWarnSubject(), sgjsWarnConfig.getWarnRule());
                 tWarn.setWarnContent(warnContent);
                 tWarn.setProjectName(tenant.getTenantName());
                 tWarn.setTenantKey(tenant.getTenantKey());
@@ -563,19 +584,18 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 if (CollUtil.isNotEmpty(objects)) {
                     systemServiceApi.insertTWarnList(objects);
                 }
-                log.info("施工方案清单预警执行完成。。。。共:{}", objects.size());
+                log.info("租户：{}，施工方案清单预警执行完成。。。。共:{}", tenant.getTenantName(), objects.size());
                 /*推送总部*/
                 if (CollUtil.isNotEmpty(warnRecordList)) {
-                    log.info("施工方案清单预警记录推送数据：" + JSON.toJSONString(warnRecordList));
+                    log.info("租户：{}，施工方案清单预警记录推送数据：" + JSON.toJSONString(warnRecordList), tenant.getTenantName());
                     rocketMQTemplate.convertAndSend("sgjs_build_scheme_list_warn:tenantSuccess", warnRecordList);
                 }
+            } catch (Exception e) {
+                log.error("租户：{}, 异常", tenant.getTenantName());
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            throw new CustomException(e.getMessage());
-        } finally {
-            DynamicDataSourceContextHolder.poll();
-            DynamicDataSourceContextHolder.push(oldDataSource);
         }
+
     }
 
 }
