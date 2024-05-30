@@ -578,6 +578,9 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                     sgjsWarnRecord.setWarnContent(warnContent);
                     sgjsWarnRecord.setWarnUserId(String.valueOf(p.getUserId()));
                     sgjsWarnRecord.setWarnUser(p.getUserName());
+                    sgjsWarnRecord.setWarnSubject(sgjsWarnConfig.getWarnSubject());
+                    sgjsWarnRecord.setWarnTime(new Date());
+                    sgjsWarnRecord.setStatus("1");
                     warnRecordList.add(sgjsWarnRecord);
                 });
                 //发送预警
