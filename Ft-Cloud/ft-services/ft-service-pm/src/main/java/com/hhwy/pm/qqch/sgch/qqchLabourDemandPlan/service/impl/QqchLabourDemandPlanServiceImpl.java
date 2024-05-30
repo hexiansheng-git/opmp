@@ -10,6 +10,10 @@ import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.domain.QqchSafetyTrain;
+import com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.domain.vo.QqchSafetyTrainVo;
+import com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.mapper.QqchSafetyTrainMapper;
+import com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.service.IQqchSafetyTrainService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanDto;
@@ -23,8 +27,10 @@ import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstService;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstStaffPlanService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.collection.ListUtil;
 import com.hhwy.utils.date.Getclasspath;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import io.seata.common.util.CollectionUtils;
@@ -37,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.springframework.transaction.annotation.Propagation.REQUIRED;
 
@@ -62,6 +69,10 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
     private QqchConstMapper qqchConstMapper;
     @Autowired
     private IQqchConstStaffPlanService qqchConstStaffPlanService;
+    @Autowired
+    private QqchSafetyTrainMapper qqchSafetyTrainMapper;
+    @Autowired
+    private IQqchSafetyTrainService qqchSafetyTrainService;
 
 
     public QqchLabourDemandPlan getQqchLabourDemandPlan(QqchLabourDemandPlan qqchLabourDemandPlan) {
@@ -341,6 +352,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
 
         List<QqchLabourDemandPlanResult> saveList = new ArrayList<>();
         List<Long> delList = new ArrayList<>();
+        List<String> delListSafety = new ArrayList<>();//需要清空8.9对应的数据
 
         //遍历1.5.2数据，判断在1.3中是否存在，存在则修改，不存在说明1.3已删除1.5.2也同步删除
         //1.3数据 按id分组
@@ -355,12 +367,19 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
                     qqchLabourDemandPlanResults.forEach(p -> {
                         p.setEntryDate(qqchLabourDemandPlan.getEntryDate());
                         p.setExitDate(qqchLabourDemandPlan.getExitDate());
+                        p.setPtVar2(qqchLabourDemandPlan.getPtVar2());
                     });
                 }
                 saveList.addAll(qqchLabourDemandPlanResults);
+
             }else {
                 //删除
                 delList.add(qqchLabourDemandPlan.getId());
+                if (qqchLabourDemandPlan.getEntryDate() != null){//进场时间存在说明8.9已存在对应数据
+                    if (StringUtils.isNotBlank(qqchLabourDemandPlan.getPtVar2())) {
+                        delListSafety.add(qqchLabourDemandPlan.getPtVar2());
+                    }
+                }
             }
         }
 
@@ -380,6 +399,10 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         if (CollectionUtils.isNotEmpty(delList)) {
             qqchLabourDemandPlanMapper.deleteQqchLabourDemandPlanByPks(delList);
         }
+        if (CollectionUtils.isNotEmpty(delListSafety)) {
+            //删除8.9已存在的对应数据
+            qqchSafetyTrainMapper.deleteQqchSafetyTrainByPtVar2(delListSafety);
+        }
 
         if (CollectionUtils.isNotEmpty(saveList)) {
             //列表结构转换
@@ -397,6 +420,12 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         if (CollectionUtils.isEmpty(qqchLabourDemandPlanList)) {
             return;
         }
+        List<QqchSafetyTrain> qqchSafetyTrainNew = new ArrayList<>();
+        //获取8.9的针对1.5.2同步过去的数据
+        QqchSafetyTrain qqchSafetyTrain = new QqchSafetyTrain();
+        qqchSafetyTrain.setPtVar2("1");
+        QqchSafetyTrainVo vo = qqchSafetyTrainService.getQqchSafetyTrainList(qqchSafetyTrain);
+
         //删除旧数据
         QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
         qqchLabourDemandPlan.setVersion(version);
@@ -416,8 +445,41 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             if (labourDemandPlan.getPid() == null) {
                 labourDemandPlan.setPid(0l);
             }
+            if (labourDemandPlan.getEntryDate() != null && StringUtils.isBlank(labourDemandPlan.getPtVar2())) {
+                labourDemandPlan.setPtVar2(IdWorker.createId() + "");
+            } else if (labourDemandPlan.getEntryDate() == null && StringUtils.isNotBlank(labourDemandPlan.getPtVar2())) {
+                labourDemandPlan.setPtVar2("");
+            }
+            if (StringUtils.isNotBlank(labourDemandPlan.getPtVar2())) {
+                //根据唯一标识获取获取8.9对应的数据，重新组装培训时间，队伍
+                List<QqchSafetyTrain> safetyTrains = vo.getQqchSafetyTrainList().stream().filter(item -> (StringUtils.isNotBlank(item.getPtVar1()) && item.getPtVar1().equals(labourDemandPlan.getPtVar2()))).collect(Collectors.toList());
+                if (ObjectNullUtil.isEmpty(safetyTrains)) {
+                    QqchSafetyTrain train = new QqchSafetyTrain();
+                    train.setContent("入场安全培训");
+                    train.setTrainType("入场安全培训");
+                    train.setTime(labourDemandPlan.getEntryDate());
+                    train.setTarget(labourDemandPlan.getWorkTeam());
+                    train.setParticipantsNum(labourDemandPlan.getTotal());
+                    train.setPtVar2("1");
+                    train.setPtVar1(labourDemandPlan.getPtVar2());
+                    qqchSafetyTrainNew.add(train);
+                } else {
+                    safetyTrains.forEach(item -> {
+                        item.setContent("入场安全培训");
+                        item.setTrainType("入场安全培训");
+                        item.setTime(labourDemandPlan.getEntryDate());
+                        item.setTarget(labourDemandPlan.getWorkTeam());
+                        item.setParticipantsNum(labourDemandPlan.getTotal());
+                    });
+                    qqchSafetyTrainNew.addAll(safetyTrains);
+                }
+            }
         }
         qqchLabourDemandPlanMapper.insertQqchLabourDemandPlanList(configs);
+        if (!ObjectNullUtil.isEmpty(qqchSafetyTrainNew)) {
+            BigDecimal versionTrain = VersionUtil.getVersion("qqch_safety_train", vo.getVersion());
+            qqchSafetyTrainService.insertQqchSafetyTrainList(qqchSafetyTrainNew,versionTrain);
+        }
     }
 
     private List<QqchLabourDemandPlan> toTreeList(List<QqchLabourDemandPlanResult> qqchConstList){

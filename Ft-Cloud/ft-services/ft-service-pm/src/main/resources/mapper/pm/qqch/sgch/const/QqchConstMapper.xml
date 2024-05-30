@@ -626,7 +626,7 @@
 
     <select id="selectQqchConst"  resultType="com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlanResult">
         SELECT
-            p.id,
+            p.pt_var1 id,
             p.master_id masterId,
             p.occupation_code  occupationCode,
             p.occupation_name  occupationName,

@@ -17,7 +17,7 @@ public class QqchConstStaffPlanResult extends CompileEntity<QqchConstStaffPlanRe
     private static final long serialVersionUID = 1L;
 
     /**
-     * 字段描述：主键
+     * 字段描述：主键 对应1.3施工部署中人员策划中的pt_var1
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty

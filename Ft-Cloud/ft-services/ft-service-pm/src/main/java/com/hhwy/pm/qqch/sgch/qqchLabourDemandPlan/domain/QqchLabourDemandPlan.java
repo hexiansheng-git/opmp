@@ -214,7 +214,7 @@ public class QqchLabourDemandPlan extends TreeNode<QqchLabourDemandPlan> {
      * 字段描述：预留字段2
      */
     @JsonProperty
-    @Excel(name = "预留字段2")
+    @Excel(name = "和8.9中PtVar1关联的唯一标识")
     private String ptVar2;
     /**
      * 字段描述：预留字段3
