@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.service;
 import com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.domain.QqchSafetyTrain;
 import com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.domain.vo.QqchSafetyTrainVo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,4 +28,6 @@ public interface IQqchSafetyTrainService {
     int deleteQqchSafetyTrainByPks(List<Long> qqchSafetyTrainPkList);
 
     void save(QqchSafetyTrainVo vo);
+
+    void insertQqchSafetyTrainList(List<QqchSafetyTrain> qqchSafetyTrainList, BigDecimal version);
 }

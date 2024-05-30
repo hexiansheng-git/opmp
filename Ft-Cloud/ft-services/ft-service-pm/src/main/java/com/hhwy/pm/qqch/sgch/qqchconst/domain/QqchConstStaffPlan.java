@@ -202,7 +202,7 @@ public class QqchConstStaffPlan extends CompileEntity<QqchConstStaffPlan> {
      * 字段描述：预留字段1
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
+    @Excel(name = "对应1.5.2中的outId")
     private String ptVar1;
     /**
      * 字段描述：预留字段2

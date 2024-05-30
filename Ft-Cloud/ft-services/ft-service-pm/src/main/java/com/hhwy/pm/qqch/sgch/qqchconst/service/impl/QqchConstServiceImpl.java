@@ -20,6 +20,7 @@ import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
+import nonapi.io.github.classgraph.json.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -161,6 +162,9 @@ public class QqchConstServiceImpl implements IQqchConstService {
                 for (QqchConstStaffPlan qqchConstStaffPlan : staffList) {
                     qqchConstStaffPlan = CompileEntity.dealSaveDtoWithoutTree(cons, qqchConstStaffPlan);
                     qqchConstStaffPlan.setId(IdWorker.createId());
+                    if (StringUtils.isBlank(qqchConstStaffPlan.getPtVar1())) {
+                        qqchConstStaffPlan.setPtVar1(IdWorker.createId()+"");
+                    }
                     qqchConstStaffPlan.setMasterId(id);
                     if (qqchConstStaffPlan.getId() == null) qqchConstStaffPlan.setId(IdWorker.createId());
                 }
