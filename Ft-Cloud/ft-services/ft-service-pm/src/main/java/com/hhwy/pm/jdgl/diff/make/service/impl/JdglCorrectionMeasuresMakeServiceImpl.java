@@ -6,6 +6,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -233,6 +234,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         qryAnalysis.setPeriod(yearMonth);
         JdglDiffAnalysis JdglDiffAnalysis = jdglDiffAnalysisService.getJdglDiffAnalysis(qryAnalysis);
         if (JdglDiffAnalysis == null) {
+            log.info("纠偏措施制定当前期次无数据:{}", DateUtil.format(yearMonth, DatePattern.NORM_MONTH_PATTERN));
             return;
         }
         //时间处理
@@ -359,31 +361,46 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             newDetailList.add(JdglCorrectionMeasuresMakeDetail);
         }
         // 纠偏方案入库
-        if (CollectionUtil.isEmpty(newDetailList)) return;
+        if (CollectionUtil.isEmpty(newDetailList)) {
+            log.info("newDetailList 空");
+            return;
+        }
         jdglCorrectionMeasuresMakeDetailService.insertJdglCorrectionMeasuresMakeDetailList(newDetailList);
-        log.info("纠偏措施制定，纠偏方案入库完成");
+        log.info("纠偏措施制定，纠偏方案入库完成; 开始发起流程...");
         //发起流程
 //        ExecutorService executorService = Executors.newSingleThreadExecutor();
 //        executorService.submit(() -> {
             //获取用户名
             List<String> userNameList = newDetailList.stream()
-                    .filter(p -> StrUtil.isNotBlank(p.getDirectorId()))
                     .map(JdglCorrectionMeasuresMakeDetail::getDirectorId)
+                    .filter(StrUtil::isNotBlank)
                     .distinct().collect(Collectors.toList());
             //获取菜单id
-        if (CollectionUtil.isEmpty(userNameList)) return;
+        if (CollectionUtil.isEmpty(userNameList)) {
+            log.info("获取责任人为空:{}", JSON.toJSONString(userNameList));
+            return;
+        }
         String tenantKey = SecurityUtils.getTenantKey();
-        List<SysMenu> menuIdList = systemServiceApi.getMenuId("scheduleManagement/FormulateCorrectiveMeasures/detail", tenantKey + ",master");
-        if (CollectionUtil.isEmpty(menuIdList)) return;
+        String component = "scheduleManagement/FormulateCorrectiveMeasures/detail";
+        List<SysMenu> menuIdList = systemServiceApi.getMenuId(component, tenantKey + ",master");
+        if (CollectionUtil.isEmpty(menuIdList)){
+            log.info("当前租户没有此菜单,租户:{}, 菜单:{}", tenantKey, component);
+            return;
+        }
         List<SysMenu> collect = menuIdList.stream().filter(p -> tenantKey.equals(p.getTenantKey())).collect(Collectors.toList());
         if (CollectionUtil.isEmpty(collect)) {
             collect = menuIdList.stream().filter(p -> "master".equals(p.getTenantKey())).collect(Collectors.toList());
         }
-        if (CollectionUtil.isEmpty(collect)) return;
-//        String processKey = "process_jdgl_correction_measures_make";
-        //临时做测试数据
-//        userNameList.add("chenxiaodong");
-//        FlowStartUtil.start(processKey, String.valueOf(id), "jdgl_correction_measures_make", userNameList, String.valueOf(collect.get(0).getMenuId()));
+        if (CollectionUtil.isEmpty(collect)) {
+            log.info("当前租户没有菜单:{}", tenantKey);
+            return;
+        }
+        String processKey = "process_jdgl_correction_measures_make";
+        String tableName = "jdgl_correction_measures_make";
+//        log.info("流程发起参数, 流程定义key:{}, 业务id:{}, 表名:{}, 提交目标:{}, 路由id:{}", processKey, id, tableName, JSON.toJSONString(userNameList), collect.get(0).getMenuId());
+        userNameList.clear();
+        userNameList.add("guolan");
+        FlowStartUtil.start(processKey, String.valueOf(id), tableName, userNameList, String.valueOf(collect.get(0).getMenuId()), "纠偏措施制定-0530");
 //        });
     }
 

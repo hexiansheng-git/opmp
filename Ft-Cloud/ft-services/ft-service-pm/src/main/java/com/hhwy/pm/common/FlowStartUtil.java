@@ -6,6 +6,7 @@ import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.flowable.api.RemoteBpmnService;
 import com.hhwy.flowable.domain.NextNodesParam;
+import com.hhwy.flowable.domain.NodeInfo;
 import com.hhwy.flowable.domain.StartFlowResource;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,12 +29,13 @@ public class FlowStartUtil {
      * 作者: fushudong
      * 时间: 2023/12/25
      */
-    public static void start(String processDefinitionKey, String businessKey, String tableName, List<String> userNameList, String routeId){
-        log.info("流程KEY：{}，业务KEY: {}， 表名：{}， 用户列表：{}， 菜单id：{}", processDefinitionKey, businessKey, tableName, userNameList, routeId);
+    public static void start(String processDefinitionKey, String businessKey, String tableName, List<String> userNameList, String routeId, String processInstanceName){
+        log.info("流程KEY：{}，流程名称：{}，业务id: {}， 表名：{}， 用户列表：{}， 菜单id：{}", processDefinitionKey, processInstanceName, businessKey, tableName, userNameList, routeId);
         NextNodesParam nextNodesParam = new NextNodesParam();
         nextNodesParam.setProcessDefinitionKey(processDefinitionKey);
         //BpmnController  nextNodesForFeign
-        R r = remoteBpmnService.nextNodesForFeign(nextNodesParam);
+        R<List<NodeInfo>> r = remoteBpmnService.nextNodesForFeign(nextNodesParam);
+        log.info("发起流程响应结果：{}", JSON.toJSONString(r));
         int code = r.getCode();
         if (code != 200) {
             log.error("发起流程失败，获取下一节点实例失败，状态code：{}---响应mas：{}---响应data：{}", r.getCode(), r.getMsg(), r.getData());
@@ -63,7 +65,7 @@ public class FlowStartUtil {
         StartFlowResource startFlowResource = new StartFlowResource();
         startFlowResource.setProcessDefinitionKey(processDefinitionKey);
         startFlowResource.setBusinessKey(businessKey);
-        startFlowResource.setProcessInstanceName("纠偏措施指定审批流程批");
+        startFlowResource.setProcessInstanceName(processInstanceName);
 //        startFlowResource.setComment();
 //        startFlowResource.setFileGroupId();
 
