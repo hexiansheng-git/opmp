@@ -209,7 +209,7 @@ public class QqchDangerProcessControlPlanServiceImpl implements IQqchDangerProce
                         QqchSafetyTrain train = new QqchSafetyTrain();
                         train.setContent("危大工程专项培训");
                         train.setTrainType("危大工程专项培训");
-                        train.setTime(qqchDangerProcessControlPlan.getPlanStartDate());
+                        train.setTime(FtDateUtils.getDateLastOneWeek(qqchDangerProcessControlPlan.getPlanStartDate()));
                         train.setPtVar2("2");
                         train.setPtVar1(qqchDangerProcessControlPlan.getPtVar2());
                         qqchSafetyTrainNew.add(train);
@@ -217,7 +217,7 @@ public class QqchDangerProcessControlPlanServiceImpl implements IQqchDangerProce
                         safetyTrains.forEach(item -> {
                             item.setContent("危大工程专项培训");
                             item.setTrainType("危大工程专项培训");
-                            item.setTime(qqchDangerProcessControlPlan.getPlanStartDate());
+                            item.setTime(FtDateUtils.getDateLastOneWeek(qqchDangerProcessControlPlan.getPlanStartDate()));
                         });
                         qqchSafetyTrainNew.addAll(safetyTrains);
                     }
