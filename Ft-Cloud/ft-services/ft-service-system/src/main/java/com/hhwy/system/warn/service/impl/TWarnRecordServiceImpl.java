@@ -2,6 +2,7 @@ package com.hhwy.system.warn.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.domain.base.system.warn.TWarnRecord;
 import com.hhwy.system.warn.mapper.TWarnRecordMapper;
 import com.hhwy.system.warn.service.ITWarnRecordService;
@@ -76,5 +77,10 @@ public class TWarnRecordServiceImpl implements ITWarnRecordService {
     @Transactional
     public int deleteTWarnRecordByPks(List<Long> tWarnRecordPkList) {
         return tWarnRecordMapper.deleteTWarnRecordByPks(tWarnRecordPkList);
+    }
+
+    //查看已读记录
+    public List<TWarnRecord> getWranRecordReadInfo(String[] businessIds) {
+        return tWarnRecordMapper.getWranRecordReadInfo(businessIds);
     }
 }

@@ -27,4 +27,6 @@ public interface ITWarnRecordService {
     int deleteTWarnRecord(TWarnRecord tWarnRecord);
 
     int deleteTWarnRecordByPks(List<Long> tWarnRecordPkList);
+
+    List<TWarnRecord> getWranRecordReadInfo(String[] businessId);
 }

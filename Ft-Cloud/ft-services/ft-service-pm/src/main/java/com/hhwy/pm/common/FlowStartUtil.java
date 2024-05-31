@@ -78,7 +78,7 @@ public class FlowStartUtil {
         //BpmnController  startAndCompleteFlowForFeign
         R r1 = remoteBpmnService.startAndCompleteFlowForFeign(startFlowResource);
         if (r1.getCode() == 200){
-            log.error("流程发起成功，状态code：{}---响应mas：{}---响应data：{}", r1.getCode(), r1.getMsg(), r1.getData());
+            log.info("流程发起成功，状态code：{}---响应mas：{}---响应data：{}", r1.getCode(), r1.getMsg(), r1.getData());
         }else {
             log.error("流程发起失败，状态code：{}---响应mas：{}---响应data：{}", r1.getCode(), r1.getMsg(), r1.getData());
         }
