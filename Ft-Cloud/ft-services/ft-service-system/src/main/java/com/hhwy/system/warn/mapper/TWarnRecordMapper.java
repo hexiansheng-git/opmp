@@ -1,5 +1,6 @@
 package com.hhwy.system.warn.mapper;
 
+import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.domain.base.system.warn.TWarnRecord;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -33,4 +34,6 @@ public interface TWarnRecordMapper {
     TWarnRecord getWarnRecordByWarnIdAndWarnUser(@Param("warnId") Long warnId, @Param("userName") String userName);
 
     int changeStatus(TWarnRecord record);
+
+    List<TWarnRecord> getWranRecordReadInfo(@Param("businessIds") String[]  businessIds);
 }

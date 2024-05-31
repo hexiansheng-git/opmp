@@ -244,4 +244,17 @@
             </foreach>
         </where>
     </delete>
+
+    <select id="getWranRecordReadInfo" resultMap="TWarnRecordResultMap">
+        SELECT
+        a.business_id AS id,
+        b.warn_id,
+        b.warn_user_name
+        FROM (SELECT warn_id, business_id FROM t_warn WHERE del_flag = '0' AND business_id in
+        <foreach collection="businessIds" item="businessId" open="(" close=")" separator=",">
+            #{businessId}
+        </foreach>
+        ) a
+        LEFT JOIN t_warn_record b ON a.warn_id = b.warn_id
+    </select>
 </mapper>

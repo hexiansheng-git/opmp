@@ -9,6 +9,7 @@ import com.hhwy.domain.base.system.warn.TWarnRecord;
 import com.hhwy.system.warn.service.ITWarnRecordService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -90,5 +91,12 @@ public class TWarnRecordController extends BaseController {
         List<TWarnRecord> tWarnRecordList = tWarnRecordService.getTWarnRecordList(tWarnRecordParam);
         ExcelUtils<TWarnRecord> util = new ExcelUtils<>(TWarnRecord.class);
         util.exportExcel(response, tWarnRecordList, DateUtils.getDate());
+    }
+
+    //查看已读记录
+    @GetMapping("/recordReadInfo")
+    public AjaxResult recordReadInfo(String[] businessIds) {
+        Assert.isTrue(businessIds != null, "参数不能为空：businessIds");
+        return AjaxResult.success(tWarnRecordService.getWranRecordReadInfo(businessIds));
     }
 }
