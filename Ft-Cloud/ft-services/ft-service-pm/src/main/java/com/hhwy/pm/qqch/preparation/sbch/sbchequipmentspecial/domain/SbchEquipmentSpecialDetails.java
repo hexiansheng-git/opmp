@@ -125,7 +125,7 @@ public class SbchEquipmentSpecialDetails extends CommonBaseEntity {
     private String delFlag;
 
     /** 预留字段1 */
-    @Excel(name = "唯一标识")
+    @Excel(name = "唯一标识对应8.9和8.4.1中的ptVar1")
     private String ptVar1;
 
     /** 预留字段2 */
@@ -161,6 +161,6 @@ public class SbchEquipmentSpecialDetails extends CommonBaseEntity {
     /** 所属区域 */
     @Excel(name = "所属区域")
     private String region;
-    @NotBlank(message = "管理编号不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotBlank(message = "管理编号不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private String manageCode;
 }

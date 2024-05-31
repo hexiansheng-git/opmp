@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.service;
 
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.domain.SbchEquipmentSpecialDetails;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -60,6 +61,6 @@ public interface ISbchEquipmentSpecialDetailsService {
      */
     int deleteSbchEquipmentSpecialDetailsById(Long id);
 
-    int insertOrEditBatchByMainId(List<SbchEquipmentSpecialDetails> list, Long mainId, Boolean isAdjus);
+    int insertOrEditBatchByMainId(List<SbchEquipmentSpecialDetails> list, Long mainId, Boolean isAdjus, BigDecimal version);
 
 }

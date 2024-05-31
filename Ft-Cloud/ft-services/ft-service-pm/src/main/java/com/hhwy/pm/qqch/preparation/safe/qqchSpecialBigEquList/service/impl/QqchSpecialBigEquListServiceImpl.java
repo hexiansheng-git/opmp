@@ -174,6 +174,7 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
 //                addList.addAll(qqchSpecialBigEquLists);
 //            }
         }
+//        时间排序
         addList.sort((t1, t2) -> t2.getUpdateTime().compareTo(t1.getUpdateTime()));
         //保存新增的数据
         if (CollectionUtil.isNotEmpty(addList)){

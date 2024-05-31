@@ -210,7 +210,7 @@ public class QqchSpecialBigEquList extends CommonBaseEntity {
      * 字段描述：设备名称
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
+    @Excel(name = "唯一标识对应7.6.1里面的ptvar1")
     private String ptVar1;
     /**
      * 字段描述：预留字段2

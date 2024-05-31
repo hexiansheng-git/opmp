@@ -3,15 +3,25 @@ package com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.service.impl;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
+import com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.domain.QqchSafetyTrain;
+import com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.domain.vo.QqchSafetyTrainVo;
+import com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.service.IQqchSafetyTrainService;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.domain.SbchEquipmentSpecialDetails;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.mapper.SbchEquipmentSpecialDetailsMapper;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.service.ISbchEquipmentSpecialDetailsService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +35,10 @@ import java.util.stream.Collectors;
 public class SbchEquipmentSpecialDetailsServiceImpl implements ISbchEquipmentSpecialDetailsService {
     @Autowired
     private SbchEquipmentSpecialDetailsMapper sbchEquipmentSpecialDetailsMapper;
+    @Autowired
+    private IQqchSafetyTrainService qqchSafetyTrainService;
+    @Autowired
+    private IJdglMainPlanService jdglMainPlanService;
 
     /**
      * 查询特种设备管理详情
@@ -98,7 +112,14 @@ public class SbchEquipmentSpecialDetailsServiceImpl implements ISbchEquipmentSpe
     }
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int insertOrEditBatchByMainId(List<SbchEquipmentSpecialDetails> detailList, Long mainId, Boolean isAdjust) {
+    public int insertOrEditBatchByMainId(List<SbchEquipmentSpecialDetails> detailList, Long mainId, Boolean isAdjust, BigDecimal version) {
+        version = VersionUtil.getVersion("qqch_danger_process_control_plan", version);
+        List<QqchSafetyTrain> qqchSafetyTrainNew = new ArrayList<>();
+        //获取8.9的针对8.3.3同步过去的数据
+        QqchSafetyTrain qqchSafetyTrain = new QqchSafetyTrain();
+//        qqchSafetyTrain.setPtVar2("3");
+        QqchSafetyTrainVo vo = qqchSafetyTrainService.getQqchSafetyTrainList(qqchSafetyTrain);
+
         sbchEquipmentSpecialDetailsMapper.deleteSbchEquipmentSpecialDetailsByMainId(mainId);
 
         if (detailList != null && detailList.size() > 0) {
@@ -112,10 +133,57 @@ public class SbchEquipmentSpecialDetailsServiceImpl implements ISbchEquipmentSpe
                     item.setPtVar1(IdWorker.createId()+"");
                 }
                 EntityUtils.setCreateUpdateInfo(item);
+                if (item.getPlanEntryTime() != null) {
+                    //8.9若为空，直接组装
+                    if (vo != null && vo.getQqchSafetyTrainList() != null && vo.getQqchSafetyTrainList().size() == 0) {
+                        QqchSafetyTrain train = new QqchSafetyTrain();
+                        train.setContent("特种设备操作培训");
+                        train.setTrainType("特种设备操作培训");
+                        train.setTime(FtDateUtils.getDateNextOneWeek(item.getPlanEntryTime()));
+                        train.setPtVar2("3");
+                        train.setPtVar1(item.getPtVar1());
+                        train.setUpdateTime(new Date());
+                        qqchSafetyTrainNew.add(train);
+                    } else {//8.9不为空
+                        //根据唯一标识获取获取8.9对应的数据，重新组装培训时间，队伍
+                        List<QqchSafetyTrain> safetyTrains = vo.getQqchSafetyTrainList().stream().filter(item1 -> (StringUtils.isNotBlank(item1.getPtVar1()) && item1.getPtVar1().equals(item.getPtVar1()))).collect(Collectors.toList());
+                        if (ObjectNullUtil.isEmpty(safetyTrains)) {
+                            QqchSafetyTrain train = new QqchSafetyTrain();
+                            train.setContent("特种设备操作培训");
+                            train.setTrainType("特种设备操作培训");
+                            train.setTime(FtDateUtils.getDateNextOneWeek(item.getPlanEntryTime()));
+                            train.setPtVar2("3");
+                            train.setPtVar1(item.getPtVar1());
+                            train.setUpdateTime(new Date());
+                            qqchSafetyTrainNew.add(train);
+                        } else {
+                            safetyTrains.forEach(item3 -> {
+                                item3.setContent("特种设备操作培训");
+                                item3.setTrainType("特种设备操作培训");
+                                if (item3.getUpdateTime() == null) {
+                                    item3.setUpdateTime(new Date());
+                                }
+                                item3.setTime(FtDateUtils.getDateNextOneWeek(item.getPlanEntryTime()));
+                            });
+                            qqchSafetyTrainNew.addAll(safetyTrains);
+                        }
+                    }
+                }
                 return item;
 
             }).collect(Collectors.toList());
-            return sbchEquipmentSpecialDetailsMapper.batchInsert(insertOrUpdateData);
+            sbchEquipmentSpecialDetailsMapper.batchInsert(insertOrUpdateData);
+            if (vo!=null&&vo.getQqchSafetyTrainList()!=null&&vo.getQqchSafetyTrainList().size()>0) {
+                List<QqchSafetyTrain> safetyTrainsHave = vo.getQqchSafetyTrainList().stream().filter(item -> !"3".equals(item.getPtVar2())).collect(Collectors.toList());
+                qqchSafetyTrainNew.addAll(safetyTrainsHave);
+            }
+            //往8.9同步数据
+            if (!ObjectNullUtil.isEmpty(qqchSafetyTrainNew)) {
+                //        时间排序
+                qqchSafetyTrainNew.sort((t1, t2) -> t2.getUpdateTime().compareTo(t1.getUpdateTime()));
+                BigDecimal versionTrain = VersionUtil.getVersion("qqch_safety_train", vo.getVersion());
+                qqchSafetyTrainService.insertQqchSafetyTrainList(qqchSafetyTrainNew,versionTrain);
+            }
         }
         return 1;
     }

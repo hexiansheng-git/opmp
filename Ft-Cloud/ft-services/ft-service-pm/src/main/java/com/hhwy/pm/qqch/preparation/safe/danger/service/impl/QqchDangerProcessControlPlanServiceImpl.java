@@ -178,7 +178,7 @@ public class QqchDangerProcessControlPlanServiceImpl implements IQqchDangerProce
         List<QqchSafetyTrain> qqchSafetyTrainNew = new ArrayList<>();
         //获取8.9的针对8.3.3同步过去的数据
         QqchSafetyTrain qqchSafetyTrain = new QqchSafetyTrain();
-        qqchSafetyTrain.setPtVar2("2");
+//        qqchSafetyTrain.setPtVar2("2");
         QqchSafetyTrainVo vo = qqchSafetyTrainService.getQqchSafetyTrainList(qqchSafetyTrain);
 
         // 清空数据库表中数据
@@ -196,35 +196,57 @@ public class QqchDangerProcessControlPlanServiceImpl implements IQqchDangerProce
                 qqchDangerProcessControlPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 qqchDangerProcessControlPlan.setCreateUserName(SecurityUtils.getUserName());
                 qqchDangerProcessControlPlan.setCreateTime(DateUtils.getNowDate());
-                if (qqchDangerProcessControlPlan.getPlanStartDate() != null && StringUtils.isBlank(qqchDangerProcessControlPlan.getPtVar1())) {
+                if (qqchDangerProcessControlPlan.getPlanStartDate() != null && StringUtils.isBlank(qqchDangerProcessControlPlan.getPtVar2())) {
                     qqchDangerProcessControlPlan.setPtVar2(IdWorker.createId() + "");
-                } else if (qqchDangerProcessControlPlan.getPlanStartDate() != null && StringUtils.isNotBlank(qqchDangerProcessControlPlan.getPtVar1())) {
+                } else if (qqchDangerProcessControlPlan.getPlanStartDate() != null && StringUtils.isNotBlank(qqchDangerProcessControlPlan.getPtVar2())) {
                     qqchDangerProcessControlPlan.setPtVar2("");
                 }
 
                 if (StringUtils.isNotBlank(qqchDangerProcessControlPlan.getPtVar2())) {
-                    //根据唯一标识获取获取8.9对应的数据，重新组装培训时间，队伍
-                    List<QqchSafetyTrain> safetyTrains = vo.getQqchSafetyTrainList().stream().filter(item -> (StringUtils.isNotBlank(item.getPtVar1()) && item.getPtVar1().equals(qqchDangerProcessControlPlan.getPtVar2()))).collect(Collectors.toList());
-                    if (ObjectNullUtil.isEmpty(safetyTrains)) {
+                    //8.9若为空，直接组装
+                    if (vo != null && vo.getQqchSafetyTrainList() != null && vo.getQqchSafetyTrainList().size() == 0) {
                         QqchSafetyTrain train = new QqchSafetyTrain();
                         train.setContent("危大工程专项培训");
                         train.setTrainType("危大工程专项培训");
                         train.setTime(FtDateUtils.getDateLastOneWeek(qqchDangerProcessControlPlan.getPlanStartDate()));
                         train.setPtVar2("2");
                         train.setPtVar1(qqchDangerProcessControlPlan.getPtVar2());
+                        train.setUpdateTime(new Date());
                         qqchSafetyTrainNew.add(train);
                     } else {
-                        safetyTrains.forEach(item -> {
-                            item.setContent("危大工程专项培训");
-                            item.setTrainType("危大工程专项培训");
-                            item.setTime(FtDateUtils.getDateLastOneWeek(qqchDangerProcessControlPlan.getPlanStartDate()));
-                        });
-                        qqchSafetyTrainNew.addAll(safetyTrains);
+                        //根据唯一标识获取获取8.9对应的数据，重新组装培训时间，队伍
+                        List<QqchSafetyTrain> safetyTrains = vo.getQqchSafetyTrainList().stream().filter(item -> (StringUtils.isNotBlank(item.getPtVar1()) && item.getPtVar1().equals(qqchDangerProcessControlPlan.getPtVar2()))).collect(Collectors.toList());
+                        if (ObjectNullUtil.isEmpty(safetyTrains)) {
+                            QqchSafetyTrain train = new QqchSafetyTrain();
+                            train.setContent("危大工程专项培训");
+                            train.setTrainType("危大工程专项培训");
+                            train.setTime(FtDateUtils.getDateLastOneWeek(qqchDangerProcessControlPlan.getPlanStartDate()));
+                            train.setPtVar2("2");
+                            train.setPtVar1(qqchDangerProcessControlPlan.getPtVar2());
+                            train.setUpdateTime(new Date());
+                            qqchSafetyTrainNew.add(train);
+                        } else {
+                            safetyTrains.forEach(item -> {
+                                item.setContent("危大工程专项培训");
+                                item.setTrainType("危大工程专项培训");
+                                item.setTime(FtDateUtils.getDateLastOneWeek(qqchDangerProcessControlPlan.getPlanStartDate()));
+                                if (item.getUpdateTime() == null) {
+                                    item.setUpdateTime(new Date());
+                                }
+                            });
+                            qqchSafetyTrainNew.addAll(safetyTrains);
+                        }
                     }
                 }
             }
             qqchDangerProcessControlPlanMapper.insertQqchDangerProcessControlPlanList(list);
+            if (vo!=null&&vo.getQqchSafetyTrainList()!=null&&vo.getQqchSafetyTrainList().size()>0) {
+                List<QqchSafetyTrain> safetyTrainsHave = vo.getQqchSafetyTrainList().stream().filter(item -> !"2".equals(item.getPtVar2())).collect(Collectors.toList());
+                qqchSafetyTrainNew.addAll(safetyTrainsHave);
+            }
             if (!ObjectNullUtil.isEmpty(qqchSafetyTrainNew)) {
+                //        时间排序
+                qqchSafetyTrainNew.sort((t1, t2) -> t2.getUpdateTime().compareTo(t1.getUpdateTime()));
                 BigDecimal versionTrain = VersionUtil.getVersion("qqch_safety_train", vo.getVersion());
                 qqchSafetyTrainService.insertQqchSafetyTrainList(qqchSafetyTrainNew,versionTrain);
             }

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -12,6 +13,7 @@ import com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.service.IQqchSafetyT
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -148,8 +150,11 @@ public class QqchSafetyTrainServiceImpl implements IQqchSafetyTrainService {
             qqchSafetyTrain.setId(IdWorker.createId());
             qqchSafetyTrain.setValid(valid);
             qqchSafetyTrain.setVersion(version);
-            qqchSafetyTrain.setCreateUser(SecurityUtils.getUserName());
-            qqchSafetyTrain.setCreateTime(DateUtils.getNowDate());
+            if (qqchSafetyTrain.getCreateTime()==null) {
+                EntityUtils.setCreateUpdateInfo(qqchSafetyTrain);
+            } else {
+                EntityUtils.setUpdateInfo(qqchSafetyTrain);
+            }
         }
         qqchSafetyTrainMapper.insertQqchSafetyTrainList(qqchSafetyTrainList);
     }

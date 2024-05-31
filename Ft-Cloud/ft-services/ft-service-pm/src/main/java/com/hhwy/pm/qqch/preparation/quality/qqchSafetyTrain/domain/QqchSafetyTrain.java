@@ -197,7 +197,7 @@ public class QqchSafetyTrain extends CommonBaseEntity {
      * 字段描述：预留字段1
      */
     @JsonProperty
-    @Excel(name = "对应1.5.2的ptvar2 和 8.3.3的ptvar2 和 7.6.1的")
+    @Excel(name = "对应1.5.2的ptvar2 和 8.3.3的ptvar2 和 7.6.1的的ptvar1")
     private String ptVar1;
     /**
      * 字段描述：预留字段2

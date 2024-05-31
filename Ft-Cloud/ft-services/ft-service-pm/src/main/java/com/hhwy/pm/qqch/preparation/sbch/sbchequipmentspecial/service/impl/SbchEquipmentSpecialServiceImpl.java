@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.service.impl;
 import com.alibaba.nacos.client.naming.utils.CollectionUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.SecurityUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
@@ -144,7 +145,7 @@ public class SbchEquipmentSpecialServiceImpl implements ISbchEquipmentSpecialSer
         // 新增
         this.sbchEquipmentSpecialMapper.insertSbchEquipmentSpecial(sbchEquipmentSpecial);
         // 明细
-        return detailsService.insertOrEditBatchByMainId(detailList,sbchEquipmentSpecial.getId(),false);
+        return detailsService.insertOrEditBatchByMainId(detailList,sbchEquipmentSpecial.getId(),false,null);
 
     }
 
@@ -164,7 +165,7 @@ public class SbchEquipmentSpecialServiceImpl implements ISbchEquipmentSpecialSer
         // 修改
         sbchEquipmentSpecialMapper.updateSbchEquipmentSpecial(sbchEquipmentSpecial);
         // 明细
-        return detailsService.insertOrEditBatchByMainId(detailList,sbchEquipmentSpecial.getId(),false);
+        return detailsService.insertOrEditBatchByMainId(detailList,sbchEquipmentSpecial.getId(),false,null);
 
     }
 
@@ -215,7 +216,7 @@ public class SbchEquipmentSpecialServiceImpl implements ISbchEquipmentSpecialSer
     public AjaxResult batchSave(SbchEquipmentSpecial sbchEquipmentSpecial) {
         List<SbchEquipmentSpecialDetails> detailsList = sbchEquipmentSpecial.getDetailsList();
 
-        Map<String, Long> mapgroup = detailsList.stream().collect(Collectors.groupingBy(s -> s.getManageCode(), Collectors.counting()));
+        Map<String, Long> mapgroup = detailsList.stream().filter(item-> StringUtils.isNotBlank(item.getManageCode())).collect(Collectors.groupingBy(s -> s.getManageCode(), Collectors.counting()));
         List<String> collect3 = mapgroup.keySet().stream().filter(key -> mapgroup.get(key) > 1).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(collect3)) {
             return AjaxResult.error("管理编号 "+collect3.stream().collect(Collectors.joining(","))+" 不能重复");
@@ -248,7 +249,7 @@ public class SbchEquipmentSpecialServiceImpl implements ISbchEquipmentSpecialSer
             sbchEquipmentSpecialMapper.insertSbchEquipmentSpecial(sbchEquipmentSpecial);
         }
         //子表
-        detailsService.insertOrEditBatchByMainId(detailsList,sbchEquipmentSpecial.getId(),false);
+        detailsService.insertOrEditBatchByMainId(detailsList,sbchEquipmentSpecial.getId(),false,sbchEquipmentSpecial.getVersion());
         //判断是否是确认
         if(ButtonMark.CONFIRM.equals(sbchEquipmentSpecial.getButtonMark())){
             //插入确认记录

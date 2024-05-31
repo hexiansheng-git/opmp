@@ -423,7 +423,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         List<QqchSafetyTrain> qqchSafetyTrainNew = new ArrayList<>();
         //获取8.9的针对1.5.2同步过去的数据
         QqchSafetyTrain qqchSafetyTrain = new QqchSafetyTrain();
-        qqchSafetyTrain.setPtVar2("1");
+//        qqchSafetyTrain.setPtVar2("1");
         QqchSafetyTrainVo vo = qqchSafetyTrainService.getQqchSafetyTrainList(qqchSafetyTrain);
 
         //删除旧数据
@@ -451,9 +451,8 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
                 labourDemandPlan.setPtVar2("");
             }
             if (StringUtils.isNotBlank(labourDemandPlan.getPtVar2())) {
-                //根据唯一标识获取获取8.9对应的数据，重新组装培训时间，队伍
-                List<QqchSafetyTrain> safetyTrains = vo.getQqchSafetyTrainList().stream().filter(item -> (StringUtils.isNotBlank(item.getPtVar1()) && item.getPtVar1().equals(labourDemandPlan.getPtVar2()))).collect(Collectors.toList());
-                if (ObjectNullUtil.isEmpty(safetyTrains)) {
+                //8.9若为空，直接组装
+                if (vo != null && vo.getQqchSafetyTrainList() != null && vo.getQqchSafetyTrainList().size() == 0) {
                     QqchSafetyTrain train = new QqchSafetyTrain();
                     train.setContent("入场安全培训");
                     train.setTrainType("入场安全培训");
@@ -462,21 +461,46 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
                     train.setParticipantsNum(labourDemandPlan.getTotal());
                     train.setPtVar2("1");
                     train.setPtVar1(labourDemandPlan.getPtVar2());
+                    train.setUpdateTime(new Date());
                     qqchSafetyTrainNew.add(train);
                 } else {
-                    safetyTrains.forEach(item -> {
-                        item.setContent("入场安全培训");
-                        item.setTrainType("入场安全培训");
-                        item.setTime(labourDemandPlan.getEntryDate());
-                        item.setTarget(labourDemandPlan.getWorkTeam());
-                        item.setParticipantsNum(labourDemandPlan.getTotal());
-                    });
-                    qqchSafetyTrainNew.addAll(safetyTrains);
+                    //根据唯一标识获取获取8.9对应的数据，重新组装培训时间，队伍
+                    List<QqchSafetyTrain> safetyTrains = vo.getQqchSafetyTrainList().stream().filter(item -> (StringUtils.isNotBlank(item.getPtVar1()) && item.getPtVar1().equals(labourDemandPlan.getPtVar2()))).collect(Collectors.toList());
+                    if (ObjectNullUtil.isEmpty(safetyTrains)) {
+                        QqchSafetyTrain train = new QqchSafetyTrain();
+                        train.setContent("入场安全培训");
+                        train.setTrainType("入场安全培训");
+                        train.setTime(labourDemandPlan.getEntryDate());
+                        train.setTarget(labourDemandPlan.getWorkTeam());
+                        train.setParticipantsNum(labourDemandPlan.getTotal());
+                        train.setPtVar2("1");
+                        train.setPtVar1(labourDemandPlan.getPtVar2());
+                        train.setUpdateTime(new Date());
+                        qqchSafetyTrainNew.add(train);
+                    } else {
+                        safetyTrains.forEach(item -> {
+                            item.setContent("入场安全培训");
+                            item.setTrainType("入场安全培训");
+                            item.setTime(labourDemandPlan.getEntryDate());
+                            item.setTarget(labourDemandPlan.getWorkTeam());
+                            item.setParticipantsNum(labourDemandPlan.getTotal());
+                            if (item.getUpdateTime() == null) {
+                                item.setUpdateTime(new Date());
+                            }
+                        });
+                        qqchSafetyTrainNew.addAll(safetyTrains);
+                    }
                 }
             }
         }
         qqchLabourDemandPlanMapper.insertQqchLabourDemandPlanList(configs);
+        if (vo!=null&&vo.getQqchSafetyTrainList()!=null&&vo.getQqchSafetyTrainList().size()>0) {
+            List<QqchSafetyTrain> safetyTrainsHave = vo.getQqchSafetyTrainList().stream().filter(item -> !"1".equals(item.getPtVar2())).collect(Collectors.toList());
+            qqchSafetyTrainNew.addAll(safetyTrainsHave);
+        }
         if (!ObjectNullUtil.isEmpty(qqchSafetyTrainNew)) {
+            //        时间排序
+            qqchSafetyTrainNew.sort((t1, t2) -> t2.getUpdateTime().compareTo(t1.getUpdateTime()));
             BigDecimal versionTrain = VersionUtil.getVersion("qqch_safety_train", vo.getVersion());
             qqchSafetyTrainService.insertQqchSafetyTrainList(qqchSafetyTrainNew,versionTrain);
         }
