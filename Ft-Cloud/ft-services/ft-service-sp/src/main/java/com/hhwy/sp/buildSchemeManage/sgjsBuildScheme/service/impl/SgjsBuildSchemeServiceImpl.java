@@ -1,6 +1,7 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ArrayUtil;
@@ -508,7 +509,9 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenant.getTenantKey()));
             try {
                 /*查询施工方案评审数据*/
+                String createTimeStr = "2024-06-01 00:00:00";
                 SgjsBuildSchemeReview sgjsBuildSchemeReview = new SgjsBuildSchemeReview();
+                sgjsBuildSchemeReview.setCreateTime(DateUtil.parse(createTimeStr, DatePattern.NORM_DATETIME_PATTERN));
                 List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewList = sgjsBuildSchemeReviewService.getSgjsBuildSchemeReviewList(sgjsBuildSchemeReview);
                 if (CollUtil.isEmpty(sgjsBuildSchemeReviewList)) {
                     log.info("租户：{}，施工方案评审数据无数据", tenant.getTenantName());
@@ -555,6 +558,8 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                     continue;
                 }
                 String userNames = sysUsers.stream().map(p -> String.valueOf(p.getUserName())).collect(Collectors.joining(","));
+                //业务表与预警表关联id
+                Long relationId = IdWorker.createId();
                 //发送预警
                 ArrayList<TWarn> objects = new ArrayList<>();
                 TWarn tWarn = new TWarn();
@@ -562,6 +567,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_LIST.getWarnItemId());
                 tWarn.setWarnScope(userNames);
                 tWarn.setWarnUrl(schemeListUrl);
+                tWarn.setBusinessId(relationId);
                 tWarn.setWarnScopeType("3");
                 String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getWarnSubject(), sgjsWarnConfig.getWarnRule());
                 tWarn.setWarnContent(warnContent);
@@ -581,6 +587,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                     sgjsWarnRecord.setWarnSubject(sgjsWarnConfig.getWarnSubject());
                     sgjsWarnRecord.setWarnTime(new Date());
                     sgjsWarnRecord.setStatus("1");
+                    sgjsWarnRecord.setPtVar1(String.valueOf(relationId));
                     warnRecordList.add(sgjsWarnRecord);
                 });
                 //发送预警

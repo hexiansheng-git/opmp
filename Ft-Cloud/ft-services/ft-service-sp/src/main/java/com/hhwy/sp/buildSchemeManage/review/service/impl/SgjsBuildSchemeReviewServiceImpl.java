@@ -1,6 +1,7 @@
 package com.hhwy.sp.buildSchemeManage.review.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
@@ -952,7 +953,10 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 //        tenant.setTenantKey("PJ2022037953");
 //        tenant.setTenantName("埃塞RG道路升级施工总承包项目");
         /*查询施工方案评审数据*/
+                // 2024年05月31日之前的数据不做预警
+                String createTimeStr = "2024-06-01 00:00:00";
                 SgjsBuildSchemeReview sgjsBuildSchemeReview = new SgjsBuildSchemeReview();
+                sgjsBuildSchemeReview.setCreateTime(DateUtil.parse(createTimeStr, DatePattern.NORM_DATETIME_PATTERN));
                 List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewList = sgjsBuildSchemeReviewMapper.getSgjsBuildSchemeReviewList(sgjsBuildSchemeReview);
                 if (CollUtil.isEmpty(sgjsBuildSchemeReviewList)) {
                     log.info("施工方案评审数据无数据");
@@ -1020,6 +1024,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     return;
                 }
                 /*执行预警，保存预警记录*/
+                //业务表与预警表关联id
+                Long relationId = IdWorker.createId();
                 //预警消息组装
                 TWarn tWarn = new TWarn();
                 tWarn.setWarnItem(sgjsWarnConfig.getWarnSubject());
@@ -1027,6 +1033,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 String userNames = String.join(",", userList);
                 tWarn.setWarnScope(userNames);
                 tWarn.setWarnUrl(schemeReviewUrl);
+                tWarn.setBusinessId(relationId);
                 tWarn.setWarnScopeType("3");
                 String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getWarnSubject(), sgjsWarnConfig.getWarnRule());
                 tWarn.setWarnContent(warnContent);
@@ -1045,6 +1052,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 //                    sgjsWarnRecord.setWarnUserId(String.valueOf(p.getUserId()));
                     sgjsWarnRecord.setWarnUser(userName);
                     sgjsWarnRecord.setWarnSubject(sgjsWarnConfig.getWarnSubject());
+                    sgjsWarnRecord.setWarnTime(new Date());
+                    sgjsWarnRecord.setStatus("1");
+                    sgjsWarnRecord.setPtVar1(String.valueOf(relationId));
                     warnRecordList.add(sgjsWarnRecord);
                 }
                 /*推送总部*/
