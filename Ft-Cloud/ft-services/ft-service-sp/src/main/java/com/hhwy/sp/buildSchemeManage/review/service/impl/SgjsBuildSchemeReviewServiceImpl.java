@@ -13,6 +13,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.constant.WarnItem;
 import com.hhwy.domain.base.flow.TaskResource;
 import com.hhwy.domain.base.project.ProjectDto;
@@ -938,29 +939,45 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     public void warnMessage() {
         //从总部获取预警配置信息
         String url = gmUrl + "/gm/sgjsWarnConfig/list?warnSubject={warnSubject}";
-        String warnItemId = WarnItem.SGJS_BUILD_SCHEME_REVIEW.getWarnItemId();
-        SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, warnItemId);
-        if (null == sgjsWarnConfig) return;
+        SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, "施工方案评审");
+        if (null == sgjsWarnConfig) {
+            log.error("获取施工方案评审预警配置无数据");
+            return;
+        }
         /*遍历所有租户发送预警*/
         // 切换到master
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         DynamicDataSourceContextHolder.push("master");
         try {
             //获取所有租户
-            List<SysTenant> tenantList = systemServiceApi.tenantList();
-            for (SysTenant tenant : tenantList) {
-//        SysTenant tenant = new SysTenant();
-//        tenant.setTenantKey("PJ2022037953");
-//        tenant.setTenantName("埃塞RG道路升级施工总承包项目");
-        /*查询施工方案评审数据*/
+//            List<SysTenant> tenantList = systemServiceApi.tenantList();
+            List<SysTenant> tenantList = new ArrayList<>();
+            SysTenant sysTenant = new SysTenant();
+            sysTenant.setTenantKey("PJ2020011492");
+            sysTenant.setTenantName("吉布提风力发电项目");
+            tenantList.add(sysTenant);
+            warnHandler(tenantList, sgjsWarnConfig);
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        } finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+    }
+
+    private void warnHandler(List<SysTenant> tenantList, SgjsWarnConfig sgjsWarnConfig) {
+        for (SysTenant tenant : tenantList) {
+            DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenant.getTenantKey()));
+            try {
+                /*查询施工方案评审数据*/
                 // 2024年05月31日之前的数据不做预警
                 String createTimeStr = "2024-06-01 00:00:00";
                 SgjsBuildSchemeReview sgjsBuildSchemeReview = new SgjsBuildSchemeReview();
                 sgjsBuildSchemeReview.setCreateTime(DateUtil.parse(createTimeStr, DatePattern.NORM_DATETIME_PATTERN));
                 List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewList = sgjsBuildSchemeReviewMapper.getSgjsBuildSchemeReviewList(sgjsBuildSchemeReview);
                 if (CollUtil.isEmpty(sgjsBuildSchemeReviewList)) {
-                    log.info("施工方案评审数据无数据");
-                    return;
+                    log.info("租户：{}，施工方案评审数据无数据", tenant.getTenantName());
+                    continue;
                 }
                 /*查询流程，过滤得到未发起审批的数据*/
                 List<SgjsBuildSchemeReview> list23 = sgjsBuildSchemeReviewList.stream()
@@ -981,12 +998,16 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                         .filter(p -> !p.getTaskStatus().equals("0") && !p.getTaskStatus().equals("4"))
                         .collect(Collectors.toList());
                 //获取任务详情，得到当前任务节点; 只需处理专家、部门评审人员节点
-                Set<String> userList = new HashSet<>();
+//                Set<String> userNameList = new HashSet<>();
+                List<SysUser> userList = new ArrayList<>();
                 Date nowDate = new Date();
                 //遍历所有业务数据
                 for (SgjsBuildSchemeReview schemeReview : flowList) {
                     String currentTaskIds = schemeReview.getCurrentTaskIds();
-                    if (StrUtil.isBlank(currentTaskIds)) continue;
+                    if (StrUtil.isBlank(currentTaskIds)) {
+                        log.warn("currentTaskIds空，任务：{}", currentTaskIds);
+                        continue;
+                    }
                     String[] currentTaskIdArr = StrUtil.splitToArray(currentTaskIds, ",");
                     //遍历当前业务数据的所有流程任务
                     for (String currentTaskId : currentTaskIdArr) {
@@ -994,12 +1015,19 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                         Integer code = (Integer) ajaxResult.get("code");
                         if (!code.equals(200)) continue;
                         String warnInfo = JSON.toJSONString(ajaxResult.get("data"));
-                        if (StrUtil.isBlank(warnInfo)) continue;
+                        if (StrUtil.isBlank(warnInfo)) {
+                            log.warn("查询流程无数据，任务：{}", currentTaskId);
+                            continue;
+                        }
                         //得到流程任务详情
                         TaskResource taskResource = JSON.parseObject(warnInfo, TaskResource.class);
                         Date createTime = taskResource.getCreateTime();
-                        if (null == createTime) continue;
-                        long between = DateUtil.between(createTime, nowDate, DateUnit.MINUTE, false);
+                        if (null == createTime) {
+                            log.warn("流程任务创建时间为空");
+                            continue;
+                        }
+//                        long between = DateUtil.between(createTime, DateUtil.offsetDay(nowDate, 5), DateUnit.DAY, false);
+                        long between = DateUtil.between(createTime, nowDate, DateUnit.DAY, false);
                         Map<String, Object> variables = taskResource.getVariables();
                         String assignee = taskResource.getAssignee();
                         String assigneeNickName = taskResource.getAssigneeNickName();
@@ -1010,18 +1038,18 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                         String flowNodeMark = flowNodeMarkList.get(0);
                         if (StrUtil.isNotBlank(flowNodeMark)
                                 && (flowNodeMark.equals("3") || flowNodeMark.equals("4") || flowNodeMark.equals("5") || flowNodeMark.equals("6"))
-                                && between >= 5 ) {
+                                && between >= 5) {
                             //得到流程节点标识为 3，4，5，6的节点, 并且在此节点大于等于5天
-//                                SysUser sysUser = new SysUser();
-//                                sysUser.setUserName(assignee);
-//                                sysUser.setNickName(assigneeNickName);
-                            userList.add(assignee);
+                            SysUser sysUser = new SysUser();
+                            sysUser.setUserName(assignee);
+                            sysUser.setNickName(assigneeNickName);
+                            userList.add(sysUser);
                         }
                     }
                 }
                 if (CollUtil.isEmpty(userList)) {
-                    log.info("施工方案评审预警，无需预警");
-                    return;
+                    log.info("租户：{}，施工方案评审预警，无需预警", tenant.getTenantName());
+                    continue;
                 }
                 /*执行预警，保存预警记录*/
                 //业务表与预警表关联id
@@ -1030,7 +1058,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 TWarn tWarn = new TWarn();
                 tWarn.setWarnItem(sgjsWarnConfig.getWarnSubject());
                 tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_REVIEW.getWarnItemId());
-                String userNames = String.join(",", userList);
+                String userNames = userList.stream().map(SysUser::getUserName).collect(Collectors.joining(","));
                 tWarn.setWarnScope(userNames);
                 tWarn.setWarnUrl(schemeReviewUrl);
                 tWarn.setBusinessId(relationId);
@@ -1043,14 +1071,14 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 systemServiceApi.addWarnNonGm(tWarn);
                 //预警记录保存
                 List<SgjsWarnRecord> warnRecordList = new ArrayList<>();
-                for (String userName : userList) {
+                for (SysUser user : userList) {
                     //预警记录
                     SgjsWarnRecord sgjsWarnRecord = new SgjsWarnRecord();
                     sgjsWarnRecord.setProjectCode(tenant.getTenantKey());
                     sgjsWarnRecord.setProjectName(tenant.getTenantName());
                     sgjsWarnRecord.setWarnContent(warnContent);
-//                    sgjsWarnRecord.setWarnUserId(String.valueOf(p.getUserId()));
-                    sgjsWarnRecord.setWarnUser(userName);
+                    sgjsWarnRecord.setWarnUserId(user.getUserName());
+                    sgjsWarnRecord.setWarnUser(user.getNickName());
                     sgjsWarnRecord.setWarnSubject(sgjsWarnConfig.getWarnSubject());
                     sgjsWarnRecord.setWarnTime(new Date());
                     sgjsWarnRecord.setStatus("1");
@@ -1060,15 +1088,13 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 /*推送总部*/
                 if (CollUtil.isNotEmpty(warnRecordList)) {
                     rocketMQTemplate.convertAndSend("sgjs_build_scheme_list_warn:tenantSuccess", warnRecordList);
-                    log.info("施工方案清单预警记录推送数据：" + JSON.toJSONString(warnRecordList));
+                    log.info("租户：{}，施工方案清单预警记录推送数据：" + JSON.toJSONString(warnRecordList), tenant.getTenantName());
                 }
-                log.info("施工方案评审预警执行完成。。。。: {}", userNames);
+                log.info("租户：{}，施工方案评审预警执行完成。。。。预警人: {}", tenant.getTenantName(), userNames);
+            } catch (Exception e) {
+                log.error("租户：{}, 异常", tenant.getTenantName());
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            throw new CustomException(e.getMessage());
-        } finally {
-            DynamicDataSourceContextHolder.poll();
-            DynamicDataSourceContextHolder.push(oldDataSource);
         }
     }
 

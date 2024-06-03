@@ -54,7 +54,7 @@ public class CommonBusiness {
         Assert.isTrue(code.equals(200), "从总部获取预警配置信息失败");
         String warnInfo = JSON.toJSONString(ajaxResul.get("data"));
         Assert.isTrue(StrUtil.isNotBlank(warnInfo), "获取" + warnSubject + "预警配置无数据");
-        List<com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsWarnConfig> sgjsWarnConfigs = JSON.parseArray(warnInfo, SgjsWarnConfig.class);
+        List<SgjsWarnConfig> sgjsWarnConfigs = JSON.parseArray(warnInfo, SgjsWarnConfig.class);
         if (CollUtil.isEmpty(sgjsWarnConfigs)) return null;
         return sgjsWarnConfigs.get(0);
     }
