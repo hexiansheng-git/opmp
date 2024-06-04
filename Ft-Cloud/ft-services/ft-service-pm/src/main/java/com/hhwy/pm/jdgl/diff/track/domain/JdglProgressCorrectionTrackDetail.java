@@ -137,7 +137,7 @@ public class JdglProgressCorrectionTrackDetail extends TreeNode<JdglProgressCorr
      */
     @JsonProperty
     @Excel(name = "作业队伍")
-    private BigDecimal workTeam;
+    private String workTeam;
     /**
      * 字段描述：责任人id
      */
