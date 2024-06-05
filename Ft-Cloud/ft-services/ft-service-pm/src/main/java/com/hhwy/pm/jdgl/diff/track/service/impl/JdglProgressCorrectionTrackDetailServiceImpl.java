@@ -6,6 +6,8 @@ import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrackDetail;
 import com.hhwy.pm.jdgl.diff.track.mapper.JdglProgressCorrectionTrackDetailMapper;
 import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackDetailService;
 import com.hhwy.utils.idworker.IdWorker;
+
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -91,6 +93,8 @@ public class JdglProgressCorrectionTrackDetailServiceImpl implements IJdglProgre
     public List<JdglProgressCorrectionTrackDetail> getDetailListByTackId(Long trackId) {
         JdglProgressCorrectionTrackDetail jdglProgressCorrectionTrackDetail = new JdglProgressCorrectionTrackDetail();
         jdglProgressCorrectionTrackDetail.setTrackId(trackId);
-        return jdglProgressCorrectionTrackDetailMapper.getJdglProgressCorrectionTrackDetailList(jdglProgressCorrectionTrackDetail);
+        List<JdglProgressCorrectionTrackDetail> jdglProgressCorrectionTrackDetailList = jdglProgressCorrectionTrackDetailMapper.getJdglProgressCorrectionTrackDetailList(jdglProgressCorrectionTrackDetail);
+        jdglProgressCorrectionTrackDetailList.sort(Comparator.comparing(JdglProgressCorrectionTrackDetail::getWorkCode));
+        return jdglProgressCorrectionTrackDetailList;
     }
 }
