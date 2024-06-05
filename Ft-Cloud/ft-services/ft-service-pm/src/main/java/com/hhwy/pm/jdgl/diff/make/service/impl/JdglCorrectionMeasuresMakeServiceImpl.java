@@ -374,10 +374,11 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             List<String> userNameList = newDetailList.stream()
                     .map(JdglCorrectionMeasuresMakeDetail::getDirectorId)
                     .filter(StrUtil::isNotBlank)
+//                    .filter(p -> StrUtil.isNotBlank(p) && p.equals("admin"))
                     .distinct().collect(Collectors.toList());
             //获取菜单id
         if (CollectionUtil.isEmpty(userNameList)) {
-            log.info("获取责任人为空:{}", JSON.toJSONString(userNameList));
+            log.info("获取责任人为空");
             return;
         }
         String tenantKey = SecurityUtils.getTenantKey();
@@ -400,7 +401,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
 //        log.info("流程发起参数, 流程定义key:{}, 业务id:{}, 表名:{}, 提交目标:{}, 路由id:{}", processKey, id, tableName, JSON.toJSONString(userNameList), collect.get(0).getMenuId());
 //        userNameList.clear();
 //        userNameList.add("guolan");
-        FlowStartUtil.start(processKey, String.valueOf(id), tableName, userNameList, String.valueOf(collect.get(0).getMenuId()), "纠偏措施制定-0530");
+        FlowStartUtil.start(processKey, String.valueOf(id), tableName, userNameList, String.valueOf(collect.get(0).getMenuId()), "纠偏措施制定");
 //        });
     }
 

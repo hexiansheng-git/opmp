@@ -18,10 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.RoundingMode;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -85,6 +83,10 @@ public class JdglCorrectionMeasuresMakeDetailServiceImpl implements IJdglCorrect
         for (JdglCorrectionMeasuresMakeDetail jdglCorrectionMeasuresMakeDetail : jdglCorrectionMeasuresMakeDetailList) {
             jdglCorrectionMeasuresMakeDetail.setUpdateUser(SecurityUtils.getUserName());
             jdglCorrectionMeasuresMakeDetail.setUpdateTime(DateUtils.getNowDate());
+            BigDecimal completeDatePercentage = jdglCorrectionMeasuresMakeDetail.getCompleteDatePercentage();
+            BigDecimal completeProgressPercentage = jdglCorrectionMeasuresMakeDetail.getCompleteProgressPercentage();
+            jdglCorrectionMeasuresMakeDetail.setCompleteDatePercentage(completeDatePercentage.divide(new BigDecimal("100"), RoundingMode.HALF_DOWN));
+            jdglCorrectionMeasuresMakeDetail.setCompleteProgressPercentage(completeProgressPercentage.divide(new BigDecimal("100"), RoundingMode.HALF_DOWN));
         }
         return jdglCorrectionMeasuresMakeDetailMapper
             .updateJdglCorrectionMeasuresMakeDetailList(jdglCorrectionMeasuresMakeDetailList);
