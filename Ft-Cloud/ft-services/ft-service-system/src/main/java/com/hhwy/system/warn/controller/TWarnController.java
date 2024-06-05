@@ -122,6 +122,13 @@ public class TWarnController extends BaseController {
         return AjaxResult.success(tWarnListParam);
     }
 
+    @PreAuthorize(hasPermi = "tWarn:add")
+    @PostMapping("/batchAddToGm")
+    public AjaxResult insertTWarnListToGm(@Validated(ValidationGroups.Save.class) @RequestBody List<TWarn> tWarnListParam) {
+        tWarnService.insertTWarnListToGm(tWarnListParam);
+        return AjaxResult.success(tWarnListParam);
+    }
+
     @PreAuthorize(hasPermi = "tWarn:update")
     @PostMapping("/update")
     public AjaxResult updateTWarn(@Validated(ValidationGroups.Update.class) @RequestBody TWarn tWarnParam) {

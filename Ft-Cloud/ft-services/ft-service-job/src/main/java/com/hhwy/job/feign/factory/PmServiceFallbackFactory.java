@@ -43,6 +43,11 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             }
 
             @Override
+            public AjaxResult trainPlanWarn() {
+                return null;
+            }
+
+            @Override
             public AjaxResult initDiffAnalysis() {
                 return null;
             }

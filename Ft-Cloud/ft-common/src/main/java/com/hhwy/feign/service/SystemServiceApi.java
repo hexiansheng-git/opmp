@@ -137,6 +137,15 @@ public interface SystemServiceApi {
     AjaxResult insertTWarnList(@RequestBody List<TWarn> tWarnListParam);
 
     /**
+     * 批量新增预警 (往总部版推)
+     *
+     * @param tWarnListParam
+     * @return
+     */
+    @PostMapping("/tWarn/batchAddToGm")
+    AjaxResult insertTWarnListToGm(@RequestBody List<TWarn> tWarnListParam);
+
+    /**
      * 根据用户名，租户标识获取用户信息
      * @param usernames 登录账号，多个逗号分割
      * @param tenanKey 租户标识

@@ -1,8 +1,15 @@
 package com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.constant.WarnItem;
+import com.hhwy.domain.base.system.warn.TWarn;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
@@ -13,17 +20,28 @@ import com.hhwy.pm.qqch.preparation.quality.qqchSafetyTrain.service.IQqchSafetyT
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * @author ldd
@@ -31,6 +49,7 @@ import java.util.List;
  * @remark 8.9 安全培训策划
  */
 @Service
+@Slf4j
 public class QqchSafetyTrainServiceImpl implements IQqchSafetyTrainService {
 
     @Autowired
@@ -39,6 +58,10 @@ public class QqchSafetyTrainServiceImpl implements IQqchSafetyTrainService {
     private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
 
 
     public QqchSafetyTrain getQqchSafetyTrain(QqchSafetyTrain qqchSafetyTrain) {
@@ -157,5 +180,69 @@ public class QqchSafetyTrainServiceImpl implements IQqchSafetyTrainService {
             }
         }
         qqchSafetyTrainMapper.insertQqchSafetyTrainList(qqchSafetyTrainList);
+    }
+
+    @Override
+    public void workGroupSetUpWarn() {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+        //所有的预警信息
+        List<TWarn> qqchSafetyTrainListHave = new ArrayList<>();
+        try {
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+                //获取项目数据
+                ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+                if(projectInfo == null){
+                    continue;
+                }
+                QqchSafetyTrain qqchSafetyTrain = new QqchSafetyTrain();
+                QqchSafetyTrainVo qqchSafetyTrainVo = this.getQqchSafetyTrainList(qqchSafetyTrain);
+                String nowDate=DateUtils.getDate();
+                if (qqchSafetyTrainVo != null && qqchSafetyTrainVo.getQqchSafetyTrainList() != null && qqchSafetyTrainVo.getQqchSafetyTrainList().size() > 0) {
+                    qqchSafetyTrainVo.getQqchSafetyTrainList().forEach(item->{
+                        if (item.getTime() != null) {
+                            String trainTime = DateUtils.parseDateToStr("yyyy-MM-dd", item.getTime());
+                            LocalDate localDate = item.getTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                            //提前三天进行预警
+                            LocalDate threeDaysBefore = localDate.minusDays(3);
+                            Date dateNew1 = Date.from(threeDaysBefore.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+                            System.out.println("提前三天日期对象转date：" + dateNew1);
+                            String tranTime = DateUtils.parseDateToStr("yyyy-MM-dd", dateNew1);
+                            if (nowDate.equals(tranTime)) {
+                                TWarn warn = new TWarn();
+                                warn.setProjectName(projectInfo.getProjectName());
+//                                warn.setBusinessId(item.getId());
+                                warn.setCreateTime(DateUtils.getNowDate());
+                                warn.setTenantKey(tenantKey);
+                                warn.setWarnItem(WarnItem.AQCH_SAFETY_TRAIN.getWarnItem());
+                                warn.setWarnItemId(WarnItem.AQCH_SAFETY_TRAIN.getWarnItemId());
+                                warn.setWarnScopeType("4");
+                                warn.setWarnScope("lead_engineer");
+                                String warnContent = "您好，【"+projectInfo.getProjectName()+"】项目中培训类型【"+item.getTrainType()+"】即将开始培训，培训时间为【"+trainTime+"】，请提前做好准备";
+                                warn.setWarnContent(warnContent);
+                                warn.setWarnUrl("/preliminaryPlanning/SafetyPlan");
+                                qqchSafetyTrainListHave.add(warn);
+                            }
+                        }
+                    });
+                }
+            }
+            if (qqchSafetyTrainListHave.size()>0) {
+                log.info("预警信息列表为："+JSON.toJSONString(qqchSafetyTrainListHave));
+                systemServiceApi.insertTWarnListToGm(qqchSafetyTrainListHave);
+            }
+        }catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 }

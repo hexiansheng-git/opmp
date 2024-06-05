@@ -101,4 +101,14 @@ public class QqchSafetyTrainController extends BaseController {
         return toAjax(qqchSafetyTrainService.deleteQqchSafetyTrainByPks(qqchSafetyTrainPkList));
     }
 
+    /**
+     * 提前三天发送预警消息
+     * @return
+     */
+    @GetMapping("safetyTrainWarn")
+    public AjaxResult workGroupSetUpWarn() {
+        qqchSafetyTrainService.workGroupSetUpWarn();
+        return AjaxResult.success();
+    }
+
 }

@@ -280,6 +280,30 @@ public class TWarnServiceImpl implements ITWarnService {
     }
 
     @Transactional
+    public int insertTWarnListToGm(List<TWarn> tWarnList) {
+        for (TWarn tWarn : tWarnList) {
+            tWarn.setWarnId(IdWorker.createId());
+            tWarn.setCreateUser(SecurityUtils.getUserName());
+            tWarn.setCreateTime(DateUtils.getNowDate());
+        }
+        int result = tWarnMapper.insertTWarnList(tWarnList);
+        if (result > 0) {
+            ThreadUtil.execAsync(() -> {
+                for (TWarn tWarn : tWarnList) {
+                    this.notify(tWarn);
+                    //推送到总部版
+                    this.push2Head(tWarn);
+                    //推送到一公局门户
+                    warn2Push.push(tWarn);
+                    //推送到中交门户
+                    warnPushMenHu.push(tWarn);
+                }
+            });
+        }
+        return result;
+    }
+
+    @Transactional
     public int updateTWarn(TWarn tWarn) {
         tWarn.setUpdateUser(SecurityUtils.getUserName());
         tWarn.setUpdateTime(DateUtils.getNowDate());
