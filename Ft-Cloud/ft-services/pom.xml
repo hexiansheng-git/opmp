@@ -18,6 +18,7 @@
         <module>ft-service-sd</module>
         <module>ft-service-sp</module>
         <module>ft-service-log</module>
+        <module>ft-service-file</module>
     </modules>
 
     <artifactId>ft-services</artifactId>
