@@ -1,16 +1,14 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.controller;
 
-import cn.hutool.core.util.StrUtil;
-import com.github.pagehelper.Constant;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.ISgjsBuildSchemeService;
-import com.hhwy.utils.ThreadPoolUtil;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -70,6 +68,7 @@ public class SgjsBuildSchemeController extends BaseController {
     //保存、提交
     @PreAuthorize(hasPermi = "sgjsBuildScheme:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术-施工方案管理", name = "施工方案清单", businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsBuildScheme(@Validated(ValidationGroups.Save.class) @RequestBody SgjsBuildScheme sgjsBuildSchemeParam) {
         Long id = sgjsBuildSchemeService.insertSgjsBuildScheme(sgjsBuildSchemeParam);
         return AjaxResult.success(id);
