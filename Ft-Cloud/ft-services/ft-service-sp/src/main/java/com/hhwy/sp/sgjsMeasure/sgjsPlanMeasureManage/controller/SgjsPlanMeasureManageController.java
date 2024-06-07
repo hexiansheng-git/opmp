@@ -3,6 +3,8 @@ package com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.controller;
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.google.common.util.concurrent.ListenableFutureTask;
 import com.hhwy.sp.sgjsMeasure.sgjsPlanMeasureManage.domain.SgjsPlanMeasureManageVo;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
@@ -68,6 +70,7 @@ public class SgjsPlanMeasureManageController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术-测量管理-测量计划进度管理", name = "测量计划进度管理" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsPlanMeasureManage(
         @Validated(ValidationGroups.Save.class) @RequestBody SgjsPlanMeasureManage sgjsPlanMeasureManageParam) {
         sgjsPlanMeasureManageService.insertSgjsPlanMeasureManage(sgjsPlanMeasureManageParam);
@@ -82,6 +85,7 @@ public class SgjsPlanMeasureManageController extends BaseController {
      */
     @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:batchAdd")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "施工技术-测量管理-测量计划进度管理", name = "测量计划进度管理" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsPlanMeasureManageList(
         @Validated(ValidationGroups.Save.class) @RequestBody SgjsPlanMeasureManageVo sgjsPlanMeasureManageVo) {
         AjaxResult ajaxResult = sgjsPlanMeasureManageService.batchAdd(sgjsPlanMeasureManageVo);
@@ -104,6 +108,7 @@ public class SgjsPlanMeasureManageController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-测量管理-测量计划进度管理", name = "测量计划进度管理" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsPlanMeasureManage(
         @Validated(ValidationGroups.Update.class) @RequestBody SgjsPlanMeasureManage sgjsPlanMeasureManageParam) {
         return toAjax(
@@ -112,6 +117,7 @@ public class SgjsPlanMeasureManageController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术-测量管理-测量计划进度管理", name = "测量计划进度管理" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsPlanMeasureManageList(
         @Validated(ValidationGroups.Update.class) @RequestBody List<SgjsPlanMeasureManage> sgjsPlanMeasureManageListParam) {
         return toAjax(sgjsPlanMeasureManageService.updateSgjsPlanMeasureManageList(
@@ -172,6 +178,7 @@ public class SgjsPlanMeasureManageController extends BaseController {
 
     @PostMapping("/importData")
 //    @PreAuthorize(hasPermi = "sgjsPlanMeasureManage:import")
+    @CustomLogger(title = "施工技术-测量管理-测量计划进度管理", name = "测量计划进度管理" ,businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(HttpServletResponse response, MultipartFile file) throws Exception {
         FtExcelUtil<SgjsPlanMeasureManage> utils = new FtExcelUtil<>(SgjsPlanMeasureManage.class);
         List<SgjsPlanMeasureManage> list = utils.importExcel(file.getInputStream());

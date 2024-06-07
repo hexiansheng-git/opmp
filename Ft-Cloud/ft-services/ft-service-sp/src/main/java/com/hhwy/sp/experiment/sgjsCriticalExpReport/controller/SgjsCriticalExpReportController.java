@@ -8,6 +8,8 @@ import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.SgjsCriticalExpReport
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportQueryVo;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.domain.vo.CriticalExpReportVo;
 import com.hhwy.sp.experiment.sgjsCriticalExpReport.service.ISgjsCriticalExpReportService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
@@ -51,6 +53,7 @@ public class SgjsCriticalExpReportController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsCriticalExpReport:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术-试验管理-工程关键部位试验报告",name = "工程关键部位试验报告",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsCriticalExpReport(@Validated(ValidationGroups.Save.class) @RequestBody SgjsCriticalExpReport sgjsCriticalExpReportParam) {
         sgjsCriticalExpReportService.insertSgjsCriticalExpReport(sgjsCriticalExpReportParam);
         return AjaxResult.success(sgjsCriticalExpReportParam);
@@ -58,6 +61,7 @@ public class SgjsCriticalExpReportController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsCriticalExpReport:save")
     @PostMapping("/save")
+    @CustomLogger(title = "施工技术-试验管理-工程关键部位试验报告",name = "工程关键部位试验报告",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsCriticalExpReportList(@Validated(ValidationGroups.Save.class) @RequestBody CriticalExpReportVo criticalExpReportVo) {
         sgjsCriticalExpReportService.save(criticalExpReportVo);
         return AjaxResult.success();
@@ -65,12 +69,14 @@ public class SgjsCriticalExpReportController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsCriticalExpReport:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-试验管理-工程关键部位试验报告",name = "工程关键部位试验报告",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsCriticalExpReport(@Validated(ValidationGroups.Update.class) @RequestBody SgjsCriticalExpReport sgjsCriticalExpReportParam) {
         return toAjax(sgjsCriticalExpReportService.updateSgjsCriticalExpReport(sgjsCriticalExpReportParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsCriticalExpReport:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术-试验管理-工程关键部位试验报告",name = "工程关键部位试验报告",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsCriticalExpReportList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsCriticalExpReport> sgjsCriticalExpReportListParam) {
         return toAjax(sgjsCriticalExpReportService.updateSgjsCriticalExpReportList(sgjsCriticalExpReportListParam));
     }

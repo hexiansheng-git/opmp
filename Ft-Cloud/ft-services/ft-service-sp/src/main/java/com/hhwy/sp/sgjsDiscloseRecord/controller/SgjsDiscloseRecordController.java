@@ -13,6 +13,8 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord4Update;
 import com.hhwy.sp.sgjsDiscloseRecord.service.ISgjsDiscloseRecordService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -66,6 +68,7 @@ public class SgjsDiscloseRecordController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsDiscloseRecord:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsDiscloseRecord(@Validated(ValidationGroups.Save.class) @RequestBody SgjsDiscloseRecord sgjsDiscloseRecordParam) {
         sgjsDiscloseRecordService.insertSgjsDiscloseRecord(sgjsDiscloseRecordParam);
         return AjaxResult.success(sgjsDiscloseRecordParam);
@@ -73,6 +76,7 @@ public class SgjsDiscloseRecordController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsDiscloseRecord:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsDiscloseRecordList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsDiscloseRecord> sgjsDiscloseRecordListParam) {
         sgjsDiscloseRecordService.insertSgjsDiscloseRecordList(sgjsDiscloseRecordListParam);
         return AjaxResult.success(sgjsDiscloseRecordListParam);
@@ -80,6 +84,7 @@ public class SgjsDiscloseRecordController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsDiscloseRecord:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsDiscloseRecord(@Validated(ValidationGroups.Update.class) @RequestBody SgjsDiscloseRecord sgjsDiscloseRecordParam) {
         return toAjax(sgjsDiscloseRecordService.updateSgjsDiscloseRecord(sgjsDiscloseRecordParam));
     }
@@ -91,6 +96,7 @@ public class SgjsDiscloseRecordController extends BaseController {
      */
     @PreAuthorize(hasPermi = "sgjsDiscloseRecord:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsDiscloseRecordList(@Validated(ValidationGroups.Update.class) @RequestBody SgjsDiscloseRecord4Update sgjsDiscloseRecord4Update) {
         List<SgjsDiscloseRecord> sgjsDiscloseRecordListParam = sgjsDiscloseRecord4Update.getTreeList();
         List<Long> delIdList = sgjsDiscloseRecord4Update.getDelIdList();

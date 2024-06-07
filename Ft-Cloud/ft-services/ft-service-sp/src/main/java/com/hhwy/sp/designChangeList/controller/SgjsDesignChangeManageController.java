@@ -21,6 +21,8 @@ import com.hhwy.sp.designChangeList.service.ISgjsDesignChangeWbsService;
 import com.hhwy.sp.designChangeList.vo.ChangeManagSaveVo;
 import com.hhwy.sp.designChangeList.vo.SgjsDesignChangeManageVo;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -238,6 +240,7 @@ public class SgjsDesignChangeManageController extends BaseController {
      * 新增保存施工技术管理-设计变更管理
      */
     @PostMapping("/save")
+    @CustomLogger(title = "施工技术-设计变更管理",name = "设计变更管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody ChangeManagSaveVo saveVo) {
         try{
             saveVo.setPtVar2(ObjectUtils.nvlString(saveVo.getPtVar2(),"1"));

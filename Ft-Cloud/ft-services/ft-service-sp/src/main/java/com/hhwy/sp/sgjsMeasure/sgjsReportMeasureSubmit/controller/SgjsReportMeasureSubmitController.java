@@ -9,6 +9,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmit;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.domain.SgjsReportMeasureSubmitVo;
 import com.hhwy.sp.sgjsMeasure.sgjsReportMeasureSubmit.service.ISgjsReportMeasureSubmitService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -57,6 +59,7 @@ public class SgjsReportMeasureSubmitController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术-测量管理-测量报告提交",name = "测量报告提交",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsReportMeasureSubmit(
         @RequestBody SgjsReportMeasureSubmit sgjsReportMeasureSubmitParam) {
         sgjsReportMeasureSubmitService.insertSgjsReportMeasureSubmit(sgjsReportMeasureSubmitParam);
@@ -70,6 +73,7 @@ public class SgjsReportMeasureSubmitController extends BaseController {
      */
     @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:batchAdd")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "施工技术-测量管理-测量报告提交",name = "测量报告提交",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsReportMeasureSubmitList(
         @Validated(ValidationGroups.Save.class) @RequestBody SgjsReportMeasureSubmitVo sgjsReportMeasureSubmitVo) {
         AjaxResult ajaxResult =  sgjsReportMeasureSubmitService.batchAdd(sgjsReportMeasureSubmitVo);
@@ -78,6 +82,7 @@ public class SgjsReportMeasureSubmitController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-测量管理-测量报告提交",name = "测量报告提交",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsReportMeasureSubmit(
         @RequestBody SgjsReportMeasureSubmit sgjsReportMeasureSubmitParam) {
         return toAjax(sgjsReportMeasureSubmitService.updateSgjsReportMeasureSubmit(
@@ -86,6 +91,7 @@ public class SgjsReportMeasureSubmitController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsReportMeasureSubmit:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术-测量管理-测量报告提交",name = "测量报告提交",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsReportMeasureSubmitList(
         @RequestBody List<SgjsReportMeasureSubmit> sgjsReportMeasureSubmitListParam) {
         return toAjax(sgjsReportMeasureSubmitService.updateSgjsReportMeasureSubmitList(
