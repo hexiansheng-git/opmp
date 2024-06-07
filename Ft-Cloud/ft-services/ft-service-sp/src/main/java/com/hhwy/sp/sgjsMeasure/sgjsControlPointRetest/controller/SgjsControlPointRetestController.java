@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -53,6 +55,7 @@ public class SgjsControlPointRetestController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsControlPointRetest:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术--测量管理--控制点复测", name = "控制点复测" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsControlPointRetest(@Validated(ValidationGroups.Save.class) @RequestBody SgjsControlPointRetest sgjsControlPointRetestParam) {
         sgjsControlPointRetestService.insertSgjsControlPointRetest(sgjsControlPointRetestParam);
         return AjaxResult.success(sgjsControlPointRetestParam);
@@ -60,6 +63,7 @@ public class SgjsControlPointRetestController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsControlPointRetest:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "施工技术--测量管理--控制点复测", name = "控制点复测" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsControlPointRetestList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsControlPointRetest> sgjsControlPointRetestListParam) {
         sgjsControlPointRetestService.insertSgjsControlPointRetestList(sgjsControlPointRetestListParam);
         return AjaxResult.success(sgjsControlPointRetestListParam);
@@ -67,12 +71,14 @@ public class SgjsControlPointRetestController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsControlPointRetest:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术--测量管理--控制点复测", name = "控制点复测" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsControlPointRetest(@Validated(ValidationGroups.Update.class) @RequestBody SgjsControlPointRetest sgjsControlPointRetestParam) {
         return toAjax(sgjsControlPointRetestService.updateSgjsControlPointRetest(sgjsControlPointRetestParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsControlPointRetest:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术--测量管理--控制点复测", name = "控制点复测" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsControlPointRetestList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsControlPointRetest> sgjsControlPointRetestListParam) {
         return toAjax(sgjsControlPointRetestService.updateSgjsControlPointRetestList(sgjsControlPointRetestListParam));
     }
@@ -92,6 +98,7 @@ public class SgjsControlPointRetestController extends BaseController {
 
     @PostMapping("/export")
     @PreAuthorize(hasPermi = "sgjsControlPointRetest:export")
+    @CustomLogger(title = "施工技术--测量管理--控制点复测", name = "控制点复测" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, @RequestBody SgjsControlPointRetest sgjsControlPointRetestParam) throws IOException {
         List<SgjsControlPointRetest> sgjsControlPointRetestList = sgjsControlPointRetestService.getSgjsControlPointRetestList(sgjsControlPointRetestParam);
         ExcelUtils<SgjsControlPointRetest> util = new ExcelUtils<>(SgjsControlPointRetest.class);

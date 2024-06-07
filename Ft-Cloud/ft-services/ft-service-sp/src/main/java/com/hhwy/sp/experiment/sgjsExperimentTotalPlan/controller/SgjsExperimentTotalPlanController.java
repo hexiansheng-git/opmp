@@ -7,6 +7,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.domain.SgjsExperimentTotalPlan;
 import com.hhwy.sp.experiment.sgjsExperimentTotalPlan.service.ISgjsExperimentTotalPlanService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -48,6 +50,7 @@ public class SgjsExperimentTotalPlanController extends BaseController{
 
     @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术-试验管理--试验总体计划", name = "试验总体计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsExperimentTotalPlan(@Validated(ValidationGroups.Save.class) @RequestBody SgjsExperimentTotalPlan sgjsExperimentTotalPlanParam){
         sgjsExperimentTotalPlanService.insertSgjsExperimentTotalPlan(sgjsExperimentTotalPlanParam);
         return AjaxResult.success(sgjsExperimentTotalPlanParam);
@@ -55,6 +58,7 @@ public class SgjsExperimentTotalPlanController extends BaseController{
 
     @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:batchAdd")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "施工技术-试验管理--试验总体计划", name = "试验总体计划" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsExperimentTotalPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsExperimentTotalPlan> sgjsExperimentTotalPlanListParam){
         sgjsExperimentTotalPlanService.insertSgjsExperimentTotalPlanList(sgjsExperimentTotalPlanListParam);
         return AjaxResult.success(sgjsExperimentTotalPlanListParam);
@@ -62,12 +66,14 @@ public class SgjsExperimentTotalPlanController extends BaseController{
 
     @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-试验管理--试验总体计划", name = "试验总体计划" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsExperimentTotalPlan(@Validated(ValidationGroups.Update.class) @RequestBody SgjsExperimentTotalPlan sgjsExperimentTotalPlanParam){
         return toAjax(sgjsExperimentTotalPlanService.updateSgjsExperimentTotalPlan(sgjsExperimentTotalPlanParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsExperimentTotalPlan:batchUpdate")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术-试验管理--试验总体计划", name = "试验总体计划" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsExperimentTotalPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsExperimentTotalPlan> sgjsExperimentTotalPlanListParam){
         return toAjax(sgjsExperimentTotalPlanService.updateSgjsExperimentTotalPlanList(sgjsExperimentTotalPlanListParam));
     }
@@ -86,6 +92,7 @@ public class SgjsExperimentTotalPlanController extends BaseController{
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "施工技术-试验管理--试验总体计划", name = "试验总体计划" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, SgjsExperimentTotalPlan sgjsExperimentTotalPlanParam) throws IOException {
         List<SgjsExperimentTotalPlan> sgjsExperimentTotalPlanList = sgjsExperimentTotalPlanService.getSgjsExperimentTotalPlanList(sgjsExperimentTotalPlanParam);
         ExcelUtils<SgjsExperimentTotalPlan> util = new ExcelUtils<>(SgjsExperimentTotalPlan.class);

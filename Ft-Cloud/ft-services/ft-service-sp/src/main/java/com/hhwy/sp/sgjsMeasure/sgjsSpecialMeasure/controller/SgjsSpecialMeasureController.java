@@ -5,6 +5,8 @@ import java.util.List;
 import java.io.IOException;
 
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -54,6 +56,7 @@ public class SgjsSpecialMeasureController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsSpecialMeasure:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术--测量管理--特殊工程监控量测", name = "特殊工程监控量测" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsSpecialMeasure(@Validated(ValidationGroups.Save.class) @RequestBody SgjsSpecialMeasure sgjsSpecialMeasureParam) {
         sgjsSpecialMeasureService.insertSgjsSpecialMeasure(sgjsSpecialMeasureParam);
         return AjaxResult.success(sgjsSpecialMeasureParam);
@@ -61,6 +64,7 @@ public class SgjsSpecialMeasureController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsSpecialMeasure:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "施工技术--测量管理--特殊工程监控量测", name = "特殊工程监控量测" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsSpecialMeasureList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsSpecialMeasure> sgjsSpecialMeasureListParam) {
         sgjsSpecialMeasureService.insertSgjsSpecialMeasureList(sgjsSpecialMeasureListParam);
         return AjaxResult.success(sgjsSpecialMeasureListParam);
@@ -68,12 +72,14 @@ public class SgjsSpecialMeasureController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsSpecialMeasure:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术--测量管理--特殊工程监控量测", name = "特殊工程监控量测" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsSpecialMeasure(@Validated(ValidationGroups.Update.class) @RequestBody SgjsSpecialMeasure sgjsSpecialMeasureParam) {
         return toAjax(sgjsSpecialMeasureService.updateSgjsSpecialMeasure(sgjsSpecialMeasureParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsSpecialMeasure:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术--测量管理--特殊工程监控量测", name = "特殊工程监控量测" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsSpecialMeasureList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsSpecialMeasure> sgjsSpecialMeasureListParam) {
         return toAjax(sgjsSpecialMeasureService.updateSgjsSpecialMeasureList(sgjsSpecialMeasureListParam));
     }
@@ -93,6 +99,7 @@ public class SgjsSpecialMeasureController extends BaseController {
 
     @PostMapping("/export")
     @PreAuthorize(hasPermi = "sgjsSpecialMeasure:export")
+    @CustomLogger(title = "施工技术--测量管理--特殊工程监控量测", name = "特殊工程监控量测" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response,@RequestBody SgjsSpecialMeasure sgjsSpecialMeasureParam) throws IOException {
         List<SgjsSpecialMeasure> sgjsSpecialMeasureList = sgjsSpecialMeasureService.getSgjsSpecialMeasureList(sgjsSpecialMeasureParam);
         ExcelUtils<SgjsSpecialMeasure> util = new ExcelUtils<>(SgjsSpecialMeasure.class);

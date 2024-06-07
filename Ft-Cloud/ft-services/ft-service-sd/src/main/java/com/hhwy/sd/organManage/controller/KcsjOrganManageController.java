@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sd.organManage.domain.KcsjOrganManage;
 import com.hhwy.sd.organManage.domain.KcsjOrganManage4Update;
 import com.hhwy.sd.organManage.service.IKcsjOrganManageService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -55,6 +57,7 @@ public class KcsjOrganManageController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjOrganManage:add")
     @PostMapping("/add")
+    @CustomLogger(title = "勘察设计-勘察设计组织管理",name = "勘察设计组织管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjOrganManage(@Validated(ValidationGroups.Save.class) @RequestBody KcsjOrganManage kcsjOrganManageParam) {
         kcsjOrganManageService.insertKcsjOrganManage(kcsjOrganManageParam);
         return AjaxResult.success(kcsjOrganManageParam);
@@ -62,6 +65,7 @@ public class KcsjOrganManageController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjOrganManage:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "勘察设计-勘察设计组织管理",name = "勘察设计组织管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjOrganManageList(@Validated(ValidationGroups.Save.class) @RequestBody List<KcsjOrganManage> kcsjOrganManageListParam) {
         kcsjOrganManageService.insertKcsjOrganManageList(kcsjOrganManageListParam);
         return AjaxResult.success(kcsjOrganManageListParam);
@@ -69,12 +73,14 @@ public class KcsjOrganManageController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjOrganManage:update")
     @PostMapping("/update")
+    @CustomLogger(title = "勘察设计-勘察设计组织管理",name = "勘察设计组织管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjOrganManage(@Validated(ValidationGroups.Update.class) @RequestBody KcsjOrganManage kcsjOrganManageParam) {
         return toAjax(kcsjOrganManageService.updateKcsjOrganManage(kcsjOrganManageParam));
     }
 
     @PreAuthorize(hasPermi = "kcsjOrganManage:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "勘察设计-勘察设计组织管理",name = "勘察设计组织管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjOrganManageList(@RequestBody KcsjOrganManage4Update kcsjOrganManage4Update) {
         int i = kcsjOrganManageService.newUpdateKcsjOrganManageList(kcsjOrganManage4Update);
         return toAjax(i);

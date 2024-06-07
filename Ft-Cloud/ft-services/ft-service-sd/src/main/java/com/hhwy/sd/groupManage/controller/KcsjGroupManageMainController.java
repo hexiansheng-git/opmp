@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sd.groupManage.domain.KcsjGroupManageMain;
 import com.hhwy.sd.groupManage.domain.vo.KcsjGroupManageMainVo;
 import com.hhwy.sd.groupManage.service.IKcsjGroupManageMainService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -53,6 +55,7 @@ public class KcsjGroupManageMainController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjGroupManageMain:save")
     @PostMapping("/save")
+    @CustomLogger(title = "勘察设计-勘察设计单位管理",name = "勘察设计单位管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjGroupManageMain(@RequestBody KcsjGroupManageMainVo kcsjGroupManageMainVo) {
         kcsjGroupManageMainService.save(kcsjGroupManageMainVo);
         return AjaxResult.success();
@@ -60,6 +63,7 @@ public class KcsjGroupManageMainController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjGroupManageMain:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "勘察设计-勘察设计单位管理",name = "勘察设计单位管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjGroupManageMainList(@Validated(ValidationGroups.Save.class) @RequestBody List<KcsjGroupManageMain> kcsjGroupManageMainListParam) {
         kcsjGroupManageMainService.insertKcsjGroupManageMainList(kcsjGroupManageMainListParam);
         return AjaxResult.success(kcsjGroupManageMainListParam);
@@ -67,12 +71,14 @@ public class KcsjGroupManageMainController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjGroupManageMain:update")
     @PostMapping("/update")
+    @CustomLogger(title = "勘察设计-勘察设计单位管理",name = "勘察设计单位管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjGroupManageMain(@Validated(ValidationGroups.Update.class) @RequestBody KcsjGroupManageMain kcsjGroupManageMainParam) {
         return toAjax(kcsjGroupManageMainService.updateKcsjGroupManageMain(kcsjGroupManageMainParam));
     }
 
     @PreAuthorize(hasPermi = "kcsjGroupManageMain:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "勘察设计-勘察设计单位管理",name = "勘察设计单位管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjGroupManageMainList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjGroupManageMain> kcsjGroupManageMainListParam) {
         return toAjax(kcsjGroupManageMainService.updateKcsjGroupManageMainList(kcsjGroupManageMainListParam));
     }

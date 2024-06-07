@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManage;
 import com.hhwy.sp.techOrg.domain.SgjsTechnicalManageVo;
 import com.hhwy.sp.techOrg.service.ISgjsTechnicalManageService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -59,6 +61,7 @@ public class SgjsTechnicalManageController extends BaseController {
      */
     @PreAuthorize(hasPermi = "sgjsTechnicalManage:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术-技术组织机构管理",name = "技术组织机构管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsTechnicalManage(@Validated(ValidationGroups.Save.class) @RequestBody SgjsTechnicalManage sgjsTechnicalManageParam) {
         sgjsTechnicalManageService.insertSgjsTechnicalManage(sgjsTechnicalManageParam);
         return AjaxResult.success();
@@ -66,6 +69,7 @@ public class SgjsTechnicalManageController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsTechnicalManage:batchAdd")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "施工技术-技术组织机构管理",name = "技术组织机构管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsTechnicalManageList(@Validated(ValidationGroups.Save.class) @RequestBody SgjsTechnicalManageVo sgjsTechnicalManageVo) {
         AjaxResult result = sgjsTechnicalManageService.batchAdd(sgjsTechnicalManageVo);
         return result;
@@ -81,12 +85,14 @@ public class SgjsTechnicalManageController extends BaseController {
      */
     @PreAuthorize(hasPermi = "sgjsTechnicalManage:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-技术组织机构管理",name = "技术组织机构管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsTechnicalManage(@Validated(ValidationGroups.Update.class) @RequestBody SgjsTechnicalManage sgjsTechnicalManageParam) {
         return toAjax(sgjsTechnicalManageService.updateSgjsTechnicalManage(sgjsTechnicalManageParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsTechnicalManage:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术-技术组织机构管理",name = "技术组织机构管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsTechnicalManageList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsTechnicalManage> sgjsTechnicalManageListParam) {
         return toAjax(sgjsTechnicalManageService.updateSgjsTechnicalManageList(sgjsTechnicalManageListParam));
     }
@@ -110,6 +116,7 @@ public class SgjsTechnicalManageController extends BaseController {
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "施工技术-技术组织机构管理",name = "技术组织机构管理",businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, SgjsTechnicalManage sgjsTechnicalManageParam) throws IOException {
         List<SgjsTechnicalManage> sgjsTechnicalManageList = sgjsTechnicalManageService.getSgjsTechnicalManageList(sgjsTechnicalManageParam);
         ExcelUtils<SgjsTechnicalManage> util = new ExcelUtils<>(SgjsTechnicalManage.class);

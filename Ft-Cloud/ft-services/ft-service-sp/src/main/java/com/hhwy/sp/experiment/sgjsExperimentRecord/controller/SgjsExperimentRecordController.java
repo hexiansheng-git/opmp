@@ -7,6 +7,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.service.ISgjsExperimentRecordService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -55,6 +57,7 @@ public class SgjsExperimentRecordController extends BaseController{
 
     @PreAuthorize(hasPermi = "sgjsExperimentRecord:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术-试验管理-设备台账及检验记录", name = "设备台账及检验记录" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsExperimentRecord(@Validated(ValidationGroups.Save.class) @RequestBody SgjsExperimentRecord sgjsExperimentRecordParam){
         sgjsExperimentRecordService.insertSgjsExperimentRecord(sgjsExperimentRecordParam);
         return AjaxResult.success(sgjsExperimentRecordParam);
@@ -62,6 +65,7 @@ public class SgjsExperimentRecordController extends BaseController{
 
     @PreAuthorize(hasPermi = "sgjsExperimentRecord:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "施工技术-试验管理-设备台账及检验记录", name = "设备台账及检验记录" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsExperimentRecordList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsExperimentRecord> sgjsExperimentRecordListParam){
         sgjsExperimentRecordService.insertSgjsExperimentRecordList(sgjsExperimentRecordListParam);
         return AjaxResult.success(sgjsExperimentRecordListParam);
@@ -69,12 +73,14 @@ public class SgjsExperimentRecordController extends BaseController{
 
     @PreAuthorize(hasPermi = "sgjsExperimentRecord:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-试验管理-设备台账及检验记录", name = "设备台账及检验记录" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsExperimentRecord(@Validated(ValidationGroups.Update.class) @RequestBody SgjsExperimentRecord sgjsExperimentRecordParam){
         return toAjax(sgjsExperimentRecordService.updateSgjsExperimentRecord(sgjsExperimentRecordParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsExperimentRecord:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术-试验管理-设备台账及检验记录", name = "设备台账及检验记录" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsExperimentRecordList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsExperimentRecord> sgjsExperimentRecordListParam){
         return toAjax(sgjsExperimentRecordService.updateSgjsExperimentRecordList(sgjsExperimentRecordListParam));
     }
@@ -93,6 +99,7 @@ public class SgjsExperimentRecordController extends BaseController{
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "施工技术-试验管理-设备台账及检验记录", name = "设备台账及检验记录" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, SgjsExperimentRecord sgjsExperimentRecordParam) throws IOException {
         List<SgjsExperimentRecord> sgjsExperimentRecordList = sgjsExperimentRecordService.getSgjsExperimentRecordList(sgjsExperimentRecordParam);
         ExcelUtils<SgjsExperimentRecord> util = new ExcelUtils<>(SgjsExperimentRecord.class);
