@@ -102,7 +102,7 @@ public class QqchSafetyTrainController extends BaseController {
     }
 
     /**
-     * 提前三天发送预警消息
+     * 提前三天发送预警消息 若6月8号培训则6月5号预警
      * @return
      */
     @GetMapping("safetyTrainWarn")
