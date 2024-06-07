@@ -17,6 +17,8 @@ import com.hhwy.sd.outlineReview.domain.KcsjOutlineReview;
 import com.hhwy.sd.outlineReview.service.IKcsjOutlineReviewService;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.ThreadPoolUtil;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -81,6 +83,7 @@ public class KcsjOutlineReviewController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjOutlineReview:add")
     @PostMapping("/add")
+    @CustomLogger(title = "勘察设计-勘察设计大纲评审",name = "勘察设计大纲评审",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjOutlineReview(@Validated(ValidationGroups.Save.class) @RequestBody KcsjOutlineReview kcsjOutlineReviewParam) {
         Long id = kcsjOutlineReviewService.insertKcsjOutlineReview(kcsjOutlineReviewParam);
         return AjaxResult.success(id);
@@ -88,6 +91,7 @@ public class KcsjOutlineReviewController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjOutlineReview:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "勘察设计-勘察设计大纲评审",name = "勘察设计大纲评审",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjOutlineReviewList(@Validated(ValidationGroups.Save.class) @RequestBody List<KcsjOutlineReview> kcsjOutlineReviewListParam) {
         kcsjOutlineReviewService.insertKcsjOutlineReviewList(kcsjOutlineReviewListParam);
         return AjaxResult.success(kcsjOutlineReviewListParam);
@@ -95,6 +99,7 @@ public class KcsjOutlineReviewController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjOutlineReview:update")
     @PostMapping("/update")
+    @CustomLogger(title = "勘察设计-勘察设计大纲评审",name = "勘察设计大纲评审",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjOutlineReview(@Validated(ValidationGroups.Update.class) @RequestBody KcsjOutlineReview kcsjOutlineReviewParam) {
         kcsjOutlineReviewService.updateKcsjOutlineReview(kcsjOutlineReviewParam);
         return AjaxResult.success(kcsjOutlineReviewParam.getId());
@@ -102,6 +107,7 @@ public class KcsjOutlineReviewController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjOutlineReview:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "勘察设计-勘察设计大纲评审",name = "勘察设计大纲评审",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjOutlineReviewList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjOutlineReview> kcsjOutlineReviewListParam) {
         return toAjax(kcsjOutlineReviewService.updateKcsjOutlineReviewList(kcsjOutlineReviewListParam));
     }

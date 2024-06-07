@@ -8,6 +8,8 @@ import com.hhwy.sd.disclosureRecord.domain.KcsjDisclosureRecord;
 import com.hhwy.sd.disclosureRecord.domain.vo.DisclosureRecordQueryVo;
 import com.hhwy.sd.disclosureRecord.domain.vo.DisclosureRecordVo;
 import com.hhwy.sd.disclosureRecord.service.IKcsjDisclosureRecordService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -70,6 +72,7 @@ public class KcsjDisclosureRecordController extends BaseController {
      */
     @PreAuthorize(hasPermi = "kcsjDisclosureRecord:save")
     @PostMapping("/save")
+    @CustomLogger(title = "勘察设计-勘察设计交底记录",name = "勘察设计交底记录",businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody DisclosureRecordVo recordVo) {
         kcsjDisclosureRecordService.save(recordVo);
         return AjaxResult.success();
@@ -77,12 +80,14 @@ public class KcsjDisclosureRecordController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjDisclosureRecord:update")
     @PostMapping("/update")
+    @CustomLogger(title = "勘察设计-勘察设计交底记录",name = "勘察设计交底记录",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjDisclosureRecord(@Validated(ValidationGroups.Update.class) @RequestBody KcsjDisclosureRecord kcsjDisclosureRecordParam) {
         return toAjax(kcsjDisclosureRecordService.updateKcsjDisclosureRecord(kcsjDisclosureRecordParam));
     }
 
     @PreAuthorize(hasPermi = "kcsjDisclosureRecord:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "勘察设计-勘察设计交底记录",name = "勘察设计交底记录",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjDisclosureRecordList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjDisclosureRecord> kcsjDisclosureRecordListParam) {
         return toAjax(kcsjDisclosureRecordService.updateKcsjDisclosureRecordList(kcsjDisclosureRecordListParam));
     }
@@ -107,6 +112,7 @@ public class KcsjDisclosureRecordController extends BaseController {
      */
     @PreAuthorize(hasPermi = "kcsjDisclosureRecord:import")
     @PostMapping("/importData")
+    @CustomLogger(title = "勘察设计-勘察设计交底记录",name = "勘察设计交底记录",businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(@RequestPart("file") MultipartFile file){
         FtExcelUtil<KcsjDisclosureRecord> util = new FtExcelUtil<>(KcsjDisclosureRecord.class);
         try {

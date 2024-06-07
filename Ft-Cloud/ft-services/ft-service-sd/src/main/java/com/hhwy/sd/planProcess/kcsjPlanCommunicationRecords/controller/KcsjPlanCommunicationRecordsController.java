@@ -7,6 +7,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.domain.KcsjPlanCommunicationRecords;
 import com.hhwy.sd.planProcess.kcsjPlanCommunicationRecords.service.IKcsjPlanCommunicationRecordsService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -71,6 +73,7 @@ public class KcsjPlanCommunicationRecordsController extends BaseController {
      */
     @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-往来沟通记录",name = "往来沟通记录",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjPlanCommunicationRecordsList(@Validated(ValidationGroups.Save.class) @RequestBody List<KcsjPlanCommunicationRecords> kcsjPlanCommunicationRecordsListParam) {
         kcsjPlanCommunicationRecordsService.insertKcsjPlanCommunicationRecordsList(kcsjPlanCommunicationRecordsListParam);
         return AjaxResult.success(kcsjPlanCommunicationRecordsListParam);
@@ -104,18 +107,21 @@ public class KcsjPlanCommunicationRecordsController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:update")
     @PostMapping("/update")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-往来沟通记录",name = "往来沟通记录",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjPlanCommunicationRecords(@Validated(ValidationGroups.Update.class) @RequestBody KcsjPlanCommunicationRecords kcsjPlanCommunicationRecordsParam) {
         return toAjax(kcsjPlanCommunicationRecordsService.updateKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecordsParam));
     }
 
     @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-往来沟通记录",name = "往来沟通记录",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjPlanCommunicationRecordsList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjPlanCommunicationRecords> kcsjPlanCommunicationRecordsListParam) {
         return toAjax(kcsjPlanCommunicationRecordsService.updateKcsjPlanCommunicationRecordsList(kcsjPlanCommunicationRecordsListParam));
     }
 
     @PreAuthorize(hasPermi = "kcsjPlanCommunicationRecords:remove")
     @PostMapping("/delete")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-往来沟通记录",name = "往来沟通记录",businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteKcsjPlanCommunicationRecords(@Validated(ValidationGroups.Delete.class) @RequestBody KcsjPlanCommunicationRecords kcsjPlanCommunicationRecordsParam) {
         return toAjax(kcsjPlanCommunicationRecordsService.deleteKcsjPlanCommunicationRecords(kcsjPlanCommunicationRecordsParam));
     }

@@ -13,6 +13,8 @@ import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.techData.sgjsTechnicalData.domain.SgjsTechnicalData4Update;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprint;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -73,6 +75,7 @@ public class SgjsTechnicalDataController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsTechnicalData:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术-技术文件管理-技术资料管理",name = "技术资料管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsTechnicalData(@Validated(ValidationGroups.Save.class) @RequestBody SgjsTechnicalData sgjsTechnicalDataParam) {
         sgjsTechnicalDataService.insertSgjsTechnicalData(sgjsTechnicalDataParam);
         return AjaxResult.success(sgjsTechnicalDataParam);
@@ -80,6 +83,7 @@ public class SgjsTechnicalDataController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsTechnicalData:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "施工技术-技术文件管理-技术资料管理",name = "技术资料管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsTechnicalDataList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsTechnicalData> sgjsTechnicalDataListParam) {
         sgjsTechnicalDataService.insertSgjsTechnicalDataList(sgjsTechnicalDataListParam);
         return AjaxResult.success(sgjsTechnicalDataListParam);
@@ -87,12 +91,14 @@ public class SgjsTechnicalDataController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsTechnicalData:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-技术文件管理-技术资料管理",name = "技术资料管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsTechnicalData(@Validated(ValidationGroups.Update.class) @RequestBody SgjsTechnicalData sgjsTechnicalDataParam) {
         return toAjax(sgjsTechnicalDataService.updateSgjsTechnicalData(sgjsTechnicalDataParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsTechnicalData:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术-技术文件管理-技术资料管理",name = "技术资料管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsTechnicalDataList(@Validated(ValidationGroups.Update.class) @RequestBody SgjsTechnicalData4Update sgjsTechnicalData4Update) {
         Long dataCatalogId = sgjsTechnicalData4Update.getDataCatalogId();
 

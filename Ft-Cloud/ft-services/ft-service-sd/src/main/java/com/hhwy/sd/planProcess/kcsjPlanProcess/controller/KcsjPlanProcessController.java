@@ -5,6 +5,8 @@ import java.util.List;
 import java.io.IOException;
 
 import com.hhwy.sd.planProcess.kcsjPlanProcess.domain.KcsjPlanProcess4Update;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,6 +55,7 @@ public class KcsjPlanProcessController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjPlanProcess:add")
     @PostMapping("/add")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-计划进度",name = "计划进度",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjPlanProcess(@Validated(ValidationGroups.Save.class) @RequestBody KcsjPlanProcess kcsjPlanProcessParam) {
         kcsjPlanProcessService.insertKcsjPlanProcess(kcsjPlanProcessParam);
         return AjaxResult.success(kcsjPlanProcessParam);
@@ -71,6 +74,7 @@ public class KcsjPlanProcessController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjPlanProcess:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-计划进度",name = "计划进度",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjPlanProcessList(@Validated(ValidationGroups.Save.class) @RequestBody List<KcsjPlanProcess> kcsjPlanProcessListParam) {
         kcsjPlanProcessService.insertKcsjPlanProcessList(kcsjPlanProcessListParam);
         return AjaxResult.success(kcsjPlanProcessListParam);
@@ -78,12 +82,14 @@ public class KcsjPlanProcessController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjPlanProcess:update")
     @PostMapping("/update")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-计划进度",name = "计划进度",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjPlanProcess(@Validated(ValidationGroups.Update.class) @RequestBody KcsjPlanProcess kcsjPlanProcessParam) {
         return toAjax(kcsjPlanProcessService.updateKcsjPlanProcess(kcsjPlanProcessParam));
     }
 
     @PreAuthorize(hasPermi = "kcsjPlanProcess:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-计划进度",name = "计划进度",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjPlanProcessList(@Validated(ValidationGroups.Update.class) @RequestBody KcsjPlanProcess4Update kcsjPlanProcess4Update) {
         List<KcsjPlanProcess> treeList = kcsjPlanProcess4Update.getTreeList();
         int i = 0;

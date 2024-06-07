@@ -9,6 +9,8 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.utils.AjaxResultUtil;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +62,7 @@ public class KcsjDesignOptimizeController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjDesignOptimize:add")
     @PostMapping("/add")
+    @CustomLogger(title = "勘察设计-设计优化管理",name = "设计优化管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjDesignOptimize(@Validated(ValidationGroups.Save.class) @RequestBody KcsjDesignOptimize kcsjDesignOptimizeParam) {
         kcsjDesignOptimizeService.insertKcsjDesignOptimize(kcsjDesignOptimizeParam);
         return AjaxResult.success(kcsjDesignOptimizeParam);

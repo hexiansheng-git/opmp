@@ -8,6 +8,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.techTrain.domain.SgjsTechnicalTraining;
 import com.hhwy.sp.techTrain.service.ISgjsTechnicalTrainingService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -64,6 +66,7 @@ public class SgjsTechnicalTrainingController extends BaseController {
      */
     @PreAuthorize(hasPermi = "sgjsTechnicalTraining:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术-技术培训管理",name = "技术培训管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsTechnicalTraining(@Validated(ValidationGroups.Save.class) @RequestBody SgjsTechnicalTraining sgjsTechnicalTrainingParam) {
         sgjsTechnicalTrainingService.insertSgjsTechnicalTraining(sgjsTechnicalTrainingParam);
         return AjaxResult.success(sgjsTechnicalTrainingParam);
@@ -71,6 +74,7 @@ public class SgjsTechnicalTrainingController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsTechnicalTraining:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "施工技术-技术培训管理",name = "技术培训管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsTechnicalTrainingList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsTechnicalTraining> sgjsTechnicalTrainingListParam) {
         sgjsTechnicalTrainingService.insertSgjsTechnicalTrainingList(sgjsTechnicalTrainingListParam);
         return AjaxResult.success(sgjsTechnicalTrainingListParam);
@@ -83,12 +87,14 @@ public class SgjsTechnicalTrainingController extends BaseController {
      */
     @PreAuthorize(hasPermi = "sgjsTechnicalTraining:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-技术培训管理",name = "技术培训管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsTechnicalTraining(@Validated(ValidationGroups.Update.class) @RequestBody SgjsTechnicalTraining sgjsTechnicalTrainingParam) {
         return toAjax(sgjsTechnicalTrainingService.updateSgjsTechnicalTraining(sgjsTechnicalTrainingParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsTechnicalTraining:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术-技术培训管理",name = "技术培训管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsTechnicalTrainingList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsTechnicalTraining> sgjsTechnicalTrainingListParam) {
         return toAjax(sgjsTechnicalTrainingService.updateSgjsTechnicalTrainingList(sgjsTechnicalTrainingListParam));
     }

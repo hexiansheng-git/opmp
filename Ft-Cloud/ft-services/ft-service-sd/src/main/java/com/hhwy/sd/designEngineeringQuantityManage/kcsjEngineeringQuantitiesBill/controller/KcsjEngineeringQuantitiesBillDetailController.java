@@ -5,6 +5,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBillDetail;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.service.IKcsjEngineeringQuantitiesBillDetailService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -47,6 +49,7 @@ public class KcsjEngineeringQuantitiesBillDetailController extends BaseControlle
 
     @PreAuthorize(hasPermi = "kcsjEngineeringQuantitiesBillDetail:add")
     @PostMapping("/add")
+    @CustomLogger(title = "勘察设计-设计工程量管理-工程量清单",name = "工程量清单",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjEngineeringQuantitiesBillDetail(@Validated(ValidationGroups.Save.class) @RequestBody KcsjEngineeringQuantitiesBillDetail kcsjEngineeringQuantitiesBillDetailParam) {
         kcsjEngineeringQuantitiesBillDetailService.insertKcsjEngineeringQuantitiesBillDetail(kcsjEngineeringQuantitiesBillDetailParam);
         return AjaxResult.success(kcsjEngineeringQuantitiesBillDetailParam);

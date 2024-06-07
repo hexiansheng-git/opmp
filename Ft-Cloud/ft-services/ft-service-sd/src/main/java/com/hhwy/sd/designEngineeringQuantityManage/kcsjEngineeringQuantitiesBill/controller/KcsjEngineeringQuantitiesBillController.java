@@ -7,6 +7,8 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.domain.KcsjEngineeringQuantitiesBill;
 import com.hhwy.sd.designEngineeringQuantityManage.kcsjEngineeringQuantitiesBill.service.IKcsjEngineeringQuantitiesBillService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -65,6 +67,7 @@ public class KcsjEngineeringQuantitiesBillController extends BaseController {
      */
     @PreAuthorize(hasPermi = "kcsjEngineeringQuantitiesBill:add")
     @PostMapping("/add")
+    @CustomLogger(title = "勘察设计-设计工程量管理-工程量清单",name = "设计工程量管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjEngineeringQuantitiesBill(@Validated(ValidationGroups.Save.class) @RequestBody KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBillParam) {
         return kcsjEngineeringQuantitiesBillService.insertKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBillParam);
 
@@ -72,6 +75,7 @@ public class KcsjEngineeringQuantitiesBillController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjEngineeringQuantitiesBill:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "勘察设计-设计工程量管理-工程量清单",name = "设计工程量管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjEngineeringQuantitiesBillList(@Validated(ValidationGroups.Save.class) @RequestBody List<KcsjEngineeringQuantitiesBill> kcsjEngineeringQuantitiesBillListParam) {
         kcsjEngineeringQuantitiesBillService.insertKcsjEngineeringQuantitiesBillList(kcsjEngineeringQuantitiesBillListParam);
         return AjaxResult.success(kcsjEngineeringQuantitiesBillListParam);
@@ -84,6 +88,7 @@ public class KcsjEngineeringQuantitiesBillController extends BaseController {
      */
     @PreAuthorize(hasPermi = "kcsjEngineeringQuantitiesBill:update")
     @PostMapping("/update")
+    @CustomLogger(title = "勘察设计-设计工程量管理-工程量清单",name = "设计工程量管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjEngineeringQuantitiesBill(@Validated(ValidationGroups.Update.class) @RequestBody KcsjEngineeringQuantitiesBill kcsjEngineeringQuantitiesBillParam) {
         return kcsjEngineeringQuantitiesBillService.updateKcsjEngineeringQuantitiesBill(kcsjEngineeringQuantitiesBillParam);
     }
@@ -91,6 +96,7 @@ public class KcsjEngineeringQuantitiesBillController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjEngineeringQuantitiesBill:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "勘察设计-设计工程量管理-工程量清单",name = "设计工程量管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjEngineeringQuantitiesBillList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjEngineeringQuantitiesBill> kcsjEngineeringQuantitiesBillListParam) {
         return toAjax(kcsjEngineeringQuantitiesBillService.updateKcsjEngineeringQuantitiesBillList(kcsjEngineeringQuantitiesBillListParam));
     }
