@@ -10,6 +10,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManage;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.domain.SgjsExperProgressManageVo;
 import com.hhwy.sp.experiment.sgjsExperProgressManage.service.ISgjsExperProgressManageService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +49,6 @@ public class SgjsExperProgressManageController extends BaseController {
     @PreAuthorize(hasPermi = "sgjsExperProgressManage:list")
     @GetMapping("/list")
     public AjaxResult getSgjsExperProgressManageList(@Validated(ValidationGroups.Select.class) SgjsExperProgressManage sgjsExperProgressManageParam) {
-
         SgjsExperProgressManageVo vo = sgjsExperProgressManageService.list(sgjsExperProgressManageParam);
         return AjaxResult.success(vo);
     }
@@ -61,6 +62,7 @@ public class SgjsExperProgressManageController extends BaseController {
      */
     @PreAuthorize(hasPermi = "sgjsExperProgressManage:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "施工技术-试验管理-试验计划进度管理",name = "测量报告提交",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsExperProgressManageList(
             @Validated(ValidationGroups.Save.class) @RequestBody SgjsExperProgressManageVo sgjsExperProgressManageVo) {
         AjaxResult ajaxResult = sgjsExperProgressManageService.batchAdd(sgjsExperProgressManageVo);
@@ -127,12 +129,14 @@ public class SgjsExperProgressManageController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsExperProgressManage:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-试验管理-试验计划进度管理",name = "试验计划进度管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsExperProgressManage(@Validated(ValidationGroups.Update.class) @RequestBody SgjsExperProgressManage sgjsExperProgressManageParam) {
         return toAjax(sgjsExperProgressManageService.updateSgjsExperProgressManage(sgjsExperProgressManageParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsExperProgressManage:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术-试验管理-试验计划进度管理",name = "试验计划进度管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsExperProgressManageList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsExperProgressManage> sgjsExperProgressManageListParam) {
         return toAjax(sgjsExperProgressManageService.updateSgjsExperProgressManageList(sgjsExperProgressManageListParam));
     }
@@ -152,6 +156,7 @@ public class SgjsExperProgressManageController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsExperProgressManage:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术-试验管理-试验计划进度管理",name = "试验计划进度管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsExperProgressManage(@Validated(ValidationGroups.Save.class) @RequestBody SgjsExperProgressManage sgjsExperProgressManageParam) {
         sgjsExperProgressManageService.insertSgjsExperProgressManage(sgjsExperProgressManageParam);
         return AjaxResult.success(sgjsExperProgressManageParam);
@@ -165,6 +170,7 @@ public class SgjsExperProgressManageController extends BaseController {
      */
     @PreAuthorize(hasPermi = "sgjsExperProgressManage:import")
     @PostMapping("/importData")
+    @CustomLogger(title = "施工技术-试验管理-试验计划进度管理",name = "试验计划进度管理",businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(@RequestPart("file") MultipartFile file) {
         return sgjsExperProgressManageService.importData(file);
     }

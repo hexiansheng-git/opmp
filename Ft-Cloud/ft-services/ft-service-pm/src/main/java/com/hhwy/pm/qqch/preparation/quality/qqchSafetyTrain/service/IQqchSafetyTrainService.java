@@ -30,4 +30,6 @@ public interface IQqchSafetyTrainService {
     void save(QqchSafetyTrainVo vo);
 
     void insertQqchSafetyTrainList(List<QqchSafetyTrain> qqchSafetyTrainList, BigDecimal version);
+
+    void workGroupSetUpWarn();
 }

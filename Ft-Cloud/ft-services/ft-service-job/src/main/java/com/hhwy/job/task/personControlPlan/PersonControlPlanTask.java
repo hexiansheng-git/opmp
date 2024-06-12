@@ -17,4 +17,12 @@ public class PersonControlPlanTask {
         System.out.println("----------发送预警------------");
         pmServiceApi.personControlPlanWarn();
     }
+
+    /**
+     * 安全培训策划提前三天预警
+     */
+    public void trainPlanWarn() {
+        System.out.println("----------发送预警------------");
+        pmServiceApi.trainPlanWarn();
+    }
 }

@@ -9,6 +9,8 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.sd.achievementReview.domain.KcsjAchievementReview;
 import com.hhwy.sd.achievementReview.service.IKcsjAchievementReviewService;
 import com.hhwy.sd.common.FlowInfoSearchUtil;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -73,6 +75,7 @@ public class KcsjAchievementReviewController extends BaseController {
      */
     @PreAuthorize(hasPermi = "kcsjAchievementReview:save")
     @PostMapping("/save")
+    @CustomLogger(title = "勘察设计-勘察设计成果评审-成果评审",name = "成果评审",businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody KcsjAchievementReview review){
         Long id = kcsjAchievementReviewService.save(review);
         return AjaxResult.success(id);
@@ -80,6 +83,7 @@ public class KcsjAchievementReviewController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjAchievementReview:add")
     @PostMapping("/add")
+    @CustomLogger(title = "勘察设计-勘察设计成果评审-成果评审",name = "成果评审",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjAchievementReview(@Validated(ValidationGroups.Save.class) @RequestBody KcsjAchievementReview kcsjAchievementReviewParam) {
         kcsjAchievementReviewService.insertKcsjAchievementReview(kcsjAchievementReviewParam);
         return AjaxResult.success(kcsjAchievementReviewParam);
@@ -87,6 +91,7 @@ public class KcsjAchievementReviewController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjAchievementReview:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "勘察设计-勘察设计成果评审-成果评审",name = "成果评审",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjAchievementReviewList(@Validated(ValidationGroups.Save.class) @RequestBody List<KcsjAchievementReview> kcsjAchievementReviewListParam) {
         kcsjAchievementReviewService.insertKcsjAchievementReviewList(kcsjAchievementReviewListParam);
         return AjaxResult.success(kcsjAchievementReviewListParam);
@@ -94,12 +99,14 @@ public class KcsjAchievementReviewController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjAchievementReview:update")
     @PostMapping("/update")
+    @CustomLogger(title = "勘察设计-勘察设计成果评审-成果评审",name = "成果评审",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjAchievementReview(@Validated(ValidationGroups.Update.class) @RequestBody KcsjAchievementReview kcsjAchievementReviewParam) {
         return toAjax(kcsjAchievementReviewService.updateKcsjAchievementReview(kcsjAchievementReviewParam));
     }
 
     @PreAuthorize(hasPermi = "kcsjAchievementReview:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "勘察设计-勘察设计成果评审-成果评审",name = "成果评审",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjAchievementReviewList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjAchievementReview> kcsjAchievementReviewListParam) {
         return toAjax(kcsjAchievementReviewService.updateKcsjAchievementReviewList(kcsjAchievementReviewListParam));
     }

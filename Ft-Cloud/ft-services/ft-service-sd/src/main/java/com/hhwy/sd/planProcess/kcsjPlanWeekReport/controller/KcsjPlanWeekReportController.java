@@ -6,6 +6,8 @@ import java.util.List;
 import java.io.IOException;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -53,6 +55,7 @@ public class KcsjPlanWeekReportController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjPlanWeekReport:add")
     @PostMapping("/add")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-周报",name = "周报",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjPlanWeekReport(@Validated(ValidationGroups.Save.class) @RequestBody KcsjPlanWeekReport kcsjPlanWeekReportParam) {
         kcsjPlanWeekReportService.insertKcsjPlanWeekReport(kcsjPlanWeekReportParam);
         return AjaxResult.success(kcsjPlanWeekReportParam);
@@ -60,6 +63,7 @@ public class KcsjPlanWeekReportController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjPlanWeekReport:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-周报",name = "周报",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjPlanWeekReportList(@Validated(ValidationGroups.Save.class) @RequestBody List<KcsjPlanWeekReport> kcsjPlanWeekReportListParam) {
         kcsjPlanWeekReportService.insertKcsjPlanWeekReportList(kcsjPlanWeekReportListParam);
         return AjaxResult.success(kcsjPlanWeekReportListParam);
@@ -67,12 +71,14 @@ public class KcsjPlanWeekReportController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjPlanWeekReport:update")
     @PostMapping("/update")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-周报",name = "周报",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjPlanWeekReport(@Validated(ValidationGroups.Update.class) @RequestBody KcsjPlanWeekReport kcsjPlanWeekReportParam) {
         return toAjax(kcsjPlanWeekReportService.updateKcsjPlanWeekReport(kcsjPlanWeekReportParam));
     }
 
     @PreAuthorize(hasPermi = "kcsjPlanWeekReport:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-周报",name = "周报",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjPlanWeekReportList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjPlanWeekReport> kcsjPlanWeekReportListParam) {
         return toAjax(kcsjPlanWeekReportService.updateKcsjPlanWeekReportList(kcsjPlanWeekReportListParam));
     }

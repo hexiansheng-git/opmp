@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecord;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.service.ISgjsEquipEntryRecordService;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 测量管理--测试设备进场记录
+ * 测量管理--测量设备进场记录
  *
  * @date 2023-12-08 10:47:00
  * @remark
@@ -58,6 +60,7 @@ public class SgjsEquipEntryRecordController extends BaseController{
 
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术-测量管理--测量设备进场记录", name = "测量设备进场记录" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsEquipEntryRecord(@Validated(ValidationGroups.Save.class) @RequestBody SgjsEquipEntryRecord sgjsEquipEntryRecordParam){
         sgjsEquipEntryRecordService.insertSgjsEquipEntryRecord(sgjsEquipEntryRecordParam);
         return AjaxResult.success(sgjsEquipEntryRecordParam);
@@ -65,6 +68,7 @@ public class SgjsEquipEntryRecordController extends BaseController{
 
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "施工技术-测量管理--测量设备进场记录", name = "测量设备进场记录" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsEquipEntryRecordList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsEquipEntryRecord> sgjsEquipEntryRecordListParam){
         sgjsEquipEntryRecordService.insertSgjsEquipEntryRecordList(sgjsEquipEntryRecordListParam);
         return AjaxResult.success(sgjsEquipEntryRecordListParam);
@@ -72,12 +76,14 @@ public class SgjsEquipEntryRecordController extends BaseController{
 
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-测量管理--测量设备进场记录", name = "测量设备进场记录" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsEquipEntryRecord(@Validated(ValidationGroups.Update.class) @RequestBody SgjsEquipEntryRecord sgjsEquipEntryRecordParam){
         return toAjax(sgjsEquipEntryRecordService.updateSgjsEquipEntryRecord(sgjsEquipEntryRecordParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术-测量管理--测量设备进场记录", name = "测量设备进场记录" ,businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsEquipEntryRecordList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsEquipEntryRecord> sgjsEquipEntryRecordListParam){
         return toAjax(sgjsEquipEntryRecordService.updateSgjsEquipEntryRecordList(sgjsEquipEntryRecordListParam));
     }
@@ -96,6 +102,7 @@ public class SgjsEquipEntryRecordController extends BaseController{
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "施工技术-测量管理--测量设备进场记录", name = "测量设备进场记录" ,businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, SgjsEquipEntryRecord sgjsEquipEntryRecordParam) throws IOException {
         List<SgjsEquipEntryRecord> sgjsEquipEntryRecordList = sgjsEquipEntryRecordService.getSgjsEquipEntryRecordList(sgjsEquipEntryRecordParam);
         ExcelUtils<SgjsEquipEntryRecord> util = new ExcelUtils<>(SgjsEquipEntryRecord.class);

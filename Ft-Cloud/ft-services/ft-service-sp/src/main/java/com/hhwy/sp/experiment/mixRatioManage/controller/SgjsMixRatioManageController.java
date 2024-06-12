@@ -12,6 +12,8 @@ import com.hhwy.sp.experiment.mixRatioManage.domain.vo.SgjsMixRatioManageDto;
 import com.hhwy.sp.experiment.mixRatioManage.domain.vo.SgjsMixRatioManageSaveVo;
 import com.hhwy.sp.experiment.mixRatioManage.service.ISgjsMixRatioManageService;
 import com.hhwy.sp.experiment.mixRatioManage.service.ISgjsMixRatioManageStaffRecordService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
@@ -73,6 +75,7 @@ public class SgjsMixRatioManageController extends BaseController {
      */
     @PreAuthorize(hasPermi = "sgjsMixRatioManage:save")
     @PostMapping("/save")
+    @CustomLogger(title = "施工技术-试验管理-配合比管理",name = "配合比管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody SgjsMixRatioManageSaveVo mixRatioManage) {
         sgjsMixRatioManageService.save(mixRatioManage);
         return AjaxResult.success(mixRatioManage.getId());
@@ -91,12 +94,14 @@ public class SgjsMixRatioManageController extends BaseController {
      * @return
      */
     @PostMapping("/saveApproval")
+    @CustomLogger(title = "施工技术-试验管理-配合比管理",name = "配合比管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult saveApproval(@RequestBody SgjsMixRatioManageSaveVo saveVo) {
         sgjsMixRatioManageService.saveApproval(saveVo);
         return AjaxResult.success();
     }
 
     @PostMapping("/saveSuggestion")
+    @CustomLogger(title = "施工技术-试验管理-配合比管理",name = "配合比管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult saveSuggestion(@RequestBody SgjsMixRatioManageSaveVo saveVo) {
         recordService.saveRecord(saveVo);
         return AjaxResult.success();

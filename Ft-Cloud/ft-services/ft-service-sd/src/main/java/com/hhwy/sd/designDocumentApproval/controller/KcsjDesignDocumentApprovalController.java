@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApproval;
 import com.hhwy.sd.designDocumentApproval.domain.KcsjDesignDocumentApprovalVo;
 import com.hhwy.sd.designDocumentApproval.service.IKcsjDesignDocumentApprovalService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -55,6 +57,7 @@ public class KcsjDesignDocumentApprovalController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjDesignDocumentApproval:add")
     @PostMapping("/add")
+    @CustomLogger(title = "勘察设计-勘察设计文件报批",name = "勘察设计文件报批",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjDesignDocumentApproval(@Validated(ValidationGroups.Save.class) @RequestBody KcsjDesignDocumentApproval kcsjDesignDocumentApprovalParam) {
         kcsjDesignDocumentApprovalService.insertKcsjDesignDocumentApproval(kcsjDesignDocumentApprovalParam);
         return AjaxResult.success(kcsjDesignDocumentApprovalParam);
@@ -68,6 +71,7 @@ public class KcsjDesignDocumentApprovalController extends BaseController {
      */
     @PreAuthorize(hasPermi = "kcsjDesignDocumentApproval:save")
     @PostMapping("/batchSave")
+    @CustomLogger(title = "勘察设计-勘察设计文件报批",name = "勘察设计文件报批",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjDesignDocumentApprovalList(@Validated(ValidationGroups.Save.class) @RequestBody KcsjDesignDocumentApprovalVo kcsjDesignDocumentApprovalListVo) {
         return kcsjDesignDocumentApprovalService.saveKcsjDesignDocumentApprovalList(kcsjDesignDocumentApprovalListVo);
 
@@ -75,12 +79,14 @@ public class KcsjDesignDocumentApprovalController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjDesignDocumentApproval:update")
     @PostMapping("/update")
+    @CustomLogger(title = "勘察设计-勘察设计文件报批",name = "勘察设计文件报批",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjDesignDocumentApproval(@Validated(ValidationGroups.Update.class) @RequestBody KcsjDesignDocumentApproval kcsjDesignDocumentApprovalParam) {
         return toAjax(kcsjDesignDocumentApprovalService.updateKcsjDesignDocumentApproval(kcsjDesignDocumentApprovalParam));
     }
 
     @PreAuthorize(hasPermi = "kcsjDesignDocumentApproval:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "勘察设计-勘察设计文件报批",name = "勘察设计文件报批",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjDesignDocumentApprovalList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjDesignDocumentApproval> kcsjDesignDocumentApprovalListParam) {
         return toAjax(kcsjDesignDocumentApprovalService.updateKcsjDesignDocumentApprovalList(kcsjDesignDocumentApprovalListParam));
     }

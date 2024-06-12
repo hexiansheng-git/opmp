@@ -10,6 +10,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.EasyExcelListener;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.SgjsTechnicalNormalTopic;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.service.ISgjsTechnicalNormalTopicService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +55,7 @@ public class SgjsTechnicalNormalTopicController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsTechnicalNormalTopic:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术-科技管理-一般课题研发管理(高新)",name = "一般课题研发管理(高新)",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsTechnicalNormalTopic(@Validated(ValidationGroups.Save.class) @RequestBody SgjsTechnicalNormalTopic sgjsTechnicalNormalTopicParam) {
         sgjsTechnicalNormalTopicService.insertSgjsTechnicalNormalTopic(sgjsTechnicalNormalTopicParam);
         return AjaxResult.success(sgjsTechnicalNormalTopicParam);
@@ -60,6 +63,7 @@ public class SgjsTechnicalNormalTopicController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsTechnicalNormalTopic:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "施工技术-科技管理-一般课题研发管理(高新)",name = "一般课题研发管理(高新)",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsTechnicalNormalTopicList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsTechnicalNormalTopic> sgjsTechnicalNormalTopicListParam) {
         JyDetailsUtil.jyDetails(sgjsTechnicalNormalTopicListParam, ValidationGroups.Save.class);
         sgjsTechnicalNormalTopicService.insertSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopicListParam);
@@ -68,12 +72,14 @@ public class SgjsTechnicalNormalTopicController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsTechnicalNormalTopic:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-科技管理-一般课题研发管理(高新)",name = "一般课题研发管理(高新)",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsTechnicalNormalTopic(@Validated(ValidationGroups.Update.class) @RequestBody SgjsTechnicalNormalTopic sgjsTechnicalNormalTopicParam) {
         return toAjax(sgjsTechnicalNormalTopicService.updateSgjsTechnicalNormalTopic(sgjsTechnicalNormalTopicParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsTechnicalNormalTopic:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术-科技管理-一般课题研发管理(高新)",name = "一般课题研发管理(高新)",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsTechnicalNormalTopicList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsTechnicalNormalTopic> sgjsTechnicalNormalTopicListParam) {
         return toAjax(sgjsTechnicalNormalTopicService.updateSgjsTechnicalNormalTopicList(sgjsTechnicalNormalTopicListParam));
     }

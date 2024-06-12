@@ -6,6 +6,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.KcsjPlanMonthlyReport;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.domain.vo.PlanMonthlyReportQueryVo;
 import com.hhwy.sd.planProcess.kcsjPlanMonthlyReport.service.IKcsjPlanMonthlyReportService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -51,6 +53,7 @@ public class KcsjPlanMonthlyReportController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjPlanMonthlyReport:add")
     @PostMapping("/add")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-月报",name = "月报",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjPlanMonthlyReport(@Validated(ValidationGroups.Save.class) @RequestBody KcsjPlanMonthlyReport kcsjPlanMonthlyReportParam) {
         kcsjPlanMonthlyReportService.insertKcsjPlanMonthlyReport(kcsjPlanMonthlyReportParam);
         return AjaxResult.success(kcsjPlanMonthlyReportParam);
@@ -58,6 +61,7 @@ public class KcsjPlanMonthlyReportController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjPlanMonthlyReport:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-月报",name = "月报",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjPlanMonthlyReportList(@Validated(ValidationGroups.Save.class) @RequestBody List<KcsjPlanMonthlyReport> kcsjPlanMonthlyReportListParam) {
         kcsjPlanMonthlyReportService.insertKcsjPlanMonthlyReportList(kcsjPlanMonthlyReportListParam);
         return AjaxResult.success(kcsjPlanMonthlyReportListParam);
@@ -65,6 +69,7 @@ public class KcsjPlanMonthlyReportController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjPlanMonthlyReport:update")
     @PostMapping("/update")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-月报",name = "月报",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjPlanMonthlyReport(@Validated(ValidationGroups.Update.class) @RequestBody KcsjPlanMonthlyReport kcsjPlanMonthlyReportParam) {
         return toAjax(kcsjPlanMonthlyReportService.updateKcsjPlanMonthlyReport(kcsjPlanMonthlyReportParam));
     }
@@ -76,6 +81,7 @@ public class KcsjPlanMonthlyReportController extends BaseController {
      */
     @PreAuthorize(hasPermi = "kcsjPlanMonthlyReport:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "勘察设计-勘察设计进度管理-月报",name = "月报",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjPlanMonthlyReportList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjPlanMonthlyReport> kcsjPlanMonthlyReportList) {
         return toAjax(kcsjPlanMonthlyReportService.updateKcsjPlanMonthlyReportList(kcsjPlanMonthlyReportList));
     }

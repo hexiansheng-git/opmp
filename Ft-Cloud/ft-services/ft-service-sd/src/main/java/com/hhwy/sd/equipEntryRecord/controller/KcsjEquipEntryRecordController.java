@@ -9,6 +9,8 @@ import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecord;
 import com.hhwy.sd.equipEntryRecord.domain.KcsjEquipEntryRecordVo;
 import com.hhwy.sd.equipEntryRecord.domain.SyncWusheEquipVo;
 import com.hhwy.sd.equipEntryRecord.service.IKcsjEquipEntryRecordService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,7 @@ public class KcsjEquipEntryRecordController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:add")
     @PostMapping("/add")
+    @CustomLogger(title = "勘察设计-勘察设备进场记录",name = "勘察设备进场记录",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjEquipEntryRecord(@Validated(ValidationGroups.Save.class) @RequestBody KcsjEquipEntryRecord kcsjEquipEntryRecordParam) {
         kcsjEquipEntryRecordService.insertKcsjEquipEntryRecord(kcsjEquipEntryRecordParam);
         return AjaxResult.success(kcsjEquipEntryRecordParam);
@@ -60,6 +63,7 @@ public class KcsjEquipEntryRecordController extends BaseController {
      */
     @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:batchAdd")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "勘察设计-勘察设备进场记录",name = "勘察设备进场记录",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjEquipEntryRecordList(@Validated(ValidationGroups.Save.class) @RequestBody KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo) {
         AjaxResult ajaxResul =  kcsjEquipEntryRecordService.insertKcsjEquipEntryRecordList(kcsjEquipEntryRecordVo);
         return AjaxResult.success(ajaxResul);
@@ -67,12 +71,14 @@ public class KcsjEquipEntryRecordController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:update")
     @PostMapping("/update")
+    @CustomLogger(title = "勘察设计-勘察设备进场记录",name = "勘察设备进场记录",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjEquipEntryRecord(@Validated(ValidationGroups.Update.class) @RequestBody KcsjEquipEntryRecord kcsjEquipEntryRecordParam) {
         return toAjax(kcsjEquipEntryRecordService.updateKcsjEquipEntryRecord(kcsjEquipEntryRecordParam));
     }
 
     @PreAuthorize(hasPermi = "kcsjEquipEntryRecord:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "勘察设计-勘察设备进场记录",name = "勘察设备进场记录",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjEquipEntryRecordList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjEquipEntryRecord> kcsjEquipEntryRecordListParam) {
         return toAjax(kcsjEquipEntryRecordService.updateKcsjEquipEntryRecordList(kcsjEquipEntryRecordListParam));
     }
@@ -91,6 +97,7 @@ public class KcsjEquipEntryRecordController extends BaseController {
     }
 
     @GetMapping("/export")
+    @CustomLogger(title = "勘察设计-勘察设备进场记录",name = "勘察设备进场记录",businessType = CustomBusinessType.EXPORT)
     public void export(HttpServletResponse response, KcsjEquipEntryRecord kcsjEquipEntryRecordParam) throws IOException {
         KcsjEquipEntryRecordVo kcsjEquipEntryRecordVo = kcsjEquipEntryRecordService.getKcsjEquipEntryRecordList(kcsjEquipEntryRecordParam);
         ExcelUtils<KcsjEquipEntryRecord> util = new ExcelUtils<>(KcsjEquipEntryRecord.class);

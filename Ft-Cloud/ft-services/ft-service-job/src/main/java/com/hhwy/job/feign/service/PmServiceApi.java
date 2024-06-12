@@ -86,6 +86,14 @@ public interface PmServiceApi {
     @GetMapping("/qqchPersonControlPlan/personControlPlanWarn")
     AjaxResult personControlPlanWarn();
 
+    /**
+     * 人员管控策划预警
+     *
+     * @return
+     */
+    @GetMapping("/qqchSafetyTrain/safetyTrainWarn")
+    AjaxResult trainPlanWarn();
+
 
     /**
      * 进度计划差异化分析20号生成数据

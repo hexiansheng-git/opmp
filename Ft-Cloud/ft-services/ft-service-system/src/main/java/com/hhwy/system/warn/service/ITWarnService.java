@@ -23,6 +23,7 @@ public interface ITWarnService {
     int addWarnNonGm(TWarn tWarn);
 
     int insertTWarnList(List<TWarn> tWarnList);
+    int insertTWarnListToGm(List<TWarn> tWarnList);
 
     int updateTWarn(TWarn tWarn);
 

@@ -8,6 +8,8 @@ import com.hhwy.sd.achievementReview.domain.KcsjAchievement;
 import com.hhwy.sd.achievementReview.domain.vo.AchievementQueryVo;
 import com.hhwy.sd.achievementReview.domain.vo.AchievementVo;
 import com.hhwy.sd.achievementReview.service.IKcsjAchievementService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -64,6 +66,7 @@ public class KcsjAchievementController extends BaseController {
      */
     @PreAuthorize(hasPermi = "kcsjAchievement:save")
     @PostMapping("/save")
+    @CustomLogger(title = "勘察设计-勘察设计成果评审-成果台账",name = "成果台账",businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody AchievementVo achievementVo){
         kcsjAchievementService.save(achievementVo);
         return AjaxResult.success();
@@ -71,6 +74,7 @@ public class KcsjAchievementController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjAchievement:add")
     @PostMapping("/add")
+    @CustomLogger(title = "勘察设计-勘察设计成果评审-成果台账",name = "成果台账",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjAchievement(@Validated(ValidationGroups.Save.class) @RequestBody KcsjAchievement kcsjAchievementParam) {
         kcsjAchievementService.insertKcsjAchievement(kcsjAchievementParam);
         return AjaxResult.success(kcsjAchievementParam);
@@ -78,6 +82,7 @@ public class KcsjAchievementController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjAchievement:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "勘察设计-勘察设计成果评审-成果台账",name = "成果台账",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertKcsjAchievementList(@Validated(ValidationGroups.Save.class) @RequestBody List<KcsjAchievement> kcsjAchievementListParam) {
         kcsjAchievementService.insertKcsjAchievementList(kcsjAchievementListParam);
         return AjaxResult.success(kcsjAchievementListParam);
@@ -85,12 +90,14 @@ public class KcsjAchievementController extends BaseController {
 
     @PreAuthorize(hasPermi = "kcsjAchievement:update")
     @PostMapping("/update")
+    @CustomLogger(title = "勘察设计-勘察设计成果评审-成果台账",name = "成果台账",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjAchievement(@Validated(ValidationGroups.Update.class) @RequestBody KcsjAchievement kcsjAchievementParam) {
         return toAjax(kcsjAchievementService.updateKcsjAchievement(kcsjAchievementParam));
     }
 
     @PreAuthorize(hasPermi = "kcsjAchievement:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "勘察设计-勘察设计成果评审-成果台账",name = "成果台账",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateKcsjAchievementList(@Validated(ValidationGroups.Update.class) @RequestBody List<KcsjAchievement> kcsjAchievementListParam) {
         return toAjax(kcsjAchievementService.updateKcsjAchievementList(kcsjAchievementListParam));
     }

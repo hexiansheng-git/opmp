@@ -19,6 +19,8 @@ import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.domain.SgsjTechnical
 import com.hhwy.sp.techManagement.sgsjTechnicalScienceTopic.service.ISgsjTechnicalScienceTopicService;
 import com.hhwy.sp.utils.easyExcel.CustomMergeStrategy;
 import com.hhwy.utils.ThreadPoolUtil;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +88,7 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
     //课题申请里的保存
     @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopic:add")
     @PostMapping("/applyAdd")
+    @CustomLogger(title = "施工技术-科技管理-科研课题管理",name = "科研课题管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult applyAdd(@Validated(ValidationGroups.Save.class) @RequestBody SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {
         sgsjTechnicalScienceTopicService.applyAdd(sgsjTechnicalScienceTopicParam);
         return AjaxResult.success(sgsjTechnicalScienceTopicParam);
@@ -94,6 +97,7 @@ public class SgsjTechnicalScienceTopicController extends BaseController {
     //课题立项里的保存
     @PreAuthorize(hasPermi = "sgsjTechnicalScienceTopic:add")
     @PostMapping("/lxAdd")
+    @CustomLogger(title = "施工技术-科技管理-科研课题管理",name = "科研课题管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgsjTechnicalScienceTopic(@Validated(ValidationGroups.Save.class) @RequestBody SgsjTechnicalScienceTopic sgsjTechnicalScienceTopicParam) {
         SgsjTechnicalScienceTopic result = sgsjTechnicalScienceTopicService.lxAdd(sgsjTechnicalScienceTopicParam);
         return AjaxResult.success(result);

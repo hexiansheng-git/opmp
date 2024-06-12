@@ -6,6 +6,8 @@ import java.io.IOException;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprint;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprintParam;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -59,6 +61,7 @@ public class SgjsTechnicalFileBlueprintController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsTechnicalFileBlueprint:add")
     @PostMapping("/add")
+    @CustomLogger(title = "施工技术-技术文件管理-施工环节图纸管理",name = "施工环节图纸管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsTechnicalFileBlueprint(@Validated(ValidationGroups.Save.class) @RequestBody SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprintParam) {
         sgjsTechnicalFileBlueprintService.insertSgjsTechnicalFileBlueprint(sgjsTechnicalFileBlueprintParam);
         return AjaxResult.success(sgjsTechnicalFileBlueprintParam);
@@ -66,6 +69,7 @@ public class SgjsTechnicalFileBlueprintController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsTechnicalFileBlueprint:add")
     @PostMapping("/batchAdd")
+    @CustomLogger(title = "施工技术-技术文件管理-施工环节图纸管理",name = "施工环节图纸管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult insertSgjsTechnicalFileBlueprintList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintListParam) {
         sgjsTechnicalFileBlueprintService.insertSgjsTechnicalFileBlueprintList(sgjsTechnicalFileBlueprintListParam);
         return AjaxResult.success(sgjsTechnicalFileBlueprintListParam);
@@ -73,12 +77,14 @@ public class SgjsTechnicalFileBlueprintController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsTechnicalFileBlueprint:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-技术文件管理-施工环节图纸管理",name = "施工环节图纸管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsTechnicalFileBlueprint(@Validated(ValidationGroups.Update.class) @RequestBody SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprintParam) {
         return toAjax(sgjsTechnicalFileBlueprintService.updateSgjsTechnicalFileBlueprint(sgjsTechnicalFileBlueprintParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsTechnicalFileBlueprint:update")
     @PostMapping("/batchUpdate")
+    @CustomLogger(title = "施工技术-技术文件管理-施工环节图纸管理",name = "施工环节图纸管理",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsTechnicalFileBlueprintList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprintListParam) {
         return toAjax(sgjsTechnicalFileBlueprintService.updateSgjsTechnicalFileBlueprintList(sgjsTechnicalFileBlueprintListParam));
     }

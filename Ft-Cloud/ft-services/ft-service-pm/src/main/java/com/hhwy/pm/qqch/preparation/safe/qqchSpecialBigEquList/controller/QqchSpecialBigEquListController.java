@@ -8,15 +8,23 @@ import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.domain.QqchSpecia
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.domain.vo.QqchSpecialBigEquListVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service.IQqchSpecialBigEquListService;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.ActiveEquVo;
+import com.hhwy.pm.utils.HttpHeadersUtils;
+import com.hhwy.pm.utils.RestTemplateUtils;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,6 +40,20 @@ public class QqchSpecialBigEquListController extends BaseController {
     @Autowired
     private IQqchSpecialBigEquListService qqchSpecialBigEquListService;
 
+    @Value("${gm.back-url}")
+    private String gmUrl;
+
+    //获取总部知识库特种设备清单
+    @GetMapping("/getGmSepcialEquipmentKind")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划-获取总部特种设备类型", name = "8.4.2 特种设备及大型设备风险识别与措施策划-获取总部特种设备类型" ,businessType = CustomBusinessType.SELECT)
+    public AjaxResult sepcialEquipmentKind(@RequestParam(value = "kind1", required = false)String kind1
+                                            , @RequestParam(value = "kind2", required = false)String kind2
+                                            , @RequestParam(value = "kind3", required = false)String kind3) {
+        String url = gmUrl + "/gm/qyzsSafeSpecialEquipment/list?kind1={kind1}&kind2={kind2}&kind3={kind3}";
+        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(headers);
+        return RestTemplateUtils.get(url, httpEntity, AjaxResult.class,  ObjectUtils.toMap("kind1", kind1, "kind2", kind2, "kind3", kind3));
+    }
 
     /**
      *  列表页面

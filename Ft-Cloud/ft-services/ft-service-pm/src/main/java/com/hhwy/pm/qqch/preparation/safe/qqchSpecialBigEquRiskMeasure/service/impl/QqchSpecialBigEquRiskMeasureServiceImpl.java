@@ -2,8 +2,12 @@ package com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquRiskMeasure.service.i
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.common.domain.QyzsSafeSpecialEquipment;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -20,16 +24,23 @@ import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialplan.service.ISbchE
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.utils.HttpHeadersUtils;
+import com.hhwy.pm.utils.RestTemplateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import io.jsonwebtoken.lang.Assert;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
+
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +61,9 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
     private IQqchSpecialBigEquListService specialBigEquListService;
     @Autowired
     private ISbchEquipmentSpecialPlanService sbchEquipmentSpecialPlanService;
+
+    @Value("${gm.back-url}")
+    private String gmUrl;
 
 
     public QqchSpecialBigEquRiskMeasure getQqchSpecialBigEquRiskMeasure(QqchSpecialBigEquRiskMeasure qqchSpecialBigEquRiskMeasure) {
@@ -96,38 +110,46 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
 
     /**
      * 列表接口
-     * @param qqchSpecialBigEquRiskMeasure
      * @return
      */
-    public QqchSpecialBigEquRiskMeasureVo getQqchSpecialBigEquRiskMeasureList(QqchSpecialBigEquRiskMeasure qqchSpecialBigEquRiskMeasure) {
+    public QqchSpecialBigEquRiskMeasureVo getQqchSpecialBigEquRiskMeasureList(QqchSpecialBigEquRiskMeasure requestParam) {
         QqchSpecialBigEquRiskMeasureVo vo = new QqchSpecialBigEquRiskMeasureVo();
-        BigDecimal version = qqchSpecialBigEquRiskMeasure.getVersion();
-        version = VersionUtil.getVersion("qqch_special_big_equ_risk_measure", version);
-        qqchSpecialBigEquRiskMeasure.setVersion(version);
-
-//        QqchSpecialBigEquList param = new QqchSpecialBigEquList();
-//        param.setVersion(version);
-        //获取8.4.1中有所有的设备
-//        QqchSpecialBigEquListVo specialBigEquList = specialBigEquListService.getSpecialBigEquList(param);
-//        List<QqchSpecialBigEquList> qqchSpecialBigEquListList = specialBigEquList.getQqchSpecialBigEquListList();
         List<QqchSpecialBigEquRiskMeasure> result = new ArrayList<>();
-//        if (CollectionUtil.isNotEmpty(qqchSpecialBigEquListList)) {
-//            List<String> collect = qqchSpecialBigEquListList.stream().map(QqchSpecialBigEquList::getEquName).collect(Collectors.toList());
-            ////根据设备集合获取7.6.2中的数据
-//            List<SbchEquipmentSpecialPlanDetails> list = sbchEquipmentSpecialPlanService.getListByDeviceCode(collect, version);
-        SbchEquipmentSpecialPlan plan = sbchEquipmentSpecialPlanService.getList(version);
-        if (CollUtil.isNotEmpty(plan.getDetailsList())){
-            List<SbchEquipmentSpecialPlanDetails> detailsList = plan.getDetailsList();
-            detailsList.forEach(p -> {
-                QqchSpecialBigEquRiskMeasure bean = new QqchSpecialBigEquRiskMeasure();
-                bean.setEquName(p.getMaterialName());
-                bean.setRiskContent(p.getRiskContent());
-                bean.setControlMeasures(p.getControlMethods());
-                result.add(bean);
-            });
+        BigDecimal version = requestParam.getVersion();
+        version = VersionUtil.getVersion("qqch_special_big_equ_risk_measure", version);
+        //获取8.4.1中有所有的设备
+        QqchSpecialBigEquList param = new QqchSpecialBigEquList();
+        param.setVersion(version);
+        QqchSpecialBigEquListVo specialBigEquList = specialBigEquListService.getSpecialBigEquList(param);
+        List<QqchSpecialBigEquList> qqchSpecialBigEquListList = specialBigEquList.getQqchSpecialBigEquListList();
+        if (CollectionUtil.isNotEmpty(qqchSpecialBigEquListList)) {
+            Set<String> equTypeList = qqchSpecialBigEquListList.stream().map(QqchSpecialBigEquList::getEquType).filter(StrUtil::isNotBlank).collect(Collectors.toSet());
+            if (CollUtil.isNotEmpty(equTypeList)) {
+                String url = gmUrl + "/gm/qyzsSafeSpecialEquipment/getChilderByKind3?kind3Arr={kind3Arr}";
+                HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
+                HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(headers);
+                HashMap<String, Object> mapParam = new HashMap<>();
+                //841设备类型 等于 总部特种设备品种字段
+                mapParam.put("kind3Arr", equTypeList.toArray());
+                AjaxResult ajaxResult = RestTemplateUtils.get(url, httpEntity, AjaxResult.class, mapParam);
+                Assert.isTrue(AjaxResult.isSuccess(ajaxResult), "请求总部接口失败:" + ajaxResult.get(AjaxResult.MSG_TAG));
+                Assert.isTrue(ajaxResult.get(AjaxResult.DATA_TAG) != null, "请求总部接口失败:" + ajaxResult.get(AjaxResult.MSG_TAG));
+                String jsonString = JSON.toJSONString(ajaxResult.get(AjaxResult.DATA_TAG));
+                List<QyzsSafeSpecialEquipment> qyzsSafeSpecialEquipments = JSON.parseArray(jsonString, QyzsSafeSpecialEquipment.class);
+                Map<String, List<QyzsSafeSpecialEquipment>> collect = qyzsSafeSpecialEquipments.stream().collect(Collectors.groupingBy(QyzsSafeSpecialEquipment::getKind3));
+                for (QqchSpecialBigEquList p : qqchSpecialBigEquListList) {
+                    List<QyzsSafeSpecialEquipment> qyzsSafeSpecialEquipments1 = collect.get(p.getEquType());
+                    if (CollUtil.isEmpty(qyzsSafeSpecialEquipments1)) continue;
+                    for (QyzsSafeSpecialEquipment qyzsSafeSpecialEquipment : qyzsSafeSpecialEquipments1) {
+                        QqchSpecialBigEquRiskMeasure qqchSpecialBigEquRiskMeasure = new QqchSpecialBigEquRiskMeasure();
+                        qqchSpecialBigEquRiskMeasure.setControlMeasures(qyzsSafeSpecialEquipment.getControlMeasure());
+                        qqchSpecialBigEquRiskMeasure.setEquName(p.getEquName());
+                        qqchSpecialBigEquRiskMeasure.setRiskContent(qyzsSafeSpecialEquipment.getRiskEvent());
+                        result.add(qqchSpecialBigEquRiskMeasure);
+                    }
+                }
+            }
         }
-//        }
-//        List<QqchSpecialBigEquRiskMeasure> qqchSpecialBigEquRiskMeasureList = qqchSpecialBigEquRiskMeasureMapper.getQqchSpecialBigEquRiskMeasureList(qqchSpecialBigEquRiskMeasure);
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(result);

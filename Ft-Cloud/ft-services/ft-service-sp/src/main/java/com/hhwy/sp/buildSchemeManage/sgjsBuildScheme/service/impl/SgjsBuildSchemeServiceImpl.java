@@ -95,6 +95,10 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         businessAreas.put("D02P03", "大型综合体建筑");
         businessAreas.put("D02P02", "一般公共建筑");
         businessAreas.put("D02P01", "居住建筑");
+        businessAreas.put("D03P05", "矿区/油区场地建设及配套设施");
+        businessAreas.put("D03P03", "矿业开采");
+        businessAreas.put("D03P01", "工业园、生产厂房、汽车试验场等");
+        businessAreas.put("D04P02", "中小型水电站、中小型水坝");
     }
 
     //详情
