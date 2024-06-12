@@ -950,13 +950,13 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         DynamicDataSourceContextHolder.push("master");
         try {
             //获取所有租户
-//            List<SysTenant> tenantList = systemServiceApi.tenantList();
-            List<SysTenant> tenantList = new ArrayList<>();
-            SysTenant sysTenant = new SysTenant();
-            sysTenant.setTenantKey("PJ2020011492");
-            sysTenant.setTenantName("吉布提风力发电项目");
-            tenantList.add(sysTenant);
-            warnHandler(tenantList, sgjsWarnConfig);
+            List<SysTenant> tenantList = systemServiceApi.tenantList();
+//            List<SysTenant> tenantList = new ArrayList<>();
+//            SysTenant sysTenant = new SysTenant();
+//            sysTenant.setTenantKey("PJ2020011492");
+//            sysTenant.setTenantName("吉布提风力发电项目");
+//            tenantList.add(sysTenant);
+            this.warnHandler(tenantList, sgjsWarnConfig);
         } catch (Exception e) {
             throw new CustomException(e.getMessage());
         } finally {
@@ -965,6 +965,14 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         }
     }
 
+    /**
+    * 功能描述: 所有租户发送预警
+    * @param: tenantList 租户列表
+     * @param: sgjsWarnConfig 预警配置信息
+    * @return: void
+    * 作者:
+    * 时间: 2024/6/12
+    */
     private void warnHandler(List<SysTenant> tenantList, SgjsWarnConfig sgjsWarnConfig) {
         for (SysTenant tenant : tenantList) {
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenant.getTenantKey()));
