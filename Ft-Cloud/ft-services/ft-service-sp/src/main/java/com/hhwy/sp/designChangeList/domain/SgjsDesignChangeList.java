@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -116,17 +117,17 @@ public class SgjsDesignChangeList extends TreeNode<SgjsDesignChangeList> {
 
     /** 当前工程量清单 */
     @FtExcel(name = "本次变更数量")
-    @NotBlank(message = "本次变更数量不能为空",groups = {ValidationGroups.Other.class})
+    @NotNull(message = "本次变更数量不能为空",groups = {ValidationGroups.Other.class})
     private BigDecimal changeNum;
 
     /** 当前单价不含税 */
     @FtExcel(name = "本次变更单价（不含税）",width = 21L)
-    @NotBlank(message = "本次变更单价（不含税）不能为空",groups = {ValidationGroups.Other.class})
+    @NotNull(message = "本次变更单价（不含税）不能为空",groups = {ValidationGroups.Other.class})
     private BigDecimal changeExcludePrice;
 
     /** 当前单价含税 */
     @FtExcel(name = "本次变更金额（不含税）",width = 21L)
-    @NotBlank(message = "本次变更金额（不含税）不能为空",groups = {ValidationGroups.Other.class})
+    @NotNull(message = "本次变更金额（不含税）不能为空",groups = {ValidationGroups.Other.class})
     private BigDecimal changeSumPrice;
 
     /** 变更后-工程量清单 */
