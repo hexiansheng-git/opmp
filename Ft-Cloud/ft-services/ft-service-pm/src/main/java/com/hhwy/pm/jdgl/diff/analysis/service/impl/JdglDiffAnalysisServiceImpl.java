@@ -32,6 +32,7 @@ import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,7 @@ import java.util.*;
  * @remark
  */
 @Service
+@Slf4j
 public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
     @Autowired
@@ -252,17 +254,14 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         jdglDiffAnalysis.setTotalGrade(thisTotalGrage);
 
         if(oldTotalGrage == null || thisTotalGrage.compareTo(oldTotalGrage) != 0) {
-
             jdglDiffAnalysis.setIsWarn(true);
-
-
             // 调取获取进度差异化管控策划列表接口
 //            QqchScheDTO dto = new QqchScheDTO();
 //            QqchScheDTO list = qqchScheService.list(dto);
             QqchScheDTO list = qqchScheService.getItems();
 
-
             if(list == null || CollectionUtils.isEmpty(list.getDiffList())) {
+                log.info("前期策划 126数据为空; 无法计算风险等级");
                 return jdglDiffAnalysis;
             }
 
@@ -273,7 +272,10 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
                 if(minScore != null && maxScore != null) {
                     if(thisTotalGrage.compareTo(minScore) >= 0 && thisTotalGrage.compareTo(maxScore) <= 0) {
                         jdglDiffAnalysis.setRiskLevel(qqchScheDiff.getRiskLevel());
+                        break;
                     }
+                }else {
+                    log.info("分数为：{}, 没有匹配到对应的等级", thisTotalGrage);
                 }
             }
 
