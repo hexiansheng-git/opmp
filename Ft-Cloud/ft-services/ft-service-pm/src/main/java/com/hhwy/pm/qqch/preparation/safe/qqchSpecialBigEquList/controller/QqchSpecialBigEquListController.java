@@ -45,7 +45,7 @@ public class QqchSpecialBigEquListController extends BaseController {
 
     //获取总部知识库特种设备清单
     @GetMapping("/getGmSepcialEquipmentKind")
-    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划-获取总部特种设备类型", name = "8.4.2 特种设备及大型设备风险识别与措施策划-获取总部特种设备类型" ,businessType = CustomBusinessType.SELECT)
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划-获取总部特种设备类型", name = "8.4.1 特种设备及大型设备风险识别与措施策划-获取总部特种设备类型" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult sepcialEquipmentKind(@RequestParam(value = "kind1", required = false)String kind1
                                             , @RequestParam(value = "kind2", required = false)String kind2
                                             , @RequestParam(value = "kind3", required = false)String kind3) {

@@ -202,4 +202,11 @@ public class QqchDangerList extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    /**
+     * 字段描述：危大工程类型
+     */
+    @JsonProperty
+    @Excel(name = "危大工程类型")
+    private String riskProjType;
 }

@@ -123,6 +123,7 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
         QqchSpecialBigEquListVo specialBigEquList = specialBigEquListService.getSpecialBigEquList(param);
         List<QqchSpecialBigEquList> qqchSpecialBigEquListList = specialBigEquList.getQqchSpecialBigEquListList();
         if (CollectionUtil.isNotEmpty(qqchSpecialBigEquListList)) {
+            //总部知识库查询条件 ，{设备类型}
             Set<String> equTypeList = qqchSpecialBigEquListList.stream().map(QqchSpecialBigEquList::getEquType).filter(StrUtil::isNotBlank).collect(Collectors.toSet());
             if (CollUtil.isNotEmpty(equTypeList)) {
                 String url = gmUrl + "/gm/qyzsSafeSpecialEquipment/getChilderByKind3?kind3Arr={kind3Arr}";
@@ -139,7 +140,12 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
                 Map<String, List<QyzsSafeSpecialEquipment>> collect = qyzsSafeSpecialEquipments.stream().collect(Collectors.groupingBy(QyzsSafeSpecialEquipment::getKind3));
                 for (QqchSpecialBigEquList p : qqchSpecialBigEquListList) {
                     List<QyzsSafeSpecialEquipment> qyzsSafeSpecialEquipments1 = collect.get(p.getEquType());
-                    if (CollUtil.isEmpty(qyzsSafeSpecialEquipments1)) continue;
+                    if (CollUtil.isEmpty(qyzsSafeSpecialEquipments1)) {
+                        QqchSpecialBigEquRiskMeasure qqchSpecialBigEquRiskMeasure = new QqchSpecialBigEquRiskMeasure();
+                        qqchSpecialBigEquRiskMeasure.setEquName(p.getEquName());
+                        result.add(qqchSpecialBigEquRiskMeasure);
+                        continue;
+                    }
                     for (QyzsSafeSpecialEquipment qyzsSafeSpecialEquipment : qyzsSafeSpecialEquipments1) {
                         QqchSpecialBigEquRiskMeasure qqchSpecialBigEquRiskMeasure = new QqchSpecialBigEquRiskMeasure();
                         qqchSpecialBigEquRiskMeasure.setControlMeasures(qyzsSafeSpecialEquipment.getControlMeasure());
