@@ -1,5 +1,6 @@
 package com.hhwy.sp.designChangeList.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.utils.tree.TreeNode;
@@ -138,6 +139,7 @@ public class SgjsDesignChangeWbs extends TreeNode<SgjsDesignChangeWbs> {
 
     /** 数据删除系统时间 */
     @FtExcel(name = "数据删除系统时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date delTime;
 
     /** 删除标识：0未删除；1已删除 */
