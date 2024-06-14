@@ -354,8 +354,10 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
         List<KcsjWarnConfig> warnList=new ArrayList<>();
         //从总部找预警接收角色 和预警消息内容
         String url = gmUrl + "/gm/sgjsWarnConfig?warnSubject={warnSubject}";
+        logger.info("到了到了。。。。。。。");
         KcsjWarnConfig warnConfigRst = WarnCommonBusiness.getSgjsWarnConfig(url, WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
         if(null==warnConfigRst){
+            logger.error("未找到总部版预警配置信息");
             return AjaxResult.error("未找到总部版预警配置信息");
         }
         try {

@@ -137,6 +137,7 @@ public class KcsjPlanProcessController extends BaseController {
      */
     @GetMapping("/jobPlanProcess")
     public AjaxResult jobPlanProcess(){
+        logger.info("开始啦啦啦啦啦啦啦啦啦啦啦啦啦----->");
         AjaxResult result=kcsjPlanProcessService.jobPlanProcess();
         return result;
     }

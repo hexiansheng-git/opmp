@@ -1,5 +1,6 @@
 package com.hhwy.sp.techOrg.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -36,6 +37,8 @@ import java.util.stream.Collectors;
 @Service
 public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageService{
 
+    private Logger logger=LoggerFactory.getLogger(SgjsTechnicalManageServiceImpl.class);
+
     @Autowired
     private SgjsTechnicalManageMapper sgjsTechnicalManageMapper;
     @Autowired
@@ -44,8 +47,6 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
     private RocketMQTemplate rocketMQTemplate;
     @Autowired
     private SgjsTechnicalManageInfoMapper sgjsTechnicalManageInfoMapper;
-
-    private static final Logger logger= LoggerFactory.getLogger(SgjsTechnicalManageServiceImpl.class);
 
 
 
@@ -379,6 +380,7 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         Integer status = 1;
         String errMsg = "";
         try {
+            logger.info("同步总部传参【{}】,", JSONObject.toJSONString(map));
             rocketMQTemplate.convertAndSend("sgjs_technical_group1:tenantSuccess", JSONObject.toJSONString(map));
         }catch (Exception e){
             e.printStackTrace();
