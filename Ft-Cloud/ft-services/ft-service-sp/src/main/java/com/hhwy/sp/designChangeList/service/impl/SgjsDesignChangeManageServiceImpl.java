@@ -206,7 +206,7 @@ public class SgjsDesignChangeManageServiceImpl implements ISgjsDesignChangeManag
             return;
         for (int j = 0; j < list.size(); j++) {
             SgjsDesignChangeList temp = list.get(j);
-            if(StringUtils.equals(saveVo.getSubmitFlag(),"1")){
+            if(StringUtils.equals(saveVo.getSubmitFlag(),"1") && CollectionUtils.isEmpty(temp.getChildren())){
                 JyDetailsUtil.jy(temp, new Class[]{ValidationGroups.Other.class} );
             }
             new AddBaseInfoUtil<>().addBaseEntity(temp);
