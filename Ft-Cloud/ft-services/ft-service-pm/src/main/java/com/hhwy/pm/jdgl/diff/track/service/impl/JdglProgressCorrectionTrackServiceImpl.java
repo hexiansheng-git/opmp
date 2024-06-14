@@ -234,7 +234,17 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         SysTenant sysTenant = new SysTenant();
         sysTenant.setTenantKey(tenantKey);
         tenantList.add(sysTenant);
-        this.initData(tenantList, dateTime);
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        try {
+            //切换到master
+            DynamicDataSourceContextHolder.push("master");
+            this.initData(tenantList, dateTime);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 
     /**
