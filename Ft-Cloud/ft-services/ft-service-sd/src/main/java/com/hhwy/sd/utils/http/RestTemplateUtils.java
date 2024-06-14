@@ -2,6 +2,8 @@ package com.hhwy.sd.utils.http;
 
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.SpringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +15,15 @@ public class RestTemplateUtils {
 
     private static RestTemplate restTemplate;
 
+    private static Logger logger= LoggerFactory.getLogger(RestTemplateUtils.class);
+
     static {
-        restTemplate = SpringUtils.getBean(RestTemplate.class);
+        try {
+            restTemplate = SpringUtils.getBean(RestTemplate.class);
+        }catch (Exception e){
+            logger.error("Error initializing MyClass:【{}】",e.getMessage());
+        }
+
     }
 
     public static <T> T get(String url, Class<T> responseType, Object ... uriVariables){
