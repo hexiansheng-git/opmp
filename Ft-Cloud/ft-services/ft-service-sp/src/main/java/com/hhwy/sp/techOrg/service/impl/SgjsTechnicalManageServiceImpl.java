@@ -524,5 +524,11 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         manage.setPtVar5(info.getId()+"");
         manage.setCreateUser(SecurityUtils.getUserId()+"");
         manage.setCreateTime(DateUtils.getNowDate());
+        if(StringUtils.isNotEmpty(info.getProjectName())){
+            manage.setProjectName(info.getProjectName());
+        }
+        if(null!=info.getProjectId()){
+            manage.setProjectId(info.getProjectId());
+        }
     }
 }
