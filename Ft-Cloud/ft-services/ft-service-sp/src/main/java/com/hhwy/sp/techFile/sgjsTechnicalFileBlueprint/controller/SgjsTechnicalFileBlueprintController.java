@@ -1,13 +1,18 @@
 package com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.controller;
 
+import java.io.InputStream;
 import java.util.*;
 import java.io.IOException;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.excel.EasyExcel;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprint;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprintParam;
+import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.EasyExcelListener;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
+import com.hhwy.utils.excel.FtExcelUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +27,7 @@ import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.service.ISgjsTechnicalFil
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import org.springframework.web.multipart.MultipartFile;
 
 /***
  * 功能描述: 技术文件管理 - 施工环节图纸管理
@@ -126,5 +132,18 @@ public class SgjsTechnicalFileBlueprintController extends BaseController {
             }
         });
         util.exportExcel(response, list, DateUtils.getDate());
+    }
+
+    //导入
+    @PreAuthorize(hasPermi = "sgjsTechnicalFileBlueprint:add")
+    @PostMapping("/importExcel")
+    public AjaxResult importExcel(MultipartFile file) throws IOException {
+        EasyExcelListener listener = new EasyExcelListener();
+        EasyExcel.read(file.getInputStream(), listener).sheet(0).doRead();
+        List<Map<Integer, String>> headList = listener.getHeadList();
+        if (CollUtil.isEmpty(headList)) return AjaxResult.error("表头为空");
+        List<Map<Integer, String>> dataList = listener.getDataList();
+        if (CollUtil.isEmpty(dataList)) return AjaxResult.error("数据为空");
+        return sgjsTechnicalFileBlueprintService.importData(headList, dataList);
     }
 }

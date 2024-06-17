@@ -2,16 +2,20 @@ package com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprint;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprintParam;
 import com.hhwy.sp.utils.TreeNodeUtil;
@@ -158,5 +162,36 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
             sgjsTechnicalFileBlueprintList.add(sgjsTechnicalFileBlueprint);
         }
         rocketMQTemplate.convertAndSend("sgjs_technical_file_blueprint:tenantSuccess", sgjsTechnicalFileBlueprintList);
+    }
+
+    @Override
+    public AjaxResult importData(List<Map<Integer, String>> headList, List<Map<Integer, String>> dataList) {
+        List<SgjsTechnicalFileBlueprint> result = new ArrayList<>();
+        for (Map<Integer, String> map : dataList) {
+            String blueprintNum = map.get(0);
+            String blueprintName = map.get(1);
+            String version = map.get(2);
+            Integer blueprintCount = map.get(3) == null ? null : Integer.valueOf(map.get(3));
+            String startDatePlan = map.get(4);
+            String senderName = map.get(5);
+            String sendDate = map.get(6);
+            String receiverName = map.get(7);
+            String changeOr = map.get(8);
+            if (StrUtil.isBlank(blueprintName)) AjaxResult.error("图纸名称不能为空");
+            if (StrUtil.isBlank(senderName)) AjaxResult.error("图纸发放人不能为空");
+            if (StrUtil.isBlank(receiverName)) AjaxResult.error("图纸接收人不能为空");
+            SgjsTechnicalFileBlueprint technicalFileBlueprint = new SgjsTechnicalFileBlueprint();
+            technicalFileBlueprint.setBlueprintNum(StrUtil.isBlank(blueprintNum)?"":blueprintNum);
+            technicalFileBlueprint.setBlueprintName(blueprintName);
+            technicalFileBlueprint.setVersion(StrUtil.isBlank(version)?"":version);
+            technicalFileBlueprint.setBlueprintCount(blueprintCount);
+            technicalFileBlueprint.setStartDatePlan(startDatePlan == null ? null : DateUtil.parseDate(startDatePlan));
+            technicalFileBlueprint.setSenderName(StrUtil.isBlank(senderName)?"":senderName);
+            technicalFileBlueprint.setSendDate(sendDate == null ? null : DateUtil.parseDate(sendDate));
+            technicalFileBlueprint.setReceiverName(receiverName);
+            technicalFileBlueprint.setChangeOr(StrUtil.isBlank(changeOr)? "" : changeOr.equals("是")?"1":"0");
+            result.add(technicalFileBlueprint);
+        }
+        return AjaxResult.success(result);
     }
 }

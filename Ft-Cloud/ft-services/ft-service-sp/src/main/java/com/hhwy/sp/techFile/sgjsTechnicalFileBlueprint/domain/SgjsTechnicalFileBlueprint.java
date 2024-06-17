@@ -110,6 +110,7 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      */
     @JsonProperty
     @Excel(name = "图纸发放人")
+    @NotBlank(message = "图纸发放人不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String senderName;
     /**
      * 字段描述：图纸发放日期

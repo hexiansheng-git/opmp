@@ -1,9 +1,11 @@
 package com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.service;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprint;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprintParam;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author fsd
@@ -30,4 +32,6 @@ public interface ISgjsTechnicalFileBlueprintService {
     int deleteSgjsTechnicalFileBlueprintByPks(List<Long> sgjsTechnicalFileBlueprintPkList);
 
     int deleteWithChildren(List<Long> sgjsTechnicalFileBlueprintPkList);
+
+    AjaxResult importData(List<Map<Integer, String>> headList, List<Map<Integer, String>> dataList);
 }

@@ -28,6 +28,7 @@ public enum FtExcelEnum {
     QQCH_CONTRACT_SPECIAL("importXmslContractSpecial.xlsx", "合同信息-专用条件.xlsx", "com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSpecial"),
     WZCH_TOTAL_DEMAND_DETIAL("importEquPlanDemand.xlsx", "总需详情.xlsx", "com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail"),
     SGJS_BUILD_SCHEME_LIST("importSgjsBuildSchemeList.xlsx", "施工方案清单.xlsx", "com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList"),
+    SGJS_TECHNICAL_FILE_BULEPRINT("importSgjsTechnicalFileBlueprint.xlsx", "施工环节图纸管理.xlsx", "com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprint"),
     SGJS_TECHNICAL_NORMAL_TOPIC("importSgjsTechnicalNormalTopic.xlsx", "一般课题研发管理.xlsx", "com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.sgjsTechnicalNormalTopicCost.domain.SgjsTechnicalNormalTopicCostDTO");
 
 
