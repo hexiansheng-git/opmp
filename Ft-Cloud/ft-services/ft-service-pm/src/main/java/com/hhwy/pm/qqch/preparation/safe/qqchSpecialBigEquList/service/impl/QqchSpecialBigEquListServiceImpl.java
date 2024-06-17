@@ -26,6 +26,8 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionRevi
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.utils.HttpHeadersUtils;
+import com.hhwy.pm.utils.RestTemplateUtils;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
@@ -34,8 +36,11 @@ import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -68,6 +73,16 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
     @Autowired
     private ISbchEquipmentSpecialService equipmentSpecialService;
 
+    @Value("${gm.back-url}")
+    private String gmUrl;
+
+    @Override
+    public AjaxResult getGmRiskBigProjList(String kind1, String kind2, String kind3) {
+        String url = gmUrl + "/gm/qyzsSafeSpecialEquipment/list?kind1={kind1}&kind2={kind2}&kind3={kind3}";
+        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(headers);
+        return RestTemplateUtils.get(url, httpEntity, AjaxResult.class,  ObjectUtils.toMap("kind1", kind1, "kind2", kind2, "kind3", kind3));
+    }
 
     public QqchSpecialBigEquList getQqchSpecialBigEquList(QqchSpecialBigEquList qqchSpecialBigEquList) {
         return qqchSpecialBigEquListMapper.getQqchSpecialBigEquList(qqchSpecialBigEquList);

@@ -33,4 +33,6 @@ public interface IQqchSpecialBigEquListService {
     AjaxResult selfEquDetail(String bhEqu);
 
     QqchSpecialBigEquListVo getSpecialBigEquList(QqchSpecialBigEquList qqchSpecialBigEquList);
+
+    AjaxResult getGmRiskBigProjList(String kind1, String kind2, String kind3);
 }

@@ -33,6 +33,17 @@ public class QqchSafeRiskListDetailController extends BaseController {
     @Autowired
     private IQqchSafeRiskListDetailService qqchSafeRiskListDetailService;
 
+    /**
+     * 功能描述: 更新接口，从831和841同步数据
+     * @param: qqchSafeRiskListParam
+     * @return: com.hhwy.common.core.web.domain.AjaxResult
+     * 作者:
+     * 时间: 2024/6/14
+     */
+    @GetMapping("syncData")
+    public AjaxResult syncData() {
+        return qqchSafeRiskListDetailService.syncData();
+    }
 
 //    @PreAuthorize(hasPermi = "qqchSafeRiskListDetail:list")
     @GetMapping

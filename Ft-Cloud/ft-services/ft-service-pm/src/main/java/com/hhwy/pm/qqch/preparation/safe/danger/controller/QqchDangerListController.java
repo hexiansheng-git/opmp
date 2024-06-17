@@ -35,18 +35,11 @@ public class QqchDangerListController extends BaseController {
     private IQqchDangerListService qqchDangerListService;
 
 
-    @Value("${gm.back-url}")
-    private String gmUrl;
-
     //获取总部知识库危大工程清单
     @GetMapping("/getGmRiskBigProjList")
     @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划-获取总部特种设备类型", name = "8.3.1 特种设备及大型设备风险识别与措施策划-获取总部知识库危大工程清单" ,businessType = CustomBusinessType.SELECT)
     public AjaxResult getRiskBigProjList(QyzsSafeRiskBigProj qyzsSafeRiskBigProj) {
-        String url = gmUrl + "/gm/qyzsSafeRiskBigProj/list";
-        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
-        HttpEntity<QyzsSafeRiskBigProj> httpEntity = new HttpEntity<>(qyzsSafeRiskBigProj, headers);
-        return RestTemplateUtils.post(url, httpEntity, AjaxResult.class);
+        return qqchDangerListService.getGmRiskBigProjList(qyzsSafeRiskBigProj);
     }
 
     /**

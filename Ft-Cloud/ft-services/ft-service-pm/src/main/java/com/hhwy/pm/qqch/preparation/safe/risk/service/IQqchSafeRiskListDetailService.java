@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.safe.risk.service;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskListDetail;
 
 import java.util.Date;
@@ -29,4 +30,6 @@ public interface IQqchSafeRiskListDetailService {
     int deleteQqchSafeRiskListDetailByPks(List<Long> qqchSafeRiskListDetailPkList);
 
     void deleteByInfoId(Long infoId, String valueOf, String userName, Date nowDate);
+
+    AjaxResult syncData();
 }

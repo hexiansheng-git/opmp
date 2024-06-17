@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
 
 import java.util.Date;
@@ -165,10 +166,41 @@ public class QyzsSafeRiskBigProjItem extends BaseEntity {
     @JsonProperty
     @Excel(name = "关联id")
     private Long linkId;
+
+//    @FtExcel(name = "危大工程类型")
+    private String  riskProjType;
+
+//    @FtExcel(name = "判定条件")
+    private String  judgmentCondition;
+
+    /**
+     * 字段描述：风险事件
+     */
+    @JsonProperty
+//    @Excel(name = "风险描述")
+//    @FtExcel(name = "风险描述")
+    private String riskEvent;
+    /**
+     * 字段描述：可能后果
+     */
+    @JsonProperty
+//    @Excel(name = "可能后果")
+//    @FtExcel(name = "可能后果")
+    private String possibleConsequence;
+
+
     /**
      * 字段描述：安全技术措施
      */
     @JsonProperty
-    @Excel(name = "安全技术措施")
+//    @Excel(name = "安全技术措施 改为风险控制措施")
+//    @FtExcel(name = "风险控制措施")
     private String safeTechnicalMeasure;
+
+    /**
+     * 字段描述：风险等级
+     */
+    @JsonProperty
+//    @Excel(name = "风险等级")
+    private String riskLevel;
 }

@@ -1,6 +1,9 @@
 package com.hhwy.pm.qqch.preparation.safe.danger.service;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.safe.danger.domain.vo.QqchDangerListVo;
+import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain.QyzsSafeRiskBigProj;
+
 import java.math.BigDecimal;
 
 /**
@@ -32,4 +35,7 @@ public interface IQqchDangerListService {
      * @return
      */
     void syncData(QqchDangerListVo qqchDangerListVo);
+
+    //获取总部知识库危大工程清单
+    AjaxResult getGmRiskBigProjList(QyzsSafeRiskBigProj qyzsSafeRiskBigProj);
 }

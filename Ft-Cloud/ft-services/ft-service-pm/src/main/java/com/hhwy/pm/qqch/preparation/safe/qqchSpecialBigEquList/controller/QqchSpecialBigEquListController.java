@@ -4,6 +4,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.common.domain.QyzsSafeSpecialEquipment;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.domain.QqchSpecialBigEquList;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.domain.vo.QqchSpecialBigEquListVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service.IQqchSpecialBigEquListService;
@@ -40,8 +41,7 @@ public class QqchSpecialBigEquListController extends BaseController {
     @Autowired
     private IQqchSpecialBigEquListService qqchSpecialBigEquListService;
 
-    @Value("${gm.back-url}")
-    private String gmUrl;
+
 
     //获取总部知识库特种设备清单
     @GetMapping("/getGmSepcialEquipmentKind")
@@ -49,10 +49,7 @@ public class QqchSpecialBigEquListController extends BaseController {
     public AjaxResult sepcialEquipmentKind(@RequestParam(value = "kind1", required = false)String kind1
                                             , @RequestParam(value = "kind2", required = false)String kind2
                                             , @RequestParam(value = "kind3", required = false)String kind3) {
-        String url = gmUrl + "/gm/qyzsSafeSpecialEquipment/list?kind1={kind1}&kind2={kind2}&kind3={kind3}";
-        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
-        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(headers);
-        return RestTemplateUtils.get(url, httpEntity, AjaxResult.class,  ObjectUtils.toMap("kind1", kind1, "kind2", kind2, "kind3", kind3));
+        return qqchSpecialBigEquListService.getGmRiskBigProjList(kind1,kind2,kind3);
     }
 
     /**

@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.safe.danger.service.impl;
 
+import com.alibaba.nacos.common.http.param.MediaType;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -13,10 +15,16 @@ import com.hhwy.pm.qqch.preparation.safe.danger.mapper.QqchDangerListMapper;
 import com.hhwy.pm.qqch.preparation.safe.danger.service.IQqchDangerListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain.QyzsSafeRiskBigProj;
+import com.hhwy.pm.utils.HttpHeadersUtils;
+import com.hhwy.pm.utils.RestTemplateUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -39,8 +47,19 @@ public class QqchDangerListServiceImpl implements IQqchDangerListService {
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
-    @Autowired
-    private CommonMapper commonMapper;
+
+    @Value("${gm.back-url}")
+    private String gmUrl;
+
+    //获取总部知识库危大工程清单
+    public AjaxResult getGmRiskBigProjList(QyzsSafeRiskBigProj qyzsSafeRiskBigProj){
+        String url = gmUrl + "/gm/qyzsSafeRiskBigProj/list";
+        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+        HttpEntity<QyzsSafeRiskBigProj> httpEntity = new HttpEntity<>(qyzsSafeRiskBigProj, headers);
+        return RestTemplateUtils.post(url, httpEntity, AjaxResult .class);
+    }
+
 
     /**
      * 列表
