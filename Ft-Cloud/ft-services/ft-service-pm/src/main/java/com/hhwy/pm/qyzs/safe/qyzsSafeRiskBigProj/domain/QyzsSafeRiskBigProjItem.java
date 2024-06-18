@@ -27,6 +27,13 @@ public class QyzsSafeRiskBigProjItem extends BaseEntity {
     @JsonProperty
     @Excel(name = "主键id")
     private Long id;
+
+    @FtExcel(name = "父级序号")
+    private String parent;
+
+    @FtExcel(name = "序号")
+    private String sortNum;
+    
     /**
      * 字段描述：附件组id
      */
