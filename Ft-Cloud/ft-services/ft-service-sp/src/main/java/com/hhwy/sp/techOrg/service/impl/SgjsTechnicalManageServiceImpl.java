@@ -494,6 +494,12 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         if(null!=info.getProjectId()){
             manage.setProjectId(info.getProjectId());
         }
+        if(null!=info.getRegionId()){
+            manage.setRegionId(info.getRegionId());
+        }
+        if(StringUtils.isNotEmpty(info.getRegionName())){
+            manage.setRegionName(info.getRegionName());
+        }
     }
 
 
@@ -535,6 +541,12 @@ public class SgjsTechnicalManageServiceImpl implements ISgjsTechnicalManageServi
         }
         if(null!=info.getProjectId()){
             manage.setProjectId(info.getProjectId());
+        }
+        if(null!=info.getRegionId()){
+            manage.setRegionId(info.getRegionId());
+        }
+        if(StringUtils.isNotEmpty(info.getRegionName())){
+            manage.setRegionName(info.getRegionName());
         }
     }
 }
