@@ -353,7 +353,7 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
         //存放所有租户的消息
         List<KcsjWarnConfig> warnList=new ArrayList<>();
         //从总部找预警接收角色 和预警消息内容
-        String url = gmUrl + "/gm/sgjsWarnConfig?warnSubject={warnSubject}";
+        String url = gmUrl + "/gm/kcsjWarnConfig?warnSubject={warnSubject}";
         logger.info("到了到了。。。。。。。");
         KcsjWarnConfig warnConfigRst = WarnCommonBusiness.getSgjsWarnConfig(url, WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
         if(null==warnConfigRst){
