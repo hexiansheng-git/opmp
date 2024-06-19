@@ -3,11 +3,14 @@ package com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
@@ -29,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.mapper.SgjsTechnicalFileBlueprintMapper;
 import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.service.ISgjsTechnicalFileBlueprintService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.util.Assert;
 
 /***
  * 功能描述: 技术文件管理 - 施工环节图纸管理
@@ -110,6 +114,20 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
             save.add(sgjsTechnicalFileBlueprint);
         }
         if (CollUtil.isNotEmpty(save)){
+            //图纸编码唯一性校验
+            List<SgjsTechnicalFileBlueprint> alreadyData = sgjsTechnicalFileBlueprintMapper.getSgjsTechnicalFileBlueprintList(new SgjsTechnicalFileBlueprintParam());
+            if (CollUtil.isNotEmpty(alreadyData)) {
+                save.addAll(alreadyData);
+                //代码唯一性校验
+                Map<String, List<SgjsTechnicalFileBlueprint>> map = save.stream().collect(Collectors.groupingBy(SgjsTechnicalFileBlueprint::getBlueprintNum));
+                List<String> repeatCode = new ArrayList<>();
+                map.forEach((k, v) -> {
+                    if (v.size() > 1) {
+                        repeatCode.add(String.valueOf(k));
+                    }
+                });
+                Assert.isTrue(CollUtil.isEmpty(repeatCode), "图纸编号不能重复, 请检查：" + String.join(",", repeatCode));
+            }
             sgjsTechnicalFileBlueprintMapper.insertSgjsTechnicalFileBlueprintList(save);
         }
         if (CollUtil.isNotEmpty(update)){
@@ -166,20 +184,23 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
 
     @Override
     public AjaxResult importData(List<Map<Integer, String>> headList, List<Map<Integer, String>> dataList) {
-        List<SgjsTechnicalFileBlueprint> result = new ArrayList<>();
+        List<SgjsTechnicalFileBlueprint> importData = new ArrayList<>();
         for (Map<Integer, String> map : dataList) {
-            String blueprintNum = map.get(0);
-            String blueprintName = map.get(1);
-            String version = map.get(2);
-            Integer blueprintCount = map.get(3) == null ? null : Integer.valueOf(map.get(3));
-            String startDatePlan = map.get(4);
-            String senderName = map.get(5);
-            String sendDate = map.get(6);
-            String receiverName = map.get(7);
-            String changeOr = map.get(8);
-            if (StrUtil.isBlank(blueprintName)) AjaxResult.error("图纸名称不能为空");
-            if (StrUtil.isBlank(senderName)) AjaxResult.error("图纸发放人不能为空");
-            if (StrUtil.isBlank(receiverName)) AjaxResult.error("图纸接收人不能为空");
+            String innerCode = map.get(0);
+            String blueprintNum = map.get(1);
+            String blueprintName = map.get(2);
+            String version = map.get(3);
+            Integer blueprintCount = map.get(4) == null ? null : Integer.valueOf(map.get(3));
+            String startDatePlan = map.get(5);
+            String senderName = map.get(6);
+            String sendDate = map.get(7);
+            String receiverName = map.get(8);
+            String changeOr = map.get(9);
+            Assert.isTrue(StrUtil.isNotBlank(innerCode), "层级编码不能为空");
+            Assert.isTrue(StrUtil.isNotBlank(blueprintNum), "图纸编码不能为空");
+            Assert.isTrue(StrUtil.isNotBlank(blueprintName), "图纸名称不能为空");
+            Assert.isTrue(StrUtil.isNotBlank(senderName), "图纸发放人不能为空");
+            Assert.isTrue(StrUtil.isNotBlank(receiverName),"图纸接收人不能为空");
             SgjsTechnicalFileBlueprint technicalFileBlueprint = new SgjsTechnicalFileBlueprint();
             technicalFileBlueprint.setBlueprintNum(StrUtil.isBlank(blueprintNum)?"":blueprintNum);
             technicalFileBlueprint.setBlueprintName(blueprintName);
@@ -190,8 +211,57 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
             technicalFileBlueprint.setSendDate(sendDate == null ? null : DateUtil.parseDate(sendDate));
             technicalFileBlueprint.setReceiverName(receiverName);
             technicalFileBlueprint.setChangeOr(StrUtil.isBlank(changeOr)? "" : changeOr.equals("是")?"1":"0");
-            result.add(technicalFileBlueprint);
+            technicalFileBlueprint.setIsAdd("1");
+            technicalFileBlueprint.setBlueprintValid("1");
+            technicalFileBlueprint.setInnerCode(innerCode);
+            importData.add(technicalFileBlueprint);
         }
-        return AjaxResult.success(result);
+        //图纸编码唯一性校验
+        Map<String, List<SgjsTechnicalFileBlueprint>> mapBlueNum = importData.stream().collect(Collectors.groupingBy(SgjsTechnicalFileBlueprint::getBlueprintNum));
+        List<String> repeatNum = new ArrayList<>();
+        mapBlueNum.forEach((k, v) -> {
+            if (v.size() > 1) {
+                repeatNum.add(String.valueOf(k));
+            }
+        });
+        Assert.isTrue(CollUtil.isEmpty(repeatNum), "图纸编号不能重复, 请检查：" + String.join(",", repeatNum));
+        //层级编码唯一性校验
+        Map<String, List<SgjsTechnicalFileBlueprint>> mapInnerCode = importData.stream().collect(Collectors.groupingBy(SgjsTechnicalFileBlueprint::getInnerCode));
+        List<String> repeatCode = new ArrayList<>();
+        mapInnerCode.forEach((k, v) -> {
+            if (v.size() > 1) {
+                repeatCode.add(String.valueOf(k));
+            }
+        });
+        Assert.isTrue(CollUtil.isEmpty(repeatCode), "层级编号不能重复, 请检查：" + String.join(",", repeatCode));
+        //
+        Map<String, SgjsTechnicalFileBlueprint> mapByInnerCode = importData.stream()
+                .filter(p -> StrUtil.isNotBlank(p.getInnerCode()))
+                .collect(Collectors.toMap(SgjsTechnicalFileBlueprint::getInnerCode, value -> value, (v1, v2) -> v1));
+        for (SgjsTechnicalFileBlueprint fileBlue : importData) {
+            fileBlue.setId(IdWorker.createId());
+            String innerCode = fileBlue.getInnerCode();
+            if (StrUtil.isBlank(innerCode)) continue;
+            if (!innerCode.contains("-")) {
+                //第一层级
+                fileBlue.setSort(Integer.valueOf(innerCode));
+                continue;
+            }
+            String parentCode = innerCode.substring(0, innerCode.lastIndexOf("-"));
+            String curentCode = innerCode.substring(innerCode.lastIndexOf("-") + 1);
+            //获取当前数据的父层级
+            SgjsTechnicalFileBlueprint parent = mapByInnerCode.get(parentCode);
+            cn.hutool.core.lang.Assert.notNull(parent, "层级码：{} 未找到父层级：{}，请确认是否存在", innerCode, parentCode);
+            //获取父层级的children，将当前记录add进去
+            List children = parent.getChildren();
+            if (CollectionUtil.isEmpty(children)) {
+                children = new ArrayList<>();
+            }
+            fileBlue.setSort(Integer.valueOf(curentCode));
+            fileBlue.setPid(parent.getId());
+            children.add(fileBlue);
+        }
+        List<SgjsTechnicalFileBlueprint> fileBlues = new ArrayList<>(mapByInnerCode.values());
+        return AjaxResult.success(TreeUtil.build(fileBlues, null));
     }
 }

@@ -32,6 +32,8 @@ import javax.validation.constraints.NotBlank;
 public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBlueprint> {
     private static final long serialVersionUID = 1L;
 
+    //层级编码
+    private String innerCode;
     @JsonProperty
     private String isAdd;
 
