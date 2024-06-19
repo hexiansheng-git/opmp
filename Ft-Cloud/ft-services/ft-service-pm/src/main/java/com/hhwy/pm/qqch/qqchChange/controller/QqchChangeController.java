@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.qqchChange.controller;
 
 import cn.hutool.core.collection.CollUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
@@ -186,42 +187,38 @@ public class QqchChangeController extends BaseController {
      */
     @PostMapping("/listener")
     public AjaxResult listener(@RequestParam("id") Long businessId){
+        logger.info("变更流程结束后触发...");
         qqchChangeService.finishFlow(businessId);
-
         /*变更完成后触发一些操作*/
-        String tenantKey = SecurityUtils.getTenantKey();
-        ThreadPoolUtil.submit(() -> {
-            //切换
-            String oldDataSource = DynamicDataSourceContextHolder.peek();
-            DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
-            try {
-                //推送设备策划数据到物设中间库
-                dataShareDevicePlanService.eachChangePush(tenantKey);
-                //进度管理 - 总体计划数据初始化
-                //判断此次变更有没有涉及到1.2.1的内容
-                QqchChange qqchChange = new QqchChange();
-                qqchChange.setId(businessId);
-                QqchChange qqchChange1 = qqchChangeService.getQqchChange(qqchChange);
-                List<QqchChangeDetail> qqchChangeDetailList = qqchChangeDetailService.getQqchChangeDetailList(qqchChange1.getId());
-                List<QqchChangeDetail> collect = qqchChangeDetailList.stream().filter(p -> p.getItemId().equals("/preliminaryPlanning/constructionPlannin/child2/list2_1")
-                        || p.getItemName().equals("1.2.1 总体进度计划")).collect(Collectors.toList());
-                if (CollUtil.isNotEmpty(collect)) {
-                    logger.info("生成进度管理基线版本");
-                    //如果变更中包含1.2.1的内容，则重新拉去1.2.1的数据到 进度管理 - 总体计划
-                    jdglData4P6Service.syncData();
-                    //进度管理 - 总体计划  设置基线版本
-                    jdglMainPlanService.updateJdglBaseMainPlan();
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-                throw new CustomException(e.getMessage());
-            }finally {
-                DynamicDataSourceContextHolder.poll();
-                DynamicDataSourceContextHolder.push(oldDataSource);
+        try {
+            //进度管理 - 总体计划数据初始化
+            QqchChange qqchChange = new QqchChange();
+            qqchChange.setId(businessId);
+            QqchChange qqchChange1 = qqchChangeService.getQqchChange(qqchChange);
+            List<QqchChangeDetail> qqchChangeDetailList = qqchChangeDetailService.getQqchChangeDetailList(qqchChange1.getId());
+            logger.info("生成进度管理基线版本: {}", JSON.toJSONString(qqchChangeDetailList));
+            //判断此次变更有没有涉及到1.2.1的内容
+            List<QqchChangeDetail> collect = qqchChangeDetailList.stream()
+                    .filter(p -> p.getItemId().equals("/preliminaryPlanning/constructionPlannin/child2/list2_1")
+                            || p.getItemName().equals("1.2.1 总体进度计划")).collect(Collectors.toList());
+            if (CollUtil.isNotEmpty(collect)) {
+                logger.info("生成进度管理基线版本");
+                //如果变更中包含1.2.1的内容，则重新拉去1.2.1的数据到 进度管理 - 总体计划
+                jdglData4P6Service.syncData();
+                //进度管理 - 总体计划  设置基线版本
+                jdglMainPlanService.updateJdglBaseMainPlan();
             }
-            return null;
-        });
-
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new CustomException(e.getMessage());
+        }
+        try {
+            //推送设备策划数据到物设中间库
+            String tenantKey = SecurityUtils.getTenantKey();
+            dataShareDevicePlanService.eachChangePush(tenantKey);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
         //推送同类项目方案
         qqchSimilarProjectSchemeService.pushData();
         return AjaxResult.success();

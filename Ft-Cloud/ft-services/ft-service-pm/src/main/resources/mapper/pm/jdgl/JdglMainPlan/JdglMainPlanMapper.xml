@@ -121,8 +121,7 @@
     <select id="getBaseMainPlanMaxVersion" resultMap="JdglMainPlanResultMap">
         SELECT *
         FROM jdgl_main_plan
-        WHERE del_flag = '0'
-          AND pt_var2 IS NOT NULL
+        WHERE pt_var2 IS NOT NULL
         ORDER BY pt_var2 DESC
         LIMIT 0,1
     </select>

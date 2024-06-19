@@ -120,7 +120,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
             List<JdglMainPlanItem> jdglMainPlanItems = BeanUtil.copyToList(itemList, JdglMainPlanItem.class);
             jdglMainPlanItems.forEach(p -> {
                 p.setMainPlanId(mainPlanId);
-//                p.setId(IdWorker.createId());
+                p.setId(IdWorker.createId());
                 p.setCreateTime(DateUtils.getNowDate());
             });
             jdglMainPlanItemService.insertJdglMainPlanItemList(jdglMainPlanItems);
@@ -134,7 +134,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
             List<JdglMainPlanItemPre> jdglMainPlanItemPres = BeanUtil.copyToList(itemList, JdglMainPlanItemPre.class);
             jdglMainPlanItemPres.forEach(p -> {
                 p.setMainPlanId(mainPlanId);
-//                p.setId(IdWorker.createId());
+                p.setId(IdWorker.createId());
                 p.setCreateTime(DateUtils.getNowDate());
             });
             iJdglMainPlanItemPreService.insertJdglMainPlanItemPreList(jdglMainPlanItemPres);

@@ -309,11 +309,12 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         //查询已存在的基线最高版本
         JdglMainPlan jdglMainPlan = jdglMainPlanMapper.getBaseMainPlanMaxVersion();
         JdglMainPlan param = new JdglMainPlan();
+        String baseVersion = "1";
         if (null == jdglMainPlan) {
-            param.setPtVar1("1");
+            param.setPtVar1(baseVersion);
         } else {
-            String ptVar2 = jdglMainPlan.getPtVar2();
-            param.setPtVar2(Integer.valueOf(ptVar2) + 1 + "");
+            baseVersion = jdglMainPlan.getPtVar2();
+            param.setPtVar2(Integer.valueOf(baseVersion) + 1 + "");
         }
         param.setId(maxVersionMainPlan.getId());
         param.setPtVar3(DateUtil.format(new Date(), "yyyy年MM月dd日 HH") + ":00");
