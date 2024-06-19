@@ -302,7 +302,7 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
     //设置基线计划版本信息
     @Override
     public void updateJdglBaseMainPlan() {
-        /*总体计划表中维护了两个版本,1.每次拉去数据的版本 2.基线的版本(pt_var2)*/
+        /*总体计划表中维护了两个版本,1.每次拉取P6数据的版本 2.另一个基线的版本(pt_var2)*/
         //查询总体计划中最新版本
         JdglMainPlan maxVersionMainPlan = jdglMainPlanMapper.getMaxVersionMainPlan();
         if (null == maxVersionMainPlan) return;

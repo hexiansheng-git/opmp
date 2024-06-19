@@ -25,6 +25,7 @@ import com.hhwy.pm.qqch.sgch.dataShare.DataShareDevicePlanService;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysMenu;
+import com.hhwy.utils.ThreadPoolUtil;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -188,9 +189,8 @@ public class QqchChangeController extends BaseController {
         qqchChangeService.finishFlow(businessId);
 
         /*变更完成后触发一些操作*/
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
         String tenantKey = SecurityUtils.getTenantKey();
-        executorService.submit(() -> {
+        ThreadPoolUtil.submit(() -> {
             //切换
             String oldDataSource = DynamicDataSourceContextHolder.peek();
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
@@ -206,6 +206,7 @@ public class QqchChangeController extends BaseController {
                 List<QqchChangeDetail> collect = qqchChangeDetailList.stream().filter(p -> p.getItemId().equals("/preliminaryPlanning/constructionPlannin/child2/list2_1")
                         || p.getItemName().equals("1.2.1 总体进度计划")).collect(Collectors.toList());
                 if (CollUtil.isNotEmpty(collect)) {
+                    logger.info("生成进度管理基线版本");
                     //如果变更中包含1.2.1的内容，则重新拉去1.2.1的数据到 进度管理 - 总体计划
                     jdglData4P6Service.syncData();
                     //进度管理 - 总体计划  设置基线版本
@@ -218,6 +219,7 @@ public class QqchChangeController extends BaseController {
                 DynamicDataSourceContextHolder.poll();
                 DynamicDataSourceContextHolder.push(oldDataSource);
             }
+            return null;
         });
 
         //推送同类项目方案

@@ -115,7 +115,7 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
     public QqchManagementPersonConfigVo synchData(QqchManagementPersonConfigVo qqchManagementPersonConfigVo) {
         //保存表格现有数据
         BigDecimal version = qqchManagementPersonConfigVo.getVersion();
-        version = VersionUtil.getVersion("qqch_management_person_config", version);
+        version = VersionUtil.getVersion("qqch_organization_list", version);
         this.insertQqchManagementPersonConfigList(qqchManagementPersonConfigVo.getQqchManagementPersonConfigList(), version);
 
         //需求：1.1的项目组织的子集为本功能的父集

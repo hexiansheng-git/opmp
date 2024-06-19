@@ -110,7 +110,12 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
 
     /**
      * 列表接口
-     * @return
+     * <p>
+     * 查询逻辑：
+     * 1获取841所有数据
+     * 2根据841中的特种设备类型去总部特种设备库查询当前设备拥有的风险信息，管控措施等内容
+     * 3返回结果，设备与设备存在的风险是1:N关系：设备名称1 风险内容1 管控措施1
+     *                                            风险内容2 管控措施2
      */
     public QqchSpecialBigEquRiskMeasureVo getQqchSpecialBigEquRiskMeasureList(QqchSpecialBigEquRiskMeasure requestParam) {
         QqchSpecialBigEquRiskMeasureVo vo = new QqchSpecialBigEquRiskMeasureVo();
@@ -130,15 +135,18 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
                 HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
                 HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(headers);
                 HashMap<String, Object> mapParam = new HashMap<>();
-                //841设备类型 等于 总部特种设备品种字段
+                //841“设备类型” 等于 总部特种设备“品种”字段
                 mapParam.put("kind3Arr", equTypeList.toArray());
                 AjaxResult ajaxResult = RestTemplateUtils.get(url, httpEntity, AjaxResult.class, mapParam);
                 Assert.isTrue(AjaxResult.isSuccess(ajaxResult), "请求总部接口失败:" + ajaxResult.get(AjaxResult.MSG_TAG));
                 Assert.isTrue(ajaxResult.get(AjaxResult.DATA_TAG) != null, "请求总部接口失败:" + ajaxResult.get(AjaxResult.MSG_TAG));
                 String jsonString = JSON.toJSONString(ajaxResult.get(AjaxResult.DATA_TAG));
                 List<QyzsSafeSpecialEquipment> qyzsSafeSpecialEquipments = JSON.parseArray(jsonString, QyzsSafeSpecialEquipment.class);
+                //总部知识库特种设备，按设备类型分组
                 Map<String, List<QyzsSafeSpecialEquipment>> collect = qyzsSafeSpecialEquipments.stream().collect(Collectors.groupingBy(QyzsSafeSpecialEquipment::getKind3));
+                //遍历841数据
                 for (QqchSpecialBigEquList p : qqchSpecialBigEquListList) {
+                    //根据特种设备类型获取当前设备的其它信息,包括风险内容，措施等
                     List<QyzsSafeSpecialEquipment> qyzsSafeSpecialEquipments1 = collect.get(p.getEquType());
                     if (CollUtil.isEmpty(qyzsSafeSpecialEquipments1)) {
                         QqchSpecialBigEquRiskMeasure qqchSpecialBigEquRiskMeasure = new QqchSpecialBigEquRiskMeasure();
@@ -146,6 +154,7 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
                         result.add(qqchSpecialBigEquRiskMeasure);
                         continue;
                     }
+                    //遍历当前设备类型下的所有风险信息
                     for (QyzsSafeSpecialEquipment qyzsSafeSpecialEquipment : qyzsSafeSpecialEquipments1) {
                         QqchSpecialBigEquRiskMeasure qqchSpecialBigEquRiskMeasure = new QqchSpecialBigEquRiskMeasure();
                         qqchSpecialBigEquRiskMeasure.setControlMeasures(qyzsSafeSpecialEquipment.getControlMeasure());
