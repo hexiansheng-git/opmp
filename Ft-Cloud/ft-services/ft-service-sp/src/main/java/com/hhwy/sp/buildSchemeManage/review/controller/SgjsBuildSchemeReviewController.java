@@ -18,6 +18,8 @@ import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.core.system.SystemApiService;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
@@ -123,6 +125,7 @@ public class SgjsBuildSchemeReviewController extends BaseController {
      */
     @PreAuthorize(hasPermi = "sgjsBuildSchemeReview:save")
     @PostMapping("/save")
+    @CustomLogger(title = "施工技术-施工方案管理-施工方案评审", name = "施工方案评审保存" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody SgjsBuildSchemeReview review) {
         Long id = sgjsBuildSchemeReviewService.save(review);
         return AjaxResult.success(id);
@@ -152,6 +155,7 @@ public class SgjsBuildSchemeReviewController extends BaseController {
      * @return
      */
     @GetMapping("/sync")
+    @CustomLogger(title = "施工技术-施工方案管理-施工方案评审", name = "同步" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult sync() {
         String remind = sgjsBuildSchemeReviewService.sync();
         return AjaxResult.success(remind);
@@ -162,6 +166,7 @@ public class SgjsBuildSchemeReviewController extends BaseController {
      * @return
      */
     @GetMapping("/turnDown")
+    @CustomLogger(title = "施工技术-施工方案管理-施工方案评审", name = "施工方案评审驳回" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult turnDown(Long reviewId) {
         sgjsBuildSchemeReviewService.turnDown(reviewId);
         return AjaxResult.success();
@@ -189,12 +194,14 @@ public class SgjsBuildSchemeReviewController extends BaseController {
     }
 
     @GetMapping("/submit")
+    @CustomLogger(title = "施工技术-施工方案管理-施工方案评审", name = "施工方案评审提交" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult submitBuildSchemeReviewProcess(@RequestParam("id") Long id){
         sgjsBuildSchemeReviewService.submitBuildSchemeReviewProcess(id);
         return AjaxResult.success();
     }
 
     @GetMapping("/listener")
+    @CustomLogger(title = "施工技术-施工方案管理-施工方案评审", name = "施工方案评审流程结束监听" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult updateBuildSchemeReviewProcess(@RequestParam("id") Long id){
         sgjsBuildSchemeReviewService.updateBuildSchemeReviewProcess(id);
         return AjaxResult.success();
@@ -213,6 +220,7 @@ public class SgjsBuildSchemeReviewController extends BaseController {
      * @param id
      */
     @PostMapping("/deleteById")
+    @CustomLogger(title = "施工技术-施工方案管理-施工方案评审", name = "施工方案评审删除" ,businessType = CustomBusinessType.DELETE)
     public AjaxResult deleteById(Long id){
         sgjsBuildSchemeReviewService.deleteById(id);
         return AjaxResult.success("删除成功！");
