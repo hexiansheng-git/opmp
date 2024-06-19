@@ -61,6 +61,8 @@ public class QqchPostSettingController extends BaseController {
             QqchPostSetting temp = list.get(i);
             temp.setProjectId(projectInfo.getProjectId());
             temp.setProjectName(projectInfo.getProjectName());
+            temp.setRegionId(projectInfo.getRegionId());
+            temp.setRegionName(projectInfo.getRegionName());
         }
         return list;
     }
