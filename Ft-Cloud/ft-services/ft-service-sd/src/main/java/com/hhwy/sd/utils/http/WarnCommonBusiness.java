@@ -1,6 +1,5 @@
 package com.hhwy.sd.utils.http;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.SpringUtils;
@@ -9,6 +8,8 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sd.planProcess.kcsjPlanProcess.domain.KcsjWarnConfig;
 import com.hhwy.system.api.domain.SysUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.Assert;
@@ -19,6 +20,8 @@ import java.util.List;
 public class WarnCommonBusiness {
 
     static SystemServiceApi systemServiceApi = SpringUtils.getBean(SystemServiceApi.class);
+
+    private static Logger logger= LoggerFactory.getLogger(WarnCommonBusiness.class);
 
     /*
      * 功能描述: 从总部获取预警配置信息
@@ -52,9 +55,11 @@ public class WarnCommonBusiness {
         Assert.isTrue(code.equals(200), "从总部获取预警配置信息失败");
         String warnInfo = JSON.toJSONString(ajaxResul.get("data"));
         Assert.isTrue(StrUtil.isNotBlank(warnInfo), "获取" + warnSubject + "预警配置无数据");
-        List<KcsjWarnConfig> sgjsWarnConfigs = JSON.parseArray(warnInfo, KcsjWarnConfig.class);
-        if (CollUtil.isEmpty(sgjsWarnConfigs)) return null;
-        return sgjsWarnConfigs.get(0);
+        KcsjWarnConfig config = JSON.parseObject(warnInfo, KcsjWarnConfig.class);
+        if(null==config){
+            return null;
+        }
+        return config;
     }
 
     /*
@@ -67,7 +72,10 @@ public class WarnCommonBusiness {
      * 时间: 2024/4/2
      */
     public static String warnMessageHandle(String warnContent, String projectName, String warnSubject, String warnRule) {
-        return warnContent.replace("【项目名称】", projectName)
+        logger.info("项目名称【{}】,预警项名称【{}】,预警规则【{}】",projectName,warnSubject,warnRule);
+        String replace = warnContent.replace("【项目名称】", projectName)
                 .replace("【预警项名称】", warnSubject).replace("【预警规则】", warnRule);
+        logger.info("warnContent---【{}】,,,,replace---->【{}】",warnContent,replace);
+        return replace;
     }
 }

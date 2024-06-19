@@ -29,7 +29,6 @@ import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.math3.distribution.MixtureMultivariateNormalDistribution;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,15 +38,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import static com.hhwy.constant.WarnItem.KCSJ_PLAN_PROCESS;
 
 /**
  * @author cjh
@@ -356,6 +350,7 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
         String url = gmUrl + "/gm/kcsjWarnConfig?warnSubject={warnSubject}";
         logger.info("到了到了。。。。。。。");
         KcsjWarnConfig warnConfigRst = WarnCommonBusiness.getSgjsWarnConfig(url, WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
+        logger.info("warnConfigRst---->【{}】",warnConfigRst);
         if(null==warnConfigRst){
             logger.error("未找到总部版预警配置信息");
             return AjaxResult.error("未找到总部版预警配置信息");
@@ -393,6 +388,7 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
                         warn.setWarnScopeType("3");
                         warn.setWarnScope(warnConfigRst.getWarnObject());
                         String warnContent = WarnCommonBusiness.warnMessageHandle(warnConfigRst.getWarnMassage(), tenant.getTenantName(), warnConfigRst.getWarnSubject(), warnConfigRst.getWarnRule());
+                        logger.info("wwww--->【{}】",warnContent);
                         warn.setWarnContent(warnContent);
                         warn.setWarnUrl(warnUrl);
                         warn.setTenantKey(tenantKey);
@@ -451,7 +447,7 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
                 record.setProjectName(valueList.get(0).getPrjName());
                 record.setWarnContent(valueList.get(0).getWarnMassage());
                 record.setWarnUserId(e.getUserId()+"");
-                record.setWarnUser(e.getUserName());
+                record.setWarnUser(e.getNickName());
                 record.setWarnSubject(valueList.get(0).getWarnSubject());
                 record.setWarnTime(DateUtils.getNowDate());
                 record.setStatus("1");
