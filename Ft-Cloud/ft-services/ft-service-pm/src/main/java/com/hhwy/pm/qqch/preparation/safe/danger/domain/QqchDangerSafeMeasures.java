@@ -174,10 +174,10 @@ public class QqchDangerSafeMeasures extends BaseEntity {
     @Excel(name = "是否已同步过主数据")
     private String ptVar2;
     /**
-     * 字段描述：预留字段3
+     * 字段描述：预留字段3  DecisionCondition
      */
     @JsonProperty
-    @Excel(name = "预留字段3")
+    @Excel(name = "判定条件")
     private String ptVar3;
     /**
      * 字段描述：预留字段4

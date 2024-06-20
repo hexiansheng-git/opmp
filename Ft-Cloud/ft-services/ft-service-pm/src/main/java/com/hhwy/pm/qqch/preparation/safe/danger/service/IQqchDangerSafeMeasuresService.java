@@ -25,4 +25,6 @@ public interface IQqchDangerSafeMeasuresService {
      * @return
      */
     void batchSave(QqchDangerSafeMeasuresVo qqchDangerSafeMeasuresVo);
+    
+    void sync(BigDecimal version);
 }

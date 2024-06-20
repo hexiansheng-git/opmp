@@ -175,5 +175,5 @@ public class QyzsSafeRiskBigProj extends BaseEntity {
     @JsonProperty
     private String isAdd;
 
-    private List<QyzsSafeRiskBigProjItem> qyzsSafeRiskBigProjItemList;
+    private List<QyzsSafeRiskBigProjItem> children;
 }

@@ -150,16 +150,16 @@ public class QqchDangerSafeMeasuresDetail extends BaseEntity {
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：风险事件
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
+    @Excel(name = "风险事件")
     private String ptVar1;
     /**
-     * 字段描述：预留字段2
+     * 字段描述：可能结果
      */
     @JsonProperty
-    @Excel(name = "预留字段2")
+    @Excel(name = "可能结果")
     private String ptVar2;
     /**
      * 字段描述：预留字段3

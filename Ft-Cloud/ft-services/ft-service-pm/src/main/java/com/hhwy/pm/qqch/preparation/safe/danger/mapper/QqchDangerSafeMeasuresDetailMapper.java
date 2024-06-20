@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.safe.danger.mapper;
 import com.hhwy.pm.qqch.preparation.safe.danger.domain.QqchDangerSafeMeasuresDetail;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * @author zhenglili
@@ -31,4 +32,7 @@ public interface QqchDangerSafeMeasuresDetailMapper {
 
     int deleteQqchDangerSafeMeasuresDetailByPks(
         @Param("qqchDangerSafeMeasuresDetailPkList") List<Long> qqchDangerSafeMeasuresDetailPkList);
+
+    @Update("update `qqch_danger_safe_measures_detail` set del_flag = 1 ")
+    int deleteAll();
 }

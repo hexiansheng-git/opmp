@@ -8,6 +8,7 @@ import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +52,15 @@ public class QqchDangerSafeMeasuresController extends BaseController {
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchDangerSafeMeasuresVo qqchDangerSafeMeasuresVo) {
         qqchDangerSafeMeasuresService.batchSave(qqchDangerSafeMeasuresVo);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/sync")
+    @CustomLogger(title = "前期策划-前期策划编制-安全策划-8.3 危大工程管控策划", name = "8.3.2 危大工程安全技术措施" 
+            ,businessType = CustomBusinessType.SAVE)
+    public AjaxResult sync(@RequestBody QqchDangerSafeMeasuresVo qqchDangerSafeMeasuresVo) {
+        Assert.notNull(qqchDangerSafeMeasuresVo.getVersion(), "version不能为空");
+        qqchDangerSafeMeasuresService.sync(qqchDangerSafeMeasuresVo.getVersion());
         return AjaxResult.success();
     }
 }
