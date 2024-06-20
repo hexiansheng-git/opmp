@@ -137,24 +137,15 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
         BigDecimal version = VersionUtil.getVersion("qqch_special_big_equ_list",qqchSpecialBigEquList.getVersion());
         //查询7.6.1数据
         SbchEquipmentSpecial equipmentSpecial = equipmentSpecialService.getList(version);
-        List<SbchEquipmentSpecialDetails> detailsList = equipmentSpecial.getDetailsList();
+        List<SbchEquipmentSpecialDetails> detailsList761 = equipmentSpecial.getDetailsList();
         //查询841设备
         List<QqchSpecialBigEquList> qqchSpecialBigEquListList = qqchSpecialBigEquListMapper.getQqchSpecialBigEquListList(qqchSpecialBigEquList);
-//        List<QqchInformationSheet> qqchInformationSheetList = qqchInformationSheetService.getQqchInformationSheetList(new QqchInformationSheet());
-//        Map<Long, List<QqchInformationSheet>> sheetMap = qqchInformationSheetList.stream().collect(Collectors.groupingBy(QqchInformationSheet::getOutId));
-//        List<QqchTransitionRecord> qqchTransitionRecordList = qqchTransitionRecordService.getQqchTransitionRecordList(new QqchTransitionRecord());
-//        Map<Long, List<QqchTransitionRecord>> recordMap = qqchTransitionRecordList.stream().collect(Collectors.groupingBy(QqchTransitionRecord::getOutId));
-//        //填充附件信息
-//        for (QqchSpecialBigEquList specialBigEquList : qqchSpecialBigEquListList) {
-//            specialBigEquList.setQqchInformationSheetList(sheetMap.get(specialBigEquList.getId()));
-//            specialBigEquList.setQqchTransitionRecordList(recordMap.get(specialBigEquList.getId()));
-//        }
+        Map<String, List<QqchSpecialBigEquList>> map841 = qqchSpecialBigEquListList.stream().collect(Collectors.groupingBy(QqchSpecialBigEquList::getPtVar1));
         //将761新增的数据追加到841中
-        Map<String, List<QqchSpecialBigEquList>> collect = qqchSpecialBigEquListList.stream().collect(Collectors.groupingBy(QqchSpecialBigEquList::getPtVar1));
         List<QqchSpecialBigEquList> addList = new ArrayList<>();
         //根据ptvar1获取已同步过的数据，更新管理编号
-        collect.forEach((k,v) ->{
-            List<SbchEquipmentSpecialDetails> detailsHave = detailsList.stream().filter(equ -> equ.getPtVar1().equals(k)).collect(Collectors.toList());
+        map841.forEach((k,v) ->{
+            List<SbchEquipmentSpecialDetails> detailsHave = detailsList761.stream().filter(equ -> equ.getPtVar1().equals(k)).collect(Collectors.toList());
             if (detailsHave != null && detailsHave.size() > 0) {
                 v.forEach(plan -> {
                     plan.setManageNum(detailsHave.get(0).getManageCode());
@@ -163,9 +154,9 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
             };
         });
 
-        for (SbchEquipmentSpecialDetails bean : detailsList ) {
+        for (SbchEquipmentSpecialDetails bean : detailsList761 ) {
             String idOne = bean.getPtVar1();//唯一标识
-            if (!collect.containsKey(idOne)) {
+            if (!map841.containsKey(idOne)) {
                 QqchSpecialBigEquList equList = new QqchSpecialBigEquList();
                 equList.setEquName(bean.getMaterialName());
                 equList.setSpec(bean.getMaterialSpec());
@@ -181,13 +172,6 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
                 equList.setPtVar1(idOne);
                 addList.add(equList);
             }
-//            else {
-//                List<QqchSpecialBigEquList> qqchSpecialBigEquLists = collect.get(idOne);
-//                qqchSpecialBigEquLists.stream().forEach(plan -> {
-//                    plan.setManageNum(bean.getManageCode());
-//                });
-//                addList.addAll(qqchSpecialBigEquLists);
-//            }
         }
 //        时间排序
         addList.sort((t1, t2) -> t2.getUpdateTime().compareTo(t1.getUpdateTime()));
@@ -256,8 +240,6 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;
         }
-        List<QqchInformationSheet> informationSheets = new ArrayList<>();
-        List<QqchTransitionRecord>  transitionRecords= new ArrayList<>();
         for (QqchSpecialBigEquList specialBigEquList : qqchSpecialBigEquListList) {
             specialBigEquList.setId(IdWorker.createId());
             specialBigEquList.setValid(valid);
@@ -265,28 +247,6 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
             specialBigEquList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             specialBigEquList.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             specialBigEquList.setCreateTime(DateUtils.getNowDate());
-//            List<QqchInformationSheet> qqchInformationSheetList = specialBigEquList.getQqchInformationSheetList();
-//            List<QqchTransitionRecord> qqchTransitionRecordList = specialBigEquList.getQqchTransitionRecordList();
-//            if(CollectionUtils.isNotEmpty(qqchInformationSheetList)){
-//                for (QqchInformationSheet qqchInformationSheet : qqchInformationSheetList) {
-//                    qqchInformationSheet.setId(IdWorker.createId());
-//                    qqchInformationSheet.setOutId(specialBigEquList.getId());
-//                    EntityUtils.setCreateUpdateInfo(qqchInformationSheetList);
-//                    informationSheets.add(qqchInformationSheet);
-//                }
-//                List<QqchInformationSheet> sheetList = informationSheets.stream().distinct().collect(Collectors.toList());
-//                qqchInformationSheetService.insertQqchInformationSheetList(sheetList);
-//            }
-//            if(CollectionUtils.isNotEmpty(qqchTransitionRecordList)){
-//                for (QqchTransitionRecord transitionRecord : qqchTransitionRecordList) {
-//                    transitionRecord.setId(IdWorker.createId());
-//                    transitionRecord.setOutId(specialBigEquList.getId());
-//                    EntityUtils.setCreateUpdateInfo(transitionRecord);
-//                    transitionRecords.add(transitionRecord);
-//                }
-//                List<QqchTransitionRecord> recordList = transitionRecords.stream().distinct().collect(Collectors.toList());
-//                qqchTransitionRecordService.insertQqchTransitionRecordList(recordList);
-//            }
         }
         qqchSpecialBigEquListMapper.insertQqchSpecialBigEquListList(qqchSpecialBigEquListList);
     }
