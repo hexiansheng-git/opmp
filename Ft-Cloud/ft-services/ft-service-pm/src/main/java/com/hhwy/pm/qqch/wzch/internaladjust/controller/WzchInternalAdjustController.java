@@ -65,7 +65,7 @@ public class WzchInternalAdjustController extends BaseController {
      */
     @GetMapping("baseInfo")
     @CustomLogger(title = "前期策划编制-6.2组织供应策划", name = "6.2.4内部调剂材料策划" ,businessType = CustomBusinessType.SELECT)
-    public AjaxResult baseInfo(@RequestParam(required = false) WzchInternalAdjustDTO dto) {
+    public AjaxResult baseInfo(WzchInternalAdjustDTO dto) {
         return AjaxResult.success(wzchInternalAdjustService.baseInfo(dto==null?new WzchInternalAdjustDTO():dto));
     }
 

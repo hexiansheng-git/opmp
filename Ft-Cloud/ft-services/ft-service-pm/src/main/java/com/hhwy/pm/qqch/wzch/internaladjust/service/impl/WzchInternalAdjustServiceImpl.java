@@ -499,7 +499,8 @@ public class WzchInternalAdjustServiceImpl implements IWzchInternalAdjustService
             String code = genCodeService.getCode(CodeEnum.EQU_SPECIALCONTROLPLAN);
             code += genCodeService.fillString(1, 2);
             dto.setAdjustCode(code);
-            dto.setVersionCode(new BigDecimal("1.0"));dto.setValid("0");
+//            dto.setVersionCode(new BigDecimal("1.0"));
+            dto.setValid("0");
             // 设置新增信息
             EntityUtils.setCreateUpdateInfo(dto);
             dto.setId(IdWorker.createId());

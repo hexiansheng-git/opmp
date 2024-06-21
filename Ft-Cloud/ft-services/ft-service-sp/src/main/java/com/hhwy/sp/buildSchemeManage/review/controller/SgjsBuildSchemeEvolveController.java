@@ -105,9 +105,24 @@ public class SgjsBuildSchemeEvolveController extends BaseController {
         }else {
             evolveList = sgjsBuildSchemeEvolveService.getListByIds(ids);
         }
+        //格式化方案类型
+        List<SysDictData> list = systemApiService.selectDictDataByType("scheme_type_all");
+        Map<Long,SysDictData> dictMap = list.stream().collect(Collectors.toMap(r->r.getDictDataId(), r->r));
+        Map<String,String> map = list.stream().collect(
+                Collectors.toMap(r->{
+                            String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":dictMap.get(r.getParentId()).getDictValue()+",";
+                            return parent+r.getDictValue();
+                        }
+                        , r->{
+                            String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":dictMap.get(r.getParentId()).getDictLabel()+"/";
+                            return parent+r.getDictLabel();
+                        })
+        );
         if(CollectionUtils.isNotEmpty(evolveList)){
             for (SgjsBuildSchemeEvolve evolve : evolveList) {
                 evolve.setInventoryApprovalTime(lastValidScheme.getUpdateTime());
+                String fmtStr = ObjectUtils.nvlString(map.get(evolve.getSchemeType()),evolve.getSchemeType());
+                evolve.setSchemeType(fmtStr);
             }
         }
         FtExcelUtil<SgjsBuildSchemeEvolve> util = new FtExcelUtil<>(SgjsBuildSchemeEvolve.class);
