@@ -64,13 +64,14 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      */
     @JsonProperty
     @Excel(name = "图纸编号")
+    @NotBlank(message = "图纸编号不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String blueprintNum;
     /**
      * 字段描述：图纸名称
      */
     @JsonProperty
     @Excel(name = "图纸名称")
-    @NotBlank(message = "图纸名称不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
+    @NotBlank(message = "最末层级图纸名称不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String blueprintName;
     /**
      * 字段描述：版本
@@ -112,7 +113,7 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      */
     @JsonProperty
     @Excel(name = "图纸发放人")
-    @NotBlank(message = "图纸发放人不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
+    @NotBlank(message = "最末层级图纸发放人不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String senderName;
     /**
      * 字段描述：图纸发放日期
@@ -131,7 +132,7 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      */
     @JsonProperty
     @Excel(name = "图纸接收人")
-    @NotBlank(message = "图纸接收人不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
+    @NotBlank(message = "最末层级图纸接收人不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String receiverName;
     /**
      * 字段描述：是否变更
@@ -144,7 +145,7 @@ public class SgjsTechnicalFileBlueprint extends TreeNode<SgjsTechnicalFileBluepr
      */
     @JsonProperty
     @Excel(name = "图纸有效性")
-    @NotBlank(message = "图纸有效性不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
+    @NotBlank(message = "最末层级图纸有效性不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String blueprintValid;
     /**
      * 字段描述：图纸是否回收

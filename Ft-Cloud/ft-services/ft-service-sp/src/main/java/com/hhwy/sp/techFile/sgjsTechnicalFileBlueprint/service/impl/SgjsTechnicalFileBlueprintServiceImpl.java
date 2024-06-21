@@ -91,11 +91,12 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
             doSendGm();
             return;
         }
-        //校验数据必填
-        JyDetailsUtil.jyDetails(sgjsTechnicalFileBlueprintList, ValidationGroups.Save.class);
+        List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprints = TreeUtil.treeToListWithoutNewId(sgjsTechnicalFileBlueprintList);
+        //校验数据必填, 只校验叶子层级
+        List<SgjsTechnicalFileBlueprint> leafList = sgjsTechnicalFileBlueprints.stream().filter(p -> p.getLeaf().equals("1")).collect(Collectors.toList());
+        JyDetailsUtil.jyDetails(leafList, ValidationGroups.Save.class);
         List<SgjsTechnicalFileBlueprint> save = new ArrayList<>();
         List<SgjsTechnicalFileBlueprint> update = new ArrayList<>();
-        List<SgjsTechnicalFileBlueprint> sgjsTechnicalFileBlueprints = TreeUtil.treeToListWithoutNewId(sgjsTechnicalFileBlueprintList);
         ProjectDto projectDto = pmServiceApi.getProjectDto();
         for (SgjsTechnicalFileBlueprint sgjsTechnicalFileBlueprint : sgjsTechnicalFileBlueprints) {
             String isAdd = sgjsTechnicalFileBlueprint.getIsAdd();
@@ -117,9 +118,9 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
             //图纸编码唯一性校验
             List<SgjsTechnicalFileBlueprint> alreadyData = sgjsTechnicalFileBlueprintMapper.getSgjsTechnicalFileBlueprintList(new SgjsTechnicalFileBlueprintParam());
             if (CollUtil.isNotEmpty(alreadyData)) {
-                save.addAll(alreadyData);
+                alreadyData.addAll(save);
                 //代码唯一性校验
-                Map<String, List<SgjsTechnicalFileBlueprint>> map = save.stream().collect(Collectors.groupingBy(SgjsTechnicalFileBlueprint::getBlueprintNum));
+                Map<String, List<SgjsTechnicalFileBlueprint>> map = alreadyData.stream().collect(Collectors.groupingBy(SgjsTechnicalFileBlueprint::getBlueprintNum));
                 List<String> repeatCode = new ArrayList<>();
                 map.forEach((k, v) -> {
                     if (v.size() > 1) {
