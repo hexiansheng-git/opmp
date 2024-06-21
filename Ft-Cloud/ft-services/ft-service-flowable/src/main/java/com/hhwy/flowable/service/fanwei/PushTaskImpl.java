@@ -184,7 +184,21 @@ public class PushTaskImpl  implements TaskProcessor {
 
     @Override
     public void remove(String taskId) {
+        //测试环境网络不通
+        if(sendFlag){
+            //创建已办
+            Map<String, Object> paramDB = this.getCreateInfo(taskId);
+            Map<String, String> delParam = new HashMap<>();
+            delParam.put("syscode","PM");
+            delParam.put("flowid",ObjectUtil.toString(paramDB.get("flowid")));
 
+            log.info("一公局门户!!!!!!!!!!!!!!!!!待办撤回:"+taskId+":"+JSON.toJSONString(delParam));
+            //一公局门户
+            String resDB= HttpRequest.post(deleteUrl)
+                    .header("apikey",apikey)
+                    .body(JSON.toJSONString(paramDB)).execute().body();
+            log.info("一公局门户*****************撤回返回数据:"+taskId+":"+resDB);
+        }
     }
     //撤回是流程调用
 //    {
