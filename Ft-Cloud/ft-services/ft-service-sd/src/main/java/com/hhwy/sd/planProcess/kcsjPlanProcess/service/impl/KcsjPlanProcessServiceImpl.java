@@ -403,6 +403,7 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
                         config.setPrjCode(tenantKey);
                         config.setPrjName(tenant.getTenantName());
                         config.setWarnMassage(warnConfigRst.getWarnMassage());
+                        config.setPtVar1(warnContent);
                         warnList.add(config);
                         break;
                     }
@@ -445,7 +446,7 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
                 KcsjWarnRecord record=new KcsjWarnRecord();
                 record.setProjectCode(valueList.get(0).getPrjCode());
                 record.setProjectName(valueList.get(0).getPrjName());
-                record.setWarnContent(valueList.get(0).getWarnMassage());
+                record.setWarnContent(valueList.get(0).getPtVar1());
                 record.setWarnUserId(e.getUserId()+"");
                 record.setWarnUser(e.getNickName());
                 record.setWarnSubject(valueList.get(0).getWarnSubject());

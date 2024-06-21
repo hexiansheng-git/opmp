@@ -224,6 +224,10 @@ public class KcsjOrganManageServiceImpl implements IKcsjOrganManageService {
             info.setHeadCount(num);
             info.setCreateTime(DateUtils.getNowDate());
             info.setCreateUser(SecurityUtils.getSysUser().getNickName());
+            info.setProjectId(Long.valueOf(ObjectUtils.toString(object.get("projectId"))));
+            info.setProjectName(ObjectUtils.toString(object.get("projectName")));
+            info.setRegionId(Long.valueOf(ObjectUtils.toString(object.get("regionId"))));
+            info.setRegionName(ObjectUtils.toString(object.get("regionName")));
             list.add(info);
         }
         if(CollectionUtils.isNotEmpty(list)) {
