@@ -116,16 +116,19 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
         Map<Long, Object> idmap = new HashMap<>();
         for(SysUser item:userList){
             if(!idmap.containsKey(item.getUserId()) &&  item.getUserId()!=1){
+                idmap.put(item.getUserId(),1);
                 list.add(item);
             }
         }
         for(SysUser item:roleUserList){
             if(!idmap.containsKey(item.getUserId()) &&  item.getUserId()!=1){
+                idmap.put(item.getUserId(),1);
                 list.add(item);
             }
         }
         for(SysUser item:partUserList){
             if(!idmap.containsKey(item.getUserId()) &&  item.getUserId()!=1){
+                idmap.put(item.getUserId(),1);
                 list.add(item);
             }
         }
