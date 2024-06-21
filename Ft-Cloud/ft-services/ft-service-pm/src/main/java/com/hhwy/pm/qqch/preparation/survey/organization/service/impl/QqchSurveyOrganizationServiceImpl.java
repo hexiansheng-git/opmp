@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -15,6 +16,7 @@ import com.hhwy.pm.qqch.preparation.survey.organization.mapper.QqchSurveyOrganiz
 import com.hhwy.pm.qqch.preparation.survey.organization.service.IQqchSurveyOrganizationService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.io.IOUtils;
@@ -42,6 +44,8 @@ public class QqchSurveyOrganizationServiceImpl implements IQqchSurveyOrganizatio
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private IXmslProjectBasicInfoService projectBasicInfoService;
 
 
     /**
@@ -109,6 +113,7 @@ public class QqchSurveyOrganizationServiceImpl implements IQqchSurveyOrganizatio
 
     private int insertQqchSurveyOrganizationList(List<QqchSurveyOrganization> qqchSurveyOrganizationList, BigDecimal version) {
         List<QqchSurveyOrganization> insertList = TreeUtil.treeToList(qqchSurveyOrganizationList);
+        ProjectDto projectDto = projectBasicInfoService.getProjectDto();
         for (QqchSurveyOrganization qqchSurveyOrganization : insertList) {
             qqchSurveyOrganization.setVersion(version);
             if(version.compareTo(BigDecimal.ONE) == 0){
@@ -120,6 +125,10 @@ public class QqchSurveyOrganizationServiceImpl implements IQqchSurveyOrganizatio
             if(qqchSurveyOrganization.getPid()==null){
                 qqchSurveyOrganization.setPid(0l);
             }
+            qqchSurveyOrganization.setProjectId(projectDto.getProjectId());
+            qqchSurveyOrganization.setProjectName(projectDto.getProjectName());
+            qqchSurveyOrganization.setRegionId(projectDto.getRegionId());
+            qqchSurveyOrganization.setRegionName(projectDto.getRegionName());
         }
         return qqchSurveyOrganizationMapper.insertQqchSurveyOrganizationList(insertList);
     }
