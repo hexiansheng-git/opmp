@@ -199,9 +199,9 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
             String changeOr = map.get(9);
             Assert.isTrue(StrUtil.isNotBlank(innerCode), "层级编码不能为空");
             Assert.isTrue(StrUtil.isNotBlank(blueprintNum), "图纸编码不能为空");
-            Assert.isTrue(StrUtil.isNotBlank(blueprintName), "图纸名称不能为空");
-            Assert.isTrue(StrUtil.isNotBlank(senderName), "图纸发放人不能为空");
-            Assert.isTrue(StrUtil.isNotBlank(receiverName),"图纸接收人不能为空");
+//            Assert.isTrue(StrUtil.isNotBlank(blueprintName), "图纸名称不能为空");
+//            Assert.isTrue(StrUtil.isNotBlank(senderName), "图纸发放人不能为空");
+//            Assert.isTrue(StrUtil.isNotBlank(receiverName),"图纸接收人不能为空");
             SgjsTechnicalFileBlueprint technicalFileBlueprint = new SgjsTechnicalFileBlueprint();
             technicalFileBlueprint.setBlueprintNum(StrUtil.isBlank(blueprintNum)?"":blueprintNum);
             technicalFileBlueprint.setBlueprintName(blueprintName);
