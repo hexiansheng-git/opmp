@@ -271,6 +271,7 @@
         #{item.ptVar2},
         #{item.ptVar3},
         #{item.ptVar4},
+        #{item.ptVar5},
         #{item.riskProjType},
       </trim>
     </foreach>
