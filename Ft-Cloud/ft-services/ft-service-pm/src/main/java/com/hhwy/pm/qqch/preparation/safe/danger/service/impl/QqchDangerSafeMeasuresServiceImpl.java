@@ -273,11 +273,11 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
      * @return {危大工程类型-判定条件: [QyzsSafeRiskBigProjItem] }
      */
     private JSONObject gmProjItemList(Set<String> typeStrSet){
-        gmUrl = "http://10.0.1.118:10010/ftCenter/basic-api/gm/qyzsSafeRiskBigProj/getChildList";
-//        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
-        Map map = new HashMap();
-        map.put(Constant.AUTHORIZATION,"8780c2ea-d64e-4f94-94a4-c0e31897e62d");
-        map.put(Constant.TENANT_KEY,"master");
+//        gmUrl = "http://10.0.1.118:10010/ftCenter/basic-api/gm/qyzsSafeRiskBigProj/getChildList";
+        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
+        Map map = new HashMap(headers);
+//        map.put(Constant.AUTHORIZATION,"8780c2ea-d64e-4f94-94a4-c0e31897e62d");
+//        map.put(Constant.TENANT_KEY,"master");
         StringEntity stringEntity = new StringEntity(JSONObject.toJSONString(typeStrSet), ContentType.APPLICATION_JSON);
         Object string = HttpClientUtil.send(gmUrl, HttpClientUtil.METHOD_POST, null, map, stringEntity, null);
         JSONObject resultObj = JSONObject.parseObject(string.toString());
