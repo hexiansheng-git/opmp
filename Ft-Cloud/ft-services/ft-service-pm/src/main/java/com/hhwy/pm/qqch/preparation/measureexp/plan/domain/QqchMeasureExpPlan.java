@@ -184,6 +184,11 @@ public class QqchMeasureExpPlan extends CompileEntity<QqchMeasureExpPlan> {
     @JsonProperty
     @FtExcel(name = "预留字段5")
     private String ptVar5;
+    
+    private Long projectId;
+    private String projectName;
+    private Long regionId;
+    private String regionName;
 
 
     public static void main(String[] args) {

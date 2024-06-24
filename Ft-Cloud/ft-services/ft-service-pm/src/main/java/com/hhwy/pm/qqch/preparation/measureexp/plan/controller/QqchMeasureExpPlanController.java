@@ -8,6 +8,9 @@ import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.domain.QqchMeasureExpPlan;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.service.IQqchMeasureExpPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -36,6 +39,8 @@ public class QqchMeasureExpPlanController extends BaseController {
 
     @Autowired
     private IQqchReviewService reviewService;
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
 
 
 
@@ -66,7 +71,19 @@ public class QqchMeasureExpPlanController extends BaseController {
     public AjaxResult feignList() {
         QqchMeasureExpPlan qqchMeasureExpPlanParam = new QqchMeasureExpPlan();
         qqchMeasureExpPlanParam.setDataType("1"); //1-测量管理计划 2-实验管理计划
-        return this.getQqchMeasureExpPlanList(qqchMeasureExpPlanParam);
+        AjaxResult result = this.getQqchMeasureExpPlanList(qqchMeasureExpPlanParam);
+        CompileEntity compileEntity = (CompileEntity)result.get(AjaxResult.DATA_TAG);
+        List<QqchMeasureExpPlan> qqchMeasureExpPlanList = (List<QqchMeasureExpPlan>)compileEntity.getDto(); 
+        //填充项目、区域id&Code
+        ProjectBasicInfo projectBasicInfo = xmslProjectBasicInfoService.projectInfo();
+        for (int i = 0; i < qqchMeasureExpPlanList.size(); i++) {
+            QqchMeasureExpPlan temp = qqchMeasureExpPlanList.get(i);
+            temp.setProjectId(projectBasicInfo.getProjectId());
+            temp.setProjectName(projectBasicInfo.getProjectName());
+            temp.setRegionId(projectBasicInfo.getRegionId());
+            temp.setRegionName(projectBasicInfo.getRegionName());
+        }
+        return result;
     }
 
     /**
