@@ -7,6 +7,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.danger.domain.vo.QqchDangerListVo;
 import com.hhwy.pm.qqch.preparation.safe.danger.service.IQqchDangerListService;
 import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain.QyzsSafeRiskBigProj;
+import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain.QyzsSafeRiskBigProjItem;
 import com.hhwy.pm.utils.HttpHeadersUtils;
 import com.hhwy.pm.utils.RestTemplateUtils;
 import com.hhwy.utils.customLog.CustomBusinessType;
@@ -38,7 +39,7 @@ public class QqchDangerListController extends BaseController {
     //获取总部知识库危大工程清单
     @GetMapping("/getGmRiskBigProjList")
     @CustomLogger(title = "前期策划-前期策划编制-安全策划-特种设备管控策划-获取总部特种设备类型", name = "8.3.1 特种设备及大型设备风险识别与措施策划-获取总部知识库危大工程清单" ,businessType = CustomBusinessType.SELECT)
-    public AjaxResult getRiskBigProjList(QyzsSafeRiskBigProj qyzsSafeRiskBigProj) {
+    public AjaxResult getRiskBigProjList(QyzsSafeRiskBigProjItem qyzsSafeRiskBigProj) {
         return qqchDangerListService.getGmRiskBigProjList(qyzsSafeRiskBigProj);
     }
 

@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.safe.danger.service;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.safe.danger.domain.vo.QqchDangerListVo;
 import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain.QyzsSafeRiskBigProj;
+import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain.QyzsSafeRiskBigProjItem;
 
 import java.math.BigDecimal;
 
@@ -37,5 +38,5 @@ public interface IQqchDangerListService {
     void syncData(QqchDangerListVo qqchDangerListVo);
 
     //获取总部知识库危大工程清单
-    AjaxResult getGmRiskBigProjList(QyzsSafeRiskBigProj qyzsSafeRiskBigProj);
+    AjaxResult getGmRiskBigProjList(QyzsSafeRiskBigProjItem qyzsSafeRiskBigProj);
 }

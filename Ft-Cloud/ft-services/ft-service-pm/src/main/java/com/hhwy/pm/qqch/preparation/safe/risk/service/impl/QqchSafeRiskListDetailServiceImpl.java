@@ -96,7 +96,8 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
                     log.info("wbsId为空: {}", qqchDangerList.getSchemeName());
                     continue;
                 }
-                QyzsSafeRiskBigProj param = new QyzsSafeRiskBigProj();
+
+                QyzsSafeRiskBigProjItem param = new QyzsSafeRiskBigProjItem();
                 param.setRiskProjType(qqchDangerList.getRiskProjType());
                 param.setJudgmentCondition(qqchDangerList.getDecisionCondition());
                 AjaxResult ajaxResult = qqchDangerListService.getGmRiskBigProjList(param);

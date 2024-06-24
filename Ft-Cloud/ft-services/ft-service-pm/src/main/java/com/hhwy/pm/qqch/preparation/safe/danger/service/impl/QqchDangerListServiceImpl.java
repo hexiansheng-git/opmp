@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.safe.danger.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.nacos.common.http.param.MediaType;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -16,6 +17,7 @@ import com.hhwy.pm.qqch.preparation.safe.danger.service.IQqchDangerListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain.QyzsSafeRiskBigProj;
+import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain.QyzsSafeRiskBigProjItem;
 import com.hhwy.pm.utils.HttpHeadersUtils;
 import com.hhwy.pm.utils.RestTemplateUtils;
 import com.hhwy.utils.ObjectUtils;
@@ -30,8 +32,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhenglili
@@ -52,11 +56,16 @@ public class QqchDangerListServiceImpl implements IQqchDangerListService {
     private String gmUrl;
 
     //获取总部知识库危大工程清单
-    public AjaxResult getGmRiskBigProjList(QyzsSafeRiskBigProj qyzsSafeRiskBigProj){
+    public AjaxResult getGmRiskBigProjList(QyzsSafeRiskBigProjItem qyzsSafeRiskBigProj){
         String url = gmUrl + "/gm/qyzsSafeRiskBigProj/list";
         HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
-        HttpEntity<QyzsSafeRiskBigProj> httpEntity = new HttpEntity<>(qyzsSafeRiskBigProj, headers);
+        HashMap<String, String> map  = new HashMap<>();
+        map.put("riskProjType", qyzsSafeRiskBigProj.getRiskProjType());
+        map.put("judgmentCondition", qyzsSafeRiskBigProj.getJudgmentCondition());
+        map.put("riskEvent", qyzsSafeRiskBigProj.getRiskEvent());
+        map.put("possibleConsequence", qyzsSafeRiskBigProj.getPossibleConsequence());
+        HttpEntity<Map<String,String>> httpEntity = new HttpEntity<>(map, headers);
         return RestTemplateUtils.post(url, httpEntity, AjaxResult .class);
     }
 
