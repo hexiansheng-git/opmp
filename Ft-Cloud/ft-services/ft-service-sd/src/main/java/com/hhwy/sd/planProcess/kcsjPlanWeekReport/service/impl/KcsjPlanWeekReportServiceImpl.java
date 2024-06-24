@@ -5,6 +5,7 @@ import java.util.*;
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -91,7 +92,11 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
             kcsjPlanWeekReport.setUpdateTime(DateUtils.getNowDate());
         }
         int i = kcsjPlanWeekReportMapper.updateKcsjPlanWeekReportList(kcsjPlanWeekReportList);
-        doSendGm(SecurityUtils.getTenantKey());
+        try {
+            doSendGm(SecurityUtils.getTenantKey());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return i;
     }
 
@@ -107,36 +112,36 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
 
     @Override
     public int produceData() {
-
         // 获取租户集合
         List<String> tenantKeyList = new ArrayList<>();
-        //
         List<SysTenant> sysTenants = systemServiceApi.tenantList();
         int i = 0;
         if(!CollectionUtils.isEmpty(sysTenants)) {
             sysTenants.forEach(vo -> tenantKeyList.add(vo.getTenantKey()));
             i = sysTenants.size();
         }
-
-        if(!CollectionUtils.isEmpty(tenantKeyList)) {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        try {
             for (String tenantKey : tenantKeyList) {
                 //切换租户
-                String oldDataSource = DynamicDataSourceContextHolder.peek();
                 DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
                 try {
                     produceDataByPeriod(DateUtils.getNowDate());
                     //推送总部
                     doSendGm(tenantKey);
                 }catch (Exception e){
-                    e.printStackTrace();
+                    log.error("周报计划生成错误，租户：{}", tenantKey);
                     throw new CustomBusinessException(e.getMessage());
-                }finally {
-                    DynamicDataSourceContextHolder.poll();
-                    DynamicDataSourceContextHolder.push(oldDataSource);
                 }
             }
+        }catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
         }
-
         return i;
 
     }
@@ -156,7 +161,7 @@ public class KcsjPlanWeekReportServiceImpl implements IKcsjPlanWeekReportService
     }
 
     //数据推送总部版
-    public void doSendGm(String tenantKey){
+    public void doSendGm(String tenantKey) throws Exception{
         KcsjPlanWeekReport planWeekReport = new KcsjPlanWeekReport();
         List<KcsjPlanWeekReport> kcsjPlanWeekReportList = kcsjPlanWeekReportMapper.getKcsjPlanWeekReportList(planWeekReport);
         if (CollUtil.isEmpty(kcsjPlanWeekReportList)) return;

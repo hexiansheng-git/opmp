@@ -281,6 +281,7 @@ public class KcsjOutlineReviewServiceImpl implements IKcsjOutlineReviewService {
     public void doSendGm(String tenantKey, String loginUserName) {
         log.info("勘察设计大纲评审推送总部开始");
         String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
         try {
             String dataSourceNameByTenantKey = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
             DynamicDataSourceContextHolder.push(dataSourceNameByTenantKey);
