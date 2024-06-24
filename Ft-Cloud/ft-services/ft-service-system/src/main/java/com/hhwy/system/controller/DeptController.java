@@ -36,7 +36,8 @@ public class DeptController {
     @GetMapping("/lazyList")
     public AjaxResult lazyList(SysDept dept, boolean showNextLevel){
         List depts;
-        if ((StringUtils.isNotEmpty(dept.getStatus()) || StringUtils.isNotEmpty(dept.getDeptName())) && dept.getDeptId() == null) {
+        if (StringUtils.isNotEmpty(dept.getDeptName()) && dept.getDeptId() == null) {//20240624修改-何文杰
+//        if ((StringUtils.isNotEmpty(dept.getStatus()) || StringUtils.isNotEmpty(dept.getDeptName())) && dept.getDeptId() == null) {
             List<SysDept> sysDeptList = this.deptService.selectDeptList(dept);
             depts = (new DeptTreeUtils()).deptList(sysDeptList);
             if (CollectionUtils.isNotEmpty(depts)) {
