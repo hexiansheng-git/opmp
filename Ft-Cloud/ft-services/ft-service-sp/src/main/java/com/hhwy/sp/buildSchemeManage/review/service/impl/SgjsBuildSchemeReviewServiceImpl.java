@@ -511,11 +511,15 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             }
         }
 
-        if(("1".equals(taskStatus) || "4".equals(taskStatus)) && StringUtils.isNotBlank(flowNodeMark) && !ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark) && !ReviewFlowNodeMark.FlowNodeMark10.equals(flowNodeMark)){
+        if(("1".equals(taskStatus) || "4".equals(taskStatus)) && StringUtils.isNotBlank(flowNodeMark) && 
+                !ReviewFlowNodeMark.FlowNodeMark9.equals(flowNodeMark) && !ReviewFlowNodeMark.FlowNodeMark10.equals(flowNodeMark)){
             review.setProcessStatus("no");
             List<BuildSchemeStaffOpinionGatherVo> staffOpinionGatherVoList = this.getStaffOpinionGatherVoList(review.getId(), null,null);
             Double average = staffOpinionGatherVoList.stream().filter(o -> o.getScore() != null).collect(Collectors.averagingDouble(BuildSchemeStaffOpinionGatherVo::getScore));
             review.setScore(average);
+            sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
+        }else{ //新需求，总部版需要看到待发起数据
+            review.setProcessStatus("save");
             sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
         }
         return review.getId();
