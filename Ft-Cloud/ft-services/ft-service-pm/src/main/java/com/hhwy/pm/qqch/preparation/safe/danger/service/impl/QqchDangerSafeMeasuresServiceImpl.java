@@ -26,6 +26,7 @@ import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.service.IQyzsSafeRiskBigProjSer
 import com.hhwy.pm.utils.HttpHeadersUtils;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
+import com.hhwy.utils.GmTokenUtils;
 import com.hhwy.utils.HttpClientUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import javafx.scene.shape.Mesh;
@@ -274,12 +275,13 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
      */
     private JSONObject gmProjItemList(Set<String> typeStrSet){
 //        gmUrl = "http://10.0.1.118:10010/ftCenter/basic-api/gm/qyzsSafeRiskBigProj/getChildList";
-        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
-        Map map = new HashMap(headers);
-//        map.put(Constant.AUTHORIZATION,"8780c2ea-d64e-4f94-94a4-c0e31897e62d");
-//        map.put(Constant.TENANT_KEY,"master");
+//        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
+        Map map = new HashMap();
+        String token = GmTokenUtils.getToken();
+        map.put(Constant.AUTHORIZATION,token);
+        map.put(Constant.TENANT_KEY,"master");
         StringEntity stringEntity = new StringEntity(JSONObject.toJSONString(typeStrSet), ContentType.APPLICATION_JSON);
-        Object string = HttpClientUtil.send(gmUrl, HttpClientUtil.METHOD_POST, null, map, stringEntity, null);
+        Object string = HttpClientUtil.send(gmUrl+"/gm/qyzsSafeRiskBigProj/getChildList", HttpClientUtil.METHOD_POST, null, map, stringEntity, null);
         JSONObject resultObj = JSONObject.parseObject(string.toString());
         if(!StringUtils.equals(resultObj.get("code")+"","200")){
             throw new RuntimeException(resultObj.get("msg")+"");
