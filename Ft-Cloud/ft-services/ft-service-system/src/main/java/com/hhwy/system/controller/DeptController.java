@@ -78,6 +78,12 @@ public class DeptController {
 
     }
 
+    @GetMapping("/lazySearch")
+    public AjaxResult lazySearch(SysDept dept){
+        List<SysDept > list = deptService.lazySearch(dept);
+        return AjaxResult.success(list);
+    }
+
     /**
      * 查询区域信息接口
      * @param map

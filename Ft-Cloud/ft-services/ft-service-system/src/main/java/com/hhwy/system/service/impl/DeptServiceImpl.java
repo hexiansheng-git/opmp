@@ -1,5 +1,8 @@
 package com.hhwy.system.service.impl;
 
+import com.hhwy.common.core.domain.R;
+import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.system.api.domain.SysDept;
@@ -12,14 +15,22 @@ import com.hhwy.domain.base.system.SysTreeUtil;
 import com.hhwy.system.mapper.DeptMapper;
 import com.hhwy.system.service.IDeptService;
 import com.hhwy.system.utils.redis.SysRedisUtils;
+import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.myUtilPrepare.SetMaterialNameUtils;
+import com.hhwy.utils.redissonLock.RedissonLockUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.redisson.api.listener.ListSetListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 public class DeptServiceImpl implements IDeptService {
@@ -124,5 +135,84 @@ public class DeptServiceImpl implements IDeptService {
         return sb.toString();
     }
 
-
+    @Override
+    public List<SysDept> lazySearch(SysDept dept) {
+        Long beginMills = System.currentTimeMillis();
+        try{
+            List<SysDept> depts;
+            if(StringUtils.isBlank(dept.getDeptName())){
+                if (dept.getDeptId() == null) {
+                    depts = this.selectOneLevelDeptList(dept);
+                } else {
+                    depts = this.selectChildrenDeptList(dept);
+                }
+                return depts;
+            }
+            String key = "dept_lazySearch::"+dept.getDeptName();
+            Set<Long> matchIdSet = null;
+            if(redisUtils.hasKey(key)){
+                Set<String> matchIdStrSet = redisUtils.sMembers(key);
+                matchIdSet = matchIdStrSet.stream().map(r->Long.valueOf(r)).collect(Collectors.toSet());
+            }else{
+                List<SysDept> deptList = this.deptMapper.selectDeptListByDeptName(dept,"master");
+                matchIdSet = new HashSet<>();
+                for (int i = 0; i < deptList.size(); i++) {
+                    SysDept temp = deptList.get(i);
+                    matchIdSet.addAll(parseAllId(temp));
+                }
+                try{
+                    if(RedissonLockUtil.lock(key)){
+                        matchIdSet = CollectionUtils.isEmpty(matchIdSet)?new HashSet(Arrays.asList(0L)):matchIdSet;
+                        String[] perfectMatch = deptList.stream().map(r->r.getDeptId()+"").toArray(String[]::new);
+                        redisUtils.delete(key);
+                        redisUtils.sAdd(key, matchIdSet.stream().map(r->r+"").toArray(String[]::new));
+                        redisUtils.sAdd("perfect_"+key, perfectMatch==null?new String[]{"0"}:perfectMatch);
+                        redisUtils.expire(key, 1, TimeUnit.HOURS);
+                        redisUtils.expire("perfect_"+key, 1, TimeUnit.HOURS);
+                    }
+                }finally {
+                    RedissonLockUtil.unlock(key);
+                }
+            }
+            if(CollectionUtils.isEmpty(matchIdSet))
+                return new ArrayList<>(2);
+            SysDept query = new SysDept();
+            query.setParentId(dept.getDeptId());
+            query.setParams(ObjectUtils.toMap("deptIds", matchIdSet));
+            if(dept.getDeptId() != null){
+                final Set<Long> finalMatchIdSet = redisUtils.sMembers("perfect_"+key).stream().map(r->Long.valueOf(r)).collect(Collectors.toSet());
+                SysDept nowDept = this.getByDeptId(dept.getDeptId());
+                Set<Long> nowDeptAnces =  parseAllId(nowDept);
+                boolean anceMatched = nowDeptAnces.stream().filter(r->finalMatchIdSet.contains(r)).findAny().isPresent();
+                if(anceMatched){
+                    query.setParams(null);
+                }
+            }
+            List<SysDept> finalList = this.deptMapper.selectDeptListAll(query,"master");
+            return finalList;
+        }finally {
+            logger.debug("搜索耗时:{},关键字:{}",System.currentTimeMillis()-beginMills,dept.getDeptName());
+        }
+    }
+    
+    private SysDept getByDeptId(Long deptId){
+        SysDept query = new SysDept();
+        query.setDeptId(deptId);
+        List<SysDept> list = deptMapper.selectDeptListByDeptName(query,"master");
+        return CollectionUtils.isEmpty(list)?null:list.get(0);
+    }
+    
+    private Set<Long> parseAllId(SysDept dept){
+        Set<Long> set = new HashSet<>(10);
+        set.add(dept.getDeptId());
+        if(StringUtils.isBlank(dept.getAncestors()))
+            return set;
+        String[] ances = dept.getAncestors().split(",");
+        for (int i = 0; i < ances.length; i++) {
+            if("".equals(ances[i]) || "null".equals(ances[i]))
+                continue;
+            set.add(Long.valueOf(ances[i]));
+        }
+        return set;
+    }
 }

@@ -28,4 +28,8 @@ public interface DeptMapper {
     List<SysDept> getProjectOrgInfo();
 
     List<SysDept> selectDeptList(@Param("dept") SysDept dept, @Param("tenantKey") String master);
+
+    List<SysDept> selectDeptListAll(@Param("dept") SysDept dept, @Param("tenantKey") String master);
+
+    List<SysDept> selectDeptListByDeptName(@Param("dept") SysDept dept, @Param("tenantKey") String master);
 }

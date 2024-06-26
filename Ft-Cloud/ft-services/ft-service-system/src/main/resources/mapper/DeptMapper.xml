@@ -132,7 +132,61 @@
         WHERE
             del_flag = '0'
             AND tenant_key = #{tenantKey}
+            <if test="dept != null and dept.parentId != null">
+                and parent_id =  #{dept.parentId}
+            </if>
+            <if test="dept != null and dept.deptName != null and dept.deptName != '' ">
+                and dept_name like concat('%', #{dept.deptName}, '%')
+            </if>
     </select>
+    <select id="selectDeptListAll" resultMap="SysDeptResult">
+        SELECT
+            dept_id ,
+            parent_id ,
+            dept_name ,
+            pt_var_5 ,
+            dept_type,
+            ancestors,phone,email,pt_var_1, pt_var_2, pt_var_3, pt_var_4, pt_var_5
+        FROM
+        sys_dept
+        WHERE
+        del_flag = '0'
+        AND tenant_key = #{tenantKey}
+        <choose>
+            <when test="dept != null and dept.parentId != null">
+                and parent_id =  #{dept.parentId}
+            </when>
+            <otherwise> and parent_id is null </otherwise>
+        </choose>
+        <if test="dept != null and dept.deptName != null and dept.deptName != '' ">
+            and dept_name like concat('%', #{dept.deptName}, '%')
+        </if>
+        <if test="dept != null and dept.params != null and dept.params.deptIds != null ">
+            and dept_id in
+            <foreach collection="dept.params.deptIds" index="index" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="selectDeptListByDeptName" resultMap="SysDeptResult">
+        SELECT
+            dept_id ,
+            ancestors,
+            parent_id 
+        FROM
+        sys_dept
+        WHERE
+        del_flag = '0'
+        AND tenant_key = #{tenantKey}
+        <if test="dept != null and dept.deptId != null">
+            and dept_id = #{dept.deptId}
+        </if>
+        <if test="dept != null and dept.deptName != null and dept.deptName != '' ">
+            and dept_name like concat('%', #{dept.deptName}, '%')
+        </if>
+    </select>
+
 
 
 </mapper>

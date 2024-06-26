@@ -29,4 +29,6 @@ public interface IDeptService {
     List selectChildrenDeptList(SysDept dept);
 
     String getAllDepNames();
+    
+    List<SysDept> lazySearch(SysDept dept);
 }
