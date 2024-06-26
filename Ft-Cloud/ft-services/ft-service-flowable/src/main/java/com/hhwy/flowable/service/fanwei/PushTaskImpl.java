@@ -273,12 +273,12 @@ public class PushTaskImpl  implements TaskProcessor {
             String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
             map.put("requestname","【海外项管】"+"项目WBS管理："+tenantName+"项目编号"+tenantKey+"没有绑定p6，请领导绑定");
         }
-
+        String urlToken = (pageRoute.contains("?")?"&":"?");
         map.put("workflowname","工作流程");
         map.put("nodename",taskTame);
         map.put("nodeId",taskDefinitionKey);
         map.put("dateobj",createTime);
-        map.put("pcurl",pmUrl+pageRoute+"?id="+businessId+"&tenantKey="+tenantKey+"&receiver="+receiver+"&pageType=fw");
+        map.put("pcurl",pmUrl+pageRoute+urlToken+"id="+businessId+"&tenantKey="+tenantKey+"&receiver="+receiver+"&pageType=fw");
         map.put("appurl","");
         map.put("creator", SecurityUtils.getUserName());
         map.put("createdatetime", DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,createTime));

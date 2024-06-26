@@ -127,7 +127,9 @@ public class Warn2Push {
         String warnUrl = warn.getWarnUrl();
         String path = (sysUrl.endsWith("/")?sysUrl.substring(0,sysUrl.length()-1):sysUrl) +
                 (warnUrl.startsWith("/")?warnUrl:warnUrl.substring(1));
-        map.put("pcurl",String.format("%s?id=%s&tenantKey=%s&receiver=%s&pageType=fw",
+        //拼接 ? 或 &
+        path = path+(path.contains("?")?"&":"?");
+        map.put("pcurl",String.format("%sid=%s&tenantKey=%s&receiver=%s&pageType=fw",
                 path,ObjectUtils.nvlString(warn.getBusinessId()),warn.getTenantKey(),receive) );
         map.put("appurl","");
         map.put("isremark","8");
