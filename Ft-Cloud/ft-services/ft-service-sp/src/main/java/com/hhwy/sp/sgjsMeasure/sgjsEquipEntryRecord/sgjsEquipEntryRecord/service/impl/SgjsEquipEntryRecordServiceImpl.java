@@ -172,10 +172,11 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             info.setCreateTime(DateUtils.getNowDate());
             info.setCreateUser(SecurityUtils.getUserId()+"");
             info.setId(IdWorker.createId());
-            //info.setProjectId(ObjectUtils.toLong(object.get("projectId")));
             info.setPtVar5(ObjectUtils.toString(object.get("id")));
             if(prjInfo.get("projectId") != null)info.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
             info.setProjectName((String) prjInfo.get("projectName"));
+            info.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
+            info.setRegionName((String) prjInfo.get("regionName"));
             dataList.add(info);
         }
         //查询库中已有所有数据
