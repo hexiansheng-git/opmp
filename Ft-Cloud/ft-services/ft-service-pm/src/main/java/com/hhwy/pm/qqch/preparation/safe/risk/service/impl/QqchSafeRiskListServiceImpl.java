@@ -375,7 +375,7 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
     @Transactional
     public void syncData() {
         //删除所有子表旧数据
-        qqchSafeRiskListDetailMapper.deleteAll();
+//        qqchSafeRiskListDetailMapper.deleteAll();
 
         //插入数据
         List<QyzsSafeSafeRisk> riskList = qyzsSafeSafeRiskService.getCommonListBy(new QyzsSafeSafeRisk());

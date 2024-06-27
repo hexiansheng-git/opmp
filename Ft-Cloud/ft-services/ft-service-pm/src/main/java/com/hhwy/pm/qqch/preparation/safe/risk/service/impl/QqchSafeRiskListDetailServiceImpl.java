@@ -61,9 +61,6 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
     private QqchSafeRiskListDetailMapper qqchSafeRiskListDetailMapper;
 
     @Autowired
-    private IQqchSafeRiskListDetailService qqchSafeRiskListDetailService;
-
-    @Autowired
     private IQqchDangerListService qqchDangerListService;
     @Autowired
     private IQqchSpecialBigEquListService qqchSpecialBigEquListService;
@@ -73,6 +70,11 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
 
     @Value("${gm.back-url}")
     private String gmUrl;
+
+    @Override
+    public void deleteByInfoIds(List<Long> infoIds) {
+        qqchSafeRiskListDetailMapper.deleteQqchSafeRiskListDetailByInfoIds(infoIds);
+    }
 
     /**
      * 功能描述: 更新接口，从831和841同步数据
@@ -93,10 +95,10 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
             for (QqchDangerList qqchDangerList : resultList831) {
                 String wbsId = qqchDangerList.getPtVar3();
                 if (StrUtil.isBlank(wbsId)) {
-                    log.info("wbsId为空: {}", qqchDangerList.getSchemeName());
+                    log.info("wbsId为空, 危大工程名称: {}", qqchDangerList.getSchemeName());
                     continue;
                 }
-
+                String dangerLevel = qqchDangerList.getDangerLevel();
                 QyzsSafeRiskBigProjItem param = new QyzsSafeRiskBigProjItem();
                 param.setRiskProjType(qqchDangerList.getRiskProjType());
                 param.setJudgmentCondition(qqchDangerList.getDecisionCondition());
@@ -111,35 +113,53 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
                     log.info("总部危大工程清单查询为空:" + ajaxResult.get(AjaxResult.DATA_TAG));
                     continue;
                 }
-                QyzsSafeRiskBigProjItem qyzsSafeRiskBigProj = qyzsSafeRiskBigProjList.get(0);
-                String riskEvent = qyzsSafeRiskBigProj.getRiskEvent();
-                String riskLevel = qyzsSafeRiskBigProj.getRiskLevel();
-                String possibleConsequence = qyzsSafeRiskBigProj.getPossibleConsequence();
-                String safeTechnicalMeasure = qyzsSafeRiskBigProj.getSafeTechnicalMeasure();
-                String riskProjType = qyzsSafeRiskBigProj.getRiskProjType();
-
-                QqchSafeRiskList info = new QqchSafeRiskList();
-                Long infoId = IdWorker.createId();
-                info.setId(infoId);
-                info.setWbsId(wbsId);
-                info.setVersion(version);
-                if (version.compareTo(BigDecimal.ONE) == 0) {
-                    info.setValid(Valid.YES);
+                List<QyzsSafeRiskBigProjItem> qyzsSafeRiskBigProjItem = qyzsSafeRiskBigProjList.get(0).getChildren();
+                if (CollUtil.isEmpty(qyzsSafeRiskBigProjItem)){
+                    log.info("总部危大工程清单查询为空:" + ajaxResult.get(AjaxResult.DATA_TAG));
+                    continue;
                 }
-                info.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                info.setCreateUserName(SecurityUtils.getUserName());
-                info.setCreateTime(DateUtils.getNowDate());
-                info.setType("1");
-                saveSafeRiskList.add(info);
+                List<QyzsSafeRiskBigProjItem> children = qyzsSafeRiskBigProjItem.get(0).getChildren();
+                if (CollUtil.isEmpty(children)){
+                    log.info("总部危大工程清单查询为空:" + ajaxResult.get(AjaxResult.DATA_TAG));
+                    continue;
+                }
 
-                QqchSafeRiskListDetail qqchSafeRiskListDetail = new QqchSafeRiskListDetail();
-                qqchSafeRiskListDetail.setId(IdWorker.createId());
-                qqchSafeRiskListDetail.setInfoId(infoId);
-                qqchSafeRiskListDetail.setRiskLevel(riskLevel);
-                qqchSafeRiskListDetail.setDangerThing(riskEvent);
-                qqchSafeRiskListDetail.setPossibleResult(possibleConsequence);
-                qqchSafeRiskListDetail.setRiskControWay(safeTechnicalMeasure);
-                saveDetailList.add(qqchSafeRiskListDetail);
+                Long infoId = IdWorker.createId();
+                int  count = 0;
+                for (QyzsSafeRiskBigProjItem item : children) {
+                    String riskEvent = item.getRiskEvent();
+//                    String riskLevel = item.getRiskLevel();
+                    String possibleConsequence = item.getPossibleConsequence();
+                    String safeTechnicalMeasure = item.getSafeTechnicalMeasure();
+                    String riskProjType = item.getRiskProjType();
+                    if (StrUtil.isBlank(riskEvent) && StrUtil.isBlank(possibleConsequence) && StrUtil.isBlank(safeTechnicalMeasure)) {
+                        log.info("风险描述、可能后果、风险控制措施都为空");
+                        continue;
+                    }
+                    QqchSafeRiskListDetail qqchSafeRiskListDetail = new QqchSafeRiskListDetail();
+                    qqchSafeRiskListDetail.setId(IdWorker.createId());
+                    qqchSafeRiskListDetail.setInfoId(infoId);
+                    qqchSafeRiskListDetail.setRiskLevel(dangerLevel);
+                    qqchSafeRiskListDetail.setDangerThing(riskEvent);
+                    qqchSafeRiskListDetail.setPossibleResult(possibleConsequence);
+                    qqchSafeRiskListDetail.setRiskControWay(safeTechnicalMeasure);
+                    saveDetailList.add(qqchSafeRiskListDetail);
+                    count++;
+                }
+                if (count > 0) {
+                    QqchSafeRiskList info = new QqchSafeRiskList();
+                    info.setId(infoId);
+                    info.setWbsId(wbsId);
+                    info.setVersion(version);
+                    if (version.compareTo(BigDecimal.ONE) == 0) {
+                        info.setValid(Valid.YES);
+                    }
+                    info.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                    info.setCreateUserName(SecurityUtils.getUserName());
+                    info.setCreateTime(DateUtils.getNowDate());
+                    info.setType("1");
+                    saveSafeRiskList.add(info);
+                }
             }
         }
         //获取841数据
@@ -176,30 +196,16 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
                 log.info("总部特种设备清单查询为空:" + ajaxResult.get(AjaxResult.DATA_TAG));
                 continue;
             }
-//            List<QyzsSafeSpecialEquipment> specialEquipmentAllList = TreeUtil.treeToList(specialEquipmentTreeList);
-//            List<QyzsSafeSpecialEquipment> specialEquipmentList = specialEquipmentAllList.stream().filter(p -> StrUtil.isNotBlank(p.getPerhapsTrouble()) || StrUtil.isNotBlank(p.getRiskEvent())
-//                    || StrUtil.isNotBlank(p.getControlMeasure())).collect(Collectors.toList());
-//            if (CollUtil.isEmpty(specialEquipmentList)) {
-//                log.info("总部特种设备清单查询为空:" + ajaxResult.get(AjaxResult.DATA_TAG));
-//                continue;
-//            }
-            QqchSafeRiskList info = new QqchSafeRiskList();
+            int count = 0;
             Long infoId = IdWorker.createId();
-            info.setId(infoId);
-            info.setWbsId(wbsId);
-            info.setVersion(version);
-            if (version.compareTo(BigDecimal.ONE) == 0) {
-                info.setValid(Valid.YES);
-            }
-            info.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            info.setCreateUserName(SecurityUtils.getUserName());
-            info.setCreateTime(DateUtils.getNowDate());
-            info.setType("1");
-            saveSafeRiskList.add(info);
             for (QyzsSafeSpecialEquipment specialEquipment : specialEquipmentList) {
                 String riskEvent = specialEquipment.getRiskEvent();
                 String perhapsTrouble = specialEquipment.getPerhapsTrouble();
                 String controlMeasure = specialEquipment.getControlMeasure();
+                if (StrUtil.isBlank(riskEvent) && StrUtil.isBlank(perhapsTrouble) && StrUtil.isBlank(controlMeasure)) {
+                    log.info("风险描述、可能后果、风险控制措施都为空");
+                    continue;
+                }
                 QqchSafeRiskListDetail qqchSafeRiskListDetail = new QqchSafeRiskListDetail();
                 qqchSafeRiskListDetail.setId(IdWorker.createId());
                 qqchSafeRiskListDetail.setInfoId(infoId);
@@ -208,15 +214,40 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
                 qqchSafeRiskListDetail.setPossibleResult(perhapsTrouble);
                 qqchSafeRiskListDetail.setRiskControWay(controlMeasure);
                 saveDetailList.add(qqchSafeRiskListDetail);
+                count++;
+            }
+            if (count > 0) {
+                QqchSafeRiskList info = new QqchSafeRiskList();
+                info.setId(infoId);
+                info.setWbsId(wbsId);
+                info.setVersion(version);
+                if (version.compareTo(BigDecimal.ONE) == 0) {
+                    info.setValid(Valid.YES);
+                }
+                info.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                info.setCreateUserName(SecurityUtils.getUserName());
+                info.setCreateTime(DateUtils.getNowDate());
+                info.setType("1");
+                saveSafeRiskList.add(info);
             }
         }
         if (CollUtil.isNotEmpty(saveSafeRiskList)) {
-            qqchSafeRiskListMapper.deleteQqchSafeRiskList(new QqchSafeRiskList());
+            //删除type为1的数据
+            QqchSafeRiskList qqchSafeRiskList = new QqchSafeRiskList();
+            qqchSafeRiskList.setType("1");
+            qqchSafeRiskListMapper.deleteQqchSafeRiskList(qqchSafeRiskList);
             qqchSafeRiskListMapper.insertQqchSafeRiskListList(saveSafeRiskList);
         }
         if (CollUtil.isNotEmpty(saveDetailList)) {
-            qqchSafeRiskListDetailMapper.deleteAll();
-            qqchSafeRiskListDetailService.insertQqchSafeRiskListDetailList(saveDetailList);
+            //删除type为1的数据
+            QqchSafeRiskList qqchSafeRiskList = new QqchSafeRiskList();
+            qqchSafeRiskList.setType("1");
+            List<QqchSafeRiskList> qqchSafeRiskListList = qqchSafeRiskListMapper.getQqchSafeRiskListList(qqchSafeRiskList);
+            if (CollUtil.isNotEmpty(qqchSafeRiskListList)) {
+                List<Long> infoIds = qqchSafeRiskListList.stream().map(QqchSafeRiskList::getId).collect(Collectors.toList());
+                this.deleteByInfoIds(infoIds);
+            }
+            this.insertQqchSafeRiskListDetailList(saveDetailList);
         }
         return AjaxResult.success();
     }

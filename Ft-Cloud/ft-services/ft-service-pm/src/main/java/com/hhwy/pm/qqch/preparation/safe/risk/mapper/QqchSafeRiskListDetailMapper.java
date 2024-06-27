@@ -31,6 +31,8 @@ public interface QqchSafeRiskListDetailMapper {
 
     int deleteQqchSafeRiskListDetailByPks(@Param("qqchSafeRiskListDetailPkList") List<Long> qqchSafeRiskListDetailPkList);
 
+    int deleteQqchSafeRiskListDetailByInfoIds(@Param("qqchSafeRiskListDetailPkList") List<Long> qqchSafeRiskListDetailPkList);
+
     void deleteByInfoId(@Param("infoId") Long infoId, @Param("delUser") String userName, @Param("delTime") Date nowDate);
 
     int getCount();

@@ -44,7 +44,7 @@ public class QqchSafeRiskList extends BaseEntity {
      */
     private BigDecimal wbsVersionId;
     /**
-     * 字段描述：
+     * 字段描述：0：821   1：822
      */
     @JsonProperty
     private String type;

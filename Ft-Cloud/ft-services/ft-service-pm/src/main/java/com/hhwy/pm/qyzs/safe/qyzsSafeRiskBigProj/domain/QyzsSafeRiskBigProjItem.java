@@ -10,6 +10,7 @@ import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author cjh
@@ -17,8 +18,10 @@ import java.util.Date;
  * @remark qyzs_safe_risk_big_proj_item
  */
 @Data
-public class QyzsSafeRiskBigProjItem extends BaseEntity {
+public class QyzsSafeRiskBigProjItem  extends QyzsSafeRiskBigProj {
     private static final long serialVersionUID = 1L;
+
+    private List<QyzsSafeRiskBigProjItem> children;
 
     /**
      * 字段描述：主键id

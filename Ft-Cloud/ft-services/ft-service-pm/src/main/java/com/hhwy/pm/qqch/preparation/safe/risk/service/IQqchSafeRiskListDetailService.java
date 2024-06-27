@@ -32,4 +32,6 @@ public interface IQqchSafeRiskListDetailService {
     void deleteByInfoId(Long infoId, String valueOf, String userName, Date nowDate);
 
     AjaxResult syncData();
+
+    void deleteByInfoIds(List<Long> infoIds);
 }
