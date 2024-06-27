@@ -18,7 +18,9 @@ import com.hhwy.system.utils.redis.SysRedisUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.myUtilPrepare.SetMaterialNameUtils;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
+import jodd.util.ArraysUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.redisson.api.listener.ListSetListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -166,7 +168,7 @@ public class DeptServiceImpl implements IDeptService {
                         String[] perfectMatch = deptList.stream().map(r->r.getDeptId()+"").toArray(String[]::new);
                         redisUtils.delete(key);
                         redisUtils.sAdd(key, matchIdSet.stream().map(r->r+"").toArray(String[]::new));
-                        redisUtils.sAdd("perfect_"+key, perfectMatch==null?new String[]{"0"}:perfectMatch);
+                        redisUtils.sAdd("perfect_"+key, ArrayUtils.isEmpty(perfectMatch)?new String[]{"0"}:perfectMatch);
                         redisUtils.expire(key, 1, TimeUnit.HOURS);
                         redisUtils.expire("perfect_"+key, 1, TimeUnit.HOURS);
                     }
