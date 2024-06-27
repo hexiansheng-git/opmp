@@ -21,19 +21,16 @@ import com.hhwy.sd.groupManage.service.IKcsjGroupManageMainService;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
-import com.hhwy.utils.tree.TreeUtil;
 import io.seata.common.util.CollectionUtils;
 import io.seata.common.util.StringUtils;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -296,13 +293,15 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
         String businessModel = kcsjGroupManageMainVo.getBusinessModel();
         Long projectId = kcsjGroupManageMainVo.getProjectId();
         String projectName = kcsjGroupManageMainVo.getProjectName();
+        String regionId = kcsjGroupManageMainVo.getRegionId();
+        String regionName = kcsjGroupManageMainVo.getRegionName();
         List<KcsjGroupManageContract> contractList = kcsjGroupManageMainVo.getContractList();
         if(StringUtils.isBlank(businessModel) && CollectionUtils.isEmpty(contractList)){
             return;
         }
         String subpackageType = kcsjGroupManageMainVo.getSubpackageType();
         /*插入主表数据*/
-        long mainId = this.addMain(subpackageType, businessModel, kcsjGroupManageMainVo.getFileGroupId(),projectId,projectName);
+        long mainId = this.addMain(subpackageType, businessModel, kcsjGroupManageMainVo.getFileGroupId(),projectId,projectName,regionId,regionName);
         /*插入子表数据*/
         this.addContractList(mainId,subpackageType,contractList);
     }
@@ -315,7 +314,7 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
      * @return
      */
     @Transactional
-    public long addMain(String subpackageType,String businessModel,String fileGroupId,Long projectId,String projectName){
+    public long addMain(String subpackageType,String businessModel,String fileGroupId,Long projectId,String projectName,String regionId,String regionName){
         KcsjGroupManageMain groupManageMain = new KcsjGroupManageMain();
         long id = IdWorker.createId();
         groupManageMain.setId(id);
@@ -324,6 +323,8 @@ public class KcsjGroupManageMainServiceImpl implements IKcsjGroupManageMainServi
         groupManageMain.setFileGroupId(fileGroupId);
         groupManageMain.setProjectId(projectId);
         groupManageMain.setProjectName(projectName);
+        groupManageMain.setRegionId(Long.parseLong(regionId));
+        groupManageMain.setRegionName(regionName);
         this.insertKcsjGroupManageMain(groupManageMain);
         return id;
     }

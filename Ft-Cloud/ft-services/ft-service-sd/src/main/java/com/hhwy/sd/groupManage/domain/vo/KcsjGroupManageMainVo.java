@@ -35,4 +35,8 @@ public class KcsjGroupManageMainVo {
     private Long projectId;
 
     private String projectName;
+
+    private String regionId;
+
+    private String regionName;
 }

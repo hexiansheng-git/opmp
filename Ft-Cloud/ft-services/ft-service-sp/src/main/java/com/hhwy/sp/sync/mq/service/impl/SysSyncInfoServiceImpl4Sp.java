@@ -86,6 +86,8 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
                     if (prjInfo.get("projectId") != null)
                         sgjsExperProgressManage.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
                     sgjsExperProgressManage.setProjectName((String) prjInfo.get("projectName"));
+                    sgjsExperProgressManage.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
+                    sgjsExperProgressManage.setRegionName((String) prjInfo.get("regionName"));
                     JSONObject json = JSONObject.parseObject(JSONObject.toJSONString(sgjsExperProgressManage));
                     finalList.add(json);
                 }
