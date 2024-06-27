@@ -104,7 +104,7 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
                 }else if (dangerLevel.equals("1")){
                     //危大 = 等级2
                     dangerLevel = "2";
-                }else if (dangerLevel.equals("3")){
+                }else if (dangerLevel.equals("2")){
                     //超危大 = 等级1
                     dangerLevel = "1";
                 }else{

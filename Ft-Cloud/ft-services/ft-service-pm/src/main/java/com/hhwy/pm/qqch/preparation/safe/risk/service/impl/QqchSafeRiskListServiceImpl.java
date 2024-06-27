@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.safe.risk.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -376,6 +377,13 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
     public void syncData() {
         //删除所有子表旧数据
 //        qqchSafeRiskListDetailMapper.deleteAll();
+        QqchSafeRiskList qqchSafeRiskList = new QqchSafeRiskList();
+        qqchSafeRiskList.setType("0");
+        List<QqchSafeRiskList> qqchSafeRiskListList = qqchSafeRiskListMapper.getQqchSafeRiskListList(qqchSafeRiskList);
+        if (CollUtil.isNotEmpty(qqchSafeRiskListList)) {
+            List<Long> infoIds = qqchSafeRiskListList.stream().map(QqchSafeRiskList::getId).collect(Collectors.toList());
+            qqchSafeRiskListDetailService.deleteByInfoIds(infoIds);
+        }
 
         //插入数据
         List<QyzsSafeSafeRisk> riskList = qyzsSafeSafeRiskService.getCommonListBy(new QyzsSafeSafeRisk());
