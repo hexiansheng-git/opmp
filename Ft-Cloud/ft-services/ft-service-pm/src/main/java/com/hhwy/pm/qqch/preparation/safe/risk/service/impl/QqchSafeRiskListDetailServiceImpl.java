@@ -99,6 +99,17 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
                     continue;
                 }
                 String dangerLevel = qqchDangerList.getDangerLevel();
+                if (StrUtil.isBlank(dangerLevel)) {
+                    dangerLevel = "";
+                }else if (dangerLevel.equals("1")){
+                    //危大 = 等级2
+                    dangerLevel = "2";
+                }else if (dangerLevel.equals("3")){
+                    //超危大 = 等级1
+                    dangerLevel = "1";
+                }else{
+                    dangerLevel = "";
+                }
                 QyzsSafeRiskBigProjItem param = new QyzsSafeRiskBigProjItem();
                 param.setRiskProjType(qqchDangerList.getRiskProjType());
                 param.setJudgmentCondition(qqchDangerList.getDecisionCondition());
@@ -170,12 +181,11 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
         for (QqchSpecialBigEquList specialBigEquList : resultList841) {
             String wbsId = specialBigEquList.getPtVar3();
             if (StrUtil.isBlank(wbsId)) {
-                log.info("获取841数据,wbsId为空: {}", specialBigEquList.getEquName());
-                continue;
-            }
+                log.info("获取841数据,wbsId为空，设备名称：{}", specialBigEquList.getEquName());
+                continue;}
             String equType = specialBigEquList.getEquType();
             if (StrUtil.isBlank(equType)) {
-                log.info("特种设备类型为空：{}", specialBigEquList.getEquName());
+                log.info("特种设备类型为空，设备名称：{}", specialBigEquList.getEquName());
                 continue;
             }
             String url = gmUrl + "/gm/qyzsSafeSpecialEquipment/getChilderByKind3?kind3Arr={kind3Arr}";
@@ -193,7 +203,7 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
             String jsonString = JSON.toJSONString(ajaxResult.get(AjaxResult.DATA_TAG));
             List<QyzsSafeSpecialEquipment> specialEquipmentList = JSON.parseArray(jsonString, QyzsSafeSpecialEquipment.class);
             if (CollUtil.isEmpty(specialEquipmentList)){
-                log.info("总部特种设备清单查询为空:" + ajaxResult.get(AjaxResult.DATA_TAG));
+                log.info("总部特种设备清单查询为空， 设备类型/品种:" +  equType);
                 continue;
             }
             int count = 0;
