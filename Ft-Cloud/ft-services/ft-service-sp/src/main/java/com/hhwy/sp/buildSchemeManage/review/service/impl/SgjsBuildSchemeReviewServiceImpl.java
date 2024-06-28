@@ -724,6 +724,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             }
             syncNumTotal = reviewListNew.size();
             sgjsBuildSchemeReviewMapper.insertSgjsBuildSchemeReviewList(reviewListNew);
+            //推送到总部
+            push2Gm(reviewListNew);
             return "已同步 " + syncNumTotal + " 条数据！";
         }
 
@@ -750,12 +752,24 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 
         if(CollectionUtils.isNotEmpty(insertList)){
             sgjsBuildSchemeReviewMapper.insertSgjsBuildSchemeReviewList(insertList);
+            
         }
 
         if(CollectionUtils.isNotEmpty(updateList)){
             sgjsBuildSchemeReviewMapper.updateSgjsBuildSchemeReviewList(updateList);
         }
+        if(CollectionUtils.isNotEmpty(insertList))
+            push2Gm(insertList);
+        if(CollectionUtils.isNotEmpty(updateList))
+            push2Gm(updateList);
         return "已同步 " + syncNumTotal + " 条数据！ 其中，新增 " + insertList.size() + " 条数据，修改 " + updateList.size() + "条数据！";
+    }
+    private void push2Gm(List<SgjsBuildSchemeReview> list){
+        for (int i = 0; i < list.size(); i++) {
+            SgjsBuildSchemeReview temp = list.get(i);
+            temp.setProcessStatus("save");
+            sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(temp);
+        }
     }
 
     private void setInsertList(List<SgjsBuildSchemeReview> insertList,SgjsBuildSchemeList schemeList,String userName,String nickName){
