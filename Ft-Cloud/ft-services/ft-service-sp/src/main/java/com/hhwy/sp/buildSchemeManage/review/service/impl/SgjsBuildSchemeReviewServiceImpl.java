@@ -752,7 +752,6 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 
         if(CollectionUtils.isNotEmpty(insertList)){
             sgjsBuildSchemeReviewMapper.insertSgjsBuildSchemeReviewList(insertList);
-            
         }
 
         if(CollectionUtils.isNotEmpty(updateList)){
@@ -765,6 +764,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         return "已同步 " + syncNumTotal + " 条数据！ 其中，新增 " + insertList.size() + " 条数据，修改 " + updateList.size() + "条数据！";
     }
     private void push2Gm(List<SgjsBuildSchemeReview> list){
+        if(CollectionUtils.isEmpty(list))
+            return ;
         for (int i = 0; i < list.size(); i++) {
             SgjsBuildSchemeReview temp = list.get(i);
             temp.setProcessStatus("save");
