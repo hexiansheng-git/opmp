@@ -136,7 +136,8 @@ public class SgjsBuildSchemeEvolveImpl implements ISgjsBuildSchemeEvolveService 
             }
 
             //设置进展状态
-            if("red".equals(evolve.getSchemeApprovalTimeColor())|| "red".equals(evolve.getSubmitDateColor())){
+//            if("red".equals(evolve.getSchemeApprovalTimeColor()) || "red".equals(evolve.getSubmitDateColor())){
+            if("red".equals(evolve.getSchemeApprovalTimeColor()) ){
                 evolve.setSchemeEvolve("滞后");
             }else{
                 evolve.setSchemeEvolve("正常");

@@ -144,7 +144,7 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
             //拿总部版数据
             Object gmChildObj = gmObj.get(measures.getPtVar1()+"__"+measures.getPtVar3());
             if(gmChildObj == null){
-                measures.getDetailList().addAll(sourceDetailMap.values());
+                measures.setDetailList(new ArrayList<>(sourceDetailMap.values()));
                 continue;
             }
             measures.setDetailList(new ArrayList<>());

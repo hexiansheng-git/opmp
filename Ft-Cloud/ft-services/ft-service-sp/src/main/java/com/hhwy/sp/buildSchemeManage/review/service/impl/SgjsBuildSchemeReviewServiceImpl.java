@@ -28,6 +28,7 @@ import com.hhwy.sp.buildSchemeManage.review.domain.*;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.*;
 import com.hhwy.sp.buildSchemeManage.review.mapper.*;
 import com.hhwy.sp.buildSchemeManage.review.service.ISgjsBuildSchemeReviewService;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsWarnConfig;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
@@ -1113,5 +1114,10 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     @Override
     public void deleteById(Long id) {
         sgjsBuildSchemeReviewMapper.deleteById(id);
+        //推送到总部，删除总部版对应数据
+        SgjsBuildSchemeReview review = new SgjsBuildSchemeReview();
+        review.setId(id);
+        review.setProcessStatus("delete");
+        sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
     }
 }
