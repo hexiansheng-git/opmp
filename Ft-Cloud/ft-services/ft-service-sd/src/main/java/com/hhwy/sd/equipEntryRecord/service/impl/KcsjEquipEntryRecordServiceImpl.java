@@ -662,7 +662,7 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
         }
         kcsjEquipEntryRecordList.forEach(p -> p.setPtVar5(projectCode));
         rocketMQTemplate.convertAndSend("kcsj_equip_entry_record:tenantSuccess", kcsjEquipEntryRecordList);
-        if (CollUtil.isEmpty(kcsjEquipEntryRecordInfoList)) {
+        if (CollUtil.isNotEmpty(kcsjEquipEntryRecordInfoList)) {
             kcsjEquipEntryRecordInfoList.forEach(p -> p.setPtVar5(projectCode));
             rocketMQTemplate.convertAndSend("kcsj_equip_entry_record_info:tenantSuccess", kcsjEquipEntryRecordInfoList);
         }
