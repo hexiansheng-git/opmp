@@ -110,6 +110,7 @@ public class SgjsTechnicalFileBlueprintServiceImpl implements ISgjsTechnicalFile
             sgjsTechnicalFileBlueprint.setRegionName(projectDto.getRegionName());
             sgjsTechnicalFileBlueprint.setProjectId(projectDto.getProjectId());
             sgjsTechnicalFileBlueprint.setPtVar5(projectDto.getProjectCode());
+            sgjsTechnicalFileBlueprint.setProjectName(projectDto.getProjectName());
             sgjsTechnicalFileBlueprint.setCreateUser(SecurityUtils.getUserName());
             sgjsTechnicalFileBlueprint.setCreateTime(DateUtils.getNowDate());
             save.add(sgjsTechnicalFileBlueprint);
