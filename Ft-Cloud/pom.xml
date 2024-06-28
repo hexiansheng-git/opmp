@@ -17,7 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring-boot.version>2.5.1</spring-boot.version>
+        <spring-boot.version>2.5.15</spring-boot.version>
         <spring-cloud.version>2020.0.6</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.1</spring-cloud-alibaba.version>
         <alibaba.nacos.version>2.0.2</alibaba.nacos.version>
@@ -31,7 +31,7 @@
         <druid.version>1.2.6</druid.version>
         <dynamic-ds.version>3.4.0</dynamic-ds.version>
         <commons.io.version>2.10.0</commons.io.version>
-        <commons.fileupload.version>1.4</commons.fileupload.version>
+        <commons.fileupload.version>1.5</commons.fileupload.version>
         <velocity.version>1.7</velocity.version>
         <fastjson.version>1.2.83</fastjson.version>
         <minio.version>8.2.1</minio.version>
@@ -83,7 +83,7 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
-                <version>5.3.32</version>
+                <version>5.3.37</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
