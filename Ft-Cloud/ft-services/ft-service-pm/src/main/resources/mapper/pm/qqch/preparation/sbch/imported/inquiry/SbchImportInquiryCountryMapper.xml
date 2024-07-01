@@ -55,7 +55,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="regionName != null  and regionName != ''"> and `region_name` like concat('%', #{regionName}, '%')</if>
             <if test="deptId != null "> and `dept_id` = #{deptId}</if>
         </where>
-        order by `id` desc
     </select>
     
     <select id="selectSbchImportInquiryCountryById" parameterType="Long" resultMap="SbchImportInquiryCountryResult">

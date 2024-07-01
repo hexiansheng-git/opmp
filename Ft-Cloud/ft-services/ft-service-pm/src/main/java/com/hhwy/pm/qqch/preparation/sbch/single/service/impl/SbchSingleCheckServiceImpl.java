@@ -301,7 +301,7 @@ public class SbchSingleCheckServiceImpl implements ISbchSingleCheckService {
             returnVo = sbchSingleCheck1;
             //详情列表
             SbchSingleCheckDetail sbchSingleCheckDetail = new SbchSingleCheckDetail();
-            sbchSingleCheckDetail.setInfoId(sbchSingleCheckDetail.getId());
+            sbchSingleCheckDetail.setInfoId(sbchSingleCheck1.getId());
             List<SbchSingleCheckDetail> sbchSingleCheckDetails = sbchSingleCheckDetailService.selectSbchSingleCheckDetailList(sbchSingleCheckDetail);
             returnVo.setDetailList(sbchSingleCheckDetails);
         }else{

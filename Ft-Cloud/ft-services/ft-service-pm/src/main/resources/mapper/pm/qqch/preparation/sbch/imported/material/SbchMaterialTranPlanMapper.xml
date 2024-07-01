@@ -61,7 +61,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="prjCode != null  and prjCode != ''"> and `prj_code` = #{prjCode}</if>
         </where>
         ${params.dataScope}
-#         order by `id` desc
     </select>
     
     <select id="selectSbchMaterialTranPlanById" parameterType="Long" resultMap="SbchMaterialTranPlanResult">

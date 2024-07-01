@@ -153,7 +153,7 @@ public class SbchMaterialTranPlanServiceImpl implements ISbchMaterialTranPlanSer
         version = VersionUtil.getVersion("sbch_material_tran_plan", version);
 
         SbchMaterialTranPlan sbchMaterialTranPlan = new SbchMaterialTranPlan();
-        sbchMaterialTranPlan.setVersionNo(version);
+        sbchMaterialTranPlan.setVersion(version);
         List<SbchMaterialTranPlan> sbchMaterialTranPlans = sbchMaterialTranPlanMapper.selectSbchMaterialTranPlanList(sbchMaterialTranPlan);
         if(!ObjectNullUtil.isEmpty(sbchMaterialTranPlans)){
             SbchMaterialTranPlan sbchMaterialTranPlan1 = sbchMaterialTranPlans.get(0);
