@@ -70,7 +70,7 @@ public class TWarnServiceImpl implements ITWarnService {
     }
 
     @Override
-    @Transactional
+    //@Transactional
     public int addWarnNonGm(TWarn tWarn) {
         String warnScope = tWarn.getWarnScope();
         if(StringUtils.isBlank(warnScope)){
