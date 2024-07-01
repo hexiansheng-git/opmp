@@ -198,7 +198,7 @@ public class QqchDangerProcessControlPlanServiceImpl implements IQqchDangerProce
                 qqchDangerProcessControlPlan.setCreateTime(DateUtils.getNowDate());
                 if (qqchDangerProcessControlPlan.getPlanStartDate() != null && StringUtils.isBlank(qqchDangerProcessControlPlan.getPtVar2())) {
                     qqchDangerProcessControlPlan.setPtVar2(IdWorker.createId() + "");
-                } else if (qqchDangerProcessControlPlan.getPlanStartDate() != null && StringUtils.isNotBlank(qqchDangerProcessControlPlan.getPtVar2())) {
+                } else if (qqchDangerProcessControlPlan.getPlanStartDate() == null && StringUtils.isNotBlank(qqchDangerProcessControlPlan.getPtVar2())) {
                     qqchDangerProcessControlPlan.setPtVar2("");
                 }
 
