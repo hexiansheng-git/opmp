@@ -49,13 +49,13 @@ public class SysSyncInfoLogServiceImpl implements ISysSyncInfoLogService {
     }
 
     @Override
-    @Transactional
+    //@Transactional 经坤同意去掉
     public int success(SyncBusinessEnum businessEnum, String ids, Long count, Long useMills) {
         return insert(businessEnum,ids,count,useMills,null,null);
     }
 
     @Override
-    @Transactional
+    //@Transactional
     public int insert(SyncBusinessEnum businessEnum, String ids, Long count, Long useMills, Integer status,String msg) {
         return insert(businessEnum.busType(),ids,count,useMills,status,msg);
     }
