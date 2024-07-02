@@ -162,7 +162,7 @@ public class XmslContractSpecialController extends BaseController {
      */
     @PostMapping("/provideList")
     @CustomLogger(title = "项目设立-合同信息-专用条件", name = "专用条件", businessType = CustomBusinessType.SELECT)
-    public AjaxResult provideList(@Validated(ValidationGroups.Get.class) XmslContractSpecial xmslContractSpecialParam) {
+    public AjaxResult provideList(@Validated(ValidationGroups.Get.class) @RequestBody XmslContractSpecial xmslContractSpecialParam) {
         List<XmslContractSpecial> treeVOS = xmslContractSpecialService.provideList(xmslContractSpecialParam);
         return AjaxResult.success(treeVOS);
     }

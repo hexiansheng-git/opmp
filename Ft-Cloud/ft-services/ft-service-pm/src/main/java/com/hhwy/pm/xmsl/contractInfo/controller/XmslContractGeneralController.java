@@ -163,7 +163,7 @@ public class XmslContractGeneralController extends BaseController {
      */
     @PostMapping("/provideList")
     @CustomLogger(title = "项目设立-合同信息-通用条件", name = "通用条件 - 给编制模块（合同策划）提供接口", businessType = CustomBusinessType.SELECT)
-    public AjaxResult provideList(@Validated(ValidationGroups.Get.class) XmslContractGeneral xmslContractGeneralParam) {
+    public AjaxResult provideList(@Validated(ValidationGroups.Get.class) @RequestBody XmslContractGeneral xmslContractGeneralParam) {
         List<XmslContractGeneral> treeVOS = xmslContractGeneralService.provideList(xmslContractGeneralParam);
         return AjaxResult.success(treeVOS);
     }

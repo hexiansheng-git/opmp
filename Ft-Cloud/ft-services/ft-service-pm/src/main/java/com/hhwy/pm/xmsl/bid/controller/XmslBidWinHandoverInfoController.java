@@ -1,5 +1,6 @@
 package com.hhwy.pm.xmsl.bid.controller;
 
+import com.hhwy.pm.xmsl.bid.domain.XmslBidWinHandoverFile;
 import com.hhwy.pm.xmsl.bid.domain.XmslBidWinHandoverInfo;
 import com.hhwy.pm.xmsl.bid.service.IXmslBidWinHandoverInfoService;
 import com.hhwy.common.core.web.controller.BaseController;
@@ -7,11 +8,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zhenglili
@@ -32,8 +29,9 @@ public class XmslBidWinHandoverInfoController extends BaseController {
      * @param
      * @return
      */
-    @GetMapping("/getList")
-    public AjaxResult getXmslBidWinHandoverInfo(String fileName) {
+    @PostMapping("/getList")
+    public AjaxResult getXmslBidWinHandoverInfo(@RequestBody XmslBidWinHandoverFile bidWinHandoverFile) {
+        String fileName = bidWinHandoverFile.getFileName();
         XmslBidWinHandoverInfo xmslBidWinHandoverInfo = xmslBidWinHandoverInfoService.getXmslBidWinHandoverInfo(fileName);
         return AjaxResult.success(xmslBidWinHandoverInfo);
     }
