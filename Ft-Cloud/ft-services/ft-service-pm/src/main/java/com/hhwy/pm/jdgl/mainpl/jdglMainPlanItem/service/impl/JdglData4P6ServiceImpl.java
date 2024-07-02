@@ -528,6 +528,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                     //切换租户
                     String oldDataSource = DynamicDataSourceContextHolder.peek();
                     DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+                    log.info("切换---线程：{} --- 原数据源：{} --- 新数据源：{}", Thread.currentThread().getName(), oldDataSource, TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
                     try {
                         initJdglData4P6ByOne(tenantKey);
                     } catch (Exception e) {
@@ -537,6 +538,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                     } finally {
                         DynamicDataSourceContextHolder.poll();
                         DynamicDataSourceContextHolder.push(oldDataSource);
+                        log.info("还原---线程：{} --- 原数据源：{} --- 新数据源：{}", Thread.currentThread().getName(), oldDataSource, TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
                     }
                 });
             }
@@ -549,7 +551,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
             }
 
         }
-
+        log.info("结束");
         return null;
     }
 

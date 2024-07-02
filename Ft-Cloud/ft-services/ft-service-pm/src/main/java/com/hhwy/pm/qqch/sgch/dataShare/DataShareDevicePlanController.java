@@ -33,22 +33,22 @@ public class DataShareDevicePlanController {
         if(!SecurityUtils.getSysUser().isAdmin())
             return AjaxResult.error("permission defined");
         String tenantKey = SecurityUtils.getTenantKey();
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        executorService.submit(() -> {
+//        ExecutorService executorService = Executors.newSingleThreadExecutor();
+//        executorService.submit(() -> {
             //切换到master
-            String oldDataSource = DynamicDataSourceContextHolder.peek();
-            DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
-            try {
+//            String oldDataSource = DynamicDataSourceContextHolder.peek();
+//            DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+//            try {
                 dataShareDevicePlanService.eachStagePush(tenantKey);
 //                dataShareDevicePlanService.eachChangePush(tenantKey);
-            }catch (Exception e){
-                e.printStackTrace();
-                throw new CustomException(e.getMessage());
-            }finally {
-                DynamicDataSourceContextHolder.poll();
-                DynamicDataSourceContextHolder.push(oldDataSource);
-            }
-        });
+//            }catch (Exception e){
+//                e.printStackTrace();
+//                throw new CustomException(e.getMessage());
+//            }finally {
+//                DynamicDataSourceContextHolder.poll();
+//                DynamicDataSourceContextHolder.push(oldDataSource);
+//            }
+//        });
         return AjaxResult.success();
     }
     @GetMapping("/eachChangePush")
