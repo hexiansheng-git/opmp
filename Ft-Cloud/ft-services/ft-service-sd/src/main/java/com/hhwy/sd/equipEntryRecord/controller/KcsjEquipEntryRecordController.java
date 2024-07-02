@@ -139,4 +139,10 @@ public class KcsjEquipEntryRecordController extends BaseController {
         kcsjEquipEntryRecordService.syncWusheJob();
         return AjaxResult.success();
     }
+
+    @GetMapping("/doSendGm")
+    public AjaxResult doSendGm(){
+        kcsjEquipEntryRecordService.doSendGm();
+        return AjaxResult.success();
+    }
 }

@@ -199,7 +199,7 @@
 
     <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsBuildSchemeExpertSuggest -->
     <insert id="insertSgjsBuildSchemeExpertSuggestList">
-        insert into sgjs_build_scheme_expert_suggest
+        replace into sgjs_build_scheme_expert_suggest
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `foreign_id`,

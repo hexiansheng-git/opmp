@@ -45,4 +45,7 @@ public interface IKcsjEquipEntryRecordService {
      * @return
      */
     void syncWusheJob();
+
+    void doSendGm();
+
 }

@@ -75,7 +75,8 @@ public class SgjsBuildSchemeExpertSuggestServiceImpl implements ISgjsBuildScheme
             sgjsBuildSchemeExpertSuggest.setPersonId(String.valueOf(userId));
             sgjsBuildSchemeExpertSuggest.setPersonName(sysUser.getNickName());
             sgjsBuildSchemeExpertSuggest.setSubmitTime(DateUtils.getNowDate());
-            sgjsBuildSchemeExpertSuggest.setId(IdWorker.createId());
+            if (sgjsBuildSchemeExpertSuggest.getId() == null )
+                sgjsBuildSchemeExpertSuggest.setId(IdWorker.createId());
             sgjsBuildSchemeExpertSuggest.setCreateUser(sysUser.getUserName());
             sgjsBuildSchemeExpertSuggest.setCreateTime(DateUtils.getNowDate());
         }
