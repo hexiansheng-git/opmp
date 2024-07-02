@@ -507,7 +507,6 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
     @Override
     public List<JdglMainPlanItem> initAllJdglData4P6() {
-
         // 获取租户集合
         List<String> tenantKeyList = new ArrayList<>();
         List<SysTenant> sysTenants = systemServiceApi.tenantList();
@@ -515,41 +514,39 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         if (!CollectionUtils.isEmpty(sysTenants)) {
             sysTenants.forEach(vo -> tenantKeyList.add(vo.getTenantKey()));
         }
+        if (CollUtil.isEmpty(tenantKeyList)) {
+            log.info("租户列表为空");
+            return null;
+        }
+        // 创建固定数量的线程池
+        int threadPoolSize = 5;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
 
-        if (!CollectionUtils.isEmpty(tenantKeyList)) {
-
-            // 创建固定数量的线程池
-            int threadPoolSize = 5;
-            ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
-
-
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        try {
             for (String tenantKey : tenantKeyList) {
                 executorService.execute(() -> {
                     //切换租户
-                    String oldDataSource = DynamicDataSourceContextHolder.peek();
                     DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
                     log.info("切换---线程：{} --- 原数据源：{} --- 新数据源：{}", Thread.currentThread().getName(), oldDataSource, TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
                     try {
                         initJdglData4P6ByOne(tenantKey);
                     } catch (Exception e) {
+                        log.info("租户"+ tenantKey + "获取p6异常:-----------------" + e.getMessage());
                         e.printStackTrace();
-                        System.out.println("租户"+ tenantKey + "获取p6异常:-----------------" + e.getMessage());
-//                        throw new CustomBusinessException(e.getMessage());
-                    } finally {
-                        DynamicDataSourceContextHolder.poll();
-                        DynamicDataSourceContextHolder.push(oldDataSource);
-                        log.info("还原---线程：{} --- 原数据源：{} --- 新数据源：{}", Thread.currentThread().getName(), oldDataSource, TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
                     }
                 });
             }
-
-            executorService.shutdown();
-
-            // 等待线程池执行结束
-            while (!executorService.isTerminated()) {
-                Thread.yield();
-            }
-
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+            log.info("还原---线程：{} --- 原数据源：{}", Thread.currentThread().getName(), oldDataSource);
+        }
+        executorService.shutdown();
+        // 等待线程池执行结束
+        while (!executorService.isTerminated()) {
+            Thread.yield();
         }
         log.info("结束");
         return null;
