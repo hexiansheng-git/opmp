@@ -243,13 +243,12 @@ public class SysPmController {
         map.put("前期策划小组","qqch_work_group");
         map.put("前期策划工作计划","qqch_work_plan");
 //        map.put("前期策划编制","");
-//        map.put("前期策划评","");
+        map.put("前期策划评审","qqch_review");
         map.put("进度管理-年度产值计划","jdgl_year_plan");
         map.put("进度管理-季度产值计划","jdgl_quarter_plan");
         map.put("进度管理-月度产值计划","jdgl_month_plan");
         map.put("进度管理-每周产值计划","jdgl_week_plan");
         map.put("进度管理-进度填报","jdgl_day_schedule");
-
         //前期策划编制
         chmap.put("施工策划","sgch");
         chmap.put("勘察设计策划","kcsj");
@@ -261,6 +260,7 @@ public class SysPmController {
         chmap.put("安全策划","aqch");
         chmap.put("质量策划","zlch");
         chmap.put("财务策划","cwch");
+
 
         //策划调用数据
         Map<String, Integer> tenantChMap = new HashMap<>();
