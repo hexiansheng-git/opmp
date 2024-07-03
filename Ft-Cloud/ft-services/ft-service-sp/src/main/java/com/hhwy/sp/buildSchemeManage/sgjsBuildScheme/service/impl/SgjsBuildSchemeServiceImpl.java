@@ -267,6 +267,10 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         return sgjsBuildSchemeMapper.getSgjsBuildScheme(sgjsBuildScheme);
     }
 
+    public List<SgjsBuildScheme> getSgjsBuildSchemeList1(SgjsBuildScheme sgjsBuildScheme) {
+        return sgjsBuildSchemeMapper.getSgjsBuildSchemeList(sgjsBuildScheme);
+    }
+
     //台账、历史记录
     public List<SgjsBuildScheme> getSgjsBuildSchemeList(SgjsBuildScheme sgjsBuildScheme) {
         List<SgjsBuildScheme> sgjsBuildSchemeList = sgjsBuildSchemeMapper.getSgjsBuildSchemeList(sgjsBuildScheme);

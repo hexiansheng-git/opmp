@@ -15,6 +15,8 @@ public interface ISgjsBuildSchemeService {
 
     List<SgjsBuildScheme> getSgjsBuildSchemeList(SgjsBuildScheme sgjsBuildScheme);
 
+    List<SgjsBuildScheme> getSgjsBuildSchemeList1(SgjsBuildScheme sgjsBuildScheme);
+
     Long insertSgjsBuildScheme(SgjsBuildScheme sgjsBuildScheme);
 
     int insertSgjsBuildSchemeList(List<SgjsBuildScheme> sgjsBuildSchemeList);
