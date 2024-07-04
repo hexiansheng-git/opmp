@@ -96,7 +96,7 @@ public class SgjsDiscloseRecordController extends BaseController {
      */
     @PreAuthorize(hasPermi = "sgjsDiscloseRecord:update")
     @PostMapping("/batchUpdate")
-    @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.UPDATE)
+    @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.SAVE)
     public AjaxResult updateSgjsDiscloseRecordList(@Validated(ValidationGroups.Update.class) @RequestBody SgjsDiscloseRecord4Update sgjsDiscloseRecord4Update) {
         List<SgjsDiscloseRecord> sgjsDiscloseRecordListParam = sgjsDiscloseRecord4Update.getTreeList();
         List<Long> delIdList = sgjsDiscloseRecord4Update.getDelIdList();

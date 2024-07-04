@@ -46,10 +46,17 @@ public class SysSpController {
         Map<String, String> chmap = new HashMap<>();
         //施工方案技术
         if(type.equals("1")) {//施工技术
-            map.put("施工方案清单", "sgjs_build_scheme");
-            map.put("危大工程清单", "sgjs_build_scheme_list");
-            map.put("施工方案评审", "sgjs_build_scheme_review");
-            map.put("施工方案进展", "sgjs_build_scheme_review");
+            map.put("施工方案管理--施工方案清单", "sgjs_build_scheme");
+            map.put("施工方案管理--危大工程清单", "sgjs_build_scheme_list");
+            map.put("施工方案管理--施工方案评审", "sgjs_build_scheme_review");
+            map.put("施工方案管理--施工方案进展", "sgjs_build_scheme_review");
+            map.put("方案安全技术交底","");
+            map.put("科技管理--一般课题研发(高新)","sgjs_technical_normal_topic");
+            map.put("科技管理--科研课题管理","sgsj_technical_science_topic");
+            map.put("科技管理--四新成果管理","sgjs_four_news_achievement");
+            map.put("科技管理--工艺工法管理","sgjs_tech_method");
+            map.put("科技管理--专利申报管理","sgjs_patent_declare");
+            map.put("科技管理--论文发表管理","sgjs_paper_publish");
         }
         if(type.equals("0")) {
             //勘祭设计
