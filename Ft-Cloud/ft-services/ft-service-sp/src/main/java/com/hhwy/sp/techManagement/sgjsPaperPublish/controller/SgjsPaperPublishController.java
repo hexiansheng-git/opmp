@@ -12,6 +12,8 @@ import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.SgjsPaperPublish;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishExportVo;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishQueryVo;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.service.ISgjsPaperPublishService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
@@ -83,6 +85,7 @@ public class SgjsPaperPublishController extends BaseController {
      */
     @PreAuthorize(hasPermi = "sgjsPaperPublish:save")
     @PostMapping("save")
+    @CustomLogger(title = "施工技术-科技管理-论文发表管理",name = "论文发表管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody SgjsPaperPublish paperPublish){
         Long id = sgjsPaperPublishService.save(paperPublish);
         return AjaxResult.success(id);

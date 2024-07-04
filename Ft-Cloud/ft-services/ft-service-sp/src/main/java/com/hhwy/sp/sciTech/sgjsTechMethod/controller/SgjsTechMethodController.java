@@ -7,6 +7,8 @@ import java.io.IOException;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain.SgjsAuthenticateEvaluate;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -71,6 +73,7 @@ public class SgjsTechMethodController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsTechMethod:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-科技管理-工艺工法管理",name = "工艺工法管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult updateSgjsTechMethod(@Validated(ValidationGroups.Update.class) @RequestBody SgjsTechMethod sgjsTechMethodParam) {
         return AjaxResult.success(sgjsTechMethodService.updateSgjsTechMethod(sgjsTechMethodParam));
     }

@@ -10,6 +10,8 @@ import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAuthenticateEvaluate.domain.SgjsAuthenticateEvaluate;
 import com.hhwy.utils.ThreadPoolUtil;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -73,6 +75,7 @@ public class SgjsFourNewsAchievementController extends BaseController {
 
     @PreAuthorize(hasPermi = "sgjsFourNewsAchievement:update")
     @PostMapping("/update")
+    @CustomLogger(title = "施工技术-科技管理-四新成果管理",name = "四新成果管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult updateSgjsFourNewsAchievement(@Validated(ValidationGroups.Update.class) @RequestBody SgjsFourNewsAchievement sgjsFourNewsAchievementParam) {
         return AjaxResult.success(sgjsFourNewsAchievementService.updateSgjsFourNewsAchievement(sgjsFourNewsAchievementParam));
     }

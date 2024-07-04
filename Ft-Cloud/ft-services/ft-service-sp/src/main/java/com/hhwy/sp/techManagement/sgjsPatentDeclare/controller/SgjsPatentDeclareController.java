@@ -11,6 +11,8 @@ import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardServ
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.SgjsPatentDeclare;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.domain.vo.PatentDeclareQueryVo;
 import com.hhwy.sp.techManagement.sgjsPatentDeclare.service.ISgjsPatentDeclareService;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
@@ -76,6 +78,7 @@ public class SgjsPatentDeclareController extends BaseController {
      */
     @PostMapping("save")
     @PreAuthorize(hasPermi = "sgjsPatentDeclare:save")
+    @CustomLogger(title = "施工技术-科技管理-专利申报管理",name = "专利申报管理",businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@RequestBody SgjsPatentDeclare patentDeclare){
         Long id = sgjsPatentDeclareService.save(patentDeclare);
         return AjaxResult.success(id);
