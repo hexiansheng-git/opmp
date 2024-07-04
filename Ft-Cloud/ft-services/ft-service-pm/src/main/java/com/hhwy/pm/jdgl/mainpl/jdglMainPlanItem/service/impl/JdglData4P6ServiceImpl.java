@@ -87,7 +87,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
     //从1.2.1获取数据，生成基线计划
     @Transactional
-    public void syncData(){
+    public void syncData() {
         log.info("从1.2.1获取数据，生成基线计划开始.....");
         /*清空表*/
         jdglMainPlanService.deleteJdglMainPlan(new JdglMainPlan());
@@ -146,7 +146,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
     @Override
     public List<JdglMainPlanItem> initJdglData4P6ByThis() {
         String tenantKey = SecurityUtils.getTenantKey();
-        if(StringUtils.isEmpty(tenantKey)) {
+        if (StringUtils.isEmpty(tenantKey)) {
             return new ArrayList<>();
         }
         this.alex = "RealTime";
@@ -166,9 +166,9 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 //            return returnList;
 //        }
 
-        System.out.println("--获取p6项目数据--租户:" + tenantKey + "--开始:" +  DateUtils.getTime());
+        System.out.println("--获取p6项目数据--租户:" + tenantKey + "--开始:" + DateUtils.getTime());
         ProjectInfo projectInfo = getProjectInfo(tenantKey);
-        System.out.println("--获取p6项目数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime());
+        System.out.println("--获取p6项目数据--租户:" + tenantKey + "--结束:" + DateUtils.getTime());
         if (projectInfo == null) {
             System.out.println("--未获取到p6项目数据--租户:" + tenantKey);
             return returnList;
@@ -187,11 +187,11 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         ParameterizedTypeReference<List<ActivityConstField>> responseType4Work = new ParameterizedTypeReference<List<ActivityConstField>>() {
         };
 
-        System.out.println("--获取p6 wbs数据--租户:" + tenantKey + "--开始:" +  DateUtils.getTime());
+        System.out.println("--获取p6 wbs数据--租户:" + tenantKey + "--开始:" + DateUtils.getTime());
         // 获取p6 wbs数据
         ResponseEntity<List<WbsInfo>> wbsResult = restTemplate.exchange(urlwbs + "?projectId={projectId}", HttpMethod.GET, entity, responseType4Wbs, params);
-        System.out.println("--获取p6 wbs数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime() + "-- 数量:" + (wbsResult.getBody() == null ? 0 : wbsResult.getBody().size()));
-        System.out.println("--获取p6 作业数据--租户:" + tenantKey + "--开始:" +  DateUtils.getTime());
+        System.out.println("--获取p6 wbs数据--租户:" + tenantKey + "--结束:" + DateUtils.getTime() + "-- 数量:" + (wbsResult.getBody() == null ? 0 : wbsResult.getBody().size()));
+        System.out.println("--获取p6 作业数据--租户:" + tenantKey + "--开始:" + DateUtils.getTime());
         // 获取p6 作业数据
 //        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
 //        requestFactory.setConnectTimeout(1000);
@@ -224,7 +224,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 .clientConnector(new ReactorClientHttpConnector(client))
                 .build();
         List<ActivityConstField> workInfos = webClient.get().uri(urlwork + "?projectId={projectId}", projectId).retrieve().bodyToFlux(ActivityConstField.class).collectList().block();
-        System.out.println("--获取p6 作业数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime() + "-- 数量:" + (workInfos == null ? 0 : workInfos.size()));
+        System.out.println("--获取p6 作业数据--租户:" + tenantKey + "--结束:" + DateUtils.getTime() + "-- 数量:" + (workInfos == null ? 0 : workInfos.size()));
 
         // 获取当前启用的总体计划主表数据
         JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
@@ -262,10 +262,10 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
         List<WbsInfo> wbsInfos = wbsResult.getBody();
 
-        if(CollectionUtils.isEmpty(wbsInfos)) {
+        if (CollectionUtils.isEmpty(wbsInfos)) {
             System.out.println("--未获取到p6wbs数据--租户:" + tenantKey);
         }
-        if(CollectionUtils.isEmpty(workInfos)) {
+        if (CollectionUtils.isEmpty(workInfos)) {
             System.out.println("--未获取到p6作业数据--租户:" + tenantKey);
         }
 
@@ -322,7 +322,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 returnList.add(jdglMainPlanItem);
             }
             List<JdglMainPlanItem> workMainPlanItemList = new ArrayList<>();
-            if(!CollectionUtils.isEmpty(workInfos)) {
+            if (!CollectionUtils.isEmpty(workInfos)) {
                 for (ActivityConstField activityInfo : workInfos) {
                     JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
                     String p6Id = activityInfo.getId();
@@ -336,9 +336,9 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                     jdglMainPlanItem.setTotalFloat(activityInfo.getTotalFloat());
 //                jdglMainPlanItem.setExecuterId();
                     jdglMainPlanItem.setExecuter(activityInfo.getExecuter());
-                    if(CollectionUtils.isNotEmpty(jdglMainPlanItemList)) {
+                    if (CollectionUtils.isNotEmpty(jdglMainPlanItemList)) {
                         JdglMainPlanItem jdglMainPlanItem1 = jdglMainPlanItemList.stream().filter(vo -> p6Id.equals(vo.getItemCode())).findFirst().orElse(null);
-                        if(jdglMainPlanItem1 != null) {
+                        if (jdglMainPlanItem1 != null) {
                             jdglMainPlanItem.setExecuterId(jdglMainPlanItem1.getExecuterId());
                             jdglMainPlanItem.setExecuter(jdglMainPlanItem1.getExecuter());
                         }
@@ -399,7 +399,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
             if (!CollectionUtils.isEmpty(returnList)) {
                 for (JdglMainPlanItem jdglMainPlanItem : returnList) {
                     JdglMainPlanItem jdglMainPlanItem1 = returnList.stream().filter(
-                            vo -> jdglMainPlanItem.getWbsParentObjectId().equals(vo.getWbsObjectId()))
+                                    vo -> jdglMainPlanItem.getWbsParentObjectId().equals(vo.getWbsObjectId()))
                             .findFirst().orElse(null);
                     if (jdglMainPlanItem1 != null) {
                         jdglMainPlanItem.setPid(jdglMainPlanItem1.getId());
@@ -469,12 +469,12 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
             String oldDataSource = DynamicDataSourceContextHolder.peek();
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
             try {
-                System.out.println("--获取p6 作业逻辑关系数据--租户:" + tenantKey + "--开始:" +  DateUtils.getTime());
+                System.out.println("--获取p6 作业逻辑关系数据--租户:" + tenantKey + "--开始:" + DateUtils.getTime());
                 // 获取转换后的p6逻辑关系数据
                 List<JdglMainPlanItemPre> relInfos = getPre(projectId);
-                System.out.println("--获取p6 作业逻辑关系数据--租户:" + tenantKey + "--结束:" +  DateUtils.getTime() +"-- 数量:" + (relInfos == null ? 0 : relInfos.size()));
+                System.out.println("--获取p6 作业逻辑关系数据--租户:" + tenantKey + "--结束:" + DateUtils.getTime() + "-- 数量:" + (relInfos == null ? 0 : relInfos.size()));
 
-                if(CollectionUtils.isEmpty(relInfos)) {
+                if (CollectionUtils.isEmpty(relInfos)) {
                     System.out.println("--未获取到p6作业逻辑数据--租户:" + tenantKey);
                 }
 
@@ -521,27 +521,23 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         // 创建固定数量的线程池
         int threadPoolSize = 5;
         ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
-
-        String oldDataSource = DynamicDataSourceContextHolder.peek();
-        DynamicDataSourceContextHolder.push("master");
-        try {
-            for (String tenantKey : tenantKeyList) {
-                executorService.execute(() -> {
-                    //切换租户
-                    DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
-                    log.info("切换---线程：{} --- 原数据源：{} --- 新数据源：{}", Thread.currentThread().getName(), oldDataSource, TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
-                    try {
-                        initJdglData4P6ByOne(tenantKey);
-                    } catch (Exception e) {
-                        log.info("租户"+ tenantKey + "获取p6异常:-----------------" + e.getMessage());
-                        e.printStackTrace();
-                    }
-                });
-            }
-        }finally {
-            DynamicDataSourceContextHolder.poll();
-            DynamicDataSourceContextHolder.push(oldDataSource);
-            log.info("还原---线程：{} --- 原数据源：{}", Thread.currentThread().getName(), oldDataSource);
+        for (String tenantKey : tenantKeyList) {
+            executorService.execute(() -> {
+                //切换租户
+                String oldDataSource = DynamicDataSourceContextHolder.peek();
+                DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+                log.info("切换---线程：{} --- 原数据源：{} --- 新数据源：{}", Thread.currentThread().getName(), oldDataSource, TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+                try {
+                    initJdglData4P6ByOne(tenantKey);
+                } catch (Exception e) {
+                    log.info("租户" + tenantKey + "获取p6异常:-----------------" + e.getMessage());
+                    e.printStackTrace();
+                } finally {
+                    DynamicDataSourceContextHolder.poll();
+                    DynamicDataSourceContextHolder.push(oldDataSource);
+                    log.info("还原---线程：{} --- 原数据源：{}", Thread.currentThread().getName(), oldDataSource);
+                }
+            });
         }
         executorService.shutdown();
         // 等待线程池执行结束
@@ -554,15 +550,12 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
     @Override
     public List<JdglMainPlanItem> initOneJdglData4P6ByTenent(String projectId) {
-
         if (StringUtils.isEmpty(projectId)) {
             throw new RuntimeException("projectId参数异常");
         }
-
         // 创建固定数量的线程池
         int threadPoolSize = 1;
         ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
-
         executorService.execute(() -> {
             String oldDataSource = DynamicDataSourceContextHolder.peek();
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(projectId));
@@ -858,7 +851,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
         List<JdglMainPlanItemPre> returnList = new ArrayList<>();
 
-        String urlRel = p6IpPort + pre + "/relationInfo"  + this.alex;
+        String urlRel = p6IpPort + pre + "/relationInfo" + this.alex;
 
         HttpEntity<?> entity = new HttpEntity(new HttpHeaders());
 
