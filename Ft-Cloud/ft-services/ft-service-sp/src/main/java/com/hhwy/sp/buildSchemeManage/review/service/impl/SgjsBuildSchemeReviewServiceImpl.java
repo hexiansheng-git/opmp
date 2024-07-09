@@ -197,7 +197,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         }
         if("4".equals(schemeLevel)){
             FlowInfoSearchUtil.getFlowInfo(review, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4);
-        }
+        }                
+        //总部版跳转过来传的type=handler
+        type=StringUtils.equals(type,"handle")?"4":type;
         if("1".equals(type) || "2".equals(type)){
             //查看/发起审批
             return review;
