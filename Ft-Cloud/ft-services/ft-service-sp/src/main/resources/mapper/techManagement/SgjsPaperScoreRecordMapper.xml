@@ -15,7 +15,6 @@
         <result property="logicality" column="logicality"/>
         <result property="writingLevel" column="writing_level"/>
         <result property="weightingScore" column="weighting_score"/>
-        <result property="averageScore" column="average_score"/>
         <result property="submitTime" column="submit_time"/>
         <result property="remark" column="remark"/>
         <result property="regionId" column="region_id"/>
@@ -48,7 +47,6 @@
              , `logicality`
              , `writing_level`
              , `weighting_score`
-             , `average_score`
              , `submit_time`
              , `remark`
              , `region_id`
@@ -85,7 +83,6 @@
             <if test="logicality != null ">and `logicality` = #{logicality}</if>
             <if test="writingLevel != null ">and `writing_level` = #{writingLevel}</if>
             <if test="weightingScore != null ">and `weighting_score` = #{weightingScore}</if>
-            <if test="averageScore != null ">and `average_score` = #{averageScore}</if>
             <if test="submitTime != null ">and `submit_time` = #{submitTime}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
@@ -124,7 +121,6 @@
             <if test="logicality != null ">and `logicality` = #{logicality}</if>
             <if test="writingLevel != null ">and `writing_level` = #{writingLevel}</if>
             <if test="weightingScore != null ">and `weighting_score` = #{weightingScore}</if>
-            <if test="averageScore != null ">and `average_score` = #{averageScore}</if>
             <if test="submitTime != null ">and `submit_time` = #{submitTime}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
@@ -162,7 +158,6 @@
             <if test="logicality != null ">`logicality`,</if>
             <if test="writingLevel != null ">`writing_level`,</if>
             <if test="weightingScore != null ">`weighting_score`,</if>
-            <if test="averageScore != null ">`average_score`,</if>
             <if test="submitTime != null ">`submit_time`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
@@ -195,7 +190,6 @@
             <if test="logicality != null ">#{logicality},</if>
             <if test="writingLevel != null ">#{writingLevel},</if>
             <if test="weightingScore != null ">#{weightingScore},</if>
-            <if test="averageScore != null ">#{averageScore},</if>
             <if test="submitTime != null ">#{submitTime},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="regionId != null ">#{regionId},</if>
@@ -233,7 +227,6 @@
             `logicality`,
             `writing_level`,
             `weighting_score`,
-            `average_score`,
             `submit_time`,
             `remark`,
             `region_id`,
@@ -267,7 +260,6 @@
                 #{item.logicality},
                 #{item.writingLevel},
                 #{item.weightingScore},
-                #{item.averageScore},
                 #{item.submitTime},
                 #{item.remark},
                 #{item.regionId},
@@ -304,7 +296,6 @@
             <if test="logicality != null ">`logicality` = #{logicality},</if>
             <if test="writingLevel != null ">`writing_level` = #{writingLevel},</if>
             <if test="weightingScore != null ">`weighting_score` = #{weightingScore},</if>
-            <if test="averageScore != null ">`average_score` = #{averageScore},</if>
             <if test="submitTime != null ">`submit_time` = #{submitTime},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
@@ -379,11 +370,6 @@
             <trim prefix="weighting_score  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `specialist_id`=#{item.specialistId} then #{item.weightingScore}
-                </foreach>
-            </trim>
-            <trim prefix="average_score  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `specialist_id`=#{item.specialistId} then #{item.averageScore}
                 </foreach>
             </trim>
             <trim prefix="submit_time  = case" suffix="end,">
@@ -510,7 +496,6 @@
             <if test="logicality != null ">and `logicality` = #{logicality}</if>
             <if test="writingLevel != null ">and `writing_level` = #{writingLevel}</if>
             <if test="weightingScore != null ">and `weighting_score` = #{weightingScore}</if>
-            <if test="averageScore != null ">and `average_score` = #{averageScore}</if>
             <if test="submitTime != null ">and `submit_time` = #{submitTime}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
@@ -544,4 +529,14 @@
             </foreach>
         </where>
     </update>
+
+    <select id="getListByForeginId" resultMap="SgjsPaperScoreRecordResultMap">
+        <include refid="selectSgjsPaperScoreRecordVo"/>
+        <where>
+            `foregin_id` in
+            <foreach item="foreginId" collection="idList" open="(" separator="," close=")">
+                #{foreginId}
+            </foreach>
+        </where>
+    </select>
 </mapper>

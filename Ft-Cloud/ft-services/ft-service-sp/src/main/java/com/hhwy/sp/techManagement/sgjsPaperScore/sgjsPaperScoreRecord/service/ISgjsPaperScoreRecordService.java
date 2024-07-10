@@ -27,4 +27,6 @@ public interface ISgjsPaperScoreRecordService {
     int deleteSgjsPaperScoreRecord(SgjsPaperScoreRecord sgjsPaperScoreRecord);
 
     int deleteSgjsPaperScoreRecordByPks(List<Long> sgjsPaperScoreRecordPkList);
+
+    List<SgjsPaperScoreRecord> getListByForeginId(List<Long> idList);
 }

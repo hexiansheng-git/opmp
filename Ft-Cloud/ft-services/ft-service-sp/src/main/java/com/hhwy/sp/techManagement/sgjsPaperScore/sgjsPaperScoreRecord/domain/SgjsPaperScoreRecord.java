@@ -12,7 +12,7 @@ import java.util.Date;
 
 /**
  * @author fsd
- * @date 2024-07-10 16:38:37
+ * @date 2024-07-10 17:28:48
  * @remark sgjs_paper_score_record
  */
 public class SgjsPaperScoreRecord extends BaseEntity {
@@ -75,12 +75,6 @@ public class SgjsPaperScoreRecord extends BaseEntity {
     @JsonProperty
     @Excel(name = "综合得分")
     private Integer weightingScore;
-    /**
-     * 字段描述：平均分
-     */
-    @JsonProperty
-    @Excel(name = "平均分")
-    private Integer averageScore;
     /**
      * 字段描述：提交时间
      */
@@ -303,16 +297,6 @@ public class SgjsPaperScoreRecord extends BaseEntity {
     @JsonIgnore
     public void setWeightingScore(Integer weightingScore) {
         this.weightingScore = weightingScore;
-    }
-
-    @JsonIgnore
-    public Integer getAverageScore() {
-        return averageScore;
-    }
-
-    @JsonIgnore
-    public void setAverageScore(Integer averageScore) {
-        this.averageScore = averageScore;
     }
 
     @JsonIgnore

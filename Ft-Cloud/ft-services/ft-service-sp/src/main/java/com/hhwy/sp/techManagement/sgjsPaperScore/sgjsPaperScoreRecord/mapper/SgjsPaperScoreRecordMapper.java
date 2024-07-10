@@ -27,4 +27,6 @@ public interface SgjsPaperScoreRecordMapper {
     int deleteSgjsPaperScoreRecord(SgjsPaperScoreRecord sgjsPaperScoreRecord);
 
     int deleteSgjsPaperScoreRecordByPks(@Param("sgjsPaperScoreRecordPkList") List<Long> sgjsPaperScoreRecordPkList);
+
+    List<SgjsPaperScoreRecord> getListByForeginId(@Param("idList") List<Long> idList);
 }

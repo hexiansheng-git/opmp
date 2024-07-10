@@ -77,4 +77,9 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
     public int deleteSgjsPaperScoreRecordByPks(List<Long> sgjsPaperScoreRecordPkList) {
         return sgjsPaperScoreRecordMapper.deleteSgjsPaperScoreRecordByPks(sgjsPaperScoreRecordPkList);
     }
+
+    @Override
+    public List<SgjsPaperScoreRecord> getListByForeginId(List<Long> idList) {
+        return sgjsPaperScoreRecordMapper.getListByForeginId(idList);
+    }
 }

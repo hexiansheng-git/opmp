@@ -6,6 +6,7 @@
 
     <resultMap type="com.hhwy.sp.techManagement.sgjsPaperScore.domain.SgjsPaperScore" id="SgjsPaperScoreResultMap">
         <result property="id" column="id"/>
+        <result property="taskStatus" column="task_status"/>
         <result property="paperCode" column="paper_code"/>
         <result property="paperName" column="paper_name"/>
         <result property="declareGrade" column="declare_grade"/>
@@ -13,7 +14,7 @@
         <result property="professionPlate" column="profession_plate"/>
         <result property="principalConsumator" column="principal_consumator"/>
         <result property="principalConsumatorContactWay" column="principal_consumator_contact_way"/>
-        <result property="taskStatus" column="task_status"/>
+        <result property="averageScore" column="average_score"/>
         <result property="remark" column="remark"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
@@ -37,6 +38,7 @@
     </resultMap>
     <sql id="selectSgjsPaperScoreVo">
         select `id`
+             , `task_status`
              , `paper_code`
              , `paper_name`
              , `declare_grade`
@@ -44,7 +46,7 @@
              , `profession_plate`
              , `principal_consumator`
              , `principal_consumator_contact_way`
-             , `task_status`
+             , `average_score`
              , `remark`
              , `region_id`
              , `region_name`
@@ -72,6 +74,7 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="paperCode != null  and paperCode != ''">and `paper_code` = #{paperCode}</if>
             <if test="paperName != null  and paperName != ''">and `paper_name` = #{paperName}</if>
             <if test="declareGrade != null  and declareGrade != ''">and `declare_grade` = #{declareGrade}</if>
@@ -84,7 +87,7 @@
             <if test="principalConsumatorContactWay != null  and principalConsumatorContactWay != ''">and
                 `principal_consumator_contact_way` = #{principalConsumatorContactWay}
             </if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="averageScore != null ">and `average_score` = #{averageScore}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -114,6 +117,7 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="paperCode != null  and paperCode != ''">and `paper_code` = #{paperCode}</if>
             <if test="paperName != null  and paperName != ''">and `paper_name` = #{paperName}</if>
             <if test="declareGrade != null  and declareGrade != ''">and `declare_grade` = #{declareGrade}</if>
@@ -126,7 +130,7 @@
             <if test="principalConsumatorContactWay != null  and principalConsumatorContactWay != ''">and
                 `principal_consumator_contact_way` = #{principalConsumatorContactWay}
             </if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="averageScore != null ">and `average_score` = #{averageScore}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -155,6 +159,7 @@
         insert into sgjs_paper_score
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
+            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
             <if test="paperCode != null  and paperCode != ''">`paper_code`,</if>
             <if test="paperName != null  and paperName != ''">`paper_name`,</if>
             <if test="declareGrade != null  and declareGrade != ''">`declare_grade`,</if>
@@ -164,7 +169,7 @@
             <if test="principalConsumatorContactWay != null  and principalConsumatorContactWay != ''">
                 `principal_consumator_contact_way`,
             </if>
-            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+            <if test="averageScore != null ">`average_score`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -188,6 +193,7 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
+            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
             <if test="paperCode != null  and paperCode != ''">#{paperCode},</if>
             <if test="paperName != null  and paperName != ''">#{paperName},</if>
             <if test="declareGrade != null  and declareGrade != ''">#{declareGrade},</if>
@@ -197,7 +203,7 @@
             <if test="principalConsumatorContactWay != null  and principalConsumatorContactWay != ''">
                 #{principalConsumatorContactWay},
             </if>
-            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+            <if test="averageScore != null ">#{averageScore},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -226,6 +232,7 @@
         insert into sgjs_paper_score
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
+            `task_status`,
             `paper_code`,
             `paper_name`,
             `declare_grade`,
@@ -233,7 +240,7 @@
             `profession_plate`,
             `principal_consumator`,
             `principal_consumator_contact_way`,
-            `task_status`,
+            `average_score`,
             `remark`,
             `region_id`,
             `region_name`,
@@ -258,6 +265,7 @@
         <foreach collection="sgjsPaperScoreList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
+                #{item.taskStatus},
                 #{item.paperCode},
                 #{item.paperName},
                 #{item.declareGrade},
@@ -265,7 +273,7 @@
                 #{item.professionPlate},
                 #{item.principalConsumator},
                 #{item.principalConsumatorContactWay},
-                #{item.taskStatus},
+                #{item.averageScore},
                 #{item.remark},
                 #{item.regionId},
                 #{item.regionName},
@@ -293,6 +301,7 @@
         update sgjs_paper_score
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
+            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
             <if test="paperCode != null  and  paperCode != ''">`paper_code` = #{paperCode},</if>
             <if test="paperName != null  and  paperName != ''">`paper_name` = #{paperName},</if>
             <if test="declareGrade != null  and  declareGrade != ''">`declare_grade` = #{declareGrade},</if>
@@ -304,7 +313,7 @@
             <if test="principalConsumatorContactWay != null  and  principalConsumatorContactWay != ''">
                 `principal_consumator_contact_way` = #{principalConsumatorContactWay},
             </if>
-            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+            <if test="averageScore != null ">`average_score` = #{averageScore},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -337,6 +346,11 @@
             <trim prefix="id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="task_status  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.taskStatus}
                 </foreach>
             </trim>
             <trim prefix="paper_code  = case" suffix="end,">
@@ -374,9 +388,9 @@
                     when `id`=#{item.id} then #{item.principalConsumatorContactWay}
                 </foreach>
             </trim>
-            <trim prefix="task_status  = case" suffix="end,">
+            <trim prefix="average_score  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.taskStatus}
+                    when `id`=#{item.id} then #{item.averageScore}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">
@@ -490,6 +504,7 @@
         update `sgjs_paper_score` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="paperCode != null  and paperCode != ''">and `paper_code` = #{paperCode}</if>
             <if test="paperName != null  and paperName != ''">and `paper_name` = #{paperName}</if>
             <if test="declareGrade != null  and declareGrade != ''">and `declare_grade` = #{declareGrade}</if>
@@ -502,7 +517,7 @@
             <if test="principalConsumatorContactWay != null  and principalConsumatorContactWay != ''">and
                 `principal_consumator_contact_way` = #{principalConsumatorContactWay}
             </if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="averageScore != null ">and `average_score` = #{averageScore}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
