@@ -1,21 +1,22 @@
 package com.hhwy.sp.techManagement.sgjsPaperScore.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
 /**
  * @author fsd
  * @date 2024-07-10 17:28:01
- * @remark sgjs_paper_score
+ * @remark sgjs_paper_score 论文评分主表
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class SgjsPaperScore extends BaseEntity {
     private static final long serialVersionUID = 1L;

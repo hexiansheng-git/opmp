@@ -41,14 +41,15 @@ public class SgjsPaperScoreRecordController extends BaseController {
         return AjaxResult.success(sgjsPaperScoreRecord);
     }
 
+    //查询
     @PreAuthorize(hasPermi = "sgjsPaperScoreRecord:list")
     @GetMapping("/list")
     public AjaxResult getSgjsPaperScoreRecordList(@Validated(ValidationGroups.Select.class) SgjsPaperScoreRecord sgjsPaperScoreRecordParam) {
-        startPage();
         List<SgjsPaperScoreRecord> sgjsPaperScoreRecordList = sgjsPaperScoreRecordService.getSgjsPaperScoreRecordList(sgjsPaperScoreRecordParam);
-        return getDataTableAjaxResult(sgjsPaperScoreRecordList);
+        return AjaxResult.success(sgjsPaperScoreRecordList);
     }
 
+    //保存  （界面每次选中或者删除一个专家时调用）
     @PreAuthorize(hasPermi = "sgjsPaperScoreRecord:add")
     @PostMapping("/add")
     public AjaxResult insertSgjsPaperScoreRecord(@Validated(ValidationGroups.Save.class) @RequestBody SgjsPaperScoreRecord sgjsPaperScoreRecordParam) {
@@ -63,6 +64,7 @@ public class SgjsPaperScoreRecordController extends BaseController {
         return AjaxResult.success(sgjsPaperScoreRecordListParam);
     }
 
+    //评分保存  （专家评分后保存）
     @PreAuthorize(hasPermi = "sgjsPaperScoreRecord:update")
     @PostMapping("/update")
     public AjaxResult updateSgjsPaperScoreRecord(@Validated(ValidationGroups.Update.class) @RequestBody SgjsPaperScoreRecord sgjsPaperScoreRecordParam) {

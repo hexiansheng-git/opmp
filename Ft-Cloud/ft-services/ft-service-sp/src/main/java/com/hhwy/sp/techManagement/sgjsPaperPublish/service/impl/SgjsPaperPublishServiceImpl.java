@@ -1,5 +1,6 @@
 package com.hhwy.sp.techManagement.sgjsPaperPublish.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
@@ -19,12 +20,16 @@ import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishExportV
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishQueryVo;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.mapper.SgjsPaperPublishMapper;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.service.ISgjsPaperPublishService;
+import com.hhwy.sp.techManagement.sgjsPaperScore.domain.SgjsPaperScore;
+import com.hhwy.sp.techManagement.sgjsPaperScore.service.ISgjsPaperScoreService;
+import com.hhwy.sp.techManagement.sgjsPaperScore.service.impl.SgjsPaperScoreServiceImpl;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -43,6 +48,8 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
 
     @Autowired
     private SgjsPaperPublishMapper sgjsPaperPublishMapper;
+    @Autowired
+    private ISgjsPaperScoreService sgjsPaperScoreService;
 
     @Autowired
     private ISgjsAchievementAwardService sgjsAchievementAwardService;
@@ -233,6 +240,14 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         SgjsPaperPublish paperPublish = sgjsPaperPublishMapper.getSgjsPaperPublishById(id);
         paperPublish.setProcessStatus("end");
         sysSyncInfoService4Sp.pushSgjsPaperPublish(paperPublish);
+        //保存到论文评分表
+        if("1".equals(pass)){
+            ArrayList<SgjsPaperScore> objects = new ArrayList<>();
+            SgjsPaperScore sgjsPaperScore = new SgjsPaperScore();
+            BeanUtil.copyProperties(paperPublish, sgjsPaperScore, "createTime", "updateTime" ,"updateUser");
+            objects.add(sgjsPaperScore);
+            sgjsPaperScoreService.insertSgjsPaperScoreList(objects);
+        }
     }
 
     @Override

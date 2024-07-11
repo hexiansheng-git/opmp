@@ -25,7 +25,8 @@ public enum WarnItem {
     SGJS_EXPERIMENT_WARN("施工技术-设备台账及检验记录","sgjs_experiment_warn","根据下次检验标定日期预警，检验标定日期更新后停止预警"),
     KCSJ_PLAN_PROCESS("勘察设计计划进度","plan_process_warn","根据计划开始时间预警，实际开始日期填写后停止预警"),
     SGJS_DESIGN_CHANGE("施工技术-设计变更管理","sgjs_design_change","您好，设计变更管理新增了数据【${code}】已提交至海外事业部审批"),
-    AQCH_SAFETY_TRAIN("安全策划-安全培训策划","aqch_safety_train","您好，培训类型【${trainType}】预计在培训时间【${time}】进行培训，请提前做好准备");
+    AQCH_SAFETY_TRAIN("安全策划-安全培训策划","aqch_safety_train","您好，培训类型【${trainType}】预计在培训时间【${time}】进行培训，请提前做好准备"),
+    SGJS_PAPER_SCORE("施工技术-科技管理-论文评分","sgjs_paper_score","项目中向您发起论文评分请求");
 
     public String getWarnItem() {
         return warnItem;
