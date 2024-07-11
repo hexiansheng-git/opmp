@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.sp.techManagement.sgjsPaperScore.mapper.SgjsPaperScoreMapper">
+
+    <resultMap type="com.hhwy.sp.techManagement.sgjsPaperScore.domain.SgjsPaperScore" id="SgjsPaperScoreResultMap">
+        <result property="id" column="id"/>
+        <result property="taskStatus" column="task_status"/>
+        <result property="paperCode" column="paper_code"/>
+        <result property="paperName" column="paper_name"/>
+        <result property="declareGrade" column="declare_grade"/>
+        <result property="professionType" column="profession_type"/>
+        <result property="professionPlate" column="profession_plate"/>
+        <result property="principalConsumator" column="principal_consumator"/>
+        <result property="principalConsumatorContactWay" column="principal_consumator_contact_way"/>
+        <result property="averageScore" column="average_score"/>
+        <result property="remark" column="remark"/>
+        <result property="regionId" column="region_id"/>
+        <result property="regionName" column="region_name"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="projectCode" column="project_code"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="ptVar5" column="pt_var5"/>
+    </resultMap>
+    <sql id="selectSgjsPaperScoreVo">
+        select `id`
+             , `task_status`
+             , `paper_code`
+             , `paper_name`
+             , `declare_grade`
+             , `profession_type`
+             , `profession_plate`
+             , `principal_consumator`
+             , `principal_consumator_contact_way`
+             , `average_score`
+             , `remark`
+             , `region_id`
+             , `region_name`
+             , `project_id`
+             , `project_name`
+             , `project_code`
+             , `dept_id`
+             , `create_user`
+             , `create_user_name`
+             , `create_time`
+             , `update_user`
+             , `update_time`
+             , `del_user`
+             , `del_time`
+             , `del_flag`
+             , `pt_var1`
+             , `pt_var2`
+             , `pt_var3`
+             , `pt_var4`
+             , `pt_var5`
+        from sgjs_paper_score
+    </sql>
+    <select id="getSgjsPaperScore" resultMap="SgjsPaperScoreResultMap">
+        <include refid="selectSgjsPaperScoreVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="paperCode != null  and paperCode != ''">and `paper_code` = #{paperCode}</if>
+            <if test="paperName != null  and paperName != ''">and `paper_name` = #{paperName}</if>
+            <if test="declareGrade != null  and declareGrade != ''">and `declare_grade` = #{declareGrade}</if>
+            <if test="professionType != null  and professionType != ''">and `profession_type` = #{professionType}</if>
+            <if test="professionPlate != null  and professionPlate != ''">and `profession_plate` = #{professionPlate}
+            </if>
+            <if test="principalConsumator != null  and principalConsumator != ''">and `principal_consumator` =
+                #{principalConsumator}
+            </if>
+            <if test="principalConsumatorContactWay != null  and principalConsumatorContactWay != ''">and
+                `principal_consumator_contact_way` = #{principalConsumatorContactWay}
+            </if>
+            <if test="averageScore != null ">and `average_score` = #{averageScore}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="projectCode != null  and projectCode != ''">and `project_code` = #{projectCode}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getSgjsPaperScoreList" resultMap="SgjsPaperScoreResultMap">
+        <include refid="selectSgjsPaperScoreVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="paperCode != null  and paperCode != ''">and `paper_code` = #{paperCode}</if>
+            <if test="paperName != null  and paperName != ''">and `paper_name` = #{paperName}</if>
+            <if test="declareGrade != null  and declareGrade != ''">and `declare_grade` = #{declareGrade}</if>
+            <if test="professionType != null  and professionType != ''">and `profession_type` = #{professionType}</if>
+            <if test="professionPlate != null  and professionPlate != ''">and `profession_plate` = #{professionPlate}
+            </if>
+            <if test="principalConsumator != null  and principalConsumator != ''">and `principal_consumator` =
+                #{principalConsumator}
+            </if>
+            <if test="principalConsumatorContactWay != null  and principalConsumatorContactWay != ''">and
+                `principal_consumator_contact_way` = #{principalConsumatorContactWay}
+            </if>
+            <if test="averageScore != null ">and `average_score` = #{averageScore}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="projectCode != null  and projectCode != ''">and `project_code` = #{projectCode}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertSgjsPaperScore" useGeneratedKeys="true" keyProperty="id">
+        insert into sgjs_paper_score
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+            <if test="paperCode != null  and paperCode != ''">`paper_code`,</if>
+            <if test="paperName != null  and paperName != ''">`paper_name`,</if>
+            <if test="declareGrade != null  and declareGrade != ''">`declare_grade`,</if>
+            <if test="professionType != null  and professionType != ''">`profession_type`,</if>
+            <if test="professionPlate != null  and professionPlate != ''">`profession_plate`,</if>
+            <if test="principalConsumator != null  and principalConsumator != ''">`principal_consumator`,</if>
+            <if test="principalConsumatorContactWay != null  and principalConsumatorContactWay != ''">
+                `principal_consumator_contact_way`,
+            </if>
+            <if test="averageScore != null ">`average_score`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="regionId != null ">`region_id`,</if>
+            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+            <if test="projectId != null ">`project_id`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="projectCode != null  and projectCode != ''">`project_code`,</if>
+            <if test="deptId != null ">`dept_id`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+            <if test="paperCode != null  and paperCode != ''">#{paperCode},</if>
+            <if test="paperName != null  and paperName != ''">#{paperName},</if>
+            <if test="declareGrade != null  and declareGrade != ''">#{declareGrade},</if>
+            <if test="professionType != null  and professionType != ''">#{professionType},</if>
+            <if test="professionPlate != null  and professionPlate != ''">#{professionPlate},</if>
+            <if test="principalConsumator != null  and principalConsumator != ''">#{principalConsumator},</if>
+            <if test="principalConsumatorContactWay != null  and principalConsumatorContactWay != ''">
+                #{principalConsumatorContactWay},
+            </if>
+            <if test="averageScore != null ">#{averageScore},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="regionId != null ">#{regionId},</if>
+            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="projectCode != null  and projectCode != ''">#{projectCode},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertSgjsPaperScore -->
+    <insert id="insertSgjsPaperScoreList">
+        insert into sgjs_paper_score
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `task_status`,
+            `paper_code`,
+            `paper_name`,
+            `declare_grade`,
+            `profession_type`,
+            `profession_plate`,
+            `principal_consumator`,
+            `principal_consumator_contact_way`,
+            `average_score`,
+            `remark`,
+            `region_id`,
+            `region_name`,
+            `project_id`,
+            `project_name`,
+            `project_code`,
+            `dept_id`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+        </trim>
+        values
+        <foreach collection="sgjsPaperScoreList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.taskStatus},
+                #{item.paperCode},
+                #{item.paperName},
+                #{item.declareGrade},
+                #{item.professionType},
+                #{item.professionPlate},
+                #{item.principalConsumator},
+                #{item.principalConsumatorContactWay},
+                #{item.averageScore},
+                #{item.remark},
+                #{item.regionId},
+                #{item.regionName},
+                #{item.projectId},
+                #{item.projectName},
+                #{item.projectCode},
+                #{item.deptId},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateSgjsPaperScore">
+        update sgjs_paper_score
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+            <if test="paperCode != null  and  paperCode != ''">`paper_code` = #{paperCode},</if>
+            <if test="paperName != null  and  paperName != ''">`paper_name` = #{paperName},</if>
+            <if test="declareGrade != null  and  declareGrade != ''">`declare_grade` = #{declareGrade},</if>
+            <if test="professionType != null  and  professionType != ''">`profession_type` = #{professionType},</if>
+            <if test="professionPlate != null  and  professionPlate != ''">`profession_plate` = #{professionPlate},</if>
+            <if test="principalConsumator != null  and  principalConsumator != ''">`principal_consumator` =
+                #{principalConsumator},
+            </if>
+            <if test="principalConsumatorContactWay != null  and  principalConsumatorContactWay != ''">
+                `principal_consumator_contact_way` = #{principalConsumatorContactWay},
+            </if>
+            <if test="averageScore != null ">`average_score` = #{averageScore},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="regionId != null ">`region_id` = #{regionId},</if>
+            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="projectCode != null  and  projectCode != ''">`project_code` = #{projectCode},</if>
+            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+        </trim>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateSgjsPaperScoreList">
+        update sgjs_paper_score
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="task_status  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.taskStatus}
+                </foreach>
+            </trim>
+            <trim prefix="paper_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.paperCode}
+                </foreach>
+            </trim>
+            <trim prefix="paper_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.paperName}
+                </foreach>
+            </trim>
+            <trim prefix="declare_grade  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.declareGrade}
+                </foreach>
+            </trim>
+            <trim prefix="profession_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.professionType}
+                </foreach>
+            </trim>
+            <trim prefix="profession_plate  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.professionPlate}
+                </foreach>
+            </trim>
+            <trim prefix="principal_consumator  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.principalConsumator}
+                </foreach>
+            </trim>
+            <trim prefix="principal_consumator_contact_way  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.principalConsumatorContactWay}
+                </foreach>
+            </trim>
+            <trim prefix="average_score  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.averageScore}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="region_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionId}
+                </foreach>
+            </trim>
+            <trim prefix="region_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionName}
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="project_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectCode}
+                </foreach>
+            </trim>
+            <trim prefix="dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.deptId}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar3}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar4}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar5}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="deleteSgjsPaperScore">
+        update `sgjs_paper_score` set del_flag = 1
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="paperCode != null  and paperCode != ''">and `paper_code` = #{paperCode}</if>
+            <if test="paperName != null  and paperName != ''">and `paper_name` = #{paperName}</if>
+            <if test="declareGrade != null  and declareGrade != ''">and `declare_grade` = #{declareGrade}</if>
+            <if test="professionType != null  and professionType != ''">and `profession_type` = #{professionType}</if>
+            <if test="professionPlate != null  and professionPlate != ''">and `profession_plate` = #{professionPlate}
+            </if>
+            <if test="principalConsumator != null  and principalConsumator != ''">and `principal_consumator` =
+                #{principalConsumator}
+            </if>
+            <if test="principalConsumatorContactWay != null  and principalConsumatorContactWay != ''">and
+                `principal_consumator_contact_way` = #{principalConsumatorContactWay}
+            </if>
+            <if test="averageScore != null ">and `average_score` = #{averageScore}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="projectCode != null  and projectCode != ''">and `project_code` = #{projectCode}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+    </update>
+
+    <update id="deleteSgjsPaperScoreByPks">
+        update `sgjs_paper_score` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="sgjsPaperScorePkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+</mapper>
