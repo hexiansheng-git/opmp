@@ -44,17 +44,29 @@ public class GmTokenUtils {
     public static String getToken(){
         return getToken(ssoUrl,ssoSecrekey,"master");
     }
+
+    /**
+     * 获取master租户的token
+     * @return
+     */
+    public static String getTokenWithUsername(String username){
+        return getToken(ssoUrl,ssoSecrekey,"master",username);
+    }
     
     public static String getToken(String tenantKey){
         return getToken(ssoUrl,ssoSecrekey,tenantKey);
     }
-    
+
     public static String getToken(String ssoUrl,String ssoSecrekey,String tenantKey){
+        return getToken(ssoUrl, ssoSecrekey, tenantKey,null);
+    }
+    
+    public static String getToken(String ssoUrl,String ssoSecrekey,String tenantKey,String userName){
         if(StringUtils.isBlank(tenantKey))
             return "";
         String key = "gmToken::"+tenantKey;
         String entenantKey = EncryptUtils.AESEncode(tenantKey,ssoSecrekey);
-        String userName = "admin";
+        userName = StringUtils.isBlank(userName)?"admin":userName;
         if (StrUtil.isNotBlank(ServletUtils.getRequest().getHeader("username"))) {
             userName = SecurityUtils.getUserName();
         }

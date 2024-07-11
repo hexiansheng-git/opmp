@@ -6,6 +6,7 @@ import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.hhwy.common.core.exception.CustomException;
@@ -41,12 +42,17 @@ import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
+import com.hhwy.utils.Constant;
+import com.hhwy.utils.GmTokenUtils;
+import com.hhwy.utils.HttpClientUtil;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -207,7 +213,10 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         if("3".equals(type)){
             //查看
             String uname = SecurityUtils.getUserName();
-            if(StringUtils.equals(review.getTaskStatus(),TaskStatus.COMPLETED.getCode()))
+            if(StringUtils.equals(review.getTaskStatus(),TaskStatus.COMPLETED.getCode())
+                || SecurityUtils.getSysUser().isAdmin() || isLeader()) //已结束、管理员、总部版领导角色
+//            boolean s = SecurityUtils.getSysUser().isAdmin() || isLeader();
+//            if(s || StringUtils.equals(review.getTaskStatus(),TaskStatus.COMPLETED.getCode())
                 uname = null;
             BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id,uname);
             review.setScore(reviewOpinionVo.getScore());
@@ -1136,5 +1145,20 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         review.setId(id);
         review.setProcessStatus("delete");
         sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
+    }
+    
+    
+    private boolean isLeader(){
+        Map map = new HashMap();
+        String token = GmTokenUtils.getTokenWithUsername(SecurityUtils.getUserName());
+        map.put(Constant.AUTHORIZATION,token);
+        map.put(Constant.TENANT_KEY,"master");
+//        StringEntity stringEntity = new StringEntity(JSONObject.toJSONString(typeStrSet), ContentType.APPLICATION_JSON);
+        Object string = HttpClientUtil.send(gmUrl+"/system/selfSysUser/isLeader", HttpClientUtil.METHOD_GET, null, map, null, null);
+        JSONObject resultObj = JSONObject.parseObject(string.toString());
+        if(!org.apache.commons.lang3.StringUtils.equals(resultObj.get("code")+"","200")){
+            throw new RuntimeException(resultObj.get("msg")+"");
+        }
+        return ObjectUtils.nvlString(resultObj.get("data")).equals("1");
     }
 }
