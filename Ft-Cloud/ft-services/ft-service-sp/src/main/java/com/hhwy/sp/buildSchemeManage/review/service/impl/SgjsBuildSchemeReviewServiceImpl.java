@@ -963,6 +963,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 
     @Value("${gm.url}")
     private String gmUrl;
+    @Value("${gm.back-url}")
+    private String gmBackUrl;
     @Value("${warn.schemeReviewUrl}")
     private String schemeReviewUrl;
 
@@ -1154,7 +1156,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         map.put(Constant.AUTHORIZATION,token);
         map.put(Constant.TENANT_KEY,"master");
 //        StringEntity stringEntity = new StringEntity(JSONObject.toJSONString(typeStrSet), ContentType.APPLICATION_JSON);
-        Object string = HttpClientUtil.send(gmUrl+"/system/selfSysUser/isLeader", HttpClientUtil.METHOD_GET, null, map, null, null);
+        Object string = HttpClientUtil.send(gmBackUrl+"/system/selfSysUser/isLeader", HttpClientUtil.METHOD_GET, null, map, null, null);
         JSONObject resultObj = JSONObject.parseObject(string.toString());
         if(!org.apache.commons.lang3.StringUtils.equals(resultObj.get("code")+"","200")){
             throw new RuntimeException(resultObj.get("msg")+"");
