@@ -560,16 +560,20 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 }
                 /*执行预警*/
                 //根据角色获取用户
-                List<SysUser> sysUsers = CommonBusiness.getSysUsers(sgjsWarnConfig);
-                if (CollUtil.isEmpty(sysUsers)) {
+                List<SysUser> allSysUsers = CommonBusiness.getSysUsers(sgjsWarnConfig);
+                if (CollUtil.isEmpty(allSysUsers)) {
                     log.info("租户：{}，根据角色获取用户, 无数据，{}", tenant.getTenantName(), JSON.toJSONString(sgjsWarnConfig));
+                    continue;
+                }
+                List<SysUser> sysUsers = allSysUsers.stream().filter(p -> StrUtil.isNotBlank(p.getTenantKey()) && p.getTenantKey().equals(tenant.getTenantKey())).collect(Collectors.toList());
+                if (CollUtil.isEmpty(sysUsers)) {
+                    log.info("租户：{}，根据租户过滤后, 无数据，{}", tenant.getTenantName(), JSON.toJSONString(allSysUsers));
                     continue;
                 }
                 String userNames = sysUsers.stream().map(p -> String.valueOf(p.getUserName())).collect(Collectors.joining(","));
                 //业务表与预警表关联id
                 Long relationId = IdWorker.createId();
                 //发送预警
-                ArrayList<TWarn> objects = new ArrayList<>();
                 TWarn tWarn = new TWarn();
                 tWarn.setWarnItem(sgjsWarnConfig.getWarnSubject());
                 tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_LIST.getWarnItemId());
@@ -581,7 +585,9 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 tWarn.setWarnContent(warnContent);
                 tWarn.setProjectName(tenant.getTenantName());
                 tWarn.setTenantKey(tenant.getTenantKey());
-                objects.add(tWarn);
+                //发送预警
+                AjaxResult ajaxResult = systemServiceApi.addWarnNonGm(tWarn);
+                log.info("租户：{}，施工方案编制预警执行完成。。。。预警服务响应：{}", tenant.getTenantName(), JSON.toJSONString(ajaxResult));
                 //预警记录保存
                 List<SgjsWarnRecord> warnRecordList = new ArrayList<>();
                 sysUsers.forEach(p -> {
@@ -598,11 +604,6 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                     sgjsWarnRecord.setPtVar1(String.valueOf(relationId));
                     warnRecordList.add(sgjsWarnRecord);
                 });
-                //发送预警
-                if (CollUtil.isNotEmpty(objects)) {
-                    systemServiceApi.insertTWarnList(objects);
-                }
-                log.info("租户：{}，施工方案清单预警执行完成。。。。共:{}", tenant.getTenantName(), objects.size());
                 /*推送总部*/
                 if (CollUtil.isNotEmpty(warnRecordList)) {
                     log.info("租户：{}，施工方案清单预警记录推送数据：" + JSON.toJSONString(warnRecordList), tenant.getTenantName());
