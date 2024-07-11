@@ -305,14 +305,14 @@ public class WbsPushP6 {
                 log.info("p6判断项目是否存在接口,prjCode:{},未获取到返回值",projectCode);
                 return false;
             }
-            System.out.println(result);
+//            System.out.println(result);
             JSONArray jsonArray = JSONObject.parseArray(result);
-            System.out.println(jsonArray);
+//            System.out.println(jsonArray);
             return CollectionUtils.isNotEmpty(jsonArray);
         }catch(Exception e){
             e.printStackTrace();
             log.error("p6判断项目是否存在接口错误",e);
-            return false;
+            throw e;
         }finally {
             long usemills = System.currentTimeMillis()-beginMills;
             log.debug("p6判断项目是否存在接口，prjCode:{},耗时:{}毫秒",projectCode,usemills);
