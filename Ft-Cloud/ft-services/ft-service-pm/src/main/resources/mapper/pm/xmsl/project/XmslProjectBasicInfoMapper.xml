@@ -872,34 +872,34 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="projectId != null ">`project_id` = #{projectId},</if>
             <if test="projectCode != null ">`project_code` = #{projectCode},</if>
-            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
-            <if test="projectShortName != null  and  projectShortName != ''">`project_short_name` = #{projectShortName},</if>
-            <if test="projectNameForeignLang != null  and  projectNameForeignLang != ''">`project_name_foreign_lang` =
+            <if test="projectName != null  ">`project_name` = #{projectName},</if>
+            <if test="projectShortName != null  ">`project_short_name` = #{projectShortName},</if>
+            <if test="projectNameForeignLang != null  ">`project_name_foreign_lang` =
                 #{projectNameForeignLang},
             </if>
-            <if test="mileage != null  and  mileage != ''">`mileage` = #{mileage},</if>
+            <if test="mileage != null ">`mileage` = #{mileage},</if>
             <if test="contractPrice != null ">`contract_price` = #{contractPrice},</if>
             <if test="contractExchangeRate != null ">`contract_exchange_rate` = #{contractExchangeRate},</if>
-            <if test="proprietorUnit != null  and  proprietorUnit != ''">`proprietor_unit` = #{proprietorUnit},</if>
-            <if test="supervisorUnit != null  and  supervisorUnit != ''">`supervisor_unit` = #{supervisorUnit},</if>
-            <if test="managementCompany != null  and  managementCompany != ''">`management_company` =
+            <if test="proprietorUnit != null ">`proprietor_unit` = #{proprietorUnit},</if>
+            <if test="supervisorUnit != null ">`supervisor_unit` = #{supervisorUnit},</if>
+            <if test="managementCompany != null  ">`management_company` =
                 #{managementCompany},
             </if>
-            <if test="capitalSource != null  and  capitalSource != ''">`capital_source` = #{capitalSource},</if>
-            <if test="contractType != null  and  contractType != ''">`contract_type` = #{contractType},</if>
-            <if test="contractSchedule != null  and contractSchedule != ''">`contract_schedule` = #{contractSchedule},</if>
+            <if test="capitalSource != null  ">`capital_source` = #{capitalSource},</if>
+            <if test="contractType != null  ">`contract_type` = #{contractType},</if>
+            <if test="contractSchedule != null ">`contract_schedule` = #{contractSchedule},</if>
             <if test="startDate != null ">`start_date` = #{startDate},</if>
             <if test="completionDate != null ">`completion_date` = #{completionDate},</if>
-            <if test="defectsLiabilityPeriod != null  and  defectsLiabilityPeriod != ''">`defects_liability_period` =
+            <if test="defectsLiabilityPeriod != null ">`defects_liability_period` =
                 #{defectsLiabilityPeriod},
             </if>
-            <if test="executiveSpecificationStandard != null  and  executiveSpecificationStandard != ''">
+            <if test="executiveSpecificationStandard != null  ">
                 `executive_specification_standard` = #{executiveSpecificationStandard},
             </if>
-            <if test="contractLang != null  and  contractLang != ''">`contract_lang` = #{contractLang},</if>
-            <if test="weightedGrade != null  and  weightedGrade != ''">`weighted_grade` = #{weightedGrade},</if>
-            <if test="paymentCurrency != null  and  paymentCurrency != ''">`payment_currency` = #{paymentCurrency},</if>
-            <if test="priceAdjustmentMode != null  and  priceAdjustmentMode != ''">`price_adjustment_mode` =
+            <if test="contractLang != null ">`contract_lang` = #{contractLang},</if>
+            <if test="weightedGrade != null ">`weighted_grade` = #{weightedGrade},</if>
+            <if test="paymentCurrency != null  ">`payment_currency` = #{paymentCurrency},</if>
+            <if test="priceAdjustmentMode != null  ">`price_adjustment_mode` =
                 #{priceAdjustmentMode},
             </if>
             <if test="prepaymentRatio != null ">`prepayment_ratio` = #{prepaymentRatio},</if>
@@ -910,66 +910,66 @@
                 #{qualityGuaranteeDepositRatio},
             </if>
             <if test="winTheBiddingDate != null ">`win_the_bidding_date` = #{winTheBiddingDate},</if>
-            <if test="businessAreasAndProducts != null  and  businessAreasAndProducts != ''">
+            <if test="businessAreasAndProducts != null  ">
                 `business_areas_and_products` = #{businessAreasAndProducts},
             </if>
-            <if test="businessAreasAndProductsLabel != null  and  businessAreasAndProductsLabel != ''">
+            <if test="businessAreasAndProductsLabel != null  ">
                 `business_areas_and_products_label` = #{businessAreasAndProductsLabel},
             </if>
-            <if test="contractingMethod != null  and  contractingMethod != ''">`contracting_method` =
+            <if test="contractingMethod != null  ">`contracting_method` =
                 #{contractingMethod},
             </if>
-            <if test="projectType != null  and  projectType != ''">`project_type` = #{projectType},</if>
-            <if test="projectCategory != null  and  projectCategory != ''">`project_category` = #{projectCategory},</if>
-            <if test="projectLocation != null  and  projectLocation != ''">`project_location` = #{projectLocation},</if>
-            <if test="subsidiaryOrgan != null  and  subsidiaryOrgan != ''">`subsidiary_organ` = #{subsidiaryOrgan},</if>
-            <if test="projectManager != null  and  projectManager != ''">`project_manager` = #{projectManager},</if>
-            <if test="internalContactWay != null  and  internalContactWay != ''">`internal_contact_way` =
+            <if test="projectType != null  ">`project_type` = #{projectType},</if>
+            <if test="projectCategory != null  ">`project_category` = #{projectCategory},</if>
+            <if test="projectLocation != null  ">`project_location` = #{projectLocation},</if>
+            <if test="subsidiaryOrgan != null  ">`subsidiary_organ` = #{subsidiaryOrgan},</if>
+            <if test="projectManager != null  ">`project_manager` = #{projectManager},</if>
+            <if test="internalContactWay != null  ">`internal_contact_way` =
                 #{internalContactWay},
             </if>
-            <if test="foreignContactWay != null  and  foreignContactWay != ''">`foreign_contact_way` =
+            <if test="foreignContactWay != null ">`foreign_contact_way` =
                 #{foreignContactWay},
             </if>
-            <if test="winTheBiddingUnit != null  and  winTheBiddingUnit != ''">`win_the_bidding_unit` =
+            <if test="winTheBiddingUnit != null  ">`win_the_bidding_unit` =
                 #{winTheBiddingUnit},
             </if>
-            <if test="designUnit != null  and  designUnit != ''">`design_unit` = #{designUnit},</if>
-            <if test="establishPersonnel != null  and  establishPersonnel != ''">`establish_personnel` =
+            <if test="designUnit != null ">`design_unit` = #{designUnit},</if>
+            <if test="establishPersonnel != null  ">`establish_personnel` =
                 #{establishPersonnel},
             </if>
             <if test="establishDate != null ">`establish_date` = #{establishDate},</if>
-            <if test="detailedAddress != null  and  detailedAddress != ''">`detailed_address` = #{detailedAddress},</if>
-            <if test="projectScale != null  and  projectScale != ''">`project_scale` = #{projectScale},</if>
-            <if test="projectContext != null  and  projectContext != ''">`project_context` = #{projectContext},</if>
-            <if test="engineeringGeographicalLocationX != null  and  engineeringGeographicalLocationX != ''">
+            <if test="detailedAddress != null  ">`detailed_address` = #{detailedAddress},</if>
+            <if test="projectScale != null ">`project_scale` = #{projectScale},</if>
+            <if test="projectContext != null  ">`project_context` = #{projectContext},</if>
+            <if test="engineeringGeographicalLocationX != null  ">
                 `engineering_geographical_location_x` = #{engineeringGeographicalLocationX},
             </if>
-            <if test="engineeringGeographicalLocationY != null  and  engineeringGeographicalLocationY != ''">
+            <if test="engineeringGeographicalLocationY != null  ">
                 `engineering_geographical_location_y` = #{engineeringGeographicalLocationY},
             </if>
-            <if test="engineeringGeographicalLocationZ != null  and  engineeringGeographicalLocationZ != ''">
+            <if test="engineeringGeographicalLocationZ != null ">
                 `engineering_geographical_location_z` = #{engineeringGeographicalLocationZ},
             </if>
-            <if test="locationImageGroupId != null  and  locationImageGroupId != ''">`location_image_group_id` =
+            <if test="locationImageGroupId != null  ">`location_image_group_id` =
                 #{locationImageGroupId},
             </if>
-            <if test="structureImageGroupId != null  and  structureImageGroupId != ''">`structure_image_group_id` =
+            <if test="structureImageGroupId != null  ">`structure_image_group_id` =
                 #{structureImageGroupId},
             </if>
-            <if test="localCurrency != null  and  localCurrency != ''">`local_currency` =
+            <if test="localCurrency != null  ">`local_currency` =
                 #{localCurrency},
             </if>
-            <if test="localCurrencyCode != null  and  localCurrencyCode != ''">`local_currency_code` =
+            <if test="localCurrencyCode != null ">`local_currency_code` =
                 #{localCurrencyCode},
             </if>
-            <if test="contractCurrency != null  and  contractCurrency != ''">`contract_currency` =
+            <if test="contractCurrency != null  ">`contract_currency` =
                 #{contractCurrency},
             </if>
-            <if test="contractCurrencyCode != null  and  contractCurrencyCode != ''">`contract_currency_code` =
+            <if test="contractCurrencyCode != null ">`contract_currency_code` =
                 #{contractCurrencyCode},
             </if>
-            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
-            <if test="projectStatus != null  and  projectStatus != ''">`project_status` = #{projectStatus},</if>
+            <if test="remark != null ">`remark` = #{remark},</if>
+            <if test="projectStatus != null ">`project_status` = #{projectStatus},</if>
             <if test="projectCompleteDate != null">`project_complete_date` = #{projectCompleteDate},</if>
             <if test="projectInitialInspectionDate != null">`project_initial_inspection_date` = #{projectInitialInspectionDate},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
