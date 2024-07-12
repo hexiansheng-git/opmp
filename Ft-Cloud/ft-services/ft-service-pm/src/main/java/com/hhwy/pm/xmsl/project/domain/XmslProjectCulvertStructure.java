@@ -88,7 +88,7 @@ public class XmslProjectCulvertStructure extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "数量")
-    private String count;
+    private Integer count;
     /**
      * 字段描述：所属区域id
      */
