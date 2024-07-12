@@ -1,5 +1,6 @@
 package com.hhwy.sp.techManagement.sgjsPaperScore.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
@@ -41,11 +42,28 @@ public class SgjsPaperScoreController extends BaseController {
         return AjaxResult.success(sgjsPaperScore);
     }
 
+    //台账
     @PreAuthorize(hasPermi = "sgjsPaperScore:list")
     @GetMapping("/list")
     public AjaxResult getSgjsPaperScoreList(@Validated(ValidationGroups.Select.class) SgjsPaperScore sgjsPaperScoreParam) {
         List<SgjsPaperScore> sgjsPaperScoreList = sgjsPaperScoreService.getSgjsPaperScoreList(sgjsPaperScoreParam);
         return AjaxResult.success(sgjsPaperScoreList);
+    }
+
+    //发起评审
+    @PreAuthorize(hasPermi = "sgjsPaperScore:update")
+    @PostMapping("/reviewStart")
+    public AjaxResult reviewStart(Long[] ids) {
+        sgjsPaperScoreService.reviewStart(ids);
+        return AjaxResult.success();
+    }
+
+    //结束流程
+    @PreAuthorize(hasPermi = "sgjsPaperScore:update")
+    @PostMapping("/reviewEnd")
+    public AjaxResult reviewEnd(@RequestBody Long[] ids) {
+        sgjsPaperScoreService.reviewEnd(ids);
+        return AjaxResult.success();
     }
 
     @PreAuthorize(hasPermi = "sgjsPaperScore:add")

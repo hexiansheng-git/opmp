@@ -7,7 +7,7 @@
     <resultMap type="com.hhwy.sp.techManagement.sgjsPaperScore.sgjsPaperScoreRecord.domain.SgjsPaperScoreRecord"
                id="SgjsPaperScoreRecordResultMap">
         <result property="id" column="id"/>
-        <result property="foreginId" column="foregin_id"/>
+        <result property="foreignId" column="foreign_id"/>
         <result property="specialist" column="specialist"/>
         <result property="specialistId" column="specialist_id"/>
         <result property="scienceLevel" column="science_level"/>
@@ -39,7 +39,7 @@
     </resultMap>
     <sql id="selectSgjsPaperScoreRecordVo">
         select `id`
-             , `foregin_id`
+             , `foreign_id`
              , `specialist`
              , `specialist_id`
              , `science_level`
@@ -75,7 +75,7 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="foreginId != null ">and `foregin_id` = #{foreginId}</if>
+            <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
             <if test="specialist != null  and specialist != ''">and `specialist` = #{specialist}</if>
             <if test="specialistId != null ">and `specialist_id` = #{specialistId}</if>
             <if test="scienceLevel != null ">and `science_level` = #{scienceLevel}</if>
@@ -113,7 +113,7 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="foreginId != null ">and `foregin_id` = #{foreginId}</if>
+            <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
             <if test="specialist != null  and specialist != ''">and `specialist` = #{specialist}</if>
             <if test="specialistId != null ">and `specialist_id` = #{specialistId}</if>
             <if test="scienceLevel != null ">and `science_level` = #{scienceLevel}</if>
@@ -150,7 +150,7 @@
         insert into sgjs_paper_score_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="foreginId != null ">`foregin_id`,</if>
+            <if test="foreignId != null ">`foreign_id`,</if>
             <if test="specialist != null  and specialist != ''">`specialist`,</if>
             <if test="specialistId != null ">`specialist_id`,</if>
             <if test="scienceLevel != null ">`science_level`,</if>
@@ -182,7 +182,7 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="foreginId != null ">#{foreginId},</if>
+            <if test="foreignId != null ">#{foreignId},</if>
             <if test="specialist != null  and specialist != ''">#{specialist},</if>
             <if test="specialistId != null ">#{specialistId},</if>
             <if test="scienceLevel != null ">#{scienceLevel},</if>
@@ -219,7 +219,7 @@
         insert into sgjs_paper_score_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
-            `foregin_id`,
+            `foreign_id`,
             `specialist`,
             `specialist_id`,
             `science_level`,
@@ -252,7 +252,7 @@
         <foreach collection="sgjsPaperScoreRecordList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
-                #{item.foreginId},
+                #{item.foreignId},
                 #{item.specialist},
                 #{item.specialistId},
                 #{item.scienceLevel},
@@ -288,7 +288,7 @@
         update sgjs_paper_score_record
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
-            <if test="foreginId != null ">`foregin_id` = #{foreginId},</if>
+            <if test="foreignId != null ">`foreign_id` = #{foreignId},</if>
             <if test="specialist != null  and  specialist != ''">`specialist` = #{specialist},</if>
             <if test="specialistId != null ">`specialist_id` = #{specialistId},</if>
             <if test="scienceLevel != null ">`science_level` = #{scienceLevel},</if>
@@ -319,7 +319,7 @@
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
         </trim>
         <where>
-            <if test="foreginId != null ">and `foregin_id` = #{foreginId}</if>
+            <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
             <if test="specialistId != null ">and `specialist_id` = #{specialistId}</if>
         </where>
     </update>
@@ -332,9 +332,9 @@
                     when `specialist_id`=#{item.specialistId} then #{item.id}
                 </foreach>
             </trim>
-            <trim prefix="foregin_id  = case" suffix="end,">
+            <trim prefix="foreign_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `specialist_id`=#{item.specialistId} then #{item.foreginId}
+                    when `specialist_id`=#{item.specialistId} then #{item.foreignId}
                 </foreach>
             </trim>
             <trim prefix="specialist  = case" suffix="end,">
@@ -488,7 +488,7 @@
         update `sgjs_paper_score_record` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="foreginId != null ">and `foregin_id` = #{foreginId}</if>
+            <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
             <if test="specialist != null  and specialist != ''">and `specialist` = #{specialist}</if>
             <if test="specialistId != null ">and `specialist_id` = #{specialistId}</if>
             <if test="scienceLevel != null ">and `science_level` = #{scienceLevel}</if>
@@ -530,12 +530,12 @@
         </where>
     </update>
 
-    <select id="getListByForeginId" resultMap="SgjsPaperScoreRecordResultMap">
+    <select id="getListByforeignId" resultMap="SgjsPaperScoreRecordResultMap">
         <include refid="selectSgjsPaperScoreRecordVo"/>
         <where>
-            `foregin_id` in
-            <foreach item="foreginId" collection="idList" open="(" separator="," close=")">
-                #{foreginId}
+            `foreign_id` in
+            <foreach item="foreignId" collection="idList" open="(" separator="," close=")">
+                #{foreignId}
             </foreach>
         </where>
     </select>

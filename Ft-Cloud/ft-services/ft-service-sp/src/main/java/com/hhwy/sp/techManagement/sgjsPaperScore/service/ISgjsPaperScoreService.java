@@ -2,6 +2,7 @@ package com.hhwy.sp.techManagement.sgjsPaperScore.service;
 
 import java.util.List;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.techManagement.sgjsPaperScore.domain.SgjsPaperScore;
 
 /**
@@ -26,4 +27,8 @@ public interface ISgjsPaperScoreService {
     int deleteSgjsPaperScore(SgjsPaperScore sgjsPaperScore);
 
     int deleteSgjsPaperScoreByPks(List<Long> sgjsPaperScorePkList);
+
+    void reviewStart(Long[] ids);
+
+    void reviewEnd(Long[] ids);
 }
