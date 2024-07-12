@@ -86,6 +86,10 @@ public class TWarnServiceImpl implements ITWarnService {
                 this.notify(tWarn);
             });
         }
+        //推送到一公局门户
+        warn2Push.push(tWarn);
+        //推送到中交门户
+        warnPushMenHu.push(tWarn);
         return result;
     }
 
