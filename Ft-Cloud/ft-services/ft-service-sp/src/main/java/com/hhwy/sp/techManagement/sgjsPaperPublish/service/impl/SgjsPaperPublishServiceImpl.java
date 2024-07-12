@@ -26,6 +26,7 @@ import com.hhwy.sp.techManagement.sgjsPaperScore.service.impl.SgjsPaperScoreServ
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ import java.util.stream.Collectors;
  * @remark
  */
 @Service
+@Slf4j
 public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
 
     @Autowired
@@ -247,7 +249,9 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
             BeanUtil.copyProperties(paperPublish, sgjsPaperScore, "createTime", "updateTime" ,"updateUser");
             objects.add(sgjsPaperScore);
             sgjsPaperScoreService.insertSgjsPaperScoreList(objects);
+            log.info("论文申请-写入论文评分完成: {}", JSON.toJSONString(objects));
         }
+        log.info("论文申请-流程审批完成");
     }
 
     @Override

@@ -49,7 +49,6 @@ public class SgjsPaperScoreRecordController extends BaseController {
         return AjaxResult.success(sgjsPaperScoreRecordList);
     }
 
-    //保存  （界面每次选中或者删除一个专家时调用）
     @PreAuthorize(hasPermi = "sgjsPaperScoreRecord:add")
     @PostMapping("/add")
     public AjaxResult insertSgjsPaperScoreRecord(@Validated(ValidationGroups.Save.class) @RequestBody SgjsPaperScoreRecord sgjsPaperScoreRecordParam) {

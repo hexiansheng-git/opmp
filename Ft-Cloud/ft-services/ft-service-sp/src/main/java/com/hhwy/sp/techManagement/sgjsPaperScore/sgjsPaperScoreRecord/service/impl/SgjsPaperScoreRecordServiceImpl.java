@@ -1,5 +1,6 @@
 package com.hhwy.sp.techManagement.sgjsPaperScore.sgjsPaperScoreRecord.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.hash.Hash;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -41,27 +42,16 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
         return sgjsPaperScoreRecordMapper.getSgjsPaperScoreRecord(sgjsPaperScoreRecord);
     }
 
+    //查询
     public List<SgjsPaperScoreRecord> getSgjsPaperScoreRecordList(SgjsPaperScoreRecord sgjsPaperScoreRecord) {
-        return sgjsPaperScoreRecordMapper.getSgjsPaperScoreRecordList(sgjsPaperScoreRecord);
-    }
-
-    //保存  （界面每次选中一个专家时调用）
-    @Transactional
-    public int insertSgjsPaperScoreRecord(SgjsPaperScoreRecord sgjsPaperScoreRecord) {
-        sgjsPaperScoreRecord.setId(IdWorker.createId());
-        sgjsPaperScoreRecord.setCreateUser(SecurityUtils.getUserName());
-        sgjsPaperScoreRecord.setCreateTime(DateUtils.getNowDate());
-        return sgjsPaperScoreRecordMapper.insertSgjsPaperScoreRecord(sgjsPaperScoreRecord);
-    }
-
-    @Transactional
-    public int insertSgjsPaperScoreRecordList(List<SgjsPaperScoreRecord> sgjsPaperScoreRecordList) {
-        for (SgjsPaperScoreRecord sgjsPaperScoreRecord : sgjsPaperScoreRecordList) {
-            sgjsPaperScoreRecord.setId(IdWorker.createId());
-            sgjsPaperScoreRecord.setCreateUser(SecurityUtils.getUserName());
-            sgjsPaperScoreRecord.setCreateTime(DateUtils.getNowDate());
+        List<SgjsPaperScoreRecord> sgjsPaperScoreRecordList = sgjsPaperScoreRecordMapper.getSgjsPaperScoreRecordList(sgjsPaperScoreRecord);
+        if (CollUtil.isEmpty(sgjsPaperScoreRecordList)) return new ArrayList<>();
+        //如果当前登陆用户是评分专家，则只展示自己的数据
+        String usernames = sgjsPaperScoreRecordList.stream().map(SgjsPaperScoreRecord::getPtVar2).collect(Collectors.joining());
+        if (usernames.contains(SecurityUtils.getUserName())) {
+            sgjsPaperScoreRecordList = sgjsPaperScoreRecordList.stream().filter(p -> p.getPtVar2().equals(SecurityUtils.getUserName())).collect(Collectors.toList());
         }
-        return sgjsPaperScoreRecordMapper.insertSgjsPaperScoreRecordList(sgjsPaperScoreRecordList);
+        return sgjsPaperScoreRecordList;
     }
 
     //评分保存  （专家评分后保存）
@@ -85,12 +75,31 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
         Map<String, Object> map = new HashMap<>();
         map.put("paperScoreRecord", sgjsPaperScoreRecord);
         map.put("paperScore", sgjsPaperScore);
-        rocketMQTemplate.convertAndSend("sgjs_paper_score:tenantSuccess", map);
+        rocketMQTemplate.convertAndSend("gm_sgjs_paper_score:tenantSuccess", map);
         return i;
     }
 
     @Transactional
+    public int insertSgjsPaperScoreRecord(SgjsPaperScoreRecord sgjsPaperScoreRecord) {
+        sgjsPaperScoreRecord.setId(IdWorker.createId());
+        sgjsPaperScoreRecord.setCreateUser(SecurityUtils.getUserName());
+        sgjsPaperScoreRecord.setCreateTime(DateUtils.getNowDate());
+        return sgjsPaperScoreRecordMapper.insertSgjsPaperScoreRecord(sgjsPaperScoreRecord);
+    }
+
+    @Transactional
+    public int insertSgjsPaperScoreRecordList(List<SgjsPaperScoreRecord> sgjsPaperScoreRecordList) {
+        for (SgjsPaperScoreRecord sgjsPaperScoreRecord : sgjsPaperScoreRecordList) {
+            sgjsPaperScoreRecord.setId(IdWorker.createId());
+            sgjsPaperScoreRecord.setCreateUser(SecurityUtils.getUserName());
+            sgjsPaperScoreRecord.setCreateTime(DateUtils.getNowDate());
+        }
+        return sgjsPaperScoreRecordMapper.insertSgjsPaperScoreRecordList(sgjsPaperScoreRecordList);
+    }
+
+    @Transactional
     public int updateSgjsPaperScoreRecordList(List<SgjsPaperScoreRecord> sgjsPaperScoreRecordList) {
+        if (CollUtil.isEmpty(sgjsPaperScoreRecordList)) return 0;
         for (SgjsPaperScoreRecord sgjsPaperScoreRecord : sgjsPaperScoreRecordList) {
             sgjsPaperScoreRecord.setUpdateUser(SecurityUtils.getUserName());
             sgjsPaperScoreRecord.setUpdateTime(DateUtils.getNowDate());

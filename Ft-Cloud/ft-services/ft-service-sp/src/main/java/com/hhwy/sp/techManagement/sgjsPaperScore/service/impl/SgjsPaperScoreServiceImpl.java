@@ -1,13 +1,11 @@
 package com.hhwy.sp.techManagement.sgjsPaperScore.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.WarnItem;
@@ -22,6 +20,7 @@ import com.hhwy.sp.techManagement.sgjsPaperPublish.service.ISgjsPaperPublishServ
 import com.hhwy.sp.techManagement.sgjsPaperScore.sgjsPaperScoreRecord.domain.SgjsPaperScoreRecord;
 import com.hhwy.sp.techManagement.sgjsPaperScore.sgjsPaperScoreRecord.service.ISgjsPaperScoreRecordService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +50,9 @@ public class SgjsPaperScoreServiceImpl implements ISgjsPaperScoreService {
     private PmServiceApi pmServiceApi;
     @Autowired
     private SystemServiceApi systemServiceApi;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
     @Value("${warn.paperScoreUrl}")
     private String paperScoreUrl;
 
@@ -101,7 +103,7 @@ public class SgjsPaperScoreServiceImpl implements ISgjsPaperScoreService {
         Assert.isTrue(ids != null, "ids不能为空");
         /* 待评分论文信息查询 */
         List<SgjsPaperScoreRecord> scoreRecordList = sgjsPaperScoreRecordService.getListByForeginId(Arrays.asList(ids));
-        Assert.isTrue(CollUtil.isEmpty(scoreRecordList), "查无数据");
+        Assert.isTrue(CollUtil.isEmpty(scoreRecordList), "待评分论文信息查询 查无数据");
         Map<Long, List<SgjsPaperScoreRecord>> scoreRecordMap = scoreRecordList.stream().collect(Collectors.groupingBy(SgjsPaperScoreRecord::getForeignId));
         /* 发送待办 */
         //消息参数
@@ -126,14 +128,18 @@ public class SgjsPaperScoreServiceImpl implements ISgjsPaperScoreService {
             warnInfo.add(tWarn);
         });
         //发送
-        systemServiceApi.insertTWarnList(warnInfo);
-        log.info("论文评分待办发送完成, 开始修改评审状态");
+        systemServiceApi.insertTWarnListToGm(warnInfo);
+        log.info("论文评分-发起评审 待办发送完成: {}", JSON.toJSONString(warnInfo));
         /* 修改评审状态 */
         String taskStatus = "1";
-        sgjsPaperScoreMapper.updateByIds(Arrays.asList(ids), taskStatus);
+        int i = sgjsPaperScoreMapper.updateByIds(Arrays.asList(ids), taskStatus);
         /* 数据同步项目版 */
-
-        log.info("论文评分待办发送完成");
+        if (i > 0) {
+            List<SgjsPaperScore> listByIds = sgjsPaperScoreMapper.getListByIds(Arrays.asList(ids));
+            rocketMQTemplate.convertAndSend("sp_sgjs_paper_score:tenantSuccess", listByIds);
+            log.info("论文评分-发起评审 数据发送项目完成：{}", JSON.toJSONString(listByIds));
+        }
+        log.info("论文评分-发起评审 完成");
     }
 
     //结束流程
@@ -167,7 +173,15 @@ public class SgjsPaperScoreServiceImpl implements ISgjsPaperScoreService {
             sgjsPaperScore.setCreateUser(SecurityUtils.getUserName());
             sgjsPaperScore.setCreateTime(DateUtils.getNowDate());
         }
-        return sgjsPaperScoreMapper.insertSgjsPaperScoreList(sgjsPaperScoreList);
+        int i = sgjsPaperScoreMapper.insertSgjsPaperScoreList(sgjsPaperScoreList);
+        if (i > 0) {
+            //推送总部
+            HashMap<String, Object> map = new HashMap<>();
+//            map.put("paperScoreRecord", sgjsPaperScoreRecord);
+            map.put("paperScore", sgjsPaperScoreList);
+            rocketMQTemplate.convertAndSend("gm_sgjs_paper_score:tenantSuccess", map);
+        }
+        return i;
     }
 
     //修改
@@ -180,6 +194,7 @@ public class SgjsPaperScoreServiceImpl implements ISgjsPaperScoreService {
 
     @Transactional
     public int updateSgjsPaperScoreList(List<SgjsPaperScore> sgjsPaperScoreList) {
+        if (CollUtil.isEmpty(sgjsPaperScoreList)) return 0;
         for (SgjsPaperScore sgjsPaperScore : sgjsPaperScoreList) {
             sgjsPaperScore.setUpdateUser(SecurityUtils.getUserName());
             sgjsPaperScore.setUpdateTime(DateUtils.getNowDate());

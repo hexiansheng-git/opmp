@@ -30,5 +30,5 @@ public interface SgjsPaperScoreMapper {
 
     List<SgjsPaperScore> getListByIds(@Param("ids") List<Long> ids);
 
-    void updateByIds(@Param("ids") List<Long> ids, @Param("taskStatus") String taskStatus);
+    int updateByIds(@Param("ids") List<Long> ids, @Param("taskStatus") String taskStatus);
 }
