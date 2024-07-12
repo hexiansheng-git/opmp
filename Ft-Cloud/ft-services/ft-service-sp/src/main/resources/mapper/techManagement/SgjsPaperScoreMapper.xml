@@ -550,4 +550,24 @@
             </foreach>
         </where>
     </update>
+
+    <select id="getListByIds" resultMap="SgjsPaperScoreResultMap">
+        <include refid="selectSgjsPaperScoreVo"/>
+        <where>
+            `id` in
+            <foreach item="id" collection="ids" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+
+    <update id="updateByIds">
+        update `sgjs_paper_score` set task_status = #{taskStatus}
+        <where>
+            `id` in
+            <foreach item="id" collection="ids" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
 </mapper>

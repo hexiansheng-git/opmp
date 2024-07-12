@@ -2,6 +2,7 @@ package com.hhwy.system.warn.service.impl;
 
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.HtmlToText;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -19,6 +20,7 @@ import com.hhwy.system.warn.mapper.TWarnRecordMapper;
 import com.hhwy.system.warn.push.Warn2Push;
 import com.hhwy.system.warn.service.ITWarnService;
 import com.hhwy.utils.idworker.IdWorker;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,7 @@ import java.util.stream.Collectors;
  * @remark
  */
 @Service
+@Slf4j
 public class TWarnServiceImpl implements ITWarnService {
 
     @Autowired
@@ -72,6 +75,7 @@ public class TWarnServiceImpl implements ITWarnService {
     @Override
     //@Transactional
     public int addWarnNonGm(TWarn tWarn) {
+        log.info("预警消息发送：{}", JSON.toJSONString(tWarn));
         String warnScope = tWarn.getWarnScope();
         if(StringUtils.isBlank(warnScope)){
             return 1;
@@ -86,6 +90,10 @@ public class TWarnServiceImpl implements ITWarnService {
                 this.notify(tWarn);
             });
         }
+        //推送到一公局门户
+        warn2Push.push(tWarn);
+        //推送到中交门户
+        warnPushMenHu.push(tWarn);
         return result;
     }
 

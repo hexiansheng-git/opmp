@@ -27,4 +27,8 @@ public interface SgjsPaperScoreMapper {
     int deleteSgjsPaperScore(SgjsPaperScore sgjsPaperScore);
 
     int deleteSgjsPaperScoreByPks(@Param("sgjsPaperScorePkList") List<Long> sgjsPaperScorePkList);
+
+    List<SgjsPaperScore> getListByIds(@Param("ids") List<Long> ids);
+
+    void updateByIds(@Param("ids") List<Long> ids, @Param("taskStatus") String taskStatus);
 }

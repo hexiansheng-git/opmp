@@ -38,12 +38,12 @@ public class SgjsPaperScoreStandardController extends BaseController {
         return AjaxResult.success(sgjsPaperScoreStandard);
     }
 
+    //查询
     @PreAuthorize(hasPermi = "sgjsPaperScoreStandard:list")
     @GetMapping("/list")
     public AjaxResult getSgjsPaperScoreStandardList(@Validated(ValidationGroups.Select.class) SgjsPaperScoreStandard sgjsPaperScoreStandardParam) {
-        startPage();
         List<SgjsPaperScoreStandard> sgjsPaperScoreStandardList = sgjsPaperScoreStandardService.getSgjsPaperScoreStandardList(sgjsPaperScoreStandardParam);
-        return getDataTableAjaxResult(sgjsPaperScoreStandardList);
+        return AjaxResult.success(sgjsPaperScoreStandardList);
     }
 
     @PreAuthorize(hasPermi = "sgjsPaperScoreStandard:add")
