@@ -194,8 +194,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
 
         SgjsBuildSchemeReview review = sgjsBuildSchemeReviewMapper.getById(id);
         //格式化方案类型
-        String schemeType = DictUtil.formatMultiDict("scheme_type_all",review.getSchemeType());
-        review.setSchemeType(schemeType);
+//        String schemeType = DictUtil.formatMultiDict("scheme_type_all",review.getSchemeType());
+//        review.setSchemeType(schemeType);
         review.setFlowNodeMark(flowNodeMark);
         String schemeLevel = review.getSchemeLevel();
         if("2".equals(schemeLevel) || "3".equals(schemeLevel)){
