@@ -118,8 +118,8 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
-            <if test="paperCode != null  and paperCode != ''">and `paper_code` = #{paperCode}</if>
-            <if test="paperName != null  and paperName != ''">and `paper_name` = #{paperName}</if>
+            <if test="paperCode != null  and paperCode != ''">and `paper_code` like concat('%', #{paperCode}, '%')</if>
+            <if test="paperName != null  and paperName != ''">and `paper_name` like concat('%', #{paperName}, '%')</if>
             <if test="declareGrade != null  and declareGrade != ''">and `declare_grade` = #{declareGrade}</if>
             <if test="professionType != null  and professionType != ''">and `profession_type` = #{professionType}</if>
             <if test="professionPlate != null  and professionPlate != ''">and `profession_plate` = #{professionPlate}
@@ -152,7 +152,6 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by create_time desc
     </select>
 
     <insert id="insertSgjsPaperScore" useGeneratedKeys="true" keyProperty="id">

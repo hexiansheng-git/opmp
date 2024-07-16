@@ -23,15 +23,10 @@ public class CommonBusiness {
     static SystemServiceApi systemServiceApi = SpringUtils.getBean(SystemServiceApi.class);
 
     /*
-     * 功能描述: 从总部获取预警配置信息
-     * @param: url 请求url
-     * @param: warnSubject 预警项(中文)
-     * @return: 预警配置信息
-     * 时间: 2024/4/2
+     * 功能描述: 根据角色获取用户
      */
-    public static List<SysUser> getSysUsers(SgjsWarnConfig sgjsWarnConfig) {
-        String[] roles = StrUtil.splitToArray(sgjsWarnConfig.getWarnObjectId(), ",");
-        AjaxResult ajaxResult = systemServiceApi.selectByRoleAndTenant(roles, SecurityUtils.getTenantKey());
+    public static List<SysUser> getSysUsers(String[] roleKeys, String tenantKey) {
+        AjaxResult ajaxResult = systemServiceApi.selectByRoleAndTenant(roleKeys, tenantKey);
         Integer code1 = (Integer) ajaxResult.get("code");
         Assert.isTrue(code1.equals(200), "获取用户列表失败");
         String userInfoStr = JSON.toJSONString(ajaxResult.get("data"));
