@@ -73,6 +73,7 @@ public class SgjsPaperScoreServiceImpl implements ISgjsPaperScoreService {
             if (CollUtil.isEmpty(sgjsPaperPublishList)) {
                 return new ArrayList<>();
             }
+            sgjsPaperPublishList.forEach(p -> p.setPtVar3(p.getId()+""));
             List<SgjsPaperScore> sgjsPaperScores = BeanUtil.copyToList(sgjsPaperPublishList, SgjsPaperScore.class);
             this.insertSgjsPaperScoreList(sgjsPaperScores);
             return sgjsPaperScoreMapper.getSgjsPaperScoreList(sgjsPaperScore);

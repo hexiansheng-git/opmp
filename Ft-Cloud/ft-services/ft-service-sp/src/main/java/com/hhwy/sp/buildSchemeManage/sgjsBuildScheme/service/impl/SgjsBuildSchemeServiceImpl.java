@@ -522,7 +522,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 sgjsBuildSchemeReview.setCreateTime(DateUtil.parse(createTimeStr, DatePattern.NORM_DATETIME_PATTERN));
                 List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewList = sgjsBuildSchemeReviewService.getSgjsBuildSchemeReviewList(sgjsBuildSchemeReview);
                 if (CollUtil.isEmpty(sgjsBuildSchemeReviewList)) {
-                    log.info("租户：{}，施工方案评审数据无数据", tenant.getTenantName());
+                    log.info("施工方案评审数据无数据, 租户：{}", tenant.getTenantName());
                     continue;
                 }
                 /*查询流程，过滤得到未发起审批的数据*/
@@ -555,14 +555,15 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                     }
                 }
                 if (!triggerFlag) {
-                    log.info("租户：{}，施工方案清单预警执行, 无需预警。。。。", tenant.getTenantName());
+                    log.info("施工方案清单预警执行, 无需预警, 租户：{}，", tenant.getTenantName());
                     continue;
                 }
                 /*执行预警*/
                 //根据角色获取用户
-                List<SysUser> allSysUsers = CommonBusiness.getSysUsers(sgjsWarnConfig);
+                String[] roleKeys = StrUtil.splitToArray(sgjsWarnConfig.getWarnObjectId(), ",");
+                List<SysUser> allSysUsers = CommonBusiness.getSysUsers(roleKeys, tenant.getTenantKey());
                 if (CollUtil.isEmpty(allSysUsers)) {
-                    log.info("租户：{}，根据角色获取用户, 无数据，{}", tenant.getTenantName(), JSON.toJSONString(sgjsWarnConfig));
+                    log.info("根据角色获取用户, 无数据，总部配置：{} --- 租户：{}，", tenant.getTenantName(), JSON.toJSONString(sgjsWarnConfig));
                     continue;
                 }
                 List<SysUser> sysUsers = allSysUsers.stream().filter(p -> StrUtil.isNotBlank(p.getTenantKey()) && p.getTenantKey().equals(tenant.getTenantKey())).collect(Collectors.toList());

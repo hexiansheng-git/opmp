@@ -421,9 +421,7 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
             if(CollectionUtils.isEmpty(valueList))continue;
             //一个项目一条预警信息
             String warnObjectId = valueList.get(0).getWarnObjectId();
-            SgjsWarnConfig sgjsWarnConfig=new SgjsWarnConfig();
-            sgjsWarnConfig.setWarnObjectId(warnObjectId);
-            List<SysUser> sysUsers = CommonBusiness.getSysUsers(sgjsWarnConfig);
+            List<SysUser> sysUsers = CommonBusiness.getSysUsers(new String[]{warnObjectId}, SecurityUtils.getTenantKey());
             if (CollUtil.isEmpty(sysUsers)) continue;
             sysUsers.forEach(e->{
                 SgjsWarnRecord record=new SgjsWarnRecord();
