@@ -26,7 +26,12 @@ public class CommonBusiness {
      * 功能描述: 根据角色获取用户
      */
     public static List<SysUser> getSysUsers(String[] roleKeys, String tenantKey) {
-        AjaxResult ajaxResult = systemServiceApi.selectByRoleAndTenant(roleKeys, tenantKey);
+        AjaxResult ajaxResult = new AjaxResult();
+        if (StrUtil.isBlank(tenantKey)) {
+            ajaxResult = systemServiceApi.selectByRole(roleKeys, null);
+        }else {
+            ajaxResult = systemServiceApi.selectByRoleAndTenant(roleKeys, tenantKey);
+        }
         Integer code1 = (Integer) ajaxResult.get("code");
         Assert.isTrue(code1.equals(200), "获取用户列表失败");
         String userInfoStr = JSON.toJSONString(ajaxResult.get("data"));

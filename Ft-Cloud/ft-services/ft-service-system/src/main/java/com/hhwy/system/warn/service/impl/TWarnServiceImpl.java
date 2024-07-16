@@ -354,4 +354,9 @@ public class TWarnServiceImpl implements ITWarnService {
             tenantKey = "master";
         return myUserMapper.selectByRoleKeyList(roleKeyList,tenantKey);
     }
+
+    @Override
+    public List<SysUser> selectByRoleKeyList1(String[] roleKeyList, String tenantKey) {
+        return myUserMapper.selectByRoleKeyList(roleKeyList,tenantKey);
+    }
 }

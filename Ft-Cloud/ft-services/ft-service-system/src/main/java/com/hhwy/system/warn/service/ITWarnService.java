@@ -46,4 +46,6 @@ public interface ITWarnService {
     List<SysUser> selectByRoleKeyList(String[] roleKeyList);
 
     List<SysUser> selectByRoleKeyList(String[] roleKeyList, String tenantKey);
+
+    List<SysUser> selectByRoleKeyList1(String[] roleKeyList, String tenantKey);
 }

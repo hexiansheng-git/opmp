@@ -206,7 +206,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         u.status, u.del_flag, u.super_flag, u.login_ip, u.login_date, u.create_user, u.create_time, u.remark, u.pt_var_1, u.pt_var_2, u.pt_var_3, u.pt_var_4, u.pt_var_5
         FROM
         sys_user u,
-        (select user_id from sys_user_role sur,sys_role sr where sur.tenant_key = #{tenantKey} and sur.role_id = sr.role_id and sr.role_key in
+        (select user_id from sys_user_role sur,sys_role sr where sur.role_id = sr.role_id
+         <if test="tenantKey != null and tenantKey != ''">
+             and sur.tenant_key = #{tenantKey}
+         </if>
+         and sur.role_id = sr.role_id and sr.role_key in
         <foreach item="roleKey" collection="roleKeyList" open="(" separator="," close=")">
             #{roleKey}
         </foreach>) uid

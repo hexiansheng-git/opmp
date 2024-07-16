@@ -169,12 +169,23 @@ public class TWarnController extends BaseController {
     /**
      * 根据角色和租户获取用户列表
      * @param roleKeyList 角色列表
-     * @param tenantKey 租户
+     * @param tenantKey 租户 默认master
      * @return 用户列表
      */
     @PostMapping("selectByRoleAndTenant")
     public AjaxResult selectByRoleAndTenant(@RequestParam String[] roleKeyList, @RequestParam(value = "tenantKey", required = false) String tenantKey){
         return AjaxResult.success(tWarnService.selectByRoleKeyList(roleKeyList, tenantKey));
+    }
+
+    /**
+     * 根据角色和租户获取用户列表
+     * @param roleKeyList 角色列表
+     * @param tenantKey 租户 默认为空
+     * @return 用户列表
+     */
+    @PostMapping("selectByRole")
+    public AjaxResult selectByRole(@RequestParam String[] roleKeyList, @RequestParam(value = "tenantKey", required = false) String tenantKey){
+        return AjaxResult.success(tWarnService.selectByRoleKeyList1(roleKeyList, tenantKey));
     }
     
     @GetMapping("/pushWarn/{id}")

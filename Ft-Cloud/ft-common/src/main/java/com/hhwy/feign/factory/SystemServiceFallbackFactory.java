@@ -169,6 +169,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             public AjaxResult selectByRoleAndTenant(String[] roleKeyList, String tenantKey) {
                 return AjaxResult.error("请求失败:",throwable.getMessage());
             }
+
+            @Override
+            public AjaxResult selectByRole(String[] roleKeyList, String tenantKey) {
+                return AjaxResult.error("请求失败:",throwable.getMessage());
+            }
         };
     }
 }

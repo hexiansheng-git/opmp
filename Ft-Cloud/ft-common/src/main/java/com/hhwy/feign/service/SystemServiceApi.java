@@ -187,7 +187,7 @@ public interface SystemServiceApi {
     R broadcast(@RequestParam("topic")String topic, @RequestParam("message")String message);
 
     /**
-     * 功能描述: 获取给定角色和租户下的所有用户
+     * 功能描述: 获取给定角色和租户下的用户，租户为空默认master
      * @param roleKeyList 角色集  role key
      * @param tenantKey 租户
      * 作者: fsd
@@ -195,4 +195,15 @@ public interface SystemServiceApi {
      */
     @PostMapping("/tWarn/selectByRoleAndTenant")
     AjaxResult selectByRoleAndTenant(@RequestParam(value = "roleKeyList") String[] roleKeyList, @RequestParam(value = "tenantKey", required = false) String tenantKey);
+
+    /**
+     * 功能描述: 获取给定角色和租户下的用户，租户为空返回所有租户下的用户
+     * @param roleKeyList 角色集  role key
+     * @param tenantKey 租户
+     * 作者: fsd
+     * 时间: 2024/2/4
+     */
+    @PostMapping("/tWarn/selectByRole")
+    AjaxResult selectByRole(@RequestParam(value = "roleKeyList") String[] roleKeyList, @RequestParam(value = "tenantKey", required = false) String tenantKey);
+
 }
