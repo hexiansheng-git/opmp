@@ -291,8 +291,13 @@ public class TWarnServiceImpl implements ITWarnService {
     public int insertTWarnListToGm(List<TWarn> tWarnList) {
         for (TWarn tWarn : tWarnList) {
             tWarn.setWarnId(IdWorker.createId());
-            tWarn.setCreateUser(SecurityUtils.getUserName());
+//            tWarn.setCreateUser(SecurityUtils.getUserName());
             tWarn.setCreateTime(DateUtils.getNowDate());
+        }
+        if (tWarnList != null) {
+            log.info("预警条数："+tWarnList.size());
+        } else {
+            log.info("预警条数：0");
         }
         int result = tWarnMapper.insertTWarnList(tWarnList);
         if (result > 0) {

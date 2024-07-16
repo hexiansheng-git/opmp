@@ -237,6 +237,7 @@ public class QqchSafetyTrainServiceImpl implements IQqchSafetyTrainService {
             if (qqchSafetyTrainListHave.size()>0) {
                 log.info("预警信息列表为："+JSON.toJSONString(qqchSafetyTrainListHave));
                 systemServiceApi.insertTWarnListToGm(qqchSafetyTrainListHave);
+                log.info("预警发送完成");
             }
         }catch (Exception e){
             throw new CustomException(e.getMessage());
