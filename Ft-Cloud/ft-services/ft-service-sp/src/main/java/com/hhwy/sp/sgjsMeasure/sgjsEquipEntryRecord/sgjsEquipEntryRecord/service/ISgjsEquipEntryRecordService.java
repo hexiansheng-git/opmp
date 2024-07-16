@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecord;
+import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecordVo;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
 
 /**
@@ -52,4 +53,20 @@ public interface ISgjsEquipEntryRecordService {
      * @return
      */
     List<SgjsEquipEntryRecordInfo> getDatatByOther(List<Map> map);
+
+    /**
+     * 保存
+     *
+     * @param vo
+     * @return
+     */
+    int save(SgjsEquipEntryRecordVo vo);
+
+    /**
+     * 根据id删除
+     *
+     * @param delIdList
+     * @return
+     */
+    int updateByDelIdList(List<Long> delIdList);
 }

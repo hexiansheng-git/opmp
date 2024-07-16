@@ -325,7 +325,7 @@
         </where>
     </update>
 
-    <update id="updateSgjsEquipEntryRecordList">
+    <update id="updateSgjsEquipEntryRecordList" parameterType="list">
         update sgjs_equip_entry_record
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="id  = case" suffix="end,">
@@ -480,7 +480,7 @@
             </trim>
         </trim>
         where `id` in
-        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </update>
@@ -559,5 +559,15 @@
         <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
+    </update>
+
+    <update id="updateByDelIdList" parameterType="list">
+        update `sgjs_equip_entry_record` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="delIdList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
     </update>
 </mapper>

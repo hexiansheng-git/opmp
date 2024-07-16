@@ -21,7 +21,7 @@ public interface SgjsEquipEntryRecordMapper {
 
     int updateSgjsEquipEntryRecord(SgjsEquipEntryRecord sgjsEquipEntryRecord);
 
-    int updateSgjsEquipEntryRecordList(@Param("sgjsEquipEntryRecordList") List<SgjsEquipEntryRecord> sgjsEquipEntryRecordList);
+    int updateSgjsEquipEntryRecordList(@Param("list") List<SgjsEquipEntryRecord> sgjsEquipEntryRecordList);
 
     int deleteSgjsEquipEntryRecord(SgjsEquipEntryRecord sgjsEquipEntryRecord);
 
@@ -34,4 +34,6 @@ public interface SgjsEquipEntryRecordMapper {
      * @return
      */
     int bathUpdateByList(@Param(value = "list") List<SgjsEquipEntryRecord> equipList);
+
+    int updateByDelIdList(@Param(value = "delIdList") List<Long> delIdList);
 }

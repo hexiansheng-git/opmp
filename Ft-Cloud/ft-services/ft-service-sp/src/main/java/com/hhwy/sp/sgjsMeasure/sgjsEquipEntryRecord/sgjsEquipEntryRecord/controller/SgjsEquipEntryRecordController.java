@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecord;
+import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecordVo;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.service.ISgjsEquipEntryRecordService;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
 import com.hhwy.utils.customLog.CustomBusinessType;
@@ -56,6 +57,19 @@ public class SgjsEquipEntryRecordController extends BaseController{
         startPage();
         List<SgjsEquipEntryRecord> sgjsEquipEntryRecordList = sgjsEquipEntryRecordService.getSgjsEquipEntryRecordList(sgjsEquipEntryRecordParam);
         return getDataTableAjaxResult(sgjsEquipEntryRecordList);
+    }
+
+    /**
+     * 2024-7-11 新增保存
+     * 新需求
+     *
+     * @param vo
+     * @return
+     */
+    @PostMapping("/save")
+    @CustomLogger(title = "施工技术-测量管理--测量设备进场记录", name = "测量设备进场记录" ,businessType = CustomBusinessType.SAVE)
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody SgjsEquipEntryRecordVo vo){
+        return AjaxResult.success(sgjsEquipEntryRecordService.save(vo));
     }
 
     @PreAuthorize(hasPermi = "sgjsEquipEntryRecord:add")

@@ -209,6 +209,16 @@ public class SgjsEquipEntryRecord extends BaseEntity {
     @Excel(name = "预留字段5"    )
     private String ptVar5;
 
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     private String entryDateStr;
 
     private Date entryDateBegin;

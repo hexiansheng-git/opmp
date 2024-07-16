@@ -50,17 +50,19 @@ public class SysSpController {
             map.put("施工方案管理--危大工程清单", "sgjs_build_scheme_list");
             map.put("施工方案管理--施工方案评审", "sgjs_build_scheme_review");
             map.put("施工方案管理--施工方案进展", "sgjs_build_scheme_review");
-            map.put("方案安全技术交底","");
+            map.put("方案安全技术交底","sgjs_disclose_record");
             map.put("科技管理--一般课题研发(高新)","sgjs_technical_normal_topic");
             map.put("科技管理--科研课题管理","sgsj_technical_science_topic");
             map.put("科技管理--四新成果管理","sgjs_four_news_achievement");
             map.put("科技管理--工艺工法管理","sgjs_tech_method");
             map.put("科技管理--专利申报管理","sgjs_patent_declare");
             map.put("科技管理--论文发表管理","sgjs_paper_publish");
+            map.put("设计变更管理","sgjs_design_change_wbs");
         }
         if(type.equals("0")) {
             //勘祭设计
             map.put("设计优化管理", "kcsj_design_optimize");
+            map.put("勘察设计组织管理", "kcsj_organ_manage");
         }
         if(type.equals("1")) {
             chmap.put("施工技术", "sgjs");

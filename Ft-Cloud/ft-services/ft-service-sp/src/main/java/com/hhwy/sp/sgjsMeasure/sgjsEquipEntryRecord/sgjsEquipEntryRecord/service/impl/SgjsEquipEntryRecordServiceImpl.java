@@ -9,6 +9,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecord;
+import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.domain.SgjsEquipEntryRecordVo;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.mapper.SgjsEquipEntryRecordMapper;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecord.service.ISgjsEquipEntryRecordService;
 import com.hhwy.sp.sgjsMeasure.sgjsEquipEntryRecord.sgjsEquipEntryRecordInfo.domain.SgjsEquipEntryRecordInfo;
@@ -30,6 +31,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author lcf   测量管理--测试设备进场记录
@@ -76,6 +78,7 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
         //根据id批量查询子表信息
         List<SgjsEquipEntryRecordInfo> infoList=infoMapper.selectByIdList(idList);
         for (int i = 0; i < list.size(); i++) {
+            list.get(i).setType("1");
             String id = list.get(i).getId()+"";
             List<SgjsEquipEntryRecordInfo> infos = infoList.stream().filter(e -> String.valueOf(e.getRecordId()).equals(id)).collect(Collectors.toList());
             list.get(i).setInfoList(infos);
@@ -145,7 +148,6 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
     @Override
     public AjaxResult sync() {
         AjaxResult result = pmServiceApi.qqchMeasureExpEquList();
-        List<SgjsEquipEntryRecord> list=new ArrayList<>();
         if(!result.get("code").toString().equals("200")){
             logger.error("同步异常");
             AjaxResult.error("同步异常");
@@ -173,54 +175,58 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             info.setCreateUser(SecurityUtils.getUserId()+"");
             info.setId(IdWorker.createId());
             info.setPtVar5(ObjectUtils.toString(object.get("id")));
+            info.setDataSource("1");
+            info.setType("0");
             if(prjInfo.get("projectId") != null)info.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
-            info.setProjectName((String) prjInfo.get("projectName"));
-            info.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
-            info.setRegionName((String) prjInfo.get("regionName"));
+            if(StringUtils.isNotEmpty(prjInfo.get("projectName")+""))info.setProjectName((String) prjInfo.get("projectName"));
+            if(prjInfo.get("regionId") != null)info.setRegionId(Long.parseLong(prjInfo.get("regionId").toString()));
+            if(StringUtils.isNotEmpty(prjInfo.get("regionName")+""))info.setRegionName((String) prjInfo.get("regionName"));
             dataList.add(info);
         }
-        //查询库中已有所有数据
-        List<SgjsEquipEntryRecord> insertList =new ArrayList<>();
-        List<SgjsEquipEntryRecord> recordList = sgjsEquipEntryRecordMapper.getSgjsEquipEntryRecordList(new SgjsEquipEntryRecord());
-        if(CollectionUtils.isEmpty(recordList)){
-            if(!CollectionUtils.isEmpty(dataList)){
-                sgjsEquipEntryRecordMapper.insertSgjsEquipEntryRecordList(dataList);
-            }
-            //同步总部版
-            if(!CollectionUtils.isEmpty(dataList)){
-                logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(dataList));
-                syncDataToGm(dataList);
-            }
+        if (CollectionUtils.isEmpty(dataList)) {
+            return AjaxResult.success("暂未同步到数据");
+        }else {
             return AjaxResult.success(dataList);
         }
-
-        //库里有的 不做入库操作    没有的做入库操作  只同步库里没有的
-        for (int i = 0; i < list.size(); i++) {
-            String syncId = list.get(i).getPtVar5();
-            if(StringUtils.isNotEmpty(syncId)){
-                List<SgjsEquipEntryRecord> checkList = recordList.stream().filter(e -> e.getPtVar5().equals(syncId)).collect(Collectors.toList());
-                if(CollectionUtils.isEmpty(checkList)){//空说明库里没有
-                    insertList.add(list.get(i));
-                }
-            }
-
-        }
-        if(!CollectionUtils.isEmpty(insertList)){
-            sgjsEquipEntryRecordMapper.insertSgjsEquipEntryRecordList(insertList);
-            return AjaxResult.success(list);
-        }
-        //同步总部版
-        if(!CollectionUtils.isEmpty(insertList)){
-            logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(insertList));
-            syncDataToGm(insertList);
-        }
-        return AjaxResult.success("暂未同步到新数据！");
+//        //查询库中已有所有数据
+//        List<SgjsEquipEntryRecord> insertList =new ArrayList<>();
+//        List<SgjsEquipEntryRecord> recordList = sgjsEquipEntryRecordMapper.getSgjsEquipEntryRecordList(new SgjsEquipEntryRecord());
+//        if(CollectionUtils.isEmpty(recordList)){
+//            if(!CollectionUtils.isEmpty(dataList)){
+//                sgjsEquipEntryRecordMapper.insertSgjsEquipEntryRecordList(dataList);
+//            }
+//            //同步总部版
+//            if(!CollectionUtils.isEmpty(dataList)){
+//                logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(dataList));
+//                syncDataToGm(dataList);
+//            }
+//            return AjaxResult.success(dataList);
+//        }
+//
+//        //库里有的 不做入库操作    没有的做入库操作  只同步库里没有的
+//        for (int i = 0; i < list.size(); i++) {
+//            String syncId = list.get(i).getPtVar5();
+//            if(StringUtils.isNotEmpty(syncId)){
+//                List<SgjsEquipEntryRecord> checkList = recordList.stream().filter(e -> e.getPtVar5().equals(syncId)).collect(Collectors.toList());
+//                if(CollectionUtils.isEmpty(checkList)){//空说明库里没有
+//                    insertList.add(list.get(i));
+//                }
+//            }
+//
+//        }
+//        if(!CollectionUtils.isEmpty(insertList)){
+//            sgjsEquipEntryRecordMapper.insertSgjsEquipEntryRecordList(insertList);
+//            return AjaxResult.success(list);
+//        }
+//        //同步总部版
+//        if(!CollectionUtils.isEmpty(insertList)){
+//            logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(insertList));
+//            syncDataToGm(insertList);
+//        }
+//        return AjaxResult.success("暂未同步到新数据！");
     }
 
-    private void syncDataToGm(List<SgjsEquipEntryRecord> insertList) {
-        Map<String,Object> map=new HashMap<>();
-        map.put("type","1");
-        map.put("data",insertList);
+    private void syncDataToGm(Map<String,Object> map) {
         long beginMills = System.currentTimeMillis();
         Integer status = 1;
         String errMsg = "";
@@ -317,6 +323,50 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
                             )), ArrayList::new));
         }
         return list;
+    }
+
+    @Override
+    public int save(SgjsEquipEntryRecordVo vo) {
+        Map<String,Object> map=new HashMap<>();
+        //空了 全删
+        if(null==vo){
+            List<SgjsEquipEntryRecord> list=new ArrayList<>();
+            SgjsEquipEntryRecord info=new SgjsEquipEntryRecord();
+            Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+            Long projectId = Long.parseLong(prjInfo.get("projectId") + "");
+            info.setProjectId(projectId);
+            info.setProjectName((String) prjInfo.get("projectName"));
+            list.add(info);
+            SgjsEquipEntryRecordVo recordVo=new SgjsEquipEntryRecordVo();
+            recordVo.setList(list);
+            map.put("data",recordVo);
+            map.put("type","3");
+            syncDataToGm(map);
+
+        }
+        List<Long> delIdList = vo.getDelIdList();
+        if(!CollectionUtils.isEmpty(delIdList)){
+            updateByDelIdList(delIdList);
+        }
+        List<SgjsEquipEntryRecord> list = vo.getList();
+        //0新增 1编辑  2删除
+        List<SgjsEquipEntryRecord> insertList = list.stream().filter(e -> e.getType().equals("0")).collect(Collectors.toList());
+        if(!CollectionUtils.isEmpty(insertList)){
+            insertSgjsEquipEntryRecordList(insertList);
+        }
+        List<SgjsEquipEntryRecord> updateList = list.stream().filter(e -> e.getType().equals("1")).collect(Collectors.toList());
+        if(!CollectionUtils.isEmpty(updateList)){
+            updateSgjsEquipEntryRecordList(updateList);
+        }
+        map.put("data",vo);
+        map.put("type","1");
+        syncDataToGm(map);
+        return 1;
+
+    }
+    @Override
+    public int updateByDelIdList(List<Long> delIdList) {
+        return sgjsEquipEntryRecordMapper.updateByDelIdList(delIdList);
     }
 
 }
