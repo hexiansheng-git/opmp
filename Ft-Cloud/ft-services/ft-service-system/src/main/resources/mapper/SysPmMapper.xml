@@ -122,7 +122,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			#{info.qqch_work_plan},
 			#{info.bianzhi},
 <!--			#{info.jieduan},-->
-			#{info.pingshen},
+			#{info.qqch_review},
 			#{info.jdgl_year_plan},
 			#{info.jdgl_quarter_plan},
 			#{info.jdgl_month_plan},
