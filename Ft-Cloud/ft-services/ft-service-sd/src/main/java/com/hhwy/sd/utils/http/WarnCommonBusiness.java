@@ -30,9 +30,13 @@ public class WarnCommonBusiness {
      * @return: 预警配置信息
      * 时间: 2024/4/2
      */
-    public static List<SysUser> getSysUsers(KcsjWarnConfig sgjsWarnConfig) {
-        String[] roles = StrUtil.splitToArray(sgjsWarnConfig.getWarnObjectId(), ",");
-        AjaxResult ajaxResult = systemServiceApi.selectByRoleAndTenant(roles, SecurityUtils.getTenantKey());
+    public static List<SysUser> getSysUsers(String[] roleKeys, String tenantKey) {
+        AjaxResult ajaxResult = new AjaxResult();
+        if (StrUtil.isBlank(tenantKey)) {
+            ajaxResult = systemServiceApi.selectByRole(roleKeys, null);
+        }else {
+            ajaxResult = systemServiceApi.selectByRoleAndTenant(roleKeys, tenantKey);
+        }
         Integer code1 = (Integer) ajaxResult.get("code");
         Assert.isTrue(code1.equals(200), "获取用户列表失败");
         String userInfoStr = JSON.toJSONString(ajaxResult.get("data"));

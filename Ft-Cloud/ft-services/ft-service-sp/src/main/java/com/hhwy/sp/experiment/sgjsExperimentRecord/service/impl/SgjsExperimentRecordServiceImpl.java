@@ -385,6 +385,7 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
                         config.setPrjCode(tenantKey);
                         config.setPrjName(tenant.getTenantName());
                         config.setWarnMassage(warnConfigRst.getWarnMassage());
+                        config.setTenantKey(tenant.getTenantKey());
                         warnList.add(config);
                         break;
                     }
@@ -393,7 +394,7 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
             }
 
             //同步总部数据
-            syncToGm(warnList);
+            syncToGm(warnList,warnConfigRst);
         }catch (Exception e){
             throw new CustomException(e.getMessage());
         }finally {
@@ -409,21 +410,25 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
      *
      * @param warnList
      */
-    private void syncToGm(List<SgjsWarnConfig> warnList) {
+    private void syncToGm(List<SgjsWarnConfig> warnList,SgjsWarnConfig warnConfigRst) {
         if(CollectionUtils.isEmpty(warnList)){
             logger.info("空了，哪来回哪去！！！！");
             return;
         }
         List<SgjsWarnRecord> rstList=new ArrayList<>();
-        Map<String, List<SgjsWarnConfig>> map = warnList.stream().collect(Collectors.groupingBy(e -> e.getPrjCode()));
+        Map<String, List<SgjsWarnConfig>> map = warnList.stream().collect(Collectors.groupingBy(e -> e.getTenantKey()));
+        //一个项目一条预警信息 在总部    所有项目对应的都是同一个角色
+        String warnObjectId = warnConfigRst.getWarnObjectId();
+        //查出该角色下所有项目用户  根据项目编码过滤
+        List<SysUser> sysUsers = CommonBusiness.getSysUsers(new String[]{warnObjectId}, null);
         for (Map.Entry<String, List<SgjsWarnConfig>> info:map.entrySet()) {
             List<SgjsWarnConfig> valueList = info.getValue();
             if(CollectionUtils.isEmpty(valueList))continue;
-            //一个项目一条预警信息
-            String warnObjectId = valueList.get(0).getWarnObjectId();
-            List<SysUser> sysUsers = CommonBusiness.getSysUsers(new String[]{warnObjectId}, SecurityUtils.getTenantKey());
-            if (CollUtil.isEmpty(sysUsers)) continue;
-            sysUsers.forEach(e->{
+            if (CollectionUtils.isEmpty(sysUsers)) continue;
+            //根据租户信息 处理发送的预警消息
+            List<SysUser> userList = sysUsers.stream().filter(e -> e.getTenantKey().equals(info.getKey())).collect(Collectors.toList());
+            if (CollectionUtils.isEmpty(userList)) continue;
+            userList.forEach(e->{
                 SgjsWarnRecord record=new SgjsWarnRecord();
                 record.setProjectCode(valueList.get(0).getPrjCode());
                 record.setProjectName(valueList.get(0).getPrjName());
