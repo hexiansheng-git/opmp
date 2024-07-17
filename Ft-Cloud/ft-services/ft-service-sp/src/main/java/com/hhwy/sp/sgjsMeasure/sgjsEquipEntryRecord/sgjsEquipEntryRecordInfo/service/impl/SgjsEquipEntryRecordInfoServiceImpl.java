@@ -188,7 +188,7 @@ public class SgjsEquipEntryRecordInfoServiceImpl implements ISgjsEquipEntryRecor
             sgjsEquipEntryRecordInfoDetailService.insertSgjsEquipEntryRecordInfoDetailList(list);
         }
         //总部版同步
-        //syncDataToGm(map);
+        syncDataToGm(map);
         return 1;
     }
 
