@@ -22,7 +22,7 @@ public interface SgjsExperimentRecordMapper {
 
     int updateSgjsExperimentRecord(SgjsExperimentRecord sgjsExperimentRecord);
 
-    int updateSgjsExperimentRecordList(@Param("sgjsExperimentRecordList") List<SgjsExperimentRecord> sgjsExperimentRecordList);
+    int updateSgjsExperimentRecordList(@Param("list") List<SgjsExperimentRecord> sgjsExperimentRecordList);
 
     int deleteSgjsExperimentRecord(SgjsExperimentRecord sgjsExperimentRecord);
 
@@ -35,4 +35,6 @@ public interface SgjsExperimentRecordMapper {
      * @return
      */
     int bathUpdateByList(@Param("list") List<SgjsExperimentRecord> eList);
+
+    int updateByDelIdList(@Param("delIdList") List<Long> delIdList);
 }

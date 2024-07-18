@@ -342,21 +342,23 @@ public class SgjsEquipEntryRecordServiceImpl implements ISgjsEquipEntryRecordSer
             map.put("data",recordVo);
             map.put("type","3");
             syncDataToGm(map);
-
+            return 1;
         }
         List<Long> delIdList = vo.getDelIdList();
         if(!CollectionUtils.isEmpty(delIdList)){
             updateByDelIdList(delIdList);
         }
         List<SgjsEquipEntryRecord> list = vo.getList();
-        //0新增 1编辑  2删除
-        List<SgjsEquipEntryRecord> insertList = list.stream().filter(e -> e.getType().equals("0")).collect(Collectors.toList());
-        if(!CollectionUtils.isEmpty(insertList)){
-            insertSgjsEquipEntryRecordList(insertList);
-        }
-        List<SgjsEquipEntryRecord> updateList = list.stream().filter(e -> e.getType().equals("1")).collect(Collectors.toList());
-        if(!CollectionUtils.isEmpty(updateList)){
-            updateSgjsEquipEntryRecordList(updateList);
+        if(!CollectionUtils.isEmpty(list)){
+            //0新增 1编辑  2删除
+            List<SgjsEquipEntryRecord> insertList = list.stream().filter(e -> e.getType().equals("0")).collect(Collectors.toList());
+            if(!CollectionUtils.isEmpty(insertList)){
+                insertSgjsEquipEntryRecordList(insertList);
+            }
+            List<SgjsEquipEntryRecord> updateList = list.stream().filter(e -> e.getType().equals("1")).collect(Collectors.toList());
+            if(!CollectionUtils.isEmpty(updateList)){
+                updateSgjsEquipEntryRecordList(updateList);
+            }
         }
         map.put("data",vo);
         map.put("type","1");

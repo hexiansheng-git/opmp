@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
+import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecordVo;
 
 /**
  * @author lcf--试验设备进场记录
@@ -59,4 +60,15 @@ public interface ISgjsExperimentRecordService {
      * @return
      */
     AjaxResult experimentRecordJob();
+
+    /**
+     * 新增需求
+     * 20240718
+     * lcf
+     * @param sgjsExperimentRecordVo
+     * @return
+     */
+    int save(SgjsExperimentRecordVo sgjsExperimentRecordVo);
+
+    int updateByDelIdList(List<Long> delIdList);
 }

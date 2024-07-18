@@ -214,6 +214,16 @@ public class SgjsExperimentRecord extends BaseEntity {
     private String ptVar5;
 
     private List<SgjsExperimentRecordInfo> infoList;
+    //0新增 1编辑
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public List<SgjsExperimentRecordInfo> getInfoList() {
         return infoList;

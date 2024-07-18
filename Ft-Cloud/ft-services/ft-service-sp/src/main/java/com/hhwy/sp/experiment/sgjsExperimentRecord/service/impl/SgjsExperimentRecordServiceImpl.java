@@ -1,6 +1,5 @@
 package com.hhwy.sp.experiment.sgjsExperimentRecord.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
@@ -18,6 +17,7 @@ import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsWarnConfig;
 import com.hhwy.sp.common.warn.CommonBusiness;
 import com.hhwy.sp.common.warn.SgjsWarnRecord;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
+import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecordVo;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.mapper.SgjsExperimentRecordMapper;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.service.ISgjsExperimentRecordService;
 import com.hhwy.sp.experiment.sgjsExperimentRecordInfo.domain.SgjsExperimentRecordInfo;
@@ -91,6 +91,7 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
         List<SgjsExperimentRecordInfo> infoList = infoMapper.selectByIdList(idList);
         for (int i = 0; i < list.size(); i++) {
             String id = list.get(i).getId()+"";
+            list.get(i).setType("1");
             List<SgjsExperimentRecordInfo> iList = infoList.stream().filter(e -> String.valueOf(e.getRecordId()).equals(id)).collect(Collectors.toList());
             list.get(i).setInfoList(iList);
         }
@@ -177,84 +178,56 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
             info.setCreateTime(DateUtils.getNowDate());
             info.setCreateUser(SecurityUtils.getUserId()+"");
             info.setId(IdWorker.createId());
-            //info.setProjectId(ObjectUtils.toLong(object.get("projectId")));
+            info.setDataSource("1");
+            info.setType("0");
             if(prjInfo.get("projectId") != null)info.setProjectId(Long.parseLong(prjInfo.get("projectId").toString()));
             info.setProjectName((String) prjInfo.get("projectName"));
             //同步数据id
             info.setPtVar5(ObjectUtils.toString(object.get("id")));
             list.add(info);
         }
-
-        List<SgjsExperimentRecord> insertList =new ArrayList<>();
-
-        //查询库中已有所有数据
-        List<SgjsExperimentRecord> recordList = sgjsExperimentRecordMapper.getSgjsExperimentRecordList(new SgjsExperimentRecord());
-        if(CollectionUtils.isEmpty(recordList)){ //库里没有同步的数据 直接插入
-            if(!CollectionUtils.isEmpty(list)){
-                sgjsExperimentRecordMapper.insertSgjsExperimentRecordList(list);
-            }
-            //数据同步总部
-            if(!CollectionUtils.isEmpty(list)) {
-                logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(list));
-                syncDataToGm(list);
-            }
+        if(CollectionUtils.isEmpty(list)){
+            return AjaxResult.success("未同步到新数据！");
+        }else{
             return AjaxResult.success(list);
         }
-        //库里有的 不做入库操作    没有的做入库操作  只同步库里没有的
-        for (int i = 0; i < list.size(); i++) {
-            String syncId = list.get(i).getPtVar5();
-            if(StringUtils.isNotEmpty(syncId)){
-                List<SgjsExperimentRecord> checkList = recordList.stream().filter(e ->syncId.equals(e.getPtVar5())).collect(Collectors.toList());
-                if(CollectionUtils.isEmpty(checkList)){//空说明库里没有
-                    insertList.add(list.get(i));
-                }
-            }
-        }
-        if(!CollectionUtils.isEmpty(insertList)){
-            sgjsExperimentRecordMapper.insertSgjsExperimentRecordList(insertList);
-            return AjaxResult.success(list);
-        }
-        //数据同步总部
-        if(!CollectionUtils.isEmpty(insertList)) {
-            logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(insertList));
-            syncDataToGm(insertList);
-        }
-        return AjaxResult.success("未同步到新数据！");
-    }
 
-    /**
-     * 从前期策划来的数据直接同步总部版
-     *
-     * @param insertList
-     */
-    private void syncDataToGm(List<SgjsExperimentRecord> insertList) {
-        Map<String,Object> map=new HashMap<>();
-        map.put("type","1");
-        map.put("data",insertList);
-        long beginMills = System.currentTimeMillis();
-        Integer status = 1;
-        String errMsg = "";
-        try{
-            logger.info("数据源头【{}】",JSONObject.toJSONString(map));
-            rocketMQTemplate.convertAndSend("sgjs_experiment_record:tenantSuccess1", JSONObject.toJSONString(map));
-        }catch (Exception e){
-            e.printStackTrace();
-            status = 0;
-            errMsg = e.getMessage();
-            logger.error("报错了【{}】",e.getMessage());
-            throw e;
-        }finally {
-            //3、更新syncInfo
-            SysSyncInfoLog log=new SysSyncInfoLog();
-            log.setBusinessName("sgjs_experiment_record");
-            log.setStatus(status);
-            log.setFailMsg(errMsg);
-            log.setPtVar1(JSONObject.toJSONString(map));
-            logger.error("sgjs_experiment_record同步失败【{}】,时间：【{}】",JSONObject.toJSONString(map),System.currentTimeMillis()-beginMills);
-            pmServiceApi.insertSyncLog(log);
-        }
+//        List<SgjsExperimentRecord> insertList =new ArrayList<>();
+//        //查询库中已有所有数据
+//        List<SgjsExperimentRecord> recordList = sgjsExperimentRecordMapper.getSgjsExperimentRecordList(new SgjsExperimentRecord());
+//        if(CollectionUtils.isEmpty(recordList)){ //库里没有同步的数据 直接插入
+//            if(!CollectionUtils.isEmpty(list)){
+//                sgjsExperimentRecordMapper.insertSgjsExperimentRecordList(list);
+//            }
+//            //数据同步总部
+//            if(!CollectionUtils.isEmpty(list)) {
+//                logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(list));
+//                syncDataToGm(list);
+//            }
+//            return AjaxResult.success(list);
+//        }
+//        //库里有的 不做入库操作    没有的做入库操作  只同步库里没有的
+//        for (int i = 0; i < list.size(); i++) {
+//            String syncId = list.get(i).getPtVar5();
+//            if(StringUtils.isNotEmpty(syncId)){
+//                List<SgjsExperimentRecord> checkList = recordList.stream().filter(e ->syncId.equals(e.getPtVar5())).collect(Collectors.toList());
+//                if(CollectionUtils.isEmpty(checkList)){//空说明库里没有
+//                    insertList.add(list.get(i));
+//                }
+//            }
+//        }
+//        if(!CollectionUtils.isEmpty(insertList)){
+//            sgjsExperimentRecordMapper.insertSgjsExperimentRecordList(insertList);
+//            return AjaxResult.success(list);
+//        }
+//        //数据同步总部
+//        if(!CollectionUtils.isEmpty(insertList)) {
+//            logger.info("源头数据。。。。。。【{}】",JSONObject.toJSONString(insertList));
+//            syncDataToGm(insertList);
+//        }
 
     }
+
 
     @Override
     public AjaxResult syncWuShe(List<Map> listMap) {
@@ -404,6 +377,83 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
 
         return AjaxResult.success();
     }
+
+    @Override
+    public int save(SgjsExperimentRecordVo sgjsExperimentRecordVo) {
+        Map<String,Object> map=new HashMap<>();
+        if(null==sgjsExperimentRecordVo){
+            Map<String, Object> prjInfo = pmServiceApi.getPrjInfo();
+            Long projectId = Long.parseLong(prjInfo.get("projectId") + "");
+            SgjsExperimentRecord record=new SgjsExperimentRecord();
+            record.setProjectId(projectId);
+            record.setProjectName((String) prjInfo.get("projectName"));
+            List<SgjsExperimentRecord> list=new ArrayList<>();
+            list.add(record);
+            sgjsExperimentRecordVo.setList(list);
+            map.put("data",sgjsExperimentRecordVo);
+            map.put("type","3");
+            syncDataToGm(map);
+            return 1;
+        }
+        List<Long> delIdList = sgjsExperimentRecordVo.getDelIdList();
+        if(!CollectionUtils.isEmpty(delIdList)){
+            updateByDelIdList(delIdList);
+        }
+        List<SgjsExperimentRecord> list = sgjsExperimentRecordVo.getList();
+        if(!CollectionUtils.isEmpty(list)){
+            //0新增 1编辑
+            List<SgjsExperimentRecord> insertList = list.stream().filter(e -> e.getType().equals("0")).collect(Collectors.toList());
+            if(!CollectionUtils.isEmpty(insertList)){
+                insertSgjsExperimentRecordList(insertList);
+            }
+            List<SgjsExperimentRecord> updateList = list.stream().filter(e -> e.getType().equals("1")).collect(Collectors.toList());
+            if(!CollectionUtils.isEmpty(updateList)){
+                updateSgjsExperimentRecordList(updateList);
+            }
+        }
+        map.put("data",sgjsExperimentRecordVo);
+        map.put("type","1");
+        syncDataToGm(map);
+        return 1;
+    }
+
+    @Override
+    public int updateByDelIdList(List<Long> delIdList) {
+        return sgjsExperimentRecordMapper.updateByDelIdList(delIdList);
+    }
+
+    /**
+     * 数据同步总部版
+     *
+     * @param map
+     */
+    private void syncDataToGm(Map<String,Object> map) {
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try{
+            logger.info("数据源头【{}】",JSONObject.toJSONString(map));
+            rocketMQTemplate.convertAndSend("sgjs_experiment_record:tenantSuccess1", JSONObject.toJSONString(map));
+        }catch (Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            logger.error("报错了【{}】",e.getMessage());
+            throw e;
+        }finally {
+            //3、更新syncInfo
+            SysSyncInfoLog log=new SysSyncInfoLog();
+            log.setBusinessName("sgjs_experiment_record");
+            log.setStatus(status);
+            log.setFailMsg(errMsg);
+            log.setPtVar1(JSONObject.toJSONString(map));
+            logger.error("sgjs_experiment_record同步失败【{}】,时间：【{}】",JSONObject.toJSONString(map),System.currentTimeMillis()-beginMills);
+            pmServiceApi.insertSyncLog(log);
+        }
+
+    }
+
+
 
     /**
      * 同步总部版数据

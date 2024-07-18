@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecord;
+import com.hhwy.sp.experiment.sgjsExperimentRecord.domain.SgjsExperimentRecordVo;
 import com.hhwy.sp.experiment.sgjsExperimentRecord.service.ISgjsExperimentRecordService;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
@@ -53,6 +54,12 @@ public class SgjsExperimentRecordController extends BaseController{
         startPage();
         List<SgjsExperimentRecord> sgjsExperimentRecordList = sgjsExperimentRecordService.getSgjsExperimentRecordList(sgjsExperimentRecordParam);
         return getDataTableAjaxResult(sgjsExperimentRecordList);
+    }
+
+
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class)@RequestBody SgjsExperimentRecordVo SgjsExperimentRecordVo){
+        return AjaxResult.success(sgjsExperimentRecordService.save(SgjsExperimentRecordVo));
     }
 
     @PreAuthorize(hasPermi = "sgjsExperimentRecord:add")
