@@ -38,4 +38,6 @@ public interface ISgjsBuildSchemeService {
     void warnMessage();
 
     void doSendGm(String tenantKey, String admin);
+
+    void sendProcessCompleteNotice(Long id, String isPass);
 }

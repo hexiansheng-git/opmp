@@ -39,6 +39,16 @@ public class FlowInfoSearchUtil {
     static SystemApiService systemApiService= SpringUtils.getBean(SystemApiService.class);
     static FlowServiceApi flowServiceApi= SpringUtils.getBean(FlowServiceApi.class);
     static RemoteBpmnService remoteBpmnService = SpringUtils.getBean(RemoteBpmnService.class);
+
+    /*
+    * 功能描述: 查询流程处理记录
+    * @param: businessId 业务id(必填)
+    * @param: nodeName 节点名称（非必填）
+    * @return: nodeName、assignee 节点名称/处理人
+    */
+    public static List<Map<String, String>> getFlowHistoryInfo(Long businessId, String nodeName){
+        return flowInfoMapper.getHistoryTaskInfo(businessId, nodeName);
+    }
     
     /***
      * 功能描述: 查询流程信息

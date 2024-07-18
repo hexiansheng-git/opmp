@@ -1,13 +1,18 @@
 package com.hhwy.sp.techManagement.sgjsPaperPublish.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.project.ProjectDto;
+import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.constant.BelongBusiness;
 import com.hhwy.sp.common.constant.DataCurrentState;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
@@ -30,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +43,7 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -226,8 +233,15 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         return exportVoList;
     }
 
+
+    @Value("${warn.paperPublishProcEnd.url}")
+    private String paperPublishProcEndUrl;
+    @Value("${warn.paperPublishProcEnd.switch}")
+    private String paperPublishProcEndSwitch;
+
     @Override
     public void updatePaperPublishProcess(Long id, String pass) {
+        log.info("论文申请审批完成； id：{}，isPass：{}", id, pass);
         if(StringUtils.isBlank(pass)){
             return;
         }
@@ -238,7 +252,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
             currentState = DataCurrentState.NO_PASS;
         }
         sgjsPaperPublishMapper.updatePaperPublishProcess(id,currentState,"5");
-
+        //发送总部
         SgjsPaperPublish paperPublish = sgjsPaperPublishMapper.getSgjsPaperPublishById(id);
         paperPublish.setProcessStatus("end");
         sysSyncInfoService4Sp.pushSgjsPaperPublish(paperPublish);
@@ -247,11 +261,58 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
             ArrayList<SgjsPaperScore> objects = new ArrayList<>();
             SgjsPaperScore sgjsPaperScore = new SgjsPaperScore();
             BeanUtil.copyProperties(paperPublish, sgjsPaperScore, "createTime", "updateTime" ,"updateUser");
+            sgjsPaperScore.setPtVar3(String.valueOf(sgjsPaperScore.getId()));
             objects.add(sgjsPaperScore);
             sgjsPaperScoreService.insertSgjsPaperScoreList(objects);
             log.info("论文申请-写入论文评分完成: {}", JSON.toJSONString(objects));
         }
-        log.info("论文申请-流程审批完成");
+        /*0716增加需求
+         流程审批完成后给发起人发通知：
+         您的【论文名称】申请已通过专家审核，进入终评阶段。
+         */
+        //判断开关状态
+        if (StrUtil.isNotBlank(paperPublishProcEndSwitch) && paperPublishProcEndSwitch.equals("on")) {
+            this.sendProcessCompleteNotice(id, pass, paperPublish);
+        }else {
+            log.info("预警开关状态未开启，状态：{}", paperPublishProcEndSwitch);
+        }
+    }
+
+    public void sendProcessCompleteNotice(Long id, String pass, SgjsPaperPublish paperPublish) {
+        //获取发起人信息
+        List<Map<String, String>> flowHistoryInfo = FlowInfoSearchUtil.getFlowHistoryInfo(id, null);
+        if (CollUtil.isEmpty(flowHistoryInfo)) {
+            log.error("查询流程审批记录未找到，id：{}", id);
+            return;
+        }
+        List<Map<String, String>> collect = flowHistoryInfo.stream().limit(1).collect(Collectors.toList());
+        if (CollUtil.isEmpty(collect)) {
+            log.error("过滤流程审批记录异常，元数据：{}", flowHistoryInfo);
+            return;
+        }
+        String userNames = collect.stream().map(key -> key.get("assignee")).collect(Collectors.joining(","));
+        //发送预警
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        String projectCode = projectDto.getProjectCode();
+        String projectName = projectDto.getProjectName();
+        TWarn tWarn = new TWarn();
+        tWarn.setWarnItem(projectName + "-论文申请");
+        tWarn.setWarnItemId("sgjs_paper_publish");
+        tWarn.setWarnScope(userNames);
+        tWarn.setWarnUrl(paperPublishProcEndUrl);
+        tWarn.setBusinessId(id);
+        tWarn.setWarnScopeType("3");
+        String paperName = paperPublish.getPaperName();
+        String warnContent = pass.equals("0")?"-您的" + paperName + "审批未通过，请调整后重新发起。":"-您的" + paperName + "申请已通过专家审核，进入终评阶段。";
+        tWarn.setWarnContent(projectName + warnContent);
+        tWarn.setProjectName(projectName);
+        tWarn.setTenantKey(projectCode);
+        AjaxResult ajaxResult = systemServiceApi.addWarnNonGm(tWarn);
+        if (!AjaxResult.isSuccess(ajaxResult)) {
+            log.info("预警服务异常, 租户：{}\n请求参数：{}\n响应结果：{}", projectName, JSON.toJSONString(tWarn), JSON.toJSONString(ajaxResult));
+            return;
+        }
+        log.info("论文申请审批结束预警执行完成。租户：{}\n请求参数：{}\n预警服务响应：{}", projectName, JSON.toJSONString(tWarn), JSON.toJSONString(ajaxResult));
     }
 
     @Override

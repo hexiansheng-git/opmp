@@ -137,4 +137,13 @@ public class SgjsBuildSchemeController extends BaseController {
     public void schemeListDoSendGm(@RequestParam("tenantKey") String tenantKey){
 //        ThreadPoolUtil.execute(() -> sgjsBuildSchemeService.doSendGm(tenantKey, "admin"));
     }
+
+    /***
+     * 功能描述: 测试用，流程结束后发送通知
+     */
+    @RequestMapping("/testSendNotice")
+    public AjaxResult sendProcessComplateNotice(@RequestParam("id") Long id, @RequestParam("isPass") String isPass){
+        sgjsBuildSchemeService.sendProcessCompleteNotice(id, isPass);
+        return AjaxResult.success();
+    }
 }

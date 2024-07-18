@@ -45,4 +45,6 @@ public interface ISgjsPaperPublishService {
     void updatePaperPublishProcess(Long id, String pass);
 
     void submitPaperPublishProcess(Long id);
+
+    void sendProcessCompleteNotice(Long id, String pass,  SgjsPaperPublish sgjsPaperPublish);
 }
