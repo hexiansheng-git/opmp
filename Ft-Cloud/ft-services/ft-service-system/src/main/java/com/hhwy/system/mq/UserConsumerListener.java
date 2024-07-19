@@ -6,6 +6,8 @@ package com.hhwy.system.mq;/*
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.system.api.domain.SysDept;
 import com.hhwy.system.api.domain.SysRole;
@@ -20,6 +22,7 @@ import com.hhwy.system.service.IDeptService;
 import com.hhwy.system.service.IRoleService;
 import com.hhwy.system.service.IUserService;
 import com.hhwy.utils.idworker.IdWorker;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.spring.annotation.ConsumeMode;
@@ -40,6 +43,7 @@ import java.util.stream.Collectors;
  * @author
  */
 @Service
+@Slf4j
 @RocketMQMessageListener(
         consumerGroup = "pm-leader-user",
         topic = "gm-system",
@@ -62,6 +66,7 @@ public class UserConsumerListener implements RocketMQListener<String> , RocketMQ
 
     @Override
     public void onMessage(String s) {
+        log.info("同步用户权限，从总部版传过来数据为；"+s);
         boolean addUser = false;
         Map userInfo = JSON.parseObject(s, Map.class);
         // 需要同步的账号
@@ -162,6 +167,15 @@ public class UserConsumerListener implements RocketMQListener<String> , RocketMQ
             if(!CollectionUtils.isEmpty(sysUserList4Add)) userService.insertSysUserList(sysUserList4Add);
             // 插入权限关系数据
             if(!CollectionUtils.isEmpty(sysUserRoleList4Add)) sysUserRoleMapper.batchUserRole(sysUserRoleList4Add);
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                String sysUserList4AddJson = objectMapper.writeValueAsString(sysUserList4Add);
+                String sysUserRoleList4AddJson = objectMapper.writeValueAsString(sysUserRoleList4Add);
+                log.info("插入用户数据："+sysUserList4AddJson);
+                log.info("插入权限关系数据："+sysUserRoleList4AddJson);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
