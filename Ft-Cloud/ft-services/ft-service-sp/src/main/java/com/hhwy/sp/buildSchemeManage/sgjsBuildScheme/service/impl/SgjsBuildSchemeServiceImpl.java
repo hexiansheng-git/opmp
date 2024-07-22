@@ -35,8 +35,6 @@ import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.FlowInfoSearchUtilNonReqest;
 import com.hhwy.sp.common.warn.CommonBusiness;
 import com.hhwy.sp.common.warn.SgjsWarnRecord;
-import com.hhwy.sp.utils.http.HttpHeadersUtils;
-import com.hhwy.sp.utils.http.RestTemplateUtils;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.ThreadPoolUtil;
@@ -47,12 +45,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-import org.springframework.util.MultiValueMap;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -100,6 +94,15 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         businessAreas.put("D03P01", "工业园、生产厂房、汽车试验场等");
         businessAreas.put("D04P02", "中小型水电站、中小型水坝");
     }
+
+    @Value("${gm.url}")
+    private String gmUrl;
+    @Value("${warn.schemeListUrl}")
+    private String schemeListUrl;
+    @Value("${warn.schemeListProcEnd.url}")
+    private String schemeListProcEndUrl;
+    @Value("${warn.schemeListProcEnd.switch}")
+    private String schemeListProcEndSwitch;
 
     //详情
     public SgjsBuildScheme detail(SgjsBuildScheme sgjsBuildScheme) {
@@ -394,6 +397,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     @Override
     @Transactional
     public void updateTaskStatus(Long id, String isPass) {
+        log.info("施工清单审批完成； id：{}，isPass：{}", id,isPass);
         SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
         sgjsBuildScheme.setTaskStatus("5");
         sgjsBuildScheme.setId(id);
@@ -403,6 +407,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             sgjsBuildScheme.setValid("0");
             //修改当前记录状态
             sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
+            return;
         } else {
             //0不通过 1通过
             sgjsBuildScheme.setValid(isPass);
@@ -420,6 +425,54 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 ThreadPoolUtil.execute(() -> doSendGm(tenantKey, userName));
             }
         }
+        /*
+        * 0716增加需求； 流程审批完成后发送通知给流程发起人和技术负责人
+        *  通知内容为：
+        *  通过：项目名称-施工方案清单审批通过
+        *  不通过：项目名称-施工方案清单审批未通过，请调整后重新发起。
+        * 开关式  可关 可开
+        */
+        //如果打开状态，则发送
+        if (StrUtil.isNotBlank(schemeListProcEndSwitch) && schemeListProcEndSwitch.equals("on")){
+            this.sendProcessCompleteNotice(id, isPass);
+        }
+    }
+
+    public void sendProcessCompleteNotice(Long id, String isPass) {
+        //获取该流程第一、第二个节点审批人信息（发起人/区域中心技术负责人）
+        List<Map<String, String>> flowHistoryInfo = FlowInfoSearchUtil.getFlowHistoryInfo(id, null);
+        if (CollUtil.isEmpty(flowHistoryInfo)) {
+            log.error("查询流程审批记录未找到，id：{}", id);
+            return;
+        }
+        List<Map<String, String>> collect = flowHistoryInfo.stream().limit(2).collect(Collectors.toList());
+        if (CollUtil.isEmpty(collect)) {
+            log.error("过滤流程审批记录异常，元数据：{}", flowHistoryInfo);
+            return;
+        }
+        String userNames = collect.stream().map(key -> key.get("assignee")).distinct().collect(Collectors.joining(","));
+        //发送预警
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        String projectCode = projectDto.getProjectCode();
+        String projectName = projectDto.getProjectName();
+        TWarn tWarn = new TWarn();
+        tWarn.setWarnItem(projectName + "-施工方案清单");
+        tWarn.setWarnItemId("sgjs_build_scheme");
+        tWarn.setWarnScope(userNames);
+        tWarn.setWarnUrl(schemeListProcEndUrl);
+        tWarn.setBusinessId(id);
+        tWarn.setWarnScopeType("3");
+        String warnContent = isPass.equals("0")?"-施工方案清单审批未通过，请调整后重新发起。":"-施工方案清单审批通过";
+        tWarn.setWarnContent(projectName + warnContent);
+        tWarn.setProjectName(projectName);
+        tWarn.setTenantKey(projectCode);
+        //发送预警
+        AjaxResult ajaxResult = systemServiceApi.addWarnNonGm(tWarn);
+        if (!AjaxResult.isSuccess(ajaxResult)) {
+            log.info("预警服务异常, 响应结果：{}\n请求参数：{}\n租户：{}", JSON.toJSONString(ajaxResult), JSON.toJSONString(tWarn), projectName);
+            return;
+        }
+        log.info("施工方案清单审批结束预警执行完成。租户：{}\n请求参数：{}\n预警服务响应：{}", projectName, JSON.toJSONString(tWarn), JSON.toJSONString(ajaxResult));
     }
 
     //发送总部版
@@ -477,12 +530,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         rocketMQTemplate.convertAndSend("sgjs_build_scheme:tenantSuccess", objects);
     }
 
-    @Value("${gm.url}")
-    private String gmUrl;
-    @Value("${warn.schemeListUrl}")
-    private String schemeListUrl;
-
-    //预警消息发送
+    //清单已审核完成但未发起评审流程的预警消息发送
     @Override
     public void warnMessage() {
         //从总部获取预警配置信息
@@ -512,6 +560,8 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         }
     }
 
+    //清单已审核完成但未发起清单评审流程的预警消息发送
+    //业务处理
     private void warnHandler(List<SysTenant> tenantList, SgjsWarnConfig sgjsWarnConfig) {
         for (SysTenant tenant : tenantList) {
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenant.getTenantKey()));
@@ -563,12 +613,12 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 String[] roleKeys = StrUtil.splitToArray(sgjsWarnConfig.getWarnObjectId(), ",");
                 List<SysUser> allSysUsers = CommonBusiness.getSysUsers(roleKeys, tenant.getTenantKey());
                 if (CollUtil.isEmpty(allSysUsers)) {
-                    log.info("根据角色获取用户, 无数据，总部配置：{} --- 租户：{}，", tenant.getTenantName(), JSON.toJSONString(sgjsWarnConfig));
+                    log.info("根据角色获取用户, 无数据，总部配置：{} --- 租户：{}", JSON.toJSONString(sgjsWarnConfig), tenant.getTenantName());
                     continue;
                 }
                 List<SysUser> sysUsers = allSysUsers.stream().filter(p -> StrUtil.isNotBlank(p.getTenantKey()) && p.getTenantKey().equals(tenant.getTenantKey())).collect(Collectors.toList());
                 if (CollUtil.isEmpty(sysUsers)) {
-                    log.info("租户：{}，根据租户过滤后, 无数据，{}", tenant.getTenantName(), JSON.toJSONString(allSysUsers));
+                    log.info("根据租户过滤后, 无数据，{} --- 租户：{}", JSON.toJSONString(allSysUsers), tenant.getTenantName());
                     continue;
                 }
                 String userNames = sysUsers.stream().map(p -> String.valueOf(p.getUserName())).collect(Collectors.joining(","));
@@ -588,7 +638,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 tWarn.setTenantKey(tenant.getTenantKey());
                 //发送预警
                 AjaxResult ajaxResult = systemServiceApi.addWarnNonGm(tWarn);
-                log.info("租户：{}，施工方案编制预警执行完成。。。。预警服务响应：{}", tenant.getTenantName(), JSON.toJSONString(ajaxResult));
+                log.info("施工方案编制预警执行完成。。。。预警服务响应：{} --- 租户：{}", JSON.toJSONString(ajaxResult), tenant.getTenantName());
                 //预警记录保存
                 List<SgjsWarnRecord> warnRecordList = new ArrayList<>();
                 sysUsers.forEach(p -> {
@@ -615,7 +665,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 e.printStackTrace();
             }
         }
-
+        log.info("施工方案编制预警完了");
     }
 
 }

@@ -105,6 +105,7 @@ public class SgjsBuildSchemeEvolve {
     /**
      * 字段描述：方案审核通过时间
      */
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
     @FtExcel(name = "方案审核通过时间", dateFormat = "yyyy年MM月dd日")
     private Date schemeApprovalTime;

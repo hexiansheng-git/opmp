@@ -105,6 +105,9 @@ public class SgjsExperimentRecordInfoController extends BaseController{
         if(i==-1){
             return AjaxResult.error("试验编码重复了。。。。。");
         }
+        if(i==-9){
+            return AjaxResult.error("试验编码重复不能为空。。。。。");
+        }
         return AjaxResult.success(i);
     }
 }

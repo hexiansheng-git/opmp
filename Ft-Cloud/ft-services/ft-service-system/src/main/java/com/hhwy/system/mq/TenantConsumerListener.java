@@ -24,6 +24,7 @@ import org.apache.rocketmq.spring.annotation.ConsumeMode;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.apache.rocketmq.spring.core.RocketMQPushConsumerLifecycleListener;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,52 +57,57 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
 
     @Autowired
     private IDeptService deptService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
     @Override
     public void onMessage(String s) {
-        System.out.println("mq创建租户方法开始*************************************"+s);
-                Map projectBasicInfo = JSON.parseObject(s, Map.class);
-                String projectName = (String) projectBasicInfo.get("projectName");
-                String projectCode = (String) projectBasicInfo.get("projectCode");
-                String projectId = (String) projectBasicInfo.get("projectId");
-                Map params = (Map) projectBasicInfo.get("params");
+        System.out.println("mq创建租户方法开始*************************************" + s);
+        Map projectBasicInfo = JSON.parseObject(s, Map.class);
+        String projectName = (String) projectBasicInfo.get("projectName");
+        String projectCode = (String) projectBasicInfo.get("projectCode");
+        String projectId = (String) projectBasicInfo.get("projectId");
+        Map params = (Map) projectBasicInfo.get("params");
 
-                SysTenant sysTenant = new SysTenant();
+        SysTenant sysTenant = new SysTenant();
 
-                sysTenant.setParams(projectBasicInfo);
-                sysTenant.setTenantName(projectName);
-                sysTenant.setTenantKey(projectCode);
-                sysTenant.setTenantStatus("0");
-                sysTenant.setValidityStatus("1");
-                sysTenant.setAdministratorNickName("系统管理员");
-                sysTenant.setAdministratorUserName("admin");
-                sysTenant.setAdministratorPassword(SecurityUtils.encryptRSAPassword("admin123"));
-                sysTenant.setMenuStatus("1");
-                sysTenant.setRoleStatus("1");
-                sysTenant.setPostStatus("1");
-                sysTenant.setDeptStatus("0");
-                sysTenant.setUserStatus("0");
+        sysTenant.setParams(projectBasicInfo);
+        sysTenant.setTenantName(projectName);
+        sysTenant.setTenantKey(projectCode);
+        sysTenant.setTenantStatus("0");
+        sysTenant.setValidityStatus("1");
+        sysTenant.setAdministratorNickName("系统管理员");
+        sysTenant.setAdministratorUserName("admin");
+        sysTenant.setAdministratorPassword(SecurityUtils.encryptRSAPassword("admin123"));
+        sysTenant.setMenuStatus("1");
+        sysTenant.setRoleStatus("1");
+        sysTenant.setPostStatus("1");
+        sysTenant.setDeptStatus("0");
+        sysTenant.setUserStatus("0");
 
-                SysDept dept=deptService.selectDeptIdByprojectId(projectId);
-                Long deptId = dept.getDeptId();
-                String ancestors = dept.getAncestors();
-                List<SysDept> deptList = deptService.selectAllDept(deptId,ancestors);
-                sysTenant.setDeptList(deptList);
+        SysDept dept = deptService.selectDeptIdByprojectId(projectId);
+        Long deptId = dept.getDeptId();
+        String ancestors = dept.getAncestors();
+        List<SysDept> deptList = deptService.selectAllDept(deptId, ancestors);
+        sysTenant.setDeptList(deptList);
 
-                List<SysUser> userList=userService.selectAllUser(deptList);
+        List<SysUser> userList = userService.selectAllUser(deptList);
 
-                String roleUserStr=JSON.toJSONString(params.get("roleUserList"));
-                List<SysUser>  roleUserList = JSON.parseArray(roleUserStr,SysUser.class);
+        String roleUserStr = JSON.toJSONString(params.get("roleUserList"));
+        List<SysUser> roleUserList = JSON.parseArray(roleUserStr, SysUser.class);
 
-                String partUserStr=JSON.toJSONString(params.get("partUserList"));
-                List<SysUser>  partUserList = JSON.parseArray(partUserStr,SysUser.class);
+        String partUserStr = JSON.toJSONString(params.get("partUserList"));
+        List<SysUser> partUserList = JSON.parseArray(partUserStr, SysUser.class);
 
 
-                List<SysUser> idList = this.handUserInfo(userList, roleUserList, partUserList);
+        List<SysUser> idList = this.handUserInfo(userList, roleUserList, partUserList);
 
-                sysTenant.setUserList(idList);
-
-                this.tenantService.insertSysTenant(sysTenant);
-        System.out.println("mq创建租户方法结束*************************************"+s);
+        sysTenant.setUserList(idList);
+        try {
+            this.tenantService.insertSysTenant(sysTenant);
+        } catch (Exception e) {
+            rocketMQTemplate.convertAndSend("pm-error:tenantError",projectBasicInfo);
+        }
+        System.out.println("mq创建租户方法结束*************************************" + s);
     }
 
     @Override

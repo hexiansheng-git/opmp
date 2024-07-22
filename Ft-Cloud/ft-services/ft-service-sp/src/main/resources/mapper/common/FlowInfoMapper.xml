@@ -4,6 +4,21 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhwy.sp.common.mapper.FlowInfoMapper">
 
+    <select id="getHistoryTaskInfo" resultType="java.util.Map">
+        SELECT
+            name_ as nodeName,
+            assignee_ as assignee
+        FROM
+            `opmp-flowable`.act_hi_taskinst
+        WHERE
+                PROC_INST_ID_ = ( SELECT process_instance_id FROM `opmp-flowable`.ft_act_business WHERE business_id = #{businessId} )
+                <if test="nodeName != null and nodeName != ''">
+                    and NAME_ = #{nodeName}
+                </if>
+        ORDER BY
+            START_TIME_
+    </select>
+
     <select id="flowByTBNameAndId" resultType="com.hhwy.utils.common.CommonBaseEntity">
         SELECT
             process_instance_id instanceId,

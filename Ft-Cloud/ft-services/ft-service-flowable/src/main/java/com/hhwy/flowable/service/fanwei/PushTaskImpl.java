@@ -139,7 +139,7 @@ public class PushTaskImpl  implements TaskProcessor {
      * @param taskId
      */
     @Override
-    public void create(String taskId) {
+    public void create(String taskId,JSONObject params) {
         //测试环境网络不通
         if(sendFlag){
             //创建待办
@@ -162,7 +162,7 @@ public class PushTaskImpl  implements TaskProcessor {
     }
 
     @Override
-    public void complete(String taskId) {
+    public void complete(String taskId,JSONObject params) {
         //测试环境网络不通
         if(sendFlag){
             //创建已办
@@ -184,7 +184,7 @@ public class PushTaskImpl  implements TaskProcessor {
     }
 
     @Override
-    public void remove(String taskId) {
+    public void remove(String taskId,JSONObject params) {
         //测试环境网络不通
         if(sendFlag){
             //创建已办
@@ -207,7 +207,7 @@ public class PushTaskImpl  implements TaskProcessor {
 //            "flowid": "57132477-ee84-11ee-aef8-00163e01a4da", //流程id
 //    }
     @Override
-    public void deleteProcessInstance(String taskId) {
+    public void deleteProcessInstance(String taskId,JSONObject params) {
         //测试环境网络不通
         if(sendFlag){
             //创建已办

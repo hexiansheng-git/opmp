@@ -2,6 +2,7 @@ package com.hhwy.sp.experiment.sgjsExperimentRecordInfo.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.SysSyncInfoLog;
 import com.hhwy.feign.service.PmServiceApi;
@@ -246,6 +247,11 @@ public class SgjsExperimentRecordInfoServiceImpl implements ISgjsExperimentRecor
         if(CollectionUtils.isEmpty(iList)){
             logger.error("空了。。。。。。。。【{}】",iList);
             return 0;
+        }
+        //取出为空的  如果有 返回前端提示
+        List<SgjsExperimentRecordInfo> collect = iList.stream().filter(e -> StringUtils.isEmpty(e.getExperimentCode())).collect(Collectors.toList());
+        if(!CollectionUtils.isEmpty(collect)){
+            return -9;
         }
         //1、校验传过来的试验管理编号 是否重复 experimentCode
         Map<String,List<SgjsExperimentRecordInfo>> filterMap = iList.stream().collect(Collectors.groupingBy(e->e.getExperimentCode()));

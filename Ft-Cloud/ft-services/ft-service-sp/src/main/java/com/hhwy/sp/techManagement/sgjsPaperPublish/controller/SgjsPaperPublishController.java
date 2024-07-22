@@ -177,4 +177,17 @@ public class SgjsPaperPublishController extends BaseController {
     public AjaxResult messagePublic(String message){
         return sgjsPaperPublishService.messagePublic(message);
     }
+
+
+    /***
+     * 功能描述: 测试用，流程结束后发送通知
+     */
+    @RequestMapping("/testSendNotice")
+    public AjaxResult sendProcessComplateNotice(@RequestParam("id") Long id, @RequestParam("isPass") String isPass){
+        SgjsPaperPublish sgjsPaperPublish = new SgjsPaperPublish();
+        sgjsPaperPublish.setPaperName("测试论文");
+        sgjsPaperPublishService.sendProcessCompleteNotice(id, isPass, sgjsPaperPublish);
+        return AjaxResult.success();
+    }
+
 }
