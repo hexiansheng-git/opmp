@@ -8,11 +8,10 @@
         SELECT
             process_instance_id instanceId,
             business_id businessId,
-            taskId currentTaskId,
             taskNode nextNodeId, 
             name_ AS processTaskName,
-            GROUP_CONCAT( ASSIGNEE_ ) AS processTaskManId,
-            GROUP_CONCAT( taskId ) currentTaskId
+            GROUP_CONCAT( ASSIGNEE_ order by CREATE_TIME_ desc) AS processTaskManId,
+            GROUP_CONCAT( taskId order by CREATE_TIME_ desc) currentTaskId
         FROM
             (
                 SELECT
