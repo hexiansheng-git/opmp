@@ -7,13 +7,18 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.log.SysSyncLog;
+import com.hhwy.feign.service.ILogServiceApi;
 import com.hhwy.flowable.core.domain.ActBusiness;
 import com.hhwy.flowable.core.domain.ActFormRoute;
 import com.hhwy.flowable.core.mapper.ActBusinessMapper;
 import com.hhwy.flowable.core.mapper.ActFormRouteMapper;
 import com.hhwy.flowable.core.mapper.BpmnMapper;
 import com.hhwy.flowable.core.processor.TaskProcessor;
+import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.flowable.engine.HistoryService;
 import org.flowable.engine.history.HistoricProcessInstance;
@@ -49,6 +54,8 @@ public class PushTaskImpl  implements TaskProcessor {
 
     @Autowired
     private BpmnMapper bpmnMapper;
+    @Autowired
+    private ILogServiceApi logServiceApi;
 /*    #创建待办
     createUrl: http://10.11.238.56/rest/ofs/ReceiveTodoRequestByJson
     #创建已办
@@ -139,22 +146,29 @@ public class PushTaskImpl  implements TaskProcessor {
      */
     @Override
     public void create(String taskId,JSONObject params) {
+        String resDB = "",errMsg = "";
         //测试环境网络不通
         if(sendFlag){
             //创建待办
             Map<String, Object> param = this.getCreateInfo(taskId);
             log.info("一公局门户!!!!!!!!!!!!!!!!创建待办:"+taskId+":"+JSON.toJSONString(param));
             if(param.get("pcurl")!=null){
-                //一公局门户
-                String res= HttpRequest.post(createUrl)
-                        .header("apikey",apikey)
-                        .body(JSON.toJSONString(param)).execute().body();
-                log.info("一公局门户****************返回数据:"+taskId+":"+res);
-                //中交门户
-
-
+                try {
+                    //一公局门户
+                    resDB = HttpRequest.post(createUrl)
+                            .header("apikey", apikey)
+                            .body(JSON.toJSONString(param)).execute().body();
+                    log.info("一公局门户*****************返回数据:" + taskId + ":" + resDB);
+                }catch(Exception e){
+                    e.printStackTrace();
+                    errMsg = e.getMessage();
+                    log.error("一公局门户*****************请求异常:" + taskId + ":" + errMsg);
+                }finally {
+                    logServiceApi.insertSysSyncLog(buildLog(taskId,"创建待办",param,resDB,errMsg));
+                }
             }else{
                 log.info("##########未获取到审批路径不进行待办推送,检查流程路由配置");
+                logServiceApi.insertSysSyncLog(buildLog(taskId,"创建待办",param,null,"未获取到审批路径不进行待办推送,检查流程路由配置"));
             }
         }
 
@@ -162,28 +176,36 @@ public class PushTaskImpl  implements TaskProcessor {
 
     @Override
     public void complete(String taskId,JSONObject params) {
+        String resDB = "",errMsg = "";
         //测试环境网络不通
         if(sendFlag){
             //创建已办
             Map<String, Object> paramDB = this.getCreateInfo(taskId);
             log.info("一公局门户!!!!!!!!!!!!!!!!!待办变已办:"+taskId+":"+JSON.toJSONString(paramDB));
             if(paramDB.get("pcurl")!=null){
-                //一公局门户
-                String resDB= HttpRequest.post(doneUrl)
-                        .header("apikey",apikey)
-                        .body(JSON.toJSONString(paramDB)).execute().body();
-                log.info("一公局门户*****************返回数据:"+taskId+":"+resDB);
-                //中交门户
-
-
+                try {
+                    //一公局门户
+                    resDB = HttpRequest.post(doneUrl)
+                            .header("apikey", apikey)
+                            .body(JSON.toJSONString(paramDB)).execute().body();
+                    log.info("一公局门户*****************返回数据:" + taskId + ":" + resDB);
+                }catch(Exception e){
+                    e.printStackTrace();
+                    errMsg = e.getMessage();
+                    log.error("一公局门户*****************请求异常:" + taskId + ":" + errMsg);
+                }finally {
+                    logServiceApi.insertSysSyncLog(buildLog(taskId,"待办变已办",paramDB,resDB,errMsg));
+                }
             }else{
                 log.info("##########未获取到审批路径不进行待办推送,检查流程路由配置");
+                logServiceApi.insertSysSyncLog(buildLog(taskId,"待办变已办",paramDB,null,"未获取到审批路径不进行待办推送,检查流程路由配置"));
             }
         }
     }
 
     @Override
     public void remove(String taskId,JSONObject params) {
+        String resDB = "",errMsg = "";
         //测试环境网络不通
         if(sendFlag){
             //创建已办
@@ -193,11 +215,19 @@ public class PushTaskImpl  implements TaskProcessor {
             delParam.put("flowid",ObjectUtil.toString(paramDB.get("flowid")));
 
             log.info("一公局门户!!!!!!!!!!!!!!!!!待办撤回:"+taskId+":"+JSON.toJSONString(delParam));
-            //一公局门户
-            String resDB= HttpRequest.post(deleteUrl)
-                    .header("apikey",apikey)
-                    .body(JSON.toJSONString(paramDB)).execute().body();
-            log.info("一公局门户*****************撤回返回数据:"+taskId+":"+resDB);
+            try {
+                //一公局门户
+                resDB= HttpRequest.post(deleteUrl)
+                        .header("apikey",apikey)
+                        .body(JSON.toJSONString(paramDB)).execute().body();
+                log.info("一公局门户*****************撤回返回数据:"+taskId+":"+resDB);
+            }catch(Exception e){
+                e.printStackTrace();
+                errMsg = e.getMessage();
+                log.error("一公局门户*****************请求异常:" + taskId + ":" + errMsg);
+            }finally {
+                logServiceApi.insertSysSyncLog(buildLog(taskId,"待办撤回",paramDB,resDB,errMsg));
+            }
         }
     }
     //撤回是流程调用
@@ -207,6 +237,7 @@ public class PushTaskImpl  implements TaskProcessor {
 //    }
     @Override
     public void deleteProcessInstance(String taskId,JSONObject params) {
+        String resDB = "",errMsg = "";
         //测试环境网络不通
         if(sendFlag){
             //创建已办
@@ -216,11 +247,19 @@ public class PushTaskImpl  implements TaskProcessor {
             delParam.put("flowid",ObjectUtil.toString(paramDB.get("flowid")));
 
             log.info("一公局门户!!!!!!!!!!!!!!!!!待办撤回:"+taskId+":"+JSON.toJSONString(delParam));
-            //一公局门户
-            String resDB= HttpRequest.post(deleteUrl)
-                    .header("apikey",apikey)
-                    .body(JSON.toJSONString(paramDB)).execute().body();
-            log.info("一公局门户*****************撤回返回数据:"+taskId+":"+resDB);
+            try {
+                //一公局门户
+                resDB= HttpRequest.post(deleteUrl)
+                        .header("apikey",apikey)
+                        .body(JSON.toJSONString(paramDB)).execute().body();
+                log.info("一公局门户*****************撤回返回数据:"+taskId+":"+resDB);
+            }catch(Exception e){
+                e.printStackTrace();
+                errMsg = e.getMessage();
+                log.error("一公局门户*****************请求异常:" + taskId + ":" + errMsg);
+            }finally {
+                logServiceApi.insertSysSyncLog(buildLog(taskId,"待办撤回",paramDB,resDB,errMsg));
+            }
         }
     }
 
@@ -286,10 +325,38 @@ public class PushTaskImpl  implements TaskProcessor {
         map.put("receivedatetime",DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,new Date()));
         return map;
     }
+    private SysSyncLog buildLog(String taskId,String typeStr, Map<String, Object> paramDB, String result, String failMsg){
+        String tenantKey = "";
+        if (paramDB != null && paramDB.get("pcurl")!=null) {
+            String str = paramDB.get("pcurl").toString();
+            if (StringUtils.isNotBlank(str)) {
+                String[] split = str.split("&");
+                for (int i = 0; i < split.length; i++) {
+                    if (split[i] != null && split[i].contains("tenantKey=")) {
+                        tenantKey = split[i].split("=")[1];
+                    }
+                }
+            }
+        }
+        SysSyncLog syncLog = new SysSyncLog();
+        syncLog.setId(IdWorker.createId());
+        syncLog.setCreateUser(SecurityUtils.getUserName());
+        syncLog.setCreateTime(new Date());
+        syncLog.setDelFlag("0");
+        syncLog.setInterfaceName(typeStr);
+        syncLog.setFunName(typeStr);
+        syncLog.setReq(JSONObject.toJSONString(paramDB));
+        syncLog.setRes(result);
+        syncLog.setStatus(StringUtils.isBlank(failMsg)?"0":"1");
+        syncLog.setRemark(ObjectUtils.nvlString(failMsg));
+        syncLog.setPtVar1(taskId);
+        syncLog.setPtVar2(tenantKey);
+        return syncLog;
+    }
 
 
 //    public static void main(String[] args) {
-//        Map<Object, Object> map = new HashMap<>();
+//        Map<String, Object> map = new HashMap<>();
 //        Commission commission = new Commission();
 //
 //        commission.setCreatedTime(1699343818705L);			//只是待办、待阅2中状态的创建时间业务系统创建待办的时间，更新办理状态时，此时间不变。
@@ -338,6 +405,18 @@ public class PushTaskImpl  implements TaskProcessor {
 //        System.out.println(resDB);
 //
 //
+//        map.put("syscode","PM");
+//        map.put("flowid","processInstanceId");
+//        map.put("requestname","【海外项管】"+"processName");
+//        String urlToken = "www.baidu.com?";
+//        map.put("workflowname","工作流程");
+//        map.put("pcurl","pmUrl+pageRoute"+urlToken+"id=businessId&tenantKey=tenantKey&receiver=receiver&pageType=fw");
+//        map.put("creator", "dddd");
+//        map.put("createdatetime", DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,new Date()));
+//        map.put("receiver","receiver");
+//        map.put("receivedatetime",DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,new Date()));
+//        SysSyncLog sysSyncLog = buildLog("taskId", "创建待办", map, "resDB", "errMsg");
+//        System.out.println(JSONObject.toJSONString(sysSyncLog));
 //    }
 
 

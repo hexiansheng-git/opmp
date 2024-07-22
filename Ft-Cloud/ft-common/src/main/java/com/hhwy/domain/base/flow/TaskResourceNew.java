@@ -1,7 +1,6 @@
 package com.hhwy.domain.base.flow;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
 import java.util.Date;
@@ -9,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class TaskResource {
+public class TaskResourceNew {
     private String businessKey;
     private String taskId;
     private String taskName;
