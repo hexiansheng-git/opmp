@@ -39,6 +39,7 @@ import java.util.Map;
 /**
  * 推送待办
  * 海外综合门户统一待办中心
+ * 中交门户用的视图查询的待办！！！
  */
 @Component
 @RefreshScope
