@@ -34,6 +34,7 @@ import java.util.Map;
 /**
  * 推送待办
  * 海外综合门户统一待办中心
+ * 中交门户用的视图查询的待办！！！
  */
 @Component
 @RefreshScope
@@ -150,7 +151,7 @@ public class PushTaskImpl  implements TaskProcessor {
                         .header("apikey",apikey)
                         .body(JSON.toJSONString(param)).execute().body();
                 log.info("一公局门户****************返回数据:"+taskId+":"+res);
-                //中交门户
+                //中交门户 
 
 
             }else{

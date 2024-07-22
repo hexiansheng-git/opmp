@@ -133,6 +133,12 @@ public class FlowInfoSearchUtil {
                 userNameSet.addAll(SetUtils.hashSet(flowInfo.getProcessTaskManId().split(",")));
             //是否为第一节点发起&当前登录用户等于发起人
             t.setIsFirstNode(isFirstNodeEdit(flowInfo.getInstanceId()));
+            //当前用户若在处理人中，将currentTaskId设置为对应得，否则前端点处理时有问题
+            if(StringUtils.isNotBlank(t.getProcessTaskManId()) && t.getProcessTaskManId().indexOf(SecurityUtils.getUserName()) > -1){
+                int index = Arrays.asList(t.getProcessTaskManId().split(",")).indexOf(SecurityUtils.getUserName());
+                String myTaskId = Arrays.asList(t.getCurrentTaskId().split(",")).get(index);
+                t.setCurrentTaskId(myTaskId);
+            }
         }
         //查询流程审批人名称
         if(CollectionUtils.isNotEmpty(userNameSet)){
