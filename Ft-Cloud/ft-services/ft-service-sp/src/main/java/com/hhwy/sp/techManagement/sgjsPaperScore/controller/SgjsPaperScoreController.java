@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import cn.hutool.core.util.StrUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -105,9 +106,20 @@ public class SgjsPaperScoreController extends BaseController {
         return toAjax(sgjsPaperScoreService.deleteSgjsPaperScoreByPks(sgjsPaperScorePkList));
     }
 
+    //导出
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsPaperScore sgjsPaperScoreParam) throws IOException {
         List<SgjsPaperScore> sgjsPaperScoreList = sgjsPaperScoreService.getSgjsPaperScoreList(sgjsPaperScoreParam);
+        sgjsPaperScoreList.forEach(p -> {
+            String taskStatus = p.getTaskStatus();
+            if (StrUtil.isNotBlank(taskStatus) && taskStatus.equals("0")) {
+                p.setTaskStatus("未发起");
+            }else if (StrUtil.isNotBlank(taskStatus) && taskStatus.equals("1")) {
+                p.setTaskStatus("审批中");
+            }else {
+                p.setTaskStatus("已结束");
+            }
+        });
         ExcelUtils<SgjsPaperScore> util = new ExcelUtils<>(SgjsPaperScore.class);
         util.exportExcel(response, sgjsPaperScoreList, DateUtils.getDate());
     }

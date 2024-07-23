@@ -11,6 +11,7 @@ import com.hhwy.sp.techManagement.sgjsPaperScore.sgjsPaperScoreRecord.domain.Sgj
 import com.hhwy.sp.techManagement.sgjsPaperScore.sgjsPaperScoreRecord.mapper.SgjsPaperScoreRecordMapper;
 import com.hhwy.sp.techManagement.sgjsPaperScore.sgjsPaperScoreRecord.service.ISgjsPaperScoreRecordService;
 import com.hhwy.utils.idworker.IdWorker;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
  * @remark
  */
 @Service
+@Slf4j
 public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordService {
 
     @Autowired
@@ -102,7 +104,10 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
 
     @Transactional
     public int updateSgjsPaperScoreRecordList(List<SgjsPaperScoreRecord> sgjsPaperScoreRecordList) {
-        if (CollUtil.isEmpty(sgjsPaperScoreRecordList)) return 0;
+        if (CollUtil.isEmpty(sgjsPaperScoreRecordList)) {
+            log.warn("保存论文评分记录list为空");
+            return 0;
+        }
         for (SgjsPaperScoreRecord sgjsPaperScoreRecord : sgjsPaperScoreRecordList) {
             sgjsPaperScoreRecord.setUpdateUser(SecurityUtils.getUserName());
             sgjsPaperScoreRecord.setUpdateTime(DateUtils.getNowDate());
