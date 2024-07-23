@@ -22,7 +22,7 @@ import java.net.UnknownHostException;
 @EnableCustomConfig
 @EnableCustomSwagger2
 @EnableFtFeignClients
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.hhwy.*"})
 public class FtFlowableApplication {
     public static void main(String[] args) throws UnknownHostException {
         Logger logger = LoggerFactory.getLogger(FtFlowableApplication.class);
