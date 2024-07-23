@@ -318,7 +318,7 @@ public class PushTaskImpl  implements TaskProcessor {
         map.put("nodename",taskTame);
         map.put("nodeId",taskDefinitionKey);
         map.put("dateobj",createTime);
-        map.put("pcurl",pmUrl+pageRoute+urlToken+"id="+businessId+"&tenantKey="+tenantKey+"&receiver="+receiver+"&pageType=fw&type=4");
+        map.put("pcurl",pmUrl+pageRoute+urlToken+"id="+businessId+"&tenantKey="+tenantKey+"&receiver="+receiver+"&pageType=fw&type=4&currentTaskId="+task.getId());
         map.put("appurl","");
         map.put("creator", SecurityUtils.getUserName());
         map.put("createdatetime", DateUtils.parseDateToStr(DateUtils.YYYY_MM_DD_HH_MM_SS,createTime));
