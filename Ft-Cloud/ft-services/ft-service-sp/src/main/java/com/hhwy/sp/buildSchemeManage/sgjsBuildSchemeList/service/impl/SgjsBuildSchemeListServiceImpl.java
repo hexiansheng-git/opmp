@@ -108,6 +108,8 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
             if (StrUtil.isNotBlank(p.getSchemeType())) {
                 String[] split = p.getSchemeType().split(",");
                 p.setSchemeTypeArr(split);
+            }else{
+                p.setSchemeTypeArr(new String[2]);
             }
         });
     }
