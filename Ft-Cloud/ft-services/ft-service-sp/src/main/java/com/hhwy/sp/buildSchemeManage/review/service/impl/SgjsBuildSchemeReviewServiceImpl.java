@@ -8,9 +8,11 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.fasterxml.jackson.databind.ser.impl.ObjectIdWriter;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.utils.YamlUtil;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
@@ -18,6 +20,7 @@ import com.hhwy.constant.WarnItem;
 import com.hhwy.domain.base.flow.TaskResourceNew;
 import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.domain.base.system.warn.TWarn;
+import com.hhwy.domain.log.SysSyncLog;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.FlowServiceApi;
 import com.hhwy.feign.service.ILogServiceApi;
@@ -40,10 +43,7 @@ import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
-import com.hhwy.utils.Constant;
-import com.hhwy.utils.GmTokenUtils;
-import com.hhwy.utils.HttpClientUtil;
-import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.*;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import lombok.extern.slf4j.Slf4j;
@@ -465,6 +465,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     @Override
     @Transactional
     public Long save(SgjsBuildSchemeReview review) {
+        saveLog(review);
         String saveType = review.getSaveType();
         CommonAssert.notBlank(saveType,"保存类型不能为空！");
         if("add".equals(saveType) || review.getId() == null){
@@ -537,6 +538,22 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         return review.getId();
     }
 
+    private void saveLog(SgjsBuildSchemeReview review){
+        String json = JSONObject.toJSONString(review);
+        try{
+            SysSyncLog syncLog = new SysSyncLog();
+            syncLog.setId(IdWorker.createId());
+            syncLog.setInterfaceName("SgjsBuildSchemeReview");
+            syncLog.setReq(json);
+            syncLog.setBusinessUnique(review.getId()+"");
+            syncLog.setPtVar1(SecurityUtils.getTenantKey());
+            new AddBaseInfoUtil<>().addBaseEntity(syncLog);
+            logServiceApi.insertSysSyncLog(syncLog);
+        }catch(Exception e){
+            e.printStackTrace();
+            log.error("SP,施工方案清单日志记录失败,租户:{},json:{},",SecurityUtils.getTenantKey(),json);
+        }
+    }
     private void updateStaffOpinionRecordList(List<SgjsBuildSchemeStaffOpinionRecord> staffOpinionRecordList) {
         if (CollectionUtils.isNotEmpty(staffOpinionRecordList)) {
             //校验修改结果不能为空
