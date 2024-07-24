@@ -237,29 +237,35 @@ public class PushTaskImpl  implements TaskProcessor {
 //            "flowid": "57132477-ee84-11ee-aef8-00163e01a4da", //流程id
 //    }
     @Override
-    public void deleteProcessInstance(String taskId,JSONObject params) {
-        String resDB = "",errMsg = "";
-        //测试环境网络不通
-        if(sendFlag){
-            //创建已办
-            Map<String, Object> paramDB = this.getCreateInfo(taskId);
-            Map<String, String> delParam = new HashMap<>();
-            delParam.put("syscode","PM");
-            delParam.put("flowid",ObjectUtil.toString(paramDB.get("flowid")));
+    public void deleteProcessInstance(String instanceId,JSONObject params) {
+        List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().processInstanceId(instanceId).unfinished().list();
+        for (HistoricTaskInstance historicTaskInstance : list) {
+            String taskId = historicTaskInstance.getId();
+            //创建待办
+            Map<String, Object> param = this.getCreateInfo(taskId);
+            String resDB = "",errMsg = "";
+            //测试环境网络不通
+            if(sendFlag){
+                //创建已办
+                Map<String, Object> paramDB = this.getCreateInfo(taskId);
+                Map<String, String> delParam = new HashMap<>();
+                delParam.put("syscode","PM");
+                delParam.put("flowid",ObjectUtil.toString(paramDB.get("flowid")));
 
-            log.info("一公局门户!!!!!!!!!!!!!!!!!待办撤回:"+taskId+":"+JSON.toJSONString(delParam));
-            try {
-                //一公局门户
-                resDB= HttpRequest.post(deleteUrl)
-                        .header("apikey",apikey)
-                        .body(JSON.toJSONString(paramDB)).execute().body();
-                log.info("一公局门户*****************撤回返回数据:"+taskId+":"+resDB);
-            }catch(Exception e){
-                e.printStackTrace();
-                errMsg = e.getMessage();
-                log.error("一公局门户*****************请求异常:" + taskId + ":" + errMsg);
-            }finally {
-                logServiceApi.insertSysSyncLog(buildLog(taskId,"待办撤回",paramDB,resDB,errMsg));
+                log.info("一公局门户!!!!!!!!!!!!!!!!!待办撤回:"+taskId+":"+JSON.toJSONString(delParam));
+                try {
+                    //一公局门户
+                    resDB= HttpRequest.post(deleteUrl)
+                            .header("apikey",apikey)
+                            .body(JSON.toJSONString(paramDB)).execute().body();
+                    log.info("一公局门户*****************撤回返回数据:"+taskId+":"+resDB);
+                }catch(Exception e){
+                    e.printStackTrace();
+                    errMsg = e.getMessage();
+                    log.error("一公局门户*****************请求异常:" + taskId + ":" + errMsg);
+                }finally {
+                    logServiceApi.insertSysSyncLog(buildLog(taskId,"待办撤回",paramDB,resDB,errMsg));
+                }
             }
         }
     }
