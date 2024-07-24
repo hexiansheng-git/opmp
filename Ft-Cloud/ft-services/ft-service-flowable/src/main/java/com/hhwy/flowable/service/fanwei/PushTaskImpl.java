@@ -241,8 +241,6 @@ public class PushTaskImpl  implements TaskProcessor {
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().processInstanceId(instanceId).unfinished().list();
         for (HistoricTaskInstance historicTaskInstance : list) {
             String taskId = historicTaskInstance.getId();
-            //创建待办
-            Map<String, Object> param = this.getCreateInfo(taskId);
             String resDB = "",errMsg = "";
             //测试环境网络不通
             if(sendFlag){
