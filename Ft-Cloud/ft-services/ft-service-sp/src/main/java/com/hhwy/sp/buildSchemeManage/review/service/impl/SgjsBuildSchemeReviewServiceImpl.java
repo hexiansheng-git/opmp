@@ -20,6 +20,7 @@ import com.hhwy.domain.base.project.ProjectDto;
 import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.FlowServiceApi;
+import com.hhwy.feign.service.ILogServiceApi;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.buildSchemeManage.review.constant.ReviewFlowNodeMark;
@@ -93,7 +94,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     private SystemServiceApi systemServiceApi;
     @Autowired
     private FlowServiceApi flowServiceApi;
-
+    @Autowired
+    private ILogServiceApi logServiceApi;
     @Autowired
     private ISysSyncInfoService4Sp sysSyncInfoService4Sp;
     @Autowired
@@ -525,7 +527,11 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             review.setScore(average);
             sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
         }else{ //新需求，总部版需要看到待发起数据
-            review.setProcessStatus("save");
+            if("dispose".equals(saveType)){
+                review.setProcessStatus("submit");    
+            }else if("add".equals(saveType) || "edit".equals(saveType) || "save".equals(saveType)){
+                review.setProcessStatus("save");
+            }
             sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
         }
         return review.getId();
