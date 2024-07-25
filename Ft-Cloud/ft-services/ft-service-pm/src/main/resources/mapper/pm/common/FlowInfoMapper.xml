@@ -20,7 +20,8 @@
                     b.id_ taskId,
                     b.name_,
                     b.task_def_key_ taskNode, 
-                    b.ASSIGNEE_
+                    b.ASSIGNEE_,
+                    b.CREATE_TIME_
                 FROM
                     ( SELECT process_instance_id,business_id  FROM `opmp-flowable`.v_ft_act_business
                         WHERE business_table_name = #{tableName} AND business_id in
@@ -28,7 +29,7 @@
                             #{id}
                         </foreach> AND tenant_key = #{tenantKey}
                     ) a
-                    LEFT JOIN ( SELECT id_,PROC_INST_ID_, name_,task_def_key_,ASSIGNEE_ FROM `opmp-flowable`.v_act_ru_task ) b ON a.process_instance_id = b.PROC_INST_ID_
+                    LEFT JOIN ( SELECT id_,PROC_INST_ID_, name_,task_def_key_,ASSIGNEE_,CREATE_TIME_ FROM `opmp-flowable`.v_act_ru_task ) b ON a.process_instance_id = b.PROC_INST_ID_
             ) c
         GROUP BY
             process_instance_id
