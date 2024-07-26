@@ -6,6 +6,7 @@ import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.fasterxml.jackson.databind.ser.impl.ObjectIdWriter;
@@ -45,6 +46,7 @@ import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.*;
 import com.hhwy.utils.common.CommonAssert;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -199,7 +201,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         }
         if("4".equals(schemeLevel)){
             FlowInfoSearchUtil.getFlowInfo(review, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4);
-        }                
+        }
+        auditResultPush(review);
         //总部版跳转过来传的type=handler
         type=StringUtils.equals(type,"handle")?"4":type;
         if("1".equals(type) || "2".equals(type)){
@@ -961,11 +964,11 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     }
 
     @Override
+    @Transactional
     public void updateBuildSchemeReviewProcess(Long id) {
         sgjsBuildSchemeReviewMapper.updateTaskStatus(id, TaskStatus.COMPLETED.getCode());
         sgjsBuildSchemeReviewMapper.updateApprovalTime(id);
         SgjsBuildSchemeReview review = sgjsBuildSchemeReviewMapper.getById(id);
-        //fuck
         List<SgjsBuildSchemeReviewStaff> sumScoreList = sgjsBuildSchemeReviewStaffMapper.getSumScoreByReviewIdList(Arrays.asList(id));
         Map<Long, Double> sumSocreMap = sumScoreList.stream().filter(o -> o.getScore() != null).collect(Collectors.toMap(SgjsBuildSchemeReviewStaff::getReviewId, SgjsBuildSchemeReviewStaff::getScore));
         Double score = sumSocreMap.get(id);
@@ -976,6 +979,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         //log.error("20240522:算分结果:{}",score );
         review.setProcessStatus("end");
         sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
+        //审批结果走预警,推送
+        auditResultPush(review);
+        
     }
 
     @Value("${gm.url}")
@@ -984,6 +990,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     private String gmBackUrl;
     @Value("${warn.schemeReviewUrl}")
     private String schemeReviewUrl;
+    @Value("${warn.schemeReviewFinishPush}")
+    private boolean finishPush;
 
     //预警消息发送
     public void warnMessage() {
@@ -1015,6 +1023,55 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         }
     }
 
+    //审批结束后，审批结果推送
+    //推送消息给审批人，2、3级>发起人、区域中心。4级>项目上发起人、区域中心
+    public void auditResultPush(SgjsBuildSchemeReview review){
+        if(!finishPush)
+            return ;
+        AjaxResult ajaxResult = flowServiceApi.handleList(review.getId()+"",FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4.getTableName() );
+        if(!AjaxResult.isSuccess(ajaxResult))
+            throw new CustomException("获取流程处理列表失败");
+        JSONObject jsonObject = (JSONObject)ajaxResult.getData();
+        JSONArray jsonArray = (JSONArray)jsonObject.get("items");
+        Set<String> unameSet = new HashSet<>();
+        Set<String> unicknameSet = new HashSet<>();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONObject temp = jsonArray.getJSONObject(i);
+            String taskName = temp.getString("taskName");
+            if(taskName.indexOf("发起人") > -1 || taskName.indexOf("区域中心") > -1){
+                unameSet.add(temp.getString("assignee"));
+                unicknameSet.add(temp.getString("assigneeNickName"));
+            }
+        }
+        if(CollectionUtils.isEmpty(unameSet)){
+            log.info("施工方案评审,未能获取到发起人或区域中心审批人。租户key:{},id:{}",SecurityUtils.getTenantKey(),review.getId());
+            return ;
+        }
+        //查询历史记录
+        TWarn tWarn = new TWarn();
+        tWarn.setWarnItem(WarnItem.SGJS_BUILD_SCHEME_REVIEW_REJECT.getWarnItem());
+        tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_REVIEW_REJECT.getWarnItemId());
+        tWarn.setWarnScope(org.apache.commons.lang3.StringUtils.join(unameSet, ","));
+        tWarn.setWarnScopeName(org.apache.commons.lang3.StringUtils.join(unicknameSet, ","));
+        tWarn.setWarnUrl(schemeReviewUrl);
+        tWarn.setBusinessId(review.getId());
+        tWarn.setWarnScopeType("3");
+        tWarn.setProjectName(SecurityUtils.getSysUser().getTenant().getTenantName());
+        //消息内容
+        //4级取区域总工意见、2、3级拿海外事业部意见
+        BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(review.getId(),null);
+        String opinion = reviewOpinionVo.getOverseasChiefOpinion();
+        if(StringUtils.equals(review.getSchemeLevel(),"4"))
+            opinion = reviewOpinionVo.getRegionChiefOpinion();
+        //项目名称-方案名称审批结果
+        String warnContent = String.format("[项管系统],%s-%s%s",
+                tWarn.getProjectName(),review.getSchemeName(),StringUtils.equals(opinion,"3")?"审批未通过":"审批通过");
+        tWarn.setWarnContent(warnContent);            
+        tWarn.setTenantKey(SecurityUtils.getTenantKey());
+        //发送预警
+//        systemServiceApi.addWarn(tWarn);
+    }
+    
     /**
     * 功能描述: 所有租户发送预警
     * @param: tenantList 租户列表

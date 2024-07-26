@@ -32,6 +32,11 @@ public class FlowServiceFallbackFactory implements FallbackFactory<FlowServiceAp
             public AjaxResult taskInfoDetail(String taskId) {
                 return null;
             }
+
+            @Override
+            public AjaxResult handleList(String businessKey, String tableName) {
+                return AjaxResult.error(throwable.getMessage());
+            }
         };
     }
 }

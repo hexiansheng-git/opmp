@@ -5,6 +5,7 @@ import com.hhwy.feign.factory.FlowServiceFallbackFactory;
 import com.hhwy.feign.factory.PmServiceFallbackFactory;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,4 +32,10 @@ public interface FlowServiceApi {
      */
     @PostMapping("/myFlow/taskInfoDetail")
     AjaxResult taskInfoDetail(@RequestParam("taskId") String taskId);
+
+    /**
+     *  流程处理列表
+     */
+    @GetMapping("/bpmn/handleList")
+    AjaxResult handleList(@RequestParam("businessKey") String businessKey,@RequestParam("tableName") String tableName);
 }
