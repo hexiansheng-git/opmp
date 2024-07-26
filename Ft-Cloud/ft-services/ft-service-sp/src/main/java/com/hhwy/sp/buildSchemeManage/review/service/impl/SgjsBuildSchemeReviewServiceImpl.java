@@ -1031,8 +1031,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         AjaxResult ajaxResult = flowServiceApi.handleList(review.getId()+"",FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4.getTableName() );
         if(!AjaxResult.isSuccess(ajaxResult))
             throw new CustomException("获取流程处理列表失败");
-        JSONObject jsonObject = (JSONObject)ajaxResult.getData();
-        JSONArray jsonArray = (JSONArray)jsonObject.get("items");
+        JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(ajaxResult.getData()));
+        JSONArray jsonArray = JSONObject.parseArray(JSONObject.toJSONString(jsonObject.get("items")));
         Set<String> unameSet = new HashSet<>();
         Set<String> unicknameSet = new HashSet<>();
         for (int i = 0; i < jsonArray.size(); i++) {
