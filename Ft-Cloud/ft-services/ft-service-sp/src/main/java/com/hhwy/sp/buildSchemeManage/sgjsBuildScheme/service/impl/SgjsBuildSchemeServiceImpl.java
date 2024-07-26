@@ -434,15 +434,13 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         */
         //如果打开状态，则发送
         log.info("施工清单审批完成;开始发送提醒消息???  id：{}，isPass：{}, schemeListProcEndSwitch: {}", id,isPass,schemeListProcEndSwitch);
-//        if (StrUtil.isNotBlank(schemeListProcEndSwitch) && schemeListProcEndSwitch.trim().equals("on")){
+        if (StrUtil.isNotBlank(schemeListProcEndSwitch) && (schemeListProcEndSwitch.trim().equals("on")
+                || schemeListProcEndSwitch.trim().equals("true"))){
             this.sendProcessCompleteNotice(id, isPass);
-//        }
+        }
     }
 
     public void sendProcessCompleteNotice(Long id, String isPass) {
-        if (StrUtil.isNotBlank(schemeListProcEndSwitch) && schemeListProcEndSwitch.trim().equals("on")){
-            this.sendProcessCompleteNotice(id, isPass);
-        }
         log.info("施工清单审批完成;开始发送提醒消息!!!  id：{}，isPass：{}", id,isPass);
         //获取该流程第一、第二个节点审批人信息（发起人/区域中心技术负责人）
         List<Map<String, String>> flowHistoryInfo = FlowInfoSearchUtil.getFlowHistoryInfo(id, null);
