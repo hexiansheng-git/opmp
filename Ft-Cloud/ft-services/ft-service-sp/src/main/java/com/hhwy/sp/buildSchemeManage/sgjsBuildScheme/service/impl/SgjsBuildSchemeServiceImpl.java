@@ -439,6 +439,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     }
 
     public void sendProcessCompleteNotice(Long id, String isPass) {
+        log.info("施工清单审批完成;开始发送提醒消息!!!  id：{}，isPass：{}", id,isPass);
         //获取该流程第一、第二个节点审批人信息（发起人/区域中心技术负责人）
         List<Map<String, String>> flowHistoryInfo = FlowInfoSearchUtil.getFlowHistoryInfo(id, null);
         if (CollUtil.isEmpty(flowHistoryInfo)) {
@@ -450,7 +451,9 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             log.error("过滤流程审批记录异常，元数据：{}", flowHistoryInfo);
             return;
         }
+
         String userNames = collect.stream().map(key -> key.get("assignee")).distinct().collect(Collectors.joining(","));
+        log.info("开始发送提醒消息!!!  userNames：{}", userNames);
         //发送预警
         ProjectDto projectDto = pmServiceApi.getProjectDto();
         String projectCode = projectDto.getProjectCode();
