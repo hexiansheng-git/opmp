@@ -56,6 +56,16 @@ public class SgjsPaperPublishController extends BaseController {
         return AjaxResult.success(sgjsPaperPublish);
     }
 
+    /**
+     * 首节点撤回或者退回到项目发起人时，流程状态同步总部
+     */
+//    @GetMapping("getSgjsPaperPublishById")
+//    public AjaxResult getSgjsPaperPublishById(Long id) {
+////        sgjsPaperPublishService.sen
+////        SgjsPaperPublish sgjsPaperPublish = sgjsPaperPublishService.getSgjsPaperPublishById(id);
+//        return AjaxResult.success(1);
+//    }
+
     @PreAuthorize(hasPermi = "sgjsPaperPublish:list")
     @GetMapping
     public AjaxResult getSgjsPaperPublish(@Validated(ValidationGroups.Get.class) SgjsPaperPublish sgjsPaperPublishParam) {

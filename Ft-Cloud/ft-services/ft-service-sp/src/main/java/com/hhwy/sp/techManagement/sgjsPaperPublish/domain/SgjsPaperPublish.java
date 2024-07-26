@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
+import com.hhwy.sp.techManagement.sgjsPaperPublish.sgjsPaperPublishSpecialistReview.domain.SgjsPaperPublishSpecialistReview;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.excel.FtExcel;
 import lombok.AllArgsConstructor;
@@ -109,6 +111,13 @@ public class SgjsPaperPublish extends CommonBaseEntity {
     @JsonProperty
     @FtExcel(name = "论文简介")
     private String paperIntroduction;
+
+    /**
+     * 字段描述：查重报告
+     */
+    @JsonProperty
+    @FtExcel(name = "查重报告")
+    private String checkRepeatFile;
     /**
      * 字段描述：附件
      */
@@ -158,6 +167,13 @@ public class SgjsPaperPublish extends CommonBaseEntity {
     @JsonProperty
     @FtExcel(name = "当前状态")
     private String currentState;
+
+    /**
+     * 字段描述：海外事业部意见
+     */
+    @JsonProperty
+    private String deptSuggest;
+
     /**
      * 字段描述：备注
      */
@@ -286,5 +302,29 @@ public class SgjsPaperPublish extends CommonBaseEntity {
 
     private List<SgjsAchievementAward> awardList;
 
-    private List<SgjsExpertLibrary> libraryList;
+    //专家意见列表
+    private List<SgjsPaperPublishSpecialistReview> libraryList;
+
+    /**
+     * 字段描述：评审结果1通过 2不通过 3修改
+     */
+    @JsonProperty
+    private String reviewResult;
+    /**
+     * 字段描述：总体意见
+     */
+    @JsonProperty
+    private String reviewSuggest;
+    /**
+     * 字段描述：专家审核稿
+     */
+    @JsonProperty
+    private String reviewFile;
+
+    /**
+     * 字段描述：1直管、2非直管  流程分支使用
+     */
+    @JsonProperty
+    private String regionFlag;
+
 }

@@ -19,6 +19,7 @@
         <result property="registrantContactWay" column="registrant_contact_way"/>
         <result property="paperIntroduction" column="paper_introduction"/>
         <result property="paperFile" column="paper_file"/>
+        <result property="checkRepeatFile" column="check_repeat_file"/>
         <result property="periodicalGrade" column="periodical_grade"/>
         <result property="periodicalName" column="periodical_name"/>
         <result property="publishDate" column="publish_date"/>
@@ -60,6 +61,7 @@
              , `registrant_contact_way`
              , `paper_introduction`
              , `paper_file`
+             , `check_repeat_file`
              , `periodical_grade`
              , `periodical_name`
              , `publish_date`
@@ -120,6 +122,7 @@
                 #{paperIntroduction}
             </if>
             <if test="paperFile != null  and paperFile != ''">and `paper_file` = #{paperFile}</if>
+            <if test="checkRepeatFile != null  and checkRepeatFile != ''">and `check_repeat_file` = #{checkRepeatFile}</if>
             <if test="periodicalGrade != null  and periodicalGrade != ''">and `periodical_grade` = #{periodicalGrade}
             </if>
             <if test="periodicalName != null and periodicalName != ''">and `periodical_name` = #{periodicalName}</if>
@@ -198,6 +201,7 @@
             <if test="registrantContactWay != null  and registrantContactWay != ''">`registrant_contact_way`,</if>
             <if test="paperIntroduction != null  and paperIntroduction != ''">`paper_introduction`,</if>
             <if test="paperFile != null  and paperFile != ''">`paper_file`,</if>
+            <if test="checkRepeatFile != null  and checkRepeatFile != ''">`check_repeat_file`,</if>
             <if test="periodicalGrade != null  and periodicalGrade != ''">`periodical_grade`,</if>
             <if test="periodicalName != null and periodicalName != ''">`periodical_name`,</if>
             <if test="publishDate != null ">`publish_date`,</if>
@@ -241,6 +245,7 @@
             <if test="registrantContactWay != null  and registrantContactWay != ''">#{registrantContactWay},</if>
             <if test="paperIntroduction != null  and paperIntroduction != ''">#{paperIntroduction},</if>
             <if test="paperFile != null  and paperFile != ''">#{paperFile},</if>
+            <if test="checkRepeatFile != null  and checkRepeatFile != ''">#{checkRepeatFile},</if>
             <if test="periodicalGrade != null  and periodicalGrade != ''">#{periodicalGrade},</if>
             <if test="periodicalName != null and periodicalName != ''">#{periodicalName},</if>
             <if test="publishDate != null ">#{publishDate},</if>
@@ -287,6 +292,7 @@
             `registrant_contact_way`,
             `paper_introduction`,
             `paper_file`,
+            `check_repeat_file`,
             `periodical_grade`,
             `periodical_name`,
             `publish_date`,
@@ -329,6 +335,7 @@
                 #{item.registrantContactWay},
                 #{item.paperIntroduction},
                 #{item.paperFile},
+                #{item.checkRepeatFile},
                 #{item.periodicalGrade},
                 #{item.periodicalName},
                 #{item.publishDate},
@@ -384,6 +391,7 @@
                 #{paperIntroduction},
             </if>
             <if test="paperFile != null  and  paperFile != ''">`paper_file` = #{paperFile},</if>
+            <if test="checkRepeatFile != null  and  checkRepeatFile != ''">`check_repeat_file` = #{checkRepeatFile},</if>
             <if test="periodicalGrade != null  and  periodicalGrade != ''">`periodical_grade` = #{periodicalGrade},</if>
             <if test="periodicalName != null and periodicalName != ''">`periodical_name` = #{periodicalName},</if>
             <if test="publishDate != null ">`publish_date` = #{publishDate},</if>
@@ -484,6 +492,11 @@
             <trim prefix="paper_file  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.paperFile}
+                </foreach>
+            </trim>
+            <trim prefix="check_repeat_file  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.checkRepeatFile}
                 </foreach>
             </trim>
             <trim prefix="periodical_grade  = case" suffix="end,">
@@ -650,6 +663,7 @@
                 #{paperIntroduction}
             </if>
             <if test="paperFile != null  and paperFile != ''">and `paper_file` = #{paperFile}</if>
+            <if test="checkRepeatFile != null  and checkRepeatFile != ''">and `check_repeat_file` = #{checkRepeatFile}</if>
             <if test="periodicalGrade != null  and periodicalGrade != ''">and `periodical_grade` = #{periodicalGrade}
             </if>
             <if test="periodicalName != null and periodicalName != ''">and `periodical_name` = #{periodicalName}</if>

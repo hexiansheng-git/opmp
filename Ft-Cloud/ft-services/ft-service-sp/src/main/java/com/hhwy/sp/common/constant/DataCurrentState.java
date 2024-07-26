@@ -9,4 +9,5 @@ public class DataCurrentState {
     public static final String APPLYING = "2"; //申请中
     public static final String PASS = "3"; //申请通过
     public static final String NO_PASS = "4"; //申请不通过
+    public static final String MODIFY = "5"; //修改
 }

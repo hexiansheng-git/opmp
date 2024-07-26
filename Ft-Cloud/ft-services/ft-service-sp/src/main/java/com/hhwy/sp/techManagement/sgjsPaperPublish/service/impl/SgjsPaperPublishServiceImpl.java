@@ -25,6 +25,8 @@ import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishExportV
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishQueryVo;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.mapper.SgjsPaperPublishMapper;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.service.ISgjsPaperPublishService;
+import com.hhwy.sp.techManagement.sgjsPaperPublish.sgjsPaperPublishSpecialistReview.domain.SgjsPaperPublishSpecialistReview;
+import com.hhwy.sp.techManagement.sgjsPaperPublish.sgjsPaperPublishSpecialistReview.service.ISgjsPaperPublishSpecialistReviewService;
 import com.hhwy.sp.techManagement.sgjsPaperScore.domain.SgjsPaperScore;
 import com.hhwy.sp.techManagement.sgjsPaperScore.service.ISgjsPaperScoreService;
 import com.hhwy.sp.techManagement.sgjsPaperScore.service.impl.SgjsPaperScoreServiceImpl;
@@ -67,6 +69,9 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
     private ISgjsExpertLibraryService sgjsExpertLibraryService;
 
     @Autowired
+    private ISgjsPaperPublishSpecialistReviewService sgjsPaperPublishSpecialistReviewService;
+
+    @Autowired
     private SystemServiceApi systemServiceApi;
 
     @Autowired
@@ -75,18 +80,29 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
     @Autowired
     private PmServiceApi pmServiceApi;
 
+    //详情
     @Override
     public SgjsPaperPublish getSgjsPaperPublishById(Long id, String type) {
         SgjsPaperPublish paperPublish = sgjsPaperPublishMapper.getSgjsPaperPublishById(id);
-        //TODO 设置专家数据
-        List<SgjsExpertLibrary> libraryList = sgjsExpertLibraryService.getListByForeignId(id);
-        paperPublish.setLibraryList(libraryList);
+        //设置专家数据
+        SgjsPaperPublishSpecialistReview sgjsPaperPublishSpecialistReview = new SgjsPaperPublishSpecialistReview();
+        sgjsPaperPublishSpecialistReview.setForeignId(id);
+        List<SgjsPaperPublishSpecialistReview> sgjsPaperPublishSpecialistReviewList = sgjsPaperPublishSpecialistReviewService.getSgjsPaperPublishSpecialistReviewList(sgjsPaperPublishSpecialistReview);
+        paperPublish.setLibraryList(sgjsPaperPublishSpecialistReviewList);
         if("1".equals(type)){
 
         }
         if("2".equals(type)){
             //设置成果数据
             sgjsAchievementAwardService.setAwardList(paperPublish, SgjsPaperPublish::getId,SgjsPaperPublish::setAwardList);
+        }
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        String regionName = projectDto.getRegionName();
+        //1直管、2非直管  流程分支使用
+        if (StrUtil.isNotBlank(regionName) && regionName.contains("直管")){
+            paperPublish.setRegionFlag("1");
+        }else {
+            paperPublish.setRegionFlag("2");
         }
         return paperPublish;
     }
@@ -95,6 +111,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         return sgjsPaperPublishMapper.getSgjsPaperPublish(sgjsPaperPublish);
     }
 
+    //台账
     public List<SgjsPaperPublish> getSgjsPaperPublishList(PaperPublishQueryVo queryVo) {
         return sgjsPaperPublishMapper.getSgjsPaperPublishList(queryVo);
     }
@@ -170,8 +187,15 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         }
 
         //保存专家数据
-        List<SgjsExpertLibrary> libraryList = paperPublish.getLibraryList();
-        sgjsExpertLibraryService.saveSgjsExpertLibraryList(id, BelongBusiness.BELONG_BUSINESS_8,libraryList);
+        String reviewFile = paperPublish.getReviewFile();
+        String reviewResult = paperPublish.getReviewResult();
+        String reviewSuggest = paperPublish.getReviewSuggest();
+        SgjsPaperPublishSpecialistReview param = new SgjsPaperPublishSpecialistReview();
+        param.setReviewFile(reviewFile);
+        param.setReviewResult(reviewResult);
+        param.setReviewSuggest(reviewSuggest);
+        param.setForeignId(id);
+        sgjsPaperPublishSpecialistReviewService.insertSgjsPaperPublishSpecialistReview(param);
 
         //保存成果登记数据
         List<SgjsAchievementAward> awardList = paperPublish.getAwardList();
@@ -211,7 +235,9 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         CommonAssert.notNull(id,"id不能为空");
         sgjsPaperPublishMapper.deleteSgjsPaperPublishById(id);
         //删除专家数据
-        sgjsExpertLibraryService.deleteSgjsExpertLibraryByForeignId(id);
+        SgjsPaperPublishSpecialistReview sgjsPaperPublishSpecialistReview = new SgjsPaperPublishSpecialistReview();
+        sgjsPaperPublishSpecialistReview.setForeignId(id);
+        sgjsPaperPublishSpecialistReviewService.deleteSgjsPaperPublishSpecialistReview(sgjsPaperPublishSpecialistReview);
         //删除成果奖励数据
         sgjsAchievementAwardService.deleteSgjsAchievementAwardByForeignId(id);
     }
