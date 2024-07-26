@@ -109,7 +109,7 @@ public class SgjsBuildSchemeListServiceImpl implements ISgjsBuildSchemeListServi
                 String[] split = p.getSchemeType().split(",");
                 p.setSchemeTypeArr(split);
             }else{
-                p.setSchemeTypeArr(new String[2]);
+                p.setSchemeTypeArr(new String[]{});
             }
         });
     }

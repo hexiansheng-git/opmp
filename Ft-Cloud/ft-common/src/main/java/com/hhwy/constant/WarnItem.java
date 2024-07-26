@@ -22,6 +22,7 @@ public enum WarnItem {
     WBS_P6_WARN("P6推送预警", "wbs_p6_warn", "P6数据已推送，请及时上传作业"),
     SGJS_BUILD_SCHEME_LIST("施工技术-施工方案编制", "sgjs_build_scheme_list", "根据施工方案清单计划，若该方案未按计划完成编制时间进行提交评审，则进行预警"),
     SGJS_BUILD_SCHEME_REVIEW("施工技术-施工方案评审", "sgjs_build_scheme_review", "根据施工方案清单计划，若该方案未按时完成评审，则进行预警"),
+    SGJS_BUILD_SCHEME_REVIEW_REJECT("施工技术-施工方案评审", "sgjs_build_scheme_review_listener", ""),
     SGJS_EXPERIMENT_WARN("施工技术-设备台账及检验记录","sgjs_experiment_warn","根据下次检验标定日期预警，检验标定日期更新后停止预警"),
     KCSJ_PLAN_PROCESS("勘察设计计划进度","plan_process_warn","根据计划开始时间预警，实际开始日期填写后停止预警"),
     SGJS_DESIGN_CHANGE("施工技术-设计变更管理","sgjs_design_change","您好，设计变更管理新增了数据【${code}】已提交至海外事业部审批"),
