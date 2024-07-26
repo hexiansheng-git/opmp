@@ -1035,12 +1035,14 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         JSONArray jsonArray = JSONObject.parseArray(JSONObject.toJSONString(jsonObject.get("items")));
         Set<String> unameSet = new HashSet<>();
         Set<String> unicknameSet = new HashSet<>();
-        for (int i = 0; i < jsonArray.size(); i++) {
-            JSONObject temp = jsonArray.getJSONObject(i);
-            String taskName = temp.getString("taskName");
-            if(taskName.indexOf("发起人") > -1 || taskName.indexOf("区域中心") > -1){
-                unameSet.add(temp.getString("assignee"));
-                unicknameSet.add(temp.getString("assigneeNickName"));
+        if(CollectionUtils.isNotEmpty(jsonArray)){
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject temp = jsonArray.getJSONObject(i);
+                String taskName = temp.getString("taskName");
+                if(taskName.indexOf("发起人") > -1 || taskName.indexOf("区域中心") > -1){
+                    unameSet.add(temp.getString("assignee"));
+                    unicknameSet.add(temp.getString("assigneeNickName"));
+                }
             }
         }
         if(CollectionUtils.isEmpty(unameSet)){
