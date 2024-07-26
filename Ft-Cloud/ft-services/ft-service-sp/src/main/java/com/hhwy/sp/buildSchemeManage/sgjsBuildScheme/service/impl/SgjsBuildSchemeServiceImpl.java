@@ -433,7 +433,8 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         * 开关式  可关 可开
         */
         //如果打开状态，则发送
-        if (StrUtil.isNotBlank(schemeListProcEndSwitch) && schemeListProcEndSwitch.equals("on")){
+        log.info("施工清单审批完成;开始发送提醒消息???  id：{}，isPass：{}", id,isPass);
+        if (StrUtil.isNotBlank(schemeListProcEndSwitch) && schemeListProcEndSwitch.trim().equals("on")){
             this.sendProcessCompleteNotice(id, isPass);
         }
     }
