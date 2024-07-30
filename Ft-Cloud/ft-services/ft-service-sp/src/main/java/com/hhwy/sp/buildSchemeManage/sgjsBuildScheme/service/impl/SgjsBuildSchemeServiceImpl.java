@@ -455,7 +455,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         }
 
         String userNames = collect.stream().map(key -> key.get("assignee")).distinct().collect(Collectors.joining(","));
-        log.info("开始发送提醒消息!!!  userNames：{}", userNames);
+        log.info("all ready 开始发送提醒消息!!!  userNames：{}", userNames);
         //发送预警
         ProjectDto projectDto = pmServiceApi.getProjectDto();
         String projectCode = projectDto.getProjectCode();

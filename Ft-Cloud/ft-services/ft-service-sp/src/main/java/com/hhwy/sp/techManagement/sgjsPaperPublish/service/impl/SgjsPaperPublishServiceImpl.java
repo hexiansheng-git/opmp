@@ -167,11 +167,6 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         String saveType = paperPublish.getSaveType();
         CommonAssert.notBlank(saveType,"保存类型不能为空");
 
-//        String isSubmit = paperPublish.getIsSubmit();
-//        if("1".equals(isSubmit)){
-//            paperPublish.setCurrentState(DataCurrentState.APPLYING);
-//        }
-
         Long id;
         if("1".equals(saveType) && paperPublish.getId() == null){
             //新增
@@ -190,12 +185,14 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         String reviewFile = paperPublish.getReviewFile();
         String reviewResult = paperPublish.getReviewResult();
         String reviewSuggest = paperPublish.getReviewSuggest();
-        SgjsPaperPublishSpecialistReview param = new SgjsPaperPublishSpecialistReview();
-        param.setReviewFile(reviewFile);
-        param.setReviewResult(reviewResult);
-        param.setReviewSuggest(reviewSuggest);
-        param.setForeignId(id);
-        sgjsPaperPublishSpecialistReviewService.insertSgjsPaperPublishSpecialistReview(param);
+        if (StrUtil.isNotBlank(reviewFile) && StrUtil.isNotBlank(reviewResult)) {
+            SgjsPaperPublishSpecialistReview param = new SgjsPaperPublishSpecialistReview();
+            param.setReviewFile(reviewFile);
+            param.setReviewResult(reviewResult);
+            param.setReviewSuggest(reviewSuggest);
+            param.setForeignId(id);
+            sgjsPaperPublishSpecialistReviewService.insertSgjsPaperPublishSpecialistReview(param);
+        }
 
         //保存成果登记数据
         List<SgjsAchievementAward> awardList = paperPublish.getAwardList();
@@ -298,8 +295,9 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
          流程审批完成后给发起人发通知：
          您的【论文名称】申请已通过专家审核，进入终评阶段。
          */
+        log.info("论文申请审批完成;开始发送提醒消息???  id：{}，isPass：{}, schemeListProcEndSwitch: {}", id,pass,paperPublish);
         //判断开关状态
-        if (StrUtil.isNotBlank(paperPublishProcEndSwitch) && paperPublishProcEndSwitch.equals("on")) {
+        if (StrUtil.isNotBlank(paperPublishProcEndSwitch) && (paperPublishProcEndSwitch.equals("on") || paperPublishProcEndSwitch.equals("true"))) {
             this.sendProcessCompleteNotice(id, pass, paperPublish);
         }else {
             log.info("预警开关状态未开启，状态：{}", paperPublishProcEndSwitch);
@@ -307,6 +305,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
     }
 
     public void sendProcessCompleteNotice(Long id, String pass, SgjsPaperPublish paperPublish) {
+        log.info("施工清单审批完成;开始发送提醒消息!!!  id：{}，isPass：{}", id,pass);
         //获取发起人信息
         List<Map<String, String>> flowHistoryInfo = FlowInfoSearchUtil.getFlowHistoryInfo(id, null, SecurityUtils.getTenantKey());
         if (CollUtil.isEmpty(flowHistoryInfo)) {
@@ -319,6 +318,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
             return;
         }
         String userNames = collect.stream().map(key -> key.get("assignee")).collect(Collectors.joining(","));
+        log.info("all ready 开始发送提醒消息!!!  发送人：{}", userNames);
         //发送预警
         ProjectDto projectDto = pmServiceApi.getProjectDto();
         String projectCode = projectDto.getProjectCode();
@@ -331,7 +331,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         tWarn.setBusinessId(id);
         tWarn.setWarnScopeType("3");
         String paperName = paperPublish.getPaperName();
-        String warnContent = pass.equals("0")?"-您的" + paperName + "审批未通过，请调整后重新发起。":"-您的" + paperName + "申请已通过专家审核，进入终评阶段。";
+        String warnContent = pass.equals("0")?"-您的" + paperName + "论文经专家审核后认为不满足发表要求,未通过专家评审。":"-您的" + paperName + "申请已通过专家评审，进入终评阶段。";
         tWarn.setWarnContent(projectName + warnContent);
         tWarn.setProjectName(projectName);
         tWarn.setTenantKey(projectCode);
