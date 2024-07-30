@@ -6,6 +6,7 @@ import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.flowable.api.RemoteBpmnService;
 import com.hhwy.flowable.domain.NextNodesParam;
+import com.hhwy.flowable.domain.NodeInfo;
 import com.hhwy.flowable.domain.StartFlowResource;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,7 +34,7 @@ public class FlowStartUtil {
         NextNodesParam nextNodesParam = new NextNodesParam();
         nextNodesParam.setProcessDefinitionKey(processDefinitionKey);
         //BpmnController  nextNodesForFeign
-        R r = remoteBpmnService.nextNodesForFeign(nextNodesParam);
+        R<Map<String, List<NodeInfo>>> r = remoteBpmnService.nextNodesForFeign(nextNodesParam);
         int code = r.getCode();
         if (code != 200) {
             log.error("发起流程失败，获取下一节点实例失败，状态code：{}---响应mas：{}---响应data：{}", r.getCode(), r.getMsg(), r.getData());
@@ -43,18 +44,17 @@ public class FlowStartUtil {
             log.error("发起流程失败，r.getData() == null");
             return;
         }
-        String s = JSON.toJSONString(r.getData());
-        List<Map> maps = JSON.parseArray(s, Map.class);
-        if (CollUtil.isEmpty(maps)){
-            log.error("发起流程失败，CollUtil.isEmpty(maps)");
+        List<NodeInfo> main = r.getData().get("main");
+        if (CollUtil.isEmpty(main)){
+            log.error("发起流程失败，CollUtil.isEmpty(main)");
             return;
         }
-        Map map = maps.get(0);
-        if (null == map) {
+        NodeInfo nodeInfo = main.get(0);
+        if (null == nodeInfo) {
             log.error("发起流程失败，null == map");
             return;
         }
-        Object nodeId = map.get("nodeId");
+        String nodeId = nodeInfo.getNodeId();
         if (nodeId == null)
         {
             log.error("发起流程失败，nodeId == null");

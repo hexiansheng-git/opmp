@@ -34,29 +34,29 @@ public class FlowStartUtil {
         NextNodesParam nextNodesParam = new NextNodesParam();
         nextNodesParam.setProcessDefinitionKey(processDefinitionKey);
         //BpmnController  nextNodesForFeign
-        R<List<NodeInfo>> r = remoteBpmnService.nextNodesForFeign(nextNodesParam);
+        R<Map<String, List<NodeInfo>>> r = remoteBpmnService.nextNodesForFeign(nextNodesParam);
+        Map<String, List<NodeInfo>> data = r.getData();
+        if (r.getData() == null){
+            log.error("发起流程失败，r.getData() == null");
+            return;
+        }
+        List<NodeInfo> main = data.get("main");
         log.info("发起流程响应结果：{}", JSON.toJSONString(r));
         int code = r.getCode();
         if (code != 200) {
             log.error("发起流程失败，获取下一节点实例失败，状态code：{}---响应mas：{}---响应data：{}", r.getCode(), r.getMsg(), r.getData());
             return;
         }
-        if (r.getData() == null){
-            log.error("发起流程失败，r.getData() == null");
-            return;
-        }
-        String s = JSON.toJSONString(r.getData());
-        List<Map> maps = JSON.parseArray(s, Map.class);
-        if (CollUtil.isEmpty(maps)){
+        if (CollUtil.isEmpty(main)){
             log.error("发起流程失败，CollUtil.isEmpty(maps)");
             return;
         }
-        Map map = maps.get(0);
-        if (null == map) {
+        NodeInfo nodeInfo = main.get(0);
+        if (null == nodeInfo) {
             log.error("发起流程失败，null == map");
             return;
         }
-        Object nodeId = map.get("nodeId");
+        String nodeId = nodeInfo.getNodeId();
         if (nodeId == null)
         {
             log.error("发起流程失败，nodeId == null");
