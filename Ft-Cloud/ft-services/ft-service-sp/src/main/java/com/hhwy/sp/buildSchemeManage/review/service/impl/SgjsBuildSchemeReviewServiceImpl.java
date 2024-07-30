@@ -1071,7 +1071,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         tWarn.setWarnContent(warnContent);            
         tWarn.setTenantKey(SecurityUtils.getTenantKey());
         //发送预警
-//        systemServiceApi.addWarn(tWarn);
+        systemServiceApi.addWarn(tWarn);
     }
     
     /**
