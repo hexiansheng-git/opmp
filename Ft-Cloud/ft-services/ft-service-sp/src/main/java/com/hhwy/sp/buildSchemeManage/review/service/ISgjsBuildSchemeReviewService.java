@@ -59,6 +59,12 @@ public interface ISgjsBuildSchemeReviewService {
 
     void updateBuildSchemeReviewProcess(Long id);
 
+    /**
+     * 将流程改为初始化
+     * @param id
+     */
+    void updateBuildSchemeReviewProcess2Init(Long id);
+
     BuildSchemeReviewOpinionRecordVo getSchemeReviewRecordVo(Long reviewId);
 
     void warnMessage();

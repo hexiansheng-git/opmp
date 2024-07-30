@@ -17,8 +17,10 @@ import com.hhwy.flowable.core.mapper.ActBusinessMapper;
 import com.hhwy.flowable.core.mapper.ActFormRouteMapper;
 import com.hhwy.flowable.core.mapper.BpmnMapper;
 import com.hhwy.flowable.core.processor.TaskProcessor;
+import com.hhwy.flowable.feign.service.SpServiceApi;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import liquibase.pro.packaged.I;
 import org.apache.commons.collections4.CollectionUtils;
 import org.flowable.engine.HistoryService;
 import org.flowable.engine.history.HistoricProcessInstance;
@@ -57,6 +59,8 @@ public class PushTaskImpl  implements TaskProcessor {
     private BpmnMapper bpmnMapper;
     @Autowired
     private ILogServiceApi logServiceApi;
+    @Autowired
+    private SpServiceApi spServiceApi;
 /*    #创建待办
     createUrl: http://10.11.238.56/rest/ofs/ReceiveTodoRequestByJson
     #创建已办
@@ -240,10 +244,11 @@ public class PushTaskImpl  implements TaskProcessor {
     public void deleteProcessInstance(String instanceId,JSONObject params) {
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery().processInstanceId(instanceId).unfinished().list();
         for (HistoricTaskInstance historicTaskInstance : list) {
+            historicTaskInstance.getProcessDefinitionId();                    
             String taskId = historicTaskInstance.getId();
             String resDB = "",errMsg = "";
             //测试环境网络不通
-            if(sendFlag){
+            if(sendFlag){                                                                                                       
                 //创建已办
                 Map<String, Object> paramDB = this.getCreateInfo(taskId);
                 Map<String, String> delParam = new HashMap<>();
@@ -266,6 +271,12 @@ public class PushTaskImpl  implements TaskProcessor {
                 }
             }
         }
+        //施工评审，需要将总部版数据改成未发起
+        HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(instanceId).singleResult();
+        if(historicProcessInstance.getProcessDefinitionId().indexOf("process_sgjs_build_scheme_review") > -1){
+            spServiceApi.updateBuildSchemeReviewProcess2Init(Long.valueOf(historicProcessInstance.getBusinessKey()));
+        }
+         
     }
 
 

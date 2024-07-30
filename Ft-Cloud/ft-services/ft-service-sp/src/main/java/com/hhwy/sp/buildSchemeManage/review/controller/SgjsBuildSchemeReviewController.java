@@ -207,6 +207,14 @@ public class SgjsBuildSchemeReviewController extends BaseController {
         return AjaxResult.success();
     }
 
+    @GetMapping("/deleteProcess")
+    @CustomLogger(title = "施工技术-施工方案管理-施工方案评审", name = "施工方案评审流程删除监听" ,businessType = CustomBusinessType.SAVE)
+    public AjaxResult deleteProcess(@RequestParam("id") Long id){
+        sgjsBuildSchemeReviewService.updateBuildSchemeReviewProcess2Init(id);
+        return AjaxResult.success();
+    }
+    
+
     /*
      * 功能描述: 预警消息发送
      */

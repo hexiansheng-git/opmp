@@ -981,7 +981,14 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
         //审批结果走预警,推送
         auditResultPush(review);
-        
+    }
+
+    @Override
+    public void updateBuildSchemeReviewProcess2Init(Long id) {
+        SgjsBuildSchemeReview review = new SgjsBuildSchemeReview();
+        review.setId(id);
+        review.setProcessStatus("init");
+        sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
     }
 
     @Value("${gm.url}")
