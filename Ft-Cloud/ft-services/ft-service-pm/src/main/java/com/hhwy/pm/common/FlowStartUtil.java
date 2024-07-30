@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.flowable.api.RemoteBpmnService;
+import com.hhwy.flowable.domain.NextNodesInfo;
 import com.hhwy.flowable.domain.NextNodesParam;
 import com.hhwy.flowable.domain.NodeInfo;
 import com.hhwy.flowable.domain.StartFlowResource;
@@ -34,13 +35,13 @@ public class FlowStartUtil {
         NextNodesParam nextNodesParam = new NextNodesParam();
         nextNodesParam.setProcessDefinitionKey(processDefinitionKey);
         //BpmnController  nextNodesForFeign
-        R<Map<String, List<NodeInfo>>> r = remoteBpmnService.nextNodesForFeign(nextNodesParam);
-        Map<String, List<NodeInfo>> data = r.getData();
+        R<NextNodesInfo> r = remoteBpmnService.nextNodesForFeign(nextNodesParam);
+        NextNodesInfo data = r.getData();
         if (r.getData() == null){
             log.error("发起流程失败，r.getData() == null");
             return;
         }
-        List<NodeInfo> main = data.get("main");
+        List<NodeInfo> main = data.getMain();
         log.info("发起流程响应结果：{}", JSON.toJSONString(r));
         int code = r.getCode();
         if (code != 200) {
