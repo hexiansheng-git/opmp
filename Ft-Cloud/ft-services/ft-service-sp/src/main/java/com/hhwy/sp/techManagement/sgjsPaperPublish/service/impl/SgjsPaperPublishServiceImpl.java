@@ -308,7 +308,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
 
     public void sendProcessCompleteNotice(Long id, String pass, SgjsPaperPublish paperPublish) {
         //获取发起人信息
-        List<Map<String, String>> flowHistoryInfo = FlowInfoSearchUtil.getFlowHistoryInfo(id, null);
+        List<Map<String, String>> flowHistoryInfo = FlowInfoSearchUtil.getFlowHistoryInfo(id, null, SecurityUtils.getTenantKey());
         if (CollUtil.isEmpty(flowHistoryInfo)) {
             log.error("查询流程审批记录未找到，id：{}", id);
             return;

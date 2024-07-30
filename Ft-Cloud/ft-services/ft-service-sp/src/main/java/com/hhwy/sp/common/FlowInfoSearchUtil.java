@@ -1,6 +1,7 @@
 package com.hhwy.sp.common;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.SpringUtils;
@@ -44,10 +45,15 @@ public class FlowInfoSearchUtil {
     * 功能描述: 查询流程处理记录
     * @param: businessId 业务id(必填)
     * @param: nodeName 节点名称（非必填）
+    * @param: tenantKey 租户标识（必填）
     * @return: nodeName、assignee 节点名称/处理人
     */
-    public static List<Map<String, String>> getFlowHistoryInfo(Long businessId, String nodeName){
-        return flowInfoMapper.getHistoryTaskInfo(businessId, nodeName);
+    public static List<Map<String, String>> getFlowHistoryInfo(Long businessId, String nodeName, String tenantKey){
+        if (null == businessId || StrUtil.isBlank(tenantKey)) {
+            log.error("必填项不能为空");
+            return null;
+        }
+        return flowInfoMapper.getHistoryTaskInfo(businessId, nodeName, tenantKey);
     }
     
     /***

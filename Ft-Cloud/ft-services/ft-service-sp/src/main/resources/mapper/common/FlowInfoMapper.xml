@@ -11,7 +11,8 @@
         FROM
             `opmp-flowable`.act_hi_taskinst
         WHERE
-                PROC_INST_ID_ = ( SELECT process_instance_id FROM `opmp-flowable`.ft_act_business WHERE business_id = #{businessId} )
+                PROC_INST_ID_ = ( SELECT process_instance_id FROM `opmp-flowable`.ft_act_business
+                                                            WHERE business_id = #{businessId} and tenant_key = #{tenantKey} )
                 <if test="nodeName != null and nodeName != ''">
                     and NAME_ = #{nodeName}
                 </if>
