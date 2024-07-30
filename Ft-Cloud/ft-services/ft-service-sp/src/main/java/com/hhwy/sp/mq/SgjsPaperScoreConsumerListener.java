@@ -1,5 +1,6 @@
 package com.hhwy.sp.mq;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.sp.techManagement.sgjsPaperScore.domain.SgjsPaperScore;
 import com.hhwy.sp.techManagement.sgjsPaperScore.service.ISgjsPaperScoreService;
@@ -37,12 +38,12 @@ public class SgjsPaperScoreConsumerListener implements RocketMQListener<String> 
         try {
             log.info("论文评分 数据同步：{}", s);
             Map map = JSONObject.parseObject(s, Map.class);
-            List<SgjsPaperScore> paperScoreList = (List<SgjsPaperScore>) map.get("paperScoreList");
-            List<SgjsPaperScoreRecord> scoreRecordList = (List<SgjsPaperScoreRecord>) map.get("scoreRecordList");
+            List<SgjsPaperScore> paperScoreList = JSONObject.parseArray(JSON.toJSONString(map.get("paperScoreList")), SgjsPaperScore.class);
+            List<SgjsPaperScoreRecord> scoreRecordList = JSONObject.parseArray(JSON.toJSONString(map.get("scoreRecordList")), SgjsPaperScoreRecord.class);
             sgjsPaperScoreService.updateSgjsPaperScoreList(paperScoreList);
             sgjsPaperScoreRecordService.updateSgjsPaperScoreRecordList(scoreRecordList);
         }catch (Exception e){
-            throw new CustomBusinessException(e.getMessage());
+            e.printStackTrace();
         }
     }
 

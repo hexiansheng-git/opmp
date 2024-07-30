@@ -109,7 +109,7 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
             return 0;
         }
         for (SgjsPaperScoreRecord sgjsPaperScoreRecord : sgjsPaperScoreRecordList) {
-            sgjsPaperScoreRecord.setUpdateUser(SecurityUtils.getUserName());
+//            sgjsPaperScoreRecord.setUpdateUser(SecurityUtils.getUserName());
             sgjsPaperScoreRecord.setUpdateTime(DateUtils.getNowDate());
         }
         return sgjsPaperScoreRecordMapper.updateSgjsPaperScoreRecordList(sgjsPaperScoreRecordList);

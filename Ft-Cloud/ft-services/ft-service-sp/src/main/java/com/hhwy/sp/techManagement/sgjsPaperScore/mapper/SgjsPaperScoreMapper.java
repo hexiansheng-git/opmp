@@ -22,7 +22,7 @@ public interface SgjsPaperScoreMapper {
 
     int updateSgjsPaperScore(SgjsPaperScore sgjsPaperScore);
 
-    int updateSgjsPaperScoreList(@Param("sgjsPaperScoreList") List<SgjsPaperScore> sgjsPaperScoreList);
+    int updateSgjsPaperScoreList(@Param("list") List<SgjsPaperScore> sgjsPaperScoreList);
 
     int deleteSgjsPaperScore(SgjsPaperScore sgjsPaperScore);
 

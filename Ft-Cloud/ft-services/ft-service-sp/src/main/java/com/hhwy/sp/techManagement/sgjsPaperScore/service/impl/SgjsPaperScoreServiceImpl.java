@@ -73,8 +73,12 @@ public class SgjsPaperScoreServiceImpl implements ISgjsPaperScoreService {
             if (CollUtil.isEmpty(sgjsPaperPublishList)) {
                 return new ArrayList<>();
             }
-            sgjsPaperPublishList.forEach(p -> p.setPtVar3(p.getId()+""));
             List<SgjsPaperScore> sgjsPaperScores = BeanUtil.copyToList(sgjsPaperPublishList, SgjsPaperScore.class);
+            sgjsPaperScores.forEach( p -> {
+                p.setPtVar3(p.getId()+"");
+                p.setProjectCode(p.getPtVar5());
+                p.setPtVar5(null);
+            });
             this.insertSgjsPaperScoreList(sgjsPaperScores);
             return sgjsPaperScoreMapper.getSgjsPaperScoreList(sgjsPaperScore);
         }
@@ -175,11 +179,13 @@ public class SgjsPaperScoreServiceImpl implements ISgjsPaperScoreService {
             sgjsPaperScore.setCreateTime(DateUtils.getNowDate());
         }
         int i = sgjsPaperScoreMapper.insertSgjsPaperScoreList(sgjsPaperScoreList);
+        log.info("论文评分-保存完成, 发送总部数据......");
         if (i > 0) {
             //推送总部
             HashMap<String, Object> map = new HashMap<>();
 //            map.put("paperScoreRecord", sgjsPaperScoreRecord);
             map.put("paperScore", sgjsPaperScoreList);
+            log.info("论文评分-发送总部数据：{}", JSON.toJSONString(map));
             rocketMQTemplate.convertAndSend("gm_sgjs_paper_score:tenantSuccess", map);
         }
         return i;
@@ -200,7 +206,7 @@ public class SgjsPaperScoreServiceImpl implements ISgjsPaperScoreService {
             return 0;
         }
         for (SgjsPaperScore sgjsPaperScore : sgjsPaperScoreList) {
-            sgjsPaperScore.setUpdateUser(SecurityUtils.getUserName());
+//            sgjsPaperScore.setUpdateUser(SecurityUtils.getUserName());
             sgjsPaperScore.setUpdateTime(DateUtils.getNowDate());
         }
         return sgjsPaperScoreMapper.updateSgjsPaperScoreList(sgjsPaperScoreList);

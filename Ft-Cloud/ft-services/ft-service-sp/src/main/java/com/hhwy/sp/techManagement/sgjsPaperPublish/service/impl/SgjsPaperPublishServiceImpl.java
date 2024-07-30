@@ -288,6 +288,8 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
             SgjsPaperScore sgjsPaperScore = new SgjsPaperScore();
             BeanUtil.copyProperties(paperPublish, sgjsPaperScore, "createTime", "updateTime" ,"updateUser");
             sgjsPaperScore.setPtVar3(String.valueOf(sgjsPaperScore.getId()));
+            sgjsPaperScore.setPaperCode(sgjsPaperScore.getPtVar5());
+            sgjsPaperScore.setPtVar5(null);
             objects.add(sgjsPaperScore);
             sgjsPaperScoreService.insertSgjsPaperScoreList(objects);
             log.info("论文申请-写入论文评分完成: {}", JSON.toJSONString(objects));

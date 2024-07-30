@@ -477,7 +477,7 @@
             </trim>
         </trim>
         where `specialist_id` in
-        <foreach collection="specialistIdList" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.specialistId}
         </foreach>
     </update>
