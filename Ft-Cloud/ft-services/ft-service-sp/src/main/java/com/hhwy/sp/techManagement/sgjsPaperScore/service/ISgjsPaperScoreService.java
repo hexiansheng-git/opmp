@@ -31,4 +31,6 @@ public interface ISgjsPaperScoreService {
     void reviewStart(Long[] ids);
 
     void reviewEnd(Long[] ids);
+
+    List<SgjsPaperScore> getExportData(SgjsPaperScore sgjsPaperScoreParam);
 }

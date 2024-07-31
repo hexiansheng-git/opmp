@@ -6,6 +6,8 @@ import java.util.List;
 import java.io.IOException;
 
 import cn.hutool.core.util.StrUtil;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeRiskList;
+import com.hhwy.utils.excel.FtExcelUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -109,18 +111,18 @@ public class SgjsPaperScoreController extends BaseController {
     //导出
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsPaperScore sgjsPaperScoreParam) throws IOException {
-        List<SgjsPaperScore> sgjsPaperScoreList = sgjsPaperScoreService.getSgjsPaperScoreList(sgjsPaperScoreParam);
+        List<SgjsPaperScore> sgjsPaperScoreList = sgjsPaperScoreService.getExportData(sgjsPaperScoreParam);
         sgjsPaperScoreList.forEach(p -> {
             String taskStatus = p.getTaskStatus();
-            if (StrUtil.isNotBlank(taskStatus) && taskStatus.equals("0")) {
+            if (StrUtil.isBlank(taskStatus) || taskStatus.equals("0")) {
                 p.setTaskStatus("未发起");
-            }else if (StrUtil.isNotBlank(taskStatus) && taskStatus.equals("1")) {
+            }else if (taskStatus.equals("1")) {
                 p.setTaskStatus("审批中");
             }else {
                 p.setTaskStatus("已结束");
             }
         });
-        ExcelUtils<SgjsPaperScore> util = new ExcelUtils<>(SgjsPaperScore.class);
+        FtExcelUtil<SgjsPaperScore> util = new FtExcelUtil<>(SgjsPaperScore.class);
         util.exportExcel(response, sgjsPaperScoreList, DateUtils.getDate());
     }
 }

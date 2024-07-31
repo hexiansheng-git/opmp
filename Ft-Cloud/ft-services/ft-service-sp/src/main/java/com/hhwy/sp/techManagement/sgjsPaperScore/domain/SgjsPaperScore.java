@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author fsd
@@ -21,6 +22,8 @@ import java.util.Date;
 public class SgjsPaperScore extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
+    private List<Long> ids;
+
     /**
      * 字段描述：主键
      */
@@ -31,19 +34,19 @@ public class SgjsPaperScore extends BaseEntity {
      * 字段描述：论文编号
      */
     @JsonProperty
-    @Excel(name = "论文编号")
+    @FtExcel(name = "论文编号")
     private String paperCode;
     /**
      * 字段描述：论文名称
      */
     @JsonProperty
-    @Excel(name = "论文名称")
+    @FtExcel(name = "论文名称")
     private String paperName;
     /**
      * 字段描述：项目名称
      */
     @JsonProperty
-    @Excel(name = "项目名称")
+    @FtExcel(name = "项目名称")
     private String projectName;
     /**
      * 字段描述：申报等级
@@ -54,19 +57,19 @@ public class SgjsPaperScore extends BaseEntity {
      * 字段描述：专业类别
      */
     @JsonProperty
-    @Excel(name = "专业类别")
+    @FtExcel(name = "专业类别",dictType = "profession_areas")
     private String professionType;
     /**
      * 字段描述：专业板块
      */
     @JsonProperty
-    @Excel(name = "专业板块")
+    @FtExcel(name = "专业板块",dictType = "profession_plate")
     private String professionPlate;
     /**
      * 字段描述：主要完成人
      */
     @JsonProperty
-    @Excel(name = "主要完成人")
+    @FtExcel(name = "主要完成人")
     private String principalConsumator;
     /**
      * 字段描述：主要完成人联系方式
@@ -77,19 +80,19 @@ public class SgjsPaperScore extends BaseEntity {
      * 字段描述：评分专家
      */
     @JsonProperty
-    @Excel(name = "评分专家")
+    @FtExcel(name = "评分专家")
     private String specialist;
     /**
      * 字段描述：平均分
      */
     @JsonProperty
-    @Excel(name = "平均分")
+    @FtExcel(name = "平均分")
     private Integer averageScore;
     /**
      * 字段描述：当前状态（未发起，审批中，已结束）
      */
     @JsonProperty
-    @Excel(name = "评审状态")
+    @FtExcel(name = "评审状态")
     private String taskStatus;
     /**
      * 字段描述：备注

@@ -19,6 +19,7 @@ import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishQueryVo
 import com.hhwy.sp.techManagement.sgjsPaperPublish.service.ISgjsPaperPublishService;
 import com.hhwy.sp.techManagement.sgjsPaperScore.sgjsPaperScoreRecord.domain.SgjsPaperScoreRecord;
 import com.hhwy.sp.techManagement.sgjsPaperScore.sgjsPaperScoreRecord.service.ISgjsPaperScoreRecordService;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,6 +62,23 @@ public class SgjsPaperScoreServiceImpl implements ISgjsPaperScoreService {
         return sgjsPaperScoreMapper.getSgjsPaperScore(sgjsPaperScore);
     }
 
+    //导出
+    public List<SgjsPaperScore> getExportData(SgjsPaperScore sgjsPaperScore) {
+        List<Long> ids = sgjsPaperScore.getIds();
+        List<SgjsPaperScore> result;
+        if (CollUtil.isEmpty(ids)) {
+            result = sgjsPaperScoreMapper.getSgjsPaperScoreList(sgjsPaperScore);
+        } else {
+            result = sgjsPaperScoreMapper.getListByIds(ids);
+        }
+        if (CollUtil.isEmpty(result)) {
+            return new ArrayList<>();
+        }else {
+            this.setChildData(result);
+            return result;
+        }
+    }
+
     //台账查询
     public List<SgjsPaperScore> getSgjsPaperScoreList(SgjsPaperScore sgjsPaperScore) {
         /* 查询表是否为空，为空则获取论文申请的数据 */
@@ -87,19 +105,24 @@ public class SgjsPaperScoreServiceImpl implements ISgjsPaperScoreService {
         if (CollUtil.isEmpty(sgjsPaperScoreList)) {
             return new ArrayList<>();
         }
+        //set评分人信息
+        this.setChildData(sgjsPaperScoreList);
+        return sgjsPaperScoreList;
+    }
+
+    private void setChildData(List<SgjsPaperScore> sgjsPaperScoreList) {
         List<Long> idList = sgjsPaperScoreList.stream().map(SgjsPaperScore::getId).collect(Collectors.toList());
         //查询评分记录表，得到评分人
         List<SgjsPaperScoreRecord> scoreRecordList = sgjsPaperScoreRecordService.getListByForeginId(idList);
-        if (CollUtil.isEmpty(scoreRecordList)) return sgjsPaperScoreList;
+        if (CollUtil.isEmpty(scoreRecordList)) return;
         Map<Long, List<SgjsPaperScoreRecord>> scoreRecordMap = scoreRecordList.stream().collect(Collectors.groupingBy(SgjsPaperScoreRecord::getForeignId));
-        for (SgjsPaperScore item : sgjsPaperScoreList ) {
+        for (SgjsPaperScore item : sgjsPaperScoreList) {
             List<SgjsPaperScoreRecord> sgjsPaperScoreRecords = scoreRecordMap.get(item.getId());
             if (CollUtil.isEmpty(sgjsPaperScoreRecords)) continue;
-            String collect = sgjsPaperScoreRecords.stream().map(SgjsPaperScoreRecord::getSpecialist).collect(Collectors.joining(","));
+            String nikeNames = sgjsPaperScoreRecords.stream().map(SgjsPaperScoreRecord::getSpecialist).collect(Collectors.joining(","));
             //set评分专家姓名
-            item.setSpecialist(collect);
+            item.setSpecialist(nikeNames);
         }
-        return sgjsPaperScoreList;
     }
 
     //发起评审
