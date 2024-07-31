@@ -58,6 +58,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -202,7 +204,6 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         if("4".equals(schemeLevel)){
             FlowInfoSearchUtil.getFlowInfo(review, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4);
         }
-        auditResultPush(review);
         //总部版跳转过来传的type=handler
         type=StringUtils.equals(type,"handle")?"4":type;
         if("1".equals(type) || "2".equals(type)){
@@ -920,23 +921,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         List<SgjsBuildSchemeReview> reviewList1 = sgjsBuildSchemeReviewMapper.getListByQueryVo(new BuildSchemeReviewQueryVo());
         Set<String> schemeNumSet = reviewList1.stream().map(SgjsBuildSchemeReview::getSchemeNum).collect(Collectors.toSet());
         List<SgjsBuildSchemeList> resultList =  filterList.stream().filter(sgjsBuildSchemeList -> !schemeNumSet.contains(sgjsBuildSchemeList.getSchemeNum())).collect(Collectors.toList());
-        //格式化方案类型
-        List<SysDictData> list = systemApiService.selectDictDataByType("scheme_type_all");
-        Map<Long,SysDictData> dictMap = list.stream().collect(Collectors.toMap(r->r.getDictDataId(), r->r));
-        Map<String,String> map = list.stream().collect(
-                Collectors.toMap(r->{
-                            String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":dictMap.get(r.getParentId()).getDictValue()+",";
-                            return parent+r.getDictValue();
-                        }
-                        , r->{
-                            String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":dictMap.get(r.getParentId()).getDictLabel()+"/";
-                            return parent+r.getDictLabel();
-                        })
-        );
-        for (int i = 0; i < resultList.size(); i++) {
-            String fmtStr = ObjectUtils.nvlString(map.get(resultList.get(i).getSchemeType()),resultList.get(i).getSchemeType());
-            resultList.get(i).setSchemeType(fmtStr);
-        }
+        formatSchemeType(resultList,
+                r->r.getSchemeType(),
+                (t,v)->{t.setSchemeType(v); return v;});
         return resultList;
     }
 
@@ -1231,8 +1218,31 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         review.setProcessStatus("delete");
         sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
     }
-    
-    
+
+
+    @Override
+    public <T> void formatSchemeType(List<T> list, Function<T, String> function, BiFunction<T,String,String> setValFunc) {
+        //格式化方案类型
+        List<SysDictData> dictList = systemApiService.selectDictDataByType("scheme_type_all");
+        Map<Long,SysDictData> dictMap = dictList.stream().collect(Collectors.toMap(r->r.getDictDataId(), r->r));
+        Map<String,String> map = dictList.stream().collect(
+                Collectors.toMap(r->{
+                            String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":dictMap.get(r.getParentId()).getDictValue()+",";
+                            return parent+r.getDictValue();
+                        }
+                        , r->{
+                            String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":dictMap.get(r.getParentId()).getDictLabel()+"/";
+                            return parent+r.getDictLabel();
+                        })
+        );
+        for (int i = 0; i < list.size(); i++) {
+            String sourceVal = function.apply(list.get(i));
+            String fmtStr = ObjectUtils.nvlString(map.get(sourceVal),sourceVal);
+            setValFunc.apply(list.get(i),fmtStr);
+        }
+    }
+
+
     private boolean isLeader(){
         Map map = new HashMap();
         String token = GmTokenUtils.getTokenWithUsername(SecurityUtils.getUserName());

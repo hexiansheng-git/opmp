@@ -87,22 +87,9 @@ public class SgjsBuildSchemeReviewController extends BaseController {
             }
         }
         //格式化方案类型
-        List<SysDictData> list = systemApiService.selectDictDataByType("scheme_type_all");
-        Map<Long,SysDictData> dictMap = list.stream().collect(Collectors.toMap(r->r.getDictDataId(), r->r));
-        Map<String,String> map = list.stream().collect(
-                Collectors.toMap(r->{
-                            String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":dictMap.get(r.getParentId()).getDictValue()+",";
-                            return parent+r.getDictValue();
-                        }
-                        , r->{
-                            String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":dictMap.get(r.getParentId()).getDictLabel()+"/";
-                            return parent+r.getDictLabel();
-                        })
-        );
-        for (int i = 0; i < reviewList.size(); i++) {
-            String fmtStr = ObjectUtils.nvlString(map.get(reviewList.get(i).getSchemeType()),reviewList.get(i).getSchemeType());
-            reviewList.get(i).setSchemeType(fmtStr);
-        }
+        sgjsBuildSchemeReviewService.formatSchemeType(reviewList,
+                r->r.getSchemeType(),
+                (t,v)->{t.setSchemeType(v); return v;});
         return getDataTableAjaxResult(reviewList);
     }
 
@@ -145,6 +132,22 @@ public class SgjsBuildSchemeReviewController extends BaseController {
             reviewList = sgjsBuildSchemeReviewService.getListByQueryVo(queryVo);
         }else {
             reviewList = sgjsBuildSchemeReviewService.getListByIds(ids);
+        }
+        //格式化方案类型
+        sgjsBuildSchemeReviewService.formatSchemeType(reviewList,
+                r->r.getSchemeType(),
+                (t,v)->{t.setSchemeType(v); return v;});
+        for (SgjsBuildSchemeReview review : reviewList) {
+            String schemeLevel = review.getSchemeLevel();
+            if("1".equals(schemeLevel)){
+                continue;
+            }
+            if("2".equals(schemeLevel) || "3".equals(schemeLevel)){
+                FlowInfoSearchUtil.getFlowInfo(review, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_2_3);
+            }
+            if("4".equals(schemeLevel)){
+                FlowInfoSearchUtil.getFlowInfo(review, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4);
+            }
         }
         FtExcelUtil<SgjsBuildSchemeReview> util = new FtExcelUtil<>(SgjsBuildSchemeReview.class);
         util.exportExcel(response, reviewList, DateUtils.getDate());

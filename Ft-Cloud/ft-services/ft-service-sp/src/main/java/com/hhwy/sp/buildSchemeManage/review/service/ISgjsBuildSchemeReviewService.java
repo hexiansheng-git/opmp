@@ -5,8 +5,11 @@ import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewDetailQue
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewOpinionRecordVo;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewQueryVo;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * @author han
@@ -70,4 +73,6 @@ public interface ISgjsBuildSchemeReviewService {
     void warnMessage();
 
     void deleteById(Long id);
+    
+    <T> void formatSchemeType(List<T> list, Function<T,String> function, BiFunction<T,String,String> setValFunc);
 }

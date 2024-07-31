@@ -136,6 +136,7 @@ public class SgjsBuildSchemeReview extends CommonBaseEntity {
     @JsonProperty
     @FtExcel(name = "提交日期", dateFormat = "yyyy年MM月dd日")
     private Date submitDate;
+
     /**
      * 字段描述：方案附件组id
      */
@@ -155,7 +156,12 @@ public class SgjsBuildSchemeReview extends CommonBaseEntity {
      * 字段描述：流程状态
      */
     @JsonProperty
+    @FtExcel(name = "流程状态",readConverterExp = "0=待发起,1=审批中,4=已结束")
     private String taskStatus;
+
+    @FtExcel(name = "当前处理人")
+    private String processTaskMan;//当前处理人
+    
     /**
      * 字段描述：方案总得分
      */
