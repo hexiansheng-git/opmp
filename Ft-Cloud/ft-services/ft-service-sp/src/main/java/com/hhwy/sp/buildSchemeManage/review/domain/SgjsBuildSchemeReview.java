@@ -156,7 +156,7 @@ public class SgjsBuildSchemeReview extends CommonBaseEntity {
      * 字段描述：流程状态
      */
     @JsonProperty
-    @FtExcel(name = "流程状态",readConverterExp = "0=待发起,1=审批中,4=已结束")
+    @FtExcel(name = "流程状态",readConverterExp = "0=未发起,1=审批中,4=审批完成")
     private String taskStatus;
 
     @FtExcel(name = "当前处理人")
