@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 public enum TaskStatus {
     NOT_INITIATED("0","未发起"),
     IN_PROGRESS("1","审批中"),//审批中
-    COMPLETED("4","已完成");//已完成
+    COMPLETED("4","审批完成");//审批完成
 
     private String code;
     private String value;
