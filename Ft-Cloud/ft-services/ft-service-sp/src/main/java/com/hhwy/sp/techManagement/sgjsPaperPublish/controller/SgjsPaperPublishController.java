@@ -167,8 +167,8 @@ public class SgjsPaperPublishController extends BaseController {
     }
 
     @PostMapping("listener")
-    public AjaxResult updatePaperPublishProcess(@RequestParam("id") Long id,@RequestParam("pass") String pass){
-        sgjsPaperPublishService.updatePaperPublishProcess(id,pass);
+    public AjaxResult updatePaperPublishProcess(@RequestParam("id") Long id,@RequestParam("isPass") String isPass){
+        sgjsPaperPublishService.updatePaperPublishProcess(id,isPass);
         return AjaxResult.success();
     }
 

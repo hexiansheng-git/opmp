@@ -118,6 +118,12 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
 
     @Transactional
     public int insertSgjsPaperPublish(SgjsPaperPublish sgjsPaperPublish) {
+        String paperCode = sgjsPaperPublish.getPaperCode();
+        Assert.isTrue(StrUtil.isNotBlank(paperCode), "论文编号不能为空");
+        PaperPublishQueryVo paperPublishQueryVo = new PaperPublishQueryVo();
+        paperPublishQueryVo.setPaperCode(paperCode);
+        List<SgjsPaperPublish> sgjsPaperPublishList = sgjsPaperPublishMapper.getSgjsPaperPublishList(paperPublishQueryVo);
+        Assert.isTrue(CollUtil.isEmpty(sgjsPaperPublishList), "论文编号重复");
         sgjsPaperPublish.setCreateUser(SecurityUtils.getUserName());
         sgjsPaperPublish.setCreateTime(DateUtils.getNowDate());
         return sgjsPaperPublishMapper.insertSgjsPaperPublish(sgjsPaperPublish);
@@ -263,13 +269,13 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
     private String paperPublishProcEndSwitch;
 
     @Override
-    public void updatePaperPublishProcess(Long id, String pass) {
-        log.info("论文申请审批完成； id：{}，isPass：{}", id, pass);
-        if(StringUtils.isBlank(pass)){
+    public void updatePaperPublishProcess(Long id, String isPass) {
+        log.info("论文申请审批完成； id：{}，isPass：{}", id, isPass);
+        if(StringUtils.isBlank(isPass)){
             return;
         }
         String currentState;
-        if("1".equals(pass)){
+        if("1".equals(isPass)){
             currentState = DataCurrentState.PASS;
         }else {
             currentState = DataCurrentState.NO_PASS;
@@ -280,7 +286,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         paperPublish.setProcessStatus("end");
         sysSyncInfoService4Sp.pushSgjsPaperPublish(paperPublish);
         //保存到论文评分表
-        if("1".equals(pass)){
+        if("1".equals(isPass)){
             ArrayList<SgjsPaperScore> objects = new ArrayList<>();
             SgjsPaperScore sgjsPaperScore = new SgjsPaperScore();
             BeanUtil.copyProperties(paperPublish, sgjsPaperScore, "createTime", "updateTime" ,"updateUser");
@@ -295,10 +301,10 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
          流程审批完成后给发起人发通知：
          您的【论文名称】申请已通过专家审核，进入终评阶段。
          */
-        log.info("论文申请审批完成;开始发送提醒消息???  id：{}，isPass：{}, schemeListProcEndSwitch: {}", id,pass,paperPublish);
+        log.info("论文申请审批完成;开始发送提醒消息???  id：{}，isPass：{}, schemeListProcEndSwitch: {}", id, isPass, paperPublish);
         //判断开关状态
         if (StrUtil.isNotBlank(paperPublishProcEndSwitch) && (paperPublishProcEndSwitch.equals("on") || paperPublishProcEndSwitch.equals("true"))) {
-            this.sendProcessCompleteNotice(id, pass, paperPublish);
+            this.sendProcessCompleteNotice(id, isPass, paperPublish);
         }else {
             log.info("预警开关状态未开启，状态：{}", paperPublishProcEndSwitch);
         }

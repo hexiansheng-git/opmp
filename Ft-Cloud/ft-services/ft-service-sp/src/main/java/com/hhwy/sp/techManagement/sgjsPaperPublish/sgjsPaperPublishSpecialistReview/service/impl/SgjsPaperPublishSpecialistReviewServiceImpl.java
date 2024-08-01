@@ -44,7 +44,9 @@ public class SgjsPaperPublishSpecialistReviewServiceImpl implements ISgjsPaperPu
             return 0;
         }
         Integer reviewStage = 1;
-        List<SgjsPaperPublishSpecialistReview> sgjsPaperPublishSpecialistReviewList = sgjsPaperPublishSpecialistReviewMapper.getSgjsPaperPublishSpecialistReviewList(new SgjsPaperPublishSpecialistReview());
+        SgjsPaperPublishSpecialistReview sgjsPaperPublishSpecialistReview = new SgjsPaperPublishSpecialistReview();
+        sgjsPaperPublishSpecialistReview.setForeignId(param.getForeignId());
+        List<SgjsPaperPublishSpecialistReview> sgjsPaperPublishSpecialistReviewList = sgjsPaperPublishSpecialistReviewMapper.getSgjsPaperPublishSpecialistReviewList(sgjsPaperPublishSpecialistReview);
         if (CollUtil.isNotEmpty(sgjsPaperPublishSpecialistReviewList)) {
             SgjsPaperPublishSpecialistReview resultOne = sgjsPaperPublishSpecialistReviewList.stream().max(Comparator.comparing(SgjsPaperPublishSpecialistReview::getReviewStage)).get();
             reviewStage = resultOne.getReviewStage();

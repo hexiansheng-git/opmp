@@ -23,17 +23,17 @@ public class SgjsPaperPublishListener extends BaseExecutionListener {
 
         Map<String, Object> variables = delegateExecution.getVariables();
         Object expertAdviceObj = variables.get("expertAdvice");
-        String pass = "";
+        String isPass = "";
         if(expertAdviceObj != null  && "1".equals(expertAdviceObj.toString())){
-            pass = "1";
+            isPass = "1";
         }else {
-            Object passObj = variables.get("pass");
+            Object passObj = variables.get("isPass");
             if(passObj != null){
-                pass =  passObj.toString();
+                isPass =  passObj.toString();
             }
         }
         SpServiceApi bean = SpringUtils.getBean(SpServiceApi.class);
-        AjaxResult result = bean.updatePaperPublishProcess(Long.valueOf(businessKey),pass);
+        AjaxResult result = bean.updatePaperPublishProcess(Long.valueOf(businessKey),isPass);
         Assert.isTrue(AjaxResult.isSuccess(result),result.get(AjaxResult.MSG_TAG)==null?"":result.get(AjaxResult.MSG_TAG).toString());
     }
 }

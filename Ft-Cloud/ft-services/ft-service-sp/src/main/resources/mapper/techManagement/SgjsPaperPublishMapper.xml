@@ -27,6 +27,7 @@
         <result property="achievementFile" column="achievement_file"/>
         <result property="achievementOtherFile" column="achievement_other_file"/>
         <result property="currentState" column="current_state"/>
+        <result property="deptSuggest" column="dept_suggest"/>
         <result property="remark" column="remark"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
@@ -69,6 +70,7 @@
              , `achievement_file`
              , `achievement_other_file`
              , `current_state`
+             , `dept_suggest`
              , `remark`
              , `region_id`
              , `region_name`
@@ -136,6 +138,7 @@
                 #{achievementOtherFile}
             </if>
             <if test="currentState != null  and currentState != ''">and `current_state` = #{currentState}</if>
+            <if test="deptSuggest != null  and deptSuggest != ''">and `dept_suggest` = #{deptSuggest}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -165,7 +168,16 @@
             del_flag = "0"
             <if test="paperCode != null  and paperCode != ''">and `paper_code` like concat('%' , #{paperCode} , '%')</if>
             <if test="paperName != null and paperName != ''">and `paper_name` like concat('%' , #{paperName} , '%')</if>
-            <if test="currentState != null  and currentState != ''">and `current_state` = #{currentState}</if>
+            <if test="currentState != null  and currentState != ''">
+            <choose>
+                <when test="currentState == 2">
+                    and (`current_state` = 2 or `current_state` = 5 )
+                </when>
+                <otherwise>
+                    and `current_state` = #{currentState}
+                </otherwise>
+            </choose>
+            </if>
         </where>
         order by create_time desc
     </select>
@@ -209,6 +221,7 @@
             <if test="achievementFile != null  and achievementFile != ''">`achievement_file`,</if>
             <if test="achievementOtherFile != null  and achievementOtherFile != ''">`achievement_other_file`,</if>
             <if test="currentState != null  and currentState != ''">`current_state`,</if>
+            <if test="deptSuggest != null  and deptSuggest != ''">`dept_suggest`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -253,6 +266,7 @@
             <if test="achievementFile != null  and achievementFile != ''">#{achievementFile},</if>
             <if test="achievementOtherFile != null  and achievementOtherFile != ''">#{achievementOtherFile},</if>
             <if test="currentState != null  and currentState != ''">#{currentState},</if>
+            <if test="deptSuggest != null  and deptSuggest != ''">#{deptSuggest},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -300,6 +314,7 @@
             `achievement_file`,
             `achievement_other_file`,
             `current_state`,
+            `dept_suggest`,
             `remark`,
             `region_id`,
             `region_name`,
@@ -343,6 +358,7 @@
                 #{item.achievementFile},
                 #{item.achievementOtherFile},
                 #{item.currentState},
+                #{item.deptSuggest},
                 #{item.remark},
                 #{item.regionId},
                 #{item.regionName},
@@ -402,6 +418,8 @@
             <if test="achievementOtherFile != null  and  achievementOtherFile != ''">`achievement_other_file` =
                 #{achievementOtherFile},
             </if>
+            <if test="currentState != null  and currentState != ''">`current_state` = #{currentState},</if>
+            <if test="deptSuggest != null  and deptSuggest != ''">`dept_suggest` = #{deptSuggest},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -532,6 +550,11 @@
             <trim prefix="current_state  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.currentState}
+                </foreach>
+            </trim>
+            <trim prefix="dept_suggest  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.deptSuggest}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">

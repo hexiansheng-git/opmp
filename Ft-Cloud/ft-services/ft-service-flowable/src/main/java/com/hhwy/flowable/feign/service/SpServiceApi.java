@@ -48,7 +48,7 @@ public interface SpServiceApi {
      * @return
      */
     @PostMapping("/sgjsPaperPublish/listener")
-    AjaxResult updatePaperPublishProcess(@RequestParam("id") Long id,@RequestParam("pass") String pass);
+    AjaxResult updatePaperPublishProcess(@RequestParam("id") Long id,@RequestParam("isPass") String isPass);
 
     @PostMapping("/sgjsPaperPublish/submit")
     AjaxResult submitPaperPublishProcess(@RequestParam("id") Long id);
