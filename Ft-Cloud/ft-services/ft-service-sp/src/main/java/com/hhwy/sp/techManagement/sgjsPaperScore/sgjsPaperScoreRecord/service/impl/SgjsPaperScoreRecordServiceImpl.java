@@ -95,8 +95,7 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
     @Transactional
     public int insertSgjsPaperScoreRecordList(List<SgjsPaperScoreRecord> sgjsPaperScoreRecordList) {
         for (SgjsPaperScoreRecord sgjsPaperScoreRecord : sgjsPaperScoreRecordList) {
-            sgjsPaperScoreRecord.setId(IdWorker.createId());
-            sgjsPaperScoreRecord.setCreateUser(SecurityUtils.getUserName());
+//            sgjsPaperScoreRecord.setId(IdWorker.createId());
             sgjsPaperScoreRecord.setCreateTime(DateUtils.getNowDate());
         }
         return sgjsPaperScoreRecordMapper.insertSgjsPaperScoreRecordList(sgjsPaperScoreRecordList);

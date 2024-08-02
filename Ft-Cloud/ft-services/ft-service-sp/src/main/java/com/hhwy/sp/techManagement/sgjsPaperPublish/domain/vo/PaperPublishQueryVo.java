@@ -17,6 +17,8 @@ public class PaperPublishQueryVo {
      * 字段描述：论文编号
      */
     private String paperCode;
+
+    private String paperCodeAll;
     /**
      * 字段描述：论文名称
      */

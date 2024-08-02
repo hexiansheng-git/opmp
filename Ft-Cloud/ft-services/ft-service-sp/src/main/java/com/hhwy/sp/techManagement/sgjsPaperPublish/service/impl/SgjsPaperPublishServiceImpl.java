@@ -84,6 +84,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
     @Override
     public SgjsPaperPublish getSgjsPaperPublishById(Long id, String type) {
         SgjsPaperPublish paperPublish = sgjsPaperPublishMapper.getSgjsPaperPublishById(id);
+        Assert.isTrue(paperPublish != null, "查询为空，id：" + id);
         //设置专家数据
         SgjsPaperPublishSpecialistReview sgjsPaperPublishSpecialistReview = new SgjsPaperPublishSpecialistReview();
         sgjsPaperPublishSpecialistReview.setForeignId(id);
@@ -116,14 +117,25 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         return sgjsPaperPublishMapper.getSgjsPaperPublishList(queryVo);
     }
 
+    //保存
     @Transactional
     public int insertSgjsPaperPublish(SgjsPaperPublish sgjsPaperPublish) {
         String paperCode = sgjsPaperPublish.getPaperCode();
         Assert.isTrue(StrUtil.isNotBlank(paperCode), "论文编号不能为空");
         PaperPublishQueryVo paperPublishQueryVo = new PaperPublishQueryVo();
-        paperPublishQueryVo.setPaperCode(paperCode);
+        paperPublishQueryVo.setPaperCodeAll(paperCode);
         List<SgjsPaperPublish> sgjsPaperPublishList = sgjsPaperPublishMapper.getSgjsPaperPublishList(paperPublishQueryVo);
         Assert.isTrue(CollUtil.isEmpty(sgjsPaperPublishList), "论文编号重复");
+
+        //补充项目信息
+        ProjectDto projectDto = pmServiceApi.getProjectDto();
+        if (StrUtil.isBlank(sgjsPaperPublish.getProjectName())) {
+            sgjsPaperPublish.setProjectName(projectDto.getProjectName());
+            sgjsPaperPublish.setProjectId(projectDto.getProjectId());
+            sgjsPaperPublish.setRegionId(projectDto.getRegionId());
+            sgjsPaperPublish.setRegionName(projectDto.getRegionName());
+        }
+        sgjsPaperPublish.setPtVar5(projectDto.getProjectCode());
         sgjsPaperPublish.setCreateUser(SecurityUtils.getUserName());
         sgjsPaperPublish.setCreateTime(DateUtils.getNowDate());
         return sgjsPaperPublishMapper.insertSgjsPaperPublish(sgjsPaperPublish);
@@ -275,7 +287,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
             return;
         }
         String currentState;
-        if("1".equals(isPass)){
+        if("3".equals(isPass)){
             currentState = DataCurrentState.PASS;
         }else {
             currentState = DataCurrentState.NO_PASS;
@@ -286,12 +298,12 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         paperPublish.setProcessStatus("end");
         sysSyncInfoService4Sp.pushSgjsPaperPublish(paperPublish);
         //保存到论文评分表
-        if("1".equals(isPass)){
+        if("3".equals(isPass)){
             ArrayList<SgjsPaperScore> objects = new ArrayList<>();
             SgjsPaperScore sgjsPaperScore = new SgjsPaperScore();
             BeanUtil.copyProperties(paperPublish, sgjsPaperScore, "createTime", "updateTime" ,"updateUser");
             sgjsPaperScore.setPtVar3(String.valueOf(sgjsPaperScore.getId()));
-            sgjsPaperScore.setPaperCode(sgjsPaperScore.getPtVar5());
+            sgjsPaperScore.setProjectCode(sgjsPaperScore.getPtVar5());
             sgjsPaperScore.setPtVar5(null);
             objects.add(sgjsPaperScore);
             sgjsPaperScoreService.insertSgjsPaperScoreList(objects);

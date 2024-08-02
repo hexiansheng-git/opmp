@@ -1,7 +1,12 @@
 package com.hhwy.sp.mq;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
+import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.sp.techManagement.sgjsPaperScore.domain.SgjsPaperScore;
 import com.hhwy.sp.techManagement.sgjsPaperScore.service.ISgjsPaperScoreService;
 import com.hhwy.sp.techManagement.sgjsPaperScore.sgjsPaperScoreRecord.domain.SgjsPaperScoreRecord;
@@ -35,15 +40,28 @@ public class SgjsPaperScoreConsumerListener implements RocketMQListener<String> 
 
     @Override
     public void onMessage(String s) {
+        String oldDataSource = null;
         try {
             log.info("论文评分 数据同步：{}", s);
             Map map = JSONObject.parseObject(s, Map.class);
             List<SgjsPaperScore> paperScoreList = JSONObject.parseArray(JSON.toJSONString(map.get("paperScoreList")), SgjsPaperScore.class);
             List<SgjsPaperScoreRecord> scoreRecordList = JSONObject.parseArray(JSON.toJSONString(map.get("scoreRecordList")), SgjsPaperScoreRecord.class);
-            sgjsPaperScoreService.updateSgjsPaperScoreList(paperScoreList);
-            sgjsPaperScoreRecordService.updateSgjsPaperScoreRecordList(scoreRecordList);
-        }catch (Exception e){
-            e.printStackTrace();
+            String tenantKey = paperScoreList.get(0).getPtVar4();
+            if (StrUtil.isBlank(tenantKey)) {
+                log.error("论文评分 数据同步!!! 租户标识不能为空");
+                return;
+            }
+            String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+            oldDataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey("master");
+            if (StringUtils.isNotBlank(dataSource) && !dataSource.equals(oldDataSource)) {
+                sgjsPaperScoreService.updateSgjsPaperScoreList(paperScoreList);
+                sgjsPaperScoreRecordService.insertSgjsPaperScoreRecordList(scoreRecordList);
+            }
+        } catch(Exception e){
+            throw new CustomException(e.getMessage());
+        } finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
         }
     }
 

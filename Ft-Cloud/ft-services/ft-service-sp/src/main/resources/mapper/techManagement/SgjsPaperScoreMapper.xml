@@ -342,11 +342,6 @@
     <update id="updateSgjsPaperScoreList">
         update sgjs_paper_score
         <trim prefix="set" suffixOverrides=",">
-            <trim prefix="id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.id}
-                </foreach>
-            </trim>
             <trim prefix="task_status  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.taskStatus}

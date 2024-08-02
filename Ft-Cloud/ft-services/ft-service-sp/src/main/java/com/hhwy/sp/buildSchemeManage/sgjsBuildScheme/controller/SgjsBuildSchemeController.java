@@ -116,7 +116,7 @@ public class SgjsBuildSchemeController extends BaseController {
     /*
     * 功能描述: 流程结束监听器
     * @param: id 业务id
-    * @param: isPass 1通过 0不通过
+    * @param: isPass 3通过 4不通过
     */
     @RequestMapping("/listener")
     public void updateBuildScheme(@RequestParam("id") Long id, @RequestParam("isPass") String isPass){

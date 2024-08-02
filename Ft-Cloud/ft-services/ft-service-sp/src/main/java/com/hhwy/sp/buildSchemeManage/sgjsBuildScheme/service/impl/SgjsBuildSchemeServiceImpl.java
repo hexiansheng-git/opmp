@@ -409,9 +409,9 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
             return;
         } else {
-            //0不通过 1通过
+            //4不通过 3通过
             sgjsBuildScheme.setValid(isPass);
-            if (isPass.equals("0")) {
+            if (isPass.equals("4")) {
                 //不通过 修改当前记录状态
                 sgjsBuildSchemeMapper.updateSgjsBuildScheme(sgjsBuildScheme);
             } else {
