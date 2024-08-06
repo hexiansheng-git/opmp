@@ -195,11 +195,6 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         }else if("2".equals(saveType) || paperPublish.getId() != null){
             //修改
             id = paperPublish.getId();
-            if (StrUtil.isNotBlank(paperPublish.getCurrentState()) && paperPublish.getCurrentState().equals(DataCurrentState.MODIFY)) {
-                //设置评审到了第几轮
-                SgjsPaperPublish sgjsPaperPublishById = sgjsPaperPublishMapper.getSgjsPaperPublishById(id);
-                paperPublish.setPtVar3(StrUtil.isBlank(sgjsPaperPublishById.getPtVar3()) ? 1+"" : Integer.valueOf(sgjsPaperPublishById.getPtVar3()) + 1 + "");
-            }
             this.updateSgjsPaperPublish(paperPublish);
         }else {
             throw new RuntimeException("保存类型错误");
@@ -215,8 +210,8 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
             param.setReviewResult(reviewResult);
             param.setReviewSuggest(reviewSuggest);
             param.setForeignId(id);
-            //用于判断海外事业部是否通过，如果不通过评审阶段+1
-            param.setPtVar3(paperPublish.getPtVar3());
+            //评审阶段
+            param.setPtVar3(StrUtil.isBlank(paperPublish.getPtVar3())?"1":paperPublish.getPtVar3());
             sgjsPaperPublishSpecialistReviewService.insertSgjsPaperPublishSpecialistReview(param);
         }
 

@@ -223,7 +223,7 @@
             <if test="achievementOtherFile != null  and achievementOtherFile != ''">`achievement_other_file`,</if>
             <if test="currentState != null  and currentState != ''">`current_state`,</if>
             <if test="deptSuggest != null  and deptSuggest != ''">`dept_suggest`,</if>
-            <if test="remark != null  and remark != ''">`remark`,</if>
+            `remark`,
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -268,7 +268,7 @@
             <if test="achievementOtherFile != null  and achievementOtherFile != ''">#{achievementOtherFile},</if>
             <if test="currentState != null  and currentState != ''">#{currentState},</if>
             <if test="deptSuggest != null  and deptSuggest != ''">#{deptSuggest},</if>
-            <if test="remark != null  and remark != ''">#{remark},</if>
+            #{remark},
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>

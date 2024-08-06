@@ -27,10 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -256,6 +253,7 @@ public class TWarnServiceImpl implements ITWarnService {
     @Override
     public void pushTWarn(TWarn tWarn) {
         //总部版推送
+        tWarn.setCreateTime(new Date());
         int result = tWarnMapper.insertTWarn(tWarn);
         if (result > 0) {
             tWarn.setPtVar1("1"); //标记为总部版

@@ -1,12 +1,11 @@
 package com.hhwy.sp.techManagement.sgjsPaperScore.sgjsPaperScoreRecord.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.hash.Hash;
+import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.sp.techManagement.sgjsPaperScore.domain.SgjsPaperScore;
 import com.hhwy.sp.techManagement.sgjsPaperScore.service.ISgjsPaperScoreService;
-import com.hhwy.sp.techManagement.sgjsPaperScore.service.impl.SgjsPaperScoreServiceImpl;
 import com.hhwy.sp.techManagement.sgjsPaperScore.sgjsPaperScoreRecord.domain.SgjsPaperScoreRecord;
 import com.hhwy.sp.techManagement.sgjsPaperScore.sgjsPaperScoreRecord.mapper.SgjsPaperScoreRecordMapper;
 import com.hhwy.sp.techManagement.sgjsPaperScore.sgjsPaperScoreRecord.service.ISgjsPaperScoreRecordService;
@@ -51,12 +50,17 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
         if (CollUtil.isEmpty(sgjsPaperScoreRecordList)) return new ArrayList<>();
         //如果当前登陆用户是评分专家，则只展示自己的数据
         String usernames = sgjsPaperScoreRecordList.stream().map(SgjsPaperScoreRecord::getPtVar2).collect(Collectors.joining());
-        if (usernames.contains(SecurityUtils.getUserName())) {
-            sgjsPaperScoreRecordList = sgjsPaperScoreRecordList.stream().filter(p -> p.getPtVar2().equals(SecurityUtils.getUserName())).collect(Collectors.toList());
+        List<SgjsPaperScoreRecord> resultList = sgjsPaperScoreRecordList.stream().filter(p -> p.getPtVar2().equals(SecurityUtils.getUserName())).collect(Collectors.toList());
+        resultList.forEach(p -> {
             //设置可编辑状态
-            sgjsPaperScoreRecordList.forEach(p -> p.setPtVar3("1"));
-        }
-        return sgjsPaperScoreRecordList;
+            if (usernames.contains(SecurityUtils.getUserName()) && p.getWeightingScore() == null) {
+                p.setPtVar3("1");
+            }else {
+                p.setPtVar3(null);
+            }
+        });
+
+        return resultList;
     }
 
     //评分保存  （专家评分后保存）
@@ -65,6 +69,7 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
         SgjsPaperScoreRecord sgjsPaperScoreRecord = sgjsPaperScoreRecordList.get(0);
         Assert.isTrue(sgjsPaperScoreRecord.getId() != null, "id不能为空");
         //保存评分信息
+        sgjsPaperScoreRecord.setSubmitTime(DateUtils.getNowDate());
         sgjsPaperScoreRecord.setUpdateUser(SecurityUtils.getUserName());
         sgjsPaperScoreRecord.setUpdateTime(DateUtils.getNowDate());
         int i = sgjsPaperScoreRecordMapper.updateSgjsPaperScoreRecord(sgjsPaperScoreRecord);
@@ -82,12 +87,15 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
         //数据同步总部
         Map<String, Object> map = new HashMap<>();
         ArrayList<SgjsPaperScoreRecord> objects1 = new ArrayList<>();
-        ArrayList<SgjsPaperScore> objects2 = new ArrayList<>();
         objects1.add(sgjsPaperScoreRecord);
-        objects2.add(sgjsPaperScore);
         map.put("paperScoreRecord", objects1);
+        ArrayList<SgjsPaperScore> objects2 = new ArrayList<>();
+        SgjsPaperScore sgjsPaperScore1 = new SgjsPaperScore();
+        sgjsPaperScore1.setId(sgjsPaperScoreRecord.getForeignId());
+        objects2.add(sgjsPaperScoreService.getSgjsPaperScore(sgjsPaperScore1));
         map.put("paperScore", objects2);
         rocketMQTemplate.convertAndSend("gm_sgjs_paper_score:tenantSuccess", map);
+        log.info("论文评分 数据同步总部：{}", JSON.toJSONString(map));
         return i;
     }
 
