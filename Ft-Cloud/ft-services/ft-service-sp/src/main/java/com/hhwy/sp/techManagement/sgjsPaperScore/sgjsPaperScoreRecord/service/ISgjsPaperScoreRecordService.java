@@ -20,7 +20,7 @@ public interface ISgjsPaperScoreRecordService {
 
     int insertSgjsPaperScoreRecordList(List<SgjsPaperScoreRecord> sgjsPaperScoreRecordList);
 
-    int updateSgjsPaperScoreRecord(SgjsPaperScoreRecord sgjsPaperScoreRecord);
+    int updateSgjsPaperScoreRecord(List<SgjsPaperScoreRecord> sgjsPaperScoreRecord);
 
     int updateSgjsPaperScoreRecordList(List<SgjsPaperScoreRecord> sgjsPaperScoreRecordList);
 

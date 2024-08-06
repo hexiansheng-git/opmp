@@ -19,6 +19,7 @@ import com.hhwy.sp.common.sgjsAchievementAward.domain.SgjsAchievementAward;
 import com.hhwy.sp.common.sgjsAchievementAward.service.ISgjsAchievementAwardService;
 import com.hhwy.sp.common.sgjsExpertLibrary.domain.SgjsExpertLibrary;
 import com.hhwy.sp.common.sgjsExpertLibrary.service.ISgjsExpertLibraryService;
+import com.hhwy.sp.common.warn.CommonBusiness;
 import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.SgjsPaperPublish;
 import com.hhwy.sp.techManagement.sgjsPaperPublish.domain.vo.PaperPublishExportVo;
@@ -135,7 +136,7 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
             sgjsPaperPublish.setRegionId(projectDto.getRegionId());
             sgjsPaperPublish.setRegionName(projectDto.getRegionName());
         }
-        sgjsPaperPublish.setPtVar5(projectDto.getProjectCode());
+        sgjsPaperPublish.setPtVar4(projectDto.getProjectCode());
         sgjsPaperPublish.setCreateUser(SecurityUtils.getUserName());
         sgjsPaperPublish.setCreateTime(DateUtils.getNowDate());
         return sgjsPaperPublishMapper.insertSgjsPaperPublish(sgjsPaperPublish);
@@ -194,6 +195,11 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
         }else if("2".equals(saveType) || paperPublish.getId() != null){
             //修改
             id = paperPublish.getId();
+            if (StrUtil.isNotBlank(paperPublish.getCurrentState()) && paperPublish.getCurrentState().equals(DataCurrentState.MODIFY)) {
+                //设置评审到了第几轮
+                SgjsPaperPublish sgjsPaperPublishById = sgjsPaperPublishMapper.getSgjsPaperPublishById(id);
+                paperPublish.setPtVar3(StrUtil.isBlank(sgjsPaperPublishById.getPtVar3()) ? 1+"" : Integer.valueOf(sgjsPaperPublishById.getPtVar3()) + 1 + "");
+            }
             this.updateSgjsPaperPublish(paperPublish);
         }else {
             throw new RuntimeException("保存类型错误");
@@ -209,6 +215,8 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
             param.setReviewResult(reviewResult);
             param.setReviewSuggest(reviewSuggest);
             param.setForeignId(id);
+            //用于判断海外事业部是否通过，如果不通过评审阶段+1
+            param.setPtVar3(paperPublish.getPtVar3());
             sgjsPaperPublishSpecialistReviewService.insertSgjsPaperPublishSpecialistReview(param);
         }
 
@@ -303,8 +311,8 @@ public class SgjsPaperPublishServiceImpl implements ISgjsPaperPublishService {
             SgjsPaperScore sgjsPaperScore = new SgjsPaperScore();
             BeanUtil.copyProperties(paperPublish, sgjsPaperScore, "createTime", "updateTime" ,"updateUser");
             sgjsPaperScore.setPtVar3(String.valueOf(sgjsPaperScore.getId()));
-            sgjsPaperScore.setProjectCode(sgjsPaperScore.getPtVar5());
-            sgjsPaperScore.setPtVar5(null);
+            sgjsPaperScore.setProjectCode(sgjsPaperScore.getPtVar4());
+            sgjsPaperScore.setTaskStatus("0");
             objects.add(sgjsPaperScore);
             sgjsPaperScoreService.insertSgjsPaperScoreList(objects);
             log.info("论文申请-写入论文评分完成: {}", JSON.toJSONString(objects));

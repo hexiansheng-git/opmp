@@ -53,13 +53,16 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
         String usernames = sgjsPaperScoreRecordList.stream().map(SgjsPaperScoreRecord::getPtVar2).collect(Collectors.joining());
         if (usernames.contains(SecurityUtils.getUserName())) {
             sgjsPaperScoreRecordList = sgjsPaperScoreRecordList.stream().filter(p -> p.getPtVar2().equals(SecurityUtils.getUserName())).collect(Collectors.toList());
+            //设置可编辑状态
+            sgjsPaperScoreRecordList.forEach(p -> p.setPtVar3("1"));
         }
         return sgjsPaperScoreRecordList;
     }
 
     //评分保存  （专家评分后保存）
     @Transactional
-    public int updateSgjsPaperScoreRecord(SgjsPaperScoreRecord sgjsPaperScoreRecord) {
+    public int updateSgjsPaperScoreRecord(List<SgjsPaperScoreRecord> sgjsPaperScoreRecordList) {
+        SgjsPaperScoreRecord sgjsPaperScoreRecord = sgjsPaperScoreRecordList.get(0);
         Assert.isTrue(sgjsPaperScoreRecord.getId() != null, "id不能为空");
         //保存评分信息
         sgjsPaperScoreRecord.setUpdateUser(SecurityUtils.getUserName());
@@ -70,7 +73,7 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
         ArrayList<Long> objects = new ArrayList<>();
         objects.add(sgjsPaperScoreRecord.getForeignId());
         List<SgjsPaperScoreRecord> listByForeignId = sgjsPaperScoreRecordMapper.getListByforeignId(objects);
-        double collect = listByForeignId.stream().collect(Collectors.averagingInt(SgjsPaperScoreRecord::getWeightingScore));
+        double collect = listByForeignId.stream().filter(p -> p.getWeightingScore() != null ).collect(Collectors.averagingInt(SgjsPaperScoreRecord::getWeightingScore));
         //需改主表平均分
         SgjsPaperScore sgjsPaperScore = new SgjsPaperScore();
         sgjsPaperScore.setId(sgjsPaperScoreRecord.getForeignId());
@@ -78,8 +81,12 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
         sgjsPaperScoreService.updateSgjsPaperScore(sgjsPaperScore);
         //数据同步总部
         Map<String, Object> map = new HashMap<>();
-        map.put("paperScoreRecord", sgjsPaperScoreRecord);
-        map.put("paperScore", sgjsPaperScore);
+        ArrayList<SgjsPaperScoreRecord> objects1 = new ArrayList<>();
+        ArrayList<SgjsPaperScore> objects2 = new ArrayList<>();
+        objects1.add(sgjsPaperScoreRecord);
+        objects2.add(sgjsPaperScore);
+        map.put("paperScoreRecord", objects1);
+        map.put("paperScore", objects2);
         rocketMQTemplate.convertAndSend("gm_sgjs_paper_score:tenantSuccess", map);
         return i;
     }

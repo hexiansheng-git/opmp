@@ -34,7 +34,9 @@ public class SgjsPaperPublishSpecialistReviewServiceImpl implements ISgjsPaperPu
     }
 
     public List<SgjsPaperPublishSpecialistReview> getSgjsPaperPublishSpecialistReviewList(SgjsPaperPublishSpecialistReview sgjsPaperPublishSpecialistReview) {
-        return sgjsPaperPublishSpecialistReviewMapper.getSgjsPaperPublishSpecialistReviewList(sgjsPaperPublishSpecialistReview);
+        List<SgjsPaperPublishSpecialistReview> sgjsPaperPublishSpecialistReviewList = sgjsPaperPublishSpecialistReviewMapper.getSgjsPaperPublishSpecialistReviewList(sgjsPaperPublishSpecialistReview);
+        sgjsPaperPublishSpecialistReviewList.forEach(p -> p.setReviewStage("第" + p.getReviewStage() + "轮"));
+        return sgjsPaperPublishSpecialistReviewList;
     }
 
     //保存
@@ -43,17 +45,8 @@ public class SgjsPaperPublishSpecialistReviewServiceImpl implements ISgjsPaperPu
         if (ObjectUtils.isEmpty(param)) {
             return 0;
         }
-        Integer reviewStage = 1;
-        SgjsPaperPublishSpecialistReview sgjsPaperPublishSpecialistReview = new SgjsPaperPublishSpecialistReview();
-        sgjsPaperPublishSpecialistReview.setForeignId(param.getForeignId());
-        List<SgjsPaperPublishSpecialistReview> sgjsPaperPublishSpecialistReviewList = sgjsPaperPublishSpecialistReviewMapper.getSgjsPaperPublishSpecialistReviewList(sgjsPaperPublishSpecialistReview);
-        if (CollUtil.isNotEmpty(sgjsPaperPublishSpecialistReviewList)) {
-            SgjsPaperPublishSpecialistReview resultOne = sgjsPaperPublishSpecialistReviewList.stream().max(Comparator.comparing(SgjsPaperPublishSpecialistReview::getReviewStage)).get();
-            reviewStage = resultOne.getReviewStage();
-            reviewStage += 1;
-        }
         SysUser sysUser = SecurityUtils.getSysUser();
-        param.setReviewStage(reviewStage);
+        param.setReviewStage(param.getPtVar3());
         param.setSpecialist(sysUser.getNickName());
         param.setSpecialistId(String.valueOf(sysUser.getUserId()));
         param.setPtVar2(sysUser.getUserName());

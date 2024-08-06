@@ -262,12 +262,6 @@ public class SysSyncInfoServiceImpl4Sp implements ISysSyncInfoService4Sp {
     @Override
     public void pushSgjsPaperPublish(SgjsPaperPublish paperPublish) {
         try {
-            ProjectDto projectDto = pmServiceApi.getProjectDto();
-            paperPublish.setPtVar4(projectDto.getProjectCode());
-            paperPublish.setProjectId(projectDto.getProjectId());
-            paperPublish.setProjectName(projectDto.getProjectName());
-            paperPublish.setRegionId(projectDto.getRegionId());
-            paperPublish.setRegionName(projectDto.getRegionName());
             rocketMQTemplate.convertAndSend("sgjs_paper_publish:tenantSuccess", JSONObject.toJSONString(paperPublish));
         } catch (Exception e) {
             e.printStackTrace();

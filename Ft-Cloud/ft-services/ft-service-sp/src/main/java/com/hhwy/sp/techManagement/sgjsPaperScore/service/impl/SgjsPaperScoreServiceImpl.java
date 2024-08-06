@@ -96,6 +96,7 @@ public class SgjsPaperScoreServiceImpl implements ISgjsPaperScoreService {
                 p.setPtVar3(p.getId()+"");
                 p.setProjectCode(p.getPtVar5());
                 p.setPtVar5(null);
+                p.setTaskStatus("0");
             });
             this.insertSgjsPaperScoreList(sgjsPaperScores);
             return sgjsPaperScoreMapper.getSgjsPaperScoreList(sgjsPaperScore);

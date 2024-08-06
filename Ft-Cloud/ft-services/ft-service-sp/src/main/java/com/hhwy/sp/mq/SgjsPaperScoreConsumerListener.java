@@ -54,6 +54,7 @@ public class SgjsPaperScoreConsumerListener implements RocketMQListener<String> 
             String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
             oldDataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey("master");
             if (StringUtils.isNotBlank(dataSource) && !dataSource.equals(oldDataSource)) {
+                DynamicDataSourceContextHolder.push(dataSource);
                 sgjsPaperScoreService.updateSgjsPaperScoreList(paperScoreList);
                 sgjsPaperScoreRecordService.insertSgjsPaperScoreRecordList(scoreRecordList);
             }

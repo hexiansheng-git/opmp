@@ -111,7 +111,6 @@
             <if test="foreignId != null ">and `foreign_id` = #{foreignId}</if>
             <if test="specialist != null  and specialist != ''">and `specialist` = #{specialist}</if>
             <if test="specialistId != null  and specialistId != ''">and `specialist_id` = #{specialistId}</if>
-            <if test="reviewStage != null ">and `review_stage` = #{reviewStage}</if>
             <if test="reviewResult != null  and reviewResult != ''">and `review_result` = #{reviewResult}</if>
             <if test="reviewSuggest != null  and reviewSuggest != ''">and `review_suggest` = #{reviewSuggest}</if>
             <if test="reviewFile != null  and reviewFile != ''">and `review_file` = #{reviewFile}</if>

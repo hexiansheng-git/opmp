@@ -66,8 +66,8 @@ public class SgjsPaperScoreRecordController extends BaseController {
     //评分保存  （专家评分后保存）
     @PreAuthorize(hasPermi = "sgjsPaperScoreRecord:update")
     @PostMapping("/update")
-    public AjaxResult updateSgjsPaperScoreRecord(@Validated(ValidationGroups.Update.class) @RequestBody SgjsPaperScoreRecord sgjsPaperScoreRecordParam) {
-        return toAjax(sgjsPaperScoreRecordService.updateSgjsPaperScoreRecord(sgjsPaperScoreRecordParam));
+    public AjaxResult updateSgjsPaperScoreRecord(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsPaperScoreRecord> sgjsPaperScoreRecordListParam) {
+        return toAjax(sgjsPaperScoreRecordService.updateSgjsPaperScoreRecord(sgjsPaperScoreRecordListParam));
     }
 
     @PreAuthorize(hasPermi = "sgjsPaperScoreRecord:update")
