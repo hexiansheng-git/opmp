@@ -16,6 +16,7 @@ import com.hhwy.system.core.processor.ITenantProcessor;
 import com.hhwy.system.service.IRoleService;
 import com.hhwy.system.service.IUserService;
 import com.hhwy.utils.exception.CustomBusinessException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 @Service
+@Slf4j
 public class ITenantProcessorImpl implements ITenantProcessor {
 
     @Autowired
@@ -61,7 +63,6 @@ public class ITenantProcessorImpl implements ITenantProcessor {
 //        if(!res.get("code").toString().equals("200")){
 //            throw  new CustomBusinessException("同步项目信息到租户数据库失败！！");
 //        };
-
         masterToTenant(sysTenant);
         addRoleToTenant(sysTenant);
         addMenuToRole(sysTenant);
@@ -69,12 +70,15 @@ public class ITenantProcessorImpl implements ITenantProcessor {
 
     //给租户下发流程信息
     public void masterToTenant(SysTenant sysTenant) {
+        log.info("开始给租户下发流程，租户是"+sysTenant.getTenantKey());
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("tenantKey",sysTenant.getTenantKey());
         remoteBpmnSyncService.masterToTenants(jsonObject);
+        log.info("租户下发流程结束，租户是"+sysTenant.getTenantKey());
     }
     //给租户用户分配默认角色
     public void addRoleToTenant(SysTenant sysTenant) {
+        log.info("给租户用户分配默认角色开始，租户是"+sysTenant.getTenantKey());
         //默认普通角色信息
         SysRole sysRole = new SysRole();
         sysRole.setRoleKey("common");
@@ -97,11 +101,12 @@ public class ITenantProcessorImpl implements ITenantProcessor {
         if(CollectionUtils.isNotEmpty(sysUserRoleList)) {
             sysUserRoleMapper.batchUserRole(sysUserRoleList);
         }
-
+        log.info("给租户用户分配默认角色结束，租户是"+sysTenant.getTenantKey());
     }
 
     //给租户的默认角色添加菜单权限
     public void addMenuToRole(SysTenant sysTenant) {
+        log.info("给租户的默认角色添加菜单权限开始，租户是"+sysTenant.getTenantKey());
         //默认普通角色信息
         SysRole sysRole = new SysRole();
         sysRole.setRoleKey("common");
@@ -118,7 +123,7 @@ public class ITenantProcessorImpl implements ITenantProcessor {
         if(CollectionUtils.isNotEmpty(roleMenuList)) {
             sysRoleMenuMapper.batchRoleMenu(roleMenuList);
         }
-
+        log.info("给租户的默认角色添加菜单权限结束，租户是"+sysTenant.getTenantKey());
     }
 
 

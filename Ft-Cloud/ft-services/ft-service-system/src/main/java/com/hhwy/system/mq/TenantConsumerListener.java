@@ -104,10 +104,11 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
         sysTenant.setUserList(idList);
         try {
             this.tenantService.insertSysTenant(sysTenant);
+            System.out.println("mq创建租户方法结束*************************************租户代码："+sysTenant.getTenantKey());
         } catch (Exception e) {
             rocketMQTemplate.convertAndSend("pm-error:tenantError",projectBasicInfo);
+            System.out.println("租户失败*************************************租户代码："+sysTenant.getTenantKey());
         }
-        System.out.println("mq创建租户方法结束*************************************" + s);
     }
 
     @Override
