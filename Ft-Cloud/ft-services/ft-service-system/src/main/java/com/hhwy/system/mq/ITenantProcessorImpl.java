@@ -70,11 +70,16 @@ public class ITenantProcessorImpl implements ITenantProcessor {
 
     //给租户下发流程信息
     public void masterToTenant(SysTenant sysTenant) {
-        log.info("开始给租户下发流程，租户是"+sysTenant.getTenantKey());
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("tenantKey",sysTenant.getTenantKey());
-        remoteBpmnSyncService.masterToTenants(jsonObject);
-        log.info("租户下发流程结束，租户是"+sysTenant.getTenantKey());
+        try {
+            log.info("开始给租户下发流程，租户是"+sysTenant.getTenantKey());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("tenantKey",sysTenant.getTenantKey());
+            remoteBpmnSyncService.masterToTenants(jsonObject);
+            log.info("租户下发流程结束，租户是"+sysTenant.getTenantKey());
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.info("租户下发流程失败，租户是"+sysTenant.getTenantKey());
+        }
     }
     //给租户用户分配默认角色
     public void addRoleToTenant(SysTenant sysTenant) {
