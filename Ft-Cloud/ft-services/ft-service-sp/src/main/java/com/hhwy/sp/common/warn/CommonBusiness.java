@@ -5,9 +5,9 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsWarnConfig;
+import com.hhwy.sp.techManagement.sgjsPaperScore.domain.SgjsPaperScoreAverageRule;
 import com.hhwy.sp.utils.http.HttpHeadersUtils;
 import com.hhwy.sp.utils.http.RestTemplateUtils;
 import com.hhwy.system.api.domain.SysUser;
@@ -37,6 +37,26 @@ public class CommonBusiness {
         String userInfoStr = JSON.toJSONString(ajaxResult.get("data"));
         Assert.isTrue(StrUtil.isNotBlank(userInfoStr), "角色未绑定用户");
         return JSON.parseArray(userInfoStr, SysUser.class);
+    }
+
+    /*
+     * 功能描述: 从总部获取平均分计算配置
+     * @param: url 请求url
+     * @param: warnSubject 预警项(中文)
+     * @return: 平均分计算配置
+     * 时间: 2024/4/2
+     */
+    public static SgjsPaperScoreAverageRule getSgjsAverageRule(String url) {
+        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(headers);
+        AjaxResult ajaxResul = RestTemplateUtils.get(url, httpEntity, AjaxResult.class);
+        Integer code = (Integer) ajaxResul.get("code");
+        Assert.isTrue(code.equals(200), "从总部获取预警配置信息失败");
+        String resultInfo = JSON.toJSONString(ajaxResul.get("data"));
+        Assert.isTrue(StrUtil.isNotBlank(resultInfo), "获取平均分计算规则无数据");
+        List<SgjsPaperScoreAverageRule> sgjsWarnConfigs = JSON.parseArray(resultInfo, SgjsPaperScoreAverageRule.class);
+        if (CollUtil.isEmpty(sgjsWarnConfigs)) return null;
+        return sgjsWarnConfigs.get(0);
     }
 
     /*
