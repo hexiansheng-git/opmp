@@ -42,7 +42,7 @@ public class SgjsPaperScoreConsumerListener implements RocketMQListener<String> 
     public void onMessage(String s) {
         String oldDataSource = null;
         try {
-            log.info("论文评分 数据同步：{}", s);
+            log.info("论文评分 数据同步 总部->项目：{}", s);
             Map map = JSONObject.parseObject(s, Map.class);
             List<SgjsPaperScore> paperScoreList = JSONObject.parseArray(JSON.toJSONString(map.get("paperScoreList")), SgjsPaperScore.class);
             List<SgjsPaperScoreRecord> scoreRecordList = JSONObject.parseArray(JSON.toJSONString(map.get("scoreRecordList")), SgjsPaperScoreRecord.class);

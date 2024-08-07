@@ -109,6 +109,10 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
 
     @Transactional
     public int insertSgjsPaperScoreRecordList(List<SgjsPaperScoreRecord> sgjsPaperScoreRecordList) {
+        if (CollUtil.isEmpty(sgjsPaperScoreRecordList)) {
+            log.warn("保存论文评分list为空");
+            return 0;
+        }
         for (SgjsPaperScoreRecord sgjsPaperScoreRecord : sgjsPaperScoreRecordList) {
 //            sgjsPaperScoreRecord.setId(IdWorker.createId());
             sgjsPaperScoreRecord.setCreateTime(DateUtils.getNowDate());
