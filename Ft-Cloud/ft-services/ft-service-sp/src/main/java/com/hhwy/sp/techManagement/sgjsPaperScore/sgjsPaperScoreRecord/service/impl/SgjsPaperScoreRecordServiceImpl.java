@@ -55,30 +55,31 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
         List<SgjsPaperScoreRecord> sgjsPaperScoreRecordList = sgjsPaperScoreRecordMapper.getSgjsPaperScoreRecordList(sgjsPaperScoreRecord);
         if (CollUtil.isEmpty(sgjsPaperScoreRecordList)) return new ArrayList<>();
         SysUser sysUser = SecurityUtils.getSysUser();
-        String roleList = sysUser.getRoleList().stream().map(SysRole::getRoleKey).collect(Collectors.joining(","));
-        //如果当前登陆用户是领导或者超管, 展示全部数据
-        if (roleList.contains("leader") || roleList.contains("admin")) {
-            sgjsPaperScoreRecordList.forEach(p -> {
-                if (p.getPtVar2().equals(sysUser.getUserName()) && p.getWeightingScore() == null) {
-                    p.setPtVar3("1");
-                }else {
-                    p.setPtVar3(null);
-                }
-            });
-            return sgjsPaperScoreRecordList;
-        }
-        //如果当前登陆用户是评分专家，则只展示自己的数据
-        List<SgjsPaperScoreRecord> resultList = sgjsPaperScoreRecordList.stream().filter(p -> p.getPtVar2().equals(SecurityUtils.getUserName())).collect(Collectors.toList());
+        String userName = sysUser.getUserName();
+//        String roleList = sysUser.getRoleList().stream().map(SysRole::getRoleKey).collect(Collectors.joining(","));
+//        //如果当前登陆用户是领导或者超管角色, 展示全部数据
+//        if (roleList.contains("leader") || roleList.contains("admin") || userName.equals("admin")) {
+//            sgjsPaperScoreRecordList.forEach(p -> {
+//                if (p.getPtVar2().equals(userName) && p.getWeightingScore() == null) {
+//                    p.setPtVar3("1");
+//                }else {
+//                    p.setPtVar3(null);
+//                }
+//            });
+//            return sgjsPaperScoreRecordList;
+//        }
+//        //如果当前登陆用户非领导或者超管角色，则只展示自己的数据
+        //只展示自己的数据
+        List<SgjsPaperScoreRecord> resultList = sgjsPaperScoreRecordList.stream().filter(p -> p.getPtVar2().equals(userName)).collect(Collectors.toList());
         String usernames = sgjsPaperScoreRecordList.stream().map(SgjsPaperScoreRecord::getPtVar2).collect(Collectors.joining());
         resultList.forEach(p -> {
             //设置可编辑状态
-            if (usernames.contains(sysUser.getUserName()) && p.getWeightingScore() == null) {
+            if (usernames.contains(userName) && p.getWeightingScore() == null) {
                 p.setPtVar3("1");
             }else {
                 p.setPtVar3(null);
             }
         });
-
         return resultList;
     }
 
@@ -112,7 +113,7 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
             //总部获取平均分规则
             SgjsPaperScoreAverageRule sgjsPaperScoreAverageRule = CommonBusiness.getSgjsAverageRule(url);
             if (null != sgjsPaperScoreAverageRule && (sgjsPaperScoreAverageRule.getHighNum() > 0 || sgjsPaperScoreAverageRule.getLowNum() > 0)
-                                                    && sgjsPaperScoreAverageRule.getHighNum() + sgjsPaperScoreAverageRule.getLowNum() >= listByForeignId.size()) {
+                                                    && sgjsPaperScoreAverageRule.getHighNum() + sgjsPaperScoreAverageRule.getLowNum() < listByForeignId.size()) {
                 log.error("获取平均分计算规则：{}", JSON.toJSONString(sgjsPaperScoreAverageRule));
                 Integer highNum = sgjsPaperScoreAverageRule.getHighNum();
                 Integer lowNum = sgjsPaperScoreAverageRule.getLowNum();
@@ -136,21 +137,21 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
         }
         //改主表平均分
         SgjsPaperScore sgjsPaperScore = new SgjsPaperScore();
-        if (CollUtil.isEmpty(collect)) {
-            //所有专家评分完成，则结束
-            sgjsPaperScore.setTaskStatus("2");
-        }
+//        if (CollUtil.isEmpty(collect)) {
+//            //所有专家评分完成，则结束
+//            sgjsPaperScore.setTaskStatus("2");
+//        }
         sgjsPaperScore.setId(sgjsPaperScoreRecord.getForeignId());
         sgjsPaperScore.setAverageScore((int)averagingInt);
         sgjsPaperScoreService.updateSgjsPaperScore(sgjsPaperScore);
         //数据同步总部
         Map<String, Object> map = new HashMap<>();
-        ArrayList<SgjsPaperScoreRecord> objects1 = new ArrayList<>();
-        objects1.add(sgjsPaperScoreRecord);
-        map.put("paperScoreRecord", objects1);
-        ArrayList<SgjsPaperScore> objects2 = new ArrayList<>();
+//        ArrayList<SgjsPaperScoreRecord> objects1 = new ArrayList<>();
+//        objects1.add(sgjsPaperScoreRecord);
+        map.put("paperScoreRecord", sgjsPaperScoreRecordList);
         SgjsPaperScore sgjsPaperScore1 = new SgjsPaperScore();
         sgjsPaperScore1.setId(sgjsPaperScoreRecord.getForeignId());
+        ArrayList<SgjsPaperScore> objects2 = new ArrayList<>();
         objects2.add(sgjsPaperScoreService.getSgjsPaperScore(sgjsPaperScore1));
         map.put("paperScore", objects2);
         rocketMQTemplate.convertAndSend("gm_sgjs_paper_score:tenantSuccess", map);
