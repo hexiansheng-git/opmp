@@ -271,6 +271,13 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = this.getMaxReviewOpinionRecord(id);
                 review.setReviewOpinionRecord(reviewOpinionRecord);
             }
+            //驳回到发起人节点后，可以看到所有意见
+            if(StringUtils.equals(review.getIsFirstNode(),"1")){ 
+                BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id,null,null);
+                review.setScore(reviewOpinionVo.getScore());
+                review.setReviewOpinionVo(reviewOpinionVo);
+            }
+                
         }
         return review;
     }
@@ -838,6 +845,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     }
 
     @Override
+    @Transactional
     public void turnDown(Long reviewId) {
         this.recordData(reviewId);
         //删除上一流程所有数据
