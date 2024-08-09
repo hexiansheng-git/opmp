@@ -110,6 +110,16 @@ public class TWarnController extends BaseController {
         return toAjax(tWarnService.addWarnNonGm(tWarn));
     }
 
+    /**
+     * 发送预警List 不推送总部
+     * @param tWarn
+     * @return
+     */
+    @PostMapping("/addWarnListNonGm")
+    public AjaxResult addWarnListNonGm(@Validated(ValidationGroups.Save.class) @RequestBody List<TWarn> tWarn) {
+        return toAjax(tWarnService.addWarnListNonGm(tWarn));
+    }
+
     @PostMapping("/addWarn1")
     public AjaxResult addWarn(WarnItem warnItem, WarnScopeType warnScopeType, String warnScope, String warnUrl, String projectName, String tenantKey){
         return toAjax(tWarnService.addWarn(warnItem,warnScopeType,warnScope,warnUrl,projectName,tenantKey));
