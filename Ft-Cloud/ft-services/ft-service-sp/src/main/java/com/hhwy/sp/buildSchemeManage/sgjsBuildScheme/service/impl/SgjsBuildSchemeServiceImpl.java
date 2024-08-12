@@ -541,7 +541,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     public void warnMessage() {
         //从总部获取预警配置信息
         String url = gmUrl + "/gm/sgjsWarnConfig/list?warnSubject={warnSubject}";
-        SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, "施工方案编制");
+        SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, "施工方案评审-提交");
         if (null == sgjsWarnConfig) {
             log.error("获取施工方案编制预警配置无数据");
             return;
@@ -632,8 +632,10 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 //业务表与预警表关联id
                 Long relationId = IdWorker.createId();
                 //发送预警
-                // todo
-                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getWarnSubject(), sgjsWarnConfig.getWarnRule());
+                //您好，【项目名称】上的功能区【功能区名称】中的【施工方案名称】未能按要求完成，请及时进行查看。zhengjie 0812!
+                String warnSubject = sgjsWarnConfig.getWarnSubject();
+                String warnSubjectSub = warnSubject.substring(0, warnSubject.indexOf("-"));
+                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), warnSubjectSub, sgjsWarnConfig.getWarnRule());
                 List<TWarn> tWarnList = new ArrayList<>();
                 todoWarnList.forEach(p -> {
                     TWarn tWarn = new TWarn();
@@ -643,7 +645,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                     tWarn.setWarnUrl(schemeListUrl);
                     tWarn.setBusinessId(relationId);
                     tWarn.setWarnScopeType("3");
-                    tWarn.setWarnContent(warnContent);
+                    tWarn.setWarnContent(warnContent.replace("【施工方案名称】", p.getSchemeName()));
                     tWarn.setProjectName(tenant.getTenantName());
                     tWarn.setTenantKey(tenant.getTenantKey());
                     tWarnList.add(tWarn);
