@@ -19,7 +19,7 @@ public interface FlowInfoMapper {
      * 查询流程审批历史记录
      * return name_/assignee_  节点名称/处理人
      */
-    List<Map<String, String>> getHistoryTaskInfo(@Param("businessId") Long businessId, @Param("nodeName") String nodeName, @Param("tenantKey")  String tenantKey);
+    List<Map<String, String>> getHistoryTaskInfo(@Param("businessId") String businessId, @Param("nodeName") String nodeName, @Param("tenantKey")  String tenantKey);
 
     /**
      * 查询流程信息

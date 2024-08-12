@@ -53,7 +53,7 @@ public class FlowInfoSearchUtil {
             log.error("必填项不能为空");
             return null;
         }
-        return flowInfoMapper.getHistoryTaskInfo(businessId, nodeName, tenantKey);
+        return flowInfoMapper.getHistoryTaskInfo(String.valueOf(businessId), nodeName, tenantKey);
     }
     
     /***
