@@ -409,9 +409,7 @@
             <if test="participationUnit != null  and  participationUnit != ''">`participation_unit` =
                 #{participationUnit},
             </if>
-            <if test="submitDate != null">and `submit_date` =
-                #{submitDate}
-            </if>
+            <if test="submitDate != null">`submit_date` = #{submitDate}, </if>
             <if test="registrant != null  and  registrant != ''">`registrant` = #{registrant},</if>
             <if test="registrantContactWay != null  and  registrantContactWay != ''">`registrant_contact_way` =
                 #{registrantContactWay},

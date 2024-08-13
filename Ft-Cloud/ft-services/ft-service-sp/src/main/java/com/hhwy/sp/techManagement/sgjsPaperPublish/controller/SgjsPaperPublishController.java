@@ -1,9 +1,11 @@
 package com.hhwy.sp.techManagement.sgjsPaperPublish.controller;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.constant.BelongBusiness;
@@ -49,9 +51,19 @@ public class SgjsPaperPublishController extends BaseController {
      * @return
      */
     @GetMapping("getSgjsPaperPublishByIdNonAuth")
-    public AjaxResult getSgjsPaperPublishByIdNonAuth(Long id,String type) {
-        SgjsPaperPublish sgjsPaperPublish = sgjsPaperPublishService.getSgjsPaperPublishById(id,type);
-        FlowInfoSearchUtil.getFlowInfo(sgjsPaperPublish, FlowEnum.SGJS_PAPER_PUBLISH);
+    public AjaxResult getSgjsPaperPublishByIdNonAuth(Long id,String type, String tenantkey) {
+        String oldDataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey("master");
+        String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantkey);
+        SgjsPaperPublish sgjsPaperPublish = null;
+        try {
+            DynamicDataSourceContextHolder.push(dataSource);
+            sgjsPaperPublish = sgjsPaperPublishService.getSgjsPaperPublishById(id,type);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
         return AjaxResult.success(sgjsPaperPublish);
     }
 
