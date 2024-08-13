@@ -1,13 +1,17 @@
 package com.hhwy.sp.techManagement.sgjsPaperScore.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeRiskList;
+import com.hhwy.sp.common.warn.CommonBusiness;
 import com.hhwy.utils.excel.FtExcelUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -124,5 +128,39 @@ public class SgjsPaperScoreController extends BaseController {
         });
         FtExcelUtil<SgjsPaperScore> util = new FtExcelUtil<>(SgjsPaperScore.class);
         util.exportExcel(response, sgjsPaperScoreList, DateUtils.getDate());
+    }
+
+    @Value("${gm.url}")
+    private String gmUrl;
+
+    //首页论文集
+    @GetMapping("getGMPaperGroupList")
+    public AjaxResult getGMPaperGroupList(){
+        String url = gmUrl + "/gm/sgjsPaperScore/getGMPaperList?startTime={startTime}&endTime={endTime}&professionType={professionType}&professionPlate={professionPlate}&paperName={paperName}";
+        List<SgjsPaperScore> gmPaperList = CommonBusiness.getGMPaperList(url, new SgjsPaperScore());
+        if (CollUtil.isEmpty(gmPaperList)) return AjaxResult.success();
+        gmPaperList.forEach(p -> p.setPtVar1(DateUtil.format(p.getSubmitDate(), DatePattern.NORM_YEAR_PATTERN)));
+        Map.Entry<String, List<SgjsPaperScore>> stringListEntry = gmPaperList.stream()
+                .filter(p -> p.getSubmitDate() != null)
+                .collect(Collectors.groupingBy(SgjsPaperScore::getPtVar1
+                        , () -> new TreeMap<>((k1, k2) -> k2.compareTo(k1))
+                        ,Collectors.collectingAndThen(Collectors.toList()
+                                        ,list -> list.stream()
+                                        .limit(3)
+                                        .collect(Collectors.toList())))).firstEntry();
+        return AjaxResult.success(stringListEntry);
+    }
+
+    //首页论文集 - 更多
+    @GetMapping("getGMPaperList")
+    public AjaxResult getGMPaperList(SgjsPaperScore sgjsPaperScoreParam){
+        String url = gmUrl + "/gm/sgjsPaperScore/getGMPaperList?startTime={startTime}&endTime={endTime}&professionType={professionType}&professionPlate={professionPlate}&paperName={paperName}";
+        List<SgjsPaperScore> gmPaperList = CommonBusiness.getGMPaperList(url, sgjsPaperScoreParam);
+        if (CollUtil.isEmpty(gmPaperList)) return AjaxResult.success();
+        if (sgjsPaperScoreParam.getLimit() != null) {
+            List<SgjsPaperScore> collect = gmPaperList.stream().limit(sgjsPaperScoreParam.getLimit()).collect(Collectors.toList());
+            return AjaxResult.success(collect);
+        }
+        return AjaxResult.success(gmPaperList);
     }
 }

@@ -43,6 +43,19 @@ public class SgjsPaperPublishController extends BaseController {
     private ISgjsAchievementAwardService sgjsAchievementAwardService;
 
     /**
+     * 论文发表管理详情数据 首页论文集使用
+     * @param id
+     * @param type
+     * @return
+     */
+    @GetMapping("getSgjsPaperPublishByIdNonAuth")
+    public AjaxResult getSgjsPaperPublishByIdNonAuth(Long id,String type) {
+        SgjsPaperPublish sgjsPaperPublish = sgjsPaperPublishService.getSgjsPaperPublishById(id,type);
+        FlowInfoSearchUtil.getFlowInfo(sgjsPaperPublish, FlowEnum.SGJS_PAPER_PUBLISH);
+        return AjaxResult.success(sgjsPaperPublish);
+    }
+
+    /**
      * 论文发表管理详情数据
      * @param id
      * @param type
