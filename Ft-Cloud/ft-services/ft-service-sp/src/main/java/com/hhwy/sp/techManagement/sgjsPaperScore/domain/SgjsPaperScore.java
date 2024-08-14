@@ -23,6 +23,15 @@ public class SgjsPaperScore extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     private List<Long> ids;
+    private String startTime;
+    private String endTime;
+    private Integer limit;
+    private String paperFile;
+
+    /**
+     * 字段描述：最终得分
+     */
+    private Integer finalScore;
 
     /**
      * 字段描述：主键
@@ -94,6 +103,12 @@ public class SgjsPaperScore extends BaseEntity {
     @JsonProperty
     @FtExcel(name = "评审状态")
     private String taskStatus;
+    /**
+     * 字段描述：提交日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    private Date submitDate;
     /**
      * 字段描述：备注
      */

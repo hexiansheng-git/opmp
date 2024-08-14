@@ -7,17 +7,23 @@ import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsWarnConfig;
+import com.hhwy.sp.techManagement.sgjsPaperScore.domain.SgjsPaperScore;
 import com.hhwy.sp.techManagement.sgjsPaperScore.domain.SgjsPaperScoreAverageRule;
 import com.hhwy.sp.utils.http.HttpHeadersUtils;
 import com.hhwy.sp.utils.http.RestTemplateUtils;
 import com.hhwy.system.api.domain.SysUser;
+import com.sun.org.apache.bcel.internal.generic.NEW;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.Assert;
 import org.springframework.util.MultiValueMap;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@Slf4j
 public class CommonBusiness {
 
     static SystemServiceApi systemServiceApi = SpringUtils.getBean(SystemServiceApi.class);
@@ -57,6 +63,27 @@ public class CommonBusiness {
         List<SgjsPaperScoreAverageRule> sgjsWarnConfigs = JSON.parseArray(resultInfo, SgjsPaperScoreAverageRule.class);
         if (CollUtil.isEmpty(sgjsWarnConfigs)) return null;
         return sgjsWarnConfigs.get(0);
+    }
+
+    /*
+     * 功能描述: 从总部获取已发布论文
+     * @param: url 请求url
+     */
+    public static List<SgjsPaperScore> getGMPaperList(String url, SgjsPaperScore param) {
+        HttpHeaders headers = HttpHeadersUtils.getCommonHeaders();
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(headers);
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("startTime", param.getStartTime());
+        paramMap.put("endTime", param.getEndTime());
+        paramMap.put("professionType", param.getProfessionType());
+        paramMap.put("professionPlate", param.getProfessionPlate());
+        paramMap.put("paperName", param.getPaperName());
+//        AjaxResult ajaxResul = RestTemplateUtils.get(url, httpEntity, AjaxResult.class, param.getStartTime(),param.getEndTime(),param.getProfessionType(),param.getProfessionPlate(),param.getPaperName());
+        AjaxResult ajaxResul = RestTemplateUtils.get(url, httpEntity, AjaxResult.class, paramMap);
+        Assert.isTrue(AjaxResult.isSuccess(ajaxResul), "从总部获取数据失败：" + JSON.toJSONString(ajaxResul));
+        String resultInfo = JSON.toJSONString(ajaxResul.get("data"));
+        log.info("从总部获取已发布论文：{}", resultInfo);
+        return JSON.parseArray(resultInfo, SgjsPaperScore.class);
     }
 
     /*

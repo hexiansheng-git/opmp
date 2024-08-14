@@ -9,9 +9,13 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.ISgjsBuildSchemeService;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeRiskList;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
+import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.EasyExcelListener;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -26,6 +30,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 功能描述: 施工方案管理 - 施工方案清单详细清单
@@ -39,6 +44,8 @@ public class SgjsBuildSchemeListController extends BaseController {
 
     @Autowired
     private ISgjsBuildSchemeListService sgjsBuildSchemeListService;
+    @Autowired
+    private ISgjsBuildSchemeService sgjsBuildSchemeService;
 
     //选择原有方案，（最新有效版本）
     @PreAuthorize(hasPermi = "sgjsBuildSchemeList:list")
@@ -122,6 +129,19 @@ public class SgjsBuildSchemeListController extends BaseController {
     @GetMapping("/export")
     public void export(HttpServletResponse response, SgjsBuildSchemeList sgjsBuildSchemeListParam) throws IOException {
         List<SgjsBuildSchemeList> sgjsBuildSchemeListList = sgjsBuildSchemeListService.getSgjsBuildSchemeListList(sgjsBuildSchemeListParam);
+        if (CollUtil.isEmpty(sgjsBuildSchemeListList)) {
+            return;
+        }
+        Long foreignId = sgjsBuildSchemeListList.get(0).getForeignId();
+        SgjsBuildScheme param = new SgjsBuildScheme();
+        param.setId(foreignId);
+        SgjsBuildScheme sgjsBuildScheme = sgjsBuildSchemeService.getSgjsBuildScheme(param);
+        //流程信息
+        FlowInfoSearchUtil.getFlowInfo(sgjsBuildScheme, FlowEnum.SGJS_BUILD_SCHEME);
+        if (!sgjsBuildScheme.getTaskStatus().equals("4")) {
+            //未发起审批和未审批完成的 只展示本次调整的
+            sgjsBuildSchemeListList = sgjsBuildSchemeListList.stream().filter(p -> StrUtil.isNotBlank(p.getPtVar3()) && p.getPtVar3().equals("1")).collect(Collectors.toList());
+        }
         FtExcelUtil<SgjsBuildSchemeList> util = new FtExcelUtil<>(SgjsBuildSchemeList.class);
         util.exportExcel(response, sgjsBuildSchemeListList, DateUtils.getDate());
     }
