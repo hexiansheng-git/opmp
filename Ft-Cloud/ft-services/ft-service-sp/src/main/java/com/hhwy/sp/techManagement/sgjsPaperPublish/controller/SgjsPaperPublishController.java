@@ -52,7 +52,7 @@ public class SgjsPaperPublishController extends BaseController {
      */
     @GetMapping("getSgjsPaperPublishByIdNonAuth")
     public AjaxResult getSgjsPaperPublishByIdNonAuth(Long id,String type, String tenantkey) {
-        String oldDataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey("master");
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
         String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantkey);
         SgjsPaperPublish sgjsPaperPublish = null;
         try {

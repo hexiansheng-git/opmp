@@ -156,7 +156,7 @@ public class SgjsPaperScoreController extends BaseController {
     public AjaxResult getGMPaperList(SgjsPaperScore sgjsPaperScoreParam){
         String url = gmUrl + "/gm/sgjsPaperScore/getGMPaperList?startTime={startTime}&endTime={endTime}&professionType={professionType}&professionPlate={professionPlate}&paperName={paperName}";
         List<SgjsPaperScore> gmPaperList = CommonBusiness.getGMPaperList(url, sgjsPaperScoreParam);
-        if (CollUtil.isEmpty(gmPaperList)) return AjaxResult.success();
+        if (CollUtil.isEmpty(gmPaperList)) return AjaxResult.success(gmPaperList);
         if (sgjsPaperScoreParam.getLimit() != null) {
             List<SgjsPaperScore> collect = gmPaperList.stream().limit(sgjsPaperScoreParam.getLimit()).collect(Collectors.toList());
             return AjaxResult.success(collect);
