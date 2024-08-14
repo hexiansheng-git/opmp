@@ -52,6 +52,7 @@ public class RoleAndUserBindController {
     @Transactional
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody SysUserRole sysUserRole) {
         String errorMsg = "";
+        String errorMsgFirst = "";
         if (StringUtils.isBlank(sysUserRole.getTenantKey())||sysUserRole.getRoleId()==null||sysUserRole.getRoleId()==0L) {
             AjaxResult.error("请选中租户和角色");
         }
@@ -96,11 +97,11 @@ public class RoleAndUserBindController {
                             sysUserRoleNew.setTenantKey(tenantKey);
                             sysUserRoleList.add(sysUserRoleNew);
                         } else {
-                            errorMsg += "租户key："+tenantKey+"中没有指定用户信息 用户账号："+item.getUserName()+" 用户名称："+item.getNickName()+" \n";
+                            errorMsg += "租户key："+tenantKey+"中没有指定用户信息 用户账号："+item.getUserName()+" 用户名称："+item.getNickName()+" <br/>";
                         }
                     }
                 } else if (CollectionUtils.isNotEmpty(sysUserRoleList)) {
-                    errorMsg += "租户key："+tenantKey+"中用户为空 \n";
+                    errorMsgFirst += "租户key："+tenantKey+"中用户为空 <br/>";
                 }
                 if (sysUserRoleList != null && sysUserRoleList.size() > 0) {
                     sysUserRoleMapper.batchUserRole(sysUserRoleList);
@@ -108,12 +109,12 @@ public class RoleAndUserBindController {
                 log.info("给租户用户分配选中角色结束，租户key是"+tenantKey+"，角色是"+sysRoleCommon.getRoleName());
             }
         }
-        if (StringUtils.isBlank(errorMsg)) {
+        if (StringUtils.isBlank(errorMsg)&&StringUtils.isBlank(errorMsgFirst)) {
             log.info("下发成功");
             return AjaxResult.success("下发成功");
         } else {
             log.error(errorMsg);
-            return AjaxResult.success("部分用户信息下发成功 \n失败用户信息：\n"+errorMsg);
+            return AjaxResult.success("部分用户信息下发成功 <br/>失败用户集合：<br/>"+errorMsgFirst+errorMsg);
         }
     }
 }
