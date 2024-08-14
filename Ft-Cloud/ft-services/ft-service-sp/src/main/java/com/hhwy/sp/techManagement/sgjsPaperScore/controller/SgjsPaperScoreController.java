@@ -139,7 +139,10 @@ public class SgjsPaperScoreController extends BaseController {
         String url = gmUrl + "/gm/sgjsPaperScore/getGMPaperList?startTime={startTime}&endTime={endTime}&professionType={professionType}&professionPlate={professionPlate}&paperName={paperName}";
         List<SgjsPaperScore> gmPaperList = CommonBusiness.getGMPaperList(url, new SgjsPaperScore());
         if (CollUtil.isEmpty(gmPaperList)) return AjaxResult.success();
-        gmPaperList.forEach(p -> p.setPtVar1(DateUtil.format(p.getSubmitDate(), DatePattern.NORM_YEAR_PATTERN)));
+        gmPaperList.forEach(p -> {
+            p.setPaperName(p.getProjectName() + "-" + p.getPaperName());
+            p.setPtVar1(DateUtil.format(p.getSubmitDate(), DatePattern.NORM_YEAR_PATTERN));
+        });
         Map.Entry<String, List<SgjsPaperScore>> stringListEntry = gmPaperList.stream()
                 .filter(p -> p.getSubmitDate() != null)
                 .collect(Collectors.groupingBy(SgjsPaperScore::getPtVar1

@@ -152,8 +152,8 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
         Map<String, Object> map = new HashMap<>();
         map.put("paperScore", objects2);
         map.put("paperScoreRecord", sgjsPaperScoreRecordList);
-        rocketMQTemplate.convertAndSend("gm_sgjs_paper_score:tenantSuccess", map);
-        log.info("论文评分 数据同步总部：{}", JSON.toJSONString(map));
+        rocketMQTemplate.convertAndSend("gm_sgjs_paper_score:tenantSuccess", JSON.toJSONString(map));
+        log.info("论文评分 数据同步 项目->总部：{}", JSON.toJSONString(map));
         return 1;
     }
 
