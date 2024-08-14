@@ -113,7 +113,7 @@ public class RoleAndUserBindController {
             return AjaxResult.success("下发成功");
         } else {
             log.error(errorMsg);
-            return AjaxResult.success("下发成功，失败用户："+errorMsg);
+            return AjaxResult.success("部分用户信息下发成功 \n失败用户信息：\n"+errorMsg);
         }
     }
 }
