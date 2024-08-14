@@ -127,6 +127,7 @@ public interface UserMapper {
     List<SysUser> selectByRoleKeyList(@Param("roleKeyList") String[] roleKeyList,@Param("tenantKey") String tenantKey);
 
     List<SysUser> selectUserIdByTenant(@Param("tenantKey") String tenantKey);
+    List<SysUser> selectUserIdByTenantNew(@Param("tenantKey") String tenantKey);
 
     List<SysUser> selectUserInfoByUserNameAndTenant(Map<String, String> map);
 }

@@ -1,6 +1,7 @@
 package com.hhwy.system.mapper;
 
 import com.hhwy.domain.base.system.SysTreeUtil;
+import com.hhwy.domain.base.system.periodCurrency.PeriodCurrency;
 import com.hhwy.system.api.domain.SysDept;
 import com.hhwy.system.api.domain.SysRole;
 import com.hhwy.system.core.domain.SysRoleMenu;
@@ -16,4 +17,6 @@ public interface RoleMapper {
     List<SysRoleMenu> selectRoleMenuList(@Param("tenantKey") String tenantKey, @Param("roleId")Long roleId);
 
     List<SysUserRole> selectRoleUserExit(@Param("userId") Long userId, @Param("roleId") long l, @Param("tenantKey") String tenantKey);
+
+    int deleteRoleUserExit(@Param("roleId") long l, @Param("tenantKey") String tenantKey);
 }
