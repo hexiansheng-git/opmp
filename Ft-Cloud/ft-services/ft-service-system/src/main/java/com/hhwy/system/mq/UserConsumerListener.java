@@ -115,6 +115,8 @@ public class UserConsumerListener implements RocketMQListener<String> , RocketMQ
                     }else{
                         addUser=true;
                     }
+                } else {
+                    log.error("项目版master中没有此账号信息,无法同步账号信息 账号："+sysUser.getUserName());
                 }
                 // 复制领导用户数据
                 SysUser sysUser4Add = JSONObject.parseObject(JSONObject.toJSONString(sysUser), SysUser.class);
