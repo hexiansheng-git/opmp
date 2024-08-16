@@ -9,11 +9,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
-import com.fasterxml.jackson.databind.ser.impl.ObjectIdWriter;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
-import com.hhwy.common.core.utils.YamlUtil;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
@@ -46,7 +44,6 @@ import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.*;
 import com.hhwy.utils.common.CommonAssert;
-import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -270,6 +267,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 //节点标识为空：当前为驳回后的发起人节点，需要查看历史数据
                 SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = this.getMaxReviewOpinionRecord(id);
                 review.setReviewOpinionRecord(reviewOpinionRecord);
+                BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id,null,null);
+                review.setReviewOpinionVo(reviewOpinionVo);
             }
             //驳回到发起人节点后，可以看到所有意见
             if(StringUtils.equals(review.getIsFirstNode(),"1")){ 
