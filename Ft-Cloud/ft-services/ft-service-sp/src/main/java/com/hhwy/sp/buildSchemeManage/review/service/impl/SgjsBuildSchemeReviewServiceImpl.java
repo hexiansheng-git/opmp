@@ -9,11 +9,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
-import com.fasterxml.jackson.databind.ser.impl.ObjectIdWriter;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
-import com.hhwy.common.core.utils.YamlUtil;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
@@ -46,7 +44,6 @@ import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.*;
 import com.hhwy.utils.common.CommonAssert;
-import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -271,6 +268,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 //节点标识为空：当前为驳回后的发起人节点，需要查看历史数据
                 SgjsBuildSchemeReviewOpinionRecord reviewOpinionRecord = this.getMaxReviewOpinionRecord(id);
                 review.setReviewOpinionRecord(reviewOpinionRecord);
+                BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id,null,null);
+                review.setReviewOpinionVo(reviewOpinionVo);
             }
             //驳回到发起人节点后，可以看到所有意见
             if(StringUtils.equals(review.getIsFirstNode(),"1")){ 
@@ -1000,7 +999,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     public void warnMessage() {
         //从总部获取预警配置信息
         String url = gmUrl + "/gm/sgjsWarnConfig/list?warnSubject={warnSubject}";
-        SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, "施工方案评审");
+        SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, "施工方案评审-评审");
         if (null == sgjsWarnConfig) {
             log.error("获取施工方案评审预警配置无数据");
             return;
@@ -1119,7 +1118,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                         .collect(Collectors.toList());
                 //获取任务详情，得到当前任务节点; 只需处理专家、部门评审人员节点
 //                Set<String> userNameList = new HashSet<>();
-                List<SysUser> userList = new ArrayList<>();
+                List<SysUser> todoWarnUserList = new ArrayList<>();
+                Map<String, String> schemeName = new HashMap<>();
                 Date nowDate = new Date();
                 //遍历所有业务数据
                 for (SgjsBuildSchemeReview schemeReview : flowList) {
@@ -1132,8 +1132,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     //遍历当前业务数据的所有流程任务
                     for (String currentTaskId : currentTaskIdArr) {
                         AjaxResult ajaxResult = flowServiceApi.taskInfoDetail(currentTaskId);
-                        Integer code = (Integer) ajaxResult.get("code");
-                        if (!code.equals(200)) continue;
+                        if (!AjaxResult.isSuccess(ajaxResult)) {
+                            log.warn("获取任务失败， 任务id：{} --- 响应结果：{}", currentTaskId, ajaxResult);
+                        }
                         String warnInfo = JSON.toJSONString(ajaxResult.get("data"));
                         if (StrUtil.isBlank(warnInfo)) {
                             log.warn("查询流程无数据，任务：{}", currentTaskId);
@@ -1163,36 +1164,42 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                             SysUser sysUser = new SysUser();
                             sysUser.setUserName(assignee);
                             sysUser.setNickName(assigneeNickName);
-                            userList.add(sysUser);
+                            todoWarnUserList.add(sysUser);
+                            schemeName.put(assignee, schemeReview.getSchemeName());
                         }
                     }
                 }
-                if (CollUtil.isEmpty(userList)) {
+                if (CollUtil.isEmpty(todoWarnUserList)) {
                     log.info("租户：{}，施工方案评审预警，无需预警", tenant.getTenantName());
                     continue;
                 }
                 /*执行预警，保存预警记录*/
-                //业务表与预警表关联id
-                Long relationId = IdWorker.createId();
-                //预警消息组装
-                TWarn tWarn = new TWarn();
-                tWarn.setWarnItem(sgjsWarnConfig.getWarnSubject());
-                tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_REVIEW.getWarnItemId());
-                String userNames = userList.stream().map(SysUser::getUserName).collect(Collectors.joining(","));
-                tWarn.setWarnScope(userNames);
-                tWarn.setWarnUrl(schemeReviewUrl);
-                tWarn.setBusinessId(relationId);
-                tWarn.setWarnScopeType("3");
-                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getWarnSubject(), sgjsWarnConfig.getWarnRule());
-                tWarn.setWarnContent(warnContent);
-                tWarn.setProjectName(tenant.getTenantName());
-                tWarn.setTenantKey(tenant.getTenantKey());
                 //发送预警
-                systemServiceApi.addWarnNonGm(tWarn);
-                //预警记录保存
+                List<TWarn> tWarnList = new ArrayList<>();
+                //预警记录
                 List<SgjsWarnRecord> warnRecordList = new ArrayList<>();
-                for (SysUser user : userList) {
-                    //预警记录
+                String userNames = todoWarnUserList.stream().map(SysUser::getUserName).collect(Collectors.joining(","));
+                //您好，【项目名称】上的功能区【功能区名称】中的【施工方案名称】未能按要求完成，请及时进行查看。zhengjie 0812!
+                String warnSubject = sgjsWarnConfig.getWarnSubject();
+                String warnSubjectSub = warnSubject.substring(0, warnSubject.indexOf("-"));
+                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), warnSubjectSub, sgjsWarnConfig.getWarnRule());
+                for (SysUser user : todoWarnUserList) {
+                    //业务表与预警表关联id
+                    Long relationId = IdWorker.createId();
+                    //预警消息组装
+                    TWarn tWarn = new TWarn();
+                    tWarn.setWarnItem("施工方案评审");
+                    tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_REVIEW.getWarnItemId());
+                    tWarn.setWarnScope(user.getUserName());
+                    tWarn.setWarnUrl(schemeReviewUrl);
+                    tWarn.setBusinessId(relationId);
+                    tWarn.setWarnScopeType("3");
+                    tWarn.setWarnContent(warnContent.replace("【施工方案名称】", schemeName.get(user.getUserName())));
+                    tWarn.setProjectName(tenant.getTenantName());
+                    tWarn.setTenantKey(tenant.getTenantKey());
+                    tWarnList.add(tWarn);
+
+                    //预警记录 总部看的数据
                     SgjsWarnRecord sgjsWarnRecord = new SgjsWarnRecord();
                     sgjsWarnRecord.setProjectCode(tenant.getTenantKey());
                     sgjsWarnRecord.setProjectName(tenant.getTenantName());
@@ -1205,6 +1212,9 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     sgjsWarnRecord.setPtVar1(String.valueOf(relationId));
                     warnRecordList.add(sgjsWarnRecord);
                 }
+                //发送预警
+                AjaxResult ajaxResult = systemServiceApi.addWarnListNonGm(tWarnList);
+                log.info("施工方案编制预警执行完成。。。。预警服务响应：{} --- 租户：{}", JSON.toJSONString(ajaxResult), tenant.getTenantName());
                 /*推送总部*/
                 if (CollUtil.isNotEmpty(warnRecordList)) {
                     rocketMQTemplate.convertAndSend("sgjs_build_scheme_list_warn:tenantSuccess", warnRecordList);

@@ -128,6 +128,14 @@ public interface SystemServiceApi {
     AjaxResult addWarnNonGm(@RequestBody TWarn tWarn);
 
     /**
+     * 发送预警List 不推送总部
+     * @param tWarn
+     * @return
+     */
+    @PostMapping("/tWarn/addWarnListNonGm")
+    AjaxResult addWarnListNonGm(@RequestBody List<TWarn> tWarn);
+
+    /**
      * 批量新增预警
      *
      * @param tWarnListParam

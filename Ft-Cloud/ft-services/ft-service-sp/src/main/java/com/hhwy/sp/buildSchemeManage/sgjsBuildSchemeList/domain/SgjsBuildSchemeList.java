@@ -68,10 +68,16 @@ public class SgjsBuildSchemeList extends BaseEntity {
 //    @FtExcel(name = "关联WBS编号")
     private String relationWbsId;
     /**
+     * 字段描述：预留字段4
+     */
+    @JsonProperty
+    @FtExcel(name = "方案类型")
+    private String ptVar4;
+    /**
      * 字段描述：关联WBS
      */
     @JsonProperty
-    @FtExcel(name = "关联WBS名称")
+    @FtExcel(name = "关联WBS")
     private String relationWbsName;
     /**
      * 字段描述：方案类型
@@ -79,13 +85,6 @@ public class SgjsBuildSchemeList extends BaseEntity {
     @JsonProperty
 
     private String schemeType;
-
-    /**
-     * 字段描述：预留字段4
-     */
-    @JsonProperty
-    @FtExcel(name = "方案类型")
-    private String ptVar4;
 
     /**
      * 字段描述：方案分级 1Ⅰ、2Ⅱ、3Ⅲ、4Ⅳ

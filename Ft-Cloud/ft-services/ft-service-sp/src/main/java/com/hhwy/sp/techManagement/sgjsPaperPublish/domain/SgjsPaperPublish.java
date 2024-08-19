@@ -93,6 +93,13 @@ public class SgjsPaperPublish extends CommonBaseEntity {
     @JsonProperty
     @FtExcel(name = "参与单位")
     private String participationUnit;
+
+    /**
+     * 字段描述：提交日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @FtExcel(name = "提交日期")
+    private Date submitDate;
     /**
      * 字段描述：登记人
      */

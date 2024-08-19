@@ -1,5 +1,6 @@
 package com.hhwy.system.warn.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
@@ -91,6 +92,41 @@ public class TWarnServiceImpl implements ITWarnService {
         warn2Push.push(tWarn);
         //推送到中交门户
         warnPushMenHu.push(tWarn);
+        return result;
+    }
+
+    @Override
+    //@Transactional
+    public int addWarnListNonGm(List<TWarn> tWarnList) {
+        log.info("预警消息发送：{}", JSON.toJSONString(tWarnList));
+        for (TWarn tWarn : tWarnList) {
+            String warnScope = tWarn.getWarnScope();
+            if(StringUtils.isBlank(warnScope)){
+                log.info("warnScope不能为空");
+                continue;
+            }
+            this.setWarnScopeName(tWarn);
+            tWarn.setWarnId(IdWorker.createId());
+            tWarn.setCreateUser("admin");
+            tWarn.setCreateTime(DateUtils.getNowDate());
+        }
+        if (CollUtil.isNotEmpty(tWarnList)) {
+            log.info("预警条数："+tWarnList.size());
+        } else {
+            log.info("预警条数：0");
+        }
+        int result = tWarnMapper.insertTWarnList(tWarnList);
+        if (result > 0) {
+            ThreadUtil.execAsync(() -> {
+                for (TWarn tWarn : tWarnList) {
+                    this.notify(tWarn);
+                    //推送到一公局门户
+                    warn2Push.push(tWarn);
+                    //推送到中交门户
+                    warnPushMenHu.push(tWarn);
+                }
+            });
+        }
         return result;
     }
 

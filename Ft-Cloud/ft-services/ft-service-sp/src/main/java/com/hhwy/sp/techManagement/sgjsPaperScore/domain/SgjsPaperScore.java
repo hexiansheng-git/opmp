@@ -23,6 +23,15 @@ public class SgjsPaperScore extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     private List<Long> ids;
+    private String startTime;
+    private String endTime;
+    private Integer limit;
+    private String paperFile;
+
+    /**
+     * 字段描述：最终得分
+     */
+    private Integer finalScore;
 
     /**
      * 字段描述：主键
@@ -95,6 +104,12 @@ public class SgjsPaperScore extends BaseEntity {
     @FtExcel(name = "评审状态")
     private String taskStatus;
     /**
+     * 字段描述：提交日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @JsonProperty
+    private Date submitDate;
+    /**
      * 字段描述：备注
      */
     @JsonProperty
@@ -140,7 +155,7 @@ public class SgjsPaperScore extends BaseEntity {
     /**
      * 字段描述：数据创建系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     private Date createTime;
     /**
@@ -151,7 +166,7 @@ public class SgjsPaperScore extends BaseEntity {
     /**
      * 字段描述：数据修改系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     private Date updateTime;
     /**
@@ -162,7 +177,7 @@ public class SgjsPaperScore extends BaseEntity {
     /**
      * 字段描述：数据删除系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty
     private Date delTime;
     /**

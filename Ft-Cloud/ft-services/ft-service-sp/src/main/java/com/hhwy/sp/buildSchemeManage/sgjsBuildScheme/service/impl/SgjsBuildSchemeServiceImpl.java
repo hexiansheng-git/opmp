@@ -49,6 +49,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -540,7 +541,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
     public void warnMessage() {
         //从总部获取预警配置信息
         String url = gmUrl + "/gm/sgjsWarnConfig/list?warnSubject={warnSubject}";
-        SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, "施工方案编制");
+        SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, "施工方案评审-提交");
         if (null == sgjsWarnConfig) {
             log.error("获取施工方案编制预警配置无数据");
             return;
@@ -598,18 +599,19 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                         .filter(p -> StrUtil.isNotBlank(p.getTaskStatus()) && p.getTaskStatus().equals("0")).collect(Collectors.toList());
                 /*提前七天提醒一次，超期后每两天进行告警*/
                 //预警触发标识
-                boolean triggerFlag = false;
                 Date nowDate = new Date();
+                List<SgjsBuildSchemeReview> todoWarnList = new ArrayList<>();
                 for (SgjsBuildSchemeReview schemeList : warnList) {
                     Date planCompletionTime = schemeList.getPlanCompletionTime();
                     long between = DateUtil.between(nowDate, planCompletionTime, DateUnit.DAY, false);
                     if (between == 7 || (between <= 0 && between % 2 == 0)) {
                         //有一条数据满足条件则修改标识
-                        triggerFlag = true;
+                        //需要预警的方案
+                        todoWarnList.add(schemeList);
                         break;
                     }
                 }
-                if (!triggerFlag) {
+                if (CollUtil.isEmpty(todoWarnList)) {
                     log.info("施工方案清单预警执行, 无需预警, 租户：{}，", tenant.getTenantName());
                     continue;
                 }
@@ -630,35 +632,44 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 //业务表与预警表关联id
                 Long relationId = IdWorker.createId();
                 //发送预警
-                TWarn tWarn = new TWarn();
-                tWarn.setWarnItem(sgjsWarnConfig.getWarnSubject());
-                tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_LIST.getWarnItemId());
-                tWarn.setWarnScope(userNames);
-                tWarn.setWarnUrl(schemeListUrl);
-                tWarn.setBusinessId(relationId);
-                tWarn.setWarnScopeType("3");
-                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getWarnSubject(), sgjsWarnConfig.getWarnRule());
-                tWarn.setWarnContent(warnContent);
-                tWarn.setProjectName(tenant.getTenantName());
-                tWarn.setTenantKey(tenant.getTenantKey());
+                //您好，【项目名称】上的功能区【功能区名称】中的【施工方案名称】未能按要求完成，请及时进行查看。zhengjie 0812!
+                String warnSubject = sgjsWarnConfig.getWarnSubject();
+                String warnSubjectSub = warnSubject.substring(0, warnSubject.indexOf("-"));
+                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), warnSubjectSub, sgjsWarnConfig.getWarnRule());
+                List<TWarn> tWarnList = new ArrayList<>();
+                todoWarnList.forEach(p -> {
+                    TWarn tWarn = new TWarn();
+                    tWarn.setWarnItem("施工方案评审");
+                    tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_LIST.getWarnItemId());
+                    tWarn.setWarnScope(userNames);
+                    tWarn.setWarnUrl(schemeListUrl);
+                    tWarn.setBusinessId(relationId);
+                    tWarn.setWarnScopeType("3");
+                    tWarn.setWarnContent(warnContent.replace("【施工方案名称】", p.getSchemeName()));
+                    tWarn.setProjectName(tenant.getTenantName());
+                    tWarn.setTenantKey(tenant.getTenantKey());
+                    tWarnList.add(tWarn);
+                });
                 //发送预警
-                AjaxResult ajaxResult = systemServiceApi.addWarnNonGm(tWarn);
+                AjaxResult ajaxResult = systemServiceApi.addWarnListNonGm(tWarnList);
                 log.info("施工方案编制预警执行完成。。。。预警服务响应：{} --- 租户：{}", JSON.toJSONString(ajaxResult), tenant.getTenantName());
                 //预警记录保存
                 List<SgjsWarnRecord> warnRecordList = new ArrayList<>();
-                sysUsers.forEach(p -> {
+                sysUsers.forEach(user -> {
                     //预警记录
-                    SgjsWarnRecord sgjsWarnRecord = new SgjsWarnRecord();
-                    sgjsWarnRecord.setProjectCode(tenant.getTenantKey());
-                    sgjsWarnRecord.setProjectName(tenant.getTenantName());
-                    sgjsWarnRecord.setWarnContent(warnContent);
-                    sgjsWarnRecord.setWarnUserId(p.getUserName());
-                    sgjsWarnRecord.setWarnUser(p.getNickName());
-                    sgjsWarnRecord.setWarnSubject(sgjsWarnConfig.getWarnSubject());
-                    sgjsWarnRecord.setWarnTime(new Date());
-                    sgjsWarnRecord.setStatus("1");
-                    sgjsWarnRecord.setPtVar1(String.valueOf(relationId));
-                    warnRecordList.add(sgjsWarnRecord);
+                    todoWarnList.forEach(warn -> {
+                        SgjsWarnRecord sgjsWarnRecord = new SgjsWarnRecord();
+                        sgjsWarnRecord.setProjectCode(tenant.getTenantKey());
+                        sgjsWarnRecord.setProjectName(tenant.getTenantName());
+                        sgjsWarnRecord.setWarnContent(warnContent);
+                        sgjsWarnRecord.setWarnUserId(user.getUserName());
+                        sgjsWarnRecord.setWarnUser(user.getNickName());
+                        sgjsWarnRecord.setWarnSubject(sgjsWarnConfig.getWarnSubject());
+                        sgjsWarnRecord.setWarnTime(new Date());
+                        sgjsWarnRecord.setStatus("1");
+                        sgjsWarnRecord.setPtVar1(String.valueOf(relationId));
+                        warnRecordList.add(sgjsWarnRecord);
+                    });
                 });
                 /*推送总部*/
                 if (CollUtil.isNotEmpty(warnRecordList)) {

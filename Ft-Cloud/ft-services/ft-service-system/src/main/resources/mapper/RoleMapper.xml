@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<collection  property="mistyMenuIds"  column="{roleId=role_id,menuCheckStrictly=menu_check_strictly}" select="com.hhwy.system.core.mapper.SysMenuMapper.selectMistyMenuIdListByRoleId" />
 		<collection  property="deptIds"       column="{roleId=role_id,deptCheckStrictly=dept_check_strictly}" select="com.hhwy.system.core.mapper.SysDeptMapper.selectDeptIdListByRoleId" />-->
 	</resultMap>
-	
+
     <select id="selectRoleList" resultMap="SysRoleResult">
 		select distinct r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.menu_check_strictly, r.dept_check_strictly,
 			r.status, r.del_flag, r.create_time, r.remark, r.pt_var_1, r.pt_var_2, r.pt_var_3, r.pt_var_4, r.pt_var_5
@@ -36,6 +36,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where r.del_flag = '0'
 		<if test="role.roleName != null and role.roleName != ''">
 			AND r.role_name like concat('%', #{role.roleName}, '%')
+		</if>
+		<if test="role.roleId != null">
+			AND r.role_id = #{role.roleId}
 		</if>
 		<if test="role.status != null and role.status != ''">
 			AND r.status = #{role.status}
@@ -82,7 +85,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from  sys_user_role
 		where  user_id=#{userId} and role_id =#{roleId} and  tenant_key=#{tenantKey}
 	</select>
+	<delete id="deleteRoleUserExit">
+		delete
+		from `sys_user_role`
+		where `role_id` = #{roleId} and tenant_key=#{tenantKey}
+	</delete>
 
 
 
-</mapper> 
+</mapper>

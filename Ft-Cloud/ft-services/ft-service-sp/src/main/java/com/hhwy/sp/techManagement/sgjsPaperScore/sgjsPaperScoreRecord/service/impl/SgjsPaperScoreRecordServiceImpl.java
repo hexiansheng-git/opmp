@@ -137,25 +137,23 @@ public class SgjsPaperScoreRecordServiceImpl implements ISgjsPaperScoreRecordSer
         }
         //改主表平均分
         SgjsPaperScore sgjsPaperScore = new SgjsPaperScore();
-//        if (CollUtil.isEmpty(collect)) {
-//            //所有专家评分完成，则结束
-//            sgjsPaperScore.setTaskStatus("2");
-//        }
+        if (CollUtil.isEmpty(collect)) {
+            //所有专家评分完成，则结束
+            sgjsPaperScore.setTaskStatus("2");
+        }
         sgjsPaperScore.setId(sgjsPaperScoreRecord.getForeignId());
         sgjsPaperScore.setAverageScore((int)averagingInt);
         sgjsPaperScoreService.updateSgjsPaperScore(sgjsPaperScore);
         //数据同步总部
-        Map<String, Object> map = new HashMap<>();
-//        ArrayList<SgjsPaperScoreRecord> objects1 = new ArrayList<>();
-//        objects1.add(sgjsPaperScoreRecord);
-        map.put("paperScoreRecord", sgjsPaperScoreRecordList);
         SgjsPaperScore sgjsPaperScore1 = new SgjsPaperScore();
         sgjsPaperScore1.setId(sgjsPaperScoreRecord.getForeignId());
         ArrayList<SgjsPaperScore> objects2 = new ArrayList<>();
         objects2.add(sgjsPaperScoreService.getSgjsPaperScore(sgjsPaperScore1));
+        Map<String, Object> map = new HashMap<>();
         map.put("paperScore", objects2);
-        rocketMQTemplate.convertAndSend("gm_sgjs_paper_score:tenantSuccess", map);
-        log.info("论文评分 数据同步总部：{}", JSON.toJSONString(map));
+        map.put("paperScoreRecord", sgjsPaperScoreRecordList);
+        rocketMQTemplate.convertAndSend("gm_sgjs_paper_score:tenantSuccess", JSON.toJSONString(map));
+        log.info("论文评分 数据同步 项目->总部：{}", JSON.toJSONString(map));
         return 1;
     }
 

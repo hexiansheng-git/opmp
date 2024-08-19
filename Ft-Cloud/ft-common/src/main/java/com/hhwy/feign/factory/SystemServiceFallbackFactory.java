@@ -126,6 +126,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             }
 
             @Override
+            public AjaxResult addWarnListNonGm(List<TWarn> tWarn) {
+                return AjaxResult.error("请求失败:",throwable.getMessage());
+            }
+
+            @Override
             public AjaxResult insertTWarnList(List<TWarn> tWarnListParam) {
                 return AjaxResult.error("请求失败:",throwable.getMessage());
             }

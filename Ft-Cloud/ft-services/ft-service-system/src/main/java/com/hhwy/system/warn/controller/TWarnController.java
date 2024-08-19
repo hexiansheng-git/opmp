@@ -60,7 +60,7 @@ public class TWarnController extends BaseController {
         params.put("userName", SecurityUtils.getUserName());
         Long userId = SecurityUtils.getUserId();
         String tenantKey = SecurityUtils.getTenantKey();
-        List<SysRole> sysRoles = roleMapper.selectRoleListByUserId(userId, tenantKey, Collections.singletonList("master"));
+        List<SysRole> sysRoles = roleMapper.selectRoleListByUserId(userId, tenantKey, Collections.singletonList("master"),Collections.singletonList(tenantKey));
         String roleKeys = sysRoles.stream().map(SysRole::getRoleKey).collect(Collectors.joining(","));
         params.put("roleKeys",roleKeys);
         warn.setParams(params);
@@ -108,6 +108,16 @@ public class TWarnController extends BaseController {
     @PostMapping("/addWarnNonGm")
     public AjaxResult addWarnNonGm(@Validated(ValidationGroups.Save.class) @RequestBody TWarn tWarn) {
         return toAjax(tWarnService.addWarnNonGm(tWarn));
+    }
+
+    /**
+     * 发送预警List 不推送总部
+     * @param tWarn
+     * @return
+     */
+    @PostMapping("/addWarnListNonGm")
+    public AjaxResult addWarnListNonGm(@Validated(ValidationGroups.Save.class) @RequestBody List<TWarn> tWarn) {
+        return toAjax(tWarnService.addWarnListNonGm(tWarn));
     }
 
     @PostMapping("/addWarn1")
@@ -187,7 +197,7 @@ public class TWarnController extends BaseController {
     public AjaxResult selectByRole(@RequestParam String[] roleKeyList, @RequestParam(value = "tenantKey", required = false) String tenantKey){
         return AjaxResult.success(tWarnService.selectByRoleKeyList1(roleKeyList, tenantKey));
     }
-    
+
     @GetMapping("/pushWarn/{id}")
     public AjaxResult pushWarn(@PathVariable("id") Long mainId) {
         if(!SecurityUtils.getSysUser().isAdmin())
