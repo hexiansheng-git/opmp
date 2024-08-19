@@ -673,4 +673,8 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         log.info("施工方案编制预警完了");
     }
 
+    @Override
+    public void exportSuggestion(Long id) {
+        
+    }
 }

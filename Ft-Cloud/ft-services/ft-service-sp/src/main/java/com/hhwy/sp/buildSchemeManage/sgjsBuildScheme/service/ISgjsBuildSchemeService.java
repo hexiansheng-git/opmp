@@ -40,4 +40,6 @@ public interface ISgjsBuildSchemeService {
     void doSendGm(String tenantKey, String admin);
 
     void sendProcessCompleteNotice(Long id, String isPass);
+    
+    void exportSuggestion(Long id);
 }

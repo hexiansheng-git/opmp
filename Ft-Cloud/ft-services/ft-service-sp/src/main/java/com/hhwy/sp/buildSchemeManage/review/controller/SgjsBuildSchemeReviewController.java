@@ -8,6 +8,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.feign.service.FlowServiceApi;
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewDetailQueryVo;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewOpinionRecordVo;
@@ -47,6 +48,8 @@ public class SgjsBuildSchemeReviewController extends BaseController {
     private ISgjsBuildSchemeReviewService sgjsBuildSchemeReviewService;
     @Autowired
     private SystemApiService systemApiService;
+    @Autowired
+    private FlowServiceApi flowServiceApi;
 
     /**
      * 台账
@@ -235,5 +238,15 @@ public class SgjsBuildSchemeReviewController extends BaseController {
     public AjaxResult deleteById(Long id){
         sgjsBuildSchemeReviewService.deleteById(id);
         return AjaxResult.success("删除成功！");
+    }
+    
+    @PostMapping("/transferTask")
+    @CustomLogger(title = "施工技术-施工方案管理-施工方案评审", name = "转办" ,businessType = CustomBusinessType.DELETE)
+    public AjaxResult transferTask(Map map) {
+        String taskId = ObjectUtils.nvlString("taskId");
+        String username = ObjectUtils.nvlString("username");
+        String nickName = ObjectUtils.nvlString("nickName");
+        sgjsBuildSchemeReviewService.transferTask(taskId, username, nickName);
+        return AjaxResult.success();
     }
 }

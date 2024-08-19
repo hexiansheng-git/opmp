@@ -56,6 +56,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.ResourceUtils;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -1263,5 +1264,31 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             throw new RuntimeException(resultObj.get("msg")+"");
         }
         return ObjectUtils.nvlString(resultObj.get("data")).equals("1");
+    }
+
+    @Override
+    @Transactional
+    public void transferTask(String taskId, String username,String nickName) {
+        AjaxResult result = flowServiceApi.taskInfoDetail(taskId);
+        Assert.isTrue(AjaxResult.isSuccess(result) ,"获取流程信息失败");
+        TaskResourceNew taskResourceNew = JSONObject.parseObject(JSONObject.toJSONString(result.getData()), TaskResourceNew.class) ;
+        Set<String> areaMarkSet = new HashSet<>(Arrays.asList("3","4"));
+        Set<String> haiwaiMarkSet = new HashSet<>(Arrays.asList("5","6"));
+        List<String> nodeMarkList = taskResourceNew.getCustomProperties().get("flowNodeMark");
+        int type = 0;
+        for (int i = 0; i < nodeMarkList.size(); i++) {
+            if(areaMarkSet.contains(nodeMarkList.get(i))){
+               type = 1;
+               break;
+            } 
+            if( haiwaiMarkSet.contains(nodeMarkList.get(i)) ){
+               type = 2;
+               break;
+            }
+        }
+        if(type == 0)  //非海外事业部、区域中心审批节点
+            return ;
+        Long reviewId = Long.valueOf(taskResourceNew.getBusinessKey());
+        this.sgjsBuildSchemeReviewMapper.updateStaffUser(username,nickName,reviewId,type+"");
     }
 }

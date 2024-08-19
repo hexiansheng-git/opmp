@@ -75,4 +75,13 @@ public interface ISgjsBuildSchemeReviewService {
     void deleteById(Long id);
     
     <T> void formatSchemeType(List<T> list, Function<T,String> function, BiFunction<T,String,String> setValFunc);
+
+    /**
+     * 流程转办给其他人
+     * 如果是
+     * @param taskId
+     * @param username
+     * @param nickName
+     */
+    void transferTask(String taskId,String username,String nickName);
 }

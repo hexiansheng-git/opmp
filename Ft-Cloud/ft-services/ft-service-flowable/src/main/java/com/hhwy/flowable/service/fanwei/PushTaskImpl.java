@@ -1,11 +1,13 @@
 package com.hhwy.flowable.service.fanwei;
 
 import cn.hutool.core.codec.Base64;
+import cn.hutool.core.lang.hash.MurmurHash;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.nacos.common.utils.MD5Utils;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -21,6 +23,7 @@ import com.hhwy.flowable.feign.service.SpServiceApi;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import liquibase.pro.packaged.I;
+import liquibase.util.MD5Util;
 import org.apache.commons.collections4.CollectionUtils;
 import org.flowable.engine.HistoryService;
 import org.flowable.engine.history.HistoricProcessInstance;
@@ -321,7 +324,12 @@ public class PushTaskImpl  implements TaskProcessor {
         String businessId = actBusiness.getBusinessId();
 
         map.put("syscode","PM");
-        map.put("flowid",processInstanceId);
+        //flowId 处理
+        if(task.getProcessDefinitionId().startsWith("sgjs_build_scheme_review")){
+            map.put("flowid",processInstanceId+ MD5Utils.md5Hex(taskDefinitionKey, "utf-8") );
+        }else{
+            map.put("flowid",processInstanceId);
+        }
         map.put("requestname","【海外项管】"+processName);
 
         if(taskDefinitionKey=="userTask_96903e32d5e04d6dac21461c4e08b107"){

@@ -3,6 +3,7 @@ package com.hhwy.sp.buildSchemeManage.review.mapper;
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
 import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewQueryVo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -44,4 +45,8 @@ public interface SgjsBuildSchemeReviewMapper {
     void dismissedSchemeReview(@Param("id") Long id);
 
     void deleteById(@Param("id") Long id);
+    
+    @Update("update sgjs_build_scheme_review_staff set review_staff_name = #{nickName},review_staff_id=#{userName} where review_id=#{reviewId} and flow_node_mark=#{type}")
+    int updateStaffUser(@Param("userName") String userName,@Param("nickName") String nickName,
+                        @Param("reviewId") Long reviewId,@Param("type") String type);
 }
