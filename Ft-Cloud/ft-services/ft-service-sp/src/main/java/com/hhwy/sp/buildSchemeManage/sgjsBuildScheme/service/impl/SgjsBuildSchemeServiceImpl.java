@@ -639,7 +639,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 List<TWarn> tWarnList = new ArrayList<>();
                 todoWarnList.forEach(p -> {
                     TWarn tWarn = new TWarn();
-                    tWarn.setWarnItem("");
+                    tWarn.setWarnItem("施工方案评审");
                     tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_LIST.getWarnItemId());
                     tWarn.setWarnScope(userNames);
                     tWarn.setWarnUrl(schemeListUrl);

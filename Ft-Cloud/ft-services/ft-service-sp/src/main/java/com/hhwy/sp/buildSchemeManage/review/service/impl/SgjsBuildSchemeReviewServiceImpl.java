@@ -1188,7 +1188,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     Long relationId = IdWorker.createId();
                     //预警消息组装
                     TWarn tWarn = new TWarn();
-                    tWarn.setWarnItem("");
+                    tWarn.setWarnItem("施工方案评审");
                     tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_REVIEW.getWarnItemId());
                     tWarn.setWarnScope(user.getUserName());
                     tWarn.setWarnUrl(schemeReviewUrl);
