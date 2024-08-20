@@ -7,6 +7,8 @@ import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewQueryVo;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import org.apache.poi.ss.formula.functions.T;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -84,4 +86,6 @@ public interface ISgjsBuildSchemeReviewService {
      * @param nickName
      */
     void transferTask(String taskId,String username,String nickName);
+
+    SgjsBuildSchemeReview exportSuggestion(HttpServletResponse response,BuildSchemeReviewDetailQueryVo detailQueryVo) throws IOException;
 }

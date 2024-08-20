@@ -3,6 +3,7 @@ package com.hhwy.sp.buildSchemeManage.review.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.utils.file.FileUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -28,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -249,4 +251,20 @@ public class SgjsBuildSchemeReviewController extends BaseController {
         sgjsBuildSchemeReviewService.transferTask(taskId, username, nickName);
         return AjaxResult.success();
     }
+
+    /**
+     * 导出意见
+     * @param response
+     * @throws IOException
+     */
+    @GetMapping("/exportSuggestion")
+    public void export(HttpServletResponse response, HttpServletRequest request, BuildSchemeReviewDetailQueryVo detailQueryVo) throws IOException {
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("multipart/form-data");
+        SgjsBuildSchemeReview review = sgjsBuildSchemeReviewService.exportSuggestion(response, detailQueryVo);
+        response.setHeader("Content-Disposition", "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, review.getSchemeName()+".xls"));
+        
+    }
 }
+
+                                   

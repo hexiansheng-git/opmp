@@ -21,6 +21,7 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
+import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewDetailQueryVo;
 import com.hhwy.sp.buildSchemeManage.review.service.ISgjsBuildSchemeReviewService;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsWarnConfig;
@@ -684,8 +685,4 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         log.info("施工方案编制预警完了");
     }
 
-    @Override
-    public void exportSuggestion(Long id) {
-        
-    }
 }

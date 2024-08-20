@@ -1,5 +1,6 @@
 package com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service;
 
+import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewDetailQueryVo;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
 
 import java.util.List;
@@ -41,5 +42,5 @@ public interface ISgjsBuildSchemeService {
 
     void sendProcessCompleteNotice(Long id, String isPass);
     
-    void exportSuggestion(Long id);
+    
 }

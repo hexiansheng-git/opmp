@@ -5,6 +5,15 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.write.handler.RowWriteHandler;
+import com.alibaba.excel.write.handler.SheetWriteHandler;
+import com.alibaba.excel.write.handler.WorkbookWriteHandler;
+import com.alibaba.excel.write.handler.context.WorkbookWriteHandlerContext;
+import com.alibaba.excel.write.merge.LoopMergeStrategy;
+import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
+import com.alibaba.excel.write.metadata.holder.WriteTableHolder;
+import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -47,6 +56,8 @@ import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,6 +66,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.ResourceUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -1300,5 +1313,64 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             return ;
         Long reviewId = Long.valueOf(taskResourceNew.getBusinessKey());
         this.sgjsBuildSchemeReviewMapper.updateStaffUser(username,nickName,reviewId,type+"");
+    }
+
+    @Override
+    public SgjsBuildSchemeReview exportSuggestion(HttpServletResponse response, BuildSchemeReviewDetailQueryVo detailQueryVo) throws IOException {
+        SgjsBuildSchemeReview review = this.getDetail(detailQueryVo);
+        BuildSchemeReviewOpinionVo reviewOpinionVo = review.getReviewOpinionVo();
+        List<BuildSchemeStaffOpinionGatherVo> list = reviewOpinionVo.getGatherVoList();
+        list = list==null?new ArrayList<>():list;
+        int count = list.size();
+        for (int i = 0; i < list.size(); i++) {
+            BuildSchemeStaffOpinionGatherVo temp = list.get(i);
+            temp.setReviewOpinionStr(StringUtils.join(temp.getReviewOpinionList(),"\n"));
+        }
+        //1：通过  2：修改后通过  3：不通过
+        Map<String,String> opionDictMap = ObjectUtils.toMap(String.class, "1","通过","2","修改后通过","3","不通过");
+        //方案总得分
+        BuildSchemeStaffOpinionGatherVo vo = new BuildSchemeStaffOpinionGatherVo();
+        vo.setReviewStaffName("方案总得分");
+        vo.setStaffType(reviewOpinionVo.getScore()+"");
+        list.add(vo);
+        //区域中心审核结果
+        String regionOpinion = opionDictMap.get(reviewOpinionVo.getRegionChiefOpinion());
+        regionOpinion = opionDictMap.get(ObjectUtils.nvlString(regionOpinion,""));
+        BuildSchemeStaffOpinionGatherVo vo1 = new BuildSchemeStaffOpinionGatherVo();
+        vo1.setReviewStaffName("区域中心审核结果");
+        vo1.setStaffType(regionOpinion);
+        list.add(vo1);
+        //区域中心总工意见
+        BuildSchemeStaffOpinionGatherVo vo2 = new BuildSchemeStaffOpinionGatherVo();
+        vo2.setReviewStaffName("区域中心总工意见");
+        vo2.setStaffType(reviewOpinionVo.getRegionChiefDetailOpinion());
+        list.add(vo2);
+        //海外事业部审核结果
+        String overOpinion = opionDictMap.get(reviewOpinionVo.getOverseasChiefOpinion());
+        overOpinion = opionDictMap.get(ObjectUtils.nvlString(overOpinion,""));
+        BuildSchemeStaffOpinionGatherVo vo3 = new BuildSchemeStaffOpinionGatherVo();
+        vo3.setReviewStaffName("海外事业部审核结果");
+        vo3.setStaffType(overOpinion);
+        list.add(vo3);
+        //海外事业部总工意见
+        BuildSchemeStaffOpinionGatherVo vo4 = new BuildSchemeStaffOpinionGatherVo();
+        vo4.setReviewStaffName("海外事业部总工意见");
+        vo4.setStaffType(reviewOpinionVo.getOverseasChiefDetailOpinion());
+        list.add(vo4);
+        EasyExcel.write(response.getOutputStream())
+                .head(BuildSchemeStaffOpinionGatherVo.class)
+            .registerWriteHandler(new RowWriteHandler() {
+                @Override
+                public void afterRowDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, 
+                            Row row, Integer relativeRowIndex, Boolean isHead) {
+                     if(row.getRowNum() < count+1)
+                         return;
+                    CellRangeAddress addr1 = new CellRangeAddress(row.getRowNum(), row.getRowNum(), 1, 4);
+                    writeSheetHolder.getSheet().addMergedRegionUnsafe(addr1);
+                }
+            })
+            .sheet("意见")
+            .doWrite(list);
+        return review;        
     }
 }
