@@ -90,7 +90,8 @@ public class WarnPushMenHu {
                 paramMap.put("sysType",sysType);     //系统标识
                 paramMap.put("contentType","5");         //消息类型
                 paramMap.put("sysModel",warn.getWarnItem());     //业务系统特定模块
-                paramMap.put("title",String.format("项管信息提醒,【%s】%s",warn.getWarnItem(),warn.getWarnContent()));
+//                paramMap.put("title",String.format("项管信息提醒,【%s】%s",warn.getWarnItem(),warn.getWarnContent()));
+                paramMap.put("title",String.format("【海外项管预警提醒】,%s", warn.getWarnContent()));
                 paramMap.put("doType","0");              //3:已阅
                 paramMap.put("createdTime",createTime);
                 paramMap.put("writeTime",createTime);
