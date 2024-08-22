@@ -1,5 +1,8 @@
 package com.hhwy.sp.buildSchemeManage.review.domain.vo;
 
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.common.core.annotation.Excel;
@@ -18,6 +21,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ExcelIgnoreUnannotated
+@ColumnWidth(20)
 public class BuildSchemeStaffOpinionGatherVo {
     private static final long serialVersionUID = 1L;
 
@@ -26,6 +31,7 @@ public class BuildSchemeStaffOpinionGatherVo {
      */
     @JsonProperty
     @Excel(name = "评审人员")
+    @ExcelProperty("评审人员")
     private String reviewStaffName;
     /**
      * 字段描述：评审人员id
@@ -38,6 +44,7 @@ public class BuildSchemeStaffOpinionGatherVo {
      */
     @JsonProperty
     @Excel(name = "角色  - 评审人员类型  （1：专家  2：部门）")
+    @ExcelProperty("角色")
     private String staffType;
     /**
      * 字段描述：意见
@@ -45,6 +52,10 @@ public class BuildSchemeStaffOpinionGatherVo {
     @JsonProperty
     @Excel(name = "意见")
     private List<String> reviewOpinionList;
+
+    @ExcelProperty("意见")
+    private String reviewOpinionStr; 
+    
     /**
      * 字段描述：附件组id
      */
@@ -56,6 +67,7 @@ public class BuildSchemeStaffOpinionGatherVo {
      */
     @JsonProperty
     @Excel(name = "方案得分")
+    @ExcelProperty("专家评分")
     private Double score;
     /**
      * 字段描述：提交时间
@@ -63,6 +75,7 @@ public class BuildSchemeStaffOpinionGatherVo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
     @Excel(name = "提交时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @ExcelProperty("提交时间")
     private Date submitTime;
     /**
      * 字段描述：修改结果

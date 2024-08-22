@@ -21,6 +21,7 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.buildSchemeManage.review.domain.SgjsBuildSchemeReview;
+import com.hhwy.sp.buildSchemeManage.review.domain.vo.BuildSchemeReviewDetailQueryVo;
 import com.hhwy.sp.buildSchemeManage.review.service.ISgjsBuildSchemeReviewService;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsWarnConfig;
@@ -639,7 +640,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 List<TWarn> tWarnList = new ArrayList<>();
                 todoWarnList.forEach(p -> {
                     TWarn tWarn = new TWarn();
-                    tWarn.setWarnItem("");
+                    tWarn.setWarnItem("施工方案评审");
                     tWarn.setWarnItemId(WarnItem.SGJS_BUILD_SCHEME_LIST.getWarnItemId());
                     tWarn.setWarnScope(userNames);
                     tWarn.setWarnUrl(schemeListUrl);
