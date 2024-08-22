@@ -243,11 +243,11 @@ public class SgjsBuildSchemeReviewController extends BaseController {
     }
     
     @PostMapping("/transferTask")
-    @CustomLogger(title = "施工技术-施工方案管理-施工方案评审", name = "转办" ,businessType = CustomBusinessType.DELETE)
-    public AjaxResult transferTask(Map map) {
-        String taskId = ObjectUtils.nvlString("taskId");
-        String username = ObjectUtils.nvlString("username");
-        String nickName = ObjectUtils.nvlString("nickName");
+    @CustomLogger(title = "施工技术-施工方案管理-施工方案评审", name = "转办" ,businessType = CustomBusinessType.OTHER)
+    public AjaxResult transferTask(@RequestBody SgjsBuildSchemeReview review ) {
+        String taskId = review.getTaskId();
+        String username = review.getUserName();
+        String nickName = review.getNickName();
         sgjsBuildSchemeReviewService.transferTask(taskId, username, nickName);
         return AjaxResult.success();
     }
