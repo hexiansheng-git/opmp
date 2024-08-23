@@ -37,6 +37,7 @@ public class SgjsBuildSchemeReview extends CommonBaseEntity {
     /*用户名  测试用*/
     @JsonProperty
     private String userName;
+    private String nickName;
     /**
      * 字段描述：主键id
      */

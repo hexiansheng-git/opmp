@@ -1355,7 +1355,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         list.add(vo2);
         //海外事业部审核结果
         String overOpinion = opionDictMap.get(reviewOpinionVo.getOverseasChiefOpinion());
-        overOpinion = opionDictMap.get(ObjectUtils.nvlString(overOpinion,""));
+        overOpinion = ObjectUtils.nvlString(overOpinion,"");
         BuildSchemeStaffOpinionGatherVo vo3 = new BuildSchemeStaffOpinionGatherVo();
         vo3.setReviewStaffName("海外事业部审核结果");
         vo3.setStaffType(overOpinion);
