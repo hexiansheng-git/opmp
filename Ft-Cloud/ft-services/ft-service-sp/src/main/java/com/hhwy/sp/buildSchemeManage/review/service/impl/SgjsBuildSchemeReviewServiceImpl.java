@@ -54,6 +54,7 @@ import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.*;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
+import io.jsonwebtoken.lang.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.Row;
@@ -225,7 +226,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             //查看
             String uname = SecurityUtils.getUserName();
             if(StringUtils.equals(review.getTaskStatus(),TaskStatus.COMPLETED.getCode())
-                || SecurityUtils.getSysUser().isAdmin() || isLeader()) //已结束、管理员、总部版领导角色
+                || SecurityUtils.getSysUser().isAdmin() || isLeader() || "1".equals(review.getIsFirstNode())) //已结束、管理员、总部版领导角色，发起人
 //            boolean s = SecurityUtils.getSysUser().isAdmin() || isLeader();
 //            if(s || StringUtils.equals(review.getTaskStatus(),TaskStatus.COMPLETED.getCode())
                 uname = null;
@@ -286,7 +287,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             }
             //驳回到发起人节点后，可以看到所有意见
             if(StringUtils.equals(review.getIsFirstNode(),"1")){ 
-                BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id,null,null);
+                    BuildSchemeReviewOpinionVo reviewOpinionVo = this.getReviewOpinionVo(id,null,null);
                 review.setScore(reviewOpinionVo.getScore());
                 review.setReviewOpinionVo(reviewOpinionVo);
             }
@@ -1324,7 +1325,14 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         int count = list.size();
         for (int i = 0; i < list.size(); i++) {
             BuildSchemeStaffOpinionGatherVo temp = list.get(i);
+            for (int j = 0; j < temp.getReviewOpinionList().size(); j++) {
+                String str = temp.getReviewOpinionList().get(j);
+                str+=j+"、"+str;
+            }
             temp.setReviewOpinionStr(StringUtils.join(temp.getReviewOpinionList(),"\n"));
+            String type = StringUtils.equals(temp.getStaffType(),"1")?"专家":"部门";
+            String staffType = ObjectUtils.nvlString(temp.getRolePrefix())+type+ObjectUtils.nvlString(temp.getRoleSuffix());
+            temp.setStaffType(staffType);
         }
         //1：通过  2：修改后通过  3：不通过
         Map<String,String> opionDictMap = ObjectUtils.toMap(String.class, "1","通过","2","修改后通过","3","不通过");
@@ -1335,7 +1343,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         list.add(vo);
         //区域中心审核结果
         String regionOpinion = opionDictMap.get(reviewOpinionVo.getRegionChiefOpinion());
-        regionOpinion = opionDictMap.get(ObjectUtils.nvlString(regionOpinion,""));
+            regionOpinion = ObjectUtils.nvlString(regionOpinion,"");
         BuildSchemeStaffOpinionGatherVo vo1 = new BuildSchemeStaffOpinionGatherVo();
         vo1.setReviewStaffName("区域中心审核结果");
         vo1.setStaffType(regionOpinion);

@@ -123,11 +123,14 @@ public class SgjsMixRatioManageServiceImpl implements ISgjsMixRatioManageService
     public void deleteSgjsMixRatioManage(Long id) {
         SgjsMixRatioManage sgjsMixRatioManage = new SgjsMixRatioManage();
         sgjsMixRatioManage.setId(id);
+        sgjsMixRatioManage.setDelFlag("1");
         sgjsMixRatioManageMapper.deleteSgjsMixRatioManage(sgjsMixRatioManage);
 
         sgjsMixRatioManageMaterialMapper.deleteByForeignId(id);
         sgjsMixRatioManageMapper.deleteStaff(id);
         sgjsMixRatioManageMapper.deleteStaffRecord(id);
+        //推送到总部版
+        sysSyncInfoService4Sp.pushSgjsMixRatioManage(sgjsMixRatioManage);
     }
 
     @Transactional
