@@ -1082,7 +1082,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         if(StringUtils.equals(review.getSchemeLevel(),"4"))
             opinion = reviewOpinionVo.getRegionChiefOpinion();
         //项目名称-方案名称审批结果
-        String warnContent = String.format("[项管系统],%s-%s%s",
+        String warnContent = String.format("%s-%s%s",
                 tWarn.getProjectName(),review.getSchemeName(),StringUtils.equals(opinion,"3")?"审批未通过":"审批通过");
         tWarn.setWarnContent(warnContent);            
         tWarn.setTenantKey(SecurityUtils.getTenantKey());
