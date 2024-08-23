@@ -1335,7 +1335,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         list.add(vo);
         //区域中心审核结果
         String regionOpinion = opionDictMap.get(reviewOpinionVo.getRegionChiefOpinion());
-        regionOpinion = opionDictMap.get(ObjectUtils.nvlString(regionOpinion,""));
+        regionOpinion = ObjectUtils.nvlString(regionOpinion,"");
         BuildSchemeStaffOpinionGatherVo vo1 = new BuildSchemeStaffOpinionGatherVo();
         vo1.setReviewStaffName("区域中心审核结果");
         vo1.setStaffType(regionOpinion);
@@ -1347,7 +1347,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         list.add(vo2);
         //海外事业部审核结果
         String overOpinion = opionDictMap.get(reviewOpinionVo.getOverseasChiefOpinion());
-        overOpinion = opionDictMap.get(ObjectUtils.nvlString(overOpinion,""));
+        overOpinion = ObjectUtils.nvlString(overOpinion,"");
         BuildSchemeStaffOpinionGatherVo vo3 = new BuildSchemeStaffOpinionGatherVo();
         vo3.setReviewStaffName("海外事业部审核结果");
         vo3.setStaffType(overOpinion);
