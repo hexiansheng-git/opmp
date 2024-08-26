@@ -10,6 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.common.utils.MD5Utils;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.log.SysSyncLog;
 import com.hhwy.feign.service.ILogServiceApi;
@@ -33,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.remoting.jaxws.AbstractJaxWsServiceExporter;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.RemoteEndpoint;
@@ -324,18 +326,24 @@ public class PushTaskImpl  implements TaskProcessor {
         String businessId = actBusiness.getBusinessId();
 
         map.put("syscode","PM");
-        //flowId 处理
-        if(task.getProcessDefinitionId().startsWith("sgjs_build_scheme_review")){
-            map.put("flowid",processInstanceId+ MD5Utils.md5Hex(taskDefinitionKey, "utf-8") );
-        }else{
-            map.put("flowid",processInstanceId);
-        }
         map.put("requestname","【海外项管】"+processName);
 
         if(taskDefinitionKey=="userTask_96903e32d5e04d6dac21461c4e08b107"){
             String tenantName = SecurityUtils.getSysUser().getTenant().getTenantName();
             map.put("requestname","【海外项管】"+"项目WBS管理："+tenantName+"项目编号"+tenantKey+"没有绑定p6，请领导绑定");
         }
+        //flowId 处理
+        if(task.getProcessDefinitionId().startsWith("sgjs_build_scheme_review")){ 
+            map.put("flowid",processInstanceId+ MD5Utils.md5Hex(taskDefinitionKey, "utf-8") );
+            AjaxResult ajaxResult = spServiceApi.getBuildReviewNameById(Long.valueOf(businessId));
+            if(ObjectUtils.isBlank(ajaxResult.getData()))
+                log.info("未能获取到施工方案评审的名称，租户:{},id:{},返回:{}",tenantKey,businessId,JSONObject.toJSONString(ajaxResult));
+            map.put("requestname",String.format("【海外项管】%s施工方案评审-%s", ObjectUtils.nvlString(ajaxResult.getData())
+                    ,SecurityUtils.getSysUser().getTenant().getTenantName()));
+        }else{
+            map.put("flowid",processInstanceId);
+        }
+        
         String urlToken = (pageRoute.contains("?")?"&":"?");
         map.put("workflowname","工作流程");
         map.put("nodename",taskTame);

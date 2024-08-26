@@ -263,7 +263,17 @@ public class SgjsBuildSchemeReviewController extends BaseController {
         response.setContentType("multipart/form-data");
         SgjsBuildSchemeReview review = sgjsBuildSchemeReviewService.exportSuggestion(response, detailQueryVo);
         response.setHeader("Content-Disposition", "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, review.getSchemeName()+".xls"));
-        
+    }
+
+    @GetMapping("/getNameById")
+    public AjaxResult getNameById(@RequestParam Long id) {
+        SgjsBuildSchemeReview query = new SgjsBuildSchemeReview();
+        query.setId(id);
+        SgjsBuildSchemeReview review = this.sgjsBuildSchemeReviewService.getSgjsBuildSchemeReview(query);
+        String name = "";
+        if(review!=null)
+            name = review.getSchemeName();
+        return AjaxResult.success("",name);
     }
 }
 

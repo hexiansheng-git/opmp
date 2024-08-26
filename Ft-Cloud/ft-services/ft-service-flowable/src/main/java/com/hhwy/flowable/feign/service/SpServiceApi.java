@@ -95,6 +95,9 @@ public interface SpServiceApi {
     @GetMapping("/sgjsBuildSchemeReview/deleteProcess")
     AjaxResult updateBuildSchemeReviewProcess2Init(@RequestParam("id") Long id);
 
+    @GetMapping("/sgjsBuildSchemeReview/getNameById")
+    AjaxResult getBuildReviewNameById(@RequestParam("id") Long id);
+
     @RequestMapping(value = "/designChangeList/listener", method = RequestMethod.POST)
     AjaxResult designChangeListListener(@RequestParam("id") Long id);
 
