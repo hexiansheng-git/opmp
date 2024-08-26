@@ -12,11 +12,13 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsBuildScheme;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.service.ISgjsBuildSchemeService;
+import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeAdjustList;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeList;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.domain.SgjsBuildSchemeRiskList;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildSchemeList.service.ISgjsBuildSchemeListService;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.techManagement.sgjsTechnicalNormalTopic.domain.EasyExcelListener;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -142,8 +146,22 @@ public class SgjsBuildSchemeListController extends BaseController {
             //未发起审批和未审批完成的 只展示本次调整的
             sgjsBuildSchemeListList = sgjsBuildSchemeListList.stream().filter(p -> StrUtil.isNotBlank(p.getPtVar3()) && p.getPtVar3().equals("1")).collect(Collectors.toList());
         }
-        FtExcelUtil<SgjsBuildSchemeList> util = new FtExcelUtil<>(SgjsBuildSchemeList.class);
-        util.exportExcel(response, sgjsBuildSchemeListList, DateUtils.getDate());
+        Long foreignId1 = sgjsBuildSchemeListParam.getForeignId();
+        SgjsBuildScheme sgjsBuildScheme1 = new SgjsBuildScheme();
+        sgjsBuildScheme1.setId(foreignId1);
+        SgjsBuildScheme sgjsBuildScheme2 = sgjsBuildSchemeService.getSgjsBuildScheme(sgjsBuildScheme1);
+        if (sgjsBuildScheme2.getVersion().compareTo(BigDecimal.ONE) == 0) {
+            FtExcelUtil<SgjsBuildSchemeList> util = new FtExcelUtil<>(SgjsBuildSchemeList.class);
+            util.exportExcel(response, sgjsBuildSchemeListList, DateUtils.getDate());
+        }else {
+            FtExcelUtil<SgjsBuildSchemeAdjustList> util = new FtExcelUtil<>(SgjsBuildSchemeAdjustList.class);
+            List<SgjsBuildSchemeAdjustList> list = new ArrayList<>();
+            sgjsBuildSchemeListList.forEach(p -> {
+                list.add(BeanUtil.copyProperties(p, SgjsBuildSchemeAdjustList.class));
+            });
+            util.exportExcel(response, list, DateUtils.getDate());
+        }
+
     }
 
     //危大方案清单导出

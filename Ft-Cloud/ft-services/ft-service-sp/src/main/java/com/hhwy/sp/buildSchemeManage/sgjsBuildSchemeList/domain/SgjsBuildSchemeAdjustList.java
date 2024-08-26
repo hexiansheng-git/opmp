@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -17,11 +16,11 @@ import java.util.Date;
 /**
  * @author fushudong
  * @date 2024-03-19 15:57:37
- * @remark 方案清单实体
+ * @remark 方案清单-调整清单  与普通清单表头不同
  * sgjs_build_scheme_list
  */
 @Data
-public class SgjsBuildSchemeList extends BaseEntity {
+public class SgjsBuildSchemeAdjustList extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     private Integer serialNum;
@@ -109,12 +108,18 @@ public class SgjsBuildSchemeList extends BaseEntity {
     @NotBlank(message = "施工重难点不能为空",groups = {ValidationGroups.Save.class})
     private String buildDifficult;
     /**
+     * 字段描述：变更计划实施时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @JsonProperty
+    @FtExcel(name = "变更计划实施时间", dateFormat = "yyyy年MM月dd日")
+    private Date planImplementTimeChange;
+    /**
      * 字段描述：计划实施时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
-    @FtExcel(name = "计划实施时间", dateFormat = "yyyy年MM月dd日")
-//    @NotNull(message = "计划实施时间不能为空",groups = {ValidationGroups.Save.class})
+    @FtExcel(name = "原计划实施时间", dateFormat = "yyyy年MM月dd日")
     private Date planImplementTime;
     /**
      * 字段描述：计划编制完成时间
@@ -131,13 +136,6 @@ public class SgjsBuildSchemeList extends BaseEntity {
     @JsonProperty
 //    @FtExcel(name = "原计划实施时间", dateFormat = "yyyy-MM-dd")
     private Date planComplationTimeOrigin;
-    /**
-     * 字段描述：变更计划实施时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    @JsonProperty
-    @FtExcel(name = "变更计划实施时间", dateFormat = "yyyy年MM月dd日")
-    private Date planImplementTimeChange;
     /**
      * 字段描述：备注
      */

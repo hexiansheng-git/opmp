@@ -14,7 +14,8 @@ import java.util.Date;
 /**
  * @author fushudong
  * @date 2024-03-19 15:57:37
- * @remark sgjs_build_scheme_list
+ * @remark 方案清单-危大清单
+ * sgjs_build_scheme_list
  */
 @Data
 public class SgjsBuildSchemeRiskList implements Serializable {
