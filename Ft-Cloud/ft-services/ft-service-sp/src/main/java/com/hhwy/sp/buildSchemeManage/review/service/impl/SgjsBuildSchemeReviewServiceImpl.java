@@ -1313,7 +1313,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         if(type == 0)  //非海外事业部、区域中心审批节点
             return ;
         Long reviewId = Long.valueOf(taskResourceNew.getBusinessKey());
-        this.sgjsBuildSchemeReviewMapper.updateStaffUser(username,nickName,reviewId,type+"");
+        String sourceAssignee = taskResourceNew.getAssignee();
+        this.sgjsBuildSchemeReviewMapper.updateStaffUser(username,nickName,reviewId,type+"",sourceAssignee);
     }
 
     @Override
@@ -1325,6 +1326,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         int count = list.size();
         for (int i = 0; i < list.size(); i++) {
             BuildSchemeStaffOpinionGatherVo temp = list.get(i);
+            temp.setReviewOpinionList(temp.getReviewOpinionList()==null?new ArrayList<>(2):temp.getReviewOpinionList());
             for (int j = 0; j < temp.getReviewOpinionList().size(); j++) {
                 String str = temp.getReviewOpinionList().get(j);
                 str+=j+"、"+str;

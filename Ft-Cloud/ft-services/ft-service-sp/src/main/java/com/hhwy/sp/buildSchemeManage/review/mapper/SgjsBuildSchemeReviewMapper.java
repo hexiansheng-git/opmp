@@ -46,7 +46,7 @@ public interface SgjsBuildSchemeReviewMapper {
 
     void deleteById(@Param("id") Long id);
     
-    @Update("update sgjs_build_scheme_review_staff set review_staff_name = #{nickName},review_staff_id=#{userName} where review_id=#{reviewId} and flow_node_mark=#{type}")
+    @Update("update sgjs_build_scheme_review_staff set review_staff_name = #{nickName},review_staff_id=#{userName} where review_id=#{reviewId} and flow_node_mark=#{type} and review_staff_id = #{sourceUsername}")
     int updateStaffUser(@Param("userName") String userName,@Param("nickName") String nickName,
-                        @Param("reviewId") Long reviewId,@Param("type") String type);
+                        @Param("reviewId") Long reviewId,@Param("type") String type,@Param("sourceUsername") String sourceUsername);
 }
