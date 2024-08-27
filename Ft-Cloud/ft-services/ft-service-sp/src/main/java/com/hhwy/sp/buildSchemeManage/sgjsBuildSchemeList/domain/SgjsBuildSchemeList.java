@@ -136,7 +136,7 @@ public class SgjsBuildSchemeList extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
-    @FtExcel(name = "变更计划实施时间", dateFormat = "yyyy年MM月dd日")
+//    @FtExcel(name = "变更计划实施时间", dateFormat = "yyyy年MM月dd日")
     private Date planImplementTimeChange;
     /**
      * 字段描述：备注

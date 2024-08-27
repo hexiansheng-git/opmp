@@ -455,7 +455,13 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
             log.error("过滤流程审批记录异常，元数据：{}", flowHistoryInfo);
             return;
         }
-
+        //不同版本发送不同的消息
+        // V1.0版本  项目名称-施工方案清单评审  例如“埃塞MH三标-施工方案清单评审”
+        // V2.0及后续版本  项目名称-施工方案清单变更评审  例如“埃塞MH三标-施工方案清单变更评审”
+        SgjsBuildScheme sgjsBuildScheme = new SgjsBuildScheme();
+        sgjsBuildScheme.setId(id);
+        SgjsBuildScheme sgjsBuildScheme1 = sgjsBuildSchemeMapper.getSgjsBuildScheme(sgjsBuildScheme);
+        String warItem = sgjsBuildScheme1.getVersion().compareTo(BigDecimal.ONE) == 0 ? "施工方案清单评审":"施工方案清单变更评审";
         String userNames = collect.stream().map(key -> key.get("assignee")).distinct().collect(Collectors.joining(","));
         log.info("all ready 开始发送提醒消息!!!  userNames：{}", userNames);
         //发送预警
@@ -463,7 +469,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
         String projectCode = projectDto.getProjectCode();
         String projectName = projectDto.getProjectName();
         TWarn tWarn = new TWarn();
-        tWarn.setWarnItem(projectName + "-施工方案清单");
+        tWarn.setWarnItem(projectName + "-" + warItem);
         tWarn.setWarnItemId("sgjs_build_scheme");
         tWarn.setWarnScope(userNames);
         tWarn.setWarnUrl(schemeListProcEndUrl);
