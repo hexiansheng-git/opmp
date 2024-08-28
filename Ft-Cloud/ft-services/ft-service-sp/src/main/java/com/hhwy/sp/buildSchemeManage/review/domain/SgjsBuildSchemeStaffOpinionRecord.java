@@ -228,4 +228,9 @@ public class SgjsBuildSchemeStaffOpinionRecord extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    //角色前缀
+    private String rolePrefix;
+    //角色后缀
+    private String roleSuffix;
 }

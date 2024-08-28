@@ -429,6 +429,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 String[] fileGroupIdArr = fileGroupIdList.split(",");
                 staffOpinionRecord.setFileGroupIdList(Arrays.asList(fileGroupIdArr));
             }
+            staffOpinionRecord.setRolePrefix(staffOpinionRecord.getPtVar1());
+            staffOpinionRecord.setRoleSuffix(staffOpinionRecord.getPtVar2());
         }
         opinionRecord.setStaffOpinionRecordList(staffOpinionRecordList);
         return opinionRecord;
@@ -903,6 +905,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 staffOpinionRecord.setCreateTime(DateUtils.getNowDate());
                 staffOpinionRecord.setScore(staffOpinionGatherVo.getScore());
                 staffOpinionRecord.setSubmitTime(staffOpinionGatherVo.getSubmitTime());
+                staffOpinionRecord.setPtVar1(staffOpinionGatherVo.getRolePrefix());
+                staffOpinionRecord.setPtVar2(staffOpinionGatherVo.getRoleSuffix());
                 List<String> opinionList = staffOpinionGatherVo.getReviewOpinionList();
                 if(CollectionUtils.isNotEmpty(opinionList)){
                     String opinionStr = String.join("==>", opinionList);
