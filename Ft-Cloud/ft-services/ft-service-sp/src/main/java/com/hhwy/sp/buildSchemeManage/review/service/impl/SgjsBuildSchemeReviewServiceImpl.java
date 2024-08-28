@@ -14,6 +14,8 @@ import com.alibaba.excel.write.merge.LoopMergeStrategy;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteTableHolder;
 import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
+import com.alibaba.excel.write.metadata.style.WriteCellStyle;
+import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -57,7 +59,9 @@ import com.hhwy.utils.idworker.IdWorker;
 import io.jsonwebtoken.lang.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1331,11 +1335,12 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         for (int i = 0; i < list.size(); i++) {
             BuildSchemeStaffOpinionGatherVo temp = list.get(i);
             temp.setReviewOpinionList(temp.getReviewOpinionList()==null?new ArrayList<>(2):temp.getReviewOpinionList());
+            StringBuilder sb = new StringBuilder();
             for (int j = 0; j < temp.getReviewOpinionList().size(); j++) {
                 String str = temp.getReviewOpinionList().get(j);
-                str+=j+"、"+str;
+                sb.append((j+1)+"、"+str+"\n");
             }
-            temp.setReviewOpinionStr(StringUtils.join(temp.getReviewOpinionList(),"\n"));
+            temp.setReviewOpinionStr(sb.toString());
             String type = StringUtils.equals(temp.getStaffType(),"1")?"专家":"部门";
             String staffType = ObjectUtils.nvlString(temp.getRolePrefix())+type+ObjectUtils.nvlString(temp.getRoleSuffix());
             temp.setStaffType(staffType);
@@ -1371,20 +1376,30 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         vo4.setReviewStaffName("海外事业部总工意见");
         vo4.setStaffType(reviewOpinionVo.getOverseasChiefDetailOpinion());
         list.add(vo4);
+        //表头样式
+        WriteCellStyle headStyle = new WriteCellStyle();
+        headStyle.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        //身体样式
+        WriteCellStyle bodyStyle = new WriteCellStyle();
+        bodyStyle.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        bodyStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        bodyStyle.setWrapped(true);
+        
         EasyExcel.write(response.getOutputStream())
                 .head(BuildSchemeStaffOpinionGatherVo.class)
-            .registerWriteHandler(new RowWriteHandler() {
-                @Override
-                public void afterRowDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, 
-                            Row row, Integer relativeRowIndex, Boolean isHead) {
-                     if(row.getRowNum() < count+1)
-                         return;
-                    CellRangeAddress addr1 = new CellRangeAddress(row.getRowNum(), row.getRowNum(), 1, 4);
-                    writeSheetHolder.getSheet().addMergedRegionUnsafe(addr1);
-                }
-            })
-            .sheet("意见")
-            .doWrite(list);
+                .registerWriteHandler(new HorizontalCellStyleStrategy(headStyle,bodyStyle))
+                .registerWriteHandler(new RowWriteHandler() {
+                    @Override
+                    public void afterRowDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder, 
+                                Row row, Integer relativeRowIndex, Boolean isHead) {
+                         if(row.getRowNum() < count+1)
+                             return;
+                        CellRangeAddress addr1 = new CellRangeAddress(row.getRowNum(), row.getRowNum(), 1, 4);
+                        writeSheetHolder.getSheet().addMergedRegionUnsafe(addr1);
+                    }
+                })
+                .sheet("意见")
+                .doWrite(list);
         return review;        
     }
 }
