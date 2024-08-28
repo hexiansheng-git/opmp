@@ -583,32 +583,18 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                 String createTimeStr = "2024-06-01 00:00:00";
                 SgjsBuildSchemeReview sgjsBuildSchemeReview = new SgjsBuildSchemeReview();
                 sgjsBuildSchemeReview.setCreateTime(DateUtil.parse(createTimeStr, DatePattern.NORM_DATETIME_PATTERN));
+                sgjsBuildSchemeReview.setTaskStatus("0");
+                //获取未发起审批 and 创建时间为2024年6月1日及以后的数据
                 List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewList = sgjsBuildSchemeReviewService.getSgjsBuildSchemeReviewList(sgjsBuildSchemeReview);
                 if (CollUtil.isEmpty(sgjsBuildSchemeReviewList)) {
                     log.info("施工方案评审数据无数据, 租户：{}", tenant.getTenantName());
                     continue;
                 }
-                /*查询流程，过滤得到未发起审批的数据*/
-                List<SgjsBuildSchemeReview> list23 = sgjsBuildSchemeReviewList.stream()
-                        .filter(p -> StrUtil.isNotBlank(p.getSchemeLevel()) && (p.getSchemeLevel().equals("2") || p.getSchemeLevel().equals("3")))
-                        .collect(Collectors.toList());
-                List<SgjsBuildSchemeReview> list4 = sgjsBuildSchemeReviewList.stream()
-                        .filter(p -> StrUtil.isNotBlank(p.getSchemeLevel()) && (p.getSchemeLevel().equals("4")))
-                        .collect(Collectors.toList());
-                //不同方案级别走不同的流程,级别1不走流程
-                FlowInfoSearchUtil.getFlowInfo(list23, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_2_3);
-                FlowInfoSearchUtil.getFlowInfo(list4, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4);
-                ArrayList<SgjsBuildSchemeReview> allList = new ArrayList<>();
-                allList.addAll(list23);
-                allList.addAll(list4);
-                //未发起审批的数据
-                List<SgjsBuildSchemeReview> warnList = allList.stream()
-                        .filter(p -> StrUtil.isNotBlank(p.getTaskStatus()) && p.getTaskStatus().equals("0")).collect(Collectors.toList());
                 /*提前七天提醒一次，超期后每两天进行告警*/
                 //预警触发标识
                 Date nowDate = new Date();
                 List<SgjsBuildSchemeReview> todoWarnList = new ArrayList<>();
-                for (SgjsBuildSchemeReview schemeList : warnList) {
+                for (SgjsBuildSchemeReview schemeList : sgjsBuildSchemeReviewList) {
                     Date planCompletionTime = schemeList.getPlanCompletionTime();
                     long between = DateUtil.between(nowDate, planCompletionTime, DateUnit.DAY, false);
                     if (between == 7 || (between <= 0 && between % 2 == 0)) {
@@ -619,9 +605,10 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                     }
                 }
                 if (CollUtil.isEmpty(todoWarnList)) {
-                    log.info("施工方案清单预警执行, 无需预警, 租户：{}，", tenant.getTenantName());
+                    log.info("租户：{}, 施工方案清单预警, 没有满足此条件的数据: 计划编制完成时间, 前七天提醒一次, 超期后每两天进行告警", tenant.getTenantName());
                     continue;
                 }
+                log.info("租户: {}, 施工方案清单预警开始, 待预警数据: {}", tenant.getTenantName(), JSON.toJSONString(todoWarnList));
                 /*执行预警*/
                 //根据角色获取用户
                 String[] roleKeys = StrUtil.splitToArray(sgjsWarnConfig.getWarnObjectId(), ",");
@@ -683,6 +670,7 @@ public class SgjsBuildSchemeServiceImpl implements ISgjsBuildSchemeService {
                     log.info("租户：{}，施工方案清单预警记录推送数据：" + JSON.toJSONString(warnRecordList), tenant.getTenantName());
                     rocketMQTemplate.convertAndSend("sgjs_build_scheme_list_warn:tenantSuccess", warnRecordList);
                 }
+                log.info("租户：{}，施工方案编制预警执行完成", tenant.getTenantName());
             } catch (Exception e) {
                 log.error("租户：{}, 异常", tenant.getTenantName());
                 e.printStackTrace();

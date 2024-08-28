@@ -1114,32 +1114,19 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 // 2024年05月31日之前的数据不做预警
                 String createTimeStr = "2024-06-01 00:00:00";
                 SgjsBuildSchemeReview sgjsBuildSchemeReview = new SgjsBuildSchemeReview();
+                sgjsBuildSchemeReview.setTaskStatus("1");
                 sgjsBuildSchemeReview.setCreateTime(DateUtil.parse(createTimeStr, DatePattern.NORM_DATETIME_PATTERN));
+                //获取审批中 and 创建时间为2024年6月1日及以后的数据
                 List<SgjsBuildSchemeReview> sgjsBuildSchemeReviewList = sgjsBuildSchemeReviewMapper.getSgjsBuildSchemeReviewList(sgjsBuildSchemeReview);
                 if (CollUtil.isEmpty(sgjsBuildSchemeReviewList)) {
                     log.info("租户：{}，施工方案评审数据无数据", tenant.getTenantName());
                     continue;
                 }
-                /*查询流程，过滤得到未发起审批的数据*/
-                List<SgjsBuildSchemeReview> list23 = sgjsBuildSchemeReviewList.stream()
-                        .filter(p -> StrUtil.isNotBlank(p.getSchemeLevel()) && (p.getSchemeLevel().equals("2") || p.getSchemeLevel().equals("3")))
-                        .collect(Collectors.toList());
-                List<SgjsBuildSchemeReview> list4 = sgjsBuildSchemeReviewList.stream()
-                        .filter(p -> StrUtil.isNotBlank(p.getSchemeLevel()) && (p.getSchemeLevel().equals("4")))
-                        .collect(Collectors.toList());
-                //不同方案级别走不同的流程,级别1不走流程
-                FlowInfoSearchUtil.getFlowInfo(list23, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_2_3);
-                FlowInfoSearchUtil.getFlowInfo(list4, FlowEnum.SGJS_BUILD_SCHEME_REVIEW_4);
-                ArrayList<SgjsBuildSchemeReview> allList = new ArrayList<>();
-                allList.addAll(list23);
-                allList.addAll(list4);
-                //审批中的数据
-                List<SgjsBuildSchemeReview> flowList = allList.stream()
-                        .filter(p -> StrUtil.isNotBlank(p.getTaskStatus()))
-                        .filter(p -> !p.getTaskStatus().equals("0") && !p.getTaskStatus().equals("4"))
-                        .collect(Collectors.toList());
+                //方案分级1不走流程，过滤掉
+                List<SgjsBuildSchemeReview> flowList = sgjsBuildSchemeReviewList.stream()
+                        .filter(p -> StrUtil.isNotBlank(p.getSchemeLevel()) && !p.getSchemeLevel().equals("1")).collect(Collectors.toList());
+                log.info("租户: {}, 施工方案评审-审批预警满足方案分级大于1,审批中,大于等于2024年06月01日的数据: {}", tenant.getTenantName(), JSON.toJSONString(flowList));
                 //获取任务详情，得到当前任务节点; 只需处理专家、部门评审人员节点
-//                Set<String> userNameList = new HashSet<>();
                 List<SysUser> todoWarnUserList = new ArrayList<>();
                 Map<String, String> schemeName = new HashMap<>();
                 Date nowDate = new Date();
@@ -1155,18 +1142,20 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     for (String currentTaskId : currentTaskIdArr) {
                         AjaxResult ajaxResult = flowServiceApi.taskInfoDetail(currentTaskId);
                         if (!AjaxResult.isSuccess(ajaxResult)) {
-                            log.warn("获取任务失败， 任务id：{} --- 响应结果：{}", currentTaskId, ajaxResult);
+                            log.warn("施工方案评审-审批预警, 获取待办任务失败， 任务id：{} --- 响应结果：{}", currentTaskId, ajaxResult);
+                            continue;
                         }
                         String warnInfo = JSON.toJSONString(ajaxResult.get("data"));
                         if (StrUtil.isBlank(warnInfo)) {
-                            log.warn("查询流程无数据，任务：{}", currentTaskId);
+                            log.warn("施工方案评审-审批预警, 查询流程无数据，任务：{}", currentTaskId);
                             continue;
                         }
+                        log.info("施工方案评审-审批预警, 获取待办任务成功: {}", warnInfo);
                         //得到流程任务详情
                         TaskResourceNew taskResource = JSON.parseObject(warnInfo, TaskResourceNew.class);
                         Date createTime = taskResource.getCreateTime();
                         if (null == createTime) {
-                            log.warn("流程任务创建时间为空");
+                            log.warn("施工方案评审-审批预警, 流程任务创建时间为空, 方案名:{}", schemeReview.getSchemeName());
                             continue;
                         }
 //                        long between = DateUtil.between(createTime, DateUtil.offsetDay(nowDate, 5), DateUnit.DAY, false);
@@ -1188,6 +1177,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                             sysUser.setNickName(assigneeNickName);
                             todoWarnUserList.add(sysUser);
                             schemeName.put(assignee, schemeReview.getSchemeName());
+                        } else {
+                            log.info("租户：{}，当前方案不需要预警: 方案名:{}, flowNodeMark:{}, between: {}", tenant.getTenantName(), schemeReview.getSchemeName(), flowNodeMark, between);
                         }
                     }
                 }
@@ -1195,6 +1186,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                     log.info("租户：{}，施工方案评审预警，无需预警", tenant.getTenantName());
                     continue;
                 }
+                log.info("租户: {}, 施工方案评审-审批预警开始, 待预警数据: {}", tenant.getTenantName(), JSON.toJSONString(todoWarnUserList));
                 /*执行预警，保存预警记录*/
                 //发送预警
                 List<TWarn> tWarnList = new ArrayList<>();
@@ -1248,6 +1240,7 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 e.printStackTrace();
             }
         }
+        log.info("施工方案评审预警完了");
     }
 
     @Override
