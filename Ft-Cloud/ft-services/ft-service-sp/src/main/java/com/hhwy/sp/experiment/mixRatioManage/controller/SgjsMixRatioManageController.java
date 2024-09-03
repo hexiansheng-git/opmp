@@ -1,17 +1,20 @@
 package com.hhwy.sp.experiment.mixRatioManage.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
+import com.hhwy.sp.core.system.SystemApiService;
 import com.hhwy.sp.experiment.mixRatioManage.domain.SgjsMixRatioManage;
 import com.hhwy.sp.experiment.mixRatioManage.domain.vo.MixRatioManageQueryVo;
 import com.hhwy.sp.experiment.mixRatioManage.domain.vo.SgjsMixRatioManageDto;
 import com.hhwy.sp.experiment.mixRatioManage.domain.vo.SgjsMixRatioManageSaveVo;
 import com.hhwy.sp.experiment.mixRatioManage.service.ISgjsMixRatioManageService;
 import com.hhwy.sp.experiment.mixRatioManage.service.ISgjsMixRatioManageStaffRecordService;
+import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
@@ -25,6 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -40,6 +45,8 @@ public class SgjsMixRatioManageController extends BaseController {
     private ISgjsMixRatioManageService sgjsMixRatioManageService;
     @Autowired
     private ISgjsMixRatioManageStaffRecordService recordService;
+    @Autowired
+    private SystemApiService systemApiService;
 
 
     /**
@@ -140,8 +147,31 @@ public class SgjsMixRatioManageController extends BaseController {
         List<SgjsMixRatioManage> mixRatioManageList;
         if(CollectionUtils.isEmpty(ids)){
             mixRatioManageList = sgjsMixRatioManageService.getListByQueryVo(queryVo);
+            for (int i = 0; i < mixRatioManageList.size(); i++) {
+                SgjsMixRatioManage temp = mixRatioManageList.get(i);
+                temp.setMixRatioType(temp.getPtVar3());
+            }
         }else {
             mixRatioManageList = sgjsMixRatioManageService.getListByIds(ids);
+            List<SysDictData> mixTypeList = systemApiService.selectDictDataByType("sp_mix_type");
+            Map<Long,SysDictData> mixTypeDictMap = mixTypeList.stream().collect(Collectors.toMap(r->r.getDictDataId(), r->r));
+            Map<String,String> mixTypeMap = mixTypeList.stream().collect(
+                    Collectors.toMap(r->{
+                                String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":mixTypeDictMap.get(r.getParentId()).getDictValue()+",";
+                                return parent+r.getDictValue();
+                            }
+                            , r->{
+                                String parent = (r.getParentId()==null || r.getParentId().equals(0L) )?"":mixTypeDictMap.get(r.getParentId()).getDictLabel()+"/";
+                                return parent+r.getDictLabel();
+                            })
+            );
+            for (int i = 0; i < mixRatioManageList.size(); i++) {
+                SgjsMixRatioManage temp = mixRatioManageList.get(i);
+                if(StringUtils.isBlank(temp.getMixRatioType()))
+                    continue;
+                String mixTypeStr = mixTypeMap.get(temp.getMixRatioType());
+                temp.setMixRatioType(mixTypeStr);
+            }
         }
         FtExcelUtil<SgjsMixRatioManage> util = new FtExcelUtil<>(SgjsMixRatioManage.class);
         util.exportExcel(response, mixRatioManageList, DateUtils.getDate());
