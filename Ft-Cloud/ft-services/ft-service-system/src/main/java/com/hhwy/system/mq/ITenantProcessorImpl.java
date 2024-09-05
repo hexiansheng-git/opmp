@@ -74,7 +74,7 @@ public class ITenantProcessorImpl implements ITenantProcessor {
             log.info("开始给租户下发流程，租户是"+sysTenant.getTenantKey());
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("tenantKey",sysTenant.getTenantKey());
-            remoteBpmnSyncService.masterToTenants(jsonObject);
+            remoteBpmnSyncService.masterToTenant(jsonObject);
             log.info("租户下发流程结束，租户是"+sysTenant.getTenantKey());
         } catch (Exception e) {
             e.printStackTrace();
