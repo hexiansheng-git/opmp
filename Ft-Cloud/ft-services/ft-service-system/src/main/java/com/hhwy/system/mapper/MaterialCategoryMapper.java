@@ -3,6 +3,7 @@ package com.hhwy.system.mapper;
 import com.hhwy.domain.base.system.material.CascaderMaterialCategoryVo;
 import com.hhwy.domain.base.system.material.MaterialCategory;
 import com.hhwy.domain.base.system.material.MaterialCategoryVo;
+import com.hhwy.domain.base.system.material.MaterialCategoryVo2;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -141,4 +142,6 @@ public interface MaterialCategoryMapper {
      * @return
      */
     List<MaterialCategory> selectBathByCode(List<String> materialCodeList);
+
+    List<MaterialCategoryVo2> getTreeListByCategoryName(MaterialCategoryVo materialCategory);
 }

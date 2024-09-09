@@ -61,7 +61,7 @@ public class MaterialCategoryVo {
     private String level;
 
     /** 状态,0-停用 1-启用 */
-    @Excel(name = "状态,0-停用 1-启用")
+    @Excel(name = "状态,0-启用 1-停用")
     private String status;
 
     private String path;

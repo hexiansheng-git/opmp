@@ -11,6 +11,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.system.material.CascaderMaterialCategoryVo;
 import com.hhwy.domain.base.system.material.MaterialCategory;
 import com.hhwy.domain.base.system.material.MaterialCategoryVo;
+import com.hhwy.domain.base.system.material.MaterialCategoryVo2;
 import com.hhwy.system.mapper.MaterialCategoryMapper;
 import com.hhwy.system.service.IMaterialCategoryService;
 import com.hhwy.utils.common.PmsConstant;
@@ -42,6 +43,15 @@ public class MaterialCategoryController extends BaseController {
     private IMaterialCategoryService materialCategoryService;
     @Autowired
     private MaterialCategoryMapper materialCategoryMapper;
+
+    /**
+     * 材料分类名称模糊搜索
+     */
+    @PostMapping("/getTreeListByCategoryName")
+    public AjaxResult getTreeListByCategoryName(@RequestBody MaterialCategoryVo materialCategoryVo) {
+        List<MaterialCategoryVo2> list = materialCategoryService.getTreeListByCategoryName(materialCategoryVo);
+        return AjaxResult.success(list);
+    }
 
     /**
      * 查询物料分类名称列表
