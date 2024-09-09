@@ -103,4 +103,14 @@ public interface SpServiceApi {
 
     @RequestMapping(value = "/designChangeList/pushMsg", method = RequestMethod.POST)
     AjaxResult pushMsg(@RequestParam("id") Long id);
+
+    /**
+     * 一、二级方案安全交底流程监听
+     * 发消息to项目总工（）
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/sgjsDiscloseRecord/listener")
+    AjaxResult disCloseRecordListener(@RequestParam("id") Long id,@RequestParam("status") String status);
 }

@@ -18,8 +18,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
     <sql id="selectSysSyncLogVo">
         select
-            `id`,`interface_name`,`method`,`create_user`, `create_time`, `update_user`, `update_time`, `del_user`,
-            `del_time`, `del_flag`,`interface_url`,`fun_name`,`req`,`res`,,`status`,`remark`,`businessUnique`,
+            `id`,`interface_name`,`create_user`, `create_time`, `update_user`, `update_time`, `del_user`,
+            `del_time`, `del_flag`,`interface_url`,`fun_name`,`req`,`res`,`status`,`remark`
         from sys_sync_log
     </sql>
 

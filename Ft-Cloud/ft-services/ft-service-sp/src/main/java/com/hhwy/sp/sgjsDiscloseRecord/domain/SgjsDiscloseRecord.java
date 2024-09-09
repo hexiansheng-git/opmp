@@ -1,21 +1,16 @@
 package com.hhwy.sp.sgjsDiscloseRecord.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.util.Date;
-import java.math.BigDecimal;
-
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author cjh
@@ -23,7 +18,7 @@ import lombok.Data;
  * @remark sgjs_disclose_record
  */
 @Data
-public class SgjsDiscloseRecord extends BaseEntity {
+public class SgjsDiscloseRecord extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -34,11 +29,19 @@ public class SgjsDiscloseRecord extends BaseEntity {
     @Excel(name = "主键id")
     private Long id;
     /**
-     * 字段描述：附件组id
+     * 字段描述：交底文件
      */
     @JsonProperty
-    @Excel(name = "附件组id")
+    @Excel(name = "交底文件")
     private String fileGroupId;
+
+    /**
+     * 字段描述：交底记录上传
+     */
+    @JsonProperty
+    @Excel(name = "交底记录上传")
+    private String discloseFileId;
+
     /**
      * 字段描述：所属区域id
      */
@@ -157,8 +160,10 @@ public class SgjsDiscloseRecord extends BaseEntity {
      * 字段描述：流程状态（5已完成）
      */
     @JsonProperty
-    @Excel(name = "流程状态（5已完成）")
+    @Excel(name = "流程状态",dictType = "task_status")
     private String taskStatus;
+
+
     /**
      * 字段描述：交底等级
      */
@@ -265,4 +270,11 @@ public class SgjsDiscloseRecord extends BaseEntity {
 
     @JsonProperty
     private List<SgjsDiscloseRecord> exportList;
+
+    private String type;
+    @FtExcel(name = "当前处理人")
+    private String processTaskMan;//当前处理人
+
+    //施工方案编号
+    private String buildNo;
 }

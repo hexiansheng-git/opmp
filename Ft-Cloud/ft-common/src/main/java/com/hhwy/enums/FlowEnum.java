@@ -108,6 +108,9 @@ public enum FlowEnum {
         SGJS_BUILD_SCHEME_REVIEW_2_3("sgjs_build_scheme_review", "process_sgjs_build_scheme_review_2_3"),
         SGJS_BUILD_SCHEME_REVIEW_4("sgjs_build_scheme_review", "process_sgjs_build_scheme_review_4"),
 
+        //20240816 施工技术-方案安全交底
+        SGJS_DISCLOSE_RECORD("sgjs_disclose_record","sgjs_disclose_record_key"),
+
 
 
         /*********************勘察设计管理****************************/
@@ -115,6 +118,7 @@ public enum FlowEnum {
         KCSJ_PATENT_DECLARE("kcsj_outline_review","process_kcsj_outline_review"),
         /*勘察设计成果评审*/
         KCSJ_ACHIEVEMENT_REVIEW("kcsj_achievement_review","process_kcsj_achievement_review");
+
         
         public String getTableName() {
             return this.tableName;

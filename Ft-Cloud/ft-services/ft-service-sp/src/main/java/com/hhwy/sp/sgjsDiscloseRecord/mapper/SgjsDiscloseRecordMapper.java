@@ -31,4 +31,8 @@ public interface SgjsDiscloseRecordMapper {
     List<SgjsDiscloseRecord> getSgjsDiscloseRecordListByNames(@Param("list") List<String> discloseNames);
 
     List<SgjsDiscloseRecord> getSgjsDiscloseRecordListByIds(@Param("list") List<Long> sgjsDiscloseRecordPkList);
+
+    int selectCount(SgjsDiscloseRecord sgjsDiscloseRecord);
+
+    List<SgjsDiscloseRecord> selectData();
 }
