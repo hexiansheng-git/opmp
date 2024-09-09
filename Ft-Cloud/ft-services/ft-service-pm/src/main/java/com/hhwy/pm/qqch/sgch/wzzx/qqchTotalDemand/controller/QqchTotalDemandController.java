@@ -72,10 +72,10 @@ public class QqchTotalDemandController extends BaseController{
         return toAjax(qqchTotalDemandService.updateQqchTotalDemand(qqchTotalDemandParam));
     }
 
-        @PostMapping("/batchUpdate")
-        public AjaxResult updateQqchTotalDemandList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTotalDemand> qqchTotalDemandListParam){
-            return toAjax(qqchTotalDemandService.updateQqchTotalDemandList(qqchTotalDemandListParam));
-        }
+    @PostMapping("/batchUpdate")
+    public AjaxResult updateQqchTotalDemandList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTotalDemand> qqchTotalDemandListParam){
+        return toAjax(qqchTotalDemandService.updateQqchTotalDemandList(qqchTotalDemandListParam));
+    }
     
     @PostMapping("/delete")
     public AjaxResult deleteQqchTotalDemand(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTotalDemand qqchTotalDemandParam){
