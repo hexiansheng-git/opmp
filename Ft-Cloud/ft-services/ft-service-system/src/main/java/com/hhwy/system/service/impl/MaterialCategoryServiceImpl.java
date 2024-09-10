@@ -61,10 +61,11 @@ public class MaterialCategoryServiceImpl implements IMaterialCategoryService {
     //材料分类名称模糊搜索
     public List<MaterialCategoryVo2> getTreeListByCategoryName(MaterialCategoryVo materialCategoryVo) {
         Assert.isTrue(StrUtil.isNotBlank(materialCategoryVo.getCategoryName()), "搜索名称不能为空");
+        Assert.isTrue(StrUtil.isNotBlank(materialCategoryVo.getType()), "类型不能为空");
         List<MaterialCategoryVo2> resultList = new ArrayList<>();
         MaterialCategoryVo materialCategory = new MaterialCategoryVo();
-        materialCategory.setType("0");
         materialCategory.setStatus("0");
+        materialCategory.setType(materialCategoryVo.getType());
         materialCategory.setCategoryName(materialCategoryVo.getCategoryName());
         List<MaterialCategoryVo2> list = materialCategoryMapper.getTreeListByCategoryName(materialCategory);
         if (CollUtil.isNotEmpty(list)) {
