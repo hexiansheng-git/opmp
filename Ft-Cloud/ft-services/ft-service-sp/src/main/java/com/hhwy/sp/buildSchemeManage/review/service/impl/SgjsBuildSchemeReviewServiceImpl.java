@@ -1395,4 +1395,21 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
                 .doWrite(list);
         return review;        
     }
+
+    @Override
+    public void checkFillOpinoin(String flowNodeMark, String username,Long businessId) {
+        Set<String> areaMarkSet = new HashSet<>(Arrays.asList("3","4"));
+        Set<String> haiwaiMarkSet = new HashSet<>(Arrays.asList("5","6"));
+        //1:区域,2:海外
+        String flowNodeMarkFlag = null;
+        if(areaMarkSet.contains(flowNodeMark))
+            flowNodeMarkFlag = "1";
+        if(haiwaiMarkSet.contains(flowNodeMark))
+            flowNodeMarkFlag = "2";
+        if(flowNodeMarkFlag == null)
+            return ;
+        int nullCount = sgjsBuildSchemeReviewMapper.selectNullScore(businessId,flowNodeMark,username);
+        if(nullCount > 0)
+            throw new CustomException("请填写意见以及得分后再提交！");
+    }
 }

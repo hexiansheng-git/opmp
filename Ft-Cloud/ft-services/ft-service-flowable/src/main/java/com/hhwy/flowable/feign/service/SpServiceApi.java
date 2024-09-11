@@ -113,4 +113,8 @@ public interface SpServiceApi {
      */
     @RequestMapping(value = "/sgjsDiscloseRecord/listener")
     AjaxResult disCloseRecordListener(@RequestParam("id") Long id,@RequestParam("status") String status);
+
+    @RequestMapping(value = "/sgjsBuildSchemeReview/checkAuditOpinon")
+    AjaxResult checkAuditOpinon(@RequestParam("flowNodeMark") String flowNodeMark,@RequestParam("username") String username
+            ,@RequestParam("reviewId") Long reviewId);
 }

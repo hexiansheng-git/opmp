@@ -119,7 +119,8 @@ public class SgjsBuildSchemeReviewController extends BaseController {
     @PostMapping("/save")
     @CustomLogger(title = "施工技术-施工方案管理-施工方案评审", name = "施工方案评审保存" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody SgjsBuildSchemeReview review) {
-        Long id = sgjsBuildSchemeReviewService.save(review);
+//        Long id = sgjsBuildSchemeReviewService.save(review);
+        Long id = review.getId();
         return AjaxResult.success(id);
     }
 
@@ -213,6 +214,19 @@ public class SgjsBuildSchemeReviewController extends BaseController {
     public AjaxResult updateBuildSchemeReviewProcess(@RequestParam("id") Long id){
         sgjsBuildSchemeReviewService.updateBuildSchemeReviewProcess(id);
         return AjaxResult.success();
+    }
+
+    @GetMapping("/checkAuditOpinon")
+    @CustomLogger(title = "施工技术-施工方案管理-施工方案评审", name = "校验意见是否填写" ,businessType = CustomBusinessType.OTHER)
+    public AjaxResult checkAuditOpinon(@RequestParam("flowNodeMark") String flowNodeMark,@RequestParam("username") String username
+            ,@RequestParam("reviewId") Long reviewId){
+        try{
+            sgjsBuildSchemeReviewService.checkFillOpinoin(flowNodeMark,username,reviewId);
+            return AjaxResult.success();
+        }catch(Exception e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
     }
 
     @GetMapping("/deleteProcess")
