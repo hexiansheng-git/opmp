@@ -128,13 +128,15 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
         syncLog.setCreateUser(SecurityUtils.getUserName());
         syncLog.setCreateTime(new Date());
         syncLog.setDelFlag("0");
-        syncLog.setInterfaceName("施工方案评审同步一二级方案安全交底");
-        syncLog.setFunName("施工方案评审同步一二级方案安全交底");
+        syncLog.setInterfaceName("施工方案评审同步【一二级方案安全交底】");
+        syncLog.setFunName("施工方案评审同步【一二级方案安全交底】");
         syncLog.setReq(req);
         syncLog.setRes(res);
         syncLog.setStatus(StringUtils.isBlank(msg)?"0":"1");
         syncLog.setRemark(ObjectUtils.nvlString(msg));
         syncLog.setPtVar2(SecurityUtils.getTenantKey());
+        syncLog.setUpdateTime(DateUtils.getNowDate());
+        syncLog.setUpdateUser(SecurityUtils.getUserName());
         return syncLog;
     }
 
@@ -294,6 +296,7 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
 
     @Override
     public void disCloseWarn() {
+        logger.info("-----------------------预警开始-----------------------");
         //从总部获取预警配置信息
         String url = gmUrl + "/gm/sgjsWarnConfig/list?warnSubject={warnSubject}";
         SgjsWarnConfig sgjsWarnConfig = CommonBusiness.getSgjsWarnConfig(url, "一级、二级方案交底");
@@ -315,26 +318,8 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
         }
+        logger.info("-----------------------预警结束-----------------------");
     }
-
-    @Override
-    public AjaxResult disCloseRecordListener(Long id,String status) {
-        if(null==id) return AjaxResult.error("空了---->【{}】",id);
-        //一、修改流程状态
-        SgjsDiscloseRecord info=new SgjsDiscloseRecord();
-        info.setId(id);
-        info.setPtVar3(status);
-        info.setUpdateTime(DateUtils.getNowDate());
-        info.setUpdateUser(SecurityUtils.getUserName());
-        sgjsDiscloseRecordMapper.updateSgjsDiscloseRecord(info);
-        //二、总部推送
-        Map<String,Object> map=new HashMap<>();
-        map.put("type","2");//0新增1删除2修改
-        map.put("data",info);
-        pushSyncData(map);
-        return AjaxResult.success();
-    }
-
 
     /**
      * 功能描述: 所有租户发送预警
@@ -354,6 +339,7 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
             }
             String[] roleKeys = StrUtil.splitToArray(sgjsWarnConfig.getWarnObjectId(), ",");
             List<SysUser> allSysUsers = CommonBusiness.getSysUsers(roleKeys, tenant.getTenantKey());
+            logger.info("allSysUsers------>【{}】",allSysUsers);
             if (CollUtil.isEmpty(allSysUsers)) {
                 logger.info("根据角色获取用户, 无数据，总部配置：{} --- 租户：{}", JSON.toJSONString(sgjsWarnConfig), tenant.getTenantName());
                 continue;
@@ -398,7 +384,27 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
         syncToGm(warnList,sgjsWarnConfig);
     }
 
+    @Override
+    public AjaxResult disCloseRecordListener(Long id,String status) {
+        if(null==id) return AjaxResult.error("空了---->【{}】",id);
+        //一、修改流程状态
+        SgjsDiscloseRecord info=new SgjsDiscloseRecord();
+        info.setId(id);
+        info.setPtVar3(status);
+        info.setUpdateTime(DateUtils.getNowDate());
+        info.setUpdateUser(SecurityUtils.getUserName());
+        sgjsDiscloseRecordMapper.updateSgjsDiscloseRecord(info);
+        //二、总部推送
+        Map<String,Object> map=new HashMap<>();
+        map.put("type","2");//0新增1删除2修改
+        map.put("data",info);
+        pushSyncData(map);
+        return AjaxResult.success();
+    }
+
+
     private void syncToGm(List<SgjsWarnConfig> warnList, SgjsWarnConfig sgjsWarnConfig) {
+        logger.info("warnList--->【{}】",JSONObject.toJSONString(warnList));
         if(CollectionUtils.isEmpty(warnList)){
             logger.info("空了，哪来回哪去！！！！");
             return;
@@ -409,6 +415,7 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
         String warnObjectId = sgjsWarnConfig.getWarnObjectId();
         //查出该角色下所有项目用户  根据项目编码过滤
         List<SysUser> sysUsers = CommonBusiness.getSysUsers(new String[]{warnObjectId}, null);
+        logger.info("sysUsers--->【{}】",JSONObject.toJSONString(sysUsers));
         for (Map.Entry<String, List<SgjsWarnConfig>> info:map.entrySet()) {
             List<SgjsWarnConfig> valueList = info.getValue();
             if(CollectionUtils.isEmpty(valueList))continue;

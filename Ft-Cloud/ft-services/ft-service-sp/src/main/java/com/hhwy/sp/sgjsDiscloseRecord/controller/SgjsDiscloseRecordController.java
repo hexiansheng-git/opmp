@@ -231,8 +231,7 @@ public class SgjsDiscloseRecordController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/listener")
-    public AjaxResult disCloseRecordListener(@RequestParam("id") Long id,
-                                             @RequestParam("status") String status){
+    public AjaxResult disCloseRecordListener(@RequestParam("id") Long id,@RequestParam("status") String status){
         return sgjsDiscloseRecordService.disCloseRecordListener(id,status);
     }
 }
