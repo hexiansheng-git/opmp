@@ -1408,8 +1408,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
             flowNodeMarkFlag = "2";
         if(flowNodeMarkFlag == null)
             return ;
-        int nullCount = sgjsBuildSchemeReviewMapper.selectNullScore(businessId,flowNodeMark,username);
+        int nullCount = sgjsBuildSchemeReviewMapper.selectNullScore(businessId,flowNodeMarkFlag,username);
         if(nullCount > 0)
-            throw new CustomException("请填写意见以及得分后再提交！");
+            throw new CustomException("[请填写意见以及得分后再提交！]");
     }
 }

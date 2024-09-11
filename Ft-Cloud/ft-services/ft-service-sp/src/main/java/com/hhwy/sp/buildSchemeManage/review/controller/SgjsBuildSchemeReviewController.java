@@ -119,8 +119,7 @@ public class SgjsBuildSchemeReviewController extends BaseController {
     @PostMapping("/save")
     @CustomLogger(title = "施工技术-施工方案管理-施工方案评审", name = "施工方案评审保存" ,businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody SgjsBuildSchemeReview review) {
-//        Long id = sgjsBuildSchemeReviewService.save(review);
-        Long id = review.getId();
+        Long id = sgjsBuildSchemeReviewService.save(review);
         return AjaxResult.success(id);
     }
 
