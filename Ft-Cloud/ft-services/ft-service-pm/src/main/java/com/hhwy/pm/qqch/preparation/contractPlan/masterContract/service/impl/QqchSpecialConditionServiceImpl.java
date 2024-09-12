@@ -206,9 +206,10 @@ public class QqchSpecialConditionServiceImpl implements IQqchSpecialConditionSer
     @Override
     public List<QqchSpecialCondition> popUpWindows(QqchSpecialCondition qqchSpecialCondition) {
         List<QqchSpecialCondition> resultList;
+        BigDecimal version = qqchSpecialCondition.getVersion();
         //获取最大有效版本
-        BigDecimal version = commonMapper.selectMaxVersion("qqch_special_condition");
-
+        if(version == null)
+            version = commonMapper.selectMaxVersion("qqch_special_condition");
         /*查询版本全量数据*/
         QqchSpecialCondition query = new QqchSpecialCondition();
         query.setVersion(version);
