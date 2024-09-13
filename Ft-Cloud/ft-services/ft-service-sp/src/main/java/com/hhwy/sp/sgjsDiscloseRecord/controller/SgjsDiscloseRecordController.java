@@ -1,6 +1,8 @@
 package com.hhwy.sp.sgjsDiscloseRecord.controller;
 
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -90,7 +92,7 @@ public class SgjsDiscloseRecordController extends BaseController {
      * @param sgjsDiscloseRecord
      * @return
      */
-    @PreAuthorize(hasPermi = "sgjsDiscloseRecord:add")
+    @PreAuthorize(hasPermi = "sgjsDiscloseRecord:handleAdd")
     @PostMapping("/handleAdd")
     @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.SAVE)
     public AjaxResult handleAdd(@Validated(ValidationGroups.Save.class) @RequestBody SgjsDiscloseRecord sgjsDiscloseRecord) {
@@ -212,10 +214,19 @@ public class SgjsDiscloseRecordController extends BaseController {
         if("three".equals(dataType)) {
             templateName = "exportDiscloseRecord3.xlsx";
         }
-
         util.exportWithTemplate4FileName(response, sgjsDiscloseRecordList, 2, templateName, "sheet1", "交底记录");
 
     }
+
+
+    @GetMapping("/exportOneOrTwo")
+    public void exportOneOrTwo(HttpServletResponse response, SgjsDiscloseRecord sgjsDiscloseRecord) throws IOException {
+        List<SgjsDiscloseRecord> list = sgjsDiscloseRecordService.getSgjsDiscloseRecordList(sgjsDiscloseRecord);
+        ExcelUtils<SgjsDiscloseRecord> util = new ExcelUtils<>(SgjsDiscloseRecord.class);
+        util.exportExcel(response, list, DateUtils.getDate());
+    }
+
+
 
     /**
      * 导入接口
