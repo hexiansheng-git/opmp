@@ -84,8 +84,6 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
     @Transactional
     public int insertSgjsDiscloseRecord(SgjsDiscloseRecord sgjsDiscloseRecord) {
         sgjsDiscloseRecord.setId(IdWorker.createId());
-        sgjsDiscloseRecord.setCreateUser(SecurityUtils.getSysUser().getNickName());
-        sgjsDiscloseRecord.setCreateUserName(SecurityUtils.getUserName());
         sgjsDiscloseRecord.setCreateTime(DateUtils.getNowDate());
         //施工方案编号  方案推送过来的编号，用方案编号+FAJD﹔
         //新增的交底编号001+项目编码+XZJD,按增加顺序排
