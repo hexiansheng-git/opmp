@@ -14,9 +14,11 @@ import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.constant.WarnItem;
 import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.domain.log.SysSyncLog;
+import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.ILogServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.sp.buildSchemeManage.sgjsBuildScheme.domain.SgjsWarnConfig;
+import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.constant.DataCurrentState;
 import com.hhwy.sp.common.warn.CommonBusiness;
 import com.hhwy.sp.common.warn.SgjsWarnRecord;
@@ -400,6 +402,31 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
         map.put("data",info);
         pushSyncData(map);
         return AjaxResult.success();
+    }
+
+    @Override
+    public SgjsDiscloseRecord detail(SgjsDiscloseRecord sgjsDiscloseRecord) {
+        Long id = sgjsDiscloseRecord.getId();
+        if (null==id)return null;
+        SgjsDiscloseRecord info=sgjsDiscloseRecordMapper.getById(id);
+        FlowInfoSearchUtil.getFlowInfo(info, FlowEnum.SGJS_DISCLOSE_RECORD);
+        return info;
+    }
+
+    /**
+     * 有id新增
+     * 没有id修改
+     *
+     * @param sgjsDiscloseRecord
+     * @return
+     */
+    @Override
+    public void handleAdd(SgjsDiscloseRecord sgjsDiscloseRecord) {
+        if(null==sgjsDiscloseRecord.getId()){
+            insertSgjsDiscloseRecord(sgjsDiscloseRecord);
+        }else{
+            updateSgjsDiscloseRecord(sgjsDiscloseRecord);
+        }
     }
 
 

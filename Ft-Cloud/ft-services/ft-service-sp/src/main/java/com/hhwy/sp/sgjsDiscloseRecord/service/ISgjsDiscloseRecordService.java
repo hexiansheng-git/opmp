@@ -45,4 +45,14 @@ public interface ISgjsDiscloseRecordService {
      * @return
      */
     AjaxResult disCloseRecordListener(Long id,String status);
+
+    /**
+     * 详情
+     *
+     * @param sgjsDiscloseRecord
+     * @return
+     */
+    SgjsDiscloseRecord detail(SgjsDiscloseRecord sgjsDiscloseRecord);
+
+    void handleAdd(SgjsDiscloseRecord sgjsDiscloseRecord);
 }

@@ -35,4 +35,7 @@ public interface SgjsDiscloseRecordMapper {
     int selectCount(SgjsDiscloseRecord sgjsDiscloseRecord);
 
     List<SgjsDiscloseRecord> selectData();
+
+    SgjsDiscloseRecord getById(Long id);
+
 }

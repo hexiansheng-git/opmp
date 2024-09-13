@@ -83,6 +83,24 @@ public class SgjsDiscloseRecordController extends BaseController {
         return AjaxResult.success(sgjsDiscloseRecordParam);
     }
 
+    /**
+     * 有id新增
+     * 没有id修改
+     *
+     * @param sgjsDiscloseRecord
+     * @return
+     */
+    @PreAuthorize(hasPermi = "sgjsDiscloseRecord:add")
+    @PostMapping("/handleAdd")
+    @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.SAVE)
+    public AjaxResult handleAdd(@Validated(ValidationGroups.Save.class) @RequestBody SgjsDiscloseRecord sgjsDiscloseRecord) {
+        sgjsDiscloseRecordService.handleAdd(sgjsDiscloseRecord);
+        return AjaxResult.success(sgjsDiscloseRecord);
+    }
+
+
+
+
     @PreAuthorize(hasPermi = "sgjsDiscloseRecord:add")
     @PostMapping("/batchAdd")
     @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.SAVE)
@@ -97,6 +115,16 @@ public class SgjsDiscloseRecordController extends BaseController {
     public AjaxResult updateSgjsDiscloseRecord(@Validated(ValidationGroups.Update.class) @RequestBody SgjsDiscloseRecord sgjsDiscloseRecordParam) {
         return toAjax(sgjsDiscloseRecordService.updateSgjsDiscloseRecord(sgjsDiscloseRecordParam));
     }
+
+
+
+    @PreAuthorize(hasPermi = "sgjsDiscloseRecord:update")
+    @GetMapping("/detail")
+    @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.UPDATE)
+    public AjaxResult detail(SgjsDiscloseRecord sgjsDiscloseRecord) {
+        return AjaxResult.success(sgjsDiscloseRecordService.detail(sgjsDiscloseRecord));
+    }
+
 
     /**
      * 保存接口
