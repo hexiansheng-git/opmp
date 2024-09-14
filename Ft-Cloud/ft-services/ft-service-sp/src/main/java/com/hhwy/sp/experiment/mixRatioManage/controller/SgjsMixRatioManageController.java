@@ -174,6 +174,7 @@ public class SgjsMixRatioManageController extends BaseController {
             }
         }
         FtExcelUtil<SgjsMixRatioManage> util = new FtExcelUtil<>(SgjsMixRatioManage.class);
+        FlowInfoSearchUtil.getFlowInfo(mixRatioManageList, FlowEnum.SGJS_MIX_MANAGE);
         util.exportExcel(response, mixRatioManageList, DateUtils.getDate());
     }
 }

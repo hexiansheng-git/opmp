@@ -126,7 +126,7 @@ public class SgjsMixRatioManage extends CommonBaseEntity {
     @FtExcel(name = "是否批复",dictType = "common_yes")
     private String approveOrNot;
 
-    @FtExcel(name = "流程状态",readConverterExp = "0=未发起,1=审批中,4=审批完成")
+    @FtExcel(name = "流程状态",readConverterExp = "0=待发起,1=审批中,4=审批完成")
     private String taskStatus;
 
     @JsonProperty
