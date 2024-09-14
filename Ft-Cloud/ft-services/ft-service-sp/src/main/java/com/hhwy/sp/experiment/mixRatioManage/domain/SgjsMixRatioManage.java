@@ -126,11 +126,11 @@ public class SgjsMixRatioManage extends CommonBaseEntity {
     @FtExcel(name = "是否批复",dictType = "common_yes")
     private String approveOrNot;
 
-    //@FtExcel(name = "流程状态",dictType = "task_status")
+    @FtExcel(name = "流程状态",readConverterExp = "0=未发起,1=审批中,4=审批完成")
     private String taskStatus;
 
     @JsonProperty
-    //@FtExcel(name = "当前节点")
+    @FtExcel(name = "当前节点")
     private String processTaskName;
     /**
      * 字段描述：编制人用户名
@@ -147,7 +147,6 @@ public class SgjsMixRatioManage extends CommonBaseEntity {
      * 字段描述：编制人联系方式
      */
     @JsonProperty
-    @FtExcel(name = "编制人联系方式")
     private String principalContactWay;
     /**
      * 字段描述：配合比附件
