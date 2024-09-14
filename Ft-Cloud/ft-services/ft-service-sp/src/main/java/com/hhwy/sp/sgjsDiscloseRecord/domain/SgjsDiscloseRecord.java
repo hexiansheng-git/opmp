@@ -153,8 +153,7 @@ public class SgjsDiscloseRecord extends CommonBaseEntity {
      * 字段描述：交底等级
      */
     @JsonProperty
-    @Excel(name = "交底等级")
-    @FtExcel(name = "交底等级")
+    @Excel(name = "交底等级",dictType = "dis_levle")
     private String discloseLevel;
     /**
      * 字段描述：交底名称
@@ -204,7 +203,6 @@ public class SgjsDiscloseRecord extends CommonBaseEntity {
      * 字段描述：流程状态（5已完成）
      */
     @JsonProperty
-    @FtExcel(name = "流程状态",readConverterExp = "0=未发起,1=审批中,4=审批完成")
     @Excel(name = "流程状态",dictType = "task_status")
     private String taskStatus;
     /**

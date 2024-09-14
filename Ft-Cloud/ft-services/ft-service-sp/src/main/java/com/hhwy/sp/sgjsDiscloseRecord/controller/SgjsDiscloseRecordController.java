@@ -8,9 +8,11 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.sp.common.FlowInfoSearchUtil;
+import com.hhwy.sp.core.system.SystemApiService;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord4Update;
 import com.hhwy.sp.sgjsDiscloseRecord.service.ISgjsDiscloseRecordService;
+import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
@@ -25,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author cjh
@@ -38,6 +41,8 @@ public class SgjsDiscloseRecordController extends BaseController {
 
     @Autowired
     private ISgjsDiscloseRecordService sgjsDiscloseRecordService;
+    @Autowired
+    private SystemApiService systemApiService;
 
 
     @PreAuthorize(hasPermi = "sgjsDiscloseRecord:list")
@@ -72,6 +77,12 @@ public class SgjsDiscloseRecordController extends BaseController {
         startPage();
         List<SgjsDiscloseRecord> sgjsDiscloseRecordList = sgjsDiscloseRecordService.getSgjsDiscloseRecordList(sgjsDiscloseRecordParam);
         FlowInfoSearchUtil.getFlowInfo(sgjsDiscloseRecordList, FlowEnum.SGJS_DISCLOSE_RECORD);
+        //流程状态
+        List<SysDictData> list = systemApiService.selectDictDataByType("task_status");
+        sgjsDiscloseRecordList.forEach(e-> {
+            List<SysDictData> dataList = list.stream().filter(t -> t.getDictValue().equals(e.getTaskStatus())).collect(Collectors.toList());
+            e.setTaskStatus(dataList.get(0).getDictLabel());
+        });
         return getDataTableAjaxResult(sgjsDiscloseRecordList);
     }
 
