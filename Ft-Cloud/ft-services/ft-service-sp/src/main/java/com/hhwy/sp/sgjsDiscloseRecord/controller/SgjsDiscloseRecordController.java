@@ -173,13 +173,6 @@ public class SgjsDiscloseRecordController extends BaseController {
         return toAjax(sgjsDiscloseRecordService.deleteSgjsDiscloseRecordByPks(sgjsDiscloseRecordPkList));
     }
 
-//    @GetMapping("/export")
-//    public void export(HttpServletResponse response, SgjsDiscloseRecord sgjsDiscloseRecordParam) throws IOException {
-//        List<SgjsDiscloseRecord> sgjsDiscloseRecordList = sgjsDiscloseRecordService.getSgjsDiscloseRecordList(sgjsDiscloseRecordParam);
-//        ExcelUtils<SgjsDiscloseRecord> util = new ExcelUtils<>(SgjsDiscloseRecord.class);
-//        util.exportExcel(response, sgjsDiscloseRecordList, DateUtils.getDate());
-//    }
-
     /**
      * 导出接口
      * @param response
@@ -234,6 +227,7 @@ public class SgjsDiscloseRecordController extends BaseController {
     public void exportOneOrTwo(HttpServletResponse response, SgjsDiscloseRecord sgjsDiscloseRecord) throws IOException {
         List<SgjsDiscloseRecord> list = sgjsDiscloseRecordService.getSgjsDiscloseRecordList(sgjsDiscloseRecord);
         ExcelUtils<SgjsDiscloseRecord> util = new ExcelUtils<>(SgjsDiscloseRecord.class);
+        FlowInfoSearchUtil.getFlowInfo(list, FlowEnum.SGJS_DISCLOSE_RECORD);
         util.exportExcel(response, list, DateUtils.getDate());
     }
 
