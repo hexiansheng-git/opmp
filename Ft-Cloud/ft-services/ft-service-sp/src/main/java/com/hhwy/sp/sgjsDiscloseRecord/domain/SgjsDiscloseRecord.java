@@ -205,6 +205,8 @@ public class SgjsDiscloseRecord extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "流程状态",dictType = "task_status")
     private String taskStatus;
+
+    private String taskStatusStr;
     /**
      *字段描述：当前处理人
      */

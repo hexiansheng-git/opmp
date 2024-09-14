@@ -81,7 +81,7 @@ public class SgjsDiscloseRecordController extends BaseController {
         List<SysDictData> list = systemApiService.selectDictDataByType("task_status");
         sgjsDiscloseRecordList.forEach(e-> {
             List<SysDictData> dataList = list.stream().filter(t -> t.getDictValue().equals(e.getTaskStatus())).collect(Collectors.toList());
-            e.setTaskStatus(dataList.get(0).getDictLabel());
+            e.setTaskStatusStr(dataList.get(0).getDictLabel());
         });
         return getDataTableAjaxResult(sgjsDiscloseRecordList);
     }
