@@ -49,12 +49,15 @@ import com.hhwy.sp.common.FlowInfoSearchUtil;
 import com.hhwy.sp.common.warn.CommonBusiness;
 import com.hhwy.sp.common.warn.SgjsWarnRecord;
 import com.hhwy.sp.core.system.SystemApiService;
+import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
+import com.hhwy.sp.sgjsDiscloseRecord.service.ISgjsDiscloseRecordService;
 import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.*;
 import com.hhwy.utils.common.CommonAssert;
+import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import io.jsonwebtoken.lang.Strings;
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +69,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.loadbalancer.core.DiscoveryClientServiceInstanceListSupplier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -122,6 +126,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
     private RocketMQTemplate rocketMQTemplate;
     @Autowired
     private SystemApiService systemApiService;
+    @Autowired
+    private ISgjsDiscloseRecordService sgjsDiscloseRecordService;
 
 
     public SgjsBuildSchemeReview getSgjsBuildSchemeReview(SgjsBuildSchemeReview sgjsBuildSchemeReview) {
@@ -998,6 +1004,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         sysSyncInfoService4Sp.pushSgjsBuildSchemeReview(review);
         //审批结果走预警,推送
         auditResultPush(review);
+        //推送到技术交底(二级)
+        push2Disclose(review);
     }
 
     @Override
@@ -1243,6 +1251,23 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         log.info("施工方案评审预警完了");
     }
 
+    
+    private void push2Disclose(SgjsBuildSchemeReview review){
+        //fuck
+        SgjsDiscloseRecord disclose = new SgjsDiscloseRecord();
+        disclose.setId(IdWorker.createId());
+        disclose.setPtVar1("1");
+        disclose.setPtVar2(SecurityUtils.getTenantKey());
+        disclose.setPtVar3(TaskStatus.NOT_INITIATED.getCode());
+        disclose.setPtVar5(review.getSchemeNum());
+        disclose.setTaskStatus(TaskStatus.NOT_INITIATED.getCode());
+        new AddBaseInfoUtil<>(disclose);
+        disclose.setProjectName(SecurityUtils.getSysUser().getTenant().getTenantName());
+        disclose.setDiscloseLevel("2");
+        disclose.setDiscloseName(review.getSchemeName()+"施工方案交底");
+        sgjsDiscloseRecordService.insertSgjsDiscloseRecord(disclose);
+    }
+    
     @Override
     public void deleteById(Long id) {
         sgjsBuildSchemeReviewMapper.deleteById(id);
