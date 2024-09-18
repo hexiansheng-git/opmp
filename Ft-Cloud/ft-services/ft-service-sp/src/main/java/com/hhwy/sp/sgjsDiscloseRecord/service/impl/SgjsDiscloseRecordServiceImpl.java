@@ -172,8 +172,14 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
         sgjsDiscloseRecord.setUpdateTime(DateUtils.getNowDate());
         Map<String,Object> map=new HashMap<>();
         if(sgjsDiscloseRecord.getType().equals("1")){//删除
-            sgjsDiscloseRecord.setDelFlag("1");
+            SgjsDiscloseRecord info=sgjsDiscloseRecordMapper.getById(sgjsDiscloseRecord.getId());
+            String ptVar1 = info.getPtVar1();//数量来源  0新增 1同步  同步不允许删除
+            if(StringUtils.isNotEmpty(ptVar1) && ptVar1.equals("1")){
+                logger.info("该数据不允许删除");
+                return -1;
+            }
             map.put("type","1");//0新增1删除2修改
+            sgjsDiscloseRecord.setDelFlag("1");
         }else{
             map.put("type","2");//0新增1删除2修改
         }

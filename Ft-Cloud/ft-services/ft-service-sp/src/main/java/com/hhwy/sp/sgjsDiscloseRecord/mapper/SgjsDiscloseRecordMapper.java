@@ -37,5 +37,4 @@ public interface SgjsDiscloseRecordMapper {
     List<SgjsDiscloseRecord> selectData();
 
     SgjsDiscloseRecord getById(Long id);
-
 }

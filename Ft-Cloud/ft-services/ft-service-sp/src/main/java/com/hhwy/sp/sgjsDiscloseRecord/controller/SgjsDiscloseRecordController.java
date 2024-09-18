@@ -126,7 +126,9 @@ public class SgjsDiscloseRecordController extends BaseController {
     @PostMapping("/update")
     @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsDiscloseRecord(@Validated(ValidationGroups.Update.class) @RequestBody SgjsDiscloseRecord sgjsDiscloseRecordParam) {
-        return toAjax(sgjsDiscloseRecordService.updateSgjsDiscloseRecord(sgjsDiscloseRecordParam));
+        int i = sgjsDiscloseRecordService.updateSgjsDiscloseRecord(sgjsDiscloseRecordParam);
+        if(i==-1) return AjaxResult.error("同步的数据不允许删除");
+        return AjaxResult.success(i);
     }
 
 
