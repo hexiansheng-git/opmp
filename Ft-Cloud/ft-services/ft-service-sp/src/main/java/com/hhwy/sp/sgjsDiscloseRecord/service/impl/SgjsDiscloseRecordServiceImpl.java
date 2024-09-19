@@ -414,6 +414,7 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
         if (null==id)return null;
         SgjsDiscloseRecord info=sgjsDiscloseRecordMapper.getById(id);
         FlowInfoSearchUtil.getFlowInfo(info, FlowEnum.SGJS_DISCLOSE_RECORD);
+        info.setBusinessId(id+"");
         return info;
     }
 
