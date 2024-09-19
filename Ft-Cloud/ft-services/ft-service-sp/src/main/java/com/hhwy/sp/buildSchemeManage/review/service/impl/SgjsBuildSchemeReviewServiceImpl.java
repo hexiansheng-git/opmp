@@ -1262,6 +1262,8 @@ public class SgjsBuildSchemeReviewServiceImpl implements ISgjsBuildSchemeReviewS
         disclose.setPtVar5(review.getSchemeNum());
         disclose.setTaskStatus(TaskStatus.NOT_INITIATED.getCode());
         new AddBaseInfoUtil<>(disclose);
+        disclose.setCreateUser(null);
+        disclose.setCreateUserName(null);
         disclose.setProjectName(SecurityUtils.getSysUser().getTenant().getTenantName());
         disclose.setDiscloseLevel("2");
         disclose.setDiscloseName(review.getSchemeName()+"施工方案交底");
