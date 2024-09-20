@@ -39,6 +39,7 @@
         <result property="reviewUser" column="review_user"/>
         <result property="workTeam" column="work_team"/>
         <result property="dataType" column="data_type"/>
+        <result property="discloseFileId" column="disclose_file_id"/>
     </resultMap>
     <sql id="selectSgjsDiscloseRecordVo">
         select `id`
@@ -74,6 +75,7 @@
              , `review_user`
              , `work_team`
              , `data_type`
+             , `disclose_file_id`
         from sgjs_disclose_record
     </sql>
     <select id="getSgjsDiscloseRecord" resultMap="SgjsDiscloseRecordResultMap">
@@ -82,6 +84,7 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="discloseFileId != null  and discloseFileId != ''">and `disclose_file_id` = #{discloseFileId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -126,6 +129,7 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="discloseFileId != null  and discloseFileId != ''">and `disclose_file_id` = #{discloseFileId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -195,6 +199,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+            <if test="discloseFileId != null  and discloseFileId != ''">`disclose_file_id`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -230,6 +235,7 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+            <if test="discloseFileId != null  and discloseFileId != ''">#{discloseFileId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -270,6 +276,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `file_group_id`,
+            `disclose_file_id`,
             `remark`,
             `region_id`,
             `region_name`,
@@ -307,6 +314,7 @@
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
                 #{item.fileGroupId},
+                #{item.discloseFileId},
                 #{item.remark},
                 #{item.regionId},
                 #{item.regionName},
@@ -347,6 +355,7 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+            <if test="discloseFileId != null  and  discloseFileId != ''">`disclose_file_id` = #{discloseFileId},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -398,6 +407,11 @@
             <trim prefix="file_group_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.fileGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="disclose_file_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.discloseFileId}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">
@@ -567,6 +581,7 @@
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="discloseFileId != null  and discloseFileId != ''">and `disclose_file_id` = #{discloseFileId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
