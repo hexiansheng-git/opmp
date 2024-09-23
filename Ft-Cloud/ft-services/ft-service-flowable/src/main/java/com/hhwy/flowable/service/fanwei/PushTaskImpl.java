@@ -273,8 +273,10 @@ public class PushTaskImpl  implements TaskProcessor {
         if(historicProcessInstance.getProcessDefinitionId().indexOf("process_sgjs_build_scheme_review") > -1){
             spServiceApi.updateBuildSchemeReviewProcess2Init(Long.valueOf(historicProcessInstance.getBusinessKey()));
         }
-        //一、二级（方案）交底 撤回到未发起状态同步总部  TODO
-        //spServiceApi.disCloseRecordListener(Long.valueOf(historicProcessInstance.getBusinessKey()),"0");
+//        //一、二级（方案）交底 撤回到未发起状态同步总部
+//        if(historicProcessInstance.getProcessDefinitionId().indexOf("sgjs_disclose_record") > -1){
+//            spServiceApi.disCloseRecordListener(Long.valueOf(historicProcessInstance.getBusinessKey()),"0");
+//        }
     }
 
 

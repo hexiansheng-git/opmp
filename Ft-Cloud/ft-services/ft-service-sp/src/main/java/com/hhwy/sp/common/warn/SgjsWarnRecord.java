@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -16,6 +18,8 @@ import java.util.Date;
  * @date 2024-04-01 14:35:11
  * @remark sgjs_warn_record
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class SgjsWarnRecord extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -122,7 +126,7 @@ public class SgjsWarnRecord extends BaseEntity {
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：关联id 预警记录->预警表
      */
     @JsonProperty
     @Excel(name = "预留字段1")
@@ -183,264 +187,4 @@ public class SgjsWarnRecord extends BaseEntity {
     @JsonProperty
     @Excel(name = "项目编码")
     private String projectCode;
-
-    @JsonIgnore
-    public Long getId() {
-        return id;
-    }
-
-    @JsonIgnore
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @JsonIgnore
-    public String getWarnSubject() {
-        return warnSubject;
-    }
-
-    @JsonIgnore
-    public void setWarnSubject(String warnSubject) {
-        this.warnSubject = warnSubject;
-    }
-
-    @JsonIgnore
-    public String getWarnContent() {
-        return warnContent;
-    }
-
-    @JsonIgnore
-    public void setWarnContent(String warnContent) {
-        this.warnContent = warnContent;
-    }
-
-    @JsonIgnore
-    public String getWarnUserId() {
-        return warnUserId;
-    }
-
-    @JsonIgnore
-    public void setWarnUserId(String warnUserId) {
-        this.warnUserId = warnUserId;
-    }
-
-    @JsonIgnore
-    public String getWarnUser() {
-        return warnUser;
-    }
-
-    @JsonIgnore
-    public void setWarnUser(String warnUser) {
-        this.warnUser = warnUser;
-    }
-
-    @JsonIgnore
-    public Date getWarnTime() {
-        return warnTime;
-    }
-
-    @JsonIgnore
-    public void setWarnTime(Date warnTime) {
-        this.warnTime = warnTime;
-    }
-
-    @JsonIgnore
-    public String getStatus() {
-        return status;
-    }
-
-    @JsonIgnore
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    @JsonIgnore
-    public String getRemark() {
-        return remark;
-    }
-
-    @JsonIgnore
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    @JsonIgnore
-    public String getCreateUser() {
-        return createUser;
-    }
-
-    @JsonIgnore
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
-
-    @JsonIgnore
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    @JsonIgnore
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    @JsonIgnore
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    @JsonIgnore
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @JsonIgnore
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    @JsonIgnore
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    @JsonIgnore
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    @JsonIgnore
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @JsonIgnore
-    public String getDelUser() {
-        return delUser;
-    }
-
-    @JsonIgnore
-    public void setDelUser(String delUser) {
-        this.delUser = delUser;
-    }
-
-    @JsonIgnore
-    public Date getDelTime() {
-        return delTime;
-    }
-
-    @JsonIgnore
-    public void setDelTime(Date delTime) {
-        this.delTime = delTime;
-    }
-
-    @JsonIgnore
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    @JsonIgnore
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    @JsonIgnore
-    public String getPtVar1() {
-        return ptVar1;
-    }
-
-    @JsonIgnore
-    public void setPtVar1(String ptVar1) {
-        this.ptVar1 = ptVar1;
-    }
-
-    @JsonIgnore
-    public String getPtVar2() {
-        return ptVar2;
-    }
-
-    @JsonIgnore
-    public void setPtVar2(String ptVar2) {
-        this.ptVar2 = ptVar2;
-    }
-
-    @JsonIgnore
-    public String getPtVar3() {
-        return ptVar3;
-    }
-
-    @JsonIgnore
-    public void setPtVar3(String ptVar3) {
-        this.ptVar3 = ptVar3;
-    }
-
-    @JsonIgnore
-    public String getPtVar4() {
-        return ptVar4;
-    }
-
-    @JsonIgnore
-    public void setPtVar4(String ptVar4) {
-        this.ptVar4 = ptVar4;
-    }
-
-    @JsonIgnore
-    public String getPtVar5() {
-        return ptVar5;
-    }
-
-    @JsonIgnore
-    public void setPtVar5(String ptVar5) {
-        this.ptVar5 = ptVar5;
-    }
-
-    @JsonIgnore
-    public Long getRegionId() {
-        return regionId;
-    }
-
-    @JsonIgnore
-    public void setRegionId(Long regionId) {
-        this.regionId = regionId;
-    }
-
-    @JsonIgnore
-    public String getRegionName() {
-        return regionName;
-    }
-
-    @JsonIgnore
-    public void setRegionName(String regionName) {
-        this.regionName = regionName;
-    }
-
-    @JsonIgnore
-    public Long getProjectId() {
-        return projectId;
-    }
-
-    @JsonIgnore
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
-    }
-
-    @JsonIgnore
-    public String getProjectName() {
-        return projectName;
-    }
-
-    @JsonIgnore
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    @JsonIgnore
-    public String getProjectCode() {
-        return projectCode;
-    }
-
-    @JsonIgnore
-    public void setProjectCode(String projectCode) {
-        this.projectCode = projectCode;
-    }
 }
