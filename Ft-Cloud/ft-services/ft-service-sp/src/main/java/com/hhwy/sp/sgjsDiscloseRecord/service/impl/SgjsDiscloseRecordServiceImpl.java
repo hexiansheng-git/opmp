@@ -373,8 +373,8 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
                 //总部数据处理
                 SgjsWarnConfig config=new SgjsWarnConfig();
                 config.setCreateTime(DateUtils.getNowDate());
-                config.setWarnSubject(WarnItem.KCSJ_PLAN_PROCESS.getWarnItem());
-                config.setPtVar1(WarnItem.KCSJ_PLAN_PROCESS.getWarnItemId());
+                config.setWarnSubject(WarnItem.SGJS_DISCLOSE_RECORD.getWarnItem());
+                config.setPtVar1(WarnItem.SGJS_DISCLOSE_RECORD.getWarnItemId());
                 config.setWarnObjectId(sgjsWarnConfig.getWarnObjectId());
                 config.setPrjCode(tenant.getTenantKey());
                 config.setPrjName(tenant.getTenantName());
