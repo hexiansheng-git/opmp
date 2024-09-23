@@ -456,6 +456,7 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
                 record.setWarnSubject(valueList.get(0).getWarnSubject());
                 record.setWarnTime(DateUtils.getNowDate());
                 record.setStatus("1");
+                record.setPtVar1(valueList.get(0).getId()+"");
                 rstList.add(record);
             });
         }
