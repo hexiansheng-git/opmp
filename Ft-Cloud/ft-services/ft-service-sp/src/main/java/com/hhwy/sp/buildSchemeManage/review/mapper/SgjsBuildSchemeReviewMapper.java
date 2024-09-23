@@ -51,6 +51,6 @@ public interface SgjsBuildSchemeReviewMapper {
     int updateStaffUser(@Param("userName") String userName,@Param("nickName") String nickName,
                         @Param("reviewId") Long reviewId,@Param("type") String type,@Param("sourceUsername") String sourceUsername);
 
-    @Select("select count(1) from sgjs_build_scheme_review_staff where review_id=#{reviewId} and flow_node_mark = #{flowNodeMark} and review_staff_id =#{username} and (score is null or score = '')")
+    @Select("select count(1) from sgjs_build_scheme_review_staff where del_flag = 0 and review_id=#{reviewId} and flow_node_mark = #{flowNodeMark} and review_staff_id =#{username} and (score is null or score = '')")
     int selectNullScore(@Param("reviewId") Long reviewId,@Param("flowNodeMark") String flowNodeMark,@Param("username") String username);
 }
