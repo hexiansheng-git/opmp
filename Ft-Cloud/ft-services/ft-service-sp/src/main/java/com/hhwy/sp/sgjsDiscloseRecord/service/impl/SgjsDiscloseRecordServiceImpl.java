@@ -93,7 +93,7 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
             sgjsDiscloseRecord.setPtVar5(no);//交底编号
             sgjsDiscloseRecord.setDiscloseLevel("2");//交底等级 默认二级不可修改
             sgjsDiscloseRecord.setDiscloseName(sgjsDiscloseRecord.getDiscloseName()+DataCurrentState.DIS_NAME);//交底名称
-            logger.info("施工方案清单推送一二级方案安全交底req:【】",JSONObject.toJSONString(sgjsDiscloseRecord));
+            logger.info("施工方案清单推送一二级方案安全交底req:【{}】",JSONObject.toJSONString(sgjsDiscloseRecord));
         }else{
             int count = sgjsDiscloseRecordMapper.selectCount(new SgjsDiscloseRecord());
             String s = StringUtils.leftPad(count + 1 + "", 3, "0");
@@ -335,6 +335,7 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
      * @param sgjsWarnConfig
      */
     private void handelLogic(List<SysTenant> tenantList, SgjsWarnConfig sgjsWarnConfig) {
+        logger.info("tenantList--->【{}】,sgjsWarnConfig--->【{}】",JSONObject.toJSONString(tenantList),JSONObject.toJSONString(sgjsWarnConfig));
         //存放所有租户的消息
         List<SgjsWarnConfig> warnList=new ArrayList<>();
         for (SysTenant tenant : tenantList) {
