@@ -30,6 +30,7 @@ import com.hhwy.sp.sync.mq.service.ISysSyncInfoService4Sp;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -92,7 +93,7 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
             sgjsDiscloseRecord.setPtVar5(no);//交底编号
             sgjsDiscloseRecord.setDiscloseLevel("2");//交底等级 默认二级不可修改
             sgjsDiscloseRecord.setDiscloseName(sgjsDiscloseRecord.getDiscloseName()+DataCurrentState.DIS_NAME);//交底名称
-            logger.info("施工方案清单推送一二级方案安全交底req:【】",JSONObject.toJSONString(sgjsDiscloseRecord));
+            logger.info("施工方案清单推送一二级方案安全交底req:【{}】",JSONObject.toJSONString(sgjsDiscloseRecord));
         }else{
             int count = sgjsDiscloseRecordMapper.selectCount(new SgjsDiscloseRecord());
             String s = StringUtils.leftPad(count + 1 + "", 3, "0");
@@ -334,6 +335,7 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
      * @param sgjsWarnConfig
      */
     private void handelLogic(List<SysTenant> tenantList, SgjsWarnConfig sgjsWarnConfig) {
+        logger.info("tenantList--->【{}】,sgjsWarnConfig--->【{}】",JSONObject.toJSONString(tenantList),JSONObject.toJSONString(sgjsWarnConfig));
         //存放所有租户的消息
         List<SgjsWarnConfig> warnList=new ArrayList<>();
         for (SysTenant tenant : tenantList) {
@@ -356,32 +358,38 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
                 continue;
             }
             for (int i = 0; i < list.size(); i++) {
-                TWarn warn=new TWarn();
-                warn.setCreateTime(DateUtils.getNowDate());
-                warn.setTenantKey(tenant.getTenantKey());
-                warn.setProjectName(tenant.getTenantName());
-                warn.setWarnItem(WarnItem.SGJS_DISCLOSE_RECORD.getWarnItem());
-                warn.setWarnItemId(WarnItem.SGJS_DISCLOSE_RECORD.getWarnItemId());
-                warn.setWarnScopeType("3");
-                warn.setWarnScope(sgjsWarnConfig.getWarnObject());
-                String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getWarnSubject(), sgjsWarnConfig.getWarnRule());
-                logger.info("wwww--->【{}】",warnContent);
-                warn.setWarnContent(warnContent);
-                warn.setWarnUrl(warnUrl);
-                warn.setTenantKey(tenant.getTenantKey());
-                systemServiceApi.addWarnNonGm(warn);
-                //总部数据处理
-                SgjsWarnConfig config=new SgjsWarnConfig();
-                config.setCreateTime(DateUtils.getNowDate());
-                config.setWarnSubject(WarnItem.SGJS_DISCLOSE_RECORD.getWarnItem());
-                config.setPtVar1(WarnItem.SGJS_DISCLOSE_RECORD.getWarnItemId());
-                config.setWarnObjectId(sgjsWarnConfig.getWarnObjectId());
-                config.setPrjCode(tenant.getTenantKey());
-                config.setPrjName(tenant.getTenantName());
-                config.setWarnMassage(sgjsWarnConfig.getWarnMassage());
-                config.setPtVar1(warnContent);
-                config.setTenantKey(tenant.getTenantKey());
-                warnList.add(config);
+                //超过30天  每2天提醒一次
+                Date createTime = list.get(i).getCreateTime();
+                long twoDays = FtDateUtils.getDiffDays(createTime,DateUtils.getNowDate());
+                long ltr=twoDays%2;
+                if(ltr==0 && twoDays>0){
+                    TWarn warn=new TWarn();
+                    warn.setCreateTime(DateUtils.getNowDate());
+                    warn.setTenantKey(tenant.getTenantKey());
+                    warn.setProjectName(tenant.getTenantName());
+                    warn.setWarnItem(WarnItem.SGJS_DISCLOSE_RECORD.getWarnItem());
+                    warn.setWarnItemId(WarnItem.SGJS_DISCLOSE_RECORD.getWarnItemId());
+                    warn.setWarnScopeType("3");
+                    warn.setWarnScope(sgjsWarnConfig.getWarnObject());
+                    String warnContent = CommonBusiness.warnMessageHandle(sgjsWarnConfig.getWarnMassage(), tenant.getTenantName(), sgjsWarnConfig.getWarnSubject(), sgjsWarnConfig.getWarnRule());
+                    logger.info("wwww--->【{}】",warnContent);
+                    warn.setWarnContent(warnContent);
+                    warn.setWarnUrl(warnUrl);
+                    warn.setTenantKey(tenant.getTenantKey());
+                    systemServiceApi.addWarnNonGm(warn);
+                    //总部数据处理
+                    SgjsWarnConfig config=new SgjsWarnConfig();
+                    config.setCreateTime(DateUtils.getNowDate());
+                    config.setWarnSubject(WarnItem.SGJS_DISCLOSE_RECORD.getWarnItem());
+                    config.setPtVar1(WarnItem.SGJS_DISCLOSE_RECORD.getWarnItemId());
+                    config.setWarnObjectId(sgjsWarnConfig.getWarnObjectId());
+                    config.setPrjCode(tenant.getTenantKey());
+                    config.setPrjName(tenant.getTenantName());
+                    config.setWarnMassage(sgjsWarnConfig.getWarnMassage());
+                    config.setPtVar1(warnContent);
+                    config.setTenantKey(tenant.getTenantKey());
+                    warnList.add(config);
+                }
             }
 
         }

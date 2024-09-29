@@ -194,7 +194,7 @@ public class SgjsDiscloseRecord extends CommonBaseEntity {
     /**
      * 字段描述：数据创建系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy年MM月dd日")
     @JsonProperty
     @Excel(name = "创建日期", dateFormat = "yyyy年MM月dd日")
     @FtExcel(name = "创建日期", dateFormat = "yyyy年MM月dd日")
