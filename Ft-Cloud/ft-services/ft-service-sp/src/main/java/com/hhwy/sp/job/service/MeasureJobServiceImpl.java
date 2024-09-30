@@ -97,6 +97,7 @@ public class MeasureJobServiceImpl {
                 hanldeDataLogic(list,listMap);
             }
         }catch (Exception e){
+            logger.error("MeasureJobServiceImpl------->【{}】",e.getMessage());
             throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();

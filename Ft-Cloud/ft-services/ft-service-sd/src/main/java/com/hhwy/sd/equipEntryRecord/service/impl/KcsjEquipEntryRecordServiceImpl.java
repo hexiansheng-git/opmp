@@ -517,6 +517,7 @@ public class KcsjEquipEntryRecordServiceImpl implements IKcsjEquipEntryRecordSer
                 handleDataLogic(list,listMap);
             }
         }catch (Exception e){
+            logger.error("KcsjEquipEntryRecordServiceImpl预警报错了------->【{}】",e.getMessage());
             throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();

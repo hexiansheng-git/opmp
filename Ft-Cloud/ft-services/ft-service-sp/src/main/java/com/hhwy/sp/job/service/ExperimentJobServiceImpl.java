@@ -90,6 +90,7 @@ public class ExperimentJobServiceImpl {
                 hanldeDataLogic(list,wuSheDataMap);
             }
         }catch (Exception e){
+            logger.error("ExperimentJobServiceImpl定时任务报错了---->【{}】",JSONObject.toJSONString(tenantList));
             throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();
