@@ -92,7 +92,7 @@ public class SgjsDiscloseRecordServiceImpl implements ISgjsDiscloseRecordService
             String no = sgjsDiscloseRecord.getPtVar5() + DataCurrentState.DIS_SYNC;
             sgjsDiscloseRecord.setPtVar5(no);//交底编号
             sgjsDiscloseRecord.setDiscloseLevel("2");//交底等级 默认二级不可修改
-            sgjsDiscloseRecord.setDiscloseName(sgjsDiscloseRecord.getDiscloseName()+DataCurrentState.DIS_NAME);//交底名称
+            sgjsDiscloseRecord.setDiscloseName(sgjsDiscloseRecord.getDiscloseName());//交底名称
             logger.info("施工方案清单推送一二级方案安全交底req:【{}】",JSONObject.toJSONString(sgjsDiscloseRecord));
         }else{
             int count = sgjsDiscloseRecordMapper.selectCount(new SgjsDiscloseRecord());
