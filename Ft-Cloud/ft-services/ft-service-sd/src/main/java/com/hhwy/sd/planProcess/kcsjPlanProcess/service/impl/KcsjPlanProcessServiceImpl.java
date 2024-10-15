@@ -414,6 +414,7 @@ public class KcsjPlanProcessServiceImpl implements IKcsjPlanProcessService {
             //同步总部数据
             syncToGm(warnList,warnConfigRst);
         }catch (Exception e){
+            logger.error("定时任务报错了------>【{}】",e.getMessage());
             throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();

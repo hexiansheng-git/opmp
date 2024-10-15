@@ -369,6 +369,7 @@ public class SgjsExperimentRecordServiceImpl implements ISgjsExperimentRecordSer
             //同步总部数据
             syncToGm(warnList,warnConfigRst);
         }catch (Exception e){
+            logger.error("设备台账及检验报告预警报错----->【{}】",e.getMessage());
             throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();

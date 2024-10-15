@@ -1,7 +1,6 @@
 package com.hhwy.job.feign.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
-import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
