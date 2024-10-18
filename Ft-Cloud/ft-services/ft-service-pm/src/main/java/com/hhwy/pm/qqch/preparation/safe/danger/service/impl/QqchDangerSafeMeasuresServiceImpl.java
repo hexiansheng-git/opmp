@@ -84,10 +84,10 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
      */
     public QqchDangerSafeMeasuresVo getQqchDangerSafeMeasuresList(BigDecimal version) {
         QqchDangerSafeMeasuresVo vo = new QqchDangerSafeMeasuresVo();
-        version = VersionUtil.getVersion("qqch_danger_safe_measures", version);
-
+        BigDecimal mesVersion = VersionUtil.getVersion("qqch_danger_safe_measures", version);
+        
         QqchDangerSafeMeasures qryParam = new QqchDangerSafeMeasures();
-        qryParam.setVersion(version);
+        qryParam.setVersion(mesVersion);
         List<QqchDangerSafeMeasures> list = qqchDangerSafeMeasuresMapper.getQqchDangerSafeMeasuresList(qryParam);
 
         // 组装新列表

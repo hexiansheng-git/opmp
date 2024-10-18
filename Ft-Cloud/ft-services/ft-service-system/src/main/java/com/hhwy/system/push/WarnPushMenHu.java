@@ -48,6 +48,8 @@ public class WarnPushMenHu {
     private String pmUrl;
     @Value("${gm.url}")
     private String gmUrl;
+    @Value("${pushTask.sendFlag}")
+    private boolean sendFlag;
     @Autowired
     private ILogServiceApi logServiceApi;
     @Autowired
@@ -60,6 +62,8 @@ public class WarnPushMenHu {
 
 
     public void push(TWarn warn){
+        if(!sendFlag)
+            return ;
         Map param = new HashMap();
         String result = "",errMsg = "";
         String sysUrl = StringUtils.equals(warn.getPtVar1(),"1")?gmUrl:pmUrl;
