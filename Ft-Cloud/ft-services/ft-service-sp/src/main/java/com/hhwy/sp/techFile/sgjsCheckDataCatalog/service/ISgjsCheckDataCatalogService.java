@@ -3,6 +3,7 @@ package com.hhwy.sp.techFile.sgjsCheckDataCatalog.service;
 import java.util.List;
 
 import com.hhwy.sp.techFile.sgjsCheckDataCatalog.domain.SgjsCheckDataCatalog;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @author xuzl
@@ -26,4 +27,19 @@ public interface ISgjsCheckDataCatalogService {
     int deleteSgjsCheckDataCatalog(SgjsCheckDataCatalog sgjsCheckDataCatalog);
 
     int deleteSgjsCheckDataCatalogByPks(List<Long> sgjsCheckDataCatalogPkList);
+
+    /**
+     * 批量新增
+     *
+     * @param sgjsCheckDataCatalogList
+     * @return
+     */
+    int insertBath(List<SgjsCheckDataCatalog> sgjsCheckDataCatalogList);
+    /**
+     * 批量新增
+     *
+     * @param list
+     * @return
+     */
+    int updateBath(List<SgjsCheckDataCatalog> list);
 }

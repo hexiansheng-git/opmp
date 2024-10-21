@@ -309,7 +309,7 @@
         </where>
     </update>
 
-    <update id="updateSgjsCheckDataCatalogList">
+    <update id="updateSgjsCheckDataCatalogList" parameterType="list">
         update sgjs_check_data_catalog
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="id  = case" suffix="end,">
@@ -439,7 +439,7 @@
             </trim>
         </trim>
         where `id` in
-        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </update>

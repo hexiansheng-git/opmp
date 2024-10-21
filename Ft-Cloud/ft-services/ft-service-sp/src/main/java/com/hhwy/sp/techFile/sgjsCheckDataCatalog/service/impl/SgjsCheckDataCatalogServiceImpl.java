@@ -79,4 +79,20 @@ public class SgjsCheckDataCatalogServiceImpl implements ISgjsCheckDataCatalogSer
     public int deleteSgjsCheckDataCatalogByPks(List<Long> sgjsCheckDataCatalogPkList) {
         return sgjsCheckDataCatalogMapper.deleteSgjsCheckDataCatalogByPks(sgjsCheckDataCatalogPkList);
     }
+
+    @Override
+    public int insertBath(List<SgjsCheckDataCatalog> sgjsCheckDataCatalogList) {
+        for (SgjsCheckDataCatalog sgjsCheckDataCatalog : sgjsCheckDataCatalogList) {
+            sgjsCheckDataCatalog.setCreateTime(DateUtils.getNowDate());
+        }
+        return sgjsCheckDataCatalogMapper.insertSgjsCheckDataCatalogList(sgjsCheckDataCatalogList);
+    }
+
+    @Override
+    public int updateBath(List<SgjsCheckDataCatalog> sgjsCheckDataCatalogList) {
+        for (SgjsCheckDataCatalog sgjsCheckDataCatalog : sgjsCheckDataCatalogList) {
+            sgjsCheckDataCatalog.setUpdateTime(DateUtils.getNowDate());
+        }
+        return sgjsCheckDataCatalogMapper.updateSgjsCheckDataCatalogList(sgjsCheckDataCatalogList);
+    }
 }
