@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhwy.sp.techFile.sgjsCheckData.mapper.SgjsCheckDataMapper">
 
-    <resultMap type="com.hhwy.sp.techFile.sgjsCheckData.domain.SgjsCheckData" id="SgjsCheckDataResultMap">
+    <resultMap type="com.hhwy.sp.techFile.sgjsCheckData.domain.SgjsCheckDataParam" id="SgjsCheckDataResultMap">
         <result property="id" column="id"/>
         <result property="checkDataCatalogId" column="check_data_catalog_id"/>
         <result property="dataName" column="data_name"/>
@@ -35,7 +35,7 @@
         <result property="sort" column="sort"/>
     </resultMap>
 
-    <select id="getSgjsCheckData" resultMap="SgjsCheckDataResultMap">
+    <sql id="selectSgjsCheckDataVo">
         select
         `id`
         ,`check_data_catalog_id`
@@ -66,11 +66,15 @@
         ,`project_name`
         ,`sort`
         from sgjs_check_data
+    </sql>
+
+    <select id="getSgjsCheckData" resultMap="SgjsCheckDataResultMap">
+        <include refid="selectSgjsCheckDataVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="checkDataCatalogId != null ">and `check_data_catalog_id` = #{checkDataCatalogId}</if>
-            <if test="dataName != null  and dataName != ''">and `data_name` = #{dataName}</if>
+            <if test="dataName != null  and dataName != ''">and `data_name` like concat('%',#{data_name},'%')</if>
             <if test="uploadDate != null ">and `upload_date` = #{uploadDate}</if>
             <if test="submitUser != null  and submitUser != ''">and `submit_user` = #{submitUser}</if>
             <if test="effective != null  and effective != ''">and `effective` = #{effective}</if>
@@ -101,41 +105,12 @@
     </select>
 
     <select id="getSgjsCheckDataList" resultMap="SgjsCheckDataResultMap">
-        select
-        `id`
-        ,`check_data_catalog_id`
-        ,`data_name`
-        ,`upload_date`
-        ,`submit_user`
-        ,`effective`
-        ,`file_group_id`
-        ,`remark`
-        ,`create_user`
-        ,`create_user_name`
-        ,`create_time`
-        ,`update_user`
-        ,`update_time`
-        ,`del_user`
-        ,`del_time`
-        ,`del_flag`
-        ,`pt_var1`
-        ,`pt_var2`
-        ,`pt_var3`
-        ,`pt_var4`
-        ,`pt_var5`
-        ,`data_source`
-        ,`dept_id`
-        ,`region_id`
-        ,`region_name`
-        ,`project_id`
-        ,`project_name`
-        ,`sort`
-        from sgjs_check_data
+        <include refid="selectSgjsCheckDataVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="checkDataCatalogId != null ">and `check_data_catalog_id` = #{checkDataCatalogId}</if>
-            <if test="dataName != null  and dataName != ''">and `data_name` = #{dataName}</if>
+            <if test="dataName != null  and dataName != ''">and `data_name` like concat('%',#{data_name},'%')</if>
             <if test="uploadDate != null ">and `upload_date` = #{uploadDate}</if>
             <if test="submitUser != null  and submitUser != ''">and `submit_user` = #{submitUser}</if>
             <if test="effective != null  and effective != ''">and `effective` = #{effective}</if>
@@ -161,6 +136,9 @@
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''">
+                and `upload_date` BETWEEN #{beginDate} and #{endDate}
+            </if>
         </where>
         order by create_time desc
     </select>
@@ -482,47 +460,47 @@
         </foreach>
     </update>
 
-    <update id="deleteSgjsCheckData">
-        update `sgjs_check_data` set del_flag = 1
-        <where>
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="checkDataCatalogId != null ">and `check_data_catalog_id` = #{checkDataCatalogId}</if>
-            <if test="dataName != null  and dataName != ''">and `data_name` = #{dataName}</if>
-            <if test="uploadDate != null ">and `upload_date` = #{uploadDate}</if>
-            <if test="submitUser != null  and submitUser != ''">and `submit_user` = #{submitUser}</if>
-            <if test="effective != null  and effective != ''">and `effective` = #{effective}</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="sort != null ">and `sort` = #{sort}</if>
-        </where>
-    </update>
+<!--    <update id="deleteSgjsCheckData">-->
+<!--        update `sgjs_check_data` set del_flag = 1-->
+<!--        <where>-->
+<!--            <if test="id != null ">and `id` = #{id}</if>-->
+<!--            <if test="checkDataCatalogId != null ">and `check_data_catalog_id` = #{checkDataCatalogId}</if>-->
+<!--            <if test="dataName != null  and dataName != ''">and `data_name` = #{dataName}</if>-->
+<!--            <if test="uploadDate != null ">and `upload_date` = #{uploadDate}</if>-->
+<!--            <if test="submitUser != null  and submitUser != ''">and `submit_user` = #{submitUser}</if>-->
+<!--            <if test="effective != null  and effective != ''">and `effective` = #{effective}</if>-->
+<!--            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>-->
+<!--            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>-->
+<!--            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>-->
+<!--            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>-->
+<!--            <if test="createTime != null ">and `create_time` = #{createTime}</if>-->
+<!--            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>-->
+<!--            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>-->
+<!--            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>-->
+<!--            <if test="delTime != null ">and `del_time` = #{delTime}</if>-->
+<!--            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>-->
+<!--            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>-->
+<!--            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>-->
+<!--            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>-->
+<!--            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>-->
+<!--            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>-->
+<!--            <if test="dataSource != null  and dataSource != ''">and `data_source` = #{dataSource}</if>-->
+<!--            <if test="deptId != null ">and `dept_id` = #{deptId}</if>-->
+<!--            <if test="regionId != null ">and `region_id` = #{regionId}</if>-->
+<!--            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>-->
+<!--            <if test="projectId != null ">and `project_id` = #{projectId}</if>-->
+<!--            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>-->
+<!--            <if test="sort != null ">and `sort` = #{sort}</if>-->
+<!--        </where>-->
+<!--    </update>-->
 
-    <update id="deleteSgjsCheckDataByPks">
-        update `sgjs_check_data` set del_flag = 1
-        <where>
-            `id` in
-            <foreach item="id" collection="sgjsCheckDataPkList" open="(" separator="," close=")">
-                #{id}
-            </foreach>
-        </where>
-    </update>
+<!--    <update id="deleteSgjsCheckDataByPks">-->
+<!--        update `sgjs_check_data` set del_flag = 1-->
+<!--        <where>-->
+<!--            `id` in-->
+<!--            <foreach item="id" collection="sgjsCheckDataPkList" open="(" separator="," close=")">-->
+<!--                #{id}-->
+<!--            </foreach>-->
+<!--        </where>-->
+<!--    </update>-->
 </mapper>
