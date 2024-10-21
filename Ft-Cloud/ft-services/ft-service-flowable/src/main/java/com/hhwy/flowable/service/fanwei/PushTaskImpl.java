@@ -1,11 +1,8 @@
 package com.hhwy.flowable.service.fanwei;
 
-import cn.hutool.core.codec.Base64;
-import cn.hutool.core.lang.hash.MurmurHash;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.common.utils.MD5Utils;
 import com.hhwy.common.core.utils.DateUtils;
@@ -23,9 +20,6 @@ import com.hhwy.flowable.core.processor.TaskProcessor;
 import com.hhwy.flowable.feign.service.SpServiceApi;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
-import liquibase.pro.packaged.I;
-import liquibase.util.MD5Util;
-import org.apache.commons.collections4.CollectionUtils;
 import org.flowable.engine.HistoryService;
 import org.flowable.engine.history.HistoricProcessInstance;
 import org.flowable.task.api.history.HistoricTaskInstance;
@@ -34,10 +28,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.remoting.jaxws.AbstractJaxWsServiceExporter;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.RemoteEndpoint;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -281,7 +273,10 @@ public class PushTaskImpl  implements TaskProcessor {
         if(historicProcessInstance.getProcessDefinitionId().indexOf("process_sgjs_build_scheme_review") > -1){
             spServiceApi.updateBuildSchemeReviewProcess2Init(Long.valueOf(historicProcessInstance.getBusinessKey()));
         }
-         
+//        //一、二级（方案）交底 撤回到未发起状态同步总部
+//        if(historicProcessInstance.getProcessDefinitionId().indexOf("sgjs_disclose_record") > -1){
+//            spServiceApi.disCloseRecordListener(Long.valueOf(historicProcessInstance.getBusinessKey()),"0");
+//        }
     }
 
 

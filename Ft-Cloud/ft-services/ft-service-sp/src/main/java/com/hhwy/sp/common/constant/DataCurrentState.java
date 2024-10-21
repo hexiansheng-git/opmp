@@ -10,4 +10,13 @@ public class DataCurrentState {
     public static final String PASS = "3"; //申请通过
     public static final String NO_PASS = "4"; //申请不通过
     public static final String MODIFY = "5"; //修改
+
+    //方案安全交底——新增
+    public static final String DIS_ADD="XZJD";
+    //方案安全交底——同步
+    public static final String DIS_SYNC="FAJD";
+    public static final String DIS_NAME="交底";
+    //方案安全交底--一、二级
+    public static final String ONE_OR_TWO="oneOrTwo";
+
 }

@@ -1,36 +1,33 @@
 package com.hhwy.sp.sgjsDiscloseRecord.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.io.IOException;
-
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.metadata.WriteSheet;
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.sp.common.FlowInfoSearchUtil;
+import com.hhwy.sp.core.system.SystemApiService;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord;
 import com.hhwy.sp.sgjsDiscloseRecord.domain.SgjsDiscloseRecord4Update;
 import com.hhwy.sp.sgjsDiscloseRecord.service.ISgjsDiscloseRecordService;
+import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.customLog.CustomBusinessType;
 import com.hhwy.utils.customLog.CustomLogger;
 import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
-import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author cjh
@@ -44,6 +41,8 @@ public class SgjsDiscloseRecordController extends BaseController {
 
     @Autowired
     private ISgjsDiscloseRecordService sgjsDiscloseRecordService;
+    @Autowired
+    private SystemApiService systemApiService;
 
 
     @PreAuthorize(hasPermi = "sgjsDiscloseRecord:list")
@@ -66,6 +65,29 @@ public class SgjsDiscloseRecordController extends BaseController {
         return getDataTableAjaxResult(sgjsDiscloseRecordList);
     }
 
+
+    /**
+     * 查询接口
+     * @param sgjsDiscloseRecordParam
+     * @return
+     */
+    @PreAuthorize(hasPermi = "sgjsDiscloseRecord:getList")
+    @GetMapping("/getList")
+    public AjaxResult getList(@Validated(ValidationGroups.Select.class) SgjsDiscloseRecord sgjsDiscloseRecordParam) {
+        startPage();
+        List<SgjsDiscloseRecord> sgjsDiscloseRecordList = sgjsDiscloseRecordService.getSgjsDiscloseRecordList(sgjsDiscloseRecordParam);
+        FlowInfoSearchUtil.getFlowInfo(sgjsDiscloseRecordList, FlowEnum.SGJS_DISCLOSE_RECORD);
+        //流程状态
+        List<SysDictData> list = systemApiService.selectDictDataByType("task_status");
+        sgjsDiscloseRecordList.forEach(e-> {
+            List<SysDictData> dataList = list.stream().filter(t -> t.getDictValue().equals(e.getTaskStatus())).collect(Collectors.toList());
+            e.setTaskStatusStr(dataList.get(0).getDictLabel());
+        });
+        return getDataTableAjaxResult(sgjsDiscloseRecordList);
+    }
+
+
+
     @PreAuthorize(hasPermi = "sgjsDiscloseRecord:add")
     @PostMapping("/add")
     @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.SAVE)
@@ -73,6 +95,24 @@ public class SgjsDiscloseRecordController extends BaseController {
         sgjsDiscloseRecordService.insertSgjsDiscloseRecord(sgjsDiscloseRecordParam);
         return AjaxResult.success(sgjsDiscloseRecordParam);
     }
+
+    /**
+     * 有id新增
+     * 没有id修改
+     *
+     * @param sgjsDiscloseRecord
+     * @return
+     */
+    @PreAuthorize(hasPermi = "sgjsDiscloseRecord:handleAdd")
+    @PostMapping("/handleAdd")
+    @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.SAVE)
+    public AjaxResult handleAdd(@Validated(ValidationGroups.Save.class) @RequestBody SgjsDiscloseRecord sgjsDiscloseRecord) {
+        sgjsDiscloseRecordService.handleAdd(sgjsDiscloseRecord);
+        return AjaxResult.success(sgjsDiscloseRecord);
+    }
+
+
+
 
     @PreAuthorize(hasPermi = "sgjsDiscloseRecord:add")
     @PostMapping("/batchAdd")
@@ -86,8 +126,20 @@ public class SgjsDiscloseRecordController extends BaseController {
     @PostMapping("/update")
     @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.UPDATE)
     public AjaxResult updateSgjsDiscloseRecord(@Validated(ValidationGroups.Update.class) @RequestBody SgjsDiscloseRecord sgjsDiscloseRecordParam) {
-        return toAjax(sgjsDiscloseRecordService.updateSgjsDiscloseRecord(sgjsDiscloseRecordParam));
+        int i = sgjsDiscloseRecordService.updateSgjsDiscloseRecord(sgjsDiscloseRecordParam);
+        if(i==-1) return AjaxResult.error("同步的数据不允许删除");
+        return AjaxResult.success(i);
     }
+
+
+
+    @PreAuthorize(hasPermi = "sgjsDiscloseRecord:update")
+    @GetMapping("/detail")
+    @CustomLogger(title = "施工技术-方案安全技术交底",name = "方案安全技术交底",businessType = CustomBusinessType.UPDATE)
+    public AjaxResult detail(SgjsDiscloseRecord sgjsDiscloseRecord) {
+        return AjaxResult.success(sgjsDiscloseRecordService.detail(sgjsDiscloseRecord));
+    }
+
 
     /**
      * 保存接口
@@ -122,13 +174,6 @@ public class SgjsDiscloseRecordController extends BaseController {
         List<Long> sgjsDiscloseRecordPkList = Arrays.asList(ids);
         return toAjax(sgjsDiscloseRecordService.deleteSgjsDiscloseRecordByPks(sgjsDiscloseRecordPkList));
     }
-
-//    @GetMapping("/export")
-//    public void export(HttpServletResponse response, SgjsDiscloseRecord sgjsDiscloseRecordParam) throws IOException {
-//        List<SgjsDiscloseRecord> sgjsDiscloseRecordList = sgjsDiscloseRecordService.getSgjsDiscloseRecordList(sgjsDiscloseRecordParam);
-//        ExcelUtils<SgjsDiscloseRecord> util = new ExcelUtils<>(SgjsDiscloseRecord.class);
-//        util.exportExcel(response, sgjsDiscloseRecordList, DateUtils.getDate());
-//    }
 
     /**
      * 导出接口
@@ -168,16 +213,27 @@ public class SgjsDiscloseRecordController extends BaseController {
         String templateName = "";
         // 一、二级交底模板
         if("oneOrTwo".equals(dataType)) {
-            templateName = "exportDiscloseRecord12.xlsx";
+            //templateName = "newExportDiscloseRecord12.xlsx";
+            templateName = "newExportDiscloseRecord12.xlsx";
         }
         // 三级交底模板
         if("three".equals(dataType)) {
             templateName = "exportDiscloseRecord3.xlsx";
         }
-
         util.exportWithTemplate4FileName(response, sgjsDiscloseRecordList, 2, templateName, "sheet1", "交底记录");
 
     }
+
+
+    @GetMapping("/exportOneOrTwo")
+    public void exportOneOrTwo(HttpServletResponse response, SgjsDiscloseRecord sgjsDiscloseRecord) throws IOException {
+        List<SgjsDiscloseRecord> list = sgjsDiscloseRecordService.getSgjsDiscloseRecordList(sgjsDiscloseRecord);
+        ExcelUtils<SgjsDiscloseRecord> util = new ExcelUtils<>(SgjsDiscloseRecord.class);
+        FlowInfoSearchUtil.getFlowInfo(list, FlowEnum.SGJS_DISCLOSE_RECORD);
+        util.exportExcel(response, list, DateUtils.getDate());
+    }
+
+
 
     /**
      * 导入接口
@@ -197,5 +253,31 @@ public class SgjsDiscloseRecordController extends BaseController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 一、二级方案安全交底预警
+     * @auth lcf
+     * @date 2024年08月28日
+     *
+     * @return
+     */
+    @GetMapping("/disCloseWarn")
+    public AjaxResult disCloseWarn(){
+        sgjsDiscloseRecordService.disCloseWarn();
+        return AjaxResult.success();
+    }
+
+
+    /**
+     * 一、二级方案安全交底流程监听
+     * 发消息to项目总工（）
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/listener")
+    public AjaxResult disCloseRecordListener(@RequestParam("id") Long id,@RequestParam("status") String status){
+        return sgjsDiscloseRecordService.disCloseRecordListener(id,status);
     }
 }

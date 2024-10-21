@@ -24,10 +24,7 @@ import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain.QyzsSafeRiskBigProjItem;
 import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.domain.SafeRiskBigProjQueryVo;
 import com.hhwy.pm.qyzs.safe.qyzsSafeRiskBigProj.service.IQyzsSafeRiskBigProjService;
 import com.hhwy.pm.utils.HttpHeadersUtils;
-import com.hhwy.utils.AddBaseInfoUtil;
-import com.hhwy.utils.Constant;
-import com.hhwy.utils.GmTokenUtils;
-import com.hhwy.utils.HttpClientUtil;
+import com.hhwy.utils.*;
 import com.hhwy.utils.idworker.IdWorker;
 import javafx.scene.shape.Mesh;
 import org.apache.commons.compress.utils.Lists;
@@ -87,10 +84,10 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
      */
     public QqchDangerSafeMeasuresVo getQqchDangerSafeMeasuresList(BigDecimal version) {
         QqchDangerSafeMeasuresVo vo = new QqchDangerSafeMeasuresVo();
-        version = VersionUtil.getVersion("qqch_danger_safe_measures", version);
-
+        BigDecimal mesVersion = VersionUtil.getVersion("qqch_danger_safe_measures", version);
+        
         QqchDangerSafeMeasures qryParam = new QqchDangerSafeMeasures();
-        qryParam.setVersion(version);
+        qryParam.setVersion(mesVersion);
         List<QqchDangerSafeMeasures> list = qqchDangerSafeMeasuresMapper.getQqchDangerSafeMeasuresList(qryParam);
 
         // 组装新列表
@@ -136,8 +133,8 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
             if(!CollectionUtils.isEmpty(oldDetailList)){
                 for (int i = 0; i < oldDetailList.size(); i++) {
                     QqchDangerSafeMeasuresDetail temp = oldDetailList.get(i);
-                    if("1".equals(temp.getIsSelect()))
-                        continue;
+//                    if("1".equals(temp.getIsSelect()))
+//                        continue;
                     sourceDetailMap.put(measures.getPtVar1()+"__"+measures.getPtVar3()+"__"+temp.getMeasures(),temp);
                 }
             }
@@ -154,8 +151,13 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
                 temp.setMasterId(measures.getId());
                 temp.setVersion(version);
                 measures.getDetailList().add(temp);
-                //进行去重
-                sourceDetailMap.remove(measures.getPtVar1()+"__"+measures.getPtVar3()+"__"+temp.getMeasures()); 
+                //进行去重,且获取remark
+                String key = measures.getPtVar1()+"__"+measures.getPtVar3()+"__"+temp.getMeasures();
+                if(sourceDetailMap.containsKey(key)){
+                    QqchDangerSafeMeasuresDetail detail = sourceDetailMap.get(key);
+                    temp.setRemark(ObjectUtils.nvlString(detail.getRemark(),temp.getRemark()));
+                    sourceDetailMap.remove(key);
+                }
             }
             measures.getDetailList().addAll(sourceDetailMap.values());
         }
@@ -373,6 +375,7 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
         new AddBaseInfoUtil<>().addBaseEntity(detail);
         detail.setPtVar1(item.getRiskEvent());
         detail.setPtVar2(item.getPossibleConsequence());
+        detail.setRemark(item.getRemark());
         return detail;
     }
 }

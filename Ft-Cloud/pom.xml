@@ -80,10 +80,18 @@
 <!--                <scope>import</scope>-->
 <!--            </dependency>-->
             <!--2024-3-5 修复漏洞-->
+<!--            <dependency>-->
+<!--                <groupId>org.springframework</groupId>-->
+<!--                <artifactId>spring-framework-bom</artifactId>-->
+<!--                <version>5.3.37</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
+            <!--2024-9-6 修复漏洞-->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
-                <version>5.3.37</version>
+                <version>5.3.39</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +43,8 @@ public class QqchConstController extends BaseController {
     // 郑丽丽 要所有的施工部署的工种名称
     @GetMapping("jobList")
     @CustomLogger(title = "前期策划-前期策划编制", name = "1.3施工部署" ,businessType = CustomBusinessType.SELECT)
-    public AjaxResult jobList(String codeOrName) {
-        List<QqchConstStaffPlan> qqchConstJobList = staffPlanService.jobList(codeOrName);
+    public AjaxResult jobList(String codeOrName, BigDecimal version) {
+        List<QqchConstStaffPlan> qqchConstJobList = staffPlanService.jobList(codeOrName,version);
         return getDataTableAjaxResult(qqchConstJobList);
     }
 

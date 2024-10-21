@@ -5,7 +5,6 @@ package com.hhwy.constant;
  */
 public enum WarnItem {
 
-
     WORK_GROUP_SET_UP("前期策划工作小组设立", "work_group_set_up", "项目中标之后的10天内，成立前期策划临时工作小组并完成审批，未完成则进行预警"),
     WORK_PLAN_COMMIT("前期策划工作计划提交","work_plan_commit","应在前期策划临时工作小组审批之后的3天内，按时提交前期策划工作计划报请审批，未提交则进行预警"),
     WORK_PLAN_APPROVAL("前期策划工作计划审批","work_plan_approval","前期策划工作计划提交后，三天内完成审批，未完成则进行预警"),
@@ -25,6 +24,7 @@ public enum WarnItem {
     SGJS_BUILD_SCHEME_REVIEW_REJECT("施工技术-施工方案评审", "sgjs_build_scheme_review_listener", ""),
     SGJS_EXPERIMENT_WARN("施工技术-设备台账及检验记录","sgjs_experiment_warn","根据下次检验标定日期预警，检验标定日期更新后停止预警"),
     KCSJ_PLAN_PROCESS("勘察设计计划进度","plan_process_warn","根据计划开始时间预警，实际开始日期填写后停止预警"),
+    SGJS_DISCLOSE_RECORD("一、二级方案交底","sgjs_disclose_record","根据一、二级交底的推送或新增日期，30天后未上传交底文件则进行预警，上传后停止预警"),
     SGJS_DESIGN_CHANGE("施工技术-设计变更管理","sgjs_design_change","您好，设计变更管理新增了数据【${code}】已提交至海外事业部审批"),
     AQCH_SAFETY_TRAIN("安全策划-安全培训策划","aqch_safety_train","您好，培训类型【${trainType}】预计在培训时间【${time}】进行培训，请提前做好准备"),
     SGJS_PAPER_SCORE("施工技术-科技管理-论文评分","sgjs_paper_score","项目中向您发起论文评分请求");

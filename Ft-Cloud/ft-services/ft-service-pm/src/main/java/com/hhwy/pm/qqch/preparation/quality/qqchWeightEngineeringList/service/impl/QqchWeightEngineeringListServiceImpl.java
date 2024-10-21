@@ -28,6 +28,7 @@ import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import io.seata.common.util.CollectionUtils;
 import io.seata.common.util.StringUtils;
@@ -208,8 +209,9 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
     public QqchWeightEngineeringListVo getQqchWeightEngineeringListList(QqchWeightEngineeringList qqchWeightEngineeringList) {
         QqchWeightEngineeringListVo vo = new QqchWeightEngineeringListVo();
 
-        BigDecimal version = qqchWeightEngineeringList.getVersion();
-        version = VersionUtil.getVersion("qqch_weight_engineering_list", version);
+        BigDecimal sourceVersion = qqchWeightEngineeringList.getVersion();
+        BigDecimal version = VersionUtil.getVersion("qqch_weight_engineering_list", sourceVersion);
+        version = ObjectUtils.nvlBigDecimal(sourceVersion,version);
         List<QqchWeightEngineeringList> qqchWeightEngineeringListList = this.getEngineeringListByVersion(version);
 
         vo.setVersion(version);

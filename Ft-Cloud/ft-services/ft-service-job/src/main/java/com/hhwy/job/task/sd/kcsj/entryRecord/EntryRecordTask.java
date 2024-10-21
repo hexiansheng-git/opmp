@@ -19,8 +19,9 @@ public class EntryRecordTask {
      * 勘察设备进场记录--同步物设
      */
     public void sysncWushe(){
+        logger.info("请注意，勘察设计--文件报批发消息发送开始。。。。。。。。。。。。。。");
         sdServiceApi.syncWusheJob();
-        logger.info("请注意，勘察设计--文件报批发消息发送。。。。。。。。。。。。。。");
+        logger.info("请注意，勘察设计--文件报批发消息发送结束。。。。。。。。。。。。。。");
 
     }
 }

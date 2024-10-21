@@ -1,31 +1,35 @@
 package com.hhwy.system.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SecurityUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.utils.TreeUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
-
 import com.hhwy.domain.base.system.material.MaterialCategory;
 import com.hhwy.domain.base.system.material.MaterialCategoryVo;
+import com.hhwy.domain.base.system.material.MaterialCategoryVo2;
 import com.hhwy.domain.base.system.material.MaterialInfo;
 import com.hhwy.system.controller.InitMaterialController;
 import com.hhwy.system.mapper.MaterialCategoryMapper;
 import com.hhwy.system.mapper.MaterialInfoMapper;
 import com.hhwy.system.service.IMaterialCategoryService;
+import com.hhwy.system.utils.TreeNodeUtil;
 import com.hhwy.utils.ObjectUtils;
-
 import com.hhwy.utils.common.PmsConstant;
 import com.hhwy.utils.common.PmsUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.hhwy.utils.tree.TreeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.io.File;
@@ -53,6 +57,25 @@ public class MaterialCategoryServiceImpl implements IMaterialCategoryService {
     private MaterialCategoryMapper materialCategoryMapper;
     @Autowired
     private MaterialInfoMapper materialInfoMapper;
+
+    //材料分类名称模糊搜索
+    public List<MaterialCategoryVo2> getTreeListByCategoryName(MaterialCategoryVo materialCategoryVo) {
+        Assert.isTrue(StrUtil.isNotBlank(materialCategoryVo.getCategoryName()), "搜索名称不能为空");
+        Assert.isTrue(StrUtil.isNotBlank(materialCategoryVo.getType()), "类型不能为空");
+        List<MaterialCategoryVo2> resultList = new ArrayList<>();
+        MaterialCategoryVo materialCategory = new MaterialCategoryVo();
+        materialCategory.setStatus("0");
+        materialCategory.setType(materialCategoryVo.getType());
+        materialCategory.setCategoryName(materialCategoryVo.getCategoryName());
+        List<MaterialCategoryVo2> list = materialCategoryMapper.getTreeListByCategoryName(materialCategory);
+        if (CollUtil.isNotEmpty(list)) {
+            materialCategory.setCategoryName(null);
+            List<MaterialCategoryVo2> allList = materialCategoryMapper.getTreeListByCategoryName(materialCategory);
+            resultList = TreeNodeUtil.getAncestral(allList, list);
+
+        }
+        return TreeUtil.build(resultList, 0L);
+    }
 
     @Override
     public List<MaterialCategoryVo> getPosition(Long categoryId, String type) {

@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.sgch.qqchconst.service;
 
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlan;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -31,5 +32,5 @@ public interface IQqchConstStaffPlanService {
 
     List<QqchConstStaffPlan>  list(QqchConstStaffPlan dealListDto);
 
-    List<QqchConstStaffPlan> jobList(String codeOrName);
+    List<QqchConstStaffPlan> jobList(String codeOrName, BigDecimal version);
 }

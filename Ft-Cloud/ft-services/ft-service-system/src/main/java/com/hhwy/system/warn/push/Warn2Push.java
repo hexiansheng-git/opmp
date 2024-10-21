@@ -45,6 +45,8 @@ public class Warn2Push {
     private String apiKey;
     @Value("${gm.url}")
     private String gmUrl;
+    @Value("${pushTask.sendFlag}")
+    private boolean sendFlag;
     @Autowired
     private ILogServiceApi logServiceApi;
     @Autowired
@@ -60,6 +62,8 @@ public class Warn2Push {
      * @param warn { ptVar1: 空或者0:项目版 / 1:总部版 }
      */
     public void push(TWarn warn) {
+        if(!sendFlag)
+            return ;
         Map param = new HashMap();
         String result = "",errMsg = "";
         if(StringUtils.isBlank(warn.getWarnUrl())){

@@ -1,5 +1,7 @@
 package com.hhwy.pm.qqch.tax.qqchTaxGlobal.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -268,14 +270,17 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
      */
     private BigDecimal getExchageRate(String currency, List<XmslContractPayinfo> xmslContractPayinfoList) {
         BigDecimal rate = BigDecimal.ZERO;
-        if(StringUtils.isNotEmpty(currency)) {
-            XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> currency.equals(vo.getCurrencyCode())).findFirst().orElse(null);
-            if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
-                String obversionRate = xmslContractPayinfo.getObversionRate();
-                rate = StringUtils.isEmpty(obversionRate) ? BigDecimal.ZERO : new BigDecimal(obversionRate);
-            } else {
-                rate = this.getRateByCurrency(currency);
-            }
+        if (StringUtils.isEmpty(currency) || CollUtil.isEmpty(xmslContractPayinfoList)) {
+            return rate;
+        }
+        XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream()
+                .filter(vo -> StrUtil.isNotBlank(vo.getCurrencyCode()) && currency.equals(vo.getCurrencyCode()))
+                .findFirst().orElse(null);
+        if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
+            String obversionRate = xmslContractPayinfo.getObversionRate();
+            rate = StringUtils.isEmpty(obversionRate) ? BigDecimal.ZERO : new BigDecimal(obversionRate);
+        } else {
+            rate = this.getRateByCurrency(currency);
         }
         return rate;
     }

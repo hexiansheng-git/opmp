@@ -51,4 +51,12 @@ public interface SpServiceApi {
     @GetMapping("/sgjsBuildSchemeReview/warnMessage")
     void warnMessageSchemeReview();
 
+    /**
+     * 施工技术---一、二级方案安全交底
+     * @auth lcf
+     * @date 2024-08-21
+     */
+    @GetMapping("/sgjsDiscloseRecord/disCloseWarn")
+    void disCloseRecord();
+
 }

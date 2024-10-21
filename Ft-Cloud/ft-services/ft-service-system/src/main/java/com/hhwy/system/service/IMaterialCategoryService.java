@@ -3,6 +3,7 @@ package com.hhwy.system.service;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.base.system.material.MaterialCategory;
 import com.hhwy.domain.base.system.material.MaterialCategoryVo;
+import com.hhwy.domain.base.system.material.MaterialCategoryVo2;
 import com.hhwy.domain.base.system.material.MaterialInfo;
 
 
@@ -142,4 +143,7 @@ public interface IMaterialCategoryService {
      * @return
      */
     List<Map> selectMaterialCategoryPath(List<String> list,Integer type);
+
+    //材料分类名称模糊搜索
+    List<MaterialCategoryVo2> getTreeListByCategoryName(MaterialCategoryVo materialCategoryVo);
 }

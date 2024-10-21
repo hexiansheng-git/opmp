@@ -88,4 +88,12 @@ public interface ISgjsBuildSchemeReviewService {
     void transferTask(String taskId,String username,String nickName);
 
     SgjsBuildSchemeReview exportSuggestion(HttpServletResponse response,BuildSchemeReviewDetailQueryVo detailQueryVo) throws IOException;
+
+    /**
+     * 校验意见是否填写
+     * @param flowNodeMark
+     * @param username
+     * @param businessId
+     */
+    void checkFillOpinoin(String flowNodeMark,String username,Long businessId);
 }

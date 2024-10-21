@@ -51,8 +51,9 @@ public class SgjsPaperScoreConsumerListener implements RocketMQListener<String> 
                 log.error("论文评分 数据同步!!! 租户标识不能为空");
                 return;
             }
+            oldDataSource = DynamicDataSourceContextHolder.peek();
             String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
-            oldDataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey("master");
+            DynamicDataSourceContextHolder.push("master");
             if (StringUtils.isNotBlank(dataSource) && !dataSource.equals(oldDataSource)) {
                 DynamicDataSourceContextHolder.push(dataSource);
                 sgjsPaperScoreService.updateSgjsPaperScoreList(paperScoreList);

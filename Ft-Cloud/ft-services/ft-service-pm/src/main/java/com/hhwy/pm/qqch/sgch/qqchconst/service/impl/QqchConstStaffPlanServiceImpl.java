@@ -142,10 +142,11 @@ public class QqchConstStaffPlanServiceImpl implements IQqchConstStaffPlanService
     }
 
     @Override
-    public List<QqchConstStaffPlan> jobList(String codeOrName) {
+    public List<QqchConstStaffPlan> jobList(String codeOrName,BigDecimal version) {
         QqchConstStaffPlan query = new QqchConstStaffPlan();
         query.setCodeOrName(codeOrName);
-        BigDecimal version = VersionUtil.getVersion("qqch_const",null);
+        if(version == null)
+            version = VersionUtil.getVersion("qqch_const",null);
         query.setVersion(version);
         List<QqchConstStaffPlan> qqchConstJobList = qqchConstStaffPlanMapper.getQqchConstStaffPlanList(query);
         List<QqchConstStaffPlan> list = qqchConstJobList.stream().filter(DistinctUtil.distinctByKey(QqchConstStaffPlan::getOccupationCode)).collect(Collectors.toList());

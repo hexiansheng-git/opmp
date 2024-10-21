@@ -45,6 +45,12 @@ public class SgjsMixRatioManage extends CommonBaseEntity {
     @NotBlank(message = "配合比编号不能为空",groups = {ValidationGroups.Save.class})
     private String mixRatioCode;
     /**
+     * 字段描述：配合比名称
+     */
+    @FtExcel(name = "配合比名称")
+    @NotBlank(message = "配合比名称不能为空",groups = {ValidationGroups.Save.class})
+    private String mixRatioName;
+    /**
      * 字段描述：配合比类型
      */
     @JsonProperty
@@ -53,17 +59,14 @@ public class SgjsMixRatioManage extends CommonBaseEntity {
     private String mixRatioType;
     
     //配合比等级
+    @FtExcel(name = "混凝土等级")
     private String mixLevel;
-    //计划开始日期
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    /**
+     * 字段描述：所属WBS名称
+     */
     @JsonProperty
-    @FtExcel(name = "计划开始日期", dateFormat = "yyyy年MM月dd日")
-    private Date planStartDate;
-    //计划结束日期
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @FtExcel(name = "计划结束日期", dateFormat = "yyyy年MM月dd日")
-    private Date planEndDate;
+    @FtExcel(name = "所属WBS")
+    private String relationWbsName;
     //是否批复
     private Integer allowFlag;
     //是否审批通过
@@ -73,7 +76,7 @@ public class SgjsMixRatioManage extends CommonBaseEntity {
      * 字段描述：前期策划配合比
      */
     @JsonProperty
-    @FtExcel(name = "前期策划配合比")
+    //@FtExcel(name = "前期策划配合比")
     private String previousPlanMixRatio;
     /**
      * 字段描述：所属WBS编码
@@ -81,24 +84,11 @@ public class SgjsMixRatioManage extends CommonBaseEntity {
     @JsonProperty
     private String relationWbsCode;
     /**
-     * 字段描述：所属WBS名称
+     * 字段描述：是否有效
      */
     @JsonProperty
-    @FtExcel(name = "所属WBS名称")
-    private String relationWbsName;
-    /**
-     * 字段描述：配合比名称
-     */
-    @JsonProperty
-    @FtExcel(name = "配合比名称")
-    @NotBlank(message = "配合比名称不能为空",groups = {ValidationGroups.Save.class})
-    private String mixRatioName;
-    /**
-     * 字段描述：规格
-     */
-    @JsonProperty
-    @FtExcel(name = "规格")
-    private String specification;
+    @FtExcel(name = "是否有效",dictType = "common_yes")
+    private String validOrNot;
     /**
      * 字段描述：内部审核日期
      */
@@ -113,18 +103,35 @@ public class SgjsMixRatioManage extends CommonBaseEntity {
     @JsonProperty
     @FtExcel(name = "外部批准日期", dateFormat = "yyyy年MM月dd日")
     private Date externalApprovalDate;
+    //计划开始日期
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @FtExcel(name = "计划开始日期", dateFormat = "yyyy年MM月dd日")
+    private Date planStartDate;
+    //计划结束日期
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @FtExcel(name = "计划结束日期", dateFormat = "yyyy年MM月dd日")
+    private Date planEndDate;
+    /**
+     * 字段描述：规格
+     */
+    @JsonProperty
+    //@FtExcel(name = "规格")
+    private String specification;
     /**
      * 字段描述：是否批复
      */
     @JsonProperty
     @FtExcel(name = "是否批复",dictType = "common_yes")
     private String approveOrNot;
-    /**
-     * 字段描述：是否有效
-     */
+
+    @FtExcel(name = "流程状态",readConverterExp = "0=待发起,1=审批中,4=审批完成")
+    private String taskStatus;
+
     @JsonProperty
-    @FtExcel(name = "是否有效",dictType = "common_yes")
-    private String validOrNot;
+    @FtExcel(name = "当前节点")
+    private String processTaskName;
     /**
      * 字段描述：编制人用户名
      */
@@ -134,13 +141,12 @@ public class SgjsMixRatioManage extends CommonBaseEntity {
      * 字段描述：编制人姓名
      */
     @JsonProperty
-    @FtExcel(name = "编制人")
+    //@FtExcel(name = "编制人")
     private String principalName;
     /**
      * 字段描述：编制人联系方式
      */
     @JsonProperty
-    @FtExcel(name = "编制人联系方式")
     private String principalContactWay;
     /**
      * 字段描述：配合比附件
