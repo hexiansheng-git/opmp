@@ -10,6 +10,7 @@ import com.hhwy.sp.techFile.sgjsCheckDataCatalog.domain.SgjsCheckDataCatalog;
 import com.hhwy.sp.techFile.sgjsCheckDataCatalog.domain.SgjsFileDirectorySet;
 import com.hhwy.sp.techFile.sgjsCheckDataCatalog.service.ISgjsCheckDataCatalogService;
 import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.utils.idworker.IdWorker;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.spring.annotation.ConsumeMode;
@@ -67,7 +68,10 @@ public class SgjsFileDirectorySetConsumerListener implements RocketMQListener<St
                     for (int i = 0; i < list.size(); i++) {
                         SgjsFileDirectorySet directorySet = list.get(i);
                         SgjsCheckDataCatalog info=new SgjsCheckDataCatalog();
+                        info.setId(IdWorker.createId());
                         BeanUtils.copyProperties(directorySet,info);
+                        //存总部版id
+                        info.setPtVar5(directorySet.getId()+"");
                         catalogList.add(info);
                     }
                     List<SgjsCheckDataCatalog> insertList=new ArrayList<>();
