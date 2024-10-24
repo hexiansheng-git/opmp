@@ -1,12 +1,17 @@
 package com.hhwy.sp.techFile.sgjsCheckData.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.techData.sgjsTechnicalData.domain.SgjsTechnicalData;
+import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprint;
+import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.sp.techFile.sgjsCheckData.mapper.SgjsCheckDataMapper;
@@ -44,12 +49,33 @@ public class SgjsCheckDataServiceImpl implements ISgjsCheckDataService {
 
     @Transactional
     public int insertSgjsCheckDataList(List<SgjsCheckData> sgjsCheckDataList) {
+        if(CollUtil.isEmpty(sgjsCheckDataList)){
+            return 1;
+        }
+        List<SgjsCheckData> addList = new ArrayList<>();
+        List<SgjsCheckData> updateList = new ArrayList<>();
+
         for (SgjsCheckData sgjsCheckData : sgjsCheckDataList) {
-            sgjsCheckData.setId(IdWorker.createId());
+            String isAdd = sgjsCheckData.getIsAdd();
+            if(StrUtil.isBlank(isAdd)) {
+                sgjsCheckData.setId(IdWorker.createId());
+                sgjsCheckData.setCreateUser(SecurityUtils.getUserName());
+                sgjsCheckData.setCreateTime(DateUtils.getNowDate());
+                updateList.add(sgjsCheckData);
+                continue;
+            }
             sgjsCheckData.setCreateUser(SecurityUtils.getUserName());
             sgjsCheckData.setCreateTime(DateUtils.getNowDate());
+            addList.add(sgjsCheckData);
         }
-        return sgjsCheckDataMapper.insertSgjsCheckDataList(sgjsCheckDataList);
+        int i = 0;
+        if(CollectionUtils.isNotEmpty(addList)) {
+            i += sgjsCheckDataMapper.insertSgjsCheckDataList(addList);
+        }
+        if(CollectionUtils.isNotEmpty(updateList)) {
+            i += sgjsCheckDataMapper.updateSgjsCheckDataList(updateList);
+        }
+        return i;
     }
 
     @Transactional

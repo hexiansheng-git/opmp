@@ -22,7 +22,7 @@ public interface SgjsCheckDataMapper {
 
     int updateSgjsCheckData(SgjsCheckData sgjsCheckData);
 
-    int updateSgjsCheckDataList(@Param("sgjsCheckDataList") List<SgjsCheckData> sgjsCheckDataList);
+    int updateSgjsCheckDataList(@Param("list") List<SgjsCheckData> sgjsCheckDataList);
 
     int deleteSgjsCheckData(SgjsCheckData sgjsCheckData);
 

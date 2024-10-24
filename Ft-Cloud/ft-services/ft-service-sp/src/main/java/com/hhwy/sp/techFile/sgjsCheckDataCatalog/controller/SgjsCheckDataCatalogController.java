@@ -31,13 +31,13 @@ public class SgjsCheckDataCatalogController extends BaseController{
 
                                                                                                                                                                                                                                                                                                                             
     @GetMapping
-    public AjaxResult getSgjsCheckDataCatalog(@Validated(ValidationGroups.Get.class) @RequestBody SgjsCheckDataCatalog sgjsCheckDataCatalogParam){
+    public AjaxResult getSgjsCheckDataCatalog(@Validated(ValidationGroups.Get.class) SgjsCheckDataCatalog sgjsCheckDataCatalogParam){
         SgjsCheckDataCatalog sgjsCheckDataCatalog =  sgjsCheckDataCatalogService.getSgjsCheckDataCatalog(sgjsCheckDataCatalogParam);
         return AjaxResult.success(sgjsCheckDataCatalog);
     }
 
     @GetMapping("/list")
-    public AjaxResult getSgjsCheckDataCatalogList(@Validated(ValidationGroups.Select.class) @RequestBody SgjsCheckDataCatalog sgjsCheckDataCatalogParam){
+    public AjaxResult getSgjsCheckDataCatalogList(@Validated(ValidationGroups.Select.class) SgjsCheckDataCatalog sgjsCheckDataCatalogParam){
         startPage();
         List<SgjsCheckDataCatalog> sgjsCheckDataCatalogList = sgjsCheckDataCatalogService.getSgjsCheckDataCatalogList(sgjsCheckDataCatalogParam);
         return getDataTableAjaxResult(sgjsCheckDataCatalogList);

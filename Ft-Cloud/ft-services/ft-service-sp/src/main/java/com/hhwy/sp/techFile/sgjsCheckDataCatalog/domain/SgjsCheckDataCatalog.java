@@ -14,13 +14,15 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.sp.techData.sgjsTechnicalDataCatalog.domain.SgjsTechnicalDataCatalog;
+import com.hhwy.utils.tree.TreeNode;
 
 /**
  * @author xuzl
  * @date 2024-10-18 16:45:49
  * @remark
  */
-public class SgjsCheckDataCatalog extends BaseEntity {
+public class SgjsCheckDataCatalog extends TreeNode<SgjsCheckDataCatalog> {
     private static final long serialVersionUID = 1L;
 
     /**

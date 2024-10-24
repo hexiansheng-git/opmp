@@ -1,39 +1,33 @@
 package com.hhwy.sp.techFile.sgjsCheckData.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
-
 import java.util.Date;
-import java.math.BigDecimal;
-
 import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.List;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 /**
  * @author xuzl
  * @date 2024-10-18 15:52:00
  * @remark
  */
+@Data
 public class SgjsCheckData extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
      * 字段描述：主键id
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "主键id")
     private Long id;
     /**
      * 字段描述：检查资料目录id
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "检查资料目录id")
     private Long checkDataCatalogId;
@@ -201,11 +195,17 @@ public class SgjsCheckData extends BaseEntity {
     @Excel(name = "排序号")
     private Integer sort;
 
+//    @JsonFormat(pattern = "yyyy-MM-dd")
+    private String beginDate;
+//    @JsonFormat(pattern = "yyyy-MM-dd")
+    private String endDate;
+
+    private String isAdd;
+
     @JsonIgnore
     public Long getId() {
         return id;
     }
-
     @JsonIgnore
     public void setId(Long id) {
         this.id = id;
@@ -479,5 +479,20 @@ public class SgjsCheckData extends BaseEntity {
     @JsonIgnore
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    public String getBeginDate() {
+        return beginDate;
+    }
+
+    public void setBeginDate(String beginDate) {
+        this.beginDate = beginDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }

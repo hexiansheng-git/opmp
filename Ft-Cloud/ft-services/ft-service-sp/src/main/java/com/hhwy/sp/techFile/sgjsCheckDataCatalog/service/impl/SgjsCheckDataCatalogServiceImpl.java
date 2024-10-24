@@ -1,10 +1,14 @@
 package com.hhwy.sp.techFile.sgjsCheckDataCatalog.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.sp.techData.util.TreeCountUtils;
+import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +35,20 @@ public class SgjsCheckDataCatalogServiceImpl implements ISgjsCheckDataCatalogSer
     }
 
     public List<SgjsCheckDataCatalog> getSgjsCheckDataCatalogList(SgjsCheckDataCatalog sgjsCheckDataCatalog) {
-        return sgjsCheckDataCatalogMapper.getSgjsCheckDataCatalogList(sgjsCheckDataCatalog);
+        Map<String, Object> queryMap = new HashMap<>();
+        String checkDataCatalogName = sgjsCheckDataCatalog.getCheckDataCatalogName();
+        if(StringUtils.isNotEmpty(checkDataCatalogName)){
+            queryMap.put("checkDataCatalogName" , checkDataCatalogName);
+            sgjsCheckDataCatalog.setCheckDataCatalogName(null);
+        }
+        Long pid = sgjsCheckDataCatalog.getPid();
+        List<SgjsCheckDataCatalog> sgjsCheckDataCatalogList = sgjsCheckDataCatalogMapper.getSgjsCheckDataCatalogList(sgjsCheckDataCatalog);
+        if(CollectionUtils.isNotEmpty(sgjsCheckDataCatalogList) && queryMap.size() > 0){
+            TreeCountUtils<SgjsCheckDataCatalog> treeCountUtils = new TreeCountUtils<>();
+            List<SgjsCheckDataCatalog> sgjsCheckDataCatalogs = treeCountUtils.queryTree(sgjsCheckDataCatalogList, queryMap, pid);
+            return TreeUtil.build(sgjsCheckDataCatalogs,pid);
+        }
+        return TreeUtil.build(sgjsCheckDataCatalogList,pid);
     }
 
     @Transactional

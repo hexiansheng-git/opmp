@@ -3,7 +3,6 @@ package com.hhwy.sp.techFile.sgjsCheckDataCatalog.service;
 import java.util.List;
 
 import com.hhwy.sp.techFile.sgjsCheckDataCatalog.domain.SgjsCheckDataCatalog;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * @author xuzl

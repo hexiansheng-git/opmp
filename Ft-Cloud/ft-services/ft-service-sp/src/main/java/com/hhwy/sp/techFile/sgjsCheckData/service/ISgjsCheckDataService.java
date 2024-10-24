@@ -3,6 +3,7 @@ package com.hhwy.sp.techFile.sgjsCheckData.service;
 import java.util.List;
 
 import com.hhwy.sp.techFile.sgjsCheckData.domain.SgjsCheckData;
+import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprint;
 
 /**
  * @author xuzl
@@ -18,6 +19,8 @@ public interface ISgjsCheckDataService {
     int insertSgjsCheckData(SgjsCheckData sgjsCheckData);
 
     int insertSgjsCheckDataList(List<SgjsCheckData> sgjsCheckDataList);
+
+    //void insertSgjsCheckDataList(List<SgjsCheckData> sgjsCheckDataList);
 
     int updateSgjsCheckData(SgjsCheckData sgjsCheckData);
 

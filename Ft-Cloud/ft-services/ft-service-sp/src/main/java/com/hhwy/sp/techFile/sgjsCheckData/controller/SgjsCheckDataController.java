@@ -4,6 +4,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import cn.hutool.core.collection.CollUtil;
+import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.sp.techData.sgjsTechnicalData.domain.SgjsTechnicalData;
+import com.hhwy.sp.techData.sgjsTechnicalData.domain.SgjsTechnicalData4Update;
+import com.hhwy.sp.techData.sgjsTechnicalDataCatalog.domain.SgjsTechnicalDataCatalog;
+import com.hhwy.sp.techData.sgjsTechnicalDataCatalog.domain.SgjsTechnicalDataCatalog4Update;
+import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprint;
+import com.hhwy.utils.customLog.CustomBusinessType;
+import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,37 +41,41 @@ public class SgjsCheckDataController extends BaseController {
     @Autowired
     private ISgjsCheckDataService sgjsCheckDataService;
 
-
+    @PreAuthorize(hasPermi = "sgjsCheckData:list")
     @GetMapping
-    public AjaxResult getSgjsCheckData(@Validated(ValidationGroups.Get.class) @RequestBody SgjsCheckData sgjsCheckDataParam) {
+    public AjaxResult getSgjsCheckData(@Validated(ValidationGroups.Get.class) SgjsCheckData sgjsCheckDataParam) {
         SgjsCheckData sgjsCheckData = sgjsCheckDataService.getSgjsCheckData(sgjsCheckDataParam);
         return AjaxResult.success(sgjsCheckData);
     }
-
+    @PreAuthorize(hasPermi = "sgjsCheckData:list")
     @GetMapping("/list")
-    public AjaxResult getSgjsCheckDataList(@Validated(ValidationGroups.Select.class) @RequestBody SgjsCheckData sgjsCheckDataParam) {
+    public AjaxResult getSgjsCheckDataList(@Validated(ValidationGroups.Select.class) SgjsCheckData sgjsCheckDataParam) {
         startPage();
         List<SgjsCheckData> sgjsCheckDataList = sgjsCheckDataService.getSgjsCheckDataList(sgjsCheckDataParam);
         return getDataTableAjaxResult(sgjsCheckDataList);
     }
 
+    @PreAuthorize(hasPermi = "sgjsCheckData:add")
     @PostMapping("/add")
     public AjaxResult insertSgjsCheckData(@Validated(ValidationGroups.Save.class) @RequestBody SgjsCheckData sgjsCheckDataParam) {
         sgjsCheckDataService.insertSgjsCheckData(sgjsCheckDataParam);
         return AjaxResult.success(sgjsCheckDataParam);
     }
 
+    @PreAuthorize(hasPermi = "sgjsCheckData:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertSgjsCheckDataList(@Validated(ValidationGroups.Save.class) @RequestBody List<SgjsCheckData> sgjsCheckDataListParam) {
         sgjsCheckDataService.insertSgjsCheckDataList(sgjsCheckDataListParam);
         return AjaxResult.success(sgjsCheckDataListParam);
     }
 
+    @PreAuthorize(hasPermi = "sgjsCheckData:update")
     @PostMapping("/update")
     public AjaxResult updateSgjsCheckData(@Validated(ValidationGroups.Update.class) @RequestBody SgjsCheckData sgjsCheckDataParam) {
         return toAjax(sgjsCheckDataService.updateSgjsCheckData(sgjsCheckDataParam));
     }
 
+    @PreAuthorize(hasPermi = "sgjsCheckData:batchUpdate")
     @PostMapping("/batchUpdate")
     public AjaxResult updateSgjsCheckDataList(@Validated(ValidationGroups.Update.class) @RequestBody List<SgjsCheckData> sgjsCheckDataListParam) {
         return toAjax(sgjsCheckDataService.updateSgjsCheckDataList(sgjsCheckDataListParam));
@@ -85,4 +98,20 @@ public class SgjsCheckDataController extends BaseController {
         ExcelUtils<SgjsCheckData> util = new ExcelUtils<>(SgjsCheckData.class);
         util.exportExcel(response, sgjsCheckDataList, DateUtils.getDate());
     }
+
+    //数据推送总部版
+//    public void doSendGm(List<Long> delIdList){
+//        SgjsTechnicalData4Update sendData = new SgjsTechnicalData4Update();
+//        sendData.setProjectCode(getProjectDto().getProjectCode());
+//        //查询待推送数据
+//        List<SgjsTechnicalData> sgjsTechnicalData = sgjsTechnicalDataService.getList(new SgjsTechnicalData());
+//        if (CollUtil.isEmpty(sgjsTechnicalData)) {
+//            //集合为空，推送一个项目编号
+//            rocketMQTemplate.convertAndSend("sgjs_technical_data:tenantSuccess", sendData);
+//            return;
+//        }
+//        sendData.setTreeList(sgjsTechnicalData);
+//        sendData.setDelIdList(delIdList);
+//        rocketMQTemplate.convertAndSend("sgjs_technical_data:tenantSuccess", sendData);
+//    }
 }
