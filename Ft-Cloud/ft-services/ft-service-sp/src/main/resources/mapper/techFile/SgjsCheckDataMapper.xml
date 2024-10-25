@@ -140,7 +140,7 @@
                 and `upload_date` BETWEEN #{beginDate} and #{endDate}
             </if>
         </where>
-        order by create_time desc
+        order by sort asc
     </select>
 
     <insert id="insertSgjsCheckData" useGeneratedKeys="true" keyProperty="id">

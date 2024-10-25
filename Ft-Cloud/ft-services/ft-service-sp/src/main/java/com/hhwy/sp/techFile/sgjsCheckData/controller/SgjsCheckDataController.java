@@ -1,22 +1,13 @@
 package com.hhwy.sp.techFile.sgjsCheckData.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.io.IOException;
-
-import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.sp.techData.sgjsTechnicalData.domain.SgjsTechnicalData;
-import com.hhwy.sp.techData.sgjsTechnicalData.domain.SgjsTechnicalData4Update;
-import com.hhwy.sp.techData.sgjsTechnicalDataCatalog.domain.SgjsTechnicalDataCatalog;
-import com.hhwy.sp.techData.sgjsTechnicalDataCatalog.domain.SgjsTechnicalDataCatalog4Update;
-import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprint;
-import com.hhwy.utils.customLog.CustomBusinessType;
-import com.hhwy.utils.customLog.CustomLogger;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletResponse;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -96,6 +87,12 @@ public class SgjsCheckDataController extends BaseController {
     public void export(HttpServletResponse response, SgjsCheckData sgjsCheckDataParam) throws IOException {
         List<SgjsCheckData> sgjsCheckDataList = sgjsCheckDataService.getSgjsCheckDataList(sgjsCheckDataParam);
         ExcelUtils<SgjsCheckData> util = new ExcelUtils<>(SgjsCheckData.class);
+        sgjsCheckDataList.forEach(p ->{
+            String effective = p.getEffective();
+            if(StrUtil.isNotBlank(effective)){
+                p.setEffective(effective.equals("0")?"有效":"无效");
+            }
+        });
         util.exportExcel(response, sgjsCheckDataList, DateUtils.getDate());
     }
 
