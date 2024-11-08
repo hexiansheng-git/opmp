@@ -1,20 +1,24 @@
 package com.hhwy.sp.techFile.sgjsCheckData.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.sp.techFile.sgjsCheckData.domain.SgjsCheckData;
 import com.hhwy.sp.techFile.sgjsCheckData.mapper.SgjsCheckDataMapper;
 import com.hhwy.sp.techFile.sgjsCheckData.service.ISgjsCheckDataService;
-import com.hhwy.sp.techFile.sgjsCheckData.domain.SgjsCheckData;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author xuzl
@@ -24,9 +28,12 @@ import com.hhwy.utils.idworker.IdWorker;
 @Service
 public class SgjsCheckDataServiceImpl implements ISgjsCheckDataService {
 
+    private Logger logger= LoggerFactory.getLogger(SgjsCheckDataServiceImpl.class);
+
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
     @Autowired
     private SgjsCheckDataMapper sgjsCheckDataMapper;
-
 
     public SgjsCheckData getSgjsCheckData(SgjsCheckData sgjsCheckData) {
         return sgjsCheckDataMapper.getSgjsCheckData(sgjsCheckData);
@@ -46,7 +53,7 @@ public class SgjsCheckDataServiceImpl implements ISgjsCheckDataService {
 
     @Transactional
     public int insertSgjsCheckDataList(List<SgjsCheckData> sgjsCheckDataList) {
-        if(CollUtil.isEmpty(sgjsCheckDataList)){
+        if (CollUtil.isEmpty(sgjsCheckDataList)) {
             return 1;
         }
         List<SgjsCheckData> addList = new ArrayList<>();
@@ -54,7 +61,7 @@ public class SgjsCheckDataServiceImpl implements ISgjsCheckDataService {
 
         for (SgjsCheckData sgjsCheckData : sgjsCheckDataList) {
             String isAdd = sgjsCheckData.getIsAdd();
-            if(StrUtil.isBlank(isAdd)) {
+            if (StrUtil.isBlank(isAdd)) {
                 sgjsCheckData.setId(IdWorker.createId());
                 sgjsCheckData.setCreateUser(SecurityUtils.getUserName());
                 sgjsCheckData.setCreateTime(DateUtils.getNowDate());
@@ -66,13 +73,30 @@ public class SgjsCheckDataServiceImpl implements ISgjsCheckDataService {
             addList.add(sgjsCheckData);
         }
         int i = 0;
-        if(CollectionUtils.isNotEmpty(addList)) {
+        if (CollectionUtils.isNotEmpty(addList)) {
             i += sgjsCheckDataMapper.insertSgjsCheckDataList(addList);
         }
-        if(CollectionUtils.isNotEmpty(updateList)) {
+        if (CollectionUtils.isNotEmpty(updateList)) {
             i += sgjsCheckDataMapper.updateSgjsCheckDataList(updateList);
         }
+        syncToGm(sgjsCheckDataList);
         return i;
+    }
+
+    /**
+     * 数据同步
+     *
+     * @param sgjsCheckDataList
+     */
+    private void syncToGm(List<SgjsCheckData> sgjsCheckDataList) {
+        try {
+            logger.info("数据同步传参---->【{}】", JSONObject.toJSONString(sgjsCheckDataList));
+            rocketMQTemplate.convertAndSend("sgjs_check_data:tenantSuccess", JSONObject.toJSONString(sgjsCheckDataList));
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.getMessage();
+            throw e;
+        }
     }
 
     @Transactional

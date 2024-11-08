@@ -1,23 +1,22 @@
 package com.hhwy.sp.techFile.sgjsCheckData.controller;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.io.IOException;
 import cn.hutool.core.util.StrUtil;
-import com.hhwy.common.security.annotation.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.sp.techFile.sgjsCheckData.service.ISgjsCheckDataService;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.sp.techFile.sgjsCheckData.domain.SgjsCheckData;
-
-import org.springframework.validation.annotation.Validated;
+import com.hhwy.sp.techFile.sgjsCheckData.service.ISgjsCheckDataService;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author xuzl
@@ -38,6 +37,7 @@ public class SgjsCheckDataController extends BaseController {
         SgjsCheckData sgjsCheckData = sgjsCheckDataService.getSgjsCheckData(sgjsCheckDataParam);
         return AjaxResult.success(sgjsCheckData);
     }
+
     @PreAuthorize(hasPermi = "sgjsCheckData:list")
     @GetMapping("/list")
     public AjaxResult getSgjsCheckDataList(@Validated(ValidationGroups.Select.class) SgjsCheckData sgjsCheckDataParam) {
@@ -87,28 +87,13 @@ public class SgjsCheckDataController extends BaseController {
     public void export(HttpServletResponse response, SgjsCheckData sgjsCheckDataParam) throws IOException {
         List<SgjsCheckData> sgjsCheckDataList = sgjsCheckDataService.getSgjsCheckDataList(sgjsCheckDataParam);
         ExcelUtils<SgjsCheckData> util = new ExcelUtils<>(SgjsCheckData.class);
-        sgjsCheckDataList.forEach(p ->{
+        sgjsCheckDataList.forEach(p -> {
             String effective = p.getEffective();
-            if(StrUtil.isNotBlank(effective)){
-                p.setEffective(effective.equals("0")?"有效":"无效");
+            if (StrUtil.isNotBlank(effective)) {
+                p.setEffective(effective.equals("0") ? "有效" : "无效");
             }
         });
         util.exportExcel(response, sgjsCheckDataList, DateUtils.getDate());
     }
 
-    //数据推送总部版
-//    public void doSendGm(List<Long> delIdList){
-//        SgjsTechnicalData4Update sendData = new SgjsTechnicalData4Update();
-//        sendData.setProjectCode(getProjectDto().getProjectCode());
-//        //查询待推送数据
-//        List<SgjsTechnicalData> sgjsTechnicalData = sgjsTechnicalDataService.getList(new SgjsTechnicalData());
-//        if (CollUtil.isEmpty(sgjsTechnicalData)) {
-//            //集合为空，推送一个项目编号
-//            rocketMQTemplate.convertAndSend("sgjs_technical_data:tenantSuccess", sendData);
-//            return;
-//        }
-//        sendData.setTreeList(sgjsTechnicalData);
-//        sendData.setDelIdList(delIdList);
-//        rocketMQTemplate.convertAndSend("sgjs_technical_data:tenantSuccess", sendData);
-//    }
 }

@@ -1,9 +1,8 @@
 package com.hhwy.sp.techFile.sgjsCheckData.service;
 
-import java.util.List;
-
 import com.hhwy.sp.techFile.sgjsCheckData.domain.SgjsCheckData;
-import com.hhwy.sp.techFile.sgjsTechnicalFileBlueprint.domain.SgjsTechnicalFileBlueprint;
+
+import java.util.List;
 
 /**
  * @author xuzl
