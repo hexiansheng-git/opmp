@@ -26,7 +26,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/jdglDatePlan")
 public class JdglDatePlanController extends BaseController {
-
     @Autowired
     private IJdglDatePlanService jdglDatePlanService;
 
