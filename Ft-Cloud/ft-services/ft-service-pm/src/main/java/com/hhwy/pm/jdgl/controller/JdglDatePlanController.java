@@ -30,7 +30,6 @@ public class JdglDatePlanController extends BaseController {
     @Autowired
     private IJdglDatePlanService jdglDatePlanService;
 
-
     @PreAuthorize(hasPermi = "jdglDatePlan:list")
     @GetMapping
     public AjaxResult getJdglDatePlan(@Validated(ValidationGroups.Get.class) JdglDatePlan jdglDatePlanParam) {
